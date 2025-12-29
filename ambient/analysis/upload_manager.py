@@ -34,7 +34,10 @@ import os
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import google.generativeai as genai
+try:
+    import google.genai as genai
+except ImportError:
+    genai = None
 
 
 class AmbientGeminiFileManager:
@@ -85,6 +88,10 @@ class AmbientGeminiFileManager:
         Returns:
             Gemini file object if successful, None if failed
         """
+        if genai is None:
+            raise ImportError(
+                "google-generativeai package is required. Install it with: pip install google-generativeai"
+            )
         file_hash = self._get_file_hash(video_path)
         filename = os.path.basename(video_path)
         cache_key = f"video_{filename}"
@@ -164,6 +171,10 @@ class AmbientGeminiFileManager:
         Returns:
             Gemini file object if successful, None if failed
         """
+        if genai is None:
+            raise ImportError(
+                "google-generativeai package is required. Install it with: pip install google-generativeai"
+            )
         file_hash = self._get_file_hash(csv_path)
         filename = os.path.basename(csv_path)
         cache_key = f"csv_{filename}"

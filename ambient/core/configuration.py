@@ -272,7 +272,7 @@ class YAMLConfigurationManager(IConfigurationManager):
 
         # Test the configuration
         try:
-            import google.generativeai as genai
+            import google.genai as genai
 
             genai.configure(api_key=self._gemini_api_key)
 
@@ -449,7 +449,7 @@ class EnvConfigurationManager(IConfigurationManager):
 
         # Test the configuration
         try:
-            import google.generativeai as genai
+            import google.genai as genai
 
             genai.configure(api_key=self._gemini_api_key)
 

@@ -10,8 +10,18 @@ Monday, July 28, 2025 12:30:00 AM
 import glob
 import os
 
-import google.generativeai as genai
-from dotenv import find_dotenv, load_dotenv
+try:
+    import google.genai as genai
+except ImportError:
+    genai = None
+
+try:
+    from dotenv import find_dotenv, load_dotenv
+except ImportError:
+    def find_dotenv():
+        return None
+    def load_dotenv(path):
+        return False
 
 from .upload_manager import AmbientGeminiFileManager
 
@@ -21,6 +31,9 @@ _ = load_dotenv(find_dotenv())
 
 def upload_all_files():
     """Upload all videos and CSVs to Gemini in batch."""
+    if genai is None:
+        print("ERROR: google-generativeai package is required. Install it with: pip install google-generativeai")
+        return
 
     # Configure Gemini
     gemini_api_key = os.getenv("GOOGLE_API_KEY")

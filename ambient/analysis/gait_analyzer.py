@@ -4,7 +4,7 @@ Gait analysis module for the Ambient system.
 This module provides the main analysis functionality for gait assessment using
 Google Gemini AI and pose estimation data.
 
-For calling the Gemini API, we use the `google.generativeai` library.
+For calling the Gemini API, we use the `google.genai` library.
 We use exponential backoff for retries of the API call if it fails.
 
 @Theodore Mui
@@ -14,15 +14,48 @@ Monday, July 28, 2025 12:30:00 AM
 import time
 from typing import Any, List, Optional
 
-import google.generativeai as genai
-from tenacity import (
-    retry,
-    retry_if_exception,
-    retry_if_exception_type,
-    retry_if_result,
-    stop_after_attempt,
-    wait_exponential,
-)
+try:
+    import google.genai as genai
+except ImportError:
+    genai = None
+
+try:
+    from tenacity import (
+        retry,
+        retry_if_exception,
+        retry_if_exception_type,
+        retry_if_result,
+        stop_after_attempt,
+        wait_exponential,
+    )
+except ImportError:
+    # Fallback decorator if tenacity is not available
+    def retry(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
+    
+    # Fallback functions for retry conditions - return callable objects
+    def retry_if_exception(func=None):
+        if func is None:
+            # Called with no arguments, return a callable that accepts a function
+            def wrapper(f):
+                return lambda e: False
+            return wrapper
+        # Called with a function, return a callable that checks exceptions
+        return lambda e: False
+    
+    def retry_if_exception_type(*exception_types):
+        return lambda e: False
+    
+    def retry_if_result(func):
+        return lambda r: False
+    
+    def stop_after_attempt(n):
+        return None
+    
+    def wait_exponential(**kwargs):
+        return None
 
 from ambient.core.interfaces import IAnalyzer, IConfigurationManager, IOutputManager
 from ambient.exceptions import AmbientError
@@ -77,6 +110,10 @@ class GeminiAnalyzer(IAnalyzer):
             temperature: The temperature setting for generation
             config_manager: Optional configuration manager for accessing prompt templates
         """
+        if genai is None:
+            raise ImportError(
+                "google-generativeai package is required. Install it with: pip install google-generativeai"
+            )
         self.api_key = api_key
         self.file_manager = file_manager
         self.model_name = model_name
