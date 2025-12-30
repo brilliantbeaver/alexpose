@@ -789,7 +789,8 @@ class PoseDataConverter:
         out_path = Path(temp_dir) / f"frame_{frame_index:06d}.jpg"
         # Build ffmpeg command: select frame by index (0-based)
         # Use 'select' filter with exact frame number matching
-        select_expr = f"select=eq(n,{frame_index})"
+        # Note: comma must be escaped in ffmpeg filter expressions
+        select_expr = f"select=eq(n\\,{frame_index})"
         cmd = [
             "ffmpeg",
             "-v",
