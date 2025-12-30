@@ -306,9 +306,229 @@ def _parse_openpose_people(payload: Dict[str, any]) -> List[Keypoint]:
     return keypoints
 
 
+try:
+    import mediapipe as mp
+    from mediapipe.tasks import python
+    from mediapipe.tasks.python import vision
+    import cv2
+    import numpy as np
+    MEDIAPIPE_AVAILABLE = True
+except ImportError:
+    MEDIAPIPE_AVAILABLE = False
+
+
+class MediaPipeEstimator(PoseEstimator):
+    """
+    Pose estimator that uses Google MediaPipe for pose detection.
+    
+    MediaPipe provides fast, accurate pose estimation with 33 keypoints
+    following the BlazePose topology. This estimator supports both image
+    and video processing with configurable confidence thresholds.
+    """
+    
+    def __init__(
+        self,
+        model_path: Union[str, Path],
+        default_model: str = "BODY_25",
+        min_pose_detection_confidence: float = 0.5,
+        min_pose_presence_confidence: float = 0.5,
+        min_tracking_confidence: float = 0.5,
+    ) -> None:
+        if not MEDIAPIPE_AVAILABLE:
+            raise ImportError(
+                "MediaPipe is not installed. Please install it with: "
+                "pip install mediapipe"
+            )
+        
+        self.model_path = Path(model_path).resolve()
+        if not self.model_path.exists():
+            raise FileNotFoundError(f"Model file not found: {self.model_path}")
+        
+        self.default_model = default_model
+        self.min_pose_detection_confidence = min_pose_detection_confidence
+        self.min_pose_presence_confidence = min_pose_presence_confidence
+        self.min_tracking_confidence = min_tracking_confidence
+    
+    def _get_image_landmarker(self):
+        """Create and configure MediaPipe image landmarker."""
+        base_options = python.BaseOptions(model_asset_path=str(self.model_path))
+        options = vision.PoseLandmarkerOptions(
+            base_options=base_options,
+            min_pose_detection_confidence=self.min_pose_detection_confidence,
+            min_pose_presence_confidence=self.min_pose_presence_confidence,
+        )
+        return vision.PoseLandmarker.create_from_options(options)
+    
+    def _get_video_landmarker(self):
+        """Create and configure MediaPipe video landmarker."""
+        base_options = python.BaseOptions(model_asset_path=str(self.model_path))
+        options = vision.PoseLandmarkerOptions(
+            base_options=base_options,
+            min_pose_detection_confidence=self.min_pose_detection_confidence,
+            min_pose_presence_confidence=self.min_pose_presence_confidence,
+            min_tracking_confidence=self.min_tracking_confidence,
+        )
+        return vision.PoseLandmarker.create_from_options(options)
+    
+    def _parse_mediapipe_landmarks(
+        self,
+        result,
+        image_width: Optional[int] = None,
+        image_height: Optional[int] = None,
+    ) -> List[Keypoint]:
+        """Convert MediaPipe landmarks to keypoint format."""
+        if not result.landmarks:
+            return []
+        
+        keypoints = []
+        # Use first person's landmarks
+        landmarks = result.landmarks[0]
+        
+        for landmark in landmarks:
+            x = landmark.x
+            y = landmark.y
+            confidence = landmark.visibility
+            
+            # Convert normalized coordinates to pixel coordinates if dimensions provided
+            if image_width is not None and image_height is not None:
+                x = x * image_width
+                y = y * image_height
+            
+            keypoints.append({
+                "x": x,
+                "y": y,
+                "confidence": confidence
+            })
+        
+        return keypoints
+    
+    def estimate_image_keypoints(
+        self,
+        image_path: str,
+        model: str = "BODY_25",
+        bbox: Optional[Dict[str, Union[int, float]]] = None,
+    ) -> List[Keypoint]:
+        """
+        Estimate 2D keypoints from an image using MediaPipe.
+        
+        Args:
+            image_path: Path to the input image frame.
+            model: Pose model to use (ignored for MediaPipe, kept for interface compatibility).
+            bbox: Optional bounding box to crop the image before processing.
+        
+        Returns:
+            A list of keypoints as dicts with keys: x, y, confidence.
+        """
+        image_path = Path(image_path)
+        if not image_path.exists():
+            raise FileNotFoundError(f"Image not found: {image_path}")
+        
+        # Load image
+        image = cv2.imread(str(image_path))
+        if image is None:
+            raise ValueError(f"Could not load image: {image_path}")
+        
+        # Convert BGR to RGB
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        # Apply bounding box crop if provided
+        if bbox and all(k in bbox for k in ["left", "top", "width", "height"]):
+            left = int(bbox["left"])
+            top = int(bbox["top"])
+            width = int(bbox["width"])
+            height = int(bbox["height"])
+            
+            # Ensure bounds are within image
+            left = max(0, min(left, image_rgb.shape[1] - 1))
+            top = max(0, min(top, image_rgb.shape[0] - 1))
+            right = min(left + width, image_rgb.shape[1])
+            bottom = min(top + height, image_rgb.shape[0])
+            
+            image_rgb = image_rgb[top:bottom, left:right]
+        
+        # Create MediaPipe image
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
+        
+        # Get landmarker and detect
+        landmarker = self._get_image_landmarker()
+        result = landmarker.detect(mp_image)
+        
+        # Parse results
+        return self._parse_mediapipe_landmarks(
+            result,
+            image_width=image_rgb.shape[1],
+            image_height=image_rgb.shape[0]
+        )
+    
+    def estimate_video_keypoints(
+        self,
+        video_path: Union[str, Path],
+        model: str = "BODY_25",
+    ) -> List[List[Keypoint]]:
+        """
+        Estimate keypoints for all frames of a video using MediaPipe.
+        
+        Args:
+            video_path: Path to the input video file.
+            model: Pose model to use (ignored for MediaPipe, kept for interface compatibility).
+        
+        Returns:
+            A list where index i corresponds to frame index i. Missing frames
+            are represented by empty lists.
+        """
+        video_path = Path(video_path)
+        if not video_path.exists():
+            raise FileNotFoundError(f"Video not found: {video_path}")
+        
+        # Open video
+        cap = cv2.VideoCapture(str(video_path))
+        if not cap.isOpened():
+            raise ValueError(f"Could not open video: {video_path}")
+        
+        landmarker = self._get_video_landmarker()
+        results = []
+        frame_idx = 0
+        
+        try:
+            while True:
+                ret, frame = cap.read()
+                if not ret:
+                    break
+                
+                # Convert BGR to RGB
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                
+                # Create MediaPipe image with timestamp
+                timestamp_ms = int(frame_idx * (1000 / cap.get(cv2.CAP_PROP_FPS)))
+                mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame_rgb)
+                
+                # Detect pose
+                result = landmarker.detect_for_video(mp_image, timestamp_ms)
+                
+                # Parse results
+                keypoints = self._parse_mediapipe_landmarks(
+                    result,
+                    image_width=frame_rgb.shape[1],
+                    image_height=frame_rgb.shape[0]
+                )
+                results.append(keypoints)
+                frame_idx += 1
+                
+        finally:
+            cap.release()
+        
+        return results
+    
+    def supports_video_batch(self) -> bool:
+        """MediaPipe supports video batch processing."""
+        return True
+
+
 __all__ = [
     "PoseEstimator",
     "OpenPoseEstimator",
+    "MediaPipeEstimator",
+    "Keypoint",
 ]
 
 

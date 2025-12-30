@@ -1,6 +1,6 @@
 # Pose Data Processing - User Guide
 
-> **Alex Mui**<br/>
+> **Theodore Mui**<br/>
 > _Monday, December 29, 2025 3:17:35 PM_
 
 ## Overview
