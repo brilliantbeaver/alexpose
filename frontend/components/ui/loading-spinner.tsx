@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/applib/utils';
 import { Activity, Brain, Database, FileVideo, Loader2, Zap } from 'lucide-react';
 
 interface LoadingSpinnerProps {

@@ -5,8 +5,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { apiClient, APIError } from '@/lib/api-client';
-import { PoseAnalysisResult } from '@/lib/pose-analysis-types';
+import { apiClient, APIError } from '@/applib/api-client';
+import { PoseAnalysisResult } from '@/applib/pose-analysis-types';
 
 interface UsePoseAnalysisOptions {
   useCache?: boolean;
@@ -61,7 +61,7 @@ export function usePoseAnalysis(
 
     try {
       // First check status
-      const statusResponse = await apiClient.getPoseAnalysisStatus(datasetId, sequenceId);
+      const statusResponse = await apiClient.get<any>(`/pose-analysis/status/${datasetId}/${sequenceId}`);
       setStatus(statusResponse);
 
       // If analysis doesn't exist and we're not forcing refresh, show appropriate message
@@ -72,9 +72,11 @@ export function usePoseAnalysis(
       }
 
       // Fetch the full analysis
-      const response = await apiClient.getPoseAnalysis(datasetId, sequenceId, {
-        useCache,
-        forceRefresh,
+      const response = await apiClient.get<any>(`/pose-analysis/${datasetId}/${sequenceId}`, {
+        params: {
+          use_cache: useCache,
+          force_refresh: forceRefresh,
+        },
       });
 
       if (response.success && response.analysis) {
@@ -153,7 +155,7 @@ export function usePoseAnalysisFeatures(
     setError(null);
 
     try {
-      const response = await apiClient.getPoseAnalysisFeatures(datasetId, sequenceId);
+      const response = await apiClient.get<any>(`/pose-analysis/${datasetId}/${sequenceId}/features`);
       setFeatures(response);
     } catch (err) {
       console.error('Error fetching pose analysis features:', err);
@@ -193,7 +195,7 @@ export function usePoseAnalysisCycles(
     setError(null);
 
     try {
-      const response = await apiClient.getPoseAnalysisCycles(datasetId, sequenceId);
+      const response = await apiClient.get<any>(`/pose-analysis/${datasetId}/${sequenceId}/cycles`);
       setCycles(response);
     } catch (err) {
       console.error('Error fetching pose analysis cycles:', err);
@@ -233,7 +235,7 @@ export function usePoseAnalysisSymmetry(
     setError(null);
 
     try {
-      const response = await apiClient.getPoseAnalysisSymmetry(datasetId, sequenceId);
+      const response = await apiClient.get<any>(`/pose-analysis/${datasetId}/${sequenceId}/symmetry`);
       setSymmetry(response);
     } catch (err) {
       console.error('Error fetching pose analysis symmetry:', err);

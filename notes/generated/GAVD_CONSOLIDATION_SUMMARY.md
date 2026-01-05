@@ -36,7 +36,7 @@ NEW STRUCTURE:
 - `frontend/app/gavd/[dataset_id]/sequence/[sequence_id]/page.tsx` - Redirect target updated
 - `frontend/app/dashboard/page.tsx` - GAVD links updated
 - `frontend/app/page.tsx` - Homepage button updated
-- `frontend/lib/navigation-config.ts` - Navigation structure updated
+- `frontend/applib/navigation-config.ts` - Navigation structure updated
 
 #### Legacy Redirects Created:
 - `frontend/app/training/gavd/page.tsx` - Redirects to `/gavd`

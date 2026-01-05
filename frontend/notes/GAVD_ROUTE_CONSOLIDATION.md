@@ -27,7 +27,7 @@ Consolidated all GAVD dataset analysis functionality from `/training/gavd/` to `
 
 ### 2. Navigation Updates
 
-#### Navigation Menu (`frontend/lib/navigation-config.ts`):
+#### Navigation Menu (`frontend/applib/navigation-config.ts`):
 - **Added**: "GAVD Dataset Analysis" to Analyze dropdown menu
   - Label: "GAVD Dataset Analysis"
   - Icon: FileBarChart

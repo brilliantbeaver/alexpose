@@ -24,8 +24,8 @@ Successfully redesigned the top navigation bar with professional lucide-react ic
 
 ## Files Modified
 
-1. `frontend/lib/navigation-types.ts` - Updated icon types
-2. `frontend/lib/navigation-config.ts` - Imported and configured lucide-react icons
+1. `frontend/applib/navigation-types.ts` - Updated icon types
+2. `frontend/applib/navigation-config.ts` - Imported and configured lucide-react icons
 3. `frontend/components/navigation/NavigationMenu.tsx` - Render icon components
 4. `frontend/components/navigation/TopNavBar.tsx` - Applied Liquid Glass design
 

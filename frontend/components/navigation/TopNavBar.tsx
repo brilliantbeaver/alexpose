@@ -22,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { User, Theme } from '@/lib/navigation-types';
+import { User, Theme } from '@/applib/navigation-types';
 import { Sun, Moon, Menu, Settings, User as UserIcon, CreditCard, LogOut } from 'lucide-react';
 
 interface TopNavBarProps {
@@ -150,22 +150,20 @@ export function TopNavBar({ user, theme = 'light', onThemeToggle }: TopNavBarPro
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {item.icon && <item.icon className="w-5 h-5" />}
                       <span className="font-medium">{item.label}</span>
                     </Link>
-                    {item.submenu && (
+                    {item.children && (
                       <div className="ml-8 space-y-1">
-                        {item.submenu.map((subitem) => (
+                        {item.children.map((subitem) => (
                           <Link
                             key={subitem.id}
                             href={subitem.href}
                             className="flex items-center gap-2 px-4 py-1.5 text-sm rounded-md hover:bg-accent/50 hover:translate-x-1 transition-all duration-200"
                             onClick={() => setMobileMenuOpen(false)}
                           >
-                            {subitem.icon && <subitem.icon className="w-4 h-4" />}
                             <span>{subitem.label}</span>
-                            {subitem.comingSoon && (
-                              <span className="text-xs text-muted-foreground">(Soon)</span>
+                            {subitem.badge && (
+                              <span className="text-xs text-muted-foreground">({subitem.badge})</span>
                             )}
                           </Link>
                         ))}

@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import { NavigationItem } from '@/lib/navigation-types';
+import { NavigationItem } from '@/applib/navigation-types';
 
 interface NavigationMenuProps {
   items: NavigationItem[];
@@ -33,7 +33,7 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
         <NavigationMenuList>
           {items.map((item) => (
             <NavigationMenuItem key={item.id} suppressHydrationWarning>
-              {item.submenu ? (
+              {item.children ? (
                 <>
                   <NavigationMenuTrigger
                     className={`h-10 px-4 py-2 rounded-md transition-colors flex items-center whitespace-nowrap ${
@@ -42,7 +42,6 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                         : 'hover:bg-accent/50'
                     }`}
                   >
-                    {item.icon && <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />}
                     <span className="whitespace-nowrap">{item.label}</span>
                     {item.badge && (
                       <Badge variant="secondary" className="ml-2">
@@ -52,19 +51,18 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-6 w-[400px] lg:w-[500px] lg:grid-cols-2">
-                      {item.submenu.map((subitem) => (
+                      {item.children.map((subitem) => (
                         <Link
                           key={subitem.id}
                           href={subitem.href}
                           className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="flex items-center space-x-2">
-                            {subitem.icon && <subitem.icon className="w-4 h-4" />}
                             <div className="text-sm font-medium leading-none">
                               {subitem.label}
-                              {subitem.comingSoon && (
+                              {subitem.badge && (
                                 <Badge variant="outline" className="ml-2 text-xs">
-                                  Soon
+                                  {subitem.badge}
                                 </Badge>
                               )}
                             </div>
@@ -88,7 +86,6 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                           : 'hover:bg-accent/50'
                       }`}
                     >
-                      {item.icon && <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />}
                       <span className="whitespace-nowrap">{item.label}</span>
                       {item.badge && (
                         <Badge variant="secondary" className="ml-2">
@@ -98,15 +95,7 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="max-w-xs">{item.tooltip}</p>
-                    {item.helpLink && (
-                      <Link
-                        href={item.helpLink}
-                        className="text-xs text-blue-500 hover:underline mt-1 block"
-                      >
-                        Learn More →
-                      </Link>
-                    )}
+                    <p className="max-w-xs">{item.description}</p>
                   </TooltipContent>
                 </Tooltip>
               )}

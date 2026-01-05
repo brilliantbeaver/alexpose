@@ -3,7 +3,7 @@
 ## Changes Made
 
 ### 1. Moved GAVD Dataset from Models to Analyze Menu
-**File**: `frontend/lib/navigation-config.ts`
+**File**: `frontend/applib/navigation-config.ts`
 
 **Before**: GAVD Dataset was located under Models > GAVD Dataset
 **After**: GAVD Dataset is now located under Analyze > GAVD Dataset
@@ -43,7 +43,7 @@ Moving GAVD Dataset to the Analyze menu makes logical sense because:
 ## Technical Details
 
 ### Files Modified
-- `frontend/lib/navigation-config.ts` - Updated navigation configuration
+- `frontend/applib/navigation-config.ts` - Updated navigation configuration
 - Cleared Next.js build cache to ensure changes take effect
 
 ### Menu Item Configuration

@@ -13,7 +13,7 @@ Added comprehensive tooltips and help documentation to the Pose Analysis feature
 
 ### 1. Tooltip System ✅
 
-**File**: `frontend/lib/pose-analysis-tooltips.ts` (200+ lines)
+**File**: `frontend/applib/pose-analysis-tooltips.ts` (200+ lines)
 
 **Comprehensive Tooltip Definitions**:
 - Overall Assessment (level, confidence)
@@ -249,7 +249,7 @@ cadence: {
 ## Files Created/Modified
 
 ### Created Files (4)
-1. `frontend/lib/pose-analysis-tooltips.ts` - Tooltip definitions
+1. `frontend/applib/pose-analysis-tooltips.ts` - Tooltip definitions
 2. `frontend/app/help/pose-analysis/page.tsx` - Help page
 3. `frontend/components/pose-analysis/GaitCycleDiagram.tsx` - Visual diagram
 4. `frontend/components/pose-analysis/SymmetryDiagram.tsx` - Visual diagram

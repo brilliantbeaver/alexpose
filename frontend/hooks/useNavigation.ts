@@ -6,8 +6,8 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { NavigationItem } from '@/lib/navigation-types';
-import { navigationConfig } from '@/lib/navigation-config';
+import { NavigationItem } from '@/applib/navigation-types';
+import { navigationConfig } from '@/applib/navigation-config';
 
 export function useNavigation() {
   const pathname = usePathname();
@@ -16,16 +16,15 @@ export function useNavigation() {
 
   useEffect(() => {
     // Determine active navigation item based on current path
-    const findActiveItem = () => {
-      for (const item of navigationConfig) {
+    const findActiveItem = (items: NavigationItem[]): string | null => {
+      for (const item of items) {
         if (pathname === item.href || pathname.startsWith(item.href + '/')) {
           return item.id;
         }
-        if (item.submenu) {
-          for (const subitem of item.submenu) {
-            if (pathname === subitem.href) {
-              return item.id;
-            }
+        if (item.children) {
+          const childActive = findActiveItem(item.children);
+          if (childActive) {
+            return item.id;
           }
         }
       }
@@ -41,7 +40,7 @@ export function useNavigation() {
       });
     };
 
-    setActiveItem(findActiveItem());
+    setActiveItem(findActiveItem(navigationConfig.main));
     setBreadcrumbs(generateBreadcrumbs());
   }, [pathname]);
 
@@ -49,6 +48,10 @@ export function useNavigation() {
     activeItem,
     breadcrumbs,
     pathname,
-    navigationItems: navigationConfig,
+    navigationItems: navigationConfig.main,
+    userMenuItems: navigationConfig.user || [],
+    footerItems: navigationConfig.footer || [],
+    quickActions: navigationConfig.quickActions || [],
+    config: navigationConfig,
   };
 }

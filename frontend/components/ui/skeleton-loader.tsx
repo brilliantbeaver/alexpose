@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/applib/utils';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 interface SkeletonProps {

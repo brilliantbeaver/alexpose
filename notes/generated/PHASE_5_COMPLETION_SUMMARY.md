@@ -78,8 +78,8 @@ Phase 5 has been successfully completed! A modern NextJS frontend application ha
 5. `frontend/tsconfig.json` - TypeScript configuration
 
 ### Navigation System
-6. `frontend/lib/navigation-types.ts` - TypeScript interfaces for navigation
-7. `frontend/lib/navigation-config.ts` - Navigation menu configuration
+6. `frontend/applib/navigation-types.ts` - TypeScript interfaces for navigation
+7. `frontend/applib/navigation-config.ts` - Navigation menu configuration
 8. `frontend/hooks/useNavigation.ts` - Custom navigation hook
 9. `frontend/components/navigation/TopNavBar.tsx` - Top navigation bar component
 10. `frontend/components/navigation/NavigationMenu.tsx` - Navigation menu with dropdowns

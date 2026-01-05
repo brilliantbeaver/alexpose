@@ -17,6 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { VideoPlayer } from '@/components/video/VideoPlayer';
 import PoseAnalysisOverview from '@/components/pose-analysis/PoseAnalysisOverview';
 import { usePoseAnalysis } from '@/hooks/usePoseAnalysis';
+import { PerformanceMetrics } from '@/applib/pose-analysis-types';
 import { AlertCircle, RefreshCw, Download, Eye, BarChart3 } from 'lucide-react';
 
 interface ResultDetailPageProps {
@@ -217,10 +218,10 @@ export default function ResultDetailPage({ params }: ResultDetailPageProps) {
   const summary = analysis.summary || {};
   const overallAssessment = summary.overall_assessment || {};
   const gaitCycles = analysis.gait_cycles || [];
-  const performance = analysis.performance || {};
+  const performance: PerformanceMetrics = analysis.performance || { analysis_time_seconds: 0 };
 
   // Format confidence score
-  const confidenceScore = performance.confidence_score || overallAssessment.confidence || 0;
+  const confidenceScore = performance.confidence_score || (typeof overallAssessment.confidence === 'number' ? overallAssessment.confidence : 0);
   const qualityScore = performance.quality_score || 0;
 
   return (
@@ -237,7 +238,7 @@ export default function ResultDetailPage({ params }: ResultDetailPageProps) {
             Sequence {sequenceInfo.sequence_id || parsedId?.sequenceId}
           </h1>
           <p className="text-muted-foreground">
-            Analysis ID: {analysis.analysis_id} • Generated: {new Date(analysis.timestamp).toLocaleString()}
+            Analysis ID: {analysis.analysis_id} • Generated: {analysis.timestamp ? new Date(analysis.timestamp).toLocaleString() : 'N/A'}
           </p>
         </div>
         <div className="flex space-x-2">

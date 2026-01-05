@@ -25,7 +25,7 @@ The frontend has been successfully refactored to integrate with the backend pose
   - `/api/v1/pose-analysis/sequence/{dataset_id}/{sequence_id}/symmetry` - Symmetry only
 
 ### Frontend (Display Layer)
-- **API Client** (`frontend/lib/api-client.ts`): Handles all backend communication
+- **API Client** (`frontend/applib/api-client.ts`): Handles all backend communication
 - **React Hooks** (`frontend/hooks/usePoseAnalysis.ts`): Manages API state
 - **Components** (`frontend/components/pose-analysis/`): Display analysis results
 - **Pages** (`frontend/app/results/[id]/page.tsx`): Integrated with real API
@@ -43,7 +43,7 @@ The frontend has been successfully refactored to integrate with the backend pose
 ```
 Frontend Request
     ↓
-API Client (frontend/lib/api-client.ts)
+API Client (frontend/applib/api-client.ts)
     ↓
 Backend API (server/routers/pose_analysis.py)
     ↓

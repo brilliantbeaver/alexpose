@@ -18,9 +18,9 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Activity, TrendingUp, Target, Zap, AlertCircle, CheckCircle2, Info, HelpCircle, ExternalLink } from 'lucide-react';
-import { POSE_ANALYSIS_TOOLTIPS } from '@/lib/pose-analysis-tooltips';
+import { POSE_ANALYSIS_TOOLTIPS } from '@/applib/pose-analysis-tooltips';
 import { PoseAnalysisLoadingState } from '@/components/ui/loading-spinner';
-import { PoseAnalysisResult, ClinicalRecommendation } from '@/lib/pose-analysis-types';
+import { PoseAnalysisResult, ClinicalRecommendation, PerformanceMetrics } from '@/applib/pose-analysis-types';
 import Link from 'next/link';
 
 interface PoseAnalysisOverviewProps {
@@ -72,7 +72,7 @@ export default function PoseAnalysisOverview({
   const movementQuality = summary.movement_quality || {};
   const sequenceInfo = analysis.sequence_info || analysis.metadata || {};
   const gaitCycles = analysis.gait_cycles || [];
-  const performance = analysis.performance || {};
+  const performance: PerformanceMetrics | undefined = analysis.performance;
 
   /**
    * Get color class for assessment level
@@ -166,11 +166,13 @@ export default function PoseAnalysisOverview({
                     <TooltipContent className="max-w-xs">
                       <p className="font-semibold mb-1">Overall Gait Quality</p>
                       <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.overallLevel.description}</p>
-                      <div className="space-y-1 text-xs">
-                        <p><span className="font-semibold text-green-400">Good:</span> {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation.good}</p>
-                        <p><span className="font-semibold text-yellow-400">Moderate:</span> {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation.moderate}</p>
-                        <p><span className="font-semibold text-red-400">Poor:</span> {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation.poor}</p>
-                      </div>
+                      {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation && typeof POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation === 'object' && (
+                        <div className="space-y-1 text-xs">
+                          <p><span className="font-semibold text-green-400">Good:</span> {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation.good}</p>
+                          <p><span className="font-semibold text-yellow-400">Moderate:</span> {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation.moderate}</p>
+                          <p><span className="font-semibold text-red-400">Poor:</span> {POSE_ANALYSIS_TOOLTIPS.overallLevel.interpretation.poor}</p>
+                        </div>
+                      )}
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -199,10 +201,12 @@ export default function PoseAnalysisOverview({
                       <p className="font-semibold mb-1">{POSE_ANALYSIS_TOOLTIPS.symmetry.title}</p>
                       <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.symmetry.description}</p>
                       <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.symmetry.details}</p>
-                      <div className="space-y-1 text-xs">
-                        <p><span className="font-semibold">Symmetric:</span> {POSE_ANALYSIS_TOOLTIPS.symmetry.interpretation.symmetric}</p>
-                        <p><span className="font-semibold">Mildly Asymmetric:</span> {POSE_ANALYSIS_TOOLTIPS.symmetry.interpretation.mildly_asymmetric}</p>
-                      </div>
+                      {POSE_ANALYSIS_TOOLTIPS.symmetry.interpretation && typeof POSE_ANALYSIS_TOOLTIPS.symmetry.interpretation === 'object' && (
+                        <div className="space-y-1 text-xs">
+                          <p><span className="font-semibold">Symmetric:</span> {POSE_ANALYSIS_TOOLTIPS.symmetry.interpretation.symmetric}</p>
+                          <p><span className="font-semibold">Mildly Asymmetric:</span> {POSE_ANALYSIS_TOOLTIPS.symmetry.interpretation.mildly_asymmetric}</p>
+                        </div>
+                      )}
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -236,11 +240,13 @@ export default function PoseAnalysisOverview({
                 <TooltipContent className="max-w-xs">
                   <p className="font-semibold mb-1">{POSE_ANALYSIS_TOOLTIPS.cadence.title}</p>
                   <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.cadence.description}</p>
-                  <div className="space-y-1 text-xs">
-                    <p><span className="font-semibold">Normal:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation.normal}</p>
-                    <p><span className="font-semibold">Slow:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation.slow}</p>
-                    <p><span className="font-semibold">Fast:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation.fast}</p>
-                  </div>
+                  {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation && typeof POSE_ANALYSIS_TOOLTIPS.cadence.interpretation === 'object' && (
+                    <div className="space-y-1 text-xs">
+                      <p><span className="font-semibold">Normal:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation.normal}</p>
+                      <p><span className="font-semibold">Slow:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation.slow}</p>
+                      <p><span className="font-semibold">Fast:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.interpretation.fast}</p>
+                    </div>
+                  )}
                   <p className="text-xs mt-2 pt-2 border-t">
                     <span className="font-semibold">Clinical:</span> {POSE_ANALYSIS_TOOLTIPS.cadence.clinicalSignificance}
                   </p>
@@ -275,11 +281,13 @@ export default function PoseAnalysisOverview({
                   <p className="font-semibold mb-1">{POSE_ANALYSIS_TOOLTIPS.stability.title}</p>
                   <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.stability.description}</p>
                   <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.stability.details}</p>
-                  <div className="space-y-1 text-xs">
-                    <p><span className="font-semibold">High:</span> {POSE_ANALYSIS_TOOLTIPS.stability.interpretation.high}</p>
-                    <p><span className="font-semibold">Medium:</span> {POSE_ANALYSIS_TOOLTIPS.stability.interpretation.medium}</p>
-                    <p><span className="font-semibold">Low:</span> {POSE_ANALYSIS_TOOLTIPS.stability.interpretation.low}</p>
-                  </div>
+                  {POSE_ANALYSIS_TOOLTIPS.stability.interpretation && typeof POSE_ANALYSIS_TOOLTIPS.stability.interpretation === 'object' && (
+                    <div className="space-y-1 text-xs">
+                      <p><span className="font-semibold">High:</span> {POSE_ANALYSIS_TOOLTIPS.stability.interpretation.high}</p>
+                      <p><span className="font-semibold">Medium:</span> {POSE_ANALYSIS_TOOLTIPS.stability.interpretation.medium}</p>
+                      <p><span className="font-semibold">Low:</span> {POSE_ANALYSIS_TOOLTIPS.stability.interpretation.low}</p>
+                    </div>
+                  )}
                 </TooltipContent>
               </Tooltip>
             </CardTitle>
@@ -310,7 +318,9 @@ export default function PoseAnalysisOverview({
                   <p className="font-semibold mb-1">{POSE_ANALYSIS_TOOLTIPS.gaitCycles.title}</p>
                   <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.gaitCycles.description}</p>
                   <p className="text-xs mb-2">{POSE_ANALYSIS_TOOLTIPS.gaitCycles.details}</p>
-                  <p className="text-xs">{POSE_ANALYSIS_TOOLTIPS.gaitCycles.interpretation}</p>
+                  {typeof POSE_ANALYSIS_TOOLTIPS.gaitCycles.interpretation === 'string' && (
+                    <p className="text-xs">{POSE_ANALYSIS_TOOLTIPS.gaitCycles.interpretation}</p>
+                  )}
                 </TooltipContent>
               </Tooltip>
             </CardTitle>
@@ -361,14 +371,14 @@ export default function PoseAnalysisOverview({
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">Consistency:</span>
-                <Badge className={`${getAssessmentColor(movementQuality.velocity_consistency?.level || 'unknown')} text-xs`}>
-                  {formatLevel(movementQuality.velocity_consistency?.level || 'N/A')}
+                <Badge className={`${getAssessmentColor(movementQuality.velocity_consistency || 'unknown')} text-xs`}>
+                  {formatLevel(movementQuality.velocity_consistency || 'N/A')}
                 </Badge>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">Smoothness:</span>
-                <Badge className={`${getAssessmentColor(movementQuality.movement_smoothness?.level || 'unknown')} text-xs`}>
-                  {formatLevel(movementQuality.movement_smoothness?.level || 'N/A')}
+                <Badge className={`${getAssessmentColor(movementQuality.movement_smoothness || 'unknown')} text-xs`}>
+                  {formatLevel(movementQuality.movement_smoothness || 'N/A')}
                 </Badge>
               </div>
             </div>
@@ -563,7 +573,7 @@ export default function PoseAnalysisOverview({
           </div>
           
           {/* Performance Metrics */}
-          {performance.analysis_time_seconds && (
+          {performance?.analysis_time_seconds && (
             <div className="mt-4 pt-4 border-t">
               <p className="text-xs text-muted-foreground mb-2">Performance</p>
               <div className="grid grid-cols-2 gap-4 text-xs">

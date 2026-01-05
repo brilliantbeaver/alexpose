@@ -101,7 +101,7 @@ Comprehensive analysis interface with 4 tabs:
 - Skeleton overlay
 - Confidence scores
 
-#### 3. **Navigation Integration** (`frontend/lib/navigation-config.ts`)
+#### 3. **Navigation Integration** (`frontend/applib/navigation-config.ts`)
 
 Added to Models menu:
 
