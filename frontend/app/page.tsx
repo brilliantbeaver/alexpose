@@ -87,7 +87,7 @@ export default function Home() {
               Upload GAVD CSV files for batch processing and model training
             </p>
             <Button asChild size="sm" className="rounded-full w-full bg-purple-600 hover:bg-purple-700">
-              <Link href="/training/gavd">
+              <Link href="/gavd">
                 🚀 Upload GAVD Dataset
               </Link>
             </Button>

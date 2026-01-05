@@ -173,8 +173,8 @@ export default function DashboardPage() {
 
   const getAnalysisLink = (analysis: RecentAnalysis) => {
     if (analysis.type === 'gavd_dataset') {
-      // Link to full dataset analysis page (training/gavd path)
-      return `/training/gavd/${analysis.dataset_id}`;
+      // Link to full dataset analysis page
+      return `/gavd/${analysis.dataset_id}`;
     } else {
       return `/results/${analysis.analysis_id}`;
     }

@@ -162,7 +162,7 @@ export function TopNavBar({ user, theme = 'light', onThemeToggle }: TopNavBarPro
                             className="flex items-center gap-2 px-4 py-1.5 text-sm rounded-md hover:bg-accent/50 hover:translate-x-1 transition-all duration-200"
                             onClick={() => setMobileMenuOpen(false)}
                           >
-                            <subitem.icon className="w-4 h-4" />
+                            {subitem.icon && <subitem.icon className="w-4 h-4" />}
                             <span>{subitem.label}</span>
                             {subitem.comingSoon && (
                               <span className="text-xs text-muted-foreground">(Soon)</span>

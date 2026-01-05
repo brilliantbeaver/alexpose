@@ -174,13 +174,13 @@ export default function PoseAnalysisOverview({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                {getAssessmentIcon(overallAssessment.overall_level)}
+                {getAssessmentIcon(overallAssessment.overall_level || 'unknown')}
               </div>
               <Badge className={`${getAssessmentColor(overallAssessment.overall_level || 'unknown')} text-sm px-3 py-1`}>
                 {formatLevel(overallAssessment.overall_level || 'Unknown')}
               </Badge>
               <p className="text-xs text-muted-foreground">
-                Confidence: <span className="font-medium">{formatLevel(overallAssessment.confidence || 'N/A')}</span>
+                Confidence: <span className="font-medium">{typeof overallAssessment.confidence === 'number' ? `${(overallAssessment.confidence * 100).toFixed(0)}%` : 'N/A'}</span>
               </p>
             </div>
             
@@ -206,7 +206,7 @@ export default function PoseAnalysisOverview({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                {getAssessmentIcon(symmetryAssessment.symmetry_classification)}
+                {getAssessmentIcon(symmetryAssessment.symmetry_classification || 'unknown')}
               </div>
               <Badge className={`${getAssessmentColor(symmetryAssessment.symmetry_classification || 'unknown')} text-sm px-3 py-1`}>
                 {formatLevel(symmetryAssessment.symmetry_classification || 'Unknown')}
@@ -361,14 +361,14 @@ export default function PoseAnalysisOverview({
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">Consistency:</span>
-                <Badge className={`${getAssessmentColor(movementQuality.velocity_consistency || 'unknown')} text-xs`}>
-                  {formatLevel(movementQuality.velocity_consistency || 'N/A')}
+                <Badge className={`${getAssessmentColor(movementQuality.velocity_consistency?.level || 'unknown')} text-xs`}>
+                  {formatLevel(movementQuality.velocity_consistency?.level || 'N/A')}
                 </Badge>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">Smoothness:</span>
-                <Badge className={`${getAssessmentColor(movementQuality.movement_smoothness || 'unknown')} text-xs`}>
-                  {formatLevel(movementQuality.movement_smoothness || 'N/A')}
+                <Badge className={`${getAssessmentColor(movementQuality.movement_smoothness?.level || 'unknown')} text-xs`}>
+                  {formatLevel(movementQuality.movement_smoothness?.level || 'N/A')}
                 </Badge>
               </div>
             </div>

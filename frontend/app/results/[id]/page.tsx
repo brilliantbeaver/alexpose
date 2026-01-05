@@ -1,11 +1,11 @@
 /**
  * Individual Result Detail Page
- * Display detailed gait analysis results for a specific analysis
+ * Display detailed gait analysis results from backend API
  */
 
 'use client';
 
-import { use } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,164 +13,194 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { VideoPlayer } from '@/components/video/VideoPlayer';
-
-// Mock data - In production, this would come from API
-const mockAnalysisData = {
-  '1': {
-    id: 1,
-    name: 'Walking Test 1',
-    date: '2024-01-03',
-    time: '14:30:00',
-    status: 'Normal',
-    confidence: 95,
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    duration: '00:00:45',
-    frameCount: 1350,
-    conditions: [],
-    metrics: {
-      cadence: { value: 112, unit: 'steps/min', normal: true, range: '100-120' },
-      strideLength: { value: 1.42, unit: 'm', normal: true, range: '1.2-1.6' },
-      walkingSpeed: { value: 1.35, unit: 'm/s', normal: true, range: '1.2-1.5' },
-      stepWidth: { value: 0.12, unit: 'm', normal: true, range: '0.08-0.15' },
-      symmetry: { value: 98, unit: '%', normal: true, range: '>95' },
-      stability: { value: 94, unit: '%', normal: true, range: '>90' },
-    },
-    temporalAnalysis: {
-      gaitCycles: 42,
-      stancePhase: { left: 62, right: 63, unit: '%' },
-      swingPhase: { left: 38, right: 37, unit: '%' },
-      doubleSupportTime: 12,
-    },
-    spatialAnalysis: {
-      leftStepLength: 0.71,
-      rightStepLength: 0.71,
-      stepLengthVariability: 2.3,
-      baseOfSupport: 0.12,
-    },
-    aiAnalysis: {
-      model: 'GPT-4.1',
-      classification: 'Normal Gait Pattern',
-      confidence: 95,
-      reasoning: 'The gait pattern shows consistent cadence, symmetric step lengths, and normal temporal characteristics. All measured parameters fall within expected ranges for healthy adult walking.',
-      recommendations: [
-        'Continue regular physical activity',
-        'Maintain current fitness level',
-        'No immediate concerns identified',
-      ],
-    },
-  },
-  '2': {
-    id: 2,
-    name: 'Gait Analysis 2',
-    date: '2024-01-03',
-    time: '11:15:00',
-    status: 'Abnormal',
-    confidence: 88,
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    duration: '00:01:12',
-    frameCount: 2160,
-    conditions: ['Limping', 'Asymmetry', 'Reduced Cadence'],
-    metrics: {
-      cadence: { value: 85, unit: 'steps/min', normal: false, range: '100-120' },
-      strideLength: { value: 1.15, unit: 'm', normal: false, range: '1.2-1.6' },
-      walkingSpeed: { value: 0.98, unit: 'm/s', normal: false, range: '1.2-1.5' },
-      stepWidth: { value: 0.18, unit: 'm', normal: false, range: '0.08-0.15' },
-      symmetry: { value: 78, unit: '%', normal: false, range: '>95' },
-      stability: { value: 82, unit: '%', normal: false, range: '>90' },
-    },
-    temporalAnalysis: {
-      gaitCycles: 51,
-      stancePhase: { left: 68, right: 58, unit: '%' },
-      swingPhase: { left: 32, right: 42, unit: '%' },
-      doubleSupportTime: 18,
-    },
-    spatialAnalysis: {
-      leftStepLength: 0.62,
-      rightStepLength: 0.53,
-      stepLengthVariability: 8.7,
-      baseOfSupport: 0.18,
-    },
-    aiAnalysis: {
-      model: 'GPT-4.1',
-      classification: 'Abnormal Gait Pattern',
-      confidence: 88,
-      reasoning: 'The analysis reveals significant asymmetry between left and right steps, reduced cadence, and increased step width. The stance phase shows notable differences between sides, suggesting possible compensation for discomfort or weakness on the right side.',
-      recommendations: [
-        'Consult with a healthcare professional for detailed evaluation',
-        'Consider physical therapy assessment',
-        'Monitor for pain or discomfort during walking',
-        'Avoid high-impact activities until evaluated',
-      ],
-      possibleConditions: [
-        { name: 'Antalgic Gait', probability: 72, description: 'Gait pattern suggesting pain avoidance' },
-        { name: 'Hip Weakness', probability: 65, description: 'Reduced strength in hip abductors' },
-        { name: 'Leg Length Discrepancy', probability: 45, description: 'Possible difference in leg lengths' },
-      ],
-    },
-  },
-  '3': {
-    id: 3,
-    name: 'Patient Video 3',
-    date: '2024-01-02',
-    time: '09:45:00',
-    status: 'Normal',
-    confidence: 92,
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    duration: '00:00:38',
-    frameCount: 1140,
-    conditions: [],
-    metrics: {
-      cadence: { value: 108, unit: 'steps/min', normal: true, range: '100-120' },
-      strideLength: { value: 1.38, unit: 'm', normal: true, range: '1.2-1.6' },
-      walkingSpeed: { value: 1.28, unit: 'm/s', normal: true, range: '1.2-1.5' },
-      stepWidth: { value: 0.11, unit: 'm', normal: true, range: '0.08-0.15' },
-      symmetry: { value: 96, unit: '%', normal: true, range: '>95' },
-      stability: { value: 93, unit: '%', normal: true, range: '>90' },
-    },
-    temporalAnalysis: {
-      gaitCycles: 34,
-      stancePhase: { left: 61, right: 62, unit: '%' },
-      swingPhase: { left: 39, right: 38, unit: '%' },
-      doubleSupportTime: 11,
-    },
-    spatialAnalysis: {
-      leftStepLength: 0.69,
-      rightStepLength: 0.69,
-      stepLengthVariability: 2.8,
-      baseOfSupport: 0.11,
-    },
-    aiAnalysis: {
-      model: 'GPT-4.1',
-      classification: 'Normal Gait Pattern',
-      confidence: 92,
-      reasoning: 'Gait parameters are within normal ranges with good symmetry and stability. Minor variations are within acceptable limits for healthy walking.',
-      recommendations: [
-        'Maintain current activity level',
-        'Continue regular exercise routine',
-      ],
-    },
-  },
-};
+import PoseAnalysisOverview from '@/components/pose-analysis/PoseAnalysisOverview';
+import { usePoseAnalysis } from '@/hooks/usePoseAnalysis';
+import { AlertCircle, RefreshCw, Download, Eye, BarChart3 } from 'lucide-react';
 
 interface ResultDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+// Helper function to parse the ID into dataset and sequence
+function parseAnalysisId(id: string): { datasetId: string; sequenceId: string } | null {
+  // Expected format: datasetId_sequenceId or datasetId-sequenceId
+  const parts = id.includes('_') ? id.split('_') : id.split('-');
+  
+  if (parts.length >= 2) {
+    return {
+      datasetId: parts[0],
+      sequenceId: parts.slice(1).join('_'), // Rejoin in case sequence has underscores
+    };
+  }
+  
+  // Fallback: assume it's a sequence ID in a default dataset
+  return {
+    datasetId: 'default',
+    sequenceId: id,
+  };
+}
+
 export default function ResultDetailPage({ params }: ResultDetailPageProps) {
   const { id } = use(params);
-  const analysis = mockAnalysisData[id as keyof typeof mockAnalysisData];
+  const [forceRefresh, setForceRefresh] = useState(false);
+  
+  // Parse the ID to get dataset and sequence
+  const parsedId = parseAnalysisId(id);
+  
+  const {
+    analysis,
+    loading,
+    error,
+    refetch,
+    clearError,
+    status,
+  } = usePoseAnalysis(
+    parsedId?.datasetId || null,
+    parsedId?.sequenceId || null,
+    {
+      useCache: !forceRefresh,
+      forceRefresh,
+      autoFetch: true,
+    }
+  );
 
+  // Reset force refresh after use
+  useEffect(() => {
+    if (forceRefresh) {
+      setForceRefresh(false);
+    }
+  }, [forceRefresh]);
+
+  const handleRefresh = async () => {
+    clearError();
+    setForceRefresh(true);
+    await refetch();
+  };
+
+  const handleExportReport = () => {
+    if (analysis) {
+      const reportData = {
+        analysis_id: analysis.analysis_id,
+        sequence_info: analysis.sequence_info,
+        summary: analysis.summary,
+        gait_cycles: analysis.gait_cycles,
+        performance: analysis.performance,
+        timestamp: analysis.timestamp,
+        exported_at: new Date().toISOString(),
+      };
+      
+      const blob = new Blob([JSON.stringify(reportData, null, 2)], {
+        type: 'application/json',
+      });
+      
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pose-analysis-${analysis.analysis_id}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/results">← Back</Link>
+              </Button>
+            </div>
+            <div className="h-8 w-64 bg-muted animate-pulse rounded" />
+            <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+          </div>
+        </div>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center space-x-2 py-8">
+              <RefreshCw className="h-6 w-6 animate-spin" />
+              <span className="text-lg">Loading analysis...</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/results">← Back</Link>
+              </Button>
+            </div>
+            <h1 className="text-3xl font-bold">Analysis Error</h1>
+            <p className="text-muted-foreground">
+              Analysis ID: {id}
+            </p>
+          </div>
+        </div>
+
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Failed to Load Analysis</AlertTitle>
+          <AlertDescription className="mt-2">
+            {error}
+          </AlertDescription>
+        </Alert>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <div className="text-6xl">⚠️</div>
+              <h2 className="text-2xl font-bold">Analysis Not Available</h2>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                The analysis could not be loaded. This might be because:
+              </p>
+              <ul className="text-sm text-muted-foreground space-y-1 max-w-md mx-auto text-left">
+                <li>• The analysis hasn't been generated yet</li>
+                <li>• The sequence ID is incorrect</li>
+                <li>• The backend server is not running</li>
+                <li>• There was an error during analysis</li>
+              </ul>
+              <div className="flex justify-center space-x-2 pt-4">
+                <Button onClick={handleRefresh}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Retry
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link href="/results">← Back to Results</Link>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // No analysis found
   if (!analysis) {
     return (
       <div className="space-y-8">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
-              <div className="text-6xl">❌</div>
-              <h2 className="text-2xl font-bold">Analysis Not Found</h2>
+              <div className="text-6xl">📊</div>
+              <h2 className="text-2xl font-bold">No Analysis Data</h2>
               <p className="text-muted-foreground">
-                The analysis with ID {id} could not be found.
+                No analysis data was returned for ID {id}.
               </p>
               <Button asChild>
                 <Link href="/results">← Back to Results</Link>
@@ -182,6 +212,17 @@ export default function ResultDetailPage({ params }: ResultDetailPageProps) {
     );
   }
 
+  // Extract data from analysis
+  const sequenceInfo = analysis.sequence_info || analysis.metadata || {};
+  const summary = analysis.summary || {};
+  const overallAssessment = summary.overall_assessment || {};
+  const gaitCycles = analysis.gait_cycles || [];
+  const performance = analysis.performance || {};
+
+  // Format confidence score
+  const confidenceScore = performance.confidence_score || overallAssessment.confidence || 0;
+  const qualityScore = performance.quality_score || 0;
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -192,20 +233,21 @@ export default function ResultDetailPage({ params }: ResultDetailPageProps) {
               <Link href="/results">← Back</Link>
             </Button>
           </div>
-          <h1 className="text-3xl font-bold">{analysis.name}</h1>
+          <h1 className="text-3xl font-bold">
+            Sequence {sequenceInfo.sequence_id || parsedId?.sequenceId}
+          </h1>
           <p className="text-muted-foreground">
-            Analysis #{analysis.id} • {analysis.date} at {analysis.time}
+            Analysis ID: {analysis.analysis_id} • Generated: {new Date(analysis.timestamp).toLocaleString()}
           </p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline">
-            💾 Export Report
+          <Button variant="outline" onClick={handleExportReport}>
+            <Download className="h-4 w-4 mr-2" />
+            Export Report
           </Button>
-          <Button variant="outline">
-            📊 Compare
-          </Button>
-          <Button>
-            🔄 Re-analyze
+          <Button variant="outline" onClick={handleRefresh}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Re-analyze
           </Button>
         </div>
       </div>
@@ -216,13 +258,15 @@ export default function ResultDetailPage({ params }: ResultDetailPageProps) {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Analysis Summary</CardTitle>
-              <CardDescription>Overall classification and confidence</CardDescription>
+              <CardDescription>
+                Comprehensive gait analysis results • Version {analysis.version}
+              </CardDescription>
             </div>
             <Badge
-              variant={analysis.status === 'Normal' ? 'default' : 'destructive'}
+              variant={overallAssessment.overall_level === 'good' ? 'default' : 'destructive'}
               className="text-lg px-4 py-2"
             >
-              {analysis.status}
+              {overallAssessment.overall_level || 'Unknown'}
             </Badge>
           </div>
         </CardHeader>
@@ -230,322 +274,167 @@ export default function ResultDetailPage({ params }: ResultDetailPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <div className="text-sm text-muted-foreground mb-1">Confidence Score</div>
-              <div className="text-2xl font-bold">{analysis.confidence}%</div>
-              <Progress value={analysis.confidence} className="mt-2" />
+              <div className="text-2xl font-bold">{Math.round(confidenceScore * 100)}%</div>
+              <Progress value={confidenceScore * 100} className="mt-2" />
             </div>
             <div>
               <div className="text-sm text-muted-foreground mb-1">Video Duration</div>
-              <div className="text-2xl font-bold">{analysis.duration}</div>
+              <div className="text-2xl font-bold">
+                {sequenceInfo.duration ? `${sequenceInfo.duration.toFixed(1)}s` : 'N/A'}
+              </div>
               <div className="text-sm text-muted-foreground mt-1">
-                {analysis.frameCount} frames analyzed
+                {sequenceInfo.frame_count || 0} frames • {sequenceInfo.fps || 30} FPS
               </div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground mb-1">AI Model</div>
-              <div className="text-2xl font-bold">{analysis.aiAnalysis.model}</div>
+              <div className="text-sm text-muted-foreground mb-1">Gait Cycles</div>
+              <div className="text-2xl font-bold">{gaitCycles.length}</div>
               <div className="text-sm text-muted-foreground mt-1">
-                Latest generation model
+                Detected cycles
               </div>
             </div>
           </div>
 
-          {analysis.conditions.length > 0 && (
+          {/* Processing Performance */}
+          {performance.processing_time && (
             <>
               <Separator />
-              <div>
-                <div className="text-sm font-medium mb-2">Detected Conditions</div>
-                <div className="flex flex-wrap gap-2">
-                  {analysis.conditions.map((condition, idx) => (
-                    <Badge key={idx} variant="outline" className="text-sm">
-                      ⚠️ {condition}
-                    </Badge>
-                  ))}
-                </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Processing Time:</span>
+                <span className="font-medium">{performance.processing_time.toFixed(2)}s</span>
               </div>
             </>
+          )}
+
+          {/* Cache Status */}
+          {status && (
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Cache Status:</span>
+              <span className="font-medium">
+                {status.cached ? '✓ Cached' : '○ Fresh'} 
+                {status.lastUpdated && ` • Updated ${new Date(status.lastUpdated).toLocaleString()}`}
+              </span>
+            </div>
           )}
         </CardContent>
       </Card>
 
       {/* Detailed Analysis Tabs */}
-      <Tabs defaultValue="metrics" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="metrics">Gait Metrics</TabsTrigger>
-          <TabsTrigger value="temporal">Temporal</TabsTrigger>
-          <TabsTrigger value="spatial">Spatial</TabsTrigger>
-          <TabsTrigger value="ai">AI Analysis</TabsTrigger>
-          <TabsTrigger value="video">Video</TabsTrigger>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="cycles">Gait Cycles</TabsTrigger>
+          <TabsTrigger value="features">Features</TabsTrigger>
+          <TabsTrigger value="raw">Raw Data</TabsTrigger>
         </TabsList>
 
-        {/* Gait Metrics Tab */}
-        <TabsContent value="metrics" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Gait Metrics</CardTitle>
-              <CardDescription>Key measurements from gait analysis</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Object.entries(analysis.metrics).map(([key, metric]) => (
-                  <div key={key} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="font-medium capitalize">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </div>
-                      <Badge variant={metric.normal ? 'default' : 'destructive'}>
-                        {metric.normal ? '✓ Normal' : '⚠ Abnormal'}
-                      </Badge>
-                    </div>
-                    <div className="flex items-baseline space-x-2">
-                      <div className="text-3xl font-bold">
-                        {metric.value}
-                      </div>
-                      <div className="text-muted-foreground">{metric.unit}</div>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Normal range: {metric.range}
-                    </div>
-                    <Progress
-                      value={metric.normal ? 100 : 60}
-                      className={metric.normal ? '' : 'bg-red-100'}
-                    />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Overview Tab - Use the existing PoseAnalysisOverview component */}
+        <TabsContent value="overview" className="space-y-4">
+          <PoseAnalysisOverview
+            analysis={analysis}
+            loading={false}
+            error={null}
+          />
         </TabsContent>
 
-        {/* Temporal Analysis Tab */}
-        <TabsContent value="temporal" className="space-y-4">
+        {/* Gait Cycles Tab */}
+        <TabsContent value="cycles" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Temporal Analysis</CardTitle>
-              <CardDescription>Time-based gait characteristics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <div className="text-sm text-muted-foreground mb-2">Gait Cycles Detected</div>
-                  <div className="text-4xl font-bold">{analysis.temporalAnalysis.gaitCycles}</div>
-                </div>
-
-                <Separator />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <div className="font-medium mb-4">Stance Phase</div>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Left</span>
-                          <span className="font-medium">
-                            {analysis.temporalAnalysis.stancePhase.left}%
-                          </span>
-                        </div>
-                        <Progress value={analysis.temporalAnalysis.stancePhase.left} />
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Right</span>
-                          <span className="font-medium">
-                            {analysis.temporalAnalysis.stancePhase.right}%
-                          </span>
-                        </div>
-                        <Progress value={analysis.temporalAnalysis.stancePhase.right} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="font-medium mb-4">Swing Phase</div>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Left</span>
-                          <span className="font-medium">
-                            {analysis.temporalAnalysis.swingPhase.left}%
-                          </span>
-                        </div>
-                        <Progress value={analysis.temporalAnalysis.swingPhase.left} />
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Right</span>
-                          <span className="font-medium">
-                            {analysis.temporalAnalysis.swingPhase.right}%
-                          </span>
-                        </div>
-                        <Progress value={analysis.temporalAnalysis.swingPhase.right} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div>
-                  <div className="text-sm text-muted-foreground mb-2">Double Support Time</div>
-                  <div className="text-2xl font-bold">
-                    {analysis.temporalAnalysis.doubleSupportTime}%
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    Normal range: 10-12%
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Spatial Analysis Tab */}
-        <TabsContent value="spatial" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Spatial Analysis</CardTitle>
-              <CardDescription>Distance and position measurements</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <div className="font-medium">Left Step Length</div>
-                  <div className="text-3xl font-bold">
-                    {analysis.spatialAnalysis.leftStepLength} m
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="font-medium">Right Step Length</div>
-                  <div className="text-3xl font-bold">
-                    {analysis.spatialAnalysis.rightStepLength} m
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="font-medium">Step Length Variability</div>
-                  <div className="text-3xl font-bold">
-                    {analysis.spatialAnalysis.stepLengthVariability}%
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Lower is better (normal: &lt;5%)
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="font-medium">Base of Support</div>
-                  <div className="text-3xl font-bold">
-                    {analysis.spatialAnalysis.baseOfSupport} m
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Normal range: 0.08-0.15 m
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* AI Analysis Tab */}
-        <TabsContent value="ai" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>AI-Powered Analysis</CardTitle>
+              <CardTitle>Gait Cycles Analysis</CardTitle>
               <CardDescription>
-                Insights from {analysis.aiAnalysis.model}
+                Detected gait cycles with timing and characteristics
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <div className="text-sm font-medium mb-2">Classification</div>
-                <div className="text-2xl font-bold">{analysis.aiAnalysis.classification}</div>
-                <div className="text-sm text-muted-foreground mt-1">
-                  Confidence: {analysis.aiAnalysis.confidence}%
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <div className="text-sm font-medium mb-2">Reasoning</div>
-                <p className="text-muted-foreground leading-relaxed">
-                  {analysis.aiAnalysis.reasoning}
-                </p>
-              </div>
-
-              <Separator />
-
-              <div>
-                <div className="text-sm font-medium mb-3">Recommendations</div>
-                <ul className="space-y-2">
-                  {analysis.aiAnalysis.recommendations.map((rec, idx) => (
-                    <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-blue-500 mt-1">•</span>
-                      <span className="text-muted-foreground">{rec}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {'possibleConditions' in analysis.aiAnalysis && analysis.aiAnalysis.possibleConditions && (
-                <>
-                  <Separator />
-                  <div>
-                    <div className="text-sm font-medium mb-3">Possible Conditions</div>
-                    <div className="space-y-3">
-                      {analysis.aiAnalysis.possibleConditions.map((condition, idx) => (
-                        <div key={idx} className="border rounded-lg p-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="font-medium">{condition.name}</div>
-                            <Badge variant="outline">{condition.probability}%</Badge>
+            <CardContent>
+              {gaitCycles.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {gaitCycles.map((cycle, index) => (
+                      <Card key={cycle.cycle_id || index} className="p-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">Cycle {cycle.cycle_id || index + 1}</span>
+                            <Badge variant="outline">
+                              {cycle.duration ? `${cycle.duration.toFixed(2)}s` : 'N/A'}
+                            </Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            {condition.description}
-                          </p>
-                          <Progress value={condition.probability} className="mt-2" />
+                          <div className="text-sm space-y-1">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Start Frame:</span>
+                              <span>{cycle.start_frame}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">End Frame:</span>
+                              <span>{cycle.end_frame}</span>
+                            </div>
+                            {cycle.step_length && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Step Length:</span>
+                                <span>{cycle.step_length.toFixed(3)}m</span>
+                              </div>
+                            )}
+                            {cycle.stride_length && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Stride Length:</span>
+                                <span>{cycle.stride_length.toFixed(3)}m</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      ))}
-                    </div>
+                      </Card>
+                    ))}
                   </div>
-                </>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-4xl mb-4">🚶</div>
+                  <p className="text-muted-foreground">No gait cycles detected</p>
+                </div>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Video Tab */}
-        <TabsContent value="video" className="space-y-4">
+        {/* Features Tab */}
+        <TabsContent value="features" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Video Analysis</CardTitle>
-              <CardDescription>Original video with pose overlay and frame-by-frame controls</CardDescription>
+              <CardTitle>Extracted Features</CardTitle>
+              <CardDescription>
+                Detailed feature analysis from pose estimation
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <VideoPlayer
-                videoUrl={analysis.videoUrl}
-                videoName={analysis.name}
-                frameRate={30}
-                onTimeUpdate={(time) => {
-                  // Handle time updates if needed
-                  console.log('Current time:', time);
-                }}
-                onFrameChange={(frame) => {
-                  // Handle frame changes if needed
-                  console.log('Current frame:', frame);
-                }}
-              />
-              <div className="mt-4 flex justify-center space-x-2">
-                <Button variant="outline" asChild>
-                  <a href={analysis.videoUrl} download={`${analysis.name}.mp4`}>
-                    📥 Download Video
-                  </a>
-                </Button>
-                <Button variant="outline">
-                  🎨 Toggle Pose Overlay
-                </Button>
-                <Button variant="outline">
-                  📊 Show Metrics Overlay
-                </Button>
-              </div>
+              <Alert>
+                <Eye className="h-4 w-4" />
+                <AlertTitle>Feature Analysis</AlertTitle>
+                <AlertDescription>
+                  Detailed feature extraction data would be displayed here. 
+                  This includes kinematic features, joint angles, temporal features, 
+                  stride characteristics, and symmetry measures.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Raw Data Tab */}
+        <TabsContent value="raw" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Raw Analysis Data</CardTitle>
+              <CardDescription>
+                Complete analysis response from the backend API
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre className="bg-muted p-4 rounded-lg overflow-auto text-sm max-h-96">
+                {JSON.stringify(analysis, null, 2)}
+              </pre>
             </CardContent>
           </Card>
         </TabsContent>

@@ -6,7 +6,7 @@
  * (Overview, Sequences, Visualization, Pose Analysis) accessible from any entry point.
  * 
  * Redirect Pattern: /gavd/[dataset_id]/sequence/[sequence_id]
- *                → /training/gavd/[dataset_id]?sequence=[sequence_id]&tab=visualization
+ *                → /gavd/[dataset_id]?sequence=[sequence_id]&tab=visualization
  */
 
 'use client';
@@ -25,7 +25,7 @@ export default function GAVDSequencePage() {
 
   useEffect(() => {
     // Redirect to dataset page with sequence pre-selected and visualization tab active
-    const targetUrl = `/training/gavd/${dataset_id}?sequence=${sequence_id}&tab=visualization`;
+    const targetUrl = `/gavd/${dataset_id}?sequence=${sequence_id}&tab=visualization`;
     console.log(`[Sequence Redirect] Redirecting to: ${targetUrl}`);
     router.replace(targetUrl);
   }, [dataset_id, sequence_id, router]);
