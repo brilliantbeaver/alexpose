@@ -42,7 +42,7 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                         : 'hover:bg-accent/50'
                     }`}
                   >
-                    <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                    {item.icon && <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />}
                     <span className="whitespace-nowrap">{item.label}</span>
                     {item.badge && (
                       <Badge variant="secondary" className="ml-2">
@@ -59,7 +59,7 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                           className="group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                           <div className="flex items-center space-x-2">
-                            <subitem.icon className="w-4 h-4" />
+                            {subitem.icon && <subitem.icon className="w-4 h-4" />}
                             <div className="text-sm font-medium leading-none">
                               {subitem.label}
                               {subitem.comingSoon && (
@@ -88,7 +88,7 @@ export function NavigationMenu({ items, activeItem }: NavigationMenuProps) {
                           : 'hover:bg-accent/50'
                       }`}
                     >
-                      <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                      {item.icon && <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />}
                       <span className="whitespace-nowrap">{item.label}</span>
                       {item.badge && (
                         <Badge variant="secondary" className="ml-2">

@@ -150,7 +150,7 @@ export function TopNavBar({ user, theme = 'light', onThemeToggle }: TopNavBarPro
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <item.icon className="w-5 h-5" />
+                      {item.icon && <item.icon className="w-5 h-5" />}
                       <span className="font-medium">{item.label}</span>
                     </Link>
                     {item.submenu && (
