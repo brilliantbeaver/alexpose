@@ -1,0 +1,296 @@
+# LLM Models Configuration
+# This file contains specifications for all supported LLM models
+# Used by the classification system and other LLM-dependent components
+
+# Model Categories and Capabilities
+model_categories:
+  text_only: "Models that process text input only"
+  multimodal: "Models that can process text, images, and/or video"
+  reasoning: "Models with enhanced reasoning capabilities"
+
+# Supported LLM Models with detailed specifications
+models:
+  # Latest OpenAI GPT-5 Series Models (2025)
+  gpt-5.2:
+    provider: "openai"
+    capability: "multimodal"
+    max_tokens: 16384
+    temperature: 0.1
+    supports_json_mode: true
+    supports_video: true
+    context_window: 200000
+    cost_per_1k_tokens:
+      input: 0.010
+      output: 0.030
+    description: "Latest GPT-5.2 flagship model with advanced reasoning and multimodal capabilities"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "premium"
+
+  gpt-5.1:
+    provider: "openai"
+    capability: "multimodal"
+    max_tokens: 12288
+    temperature: 0.1
+    supports_json_mode: true
+    supports_video: true
+    context_window: 128000
+    cost_per_1k_tokens:
+      input: 0.008
+      output: 0.024
+    description: "GPT-5.1 performance model with enhanced reasoning capabilities"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "high"
+
+  gpt-5-mini:
+    provider: "openai"
+    capability: "multimodal"
+    max_tokens: 8192
+    temperature: 0.1
+    supports_json_mode: true
+    supports_video: true
+    context_window: 128000
+    cost_per_1k_tokens:
+      input: 0.003
+      output: 0.012
+    description: "GPT-5 Mini - cost-effective model with advanced capabilities"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "medium"
+
+  gpt-5-nano:
+    provider: "openai"
+    capability: "multimodal"
+    max_tokens: 4096
+    temperature: 0.1
+    supports_json_mode: true
+    supports_video: false
+    context_window: 64000
+    cost_per_1k_tokens:
+      input: 0.001
+      output: 0.004
+    description: "GPT-5 Nano - ultra-efficient model for high-volume processing"
+    text: true
+    images: true
+    video: false
+    multimodal: true
+    reasoning: "standard"
+    cost_tier: "low"
+
+  gpt-4.1:
+    provider: "openai"
+    capability: "multimodal"
+    max_tokens: 8192
+    temperature: 0.1
+    supports_json_mode: true
+    supports_video: true
+    context_window: 128000
+    cost_per_1k_tokens:
+      input: 0.006
+      output: 0.018
+    description: "Enhanced GPT-4.1 model with improved reasoning and multimodal capabilities"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "enhanced"
+    cost_tier: "high"
+
+  gpt-4.1-mini:
+    provider: "openai"
+    capability: "multimodal"
+    max_tokens: 6144
+    temperature: 0.1
+    supports_json_mode: true
+    supports_video: false
+    context_window: 128000
+    cost_per_1k_tokens:
+      input: 0.002
+      output: 0.008
+    description: "Enhanced GPT-4.1 Mini - balanced performance and cost efficiency"
+    text: true
+    images: true
+    video: false
+    multimodal: true
+    reasoning: "enhanced"
+    cost_tier: "medium"
+
+  # Latest Google Gemini Models (2024-2025)
+  gemini-3-pro-preview:
+    provider: "gemini"
+    capability: "multimodal"
+    max_tokens: 16384
+    temperature: 0.1
+    supports_json_mode: false
+    supports_video: true
+    context_window: 2000000
+    cost_per_1k_tokens:
+      input: 0.00125
+      output: 0.00375
+    description: "Gemini 3 Pro Preview - latest flagship model with advanced reasoning"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "premium"
+
+  gemini-3-pro-image-preview:
+    provider: "gemini"
+    capability: "multimodal"
+    max_tokens: 16384
+    temperature: 0.1
+    supports_json_mode: false
+    supports_video: true
+    context_window: 2000000
+    cost_per_1k_tokens:
+      input: 0.00125
+      output: 0.00375
+    description: "Gemini 3 Pro Image Preview - latest model with enhanced image capabilities"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "premium"
+
+  gemini-3-flash-preview:
+    provider: "gemini"
+    capability: "multimodal"
+    max_tokens: 8192
+    temperature: 0.1
+    supports_json_mode: false
+    supports_video: true
+    context_window: 1000000
+    cost_per_1k_tokens:
+      input: 0.000075
+      output: 0.0003
+    description: "Gemini 3 Flash Preview - latest fast model with multimodal support"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "medium"
+
+  gemini-2.5-flash:
+    provider: "gemini"
+    capability: "multimodal"
+    max_tokens: 8192
+    temperature: 0.1
+    supports_json_mode: false
+    supports_video: true
+    context_window: 1000000
+    cost_per_1k_tokens:
+      input: 0.000075
+      output: 0.0003
+    description: "Gemini 2.5 Flash - fast and cost-effective with multimodal support"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "low"
+
+  gemini-2.5-flash-image:
+    provider: "gemini"
+    capability: "multimodal"
+    max_tokens: 8192
+    temperature: 0.1
+    supports_json_mode: false
+    supports_video: true
+    context_window: 1000000
+    cost_per_1k_tokens:
+      input: 0.000075
+      output: 0.0003
+    description: "Gemini 2.5 Flash Image - optimized for image processing tasks"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "low"
+
+  gemini-2.5-pro:
+    provider: "gemini"
+    capability: "multimodal"
+    max_tokens: 8192
+    temperature: 0.1
+    supports_json_mode: false
+    supports_video: true
+    context_window: 2000000
+    cost_per_1k_tokens:
+      input: 0.00125
+      output: 0.00375
+    description: "Gemini 2.5 Pro - balanced performance with large context window"
+    text: true
+    images: true
+    video: true
+    multimodal: true
+    reasoning: "advanced"
+    cost_tier: "medium"
+
+# Model Selection Presets
+presets:
+  cost_optimized:
+    description: "Prioritize cost-effective models"
+    preferred_models:
+      - "gpt-5-nano"
+      - "gemini-2.5-flash"
+      - "gpt-4.1-mini"
+      - "gemini-2.5-flash-image"
+    
+  performance_optimized:
+    description: "Prioritize highest capability models"
+    preferred_models:
+      - "gpt-5.2"
+      - "gpt-5.1"
+      - "gemini-3-pro-preview"
+      - "gemini-3-pro-image-preview"
+    
+  balanced:
+    description: "Balance between cost and performance"
+    preferred_models:
+      - "gpt-5-mini"
+      - "gpt-5.1"
+      - "gemini-3-flash-preview"
+      - "gemini-2.5-pro"
+      - "gpt-4.1"
+
+# Provider-specific settings
+providers:
+  openai:
+    api_key_env_var: "OPENAI_API_KEY"
+    base_url: null  # Use default
+    timeout: 60
+    max_retries: 3
+    
+  gemini:
+    api_key_env_var: "GOOGLE_API_KEY"
+    timeout: 60
+    max_retries: 3
+
+# Default model priority order (used when no preset is specified)
+default_priority_order:
+  - "gpt-5.2"
+  - "gpt-5.1"
+  - "gpt-5-mini"
+  - "gpt-4.1"
+  - "gpt-4.1-mini"
+  - "gpt-5-nano"
+  - "gemini-3-pro-preview"
+  - "gemini-3-pro-image-preview"
+  - "gemini-3-flash-preview"
+  - "gemini-2.5-pro"
+  - "gemini-2.5-flash"
+  - "gemini-2.5-flash-image"

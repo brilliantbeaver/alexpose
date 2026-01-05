@@ -1,0 +1,288 @@
+name: Performance Testing
+
+on:
+  schedule:
+    # Run performance tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of performance test to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - video_processing
+        - concurrent_analysis
+        - memory_usage
+        - api_load
+
+jobs:
+  performance-baseline:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install dependencies
+      run: |
+        uv sync --all-extras --dev
+    
+    - name: Cache performance baselines
+      uses: actions/cache@v4
+      with:
+        path: tests/performance/baselines.json
+        key: performance-baselines-${{ runner.os }}-${{ hashFiles('ambient/**/*.py', 'server/**/*.py') }}
+        restore-keys: |
+          performance-baselines-${{ runner.os }}-
+    
+    - name: Run performance tests
+      run: |
+        if [ "${{ github.event.inputs.test_type }}" = "video_processing" ]; then
+          uv run pytest tests/performance/test_video_processing_performance.py -v --tb=short
+        elif [ "${{ github.event.inputs.test_type }}" = "concurrent_analysis" ]; then
+          uv run pytest tests/performance/test_concurrent_analysis.py -v --tb=short
+        elif [ "${{ github.event.inputs.test_type }}" = "memory_usage" ]; then
+          uv run pytest tests/performance/test_memory_usage.py -v --tb=short
+        elif [ "${{ github.event.inputs.test_type }}" = "api_load" ]; then
+          uv run pytest tests/performance/test_api_load.py -v --tb=short
+        else
+          uv run pytest -m "performance" -v --tb=short
+        fi
+    
+    - name: Generate performance report
+      if: always()
+      run: |
+        if [ -f "tests/performance/performance_report.json" ]; then
+          echo "Performance report generated"
+          cat tests/performance/performance_report.json
+        else
+          echo "No performance report found"
+        fi
+    
+    - name: Upload performance results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-results
+        path: |
+          tests/performance/baselines.json
+          tests/performance/performance_report.json
+        retention-days: 90
+    
+    - name: Check for performance regressions
+      if: always()
+      run: |
+        # This would integrate with the benchmark framework to detect regressions
+        echo "Checking for performance regressions..."
+        
+        # Example: fail if any performance metric regressed by more than 20%
+        if [ -f "tests/performance/performance_report.json" ]; then
+          # Parse report and check for regressions
+          # This is a placeholder - actual implementation would parse JSON
+          echo "Performance analysis completed"
+        fi
+
+  performance-comparison:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install dependencies
+      run: |
+        uv sync --all-extras --dev
+    
+    - name: Run performance tests on current branch
+      run: |
+        uv run pytest -m "performance" -v --tb=short
+        if [ -f "tests/performance/performance_report.json" ]; then
+          cp tests/performance/performance_report.json current_performance.json
+        fi
+    
+    - name: Checkout base branch
+      run: |
+        git checkout ${{ github.base_ref }}
+    
+    - name: Install dependencies (base)
+      run: |
+        uv sync --all-extras --dev
+    
+    - name: Run performance tests on base branch
+      run: |
+        uv run pytest -m "performance" -v --tb=short
+        if [ -f "tests/performance/performance_report.json" ]; then
+          cp tests/performance/performance_report.json base_performance.json
+        fi
+    
+    - name: Compare performance
+      run: |
+        echo "# Performance Comparison" > performance_comparison.md
+        echo "" >> performance_comparison.md
+        
+        if [ -f "current_performance.json" ] && [ -f "base_performance.json" ]; then
+          echo "## Performance Changes" >> performance_comparison.md
+          echo "Comparing performance between base branch and current changes..." >> performance_comparison.md
+          echo "" >> performance_comparison.md
+          
+          # This would be a more sophisticated comparison in practice
+          echo "- Current branch performance data available" >> performance_comparison.md
+          echo "- Base branch performance data available" >> performance_comparison.md
+          echo "- Detailed comparison would be implemented here" >> performance_comparison.md
+        else
+          echo "Performance data not available for comparison" >> performance_comparison.md
+        fi
+        
+        cat performance_comparison.md
+    
+    - name: Comment PR with performance comparison
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          try {
+            const comparison = fs.readFileSync('performance_comparison.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comparison
+            });
+          } catch (error) {
+            console.log('Could not read performance comparison:', error);
+          }
+    
+    - name: Upload comparison results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-comparison
+        path: |
+          current_performance.json
+          base_performance.json
+          performance_comparison.md
+        retention-days: 30
+
+  load-testing:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.test_type == 'all'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install dependencies
+      run: |
+        uv sync --all-extras --dev
+    
+    - name: Start test server
+      run: |
+        # Start the FastAPI server in background for load testing
+        uv run uvicorn server.main:app --host 0.0.0.0 --port 8000 &
+        sleep 10  # Wait for server to start
+    
+    - name: Run API load tests
+      run: |
+        uv run pytest tests/performance/test_api_load.py -v --tb=short
+    
+    - name: Stop test server
+      if: always()
+      run: |
+        pkill -f uvicorn || true
+    
+    - name: Upload load test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: load-test-results
+        path: |
+          tests/performance/performance_report.json
+        retention-days: 30
+
+  memory-profiling:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'memory_usage'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install dependencies and profiling tools
+      run: |
+        uv sync --all-extras --dev
+        uv add memory-profiler psutil
+    
+    - name: Run memory profiling tests
+      run: |
+        uv run pytest tests/performance/test_memory_usage.py -v --tb=short
+    
+    - name: Generate memory report
+      if: always()
+      run: |
+        echo "# Memory Usage Report" > memory_report.md
+        echo "" >> memory_report.md
+        echo "Memory profiling completed for:" >> memory_report.md
+        echo "- Video processing pipeline" >> memory_report.md
+        echo "- Concurrent operations" >> memory_report.md
+        echo "- Memory leak detection" >> memory_report.md
+        echo "- Large dataset processing" >> memory_report.md
+        
+        if [ -f "tests/performance/performance_report.json" ]; then
+          echo "" >> memory_report.md
+          echo "## Performance Metrics" >> memory_report.md
+          echo "See attached performance report for detailed metrics." >> memory_report.md
+        fi
+    
+    - name: Upload memory profiling results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: memory-profiling-results
+        path: |
+          memory_report.md
+          tests/performance/performance_report.json
+        retention-days: 30

@@ -1,0 +1,94 @@
+# AlexPose Production Configuration Overrides
+# This file contains production-specific overrides for the main configuration
+
+# Production video processing settings
+video_processing:
+  max_video_size_mb: 1000  # Higher limit for production
+  default_frame_rate: 30.0  # Full frame rate for production
+
+# Production pose estimation settings
+pose_estimation:
+  estimators:
+    mediapipe:
+      model_complexity: 2  # Highest accuracy for production
+      min_detection_confidence: 0.7  # Higher threshold for production
+      min_tracking_confidence: 0.7
+    openpose:
+      enabled: true  # Enable if properly configured
+    ultralytics:
+      enabled: true  # Enable advanced estimators in production
+    alphapose:
+      enabled: true  # Enable advanced estimators in production
+
+# Production classification settings
+classification:
+  llm:
+    model: "gpt-5.2"  # Use latest flagship model for production accuracy
+    temperature: 0.0  # Deterministic responses for production
+    max_tokens: 2000  # Longer responses for detailed analysis
+  
+  # Higher thresholds for production reliability
+  normal_abnormal_threshold: 0.8
+  condition_confidence_threshold: 0.7
+
+# Production storage settings
+storage:
+  cache_enabled: true
+  backup_enabled: true  # Enable backups in production
+
+# Production API settings
+api:
+  host: "0.0.0.0"  # Accept connections from all interfaces
+  port: 8000
+  cors_origins:
+    - "https://alexpose.com"
+    - "https://www.alexpose.com"
+    - "https://app.alexpose.com"
+
+# Production security settings
+security:
+  force_https: true  # Enforce HTTPS in production
+  require_api_key: true  # Require API keys in production
+  rate_limiting_enabled: true  # Enable rate limiting
+
+# Production logging settings
+logging:
+  level: "INFO"  # Standard logging level for production
+  
+  # Longer retention for production
+  retention: "90 days"
+  
+  # Enable external logging services
+  external_logging:
+    enabled: true
+    service: "papertrail"
+
+# Production YouTube settings
+youtube:
+  quality: "best[height<=1080]"  # High quality for production analysis
+
+# Production background tasks
+background_tasks:
+  enabled: true  # Full background processing in production
+  
+  # Production timeouts
+  timeouts:
+    video_processing: 600   # 10 minutes
+    gait_analysis: 1200     # 20 minutes
+    model_training: 7200    # 2 hours
+
+# Production-specific settings
+development:
+  debug: false
+  auto_reload: false
+  use_sample_data: false
+
+# Production performance settings
+performance:
+  max_memory_usage_mb: 4096  # Higher memory limit for production
+  max_workers: 8             # More workers for production
+  cache_ttl_seconds: 7200    # Longer cache TTL (2 hours)
+  
+  # Production database settings
+  db_pool_size: 20
+  db_max_overflow: 40

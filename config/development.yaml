@@ -1,0 +1,94 @@
+# AlexPose Development Configuration Overrides
+# This file contains development-specific overrides for the main configuration
+
+# Development-specific video processing settings
+video_processing:
+  max_video_size_mb: 100  # Smaller limit for development
+  default_frame_rate: 15.0  # Lower frame rate for faster processing
+
+# Development pose estimation settings
+pose_estimation:
+  estimators:
+    mediapipe:
+      model_complexity: 0  # Faster processing for development
+      min_detection_confidence: 0.3  # Lower threshold for development
+      min_tracking_confidence: 0.3
+      enabled: true  # Explicitly enable mediapipe in development
+    openpose:
+      enabled: false  # Disabled by default in development
+    ultralytics:
+      enabled: false  # Disabled by default in development
+    alphapose:
+      enabled: false  # Disabled by default in development
+
+# Development classification settings
+classification:
+  llm:
+    model: "gpt-5-nano"  # Ultra-efficient model for development
+    temperature: 0.2  # Slightly higher for more varied responses in testing
+    max_tokens: 500   # Shorter responses for development
+  
+  # Lower thresholds for development testing
+  normal_abnormal_threshold: 0.5
+  condition_confidence_threshold: 0.4
+
+# Development storage settings
+storage:
+  cache_enabled: true
+  backup_enabled: false  # Disable backups in development
+
+# Development API settings
+api:
+  host: "127.0.0.1"  # Localhost only for development
+  port: 8000
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "http://localhost:5173"
+    - "http://127.0.0.1:3000"
+    - "http://127.0.0.1:8080"
+    - "http://127.0.0.1:5173"
+
+# Development security settings
+security:
+  force_https: false
+  require_api_key: false
+  rate_limiting_enabled: false  # Disabled for easier development
+
+# Development logging settings
+logging:
+  level: "DEBUG"  # More verbose logging for development
+  
+  # Shorter retention for development
+  retention: "7 days"
+  
+  # External logging disabled in development
+  external_logging:
+    enabled: false
+
+# Development YouTube settings
+youtube:
+  quality: "worst[height<=480]"  # Lower quality for faster downloads in development
+
+# Development background tasks
+background_tasks:
+  enabled: false  # Simplified processing in development
+  
+  # Shorter timeouts for development
+  timeouts:
+    video_processing: 60   # 1 minute
+    gait_analysis: 120     # 2 minutes
+    model_training: 600    # 10 minutes
+
+# Development-specific settings
+development:
+  debug: true
+  auto_reload: true
+  use_sample_data: true
+  sample_data_directory: "data/samples"
+
+# Development performance settings
+performance:
+  max_memory_usage_mb: 1024  # Lower memory limit for development
+  max_workers: 2             # Fewer workers for development
+  cache_ttl_seconds: 300     # Shorter cache TTL (5 minutes)

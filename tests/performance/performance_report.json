@@ -1,0 +1,53 @@
+{
+  "timestamp": 1767389612.0348938,
+  "total_benchmarks": 6,
+  "baselines": {
+    "video_upload_30s": {
+      "execution_time": 0.5022902488708496,
+      "memory_usage_mb": 0.015625,
+      "cpu_usage_percent": 0.0,
+      "peak_memory_mb": 165.7109375,
+      "throughput": 1.9908807751056363
+    },
+    "health_endpoint": {
+      "execution_time": 0.5019807815551758,
+      "memory_usage_mb": 0.01953125,
+      "cpu_usage_percent": 0.0,
+      "peak_memory_mb": 167.87109375,
+      "throughput": 19.921081378891074
+    },
+    "frame_extraction": {
+      "execution_time": 0.4033329486846924,
+      "memory_usage_mb": 14.13671875,
+      "cpu_usage_percent": 56.1,
+      "peak_memory_mb": 451.36328125,
+      "throughput": 2.4793412074592376
+    },
+    "pose_estimation": {
+      "execution_time": 1.60921049118042,
+      "memory_usage_mb": 0.03125,
+      "cpu_usage_percent": 1.0,
+      "peak_memory_mb": 395.078125,
+      "throughput": 0.6214227445574633
+    },
+    "gait_analysis": {
+      "execution_time": 0.2019355297088623,
+      "memory_usage_mb": 0.015625,
+      "cpu_usage_percent": 0.0,
+      "peak_memory_mb": 395.109375,
+      "throughput": 4.952075553230954
+    },
+    "complete_pipeline": {
+      "execution_time": 17.389270067214966,
+      "memory_usage_mb": 0.03125,
+      "cpu_usage_percent": 0.2,
+      "peak_memory_mb": 395.140625,
+      "throughput": 0.05750672662709173
+    }
+  },
+  "summary": {
+    "avg_execution_time": 3.434670011202494,
+    "avg_memory_usage": 2.375,
+    "avg_throughput": 5.00371806431191
+  }
+}

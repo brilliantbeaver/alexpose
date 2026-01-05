@@ -1,0 +1,287 @@
+# AlexPose Gait Analysis System - Main Configuration
+# This file contains the default configuration for the AlexPose system
+
+# Video Processing Configuration
+video_processing:
+  supported_formats:
+    - mp4
+    - avi
+    - mov
+    - webm
+  default_frame_rate: 30.0
+  max_video_size_mb: 500
+  ffmpeg_enabled: true  # Will fallback to OpenCV if FFmpeg not available
+
+# Pose Estimation Configuration
+pose_estimation:
+  estimators:
+    mediapipe:
+      model_complexity: 1
+      min_detection_confidence: 0.5
+      min_tracking_confidence: 0.5
+      enabled: true
+    openpose:
+      model_folder: "models/openpose"
+      net_resolution: "368x368"
+      enabled: false  # Requires manual setup
+    yolov8-pose:
+      # YOLO v8 Pose model (2023 release, COCO 17 keypoints)
+      # Model path supports:
+      #   - Relative path: "data/models/yolov8n-pose.pt" (recommended)
+      #   - Absolute path: "/path/to/yolov8n-pose.pt"
+      #   - Model name only: "yolov8n-pose.pt" (searches data/models/, then project root, then downloads)
+      model_name: "data/models/yolov8n-pose.pt"
+      device: "auto"
+      confidence_threshold: 0.5
+      enabled: false  # Optional enhancement
+    yolov11-pose:
+      # YOLO11 Pose model (2024 release, improved accuracy)
+      # Model path supports:
+      #   - Relative path: "data/models/yolo11n-pose.pt" (recommended)
+      #   - Absolute path: "/path/to/yolo11n-pose.pt"
+      #   - Model name only: "yolo11n-pose.pt" (searches data/models/, then project root, then downloads)
+      model_name: "data/models/yolo11n-pose.pt"
+      device: "auto"
+      confidence_threshold: 0.5
+      enabled: false  # Optional enhancement
+    alphapose:
+      model_folder: "/opt/AlphaPose"
+      model_name: "halpe26"
+      detector: "yolo"
+      device: "auto"
+      confidence_threshold: 0.3
+      enabled: false  # Requires manual setup
+    alphapose_halpe:
+      model_folder: "/opt/AlphaPose"
+      model_name: "halpe26"
+      detector: "yolo"
+      device: "auto"
+      confidence_threshold: 0.3
+      enabled: false  # Requires manual setup
+    alphapose_coco:
+      model_folder: "/opt/AlphaPose"
+      model_name: "coco"
+      detector: "yolo"
+      device: "auto"
+      confidence_threshold: 0.3
+      enabled: false  # Requires manual setup
+  
+  default_estimator: "mediapipe"
+  confidence_threshold: 0.5
+
+# Gait Analysis Configuration
+gait_analysis:
+  min_sequence_length: 10
+  # Gait cycle detection method - determines how gait cycles are identified
+  # Available options:
+  #   "heel_strike" - Detects cycles based on heel contact events (default)
+  #                   - Tracks ankle vertical position and velocity
+  #                   - Identifies local minima in ankle height
+  #                   - Most reliable for normal walking patterns
+  #   "toe_off"     - Detects cycles based on toe-off events
+  #                   - Tracks toe/ankle forward velocity and acceleration
+  #                   - Identifies peaks during push-off phase
+  #                   - Useful for analyzing push-off mechanics
+  #   "combined"    - Uses both heel strikes and toe-offs for robust detection
+  #                   - Cross-validates events for consistency
+  #                   - Provides most accurate cycle segmentation
+  #                   - Recommended for challenging or irregular gait patterns
+  gait_cycle_detection_method: "combined"
+  feature_extraction:
+    window_size: 30
+    overlap: 0.5
+    normalize_features: true
+
+# Classification Configuration
+classification:
+  # LLM-based classification using latest OpenAI and Gemini models
+  llm:
+    # Model configuration - references external model specifications
+    models_config_file: "config/llm_models.yaml"  # External LLM models configuration
+    
+    # Default model selection
+    provider: "openai"  # "openai" or "gemini"
+    model: "gpt-5.2"  # Latest and most capable model as default
+    temperature: 0.1
+    max_tokens: 2000
+    enabled: false
+    multimodal_enabled: true
+    
+    # Two-stage classification settings
+    enable_two_stage: true
+    
+    # Stage 1: Normal/Abnormal classification
+    stage1:
+      prompt_name: "normal_abnormal_classification"
+      confidence_threshold: 0.7
+      
+    # Stage 2: Condition identification (only if abnormal)
+    stage2:
+      prompt_name: "condition_classification"
+      confidence_threshold: 0.6
+      
+    # Multimodal classification settings
+    multimodal:
+      prompt_name: "multimodal_classification"
+      max_images: 5
+      image_resize_max: 1024
+      supported_formats: ["jpg", "jpeg", "png", "webp"]
+    
+    # API settings (provider-specific configurations)
+    api:
+      # OpenAI settings
+      openai:
+        api_key_env_var: "OPENAI_API_KEY"
+        base_url: null  # Use default
+        timeout: 60
+        max_retries: 3
+        
+      # Gemini settings
+      gemini:
+        api_key_env_var: "GOOGLE_API_KEY"
+        timeout: 60
+        max_retries: 3
+    
+    # Fallback settings
+    fallback:
+      enable_fallback: true
+      triggers:
+        - "api_error"
+        - "model_unavailable"
+        - "low_confidence"
+      min_confidence_threshold: 0.3
+    
+    # Model selection strategy (references presets in llm_models.yaml)
+    model_selection:
+      strategy: "balanced"  # "cost_optimized", "performance_optimized", "balanced"
+      prefer_multimodal: true
+    
+    # Performance settings
+    performance:
+      enable_async: true
+      batch_size: 10
+      batch_timeout: 300
+      enable_caching: false
+      cache_ttl: 3600  # 1 hour
+    
+    # Logging and monitoring
+    logging:
+      log_requests: true
+      log_responses: false  # Set to true for debugging (may contain sensitive data)
+      log_costs: true
+  
+  # Legacy settings for backward compatibility
+  normal_abnormal_threshold: 0.7
+  condition_confidence_threshold: 0.6
+  fallback_to_gemini: false
+
+# Storage Configuration
+storage:
+  data_directory: "data"
+  logs_directory: "logs"
+  config_directory: "config"
+  
+  # Data subdirectories
+  videos_directory: "data/videos"
+  youtube_directory: "data/youtube"
+  analysis_directory: "data/analysis"
+  models_directory: "data/models"
+  training_directory: "data/training"
+  cache_directory: "data/cache"
+  exports_directory: "data/exports"
+  
+  cache_enabled: true
+  backup_enabled: true
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+    - "http://localhost:5173"
+  
+  # Rate limiting
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_size: 10
+
+# Security Configuration
+security:
+  jwt_secret_key: ""  # Set via environment variable JWT_SECRET_KEY
+  encryption_enabled: true
+  rate_limiting_enabled: true
+  
+  # HTTPS settings
+  force_https: false  # Set to true in production
+  
+  # API key validation
+  require_api_key: false  # Set to true for production
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "structured"
+  
+  # Log rotation
+  rotation: "1 day"
+  retention: "30 days"
+  compression: "zip"
+  
+  # External logging services
+  external_logging:
+    enabled: false
+    service: "papertrail"  # or "datadog", "newrelic"
+
+# YouTube Integration
+youtube:
+  enabled: true
+  download_directory: "data/youtube"
+  
+  # yt-dlp configuration
+  quality: "best[height<=720]"  # Limit quality for processing efficiency
+  format: "mp4"
+  
+  # Cookies file for private videos (optional)
+  cookies_file: "config/yt_cookies.txt"
+
+# Background Tasks Configuration
+background_tasks:
+  enabled: false
+  
+  # Celery configuration (if using Redis)
+  celery:
+    broker_url: "redis://localhost:6379/0"
+    result_backend: "redis://localhost:6379/0"
+    
+  # Task timeouts
+  timeouts:
+    video_processing: 300  # 5 minutes
+    gait_analysis: 600     # 10 minutes
+    model_training: 3600   # 1 hour
+
+# Development Configuration
+development:
+  debug: false
+  auto_reload: true
+  
+  # Test data
+  use_sample_data: false
+  sample_data_directory: "data/samples"
+
+# Performance Configuration
+performance:
+  # Memory management
+  max_memory_usage_mb: 2048
+  
+  # Parallel processing
+  max_workers: 4
+  
+  # Caching
+  cache_ttl_seconds: 3600  # 1 hour
+  
+  # Database connection pooling
+  db_pool_size: 10
+  db_max_overflow: 20

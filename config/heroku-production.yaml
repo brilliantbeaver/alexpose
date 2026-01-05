@@ -1,0 +1,305 @@
+# Heroku Production Configuration for AlexPose Gait Analysis System
+# This file contains Heroku-specific production overrides
+
+# Heroku-specific video processing settings
+video_processing:
+  max_video_size_mb: 500  # Heroku has file size limits
+  default_frame_rate: 30.0
+  ffmpeg_enabled: true  # Ensure FFmpeg buildpack is configured
+
+# Heroku pose estimation settings (optimized for dyno resources)
+pose_estimation:
+  estimators:
+    mediapipe:
+      model_complexity: 1  # Balance between accuracy and performance
+      min_detection_confidence: 0.6
+      min_tracking_confidence: 0.6
+      enabled: true
+    openpose:
+      enabled: false  # Disabled due to resource constraints
+    ultralytics:
+      enabled: false  # Disabled due to resource constraints
+    alphapose:
+      enabled: false  # Disabled due to resource constraints
+  
+  default_estimator: "mediapipe"
+  confidence_threshold: 0.6
+
+# Heroku classification settings
+classification:
+  llm:
+    provider: "openai"
+    model: "gpt-5-mini"  # Cost-effective for production
+    temperature: 0.0  # Deterministic responses
+    max_tokens: 1000
+    enabled: true
+    
+    # Use environment variables for API keys
+    api_key_env: "OPENAI_API_KEY"
+  
+  normal_abnormal_threshold: 0.75
+  condition_confidence_threshold: 0.65
+
+# Heroku storage settings (use ephemeral filesystem carefully)
+storage:
+  data_directory: "/tmp/data"  # Heroku ephemeral filesystem
+  logs_directory: "/tmp/logs"
+  config_directory: "config"
+  
+  # Heroku-specific directories
+  videos_directory: "/tmp/data/videos"
+  youtube_directory: "/tmp/data/youtube"
+  analysis_directory: "/tmp/data/analysis"
+  models_directory: "/tmp/data/models"
+  training_directory: "/tmp/data/training"
+  cache_directory: "/tmp/data/cache"
+  exports_directory: "/tmp/data/exports"
+  
+  cache_enabled: true
+  backup_enabled: false  # Use external storage for backups
+
+# Heroku API settings
+api:
+  host: "0.0.0.0"
+  port: "${PORT}"  # Heroku sets this environment variable
+  cors_origins:
+    - "https://alexpose.herokuapp.com"
+    - "https://www.alexpose.com"
+    - "https://app.alexpose.com"
+
+# Heroku security settings
+security:
+  jwt_secret_key: "${JWT_SECRET_KEY}"  # Set via Heroku config vars
+  encryption_enabled: true
+  rate_limiting_enabled: true
+  force_https: true
+  require_api_key: true
+
+# Heroku logging settings (integrate with Heroku logging)
+logging:
+  level: "INFO"
+  format: "structured"
+  
+  # Heroku log management
+  rotation: "1 day"
+  retention: "7 days"  # Shorter retention on Heroku
+  compression: "gzip"
+  
+  # Use Heroku add-ons for external logging
+  external_logging:
+    enabled: true
+    service: "papertrail"
+
+# Heroku YouTube settings
+youtube:
+  enabled: true
+  download_directory: "/tmp/data/youtube"
+  quality: "best[height<=720]"  # Optimize for processing speed
+  format: "mp4"
+
+# Heroku background tasks (use Redis add-on)
+background_tasks:
+  enabled: true
+  
+  # Use Heroku Redis add-on
+  celery:
+    broker_url: "${REDIS_URL}"  # Heroku Redis add-on sets this
+    result_backend: "${REDIS_URL}"
+  
+  # Heroku-optimized timeouts
+  timeouts:
+    video_processing: 300   # 5 minutes (Heroku request timeout is 30s for web)
+    gait_analysis: 600      # 10 minutes
+    model_training: 1800    # 30 minutes (consider worker dynos)
+
+# Heroku development settings
+development:
+  debug: false
+  auto_reload: false
+  use_sample_data: false
+
+# Heroku performance settings (optimized for dyno resources)
+performance:
+  max_memory_usage_mb: 400   # Leave headroom for Heroku dyno limits
+  max_workers: 2             # Limited by dyno resources
+  cache_ttl_seconds: 3600    # 1 hour
+  
+  # Database settings (use Heroku Postgres add-on)
+  db_pool_size: 5
+  db_max_overflow: 10
+
+# Heroku-specific environment variables
+environment_variables:
+  # Required Heroku config vars
+  required:
+    - "PORT"
+    - "DATABASE_URL"
+    - "REDIS_URL"
+    - "OPENAI_API_KEY"
+    - "JWT_SECRET_KEY"
+  
+  # Optional Heroku config vars
+  optional:
+    - "GEMINI_API_KEY"
+    - "PAPERTRAIL_API_TOKEN"
+    - "NEW_RELIC_LICENSE_KEY"
+    - "SENTRY_DSN"
+
+# Heroku dyno configuration recommendations
+dyno_config:
+  # Basic tier (suitable for development/testing)
+  basic:
+    web: "basic"
+    worker: "basic"
+    memory_limit: "512MB"
+    estimated_cost: "$7/month per dyno"
+  
+  # Standard tier (suitable for production)
+  standard:
+    web: "standard-1x"
+    worker: "standard-1x"
+    memory_limit: "512MB"
+    estimated_cost: "$25/month per dyno"
+  
+  # Performance tier (for high-traffic applications)
+  performance:
+    web: "standard-2x"
+    worker: "standard-2x"
+    memory_limit: "1GB"
+    estimated_cost: "$50/month per dyno"
+
+# Heroku add-ons configuration
+addons:
+  # Database
+  postgres:
+    plan: "heroku-postgresql:mini"  # $5/month
+    connection_pooling: true
+    ssl_required: true
+  
+  # Caching and background jobs
+  redis:
+    plan: "heroku-redis:mini"  # $3/month
+    maxmemory_policy: "allkeys-lru"
+  
+  # Logging
+  papertrail:
+    plan: "papertrail:choklad"  # Free
+    log_retention: "7 days"
+  
+  # Monitoring
+  newrelic:
+    plan: "newrelic:wayne"  # $25/month
+    apm_enabled: true
+  
+  # Error tracking
+  sentry:
+    plan: "sentry:f1"  # Free
+    error_tracking: true
+
+# Heroku scaling guidelines
+scaling:
+  # Traffic-based scaling recommendations
+  low_traffic:  # < 100 requests/hour
+    web_dynos: 1
+    worker_dynos: 1
+    postgres: "mini"
+    redis: "mini"
+  
+  medium_traffic:  # 100-1000 requests/hour
+    web_dynos: 2
+    worker_dynos: 2
+    postgres: "basic"
+    redis: "premium-0"
+  
+  high_traffic:  # > 1000 requests/hour
+    web_dynos: 4
+    worker_dynos: 4
+    postgres: "standard-0"
+    redis: "premium-2"
+
+# Heroku deployment settings
+deployment:
+  # Build settings
+  buildpacks:
+    - "heroku/python"
+    - "https://github.com/heroku/heroku-buildpack-ffmpeg"
+  
+  # Runtime settings
+  python_version: "3.11.7"
+  
+  # Process types
+  processes:
+    web: "cd server && gunicorn server.main:app --bind 0.0.0.0:$PORT --workers 2 --worker-class uvicorn.workers.UvicornWorker"
+    worker: "cd server && celery -A server.tasks worker --loglevel=info"
+    beat: "cd server && celery -A server.tasks beat --loglevel=info"
+  
+  # Health checks
+  health_checks:
+    web:
+      path: "/health"
+      timeout: 30
+      interval: 60
+    worker:
+      command: "celery -A server.tasks inspect ping"
+      timeout: 30
+      interval: 300
+
+# Heroku monitoring and alerting
+monitoring:
+  # Application metrics
+  metrics:
+    response_time_threshold: 2000  # milliseconds
+    error_rate_threshold: 5        # percentage
+    memory_usage_threshold: 80     # percentage
+  
+  # Alerts
+  alerts:
+    email: "admin@alexpose.com"
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+  
+  # Log monitoring
+  log_alerts:
+    error_patterns:
+      - "ERROR"
+      - "CRITICAL"
+      - "Exception"
+    warning_patterns:
+      - "WARNING"
+      - "WARN"
+
+# Heroku backup and recovery
+backup:
+  # Database backups (automatic with Heroku Postgres)
+  postgres:
+    automatic: true
+    retention: "7 days"
+    schedule: "daily"
+  
+  # File backups (use external storage)
+  files:
+    enabled: false  # Heroku ephemeral filesystem
+    external_storage: "AWS S3"  # Recommended for file persistence
+  
+  # Configuration backups
+  config:
+    backup_config_vars: true
+    backup_addons: true
+
+# Heroku troubleshooting
+troubleshooting:
+  # Common issues and solutions
+  memory_issues:
+    symptoms: ["R14 Memory quota exceeded", "Out of memory errors"]
+    solutions: ["Upgrade dyno type", "Optimize memory usage", "Add swap"]
+  
+  timeout_issues:
+    symptoms: ["H12 Request timeout", "H13 Connection closed"]
+    solutions: ["Use background workers", "Optimize processing time", "Increase timeout"]
+  
+  build_failures:
+    symptoms: ["Build failed", "Dependency errors"]
+    solutions: ["Check buildpack order", "Verify dependencies", "Clear build cache"]
+  
+  database_issues:
+    symptoms: ["Connection errors", "Query timeouts"]
+    solutions: ["Check connection limits", "Optimize queries", "Upgrade database plan"]

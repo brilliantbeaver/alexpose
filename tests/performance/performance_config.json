@@ -1,0 +1,67 @@
+{
+  "tolerance": {
+    "execution_time_tolerance": 10.0,
+    "memory_usage_tolerance": 15.0,
+    "throughput_tolerance": 10.0,
+    "test_specific_tolerances": {
+      "video_loading_30s": {
+        "execution_time_tolerance": 15.0,
+        "memory_usage_tolerance": 20.0
+      },
+      "frame_extraction_30s": {
+        "execution_time_tolerance": 25.0,
+        "memory_usage_tolerance": 30.0
+      },
+      "complete_pipeline_30s": {
+        "execution_time_tolerance": 30.0,
+        "memory_usage_tolerance": 25.0
+      },
+      "metadata_extraction": {
+        "execution_time_tolerance": 20.0,
+        "memory_usage_tolerance": 15.0
+      },
+      "api_response_time_health": {
+        "execution_time_tolerance": 10.0,
+        "memory_usage_tolerance": 10.0
+      },
+      "api_response_time_status": {
+        "execution_time_tolerance": 10.0,
+        "memory_usage_tolerance": 10.0
+      },
+      "health_endpoint": {
+        "execution_time_tolerance": 15.0,
+        "memory_usage_tolerance": 15.0
+      },
+      "concurrent_analysis_5": {
+        "execution_time_tolerance": 20.0,
+        "memory_usage_tolerance": 25.0,
+        "throughput_tolerance": 15.0
+      },
+      "memory_usage_standard": {
+        "execution_time_tolerance": 15.0,
+        "memory_usage_tolerance": 10.0
+      },
+      "test_api_integration": {
+        "execution_time_tolerance": 15.0,
+        "memory_usage_tolerance": 15.0
+      },
+      "test_custom": {
+        "execution_time_tolerance": 20.0,
+        "memory_usage_tolerance": 25.0,
+        "throughput_tolerance": 20.0
+      },
+      "integration_test": {
+        "execution_time_tolerance": 40.0,
+        "memory_usage_tolerance": 30.0,
+        "throughput_tolerance": 30.0
+      },
+      "custom_demo_test": {
+        "execution_time_tolerance": 25.0,
+        "memory_usage_tolerance": 30.0,
+        "throughput_tolerance": 20.0
+      }
+    },
+    "ci_multiplier": 1.5,
+    "local_multiplier": 1.0
+  }
+}

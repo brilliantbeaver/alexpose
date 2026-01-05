@@ -1,0 +1,256 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "alexpose-server"
+version = "0.1.0"
+description = "AlexPose Gait Analysis System - FastAPI Server"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "AlexPose Team", email = "team@alexpose.com"},
+]
+keywords = ["gait", "analysis", "pose", "estimation", "health", "api"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # FastAPI and server dependencies
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "python-multipart>=0.0.6",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    
+    # Database and storage
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+    "sqlite3",
+    
+    # HTTP and networking
+    "httpx>=0.25.0",
+    "aiofiles>=23.2.0",
+    "websockets>=12.0",
+    
+    # Configuration and environment
+    "pydantic>=2.4.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.1",
+    
+    # Logging and monitoring
+    "loguru>=0.7.2",
+    "structlog>=23.2.0",
+    
+    # Background tasks and queuing
+    "celery>=5.3.0",
+    "redis>=5.0.0",
+    
+    # File handling and validation
+    "python-magic>=0.4.27",
+    "pillow>=10.0.0",
+    
+    # Core AlexPose dependencies (from parent project)
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "opencv-python>=4.8.0",
+    "mediapipe>=0.10.0",
+    "yt-dlp>=2023.10.0",
+    
+    # LLM and AI
+    "openai>=1.3.0",
+    "tiktoken>=0.5.0",
+    
+    # Visualization (for API responses)
+    "matplotlib>=3.7.0",
+    "plotly>=5.17.0",
+    "seaborn>=0.12.0",
+    "bokeh>=3.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.3.0",
+    "hypothesis>=6.88.0",
+    
+    # Development tools
+    "black>=23.9.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.6.0",
+    "pre-commit>=3.5.0",
+    
+    # Documentation
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.23.0",
+    
+    # Debugging and profiling
+    "ipdb>=0.13.0",
+    "line-profiler>=4.1.0",
+    "memory-profiler>=0.61.0",
+]
+
+production = [
+    # Production server
+    "gunicorn>=21.2.0",
+    
+    # Monitoring and logging
+    "sentry-sdk[fastapi]>=1.38.0",
+    "prometheus-client>=0.18.0",
+    
+    # Security
+    "cryptography>=41.0.0",
+    
+    # Performance
+    "orjson>=3.9.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/alexpose/alexpose"
+Documentation = "https://docs.alexpose.com"
+Repository = "https://github.com/alexpose/alexpose.git"
+Issues = "https://github.com/alexpose/alexpose/issues"
+
+[project.scripts]
+alexpose-server = "server.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["server"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=server",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "property: marks tests as property-based tests",
+    "api: marks tests as API tests",
+    "auth: marks tests requiring authentication",
+    "external: marks tests requiring external services",
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["server"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["server", "ambient"]
+
+[tool.mypy]
+python_version = "3.9"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "cv2.*",
+    "mediapipe.*",
+    "yt_dlp.*",
+    "plotly.*",
+    "bokeh.*",
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["B011"]
