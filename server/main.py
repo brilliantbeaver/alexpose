@@ -13,6 +13,10 @@ Usage:
 Author: AlexPose Team
 """
 
+#-------------------------
+# Project variables
+#-------------------------
+
 import os
 import sys
 from pathlib import Path
@@ -49,6 +53,52 @@ except ImportError:
 # Add project root to Python path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+
+#-------------------------
+# LaunchDarkly
+#-------------------------
+
+try:
+    import ldclient
+    from ldclient import Context
+    from ldclient.config import Config
+    
+    # Set your LaunchDarkly SDK key.
+    # This is inlined as example only for onboarding.
+    # Never hardcode your SDK key in production.
+    LAUNCHDARKLY_SDK_KEY = os.environ.get("LAUNCHDARKLY_SDK_KEY")
+    
+    if LAUNCHDARKLY_SDK_KEY:
+        ldclient.set_config(Config(LAUNCHDARKLY_SDK_KEY))
+
+        if not ldclient.get().is_initialized():
+            logger.warning('LaunchDarkly SDK failed to initialize')
+        else:
+            # A "context" is a data object representing users, devices, organizations, and
+            # other entities. You'll need this later, but you can ignore it for now.
+            context = (
+                Context.builder('CONTEXT_KEY')
+                .kind('user')
+                .set('email', 'brilliantbeaver@icloud.com')
+                .build()
+            )
+
+            # For onboarding purposes only we flush events as soon as
+            # possible so we quickly detect your connection.
+            # You don't have to do this in practice because events are automatically flushed.
+            ldclient.get().flush()
+            logger.opt(raw=True).info(f"\n{20*'='}LaunchDarkly started {20*'='}\n")
+    else:
+        logger.warning("LAUNCHDARKLY_SDK_KEY not found in environment variables")
+        ld_client = None
+
+except ImportError as e:
+    logger.warning(f"LaunchDarkly SDK not available: {e}")
+    ld_client = None
+
+#-------------------------
+# Ambient
+#-------------------------
 
 # Import configuration and logging
 from ambient.core.config import ConfigurationManager
