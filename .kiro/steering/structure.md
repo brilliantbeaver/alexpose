@@ -83,6 +83,6 @@ alexpose/
 
 - Backend services in `server/services/` wrap `ambient/` library calls
 - API routes follow REST patterns: `/api/{resource}/{action}`
-- Frontend uses `applib/` for shared code (migrated from `lib/`)
+- Frontend uses `applib/` for shared code (migrated from `lib/`; avoid using `lib` as folder name)
 - Config uses YAML with environment-specific overrides
 - Tests mirror source structure in `tests/`
