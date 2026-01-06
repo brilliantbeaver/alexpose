@@ -69,22 +69,75 @@ async def upload_gavd_dataset(
     gavd_dir = training_dir / 'gavd'
     gavd_dir.mkdir(parents=True, exist_ok=True)
     
+    # Create GAVD service
+    gavd_service = GAVDService(config_manager)
+    
+    # Check for duplicate datasets
+    existing_datasets = gavd_service.list_datasets(limit=1000)
+    
+    # Reset file pointer to calculate hash
+    await file.seek(0)
+    import hashlib
+    file_content = await file.read()
+    file_hash = hashlib.md5(file_content).hexdigest()
+    file_size = len(file_content)
+    
+    # Check for duplicates
+    for dataset in existing_datasets:
+        # Check by filename
+        if dataset.get('original_filename') == file.filename:
+            logger.warning(f"Duplicate filename detected: {file.filename}")
+            raise HTTPException(
+                status_code=409,
+                detail=f"A dataset with the filename '{file.filename}' has already been uploaded. "
+                       f"Dataset ID: {dataset.get('dataset_id')}. "
+                       f"Uploaded on: {dataset.get('uploaded_at')}. "
+                       f"Please rename the file or delete the existing dataset first."
+            )
+        
+        # Check by file size and hash (for exact content match)
+        if dataset.get('file_size') == file_size:
+            # Read existing file to compare hash
+            existing_file_path = Path(dataset.get('file_path', ''))
+            if existing_file_path.exists():
+                try:
+                    with open(existing_file_path, 'rb') as f:
+                        existing_hash = hashlib.md5(f.read()).hexdigest()
+                    if existing_hash == file_hash:
+                        logger.warning(f"Duplicate content detected: {file.filename}")
+                        raise HTTPException(
+                            status_code=409,
+                            detail=f"This dataset has already been uploaded with the filename '{dataset.get('original_filename')}'. "
+                                   f"Dataset ID: {dataset.get('dataset_id')}. "
+                                   f"Uploaded on: {dataset.get('uploaded_at')}. "
+                                   f"The file content is identical to the existing dataset."
+                        )
+                except Exception as e:
+                    logger.warning(f"Could not compare file hash: {str(e)}")
+    
     # Generate unique dataset ID
     dataset_id = str(uuid.uuid4())
     file_path = gavd_dir / f"{dataset_id}.csv"
     
     # Save file
     try:
-        # Reset file pointer after validation
-        await file.seek(0)
-        
+        # Write the file content we already read
         with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+            buffer.write(file_content)
         
         logger.info(f"GAVD dataset saved successfully: {file_path}")
         
-        # Create GAVD service
-        gavd_service = GAVDService(config_manager)
+        # Extract first sequence info for display
+        import pandas as pd
+        try:
+            df = pd.read_csv(file_path)
+            first_row = df.iloc[0] if len(df) > 0 else None
+            first_seq = first_row['seq'] if first_row is not None and 'seq' in df.columns else None
+            first_gait_pat = first_row['gait_pat'] if first_row is not None and 'gait_pat' in df.columns else None
+        except Exception as e:
+            logger.warning(f"Could not extract first sequence info: {str(e)}")
+            first_seq = None
+            first_gait_pat = None
         
         # Store dataset metadata
         dataset_metadata = {
@@ -97,7 +150,9 @@ async def upload_gavd_dataset(
             "status": "uploaded",
             "validation": validation_result,
             "row_count": validation_result.get("row_count", 0),
-            "sequence_count": validation_result.get("sequence_count", 0)
+            "sequence_count": validation_result.get("sequence_count", 0),
+            "seq": first_seq,  # Add first sequence ID
+            "gait_pat": first_gait_pat  # Add first gait pattern
         }
         
         # Save metadata

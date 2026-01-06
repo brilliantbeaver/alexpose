@@ -25,6 +25,7 @@ interface UploadResult {
   status?: string;
   message?: string;
   error?: string;
+  isDuplicate?: boolean;
 }
 
 interface DatasetStatus {
@@ -175,10 +176,19 @@ export default function GAVDUploadPage() {
           startStatusPolling(result.dataset_id);
         }
       } else {
-        setUploadResult({
-          success: false,
-          error: result.detail || 'Upload failed'
-        });
+        // Handle duplicate error (409 Conflict)
+        if (response.status === 409) {
+          setUploadResult({
+            success: false,
+            error: result.detail || 'This dataset has already been uploaded.',
+            isDuplicate: true
+          });
+        } else {
+          setUploadResult({
+            success: false,
+            error: result.detail || 'Upload failed'
+          });
+        }
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -451,7 +461,7 @@ export default function GAVDUploadPage() {
 
           {/* Upload Result */}
           {uploadResult && (
-            <Alert variant={uploadResult.success ? 'default' : 'destructive'} className="border-2">
+            <Alert variant={uploadResult.success ? 'default' : (uploadResult.isDuplicate ? 'default' : 'destructive')} className={`border-2 ${uploadResult.isDuplicate ? 'border-orange-500 bg-orange-50' : ''}`}>
               <AlertTitle className="text-lg flex items-center space-x-2">
                 <span>{uploadResult.success ? '✅' : '❌'}</span>
                 <span>{uploadResult.success ? 'Upload Successful!' : 'Upload Failed'}</span>
@@ -487,7 +497,38 @@ export default function GAVDUploadPage() {
                     )}
                   </div>
                 ) : (
-                  <p className="text-base mt-2">{uploadResult.error}</p>
+                  <div className="space-y-3 mt-3">
+                    {uploadResult.isDuplicate ? (
+                      <>
+                        <div className="flex items-center gap-2 text-lg font-semibold">
+                          <span>⚠️</span>
+                          <span>Duplicate Dataset Detected</span>
+                        </div>
+                        <p className="text-base">{uploadResult.error}</p>
+                        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mt-3">
+                          <p className="font-medium mb-2">💡 What you can do:</p>
+                          <ul className="space-y-1 text-sm">
+                            <li>• Check the "Recent Datasets" tab to view the existing dataset</li>
+                            <li>• Rename your file if it's a different dataset</li>
+                            <li>• Delete the existing dataset if you want to replace it</li>
+                          </ul>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => {
+                            // Switch to Recent Datasets tab
+                            const recentTab = document.querySelector('[value="recent"]') as HTMLElement;
+                            if (recentTab) recentTab.click();
+                          }}
+                        >
+                          View Recent Datasets →
+                        </Button>
+                      </>
+                    ) : (
+                      <p className="text-base mt-2">{uploadResult.error}</p>
+                    )}
+                  </div>
                 )}
               </AlertDescription>
             </Alert>
