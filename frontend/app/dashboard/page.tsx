@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AnalysesTable } from '@/components/ui/analyses-table';
 
 interface DashboardStatistics {
   total_analyses: number;
@@ -65,6 +66,9 @@ interface RecentAnalysis {
   total_sequences_processed?: number;
   total_frames_processed?: number;
   progress?: string;
+  // GAVD sequence-specific fields
+  seq?: string;
+  gait_pat?: string;
   // Common fields
   status: string;
   created_at?: string;
@@ -111,88 +115,10 @@ export default function DashboardPage() {
     }
   };
 
-  const formatTimeAgo = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-  };
-
-  const getStatusBadge = (analysis: RecentAnalysis) => {
-    if (analysis.type === 'gavd_dataset') {
-      const status = analysis.status;
-      if (status === 'completed') return <Badge variant="default" className="bg-green-600">Completed</Badge>;
-      if (status === 'processing') return <Badge variant="default" className="bg-blue-600">Processing</Badge>;
-      if (status === 'uploaded') return <Badge variant="secondary">Uploaded</Badge>;
-      if (status === 'error') return <Badge variant="destructive">Error</Badge>;
-      return <Badge variant="secondary">{status}</Badge>;
-    } else {
-      // Gait analysis
-      const isNormal = analysis.is_normal;
-      if (isNormal === null) return <Badge variant="secondary">Unknown</Badge>;
-      return isNormal ? (
-        <Badge variant="default" className="bg-green-600">Normal</Badge>
-      ) : (
-        <Badge variant="destructive">Abnormal</Badge>
-      );
-    }
-  };
-
-  const getAnalysisTitle = (analysis: RecentAnalysis) => {
-    if (analysis.type === 'gavd_dataset') {
-      return analysis.filename || 'GAVD Dataset';
-    } else {
-      return `Analysis ${(analysis.analysis_id || '').substring(0, 8)}...`;
-    }
-  };
-
-  const getAnalysisSubtitle = (analysis: RecentAnalysis) => {
-    const date = analysis.completed_at || analysis.uploaded_at || analysis.created_at || '';
-    const timeAgo = date ? formatTimeAgo(date) : 'Unknown time';
-    
-    if (analysis.type === 'gavd_dataset') {
-      const details = [];
-      if (analysis.total_sequences_processed) {
-        details.push(`${analysis.total_sequences_processed} sequences`);
-      }
-      if (analysis.total_frames_processed) {
-        details.push(`${analysis.total_frames_processed} frames`);
-      }
-      return `${timeAgo}${details.length > 0 ? ' • ' + details.join(', ') : ''}`;
-    } else {
-      return `${timeAgo}${analysis.frame_count ? ` • ${analysis.frame_count} frames` : ''}`;
-    }
-  };
-
-  const getAnalysisLink = (analysis: RecentAnalysis) => {
-    if (analysis.type === 'gavd_dataset') {
-      // Link to full dataset analysis page
-      return `/gavd/${analysis.dataset_id}`;
-    } else {
-      return `/results/${analysis.analysis_id}`;
-    }
-  };
-
-  const getAnalysisIcon = (analysis: RecentAnalysis) => {
-    if (analysis.type === 'gavd_dataset') {
-      return '📊'; // Dataset icon
-    } else {
-      return '🎥'; // Video analysis icon
-    }
-  };
-
-  const handleDeleteAnalysis = async (analysis: RecentAnalysis, event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    const title = getAnalysisTitle(analysis);
+  const handleDeleteAnalysis = async (analysis: RecentAnalysis) => {
+    const title = analysis.type === 'gavd_dataset' 
+      ? (analysis.filename || 'GAVD Dataset')
+      : `Analysis ${(analysis.analysis_id || '').substring(0, 8)}`;
     const id = analysis.dataset_id || analysis.analysis_id;
     
     if (!id) return;
@@ -412,8 +338,15 @@ export default function DashboardPage() {
       {/* Recent Analyses */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Analyses</CardTitle>
-          <CardDescription>Your latest gait analyses and GAVD datasets</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Recent Analyses</CardTitle>
+              <CardDescription>Your latest gait analyses and GAVD datasets</CardDescription>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/analyses">View All →</Link>
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {recent_analyses.length === 0 ? (
@@ -429,71 +362,19 @@ export default function DashboardPage() {
                     <Link href="/analyze/youtube">🔗 YouTube URL</Link>
                   </Button>
                   <Button asChild size="sm" variant="outline">
-                    <Link href="/gavd/upload">📊 Upload GAVD</Link>
+                    <Link href="/gavd">📊 Upload GAVD</Link>
                   </Button>
                 </div>
               </AlertDescription>
             </Alert>
           ) : (
-            <div className="space-y-4">
-              {recent_analyses.map((analysis, index) => {
-                const analysisId = analysis.dataset_id || analysis.analysis_id || `${index}`;
-                return (
-                  <div 
-                    key={analysisId} 
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center space-x-4 flex-1">
-                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-2xl">
-                        {getAnalysisIcon(analysis)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium">
-                          {getAnalysisTitle(analysis)}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {getAnalysisSubtitle(analysis)}
-                        </div>
-                        {analysis.type === 'gait_analysis' && analysis.identified_conditions && analysis.identified_conditions.length > 0 && (
-                          <div className="text-xs text-muted-foreground mt-1">
-                            Conditions: {analysis.identified_conditions.join(', ')}
-                          </div>
-                        )}
-                        {analysis.type === 'gavd_dataset' && analysis.progress && (
-                          <div className="text-xs text-muted-foreground mt-1">
-                            {analysis.progress}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      {getStatusBadge(analysis)}
-                      {analysis.type === 'gait_analysis' && analysis.confidence !== undefined && (
-                        <div className="text-sm text-muted-foreground">
-                          {(analysis.confidence * 100).toFixed(0)}%
-                        </div>
-                      )}
-                      <Button variant="ghost" size="sm" asChild>
-                        <Link href={getAnalysisLink(analysis)}>View →</Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => handleDeleteAnalysis(analysis, e)}
-                        disabled={deletingAnalysis === analysisId}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      >
-                        {deletingAnalysis === analysisId ? (
-                          <span className="animate-spin">⏳</span>
-                        ) : (
-                          '🗑️'
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <AnalysesTable 
+              analyses={recent_analyses}
+              onDelete={handleDeleteAnalysis}
+              deletingAnalysis={deletingAnalysis}
+              maxRows={5}
+              showFilters={true}
+            />
           )}
         </CardContent>
       </Card>

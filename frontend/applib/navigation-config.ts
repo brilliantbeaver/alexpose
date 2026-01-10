@@ -26,6 +26,15 @@ const mainNavigation: NavigationItem[] = [
     showInDesktop: true,
   },
   {
+    id: 'analyses',
+    label: 'Analyses',
+    href: '/analyses',
+    icon: 'FileText',
+    description: 'View all your analyses',
+    showInMobile: true,
+    showInDesktop: true,
+  },
+  {
     id: 'analyze',
     label: 'Analyze',
     href: '/analyze',

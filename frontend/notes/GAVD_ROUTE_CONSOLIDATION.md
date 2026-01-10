@@ -51,7 +51,7 @@ Consolidated all GAVD dataset analysis functionality from `/training/gavd/` to `
 3. `/gavd/[dataset_id]/sequence/[sequence_id]/page.tsx` - Updated redirect target
 4. `/dashboard/page.tsx` - Updated GAVD dataset links
 5. `/page.tsx` (homepage) - Updated "Upload GAVD Dataset" button link
-6. `/lib/navigation-config.ts` - Updated navigation structure
+6. `/applib/navigation-config.ts` - Updated navigation structure
 
 #### Legacy Redirect Files (for backward compatibility):
 1. `/training/gavd/page.tsx` - Redirects to `/gavd`

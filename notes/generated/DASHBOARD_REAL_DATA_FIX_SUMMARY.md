@@ -277,7 +277,7 @@ return (
 #### 1. Skeleton Component (`frontend/components/ui/skeleton.tsx`)
 
 ```typescript
-import { cn } from "@/lib/utils"
+import { cn } from "@/applib/utils"
 
 function Skeleton({
   className,

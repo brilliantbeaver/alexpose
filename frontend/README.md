@@ -81,9 +81,13 @@ frontend/
 │   └── ui/                # Shadcn UI components
 ├── hooks/                 # Custom React hooks
 │   └── useNavigation.ts
-├── lib/                   # Utilities and config
+├── applib/                # Utilities and config
+│   ├── api-client.ts
+│   ├── index.ts
 │   ├── navigation-config.ts
 │   ├── navigation-types.ts
+│   ├── pose-analysis-tooltips.ts
+│   ├── pose-analysis-types.ts
 │   └── utils.ts
 └── public/                # Static assets
 ```
