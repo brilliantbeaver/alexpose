@@ -69,7 +69,7 @@ try:
     LAUNCHDARKLY_SDK_KEY = os.environ.get("LAUNCHDARKLY_SDK_KEY")
     
     if LAUNCHDARKLY_SDK_KEY:
-        ldclient.set_config(Config(LAUNCHDARKLY_SDK_KEY))
+        ldclient.set_config(Config(LAUNCHDARKLY_SDK_KEY, offline=True))
 
         if not ldclient.get().is_initialized():
             logger.warning('LaunchDarkly SDK failed to initialize')
