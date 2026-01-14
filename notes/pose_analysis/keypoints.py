@@ -1,9 +1,25 @@
-import cv2
 import os
+import sys
+
+# CRITICAL: Configure pose estimation environment BEFORE any imports
+# Import the centralized configuration utility
+import sys
+from pathlib import Path
+
+# Add project root to path if needed
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from ambient.pose.pose_config import configure_pose_environment
+
+# Configure environment to suppress C++ logs from pose estimation libraries
+configure_pose_environment()
+
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from pathlib import Path
 import tempfile
 import urllib.request
 from typing import List, Dict, Optional, Tuple
@@ -15,9 +31,7 @@ from mediapipe.tasks.python import vision
 from ambient.gavd.pose_estimators import MediaPipeEstimator, get_pose_estimator
 from ambient.utils.youtube_cache import extract_video_id
 
-from .viz import visualize_pose_with_skeleton
-
-print("✅ Using MediaPipeEstimator from ambient package")
+from notebooks.utils.viz import visualize_pose_with_skeleton
 
 # MediaPipe pose landmark names (33 landmarks)
 POSE_LANDMARK_NAMES = [
@@ -39,14 +53,14 @@ def ensure_model_downloaded(project_root: str):
     model_dir = project_root / "data" / "models"
     model_dir.mkdir(parents=True, exist_ok=True)
     
-    model_path = model_dir / "pose_landmarker_lite.task"
+    model_path = model_dir / "pose_landmarker_full.task"
     
     if model_path.exists():
         print(f"✅ Model already exists: {model_path}")
         return str(model_path)
     
     print("📥 Downloading MediaPipe pose landmarker model...")
-    model_url = "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"
+    model_url = "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_full.task"
     
     try:
         print("⏳ Downloading... (this may take a moment)")
@@ -59,9 +73,66 @@ def ensure_model_downloaded(project_root: str):
         print(f"❌ Download failed: {e}")
         return None
 
-# use the MediaPipeEstimator with our GAVD data
-def get_keypoints(project_root: str, sequences: Dict[str, pd.DataFrame]):
-    """Test pose detection using MediaPipeEstimator"""
+def get_keypoints(project_root: str, sequence_data: pd.DataFrame):
+    sequence_id = sequence_data['seq'].iloc[0]
+    model_path = ensure_model_downloaded(project_root)
+    if model_path:
+        try:
+            pose_estimator = MediaPipeEstimator(model_path=model_path)
+            print(f"✅ MediaPipeEstimator created successfully")
+        except Exception as e:
+            print(f"❌ Failed to create MediaPipeEstimator: {e}")
+            pose_estimator = None
+    else:
+        print("❌ MediaPipeEstimator not available")
+        return None
+
+    keypoints_array = []
+    try:
+        num_frames = len(sequence_data)
+        print(f"Number of frames: {num_frames}")
+        for fnum in range(num_frames):
+            frame_row = sequence_data.iloc[fnum]
+            actual_frame_num = int(frame_row['frame_num'])
+            url = frame_row['url']
+    
+            print(f"{actual_frame_num}", end=" ", flush=True)
+
+            # Get video path
+            video_id = extract_video_id(url)
+            video_path = project_root / "data" / "youtube" / f"{video_id}.mp4"
+            
+            if not video_path.exists():
+                print(f"❌ Video not found: {video_path}")
+                return None
+            
+            capture = cv2.VideoCapture(str(video_path))
+            capture.set(cv2.CAP_PROP_POS_FRAMES, actual_frame_num - 1)
+            success, frame = capture.read()
+            capture.release()
+            
+            if not success:
+                print(f"❌ Could not read frame {actual_frame_num}")
+                return None
+
+            # Save frame to temporary file
+            with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmp_file:
+                temp_image_path = tmp_file.name
+                cv2.imwrite(temp_image_path, frame)
+            
+            keypoints = pose_estimator.estimate_image_keypoints(temp_image_path)            
+            os.unlink(temp_image_path)
+
+            keypoints_array.append(keypoints)
+        print("\n")
+        return keypoints_array
+    except Exception as e:
+        print(f"❌ failed: {e}")
+        return None
+
+
+
+def get_first_keypoints(project_root: str, sequences: Dict[str, pd.DataFrame]):
 
     # Ensure model is downloaded and create estimator
     model_path = ensure_model_downloaded(project_root)
@@ -527,4 +598,27 @@ def pose_estimation_all_sequences(sequences: dict[str, pd.DataFrame], max_frames
         print(f"   {seq_id[:20]}...: {successful}/{len(results)} successful")
     
     return all_results
+
+
+#----------------------------------------------------------------------
+# main
+#----------------------------------------------------------------------
+
+if __name__ == "__main__":
+    from ambient.gavd import GAVDDataLoader
+    project_root = Path.cwd()
+    print(f"==> project_root: {project_root}")
+
+    loader = GAVDDataLoader()
+    ONE_SEQUENCE_PATH = Path(project_root, "data", "GAVD_Clinical_Annotations_1.1.csv")
+    df = loader.load_gavd_data(ONE_SEQUENCE_PATH)
+    sequences = loader.organize_by_sequence(df)
+    sequence_id = list(sequences.keys())[1]
+    sequence_data = sequences[sequence_id]
+
+    print(f"\tnum_sequences: {len(sequences)}")
+    keypoints_array = get_keypoints(project_root=project_root, sequence_data=sequence_data)
+
+    print(f"==> {len(keypoints_array)} sets of keypoints -- one per frame")
+    print(f"The first set of these keypoints look like: {keypoints_array[0]}")
 

@@ -9,9 +9,37 @@ from pathlib import Path
 from loguru import logger
 from dataclasses import dataclass
 import os
+import sys
+import contextlib
 
-# Suppress TensorFlow Lite verbose warnings (keep errors)
-os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '2')  # 0=all, 1=info, 2=warning, 3=error
+# Configure environment to suppress C++ logs BEFORE any imports
+# CRITICAL: Must be set before importing MediaPipe or other C++ libraries
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # TensorFlow Lite (MediaPipe, Ultralytics)
+os.environ['GLOG_minloglevel'] = '3'      # Google logging (MediaPipe, OpenPose)
+os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'  # OpenCV (all backends)
+
+
+@contextlib.contextmanager
+def _suppress_stderr():
+    """
+    Context manager to suppress stderr at OS level.
+    
+    Local implementation to avoid circular import with ambient.pose.pose_config.
+    """
+    stderr_fd = sys.stderr.fileno()
+    saved_stderr_fd = os.dup(stderr_fd)
+    devnull_fd = os.open(os.devnull, os.O_WRONLY)
+    
+    try:
+        sys.stderr.flush()
+        os.dup2(devnull_fd, stderr_fd)
+        yield
+    finally:
+        sys.stderr.flush()
+        os.dup2(saved_stderr_fd, stderr_fd)
+        os.close(devnull_fd)
+        os.close(saved_stderr_fd)
+
 
 # Check MediaPipe availability
 try:
@@ -23,6 +51,7 @@ except ImportError:
     MEDIAPIPE_AVAILABLE = False
     mp = None
     python = None
+    vision = None
     vision = None
 
 
@@ -155,27 +184,31 @@ class MediaPipeEstimator(PoseEstimator):
     
     def _get_image_landmarker(self):
         """Create and return a MediaPipe PoseLandmarker for image processing."""
-        base_options = python.BaseOptions(model_asset_path=str(self.model_path))
-        options = vision.PoseLandmarkerOptions(
-            base_options=base_options,
-            running_mode=vision.RunningMode.IMAGE,
-            min_pose_detection_confidence=self.min_pose_detection_confidence,
-            min_pose_presence_confidence=self.min_pose_presence_confidence,
-            min_tracking_confidence=self.min_tracking_confidence
-        )
-        return vision.PoseLandmarker.create_from_options(options)
+        # Suppress C++ warnings during landmarker initialization
+        with _suppress_stderr():
+            base_options = python.BaseOptions(model_asset_path=str(self.model_path))
+            options = vision.PoseLandmarkerOptions(
+                base_options=base_options,
+                running_mode=vision.RunningMode.IMAGE,
+                min_pose_detection_confidence=self.min_pose_detection_confidence,
+                min_pose_presence_confidence=self.min_pose_presence_confidence,
+                min_tracking_confidence=self.min_tracking_confidence
+            )
+            return vision.PoseLandmarker.create_from_options(options)
     
     def _get_video_landmarker(self):
         """Create and return a MediaPipe PoseLandmarker for video processing."""
-        base_options = python.BaseOptions(model_asset_path=str(self.model_path))
-        options = vision.PoseLandmarkerOptions(
-            base_options=base_options,
-            running_mode=vision.RunningMode.VIDEO,
-            min_pose_detection_confidence=self.min_pose_detection_confidence,
-            min_pose_presence_confidence=self.min_pose_presence_confidence,
-            min_tracking_confidence=self.min_tracking_confidence
-        )
-        return vision.PoseLandmarker.create_from_options(options)
+        # Suppress C++ warnings during landmarker initialization
+        with _suppress_stderr():
+            base_options = python.BaseOptions(model_asset_path=str(self.model_path))
+            options = vision.PoseLandmarkerOptions(
+                base_options=base_options,
+                running_mode=vision.RunningMode.VIDEO,
+                min_pose_detection_confidence=self.min_pose_detection_confidence,
+                min_pose_presence_confidence=self.min_pose_presence_confidence,
+                min_tracking_confidence=self.min_tracking_confidence
+            )
+            return vision.PoseLandmarker.create_from_options(options)
     
     def _parse_mediapipe_landmarks(
         self,
@@ -275,7 +308,10 @@ class MediaPipeEstimator(PoseEstimator):
         # Create landmarker and detect
         landmarker = self._get_image_landmarker()
         try:
-            result = landmarker.detect(mp_image)
+            # Suppress MediaPipe internal warnings during detection
+            # This includes landmark_projection_calculator warnings about NORM_RECT
+            with _suppress_stderr():
+                result = landmarker.detect(mp_image)
             
             if not result.pose_landmarks or len(result.pose_landmarks) == 0:
                 logger.warning(f"No pose detected in image: {image_path}")
@@ -335,7 +371,7 @@ class MediaPipeEstimator(PoseEstimator):
             height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             
             logger.info(f"Processing video: {frame_count} frames at {fps} fps ({width}x{height})")
-            logger.debug("Note: MediaPipe warnings about 'feedback manager' and 'NORM_RECT' are expected and can be ignored")
+            logger.debug("MediaPipe internal warnings (feedback manager, NORM_RECT) are suppressed during detection")
             
             # Create landmarker for video
             landmarker = self._get_video_landmarker()
@@ -365,8 +401,9 @@ class MediaPipeEstimator(PoseEstimator):
                     # Calculate timestamp in milliseconds
                     timestamp_ms = int((frame_idx / fps) * 1000)
                     
-                    # Detect pose
-                    result = landmarker.detect_for_video(mp_image, timestamp_ms)
+                    # Detect pose - suppress internal MediaPipe warnings
+                    with _suppress_stderr():
+                        result = landmarker.detect_for_video(mp_image, timestamp_ms)
                     
                     # Parse landmarks with explicit dimensions
                     keypoints = self._parse_mediapipe_landmarks(result, width, height)
