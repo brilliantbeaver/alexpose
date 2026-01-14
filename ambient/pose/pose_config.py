@@ -48,6 +48,11 @@ def configure_pose_environment() -> None:
     
     # Suppress Google logging (MediaPipe, OpenPose/Caffe)
     os.environ['GLOG_minloglevel'] = '3'
+    os.environ['GLOG_logtostderr'] = '0'  # Disable GLOG stderr output
+    
+    # Suppress Abseil logging (used internally by TFLite)
+    # This targets inference_feedback_manager.cc warnings
+    os.environ['ABSL_MIN_LOG_LEVEL'] = '3'
     
     # Suppress OpenCV logs (used by all backends)
     os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'

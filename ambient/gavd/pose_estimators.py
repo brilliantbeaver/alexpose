@@ -16,6 +16,8 @@ import contextlib
 # CRITICAL: Must be set before importing MediaPipe or other C++ libraries
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # TensorFlow Lite (MediaPipe, Ultralytics)
 os.environ['GLOG_minloglevel'] = '3'      # Google logging (MediaPipe, OpenPose)
+os.environ['GLOG_logtostderr'] = '0'      # Disable GLOG stderr output
+os.environ['ABSL_MIN_LOG_LEVEL'] = '3'    # Abseil logging (used by TFLite internally)
 os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'  # OpenCV (all backends)
 
 
@@ -41,17 +43,17 @@ def _suppress_stderr():
         os.close(saved_stderr_fd)
 
 
-# Check MediaPipe availability
+# Check MediaPipe availability - wrap import to suppress any C++ init warnings
 try:
-    import mediapipe as mp
-    from mediapipe.tasks import python
-    from mediapipe.tasks.python import vision
+    with _suppress_stderr():
+        import mediapipe as mp
+        from mediapipe.tasks import python
+        from mediapipe.tasks.python import vision
     MEDIAPIPE_AVAILABLE = True
 except ImportError:
     MEDIAPIPE_AVAILABLE = False
     mp = None
     python = None
-    vision = None
     vision = None
 
 
