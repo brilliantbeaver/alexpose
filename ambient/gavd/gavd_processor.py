@@ -37,8 +37,8 @@ import pandas as pd
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from ambient.gavd.keypoints import BoundingBoxProcessor, KeypointGenerator
-from ambient.gavd.pose_estimators import PoseEstimator
+from ambient.pose.keypoints import BoundingBoxProcessor, KeypointGenerator
+from ambient.pose.base_estimator import PoseEstimator
 from ambient.utils.youtube_cache import extract_video_id
 from ambient.utils.csv_parser import parse_csv_with_dicts
 from ambient.utils.youtube_cache import cache_youtube_videos_from_rows
@@ -604,13 +604,13 @@ class PoseKeypointExtractor:
 
     def _create_default_bbox_processor(self):
         """Create default bounding box processor."""
-        from ambient.gavd.keypoints import BoundingBoxProcessor
+        from ambient.pose.keypoints import BoundingBoxProcessor
 
         return BoundingBoxProcessor()
 
     def _create_default_keypoint_generator(self):
         """Create default keypoint generator."""
-        from ambient.gavd.keypoints import KeypointGenerator
+        from ambient.pose.keypoints import KeypointGenerator
 
         return KeypointGenerator()
 

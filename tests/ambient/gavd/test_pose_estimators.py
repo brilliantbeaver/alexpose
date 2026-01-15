@@ -31,12 +31,12 @@ except ImportError:
 from hypothesis import given, strategies as st, assume, settings
 from hypothesis.strategies import composite
 
-from ambient.gavd.pose_estimators import (
-    PoseEstimator,
-    MediaPipeEstimator,
-    OpenPoseEstimator,
-    Keypoint,
-)
+from ambient.pose.base_estimator import PoseEstimator, Keypoint
+from ambient.pose.mediapipe_estimator import MediaPipeEstimator, MEDIAPIPE_AVAILABLE as MP_AVAILABLE
+from ambient.pose.openpose_estimator import OpenPoseEstimator
+
+# Use the imported MEDIAPIPE_AVAILABLE for consistency
+MEDIAPIPE_AVAILABLE = MP_AVAILABLE
 
 
 # Skip tests if MediaPipe is not available
@@ -94,7 +94,7 @@ class TestMediaPipeEstimatorInitialization:
         model_file.write_bytes(b"dummy")
         
         # Patch MEDIAPIPE_AVAILABLE to False to simulate MediaPipe not being installed
-        with patch('ambient.gavd.pose_estimators.MEDIAPIPE_AVAILABLE', False):
+        with patch('ambient.pose.mediapipe_estimator.MEDIAPIPE_AVAILABLE', False):
             with pytest.raises(ImportError, match=r"MediaPipe is not installed.*"):
                 # Actually try to instantiate the class - this should raise ImportError
                 MediaPipeEstimator(model_path=str(model_file))
@@ -232,10 +232,12 @@ class TestMediaPipeEstimatorVideoProcessing:
             
             results = estimator.estimate_video_keypoints(str(sample_video))
             
-            # Should return list of lists
-            assert isinstance(results, list)
-            assert len(results) > 0
-            assert all(isinstance(frame_kps, list) for frame_kps in results)
+            # New API returns dict with 'frames', 'video_width', 'video_height'
+            assert isinstance(results, dict)
+            assert 'frames' in results
+            assert isinstance(results['frames'], list)
+            assert len(results['frames']) > 0
+            assert all(isinstance(frame_kps, list) for frame_kps in results['frames'])
 
 
 class TestMediaPipeEstimatorKeypointFormat:

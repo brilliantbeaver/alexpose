@@ -27,7 +27,7 @@ from tests.utils.assertions import (
 
 try:
     from ambient.pose.factory import PoseEstimatorFactory
-    from ambient.gavd.pose_estimators import MediaPipeEstimator, OpenPoseEstimator
+    from ambient.pose import MediaPipeEstimator, OpenPoseEstimator
     from ambient.core.interfaces import IPoseEstimator
     AMBIENT_AVAILABLE = True
 except ImportError:

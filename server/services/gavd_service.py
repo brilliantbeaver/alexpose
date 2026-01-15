@@ -17,7 +17,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from ambient.gavd.gavd_processor import GAVDProcessor, create_gavd_processor
-from ambient.gavd.pose_estimators import get_pose_estimator
+from ambient.pose import get_pose_estimator
 from ambient.core.config import ConfigurationManager
 
 
@@ -656,7 +656,7 @@ class GAVDService:
             
             # Load and process the specific sequence
             from ambient.gavd.gavd_processor import GAVDDataLoader, PoseDataConverter
-            from ambient.gavd.pose_estimators import get_pose_estimator
+            from ambient.pose import get_pose_estimator
             
             loader = GAVDDataLoader()
             df = loader.load_gavd_data(csv_file_path, verbose=False)

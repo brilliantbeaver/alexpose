@@ -7,6 +7,10 @@ This package contains the core functionality for the "ambient" fall risk detecti
 Monday, July 28, 2025 12:30:00 AM
 """
 
+# CRITICAL: Import warning suppression FIRST before any other imports
+# This sets environment variables to suppress C++ warnings from MediaPipe, TensorFlow, etc.
+from ambient.pose import _suppress_warnings
+
 __version__ = "1.0.0"
 __author__ = "Theodore Mui"
 

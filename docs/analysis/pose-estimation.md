@@ -344,7 +344,7 @@ print(f"Extracted {len(keypoints)} keypoints")
 The `PoseKeypointExtractor` can be configured with custom bounding box processors and keypoint generators:
 
 ```python
-from ambient.pose.gavd_processor import PoseKeypointExtractor
+from ambient.pose.keypoints import PoseKeypointExtractor
 from ambient.pose import BoundingBoxProcessor, KeypointGenerator
 
 # Create custom components
@@ -1372,7 +1372,8 @@ print(f"Converted {len(pose_data)} frames to pose format")
 The `PoseDataConverter` provides extensive configuration for data conversion:
 
 ```python
-from ambient.pose.gavd_processor import PoseDataConverter, PoseKeypointExtractor
+from ambient.pose.gavd_processor import PoseDataConverter
+from ambient.pose import PoseKeypointExtractor
 
 # Create custom keypoint extractor
 custom_extractor = PoseKeypointExtractor()

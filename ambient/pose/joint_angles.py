@@ -70,17 +70,17 @@ class FrameJointAngles:
         angle_obj = self.angles.get(joint_name)
         return angle_obj.confidence if angle_obj else None
     
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary format."""
+    def to_dict(self, round_decimals: int = 2) -> Dict[str, Any]:
+        """Convert to dictionary for serialization."""
         return {
-            "frame_index": self.frame_index,
-            "keypoint_format": self.keypoint_format,
-            "timestamp": self.timestamp,
-            "angles": {
+            'frame_index': self.frame_index,
+            'timestamp': round(self.timestamp, round_decimals) if self.timestamp else None,
+            'keypoint_format': self.keypoint_format,
+            'angles': {
                 name: {
-                    "angle_degrees": angle.angle_degrees,
-                    "confidence": angle.confidence,
-                    "landmark_indices": angle.landmark_indices
+                    'angle_degrees': round(angle.angle_degrees, round_decimals),
+                    'confidence': round(angle.confidence, round_decimals),
+                    'landmark_indices': angle.landmark_indices
                 }
                 for name, angle in self.angles.items()
             }
@@ -452,7 +452,7 @@ def get_joint_angles(
         keypoint_format=keypoint_format,
         confidence_threshold=confidence_threshold
     )
-    
+
     return calculator.calculate_sequence_angles(
         keypoints_array=keypoints_array,
         fps=fps,

@@ -10,7 +10,9 @@ Monday, July 28, 2025 12:30:00 AM
 
 from .gait_processor import GaitDataProcessor, GaitSequenceAnalyzer
 from .gavd_processor import GAVDDataLoader, GAVDProcessor, PoseDataConverter
-from .keypoints import (
+
+# Import keypoint utilities from ambient.pose (moved for better organization)
+from ambient.pose.keypoints import (
     BoundingBoxProcessor,
     KeypointGenerator,
     PoseKeypointExtractor,

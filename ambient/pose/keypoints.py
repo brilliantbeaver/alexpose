@@ -1,8 +1,9 @@
 """
-Pose Estimation Utilities for GAVD Data Processing
+Pose Keypoint Utilities
 
-Utilities for bounding box handling and simple placeholder keypoint generation.
-Kept as a lightweight dependency to avoid circular imports.
+Utilities for bounding box handling and keypoint generation for pose estimation.
+This module provides core functionality for extracting and generating pose keypoints
+from bounding box data.
 """
 
 from typing import Dict, List, Optional, Tuple, Union
@@ -167,7 +168,7 @@ class PoseKeypointExtractor:
         # Calculate center using the bbox processor
         center_x, center_y = self.bbox_processor.calculate_center(bbox)
 
-        # Placeholder generator (kept for fallback compatibility)
+        # Generate keypoints using the keypoint generator
         keypoints = self.keypoint_generator.generate_grid_keypoints(
             center_x, center_y, num_keypoints, grid_spacing, confidence
         )

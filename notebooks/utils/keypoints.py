@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 
@@ -28,7 +29,7 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-from ambient.gavd.pose_estimators import MediaPipeEstimator, get_pose_estimator
+from ambient.pose.pose_estimators import MediaPipeEstimator, get_pose_estimator
 from ambient.utils.youtube_cache import extract_video_id
 
 from notebooks.utils.viz import visualize_pose_with_skeleton
@@ -129,38 +130,6 @@ def get_keypoints(project_root: str, sequence_data: pd.DataFrame):
     except Exception as e:
         print(f"❌ failed: {e}")
         return None
-
-
-def get_joint_angles(keypoints_array: List[List[Dict[str, Any]]]):
-    """
-    Compute joint angles – For each frame, calculate hip, knee and ankle angles 
-    using the vector dot‑product formula: 
-    
-    1. the hip angle uses points at the shoulder, hip and knee; 
-    2. the knee angle uses hip, knee and ankle; 
-    3. the ankle angle uses knee, ankle and foot. 
-    
-    MediaPipe coordinates can be converted from normalized positions to pixels; 
-    joint angles measured this way agree well with marker‑based systems 
-    (mean absolute error < 5 ° for hip/knee/ankle angles).
-    
-    Args:
-        keypoints_array: List of frames, each containing list of keypoint dictionaries
-                        with 'x', 'y', 'confidence' fields
-    
-    Returns:
-        JointAngleSequence object containing angles for all frames
-    """
-    from ambient.pose.joint_angles import get_joint_angles as calculate_angles
-    
-    # Use MediaPipe format (33 landmarks) by default
-    return calculate_angles(
-        keypoints_array=keypoints_array,
-        keypoint_format="BLAZEPOSE_33",
-        fps=30.0,
-        confidence_threshold=0.3
-    )
-
 
 
 def visualize_keypoints(keypoints: list, frame: np.ndarray):
@@ -590,10 +559,16 @@ if __name__ == "__main__":
 
     # 2. Extract body keypoints (pose landmarks)
     keypoints_array = get_keypoints(project_root=project_root, sequence_data=sequence_data)
+    print(f"==> # keypoints: {len(keypoints_array)}")
 
     # 3. Compute joint angles – For each frame, calculate hip, knee and ankle angles
-    joint_angles_array = get_joint_angles(keypoints_array=keypoints_array)
-
-    print(f"==> {len(keypoints_array)} sets of keypoints -- one per frame")
-    print(f"The first set of these keypoints look like: {keypoints_array[0]}")
-
+    from ambient.pose.joint_angles import get_joint_angles as calculate_angles
+    joint_angles = calculate_angles(
+        keypoints_array=keypoints_array,
+        keypoint_format="BLAZEPOSE_33",
+        fps=30.0,
+        confidence_threshold=0.3
+    )
+    print(f"--> # left_knee angles: {joint_angles.get_statistics("left_knee")}")
+    print("The first set of these joint angles look like:")
+    print(json.dumps(joint_angles.frames[0].to_dict(), indent=2))
