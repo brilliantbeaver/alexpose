@@ -15,6 +15,14 @@ from ambient.pose.factory import (
     create_best_pose_estimator
 )
 
+from ambient.pose.joint_angles import (
+    JointAngle,
+    FrameJointAngles,
+    JointAngleSequence,
+    JointAngleCalculator,
+    get_joint_angles
+)
+
 try:
     from ambient.pose.ultralytics_estimator import UltralyticsEstimator
 except ImportError:
@@ -32,5 +40,10 @@ __all__ = [
     "get_available_pose_estimators",
     "create_best_pose_estimator",
     "UltralyticsEstimator",
-    "AlphaPoseEstimator"
+    "AlphaPoseEstimator",
+    "JointAngle",
+    "FrameJointAngles",
+    "JointAngleSequence",
+    "JointAngleCalculator",
+    "get_joint_angles"
 ]
