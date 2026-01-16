@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 
@@ -28,7 +29,7 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-from ambient.gavd.pose_estimators import MediaPipeEstimator, get_pose_estimator
+from ambient.pose.pose_estimators import MediaPipeEstimator, get_pose_estimator
 from ambient.utils.youtube_cache import extract_video_id
 
 from notebooks.utils.viz import visualize_pose_with_skeleton
@@ -129,68 +130,6 @@ def get_keypoints(project_root: str, sequence_data: pd.DataFrame):
     except Exception as e:
         print(f"❌ failed: {e}")
         return None
-
-
-
-def get_first_keypoints(project_root: str, sequences: Dict[str, pd.DataFrame]):
-
-    # Ensure model is downloaded and create estimator
-    model_path = ensure_model_downloaded(project_root)
-    if model_path:
-        try:
-            pose_estimator = MediaPipeEstimator(model_path=model_path)
-            print(f"✅ MediaPipeEstimator created successfully")
-            print(f"📍 Model available: {pose_estimator.is_available()}")
-        except Exception as e:
-            print(f"❌ Failed to create MediaPipeEstimator: {e}")
-            pose_estimator = None
-    else:
-        print("❌ MediaPipeEstimator not available")
-        return None
-    
-    try:
-        # Get first sequence and frame
-        first_seq_id = list(sequences.keys())[0]
-        frame_row = sequences[first_seq_id].iloc[10]
-        frame_num = int(frame_row['frame_num'])
-        url = frame_row['url']
-        
-        # Get video path
-        video_id = extract_video_id(url)
-        video_path = project_root / "data" / "youtube" / f"{video_id}.mp4"
-        
-        if not video_path.exists():
-            print(f"❌ Video not found: {video_path}")
-            return None
-        
-        cap = cv2.VideoCapture(str(video_path))
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num - 1)
-        ret, frame = cap.read()
-        cap.release()
-        
-        if not ret:
-            print(f"❌ Could not read frame {frame_num}")
-            return None, None
-        
-        # Save frame to temporary file
-        with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as tmp_file:
-            temp_image_path = tmp_file.name
-            cv2.imwrite(temp_image_path, frame)
-        
-        # Use MediaPipeEstimator to detect pose
-        print("🔍 Running pose detection with MediaPipeEstimator...")
-        keypoints = pose_estimator.estimate_image_keypoints(temp_image_path)
-        
-        # Clean up temporary file
-        os.unlink(temp_image_path)
-                
-        return keypoints, frame
-        
-    except Exception as e:
-        print(f"❌ Test failed: {e}")
-        import traceback
-        traceback.print_exc()
-        return None, None
 
 
 def visualize_keypoints(keypoints: list, frame: np.ndarray):
@@ -609,16 +548,28 @@ if __name__ == "__main__":
     project_root = Path.cwd()
     print(f"==> project_root: {project_root}")
 
+    # 1. Load GAVD gait sequences
     loader = GAVDDataLoader()
     ONE_SEQUENCE_PATH = Path(project_root, "data", "GAVD_Clinical_Annotations_1.1.csv")
     df = loader.load_gavd_data(ONE_SEQUENCE_PATH)
     sequences = loader.organize_by_sequence(df)
     sequence_id = list(sequences.keys())[1]
     sequence_data = sequences[sequence_id]
-
     print(f"\tnum_sequences: {len(sequences)}")
+
+    # 2. Extract body keypoints (pose landmarks)
     keypoints_array = get_keypoints(project_root=project_root, sequence_data=sequence_data)
+    print(f"==> # keypoints: {len(keypoints_array)}")
 
-    print(f"==> {len(keypoints_array)} sets of keypoints -- one per frame")
-    print(f"The first set of these keypoints look like: {keypoints_array[0]}")
-
+    # 3. Compute joint angles – For each frame, calculate hip, knee and ankle angles
+    from ambient.pose.joint_angles import get_joint_angles as calculate_angles
+    joint_angles = calculate_angles(
+        keypoints_array=keypoints_array,
+        keypoint_format="BLAZEPOSE_33",
+        fps=30.0,
+        confidence_threshold=0.3
+    )
+    print(f"--> # left_knee angles: {joint_angles.get_statistics("left_knee")}")
+    print("The first set of these joint angles look like:")
+    print(json.dumps(joint_angles.frames[0].__dict__, indent=2, default=str))
+    # print(json.dumps(joint_angles.frames[0].to_dict(), indent=2))

@@ -12,7 +12,8 @@ from typing import Dict, Type, Optional, Any, List
 from loguru import logger
 
 from ambient.core.interfaces import IPoseEstimator
-from ambient.gavd.pose_estimators import OpenPoseEstimator, MediaPipeEstimator
+from ambient.pose.openpose_estimator import OpenPoseEstimator
+from ambient.pose.mediapipe_estimator import MediaPipeEstimator
 from ambient.pose.ultralytics_estimator import UltralyticsEstimator
 from ambient.pose.alphapose_estimator import AlphaPoseEstimator
 
@@ -389,3 +390,82 @@ def create_best_pose_estimator(
     """
     factory = get_pose_estimator_factory()
     return factory.create_best_available_estimator(preferred_order)
+
+
+def get_pose_estimator(estimator_type: str = "mediapipe") -> Optional[IPoseEstimator]:
+    """
+    Simple factory function to get a pose estimator instance.
+    
+    This is a simplified interface for backward compatibility with GAVD code.
+    For more control, use create_pose_estimator() with a config dict.
+    
+    Args:
+        estimator_type: Type of estimator (mediapipe, openpose, ultralytics, alphapose)
+        
+    Returns:
+        PoseEstimator instance or None if not available
+    """
+    from ambient.pose.mediapipe_estimator import MEDIAPIPE_AVAILABLE
+    
+    estimator_type = estimator_type.lower()
+    
+    if estimator_type == "mediapipe":
+        if not MEDIAPIPE_AVAILABLE:
+            logger.error("MediaPipe is not installed. Install with: pip install mediapipe")
+            return None
+        
+        try:
+            # Try to create MediaPipe estimator with default model path
+            model_path = Path("data/models/pose_landmarker_lite.task")
+            
+            # If default model doesn't exist, try alternative paths
+            if not model_path.exists():
+                logger.warning(
+                    f"Default model not found at {model_path}. "
+                    f"Download from: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/index#models"
+                )
+                alt_paths = [
+                    Path("pose_landmarker_lite.task"),
+                    Path("models/pose_landmarker_lite.task"),
+                    Path("../data/models/pose_landmarker_lite.task")
+                ]
+                
+                for alt_path in alt_paths:
+                    if alt_path.exists():
+                        model_path = alt_path
+                        logger.info(f"Using model from: {model_path}")
+                        break
+                else:
+                    logger.error(
+                        "No MediaPipe model file found. Please download pose_landmarker_lite.task "
+                        "from https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/index#models"
+                    )
+                    return None
+            
+            return create_pose_estimator("mediapipe", {"model_path": str(model_path)})
+            
+        except Exception as e:
+            logger.error(f"Failed to create MediaPipe estimator: {str(e)}")
+            return None
+    
+    elif estimator_type == "openpose":
+        logger.warning("OpenPose estimator not yet implemented")
+        return None
+    
+    elif estimator_type == "ultralytics":
+        try:
+            return create_pose_estimator("yolov8-pose")
+        except ImportError:
+            logger.error("Ultralytics not available. Install with: pip install ultralytics")
+            return None
+        except Exception as e:
+            logger.error(f"Failed to create Ultralytics estimator: {str(e)}")
+            return None
+    
+    elif estimator_type == "alphapose":
+        logger.warning("AlphaPose estimator not yet implemented")
+        return None
+    
+    else:
+        logger.error(f"Unknown estimator type: {estimator_type}")
+        return None

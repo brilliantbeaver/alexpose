@@ -28,7 +28,7 @@ print("✓ Configuration imported and applied")
 print()
 
 print("Step 2: Importing MediaPipe estimator...")
-from ambient.gavd.pose_estimators import MediaPipeEstimator, MEDIAPIPE_AVAILABLE
+from ambient.pose import MediaPipeEstimator, MEDIAPIPE_AVAILABLE
 print("✓ MediaPipe estimator imported")
 print()
 

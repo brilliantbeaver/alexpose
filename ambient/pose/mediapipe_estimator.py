@@ -1,24 +1,23 @@
 """
-Pose estimator factory and integration for GAVD processing.
+MediaPipe pose estimator implementation.
 
-Provides a unified interface for different pose estimation frameworks.
+This module provides pose estimation using MediaPipe models
+with support for both the new Frame-based API and legacy compatibility.
+
+Author: AlexPose Team
 """
 
-from typing import Optional, Dict, Any, List
-from pathlib import Path
-from loguru import logger
-from dataclasses import dataclass
 import os
 import sys
+import io
 import contextlib
+from pathlib import Path
+from typing import Dict, List, Optional, Union, Any
+import numpy as np
+from loguru import logger
 
-# Configure environment to suppress C++ logs BEFORE any imports
-# CRITICAL: Must be set before importing MediaPipe or other C++ libraries
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # TensorFlow Lite (MediaPipe, Ultralytics)
-os.environ['GLOG_minloglevel'] = '3'      # Google logging (MediaPipe, OpenPose)
-os.environ['GLOG_logtostderr'] = '0'      # Disable GLOG stderr output
-os.environ['ABSL_MIN_LOG_LEVEL'] = '3'    # Abseil logging (used by TFLite internally)
-os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'  # OpenCV (all backends)
+# Note: Warning suppression is handled by ambient.pose._suppress_warnings
+# which is imported automatically by ambient/__init__.py
 
 
 @contextlib.contextmanager
@@ -27,25 +26,41 @@ def _suppress_stderr():
     Context manager to suppress stderr at OS level.
     
     Local implementation to avoid circular import with ambient.pose.pose_config.
+    Falls back to Python-level suppression in Jupyter notebooks.
     """
-    stderr_fd = sys.stderr.fileno()
-    saved_stderr_fd = os.dup(stderr_fd)
-    devnull_fd = os.open(os.devnull, os.O_WRONLY)
-    
     try:
-        sys.stderr.flush()
-        os.dup2(devnull_fd, stderr_fd)
-        yield
-    finally:
-        sys.stderr.flush()
-        os.dup2(saved_stderr_fd, stderr_fd)
-        os.close(devnull_fd)
-        os.close(saved_stderr_fd)
+        # Try OS-level suppression (works in regular Python)
+        stderr_fd = sys.stderr.fileno()
+        saved_stderr_fd = os.dup(stderr_fd)
+        devnull_fd = os.open(os.devnull, os.O_WRONLY)
+        
+        try:
+            sys.stderr.flush()
+            os.dup2(devnull_fd, stderr_fd)
+            yield
+        finally:
+            sys.stderr.flush()
+            os.dup2(saved_stderr_fd, stderr_fd)
+            os.close(devnull_fd)
+            os.close(saved_stderr_fd)
+    except (AttributeError, io.UnsupportedOperation):
+        # Fallback for Jupyter notebooks where stderr doesn't have fileno()
+        # Use Python-level redirection instead
+        old_stderr = sys.stderr
+        try:
+            sys.stderr = open(os.devnull, 'w')
+            yield
+        finally:
+            sys.stderr.close()
+            sys.stderr = old_stderr
 
 
 # Check MediaPipe availability - wrap import to suppress any C++ init warnings
 try:
-    with _suppress_stderr():
+    # Import the suppression utilities
+    from ambient.pose._suppress_warnings import suppress_stderr_fd
+    
+    with suppress_stderr_fd():
         import mediapipe as mp
         from mediapipe.tasks import python
         from mediapipe.tasks.python import vision
@@ -55,80 +70,51 @@ except ImportError:
     mp = None
     python = None
     vision = None
+finally:
+    # Restore stderr if it was redirected
+    try:
+        from ambient.pose._suppress_warnings import _original_stderr
+        if _original_stderr and hasattr(_original_stderr, 'close'):
+            sys.stderr.close()
+        sys.stderr = _original_stderr
+    except Exception:
+        pass
+
+# Import Frame classes with fallback for development
+try:
+    from ambient.core.frame import Frame, FrameSequence, FrameError
+    from ambient.core.interfaces import IPoseEstimator
+    FRAME_SUPPORT = True
+except ImportError:
+    # Fallback for development/testing
+    Frame = Any
+    FrameSequence = Any
+    FrameError = Exception
+    IPoseEstimator = object
+    FRAME_SUPPORT = False
+
+# Import base estimator for backward compatibility
+from ambient.pose.base_estimator import PoseEstimator as BasePoseEstimator
+PoseEstimator = BasePoseEstimator
+
+try:
+    import cv2
+    CV2_AVAILABLE = True
+except ImportError:
+    CV2_AVAILABLE = False
 
 
-@dataclass
-class Keypoint:
-    """Keypoint data structure."""
-    x: float
-    y: float
-    confidence: float
-    id: int = 0
+Keypoint = Dict[str, Union[float, int]]
 
 
-class PoseEstimator:
-    """Base class for pose estimators."""
+class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
+    """
+    Pose estimator using MediaPipe models.
     
-    def is_available(self) -> bool:
-        """
-        Check if the pose estimator is available and properly configured.
-        
-        Returns:
-            True if estimator is available, False otherwise
-        """
-        return True  # Default implementation assumes availability
-    
-    def estimate_image_keypoints(
-        self,
-        image_path: str,
-        model: str = "BODY_25",
-        bbox: Optional[Dict[str, float]] = None
-    ) -> List[Dict[str, Any]]:
-        """
-        Estimate keypoints from a single image.
-        
-        Args:
-            image_path: Path to image file
-            model: Model name/type
-            bbox: Optional bounding box for region of interest
-            
-        Returns:
-            List of keypoint dictionaries
-        """
-        raise NotImplementedError
-    
-    def estimate_video_keypoints(
-        self,
-        video_path: Path,
-        model: str = "BODY_25"
-    ) -> Dict[str, Any]:
-        """
-        Estimate keypoints for all frames in a video.
-        
-        Args:
-            video_path: Path to video file
-            model: Model name/type
-            
-        Returns:
-            Dictionary with:
-                - 'frames': List of frame keypoints (each frame is a list of keypoint dicts)
-                - 'video_width': Actual video width used for keypoint coordinates
-                - 'video_height': Actual video height used for keypoint coordinates
-        """
-        raise NotImplementedError
-    
-    def cache_fingerprint(self) -> str:
-        """
-        Get a unique fingerprint for caching purposes.
-        
-        Returns:
-            Unique identifier string
-        """
-        return self.__class__.__name__
-
-
-class MediaPipeEstimator(PoseEstimator):
-    """MediaPipe pose estimator implementation using tasks API."""
+    This estimator uses MediaPipe's tasks API to provide efficient pose estimation
+    with support for both image and video processing. It supports the new Frame-based
+    API while maintaining backward compatibility.
+    """
     
     def __init__(
         self,
@@ -152,6 +138,9 @@ class MediaPipeEstimator(PoseEstimator):
             raise ImportError(
                 "MediaPipe is not installed. Install with: pip install mediapipe"
             )
+        
+        if not CV2_AVAILABLE:
+            raise ImportError("OpenCV is required for MediaPipe estimator")
         
         # Store configuration
         self.default_model = default_model
@@ -246,12 +235,186 @@ class MediaPipeEstimator(PoseEstimator):
         
         return keypoints
     
+    # New Frame-based methods
+    def estimate_pose(self, frame: Frame) -> Dict[str, Any]:
+        """
+        Estimate pose from a single Frame object.
+        
+        Args:
+            frame: Frame object containing image data
+            
+        Returns:
+            Dictionary containing pose estimation results
+        """
+        if not FRAME_SUPPORT:
+            raise RuntimeError("Frame support not available - Frame classes not imported")
+        
+        try:
+            # Load frame data
+            frame_data = frame.load()
+            
+            # Get frame dimensions
+            image_height, image_width = frame_data.shape[:2]
+            
+            # Convert to RGB if needed (MediaPipe expects RGB)
+            if frame.format == "BGR":
+                frame_data = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
+            
+            # Ensure image is contiguous in memory (required by MediaPipe)
+            if not frame_data.flags['C_CONTIGUOUS']:
+                frame_data = np.ascontiguousarray(frame_data)
+            
+            # Create MediaPipe Image object with explicit format
+            mp_image = mp.Image(
+                image_format=mp.ImageFormat.SRGB,
+                data=frame_data
+            )
+            
+            # Create landmarker and detect
+            landmarker = self._get_image_landmarker()
+            try:
+                # Suppress MediaPipe internal warnings during detection
+                with _suppress_stderr():
+                    result = landmarker.detect(mp_image)
+                
+                # Parse landmarks with explicit dimensions
+                keypoints = self._parse_mediapipe_landmarks(result, image_width, image_height)
+                
+                # Convert to new format
+                pose_result = {
+                    "keypoints": keypoints,
+                    "estimator": self.get_estimator_name(),
+                    "format": self.get_keypoint_format(),
+                    "frame_metadata": frame.metadata,
+                    "confidence_scores": [kp.get("confidence", 0.0) for kp in keypoints],
+                    "num_keypoints": len(keypoints),
+                    "processing_metadata": {
+                        "model_path": str(self.model_path),
+                        "frame_shape": frame_data.shape,
+                        "frame_format": frame.format,
+                        "min_detection_confidence": self.min_pose_detection_confidence
+                    }
+                }
+                
+                return pose_result
+                
+            finally:
+                landmarker.close()
+                
+        except Exception as e:
+            logger.error(f"MediaPipe estimation failed for frame: {e}")
+            # Return empty result with error information
+            return {
+                "keypoints": [],
+                "estimator": self.get_estimator_name(),
+                "format": self.get_keypoint_format(),
+                "error": str(e),
+                "frame_metadata": frame.metadata,
+                "confidence_scores": [],
+                "num_keypoints": 0
+            }
+    
+    def estimate_pose_sequence(self, sequence: FrameSequence) -> List[Dict[str, Any]]:
+        """
+        Estimate poses from a FrameSequence.
+        
+        Args:
+            sequence: FrameSequence object containing multiple frames
+            
+        Returns:
+            List of pose estimation results, one per frame
+        """
+        if not FRAME_SUPPORT:
+            raise RuntimeError("Frame support not available - Frame classes not imported")
+        
+        results = []
+        
+        # Create landmarker for video
+        landmarker = self._get_video_landmarker()
+        
+        try:
+            # Process frames
+            for frame_idx, frame in enumerate(sequence.frames):
+                try:
+                    # Load frame data
+                    frame_data = frame.load()
+                    
+                    # Get frame dimensions
+                    image_height, image_width = frame_data.shape[:2]
+                    
+                    # Convert to RGB if needed
+                    if frame.format == "BGR":
+                        frame_data = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
+                    
+                    # Ensure frame is contiguous in memory
+                    if not frame_data.flags['C_CONTIGUOUS']:
+                        frame_data = np.ascontiguousarray(frame_data)
+                    
+                    # Create MediaPipe Image object
+                    mp_image = mp.Image(
+                        image_format=mp.ImageFormat.SRGB,
+                        data=frame_data
+                    )
+                    
+                    # Calculate timestamp in milliseconds
+                    fps = sequence.metadata.get('fps', 30.0)
+                    timestamp_ms = int((frame_idx / fps) * 1000)
+                    
+                    # Detect pose - suppress internal MediaPipe warnings
+                    with _suppress_stderr():
+                        result = landmarker.detect_for_video(mp_image, timestamp_ms)
+                    
+                    # Parse landmarks
+                    keypoints = self._parse_mediapipe_landmarks(result, image_width, image_height)
+                    
+                    pose_result = {
+                        "keypoints": keypoints,
+                        "estimator": self.get_estimator_name(),
+                        "format": self.get_keypoint_format(),
+                        "sequence_index": frame_idx,
+                        "frame_metadata": frame.metadata,
+                        "confidence_scores": [kp.get("confidence", 0.0) for kp in keypoints],
+                        "num_keypoints": len(keypoints),
+                        "processing_metadata": {
+                            "model_path": str(self.model_path),
+                            "timestamp_ms": timestamp_ms
+                        }
+                    }
+                    
+                    results.append(pose_result)
+                    
+                except Exception as e:
+                    logger.warning(f"Failed to process frame {frame_idx}: {e}")
+                    results.append({
+                        "keypoints": [],
+                        "estimator": self.get_estimator_name(),
+                        "format": self.get_keypoint_format(),
+                        "error": str(e),
+                        "sequence_index": frame_idx,
+                        "confidence_scores": [],
+                        "num_keypoints": 0
+                    })
+        
+        finally:
+            landmarker.close()
+        
+        return results
+    
+    def get_estimator_name(self) -> str:
+        """Get the name of this pose estimator."""
+        return "MediaPipe"
+    
+    def get_keypoint_format(self) -> str:
+        """Get the keypoint format used by this estimator."""
+        return "MEDIAPIPE_33"  # MediaPipe uses 33 landmarks
+    
+    # Legacy methods for backward compatibility
     def estimate_image_keypoints(
         self,
         image_path: str,
         model: str = "BODY_25",
         bbox: Optional[Dict[str, float]] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> List[Keypoint]:
         """
         Estimate keypoints using MediaPipe tasks API.
         
@@ -311,7 +474,6 @@ class MediaPipeEstimator(PoseEstimator):
         landmarker = self._get_image_landmarker()
         try:
             # Suppress MediaPipe internal warnings during detection
-            # This includes landmark_projection_calculator warnings about NORM_RECT
             with _suppress_stderr():
                 result = landmarker.detect(mp_image)
             
@@ -435,103 +597,16 @@ class MediaPipeEstimator(PoseEstimator):
     def cache_fingerprint(self) -> str:
         """Get cache fingerprint."""
         return "mediapipe_tasks_v1"
-
-
-class OpenPoseEstimator(PoseEstimator):
-    """OpenPose estimator placeholder - not yet implemented."""
     
-    def __init__(self):
-        """Initialize OpenPose estimator."""
-        logger.warning("OpenPose estimator is not yet implemented")
-        raise NotImplementedError("OpenPose estimator not yet implemented")
-    
-    def is_available(self) -> bool:
-        """
-        Check if OpenPose estimator is available.
-        
-        Returns:
-            False - OpenPose is not yet implemented
-        """
-        return False
-    
-    def estimate_image_keypoints(
-        self,
-        image_path: str,
-        model: str = "BODY_25",
-        bbox: Optional[Dict[str, float]] = None
-    ) -> List[Dict[str, Any]]:
-        """Estimate keypoints using OpenPose."""
-        raise NotImplementedError("OpenPose estimator not yet implemented")
-    
-    def cache_fingerprint(self) -> str:
-        """Get cache fingerprint."""
-        return "openpose_v1"
-
-
-def get_pose_estimator(estimator_type: str = "mediapipe") -> Optional[PoseEstimator]:
-    """
-    Factory function to get a pose estimator instance.
-    
-    Args:
-        estimator_type: Type of estimator (mediapipe, openpose, etc.)
-        
-    Returns:
-        PoseEstimator instance or None if not available
-    """
-    estimator_type = estimator_type.lower()
-    
-    if estimator_type == "mediapipe":
-        if not MEDIAPIPE_AVAILABLE:
-            logger.error("MediaPipe is not installed. Install with: pip install mediapipe")
-            return None
-        
-        try:
-            # Try to create MediaPipe estimator with default model path
-            model_path = Path("data/models/pose_landmarker_lite.task")
-            
-            # If default model doesn't exist, try to use built-in model
-            if not model_path.exists():
-                logger.warning(
-                    f"Default model not found at {model_path}. "
-                    f"Download from: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/index#models"
-                )
-                # Try alternative paths
-                alt_paths = [
-                    Path("pose_landmarker_lite.task"),
-                    Path("models/pose_landmarker_lite.task"),
-                    Path("../data/models/pose_landmarker_lite.task")
-                ]
-                
-                for alt_path in alt_paths:
-                    if alt_path.exists():
-                        model_path = alt_path
-                        logger.info(f"Using model from: {model_path}")
-                        break
-                else:
-                    logger.error(
-                        "No MediaPipe model file found. Please download pose_landmarker_lite.task "
-                        "from https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/index#models"
-                    )
-                    return None
-            
-            return MediaPipeEstimator(model_path=str(model_path))
-            
-        except Exception as e:
-            logger.error(f"Failed to create MediaPipe estimator: {str(e)}")
-            return None
-    
-    elif estimator_type == "openpose":
-        logger.warning("OpenPose estimator not yet implemented")
-        return None
-    
-    elif estimator_type == "ultralytics":
-        logger.warning("Ultralytics estimator not yet implemented")
-        return None
-    
-    elif estimator_type == "alphapose":
-        logger.warning("AlphaPose estimator not yet implemented")
-        return None
-    
-    else:
-        logger.error(f"Unknown estimator type: {estimator_type}")
-        return None
+    def get_model_info(self) -> Dict[str, Any]:
+        """Get information about the loaded model."""
+        return {
+            "model_path": str(self.model_path),
+            "model_exists": self.model_path.exists(),
+            "default_model": self.default_model,
+            "min_pose_detection_confidence": self.min_pose_detection_confidence,
+            "min_pose_presence_confidence": self.min_pose_presence_confidence,
+            "min_tracking_confidence": self.min_tracking_confidence,
+            "keypoint_format": self.get_keypoint_format(),
+            "available": self.is_available()
+        }
