@@ -1698,7 +1698,7 @@ class ConfigurationManager(IConfigurationManager):
         Set up logging based on configuration settings.
         """
         try:
-            from ambient.utils.logging import configure_logging_from_config
+            from ambient.utils.log_config import configure_logging_from_config
             configure_logging_from_config(self)
             
         except ImportError:

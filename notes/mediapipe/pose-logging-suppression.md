@@ -101,7 +101,7 @@ with suppress_stderr():
    - Imports and uses `pose_config`
    - Wraps landmarker creation with `suppress_stderr()`
 
-3. **`notebooks/utils/keypoints.py`** (Notebook utilities)
+3. **`notebooks/utils/eval_keypoints.py`** (Notebook utilities)
    - Calls `configure_pose_environment()` before imports
 
 ### Supported Backends

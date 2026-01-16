@@ -3,7 +3,7 @@
 Example demonstrating the new logging utilities for consistent usage across components.
 
 This example shows how to use the various logging utilities provided by the
-ambient.utils.logging module for consistent structured logging across the
+ambient.utils.log_config module for consistent structured logging across the
 AlexPose system.
 
 Usage:
@@ -20,7 +20,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 # Import the new logging utilities
-from ambient.utils.logging import (
+from ambient.utils.log_config import (
     setup_logging,
     create_component_logger,
     log_function_execution,

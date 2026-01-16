@@ -34,7 +34,7 @@ Changes:
 - Ensures clean initialization for both IMAGE and VIDEO modes
 
 ### 3. Updated Notebook Utilities
-**File**: `notebooks/utils/keypoints.py`
+**File**: `notebooks/utils/eval_keypoints.py`
 
 Changes:
 - Calls `configure_mediapipe_environment()` at the top
@@ -108,7 +108,7 @@ import mediapipe as mp
 
 1. ✅ `ambient/pose/mediapipe_config.py` (NEW)
 2. ✅ `ambient/gavd/pose_estimators.py` (UPDATED)
-3. ✅ `notebooks/utils/keypoints.py` (UPDATED)
+3. ✅ `notebooks/utils/eval_keypoints.py` (UPDATED)
 4. ✅ `docs/guides/mediapipe-logging-suppression.md` (NEW)
 5. ✅ `scripts/test_mediapipe_logging.py` (NEW)
 

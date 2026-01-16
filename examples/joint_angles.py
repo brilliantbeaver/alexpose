@@ -1,5 +1,8 @@
+from pathlib import Path
+
 from ambient.gavd import GAVDDataLoader
 from ambient.pose.joint_angles import get_joint_angles as calculate_angles
+from ambient.utils.eval_keypoints import get_keypoints
 
 #----------------------------------------------------------------------
 # main
@@ -20,17 +23,22 @@ if __name__ == "__main__":
     print(f"\tnum_sequences: {len(sequences)}")
 
     # 2. Extract body keypoints (pose landmarks)
-    keypoints_array = get_keypoints(project_root=project_root, sequence_data=sequence_data)
+    # get_keypoints returns (keypoints, first_frame) tuple
+    keypoints_array, first_frame = get_keypoints(
+        project_root=project_root, 
+        sequence_data=sequence_data
+    )
 
     # 3. Compute joint angles – For each frame, calculate hip, knee and ankle angles
-
-    joint_angles_array = calculate_angles(
+    joint_angles = calculate_angles(
         keypoints_array=keypoints_array,
         keypoint_format="BLAZEPOSE_33",
         fps=30.0,
         confidence_threshold=0.3
     )
 
-    print(f"==> # keypoints: {len(keypoints_array)}")
-    print(f"    # joint angles: {len(joint_angles_array)}")
-    print(f"The first set of these joint angles look like: {joint_angles_array[0]}")
+    print(f"==> # keypoints: {len(keypoints_array)} frames")
+    print(f"    # joint angles: {len(joint_angles.frames)} frames")
+    print(f"\nFirst frame joint angles:")
+    for joint_name, angle_data in joint_angles.frames[0].angles.items():
+        print(f"  {joint_name}: {angle_data.angle_degrees:.2f}° (confidence: {angle_data.confidence:.2f})")

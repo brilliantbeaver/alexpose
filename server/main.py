@@ -102,7 +102,7 @@ except ImportError as e:
 
 # Import configuration and logging
 from ambient.core.config import ConfigurationManager
-from ambient.utils.logging import (
+from ambient.utils.log_config import (
     setup_logging, 
     create_component_logger,
     log_system_event,

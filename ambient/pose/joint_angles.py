@@ -14,8 +14,11 @@ Author: AlexPose Team
 
 import numpy as np
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 from loguru import logger
+
+# Import new data structures
+from ambient.pose.keypoint_data import Keypoint, KeypointSet, KeypointFormat
 
 
 @dataclass
@@ -273,12 +276,110 @@ class JointAngleCalculator:
     
     def calculate_frame_angles(
         self,
-        keypoints: List[Dict[str, Any]],
+        keypoints: Union[KeypointSet, List[Dict[str, Any]]],
         frame_index: int = 0,
         timestamp: Optional[float] = None
     ) -> FrameJointAngles:
         """
         Calculate all joint angles for a single frame.
+        
+        Args:
+            keypoints: KeypointSet object or list of keypoint dictionaries (legacy)
+            frame_index: Frame number in sequence
+            timestamp: Optional timestamp in seconds
+            
+        Returns:
+            FrameJointAngles object containing all calculated angles
+        """
+        # Convert KeypointSet to internal format if needed
+        if isinstance(keypoints, KeypointSet):
+            # Use KeypointSet directly - more efficient
+            return self._calculate_from_keypoint_set(keypoints, frame_index, timestamp)
+        else:
+            # Legacy dict list format
+            return self._calculate_from_dict_list(keypoints, frame_index, timestamp)
+    
+    def _calculate_from_keypoint_set(
+        self,
+        keypoint_set: KeypointSet,
+        frame_index: int = 0,
+        timestamp: Optional[float] = None
+    ) -> FrameJointAngles:
+        """
+        Calculate joint angles from KeypointSet object.
+        
+        Args:
+            keypoint_set: KeypointSet object
+            frame_index: Frame number in sequence
+            timestamp: Optional timestamp in seconds
+            
+        Returns:
+            FrameJointAngles object containing all calculated angles
+        """
+        frame_angles = FrameJointAngles(
+            frame_index=frame_index,
+            keypoint_format=self.keypoint_format,
+            timestamp=timestamp or keypoint_set.timestamp
+        )
+        
+        # Define joint calculations
+        joint_definitions = self._get_joint_definitions()
+        
+        for joint_name, (p1_name, p2_name, p3_name) in joint_definitions.items():
+            try:
+                # Get landmark indices
+                p1_idx = self.mapping.get(p1_name)
+                p2_idx = self.mapping.get(p2_name)
+                p3_idx = self.mapping.get(p3_name)
+                
+                if p1_idx is None or p2_idx is None or p3_idx is None:
+                    continue
+                
+                # Check if indices are valid for this keypoint set
+                if max(p1_idx, p2_idx, p3_idx) >= len(keypoint_set):
+                    continue
+                
+                # Extract keypoints directly from KeypointSet
+                kp1 = keypoint_set[p1_idx]
+                kp2 = keypoint_set[p2_idx]
+                kp3 = keypoint_set[p3_idx]
+                
+                # Use Keypoint objects directly
+                p1 = np.array([kp1.x, kp1.y])
+                p2 = np.array([kp2.x, kp2.y])
+                p3 = np.array([kp3.x, kp3.y])
+                
+                conf1 = kp1.confidence
+                conf2 = kp2.confidence
+                conf3 = kp3.confidence
+                
+                # Calculate angle
+                angle_deg, combined_conf = self.calculate_angle(p1, p2, p3, conf1, conf2, conf3)
+                
+                # Only add if confidence meets threshold
+                if combined_conf >= self.confidence_threshold and not np.isnan(angle_deg):
+                    frame_angles.angles[joint_name] = JointAngle(
+                        joint_name=joint_name,
+                        angle_degrees=angle_deg,
+                        confidence=combined_conf,
+                        frame_index=frame_index,
+                        landmark_indices=(p1_idx, p2_idx, p3_idx)
+                    )
+            
+            except Exception as e:
+                logger.debug(f"Failed to calculate {joint_name} angle: {e}")
+                continue
+        
+        return frame_angles
+    
+    def _calculate_from_dict_list(
+        self,
+        keypoints: List[Dict[str, Any]],
+        frame_index: int = 0,
+        timestamp: Optional[float] = None
+    ) -> FrameJointAngles:
+        """
+        Calculate joint angles from legacy dict list format.
         
         Args:
             keypoints: List of keypoint dictionaries with 'x', 'y', 'confidence'
@@ -345,7 +446,7 @@ class JointAngleCalculator:
     
     def calculate_sequence_angles(
         self,
-        keypoints_array: List[List[Dict[str, Any]]],
+        keypoints_array: Union[List[KeypointSet], List[List[Dict[str, Any]]]],
         fps: float = 30.0,
         sequence_id: Optional[str] = None
     ) -> JointAngleSequence:
@@ -353,7 +454,7 @@ class JointAngleCalculator:
         Calculate joint angles for an entire sequence of frames.
         
         Args:
-            keypoints_array: List of frames, each containing list of keypoint dicts
+            keypoints_array: List of KeypointSet objects or list of frames with keypoint dicts (legacy)
             fps: Frames per second of the video
             sequence_id: Optional identifier for the sequence
             
@@ -367,7 +468,12 @@ class JointAngleCalculator:
         )
         
         for frame_idx, keypoints in enumerate(keypoints_array):
-            timestamp = frame_idx / fps if fps > 0 else None
+            # Determine timestamp
+            if isinstance(keypoints, KeypointSet) and keypoints.timestamp is not None:
+                timestamp = keypoints.timestamp / fps if keypoints.timestamp > 100 else keypoints.timestamp
+            else:
+                timestamp = frame_idx / fps if fps > 0 else None
+            
             frame_angles = self.calculate_frame_angles(keypoints, frame_idx, timestamp)
             sequence.frames.append(frame_angles)
         
@@ -408,7 +514,7 @@ class JointAngleCalculator:
 
 
 def get_joint_angles(
-    keypoints_array: List[List[Dict[str, Any]]],
+    keypoints_array: Union[List[KeypointSet], List[List[Dict[str, Any]]]],
     keypoint_format: str = "BLAZEPOSE_33",
     fps: float = 30.0,
     confidence_threshold: float = 0.3,
@@ -428,8 +534,8 @@ def get_joint_angles(
     (mean absolute error < 5° for hip/knee/ankle angles).
     
     Args:
-        keypoints_array: List of frames, each containing list of keypoint dictionaries
-                        with 'x', 'y', 'confidence' fields
+        keypoints_array: List of KeypointSet objects or list of frames with keypoint dicts (legacy)
+                        Each keypoint must have 'x', 'y', 'confidence' fields
         keypoint_format: Format of keypoints ("BLAZEPOSE_33", "COCO_17", "BODY_25")
         fps: Frames per second of the video
         confidence_threshold: Minimum confidence for valid angle calculation
@@ -439,14 +545,20 @@ def get_joint_angles(
         JointAngleSequence object containing angles for all frames with statistics
         
     Example:
+        >>> # Using new KeypointSet format
+        >>> extractor = SequenceKeypointExtractor()
+        >>> keypoint_sets = extractor.extract_from_sequence(sequence_data, video_path)
+        >>> angles = get_joint_angles(keypoint_sets, keypoint_format="BLAZEPOSE_33")
+        >>> left_knee_angles = angles.get_joint_angle_series("left_knee")
+        >>> stats = angles.get_statistics("left_knee")
+        >>> print(f"Mean knee angle: {stats['mean']:.1f}°")
+        
+        >>> # Legacy dict format still supported
         >>> keypoints = [
         ...     [{"x": 100, "y": 200, "confidence": 0.9}, ...],  # Frame 0
         ...     [{"x": 105, "y": 205, "confidence": 0.85}, ...],  # Frame 1
         ... ]
         >>> angles = get_joint_angles(keypoints, keypoint_format="BLAZEPOSE_33")
-        >>> left_knee_angles = angles.get_joint_angle_series("left_knee")
-        >>> stats = angles.get_statistics("left_knee")
-        >>> print(f"Mean knee angle: {stats['mean']:.1f}°")
     """
     calculator = JointAngleCalculator(
         keypoint_format=keypoint_format,

@@ -94,7 +94,7 @@ with suppress_stderr():
    - Wraps landmarker creation with `suppress_stderr()`
    - Ensures clean initialization
 
-3. **`notebooks/utils/keypoints.py`**
+3. **`notebooks/utils/eval_keypoints.py`**
    - Calls `configure_mediapipe_environment()` before imports
    - Ensures notebooks run cleanly
 
