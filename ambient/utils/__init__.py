@@ -12,4 +12,4 @@ from .csv_parser import parse_csv_with_dicts, parse_csv_with_pandas, parse_openp
 __all__ = ["parse_csv_with_dicts", "parse_csv_with_pandas", "parse_openpose_csv"]
 
 __version__ = "1.0.0"
-__author__ = "Theodore Mui"
+__author__ = "Alex Mui and Theodore Mui"

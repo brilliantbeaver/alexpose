@@ -571,4 +571,5 @@ if __name__ == "__main__":
     )
     print(f"--> # left_knee angles: {joint_angles.get_statistics("left_knee")}")
     print("The first set of these joint angles look like:")
-    print(json.dumps(joint_angles.frames[0].to_dict(), indent=2))
+    print(json.dumps(joint_angles.frames[0].__dict__, indent=2, default=str))
+    # print(json.dumps(joint_angles.frames[0].to_dict(), indent=2))
