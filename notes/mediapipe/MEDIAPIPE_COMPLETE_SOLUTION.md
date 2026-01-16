@@ -82,7 +82,7 @@ def _suppress_stderr():
 |------|---------|---------|
 | `ambient/pose/pose_config.py` | Created (renamed from mediapipe_config) | Generic config for all pose backends |
 | `ambient/gavd/pose_estimators.py` | Updated | Local config + 3-point suppression |
-| `notebooks/utils/keypoints.py` | Updated | Import from pose_config |
+| `notebooks/utils/eval_keypoints.py` | Updated | Import from pose_config |
 | `scripts/test_mediapipe_logging.py` | Updated | Import from pose_config |
 
 ## Systematic Analysis Process

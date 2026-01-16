@@ -11,7 +11,7 @@ from loguru import logger
 import sys
 
 from ambient.core.config import ConfigurationManager
-from ambient.utils.logging import setup_logging, create_component_logger
+from ambient.utils.log_config import setup_logging, create_component_logger
 from .commands.analyze import analyze
 from .commands.batch import batch
 from .commands.config import config_cmd

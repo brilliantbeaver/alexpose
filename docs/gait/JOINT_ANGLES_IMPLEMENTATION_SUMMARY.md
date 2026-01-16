@@ -61,7 +61,7 @@ combined_confidence = (conf1 × conf2 × conf3)^(1/3)
 
 ### 1. Notebook Integration
 
-**File**: `notebooks/utils/keypoints.py`
+**File**: `notebooks/utils/eval_keypoints.py`
 
 ```python
 from ambient.pose.joint_angles import get_joint_angles
@@ -243,7 +243,7 @@ if asymmetry > 10:
 ### Modified Files
 
 1. `ambient/pose/__init__.py` - Added exports
-2. `notebooks/utils/keypoints.py` - Implemented get_joint_angles()
+2. `notebooks/utils/eval_keypoints.py` - Implemented get_joint_angles()
 
 ---
 

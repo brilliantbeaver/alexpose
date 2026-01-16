@@ -2,7 +2,7 @@
 """
 Tests for the new logging utilities.
 
-This module tests the logging utilities added to ambient.utils.logging
+This module tests the logging utilities added to ambient.utils.log_config
 to ensure they work correctly and provide consistent structured logging.
 """
 
@@ -13,7 +13,7 @@ import asyncio
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from ambient.utils.logging import (
+from ambient.utils.log_config import (
     setup_logging,
     create_component_logger,
     log_function_execution,

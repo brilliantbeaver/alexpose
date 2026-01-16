@@ -1,3 +1,15 @@
+"""
+Visualization Utilities for Pose Analysis
+
+This module provides visualization functions for pose analysis, including:
+- Frame visualization with bounding boxes
+- Pose skeleton visualization
+- Bounding box scaling and alignment
+
+Originally located in notebooks/utils/, moved to ambient/utils/ for better
+organization and to make it available as part of the core package.
+"""
+
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,6 +18,7 @@ from typing import Dict, List, Tuple, Optional
 
 from ambient.utils.youtube_cache import extract_video_id
 from ambient.gavd import PoseDataConverter
+
 
 def _scale_bbox_coordinates(
     bbox: Dict, 
@@ -291,7 +304,7 @@ def visualize_pose_with_skeleton(image, keypoints, bbox=None, title="Pose Detect
         height = bbox.get('height', 0) * scale_y
         
         # Debug output
-        print(f"🔧 BBOX SCALING APPLIED:")
+        print(f"[WRENCH] BBOX SCALING APPLIED:")
         print(f"   Original: left={bbox.get('left', 0)}, top={bbox.get('top', 0)}, "
               f"w={bbox.get('width', 0)}, h={bbox.get('height', 0)}")
         print(f"   Annotation res: {annotation_width}x{annotation_height}")
@@ -304,9 +317,9 @@ def visualize_pose_with_skeleton(image, keypoints, bbox=None, title="Pose Detect
             rect = Rectangle((left, top), width, height, 
                            linewidth=2, edgecolor='red', facecolor='none')
             axes[0].add_patch(rect)
-            print(f"   ✅ Bounding box drawn with correct scaling")
+            print(f"   [OK] Bounding box drawn with correct scaling")
         else:
-            print(f"   ⚠️ Invalid bbox dimensions")
+            print(f"   [WARNING] Invalid bbox dimensions")
 
     # 2. Keypoints only
     keypoints_image = image.copy()

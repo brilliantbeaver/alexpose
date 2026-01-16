@@ -16,7 +16,7 @@ from typing import Dict, List, Optional, Union, Any
 import numpy as np
 from loguru import logger
 
-# Note: Warning suppression is handled by ambient.pose._suppress_warnings
+# Note: Warning suppression is handled by ambient.pose.suppress_warnings
 # which is imported automatically by ambient/__init__.py
 
 
@@ -58,7 +58,7 @@ def _suppress_stderr():
 # Check MediaPipe availability - wrap import to suppress any C++ init warnings
 try:
     # Import the suppression utilities
-    from ambient.pose._suppress_warnings import suppress_stderr_fd
+    from ambient.pose.suppress_warnings import suppress_stderr_fd
     
     with suppress_stderr_fd():
         import mediapipe as mp
@@ -70,15 +70,6 @@ except ImportError:
     mp = None
     python = None
     vision = None
-finally:
-    # Restore stderr if it was redirected
-    try:
-        from ambient.pose._suppress_warnings import _original_stderr
-        if _original_stderr and hasattr(_original_stderr, 'close'):
-            sys.stderr.close()
-        sys.stderr = _original_stderr
-    except Exception:
-        pass
 
 # Import Frame classes with fallback for development
 try:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script to verify the KeyError fixes in notebooks/utils/keypoints.py
+Test script to verify the KeyError fixes in ambient/utils/eval_keypoints.py
 """
 
 import sys
@@ -75,7 +75,7 @@ def test_dataframe_access():
 def test_import_fixes():
     """Test that the fixed functions can be imported"""
     try:
-        from notebooks.utils.keypoints import pose_estimation_all_sequences
+        from ambient.utils.eval_keypoints import pose_estimation_all_sequences
         print("✅ pose_estimation_all_sequences can be imported")
     except ImportError as e:
         print(f"❌ Import failed: {e}")
@@ -84,7 +84,7 @@ def test_import_fixes():
         print(f"⚠️  Import warning: {e}")
     
     try:
-        from notebooks.utils.keypoints import extract_pose_from_sequence
+        from ambient.utils.eval_keypoints import extract_pose_from_sequence
         print("✅ extract_pose_from_sequence can be imported")
     except ImportError as e:
         print(f"❌ Import failed: {e}")

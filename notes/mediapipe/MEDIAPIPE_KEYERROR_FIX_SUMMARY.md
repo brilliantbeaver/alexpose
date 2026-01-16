@@ -6,7 +6,7 @@ The notebook `notebooks/explore3 - extract features.ipynb` was failing with a `K
 ## Root Causes Identified
 
 ### 1. **Primary Issue: Incorrect DataFrame Column Access**
-**Location:** Lines 243 and 388 in `notebooks/utils/keypoints.py`
+**Location:** Lines 243 and 388 in `notebooks/utils/eval_keypoints.py`
 
 **Problem Code:**
 ```python
@@ -54,7 +54,7 @@ if 'seq' not in sequence_data.columns:
 - Improved function documentation
 
 ## Files Modified
-- `notebooks/utils/keypoints.py` - Fixed DataFrame access and added validation
+- `notebooks/utils/eval_keypoints.py` - Fixed DataFrame access and added validation
 - `test_keypoints_fix.py` - Created test script to verify fixes
 
 ## Testing

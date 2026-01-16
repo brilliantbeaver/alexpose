@@ -72,7 +72,7 @@ def _get_image_landmarker(self):
 
 ### 3. Updated Notebook Utilities
 
-**File**: `notebooks/utils/keypoints.py`
+**File**: `notebooks/utils/eval_keypoints.py`
 
 ```python
 from ambient.pose.pose_config import configure_pose_environment
@@ -131,7 +131,7 @@ By redirecting fd 2 at the OS level, we intercept C++ writes that bypass Python.
    - Updated import: `from ambient.pose.pose_config import ...`
    - Uses `suppress_stderr()` during landmarker creation
 
-3. ✅ `notebooks/utils/keypoints.py`
+3. ✅ `notebooks/utils/eval_keypoints.py`
    - Updated import: `from ambient.pose.pose_config import ...`
    - Configures environment before MediaPipe imports
 

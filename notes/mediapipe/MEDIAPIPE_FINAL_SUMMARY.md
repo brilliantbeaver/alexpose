@@ -29,7 +29,7 @@ Successfully implemented comprehensive C++ logging suppression for pose estimati
 
 ### 4. Updated All References
 - ✅ `ambient/gavd/pose_estimators.py` - Uses local config to avoid circular import
-- ✅ `notebooks/utils/keypoints.py` - Imports from `pose_config` (no circular issue here)
+- ✅ `notebooks/utils/eval_keypoints.py` - Imports from `pose_config` (no circular issue here)
 - ✅ `scripts/test_mediapipe_logging.py` - Updated import references
 - ✅ Documentation created and updated
 
@@ -40,7 +40,7 @@ Successfully implemented comprehensive C++ logging suppression for pose estimati
 | `ambient/pose/mediapipe_config.py` | **RENAMED** | → `ambient/pose/pose_config.py` |
 | `ambient/pose/pose_config.py` | ✅ **UPDATED** | Generic for all backends, added OpenCV env var |
 | `ambient/gavd/pose_estimators.py` | ✅ **UPDATED** | Local config to avoid circular import |
-| `notebooks/utils/keypoints.py` | ✅ **UPDATED** | Import from `pose_config` |
+| `notebooks/utils/eval_keypoints.py` | ✅ **UPDATED** | Import from `pose_config` |
 | `scripts/test_mediapipe_logging.py` | ✅ **UPDATED** | Import from `pose_config` |
 | `docs/guides/pose-logging-suppression.md` | ✅ **CREATED** | Comprehensive guide |
 | `POSE_LOGGING_FIX.md` | ✅ **CREATED** | Solution summary |
@@ -111,7 +111,7 @@ python scripts/test_mediapipe_logging.py
 │  ├── Local _suppress_stderr() implementation            │
 │  └── MediaPipeEstimator with suppressed initialization  │
 ├─────────────────────────────────────────────────────────┤
-│  notebooks/utils/keypoints.py                           │
+│  notebooks/utils/eval_keypoints.py                           │
 │  └── Imports from pose_config (no circular issue)       │
 └─────────────────────────────────────────────────────────┘
 ```

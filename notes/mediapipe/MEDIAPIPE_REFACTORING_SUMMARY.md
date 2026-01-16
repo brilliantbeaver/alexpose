@@ -40,7 +40,7 @@ Updated to support multiple pose estimation backends:
    from ambient.pose.pose_config import configure_pose_environment, suppress_stderr
    ```
 
-2. ✅ `notebooks/utils/keypoints.py`
+2. ✅ `notebooks/utils/eval_keypoints.py`
    ```python
    # Before
    from ambient.pose.mediapipe_config import configure_mediapipe_environment
@@ -145,7 +145,7 @@ python scripts/test_mediapipe_logging.py
 | `ambient/pose/mediapipe_config.py` | **RENAMED** | → `ambient/pose/pose_config.py` |
 | `ambient/pose/pose_config.py` | **UPDATED** | Generic for all backends, added OpenCV env var |
 | `ambient/gavd/pose_estimators.py` | **UPDATED** | Import path changed |
-| `notebooks/utils/keypoints.py` | **UPDATED** | Import path changed |
+| `notebooks/utils/eval_keypoints.py` | **UPDATED** | Import path changed |
 | `scripts/test_mediapipe_logging.py` | **UPDATED** | Import path changed |
 | `docs/guides/pose-logging-suppression.md` | **CREATED** | Comprehensive guide for all backends |
 | `POSE_LOGGING_FIX.md` | **CREATED** | Complete solution summary |

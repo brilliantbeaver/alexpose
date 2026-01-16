@@ -14,7 +14,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from ambient.utils.logging import (
+from ambient.utils.log_config import (
     setup_logging,
     get_rotation_retention_policies,
     calculate_estimated_disk_usage,
