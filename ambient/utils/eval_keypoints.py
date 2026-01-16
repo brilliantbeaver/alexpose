@@ -556,17 +556,20 @@ if __name__ == "__main__":
     print(f"\tnum_sequences: {len(sequences)}")
 
     # 2. Extract body keypoints (pose landmarks) using refactored code
-    # Returns: List[KeypointSet] - one KeypointSet per frame
+    # Returns: Tuple[List[KeypointSet], Optional[np.ndarray]] - keypoints and first frame
     # Each KeypointSet contains Keypoint objects with x, y, z, confidence, etc.
-    keypoints_array = get_keypoints(
+    keypoints_array, first_frame = get_keypoints(
         project_root=project_root,
         sequence_data=sequence_data,
         verbose=True
     )
     print(f"==> # keypoints extracted: {len(keypoints_array)} frames")
-    print(f"    Each frame has {len(keypoints_array[0])} keypoints")
-    print(f"    Format: {keypoints_array[0].format.value}")
-    print(f"    Avg confidence: {keypoints_array[0].avg_confidence:.3f}")
+    if len(keypoints_array) > 0:
+        print(f"    Each frame has {len(keypoints_array[0])} keypoints")
+        print(f"    Format: {keypoints_array[0].format.value}")
+        print(f"    Avg confidence: {keypoints_array[0].avg_confidence:.3f}")
+    else:
+        print("    [WARNING] No keypoints extracted")
 
     # 3. Compute joint angles – For each frame, calculate hip, knee and ankle angles
     # The calculate_angles function (alias for get_joint_angles) now accepts:
