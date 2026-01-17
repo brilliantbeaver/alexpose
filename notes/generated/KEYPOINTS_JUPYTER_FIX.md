@@ -96,7 +96,7 @@ def suppress_stderr_fd():
 Verified with `scripts/test_get_keypoints_fix.py`:
 - ✅ Imports work correctly
 - ✅ Loads GAVD data successfully
-- ✅ Calls `get_keypoints()` with dictionary of sequences
+- ✅ Calls `get_keypoints()` with DataFrame (first sequence from dict)
 - ✅ Returns correct tuple `(keypoints, frame)`
 - ✅ Extracted 512 keypoints from first sequence
 - ✅ Frame extracted with shape (360, 640, 3)
@@ -109,7 +109,7 @@ This was the final fix in a series of related issues:
 2. ✅ **Unicode errors** - Emoji characters causing encoding issues on Windows
 3. ✅ **Stale cache** - `.pyc` files from old file locations
 4. ✅ **Jupyter compatibility (suppress_warnings.py)** - First location fixed
-5. ✅ **AttributeError** - `get_keypoints()` handling dict input
+5. ✅ **AttributeError** - `get_keypoints()` simplified to DataFrame-only
 6. ✅ **Jupyter compatibility (keypoints.py)** - THIS FIX
 
 ## Usage

@@ -23,7 +23,7 @@ AttributeError: 'dict' object has no attribute 'empty'
 
 ### 1. Core Function Update (`ambient/pose/keypoints.py`)
 
-The core `get_keypoints()` function was updated to handle both DataFrame and dict inputs:
+The core `get_keypoints()` function was simplified to only accept DataFrame inputs:
 
 ```python
 def get_keypoints(

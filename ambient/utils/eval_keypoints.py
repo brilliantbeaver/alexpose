@@ -50,7 +50,6 @@ from ambient.pose.keypoints import (
     SequenceKeypointExtractor,
     KeypointVisualizer,
     ensure_model_downloaded,
-    get_keypoints as _get_keypoints_core,  # Renamed to avoid conflict
     create_pose_landmarker,
 )
 from ambient.pose.keypoint_data import KeypointSet  # For type hints
@@ -58,7 +57,7 @@ from ambient.pose.joint_angles import get_joint_angles as calculate_angles
 from ambient.utils.youtube_cache import extract_video_id
 from ambient.utils.viz import visualize_pose_with_skeleton
 
-print(f"MediaPipe detects {len(POSE_LANDMARK_NAMES)} landmarks")
+from loguru import logger
 
 
 # ============================================================================
@@ -71,79 +70,44 @@ print(f"MediaPipe detects {len(POSE_LANDMARK_NAMES)} landmarks")
 # - Convenience functions for notebook exploration
 # ============================================================================
 
+def get_gavd_frame(
+    sequence_data: pd.DataFrame,
+    frame_num: int,
+    video_base_path: str,
+):
 
-def get_keypoints(
-    project_root: Path,
-    sequence_data,  # Can be pd.DataFrame or Dict[str, pd.DataFrame]
-    model_path: Optional[str] = None,
-    verbose: bool = True
-) -> Tuple[List, Optional[np.ndarray]]:
-    """
-    Extract keypoints from a video sequence (notebook-friendly wrapper).
-    
-    This is a convenience wrapper for interactive notebook use that provides
-    backward compatibility with older notebook code by returning both keypoints
-    and the first frame for visualization.
-    
-    Args:
-        project_root: Project root directory
-        sequence_data: DataFrame with sequence information OR dictionary of sequences
-        model_path: Optional path to model file
-        verbose: Whether to print progress
-        
-    Returns:
-        Tuple of (keypoints, frame) where:
-        - keypoints: List of KeypointSet objects
-        - frame: First frame as numpy array (BGR) for visualization
-    """
-    # Use the core function to extract keypoints
-    keypoints = _get_keypoints_core(
-        project_root=project_root,
-        sequence_data=sequence_data,
-        model_path=model_path,
-        verbose=verbose
-    )
-    
-    # Extract the first frame for visualization
     frame = None
-    try:
-        # Handle both DataFrame and dict
-        if isinstance(sequence_data, dict):
-            first_key = list(sequence_data.keys())[0]
-            seq_df = sequence_data[first_key]
-        else:
-            seq_df = sequence_data
-        
-        # Get first frame info
-        first_row = seq_df.iloc[0]
-        url = first_row['url']
-        frame_num = int(first_row['frame_num'])
-        
-        # Get video path
-        video_id = extract_video_id(url)
-        video_path = project_root / "data" / "youtube" / f"{video_id}.mp4"
-        
-        if video_path.exists():
-            # Extract first frame
-            cap = cv2.VideoCapture(str(video_path))
-            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num - 1)
-            ret, frame = cap.read()
-            cap.release()
+    if frame_num < len(sequence_data):
+        try:
+            # Get first frame info from the DataFrame
+            first_row = sequence_data.iloc[frame_num]
+            url = first_row['url']
+            frame_num = int(first_row['frame_num'])
             
-            if not ret:
+            # Get video path
+            video_id = extract_video_id(url)
+            video_path = video_base_path / f"{video_id}.mp4"
+            
+            if video_path.exists():
+                # Extract first frame
+                cap = cv2.VideoCapture(str(video_path))
+                cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num - 1)
+                ret, frame = cap.read()
+                cap.release()
+                
+                if not ret:
+                    if verbose:
+                        logger.warning("Could not read frame from video")
+                    frame = None
+            else:
                 if verbose:
-                    print("[WARNING] Could not read frame from video")
-                frame = None
-        else:
+                    logger.warning("Video not found: {video_path}")
+            
+        except Exception as e:
             if verbose:
-                print(f"[WARNING] Video not found: {video_path}")
-        
-    except Exception as e:
-        if verbose:
-            print(f"[WARNING] Error extracting frame: {e}")
-        frame = None
+                logger.error(f"Error extracting frame: {e}")
     
-    return keypoints, frame
+    return frame
 
 
 # ============================================================================
@@ -158,7 +122,7 @@ def get_keypoints(
 
 
 # Evaluation-specific visualization function
-def visualize_keypoints(keypoints: list, frame: np.ndarray):
+def visualize_keypoints(keypoints_set: KeypointSet, frame: np.ndarray):
     """
     Visualize keypoints on a frame with side-by-side comparison.
     
@@ -168,49 +132,41 @@ def visualize_keypoints(keypoints: list, frame: np.ndarray):
         keypoints: List of KeypointSet objects (one per frame)
         frame: BGR image array from OpenCV
     """
-    # Process results
-    if keypoints and len(keypoints) > 0:
-        # Get the first frame's keypoints (KeypointSet object)
-        first_keypoint_set = keypoints[0]
-        
-        # Visualize
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7))
-        
-        # Original frame
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        ax1.imshow(frame_rgb)
-        ax1.set_title('Original Frame')
-        ax1.axis('off')
-        
-        # Frame with pose - use draw_skeleton for better visualization
-        annotated = KeypointVisualizer.draw_skeleton(
-            frame_rgb, 
-            first_keypoint_set,
-            confidence_threshold=0.5,
-            keypoint_color=(255, 0, 0),
-            line_color=(0, 255, 0)
-        )
-        ax2.imshow(annotated)
-        ax2.set_title(f'MediaPipe Detection ({len(first_keypoint_set)} landmarks)')
-        ax2.axis('off')
-        
-        plt.tight_layout()
-        plt.show()
-        
-        # Get and display statistics
-        stats = KeypointVisualizer.get_summary_stats(first_keypoint_set)
-        print(f"[OK] SUCCESS! Detected {stats['total_landmarks']} landmarks")
-        print(f"[INFO] {stats['visible_landmarks']} landmarks are visible (confidence > 0.5)")
-        print(f"[INFO] Average confidence: {stats['avg_confidence']:.3f}")
-        print(f"[INFO] Detection quality: {stats['detection_quality']:.3f}")
-        
-        # Show some sample keypoints
-        print("\n[INFO] Sample keypoints:")
-        for i, kp in enumerate(first_keypoint_set.keypoints[:5]):  # Show first 5
-            name = kp.name if kp.name else f"Point {kp.id}"
-            print(f"  {name}: ({kp.x:.1f}, {kp.y:.1f}) confidence={kp.confidence:.3f}")
-    else:
-        print("[WARNING] No keypoints to visualize")
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7))
+    
+    # Original frame
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    ax1.imshow(frame_rgb)
+    ax1.set_title('Original Frame')
+    ax1.axis('off')
+    
+    # Frame with pose - use draw_skeleton for better visualization
+    annotated = KeypointVisualizer.draw_skeleton(
+        frame_rgb, 
+        keypoints_set,
+        confidence_threshold=0.5,
+        keypoint_color=(255, 0, 0),
+        line_color=(0, 255, 0)
+    )
+    ax2.imshow(annotated)
+    ax2.set_title(f'MediaPipe Detection ({len(keypoints_set.keypoints)} landmarks)')
+    ax2.axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # Get and display statistics
+    stats = KeypointVisualizer.get_summary_stats(keypoints_set)
+    print(f"[OK] SUCCESS! Detected {stats['total_landmarks']} landmarks")
+    print(f"[INFO] {stats['visible_landmarks']} landmarks are visible (confidence > 0.5)")
+    print(f"[INFO] Average confidence: {stats['avg_confidence']:.3f}")
+    print(f"[INFO] Detection quality: {stats['detection_quality']:.3f}")
+    
+    # Show some sample keypoints
+    print("\n[INFO] Sample keypoints:")
+    for i, kp in enumerate(keypoints_set.keypoints[:5]):  # Show first 5
+        name = kp.name if kp.name else f"Point {kp.id}"
+        print(f"  {name}: ({kp.x:.1f}, {kp.y:.1f}) confidence={kp.confidence:.3f}")
 
 
 def extract_pose_from_sequence(
@@ -558,11 +514,12 @@ if __name__ == "__main__":
     # 2. Extract body keypoints (pose landmarks) using refactored code
     # Returns: Tuple[List[KeypointSet], Optional[np.ndarray]] - keypoints and first frame
     # Each KeypointSet contains Keypoint objects with x, y, z, confidence, etc.
-    keypoints_array, first_frame = get_keypoints(
-        project_root=project_root,
-        sequence_data=sequence_data,
-        verbose=True
+    extractor = SequenceKeypointExtractor()
+    keypoints_array = extractor.extract_from_sequence(
+            sequence_data=sequence_data,
+            video_base_path=project_root / "data" / "youtube",
     )
+
     print(f"==> # keypoints extracted: {len(keypoints_array)} frames")
     if len(keypoints_array) > 0:
         print(f"    Each frame has {len(keypoints_array[0])} keypoints")
@@ -600,4 +557,6 @@ if __name__ == "__main__":
     
     # Show first frame's joint angles
     print("\n--> First frame joint angles:")
-    print(json.dumps(joint_angles.frames[0].to_dict(), indent=2, default=str))
+    # print(json.dumps(joint_angles.frames[0].to_dict(), indent=2, default=str))
+    for joint_name, angle_data in joint_angles.frames[0].angles.items():
+        print(f"  {joint_name}: {angle_data.angle_degrees:.2f}° (confidence: {angle_data.confidence:.2f})")

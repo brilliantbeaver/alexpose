@@ -122,6 +122,6 @@ Expected output:
 ## Related Issues
 
 This fix is part of a series of updates to migrate the codebase to use the new `KeypointSet` data structure:
-- Task 6: Fixed `get_keypoints()` to handle dict input and return tuple
+- Task 6: Simplified `get_keypoints()` to DataFrame-only input
 - Task 7: Fixed Jupyter compatibility in `keypoints.py`
 - Task 8: Fixed `visualize_keypoints()` to work with KeypointSet objects
