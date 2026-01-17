@@ -15,7 +15,6 @@ from .eval_keypoints import (
     extract_pose_from_sequence,
     pose_estimation_for_frames,
     pose_estimation_all_sequences,
-    get_keypoints,
     ensure_model_downloaded,
     calculate_angles,
 )
