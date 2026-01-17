@@ -221,9 +221,10 @@ project_root = Path.cwd()
 model_path = ensure_model_downloaded(project_root)
 
 # Extract keypoints from sequence (simplified interface)
+# Note: sequence_data must be a pandas DataFrame
 keypoints_array = get_keypoints(
     project_root=project_root,
-    sequence_data=sequence_df,
+    sequence_data=sequence_df,  # Must be DataFrame, not dict
     verbose=True
 )
 
@@ -394,7 +395,7 @@ The keypoints module integrates seamlessly with other AlexPose components:
 from ambient.pose.keypoints import get_keypoints
 from ambient.pose.joint_angles import get_joint_angles
 
-# Extract keypoints
+# Extract keypoints (sequence_df must be DataFrame)
 keypoints_array = get_keypoints(project_root, sequence_df)
 
 # Calculate joint angles

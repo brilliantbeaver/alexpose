@@ -181,6 +181,11 @@ class Keypoint:
         Returns:
             Keypoint instance
         """
+        # Clamp normalized coordinates to [0.0, 1.0] range to handle potential
+        # floating-point precision issues from external data sources
+        x_normalized = max(0.0, min(1.0, data.get('x_normalized', 0.0)))
+        y_normalized = max(0.0, min(1.0, data.get('y_normalized', 0.0)))
+        
         return cls(
             id=data['id'],
             name=data['name'],
@@ -190,8 +195,8 @@ class Keypoint:
             confidence=data.get('confidence', 1.0),
             visibility=data.get('visibility', 1.0),
             presence=data.get('presence', 1.0),
-            x_normalized=data.get('x_normalized', 0.0),
-            y_normalized=data.get('y_normalized', 0.0),
+            x_normalized=x_normalized,
+            y_normalized=y_normalized,
         )
     
     def distance_to(self, other: 'Keypoint') -> float:
@@ -505,6 +510,13 @@ class KeypointSet:
         keypoints = []
         for i, landmark in enumerate(landmarks):
             name = landmark_names[i] if i < len(landmark_names) else f"LANDMARK_{i}"
+            
+            # Clamp normalized coordinates to [0.0, 1.0] range to handle MediaPipe
+            # floating-point precision issues that can produce values slightly outside
+            # the expected range (e.g., -0.0019250214099884033)
+            x_normalized = max(0.0, min(1.0, landmark.x))
+            y_normalized = max(0.0, min(1.0, landmark.y))
+            
             keypoint = Keypoint(
                 id=i,
                 name=name,
@@ -514,8 +526,8 @@ class KeypointSet:
                 confidence=landmark.visibility,
                 visibility=landmark.visibility,
                 presence=landmark.presence,
-                x_normalized=landmark.x,
-                y_normalized=landmark.y
+                x_normalized=x_normalized,
+                y_normalized=y_normalized
             )
             keypoints.append(keypoint)
         

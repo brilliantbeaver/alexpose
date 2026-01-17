@@ -128,7 +128,7 @@ After the fix:
 ## Related Issues
 
 This fix completes the series of updates for the KeypointSet migration:
-- ✅ Task 6: Fixed `get_keypoints()` dict handling
+- ✅ Task 6: Simplified `get_keypoints()` to DataFrame-only
 - ✅ Task 7: Fixed Jupyter compatibility in `keypoints.py`
 - ✅ Task 8: Fixed `visualize_keypoints()` function
 - ✅ Task 9: Fixed `extract_pose_from_sequence()` (THIS FIX)

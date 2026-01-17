@@ -864,54 +864,6 @@ def ensure_model_downloaded(project_root: Path) -> Optional[str]:
     return manager.ensure_model_available()
 
 
-def get_keypoints(
-    project_root: Path,
-    sequence_data,  # Can be pd.DataFrame or Dict[str, pd.DataFrame]
-    model_path: Optional[str] = None,
-    verbose: bool = True
-) -> List[KeypointSet]:
-    """
-    Extract keypoints from a video sequence.
-    
-    Convenience function that wraps SequenceKeypointExtractor.
-    
-    Args:
-        project_root: Project root directory
-        sequence_data: DataFrame with sequence information OR dictionary of sequences
-                      If dict, uses the first sequence
-        model_path: Optional path to model file
-        verbose: Whether to print progress
-        
-    Returns:
-        List of KeypointSet objects, one per frame
-    """
-    # Handle both DataFrame and dict of DataFrames
-    if isinstance(sequence_data, dict):
-        if not sequence_data:
-            raise ValueError("Empty sequences dictionary provided")
-        # Use the first sequence
-        first_key = list(sequence_data.keys())[0]
-        if verbose:
-            print(f"[INFO] Using first sequence: {first_key}")
-        sequence_df = sequence_data[first_key]
-    elif isinstance(sequence_data, pd.DataFrame):
-        sequence_df = sequence_data
-    else:
-        raise TypeError(
-            f"sequence_data must be pd.DataFrame or Dict[str, pd.DataFrame], "
-            f"got {type(sequence_data)}"
-        )
-    
-    video_base_path = project_root / "data" / "youtube"
-    extractor = SequenceKeypointExtractor()
-    return extractor.extract_from_sequence(
-        sequence_df,
-        video_base_path,
-        model_path,
-        verbose
-    )
-
-
 def create_pose_landmarker(model_path: str):
     """
     Convenience function to create a pose landmarker.

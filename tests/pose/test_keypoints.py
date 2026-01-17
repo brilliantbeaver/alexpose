@@ -402,6 +402,53 @@ class TestConvenienceFunctions:
         assert result == mock_landmarker
 
 
+class TestGetKeypointsFunction:
+    """Test get_keypoints convenience function."""
+    
+    @patch('ambient.pose.keypoints.SequenceKeypointExtractor')
+    def test_get_keypoints_with_dataframe(self, mock_extractor_class, tmp_path):
+        """Test get_keypoints with DataFrame input."""
+        import pandas as pd
+        
+        # Mock the extractor
+        mock_extractor = Mock()
+        mock_keypoints = [Mock(), Mock()]  # Mock keypoint objects
+        mock_extractor.extract_from_sequence.return_value = mock_keypoints
+        mock_extractor_class.return_value = mock_extractor
+        
+        # Create test DataFrame
+        sequence_data = pd.DataFrame({
+            'frame_num': [1, 2, 3],
+            'url': ['http://example.com/video1', 'http://example.com/video1', 'http://example.com/video1'],
+            'seq': ['seq1', 'seq1', 'seq1']
+        })
+        
+        result = get_keypoints(tmp_path, sequence_data, verbose=False)
+        
+        assert result == mock_keypoints
+        mock_extractor.extract_from_sequence.assert_called_once_with(
+            sequence_data,
+            tmp_path / "data" / "youtube",
+            None,
+            False
+        )
+    
+    def test_get_keypoints_with_invalid_input(self, tmp_path):
+        """Test get_keypoints with invalid input types."""
+        
+        # Test with dict (no longer supported)
+        with pytest.raises(TypeError, match="sequence_data must be pd.DataFrame"):
+            get_keypoints(tmp_path, {"seq1": "not_a_dataframe"})
+        
+        # Test with string
+        with pytest.raises(TypeError, match="sequence_data must be pd.DataFrame"):
+            get_keypoints(tmp_path, "invalid_input")
+        
+        # Test with None
+        with pytest.raises(TypeError, match="sequence_data must be pd.DataFrame"):
+            get_keypoints(tmp_path, None)
+
+
 # Property-based tests using hypothesis
 try:
     from hypothesis import given, strategies as st

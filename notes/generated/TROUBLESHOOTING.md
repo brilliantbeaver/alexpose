@@ -58,7 +58,7 @@ print("[OK] Imports successful")
 
 **Symptom**: Error when calling `get_keypoints()` with sequences dictionary
 
-**Cause**: Function expected DataFrame but received dict
+**Cause**: Function now only accepts DataFrame input, not dict
 
 **Solution**: Already fixed in the codebase. The function now handles both:
 - `pd.DataFrame` - Single sequence

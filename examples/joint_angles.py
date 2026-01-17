@@ -2,7 +2,8 @@ from pathlib import Path
 
 from ambient.gavd import GAVDDataLoader
 from ambient.pose.joint_angles import get_joint_angles as calculate_angles
-from ambient.utils.eval_keypoints import get_keypoints
+from ambient.pose.keypoints import SequenceKeypointExtractor
+from ambient.utils.eval_keypoints import get_gavd_frame
 
 #----------------------------------------------------------------------
 # main
@@ -21,14 +22,16 @@ if __name__ == "__main__":
     sequence_id = list(sequences.keys())[1]
     sequence_data = sequences[sequence_id]
     print(f"\tnum_sequences: {len(sequences)}")
+    print(f"\tusing sequence: {sequence_id}")
 
     # 2. Extract body keypoints (pose landmarks)
-    # get_keypoints returns (keypoints, first_frame) tuple
-    keypoints_array, first_frame = get_keypoints(
-        project_root=project_root, 
-        sequence_data=sequence_data
+    # get_keypoints now only accepts DataFrame, returns (keypoints, first_frame) tuple
+    extractor = SequenceKeypointExtractor()
+    keypoints_array = extractor.extract_from_sequence(
+            sequence_data=sequence_data,
+            video_base_path=project_root / "data" / "youtube",
     )
-
+ 
     # 3. Compute joint angles – For each frame, calculate hip, knee and ankle angles
     joint_angles = calculate_angles(
         keypoints_array=keypoints_array,
