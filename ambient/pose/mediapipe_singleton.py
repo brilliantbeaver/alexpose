@@ -43,7 +43,7 @@ class MediaPipeLandmarkerSingleton:
         self._landmarker = None
         self._model_path = None
         self._frame_count = 0
-        self._max_frames_before_reset = 50  # More aggressive reset for Windows
+        self._max_frames_before_reset = 500  # Reset every 500 frames to prevent memory leaks
         self._creation_lock = threading.Lock()
         self._initialized = True
         
@@ -65,11 +65,19 @@ class MediaPipeLandmarkerSingleton:
             should_recreate = (
                 self._landmarker is None or
                 self._model_path != model_path or
-                self._frame_count >= self._max_frames_before_reset
+                (self._max_frames_before_reset > 0 and 
+                 self._frame_count >= self._max_frames_before_reset)
             )
             
             if should_recreate:
-                logger.debug(f"Creating new landmarker (frame_count: {self._frame_count})")
+                reason = "initial creation"
+                if self._landmarker is not None:
+                    if self._model_path != model_path:
+                        reason = "model path changed"
+                    elif self._frame_count >= self._max_frames_before_reset:
+                        reason = f"frame limit reached ({self._frame_count}/{self._max_frames_before_reset})"
+                
+                logger.debug(f"Creating new landmarker: {reason}")
                 
                 # Clean up existing landmarker
                 if self._landmarker is not None:
@@ -97,6 +105,23 @@ class MediaPipeLandmarkerSingleton:
     def increment_frame_count(self):
         """Increment the frame counter for memory management."""
         self._frame_count += 1
+    
+    def set_max_frames_before_reset(self, max_frames: int):
+        """
+        Set the maximum number of frames before forcing a landmarker reset.
+        
+        Args:
+            max_frames: Maximum frames to process before reset (default: 500)
+                       Set to 0 to disable automatic resets
+        """
+        if max_frames < 0:
+            raise ValueError("max_frames must be >= 0")
+        self._max_frames_before_reset = max_frames
+        logger.info(f"Max frames before reset set to: {max_frames}")
+    
+    def reset_frame_count(self):
+        """Reset the frame counter without recreating the landmarker."""
+        self._frame_count = 0
     
     def reset_landmarker(self):
         """Force reset the landmarker instance."""

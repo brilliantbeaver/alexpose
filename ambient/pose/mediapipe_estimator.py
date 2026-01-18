@@ -16,50 +16,11 @@ from typing import Dict, List, Optional, Union, Any
 import numpy as np
 from loguru import logger
 
-# Note: Warning suppression is handled by ambient.pose.suppress_warnings
-# which is imported automatically by ambient/__init__.py
-
-
-@contextlib.contextmanager
-def _suppress_stderr():
-    """
-    Context manager to suppress stderr at OS level.
-    
-    Local implementation to avoid circular import with ambient.pose.pose_config.
-    Falls back to Python-level suppression in Jupyter notebooks.
-    """
-    try:
-        # Try OS-level suppression (works in regular Python)
-        stderr_fd = sys.stderr.fileno()
-        saved_stderr_fd = os.dup(stderr_fd)
-        devnull_fd = os.open(os.devnull, os.O_WRONLY)
-        
-        try:
-            sys.stderr.flush()
-            os.dup2(devnull_fd, stderr_fd)
-            yield
-        finally:
-            sys.stderr.flush()
-            os.dup2(saved_stderr_fd, stderr_fd)
-            os.close(devnull_fd)
-            os.close(saved_stderr_fd)
-    except (AttributeError, io.UnsupportedOperation):
-        # Fallback for Jupyter notebooks where stderr doesn't have fileno()
-        # Use Python-level redirection instead
-        old_stderr = sys.stderr
-        try:
-            sys.stderr = open(os.devnull, 'w')
-            yield
-        finally:
-            sys.stderr.close()
-            sys.stderr = old_stderr
-
+# Import warning suppression utilities
+from ambient.pose.suppress_warnings import suppress_stderr_fd
 
 # Check MediaPipe availability - wrap import to suppress any C++ init warnings
 try:
-    # Import the suppression utilities
-    from ambient.pose.suppress_warnings import suppress_stderr_fd
-    
     with suppress_stderr_fd():
         import mediapipe as mp
         from mediapipe.tasks import python
@@ -167,7 +128,7 @@ class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
     def _get_image_landmarker(self):
         """Create and return a MediaPipe PoseLandmarker for image processing."""
         # Suppress C++ warnings during landmarker initialization
-        with _suppress_stderr():
+        with suppress_stderr_fd():
             base_options = python.BaseOptions(model_asset_path=str(self.model_path))
             options = vision.PoseLandmarkerOptions(
                 base_options=base_options,
@@ -181,7 +142,7 @@ class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
     def _get_video_landmarker(self):
         """Create and return a MediaPipe PoseLandmarker for video processing."""
         # Suppress C++ warnings during landmarker initialization
-        with _suppress_stderr():
+        with suppress_stderr_fd():
             base_options = python.BaseOptions(model_asset_path=str(self.model_path))
             options = vision.PoseLandmarkerOptions(
                 base_options=base_options,
@@ -265,7 +226,7 @@ class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
             landmarker = self._get_image_landmarker()
             try:
                 # Suppress MediaPipe internal warnings during detection
-                with _suppress_stderr():
+                with suppress_stderr_fd():
                     result = landmarker.detect(mp_image)
                 
                 # Parse landmarks with explicit dimensions
@@ -352,7 +313,7 @@ class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
                     timestamp_ms = int((frame_idx / fps) * 1000)
                     
                     # Detect pose - suppress internal MediaPipe warnings
-                    with _suppress_stderr():
+                    with suppress_stderr_fd():
                         result = landmarker.detect_for_video(mp_image, timestamp_ms)
                     
                     # Parse landmarks
@@ -465,7 +426,7 @@ class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
         landmarker = self._get_image_landmarker()
         try:
             # Suppress MediaPipe internal warnings during detection
-            with _suppress_stderr():
+            with suppress_stderr_fd():
                 result = landmarker.detect(mp_image)
             
             if not result.pose_landmarks or len(result.pose_landmarks) == 0:
@@ -557,7 +518,7 @@ class MediaPipeEstimator(PoseEstimator, IPoseEstimator):
                     timestamp_ms = int((frame_idx / fps) * 1000)
                     
                     # Detect pose - suppress internal MediaPipe warnings
-                    with _suppress_stderr():
+                    with suppress_stderr_fd():
                         result = landmarker.detect_for_video(mp_image, timestamp_ms)
                     
                     # Parse landmarks with explicit dimensions
