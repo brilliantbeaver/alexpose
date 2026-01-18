@@ -97,7 +97,7 @@ uv run python -m ambient.cli analyze video.mp4
 
 # Web interface - choose one method:
 
-# Method 1: From project root
+# Method 1: From project root (RECOMMENDED)
 uvicorn server.main:app --reload
 
 # Method 2: From server directory
@@ -106,8 +106,14 @@ cd server && uvicorn main:app --reload
 # Method 3: Direct Python execution
 uv run python server/main.py
 
+# Method 4: Using helper script (handles cleanup)
+.\scripts\start-server-clean.ps1  # Windows
+./scripts/start-server-clean.sh   # Linux/Mac
+
 # Then visit http://localhost:8000
 ```
+
+> **Note:** The server can now be started from any directory (root, server, or frontend). The path resolution will automatically find the correct configuration files.
 
 ## 📈 Example Results
 

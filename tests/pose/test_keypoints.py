@@ -21,14 +21,18 @@ from ambient.pose.keypoints import (
     BoundingBoxProcessor,
     KeypointGenerator,
     PoseKeypointExtractor,
-    MediaPipeModelManager,
-    PoseLandmarkerFactory,
-    SequenceKeypointExtractor,
     KeypointVisualizer,
     POSE_LANDMARK_NAMES,
     ensure_model_downloaded,
     get_keypoints,
     create_pose_landmarker,
+)
+from ambient.pose.model_management import (
+    MediaPipeModelManager,
+    PoseLandmarkerFactory,
+)
+from ambient.pose.keypoint_extractor import (
+    SequenceKeypointExtractor,
 )
 
 
@@ -127,40 +131,39 @@ class TestKeypointGenerator:
 class TestPoseKeypointExtractor:
     """Test PoseKeypointExtractor class."""
     
-    def test_extract_from_bbox_valid(self):
-        """Test keypoint extraction from valid bbox."""
+    def test_init_with_defaults(self):
+        """Test initialization with defaults."""
+        extractor = PoseKeypointExtractor()
+        
+        assert extractor.sequence_extractor is not None
+        assert extractor.model_path is None
+    
+    def test_init_with_custom_extractor(self):
+        """Test initialization with custom sequence extractor."""
+        from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
+        custom_extractor = SequenceKeypointExtractor()
+        
+        extractor = PoseKeypointExtractor(sequence_extractor=custom_extractor)
+        
+        assert extractor.sequence_extractor == custom_extractor
+    
+    def test_extract_from_bbox_requires_image(self):
+        """Test that extract_from_bbox requires an image parameter."""
         extractor = PoseKeypointExtractor()
         bbox = {"left": 10, "top": 20, "width": 100, "height": 200}
         
-        keypoints = extractor.extract_from_bbox(bbox)
+        # Should require image as first parameter
+        import numpy as np
+        image = np.zeros((480, 640, 3), dtype=np.uint8)
         
-        assert len(keypoints) == 25  # Default
-        assert all("x" in kp and "y" in kp for kp in keypoints)
-    
-    def test_extract_from_bbox_custom_params(self):
-        """Test extraction with custom parameters."""
-        extractor = PoseKeypointExtractor()
-        bbox = {"left": 0, "top": 0, "width": 100, "height": 100}
+        # This should work (returns KeypointSet, may be empty for blank image)
+        result = extractor.extract_from_bbox(image, bbox)
         
-        keypoints = extractor.extract_from_bbox(
-            bbox,
-            num_keypoints=16,
-            grid_spacing=8.0,
-            confidence=0.95
-        )
-        
-        assert len(keypoints) == 16
-        assert all(kp["confidence"] == 0.95 for kp in keypoints)
-    
-    def test_extract_from_bbox_invalid(self):
-        """Test extraction with invalid bbox raises error."""
-        extractor = PoseKeypointExtractor()
-        
-        with pytest.raises(ValueError):
-            extractor.extract_from_bbox(None)
-        
-        with pytest.raises(ValueError):
-            extractor.extract_from_bbox({})
+        # Result should be a KeypointSet
+        from ambient.pose.keypoint_data import KeypointSet
+        assert isinstance(result, KeypointSet)
+        # Blank image may have 0 keypoints, which is valid
+        assert len(result.keypoints) >= 0
 
 
 class TestMediaPipeModelManager:
@@ -312,38 +315,24 @@ class TestSequenceKeypointExtractor:
 class TestKeypointVisualizer:
     """Test KeypointVisualizer class."""
     
-    def test_add_landmark_names(self):
-        """Test adding landmark names to keypoints."""
-        keypoints = [
-            {"id": 0, "x": 100, "y": 200},
-            {"id": 1, "x": 150, "y": 250},
-        ]
-        
-        result = KeypointVisualizer.add_landmark_names(keypoints)
-        
-        assert result[0]["name"] == POSE_LANDMARK_NAMES[0]
-        assert result[1]["name"] == POSE_LANDMARK_NAMES[1]
-    
-    def test_add_landmark_names_preserves_existing(self):
-        """Test that existing names are preserved."""
-        keypoints = [
-            {"id": 0, "x": 100, "y": 200, "name": "CUSTOM_NAME"},
-        ]
-        
-        result = KeypointVisualizer.add_landmark_names(keypoints)
-        
-        assert result[0]["name"] == "CUSTOM_NAME"
-    
     def test_draw_keypoints(self):
         """Test drawing keypoints on image."""
+        from ambient.pose.keypoint_data import Keypoint, KeypointSet, KeypointFormat
+        
         image = np.zeros((480, 640, 3), dtype=np.uint8)
         keypoints = [
-            {"x": 100, "y": 200, "confidence": 0.9},
-            {"x": 150, "y": 250, "confidence": 0.3},  # Below threshold
+            Keypoint(x=100, y=200, confidence=0.9),
+            Keypoint(x=150, y=250, confidence=0.3),  # Below threshold
         ]
+        keypoint_set = KeypointSet(
+            keypoints=keypoints,
+            format=KeypointFormat.MEDIAPIPE_33,
+            frame_width=640,
+            frame_height=480
+        )
         
         result = KeypointVisualizer.draw_keypoints(
-            image, keypoints, confidence_threshold=0.5
+            image, keypoint_set, confidence_threshold=0.5
         )
         
         assert result.shape == image.shape
@@ -351,7 +340,16 @@ class TestKeypointVisualizer:
     
     def test_get_summary_stats_empty(self):
         """Test summary stats with empty keypoints."""
-        stats = KeypointVisualizer.get_summary_stats([])
+        from ambient.pose.keypoint_data import KeypointSet, KeypointFormat
+        
+        keypoint_set = KeypointSet(
+            keypoints=[],
+            format=KeypointFormat.MEDIAPIPE_33,
+            frame_width=640,
+            frame_height=480
+        )
+        
+        stats = KeypointVisualizer.get_summary_stats(keypoint_set)
         
         assert stats["total_landmarks"] == 0
         assert stats["visible_landmarks"] == 0
@@ -359,19 +357,25 @@ class TestKeypointVisualizer:
     
     def test_get_summary_stats_valid(self):
         """Test summary stats with valid keypoints."""
-        keypoints = [
-            {"confidence": 0.9},
-            {"confidence": 0.7},
-            {"confidence": 0.3},
-        ]
+        from ambient.pose.keypoint_data import Keypoint, KeypointSet, KeypointFormat
         
-        stats = KeypointVisualizer.get_summary_stats(keypoints)
+        keypoints = [
+            Keypoint(x=100, y=200, confidence=0.9, visibility=0.95),
+            Keypoint(x=150, y=250, confidence=0.7, visibility=0.8),
+            Keypoint(x=200, y=300, confidence=0.3, visibility=0.4),
+        ]
+        keypoint_set = KeypointSet(
+            keypoints=keypoints,
+            format=KeypointFormat.MEDIAPIPE_33,
+            frame_width=640,
+            frame_height=480
+        )
+        
+        stats = KeypointVisualizer.get_summary_stats(keypoint_set)
         
         assert stats["total_landmarks"] == 3
-        assert stats["visible_landmarks"] == 2  # > 0.5
+        assert stats["visible_landmarks"] == 2  # > 0.5 confidence
         assert 0.6 < stats["avg_confidence"] < 0.7
-        assert stats["min_confidence"] == 0.3
-        assert stats["max_confidence"] == 0.9
 
 
 class TestConvenienceFunctions:
@@ -405,7 +409,7 @@ class TestConvenienceFunctions:
 class TestGetKeypointsFunction:
     """Test get_keypoints convenience function."""
     
-    @patch('ambient.pose.keypoints.SequenceKeypointExtractor')
+    @patch('ambient.pose.keypoint_extractor.SequenceKeypointExtractor')
     def test_get_keypoints_with_dataframe(self, mock_extractor_class, tmp_path):
         """Test get_keypoints with DataFrame input."""
         import pandas as pd

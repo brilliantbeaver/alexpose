@@ -31,6 +31,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
+import cv2
+import numpy as np
 import pandas as pd
 
 # Add the theodore directory to the Python path for imports
@@ -578,15 +580,16 @@ def create_gavd_loader(
 
 class PoseKeypointExtractor:
     """
-    Extracts pose keypoints from bounding box data using configurable strategies.
+    Extracts pose keypoints from bounding box data using real pose estimation.
 
-    This class follows the Dependency Inversion Principle by depending on
-    abstractions (BoundingBoxProcessor and KeypointGenerator) rather than
-    concrete implementations.
+    This class uses SequenceKeypointExtractor with MediaPipe for real keypoint
+    extraction from image regions, replacing the previous placeholder grid approach.
+    Falls back to grid keypoints only when real extraction is not possible.
     """
 
     def __init__(
         self,
+        sequence_extractor: Optional["SequenceKeypointExtractor"] = None,
         bbox_processor: Optional[BoundingBoxProcessor] = None,
         keypoint_generator: Optional[KeypointGenerator] = None,
     ):
@@ -594,9 +597,11 @@ class PoseKeypointExtractor:
         Initialize the pose keypoint extractor.
 
         Args:
-            bbox_processor (Optional[BoundingBoxProcessor]): Bounding box processor
-            keypoint_generator (Optional[KeypointGenerator]): Keypoint generator
+            sequence_extractor: SequenceKeypointExtractor for real pose detection
+            bbox_processor: BoundingBoxProcessor for fallback calculations
+            keypoint_generator: KeypointGenerator for fallback grid keypoints
         """
+        self.sequence_extractor = sequence_extractor
         self.bbox_processor = bbox_processor or self._create_default_bbox_processor()
         self.keypoint_generator = (
             keypoint_generator or self._create_default_keypoint_generator()
@@ -605,14 +610,114 @@ class PoseKeypointExtractor:
     def _create_default_bbox_processor(self):
         """Create default bounding box processor."""
         from ambient.pose.keypoints import BoundingBoxProcessor
-
         return BoundingBoxProcessor()
 
     def _create_default_keypoint_generator(self):
         """Create default keypoint generator."""
         from ambient.pose.keypoints import KeypointGenerator
-
         return KeypointGenerator()
+
+    def _ensure_sequence_extractor(self):
+        """Lazy initialization of SequenceKeypointExtractor with Windows optimization."""
+        if self.sequence_extractor is None:
+            try:
+                from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
+                import os
+                
+                # Use process isolation by default on Windows for GAVD processing
+                # This prevents WinError 1 issues and provides more reliable processing
+                use_process_isolation = os.name == 'nt'  # Windows
+                
+                if use_process_isolation:
+                    loguru_logger.info("Using process isolation for MediaPipe on Windows (GAVD processing)")
+                
+                self.sequence_extractor = SequenceKeypointExtractor(
+                    use_process_isolation=use_process_isolation
+                )
+            except Exception as e:
+                loguru_logger.warning(f"Failed to initialize SequenceKeypointExtractor: {e}")
+                self.sequence_extractor = False  # Mark as unavailable
+        return self.sequence_extractor if self.sequence_extractor is not False else None
+    
+    def cleanup_extractors(self):
+        """Clean up any active extractors and their worker processes."""
+        if self.sequence_extractor and self.sequence_extractor is not False:
+            try:
+                # Check if it has process isolation that needs cleanup
+                if hasattr(self.sequence_extractor, '_process_extractor'):
+                    process_extractor = self.sequence_extractor._process_extractor
+                    if process_extractor and hasattr(process_extractor, 'stop'):
+                        loguru_logger.info("Stopping process-isolated extractor workers...")
+                        process_extractor.stop()
+                        loguru_logger.info("Process-isolated extractor workers stopped")
+            except Exception as e:
+                loguru_logger.warning(f"Error cleaning up extractors: {e}")
+            finally:
+                self.sequence_extractor = None
+
+    def extract_from_image_and_bbox(
+        self,
+        image: np.ndarray,
+        bbox: Dict[str, Union[int, float]],
+        model_path: Optional[str] = None,
+    ) -> List[Dict[str, Union[float, int]]]:
+        """
+        Extract real pose keypoints from a full image.
+        
+        Note: The bbox parameter is provided for context but pose detection
+        runs on the full image for best results. MediaPipe works better with
+        full frames rather than cropped regions.
+
+        Args:
+            image: RGB image array (height, width, 3)
+            bbox: Bounding box dictionary (for reference, not used for cropping)
+            model_path: Optional path to MediaPipe model file
+
+        Returns:
+            List of keypoint dictionaries in OpenPose-like format with source dimensions
+
+        Raises:
+            ValueError: If bbox is invalid or None
+            RuntimeError: If real extraction fails
+        """
+        if not bbox or not isinstance(bbox, dict):
+            raise ValueError("Bounding box must be a non-empty dictionary")
+
+        # Ensure extractor is available
+        extractor = self._ensure_sequence_extractor()
+        if extractor is None:
+            raise RuntimeError("SequenceKeypointExtractor not available - cannot extract real keypoints")
+
+        # CRITICAL: Capture source image dimensions
+        # Keypoints are extracted in the coordinate space of this image
+        source_height, source_width = image.shape[:2]
+        loguru_logger.debug(f"Source image dimensions: {source_width}x{source_height}")
+
+        # Extract keypoints from FULL image (not cropped)
+        # MediaPipe works better with full frames
+        keypoint_set = extractor.extract_from_image(image, model_path)
+
+        loguru_logger.debug(f"Keypoint extraction result: {len(keypoint_set.keypoints)} keypoints, format={keypoint_set.format}")
+
+        # Convert KeypointSet to OpenPose-like format
+        # IMPORTANT: Include source dimensions in EACH keypoint for proper scaling
+        keypoints = []
+        for kp in keypoint_set.keypoints:
+            keypoints.append({
+                "x": kp.x,
+                "y": kp.y,
+                "confidence": kp.confidence,
+                "source_width": source_width,
+                "source_height": source_height,
+            })
+
+        if not keypoints:
+            loguru_logger.warning(f"No keypoints detected in full frame (size={image.shape})")
+            # Return empty list instead of falling back to grid
+            return []
+
+        loguru_logger.debug(f"Returning {len(keypoints)} real keypoints from full frame ({source_width}x{source_height})")
+        return keypoints
 
     def extract_from_bbox(
         self,
@@ -622,32 +727,37 @@ class PoseKeypointExtractor:
         confidence: float = 0.8,
     ) -> List[Dict[str, Union[float, int]]]:
         """
-        Extract pose keypoints from bounding box data.
+        Extract keypoints from bounding box (fallback to grid when no image available).
+
+        This method is kept for backward compatibility when only bbox data is available
+        without the actual image. For real extraction, use extract_from_image_and_bbox.
 
         Args:
-            bbox (Dict[str, Union[int, float]]): Bounding box dictionary
-            num_keypoints (int): Number of keypoints to generate
-            grid_spacing (float): Spacing between keypoints in grid
-            confidence (float): Confidence score for keypoints
+            bbox: Bounding box dictionary
+            num_keypoints: Number of keypoints to generate (fallback only)
+            grid_spacing: Spacing between keypoints (fallback only)
+            confidence: Confidence score (fallback only)
 
         Returns:
-            List[Dict[str, Union[float, int]]]: List of keypoint dictionaries
-
-        Raises:
-            ValueError: If bbox is invalid or None
+            List of keypoint dictionaries
         """
+        return self._extract_fallback_grid(bbox, num_keypoints, grid_spacing, confidence)
+
+    def _extract_fallback_grid(
+        self,
+        bbox: Dict[str, Union[int, float]],
+        num_keypoints: int = 25,
+        grid_spacing: float = 5.0,
+        confidence: float = 0.8,
+    ) -> List[Dict[str, Union[float, int]]]:
+        """Generate fallback grid keypoints when real extraction is not possible."""
         if not bbox or not isinstance(bbox, dict):
             raise ValueError("Bounding box must be a non-empty dictionary")
 
-        # Calculate center using the bbox processor
         center_x, center_y = self.bbox_processor.calculate_center(bbox)
-
-        # Generate keypoints using the keypoint generator
-        keypoints = self.keypoint_generator.generate_grid_keypoints(
+        return self.keypoint_generator.generate_grid_keypoints(
             center_x, center_y, num_keypoints, grid_spacing, confidence
         )
-
-        return keypoints
 
 
 class PoseDataConverter:
@@ -674,6 +784,15 @@ class PoseDataConverter:
         # Optional pluggable estimator (e.g., OpenPose, MediaPipe)
         self.estimator: Optional[PoseEstimator] = estimator
         self.video_cache_dir: Path = self._resolve_cache_dir(video_cache_dir)
+    
+    def cleanup(self):
+        """Clean up any active extractors and their resources."""
+        if self.keypoint_extractor:
+            try:
+                if hasattr(self.keypoint_extractor, 'cleanup_extractors'):
+                    self.keypoint_extractor.cleanup_extractors()
+            except Exception as e:
+                loguru_logger.warning(f"Error cleaning up keypoint extractor: {e}")
 
     def _resolve_cache_dir(self, p: Optional[Union[str, Path]]) -> Path:
         base = Path(p or "data/youtube")
@@ -814,6 +933,74 @@ class PoseDataConverter:
             )
         return out_path
 
+    def _extract_keypoints_fallback(
+        self,
+        video_path: Path,
+        frame_index: int,
+        bbox: Dict[str, Union[int, float]],
+        num_keypoints: int = 25,
+        grid_spacing: float = 5.0,
+        confidence: float = 0.8,
+    ) -> List[Dict[str, Union[float, int]]]:
+        """
+        Extract keypoints using real pose estimation as fallback.
+        
+        This method extracts a frame from video and uses SequenceKeypointExtractor
+        for real pose detection. Falls back to grid keypoints only if extraction fails.
+        
+        Args:
+            video_path: Path to video file
+            frame_index: Frame index (0-based)
+            bbox: Bounding box dictionary
+            num_keypoints: Number of keypoints for grid fallback
+            grid_spacing: Grid spacing for fallback
+            confidence: Confidence for fallback
+            
+        Returns:
+            List of keypoint dictionaries
+        """
+        img_path = None
+        try:
+            # Extract frame image
+            loguru_logger.debug(f"Extracting frame {frame_index} from {video_path}")
+            img_path = self._extract_frame_image(video_path, frame_index)
+            
+            # Load image
+            loguru_logger.debug(f"Loading image from {img_path}")
+            image = cv2.imread(str(img_path))
+            if image is None:
+                raise ValueError(f"Failed to read image from {img_path}")
+            
+            # Convert BGR to RGB
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            loguru_logger.debug(f"Image loaded: shape={image_rgb.shape}")
+            
+            # Use real extraction with bbox
+            loguru_logger.debug(f"Running real pose extraction with bbox: {bbox}")
+            pose_keypoints = self.keypoint_extractor.extract_from_image_and_bbox(
+                image_rgb, bbox
+            )
+            
+            if pose_keypoints and len(pose_keypoints) > 0:
+                loguru_logger.info(f"✓ Real keypoint extraction successful: {len(pose_keypoints)} keypoints")
+                return pose_keypoints
+            else:
+                loguru_logger.warning("No keypoints detected from real extraction")
+                return []
+                    
+        except Exception as e:
+            loguru_logger.error(f"Real extraction failed: {type(e).__name__}: {e}")
+            import traceback
+            loguru_logger.debug(f"Traceback: {traceback.format_exc()}")
+            raise RuntimeError(f"Failed to extract keypoints from frame {frame_index}: {e}") from e
+        finally:
+            # Clean up temp file
+            if img_path:
+                try:
+                    Path(img_path).unlink(missing_ok=True)
+                except Exception:
+                    pass
+
     def convert_sequence_to_pose_format(
         self,
         seq_data: pd.DataFrame,
@@ -849,7 +1036,8 @@ class PoseDataConverter:
         # Map URLs to cached local files; if URL is missing, skip only rows for that URL
         url_to_video: Dict[str, Path] = {}
         missing_urls: set[str] = set()
-        if self.estimator is not None and urls_in_seq:
+        # Always resolve video paths if URLs are present (needed for real extraction fallback)
+        if urls_in_seq:
             for url in urls_in_seq:
                 vp = self._resolve_cached_video_path(url)
                 if vp is None:
@@ -938,16 +1126,98 @@ class PoseDataConverter:
                                 Path(img_path).unlink(missing_ok=True)  # type: ignore[arg-type]
                             except Exception:
                                 pass
-                except Exception:
-                    # Fallback to placeholder on any failure
-                    pose_keypoints = self.keypoint_extractor.extract_from_bbox(
-                        bbox, num_keypoints, grid_spacing, confidence
-                    )
+                except Exception as e:
+                    loguru_logger.warning(f"Estimator failed: {e}, skipping frame")
+                    # Skip this frame if estimator fails
+                    continue
             else:
-                # Fallback to placeholder generator
-                pose_keypoints = self.keypoint_extractor.extract_from_bbox(
-                    bbox, num_keypoints, grid_spacing, confidence
-                )
+                # No estimator available - use real extraction with video frames
+                # OPTIMIZATION: Process entire video at once instead of per-frame
+                url_val = row.get("url")
+                if isinstance(url_val, str) and url_val.strip() and url_val not in missing_urls:
+                    video_path = url_to_video.get(url_val)
+                    if video_path is not None:
+                        frame_num_val = int(row.get("frame_num", 0))
+                        frame_index = frame_num_val - 1 if frame_num_val >= 1 else frame_num_val
+                        
+                        # CRITICAL OPTIMIZATION: Cache video-level keypoint extraction
+                        # Process entire video once instead of extracting each frame individually
+                        cache_key = f"fallback::{video_path}"
+                        if not hasattr(self, "_video_kp_cache"):
+                            self._video_kp_cache = {}
+                        
+                        if cache_key not in self._video_kp_cache:
+                            loguru_logger.info(f"Processing entire video with batch extraction: {video_path}")
+                            try:
+                                # Use SequenceKeypointExtractor to process entire video
+                                from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
+                                import os
+                                
+                                # Use process isolation by default on Windows for GAVD processing
+                                # This prevents WinError 1 issues and provides more reliable processing
+                                use_process_isolation = os.name == 'nt'  # Windows
+                                
+                                if use_process_isolation:
+                                    loguru_logger.info("Using process isolation for batch MediaPipe processing on Windows")
+                                
+                                extractor = SequenceKeypointExtractor(
+                                    use_process_isolation=use_process_isolation
+                                )
+                                
+                                # Get all unique frame numbers for this video in this sequence
+                                video_frames = seq_data[seq_data['url'] == url_val]['frame_num'].unique()
+                                loguru_logger.info(f"Extracting {len(video_frames)} frames from video")
+                                
+                                # Extract all frames at once
+                                video_keypoints = {}
+                                for frame_num in sorted(video_frames):
+                                    frame_idx = int(frame_num) - 1 if frame_num >= 1 else int(frame_num)
+                                    try:
+                                        kp_set = extractor.extract_from_video_frame(
+                                            video_path, int(frame_num)
+                                        )
+                                        if kp_set and kp_set.keypoints:
+                                            # CRITICAL: Include source dimensions from KeypointSet
+                                            # These are needed for proper coordinate scaling in the frontend
+                                            source_width = kp_set.frame_width
+                                            source_height = kp_set.frame_height
+                                            
+                                            # Convert to dict format with source dimensions
+                                            keypoints = []
+                                            for kp in kp_set.keypoints:
+                                                keypoints.append({
+                                                    "x": kp.x,
+                                                    "y": kp.y,
+                                                    "confidence": kp.confidence,
+                                                    "source_width": source_width,
+                                                    "source_height": source_height,
+                                                })
+                                            video_keypoints[frame_idx] = keypoints
+                                        else:
+                                            video_keypoints[frame_idx] = []
+                                    except Exception as e:
+                                        loguru_logger.warning(f"Failed to extract frame {frame_num}: {e}")
+                                        video_keypoints[frame_idx] = []
+                                
+                                self._video_kp_cache[cache_key] = video_keypoints
+                                loguru_logger.info(f"Cached {len(video_keypoints)} frames from video")
+                            except Exception as e:
+                                loguru_logger.error(f"Batch extraction failed: {e}")
+                                self._video_kp_cache[cache_key] = {}
+                        
+                        # Get keypoints from cache
+                        video_keypoints = self._video_kp_cache.get(cache_key, {})
+                        pose_keypoints = video_keypoints.get(frame_index, [])
+                        
+                        if not pose_keypoints:
+                            loguru_logger.warning(f"No keypoints for frame {frame_num_val}, skipping")
+                            continue
+                    else:
+                        loguru_logger.warning(f"Video not found for URL: {url_val}, skipping frame")
+                        continue
+                else:
+                    loguru_logger.warning(f"No valid URL for frame, skipping")
+                    continue
 
             frame_data = {
                 "frame": row.get("frame_num"),

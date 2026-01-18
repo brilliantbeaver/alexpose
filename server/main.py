@@ -130,12 +130,29 @@ async def lifespan(app: FastAPI):
     server_logger.info("Starting AlexPose FastAPI server", operation="startup")
     
     # Initialize configuration with correct path
-    # When running from server directory, config is in parent directory
+    # Handle running from different directories (project root, server, frontend, etc.)
     current_dir = Path.cwd()
-    if current_dir.name == "server":
-        config_dir = current_dir.parent / "config"
-    else:
+    
+    # Determine project root by looking for config/alexpose.yaml
+    if (current_dir / "config" / "alexpose.yaml").exists():
+        # Running from project root
         config_dir = current_dir / "config"
+    elif (current_dir.parent / "config" / "alexpose.yaml").exists():
+        # Running from subdirectory (server, frontend, etc.)
+        config_dir = current_dir.parent / "config"
+    elif (current_dir.parent.parent / "config" / "alexpose.yaml").exists():
+        # Running from nested subdirectory
+        config_dir = current_dir.parent.parent / "config"
+    else:
+        # Fallback: try to find config relative to this file
+        server_file_dir = Path(__file__).parent
+        config_dir = server_file_dir.parent / "config"
+        if not (config_dir / "alexpose.yaml").exists():
+            raise RuntimeError(
+                f"Cannot locate config/alexpose.yaml. "
+                f"Tried: {current_dir}/config, {current_dir.parent}/config, "
+                f"{current_dir.parent.parent}/config, {config_dir}"
+            )
     
     config_manager = ConfigurationManager(config_dir=config_dir)
     app.state.config = config_manager

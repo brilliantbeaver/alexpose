@@ -57,6 +57,8 @@ os.environ['OPENCV_LOG_LEVEL'] = 'SILENT'          # OpenCV - use SILENT instead
 
 # MediaPipe settings
 os.environ['MEDIAPIPE_DISABLE_GPU'] = '1'          # Disable GPU to reduce warnings
+os.environ['MEDIAPIPE_DISABLE_LOGGING'] = '1'      # Disable MediaPipe logging
+os.environ['GLOG_alsologtostderr'] = '0'           # Don't also log to stderr
 
 # CUDA settings
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'          # Disable CUDA warnings

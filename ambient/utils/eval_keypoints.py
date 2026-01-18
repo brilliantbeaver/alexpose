@@ -45,12 +45,16 @@ from mediapipe.tasks.python import vision
 # ============================================================================
 from ambient.pose.keypoints import (
     POSE_LANDMARK_NAMES,
-    MediaPipeModelManager,
-    PoseLandmarkerFactory,
-    SequenceKeypointExtractor,
     KeypointVisualizer,
     ensure_model_downloaded,
     create_pose_landmarker,
+)
+from ambient.pose.model_management import (
+    MediaPipeModelManager,
+    PoseLandmarkerFactory,
+)
+from ambient.pose.keypoint_extractor import (
+    SequenceKeypointExtractor,
 )
 from ambient.pose.keypoint_data import KeypointSet  # For type hints
 from ambient.pose.joint_angles import get_joint_angles as calculate_angles

@@ -240,12 +240,24 @@ export default function GAVDAnalysisPage() {
               const poseData = await poseResponse.json();
               console.log(`[loadSequenceFrames] Loaded pose data for frame ${frame.frame_num}:`, poseData.pose_keypoints?.length || 0, 'keypoints');
               
-              // Include source video dimensions for proper scaling
-              const sourceVideoWidth = poseData.source_video_width;
-              const sourceVideoHeight = poseData.source_video_height;
+              // Extract source video dimensions from keypoints
+              // CRITICAL: Keypoints contain source_width/height in each keypoint
+              // These are the actual dimensions of the video frame used for pose estimation
+              let sourceVideoWidth = poseData.source_video_width;
+              let sourceVideoHeight = poseData.source_video_height;
+              
+              // If not in root, extract from first keypoint (new format)
+              if (!sourceVideoWidth && poseData.pose_keypoints && poseData.pose_keypoints.length > 0) {
+                const firstKeypoint = poseData.pose_keypoints[0];
+                sourceVideoWidth = firstKeypoint.source_width;
+                sourceVideoHeight = firstKeypoint.source_height;
+                console.log(`[loadSequenceFrames] Extracted source dimensions from keypoint: ${sourceVideoWidth}x${sourceVideoHeight}`);
+              }
               
               if (sourceVideoWidth && sourceVideoHeight) {
-                console.log(`[loadSequenceFrames] Source video dimensions for frame ${frame.frame_num}: ${sourceVideoWidth}x${sourceVideoHeight}`);
+                console.log(`[loadSequenceFrames] ✓ Source video dimensions for frame ${frame.frame_num}: ${sourceVideoWidth}x${sourceVideoHeight}`);
+              } else {
+                console.warn(`[loadSequenceFrames] ⚠️  No source dimensions for frame ${frame.frame_num} - will fall back to vid_info`);
               }
               
               return { 

@@ -36,18 +36,18 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         start_time = time.time()
         
         # Log incoming request
-        logger.info(
-            "Incoming request",
-            extra={
-                "request_id": request_id,
-                "method": request.method,
-                "url": str(request.url),
-                "path": request.url.path,
-                "query_params": dict(request.query_params),
-                "client_host": request.client.host if request.client else None,
-                "user_agent": request.headers.get("user-agent"),
-            }
-        )
+        # logger.info(
+        #     "Incoming request",
+        #     extra={
+        #         "request_id": request_id,
+        #         "method": request.method,
+        #         "url": str(request.url),
+        #         "path": request.url.path,
+        #         "query_params": dict(request.query_params),
+        #         "client_host": request.client.host if request.client else None,
+        #         "user_agent": request.headers.get("user-agent"),
+        #     }
+        # )
         
         # Log request body if enabled (be careful with sensitive data)
         if self.log_request_body and request.method in ["POST", "PUT", "PATCH"]:
@@ -72,16 +72,16 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             process_time = time.time() - start_time
             
             # Log response
-            logger.info(
-                "Request completed",
-                extra={
-                    "request_id": request_id,
-                    "method": request.method,
-                    "url": str(request.url),
-                    "status_code": response.status_code,
-                    "process_time_ms": round(process_time * 1000, 2),
-                }
-            )
+            # logger.info(
+            #     "Request completed",
+            #     extra={
+            #         "request_id": request_id,
+            #         "method": request.method,
+            #         "url": str(request.url),
+            #         "status_code": response.status_code,
+            #         "process_time_ms": round(process_time * 1000, 2),
+            #     }
+            # )
             
             # Add custom headers
             response.headers["X-Request-ID"] = request_id
