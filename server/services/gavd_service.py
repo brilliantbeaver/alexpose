@@ -79,7 +79,15 @@ class GAVDService:
         
         try:
             with open(metadata_file, 'r') as f:
-                return json.load(f)
+                metadata = json.load(f)
+                
+                # Ensure critical fields have default values for backward compatibility
+                if "row_count" not in metadata:
+                    metadata["row_count"] = 0
+                if "sequence_count" not in metadata:
+                    metadata["sequence_count"] = 0
+                
+                return metadata
         except Exception as e:
             logger.error(f"Error loading metadata for dataset {dataset_id}: {str(e)}")
             return None
@@ -497,6 +505,12 @@ class GAVDService:
                     # Apply status filter if specified
                     if status_filter and metadata.get("status") != status_filter:
                         continue
+                    
+                    # Ensure critical fields have default values for backward compatibility
+                    if "row_count" not in metadata:
+                        metadata["row_count"] = 0
+                    if "sequence_count" not in metadata:
+                        metadata["sequence_count"] = 0
                     
                     datasets.append(metadata)
             except Exception as e:

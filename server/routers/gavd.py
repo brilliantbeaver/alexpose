@@ -127,19 +127,9 @@ async def upload_gavd_dataset(
         
         logger.info(f"GAVD dataset saved successfully: {file_path}")
         
-        # Extract first sequence info for display
-        import pandas as pd
-        try:
-            df = pd.read_csv(file_path)
-            first_row = df.iloc[0] if len(df) > 0 else None
-            first_seq = first_row['seq'] if first_row is not None and 'seq' in df.columns else None
-            first_gait_pat = first_row['gait_pat'] if first_row is not None and 'gait_pat' in df.columns else None
-        except Exception as e:
-            logger.warning(f"Could not extract first sequence info: {str(e)}")
-            first_seq = None
-            first_gait_pat = None
-        
         # Store dataset metadata
+        # Note: seq and gait_pat are sequence-level fields and should NOT be stored here
+        # as datasets contain multiple sequences with different values
         dataset_metadata = {
             "dataset_id": dataset_id,
             "original_filename": file.filename,
@@ -150,9 +140,7 @@ async def upload_gavd_dataset(
             "status": "uploaded",
             "validation": validation_result,
             "row_count": validation_result.get("row_count", 0),
-            "sequence_count": validation_result.get("sequence_count", 0),
-            "seq": first_seq,  # Add first sequence ID
-            "gait_pat": first_gait_pat  # Add first gait pattern
+            "sequence_count": validation_result.get("sequence_count", 0)
         }
         
         # Save metadata

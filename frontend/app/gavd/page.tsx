@@ -32,8 +32,8 @@ interface DatasetStatus {
   dataset_id: string;
   status: string;
   original_filename: string;
-  row_count: number;
-  sequence_count: number;
+  row_count?: number;
+  sequence_count?: number;
   uploaded_at: string;
   processing_started_at?: string;
   processing_completed_at?: string;
@@ -485,7 +485,7 @@ export default function GAVDUploadPage() {
                       </div>
                       <div>
                         <p className="text-muted-foreground">Sequences</p>
-                        <p className="font-medium">{uploadResult.sequence_count}</p>
+                        <p className="font-medium">{uploadResult.sequence_count ?? 0}</p>
                       </div>
                     </div>
                     {uploadResult.dataset_id && (
@@ -562,7 +562,7 @@ export default function GAVDUploadPage() {
                         <ul className="space-y-1 text-xs">
                           <li>• Downloading YouTube videos (if not cached)</li>
                           <li>• Extracting frames from videos</li>
-                          <li>• Running pose estimation on {datasetStatus.row_count.toLocaleString()} frames</li>
+                          <li>• Running pose estimation on {(datasetStatus.row_count ?? 0).toLocaleString()} frames</li>
                           <li>• Saving results and pose data</li>
                         </ul>
                         <p className="mt-3 text-xs text-muted-foreground">
@@ -585,11 +585,11 @@ export default function GAVDUploadPage() {
                   </div>
                   <div className="p-3 bg-gray-50 rounded-lg">
                     <p className="text-muted-foreground">Total Rows</p>
-                    <p className="font-medium">{datasetStatus.row_count.toLocaleString()}</p>
+                    <p className="font-medium">{(datasetStatus.row_count ?? 0).toLocaleString()}</p>
                   </div>
                   <div className="p-3 bg-gray-50 rounded-lg">
                     <p className="text-muted-foreground">Sequences</p>
-                    <p className="font-medium">{datasetStatus.sequence_count}</p>
+                    <p className="font-medium">{datasetStatus.sequence_count ?? 0}</p>
                   </div>
                 </div>
 
@@ -747,9 +747,9 @@ export default function GAVDUploadPage() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {recentDatasets.map((dataset) => (
+                  {recentDatasets.map((dataset, index) => (
                     <div
-                      key={dataset.dataset_id}
+                      key={`${dataset.dataset_id}-${index}`}
                       className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 hover:border-purple-500 transition-all"
                     >
                       <Link
@@ -762,8 +762,8 @@ export default function GAVDUploadPage() {
                             {getStatusBadge(dataset.status)}
                           </div>
                           <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                            <span>📊 {dataset.sequence_count} sequences</span>
-                            <span>📝 {dataset.row_count.toLocaleString()} rows</span>
+                            <span>📊 {dataset.sequence_count ?? 0} sequences</span>
+                            <span>📝 {(dataset.row_count ?? 0).toLocaleString()} rows</span>
                             <span>🕒 {formatDate(dataset.uploaded_at)}</span>
                           </div>
                         </div>

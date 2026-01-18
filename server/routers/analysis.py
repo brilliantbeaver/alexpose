@@ -368,6 +368,8 @@ async def get_dashboard_statistics(
                 gavd_status_counts[status] += 1
             
             # Add to recent analyses list
+            # Note: seq and gait_pat are sequence-level fields, not dataset-level
+            # They should not be included here as datasets contain multiple sequences
             gavd_recent.append({
                 "type": "gavd_dataset",
                 "dataset_id": dataset.get("dataset_id", ""),
@@ -379,9 +381,7 @@ async def get_dashboard_statistics(
                 "row_count": dataset.get("row_count", 0),
                 "total_sequences_processed": dataset.get("total_sequences_processed", 0),
                 "total_frames_processed": dataset.get("total_frames_processed", 0),
-                "progress": dataset.get("progress", ""),
-                "seq": dataset.get("seq"),  # Add sequence ID
-                "gait_pat": dataset.get("gait_pat")  # Add gait pattern
+                "progress": dataset.get("progress", "")
             })
             
             # Accumulate totals
