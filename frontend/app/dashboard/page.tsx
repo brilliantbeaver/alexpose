@@ -373,7 +373,7 @@ export default function DashboardPage() {
               onDelete={handleDeleteAnalysis}
               deletingAnalysis={deletingAnalysis}
               maxRows={5}
-              showFilters={true}
+              showFilters={false}
             />
           )}
         </CardContent>

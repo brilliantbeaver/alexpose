@@ -46,7 +46,7 @@ interface RecentAnalysis {
   total_sequences_processed?: number;
   total_frames_processed?: number;
   progress?: string;
-  // GAVD sequence-specific fields
+  // GAVD sequence-specific fields (only present when viewing individual sequences, not datasets)
   seq?: string;
   gait_pat?: string;
   // Common fields
@@ -71,13 +71,14 @@ export function AnalysesTable({
   deletingAnalysis, 
   showActions = true,
   maxRows,
-  showFilters = true
+  showFilters = false  // Changed default to false since seq/gait_pat filters don't apply to datasets
 }: AnalysesTableProps) {
   const [seqFilter, setSeqFilter] = useState('');
   const [gaitPatFilter, setGaitPatFilter] = useState('all_patterns');
   const [filterType, setFilterType] = useState<'seq' | 'gait_pat' | 'all'>('all');
 
   // Filter analyses based on current filters
+  // Note: These filters are for sequence-level data which doesn't exist at dataset level
   const filteredAnalyses = analyses.filter(analysis => {
     if (filterType === 'seq' && seqFilter) {
       return analysis.seq?.toLowerCase().includes(seqFilter.toLowerCase());
@@ -135,7 +136,6 @@ export function AnalysesTable({
 
   const getAnalysisTitle = (analysis: RecentAnalysis) => {
     if (analysis.type === 'gavd_dataset') {
-      // Rename GAVD files based on their content/diagnosis
       const filename = analysis.filename || 'GAVD Dataset';
       
       // Map common GAVD filenames to meaningful diagnosis names
@@ -189,7 +189,7 @@ export function AnalysesTable({
         details.push(`${analysis.total_frames_processed} frames`);
       }
       
-      // Add diagnosis-specific context
+      // Add diagnosis-specific context based on filename
       const title = getAnalysisTitle(analysis);
       if (title.includes('Parkinson\'s')) {
         details.push('Movement disorder analysis');
@@ -310,8 +310,7 @@ export function AnalysesTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Sequence</TableHead>
-            <TableHead>Gait Pattern</TableHead>
+            <TableHead>Type / Name</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Details</TableHead>
             <TableHead>Date</TableHead>
@@ -320,31 +319,31 @@ export function AnalysesTable({
         </TableHeader>
         <TableBody>
           {displayedAnalyses.map((analysis, index) => {
-            const analysisId = analysis.dataset_id || analysis.analysis_id || `${index}`;
+            // Create a truly unique key by combining type and ID
+            const uniqueKey = `${analysis.type}-${analysis.dataset_id || analysis.analysis_id || index}`;
             const date = analysis.completed_at || analysis.uploaded_at || analysis.created_at || '';
             
             return (
-              <TableRow key={analysisId} className="cursor-pointer hover:bg-muted/50">
+              <TableRow key={uniqueKey} className="cursor-pointer hover:bg-muted/50">
                 <TableCell>
                   <Link 
                     href={getAnalysisLink(analysis)}
                     className="font-medium hover:underline"
                   >
-                    {analysis.seq ? (
-                      <div className="font-mono text-sm">{analysis.seq}</div>
-                    ) : (
-                      <div className="text-muted-foreground text-sm">No sequence data</div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {analysis.type === 'gavd_dataset' ? (
+                        <>
+                          <Badge variant="outline" className="text-xs">GAVD</Badge>
+                          <span className="text-sm">{getAnalysisTitle(analysis)}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Badge variant="outline" className="text-xs">Analysis</Badge>
+                          <span className="text-sm font-mono">{(analysis.analysis_id || '').substring(0, 8)}</span>
+                        </>
+                      )}
+                    </div>
                   </Link>
-                </TableCell>
-                <TableCell>
-                  {analysis.gait_pat ? (
-                    <Badge variant={analysis.gait_pat === 'parkinsons' ? 'destructive' : 'secondary'}>
-                      {analysis.gait_pat}
-                    </Badge>
-                  ) : (
-                    <span className="text-muted-foreground text-sm">N/A</span>
-                  )}
                 </TableCell>
                 <TableCell>
                   {getStatusBadge(analysis)}
@@ -376,10 +375,10 @@ export function AnalysesTable({
                         {onDelete && (
                           <DropdownMenuItem
                             onClick={(e) => handleDelete(analysis, e)}
-                            disabled={deletingAnalysis === analysisId}
+                            disabled={deletingAnalysis === (analysis.dataset_id || analysis.analysis_id)}
                             className="text-red-600 focus:text-red-600"
                           >
-                            {deletingAnalysis === analysisId ? (
+                            {deletingAnalysis === (analysis.dataset_id || analysis.analysis_id) ? (
                               <span className="flex items-center gap-2">
                                 <span className="animate-spin">⏳</span>
                                 Deleting...

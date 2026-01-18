@@ -365,13 +365,13 @@ export default function GAVDVideoPlayer({
     const yCoords = keypoints.map(kp => kp.y).sort((a, b) => a - b);
     
     // Calculate spacing between consecutive points
-    const xSpacings = [];
+    const xSpacings: number[] = [];
     for (let i = 1; i < xCoords.length; i++) {
       const spacing = Math.abs(xCoords[i] - xCoords[i-1]);
       if (spacing > 0.1) xSpacings.push(spacing);
     }
     
-    const ySpacings = [];
+    const ySpacings: number[] = [];
     for (let i = 1; i < yCoords.length; i++) {
       const spacing = Math.abs(yCoords[i] - yCoords[i-1]);
       if (spacing > 0.1) ySpacings.push(spacing);
