@@ -27,7 +27,17 @@ from ambient.pose.joint_angles import (
 from ambient.pose.keypoints import (
     BoundingBoxProcessor,
     KeypointGenerator,
-    PoseKeypointExtractor
+    PoseKeypointExtractor,
+    KeypointVisualizer,
+)
+
+from ambient.pose.model_management import (
+    MediaPipeModelManager,
+    PoseLandmarkerFactory,
+)
+
+from ambient.pose.keypoint_extractor import (
+    SequenceKeypointExtractor,
 )
 
 from ambient.pose.base_estimator import (
@@ -77,5 +87,9 @@ __all__ = [
     "get_joint_angles",
     "BoundingBoxProcessor",
     "KeypointGenerator",
-    "PoseKeypointExtractor"
+    "PoseKeypointExtractor",
+    "KeypointVisualizer",
+    "MediaPipeModelManager",
+    "PoseLandmarkerFactory",
+    "SequenceKeypointExtractor"
 ]

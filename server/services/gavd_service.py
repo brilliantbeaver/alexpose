@@ -109,15 +109,15 @@ class GAVDService:
         self,
         dataset_id: str,
         max_sequences: Optional[int] = None,
-        pose_estimator: str = "mediapipe"
+        pose_estimator: Optional[str] = None
     ) -> None:
         """
-        Process GAVD dataset in background.
+        Process GAVD dataset in background with progress tracking.
         
         Args:
             dataset_id: Unique dataset identifier
             max_sequences: Maximum number of sequences to process
-            pose_estimator: Pose estimator to use
+            pose_estimator: Pose estimator to use (None = use batch extraction without estimator)
         """
         try:
             logger.info(f"Starting GAVD dataset processing for {dataset_id}")
@@ -128,12 +128,16 @@ class GAVDService:
                 raise ValueError(f"Dataset {dataset_id} not found")
             
             csv_file_path = metadata['file_path']
+            total_rows = metadata.get('row_count', 0)
             
             # Update status
             self.update_dataset_metadata(dataset_id, {
                 "status": "processing",
                 "processing_started_at": datetime.utcnow().isoformat(),
-                "progress": "Initializing..."
+                "progress": "Initializing...",
+                "progress_percent": 0,
+                "frames_processed": 0,
+                "total_frames": total_rows
             })
             
             # Create pose estimator if specified
@@ -141,13 +145,14 @@ class GAVDService:
             if pose_estimator and pose_estimator != "none":
                 try:
                     self.update_dataset_metadata(dataset_id, {
-                        "progress": f"Loading {pose_estimator} pose estimator..."
+                        "progress": f"Loading {pose_estimator} pose estimator...",
+                        "progress_percent": 5
                     })
                     estimator = get_pose_estimator(pose_estimator)
                     logger.info(f"Using pose estimator: {pose_estimator}")
                 except Exception as e:
                     logger.warning(f"Failed to load pose estimator {pose_estimator}: {str(e)}")
-                    logger.info("Continuing with placeholder keypoints")
+                    logger.info("Continuing without pose estimator (will skip frames without videos)")
             
             # Create GAVD processor with estimator
             processor = create_gavd_processor()
@@ -157,26 +162,52 @@ class GAVDService:
             
             # Update progress
             self.update_dataset_metadata(dataset_id, {
-                "progress": "Loading and validating CSV data..."
+                "progress": "Loading and validating CSV data...",
+                "progress_percent": 10
             })
             
             # Process dataset
             logger.info(f"Processing GAVD CSV file: {csv_file_path}")
+            logger.info(f"Total rows to process: {total_rows}")
+            logger.info(f"Max sequences: {max_sequences or 'all'}")
             
             # Update progress before processing
             self.update_dataset_metadata(dataset_id, {
-                "progress": "Processing sequences (this may take several minutes)..."
+                "progress": f"Processing sequences... (0/{total_rows} frames)",
+                "progress_percent": 15
             })
             
-            # CRITICAL FIX: Run blocking operation in thread pool to avoid blocking event loop
+            # CRITICAL FIX: Run blocking operation in thread pool with timeout
             import asyncio
-            results = await asyncio.to_thread(
-                processor.process_gavd_file,
-                csv_file_path=csv_file_path,
-                max_sequences=max_sequences,
-                include_metadata=True,
-                verbose=True
-            )
+            
+            # Set timeout based on number of rows (estimate ~200ms per frame with real extraction)
+            # Add extra time for video downloads and overhead
+            timeout_seconds = max(300, total_rows * 0.5)  # At least 5 minutes, or 0.5s per frame
+            logger.info(f"Processing timeout set to {timeout_seconds} seconds")
+            
+            try:
+                results = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        processor.process_gavd_file,
+                        csv_file_path=csv_file_path,
+                        max_sequences=max_sequences,
+                        include_metadata=True,
+                        verbose=True
+                    ),
+                    timeout=timeout_seconds
+                )
+            except asyncio.TimeoutError:
+                logger.error(f"Processing timeout after {timeout_seconds} seconds for dataset {dataset_id}")
+                raise asyncio.TimeoutError(f"Processing took longer than {timeout_seconds} seconds. Try processing fewer sequences or check if videos are downloading properly.")
+            finally:
+                # CRITICAL: Clean up worker processes regardless of success/failure
+                try:
+                    if processor.data_converter:
+                        logger.info("Cleaning up GAVD processor resources...")
+                        processor.data_converter.cleanup()
+                        logger.info("GAVD processor resources cleaned up")
+                except Exception as cleanup_error:
+                    logger.warning(f"Error during cleanup: {cleanup_error}")
             
             # Update progress
             self.update_dataset_metadata(dataset_id, {
@@ -672,13 +703,8 @@ class GAVDService:
             if frame_row.empty:
                 return None
             
-            # Try to use pose estimator if available
-            try:
-                estimator = get_pose_estimator("mediapipe")
-                converter = PoseDataConverter(estimator=estimator)
-            except Exception:
-                # Fallback to placeholder keypoints
-                converter = PoseDataConverter()
+            # Use batch extraction (no estimator for efficiency)
+            converter = PoseDataConverter(estimator=None)
             
             # Convert just this frame
             pose_frames = converter.convert_sequence_to_pose_format(

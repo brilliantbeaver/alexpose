@@ -301,6 +301,13 @@ export default function GAVDVideoPlayer({
     const shouldShowPose = showPoseRef.current;
 
     console.log(`Drawing overlays for GAVD frame ${frameData.frame_num} (index ${frameIndex}), showBbox=${shouldShowBbox}, showPose=${shouldShowPose}`);
+    
+    if (shouldShowPose && frameData.pose_keypoints) {
+      console.log(`Pose keypoints available: ${frameData.pose_keypoints.length} keypoints`);
+      if (frameData.pose_keypoints.length > 0) {
+        console.log(`First keypoint:`, frameData.pose_keypoints[0]);
+      }
+    }
 
     // Draw bounding box if enabled
     if (shouldShowBbox && frameData.bbox) {
@@ -342,7 +349,43 @@ export default function GAVDVideoPlayer({
     }
   }, []);
 
-  // Draw pose keypoints with skeleton connections
+  /**
+   * Detect if keypoints are placeholder grid data vs real pose estimation.
+   * Placeholder keypoints form a perfect grid with uniform spacing.
+   */
+  const isPlaceholderData = (keypoints: PoseKeypoint[]): boolean => {
+    if (keypoints.length < 9) return false; // Need at least 3x3 grid
+    
+    // Check if all confidence scores are identical (placeholder characteristic)
+    const confidences = keypoints.map(kp => kp.confidence);
+    const allSameConfidence = confidences.every(c => c === confidences[0]);
+    
+    // Check if keypoints form a perfect grid (uniform spacing)
+    const xCoords = keypoints.map(kp => kp.x).sort((a, b) => a - b);
+    const yCoords = keypoints.map(kp => kp.y).sort((a, b) => a - b);
+    
+    // Calculate spacing between consecutive points
+    const xSpacings = [];
+    for (let i = 1; i < xCoords.length; i++) {
+      const spacing = Math.abs(xCoords[i] - xCoords[i-1]);
+      if (spacing > 0.1) xSpacings.push(spacing);
+    }
+    
+    const ySpacings = [];
+    for (let i = 1; i < yCoords.length; i++) {
+      const spacing = Math.abs(yCoords[i] - yCoords[i-1]);
+      if (spacing > 0.1) ySpacings.push(spacing);
+    }
+    
+    // Check if spacings are uniform (within 0.1 pixel tolerance)
+    const uniformXSpacing = xSpacings.length > 0 && 
+      xSpacings.every(s => Math.abs(s - xSpacings[0]) < 0.1);
+    const uniformYSpacing = ySpacings.length > 0 && 
+      ySpacings.every(s => Math.abs(s - ySpacings[0]) < 0.1);
+    
+    return allSameConfidence && uniformXSpacing && uniformYSpacing;
+  };
+
   const drawPoseKeypoints = (
     ctx: CanvasRenderingContext2D,
     keypoints: PoseKeypoint[] | any[],
@@ -351,7 +394,14 @@ export default function GAVDVideoPlayer({
     poseSourceWidth?: number,
     poseSourceHeight?: number
   ) => {
-    if (!keypoints || keypoints.length === 0) return;
+    if (!keypoints || keypoints.length === 0) {
+      console.log('[drawPoseKeypoints] No keypoints to draw');
+      return;
+    }
+
+    console.log(`[drawPoseKeypoints] Drawing ${keypoints.length} keypoints`);
+    console.log(`[drawPoseKeypoints] Canvas dimensions: ${ctx.canvas.width}x${ctx.canvas.height}`);
+    console.log(`[drawPoseKeypoints] Video dimensions: ${video.videoWidth}x${video.videoHeight}`);
 
     // Normalize keypoint format
     const normalizedKeypoints: PoseKeypoint[] = keypoints.map((kp: any) => ({
@@ -361,11 +411,20 @@ export default function GAVDVideoPlayer({
       keypoint_id: kp.keypoint_id !== undefined ? kp.keypoint_id : (kp.id !== undefined ? kp.id : 0)
     }));
 
+    console.log(`[drawPoseKeypoints] First 3 keypoints (raw):`, normalizedKeypoints.slice(0, 3));
+    
+    // Detect placeholder data
+    const isPlaceholder = isPlaceholderData(normalizedKeypoints);
+    if (isPlaceholder) {
+      console.warn('[drawPoseKeypoints] ⚠️  PLACEHOLDER DATA DETECTED - This is not real pose estimation!');
+      console.warn('[drawPoseKeypoints] Keypoints form a perfect grid pattern. Run real pose estimation to get skeletal data.');
+    }
+
     // CRITICAL: Determine the correct source dimensions for pose keypoint scaling
     // Priority:
     // 1. Use pose_source_width/height if available (NEW format with metadata)
-    // 2. Fall back to actual video dimensions (for OLD format data)
-    // 3. Last resort: use vid_info (but this is often wrong for downloaded videos)
+    // 2. Fall back to vid_info dimensions (GAVD annotation dimensions)
+    // 3. Last resort: use actual video dimensions
     let sourceWidth: number;
     let sourceHeight: number;
     
@@ -373,75 +432,144 @@ export default function GAVDVideoPlayer({
       // NEW format: Use the stored source dimensions
       sourceWidth = poseSourceWidth;
       sourceHeight = poseSourceHeight;
-      console.log(`Using stored source dimensions: ${sourceWidth}x${sourceHeight}`);
+      console.log(`[drawPoseKeypoints] Using stored source dimensions: ${sourceWidth}x${sourceHeight}`);
+    } else if (vidInfo?.width && vidInfo?.height) {
+      // Use vid_info dimensions (GAVD annotation dimensions)
+      // Keypoints are in the coordinate space of the original video (vid_info)
+      sourceWidth = vidInfo.width;
+      sourceHeight = vidInfo.height;
+      console.log(`[drawPoseKeypoints] Using vid_info dimensions: ${sourceWidth}x${sourceHeight}`);
     } else {
-      // OLD format: Assume keypoints are in the actual video's coordinate space
-      // This is a safe assumption because MediaPipe generates keypoints based on the video it processes
+      // Fallback: Assume keypoints are in the actual video's coordinate space
       sourceWidth = video.videoWidth;
       sourceHeight = video.videoHeight;
-      console.log(`No source dimensions found, using actual video dimensions: ${sourceWidth}x${sourceHeight}`);
-      console.log(`Note: vid_info says ${vidInfo?.width}x${vidInfo?.height}, but using actual video dimensions instead`);
+      console.log(`[drawPoseKeypoints] Using actual video dimensions: ${sourceWidth}x${sourceHeight}`);
     }
     
     const scaleX = video.videoWidth / sourceWidth;
     const scaleY = video.videoHeight / sourceHeight;
     
-    console.log(`Pose scaling: source=${sourceWidth}x${sourceHeight}, display=${video.videoWidth}x${video.videoHeight}, scale=${scaleX.toFixed(2)}x${scaleY.toFixed(2)}`);
+    console.log(`[drawPoseKeypoints] Scaling: source=${sourceWidth}x${sourceHeight}, display=${video.videoWidth}x${video.videoHeight}, scale=${scaleX.toFixed(3)}x${scaleY.toFixed(3)}`);
+
+    // Show scaled coordinates for first keypoint
+    if (normalizedKeypoints.length > 0) {
+      const kp = normalizedKeypoints[0];
+      const scaledX = kp.x * scaleX;
+      const scaledY = kp.y * scaleY;
+      console.log(`[drawPoseKeypoints] First keypoint: raw=(${kp.x}, ${kp.y}), scaled=(${scaledX.toFixed(1)}, ${scaledY.toFixed(1)}), confidence=${kp.confidence}`);
+    }
 
     // MediaPipe Pose skeleton connections (33 landmarks)
     // Reference: https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker
     // Based on official MediaPipe POSE_CONNECTIONS
-    const connections = [
-      // Face contour
-      [0, 1], [1, 2], [2, 3], [3, 7],  // Nose to left eye to left ear
-      [0, 4], [4, 5], [5, 6], [6, 8],  // Nose to right eye to right ear
-      [9, 10],  // Mouth left to mouth right
-      
-      // Shoulders and arms
-      [11, 12],  // Left shoulder to right shoulder
-      [11, 13], [13, 15],  // Left shoulder to left elbow to left wrist
-      [12, 14], [14, 16],  // Right shoulder to right elbow to right wrist
-      
-      // Left hand
-      [15, 17], [15, 19], [15, 21],  // Left wrist to pinky, index, thumb
-      [17, 19],  // Left pinky to left index
-      
-      // Right hand
-      [16, 18], [16, 20], [16, 22],  // Right wrist to pinky, index, thumb
-      [18, 20],  // Right pinky to right index
-      
-      // Torso
-      [11, 23], [12, 24],  // Shoulders to hips
-      [23, 24],  // Left hip to right hip
-      
-      // Left leg
-      [23, 25], [25, 27],  // Left hip to left knee to left ankle
-      [27, 29], [27, 31],  // Left ankle to left heel and left foot index
-      [29, 31],  // Left heel to left foot index
-      
-      // Right leg
-      [24, 26], [26, 28],  // Right hip to right knee to right ankle
-      [28, 30], [28, 32],  // Right ankle to right heel and right foot index
-      [30, 32]  // Right heel to right foot index
-    ];
+    let connections = [];
+    
+    // Determine the keypoint format based on the number of keypoints
+    const numKeypoints = normalizedKeypoints.length;
+    
+    if (numKeypoints === 33) {
+      // MediaPipe format (33 keypoints)
+      connections = [
+        // Face contour
+        [0, 1], [1, 2], [2, 3], [3, 7],  // Nose to left eye to left ear
+        [0, 4], [4, 5], [5, 6], [6, 8],  // Nose to right eye to right ear
+        [9, 10],  // Mouth left to mouth right
+        
+        // Shoulders and arms
+        [11, 12],  // Left shoulder to right shoulder
+        [11, 13], [13, 15],  // Left shoulder to left elbow to left wrist
+        [12, 14], [14, 16],  // Right shoulder to right elbow to right wrist
+        
+        // Left hand
+        [15, 17], [15, 19], [15, 21],  // Left wrist to pinky, index, thumb
+        [17, 19],  // Left pinky to left index
+        
+        // Right hand
+        [16, 18], [16, 20], [16, 22],  // Right wrist to pinky, index, thumb
+        [18, 20],  // Right pinky to right index
+        
+        // Torso
+        [11, 23], [12, 24],  // Shoulders to hips
+        [23, 24],  // Left hip to right hip
+        
+        // Left leg
+        [23, 25], [25, 27],  // Left hip to left knee to left ankle
+        [27, 29], [27, 31],  // Left ankle to left heel and left foot index
+        [29, 31],  // Left heel to left foot index
+        
+        // Right leg
+        [24, 26], [26, 28],  // Right hip to right knee to right ankle
+        [28, 30], [28, 32],  // Right ankle to right heel and right foot index
+        [30, 32]  // Right heel to right foot index
+      ];
+    } else if (numKeypoints === 25) {
+      // OpenPose BODY_25 format (25 keypoints)
+      // Reference: https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/02_output.md#pose-output-format-body_25
+      connections = [
+        // Head and neck
+        [0, 1],   // Nose to Neck
+        [1, 2], [1, 5],   // Neck to shoulders
+        [2, 3], [3, 4],   // Right shoulder to elbow to wrist
+        [5, 6], [6, 7],   // Left shoulder to elbow to wrist
+        
+        // Torso
+        [1, 8],   // Neck to MidHip
+        [8, 9], [8, 12],  // MidHip to hips
+        
+        // Right leg
+        [9, 10], [10, 11],  // Right hip to knee to ankle
+        [11, 22], [11, 24], // Right ankle to foot
+        [22, 23],  // Right heel to big toe
+        
+        // Left leg
+        [12, 13], [13, 14], // Left hip to knee to ankle
+        [14, 19], [14, 21], // Left ankle to foot
+        [19, 20],  // Left heel to big toe
+        
+        // Face (if available)
+        [0, 15], [15, 17],  // Nose to right eye to right ear
+        [0, 16], [16, 18],  // Nose to left eye to left ear
+        
+        // Hands (if available)
+        [4, 7],   // Connect wrists (for visualization)
+      ];
+    } else {
+      // Unknown format - create basic connections based on common indices
+      console.warn(`Unknown keypoint format with ${numKeypoints} keypoints, using basic connections`);
+      connections = [];
+      // Create a simple skeleton for any format
+      for (let i = 0; i < Math.min(numKeypoints - 1, 10); i++) {
+        connections.push([i, i + 1]);
+      }
+    }
 
     // Draw skeleton connections
     ctx.strokeStyle = '#00FF00';
     ctx.lineWidth = 2;
     
+    let connectionsDrawn = 0;
     connections.forEach(([startId, endId]) => {
       const start = normalizedKeypoints.find(kp => kp.keypoint_id === startId);
       const end = normalizedKeypoints.find(kp => kp.keypoint_id === endId);
       
       if (start && end && start.confidence > 0.3 && end.confidence > 0.3) {
+        const startX = start.x * scaleX;
+        const startY = start.y * scaleY;
+        const endX = end.x * scaleX;
+        const endY = end.y * scaleY;
+        
         ctx.beginPath();
-        ctx.moveTo(start.x * scaleX, start.y * scaleY);
-        ctx.lineTo(end.x * scaleX, end.y * scaleY);
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
         ctx.stroke();
+        connectionsDrawn++;
       }
     });
+    
+    console.log(`[drawPoseKeypoints] Drew ${connectionsDrawn} skeleton connections out of ${connections.length} possible`);
 
     // Draw keypoints
+    let keypointsDrawn = 0;
     normalizedKeypoints.forEach((kp) => {
       if (kp.confidence > 0.3) {
         const x = kp.x * scaleX;
@@ -455,8 +583,12 @@ export default function GAVDVideoPlayer({
         ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 1;
         ctx.stroke();
+        keypointsDrawn++;
       }
     });
+    
+    console.log(`[drawPoseKeypoints] Drew ${keypointsDrawn} keypoints out of ${normalizedKeypoints.length} total`);
+    console.log(`[drawPoseKeypoints] ✓ Pose drawing completed successfully`);
   };
 
   // Redraw overlays when video seeks (for manual navigation)

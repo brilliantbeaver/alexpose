@@ -208,7 +208,7 @@ If you see **only** the test messages (no TensorFlow/MediaPipe warnings), suppre
 
 2. **Verify file descriptor suppression is being used**:
    ```python
-   from ambient.pose.keypoints import suppress_stderr_fd
+   from ambient.pose.suppress_warnings import suppress_stderr_fd
    
    with suppress_stderr_fd():
        # Your code here

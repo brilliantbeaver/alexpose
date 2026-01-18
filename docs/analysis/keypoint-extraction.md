@@ -15,8 +15,10 @@ ambient.pose.keypoints
 ├── PoseKeypointExtractor      # Bbox-based extraction
 ├── MediaPipeModelManager      # Model download/management
 ├── PoseLandmarkerFactory      # MediaPipe landmarker creation
-├── SequenceKeypointExtractor  # Video sequence processing
 └── KeypointVisualizer         # Visualization utilities
+
+ambient.pose.keypoint_extractor
+└── SequenceKeypointExtractor  # Video sequence processing
 ```
 
 ## Core Classes
@@ -117,10 +119,10 @@ landmarker = factory.create_landmarker(
 
 ### SequenceKeypointExtractor
 
-Extracts pose keypoints from video sequences.
+Extracts pose keypoints from video sequences. This class has been moved to its own module for better organization.
 
 ```python
-from ambient.pose.keypoints import SequenceKeypointExtractor
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 from pathlib import Path
 import pandas as pd
 
@@ -255,7 +257,7 @@ print(POSE_LANDMARK_NAMES[25])  # 'LEFT_KNEE'
 ### Example 1: Extract Keypoints from Single Image
 
 ```python
-from ambient.pose.keypoints import SequenceKeypointExtractor
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 import cv2
 
 # Initialize extractor
@@ -277,7 +279,7 @@ for kp in keypoints[:5]:  # Show first 5
 ### Example 2: Process Video Sequence
 
 ```python
-from ambient.pose.keypoints import SequenceKeypointExtractor
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 from pathlib import Path
 import pandas as pd
 
@@ -300,10 +302,8 @@ print(f"Processed {len(keypoints_array)} frames")
 ### Example 3: Visualize Results
 
 ```python
-from ambient.pose.keypoints import (
-    SequenceKeypointExtractor,
-    KeypointVisualizer
-)
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
+from ambient.pose.keypoints import KeypointVisualizer
 import cv2
 import matplotlib.pyplot as plt
 
@@ -336,8 +336,8 @@ print(f"Average confidence: {stats['avg_confidence']:.3f}")
 from ambient.pose.keypoints import (
     MediaPipeModelManager,
     PoseLandmarkerFactory,
-    SequenceKeypointExtractor
 )
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 from pathlib import Path
 
 # Setup custom model manager

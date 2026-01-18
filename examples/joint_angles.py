@@ -2,7 +2,7 @@ from pathlib import Path
 
 from ambient.gavd import GAVDDataLoader
 from ambient.pose.joint_angles import get_joint_angles as calculate_angles
-from ambient.pose.keypoints import SequenceKeypointExtractor
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 from ambient.utils.eval_keypoints import get_gavd_frame
 
 #----------------------------------------------------------------------

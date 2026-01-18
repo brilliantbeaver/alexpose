@@ -193,7 +193,7 @@ async def process_gavd_dataset(
     background_tasks: BackgroundTasks,
     dataset_id: str,
     max_sequences: Optional[int] = Form(None),
-    pose_estimator: Optional[str] = Form("mediapipe")
+    pose_estimator: Optional[str] = Form(None)
 ) -> Dict[str, Any]:
     """
     Process a GAVD dataset to extract pose data and prepare for training.
@@ -201,7 +201,7 @@ async def process_gavd_dataset(
     Args:
         dataset_id: Dataset ID to process
         max_sequences: Maximum number of sequences to process (None for all)
-        pose_estimator: Pose estimator to use (mediapipe, openpose, etc.)
+        pose_estimator: Pose estimator to use (None = batch extraction, or mediapipe, openpose, etc.)
         
     Returns:
         Processing job ID and status
@@ -361,6 +361,65 @@ async def list_datasets(
     except Exception as e:
         logger.error(f"Error listing datasets: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to list datasets: {str(e)}")
+
+
+@router.post("/reset/{dataset_id}")
+async def reset_dataset_processing(
+    request: Request,
+    dataset_id: str
+) -> Dict[str, Any]:
+    """
+    Reset a stuck dataset from 'processing' to 'uploaded' status.
+    
+    Use this if a dataset is stuck in processing state and you want to retry.
+    
+    Args:
+        dataset_id: Dataset ID to reset
+        
+    Returns:
+        Reset confirmation
+    """
+    config_manager = request.app.state.config
+    gavd_service = GAVDService(config_manager)
+    
+    try:
+        metadata = gavd_service.get_dataset_metadata(dataset_id)
+        if not metadata:
+            raise HTTPException(status_code=404, detail="Dataset not found")
+        
+        # Only allow resetting if currently processing or error
+        current_status = metadata.get("status")
+        if current_status not in ["processing", "error"]:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Can only reset datasets in 'processing' or 'error' status. Current status: {current_status}"
+            )
+        
+        # Reset to uploaded status
+        gavd_service.update_dataset_metadata(dataset_id, {
+            "status": "uploaded",
+            "progress": "Ready to process",
+            "progress_percent": 0,
+            "frames_processed": 0,
+            "reset_at": datetime.utcnow().isoformat(),
+            "previous_status": current_status
+        })
+        
+        logger.info(f"Reset dataset {dataset_id} from {current_status} to uploaded")
+        
+        return {
+            "success": True,
+            "dataset_id": dataset_id,
+            "previous_status": current_status,
+            "new_status": "uploaded",
+            "message": "Dataset reset successfully. You can now process it again."
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error resetting dataset {dataset_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to reset dataset: {str(e)}")
 
 
 @router.delete("/{dataset_id}")
@@ -532,12 +591,31 @@ async def get_frame_pose_data(
             source_width = None
             source_height = None
         
+        # Ensure each keypoint has a keypoint_id for frontend skeleton drawing
+        # Add keypoint_id if missing (using array index)
+        processed_keypoints = []
+        for i, kp in enumerate(keypoints):
+            if isinstance(kp, dict):
+                # Create a copy to avoid modifying original data
+                processed_kp = kp.copy()
+                if 'keypoint_id' not in processed_kp:
+                    processed_kp['keypoint_id'] = i
+                processed_keypoints.append(processed_kp)
+            else:
+                # Handle malformed keypoint data
+                processed_keypoints.append({
+                    'x': 0.0,
+                    'y': 0.0,
+                    'confidence': 0.0,
+                    'keypoint_id': i
+                })
+        
         return {
             "success": True,
             "dataset_id": dataset_id,
             "sequence_id": sequence_id,
             "frame_num": frame_num,
-            "pose_keypoints": keypoints,
+            "pose_keypoints": processed_keypoints,
             "source_video_width": source_width,
             "source_video_height": source_height
         }
