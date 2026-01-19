@@ -228,7 +228,7 @@ class JointAngleCalculator:
             )
         
         self.mapping = self.KEYPOINT_MAPPINGS[keypoint_format]
-        logger.info(f"JointAngleCalculator initialized for {keypoint_format} format")
+        # logger.info(f"JointAngleCalculator initialized for {keypoint_format} format")
     
     def calculate_angle(
         self,
@@ -477,10 +477,9 @@ class JointAngleCalculator:
             frame_angles = self.calculate_frame_angles(keypoints, frame_idx, timestamp)
             sequence.frames.append(frame_angles)
         
-        logger.info(
-            f"Calculated joint angles for {len(keypoints_array)} frames "
-            f"({self.keypoint_format} format)"
-        )
+        # logger.info(
+        #     f"Calculated joint angles for {len(keypoints_array)} frames ({self.keypoint_format} format)"
+        # )
         
         return sequence
     

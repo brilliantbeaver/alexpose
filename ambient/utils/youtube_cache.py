@@ -229,7 +229,7 @@ def _prepare_download_list(
         if existing is None:
             to_download.append(url)
             continue
-        logger.info("Already cached (skipping): {}", existing)
+        # logger.info("Already cached (skipping): {}", existing)
         results["skipped"] += 1
         results["details"][url] = {"status": "skipped_existing", "path": str(existing)}
     return to_download

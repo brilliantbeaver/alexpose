@@ -301,13 +301,11 @@ class GAVDDataLoader:
             output_dir=youtube_dir,
             cookies_file=cookies_arg,
         )
-        loguru_logger.info(f"YouTube cache attempted: {summary['attempted']}")
-        loguru_logger.info(f"YouTube cache skipped: {summary['skipped']}")
-        loguru_logger.info(f"YouTube cache downloaded: {summary['downloaded']}")
+        # loguru_logger.info(f"YouTube cache attempted: {summary['attempted']}")
+        # loguru_logger.info(f"YouTube cache skipped: {summary['skipped']}")
+        # loguru_logger.info(f"YouTube cache downloaded: {summary['downloaded']}")
         if summary["failed"] > 0:
             loguru_logger.warning(f"YouTube cache failed: {summary['failed']}")
-        else:
-            loguru_logger.info(f"YouTube cache failed: {summary['failed']}")
 
     def load_gavd_data(
         self,
@@ -343,8 +341,8 @@ class GAVDDataLoader:
         # Validate file existence
         self._validate_file_path(csv_file_path)
 
-        # Loguru: call directly; sinks control output level
-        self.logger.info(f"Loading GAVD data from: {csv_file_path}")
+        if verbose:
+            self.logger.info(f"Loading GAVD data from: {csv_file_path}")
 
         # Use default dict fields if not specified
         if dict_fields is None:
@@ -382,7 +380,8 @@ class GAVDDataLoader:
 
         # Log loading statistics
         # Loguru: call directly; sinks control output level
-        self._log_loading_statistics(df)
+        if verbose:
+            self._log_loading_statistics(df)
 
         return df
 

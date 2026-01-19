@@ -14,6 +14,8 @@ from typing import Optional
 
 from loguru import logger
 
+from ambient.pose.suppress_warnings import suppress_stderr_fd
+
 try:
     import mediapipe as mp
     from mediapipe.tasks import python
@@ -173,11 +175,8 @@ class PoseLandmarkerFactory:
                 "MediaPipe is not available. Install it with: pip install mediapipe"
             )
         
-        try:
-            # Import warning suppression
-            from ambient.pose.suppress_warnings import suppress_stderr_fd
-            
-            logger.debug(f"Creating pose landmarker from {model_path}")
+        try:            
+            # logger.debug(f"Creating pose landmarker from {model_path}")
             
             # Create base options
             base_options = python.BaseOptions(model_asset_path=model_path)
@@ -197,7 +196,7 @@ class PoseLandmarkerFactory:
             with suppress_stderr_fd():
                 landmarker = vision.PoseLandmarker.create_from_options(options)
             
-            logger.info(f"Pose landmarker created successfully from {model_path}")
+            # logger.info(f"Pose landmarker created successfully from {model_path}")
             return landmarker
             
         except Exception as e:

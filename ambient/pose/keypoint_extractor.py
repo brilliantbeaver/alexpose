@@ -552,7 +552,7 @@ class SequenceKeypointExtractor:
         sequence_data: pd.DataFrame,
         video_base_path: Path,
         model_path: Optional[str] = None,
-        verbose: bool = True
+        verbose: bool = False
     ) -> List[KeypointSet]:
         """
         Extract pose keypoints from a sequence of video frames.
@@ -597,11 +597,11 @@ class SequenceKeypointExtractor:
         
         keypoints_array = []
         
-        try:
-            for fnum in range(num_frames):
-                frame_row = sequence_data.iloc[fnum]
-                actual_frame_num = int(frame_row['frame_num'])
-                
+        for fnum in range(num_frames):
+            frame_row = sequence_data.iloc[fnum]
+            actual_frame_num = int(frame_row['frame_num'])
+            
+            try:
                 if verbose and fnum % 10 == 0:  # Log every 10th frame to reduce noise
                     # logger.bind(plain=True).debug(f"\tframe {actual_frame_num} ({fnum+1}/{num_frames})")
                     print(f"\tframe {actual_frame_num} ({fnum+1}/{num_frames})")
@@ -628,12 +628,10 @@ class SequenceKeypointExtractor:
                     return []
                 
                 keypoints_array.append(keypoints)
+            except Exception as e:
+                logger.warning(f"Frame {fnum} of {sequence_id} failed to be processed")
             
             if verbose:
                 logger.info("Sequence processing complete")
             
             return keypoints_array
-            
-        except Exception as e:
-            logger.error(f"Sequence processing failed: {e}")
-            return []
