@@ -41,7 +41,7 @@ from ambient.pose.utils import suppress_stderr_fd
 from ambient.utils.log_config import get_logger
 
 logger = get_logger(__name__)
-
+           
 # MediaPipe pose landmark names
 POSE_LANDMARK_NAMES = MEDIAPIPE_33_NAMES
 
@@ -603,7 +603,8 @@ class SequenceKeypointExtractor:
                 actual_frame_num = int(frame_row['frame_num'])
                 
                 if verbose and fnum % 10 == 0:  # Log every 10th frame to reduce noise
-                    logger.debug(f"Processing frame {actual_frame_num} ({fnum+1}/{num_frames})")
+                    # logger.bind(plain=True).debug(f"\tframe {actual_frame_num} ({fnum+1}/{num_frames})")
+                    print(f"\tframe {actual_frame_num} ({fnum+1}/{num_frames})")
                 
                 # Get video path
                 from ambient.utils.youtube_cache import extract_video_id

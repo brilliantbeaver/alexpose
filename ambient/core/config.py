@@ -333,7 +333,7 @@ class YouTubeConfig:
     download_directory: str = "data/youtube"
     quality: str = "best[height<=720]"
     format: str = "mp4"
-    cookies_file: str = "config/yt_cookies.txt"
+    cookies_file: Optional[str] = None
 
 
 @dataclass

@@ -278,7 +278,7 @@ class GAVDDataLoader:
         self,
         rows: List[Dict[str, Any]],
         youtube_dir: str = "data/youtube",
-        cookies_path: Optional[Union[Path, str]] = project_root / "config/yt_cookies.txt",
+        cookies_path: Optional[Union[Path, str]] = None,
     ) -> None:
         """
         Download all unique Youtube videos.
