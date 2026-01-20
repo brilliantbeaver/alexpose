@@ -51,8 +51,9 @@ logger = get_logger()
 logger.remove()
 logger.add(sys.stderr, level="WARNING")
 
-# Set up paths
-project_root = Path.cwd()
+from ambient.utils.path_utils import get_project_root
+
+project_root = get_project_root()
 video_base_path = project_root / "data" / "youtube"
 data_root = project_root / "experiments" / "exp2" / "data"
 
@@ -65,6 +66,7 @@ condition_paths = [
     if p.is_dir() and p.name[0] in string.ascii_letters
 ]
 
+print(f"project_root: {project_root}")
 print(f"Examining {len(condition_paths)} number of conditions ...")
 
 for condition_path in condition_paths:

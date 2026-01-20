@@ -11,7 +11,9 @@ from ambient.utils.eval_keypoints import get_gavd_frame
 
 if __name__ == "__main__":
 
-    project_root = Path.cwd()
+    from ambient.utils.path_utils import get_project_root
+
+    project_root = get_project_root()
     print(f"==> project_root: {project_root}")
 
     # 1. Load GAVD gait sequences

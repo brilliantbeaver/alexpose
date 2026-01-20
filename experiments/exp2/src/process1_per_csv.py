@@ -15,11 +15,13 @@ from ambient.utils.csv_parser import parse_csv_with_dicts
 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 from ambient.pose.joint_angles import get_joint_angles
 
-# Set up paths
-project_root = Path.cwd()
+from ambient.utils.path_utils import get_project_root
+
+project_root = get_project_root()
 csv_path = project_root / "data" / "gavd" / "parkinsons" / "cljnz5sb1000o3n6lntosswwz.csv"
 video_base_path = project_root / "data" / "youtube"
 
+print(f"project_root: {project_root}")
 print(f"csv_path: {csv_path}")
 
 # Load data (this will auto-download YouTube videos to data/youtube)

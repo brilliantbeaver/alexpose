@@ -152,7 +152,7 @@ from ambient.utils.csv_parser import parse_csv_with_dicts
 import sys
 from pathlib import Path
 
-project_root = Path.cwd().parent
+project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 # Cell 2: Imports (now work!)

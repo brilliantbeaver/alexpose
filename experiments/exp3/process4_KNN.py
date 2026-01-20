@@ -42,10 +42,12 @@ logger = get_logger()
 logger.remove()
 logger.add(sys.stderr, level="INFO")
 
+from ambient.utils.path_utils import get_project_root
+
+project_root = get_project_root()
 
 def setup_paths() -> Tuple[Path, Path, Path, Path]:
     """Setup project paths."""
-    project_root = Path.cwd()
     video_base_path = project_root / "data" / "youtube"
     data_root = project_root / "data" / "gavd"
     output_dir = project_root / "experiments" / "exp2" / "models"

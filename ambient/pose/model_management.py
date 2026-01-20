@@ -15,6 +15,7 @@ from typing import Optional
 from loguru import logger
 
 from ambient.pose.suppress_warnings import suppress_stderr_fd
+from ambient.utils.path_utils import get_project_root
 
 try:
     import mediapipe as mp
@@ -49,8 +50,8 @@ class MediaPipeModelManager:
             models_dir: Directory to store models. Defaults to data/models
         """
         if models_dir is None:
-            # Default to data/models relative to project root
-            self.models_dir = Path.cwd() / "data" / "models"
+            project_root = get_project_root()
+            self.models_dir = project_root / "data" / "models"
         else:
             self.models_dir = Path(models_dir)
         

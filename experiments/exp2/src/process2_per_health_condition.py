@@ -20,12 +20,15 @@ logger = get_logger()
 logger.remove()
 logger.add(sys.stderr, level="WARNING")
 
-# Set up paths
-project_root = Path.cwd()
+# Set up paths using utility function
+from ambient.utils.path_utils import get_project_root
+
+project_root = get_project_root()
 condition_path = project_root / "experiments" / "exp2" / "data" / "parkinsons"
 video_base_path = project_root / "data" / "youtube"
 
-print(f"==> condition_path: {condition_path}")
+print(f"==> project_root: {project_root}")
+print(f"--> condition_path: {condition_path}")
 
 # Load data (this will auto-download YouTube videos to data/youtube)
 gavd_loader = GAVDDataLoader()
