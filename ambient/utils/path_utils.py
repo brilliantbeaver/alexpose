@@ -12,7 +12,7 @@ import os
 
 
 def get_project_root(
-    marker_files: Tuple[str, ...] = ('pyproject.toml', '.git', 'README.md'),
+    marker_files: Tuple[str, ...] = ('pyproject.toml', '.git'),
     start_path: Optional[Path] = None
 ) -> Path:
     """
