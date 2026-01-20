@@ -630,8 +630,8 @@ class SequenceKeypointExtractor:
                 keypoints_array.append(keypoints)
             except Exception as e:
                 logger.warning(f"Frame {fnum} of {sequence_id} failed to be processed")
-            
-            if verbose:
-                logger.info("Sequence processing complete")
-            
-            return keypoints_array
+        
+        if verbose:
+            logger.info("Sequence processing complete")
+        
+        return keypoints_array

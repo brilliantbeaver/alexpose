@@ -68,7 +68,8 @@ condition_paths = [
 print(f"Examining {len(condition_paths)} number of conditions ...")
 
 for condition_path in condition_paths:
-    print(f"==> condition_path: {condition_path}")
+    print(f"==> condition_name: {condition_path.name}")
+    condition_name = condition_path.name
     try:
         # Load data (this will auto-download YouTube videos to data/youtube)
         gavd_loader = GAVDDataLoader()
