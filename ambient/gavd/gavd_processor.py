@@ -617,22 +617,12 @@ class PoseKeypointExtractor:
         return KeypointGenerator()
 
     def _ensure_sequence_extractor(self):
-        """Lazy initialization of SequenceKeypointExtractor with Windows optimization."""
+        """Lazy initialization of SequenceKeypointExtractor."""
         if self.sequence_extractor is None:
             try:
                 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
-                import os
                 
-                # Use process isolation by default on Windows for GAVD processing
-                # This prevents WinError 1 issues and provides more reliable processing
-                use_process_isolation = os.name == 'nt'  # Windows
-                
-                if use_process_isolation:
-                    loguru_logger.info("Using process isolation for MediaPipe on Windows (GAVD processing)")
-                
-                self.sequence_extractor = SequenceKeypointExtractor(
-                    use_process_isolation=use_process_isolation
-                )
+                self.sequence_extractor = SequenceKeypointExtractor()
             except Exception as e:
                 loguru_logger.warning(f"Failed to initialize SequenceKeypointExtractor: {e}")
                 self.sequence_extractor = False  # Mark as unavailable
@@ -1152,16 +1142,7 @@ class PoseDataConverter:
                                 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
                                 import os
                                 
-                                # Use process isolation by default on Windows for GAVD processing
-                                # This prevents WinError 1 issues and provides more reliable processing
-                                use_process_isolation = os.name == 'nt'  # Windows
-                                
-                                if use_process_isolation:
-                                    loguru_logger.info("Using process isolation for batch MediaPipe processing on Windows")
-                                
-                                extractor = SequenceKeypointExtractor(
-                                    use_process_isolation=use_process_isolation
-                                )
+                                extractor = SequenceKeypointExtractor()
                                 
                                 # Get all unique frame numbers for this video in this sequence
                                 video_frames = seq_data[seq_data['url'] == url_val]['frame_num'].unique()
