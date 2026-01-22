@@ -121,7 +121,7 @@ ambient/classification/
 
 ### Feature Selection Rationale
 
-The 13 features were selected based on:
+The 15 features were selected based on:
 
 1. **Clinical Relevance**: Used in clinical gait analysis
 2. **Discriminative Power**: Differ significantly across conditions

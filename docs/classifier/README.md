@@ -56,7 +56,7 @@ from ambient.core.data_models import ClassificationResult
 
 ### Feature Vector
 
-The classifier uses 13 features extracted from gait sequences:
+The classifier uses 15 features extracted from gait sequences:
 
 **Mean Joint Angles (6 features)**:
 - Left hip mean angle
@@ -71,11 +71,13 @@ The classifier uses 13 features extracted from gait sequences:
 - Knee asymmetry (|left - right|)
 - Ankle asymmetry (|left - right|)
 
-**Range of Motion (4 features)**:
+**Range of Motion (6 features)**:
 - Left hip range
 - Left knee range
+- Left ankle range
 - Right hip range
 - Right knee range
+- Right ankle range
 
 ### Clinical Rationale
 
@@ -92,6 +94,7 @@ These features were selected based on clinical gait analysis literature:
 3. **Range of Motion**: Indicates joint mobility and function
    - Reduced ROM suggests stiffness or pain avoidance
    - Excessive ROM may indicate instability
+   - Ankle ROM is particularly important for detecting foot drop (stroke) and reduced push-off (Parkinson's)
 
 ## Usage Guide
 

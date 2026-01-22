@@ -9,7 +9,7 @@ This document summarizes the implementation of the K-Nearest Neighbors (KNN) gai
 ### 1. Core Classifier Module (`ambient/classification/knn_classifier.py`)
 
 **Components**:
-- `GaitFeatureVector`: Feature representation with 13 gait-specific features
+- `GaitFeatureVector`: Feature representation with 15 gait-specific features
 - `KNNClassifierConfig`: Configuration dataclass for classifier parameters
 - `KNNGaitClassifier`: Main classifier implementing `IClassifier` interface
 
@@ -111,7 +111,7 @@ This document summarizes the implementation of the K-Nearest Neighbors (KNN) gai
 
 ## Feature Engineering
 
-### 13 Features Extracted
+### 15 Features Extracted
 
 **Mean Joint Angles (6)**:
 1. Left hip mean
@@ -126,17 +126,20 @@ This document summarizes the implementation of the K-Nearest Neighbors (KNN) gai
 8. Knee asymmetry (|left - right|)
 9. Ankle asymmetry (|left - right|)
 
-**Range of Motion (4)**:
+**Range of Motion (6)**:
 10. Left hip range
 11. Left knee range
-12. Right hip range
-13. Right knee range
+12. Left ankle range
+13. Right hip range
+14. Right knee range
+15. Right ankle range
 
 ### Clinical Rationale
 
 - **Mean angles**: Capture overall joint positioning and gait pattern
 - **Asymmetry**: Key indicator of pathological gait (stroke, hemiplegic)
 - **Range of motion**: Indicates joint mobility and function
+  - Ankle ROM is critical for detecting foot drop and reduced push-off power
 
 ## Performance Characteristics
 
