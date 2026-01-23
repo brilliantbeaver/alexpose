@@ -12,7 +12,8 @@ import numpy as np
 from pathlib import Path
 
 from ambient.classification.rf_classifier import RFGaitClassifier, RFClassifierConfig
-from ambient.classification.knn_classifier import KNNGaitClassifier, KNNClassifierConfig, GaitFeatureVector
+from ambient.classification.knn_classifier import KNNGaitClassifier, KNNClassifierConfig
+from ambient.classification.features import GaitFeatureVector
 
 
 @pytest.fixture

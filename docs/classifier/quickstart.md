@@ -18,8 +18,8 @@ from pathlib import Path
 from ambient.classification.knn_classifier import (
     KNNGaitClassifier,
     KNNClassifierConfig,
-    GaitFeatureVector
 )
+from ambient.classification.features import GaitFeatureVector
 from ambient.pose.joint_angles import get_joint_angles
 from ambient.gavd import GAVDDataLoader
 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
@@ -121,7 +121,8 @@ This will:
 
 ```python
 from pathlib import Path
-from ambient.classification.knn_classifier import KNNGaitClassifier, GaitFeatureVector
+from ambient.classification.knn_classifier import KNNGaitClassifier
+from ambient.classification.features import GaitFeatureVector
 from ambient.pose.joint_angles import get_joint_angles
 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
 import cv2

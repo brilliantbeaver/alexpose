@@ -25,7 +25,7 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from loguru import logger
 
 from ambient.classification.base_classifier import BaseGaitClassifier, BaseClassifierConfig
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 
 @dataclass
@@ -107,9 +107,10 @@ class LogisticGaitClassifier(BaseGaitClassifier):
         features: List[GaitFeatureVector],
         labels: Optional[List[str]] = None,
         validate: bool = True,
+        auto_remove_invalid: bool = True,
     ) -> Dict[str, Any]:
-        """Train Logistic Regression classifier."""
-        metrics = super().train(features, labels, validate)
+        # Call base class train method (handles NaN validation)
+        metrics = super().train(features, labels, validate, auto_remove_invalid)
 
         # Store coefficients
         if hasattr(self.model, "coef_"):

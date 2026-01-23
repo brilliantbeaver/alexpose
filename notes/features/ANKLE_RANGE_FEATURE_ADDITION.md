@@ -27,7 +27,7 @@ Ankle range of motion (ROM) is a critical diagnostic feature for gait analysis:
 
 ### 1. Core Implementation (`ambient/classification/knn_classifier.py`)
 
-#### GaitFeatureVector Dataclass
+#### GaitFeatureVector Dataclass (moved to `ambient/classification/features.py`)
 - Added `left_ankle_range: float = 0.0`
 - Added `right_ankle_range: float = 0.0`
 

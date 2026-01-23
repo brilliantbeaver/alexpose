@@ -30,7 +30,7 @@ except ImportError:
 from loguru import logger
 
 from ambient.classification.base_classifier import BaseGaitClassifier, BaseClassifierConfig
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 
 @dataclass
@@ -107,18 +107,23 @@ class XGBoostGaitClassifier(BaseGaitClassifier):
 
     def _get_model_params(self) -> Dict[str, Any]:
         """Get model-specific parameters."""
-        return {
+        params = {
             "feature_importances": self.feature_importances_,
         }
+        # Add n_estimators if model is trained
+        if self.model is not None and hasattr(self.model, 'n_estimators'):
+            params["n_estimators"] = self.model.n_estimators
+        return params
 
     def train(
         self,
         features: List[GaitFeatureVector],
         labels: Optional[List[str]] = None,
         validate: bool = True,
+        auto_remove_invalid: bool=True
     ) -> Dict[str, Any]:
         """Train XGBoost classifier with optional early stopping."""
-        metrics = super().train(features, labels, validate)
+        metrics = super().train(features, labels, validate, auto_remove_invalid)
 
         # Store feature importances
         if hasattr(self.model, "feature_importances_"):
@@ -138,6 +143,10 @@ class XGBoostGaitClassifier(BaseGaitClassifier):
             logger.info("Top 5 important features:")
             for imp in importances[:5]:
                 logger.info(f"  {imp}")
+
+        # Add n_estimators to metrics
+        if hasattr(self.model, 'n_estimators'):
+            metrics["n_estimators"] = self.model.n_estimators
 
         return metrics
 

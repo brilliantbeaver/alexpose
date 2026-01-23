@@ -43,7 +43,7 @@ GaitFeatureVector(
 
 ### Code Usage (No Changes Required!)
 ```python
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 from ambient.pose.joint_angles import get_joint_angles
 
 # Extract joint angles

@@ -10,16 +10,16 @@ Author: AlexPose Team
 
 from .llm_classifier import LLMClassifier
 from .prompt_manager import PromptManager
+from .features import GaitFeatureVector
 from .knn_classifier import (
     KNNGaitClassifier,
     KNNClassifierConfig,
-    GaitFeatureVector
 )
 
 __all__ = [
     "LLMClassifier",
     "PromptManager",
+    "GaitFeatureVector",
     "KNNGaitClassifier",
     "KNNClassifierConfig",
-    "GaitFeatureVector",
 ]

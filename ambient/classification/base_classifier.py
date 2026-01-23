@@ -26,7 +26,7 @@ from sklearn.metrics import (
 from loguru import logger
 
 from ambient.core.interfaces import IClassifier
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 
 @dataclass
@@ -36,6 +36,7 @@ class BaseClassifierConfig:
     normalize_features: bool = True
     random_state: int = 42
     confidence_threshold: float = 0.5
+    cv_n_jobs: int = 1  # Number of parallel jobs for cross-validation (1=sequential, -1=all CPUs)
 
 
 class BaseGaitClassifier(IClassifier, ABC):
@@ -103,6 +104,7 @@ class BaseGaitClassifier(IClassifier, ABC):
         features: List[GaitFeatureVector],
         labels: Optional[List[str]] = None,
         validate: bool = True,
+        auto_remove_invalid: bool = True,
     ) -> Dict[str, Any]:
         """
         Train the classifier.
@@ -111,15 +113,20 @@ class BaseGaitClassifier(IClassifier, ABC):
             features: List of GaitFeatureVector objects
             labels: Optional list of condition labels
             validate: Whether to perform cross-validation
+            auto_remove_invalid: If True, automatically remove samples with NaN/Inf
             
         Returns:
             Dictionary with training metrics
+            
+        Raises:
+            ValueError: If features contain NaN/Inf and auto_remove_invalid=False
         """
         if not features:
             raise ValueError("No training features provided")
 
-        # Prepare data
-        X, y = self._prepare_features(features, fit_scaler=True)
+        # Extract features WITHOUT scaling (we'll scale after validation)
+        X = np.array([f.to_array() for f in features])
+        y = np.array([f.condition_label for f in features])
         if labels:
             y = np.array(labels)
 
@@ -130,10 +137,92 @@ class BaseGaitClassifier(IClassifier, ABC):
         logger.info(f"Feature shape: {X.shape}")
         logger.info(f"Classes: {np.unique(y)}")
 
+        # ========== NaN/Inf VALIDATION ==========
+        nan_mask = np.isnan(X)
+        inf_mask = np.isinf(X)
+        invalid_mask = nan_mask | inf_mask
+        
+        if np.any(invalid_mask):
+            invalid_samples = np.where(invalid_mask.any(axis=1))[0]
+            nan_samples = np.where(nan_mask.any(axis=1))[0]
+            inf_samples = np.where(inf_mask.any(axis=1))[0]
+            invalid_features = np.where(invalid_mask.any(axis=0))[0]
+            
+            if auto_remove_invalid:
+                # Get sample IDs before filtering
+                removed_ids = [features[i].sample_id for i in invalid_samples if features[i].sample_id]
+                
+                # Automatically remove invalid samples
+                valid_mask = ~invalid_mask.any(axis=1)
+                X = X[valid_mask]
+                y = y[valid_mask]
+                features = [f for i, f in enumerate(features) if valid_mask[i]]
+                
+                logger.warning(
+                    f"Automatically removed {len(invalid_samples)} invalid samples "
+                    f"({len(nan_samples)} with NaN, {len(inf_samples)} with Inf)"
+                )
+                if removed_ids:
+                    logger.warning(f"  Removed sample IDs: {removed_ids[:10]}")
+                
+                if len(X) < 5:
+                    raise ValueError(
+                        f"After removing {len(invalid_samples)} invalid samples, only {len(X)} remain. "
+                        f"Need at least 5 samples for training. "
+                        f"Check keypoint extraction and joint angle calculation."
+                    )
+                
+                logger.info(f"Continuing training with {len(X)} valid samples")
+            else:
+                # Raise detailed error
+                error_msg = [
+                    f"Training data contains invalid values in {len(invalid_samples)} samples:",
+                    f"  Samples with NaN: {len(nan_samples)}",
+                    f"  Samples with Inf: {len(inf_samples)}",
+                    f"  Affected sample indices: {invalid_samples[:10].tolist()}" + 
+                        (" ..." if len(invalid_samples) > 10 else ""),
+                    f"  Affected features (indices): {invalid_features.tolist()}",
+                    f"  Feature names: {[self.feature_names[i] for i in invalid_features]}",
+                    "",
+                    "Common causes:",
+                    "  1. Empty keypoint extraction (no frames processed)",
+                    "  2. Joint angle calculation failed (missing keypoints)",
+                    "  3. All angles were invalid/filtered out",
+                    "  4. Division by zero in feature calculation",
+                    "",
+                    "Solutions:",
+                    "  1. Check that videos exist and are valid",
+                    "  2. Verify keypoint extraction succeeded (check logs)",
+                    "  3. Ensure joint angles were calculated correctly",
+                    "  4. Use auto_remove_invalid=True to automatically skip bad samples",
+                    "  5. Filter samples manually before training",
+                    "  6. Restart kernel to load updated code",
+                ]
+                
+                # Log sample IDs if available
+                bad_sample_ids = [
+                    features[i].sample_id for i in invalid_samples[:5] 
+                    if i < len(features) and features[i].sample_id
+                ]
+                if bad_sample_ids:
+                    error_msg.append(f"  Sample IDs with invalid values: {bad_sample_ids}")
+                
+                logger.error("\n".join(error_msg))
+                raise ValueError(
+                    f"Training data contains invalid values (NaN/Inf). "
+                    f"Use auto_remove_invalid=True or filter manually. See log for details."
+                )
+        # ========== END VALIDATION ==========
+
         # Check class distribution
         unique, counts = np.unique(y, return_counts=True)
         class_distribution = dict(zip(unique, counts))
         logger.info(f"Class distribution: {class_distribution}")
+
+        # Now scale features if configured
+        if self.scaler:
+            X = self.scaler.fit_transform(X)
+            logger.info("Features normalized using StandardScaler")
 
         # Create and train model
         if self.model is None:
@@ -148,8 +237,8 @@ class BaseGaitClassifier(IClassifier, ABC):
         self.classes_ = self.label_encoder_.classes_
         self.is_trained = True
 
-        # Training metrics
-        train_accuracy = self.model.score(X, y)
+        # Training metrics - use encoded labels for scoring
+        train_accuracy = self.model.score(X, y_encoded)
         metrics = {
             "train_accuracy": train_accuracy,
             "n_samples": len(X),
@@ -163,14 +252,45 @@ class BaseGaitClassifier(IClassifier, ABC):
             n_splits = min(5, min(counts))
             if n_splits >= 2:
                 cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
-                cv_scores = cross_val_score(
-                    self.model, X, y_encoded, cv=cv, scoring="accuracy", n_jobs=-1
-                )
-                metrics["cv_mean_accuracy"] = float(np.mean(cv_scores))
-                metrics["cv_std_accuracy"] = float(np.std(cv_scores))
-                logger.info(
-                    f"Cross-validation accuracy: {metrics['cv_mean_accuracy']:.3f} ± {metrics['cv_std_accuracy']:.3f}"
-                )
+                
+                # Use configured n_jobs with fallback to sequential
+                n_jobs = getattr(self.config, 'cv_n_jobs', 1)
+                
+                # Try cross-validation with fallback to sequential
+                try:
+                    cv_scores = cross_val_score(
+                        self.model, X, y_encoded, cv=cv, scoring="accuracy", n_jobs=n_jobs
+                    )
+                except (OSError, RuntimeError) as e:
+                    # Fallback to sequential processing if parallel fails
+                    # This commonly happens on macOS due to semaphore limits
+                    if n_jobs != 1:
+                        logger.warning(
+                            f"Parallel cross-validation failed ({type(e).__name__}: {e}). "
+                            f"Falling back to sequential processing."
+                        )
+                        try:
+                            cv_scores = cross_val_score(
+                                self.model, X, y_encoded, cv=cv, scoring="accuracy", n_jobs=1
+                            )
+                        except Exception as e2:
+                            logger.error(
+                                f"Sequential cross-validation also failed: {e2}. "
+                                f"Skipping cross-validation."
+                            )
+                            cv_scores = None
+                    else:
+                        logger.error(
+                            f"Cross-validation failed: {e}. Skipping cross-validation."
+                        )
+                        cv_scores = None
+                
+                if cv_scores is not None:
+                    metrics["cv_mean_accuracy"] = float(np.mean(cv_scores))
+                    metrics["cv_std_accuracy"] = float(np.std(cv_scores))
+                    logger.info(
+                        f"Cross-validation accuracy: {metrics['cv_mean_accuracy']:.3f} ± {metrics['cv_std_accuracy']:.3f}"
+                    )
 
         logger.info(f"Training complete. Accuracy: {train_accuracy:.3f}")
 

@@ -9,7 +9,7 @@ import pytest
 import numpy as np
 from typing import List
 
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 
 def generate_sample_gait_features(

@@ -14,7 +14,7 @@ from ambient.classification.rf_classifier import (
     RFGaitClassifier,
     RFClassifierConfig,
 )
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 
 # Custom strategies for generating test data

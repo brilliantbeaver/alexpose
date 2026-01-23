@@ -22,7 +22,7 @@ from ambient.classification.rf_classifier import (
     RFClassifierConfig,
     FeatureImportance,
 )
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 
 @pytest.fixture

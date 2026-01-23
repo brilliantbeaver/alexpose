@@ -32,7 +32,8 @@ from loguru import logger
 
 from ambient.core.interfaces import IClassifier
 from ambient.classification.base_classifier import BaseClassifierConfig
-from ambient.classification.knn_classifier import GaitFeatureVector, KNNGaitClassifier
+from ambient.classification.features import GaitFeatureVector
+from ambient.classification.knn_classifier import KNNGaitClassifier
 from ambient.classification.rf_classifier import RFGaitClassifier
 from ambient.classification.xgboost_classifier import XGBoostGaitClassifier
 from ambient.classification.svm_classifier import SVMGaitClassifier
@@ -143,6 +144,7 @@ class EnsembleGaitClassifier(IClassifier):
         features: List[GaitFeatureVector],
         labels: Optional[List[str]] = None,
         validate: bool = True,
+        auto_remove_invalid: bool = False,
     ) -> Dict[str, Any]:
         """
         Train all base classifiers in the ensemble.
@@ -151,6 +153,7 @@ class EnsembleGaitClassifier(IClassifier):
             features: List of GaitFeatureVector objects
             labels: Optional list of condition labels
             validate: Whether to perform cross-validation
+            auto_remove_invalid: If True, automatically remove samples with NaN/Inf
             
         Returns:
             Dictionary with training metrics for each classifier
@@ -166,11 +169,17 @@ class EnsembleGaitClassifier(IClassifier):
             "classifiers": {},
         }
 
-        # Train each base classifier
+        # Train each base classifier with auto_remove_invalid parameter
         for clf_name, classifier in self.base_classifiers.items():
             logger.info(f"Training {clf_name}...")
             try:
-                clf_metrics = classifier.train(features, labels, validate=validate)
+                # Pass auto_remove_invalid to each base classifier
+                clf_metrics = classifier.train(
+                    features, 
+                    labels, 
+                    validate=validate,
+                    auto_remove_invalid=auto_remove_invalid
+                )
                 metrics["classifiers"][clf_name] = clf_metrics
 
                 # Store accuracy for weighting

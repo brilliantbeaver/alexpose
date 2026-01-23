@@ -56,7 +56,7 @@ The classifier uses 15 gait features extracted from pose estimation:
 
 ```python
 from ambient.classification.rf_classifier import RFGaitClassifier, RFClassifierConfig
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 # Configure classifier
 config = RFClassifierConfig(
@@ -286,7 +286,7 @@ Typical performance on GAVD dataset (with proper train/test split):
 
 ```python
 from ambient.pose.joint_angles import JointAngleSequence
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 from ambient.classification.rf_classifier import RFGaitClassifier
 
 # 1. Extract joint angles from pose estimation

@@ -61,7 +61,7 @@ The classification system supports 8 different algorithms, from simple baselines
 
 ```python
 from ambient.classification.xgboost_classifier import XGBoostGaitClassifier
-from ambient.classification.knn_classifier import GaitFeatureVector
+from ambient.classification.features import GaitFeatureVector
 
 # Create classifier
 classifier = XGBoostGaitClassifier()

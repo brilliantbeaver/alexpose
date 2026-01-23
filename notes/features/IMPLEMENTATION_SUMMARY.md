@@ -11,7 +11,7 @@ Successfully added `left_ankle_range` and `right_ankle_range` features to the KN
 ## Changes Completed
 
 ### ✅ Core Implementation
-**File**: `ambient/classification/knn_classifier.py`
+**File**: `ambient/classification/features.py` (refactored from `knn_classifier.py`)
 
 1. **GaitFeatureVector dataclass** (lines 75-81)
    - Added `left_ankle_range: float = 0.0`

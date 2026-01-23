@@ -367,9 +367,11 @@ class SequenceKeypointExtractor:
         Returns:
             List of KeypointSet objects (may contain None for failed frames)
             If filter_empty=True, only returns frames with >= min_keypoints
+            Returns empty list if validation fails or no frames could be processed
         """
         # Validate input
         if not self._validate_sequence_input(sequence_data, video_base_path):
+            logger.error("Sequence validation failed - returning empty array")
             return []
 
         # Initialize
@@ -384,21 +386,37 @@ class SequenceKeypointExtractor:
             sequence_data, video_base_path, model_path, verbose
         )
 
+        # Check if we got any results at all
+        if not keypoints_array:
+            logger.warning("No frames were processed - extraction completely failed")
+            return []
+
         # Apply filtering if requested
         if filter_empty:
-            return self._filter_keypoints(keypoints_array, min_keypoints, verbose)
+            filtered = self._filter_keypoints(keypoints_array, min_keypoints, verbose)
+            if not filtered:
+                logger.warning(
+                    f"All {len(keypoints_array)} frames were filtered out "
+                    f"(min_keypoints={min_keypoints}). Consider lowering min_keypoints threshold."
+                )
+            return filtered
 
         return keypoints_array
 
     def _validate_sequence_input(
         self, sequence_data: pd.DataFrame, video_base_path: Path
     ) -> bool:
-        """Validate sequence data and paths."""
+        """Validate sequence data and paths with detailed logging."""
         is_valid, message = self.validate_sequence_data_verbose(
             sequence_data, video_base_path
         )
         if not is_valid:
             logger.error(f"Sequence validation failed: {message}")
+            logger.error(f"  DataFrame shape: {sequence_data.shape if not sequence_data.empty else 'empty'}")
+            logger.error(f"  Video base path: {video_base_path}")
+            if not sequence_data.empty and 'url' in sequence_data.columns:
+                sample_url = sequence_data['url'].iloc[0] if len(sequence_data) > 0 else 'N/A'
+                logger.error(f"  Sample URL: {sample_url}")
         return is_valid
 
     def _process_all_frames(
@@ -466,17 +484,32 @@ class SequenceKeypointExtractor:
             # Get video path
             url = frame_row.get("url")
             if not url or pd.isna(url):
+                if idx == 0:  # Only log once to avoid spam
+                    logger.warning(f"Missing or invalid URL in frame data")
                 return None
 
             video_path = self._get_cached_video_path(url, video_base_path, video_cache)
             if video_path is None:
+                if idx == 0:  # Only log once
+                    logger.warning(f"Video file not found for URL: {url}")
                 return None
 
             # Extract keypoints
-            return self.extract_from_video_frame(video_path, frame_num, model_path)
+            keypoints = self.extract_from_video_frame(video_path, frame_num, model_path)
+            
+            # Log if extraction returned None or empty keypoints
+            if keypoints is None:
+                if idx == 0:
+                    logger.warning(f"Keypoint extraction returned None for frame {frame_num}")
+            elif len(keypoints.keypoints) == 0:
+                if idx == 0:
+                    logger.warning(f"Keypoint extraction returned 0 keypoints for frame {frame_num}")
+            
+            return keypoints
 
         except Exception as e:
-            logger.warning(f"Error processing frame {idx}: {e}")
+            if idx < 5:  # Only log first few errors to avoid spam
+                logger.warning(f"Error processing frame {idx} (frame_num={frame_row.get('frame_num', 'unknown')}): {e}")
             return None
 
     def _get_cached_video_path(
@@ -588,6 +621,13 @@ class SequenceKeypointExtractor:
         print(f"Keypoint Statistics: {sequence_name}")
         print(f"{'='*70}")
         print(f"Total frames: {stats['total']}")
+        
+        # Handle empty array case
+        if stats['total'] == 0:
+            print("  ⚠️  No frames to analyze")
+            print(f"{'='*70}\n")
+            return
+        
         print(f"  ✅ Valid detections: {stats['valid']} ({stats['success_rate']:.1f}%)")
         print(
             f"  ⚠️  Empty detections: {stats['empty']} ({stats['empty']/stats['total']*100:.1f}%)"

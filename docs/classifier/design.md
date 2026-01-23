@@ -52,11 +52,17 @@ This document describes the design and architecture of the KNN (K-Nearest Neighb
 ```
 ambient/classification/
 │
-├── knn_classifier.py
+├── features.py
 │   │
 │   ├── GaitFeatureVector
 │   │   ├── from_joint_angles()      # Factory method
 │   │   ├── to_array()                # Conversion
+│   │   ├── get_feature_names()       # Feature metadata
+│   │   ├── get_feature_summary()     # Human-readable summary
+│   │   └── validate()                # Data validation
+│   │
+├── knn_classifier.py
+│   │
 │   │   └── get_feature_names()       # Metadata
 │   │
 │   ├── KNNClassifierConfig
@@ -76,7 +82,7 @@ ambient/classification/
 ### SOLID Principles
 
 **Single Responsibility Principle**
-- `GaitFeatureVector`: Feature representation only
+- `GaitFeatureVector`: Feature representation and validation only
 - `KNNGaitClassifier`: Classification logic only
 - `KNNClassifierConfig`: Configuration only
 
