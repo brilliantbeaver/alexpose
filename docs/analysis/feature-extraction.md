@@ -495,7 +495,10 @@ from ambient.classification.llm_classifier import LLMClassifier
 features = extractor.extract_features(pose_sequence)
 
 # Use in classification
-classifier = LLMClassifier()
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+
+config = LLMClassifierConfig(model_name="gpt-4o-mini")
+classifier = LLMClassifier(config)
 classification = classifier.classify_gait({
     'features': features,
     'sequence_info': {...}

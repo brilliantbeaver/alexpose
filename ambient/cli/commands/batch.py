@@ -181,7 +181,13 @@ def _process_single_video(video, output_path, format, pose_estimator, frame_rate
         # Classification
         progress.update_stage("Classifying")
         if use_llm:
-            llm_classifier = LLMClassifier(config_manager)
+            from ambient.classification.llm_classifier import LLMClassifierConfig
+            
+            llm_config = LLMClassifierConfig(
+                model_name=llm_model,
+                provider="openai" if llm_model.startswith("gpt") else "gemini"
+            )
+            llm_classifier = LLMClassifier(config=llm_config)
             classification_result = asyncio.run(
                 llm_classifier.classify_gait(
                     gait_metrics=gait_metrics,

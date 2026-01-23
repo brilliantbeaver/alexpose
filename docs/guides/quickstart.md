@@ -76,7 +76,10 @@ from ambient.classification.llm_classifier import LLMClassifier
 
 # Initialize components
 analyzer = EnhancedGaitAnalyzer()
-classifier = LLMClassifier()
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+
+config = LLMClassifierConfig(model_name="gpt-4o-mini")
+classifier = LLMClassifier(config)
 
 # Analyze video
 video_path = "data/videos/sample_gait.mp4"
@@ -260,8 +263,9 @@ env | grep API_KEY
 
 # Test API connection
 python -c "
-from ambient.classification.llm_classifier import LLMClassifier
-classifier = LLMClassifier()
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+config = LLMClassifierConfig(model_name='gpt-4o-mini')
+classifier = LLMClassifier(config)
 print('LLM classifier ready')
 "
 ```

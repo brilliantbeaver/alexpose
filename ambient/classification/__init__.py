@@ -8,7 +8,7 @@ classification and condition identification.
 Author: AlexPose Team
 """
 
-from .llm_classifier import LLMClassifier
+from .llm_classifier import LLMClassifier, LLMClassifierConfig
 from .prompt_manager import PromptManager
 from .features import GaitFeatureVector
 from .knn_classifier import (
@@ -18,6 +18,7 @@ from .knn_classifier import (
 
 __all__ = [
     "LLMClassifier",
+    "LLMClassifierConfig",
     "PromptManager",
     "GaitFeatureVector",
     "KNNGaitClassifier",
