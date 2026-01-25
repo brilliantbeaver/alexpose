@@ -53,7 +53,7 @@ def test_extract_from_video_frame_dimensions():
     try:
         # Extract keypoints from frame
         print(f"2. Extracting keypoints from frame 5...")
-        extractor = SequenceKeypointExtractor(use_process_isolation=False)
+        extractor = SequenceKeypointExtractor()
         keypoint_set = extractor.extract_from_video_frame(video_path, frame_number=5)
         
         if keypoint_set is None:
@@ -100,7 +100,7 @@ def test_keypoint_dict_conversion():
     try:
         # Extract keypoints
         print(f"2. Extracting keypoints...")
-        extractor = SequenceKeypointExtractor(use_process_isolation=False)
+        extractor = SequenceKeypointExtractor()
         keypoint_set = extractor.extract_from_video_frame(video_path, frame_number=5)
         
         if keypoint_set is None:

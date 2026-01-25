@@ -244,8 +244,8 @@ youtube:
   quality: "best[height<=720]"  # Limit quality for processing efficiency
   format: "mp4"
   
-  # Cookies file for private videos (optional)
-  cookies_file: "config/yt_cookies.txt"
+  # Cookies file for private videos (optional, leave null if not needed)
+  cookies_file: null
 
 # Background Tasks Configuration
 background_tasks:

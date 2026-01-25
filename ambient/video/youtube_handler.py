@@ -70,10 +70,16 @@ class YouTubeHandler:
             'writesubtitles': False,
             'writeautomaticsub': False,
             'ignoreerrors': False,
-            'no_warnings': False,
+            'no_warnings': True,  # Suppress warnings including PO Token warnings
             'extractflat': False,
             'writethumbnail': False,
             'writewebvtt': False,
+            # Skip Android client formats that require PO Token
+            'extractor_args': {
+                'youtube': {
+                    'skip': ['android']
+                }
+            }
         }
         
         if not audio:

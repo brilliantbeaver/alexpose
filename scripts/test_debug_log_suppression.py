@@ -94,11 +94,10 @@ def test_sequence_extractor_clean_logs():
     print("\n3. Testing SequenceKeypointExtractor with Windows optimization...")
     
     try:
-        # Create extractor with Windows optimization (should use clean logging)
-        use_process_isolation = os.name == 'nt'  # Windows
-        extractor = SequenceKeypointExtractor(use_process_isolation=use_process_isolation)
+        # Create extractor
+        extractor = SequenceKeypointExtractor()
         
-        print(f"   ✅ SequenceKeypointExtractor created (process_isolation={use_process_isolation})")
+        print(f"   ✅ SequenceKeypointExtractor created")
         print("   ℹ️  Internal WindowsVideoFrameExtractor should use verbose=False")
         
         # Test with a dummy image

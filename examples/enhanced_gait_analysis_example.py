@@ -194,11 +194,14 @@ def demonstrate_enhanced_analysis():
     # Test LLM Classification (if available)
     print("\n5. Testing LLM Classification...")
     try:
-        classifier = LLMClassifier(default_model="gpt-4o-mini")
-        available_models = classifier.get_available_models()
+        from ambient.classification.llm_classifier import LLMClassifierConfig
+        
+        config = LLMClassifierConfig(model_name="gpt-4o-mini")
+        classifier = LLMClassifier(config)
+        available_models = classifier.get_supported_models()
         
         if available_models:
-            print(f"   Available models: {', '.join(available_models)}")
+            print(f"   Available models: {', '.join(available_models.get('openai', []))}")
             
             # Classify the gait data
             print("   Performing classification...")

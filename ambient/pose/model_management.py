@@ -12,6 +12,11 @@ import urllib.request
 from pathlib import Path
 from typing import Optional
 
+from loguru import logger
+
+from ambient.pose.suppress_warnings import suppress_stderr_fd
+from ambient.utils.path_utils import get_project_root
+
 try:
     import mediapipe as mp
     from mediapipe.tasks import python
@@ -45,8 +50,8 @@ class MediaPipeModelManager:
             models_dir: Directory to store models. Defaults to data/models
         """
         if models_dir is None:
-            # Default to data/models relative to project root
-            self.models_dir = Path.cwd() / "data" / "models"
+            project_root = get_project_root()
+            self.models_dir = project_root / "data" / "models"
         else:
             self.models_dir = Path(models_dir)
         
@@ -81,36 +86,35 @@ class MediaPipeModelManager:
         
         # Check if already downloaded
         if model_path.exists() and not force:
-            print(f"[OK] Model already exists: {model_path}")
+            logger.info(f"Model already exists: {model_path}")
             return str(model_path)
         
         # Use default URL if not provided
         if model_url is None:
             model_url = self.DEFAULT_MODEL_URL
         
-        print(f"📥 Downloading MediaPipe pose landmarker model...")
-        print(f"   URL: {model_url}")
-        print(f"   Destination: {model_path}")
+        logger.info(f"Downloading MediaPipe pose landmarker model from {model_url}")
+        logger.info(f"Destination: {model_path}")
         
         try:
-            print("⏳ Downloading... (this may take a moment)")
+            logger.debug("Downloading model file...")
             urllib.request.urlretrieve(model_url, model_path)
             
             # Verify download
             if model_path.exists():
                 size_mb = model_path.stat().st_size / (1024 * 1024)
-                print(f"[OK] Model downloaded successfully!")
-                print(f"[CHART] Size: {size_mb:.1f} MB")
+                logger.info(f"Model downloaded successfully: {size_mb:.1f} MB")
                 return str(model_path)
             else:
-                print(f"[ERROR] Download completed but file not found")
+                logger.error("Download completed but file not found")
                 return None
                 
         except Exception as e:
-            print(f"[ERROR] Download failed: {e}")
+            logger.error(f"Model download failed: {e}")
             # Clean up partial download
             if model_path.exists():
                 model_path.unlink()
+                logger.debug("Cleaned up partial download")
             return None
     
     def ensure_model_available(
@@ -172,9 +176,8 @@ class PoseLandmarkerFactory:
                 "MediaPipe is not available. Install it with: pip install mediapipe"
             )
         
-        try:
-            # Import warning suppression
-            from ambient.pose.suppress_warnings import suppress_stderr_fd
+        try:            
+            # logger.debug(f"Creating pose landmarker from {model_path}")
             
             # Create base options
             base_options = python.BaseOptions(model_asset_path=model_path)
@@ -194,9 +197,9 @@ class PoseLandmarkerFactory:
             with suppress_stderr_fd():
                 landmarker = vision.PoseLandmarker.create_from_options(options)
             
-            print(f"[OK] Pose Landmarker created from {model_path}")
+            # logger.info(f"Pose landmarker created successfully from {model_path}")
             return landmarker
             
         except Exception as e:
-            print(f"[ERROR] Failed to create Pose Landmarker: {e}")
+            logger.error(f"Failed to create pose landmarker: {e}")
             return None

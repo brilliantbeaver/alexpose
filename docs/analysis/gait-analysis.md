@@ -689,15 +689,16 @@ While the primary recommendation system uses rule-based algorithms, the AlexPose
 The `LLMClassifier` component provides AI-powered gait classification using large language models (OpenAI GPT or Google Gemini):
 
 ```python
-from ambient.classification.llm_classifier import LLMClassifier
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
 
 # Initialize LLM classifier
-llm_classifier = LLMClassifier(
+llm_config = LLMClassifierConfig(
     model_name="gpt-4o-mini",
     provider="openai",
     temperature=0.1,
     confidence_threshold=0.7
 )
+llm_classifier = LLMClassifier(llm_config)
 
 # Perform classification
 classification_result = llm_classifier.classify_gait(

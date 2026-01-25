@@ -46,7 +46,7 @@ def setup_logging(
     """
     # Remove default handler
     logger.remove()
-    
+
     # Create logs directory
     log_path = Path(log_dir)
     log_path.mkdir(parents=True, exist_ok=True)

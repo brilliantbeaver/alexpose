@@ -453,7 +453,7 @@ def pose_estimation_all_sequences(
     Returns:
         Dictionary mapping sequence IDs to results
     """
-    project_root = Path.cwd().parent
+    project_root = Path(__file__).parent.parent.parent
     all_results = {}
     
     print(f"[SEARCH] Exploring pose detection across {len(sequences)} sequences")
@@ -501,9 +501,10 @@ def pose_estimation_all_sequences(
 #----------------------------------------------------------------------
 
 if __name__ == "__main__":
-    from ambient.gavd import GAVDDataLoader
-    
-    project_root = Path.cwd()
+    from ambient.gavd import GAVDDataLoader    
+    from ambient.utils.path_utils import get_project_root
+
+    project_root = get_project_root()
     print(f"==> project_root: {project_root}")
 
     # 1. Load GAVD gait sequences

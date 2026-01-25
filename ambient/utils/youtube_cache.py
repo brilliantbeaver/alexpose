@@ -143,7 +143,12 @@ def _build_ydl_options(template: str, cfg: YtDlpConfig) -> Dict[str, Any]:
     if cfg.rate_limit:
         ydl_opts["ratelimit"] = cfg.rate_limit
     if cfg.cookies_file:
-        ydl_opts["cookiefile"] = str(cfg.cookies_file)
+        # Only use cookies file if it exists and is non-empty
+        cookies_path = Path(cfg.cookies_file)
+        if cookies_path.exists() and cookies_path.stat().st_size > 0:
+            ydl_opts["cookiefile"] = str(cfg.cookies_file)
+        else:
+            logger.debug("Cookies file not found or empty, skipping: {}", cfg.cookies_file)
     if cfg.ffmpeg_location:
         ydl_opts["ffmpeg_location"] = str(cfg.ffmpeg_location)
     # Apply extractor args; default to android client to avoid SABR for web client
@@ -224,7 +229,7 @@ def _prepare_download_list(
         if existing is None:
             to_download.append(url)
             continue
-        logger.info("Already cached (skipping): {}", existing)
+        # logger.info("Already cached (skipping): {}", existing)
         results["skipped"] += 1
         results["details"][url] = {"status": "skipped_existing", "path": str(existing)}
     return to_download
@@ -328,7 +333,7 @@ def cache_youtube_videos_from_rows(
     rows: List[Dict[str, Any]],
     output_dir: Path | str = "data/youtube",
     *,
-    cookies_file: Optional[Path | str] = "config/yt_cookies.txt",
+    cookies_file: Optional[Path | str] = None,
     ffmpeg_location: Optional[Path | str] = None,
     format_selector: Optional[str] = None,
     filename_scheme: str = "id",
