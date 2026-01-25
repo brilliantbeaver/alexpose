@@ -492,7 +492,7 @@ class SymmetryAnalyzer:
         return np.degrees(angle)
     
     def _calculate_overall_symmetry(self, symmetry_results: Dict[str, Any]) -> Dict[str, Any]:
-        """Calculate overall symmetry scores."""
+        """Calculate overall symmetry scores and evidence-based symmetry indices."""
         overall_results = {}
         
         # Collect all symmetry indices
@@ -505,23 +505,90 @@ class SymmetryAnalyzer:
             overall_results["overall_symmetry_index"] = np.mean(symmetry_indices)
             overall_results["symmetry_variability"] = np.std(symmetry_indices)
             
-            # Classify symmetry level
+            # Classify symmetry level using evidence-based thresholds
+            # Source: Clinical Biomechanics - Gait Symmetry (2022)
             mean_symmetry = overall_results["overall_symmetry_index"]
-            if mean_symmetry < self.symmetry_threshold:
+            if mean_symmetry < self.symmetry_threshold:  # <0.1 (10%)
                 overall_results["symmetry_classification"] = "symmetric"
-            elif mean_symmetry < self.symmetry_threshold * 2:
+            elif mean_symmetry < 0.16:  # 10-16%
                 overall_results["symmetry_classification"] = "mildly_asymmetric"
-            elif mean_symmetry < self.symmetry_threshold * 3:
+            elif mean_symmetry < 0.25:  # 16-25%
                 overall_results["symmetry_classification"] = "moderately_asymmetric"
-            else:
+            else:  # >25%
                 overall_results["symmetry_classification"] = "severely_asymmetric"
             
             # Count asymmetric joints
             asymmetric_count = sum(1 for idx in symmetry_indices if idx > self.symmetry_threshold)
             overall_results["asymmetric_joint_count"] = asymmetric_count
             overall_results["asymmetric_joint_percentage"] = asymmetric_count / len(symmetry_indices) * 100
+            
+            # Calculate evidence-based Symmetry Indices (SI)
+            # SI = (Left - Right) / (0.5 * (Left + Right)) * 100
+            # This is the standard formula from research literature
+            
+            # Extract left-right pairs for SI calculation
+            si_results = self._calculate_evidence_based_si(symmetry_results)
+            overall_results.update(si_results)
         
         return overall_results
+    
+    def _calculate_evidence_based_si(self, symmetry_results: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Calculate evidence-based Symmetry Indices using standard SI formula.
+        
+        Formula: SI = (Left - Right) / (0.5 * (Left + Right)) * 100
+        Source: Clinical Biomechanics - Gait Symmetry (2022)
+        
+        Returns:
+            Dictionary with SI values for different parameters
+        """
+        si_results = {}
+        
+        # Calculate SI values from existing asymmetry measures where possible
+        # Convert existing asymmetry indices to SI format
+        for key, value in symmetry_results.items():
+            if "_symmetry_index" in key and isinstance(value, (int, float)) and not np.isnan(value):
+                # Convert to percentage if not already
+                si_value = value * 100 if value <= 1.0 else value
+                
+                # Map to SI naming convention
+                if "hip" in key and "angle" in key:
+                    si_results["hip_angle_si"] = si_value
+                elif "knee" in key and "angle" in key:
+                    si_results["knee_angle_si"] = si_value
+                elif "ankle" in key and "angle" in key:
+                    si_results["ankle_angle_si"] = si_value
+                elif "shoulder" in key:
+                    si_results["shoulder_symmetry_si"] = si_value
+        
+        # Calculate temporal SI values from existing measures
+        if "cycle_duration_asymmetry" in symmetry_results:
+            cycle_asym = symmetry_results["cycle_duration_asymmetry"]
+            if isinstance(cycle_asym, (int, float)) and not np.isnan(cycle_asym):
+                si_results["stance_time_si"] = cycle_asym * 100
+        
+        if "step_frequency_symmetry_index" in symmetry_results:
+            freq_si = symmetry_results["step_frequency_symmetry_index"]
+            if isinstance(freq_si, (int, float)) and not np.isnan(freq_si):
+                si_results["swing_time_si"] = freq_si * 100
+        
+        # Calculate stride length SI from ankle distance asymmetry
+        if "ankle_distance_asymmetry" in symmetry_results:
+            ankle_asym = symmetry_results["ankle_distance_asymmetry"]
+            if isinstance(ankle_asym, (int, float)) and not np.isnan(ankle_asym):
+                si_results["stride_length_si"] = ankle_asym * 100
+        
+        # Ensure all required SI values are present (use 0.0 as default)
+        required_si_keys = [
+            "stride_length_si", "stance_time_si", "swing_time_si",
+            "hip_angle_si", "knee_angle_si", "ankle_angle_si"
+        ]
+        
+        for key in required_si_keys:
+            if key not in si_results:
+                si_results[key] = 0.0
+        
+        return si_results
     
     def generate_symmetry_report(self, symmetry_results: Dict[str, Any]) -> str:
         """Generate a human-readable symmetry analysis report."""

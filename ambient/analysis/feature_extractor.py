@@ -334,7 +334,7 @@ class FeatureExtractor:
         return np.degrees(angle)
     
     def _extract_temporal_features(self, keypoints: np.ndarray) -> Dict[str, Any]:
-        """Extract temporal features."""
+        """Extract temporal features including spatiotemporal parameters."""
         features = {}
         
         num_frames = keypoints.shape[0]
@@ -360,6 +360,16 @@ class FeatureExtractor:
                 
                 # Calculate cadence (steps per minute) - approximate
                 features["estimated_cadence"] = features["dominant_frequency"] * 60 * 2  # *2 for both legs
+                
+                # Enhanced spatiotemporal parameters
+                # Walking speed estimation (pixels per second, needs calibration for m/s)
+                total_displacement = np.sum(com_movement)
+                features["walking_speed_pixels_per_sec"] = total_displacement / duration
+                
+                # Stride length estimation (needs calibration for meters)
+                if features["estimated_cadence"] > 0:
+                    steps_per_second = features["estimated_cadence"] / 60
+                    features["estimated_stride_length_pixels"] = features["walking_speed_pixels_per_sec"] / steps_per_second
         
         except Exception as e:
             logger.warning(f"Temporal feature extraction failed: {e}")
