@@ -114,6 +114,20 @@ class GaitFeatureVector:
     knee_angle_si: float = 0.0  # Symmetry Index for knee angles
     ankle_angle_si: float = 0.0  # Symmetry Index for ankle angles
     
+    # ========== KINEMATIC FEATURES ==========
+    # Evidence: Velocity, acceleration, and jerk provide insights into movement quality
+    # Source: Journal of Biomechanics - Kinematic Analysis (2024)
+    
+    velocity_mean: float = 0.0  # Mean velocity across all keypoints (pixels/s)
+    velocity_std: float = 0.0   # Standard deviation of velocity
+    velocity_max: float = 0.0   # Maximum velocity observed
+    velocity_min: float = 0.0   # Minimum velocity observed
+    acceleration_mean: float = 0.0  # Mean acceleration (pixels/s²)
+    acceleration_std: float = 0.0   # Standard deviation of acceleration
+    acceleration_max: float = 0.0   # Maximum acceleration observed
+    jerk_mean: float = 0.0      # Mean jerk (rate of change of acceleration)
+    jerk_std: float = 0.0       # Standard deviation of jerk
+    
     # ========== VARIABILITY METRICS ==========
     # Evidence: Stride variability indicates gait stability and fall risk
     # Source: Frontiers in Aging - Gait Variability (2024)
@@ -140,6 +154,7 @@ class GaitFeatureVector:
         "spatiotemporal": True,
         "temporal_phases": True,
         "symmetry_indices": True,
+        "kinematic": True,  # New kinematic features group
         "variability": True,
         "postural": True,
     })
@@ -166,7 +181,7 @@ class GaitFeatureVector:
             feature_groups: Optional list of feature group names to include.
                           If None, includes all enabled groups.
                           Options: "core_angles", "spatiotemporal", "temporal_phases",
-                                  "symmetry_indices", "variability", "postural"
+                                  "symmetry_indices", "kinematic", "variability", "postural"
         
         Returns:
             NumPy array of feature values
@@ -241,6 +256,20 @@ class GaitFeatureVector:
                 self.ankle_angle_si,
             ])
         
+        # Kinematic features
+        if "kinematic" in groups_to_include:
+            features.extend([
+                self.velocity_mean,
+                self.velocity_std,
+                self.velocity_max,
+                self.velocity_min,
+                self.acceleration_mean,
+                self.acceleration_std,
+                self.acceleration_max,
+                self.jerk_mean,
+                self.jerk_std,
+            ])
+        
         # Variability metrics
         if "variability" in groups_to_include:
             features.extend([
@@ -274,7 +303,7 @@ class GaitFeatureVector:
         if feature_groups is None:
             feature_groups = [
                 "core_angles", "spatiotemporal", "temporal_phases",
-                "symmetry_indices", "variability", "postural"
+                "symmetry_indices", "kinematic", "variability", "postural"
             ]
         
         names = []
@@ -328,6 +357,20 @@ class GaitFeatureVector:
                 "ankle_angle_si",
             ])
         
+        # Kinematic features
+        if "kinematic" in feature_groups:
+            names.extend([
+                "velocity_mean",
+                "velocity_std",
+                "velocity_max",
+                "velocity_min",
+                "acceleration_mean",
+                "acceleration_std",
+                "acceleration_max",
+                "jerk_mean",
+                "jerk_std",
+            ])
+        
         # Variability
         if "variability" in feature_groups:
             names.extend([
@@ -358,6 +401,7 @@ class GaitFeatureVector:
             "spatiotemporal": cls.get_feature_names(["spatiotemporal"]),
             "temporal_phases": cls.get_feature_names(["temporal_phases"]),
             "symmetry_indices": cls.get_feature_names(["symmetry_indices"]),
+            "kinematic": cls.get_feature_names(["kinematic"]),
             "variability": cls.get_feature_names(["variability"]),
             "postural": cls.get_feature_names(["postural"]),
         }
@@ -614,6 +658,18 @@ class GaitFeatureVector:
             if ankle_angle_si == 0.0 and left_ankle_mean > 0 and right_ankle_mean > 0:
                 ankle_angle_si = abs(left_ankle_mean - right_ankle_mean) / ((left_ankle_mean + right_ankle_mean) / 2) * 100
             
+            # ========== KINEMATIC FEATURES ==========
+            # From FeatureExtractor kinematic features
+            velocity_mean = safe_extract(features_dict, "velocity_mean")
+            velocity_std = safe_extract(features_dict, "velocity_std")
+            velocity_max = safe_extract(features_dict, "velocity_max")
+            velocity_min = safe_extract(features_dict, "velocity_min")
+            acceleration_mean = safe_extract(features_dict, "acceleration_mean")
+            acceleration_std = safe_extract(features_dict, "acceleration_std")
+            acceleration_max = safe_extract(features_dict, "acceleration_max")
+            jerk_mean = safe_extract(features_dict, "jerk_mean")
+            jerk_std = safe_extract(features_dict, "jerk_std")
+            
             # ========== VARIABILITY METRICS ==========
             # From TemporalAnalyzer timing analysis
             stride_time_cv = safe_extract(timing_analysis, "step_regularity_cv", 0.0)
@@ -674,6 +730,16 @@ class GaitFeatureVector:
                 hip_angle_si=hip_angle_si,
                 knee_angle_si=knee_angle_si,
                 ankle_angle_si=ankle_angle_si,
+                # Kinematic features
+                velocity_mean=velocity_mean,
+                velocity_std=velocity_std,
+                velocity_max=velocity_max,
+                velocity_min=velocity_min,
+                acceleration_mean=acceleration_mean,
+                acceleration_std=acceleration_std,
+                acceleration_max=acceleration_max,
+                jerk_mean=jerk_mean,
+                jerk_std=jerk_std,
                 # Variability
                 stride_time_cv=stride_time_cv,
                 step_length_cv=step_length_cv,
