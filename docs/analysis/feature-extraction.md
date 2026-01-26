@@ -53,31 +53,96 @@ extractor = FeatureExtractor(
 
 ## Feature Categories and UI Integration
 
-### 1. Kinematic Features
+### 1. Kinematic Features (9 features)
 
-**Description**: Motion-based features including velocities, accelerations, and movement smoothness.
+**Description**: Motion-based features including velocities, accelerations, and movement smoothness. These features capture the quality and dynamics of movement, providing insights into motor control, coordination, and neurological function.
+
+**Evidence Base**: Journal of Biomechanics (2024) - Kinematic analysis distinguishes normal from pathological gait patterns. Velocity consistency and jerk measures are validated indicators of movement quality and coordination.
 
 **Features Extracted**:
-- `velocity_mean`: Average movement velocity across all keypoints
-- `velocity_std`: Standard deviation of velocities
-- `velocity_max`: Maximum velocity observed
-- `velocity_min`: Minimum velocity observed
-- `acceleration_mean`: Average acceleration magnitude
-- `acceleration_std`: Standard deviation of accelerations
-- `acceleration_max`: Maximum acceleration observed
-- `jerk_mean`: Average jerk (rate of acceleration change)
-- `jerk_std`: Standard deviation of jerk
+
+#### Velocity Features (4 features)
+- `velocity_mean`: Average movement velocity across all keypoints (pixels/s)
+  - **Normal Range**: 50-150 pixels/s
+  - **Clinical Significance**: Overall movement speed and activity level
+  
+- `velocity_std`: Standard deviation of velocities (pixels/s)
+  - **Normal Range**: 20-60 pixels/s
+  - **Clinical Significance**: Movement consistency and smoothness
+  
+- `velocity_max`: Maximum velocity observed (pixels/s)
+  - **Normal Range**: 150-300 pixels/s
+  - **Clinical Significance**: Peak movement capacity during swing phase
+  
+- `velocity_min`: Minimum velocity observed (pixels/s)
+  - **Normal Range**: 0-20 pixels/s
+  - **Clinical Significance**: Baseline movement during stance phase
+
+#### Acceleration Features (4 features)
+- `acceleration_mean`: Average acceleration magnitude (pixels/s²)
+  - **Normal Range**: 10-50 pixels/s²
+  - **Clinical Significance**: Force generation and movement transitions
+  
+- `acceleration_std`: Standard deviation of accelerations (pixels/s²)
+  - **Normal Range**: 5-25 pixels/s²
+  - **Clinical Significance**: Consistency of force application
+  
+- `acceleration_max`: Maximum acceleration observed (pixels/s²)
+  - **Normal Range**: 50-150 pixels/s²
+  - **Clinical Significance**: Peak force generation capacity
+
+#### Jerk Features (2 features)
+- `jerk_mean`: Average jerk - rate of acceleration change (pixels/s³)
+  - **Normal Range**: 5-30 pixels/s³
+  - **Clinical Significance**: Movement smoothness and coordination quality
+  - **Interpretation**: Higher values indicate jerky, poorly coordinated movement
+  
+- `jerk_std`: Standard deviation of jerk (pixels/s³)
+  - **Normal Range**: 2-15 pixels/s³
+  - **Clinical Significance**: Consistency of movement coordination
 
 **UI Integration**:
 - **Movement Quality Card**: Displays velocity consistency and movement smoothness
+  - Velocity CV (Coefficient of Variation) = velocity_std / velocity_mean
+  - Good: CV < 0.3, Moderate: CV 0.3-0.6, Poor: CV > 0.6
 - **Color Coding**: Green (good), Yellow (moderate), Red (poor) based on thresholds
 - **Interactive Tooltips**: Detailed explanations of clinical significance
 - **Real-time Updates**: Features update automatically when sequence changes
+- **Smoothness Indicator**: Based on jerk_mean values
+  - Smooth: jerk_mean < 20, Moderate: 20-40, Jerky: > 40
 
-**Clinical Significance**:
-- Velocity consistency indicates movement smoothness
-- High acceleration variability may suggest motor control issues
-- Jerk measures reflect movement coordination quality
+**Clinical Applications**:
+
+**Parkinson's Disease**:
+- Reduced velocity_mean (bradykinesia)
+- Increased velocity_std (movement variability)
+- Elevated jerk_mean (reduced smoothness)
+
+**Stroke Recovery**:
+- Asymmetric velocity patterns between sides
+- High velocity_cv indicating poor motor control
+- Elevated jerk on affected side
+
+**Cerebellar Ataxia**:
+- High velocity_std (uncoordinated movement)
+- Elevated velocity_cv (inconsistent control)
+- Very high jerk_mean (>40) indicating poor coordination
+
+**Movement Quality Assessment**:
+```python
+def assess_movement_quality(features):
+    velocity_cv = features['velocity_std'] / features['velocity_mean']
+    jerk_threshold = 30
+    
+    if velocity_cv < 0.3 and features['jerk_mean'] < jerk_threshold:
+        return "excellent"
+    elif velocity_cv < 0.5 and features['jerk_mean'] < jerk_threshold * 1.5:
+        return "good"
+    elif velocity_cv < 0.7 and features['jerk_mean'] < jerk_threshold * 2:
+        return "moderate"
+    else:
+        return "poor"
+```
 
 **UI Display Example**:
 ```
@@ -89,8 +154,15 @@ Movement Quality Card:
 │ Smoothness:  [Smooth  ]         │
 │                                 │
 │ Velocity CV: 0.25               │
+│ Jerk Mean:   18.3 pixels/s³     │
+│                                 │
+│ Interpretation:                 │
+│ • Smooth, coordinated movement  │
+│ • Good motor control            │
 └─────────────────────────────────┘
 ```
+
+**See Also**: [Gait Analysis Tutorial - Kinematic Features](../guides/gait-analysis-tutorial.md#36-kinematic-features-9-features---new) for comprehensive details on calculation methods, clinical interpretation, and research applications.
 
 ### 2. Joint Angle Features
 

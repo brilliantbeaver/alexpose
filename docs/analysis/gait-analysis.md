@@ -80,7 +80,14 @@ graph LR
 - **Purpose**: Comprehensive analyzer with advanced clinical features
 - **Integration**: Used by `PoseAnalysisServiceAPI` for web interface
 - **Features**:
-  - 60+ comprehensive gait features
+  - 60+ comprehensive gait features including:
+    - **Kinematic Features (9)**: Velocity, acceleration, and jerk measurements
+    - **Joint Angle Features (15)**: Hip, knee, ankle angles and ranges
+    - **Spatiotemporal Features (4)**: Speed, cadence, stride length, step width
+    - **Temporal Phase Features (4)**: Stance/swing timing and ratios
+    - **Symmetry Indices (6)**: Evidence-based bilateral comparisons
+    - **Variability Metrics (3)**: Stride-to-stride consistency measures
+    - **Postural Features (2)**: Trunk lean and pelvic tilt
   - Temporal analysis and gait cycle detection
   - Bilateral symmetry assessment
   - Clinical assessment with confidence scoring
@@ -223,7 +230,13 @@ The analysis returns a structured JSON object with comprehensive gait assessment
   "features": {
     "velocity_mean": 0.996,
     "velocity_std": 2.109,
+    "velocity_max": 5.234,
+    "velocity_min": 0.123,
     "acceleration_mean": 0.475,
+    "acceleration_std": 1.234,
+    "acceleration_max": 3.456,
+    "jerk_mean": 15.678,
+    "jerk_std": 8.234,
     "left_knee_mean": 145.2,
     "ankle_distance_asymmetry": 0.15,
     "com_stability_index": 0.12

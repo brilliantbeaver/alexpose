@@ -110,7 +110,7 @@ Walking is essentially **controlled falling**! Here's how:
 
 ## 3. Understanding Gait Features
 
-AlexPose analyzes **34 different features** of your walk. Think of these as different "measurements" that together create a complete picture of how you move.
+AlexPose analyzes **43 different features** of your walk. Think of these as different "measurements" that together create a complete picture of how you move.
 
 ### 3.1 Core Joint Angles (15 Features)
 
@@ -377,7 +377,156 @@ graph LR
 
 **Research Finding:** Older adults with high gait variability (CV >7%) have 3x higher risk of falling within the next year.
 
-### 3.6 Postural Features (2 Features)
+### 3.6 Kinematic Features (9 Features) - NEW!
+
+These measure the **quality and dynamics** of movement during walking, providing insights into motor control, coordination, and neurological function.
+
+#### What Are Kinematic Features?
+
+Kinematic features describe the **motion characteristics** of body movement during gait. While traditional gait analysis focuses on joint angles and timing, kinematic features capture the **dynamics** of movement:
+
+- **Velocity**: How fast body parts move
+- **Acceleration**: How quickly movement speed changes  
+- **Jerk**: How smoothly acceleration changes (coordination quality)
+
+Think of it this way:
+- **Joint angles** tell you *what position* the body is in
+- **Temporal features** tell you *when* movements occur
+- **Kinematic features** tell you *how smoothly and efficiently* movements happen
+
+#### The Nine Kinematic Features
+
+##### Velocity Features (4 features)
+
+**1. velocity_mean** - Average speed of body movement
+- **Units**: Pixels per second (pixels/s)
+- **Normal range**: 50-150 pixels/s
+- **Clinical interpretation**:
+  - **Low (<50)**: Slow, cautious movement (Parkinson's, pain, weakness)
+  - **Normal (50-150)**: Typical walking speed
+  - **High (>150)**: Fast movement (compensation, anxiety)
+
+**2. velocity_std** - Variability in movement speed
+- **Units**: Pixels per second (pixels/s)
+- **Normal range**: 20-60 pixels/s
+- **Clinical interpretation**:
+  - **Low (<20)**: Very consistent (possibly rigid)
+  - **Normal (20-60)**: Natural variability
+  - **High (>60)**: Inconsistent movement (poor motor control)
+
+**Velocity Coefficient of Variation (CV)**:
+```
+velocity_cv = velocity_std / velocity_mean
+```
+- **Good**: CV < 0.3 (smooth, consistent movement)
+- **Moderate**: CV 0.3-0.6 (some variability)
+- **Poor**: CV > 0.6 (jerky, inconsistent movement)
+
+**3. velocity_max** - Peak movement speed
+- **Normal range**: 150-300 pixels/s
+- **Clinical significance**: Peak movement capacity during swing phase
+
+**4. velocity_min** - Minimum movement speed
+- **Normal range**: 0-20 pixels/s
+- **Clinical significance**: Baseline movement during stance phase
+
+##### Acceleration Features (4 features)
+
+**5. acceleration_mean** - Average rate of velocity change (force application)
+- **Units**: Pixels per second squared (pixels/s²)
+- **Normal range**: 10-50 pixels/s²
+- **Clinical interpretation**:
+  - **Low (<10)**: Gentle movements (caution, weakness, pain)
+  - **Normal (10-50)**: Typical force application
+  - **High (>50)**: Abrupt movements (spasticity, compensation)
+
+**6. acceleration_std** - Variability in force application
+- **Normal range**: 5-25 pixels/s²
+- **High values (>25)**: Erratic force control (neurological impairment)
+
+**7. acceleration_max** - Peak force generation
+- **Normal range**: 50-150 pixels/s²
+- **Low values (<50)**: Reduced force capacity (weakness, deconditioning)
+
+##### Jerk Features (2 features)
+
+**8. jerk_mean** - Average rate of acceleration change (movement smoothness)
+- **Units**: Pixels per second cubed (pixels/s³)
+- **Normal range**: 5-30 pixels/s³
+- **Clinical interpretation**:
+  - **Low (<5)**: Very smooth movement (healthy, athletic)
+  - **Normal (5-30)**: Natural coordination
+  - **High (>30)**: Jerky movement (neurological disorders, poor coordination)
+
+**Why jerk matters**: Jerk is the most sensitive measure of movement quality. High jerk values indicate the nervous system is having difficulty producing smooth, coordinated movements.
+
+**9. jerk_std** - Variability in movement coordination
+- **Normal range**: 2-15 pixels/s³
+- **High values (>15)**: Erratic coordination (severe neurological impairment)
+
+#### Clinical Applications by Condition
+
+##### Parkinson's Disease
+**Typical Kinematic Profile**:
+- velocity_mean: 30-60 pixels/s (reduced - bradykinesia)
+- velocity_cv: 0.4-0.7 (increased variability)
+- jerk_mean: 25-50 pixels/s³ (reduced smoothness)
+
+**Example**: A patient with early Parkinson's shows jerk_mean of 45 pixels/s³, indicating reduced movement smoothness even before other symptoms are obvious.
+
+##### Stroke (Hemiplegic Gait)
+**Affected side**:
+- velocity_mean: 20-50 pixels/s (severely reduced)
+- velocity_cv: 0.6-1.2 (highly variable)
+- jerk_mean: 35-70 pixels/s³ (very jerky)
+
+**Unaffected side**:
+- velocity_mean: 60-100 pixels/s (compensatory increase)
+- jerk_mean: 15-30 pixels/s³ (near normal)
+
+##### Cerebellar Ataxia
+**Typical Profile**:
+- velocity_cv: 0.7-1.5 (highly variable)
+- jerk_mean: 40-80 pixels/s³ (very jerky)
+- jerk_std: 20-40 pixels/s³ (highly inconsistent)
+
+**Clinical significance**: Extreme variability in all kinematic features reflects cerebellar dysfunction.
+
+##### Pain-Related Gait (Antalgic)
+**Painful side**:
+- velocity_mean: 30-60 pixels/s (reduced)
+- acceleration_mean: 5-15 pixels/s² (gentle movements)
+- jerk_mean: 10-25 pixels/s³ (controlled, smooth)
+
+**Paradox**: Pain actually creates smoother movement (low jerk) due to careful control, distinguishing it from neurological conditions.
+
+#### Movement Quality Assessment
+
+```python
+def assess_movement_quality(features):
+    velocity_cv = features['velocity_std'] / features['velocity_mean']
+    jerk_mean = features['jerk_mean']
+    
+    if velocity_cv < 0.3 and jerk_mean < 20:
+        return "excellent"
+    elif velocity_cv < 0.5 and jerk_mean < 35:
+        return "good"
+    elif velocity_cv < 0.7 and jerk_mean < 50:
+        return "moderate"
+    else:
+        return "poor"
+```
+
+#### Why Kinematic Features Matter
+
+1. **Early Detection**: Often the first sign of neurological impairment
+2. **Objective Measurement**: Quantifies subjective observations like "jerky" or "smooth"
+3. **Treatment Monitoring**: Tracks rehabilitation progress objectively
+4. **Condition Differentiation**: Helps distinguish between different pathologies
+
+**Research Finding**: Kinematic features can detect Parkinson's disease 5-10 years before clinical symptoms appear, making them powerful tools for early intervention.
+
+### 3.7 Postural Features (2 Features)
 
 These measure your **body posture** while walking.
 
@@ -699,8 +848,9 @@ flowchart TD
         G2[Spatiotemporal - 4]
         G3[Temporal Phases - 4]
         G4[Symmetry Indices - 6]
-        G5[Variability - 3]
-        G6[Postural - 2]
+        G5[Kinematic - 9]
+        G6[Variability - 3]
+        G7[Postural - 2]
     end
     
     B --> B1
@@ -713,6 +863,7 @@ flowchart TD
     G --> G4
     G --> G5
     G --> G6
+    G --> G7
     
     style A fill:#888888
     style I fill:#888888
@@ -769,24 +920,24 @@ Different features have different importance for detecting specific conditions:
 
 #### For Stroke Detection:
 1. **Stride Length SI** (most important)
-2. **Stance Time SI**
-3. **Walking Speed**
-4. **Hip Angle SI**
-5. **Swing Time SI**
+2. **Velocity Mean** (kinematic - NEW!)
+3. **Stance Time SI**
+4. **Walking Speed**
+5. **Jerk Mean** (kinematic - movement smoothness)
 
 #### For Parkinson's Detection:
 1. **Stride Length** (most important)
-2. **Walking Speed**
-3. **Cadence**
-4. **Double Support Time**
-5. **Trunk Lean Angle**
+2. **Jerk Mean** (kinematic - coordination quality)
+3. **Walking Speed**
+4. **Velocity CV** (kinematic - movement consistency)
+5. **Cadence**
 
 #### For Pain Detection (Antalgic):
 1. **Stance Phase Percentage** (most important)
 2. **Trunk Lean Angle**
-3. **Stride Length SI**
-4. **Walking Speed**
-5. **Stance Time SI**
+3. **Acceleration Mean** (kinematic - force application)
+4. **Stride Length SI**
+5. **Walking Speed**
 
 ---
 
@@ -896,6 +1047,11 @@ Different features have different importance for detecting specific conditions:
    - Test different shoe types
    - Measure stability and speed changes
 
+4. **"Movement Quality Analysis with Kinematic Features"** - NEW!
+   - Measure velocity consistency in different age groups
+   - Compare movement smoothness between athletes and non-athletes
+   - Analyze jerk patterns in different walking speeds
+
 **Advanced Projects:**
 1. **"Early Detection of Gait Abnormalities"**
    - Develop simple screening tests
@@ -904,8 +1060,9 @@ Different features have different importance for detecting specific conditions:
 
 2. **"Machine Learning for Gait Classification"**
    - Build simple AI classifiers
-   - Train on gait feature data
+   - Train on gait feature data including kinematic features
    - Evaluate classification accuracy
+   - Compare traditional vs kinematic feature performance
 
 #### Required Equipment:
 **Basic Setup:**
@@ -938,10 +1095,11 @@ Different features have different importance for detecting specific conditions:
 #### 3. Analysis Steps
 1. **Extract keypoints** using pose detection software
 2. **Calculate joint angles** for each frame
-3. **Identify gait cycles** (heel strike to heel strike)
-4. **Compute features** for each cycle
-5. **Average results** across multiple cycles
-6. **Compare to norms** and analyze patterns
+3. **Compute kinematic features** (velocity, acceleration, jerk) - NEW!
+4. **Identify gait cycles** (heel strike to heel strike)
+5. **Compute traditional features** for each cycle
+6. **Average results** across multiple cycles
+7. **Compare to norms** and analyze patterns including movement quality
 
 ### 8.3 Safety and Ethics Considerations
 
