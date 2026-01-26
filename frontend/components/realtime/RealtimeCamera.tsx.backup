@@ -1,0 +1,706 @@
+/**
+ * Realtime Camera Component
+ * 
+ * Handles webcam access, video display, and pose overlay rendering
+ * with optimized performance for real-time processing.
+ */
+
+'use client';
+
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import {
+    Camera,
+    CameraOff,
+    AlertCircle,
+    Eye,
+    EyeOff,
+    Maximize,
+    Minimize,
+    Maximize2,
+    Minimize2
+} from 'lucide-react';
+
+interface PoseKeypoint {
+    x: number;
+    y: number;
+    confidence: number;
+    id: number;
+}
+
+interface PoseResult {
+    keypoints: PoseKeypoint[];
+    confidence_scores: number[];
+    processing_time_ms: number;
+    frame_id: number;
+    timestamp: number;
+    estimator_info: any;
+}
+
+interface RealtimeCameraProps {
+    isActive: boolean;
+    currentPose?: PoseResult | null;
+    onFrame?: (frameData: string) => void;
+    config?: {
+        show_keypoints?: boolean;
+        show_skeleton?: boolean;
+        confidence_threshold?: number;
+        processing_mode?: string;
+    };
+    onPermissionChange?: (permission: 'granted' | 'denied' | 'prompt') => void;
+}
+
+export function RealtimeCamera({
+    isActive,
+    currentPose,
+    onFrame,
+    config = {},
+    onPermissionChange
+}: RealtimeCameraProps) {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const animationFrameRef = useRef<number>();
+    const lastFrameTimeRef = useRef<number>(0);
+
+    const [cameraError, setCameraError] = useState<string | null>(null);
+    const [isInitializing, setIsInitializing] = useState(false);
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    const [videoSize, setVideoSize] = useState({ width: 640, height: 480 });
+    const [showOverlay, setShowOverlay] = useState(true);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isMaximized, setIsMaximized] = useState(false);
+
+    // Configuration with defaults
+    const {
+        show_keypoints = true,
+        show_skeleton = true,
+        confidence_threshold = 0.5,
+        processing_mode = 'balanced'
+    } = config;
+
+    // Target FPS for frame capture
+    const targetFPS = processing_mode === 'fast' ? 30 : processing_mode === 'accurate' ? 15 : 20;
+    const frameInterval = 1000 / targetFPS;
+
+    const stopFrameCapture = useCallback(() => {
+        console.log('Stopping frame capture loop...');
+        if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+            animationFrameRef.current = undefined;
+        }
+    }, []);
+
+    const clearOverlay = useCallback(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+
+        if (canvas && ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }, []);
+
+    const stopCamera = useCallback(() => {
+        console.log('Stopping camera...');
+        stopFrameCapture();
+
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+
+        if (videoRef.current) {
+            videoRef.current.srcObject = null;
+        }
+
+        setIsCameraReady(false);
+        clearOverlay();
+    }, [stopFrameCapture, clearOverlay]);
+
+    const captureAndSendFrame = useCallback(() => {
+        if (!videoRef.current || !onFrame) return;
+
+        try {
+            // Create temporary canvas for frame capture
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+
+            if (!tempCtx) return;
+
+            tempCanvas.width = videoRef.current.videoWidth;
+            tempCanvas.height = videoRef.current.videoHeight;
+
+            // Draw current video frame
+            tempCtx.drawImage(videoRef.current, 0, 0);
+
+            // Convert to base64 and send
+            const frameData = tempCanvas.toDataURL('image/jpeg', 0.8);
+            onFrame(frameData);
+
+        } catch (error) {
+            console.error('Frame capture failed:', error);
+        }
+    }, [onFrame]);
+
+    const startFrameCapture = useCallback(() => {
+        console.log('Starting frame capture loop...');
+        let frameCount = 0;
+
+        const captureFrame = (timestamp: number) => {
+            if (!isActive || !videoRef.current || !onFrame) {
+                console.log('Frame capture stopped:', { isActive, hasVideo: !!videoRef.current, hasOnFrame: !!onFrame });
+                return;
+            }
+
+            // Throttle frame capture based on target FPS
+            if (timestamp - lastFrameTimeRef.current >= frameInterval) {
+                captureAndSendFrame();
+                lastFrameTimeRef.current = timestamp;
+                frameCount++;
+
+                // Log every 30 frames (roughly once per second)
+                if (frameCount % 30 === 0) {
+                    console.log(`Captured ${frameCount} frames`);
+                }
+            }
+
+            animationFrameRef.current = requestAnimationFrame(captureFrame);
+        };
+
+        animationFrameRef.current = requestAnimationFrame(captureFrame);
+    }, [isActive, onFrame, frameInterval, captureAndSendFrame]);
+
+    const drawKeypoints = useCallback((ctx: CanvasRenderingContext2D, keypoints: PoseKeypoint[]) => {
+        keypoints.forEach(kp => {
+            const radius = 4;
+            const alpha = Math.min(kp.confidence, 1.0);
+
+            // Color based on confidence
+            const hue = kp.confidence * 120; // Green (120) for high confidence, red (0) for low
+            ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`;
+            ctx.strokeStyle = `hsla(${hue}, 100%, 30%, ${alpha})`;
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.arc(kp.x, kp.y, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        });
+    }, []);
+
+    const drawSkeleton = useCallback((ctx: CanvasRenderingContext2D, keypoints: PoseKeypoint[]) => {
+        // MediaPipe Pose connections - Official from MediaPipe documentation
+        // https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker
+        const connections = [
+            // Face
+            [0, 1], [1, 2], [2, 3], [3, 7],  // Left eye to left ear
+            [0, 4], [4, 5], [5, 6], [6, 8],  // Right eye to right ear
+            [9, 10],  // Mouth
+
+            // Torso
+            [11, 12],  // Shoulders
+            [11, 23], [12, 24],  // Shoulders to hips
+            [23, 24],  // Hips
+
+            // Left arm
+            [11, 13], [13, 15],  // Shoulder to elbow to wrist
+            [15, 17], [15, 19], [15, 21],  // Wrist to hand landmarks
+            [17, 19],  // Pinky to index
+
+            // Right arm
+            [12, 14], [14, 16],  // Shoulder to elbow to wrist
+            [16, 18], [16, 20], [16, 22],  // Wrist to hand landmarks
+            [18, 20],  // Pinky to index
+
+            // Left leg
+            [23, 25], [25, 27],  // Hip to knee to ankle
+            [27, 29], [27, 31],  // Ankle to heel and foot index
+            [29, 31],  // Heel to foot index
+
+            // Right leg
+            [24, 26], [26, 28],  // Hip to knee to ankle
+            [28, 30], [28, 32],  // Ankle to heel and foot index
+            [30, 32]  // Heel to foot index
+        ];
+
+        const keypointMap = new Map(keypoints.map(kp => [kp.id, kp]));
+
+        // Draw connections with varying colors based on body part
+        connections.forEach(([startId, endId]) => {
+            const startKp = keypointMap.get(startId);
+            const endKp = keypointMap.get(endId);
+
+            if (startKp && endKp &&
+                startKp.confidence >= confidence_threshold &&
+                endKp.confidence >= confidence_threshold) {
+
+                // Color code by body part
+                let color = 'rgba(0, 255, 0, 0.7)';  // Default green
+
+                // Face connections - yellow
+                if (startId <= 10 && endId <= 10) {
+                    color = 'rgba(255, 255, 0, 0.7)';
+                }
+                // Left side - blue
+                else if ((startId % 2 === 1 && startId >= 11) || (endId % 2 === 1 && endId >= 11)) {
+                    color = 'rgba(0, 150, 255, 0.7)';
+                }
+                // Right side - red
+                else if ((startId % 2 === 0 && startId >= 12) || (endId % 2 === 0 && endId >= 12)) {
+                    color = 'rgba(255, 100, 100, 0.7)';
+                }
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.moveTo(startKp.x, startKp.y);
+                ctx.lineTo(endKp.x, endKp.y);
+                ctx.stroke();
+            }
+        });
+    }, [confidence_threshold]);
+
+    const drawPoseOverlay = useCallback((pose: PoseResult) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+
+        if (!canvas || !ctx) return;
+
+        // Clear previous overlay
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Check if pose has keypoints
+        if (!pose.keypoints || pose.keypoints.length === 0) return;
+
+        // Filter keypoints by confidence
+        const validKeypoints = pose.keypoints.filter(
+            kp => kp.confidence >= confidence_threshold
+        );
+
+        if (validKeypoints.length === 0) return;
+
+        // Draw skeleton connections first (so they appear behind keypoints)
+        if (show_skeleton) {
+            drawSkeleton(ctx, validKeypoints);
+        }
+
+        // Draw keypoints
+        if (show_keypoints) {
+            drawKeypoints(ctx, validKeypoints);
+        }
+    }, [confidence_threshold, show_skeleton, show_keypoints, drawSkeleton, drawKeypoints]);
+
+    const toggleOverlay = useCallback(() => {
+        setShowOverlay(prev => {
+            if (prev) {
+                clearOverlay();
+            }
+            return !prev;
+        });
+    }, [clearOverlay]);
+
+    // Initialize camera when component becomes active
+    useEffect(() => {
+        if (isActive) {
+            initializeCamera();
+        } else {
+            stopCamera();
+        }
+
+        return () => {
+            stopCamera();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isActive, stopCamera]);
+
+    // Start frame capture loop when camera is ready
+    useEffect(() => {
+        if (isActive && isCameraReady && onFrame) {
+            console.log('Starting frame capture...');
+            startFrameCapture();
+        } else {
+            stopFrameCapture();
+        }
+
+        return () => {
+            stopFrameCapture();
+        };
+    }, [isActive, isCameraReady, onFrame, startFrameCapture, stopFrameCapture]);
+
+    // Update canvas overlay when pose data changes
+    useEffect(() => {
+        if (currentPose && showOverlay) {
+            drawPoseOverlay(currentPose);
+        } else {
+            clearOverlay();
+        }
+    }, [currentPose, showOverlay, drawPoseOverlay, clearOverlay]);
+
+    // Handle fullscreen change events
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
+    }, []);
+
+    const toggleFullscreen = async () => {
+        if (!containerRef.current) return;
+
+        try {
+            if (!document.fullscreenElement) {
+                await containerRef.current.requestFullscreen();
+            } else {
+                await document.exitFullscreen();
+            }
+        } catch (error) {
+            console.error('Fullscreen toggle failed:', error);
+        }
+    };
+
+    const toggleMaximize = () => {
+        setIsMaximized(!isMaximized);
+    };
+
+    const initializeCamera = async () => {
+        console.log('Initializing camera...');
+        setIsInitializing(true);
+        setCameraError(null);
+        setIsCameraReady(false);
+
+        try {
+            // Request camera access
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280, max: 1920 },
+                    height: { ideal: 720, max: 1080 },
+                    frameRate: { ideal: 30, max: 60 },
+                    facingMode: 'user'
+                },
+                audio: false
+            });
+
+            console.log('Camera stream obtained:', stream);
+            streamRef.current = stream;
+
+            // Set up video element
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+                videoRef.current.onloadedmetadata = () => {
+                    console.log('Video metadata loaded');
+                    if (videoRef.current) {
+                        const { videoWidth, videoHeight } = videoRef.current;
+                        setVideoSize({ width: videoWidth, height: videoHeight });
+
+                        // Update canvas size
+                        if (canvasRef.current) {
+                            canvasRef.current.width = videoWidth;
+                            canvasRef.current.height = videoHeight;
+                        }
+
+                        // Mark camera as ready
+                        setIsCameraReady(true);
+                        console.log('Camera ready, size:', videoWidth, 'x', videoHeight);
+                    }
+                };
+
+                await videoRef.current.play();
+                console.log('Video playing');
+            }
+
+            onPermissionChange?.('granted');
+
+        } catch (error) {
+            console.error('Camera initialization failed:', error);
+
+            let errorMessage = 'Failed to access camera';
+            if (error instanceof Error) {
+                if (error.name === 'NotAllowedError') {
+                    errorMessage = 'Camera access denied. Please allow camera permissions.';
+                    onPermissionChange?.('denied');
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage = 'No camera found. Please connect a camera device.';
+                } else if (error.name === 'NotReadableError') {
+                    errorMessage = 'Camera is already in use by another application.';
+                }
+            }
+
+            setCameraError(errorMessage);
+            setIsCameraReady(false);
+        } finally {
+            setIsInitializing(false);
+        }
+    };
+
+    const drawPoseOverlay = useCallback((pose: PoseResult) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+
+        if (!canvas || !ctx) return;
+
+        // Clear previous overlay
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Check if pose has keypoints
+        if (!pose.keypoints || pose.keypoints.length === 0) return;
+
+        // Filter keypoints by confidence
+        const validKeypoints = pose.keypoints.filter(
+            kp => kp.confidence >= confidence_threshold
+        );
+
+        if (validKeypoints.length === 0) return;
+
+        // Draw skeleton connections first (so they appear behind keypoints)
+        if (show_skeleton) {
+            drawSkeleton(ctx, validKeypoints);
+        }
+
+        // Draw keypoints
+        if (show_keypoints) {
+            drawKeypoints(ctx, validKeypoints);
+        }
+    }, [confidence_threshold, show_skeleton, show_keypoints]);
+
+    const drawKeypoints = useCallback((ctx: CanvasRenderingContext2D, keypoints: PoseKeypoint[]) => {
+        keypoints.forEach(kp => {
+            const radius = 4;
+            const alpha = Math.min(kp.confidence, 1.0);
+
+            // Color based on confidence
+            const hue = kp.confidence * 120; // Green (120) for high confidence, red (0) for low
+            ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`;
+            ctx.strokeStyle = `hsla(${hue}, 100%, 30%, ${alpha})`;
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.arc(kp.x, kp.y, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        });
+    }, []);
+
+    const drawSkeleton = useCallback((ctx: CanvasRenderingContext2D, keypoints: PoseKeypoint[]) => {
+        // MediaPipe Pose connections - Official from MediaPipe documentation
+        // https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker
+        const connections = [
+            // Face
+            [0, 1], [1, 2], [2, 3], [3, 7],  // Left eye to left ear
+            [0, 4], [4, 5], [5, 6], [6, 8],  // Right eye to right ear
+            [9, 10],  // Mouth
+
+            // Torso
+            [11, 12],  // Shoulders
+            [11, 23], [12, 24],  // Shoulders to hips
+            [23, 24],  // Hips
+
+            // Left arm
+            [11, 13], [13, 15],  // Shoulder to elbow to wrist
+            [15, 17], [15, 19], [15, 21],  // Wrist to hand landmarks
+            [17, 19],  // Pinky to index
+
+            // Right arm
+            [12, 14], [14, 16],  // Shoulder to elbow to wrist
+            [16, 18], [16, 20], [16, 22],  // Wrist to hand landmarks
+            [18, 20],  // Pinky to index
+
+            // Left leg
+            [23, 25], [25, 27],  // Hip to knee to ankle
+            [27, 29], [27, 31],  // Ankle to heel and foot index
+            [29, 31],  // Heel to foot index
+
+            // Right leg
+            [24, 26], [26, 28],  // Hip to knee to ankle
+            [28, 30], [28, 32],  // Ankle to heel and foot index
+            [30, 32]  // Heel to foot index
+        ];
+
+        const keypointMap = new Map(keypoints.map(kp => [kp.id, kp]));
+
+        // Draw connections with varying colors based on body part
+        connections.forEach(([startId, endId]) => {
+            const startKp = keypointMap.get(startId);
+            const endKp = keypointMap.get(endId);
+
+            if (startKp && endKp &&
+                startKp.confidence >= confidence_threshold &&
+                endKp.confidence >= confidence_threshold) {
+
+                // Color code by body part
+                let color = 'rgba(0, 255, 0, 0.7)';  // Default green
+
+                // Face connections - yellow
+                if (startId <= 10 && endId <= 10) {
+                    color = 'rgba(255, 255, 0, 0.7)';
+                }
+                // Left side - blue
+                else if ((startId % 2 === 1 && startId >= 11) || (endId % 2 === 1 && endId >= 11)) {
+                    color = 'rgba(0, 150, 255, 0.7)';
+                }
+                // Right side - red
+                else if ((startId % 2 === 0 && startId >= 12) || (endId % 2 === 0 && endId >= 12)) {
+                    color = 'rgba(255, 100, 100, 0.7)';
+                }
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.moveTo(startKp.x, startKp.y);
+                ctx.lineTo(endKp.x, endKp.y);
+                ctx.stroke();
+            }
+        });
+    }, [confidence_threshold]);
+
+    const toggleOverlay = useCallback(() => {
+        setShowOverlay(prev => {
+            if (prev) {
+                clearOverlay();
+            }
+            return !prev;
+        });
+    }, [clearOverlay]);
+
+    if (cameraError) {
+        return (
+            <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center">
+                <Alert className="max-w-md">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{cameraError}</AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
+
+    return (
+        <div
+            ref={containerRef}
+            className={`relative ${isMaximized ? 'fixed inset-0 z-50 bg-black p-4' : ''}`}
+        >
+            {/* Video Container */}
+            <div className={`relative bg-black overflow-hidden ${isMaximized
+                ? 'w-full h-full'
+                : 'aspect-video rounded-lg'
+                }`}>
+                {/* Video Element */}
+                <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover"
+                    playsInline
+                    muted
+                />
+
+                {/* Pose Overlay Canvas */}
+                <canvas
+                    ref={canvasRef}
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    style={{ display: showOverlay ? 'block' : 'none' }}
+                />
+
+                {/* Loading Overlay */}
+                {isInitializing && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <div className="text-white text-center">
+                            <Camera className="w-8 h-8 mx-auto mb-2 animate-pulse" />
+                            <p>Initializing camera...</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Status Overlay */}
+                <div className="absolute top-4 left-4 flex items-center gap-2">
+                    {isActive ? (
+                        <Badge variant="default" className="bg-green-500">
+                            <Camera className="w-3 h-3 mr-1" />
+                            Live
+                        </Badge>
+                    ) : (
+                        <Badge variant="secondary">
+                            <CameraOff className="w-3 h-3 mr-1" />
+                            Inactive
+                        </Badge>
+                    )}
+                </div>
+
+                {/* Controls Overlay */}
+                <div className="absolute top-4 right-4 flex items-center gap-2">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={toggleOverlay}
+                        className="bg-black/50 hover:bg-black/70 text-white border-white/20"
+                        title={showOverlay ? "Hide overlay" : "Show overlay"}
+                    >
+                        {showOverlay ? (
+                            <Eye className="w-4 h-4" />
+                        ) : (
+                            <EyeOff className="w-4 h-4" />
+                        )}
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={toggleMaximize}
+                        className="bg-black/50 hover:bg-black/70 text-white border-white/20"
+                        title={isMaximized ? "Exit maximize" : "Maximize"}
+                    >
+                        {isMaximized ? (
+                            <Minimize className="w-4 h-4" />
+                        ) : (
+                            <Maximize className="w-4 h-4" />
+                        )}
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={toggleFullscreen}
+                        className="bg-black/50 hover:bg-black/70 text-white border-white/20"
+                        title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                    >
+                        {isFullscreen ? (
+                            <Minimize2 className="w-4 h-4" />
+                        ) : (
+                            <Maximize2 className="w-4 h-4" />
+                        )}
+                    </Button>
+                </div>
+
+                {/* Pose Info Overlay */}
+                {currentPose && showOverlay && currentPose.keypoints && currentPose.keypoints.length > 0 && (
+                    <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-2 rounded text-sm">
+                        <div>Keypoints: {currentPose.keypoints.length}</div>
+                        <div>Confidence: {currentPose.confidence_scores && currentPose.confidence_scores.length > 0
+                            ? (currentPose.confidence_scores.reduce((a, b) => a + b, 0) / currentPose.confidence_scores.length * 100).toFixed(1)
+                            : '0.0'}%</div>
+                        <div>Processing: {currentPose.processing_time_ms.toFixed(1)}ms</div>
+                    </div>
+                )}
+            </div>
+
+            {/* Camera Info - Hidden in maximized mode */}
+            {!isMaximized && (
+                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                    <div>
+                        Resolution: {videoSize.width} × {videoSize.height}
+                    </div>
+                    <div>
+                        Target FPS: {targetFPS}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
