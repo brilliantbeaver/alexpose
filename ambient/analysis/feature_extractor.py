@@ -30,7 +30,11 @@ class FeatureExtractor:
         self,
         keypoint_format: str = "COCO_17",
         fps: float = 30.0,
-        smoothing_window: int = 5
+        smoothing_window: int = 5,
+        extract_extended_features: bool = True,
+        include_joint_statistics: bool = True,
+        include_stability_features: bool = True,
+        include_advanced_temporal: bool = True
     ):
         """
         Initialize feature extractor.
@@ -39,15 +43,27 @@ class FeatureExtractor:
             keypoint_format: Format of keypoints (COCO_17, BODY_25, etc.)
             fps: Frames per second of the video
             smoothing_window: Window size for smoothing calculations
+            extract_extended_features: Whether to extract extended feature set
+            include_joint_statistics: Whether to include joint angle std/max/min
+            include_stability_features: Whether to include stability/balance features
+            include_advanced_temporal: Whether to include advanced temporal features
         """
         self.keypoint_format = keypoint_format
         self.fps = fps
         self.smoothing_window = smoothing_window
+        self.extract_extended_features = extract_extended_features
+        self.include_joint_statistics = include_joint_statistics
+        self.include_stability_features = include_stability_features
+        self.include_advanced_temporal = include_advanced_temporal
         
         # Define keypoint mappings for different formats
         self.keypoint_mappings = self._get_keypoint_mappings()
         
         logger.info(f"Feature extractor initialized for {keypoint_format} format")
+        logger.debug(f"Extended features: {extract_extended_features}, "
+                    f"Joint stats: {include_joint_statistics}, "
+                    f"Stability: {include_stability_features}, "
+                    f"Advanced temporal: {include_advanced_temporal}")
     
     def _get_keypoint_mappings(self) -> Dict[str, Dict[str, int]]:
         """Get keypoint mappings for different formats."""
@@ -193,7 +209,7 @@ class FeatureExtractor:
         return features
     
     def _extract_joint_angle_features(self, keypoints: np.ndarray) -> Dict[str, Any]:
-        """Extract joint angle features."""
+        """Extract joint angle features with optional extended statistics."""
         features = {}
         mapping = self.keypoint_mappings.get(self.keypoint_format, {})
         
@@ -213,11 +229,15 @@ class FeatureExtractor:
             # Statistical features for each angle
             for angle_name, angle_values in angles.items():
                 if len(angle_values) > 0:
+                    # Core statistics (always included)
                     features[f"{angle_name}_mean"] = np.mean(angle_values)
-                    features[f"{angle_name}_std"] = np.std(angle_values)
                     features[f"{angle_name}_range"] = np.max(angle_values) - np.min(angle_values)
-                    features[f"{angle_name}_max"] = np.max(angle_values)
-                    features[f"{angle_name}_min"] = np.min(angle_values)
+                    
+                    # Extended statistics (optional)
+                    if self.include_joint_statistics:
+                        features[f"{angle_name}_std"] = np.std(angle_values)
+                        features[f"{angle_name}_max"] = np.max(angle_values)
+                        features[f"{angle_name}_min"] = np.min(angle_values)
         
         except Exception as e:
             logger.warning(f"Joint angle extraction failed: {e}")
@@ -334,45 +354,48 @@ class FeatureExtractor:
         return np.degrees(angle)
     
     def _extract_temporal_features(self, keypoints: np.ndarray) -> Dict[str, Any]:
-        """Extract temporal features including spatiotemporal parameters."""
+        """Extract temporal features including spatiotemporal parameters with optional advanced features."""
         features = {}
         
         num_frames = keypoints.shape[0]
         duration = num_frames / self.fps
         
+        # Core temporal features (always included)
         features["sequence_length"] = num_frames
         features["duration_seconds"] = duration
         features["fps"] = self.fps
         
-        # Calculate movement frequency using FFT
-        try:
-            # Use center of mass movement for frequency analysis
-            center_of_mass = np.mean(keypoints[:, :, :2], axis=1)  # Average across keypoints
-            com_movement = np.linalg.norm(np.diff(center_of_mass, axis=0), axis=1)
+        # Advanced temporal features (optional)
+        if self.include_advanced_temporal:
+            # Calculate movement frequency using FFT
+            try:
+                # Use center of mass movement for frequency analysis
+                center_of_mass = np.mean(keypoints[:, :, :2], axis=1)  # Average across keypoints
+                com_movement = np.linalg.norm(np.diff(center_of_mass, axis=0), axis=1)
+                
+                if len(com_movement) > 10:  # Need sufficient data for FFT
+                    fft = np.fft.fft(com_movement)
+                    freqs = np.fft.fftfreq(len(com_movement), 1/self.fps)
+                    
+                    # Find dominant frequency
+                    dominant_freq_idx = np.argmax(np.abs(fft[1:len(fft)//2])) + 1
+                    features["dominant_frequency"] = abs(freqs[dominant_freq_idx])
+                    
+                    # Calculate cadence (steps per minute) - approximate
+                    features["estimated_cadence"] = features["dominant_frequency"] * 60 * 2  # *2 for both legs
+                    
+                    # Enhanced spatiotemporal parameters
+                    # Walking speed estimation (pixels per second, needs calibration for m/s)
+                    total_displacement = np.sum(com_movement)
+                    features["walking_speed_pixels_per_sec"] = total_displacement / duration
+                    
+                    # Stride length estimation (needs calibration for meters)
+                    if features["estimated_cadence"] > 0:
+                        steps_per_second = features["estimated_cadence"] / 60
+                        features["estimated_stride_length_pixels"] = features["walking_speed_pixels_per_sec"] / steps_per_second
             
-            if len(com_movement) > 10:  # Need sufficient data for FFT
-                fft = np.fft.fft(com_movement)
-                freqs = np.fft.fftfreq(len(com_movement), 1/self.fps)
-                
-                # Find dominant frequency
-                dominant_freq_idx = np.argmax(np.abs(fft[1:len(fft)//2])) + 1
-                features["dominant_frequency"] = abs(freqs[dominant_freq_idx])
-                
-                # Calculate cadence (steps per minute) - approximate
-                features["estimated_cadence"] = features["dominant_frequency"] * 60 * 2  # *2 for both legs
-                
-                # Enhanced spatiotemporal parameters
-                # Walking speed estimation (pixels per second, needs calibration for m/s)
-                total_displacement = np.sum(com_movement)
-                features["walking_speed_pixels_per_sec"] = total_displacement / duration
-                
-                # Stride length estimation (needs calibration for meters)
-                if features["estimated_cadence"] > 0:
-                    steps_per_second = features["estimated_cadence"] / 60
-                    features["estimated_stride_length_pixels"] = features["walking_speed_pixels_per_sec"] / steps_per_second
-        
-        except Exception as e:
-            logger.warning(f"Temporal feature extraction failed: {e}")
+            except Exception as e:
+                logger.warning(f"Advanced temporal feature extraction failed: {e}")
         
         return features
     
@@ -461,8 +484,11 @@ class FeatureExtractor:
         return features
     
     def _extract_stability_features(self, keypoints: np.ndarray) -> Dict[str, Any]:
-        """Extract stability and balance features."""
+        """Extract stability and balance features with optional advanced analysis."""
         features = {}
+        
+        if not self.include_stability_features:
+            return features
         
         try:
             # Calculate center of mass
@@ -480,6 +506,8 @@ class FeatureExtractor:
             if np.mean(com_speeds) < 5.0:  # Threshold for stationary
                 sway_area = self._calculate_sway_area(center_of_mass)
                 features["postural_sway_area"] = sway_area
+            else:
+                features["postural_sway_area"] = 0.0
         
         except Exception as e:
             logger.warning(f"Stability feature extraction failed: {e}")

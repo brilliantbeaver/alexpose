@@ -37,6 +37,161 @@ from loguru import logger
 
 
 @dataclass
+class FeatureExtractionConfig:
+    """
+    Configuration class for feature extraction with systematic control over feature groups.
+    
+    This class follows OOP principles by encapsulating feature extraction configuration
+    and providing clear interfaces for different extraction modes.
+    """
+    
+    # Core feature groups (always available)
+    extract_core_angles: bool = True
+    extract_spatiotemporal: bool = True
+    extract_temporal_phases: bool = True
+    extract_kinematic: bool = True
+    extract_symmetry_indices: bool = True
+    extract_variability: bool = True
+    extract_postural: bool = True
+    
+    # Extended feature groups (optional)
+    extract_extended_angles: bool = False
+    extract_temporal_extended: bool = False
+    extract_stability: bool = False
+    extract_stride_extended: bool = False
+    extract_symmetry_extended: bool = False
+    extract_kinematic_extended: bool = False
+    
+    @classmethod
+    def legacy_mode(cls) -> "FeatureExtractionConfig":
+        """Create configuration for legacy 15-feature extraction."""
+        return cls(
+            extract_core_angles=True,
+            extract_spatiotemporal=False,
+            extract_temporal_phases=False,
+            extract_kinematic=False,
+            extract_symmetry_indices=False,
+            extract_variability=False,
+            extract_postural=False,
+            extract_extended_angles=False,
+            extract_temporal_extended=False,
+            extract_stability=False,
+            extract_stride_extended=False,
+            extract_symmetry_extended=False,
+            extract_kinematic_extended=False
+        )
+    
+    @classmethod
+    def standard_mode(cls) -> "FeatureExtractionConfig":
+        """Create configuration for standard 34-feature extraction."""
+        return cls(
+            extract_core_angles=True,
+            extract_spatiotemporal=True,
+            extract_temporal_phases=True,
+            extract_kinematic=True,
+            extract_symmetry_indices=True,
+            extract_variability=True,
+            extract_postural=True,
+            extract_extended_angles=False,
+            extract_temporal_extended=False,
+            extract_stability=False,
+            extract_stride_extended=False,
+            extract_symmetry_extended=False,
+            extract_kinematic_extended=False
+        )
+    
+    @classmethod
+    def comprehensive_mode(cls) -> "FeatureExtractionConfig":
+        """Create configuration for comprehensive 94+ feature extraction."""
+        return cls(
+            extract_core_angles=True,
+            extract_spatiotemporal=True,
+            extract_temporal_phases=True,
+            extract_kinematic=True,
+            extract_symmetry_indices=True,
+            extract_variability=True,
+            extract_postural=True,
+            extract_extended_angles=True,
+            extract_temporal_extended=True,
+            extract_stability=True,
+            extract_stride_extended=True,
+            extract_symmetry_extended=True,
+            extract_kinematic_extended=True
+        )
+    
+    @classmethod
+    def clinical_mode(cls) -> "FeatureExtractionConfig":
+        """Create configuration optimized for clinical analysis."""
+        return cls(
+            extract_core_angles=True,
+            extract_spatiotemporal=True,
+            extract_temporal_phases=True,
+            extract_kinematic=True,
+            extract_symmetry_indices=True,
+            extract_variability=True,
+            extract_postural=True,
+            extract_extended_angles=False,
+            extract_temporal_extended=True,
+            extract_stability=True,
+            extract_stride_extended=False,
+            extract_symmetry_extended=True,
+            extract_kinematic_extended=False
+        )
+    
+    def get_enabled_groups(self) -> List[str]:
+        """Get list of enabled feature groups."""
+        groups = []
+        if self.extract_core_angles:
+            groups.append("core_angles")
+        if self.extract_spatiotemporal:
+            groups.append("spatiotemporal")
+        if self.extract_temporal_phases:
+            groups.append("temporal_phases")
+        if self.extract_kinematic:
+            groups.append("kinematic")
+        if self.extract_symmetry_indices:
+            groups.append("symmetry_indices")
+        if self.extract_variability:
+            groups.append("variability")
+        if self.extract_postural:
+            groups.append("postural")
+        if self.extract_extended_angles:
+            groups.append("extended_angles")
+        if self.extract_temporal_extended:
+            groups.append("temporal_extended")
+        if self.extract_stability:
+            groups.append("stability")
+        if self.extract_stride_extended:
+            groups.append("stride_extended")
+        if self.extract_symmetry_extended:
+            groups.append("symmetry_extended")
+        if self.extract_kinematic_extended:
+            groups.append("kinematic_extended")
+        return groups
+    
+    def get_expected_feature_count(self) -> int:
+        """Get expected number of features for this configuration."""
+        feature_counts = {
+            "core_angles": 15,
+            "spatiotemporal": 4,
+            "temporal_phases": 4,
+            "kinematic": 9,
+            "symmetry_indices": 6,
+            "variability": 3,
+            "postural": 2,
+            "extended_angles": 18,
+            "temporal_extended": 12,
+            "stability": 4,
+            "stride_extended": 5,
+            "symmetry_extended": 10,
+            "kinematic_extended": 2
+        }
+        
+        enabled_groups = self.get_enabled_groups()
+        return sum(feature_counts.get(group, 0) for group in enabled_groups)
+
+
+@dataclass
 class GaitFeatureVector:
     """
     Comprehensive feature vector for gait classification.
@@ -143,6 +298,74 @@ class GaitFeatureVector:
     trunk_lean_angle: float = 0.0  # Forward/lateral trunk lean (degrees)
     pelvic_tilt_mean: float = 0.0  # Mean pelvic tilt (degrees)
     
+    # ========== MISSING JOINT ANGLE FEATURES ==========
+    # Standard deviation, max, min for each joint angle
+    left_hip_std: float = 0.0
+    left_hip_max: float = 0.0
+    left_hip_min: float = 0.0
+    left_knee_std: float = 0.0
+    left_knee_max: float = 0.0
+    left_knee_min: float = 0.0
+    left_ankle_std: float = 0.0
+    left_ankle_max: float = 0.0
+    left_ankle_min: float = 0.0
+    right_hip_std: float = 0.0
+    right_hip_max: float = 0.0
+    right_hip_min: float = 0.0
+    right_knee_std: float = 0.0
+    right_knee_max: float = 0.0
+    right_knee_min: float = 0.0
+    right_ankle_std: float = 0.0
+    right_ankle_max: float = 0.0
+    right_ankle_min: float = 0.0
+    
+    # ========== MISSING TEMPORAL FEATURES ==========
+    sequence_length: float = 0.0  # Number of frames
+    duration_seconds: float = 0.0  # Sequence duration
+    dominant_frequency: float = 0.0  # Dominant movement frequency
+    fps: float = 30.0  # Frames per second
+    
+    # ========== MISSING STABILITY FEATURES ==========
+    com_movement_mean: float = 0.0  # Center of mass movement
+    com_movement_std: float = 0.0  # COM movement variability
+    com_stability_index: float = 0.0  # Stability index
+    postural_sway_area: float = 0.0  # Postural sway area
+    
+    # ========== MISSING STRIDE FEATURES ==========
+    step_width_std: float = 0.0  # Step width variability
+    step_width_range: float = 0.0  # Step width range
+    left_ankle_total_distance: float = 0.0  # Left ankle total movement
+    right_ankle_total_distance: float = 0.0  # Right ankle total movement
+    ankle_distance_asymmetry: float = 0.0  # Ankle movement asymmetry
+    
+    # ========== MISSING SYMMETRY FEATURES ==========
+    shoulder_symmetry_index: float = 0.0
+    elbow_symmetry_index: float = 0.0
+    wrist_symmetry_index: float = 0.0
+    hip_symmetry_index: float = 0.0
+    knee_symmetry_index: float = 0.0
+    ankle_symmetry_index: float = 0.0
+    
+    # ========== MISSING ADVANCED TEMPORAL FEATURES ==========
+    cycle_count: float = 0.0  # Number of gait cycles detected
+    left_cycle_duration_mean: float = 0.0  # Left cycle duration
+    right_cycle_duration_mean: float = 0.0  # Right cycle duration
+    cycle_duration_asymmetry: float = 0.0  # Cycle duration asymmetry
+    double_support_duration_mean: float = 0.0  # Double support duration
+    stance_duration_mean: float = 0.0  # Stance phase duration
+    swing_duration_mean: float = 0.0  # Swing phase duration
+    phase_asymmetry: float = 0.0  # Phase asymmetry
+    
+    # ========== MISSING ADVANCED SYMMETRY FEATURES ==========
+    overall_symmetry_index: float = 0.0  # Overall symmetry score
+    positional_symmetry_score: float = 0.0  # Positional symmetry
+    movement_symmetry_score: float = 0.0  # Movement symmetry
+    temporal_symmetry_score: float = 0.0  # Temporal symmetry
+    
+    # ========== MISSING ENHANCED KINEMATIC FEATURES ==========
+    walking_speed_pixels_per_sec: float = 0.0  # Walking speed in pixels
+    estimated_stride_length_pixels: float = 0.0  # Stride length in pixels
+    
     # ========== METADATA ==========
     sample_id: str = ""
     condition_label: str = ""
@@ -157,6 +380,12 @@ class GaitFeatureVector:
         "kinematic": True,  # New kinematic features group
         "variability": True,
         "postural": True,
+        "extended_angles": True,  # NEW: Extended joint angle features
+        "temporal_extended": True,  # NEW: Extended temporal features
+        "stability": True,  # NEW: Stability and balance features
+        "stride_extended": True,  # NEW: Extended stride features
+        "symmetry_extended": True,  # NEW: Extended symmetry features
+        "kinematic_extended": True,  # NEW: Extended kinematic features
     })
 
     def __post_init__(self):
@@ -285,6 +514,87 @@ class GaitFeatureVector:
                 self.pelvic_tilt_mean,
             ])
         
+        # Extended joint angle features
+        if "extended_angles" in groups_to_include:
+            features.extend([
+                self.left_hip_std,
+                self.left_hip_max,
+                self.left_hip_min,
+                self.left_knee_std,
+                self.left_knee_max,
+                self.left_knee_min,
+                self.left_ankle_std,
+                self.left_ankle_max,
+                self.left_ankle_min,
+                self.right_hip_std,
+                self.right_hip_max,
+                self.right_hip_min,
+                self.right_knee_std,
+                self.right_knee_max,
+                self.right_knee_min,
+                self.right_ankle_std,
+                self.right_ankle_max,
+                self.right_ankle_min,
+            ])
+        
+        # Extended temporal features
+        if "temporal_extended" in groups_to_include:
+            features.extend([
+                self.sequence_length,
+                self.duration_seconds,
+                self.dominant_frequency,
+                self.fps,
+                self.cycle_count,
+                self.left_cycle_duration_mean,
+                self.right_cycle_duration_mean,
+                self.cycle_duration_asymmetry,
+                self.double_support_duration_mean,
+                self.stance_duration_mean,
+                self.swing_duration_mean,
+                self.phase_asymmetry,
+            ])
+        
+        # Stability features
+        if "stability" in groups_to_include:
+            features.extend([
+                self.com_movement_mean,
+                self.com_movement_std,
+                self.com_stability_index,
+                self.postural_sway_area,
+            ])
+        
+        # Extended stride features
+        if "stride_extended" in groups_to_include:
+            features.extend([
+                self.step_width_std,
+                self.step_width_range,
+                self.left_ankle_total_distance,
+                self.right_ankle_total_distance,
+                self.ankle_distance_asymmetry,
+            ])
+        
+        # Extended symmetry features
+        if "symmetry_extended" in groups_to_include:
+            features.extend([
+                self.shoulder_symmetry_index,
+                self.elbow_symmetry_index,
+                self.wrist_symmetry_index,
+                self.hip_symmetry_index,
+                self.knee_symmetry_index,
+                self.ankle_symmetry_index,
+                self.overall_symmetry_index,
+                self.positional_symmetry_score,
+                self.movement_symmetry_score,
+                self.temporal_symmetry_score,
+            ])
+        
+        # Extended kinematic features
+        if "kinematic_extended" in groups_to_include:
+            features.extend([
+                self.walking_speed_pixels_per_sec,
+                self.estimated_stride_length_pixels,
+            ])
+        
         return np.array(features)
 
     @classmethod
@@ -303,7 +613,9 @@ class GaitFeatureVector:
         if feature_groups is None:
             feature_groups = [
                 "core_angles", "spatiotemporal", "temporal_phases",
-                "symmetry_indices", "kinematic", "variability", "postural"
+                "symmetry_indices", "kinematic", "variability", "postural",
+                "extended_angles", "temporal_extended", "stability", 
+                "stride_extended", "symmetry_extended", "kinematic_extended"
             ]
         
         names = []
@@ -386,6 +698,87 @@ class GaitFeatureVector:
                 "pelvic_tilt_mean",
             ])
         
+        # Extended joint angles
+        if "extended_angles" in feature_groups:
+            names.extend([
+                "left_hip_std",
+                "left_hip_max", 
+                "left_hip_min",
+                "left_knee_std",
+                "left_knee_max",
+                "left_knee_min",
+                "left_ankle_std",
+                "left_ankle_max",
+                "left_ankle_min",
+                "right_hip_std",
+                "right_hip_max",
+                "right_hip_min",
+                "right_knee_std",
+                "right_knee_max",
+                "right_knee_min",
+                "right_ankle_std",
+                "right_ankle_max",
+                "right_ankle_min",
+            ])
+        
+        # Extended temporal
+        if "temporal_extended" in feature_groups:
+            names.extend([
+                "sequence_length",
+                "duration_seconds",
+                "dominant_frequency",
+                "fps",
+                "cycle_count",
+                "left_cycle_duration_mean",
+                "right_cycle_duration_mean",
+                "cycle_duration_asymmetry",
+                "double_support_duration_mean",
+                "stance_duration_mean",
+                "swing_duration_mean",
+                "phase_asymmetry",
+            ])
+        
+        # Stability
+        if "stability" in feature_groups:
+            names.extend([
+                "com_movement_mean",
+                "com_movement_std",
+                "com_stability_index",
+                "postural_sway_area",
+            ])
+        
+        # Extended stride
+        if "stride_extended" in feature_groups:
+            names.extend([
+                "step_width_std",
+                "step_width_range",
+                "left_ankle_total_distance",
+                "right_ankle_total_distance",
+                "ankle_distance_asymmetry",
+            ])
+        
+        # Extended symmetry
+        if "symmetry_extended" in feature_groups:
+            names.extend([
+                "shoulder_symmetry_index",
+                "elbow_symmetry_index",
+                "wrist_symmetry_index",
+                "hip_symmetry_index",
+                "knee_symmetry_index",
+                "ankle_symmetry_index",
+                "overall_symmetry_index",
+                "positional_symmetry_score",
+                "movement_symmetry_score",
+                "temporal_symmetry_score",
+            ])
+        
+        # Extended kinematic
+        if "kinematic_extended" in feature_groups:
+            names.extend([
+                "walking_speed_pixels_per_sec",
+                "estimated_stride_length_pixels",
+            ])
+        
         return names
     
     @classmethod
@@ -404,6 +797,12 @@ class GaitFeatureVector:
             "kinematic": cls.get_feature_names(["kinematic"]),
             "variability": cls.get_feature_names(["variability"]),
             "postural": cls.get_feature_names(["postural"]),
+            "extended_angles": cls.get_feature_names(["extended_angles"]),
+            "temporal_extended": cls.get_feature_names(["temporal_extended"]),
+            "stability": cls.get_feature_names(["stability"]),
+            "stride_extended": cls.get_feature_names(["stride_extended"]),
+            "symmetry_extended": cls.get_feature_names(["symmetry_extended"]),
+            "kinematic_extended": cls.get_feature_names(["kinematic_extended"]),
         }
 
     @classmethod
@@ -490,32 +889,43 @@ class GaitFeatureVector:
         cls,
         analysis_results: Dict[str, Any],
         sample_id: str = "",
-        condition_label: str = ""
+        condition_label: str = "",
+        feature_extraction_mode: str = "comprehensive"
     ) -> Optional["GaitFeatureVector"]:
         """
         Create comprehensive feature vector from EnhancedGaitAnalyzer results.
         
-        This method extracts features from all analyzer components:
-        - FeatureExtractor: kinematic, joint angles, temporal, stride, symmetry, stability
-        - TemporalAnalyzer: gait cycles, timing, phase features
-        - SymmetryAnalyzer: positional, movement, temporal, angular symmetry
+        This method extracts features from all analyzer components with configurable
+        extraction modes for different use cases.
         
         Args:
             analysis_results: Dictionary from EnhancedGaitAnalyzer.analyze_gait_sequence()
             sample_id: Identifier for this sample
             condition_label: Ground truth condition label
+            feature_extraction_mode: Mode for feature extraction
+                - "legacy": Extract only core 15 features (backward compatibility)
+                - "standard": Extract standard 34 features 
+                - "comprehensive": Extract all 94+ features (default)
+                - "custom": Use feature_groups parameter for selection
             
         Returns:
-            GaitFeatureVector with comprehensive features, or None if insufficient data
+            GaitFeatureVector with features based on extraction mode, or None if insufficient data
             
         Example:
             >>> from ambient.analysis.gait_analyzer import EnhancedGaitAnalyzer
             >>> analyzer = EnhancedGaitAnalyzer()
             >>> results = analyzer.analyze_gait_sequence(pose_sequence)
+            >>> 
+            >>> # Comprehensive extraction (94+ features)
             >>> features = GaitFeatureVector.from_analysis_results(results, "sample_001", "normal")
+            >>> 
+            >>> # Legacy extraction (15 features)
+            >>> features = GaitFeatureVector.from_analysis_results(
+            ...     results, "sample_001", "normal", feature_extraction_mode="legacy"
+            ... )
         """
         try:
-            # Extract features from different analyzer components
+            # Extract components
             features_dict = analysis_results.get("features", {})
             timing_analysis = analysis_results.get("timing_analysis", {})
             phase_features = analysis_results.get("phase_features", {})
@@ -526,8 +936,11 @@ class GaitFeatureVector:
                 value = source_dict.get(key, default)
                 return default if value is None or np.isnan(value) else float(value)
             
-            # ========== CORE JOINT ANGLES ==========
-            # From FeatureExtractor joint angle features
+            # Determine extraction strategy based on mode
+            extract_extended = feature_extraction_mode in ["comprehensive", "standard"]
+            extract_all = feature_extraction_mode == "comprehensive"
+            
+            # ========== CORE JOINT ANGLES (always extracted) ==========
             left_hip_mean = safe_extract(features_dict, "left_hip_mean")
             left_knee_mean = safe_extract(features_dict, "left_knee_mean")
             left_ankle_mean = safe_extract(features_dict, "left_ankle_mean")
@@ -541,6 +954,27 @@ class GaitFeatureVector:
             right_hip_range = safe_extract(features_dict, "right_hip_range")
             right_knee_range = safe_extract(features_dict, "right_knee_range")
             right_ankle_range = safe_extract(features_dict, "right_ankle_range")
+            
+            # ========== EXTENDED JOINT ANGLE FEATURES ==========
+            # Extract if comprehensive mode or if available in features_dict
+            left_hip_std = safe_extract(features_dict, "left_hip_std") if extract_all else 0.0
+            left_hip_max = safe_extract(features_dict, "left_hip_max") if extract_all else 0.0
+            left_hip_min = safe_extract(features_dict, "left_hip_min") if extract_all else 0.0
+            left_knee_std = safe_extract(features_dict, "left_knee_std") if extract_all else 0.0
+            left_knee_max = safe_extract(features_dict, "left_knee_max") if extract_all else 0.0
+            left_knee_min = safe_extract(features_dict, "left_knee_min") if extract_all else 0.0
+            left_ankle_std = safe_extract(features_dict, "left_ankle_std") if extract_all else 0.0
+            left_ankle_max = safe_extract(features_dict, "left_ankle_max") if extract_all else 0.0
+            left_ankle_min = safe_extract(features_dict, "left_ankle_min") if extract_all else 0.0
+            right_hip_std = safe_extract(features_dict, "right_hip_std") if extract_all else 0.0
+            right_hip_max = safe_extract(features_dict, "right_hip_max") if extract_all else 0.0
+            right_hip_min = safe_extract(features_dict, "right_hip_min") if extract_all else 0.0
+            right_knee_std = safe_extract(features_dict, "right_knee_std") if extract_all else 0.0
+            right_knee_max = safe_extract(features_dict, "right_knee_max") if extract_all else 0.0
+            right_knee_min = safe_extract(features_dict, "right_knee_min") if extract_all else 0.0
+            right_ankle_std = safe_extract(features_dict, "right_ankle_std") if extract_all else 0.0
+            right_ankle_max = safe_extract(features_dict, "right_ankle_max") if extract_all else 0.0
+            right_ankle_min = safe_extract(features_dict, "right_ankle_min") if extract_all else 0.0
             
             # ========== SPATIOTEMPORAL PARAMETERS ==========
             # From FeatureExtractor and TemporalAnalyzer
@@ -670,6 +1104,152 @@ class GaitFeatureVector:
             jerk_mean = safe_extract(features_dict, "jerk_mean")
             jerk_std = safe_extract(features_dict, "jerk_std")
             
+            # ========== EXTENDED JOINT ANGLE FEATURES ==========
+            # Standard deviation, max, min for each joint
+            left_hip_std = safe_extract(features_dict, "left_hip_std")
+            left_hip_max = safe_extract(features_dict, "left_hip_max")
+            left_hip_min = safe_extract(features_dict, "left_hip_min")
+            left_knee_std = safe_extract(features_dict, "left_knee_std")
+            left_knee_max = safe_extract(features_dict, "left_knee_max")
+            left_knee_min = safe_extract(features_dict, "left_knee_min")
+            left_ankle_std = safe_extract(features_dict, "left_ankle_std")
+            left_ankle_max = safe_extract(features_dict, "left_ankle_max")
+            left_ankle_min = safe_extract(features_dict, "left_ankle_min")
+            right_hip_std = safe_extract(features_dict, "right_hip_std")
+            right_hip_max = safe_extract(features_dict, "right_hip_max")
+            right_hip_min = safe_extract(features_dict, "right_hip_min")
+            right_knee_std = safe_extract(features_dict, "right_knee_std")
+            right_knee_max = safe_extract(features_dict, "right_knee_max")
+            right_knee_min = safe_extract(features_dict, "right_knee_min")
+            right_ankle_std = safe_extract(features_dict, "right_ankle_std")
+            right_ankle_max = safe_extract(features_dict, "right_ankle_max")
+            right_ankle_min = safe_extract(features_dict, "right_ankle_min")
+            
+            # ========== EXTENDED TEMPORAL FEATURES ==========
+            # From FeatureExtractor and TemporalAnalyzer
+            sequence_length = safe_extract(features_dict, "sequence_length")
+            duration_seconds = safe_extract(features_dict, "duration_seconds")
+            dominant_frequency = safe_extract(features_dict, "dominant_frequency")
+            fps = safe_extract(features_dict, "fps", 30.0)
+            cycle_count = safe_extract(timing_analysis, "cycle_count")
+            left_cycle_duration_mean = safe_extract(timing_analysis, "left_cycle_duration_mean")
+            right_cycle_duration_mean = safe_extract(timing_analysis, "right_cycle_duration_mean")
+            cycle_duration_asymmetry = safe_extract(timing_analysis, "cycle_duration_asymmetry")
+            double_support_duration_mean = safe_extract(phase_features, "double_support_duration_mean")
+            stance_duration_mean = safe_extract(phase_features, "stance_duration_mean")
+            swing_duration_mean = safe_extract(phase_features, "swing_duration_mean")
+            phase_asymmetry = safe_extract(phase_features, "phase_asymmetry")
+            
+            # ========== STABILITY FEATURES ==========
+            # From FeatureExtractor stability analysis
+            com_movement_mean = safe_extract(features_dict, "com_movement_mean")
+            com_movement_std = safe_extract(features_dict, "com_movement_std")
+            com_stability_index = safe_extract(features_dict, "com_stability_index")
+            postural_sway_area = safe_extract(features_dict, "postural_sway_area")
+            
+            # ========== EXTENDED STRIDE FEATURES ==========
+            # From FeatureExtractor stride analysis
+            step_width_std = safe_extract(features_dict, "step_width_std")
+            step_width_range = safe_extract(features_dict, "step_width_range")
+            left_ankle_total_distance = safe_extract(features_dict, "left_ankle_total_distance")
+            right_ankle_total_distance = safe_extract(features_dict, "right_ankle_total_distance")
+            ankle_distance_asymmetry = safe_extract(features_dict, "ankle_distance_asymmetry")
+            
+            # ========== EXTENDED SYMMETRY FEATURES ==========
+            # Individual joint symmetry indices from FeatureExtractor
+            shoulder_symmetry_index = safe_extract(features_dict, "shoulder_symmetry_index")
+            elbow_symmetry_index = safe_extract(features_dict, "elbow_symmetry_index")
+            wrist_symmetry_index = safe_extract(features_dict, "wrist_symmetry_index")
+            hip_symmetry_index = safe_extract(features_dict, "hip_symmetry_index")
+            knee_symmetry_index = safe_extract(features_dict, "knee_symmetry_index")
+            ankle_symmetry_index = safe_extract(features_dict, "ankle_symmetry_index")
+            
+            # Advanced symmetry features from SymmetryAnalyzer
+            overall_symmetry_index = safe_extract(symmetry_analysis, "overall_symmetry_index")
+            positional_symmetry_score = safe_extract(symmetry_analysis, "positional_symmetry_score")
+            movement_symmetry_score = safe_extract(symmetry_analysis, "movement_symmetry_score")
+            temporal_symmetry_score = safe_extract(symmetry_analysis, "temporal_symmetry_score")
+            
+    @classmethod
+    def create_comprehensive_features(
+        cls,
+        analysis_results: Dict[str, Any],
+        sample_id: str = "",
+        condition_label: str = "",
+        feature_groups: Optional[List[str]] = None
+    ) -> Optional["GaitFeatureVector"]:
+        """
+        Create feature vector with systematic feature group selection.
+        
+        This method provides fine-grained control over which feature groups to extract,
+        following OOP principles with clear separation of concerns.
+        
+        Args:
+            analysis_results: Dictionary from EnhancedGaitAnalyzer.analyze_gait_sequence()
+            sample_id: Identifier for this sample
+            condition_label: Ground truth condition label
+            feature_groups: List of feature groups to extract. If None, extracts all.
+                Available groups:
+                - "core_angles": Basic joint angle statistics (15 features)
+                - "extended_angles": Extended joint angle statistics (18 features)
+                - "spatiotemporal": Walking speed, cadence, stride parameters (4 features)
+                - "temporal_phases": Stance/swing phase analysis (4 features)
+                - "temporal_extended": Advanced temporal features (12 features)
+                - "kinematic": Velocity, acceleration, jerk (9 features)
+                - "kinematic_extended": Advanced kinematic features (2 features)
+                - "symmetry_indices": Evidence-based symmetry indices (6 features)
+                - "symmetry_extended": Comprehensive symmetry analysis (10 features)
+                - "stability": Balance and stability features (4 features)
+                - "stride_extended": Advanced stride characteristics (5 features)
+                - "variability": Gait variability metrics (3 features)
+                - "postural": Trunk and pelvic alignment (2 features)
+        
+        Returns:
+            GaitFeatureVector configured for the specified feature groups
+            
+        Example:
+            >>> # Extract only core features for legacy compatibility
+            >>> features = GaitFeatureVector.create_comprehensive_features(
+            ...     results, "sample_001", "normal", 
+            ...     feature_groups=["core_angles"]
+            ... )
+            >>> 
+            >>> # Extract clinical-focused features
+            >>> features = GaitFeatureVector.create_comprehensive_features(
+            ...     results, "sample_001", "parkinsons",
+            ...     feature_groups=["core_angles", "symmetry_indices", "stability", "temporal_phases"]
+            ... )
+            >>> 
+            >>> # Extract all features (default)
+            >>> features = GaitFeatureVector.create_comprehensive_features(results, "sample_001", "normal")
+        """
+        # Use the existing from_analysis_results method with comprehensive mode
+        feature_vector = cls.from_analysis_results(
+            analysis_results, 
+            sample_id, 
+            condition_label, 
+            feature_extraction_mode="comprehensive"
+        )
+        
+        if feature_vector is None:
+            return None
+        
+        # Configure feature groups if specified
+        if feature_groups is not None:
+            # Update the feature groups configuration
+            all_groups = [
+                "core_angles", "extended_angles", "spatiotemporal", "temporal_phases",
+                "temporal_extended", "kinematic", "kinematic_extended", "symmetry_indices",
+                "symmetry_extended", "stability", "stride_extended", "variability", "postural"
+            ]
+            
+            # Enable only specified groups
+            feature_vector._feature_groups_enabled = {
+                group: group in feature_groups for group in all_groups
+            }
+        
+        return feature_vector
+            
             # ========== VARIABILITY METRICS ==========
             # From TemporalAnalyzer timing analysis
             stride_time_cv = safe_extract(timing_analysis, "step_regularity_cv", 0.0)
@@ -747,6 +1327,63 @@ class GaitFeatureVector:
                 # Postural
                 trunk_lean_angle=trunk_lean_angle,
                 pelvic_tilt_mean=pelvic_tilt_mean,
+                # Extended joint angles
+                left_hip_std=left_hip_std,
+                left_hip_max=left_hip_max,
+                left_hip_min=left_hip_min,
+                left_knee_std=left_knee_std,
+                left_knee_max=left_knee_max,
+                left_knee_min=left_knee_min,
+                left_ankle_std=left_ankle_std,
+                left_ankle_max=left_ankle_max,
+                left_ankle_min=left_ankle_min,
+                right_hip_std=right_hip_std,
+                right_hip_max=right_hip_max,
+                right_hip_min=right_hip_min,
+                right_knee_std=right_knee_std,
+                right_knee_max=right_knee_max,
+                right_knee_min=right_knee_min,
+                right_ankle_std=right_ankle_std,
+                right_ankle_max=right_ankle_max,
+                right_ankle_min=right_ankle_min,
+                # Extended temporal
+                sequence_length=sequence_length,
+                duration_seconds=duration_seconds,
+                dominant_frequency=dominant_frequency,
+                fps=fps,
+                cycle_count=cycle_count,
+                left_cycle_duration_mean=left_cycle_duration_mean,
+                right_cycle_duration_mean=right_cycle_duration_mean,
+                cycle_duration_asymmetry=cycle_duration_asymmetry,
+                double_support_duration_mean=double_support_duration_mean,
+                stance_duration_mean=stance_duration_mean,
+                swing_duration_mean=swing_duration_mean,
+                phase_asymmetry=phase_asymmetry,
+                # Stability
+                com_movement_mean=com_movement_mean,
+                com_movement_std=com_movement_std,
+                com_stability_index=com_stability_index,
+                postural_sway_area=postural_sway_area,
+                # Extended stride
+                step_width_std=step_width_std,
+                step_width_range=step_width_range,
+                left_ankle_total_distance=left_ankle_total_distance,
+                right_ankle_total_distance=right_ankle_total_distance,
+                ankle_distance_asymmetry=ankle_distance_asymmetry,
+                # Extended symmetry
+                shoulder_symmetry_index=shoulder_symmetry_index,
+                elbow_symmetry_index=elbow_symmetry_index,
+                wrist_symmetry_index=wrist_symmetry_index,
+                hip_symmetry_index=hip_symmetry_index,
+                knee_symmetry_index=knee_symmetry_index,
+                ankle_symmetry_index=ankle_symmetry_index,
+                overall_symmetry_index=overall_symmetry_index,
+                positional_symmetry_score=positional_symmetry_score,
+                movement_symmetry_score=movement_symmetry_score,
+                temporal_symmetry_score=temporal_symmetry_score,
+                # Extended kinematic
+                walking_speed_pixels_per_sec=walking_speed_pixels_per_sec,
+                estimated_stride_length_pixels=estimated_stride_length_pixels,
                 # Metadata
                 sample_id=sample_id,
                 condition_label=condition_label,

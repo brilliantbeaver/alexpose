@@ -704,7 +704,9 @@ class EnhancedGaitAnalyzer(IGaitAnalyzer):
         self,
         keypoint_format: str = "COCO_17",
         fps: float = 30.0,
-        config_manager: Optional[IConfigurationManager] = None
+        config_manager: Optional[IConfigurationManager] = None,
+        comprehensive_features: bool = True,
+        feature_extraction_config: Optional[Dict[str, bool]] = None
     ):
         """
         Initialize enhanced gait analyzer.
@@ -713,15 +715,31 @@ class EnhancedGaitAnalyzer(IGaitAnalyzer):
             keypoint_format: Format of keypoints (COCO_17, BODY_25, etc.)
             fps: Frames per second of the video
             config_manager: Optional configuration manager
+            comprehensive_features: Whether to extract comprehensive feature set
+            feature_extraction_config: Optional config for specific feature groups
         """
         self.keypoint_format = keypoint_format
         self.fps = fps
         self.config_manager = config_manager
+        self.comprehensive_features = comprehensive_features
         
-        # Initialize analysis components
+        # Default feature extraction configuration
+        default_config = {
+            "extract_extended_features": comprehensive_features,
+            "include_joint_statistics": comprehensive_features,
+            "include_stability_features": comprehensive_features,
+            "include_advanced_temporal": comprehensive_features
+        }
+        
+        # Override with user config if provided
+        if feature_extraction_config:
+            default_config.update(feature_extraction_config)
+        
+        # Initialize analysis components with configuration
         self.feature_extractor = FeatureExtractor(
             keypoint_format=keypoint_format,
-            fps=fps
+            fps=fps,
+            **default_config
         )
         
         self.temporal_analyzer = TemporalAnalyzer(
@@ -734,6 +752,9 @@ class EnhancedGaitAnalyzer(IGaitAnalyzer):
         )
         
         logger.info(f"Enhanced gait analyzer initialized for {keypoint_format} format")
+        logger.debug(f"Comprehensive features: {comprehensive_features}")
+        if feature_extraction_config:
+            logger.debug(f"Feature config: {feature_extraction_config}")
     
     def analyze_gait_sequence(
         self, 
