@@ -34,7 +34,8 @@ class FeatureExtractor:
         extract_extended_features: bool = True,
         include_joint_statistics: bool = True,
         include_stability_features: bool = True,
-        include_advanced_temporal: bool = True
+        include_advanced_temporal: bool = True,
+        confidence_threshold: float = 0.3
     ):
         """
         Initialize feature extractor.
@@ -47,6 +48,7 @@ class FeatureExtractor:
             include_joint_statistics: Whether to include joint angle std/max/min
             include_stability_features: Whether to include stability/balance features
             include_advanced_temporal: Whether to include advanced temporal features
+            confidence_threshold: Minimum confidence for keypoint validity (default 0.3)
         """
         self.keypoint_format = keypoint_format
         self.fps = fps
@@ -55,6 +57,7 @@ class FeatureExtractor:
         self.include_joint_statistics = include_joint_statistics
         self.include_stability_features = include_stability_features
         self.include_advanced_temporal = include_advanced_temporal
+        self.confidence_threshold = confidence_threshold
         
         # Define keypoint mappings for different formats
         self.keypoint_mappings = self._get_keypoint_mappings()
@@ -63,7 +66,8 @@ class FeatureExtractor:
         logger.debug(f"Extended features: {extract_extended_features}, "
                     f"Joint stats: {include_joint_statistics}, "
                     f"Stability: {include_stability_features}, "
-                    f"Advanced temporal: {include_advanced_temporal}")
+                    f"Advanced temporal: {include_advanced_temporal}, "
+                    f"Confidence threshold: {confidence_threshold}")
     
     def _get_keypoint_mappings(self) -> Dict[str, Dict[str, int]]:
         """Get keypoint mappings for different formats."""
@@ -233,14 +237,22 @@ class FeatureExtractor:
                     features[f"{angle_name}_mean"] = np.mean(angle_values)
                     features[f"{angle_name}_range"] = np.max(angle_values) - np.min(angle_values)
                     
-                    # Extended statistics (optional)
+                    # Extended statistics (optional) - only std, not max/min
+                    # Note: max/min are redundant with range (range = max - min)
                     if self.include_joint_statistics:
                         features[f"{angle_name}_std"] = np.std(angle_values)
-                        features[f"{angle_name}_max"] = np.max(angle_values)
-                        features[f"{angle_name}_min"] = np.min(angle_values)
+                        logger.debug(f"Extracted std for {angle_name}: std={features[f'{angle_name}_std']:.2f}")
+                else:
+                    logger.warning(f"No valid angle values for {angle_name} (empty array) - confidence threshold may be too high or keypoints missing")
+                    # Still create the features with 0.0 so they exist in the dict
+                    features[f"{angle_name}_mean"] = 0.0
+                    features[f"{angle_name}_range"] = 0.0
+                    if self.include_joint_statistics:
+                        features[f"{angle_name}_std"] = 0.0
         
         except Exception as e:
-            logger.warning(f"Joint angle extraction failed: {e}")
+            logger.error(f"Joint angle extraction failed: {e}", exc_info=True)
+            # Still return what we have so far
         
         return features
     
@@ -318,8 +330,10 @@ class FeatureExtractor:
             p2 = frame[p2_idx, :2]
             p3 = frame[p3_idx, :2]
             
-            # Check if points are valid (confidence > 0)
-            if (frame[p1_idx, 2] > 0 and frame[p2_idx, 2] > 0 and frame[p3_idx, 2] > 0):
+            # Check if points are valid (confidence > threshold)
+            if (frame[p1_idx, 2] > self.confidence_threshold and 
+                frame[p2_idx, 2] > self.confidence_threshold and 
+                frame[p3_idx, 2] > self.confidence_threshold):
                 angle = self._calculate_angle(p1, p2, p3)
                 angles.append(angle)
         
@@ -333,7 +347,7 @@ class FeatureExtractor:
             knee = frame[knee_idx, :2]
             ankle = frame[ankle_idx, :2]
             
-            if frame[knee_idx, 2] > 0 and frame[ankle_idx, 2] > 0:
+            if frame[knee_idx, 2] > self.confidence_threshold and frame[ankle_idx, 2] > self.confidence_threshold:
                 # Create vertical reference point below ankle
                 vertical_ref = ankle + np.array([0, 50])  # 50 pixels below
                 angle = self._calculate_angle(knee, ankle, vertical_ref)

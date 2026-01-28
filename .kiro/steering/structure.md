@@ -4,10 +4,10 @@
 alexpose/
 ├── ambient/                    # Core Python package
 │   ├── analysis/              # Gait analysis components
-│   │   ├── feature_extractor.py   # 60+ gait features
+│   │   ├── feature_extractor.py   # 82 comprehensive gait features
 │   │   ├── gait_analyzer.py       # Main analyzer + EnhancedGaitAnalyzer
-│   │   ├── temporal_analyzer.py   # Gait cycle detection
-│   │   └── symmetry_analyzer.py   # Left-right symmetry
+│   │   ├── temporal_analyzer.py   # Gait cycle detection (min_cycle_duration: 0.5s)
+│   │   └── symmetry_analyzer.py   # Left-right symmetry (confidence_threshold: 0.3)
 │   ├── classification/        # LLM-based classification
 │   │   ├── llm_classifier.py      # Multi-model LLM support
 │   │   └── prompt_manager.py      # YAML prompt templates

@@ -27,7 +27,7 @@ class SymmetryAnalyzer:
         self,
         keypoint_format: str = "COCO_17",
         symmetry_threshold: float = 0.1,  # 10% asymmetry threshold
-        confidence_threshold: float = 0.5
+        confidence_threshold: float = 0.3  # Reduced from 0.5
     ):
         """
         Initialize symmetry analyzer.
@@ -529,6 +529,26 @@ class SymmetryAnalyzer:
             # Extract left-right pairs for SI calculation
             si_results = self._calculate_evidence_based_si(symmetry_results)
             overall_results.update(si_results)
+            
+            # Calculate component symmetry scores
+            # These aggregate different types of symmetry analysis
+            positional_indices = []
+            movement_indices = []
+            temporal_indices = []
+            
+            for key, value in symmetry_results.items():
+                if isinstance(value, (int, float)) and not np.isnan(value):
+                    if "distance_symmetry" in key or "variance_symmetry" in key or "range_symmetry" in key:
+                        positional_indices.append(value)
+                    elif "velocity_symmetry" in key or "movement_correlation" in key:
+                        movement_indices.append(value)
+                    elif "cycle_duration" in key or "frequency_symmetry" in key:
+                        temporal_indices.append(value)
+            
+            # Calculate component scores (average of relevant indices)
+            overall_results["positional_symmetry_score"] = np.mean(positional_indices) if positional_indices else 0.0
+            overall_results["movement_symmetry_score"] = np.mean(movement_indices) if movement_indices else 0.0
+            overall_results["temporal_symmetry_score"] = np.mean(temporal_indices) if temporal_indices else 0.0
         
         return overall_results
     

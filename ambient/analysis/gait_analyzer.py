@@ -471,7 +471,8 @@ class GaitAnalyzer:
         self.feature_extractor = FeatureExtractor(
             keypoint_format=keypoint_format,
             fps=fps,
-            smoothing_window=5
+            smoothing_window=5,
+            confidence_threshold=0.3
         )
         
         self.temporal_analyzer = TemporalAnalyzer(
@@ -728,7 +729,8 @@ class EnhancedGaitAnalyzer(IGaitAnalyzer):
             "extract_extended_features": comprehensive_features,
             "include_joint_statistics": comprehensive_features,
             "include_stability_features": comprehensive_features,
-            "include_advanced_temporal": comprehensive_features
+            "include_advanced_temporal": comprehensive_features,
+            "confidence_threshold": 0.3
         }
         
         # Override with user config if provided

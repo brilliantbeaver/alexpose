@@ -9,6 +9,7 @@ Features include:
 - Mean joint angles (hip, knee, ankle) for both legs
 - Left-right asymmetry measures
 - Range of motion features
+- Joint angle variability (std) - max/min removed as redundant with range
 - Spatiotemporal parameters (velocity, cadence, stride length)
 - Temporal phase features (stance/swing ratios)
 - Symmetry indices (evidence-based formulas)
@@ -20,12 +21,14 @@ The feature vector is designed to be:
 - Compatible with scikit-learn classifiers
 - Interpretable for clinical analysis
 - Evidence-based (aligned with 2024-2025 research)
+- Efficient (82 features, removing redundant max/min)
 
 Design Philosophy:
 - Backward compatible: Existing code continues to work
 - Extensible: New features can be added without breaking changes
 - Flexible: Classifiers can select which feature groups to use
 - Validated: Features based on peer-reviewed research
+- Optimized: Redundant features (max/min) removed in favor of range
 
 Author: AlexPose Team
 """
@@ -179,7 +182,7 @@ class FeatureExtractionConfig:
             "symmetry_indices": 6,
             "variability": 3,
             "postural": 2,
-            "extended_angles": 18,
+            "extended_angles": 6,  # Only std (not max/min) - 6 joints × 1 stat
             "temporal_extended": 12,
             "stability": 4,
             "stride_extended": 5,
@@ -194,19 +197,33 @@ class FeatureExtractionConfig:
 @dataclass
 class GaitFeatureVector:
     """
-    Comprehensive feature vector for gait classification.
+    Comprehensive feature vector for gait classification (82 features).
 
     This represents the features extracted from a gait sequence that will
     be used for classification. Features are organized into groups based on
     clinical evidence and research (2024-2025).
     
     Feature Groups:
-    1. Core Joint Angles (LEGACY - always included for backward compatibility)
-    2. Spatiotemporal Parameters (walking speed, cadence, stride length)
-    3. Temporal Phase Features (stance/swing ratios, double support)
-    4. Symmetry Indices (evidence-based SI formulas)
-    5. Variability Metrics (stride-to-stride consistency)
-    6. Postural Features (trunk lean, pelvic tilt)
+    1. Core Joint Angles (15 features - LEGACY, always included)
+    2. Spatiotemporal Parameters (4 features - walking speed, cadence, stride length)
+    3. Temporal Phase Features (4 features - stance/swing ratios, double support)
+    4. Symmetry Indices (6 features - evidence-based SI formulas)
+    5. Kinematic Features (9 features - velocity, acceleration, jerk)
+    6. Variability Metrics (3 features - stride-to-stride consistency)
+    7. Postural Features (2 features - trunk lean, pelvic tilt)
+    8. Extended Joint Angles (6 features - std only, max/min removed as redundant)
+    9. Extended Temporal (12 features - cycle timing, phase analysis)
+    10. Stability Features (4 features - COM movement, postural sway)
+    11. Extended Stride (5 features - step width, ankle distances)
+    12. Extended Symmetry (10 features - comprehensive symmetry analysis)
+    13. Extended Kinematic (2 features - pixel-based measurements)
+    
+    Total: 82 features (reduced from 94 by removing redundant max/min)
+    
+    Optimization Note:
+    - max/min removed as redundant with range (range = max - min)
+    - std retained as it provides unique variability information
+    - This reduces feature space while preserving all unique information
     
     Backward Compatibility:
     - All original fields remain with same defaults
@@ -298,26 +315,15 @@ class GaitFeatureVector:
     trunk_lean_angle: float = 0.0  # Forward/lateral trunk lean (degrees)
     pelvic_tilt_mean: float = 0.0  # Mean pelvic tilt (degrees)
     
-    # ========== MISSING JOINT ANGLE FEATURES ==========
-    # Standard deviation, max, min for each joint angle
+    # ========== EXTENDED JOINT ANGLE FEATURES ==========
+    # Standard deviation for each joint angle (variability/consistency)
+    # Note: max/min removed as redundant with range (range = max - min)
     left_hip_std: float = 0.0
-    left_hip_max: float = 0.0
-    left_hip_min: float = 0.0
     left_knee_std: float = 0.0
-    left_knee_max: float = 0.0
-    left_knee_min: float = 0.0
     left_ankle_std: float = 0.0
-    left_ankle_max: float = 0.0
-    left_ankle_min: float = 0.0
     right_hip_std: float = 0.0
-    right_hip_max: float = 0.0
-    right_hip_min: float = 0.0
     right_knee_std: float = 0.0
-    right_knee_max: float = 0.0
-    right_knee_min: float = 0.0
     right_ankle_std: float = 0.0
-    right_ankle_max: float = 0.0
-    right_ankle_min: float = 0.0
     
     # ========== MISSING TEMPORAL FEATURES ==========
     sequence_length: float = 0.0  # Number of frames
@@ -518,23 +524,11 @@ class GaitFeatureVector:
         if "extended_angles" in groups_to_include:
             features.extend([
                 self.left_hip_std,
-                self.left_hip_max,
-                self.left_hip_min,
                 self.left_knee_std,
-                self.left_knee_max,
-                self.left_knee_min,
                 self.left_ankle_std,
-                self.left_ankle_max,
-                self.left_ankle_min,
                 self.right_hip_std,
-                self.right_hip_max,
-                self.right_hip_min,
                 self.right_knee_std,
-                self.right_knee_max,
-                self.right_knee_min,
                 self.right_ankle_std,
-                self.right_ankle_max,
-                self.right_ankle_min,
             ])
         
         # Extended temporal features
@@ -702,23 +696,11 @@ class GaitFeatureVector:
         if "extended_angles" in feature_groups:
             names.extend([
                 "left_hip_std",
-                "left_hip_max", 
-                "left_hip_min",
                 "left_knee_std",
-                "left_knee_max",
-                "left_knee_min",
                 "left_ankle_std",
-                "left_ankle_max",
-                "left_ankle_min",
                 "right_hip_std",
-                "right_hip_max",
-                "right_hip_min",
                 "right_knee_std",
-                "right_knee_max",
-                "right_knee_min",
                 "right_ankle_std",
-                "right_ankle_max",
-                "right_ankle_min",
             ])
         
         # Extended temporal
@@ -955,27 +937,6 @@ class GaitFeatureVector:
             right_knee_range = safe_extract(features_dict, "right_knee_range")
             right_ankle_range = safe_extract(features_dict, "right_ankle_range")
             
-            # ========== EXTENDED JOINT ANGLE FEATURES ==========
-            # Extract if comprehensive mode or if available in features_dict
-            left_hip_std = safe_extract(features_dict, "left_hip_std") if extract_all else 0.0
-            left_hip_max = safe_extract(features_dict, "left_hip_max") if extract_all else 0.0
-            left_hip_min = safe_extract(features_dict, "left_hip_min") if extract_all else 0.0
-            left_knee_std = safe_extract(features_dict, "left_knee_std") if extract_all else 0.0
-            left_knee_max = safe_extract(features_dict, "left_knee_max") if extract_all else 0.0
-            left_knee_min = safe_extract(features_dict, "left_knee_min") if extract_all else 0.0
-            left_ankle_std = safe_extract(features_dict, "left_ankle_std") if extract_all else 0.0
-            left_ankle_max = safe_extract(features_dict, "left_ankle_max") if extract_all else 0.0
-            left_ankle_min = safe_extract(features_dict, "left_ankle_min") if extract_all else 0.0
-            right_hip_std = safe_extract(features_dict, "right_hip_std") if extract_all else 0.0
-            right_hip_max = safe_extract(features_dict, "right_hip_max") if extract_all else 0.0
-            right_hip_min = safe_extract(features_dict, "right_hip_min") if extract_all else 0.0
-            right_knee_std = safe_extract(features_dict, "right_knee_std") if extract_all else 0.0
-            right_knee_max = safe_extract(features_dict, "right_knee_max") if extract_all else 0.0
-            right_knee_min = safe_extract(features_dict, "right_knee_min") if extract_all else 0.0
-            right_ankle_std = safe_extract(features_dict, "right_ankle_std") if extract_all else 0.0
-            right_ankle_max = safe_extract(features_dict, "right_ankle_max") if extract_all else 0.0
-            right_ankle_min = safe_extract(features_dict, "right_ankle_min") if extract_all else 0.0
-            
             # ========== SPATIOTEMPORAL PARAMETERS ==========
             # From FeatureExtractor and TemporalAnalyzer
             
@@ -1105,25 +1066,14 @@ class GaitFeatureVector:
             jerk_std = safe_extract(features_dict, "jerk_std")
             
             # ========== EXTENDED JOINT ANGLE FEATURES ==========
-            # Standard deviation, max, min for each joint
+            # Standard deviation for each joint (variability/consistency)
+            # Note: max/min removed as redundant with range
             left_hip_std = safe_extract(features_dict, "left_hip_std")
-            left_hip_max = safe_extract(features_dict, "left_hip_max")
-            left_hip_min = safe_extract(features_dict, "left_hip_min")
             left_knee_std = safe_extract(features_dict, "left_knee_std")
-            left_knee_max = safe_extract(features_dict, "left_knee_max")
-            left_knee_min = safe_extract(features_dict, "left_knee_min")
             left_ankle_std = safe_extract(features_dict, "left_ankle_std")
-            left_ankle_max = safe_extract(features_dict, "left_ankle_max")
-            left_ankle_min = safe_extract(features_dict, "left_ankle_min")
             right_hip_std = safe_extract(features_dict, "right_hip_std")
-            right_hip_max = safe_extract(features_dict, "right_hip_max")
-            right_hip_min = safe_extract(features_dict, "right_hip_min")
             right_knee_std = safe_extract(features_dict, "right_knee_std")
-            right_knee_max = safe_extract(features_dict, "right_knee_max")
-            right_knee_min = safe_extract(features_dict, "right_knee_min")
             right_ankle_std = safe_extract(features_dict, "right_ankle_std")
-            right_ankle_max = safe_extract(features_dict, "right_ankle_max")
-            right_ankle_min = safe_extract(features_dict, "right_ankle_min")
             
             # ========== EXTENDED TEMPORAL FEATURES ==========
             # From FeatureExtractor and TemporalAnalyzer
@@ -1170,6 +1120,141 @@ class GaitFeatureVector:
             movement_symmetry_score = safe_extract(symmetry_analysis, "movement_symmetry_score")
             temporal_symmetry_score = safe_extract(symmetry_analysis, "temporal_symmetry_score")
             
+            # ========== VARIABILITY METRICS ==========
+            # From TemporalAnalyzer timing analysis
+            stride_time_cv = safe_extract(timing_analysis, "step_regularity_cv", 0.0)
+            step_length_cv = safe_extract(features_dict, "step_width_std", 0.0)
+            stride_velocity_cv = safe_extract(features_dict, "velocity_std", 0.0)
+            
+            # ========== POSTURAL FEATURES ==========
+            # From SymmetryAnalyzer and FeatureExtractor
+            trunk_lean_angle = safe_extract(symmetry_analysis, "trunk_lean", 0.0)
+            pelvic_tilt_mean = safe_extract(symmetry_analysis, "pelvic_tilt_asymmetry", 0.0)
+            
+            # Enhanced postural feature extraction
+            if trunk_lean_angle == 0.0:
+                # Calculate trunk lean from shoulder-hip alignment
+                # This is a simplified calculation - in practice would need more sophisticated analysis
+                left_shoulder_movement = safe_extract(features_dict, "shoulder_symmetry_index", 0.0)
+                if left_shoulder_movement > 0:
+                    trunk_lean_angle = left_shoulder_movement * 10  # Convert to approximate degrees
+            
+            if pelvic_tilt_mean == 0.0:
+                # Calculate pelvic tilt from hip asymmetry
+                hip_asym = safe_extract(symmetry_analysis, "hip_distance_symmetry_index", 0.0)
+                if hip_asym > 0:
+                    pelvic_tilt_mean = hip_asym * 5  # Convert to approximate degrees
+            
+            # Extended kinematic features
+            walking_speed_pixels_per_sec = safe_extract(features_dict, "walking_speed_pixels_per_sec", 0.0)
+            estimated_stride_length_pixels = safe_extract(features_dict, "estimated_stride_length_pixels", 0.0)
+            
+            # Create feature vector
+            return cls(
+                # Core angles
+                left_hip_mean=left_hip_mean,
+                left_knee_mean=left_knee_mean,
+                left_ankle_mean=left_ankle_mean,
+                right_hip_mean=right_hip_mean,
+                right_knee_mean=right_knee_mean,
+                right_ankle_mean=right_ankle_mean,
+                hip_asymmetry=abs(left_hip_mean - right_hip_mean),
+                knee_asymmetry=abs(left_knee_mean - right_knee_mean),
+                ankle_asymmetry=abs(left_ankle_mean - right_ankle_mean),
+                left_hip_range=left_hip_range,
+                left_knee_range=left_knee_range,
+                left_ankle_range=left_ankle_range,
+                right_hip_range=right_hip_range,
+                right_knee_range=right_knee_range,
+                right_ankle_range=right_ankle_range,
+                # Spatiotemporal
+                walking_speed_ms=walking_speed_ms,
+                cadence_steps_min=cadence_steps_min,
+                stride_length_m=stride_length_m,
+                step_width_m=step_width_m,
+                # Temporal phases
+                stance_percentage=stance_percentage,
+                swing_percentage=swing_percentage,
+                double_support_percentage=double_support_percentage,
+                stance_swing_ratio=stance_swing_ratio,
+                # Symmetry indices
+                stride_length_si=stride_length_si,
+                stance_time_si=stance_time_si,
+                swing_time_si=swing_time_si,
+                hip_angle_si=hip_angle_si,
+                knee_angle_si=knee_angle_si,
+                ankle_angle_si=ankle_angle_si,
+                # Kinematic features
+                velocity_mean=velocity_mean,
+                velocity_std=velocity_std,
+                velocity_max=velocity_max,
+                velocity_min=velocity_min,
+                acceleration_mean=acceleration_mean,
+                acceleration_std=acceleration_std,
+                acceleration_max=acceleration_max,
+                jerk_mean=jerk_mean,
+                jerk_std=jerk_std,
+                # Variability
+                stride_time_cv=stride_time_cv,
+                step_length_cv=step_length_cv,
+                stride_velocity_cv=stride_velocity_cv,
+                # Postural
+                trunk_lean_angle=trunk_lean_angle,
+                pelvic_tilt_mean=pelvic_tilt_mean,
+                # Extended joint angles
+                left_hip_std=left_hip_std,
+                left_knee_std=left_knee_std,
+                left_ankle_std=left_ankle_std,
+                right_hip_std=right_hip_std,
+                right_knee_std=right_knee_std,
+                right_ankle_std=right_ankle_std,
+                # Extended temporal
+                sequence_length=sequence_length,
+                duration_seconds=duration_seconds,
+                dominant_frequency=dominant_frequency,
+                fps=fps,
+                cycle_count=cycle_count,
+                left_cycle_duration_mean=left_cycle_duration_mean,
+                right_cycle_duration_mean=right_cycle_duration_mean,
+                cycle_duration_asymmetry=cycle_duration_asymmetry,
+                double_support_duration_mean=double_support_duration_mean,
+                stance_duration_mean=stance_duration_mean,
+                swing_duration_mean=swing_duration_mean,
+                phase_asymmetry=phase_asymmetry,
+                # Stability
+                com_movement_mean=com_movement_mean,
+                com_movement_std=com_movement_std,
+                com_stability_index=com_stability_index,
+                postural_sway_area=postural_sway_area,
+                # Extended stride
+                step_width_std=step_width_std,
+                step_width_range=step_width_range,
+                left_ankle_total_distance=left_ankle_total_distance,
+                right_ankle_total_distance=right_ankle_total_distance,
+                ankle_distance_asymmetry=ankle_distance_asymmetry,
+                # Extended symmetry
+                shoulder_symmetry_index=shoulder_symmetry_index,
+                elbow_symmetry_index=elbow_symmetry_index,
+                wrist_symmetry_index=wrist_symmetry_index,
+                hip_symmetry_index=hip_symmetry_index,
+                knee_symmetry_index=knee_symmetry_index,
+                ankle_symmetry_index=ankle_symmetry_index,
+                overall_symmetry_index=overall_symmetry_index,
+                positional_symmetry_score=positional_symmetry_score,
+                movement_symmetry_score=movement_symmetry_score,
+                temporal_symmetry_score=temporal_symmetry_score,
+                # Extended kinematic
+                walking_speed_pixels_per_sec=walking_speed_pixels_per_sec,
+                estimated_stride_length_pixels=estimated_stride_length_pixels,
+                # Metadata
+                sample_id=sample_id,
+                condition_label=condition_label,
+            )
+            
+        except Exception as e:
+            logger.error(f"Failed to create feature vector from analysis results: {e}")
+            return None
+
     @classmethod
     def create_comprehensive_features(
         cls,
@@ -1249,149 +1334,6 @@ class GaitFeatureVector:
             }
         
         return feature_vector
-            
-            # ========== VARIABILITY METRICS ==========
-            # From TemporalAnalyzer timing analysis
-            stride_time_cv = safe_extract(timing_analysis, "step_regularity_cv", 0.0)
-            step_length_cv = safe_extract(features_dict, "step_width_std", 0.0)
-            stride_velocity_cv = safe_extract(features_dict, "velocity_std", 0.0)
-            
-            # ========== POSTURAL FEATURES ==========
-            # From SymmetryAnalyzer and FeatureExtractor
-            trunk_lean_angle = safe_extract(symmetry_analysis, "trunk_lean", 0.0)
-            pelvic_tilt_mean = safe_extract(symmetry_analysis, "pelvic_tilt_asymmetry", 0.0)
-            
-            # Enhanced postural feature extraction
-            if trunk_lean_angle == 0.0:
-                # Calculate trunk lean from shoulder-hip alignment
-                # This is a simplified calculation - in practice would need more sophisticated analysis
-                left_shoulder_movement = safe_extract(features_dict, "shoulder_symmetry_index", 0.0)
-                if left_shoulder_movement > 0:
-                    trunk_lean_angle = left_shoulder_movement * 10  # Convert to approximate degrees
-            
-            if pelvic_tilt_mean == 0.0:
-                # Calculate pelvic tilt from hip asymmetry
-                hip_asym = safe_extract(symmetry_analysis, "hip_distance_symmetry_index", 0.0)
-                if hip_asym > 0:
-                    pelvic_tilt_mean = hip_asym * 5  # Convert to approximate degrees
-            
-            # Create feature vector
-            return cls(
-                # Core angles
-                left_hip_mean=left_hip_mean,
-                left_knee_mean=left_knee_mean,
-                left_ankle_mean=left_ankle_mean,
-                right_hip_mean=right_hip_mean,
-                right_knee_mean=right_knee_mean,
-                right_ankle_mean=right_ankle_mean,
-                hip_asymmetry=abs(left_hip_mean - right_hip_mean),
-                knee_asymmetry=abs(left_knee_mean - right_knee_mean),
-                ankle_asymmetry=abs(left_ankle_mean - right_ankle_mean),
-                left_hip_range=left_hip_range,
-                left_knee_range=left_knee_range,
-                left_ankle_range=left_ankle_range,
-                right_hip_range=right_hip_range,
-                right_knee_range=right_knee_range,
-                right_ankle_range=right_ankle_range,
-                # Spatiotemporal
-                walking_speed_ms=walking_speed_ms,
-                cadence_steps_min=cadence_steps_min,
-                stride_length_m=stride_length_m,
-                step_width_m=step_width_m,
-                # Temporal phases
-                stance_percentage=stance_percentage,
-                swing_percentage=swing_percentage,
-                double_support_percentage=double_support_percentage,
-                stance_swing_ratio=stance_swing_ratio,
-                # Symmetry indices
-                stride_length_si=stride_length_si,
-                stance_time_si=stance_time_si,
-                swing_time_si=swing_time_si,
-                hip_angle_si=hip_angle_si,
-                knee_angle_si=knee_angle_si,
-                ankle_angle_si=ankle_angle_si,
-                # Kinematic features
-                velocity_mean=velocity_mean,
-                velocity_std=velocity_std,
-                velocity_max=velocity_max,
-                velocity_min=velocity_min,
-                acceleration_mean=acceleration_mean,
-                acceleration_std=acceleration_std,
-                acceleration_max=acceleration_max,
-                jerk_mean=jerk_mean,
-                jerk_std=jerk_std,
-                # Variability
-                stride_time_cv=stride_time_cv,
-                step_length_cv=step_length_cv,
-                stride_velocity_cv=stride_velocity_cv,
-                # Postural
-                trunk_lean_angle=trunk_lean_angle,
-                pelvic_tilt_mean=pelvic_tilt_mean,
-                # Extended joint angles
-                left_hip_std=left_hip_std,
-                left_hip_max=left_hip_max,
-                left_hip_min=left_hip_min,
-                left_knee_std=left_knee_std,
-                left_knee_max=left_knee_max,
-                left_knee_min=left_knee_min,
-                left_ankle_std=left_ankle_std,
-                left_ankle_max=left_ankle_max,
-                left_ankle_min=left_ankle_min,
-                right_hip_std=right_hip_std,
-                right_hip_max=right_hip_max,
-                right_hip_min=right_hip_min,
-                right_knee_std=right_knee_std,
-                right_knee_max=right_knee_max,
-                right_knee_min=right_knee_min,
-                right_ankle_std=right_ankle_std,
-                right_ankle_max=right_ankle_max,
-                right_ankle_min=right_ankle_min,
-                # Extended temporal
-                sequence_length=sequence_length,
-                duration_seconds=duration_seconds,
-                dominant_frequency=dominant_frequency,
-                fps=fps,
-                cycle_count=cycle_count,
-                left_cycle_duration_mean=left_cycle_duration_mean,
-                right_cycle_duration_mean=right_cycle_duration_mean,
-                cycle_duration_asymmetry=cycle_duration_asymmetry,
-                double_support_duration_mean=double_support_duration_mean,
-                stance_duration_mean=stance_duration_mean,
-                swing_duration_mean=swing_duration_mean,
-                phase_asymmetry=phase_asymmetry,
-                # Stability
-                com_movement_mean=com_movement_mean,
-                com_movement_std=com_movement_std,
-                com_stability_index=com_stability_index,
-                postural_sway_area=postural_sway_area,
-                # Extended stride
-                step_width_std=step_width_std,
-                step_width_range=step_width_range,
-                left_ankle_total_distance=left_ankle_total_distance,
-                right_ankle_total_distance=right_ankle_total_distance,
-                ankle_distance_asymmetry=ankle_distance_asymmetry,
-                # Extended symmetry
-                shoulder_symmetry_index=shoulder_symmetry_index,
-                elbow_symmetry_index=elbow_symmetry_index,
-                wrist_symmetry_index=wrist_symmetry_index,
-                hip_symmetry_index=hip_symmetry_index,
-                knee_symmetry_index=knee_symmetry_index,
-                ankle_symmetry_index=ankle_symmetry_index,
-                overall_symmetry_index=overall_symmetry_index,
-                positional_symmetry_score=positional_symmetry_score,
-                movement_symmetry_score=movement_symmetry_score,
-                temporal_symmetry_score=temporal_symmetry_score,
-                # Extended kinematic
-                walking_speed_pixels_per_sec=walking_speed_pixels_per_sec,
-                estimated_stride_length_pixels=estimated_stride_length_pixels,
-                # Metadata
-                sample_id=sample_id,
-                condition_label=condition_label,
-            )
-            
-        except Exception as e:
-            logger.error(f"Failed to create feature vector from analysis results: {e}")
-            return None
 
     def get_feature_summary(self, include_all_groups: bool = True) -> str:
         """

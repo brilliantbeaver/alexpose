@@ -25,7 +25,7 @@ class TemporalAnalyzer:
     def __init__(
         self,
         fps: float = 30.0,
-        min_cycle_duration: float = 0.8,  # seconds
+        min_cycle_duration: float = 0.5,  # seconds (reduced from 0.8)
         max_cycle_duration: float = 2.5,  # seconds
         detection_method: str = "heel_strike"
     ):
@@ -324,6 +324,7 @@ class TemporalAnalyzer:
             total_steps = len(cycles)
             analysis["cadence_steps_per_minute"] = (total_steps / total_time) * 60
             analysis["cadence_cycles_per_minute"] = analysis["cadence_steps_per_minute"] / 2  # Each cycle is 2 steps
+            analysis["cycle_count"] = len(cycles)  # Total number of cycles detected
         
         # Analyze cycle regularity and step intervals
         if len(cycles) >= 3:
@@ -495,6 +496,41 @@ class TemporalAnalyzer:
             features["stance_duration_cv"] = np.std(stance_durations) / np.mean(stance_durations)
         if len(swing_durations) > 1:
             features["swing_duration_cv"] = np.std(swing_durations) / np.mean(swing_durations)
+        
+        # Calculate phase asymmetry (difference between left and right phase durations)
+        if stance_durations and swing_durations:
+            # Separate left and right cycles if possible
+            left_stance = []
+            right_stance = []
+            left_swing = []
+            right_swing = []
+            
+            for i, cycle in enumerate(cycles):
+                foot = cycle.get("foot", "unknown")
+                if i < len(stance_durations):
+                    if foot == "left":
+                        left_stance.append(stance_durations[i])
+                        if i < len(swing_durations):
+                            left_swing.append(swing_durations[i])
+                    elif foot == "right":
+                        right_stance.append(stance_durations[i])
+                        if i < len(swing_durations):
+                            right_swing.append(swing_durations[i])
+            
+            # Calculate phase asymmetry if we have both left and right data
+            if left_stance and right_stance:
+                left_stance_mean = np.mean(left_stance)
+                right_stance_mean = np.mean(right_stance)
+                features["phase_asymmetry"] = abs(left_stance_mean - right_stance_mean) / ((left_stance_mean + right_stance_mean) / 2)
+            elif len(stance_durations) > 1:
+                # Fallback: use overall stance duration variability as proxy
+                features["phase_asymmetry"] = np.std(stance_durations) / np.mean(stance_durations)
+            else:
+                # Not enough data to calculate asymmetry
+                features["phase_asymmetry"] = 0.0
+                logger.debug(f"Cannot calculate phase_asymmetry: left_stance={len(left_stance) if left_stance else 0}, right_stance={len(right_stance) if right_stance else 0}, stance_durations={len(stance_durations)}")
+        else:
+            features["phase_asymmetry"] = 0.0
         
         return features
     

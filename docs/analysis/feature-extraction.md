@@ -2,7 +2,14 @@
 
 ## Overview
 
-The FeatureExtractor component provides comprehensive feature extraction capabilities for gait analysis, extracting 60+ features across multiple domains including kinematic, temporal, symmetry, and stability measures. These features are seamlessly integrated into the AlexPose web interface, providing real-time analysis and visualization capabilities.
+The FeatureExtractor component provides comprehensive feature extraction capabilities for gait analysis, extracting **82 features** across multiple domains including kinematic, temporal, symmetry, and stability measures. These features are seamlessly integrated into the AlexPose web interface, providing real-time analysis and visualization capabilities.
+
+**Recent Enhancements (January 2026)**:
+- Optimized from 94 to **82 features** by removing redundant max/min values (retained std for unique variability information)
+- Added configurable **confidence threshold parameter** (default: 0.3) for improved robustness with real-world data
+- Reduced temporal analysis thresholds for better short-sequence support
+- Enhanced symmetry analysis with lower confidence requirements
+- Improved feature extraction reliability for videos with varying pose confidence
 
 ## System Integration
 
@@ -31,11 +38,43 @@ Features are displayed in the web interface through:
 from ambient.analysis.feature_extractor import FeatureExtractor
 
 extractor = FeatureExtractor(
-    keypoint_format="COCO_17",  # Keypoint format
-    fps=30.0,                   # Video frame rate
-    smoothing_window=5          # Smoothing window size
+    keypoint_format="COCO_17",           # Keypoint format (COCO_17, BODY_25, BLAZEPOSE_33)
+    fps=30.0,                            # Video frame rate
+    smoothing_window=5,                  # Smoothing window size for calculations
+    extract_extended_features=True,      # Extract comprehensive feature set (82 features)
+    include_joint_statistics=True,       # Include joint angle std/max/min statistics
+    include_stability_features=True,     # Include balance and stability features
+    include_advanced_temporal=True,      # Include advanced temporal analysis
+    confidence_threshold=0.3             # Minimum confidence for keypoint validity (NEW)
 )
 ```
+
+**Key Parameters**:
+
+- **`confidence_threshold`** (float, default: 0.3): Minimum confidence score for considering a keypoint valid
+  - **Purpose**: Filters out low-quality keypoint detections while retaining useful data
+  - **Range**: 0.0 to 1.0 (0.0 = accept all, 1.0 = only perfect confidence)
+  - **Recommended Values**:
+    - `0.3`: Default - good balance for real-world videos with varying quality
+    - `0.5`: Higher quality threshold for research-grade data
+    - `0.1`: Very permissive for low-quality or challenging videos
+  - **Impact**: Lower thresholds extract more features from imperfect data; higher thresholds ensure higher quality but may result in more zero-value features
+
+- **`extract_extended_features`** (bool, default: True): Enable comprehensive 82-feature extraction
+  - When `True`: Extracts all available features including extended joint statistics (std only), advanced temporal features, and comprehensive symmetry analysis
+  - When `False`: Extracts only core features for faster processing
+
+- **`include_joint_statistics`** (bool, default: True): Include standard deviation, max, and min for each joint angle
+  - Adds 18 additional features (3 per joint × 6 joints)
+  - Essential for understanding joint angle variability and range of motion
+
+- **`include_stability_features`** (bool, default: True): Include balance and stability analysis
+  - Adds center of mass movement, stability indices, and postural sway metrics
+  - Critical for fall risk assessment and balance evaluation
+
+- **`include_advanced_temporal`** (bool, default: True): Include advanced temporal analysis
+  - Adds frequency analysis, estimated cadence, and enhanced spatiotemporal parameters
+  - Provides deeper insights into gait rhythm and timing patterns
 
 ### Supported Keypoint Formats
 

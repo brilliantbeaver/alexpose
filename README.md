@@ -22,7 +22,8 @@ Complete documentation is available in the [`docs/`](docs/) directory:
 
 - **Multi-Format Video Support**: MP4, AVI, MOV, WebM files and YouTube URLs
 - **Multiple Pose Estimators**: MediaPipe, OpenPose, Ultralytics, AlphaPose
-- **Comprehensive Analysis**: 60+ gait features, temporal analysis, symmetry assessment
+- **Comprehensive Analysis**: **82 gait features** including kinematic, temporal, symmetry, and stability metrics
+- **Configurable Confidence Thresholds**: Adaptive feature extraction for varying video quality (default: 0.3)
 - **AI Classification**: LLM-powered normal/abnormal classification with condition identification
 - **Modern Web Interface**: NextJS frontend with Shadcn UI components
 - **CLI Tools**: Command-line interface for batch processing and automation
