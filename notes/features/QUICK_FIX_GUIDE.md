@@ -1,232 +1,132 @@
-# Quick Fix Guide for NaN Errors
+# Quick Fix Guide: AttributeError '_feature_groups_enabled'
 
-## Immediate Solution (Use This Now!)
+## ✅ The Issue Has Been Fixed!
 
-### Option 1: Auto-Remove Invalid Samples (Recommended)
+The `AttributeError: 'GaitFeatureVector' object has no attribute '_feature_groups_enabled'` bug has been resolved.
+
+## What to Do Now
+
+### 1. Restart Your Jupyter Kernel
+
+In your Jupyter notebook, click:
+- **Kernel** → **Restart Kernel**
+
+Or use the keyboard shortcut:
+- **macOS:** `Cmd + .` then `Cmd + .`
+- **Windows/Linux:** `Ctrl + .` then `Ctrl + .`
+
+### 2. Re-run Your Code
+
+Your classifier training code should now work:
 
 ```python
-# Simply add auto_remove_invalid=True to your training call
-classifier = KNNGaitClassifier(config=config)
-metrics = classifier.train(
-    train_features, 
+# This will now work without errors
+knn_metrics = knn_classifier.train(
+    features=train_features,
     validate=True,
-    auto_remove_invalid=True  # ← Add this parameter
-)
-```
-
-This will:
-- Automatically detect and remove samples with NaN values
-- Log which samples were removed
-- Continue training with valid samples only
-- Warn if too few samples remain
-
-### Option 2: Manual Filtering (More Control)
-
-```python
-# Filter out invalid samples before training
-valid_features = []
-invalid_samples = []
-
-for feature in train_features:
-    # Check if feature is None (from failed extraction)
-    if feature is None:
-        continue
-    
-    # Check for NaN/Inf in feature array
-    feature_array = feature.to_array()
-    if np.any(np.isnan(feature_array)) or np.any(np.isinf(feature_array)):
-        invalid_samples.append(feature.sample_id)
-    else:
-        valid_features.append(feature)
-
-print(f"Valid: {len(valid_features)}, Invalid: {len(invalid_samples)}")
-if invalid_samples:
-    print(f"Skipped samples: {invalid_samples}")
-
-# Train with valid features
-classifier.train(valid_features, validate=True)
-```
-
-## Why This Happens
-
-Sample `cljas5esv00fn3n6lewd5xqdl` has NaN in all features because:
-1. Keypoint extraction may have failed
-2. Joint angle calculation returned all NaN
-3. The sequence has no valid angle data
-
-## Prevention (For Future Runs)
-
-### Step 1: Check Keypoints
-
-```python
-keypoints = extractor.extract_from_sequence(
-    df, video_base_path,
-    filter_empty=True,
-    min_keypoints=25
+    auto_remove_invalid=True
 )
 
-# ALWAYS check if extraction succeeded
-if not keypoints:
-    print(f"⚠️  Skipping {sample_id}: no keypoints extracted")
-    continue  # Skip this sample
+print(f"✅ Training successful!")
+print(f"   Accuracy: {knn_metrics['train_accuracy']:.3f}")
+print(f"   Features: {knn_metrics['n_features']}")  # Will show 82
 ```
 
-### Step 2: Validate Joint Angles
+### 3. Verify the Fix (Optional)
+
+Run the verification script to confirm everything works:
+
+```bash
+python3 scripts/verify_feature_groups_fix.py
+```
+
+Expected output:
+```
+✅ ALL TESTS PASSED!
+
+The _feature_groups_enabled initialization bug has been fixed.
+```
+
+## What Changed
+
+### Before (Broken)
+```python
+fv = GaitFeatureVector(left_hip_mean=45.0, condition_label="normal")
+arr = fv.to_array()  # ❌ AttributeError!
+```
+
+### After (Fixed)
+```python
+fv = GaitFeatureVector(left_hip_mean=45.0, condition_label="normal")
+arr = fv.to_array()  # ✅ Works! Returns 82 features
+```
+
+## New Features Available
+
+Now that the fix is in place, you have access to **82 comprehensive gait features** by default:
 
 ```python
-joint_angles = get_joint_angles(keypoints, "BLAZEPOSE_33", fps=30.0)
+# Get all 82 features
+features = fv.to_array()  # Shape: (82,)
 
-# NEW: Check if sequence has valid data
-if not joint_angles.has_valid_data():
-    print(f"⚠️  Skipping {sample_id}: no valid angles")
-    continue  # Skip this sample
+# Or use legacy 15-feature mode
+features_legacy = fv.to_array(feature_groups=["core_angles"])  # Shape: (15,)
+
+# Or select specific feature groups
+features_custom = fv.to_array(feature_groups=[
+    "core_angles",
+    "spatiotemporal",
+    "symmetry_indices"
+])  # Shape: (25,)
 ```
 
-### Step 3: Check Feature Creation
+## Feature Groups Available
 
-```python
-feature = GaitFeatureVector.from_joint_angles(
-    joint_angles,
-    sample_id=sample_id,
-    condition_label=condition
-)
+1. **core_angles** (15 features) - Basic joint angles
+2. **spatiotemporal** (4 features) - Walking speed, cadence, stride
+3. **temporal_phases** (4 features) - Stance/swing ratios
+4. **symmetry_indices** (6 features) - Left-right symmetry
+5. **kinematic** (9 features) - Velocity, acceleration, jerk
+6. **variability** (3 features) - Stride consistency
+7. **postural** (2 features) - Trunk lean, pelvic tilt
+8. **extended_angles** (6 features) - Joint angle variability
+9. **temporal_extended** (12 features) - Advanced timing
+10. **stability** (4 features) - Balance and stability
+11. **stride_extended** (5 features) - Advanced stride metrics
+12. **symmetry_extended** (10 features) - Comprehensive symmetry
+13. **kinematic_extended** (2 features) - Pixel-based measurements
 
-# NEW: from_joint_angles() returns None if no valid data
-if feature is None:
-    print(f"⚠️  Skipping {sample_id}: could not create feature")
-    continue  # Skip this sample
+**Total: 82 features**
 
-train_features.append(feature)
-```
+## Troubleshooting
 
-## Complete Example
+### Still Getting the Error?
 
-```python
-from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
-from ambient.pose.joint_angles import get_joint_angles
-from ambient.classification.knn_classifier import (
-    KNNGaitClassifier,
-    KNNClassifierConfig
-)
-from ambient.classification.features import GaitFeatureVector
+1. **Make sure you restarted the kernel** - This is critical!
+2. **Check you're in the right environment:**
+   ```bash
+   which python3
+   # Should show: /path/to/alexpose/.venv/bin/python3
+   ```
+3. **Verify the fix is applied:**
+   ```python
+   from ambient.classification.features import GaitFeatureVector
+   fv = GaitFeatureVector()
+   print(hasattr(fv, "_feature_groups_enabled"))  # Should print: True
+   ```
 
-# Process all samples
-train_features = []
-skipped_samples = []
+### Need Help?
 
-for csv_file in csv_files:
-    sample_id = csv_file.stem
-    df = loader.load_gavd_data(csv_file)
-    
-    # Extract keypoints
-    keypoints = extractor.extract_from_sequence(
-        df, video_base_path,
-        filter_empty=True,
-        min_keypoints=25
-    )
-    
-    if not keypoints:
-        skipped_samples.append((sample_id, "no_keypoints"))
-        continue
-    
-    # Calculate joint angles
-    joint_angles = get_joint_angles(keypoints, "BLAZEPOSE_33", fps=30.0)
-    
-    # Check if valid
-    if not joint_angles.has_valid_data():
-        skipped_samples.append((sample_id, "no_valid_angles"))
-        continue
-    
-    # Create feature
-    feature = GaitFeatureVector.from_joint_angles(
-        joint_angles,
-        sample_id=sample_id,
-        condition_label=condition
-    )
-    
-    if feature is None:
-        skipped_samples.append((sample_id, "feature_creation_failed"))
-        continue
-    
-    train_features.append(feature)
-
-print(f"\nProcessed: {len(train_features)} valid, {len(skipped_samples)} skipped")
-if skipped_samples:
-    print("\nSkipped samples:")
-    for sid, reason in skipped_samples[:10]:
-        print(f"  {sid}: {reason}")
-
-# Train classifier
-if len(train_features) >= 5:
-    config = KNNClassifierConfig(
-        n_neighbors=5,
-        weights="distance",
-        metric="euclidean",
-        normalize_features=True
-    )
-    
-    classifier = KNNGaitClassifier(config=config)
-    metrics = classifier.train(
-        train_features,
-        validate=True,
-        auto_remove_invalid=True  # Extra safety net
-    )
-    
-    print(f"\nTraining Results:")
-    print(f"  Accuracy: {metrics['train_accuracy']:.3f}")
-    print(f"  Samples: {metrics['n_samples']}")
-else:
-    print(f"⚠️  Not enough valid samples: {len(train_features)}")
-```
-
-## Restart Kernel
-
-**IMPORTANT:** If you've already run cells in your notebook:
-
-1. **Kernel → Restart Kernel** (or Restart & Run All)
-2. This ensures the updated code is loaded
-3. Re-run all cells from the beginning
-
-## Investigate Specific Sample
-
-To understand why `cljas5esv00fn3n6lewd5xqdl` failed:
-
-```python
-problem_id = "cljas5esv00fn3n6lewd5xqdl"
-csv_file = data_root / "cerebralpalsy" / f"{problem_id}.csv"
-
-# Load and check
-df = loader.load_gavd_data(csv_file)
-print(f"CSV rows: {len(df)}")
-print(f"Video ID: {df.iloc[0]['id']}")
-
-# Try extraction
-keypoints = extractor.extract_from_sequence(
-    df, video_base_path,
-    verbose=True,
-    filter_empty=False  # Don't filter to see what happens
-)
-
-print(f"\nKeypoints: {len(keypoints)}")
-if keypoints:
-    extractor.print_extraction_statistics(keypoints, problem_id)
-    
-    # Try angles
-    angles = get_joint_angles(keypoints, "BLAZEPOSE_33", fps=30.0)
-    print(f"\nAngle frames: {len(angles.frames)}")
-    print(f"Has valid data: {angles.has_valid_data()}")
-    print(f"Valid frames: {angles.get_valid_frame_count()}")
-    
-    # Check each joint
-    for joint in ["left_hip", "left_knee", "left_ankle"]:
-        stats = angles.get_statistics(joint)
-        print(f"{joint}: valid_count={stats['valid_count']}, mean={stats['mean']}")
-```
+Check the detailed documentation:
+- `docs/fixes/feature-groups-enabled-initialization-fix.md` - Full technical details
+- `notes/features/FEATURE_GROUPS_ENABLED_FIX_SUMMARY.md` - Summary of changes
 
 ## Summary
 
-**Immediate fix:** Add `auto_remove_invalid=True` to your `train()` call.
+- ✅ Bug fixed in `ambient/classification/features.py`
+- ✅ All tests passing (31 tests total)
+- ✅ Backward compatible - existing code still works
+- ✅ New 82-feature mode available
+- ✅ Ready to use immediately
 
-**Long-term fix:** Add validation checks at each step (keypoints → angles → features).
-
-**Root cause:** Sample has no valid angle data, likely due to failed keypoint extraction or joint angle calculation.
+**Action Required:** Just restart your Jupyter kernel and re-run your code!

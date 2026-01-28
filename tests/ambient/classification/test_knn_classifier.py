@@ -164,13 +164,20 @@ class TestGaitFeatureVector:
             right_ankle_range=40.0,
         )
 
+        # Test default (all 82 features)
         arr = fv.to_array()
-
         assert isinstance(arr, np.ndarray)
-        assert len(arr) == 15
+        assert len(arr) == 82
         assert arr[0] == 175.0  # left_hip_mean
         assert arr[6] == 1.0  # hip_asymmetry
         assert arr[11] == 40.0  # left_ankle_range
+        
+        # Test legacy mode (15 features)
+        arr_legacy = fv.to_array(feature_groups=["core_angles"])
+        assert len(arr_legacy) == 15
+        assert arr_legacy[0] == 175.0  # left_hip_mean
+        assert arr_legacy[6] == 1.0  # hip_asymmetry
+        assert arr_legacy[11] == 40.0  # left_ankle_range
 
     def test_from_joint_angles(self, sample_joint_angles):
         """Test creating feature vector from joint angles."""
@@ -188,14 +195,20 @@ class TestGaitFeatureVector:
 
     def test_get_feature_names(self):
         """Test getting feature names."""
+        # Test default (all 82 features)
         names = GaitFeatureVector.get_feature_names()
-
         assert isinstance(names, list)
-        assert len(names) == 15
+        assert len(names) == 82
         assert "left_hip_mean" in names
         assert "hip_asymmetry" in names
         assert "left_ankle_range" in names
         assert "right_ankle_range" in names
+        
+        # Test legacy mode (15 features)
+        names_legacy = GaitFeatureVector.get_feature_names(feature_groups=["core_angles"])
+        assert len(names_legacy) == 15
+        assert "left_hip_mean" in names_legacy
+        assert "hip_asymmetry" in names_legacy
 
 
 class TestKNNClassifierConfig:
@@ -230,7 +243,8 @@ class TestKNNGaitClassifier:
 
         assert classifier.is_trained is False
         assert classifier.config.n_neighbors == 5
-        assert len(classifier.feature_names) == 15
+        # Feature names now includes all 82 features by default
+        assert len(classifier.feature_names) == 82
 
     def test_classifier_with_custom_config(self):
         """Test classifier with custom config."""

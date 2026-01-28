@@ -124,6 +124,23 @@ class BaseGaitClassifier(IClassifier, ABC):
         if not features:
             raise ValueError("No training features provided")
 
+        # Filter out None values (from failed feature extraction)
+        original_count = len(features)
+        features = [f for f in features if f is not None]
+        
+        if len(features) < original_count:
+            removed_count = original_count - len(features)
+            logger.warning(
+                f"Removed {removed_count} None feature vectors (failed extraction). "
+                f"Continuing with {len(features)} valid features."
+            )
+        
+        if not features:
+            raise ValueError(
+                "No valid training features after filtering None values. "
+                "All feature extractions failed. Check your input data."
+            )
+
         # Extract features WITHOUT scaling (we'll scale after validation)
         X = np.array([f.to_array() for f in features])
         y = np.array([f.condition_label for f in features])

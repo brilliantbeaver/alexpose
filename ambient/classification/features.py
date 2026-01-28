@@ -378,24 +378,29 @@ class GaitFeatureVector:
     
     # ========== FEATURE SELECTION ==========
     # Allow classifiers to specify which feature groups to use
-    _feature_groups_enabled: Dict[str, bool] = field(default_factory=lambda: {
-        "core_angles": True,  # Always enabled for backward compatibility
-        "spatiotemporal": True,
-        "temporal_phases": True,
-        "symmetry_indices": True,
-        "kinematic": True,  # New kinematic features group
-        "variability": True,
-        "postural": True,
-        "extended_angles": True,  # NEW: Extended joint angle features
-        "temporal_extended": True,  # NEW: Extended temporal features
-        "stability": True,  # NEW: Stability and balance features
-        "stride_extended": True,  # NEW: Extended stride features
-        "symmetry_extended": True,  # NEW: Extended symmetry features
-        "kinematic_extended": True,  # NEW: Extended kinematic features
-    })
+    # Note: Using Optional to allow None, then initialize in __post_init__
+    _feature_groups_enabled: Optional[Dict[str, bool]] = field(default=None)
 
     def __post_init__(self):
         """Calculate derived features after initialization."""
+        # Initialize _feature_groups_enabled if not provided
+        if self._feature_groups_enabled is None:
+            self._feature_groups_enabled = {
+                "core_angles": True,  # Always enabled for backward compatibility
+                "spatiotemporal": True,
+                "temporal_phases": True,
+                "symmetry_indices": True,
+                "kinematic": True,  # New kinematic features group
+                "variability": True,
+                "postural": True,
+                "extended_angles": True,  # NEW: Extended joint angle features
+                "temporal_extended": True,  # NEW: Extended temporal features
+                "stability": True,  # NEW: Stability and balance features
+                "stride_extended": True,  # NEW: Extended stride features
+                "symmetry_extended": True,  # NEW: Extended symmetry features
+                "kinematic_extended": True,  # NEW: Extended kinematic features
+            }
+        
         # Calculate asymmetry features if not provided (backward compatibility)
         if self.hip_asymmetry == 0.0 and (self.left_hip_mean != 0.0 or self.right_hip_mean != 0.0):
             self.hip_asymmetry = abs(self.left_hip_mean - self.right_hip_mean)
@@ -407,6 +412,41 @@ class GaitFeatureVector:
         # Calculate stance/swing ratio if components are provided
         if self.stance_swing_ratio == 0.0 and self.stance_percentage > 0 and self.swing_percentage > 0:
             self.stance_swing_ratio = self.stance_percentage / self.swing_percentage
+
+    def __setstate__(self, state):
+        """
+        Handle unpickling of GaitFeatureVector objects.
+        
+        This method is called when unpickling objects. It's critical for handling
+        feature vectors that were pickled with old code (before _feature_groups_enabled fix).
+        
+        When unpickling, __post_init__ is NOT called, so we must manually initialize
+        _feature_groups_enabled here.
+        
+        Args:
+            state: Dictionary of object attributes from pickle
+        """
+        # Restore all attributes from pickle
+        self.__dict__.update(state)
+        
+        # Initialize _feature_groups_enabled if it's missing or None
+        # This handles old pickled objects created before the fix
+        if not hasattr(self, '_feature_groups_enabled') or self._feature_groups_enabled is None:
+            self._feature_groups_enabled = {
+                "core_angles": True,
+                "spatiotemporal": True,
+                "temporal_phases": True,
+                "symmetry_indices": True,
+                "kinematic": True,
+                "variability": True,
+                "postural": True,
+                "extended_angles": True,
+                "temporal_extended": True,
+                "stability": True,
+                "stride_extended": True,
+                "symmetry_extended": True,
+                "kinematic_extended": True,
+            }
 
     def to_array(self, feature_groups: Optional[List[str]] = None) -> np.ndarray:
         """
