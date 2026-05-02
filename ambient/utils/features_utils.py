@@ -11,7 +11,7 @@ Typical workflow:
     4. Train classifiers on loaded features
 
 Example:
-    >>> from ambient.utils.features import save_features, load_features
+    >>> from ambient.utils.features_utils import save_features, load_features
     >>> # After feature extraction
     >>> save_features(features, counts, filename="my_features.pkl", directory="data/")
     >>> # Later, in a different session
@@ -144,7 +144,7 @@ def load_features(
         Exception: For other errors during file reading or deserialization.
     
     Example:
-        >>> from ambient.utils.features import load_features
+        >>> from ambient.utils.features_utils import load_features
         >>> features, counts = load_features(
         ...     filename="my_features.pkl",
         ...     directory=Path("data/training")
@@ -252,7 +252,7 @@ def check_features_file(
         bool: True if the file exists and is accessible, False otherwise.
     
     Example:
-        >>> from ambient.utils.features import check_features_file, load_features
+        >>> from ambient.utils.features_utils import check_features_file, load_features
         >>> from pathlib import Path
         >>> 
         >>> # Check before loading to avoid exceptions

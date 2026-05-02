@@ -23,10 +23,11 @@ Welcome to the AlexPose documentation. This directory contains comprehensive doc
 ### 🔬 Analysis Components
 - [Pose Estimation](analysis/pose-estimation.md) - Pose estimation frameworks and usage
 - [Gait Analysis](analysis/gait-analysis.md) - Enhanced gait analysis capabilities
-- [Feature Extraction](analysis/feature-extraction.md) - Comprehensive feature extraction
+- [Feature Extraction](analysis/feature-extraction.md) - Comprehensive feature extraction (60+ features)
 - [Temporal Analysis](analysis/temporal-analysis.md) - Gait cycle detection and timing
 - [Symmetry Analysis](analysis/symmetry-analysis.md) - Left-right symmetry assessment
 - [LLM Classification](analysis/llm-classification.md) - AI-powered gait classification
+- [Evidence-Based Features](analysis/evidence-based-gait-features-2025.md) - Research foundations
 
 ### 🛠️ Development
 - [Contributing](development/contributing.md) - How to contribute to the project
@@ -40,11 +41,11 @@ Welcome to the AlexPose documentation. This directory contains comprehensive doc
 - [Classification API](api/classification.md) - LLM classification APIs
 - [Configuration API](api/configuration.md) - Configuration management APIs
 
-### 📖 Tutorials
-- [Basic Usage](tutorials/basic-usage.md) - Basic gait analysis workflow
-- [Advanced Features](tutorials/advanced-features.md) - Advanced analysis capabilities
-- [Custom Models](tutorials/custom-models.md) - Adding custom pose estimation models
-- [Integration](tutorials/integration.md) - Integrating with other systems
+### 📖 Tutorials & Guides
+- [Gait Analysis Tutorial](guides/gait-analysis-tutorial.md) - Complete guide including kinematic features
+- [Gait Analysis Clinical Guide](guides/gait-analysis-clinical-guide.md) - Clinical interpretation
+- [Quick Start](guides/quickstart.md) - Get started in 5 minutes
+- [Configuration Guide](guides/configuration.md) - System configuration and customization
 
 ### 📊 Examples
 - [Code Examples](examples/) - Practical code examples and demonstrations

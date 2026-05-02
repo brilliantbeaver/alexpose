@@ -254,6 +254,10 @@ app.include_router(video_router)
 app.include_router(models_router)
 app.include_router(pose_analysis.router)
 
+# Import and include realtime router
+from server.routers.realtime import router as realtime_router
+app.include_router(realtime_router)
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
