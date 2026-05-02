@@ -232,7 +232,7 @@ class GaitFeatureVector:
     - New features default to 0.0 if not provided
     """
 
-    # ========== CORE JOINT ANGLES (LEGACY) ==========
+    # ========== CORE JOINT ANGLES ==========
     # These fields maintain backward compatibility
     
     # Mean joint angles (degrees)
@@ -275,8 +275,19 @@ class GaitFeatureVector:
     stance_swing_ratio: float = 0.0  # stance/swing ratio (normally ~1.5)
     
     # ========== SYMMETRY INDICES ==========
-    # Evidence: Standard SI formula = (L-R)/(0.5*(L+R))*100
-    # Healthy gait: <12% asymmetry, Pathological: >16%
+    # Symmetry Indices (SI) quantify left–right gait asymmetry for a paired metric
+    # (e.g., stride length, stance time, joint ROM). They report the *normalized*
+    # percent difference between left (L) and right (R):
+    #
+    #   SI = (L - R) / (0.5 * (L + R)) * 100
+    #
+    # Normalizing by the mean of (L, R) makes SI scale-free: a 5 cm mismatch in
+    # stride length is treated as more important for a small stepper than for a
+    # long stepper. Interpretation:
+    # - Magnitude |SI|: how asymmetric the gait is (0% = perfectly symmetric)
+    # - Sign: direction of asymmetry (positive => L > R, negative => R > L)
+    # Clinical rule-of-thumb: healthy gait often < ~12% asymmetry; persistent
+    # > ~16% can indicate pathology or compensation.
     # Source: Clinical Biomechanics - Gait Symmetry (2022)
     
     stride_length_si: float = 0.0  # Symmetry Index for stride length
