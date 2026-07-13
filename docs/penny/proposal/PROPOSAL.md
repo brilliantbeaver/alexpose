@@ -36,7 +36,7 @@ We propose Gait-JEPA, a self-supervised model that learns the shape of walking f
 
 Neuroscience grounding, led by our clinical co-author, tells us which movement axes separate conditions such as Parkinson's disease and stroke: shared asymmetry and postural instability, plus a condition-specific third axis of rhythm-variability versus spatiotemporal slowing. This lets us ask four honest questions. RQ1: can a simple classifier on the frozen features match or beat the 76 percent baseline on the same 68-clip, five-class split? RQ2: does the model degrade more gracefully than the Random Forest when labels are scarce? RQ3: can tiny linear probes read documented clinical scalars, such as symmetry indices and stride-time variability, straight out of the frozen latent? RQ4: is VICReg load-bearing, so that removing it triggers collapse?
 
-![pipeline-overview](proposal-images/pipeline.svg)
+![pipeline-overview](images/pipeline.svg)
 *Both paths start from the same MediaPipe BlazePose skeletons; the prior path spends person-weeks on 82 hand features and a Random Forest, while ours pretrains Gait-JEPA on all of the unlabeled poses the old path threw away, then spends the 68 labels only on a small frozen-encoder probe.*
 
 We are honest about the downside. A clean null result, where the probe fails to beat 76 percent or the clinical probes explain little variance, would itself teach us that our filtered unlabeled pool was too small or that block masking alone does not surface the clinical axes, pointing the next study toward richer data or better masking. The design is deliberately small: a two-to-four-layer encoder, short 16-to-32-frame clips, and factorized attention, so the whole study fits a student team on a single modest GPU within a three-week sprint.
@@ -99,7 +99,7 @@ The first step is **pretraining without labels**. We take all of the cheap, unla
 
 The second step is **reading clinical meaning back out**. Once the model has learned a rich representation of walking from the unlabeled mountain, we freeze what it learned and use our 68 labeled clips only to train a small, lightweight classifier on top of that frozen representation. Because the heavy lifting was done during label-free pretraining, the 68 labels are asked to do far less work than before. We compare this head-to-head against the 76 percent random forest, keeping the same 70/30 split so that the comparison is fair.
 
-![two-step-big-idea](proposal-images/big-idea.svg)
+![two-step-big-idea](images/big-idea.svg)
 *The two-step plan. Step 1 learns the shape of walking from a large pile of unlabeled clips with no doctor involved; step 2 spends the tiny stack of 68 labels on a small probe over the frozen encoder.*
 
 If it works, we will have shown that most of what a gait-screening model needs to know can be learned for free from unlabeled movement, and that a handful of expensive labels is enough to point that knowledge at a clinical question. And if it does not work, we will say so plainly: the honest null result is that a JEPA encoder trained on unlabeled skeletons, once frozen and probed with the same 68 labels and the same split, fails to beat the 76 percent random forest baseline. Either way, the two-step design lets us finally use the cheap data we have been throwing away, and aims to let the model learn the melody of a walk instead of settling for 82 numbers about it.
@@ -118,7 +118,7 @@ The trouble is that the labels, not the videos, are the scarce resource. Recordi
 
 This is the same "fill-in-the-blank" idea that taught modern language models to write. Cover a word in a sentence, make the model predict it, and to do that well the model has to learn grammar and meaning. We are doing the same thing with the geometry of a walking body instead of text.
 
-![fill-in-the-blank](proposal-images/fill-in-the-blank.svg)
+![fill-in-the-blank](images/fill-in-the-blank.svg)
 *Self-supervised learning as fill-in-the-blank: hide part of a walking clip, predict it from what remains, and score the guess for free because the answer was in the data all along.*
 
 ### Predicting meaning instead of pixels
@@ -131,7 +131,7 @@ The fix is to predict *meaning* rather than exact appearance. To make that preci
 
 An *embedding* is a list of numbers that summarizes something. Think of how a doctor might sum up a gait in a few words: "shuffling, stooped, small steps." Those words are a compact summary that throws away the exact pixel values but keeps what matters. An embedding is the numerical version of that summary, a handful of numbers that capture the essence of an input. The *latent space* is the space of all such summaries, the imaginary map on which every possible walking pattern is placed as a point, with similar walks landing near each other. "Latent" just means hidden or underlying: it is the underlying meaning, not the surface detail.
 
-![latent-space-map](proposal-images/latent-space-map.svg)
+![latent-space-map](images/latent-space-map.svg)
 *Predicting meaning, not pixels. An encoder turns a noisy clip into a short summary (an embedding); similar walks land near each other in latent space, so the model can ignore camera shake and focus on structure.*
 
 The key move in the *Joint Embedding Predictive Architecture*, or JEPA, is to run the fill-in-the-blank game entirely in latent space. Instead of asking "what were the exact coordinates of the hidden leg," we ask "what is the *summary* of the hidden leg's motion." The model predicts one compact summary from another. Because a summary has already thrown away the unpredictable wiggle, the model is free to concentrate on the part of the motion that is actually structured and meaningful. It is the difference between asking a student to reproduce a painting brushstroke by brushstroke and asking them to describe what the painting depicts. The second question is both easier and more useful.
@@ -158,7 +158,7 @@ One more safeguard matters here. We never let the scoring signal flow backward i
 
 **We need a way to score the guess.** Finally we compare the predictor's guessed summaries against the target encoder's true summaries and measure how far apart they are. The measure is *mean squared error*, often called an L2 loss: take the difference between the guess and the answer at each number in the summary, square it, and average. Squaring makes larger misses count for much more than small ones. Crucially this comparison happens in latent space, between two embeddings, never between raw coordinates, and it is computed only at the hidden positions, since those are the only places we are actually testing the model.
 
-![four-pieces](proposal-images/jepa-pieces.svg)
+![four-pieces](images/jepa-pieces.svg)
 *The four pieces of a JEPA wired together: the context encoder reads the visible tokens, the slow EMA target encoder makes the answer key under stop-gradient, the predictor guesses, and the loss compares them in latent space.*
 
 ### The collapse trap and the VICReg fix
@@ -179,7 +179,7 @@ L = L_pred + lambda_v * L_var + lambda_c * L_cov
 
 the prediction error plus the two VICReg terms scaled by weights `lambda_v` and `lambda_c`, all measured on the hidden positions only. The prediction term drives the model to learn; the variance and covariance terms keep it from cheating its way to a trivial answer.
 
-![collapse-vs-vicreg](proposal-images/collapse-vicreg.svg)
+![collapse-vs-vicreg](images/collapse-vicreg.svg)
 *The collapse trap and the VICReg fix. Left: every clip maps to one useless point, so the loss is zero but nothing is learned. Right: the variance term keeps each dimension spread out and the covariance term keeps dimensions carrying different information, with no negatives and no decoder.*
 
 A brief note on what would count as failure, since a proposal should say so plainly. If, despite these defenses, the learned summaries collapse or fail to separate different gaits, we would see it directly: the variance term would sit pinned at its floor, and the downstream readout described later would perform no better than chance. That is the null result we are testing against, and we report it honestly if it occurs.
@@ -190,7 +190,7 @@ Our proposal stands or falls on evidence, so before describing how we will build
 
 A note on vocabulary before we begin, since we assume no machine-learning background. A "frozen encoder" means we train the Gait-JEPA network on unlabeled walking data, then lock its weights so it can no longer change, and use it only as a fixed feature extractor that turns a walking clip into a list of numbers (an embedding). A "probe" is a small, simple classifier we train on top of those frozen numbers using only our 68 labeled clips. Keeping the encoder frozen matters for fairness: it means the labels never touch the big network, so any accuracy we get reflects structure the network learned from unlabeled walking alone. This mirrors the prior ASDRP pipeline, which also fed fixed features (its 82 hand-engineered numbers) into a light classifier such as a Random Forest. That symmetry is what makes our headline comparison an apples-to-apples contest between two sets of features rather than two different amounts of training effort.
 
-![rq-scorecard](proposal-images/research-questions.svg)
+![rq-scorecard](images/research-questions.svg)
 *The four research questions at a glance, each tied to one metric and one success target you can check in advance.*
 
 ### RQ1: Can label-free features beat hand-engineered features on the same tiny task?
@@ -207,7 +207,7 @@ Beating a single accuracy number is persuasive, but the deeper promise of learni
 
 The metric is a label-efficiency curve: test accuracy measured when the classifier is trained on 25, 50, 75, and 100 percent of the labeled training portion, holding the test set fixed. We measure it by repeatedly retraining both the JEPA probe and the Random Forest on each fraction of the training labels and plotting accuracy against fraction. Success means that at the 25 percent and 50 percent points the frozen JEPA probe stays above the Random Forest trained on the same fraction by a visible margin, with a target of at least five accuracy points at the 25 percent point. This is often the most convincing evidence that pretraining helped, because it shows the network arrived already knowing the shape of walking and needed only a handful of labels to attach clinical names to what it had learned.
 
-![label-efficiency-curve](proposal-images/label-efficiency-curve.svg)
+![label-efficiency-curve](images/label-efficiency-curve.svg)
 *An illustration of the label-efficiency curve we hope to see for research question 2. The numbers shown are a hypothesis to be tested, not measured results.*
 
 ### RQ3: Did the network learn clinical structure without being told?
@@ -254,7 +254,7 @@ Our choice is to make one token per joint per frame. The normalized tensor has T
 
 Two problems remain. Once we have lifted every joint-at-a-frame into a D-length vector, the transformer by itself has no idea which joint or which moment each token came from, because a plain transformer treats its tokens as an unordered set. We fix this by adding two more learned embeddings to each token. A learned joint embedding is a distinct D-length vector for each of the 33 landmarks, so the model can tell "this token is a left knee" from "this token is a nose." A learned time embedding is a distinct vector for each frame index, so the model knows "this token is from frame 5" versus "frame 12." Both are learned during training rather than fixed by us. After adding them, every token carries three things fused together: where the joint was, which joint it is, and when it was. That bundle of T times 33 enriched tokens is what the model actually reads.
 
-![tokenization](proposal-images/architecture.svg)
+![tokenization](images/architecture.svg)
 *The Gait-JEPA architecture end to end: a normalized pose tensor is tokenized and block-masked; the context encoder and predictor guess the masked target embeddings that the EMA target encoder produces, and the loss combines an L2 prediction term with VICReg.*
 
 ### Block masking: what we hide, and why blocks and not scattered dots
@@ -269,7 +269,7 @@ The second style we call time-window. We pick a short window of consecutive fram
 
 We define the limbs for the first style using the natural semantic joint groups of BlazePose: face (0-10), left arm (11, 13, 15, 17, 19, 21), right arm (12, 14, 16, 18, 20, 22), torso (11, 12, 23, 24), left leg (23, 25, 27, 29, 31), and right leg (24, 26, 28, 30, 32). Mixing limb-over-time and time-window masking across different clips in the batch means the model must become good at both spatial reasoning across the body and temporal reasoning across the stride.
 
-![masking-styles](proposal-images/masking-scheme.svg)
+![masking-styles](images/masking-scheme.svg)
 *The two block-masking styles on the joint-time grid. Style A hides one whole limb across a window of frames; style B hides all joints in a short window. Hiding blocks, not scattered dots, forces the model to learn coordinated motion.*
 
 ### The four pieces, wired together
@@ -348,7 +348,7 @@ Stroke damages walking in an almost opposite way. A stroke is an injury, from a 
 
 So the headline is simple and it drives every design choice below. Parkinson's is a timing and variability disease that ends up on both sides; stroke is a fixed one-sided weakness. A representation that is good for this problem must preserve the axes that separate those two stories, and must not let them blur into a single vague notion of "abnormal gait."
 
-![neuro-mechanism-map](proposal-images/neuro-map.svg)
+![neuro-mechanism-map](images/neuro-map.svg)
 *The neuroscience map. Parkinson's disease and stroke share an asymmetry axis and a postural-instability axis, but keep a distinct third axis each, rhythm and variability for Parkinson's and spatiotemporal slowing for stroke, which the method is built to keep separate.*
 
 ### Four mechanism groups: two shared, one distinct to each disease
@@ -416,7 +416,7 @@ To make the comparison honest we will run a full **baseline ladder**, from the s
 
 Because 68 examples make any single split noisy, we will report each probe accuracy with a spread (repeated stratified splits or cross-validation on the training portion) rather than a lone point estimate, so a judge can see whether a two-point lead is real or within the noise.
 
-![rq1-baseline-ladder](proposal-images/eval-scorecard.svg)
+![rq1-baseline-ladder](images/eval-scorecard.svg)
 *The evaluation scorecard: each research question mapped to how we measure it and the success bar it must clear, with the sanity checks that run throughout training.*
 
 ### RQ2: Does the JEPA probe degrade more gracefully as labels shrink?
@@ -473,7 +473,7 @@ We write this section as a working plan rather than a wish list. The core engine
 
 A note on terms before the schedule. When we say "encoder" we mean the part of the model that reads a walking clip and turns it into a compact list of numbers summarizing the motion; "frozen" means we lock its learned settings so they no longer change, which lets us test the summary fairly. A "probe" is a small, simple classifier we attach on top of those frozen summaries to read out a clinical label; it is intentionally weak so that any success we see comes from the encoder's understanding of gait, not from the classifier doing the heavy lifting. An "ablation" is a controlled experiment where we remove one ingredient and re-measure, so we can prove that ingredient actually mattered.
 
-![timeline-gantt](proposal-images/timeline.svg)
+![timeline-gantt](images/timeline.svg)
 *The plan: a three-week core build inside a calendar arc from mid-July to the early-August 2026 neuroscience-grounded write-up.*
 
 ### The three-week core build
@@ -575,7 +575,7 @@ The first concrete system in this family that we lean on is I-JEPA, which applie
 
 All of these models face the same hazard, and it is worth naming plainly because it drives one of our design choices. If you only reward the model for making its prediction match the answer, it can cheat by collapsing every summary to the same constant: the prediction trivially matches the target, the error is zero, and nothing has been learned. This failure is called representation collapse. Our defense is VICReg, short for Variance-Invariance-Covariance Regularization, which adds two gentle pressures during training: one that forces each dimension of the summary to keep some spread across a batch of examples so nothing flattens to a constant, and one that pushes different dimensions to carry different information rather than echoing one another (source: VICReg). VICReg lets us avoid the machinery some other self-supervised methods need, such as banks of negative examples or a separate decoder that reconstructs raw inputs; collapse is held off by the combination of a slowly updated target and these two regularizers alone.
 
-![jepa-family-tree](proposal-images/jepa-family-tree.svg)
+![jepa-family-tree](images/jepa-family-tree.svg)
 *Where Gait-JEPA sits in the JEPA family: the same predict-in-latent-space idea and the same VICReg anti-collapse recipe as prior image and video models, but run on pose skeletons with masking aimed at clinical movement axes.*
 
 ### Our twist: JEPA on skeletons, with mechanism-aimed masking
