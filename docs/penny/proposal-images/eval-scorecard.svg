@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="620" fill="#ffffff"/>
+  <text x="490" y="34" font-size="21" font-weight="bold" text-anchor="middle" fill="#0f172a">Evaluation scorecard</text>
+  <text x="490" y="58" font-size="13" text-anchor="middle" fill="#475569">One row per research question: what we test, how we measure it, and the bar it must clear.</text>
+
+  <text x="150" y="92" font-size="13" font-weight="bold" text-anchor="middle" fill="#334155">Research question</text>
+  <text x="530" y="92" font-size="13" font-weight="bold" text-anchor="middle" fill="#334155">How we measure it</text>
+  <text x="835" y="92" font-size="13" font-weight="bold" text-anchor="middle" fill="#334155">Success bar and baseline it beats</text>
+
+  <rect x="30" y="105" width="240" height="95" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="150" y="130" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">RQ1: Beat the baseline?</text>
+  <text x="150" y="150" font-size="11" text-anchor="middle" fill="#1e3a8a">frozen JEPA linear / MLP</text>
+  <text x="150" y="165" font-size="11" text-anchor="middle" fill="#1e3a8a">probe vs the classic</text>
+  <text x="150" y="180" font-size="11" text-anchor="middle" fill="#1e3a8a">hand-feature classifiers</text>
+  <text x="150" y="195" font-size="11" text-anchor="middle" fill="#1e3a8a">on the same 70/30 split</text>
+
+  <rect x="410" y="105" width="240" height="95" rx="8" fill="#f1f5f9" stroke="#334155"/>
+  <text x="530" y="132" font-size="11" text-anchor="middle" fill="#0f172a">5-class test accuracy</text>
+  <text x="530" y="150" font-size="11" text-anchor="middle" fill="#475569">fair fight: same probe run on</text>
+  <text x="530" y="165" font-size="11" text-anchor="middle" fill="#475569">the 82 hand features vs on the</text>
+  <text x="530" y="180" font-size="11" text-anchor="middle" fill="#475569">frozen JEPA embedding</text>
+  <text x="530" y="195" font-size="11" text-anchor="middle" fill="#475569">(chance = 20%)</text>
+
+  <rect x="720" y="105" width="230" height="95" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="835" y="130" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">beat RF at 76%</text>
+  <text x="835" y="148" font-size="11" text-anchor="middle" fill="#14532d">also top kNN and decision</text>
+  <text x="835" y="163" font-size="11" text-anchor="middle" fill="#14532d">tree; report frozen linear,</text>
+  <text x="835" y="178" font-size="11" text-anchor="middle" fill="#14532d">MLP, and a fine-tuned</text>
+  <text x="835" y="193" font-size="11" text-anchor="middle" fill="#14532d">ceiling separately</text>
+
+  <line x1="270" y1="152" x2="410" y2="152" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="650" y1="152" x2="720" y2="152" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="215" width="240" height="90" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="150" y="242" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">RQ2: Degrade gracefully?</text>
+  <text x="150" y="262" font-size="11" text-anchor="middle" fill="#1e3a8a">how accuracy holds up</text>
+  <text x="150" y="277" font-size="11" text-anchor="middle" fill="#1e3a8a">as the labeled train set</text>
+  <text x="150" y="292" font-size="11" text-anchor="middle" fill="#1e3a8a">shrinks</text>
+
+  <rect x="410" y="215" width="240" height="90" rx="8" fill="#f1f5f9" stroke="#334155"/>
+  <text x="530" y="245" font-size="11" text-anchor="middle" fill="#0f172a">label-efficiency curve vs RF</text>
+  <text x="530" y="263" font-size="11" text-anchor="middle" fill="#475569">accuracy at 25 / 50 / 75 / 100%</text>
+  <text x="530" y="278" font-size="11" text-anchor="middle" fill="#475569">of labels, both trained on the</text>
+  <text x="530" y="293" font-size="11" text-anchor="middle" fill="#475569">same label subsets</text>
+
+  <rect x="720" y="215" width="230" height="90" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="835" y="245" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">beat RF by 5+ points</text>
+  <text x="835" y="263" font-size="11" text-anchor="middle" fill="#14532d">at the 25% label point</text>
+  <text x="835" y="278" font-size="11" text-anchor="middle" fill="#14532d">and hold a flatter curve</text>
+  <text x="835" y="293" font-size="11" text-anchor="middle" fill="#14532d">as labels are removed</text>
+
+  <line x1="270" y1="260" x2="410" y2="260" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="650" y1="260" x2="720" y2="260" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="320" width="240" height="95" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="150" y="347" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">RQ3: Clinical axes learned?</text>
+  <text x="150" y="367" font-size="11" text-anchor="middle" fill="#1e3a8a">read clinical scalars from</text>
+  <text x="150" y="382" font-size="11" text-anchor="middle" fill="#1e3a8a">the frozen latent, without</text>
+  <text x="150" y="397" font-size="11" text-anchor="middle" fill="#1e3a8a">using labels to train it</text>
+
+  <rect x="410" y="320" width="240" height="95" rx="8" fill="#f1f5f9" stroke="#334155"/>
+  <text x="530" y="350" font-size="11" text-anchor="middle" fill="#0f172a">clinical-probe test R-squared</text>
+  <text x="530" y="368" font-size="11" text-anchor="middle" fill="#475569">ridge probe to symmetry index</text>
+  <text x="530" y="383" font-size="11" text-anchor="middle" fill="#475569">and stride-time variability,</text>
+  <text x="530" y="398" font-size="11" text-anchor="middle" fill="#475569">plus threshold agreement</text>
+
+  <rect x="720" y="320" width="230" height="95" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="835" y="350" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">R-squared 0.3 or higher</text>
+  <text x="835" y="368" font-size="11" text-anchor="middle" fill="#14532d">for a symmetry scalar and</text>
+  <text x="835" y="383" font-size="11" text-anchor="middle" fill="#14532d">the rhythm scalar; correct</text>
+  <text x="835" y="398" font-size="11" text-anchor="middle" fill="#14532d">side of threshold over 70%</text>
+
+  <line x1="270" y1="365" x2="410" y2="365" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="650" y1="365" x2="720" y2="365" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="430" width="240" height="90" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="150" y="457" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">RQ4: Does VICReg prevent</text>
+  <text x="150" y="474" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">collapse?</text>
+  <text x="150" y="494" font-size="11" text-anchor="middle" fill="#1e3a8a">turn the term off and</text>
+  <text x="150" y="509" font-size="11" text-anchor="middle" fill="#1e3a8a">watch (ablation)</text>
+
+  <rect x="410" y="430" width="240" height="90" rx="8" fill="#f1f5f9" stroke="#334155"/>
+  <text x="530" y="460" font-size="11" text-anchor="middle" fill="#0f172a">per-dimension std and</text>
+  <text x="530" y="478" font-size="11" text-anchor="middle" fill="#475569">effective rank of the</text>
+  <text x="530" y="493" font-size="11" text-anchor="middle" fill="#475569">embedding, compared</text>
+  <text x="530" y="508" font-size="11" text-anchor="middle" fill="#475569">VICReg on vs off</text>
+
+  <rect x="720" y="430" width="230" height="90" rx="8" fill="#dcfce7" stroke="#15803d"/>
+  <text x="835" y="458" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">on: std stays high, high rank</text>
+  <text x="835" y="476" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">off: std falls, rank collapses</text>
+  <text x="835" y="496" font-size="11" text-anchor="middle" fill="#14532d">confirms the term is</text>
+  <text x="835" y="511" font-size="11" text-anchor="middle" fill="#14532d">load-bearing</text>
+
+  <line x1="270" y1="475" x2="410" y2="475" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="650" y1="475" x2="720" y2="475" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="540" width="920" height="58" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+  <text x="52" y="562" font-size="12" font-weight="bold" fill="#4c1d95">Sanity checks running throughout:</text>
+
+  <rect x="52" y="570" width="270" height="20" rx="6" fill="#ffffff" stroke="#6d28d9"/>
+  <text x="187" y="584" font-size="10.5" text-anchor="middle" fill="#4c1d95">live std + covariance monitoring</text>
+
+  <rect x="340" y="570" width="270" height="20" rx="6" fill="#ffffff" stroke="#6d28d9"/>
+  <text x="475" y="584" font-size="10.5" text-anchor="middle" fill="#4c1d95">UMAP colored by class before labels</text>
+
+  <rect x="628" y="570" width="300" height="20" rx="6" fill="#ffffff" stroke="#6d28d9"/>
+  <text x="778" y="584" font-size="10.5" text-anchor="middle" fill="#4c1d95">mechanism-grouped error decomposition</text>
+</svg>

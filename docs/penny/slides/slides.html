@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gait-JEPA - Interactive Slides</title>
+<style>
+  /* ============================================================
+     Gait-JEPA interactive slides.
+     Light, uncluttered, pastel theme. Self-contained: one file,
+     inline CSS and JS, SVG illustrations pulled from images/.
+     No em-dashes or en-dashes anywhere.
+     ============================================================ */
+
+  :root {
+    --ink:       #0f172a;   /* headings, slate-900 */
+    --body:      #334155;   /* body text, slate-700 */
+    --muted:     #64748b;   /* captions, slate-500 */
+    --paper:     #fbfcfe;   /* near-white page */
+    --card:      #ffffff;
+    --rule:      #e2e8f0;
+
+    --blue:      #1d4ed8;   --blue-fill:   #eff6ff;   --blue-ink:   #1e3a8a;
+    --green:     #15803d;   --green-fill:  #f0fdf4;   --green-ink:  #14532d;
+    --amber:     #d97706;   --amber-fill:  #fff7ed;   --amber-ink:  #92400e;
+    --violet:    #7c3aed;   --violet-fill: #f5f3ff;   --violet-ink: #5b21b6;
+
+    --sans: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", "IBM Plex Mono", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--paper);
+    color: var(--body);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- Deck frame ---- */
+  #deck {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3.2vh 3.5vw 6vh;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1180px;
+    height: 100%;
+    max-height: 92vh;
+    flex-direction: column;
+    animation: fade 0.32s ease;
+  }
+  .slide.active { display: flex; }
+
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Slide typography ---- */
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .kicker.blue   { color: var(--blue); }
+  .kicker.green  { color: var(--green); }
+  .kicker.amber  { color: var(--amber); }
+  .kicker.violet { color: var(--violet); }
+
+  h1.slide-title {
+    font-size: clamp(1.5rem, 3vw, 2.35rem);
+    line-height: 1.12;
+    color: var(--ink);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+  }
+  p.lede {
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--muted);
+    max-width: 60ch;
+    margin-bottom: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+  /* slides whose body is a text-beside-figure split or a card grid read
+     better anchored near the top than floating in the dead center. */
+  .body.top { justify-content: flex-start; padding-top: 0.4rem; }
+
+  /* figure that holds an SVG */
+  .figwrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .figwrap img {
+    max-width: 100%;
+    max-height: 64vh;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+  .caption {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.7rem;
+    max-width: 72ch;
+    line-height: 1.45;
+  }
+
+  /* two-column split: text beside a figure */
+  .split {
+    flex: 0 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 1.6rem;
+    align-items: center;
+  }
+  .split.text-right { grid-template-columns: 1.08fr 0.92fr; }
+  .split .col-fig { display: flex; align-items: center; justify-content: center; min-height: 0; }
+  .split .col-fig img { max-width: 100%; max-height: 58vh; height: auto; object-fit: contain; border-radius: 12px; }
+
+  ul.points { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  ul.points li {
+    position: relative;
+    padding-left: 1.3rem;
+    font-size: clamp(0.92rem, 1.35vw, 1.08rem);
+    line-height: 1.5;
+    color: var(--body);
+  }
+  ul.points li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.55em;
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 2px;
+    background: var(--blue);
+  }
+  ul.points li.g::before { background: var(--green); }
+  ul.points li.a::before { background: var(--amber); }
+  ul.points li.v::before { background: var(--violet); }
+  ul.points li b { color: var(--ink); font-weight: 650; }
+
+  code, .mono { font-family: var(--mono); font-size: 0.9em; background: #f1f5f9; padding: 0.08em 0.35em; border-radius: 4px; color: var(--blue-ink); }
+
+  /* callout cards */
+  .cards { display: grid; gap: 1rem; }
+  .cards.two   { grid-template-columns: 1fr 1fr; }
+  .cards.three { grid-template-columns: repeat(3, 1fr); }
+  .cards.four  { grid-template-columns: repeat(2, 1fr); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--blue);
+    border-radius: 10px;
+    padding: 0.9rem 1.05rem;
+  }
+  .card.g { border-left-color: var(--green); }
+  .card.a { border-left-color: var(--amber); }
+  .card.v { border-left-color: var(--violet); }
+  .card h3 { font-size: 1rem; color: var(--ink); margin-bottom: 0.3rem; font-weight: 650; }
+  .card p  { font-size: 0.9rem; line-height: 1.45; color: var(--body); }
+  .card .metric { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 0.4rem; display: block; }
+  .card .target { font-size: 0.85rem; font-weight: 600; margin-top: 0.25rem; display: block; }
+  .card.g .target { color: var(--green); }
+  .card.a .target { color: var(--amber-ink); }
+  .card.v .target { color: var(--violet); }
+  .card .target.blue { color: var(--blue); }
+
+  .callout {
+    background: var(--blue-fill);
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--blue-ink);
+  }
+  .callout.g { background: var(--green-fill); border-color: #bbf7d0; color: var(--green-ink); }
+  .callout.a { background: var(--amber-fill); border-color: #fed7aa; color: var(--amber-ink); }
+  .callout.v { background: var(--violet-fill); border-color: #ddd6fe; color: var(--violet-ink); }
+  .callout .lbl {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+    opacity: 0.85;
+  }
+  .callout b { font-weight: 700; }
+
+  /* ---- Title slide ---- */
+  .titleslide { align-items: center; justify-content: center; text-align: center; }
+  .titleslide .figwrap { flex: 0 0 auto; height: 40vh; width: 100%; margin-bottom: 1.2rem; }
+  .titleslide .figwrap img { max-height: 40vh; width: auto; }
+  .titleslide h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    color: var(--ink);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 0.6rem;
+  }
+  .titleslide .sub {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: var(--body);
+    max-width: 46ch;
+    margin: 0 auto 0.5rem;
+    line-height: 1.4;
+  }
+  .titleslide .meta {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-top: 0.8rem;
+  }
+  .titleslide .authors {
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.45;
+    margin-top: 1.1rem;
+  }
+  .pill {
+    display: inline-block;
+    background: var(--green-fill);
+    color: var(--green-ink);
+    border: 1px solid #bbf7d0;
+    border-radius: 999px;
+    padding: 0.2rem 0.8rem;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    margin: 0.15rem;
+  }
+  .pill.blue { background: var(--blue-fill); color: var(--blue-ink); border-color: #bfdbfe; }
+  .pill.violet { background: var(--violet-fill); color: var(--violet-ink); border-color: #ddd6fe; }
+
+  /* ---- Chrome: progress, counter, hint, nav ---- */
+  #progress {
+    position: fixed;
+    left: 0; top: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), var(--violet));
+    width: 0%;
+    transition: width 0.3s ease;
+    z-index: 50;
+  }
+  #counter {
+    position: fixed;
+    right: 1.4rem; bottom: 1rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    z-index: 50;
+    user-select: none;
+  }
+  #counter b { color: var(--ink); }
+  #hint {
+    position: fixed;
+    left: 1.4rem; bottom: 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    z-index: 50;
+    user-select: none;
+  }
+  .navbtn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: rgba(255,255,255,0.8);
+    color: var(--blue);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, opacity 0.15s;
+    backdrop-filter: blur(4px);
+  }
+  .navbtn:hover { background: #fff; }
+  #prevbtn { left: 0.7rem; }
+  #nextbtn { right: 0.7rem; }
+  .navbtn:disabled { opacity: 0.25; cursor: default; }
+
+  /* dots */
+  #dots {
+    position: fixed;
+    left: 50%; bottom: 0.85rem;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.4rem;
+    z-index: 50;
+  }
+  #dots .dot {
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 999px;
+    background: var(--rule);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  #dots .dot.on { background: var(--blue); transform: scale(1.25); }
+
+  /* overview grid (press O) */
+  #overview {
+    position: fixed;
+    inset: 0;
+    background: rgba(251,252,254,0.97);
+    z-index: 100;
+    display: none;
+    padding: 3rem 2rem;
+    overflow-y: auto;
+  }
+  #overview.show { display: block; }
+  #overview h2 { text-align: center; color: var(--ink); margin-bottom: 1.4rem; font-size: 1.2rem; }
+  #ovgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .ovcard {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    padding: 0.8rem 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+  .ovcard:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .ovcard .n { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+  .ovcard .t { font-size: 0.92rem; color: var(--ink); font-weight: 600; margin-top: 0.2rem; line-height: 1.25; }
+
+  @media (max-width: 820px) {
+    .split, .split.text-right { grid-template-columns: 1fr; gap: 0.9rem; }
+    .cards.two, .cards.three, .cards.four { grid-template-columns: 1fr; }
+    .navbtn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="deck">
+
+  <!-- ============ SLIDE 1: TITLE ============ -->
+  <section class="slide titleslide active" data-title="Title">
+    <div class="figwrap"><img src="images/title-hero.svg" alt="A walking skeleton on the left turns into a space where similar walks land near each other on the right" /></div>
+    <h1>Gait-JEPA</h1>
+    <p class="sub">Teaching a model to understand walking without labels.</p>
+    <div>
+      <span class="pill blue">learn first</span>
+      <span class="pill">label last</span>
+      <span class="pill violet">gait neuroscience</span>
+    </div>
+    <p class="authors">Alex Mui &middot; Penny Inouye &middot; Theodore Mui<br/>Phil Mui (Research Advisor)</p>
+    <p class="meta">Pose-sequence JEPA on 33 body joints over time</p>
+  </section>
+
+  <!-- ============ SLIDE 2: THE PROBLEM ============ -->
+  <section class="slide" data-title="The label bottleneck">
+    <div class="kicker">Part 1 &middot; the problem</div>
+    <h1 class="slide-title">Labels are the bottleneck, not the video</h1>
+    <p class="lede">Collecting raw walking video is cheap. Getting a doctor to label a clip is slow and costly. That mismatch is the whole problem.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li>The prior ASDRP work had <b>only 68 clinically labeled sequences</b>: normal 12, parkinsons 9, stroke 12, cerebral palsy 15, myopathic 20.</li>
+            <li class="g"><b>GAVD</b>, the Gait Abnormality in Video Dataset, is a large open pool of walking clips you can turn into pose data for free.</li>
+            <li class="a">The current pipeline only trains on <b>labeled rows</b>, so almost all of that pose data never gets used.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the gap this fills</span>
+            A large pool of unlabeled pose data exists, and the current pipeline has no way to learn from it.
+          </div>
+        </div>
+        <div class="col-fig"><img src="images/problem-scale.svg" alt="A tall stack of unlabeled clips next to a tiny stack of 68 labeled clips" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 3: WHY THE OLD PIPELINE STALLS ============ -->
+  <section class="slide" data-title="82 numbers throw away the walk">
+    <div class="kicker amber">Part 1 &middot; the second problem</div>
+    <h1 class="slide-title">Squeezing a clip into 82 numbers throws away the walk</h1>
+    <p class="lede">The prior best was a Random Forest on 82 hand-picked features: 76 percent test accuracy across 5 classes. Real signal, since chance is 20 percent. But it stands on a shaky base.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="images/feature-loss.svg" alt="A rich walking-cycle waveform squeezed into a handful of flat feature numbers" /></div>
+        <div>
+          <ul class="points">
+            <li class="a">Describing a whole song with 82 numbers like average loudness and tempo <b>loses the melody</b>. The same is true for a walking cycle.</li>
+            <li class="a">Every new feature is <b>a person-week of engineering</b>, and the set was already rebuilt from 15 to 34 to 43 to 82.</li>
+            <li class="a">Hand features <b>bake in the designer's guesses</b> about which motions matter, and they do not scale.</li>
+          </ul>
+          <div class="callout a" style="margin-top:1rem">
+            <span class="lbl">the fix, in one line</span>
+            Let a model learn the shape of walking from all the unlabeled data first, and spend the 68 labels only at the very end.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 4: THE BIG IDEA (TWO STEP) ============ -->
+  <section class="slide" data-title="The two-step big idea">
+    <div class="kicker blue">Part 2 &middot; the big idea</div>
+    <h1 class="slide-title">Learn first, label last</h1>
+    <p class="lede">The whole plan is two steps, and the order is what matters. Step 1 learns from the mountain of unlabeled video. Step 2 spends the tiny stack of 68 labels on a small final probe.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/two-step.svg" alt="Step 1 self-supervised pretraining on unlabeled clips feeds a frozen encoder into Step 2, a small labeled probe" /></div>
+      <p class="caption">Step 1 uses thousands of unlabeled clips, no doctor required. Step 2 freezes the encoder and fits a small 5-class classifier, a linear probe or a small MLP, on the pooled features of just the 68 labeled clips.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 5: SELF-SUPERVISED LEARNING ============ -->
+  <section class="slide" data-title="Fill in the blank">
+    <div class="kicker blue">Part 2 &middot; self-supervised learning</div>
+    <h1 class="slide-title">Self-supervised learning is fill-in-the-blank</h1>
+    <p class="lede">Take something you already have, hide part of it, and train the model to predict the hidden part from the visible part. No human labels anything, because the data labels itself.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/fill-blank.svg" alt="A row of walking frames with one frame hidden, predicted from the visible frames" /></div>
+      <p class="caption">Cover the left leg for half a second and you already know what it was doing, so you can score the model's guess for free. Do this millions of times and the model is forced to learn how bodies move.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 6: PREDICT MEANING NOT PIXELS ============ -->
+  <section class="slide" data-title="Predict meaning, not pixels">
+    <div class="kicker green">Part 2 &middot; what makes JEPA special</div>
+    <h1 class="slide-title">JEPA predicts meaning, not pixels</h1>
+    <p class="lede">Predicting the hidden part exactly, every pixel or joint coordinate, wastes effort on unpredictable noise like camera shake and fingertip wobble. JEPA makes a smarter move.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="images/predict-meaning.svg" alt="Predicting exact pixels wastes effort on noise, while predicting a latent summary captures meaning" /></div>
+        <div>
+          <ul class="points">
+            <li><b>Embedding:</b> a short list of numbers that summarizes something, like "person walking, left leg forward, upright posture".</li>
+            <li><b>Latent space:</b> the space of all those summaries. It is the compressed meaning, not the exact appearance.</li>
+            <li class="g">JEPA predicts <b>a summary of the hidden part</b> in latent space, so it can ignore unpredictable detail and focus on structure that carries meaning.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the name</span>
+            <b>JEPA</b> is a Joint Embedding Predictive Architecture. It predicts hidden parts in latent space.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 7: THE FOUR PIECES ============ -->
+  <section class="slide" data-title="The four pieces">
+    <div class="kicker blue">Part 2 &middot; the architecture</div>
+    <h1 class="slide-title">A JEPA has four pieces</h1>
+    <p class="lede">A context encoder reads the visible part, a slow-moving EMA target encoder makes the answer key, a predictor guesses, and a loss compares them in latent space.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/four-pieces.svg" alt="Context encoder, EMA target encoder with stop-gradient, predictor, and loss wired together" /></div>
+      <p class="caption">The target encoder is a slow EMA copy of the context encoder (target = m times target + (1 minus m) times context, m near 0.996 ramped toward 1.0). A slow copy is a stable answer key, so the model is not chasing a moving target. No negative pairs, no decoder.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 8: THE COLLAPSE TRAP + VICREG ============ -->
+  <section class="slide" data-title="Collapse and the VICReg fix">
+    <div class="kicker green">Part 2 &middot; the collapse trap and the fix</div>
+    <h1 class="slide-title">Stopping the model from cheating</h1>
+    <p class="lede">If nothing stops it, the model can cheat by outputting the same constant embedding for everything. The error is zero, the loss is happy, and the model learned nothing. This is representation collapse.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li class="a">The cheat: every clip maps to <b>the same vector</b>, so the prediction is always right and always useless.</li>
+            <li class="g"><b>VICReg</b> adds a variance term that keeps each embedding dimension spread out across a batch, so no dimension can collapse to a constant.</li>
+            <li class="g">It adds a covariance term that pushes dimensions to <b>carry different information</b> instead of copying each other.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">no tricks needed</span>
+            Collapse is prevented purely by the slow EMA target plus VICReg. No negative examples and no decoder.
+          </div>
+        </div>
+        <div class="col-fig"><img src="images/collapse-vicreg.svg" alt="Left: all points collapse to one spot. Right: VICReg spreads them into separated clusters" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 9: THE TWIST - JEPA ON SKELETONS ============ -->
+  <section class="slide" data-title="JEPA on skeletons">
+    <div class="kicker violet">Part 2 &middot; this proposal's twist</div>
+    <h1 class="slide-title">Run JEPA directly on skeletons, never on pixels</h1>
+    <p class="lede">Most JEPAs work on image or video pixels. This proposal runs JEPA on pose sequences: the 33 tracked joints over time, arranged as a small graph that changes frame by frame.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="images/skeleton-twist.svg" alt="A short sequence of skeleton frames turned into a grid of joint-time tokens" /></div>
+        <div>
+          <ul class="points">
+            <li class="v">Each joint carries 3 numbers (its x, y, z). Each joint at each frame becomes <b>one token</b>, giving T times J tokens per clip.</li>
+            <li class="v">Clips are <b>pelvis-centered and torso-normalized</b>, so the model cannot cheat off absolute camera position.</li>
+            <li class="v">We do not touch pixels at all, so the method is <b>light enough to run on a modest GPU or even a CPU</b> for the toy version.</li>
+          </ul>
+          <div class="callout v" style="margin-top:1rem">
+            <span class="lbl">why it fits gait</span>
+            The pose graph exposes exactly the joints and phases clinicians care about, so the task can be aimed at real mechanisms.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 10: THE TWO MASKING STYLES ============ -->
+  <section class="slide" data-title="Two block-masking styles">
+    <div class="kicker violet">Part 4 &middot; the self-supervised task</div>
+    <h1 class="slide-title">Hide blocks, not scattered dots</h1>
+    <p class="lede">Instead of hiding random scattered joints, which is too easy, we hide spatiotemporal blocks. Hiding a whole limb forces the model to reason about coordinated motion, which is exactly what walking is.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/masking-styles.svg" alt="Style A hides one limb over a window of frames; Style B hides all joints in a short window" /></div>
+      <p class="caption">Style A, limb-over-time, hides one whole limb across a window of frames. Style B, time-window, hides all 33 joints in a short window. The two styles are mixed across the batch.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 11: THE SKELETON GRAPH ============ -->
+  <section class="slide" data-title="The 33-joint pose graph">
+    <div class="kicker blue">Reference &middot; the pose graph</div>
+    <h1 class="slide-title">33 joints in six groups</h1>
+    <p class="lede">MediaPipe BLAZEPOSE_33 finds 33 body landmarks in 3D per frame. We group them into six semantic parts, and block masking hides a whole group over time.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/skeleton-graph.svg" alt="A stick-figure skeleton colored by six semantic joint groups: face, left arm, right arm, torso, left leg, right leg" /></div>
+      <p class="caption">The six groups are face, left arm, right arm, torso, left leg, and right leg. Shoulders and hips are shared anchor joints, so the groups are masking units, not a clean split. This grouping is what makes limb-over-time masking possible.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 12: THE NEUROSCIENCE CONNECTION ============ -->
+  <section class="slide" data-title="The neuroscience connection">
+    <div class="kicker violet">Part 5 &middot; the neuroscience connection</div>
+    <h1 class="slide-title">Masking aimed at real clinical mechanisms</h1>
+    <p class="lede">Parkinson's disease and stroke damage movement in different ways, so a good representation should keep the axes that tell them apart. Guided by Penny's feature mapping, the masking design targets those axes on purpose.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/neuro-map.svg" alt="Parkinson's and stroke share an asymmetry axis and a postural-instability axis but keep distinct third axes" /></div>
+      <p class="caption">Both conditions share an asymmetry axis and a postural-instability axis. Parkinson's keeps a rhythm-and-variability axis while stroke keeps a spatiotemporal-slowing axis, so the two should stay separable. This is a hypothesis the probes test, not a guarantee.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 13: PENNY'S FEATURE-TO-CONDITION MAPPING ============ -->
+  <section class="slide" data-title="Penny's feature mapping is the bridge">
+    <div class="kicker violet">Part 5 &middot; the neuroscience bridge</div>
+    <h1 class="slide-title">From the neurology of a condition to a measurable gait feature</h1>
+    <p class="lede">The connection is not hand-waved. Penny graded all 82 gait features H, M, L, or NA per condition, each with a documented neurological reason and threshold. That mapping points the masking and the probes at features that carry real clinical meaning.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/feature-mapping.svg" alt="A three-column bridge: the neurological basis of each condition, Penny's H M L NA feature mapping, and how Gait-JEPA uses it" /></div>
+      <p class="caption">Each H-priority feature traces to a mechanism: stride_time_cv to basal-ganglia rhythm failure in Parkinson's, knee_asymmetry to stroke stiff-knee gait, walking_speed to reduced corticospinal drive. The next slide shows exactly how the mapping is used in training, evaluation, and inference.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 14: HOW THE MAPPING IS USED (TRAIN / EVAL / INFER) ============ -->
+  <section class="slide" data-title="Using the mapping: train, eval, infer">
+    <div class="kicker violet">Part 5 &middot; the neuroscience bridge</div>
+    <h1 class="slide-title">How we use Penny's mapping in training, evaluation, and inference</h1>
+    <p class="lede">The mapping aims the self-supervised task in training, defines the probes and thresholds in evaluation, and turns a prediction into a clinical readout at inference. The H-priority scalars are never training labels.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/mapping-usage.svg" alt="Three columns showing how Penny's mapping is used in training, evaluation, and inference" /></div>
+      <p class="caption">Training stays fully self-supervised: the mapping only chooses which blocks to mask. Evaluation freezes the encoder and reads the H-priority scalars back out with tiny probes, checking each against Penny's documented threshold. Inference gives a mechanism-level readout for a new clip, not just a black-box label.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 15: THE FOUR RESEARCH QUESTIONS ============ -->
+  <section class="slide" data-title="The four research questions">
+    <div class="kicker">Part 3 &middot; the research questions</div>
+    <h1 class="slide-title">Four measurable questions</h1>
+    <p class="lede">Each question points to one metric and one success target you can check.</p>
+    <div class="body top">
+      <div class="cards four">
+        <div class="card">
+          <h3>RQ1 &middot; Match or beat the baseline?</h3>
+          <p>Does a frozen JEPA probe match or beat the 76 percent Random Forest?</p>
+          <span class="metric">metric: 5-class test accuracy, 68-clip 70/30 split</span>
+          <span class="target blue">target: at or above 76 percent, a clear win at 80 percent or more</span>
+        </div>
+        <div class="card g">
+          <h3>RQ2 &middot; Graceful with fewer labels?</h3>
+          <p>Does the JEPA probe lose accuracy more slowly than the Random Forest as labels shrink?</p>
+          <span class="metric">metric: accuracy at 25, 50, 75, 100 percent of labels</span>
+          <span class="target">target: above RF by 5+ points at the 25 percent mark</span>
+        </div>
+        <div class="card v">
+          <h3>RQ3 &middot; Learned clinical axes?</h3>
+          <p>Can tiny linear probes read documented clinical scalars out of the frozen latent?</p>
+          <span class="metric">metric: R-squared of ridge probes to H-priority scalars</span>
+          <span class="target">target: R-squared clearly above 0 (aim 0.3+) for a symmetry scalar and stride_time_cv, plus over 70 percent threshold agreement</span>
+        </div>
+        <div class="card a">
+          <h3>RQ4 &middot; Does VICReg matter?</h3>
+          <p>If we remove the VICReg term, does the representation collapse?</p>
+          <span class="metric">metric: embedding standard deviation and rank</span>
+          <span class="target">target: std stays above about 0.5 of its target with it on, falls toward zero with it off</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 14: HOW IT WORKS - PIPELINE ============ -->
+  <section class="slide" data-title="The end-to-end pipeline">
+    <div class="kicker">Part 4 &middot; how it works</div>
+    <h1 class="slide-title">One pipeline, replacing the hand-feature path</h1>
+    <p class="lede">Both pipelines start from the same MediaPipe poses. The prior path computes 82 hand features and fits a Random Forest. Our path pretrains the JEPA on the unlabeled GAVD pool, freezes the encoder, and fits only a small probe on the 68 labeled clips, which are held out of pretraining.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/pipeline.svg" alt="Both paths start from MediaPipe poses, then diverge into the prior hand-feature path and our JEPA path" /></div>
+      <p class="caption">The 68 labeled clips never enter pretraining, so the 70/30 comparison stays fair. A fair-fight control fits the same probe on the 82 hand features, separating better features from a better classifier. Shared preprocessing: drop low-confidence clips, pelvis-center and torso-normalize, resample, window, then augment (pretraining only).</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE: HOW YOU WILL KNOW IT WORKED ============ -->
+  <section class="slide" data-title="How you will know it worked">
+    <div class="kicker">Part 7 &middot; evaluation</div>
+    <h1 class="slide-title">How you will know it worked</h1>
+    <p class="lede">Evaluation ties straight back to the four research questions, and even a null result teaches us something.</p>
+    <div class="body">
+      <div class="figwrap"><img src="images/eval-scorecard.svg" alt="A scorecard mapping each research question to what a good result looks like, plus a note that a null result still teaches us" /></div>
+      <p class="caption">A clean negative result on a well-run experiment is real science. If the probe does not match or beat 76 percent, it tells us the unlabeled pool was too small or noisy, or that block masking alone does not surface the clinical axes.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 17: RISKS ============ -->
+  <section class="slide" data-title="Risks and mitigations">
+    <div class="kicker amber">Part 8 &middot; risks</div>
+    <h1 class="slide-title">Risks and how to handle them</h1>
+    <p class="lede">Every risk has a concrete mitigation built into the method.</p>
+    <div class="body top">
+      <div class="cards two" style="align-content:start">
+        <div class="card a">
+          <h3>Not enough unlabeled data after filtering</h3>
+          <p>Some GAVD links may be dead or low quality. Window with overlap to multiply clips, add augmentation, and fold in student-collected and openly licensed video.</p>
+        </div>
+        <div class="card g">
+          <h3>Representation collapse</h3>
+          <p>Keep the VICReg variance-covariance term on from the start and monitor embedding standard deviation live, stopping early if it drops.</p>
+        </div>
+        <div class="card">
+          <h3>The probe overfits 68 examples</h3>
+          <p>Prefer the linear probe as the headline, use strong regularization and cross-validation, and lean on the label-efficiency curve rather than a single number.</p>
+        </div>
+        <div class="card v">
+          <h3>MediaPipe pose errors and shaky video</h3>
+          <p>Filter by confidence, normalize away absolute camera position, and augment with jitter so the encoder learns to ignore it.</p>
+        </div>
+      </div>
+      <div class="callout a">
+        <span class="lbl">compute limits for a student team</span>
+        Keep the encoder small at 2 to 4 layers, clips short at T = 16 to 32, and use factorized attention. The whole method fits on a single modest GPU, or a CPU for the toy version.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 18: SUMMARY / CLOSE ============ -->
+  <section class="slide titleslide" data-title="Summary">
+    <div class="kicker" style="margin-bottom:1rem">the flagship proposal, in one breath</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.9rem)">Learn the shape of walking<br/>without labels, then spend<br/>the 68 labels wisely.</h1>
+    <p class="sub" style="margin-top:1rem">A full JEPA on a spatiotemporal joint graph, with VICReg to prevent collapse, mechanism-aimed masking, and interpretable probes that turn clinical priors into concrete validation.</p>
+    <div style="margin-top:1.2rem">
+      <span class="pill blue">Impact 4 / 5</span>
+      <span class="pill">Sophistication 5 / 5</span>
+      <span class="pill">Effort 4 / 5</span>
+      <span class="pill violet">Neuroscience 5 / 5</span>
+    </div>
+    <p class="authors" style="margin-top:1.4rem">Alex Mui &middot; Penny Inouye &middot; Theodore Mui &middot; Phil Mui (Research Advisor)</p>
+    <p class="meta" style="margin-top:0.7rem">Read the full proposal in README.md &middot; run the six-notebook tutorial in tutorials/<br/>Key sources: I-JEPA (Assran 2023), VICReg (Bardes 2022), V-JEPA (2024), GAVD (Ranjan 2025)</p>
+  </section>
+
+</div>
+
+<!-- ---- Chrome ---- -->
+<button id="prevbtn" class="navbtn" aria-label="Previous slide">&#8592;</button>
+<button id="nextbtn" class="navbtn" aria-label="Next slide">&#8594;</button>
+<div id="dots"></div>
+<div id="counter"><b id="cur">1</b> / <span id="total">18</span></div>
+<div id="hint">arrows or space to move &middot; O for overview &middot; F fullscreen</div>
+
+<!-- ---- Overview grid ---- -->
+<div id="overview">
+  <h2>All slides &middot; click to jump &middot; press O or Esc to close</h2>
+  <div id="ovgrid"></div>
+</div>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var total = slides.length;
+    var idx = 0;
+
+    var progress = document.getElementById('progress');
+    var curEl = document.getElementById('cur');
+    var totalEl = document.getElementById('total');
+    var prevBtn = document.getElementById('prevbtn');
+    var nextBtn = document.getElementById('nextbtn');
+    var dotsWrap = document.getElementById('dots');
+    var overview = document.getElementById('overview');
+    var ovgrid = document.getElementById('ovgrid');
+
+    totalEl.textContent = total;
+
+    // build dots
+    slides.forEach(function (s, i) {
+      var d = document.createElement('div');
+      d.className = 'dot';
+      d.title = s.getAttribute('data-title') || ('Slide ' + (i + 1));
+      d.addEventListener('click', function () { go(i); });
+      dotsWrap.appendChild(d);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+
+    // build overview cards
+    slides.forEach(function (s, i) {
+      var c = document.createElement('div');
+      c.className = 'ovcard';
+      c.innerHTML = '<div class="n">' + (i + 1) + ' / ' + total + '</div>' +
+                    '<div class="t">' + (s.getAttribute('data-title') || '') + '</div>';
+      c.addEventListener('click', function () { go(i); closeOverview(); });
+      ovgrid.appendChild(c);
+    });
+
+    function render() {
+      slides.forEach(function (s, i) { s.classList.toggle('active', i === idx); });
+      dots.forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+      progress.style.width = (total > 1 ? (idx / (total - 1)) * 100 : 100) + '%';
+      curEl.textContent = idx + 1;
+      prevBtn.disabled = (idx === 0);
+      nextBtn.disabled = (idx === total - 1);
+      try { history.replaceState(null, '', '#' + (idx + 1)); } catch (e) {}
+    }
+
+    function go(i) {
+      idx = Math.max(0, Math.min(total - 1, i));
+      render();
+    }
+    function next() { if (idx < total - 1) go(idx + 1); }
+    function prev() { if (idx > 0) go(idx - 1); }
+
+    function openOverview() { overview.classList.add('show'); }
+    function closeOverview() { overview.classList.remove('show'); }
+    function toggleOverview() { overview.classList.toggle('show'); }
+
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    document.addEventListener('keydown', function (e) {
+      if (overview.classList.contains('show')) {
+        if (e.key === 'Escape' || e.key === 'o' || e.key === 'O') { closeOverview(); e.preventDefault(); }
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          next(); e.preventDefault(); break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          prev(); e.preventDefault(); break;
+        case 'Home': go(0); e.preventDefault(); break;
+        case 'End': go(total - 1); e.preventDefault(); break;
+        case 'o':
+        case 'O': toggleOverview(); e.preventDefault(); break;
+        case 'f':
+        case 'F':
+          if (!document.fullscreenElement) { (document.documentElement.requestFullscreen || function(){})(); }
+          else { (document.exitFullscreen || function(){})(); }
+          e.preventDefault(); break;
+      }
+    });
+
+    // click left/right thirds of the deck to move (but not on links/buttons)
+    document.getElementById('deck').addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;
+      var x = e.clientX / window.innerWidth;
+      if (x > 0.72) next();
+      else if (x < 0.28) prev();
+    });
+
+    // touch swipe
+    var tx = 0;
+    document.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+    }, { passive: true });
+
+    // deep link via hash (#3 opens slide 3)
+    var h = parseInt((location.hash || '').replace('#', ''), 10);
+    if (!isNaN(h) && h >= 1 && h <= total) idx = h - 1;
+
+    render();
+  })();
+</script>
+
+</body>
+</html>

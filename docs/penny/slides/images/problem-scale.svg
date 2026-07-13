@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="56" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The labels are the bottleneck, not the video</text>
+  <text x="640" y="90" font-size="17" text-anchor="middle" fill="#475569">Raw walking video is everywhere. Clinical labels are rare and slow to get.</text>
+
+  <!-- ================= LEFT: TALL UNLABELED STACK ================= -->
+  <rect x="90" y="130" width="520" height="520" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="350" y="172" font-size="20" font-weight="bold" text-anchor="middle" fill="#1e3a8a">thousands of UNLABELED clips</text>
+  <text x="350" y="198" font-size="15" text-anchor="middle" fill="#475569">cheap, no doctor required</text>
+
+  <!-- tall stack of many faint blue rectangles -->
+  <g fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5">
+    <rect x="170" y="222" width="340" height="20" rx="5"/>
+    <rect x="174" y="248" width="340" height="20" rx="5"/>
+    <rect x="178" y="274" width="340" height="20" rx="5"/>
+    <rect x="182" y="300" width="340" height="20" rx="5"/>
+    <rect x="186" y="326" width="340" height="20" rx="5"/>
+    <rect x="190" y="352" width="340" height="20" rx="5"/>
+    <rect x="194" y="378" width="340" height="20" rx="5"/>
+    <rect x="198" y="404" width="340" height="20" rx="5"/>
+    <rect x="202" y="430" width="340" height="20" rx="5"/>
+    <rect x="206" y="456" width="340" height="20" rx="5"/>
+    <rect x="210" y="482" width="340" height="20" rx="5"/>
+    <rect x="214" y="508" width="340" height="20" rx="5"/>
+    <rect x="218" y="534" width="340" height="20" rx="5"/>
+    <rect x="222" y="560" width="340" height="20" rx="5"/>
+  </g>
+  <text x="360" y="612" font-size="15" font-style="italic" text-anchor="middle" fill="#1e40af">GAVD: a large pool of walking video</text>
+
+  <!-- ================= RIGHT: TINY LABELED STACK ================= -->
+  <rect x="670" y="130" width="520" height="520" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="930" y="172" font-size="20" font-weight="bold" text-anchor="middle" fill="#14532d">only 68 LABELED clips</text>
+  <text x="930" y="198" font-size="15" text-anchor="middle" fill="#475569">slow, a doctor must label each</text>
+
+  <!-- tiny stack of just a few green rectangles -->
+  <g fill="#dcfce7" stroke="#15803d" stroke-width="1.5">
+    <rect x="810" y="300" width="240" height="24" rx="6"/>
+    <rect x="816" y="330" width="240" height="24" rx="6"/>
+    <rect x="822" y="360" width="240" height="24" rx="6"/>
+  </g>
+
+  <!-- class breakdown -->
+  <rect x="760" y="430" width="340" height="120" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="930" y="462" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">the whole labeled set</text>
+  <text x="930" y="490" font-size="14" text-anchor="middle" fill="#14532d">normal 12, parkinsons 9, stroke 12,</text>
+  <text x="930" y="512" font-size="14" text-anchor="middle" fill="#14532d">cerebral palsy 15, myopathic 20</text>
+  <text x="930" y="538" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">= 68 clips total</text>
+
+  <!-- ================= BOTTOM CAPTION ================= -->
+  <text x="640" y="694" font-size="18" font-weight="bold" text-anchor="middle" fill="#0f172a">The labels are the bottleneck, not the video.</text>
+</svg>
