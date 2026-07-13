@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="60" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The twist: run JEPA on skeletons, not pixels</text>
+  <text x="640" y="94" font-size="18" text-anchor="middle" fill="#475569">Each tracked joint at each frame becomes one token, so the model reasons over motion, not appearance.</text>
+
+  <!-- ================= SKELETON SEQUENCE PANEL ================= -->
+  <rect x="70" y="130" width="1140" height="300" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="640" y="166" font-size="18" font-weight="bold" text-anchor="middle" fill="#1e3a8a">A short pose sequence: the 33 joints move frame by frame</text>
+
+  <!-- faint time arrow across the panel -->
+  <line x1="150" y1="200" x2="1130" y2="200" stroke="#93c5fd" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="640" y="192" font-size="13" text-anchor="middle" fill="#64748b">time -&gt;</text>
+
+  <!-- ===== FRAME 1 ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <line x1="245" y1="272" x2="245" y2="336"/>
+    <line x1="213" y1="290" x2="277" y2="290"/>
+    <line x1="213" y1="290" x2="203" y2="326"/>
+    <line x1="277" y1="290" x2="287" y2="326"/>
+    <line x1="245" y1="336" x2="223" y2="392"/>
+    <line x1="245" y1="336" x2="267" y2="392"/>
+  </g>
+  <g fill="#1d4ed8">
+    <circle cx="245" cy="256" r="9"/>
+    <circle cx="213" cy="290" r="5"/><circle cx="277" cy="290" r="5"/>
+    <circle cx="203" cy="326" r="5"/><circle cx="287" cy="326" r="5"/>
+    <circle cx="245" cy="336" r="5"/>
+    <circle cx="223" cy="392" r="5"/><circle cx="267" cy="392" r="5"/>
+  </g>
+  <line x1="245" y1="228" x2="245" y2="404" stroke="#bfdbfe" stroke-width="1.5" stroke-dasharray="3,4"/>
+  <text x="245" y="424" font-size="14" text-anchor="middle" fill="#475569">frame 1</text>
+
+  <!-- ===== FRAME 2 ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <line x1="440" y1="272" x2="440" y2="336"/>
+    <line x1="408" y1="290" x2="472" y2="290"/>
+    <line x1="408" y1="290" x2="394" y2="322"/>
+    <line x1="472" y1="290" x2="486" y2="324"/>
+    <line x1="440" y1="336" x2="412" y2="388"/>
+    <line x1="440" y1="336" x2="466" y2="392"/>
+  </g>
+  <g fill="#1d4ed8">
+    <circle cx="440" cy="256" r="9"/>
+    <circle cx="408" cy="290" r="5"/><circle cx="472" cy="290" r="5"/>
+    <circle cx="394" cy="322" r="5"/><circle cx="486" cy="324" r="5"/>
+    <circle cx="440" cy="336" r="5"/>
+    <circle cx="412" cy="388" r="5"/><circle cx="466" cy="392" r="5"/>
+  </g>
+  <line x1="440" y1="228" x2="440" y2="404" stroke="#bfdbfe" stroke-width="1.5" stroke-dasharray="3,4"/>
+  <text x="440" y="424" font-size="14" text-anchor="middle" fill="#475569">frame 2</text>
+
+  <!-- ===== FRAME 3 ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <line x1="635" y1="272" x2="635" y2="336"/>
+    <line x1="603" y1="290" x2="667" y2="290"/>
+    <line x1="603" y1="290" x2="589" y2="326"/>
+    <line x1="667" y1="290" x2="681" y2="326"/>
+    <line x1="635" y1="336" x2="611" y2="392"/>
+    <line x1="635" y1="336" x2="661" y2="390"/>
+  </g>
+  <g fill="#1d4ed8">
+    <circle cx="635" cy="256" r="9"/>
+    <circle cx="603" cy="290" r="5"/><circle cx="667" cy="290" r="5"/>
+    <circle cx="589" cy="326" r="5"/><circle cx="681" cy="326" r="5"/>
+    <circle cx="635" cy="336" r="5"/>
+    <circle cx="611" cy="392" r="5"/><circle cx="661" cy="390" r="5"/>
+  </g>
+  <line x1="635" y1="228" x2="635" y2="404" stroke="#bfdbfe" stroke-width="1.5" stroke-dasharray="3,4"/>
+  <text x="635" y="424" font-size="14" text-anchor="middle" fill="#475569">frame 3</text>
+
+  <!-- ===== FRAME 4 ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <line x1="830" y1="272" x2="830" y2="336"/>
+    <line x1="798" y1="290" x2="862" y2="290"/>
+    <line x1="798" y1="290" x2="784" y2="320"/>
+    <line x1="862" y1="290" x2="876" y2="320"/>
+    <line x1="830" y1="336" x2="806" y2="390"/>
+    <line x1="830" y1="336" x2="856" y2="392"/>
+  </g>
+  <g fill="#1d4ed8">
+    <circle cx="830" cy="256" r="9"/>
+    <circle cx="798" cy="290" r="5"/><circle cx="862" cy="290" r="5"/>
+    <circle cx="784" cy="320" r="5"/><circle cx="876" cy="320" r="5"/>
+    <circle cx="830" cy="336" r="5"/>
+    <circle cx="806" cy="390" r="5"/><circle cx="856" cy="392" r="5"/>
+  </g>
+  <line x1="830" y1="228" x2="830" y2="404" stroke="#bfdbfe" stroke-width="1.5" stroke-dasharray="3,4"/>
+  <text x="830" y="424" font-size="14" text-anchor="middle" fill="#475569">frame 4</text>
+
+  <!-- normalization note -->
+  <rect x="960" y="238" width="220" height="150" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="1070" y="268" font-size="14" font-weight="bold" text-anchor="middle" fill="#5b21b6">Normalized</text>
+  <text x="1070" y="296" font-size="13" text-anchor="middle" fill="#5b21b6">pelvis-centered,</text>
+  <text x="1070" y="315" font-size="13" text-anchor="middle" fill="#5b21b6">torso-normalized</text>
+  <text x="1070" y="348" font-size="12" text-anchor="middle" font-style="italic" fill="#5b21b6">so camera position</text>
+  <text x="1070" y="366" font-size="12" text-anchor="middle" font-style="italic" fill="#5b21b6">cannot be cheated</text>
+
+  <!-- ================= JOINT-AT-A-FRAME BECOMES A TOKEN ================= -->
+  <path d="M440,432 L440,470" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="640" y="464" font-size="16" font-weight="bold" text-anchor="middle" fill="#334155">each joint-at-a-frame becomes one token, forming a T x J grid</text>
+
+  <!-- token grid panel -->
+  <rect x="330" y="486" width="620" height="150" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="308" y="520" font-size="13" text-anchor="end" fill="#475569">joints</text>
+  <text x="308" y="538" font-size="13" text-anchor="end" fill="#475569">(J)</text>
+  <text x="640" y="628" font-size="13" text-anchor="middle" fill="#475569">frames (T) -&gt;</text>
+
+  <!-- grid of small token cells: 4 rows x 8 cols -->
+  <g fill="#dcfce7" stroke="#15803d" stroke-width="1.5">
+    <rect x="360" y="500" width="32" height="24" rx="5"/><rect x="398" y="500" width="32" height="24" rx="5"/><rect x="436" y="500" width="32" height="24" rx="5"/><rect x="474" y="500" width="32" height="24" rx="5"/><rect x="512" y="500" width="32" height="24" rx="5"/><rect x="550" y="500" width="32" height="24" rx="5"/><rect x="588" y="500" width="32" height="24" rx="5"/><rect x="626" y="500" width="32" height="24" rx="5"/>
+    <rect x="360" y="530" width="32" height="24" rx="5"/><rect x="398" y="530" width="32" height="24" rx="5"/><rect x="436" y="530" width="32" height="24" rx="5"/><rect x="474" y="530" width="32" height="24" rx="5"/><rect x="512" y="530" width="32" height="24" rx="5"/><rect x="550" y="530" width="32" height="24" rx="5"/><rect x="588" y="530" width="32" height="24" rx="5"/><rect x="626" y="530" width="32" height="24" rx="5"/>
+    <rect x="360" y="560" width="32" height="24" rx="5"/><rect x="398" y="560" width="32" height="24" rx="5"/><rect x="436" y="560" width="32" height="24" rx="5"/><rect x="474" y="560" width="32" height="24" rx="5"/><rect x="512" y="560" width="32" height="24" rx="5"/><rect x="550" y="560" width="32" height="24" rx="5"/><rect x="588" y="560" width="32" height="24" rx="5"/><rect x="626" y="560" width="32" height="24" rx="5"/>
+    <rect x="360" y="590" width="32" height="24" rx="5"/><rect x="398" y="590" width="32" height="24" rx="5"/><rect x="436" y="590" width="32" height="24" rx="5"/><rect x="474" y="590" width="32" height="24" rx="5"/><rect x="512" y="590" width="32" height="24" rx="5"/><rect x="550" y="590" width="32" height="24" rx="5"/><rect x="588" y="590" width="32" height="24" rx="5"/><rect x="626" y="590" width="32" height="24" rx="5"/>
+  </g>
+  <text x="710" y="547" font-size="13" text-anchor="start" fill="#14532d">one cell =</text>
+  <text x="710" y="565" font-size="13" text-anchor="start" fill="#14532d">one joint at</text>
+  <text x="710" y="583" font-size="13" text-anchor="start" fill="#14532d">one frame</text>
+
+  <!-- ================= BOTTOM CAPTION ================= -->
+  <rect x="300" y="656" width="680" height="46" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="640" y="684" font-size="17" font-weight="bold" text-anchor="middle" fill="#92400e">We work on the 33 joints over time as a graph, never on raw pixels.</text>
+</svg>

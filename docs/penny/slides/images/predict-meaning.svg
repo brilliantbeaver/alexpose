@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#15803d"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="70" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">Predict meaning, not pixels</text>
+  <text x="640" y="104" font-size="18" text-anchor="middle" fill="#475569">JEPA predicts a summary of the hidden part, not its exact appearance.</text>
+
+  <!-- ================= LEFT: PREDICT PIXELS (caution) ================= -->
+  <rect x="70" y="150" width="540" height="440" rx="12" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="340" y="192" font-size="20" font-weight="bold" text-anchor="middle" fill="#92400e">Predict exact pixels / coordinates</text>
+
+  <!-- noisy skeleton -->
+  <g stroke="#d97706" stroke-width="3" fill="#fff7ed" stroke-linecap="round">
+    <line x1="340" y1="300" x2="342" y2="410"/>
+    <circle cx="340" cy="282" r="18"/>
+    <line x1="292" y1="318" x2="390" y2="314"/>
+    <line x1="292" y1="318" x2="266" y2="364"/>
+    <line x1="266" y1="364" x2="284" y2="408"/>
+    <line x1="390" y1="314" x2="420" y2="358"/>
+    <line x1="420" y1="358" x2="406" y2="404"/>
+    <line x1="308" y1="410" x2="374" y2="408"/>
+    <line x1="308" y1="410" x2="288" y2="482"/>
+    <line x1="288" y1="482" x2="272" y2="548"/>
+    <line x1="374" y1="408" x2="404" y2="476"/>
+    <line x1="404" y1="476" x2="422" y2="542"/>
+  </g>
+
+  <!-- noise squiggles at the wobbly points -->
+  <g stroke="#b91c1c" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M260,362 q6,-8 12,0 q6,8 12,0"/>
+    <path d="M414,356 q6,-8 12,0 q6,8 12,0"/>
+    <path d="M266,548 q6,-8 12,0 q6,8 12,0"/>
+    <path d="M416,542 q6,-8 12,0 q6,8 12,0"/>
+    <path d="M334,266 q6,-8 12,0 q6,8 12,0"/>
+  </g>
+  <text x="452" y="352" font-size="12" text-anchor="middle" fill="#b91c1c">fingertip wobble</text>
+  <text x="230" y="600" font-size="12" text-anchor="middle" fill="#b91c1c">camera shake</text>
+
+  <rect x="110" y="516" width="460" height="52" rx="10" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="340" y="548" font-size="17" font-weight="bold" text-anchor="middle" fill="#7f1d1d">wastes effort on unpredictable noise</text>
+
+  <!-- ================= MIDDLE ARROW ================= -->
+  <line x1="618" y1="360" x2="666" y2="360" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= RIGHT: PREDICT MEANING (good) ================= -->
+  <rect x="674" y="150" width="540" height="440" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="944" y="192" font-size="20" font-weight="bold" text-anchor="middle" fill="#14532d">Predict MEANING in latent space</text>
+
+  <!-- clean skeleton -->
+  <g stroke="#15803d" stroke-width="3" fill="#dcfce7" stroke-linecap="round">
+    <line x1="784" y1="300" x2="786" y2="410"/>
+    <circle cx="784" cy="282" r="18"/>
+    <line x1="738" y1="318" x2="834" y2="314"/>
+    <line x1="738" y1="318" x2="712" y2="362"/>
+    <line x1="712" y1="362" x2="730" y2="406"/>
+    <line x1="834" y1="314" x2="864" y2="358"/>
+    <line x1="864" y1="358" x2="850" y2="404"/>
+    <line x1="752" y1="410" x2="818" y2="408"/>
+    <line x1="752" y1="410" x2="732" y2="482"/>
+    <line x1="732" y1="482" x2="716" y2="548"/>
+    <line x1="818" y1="408" x2="848" y2="476"/>
+    <line x1="848" y1="476" x2="866" y2="542"/>
+  </g>
+
+  <!-- arrow skeleton -> embedding -->
+  <line x1="892" y1="410" x2="978" y2="410" stroke="#15803d" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+  <text x="935" y="396" font-size="13" text-anchor="middle" fill="#15803d">summarize</text>
+
+  <!-- embedding: a tidy vertical stack of number cells -->
+  <g>
+    <rect x="1000" y="290" width="86" height="240" rx="8" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+    <text x="1043" y="278" font-size="13" font-weight="bold" text-anchor="middle" fill="#14532d">embedding</text>
+    <rect x="1012" y="302" width="62" height="30" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="1043" y="323" font-size="14" text-anchor="middle" fill="#14532d">0.82</text>
+    <rect x="1012" y="340" width="62" height="30" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="1043" y="361" font-size="14" text-anchor="middle" fill="#14532d">-0.14</text>
+    <rect x="1012" y="378" width="62" height="30" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="1043" y="399" font-size="14" text-anchor="middle" fill="#14532d">0.47</text>
+    <rect x="1012" y="416" width="62" height="30" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="1043" y="437" font-size="14" text-anchor="middle" fill="#14532d">0.05</text>
+    <rect x="1012" y="454" width="62" height="30" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="1043" y="475" font-size="14" text-anchor="middle" fill="#14532d">-0.61</text>
+    <rect x="1012" y="492" width="62" height="30" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="1043" y="513" font-size="14" text-anchor="middle" fill="#14532d">0.33</text>
+  </g>
+
+  <rect x="714" y="546" width="460" height="26" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="944" y="564" font-size="14" font-weight="bold" text-anchor="middle" fill="#14532d">a summary: person walking, left leg forward, upright</text>
+
+  <!-- ================= BOTTOM CAPTION ================= -->
+  <text x="640" y="650" font-size="18" font-style="italic" text-anchor="middle" fill="#0f172a">JEPA predicts a summary of the hidden part, not its exact appearance.</text>
+</svg>

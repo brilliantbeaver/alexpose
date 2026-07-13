@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="sans-serif">
+  <rect x="0" y="0" width="960" height="560" fill="#ffffff"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="34" font-size="21" font-weight="bold" text-anchor="middle" fill="#0f172a">Four research questions, each with a metric and a target</text>
+  <text x="480" y="58" font-size="13" text-anchor="middle" fill="#475569">One row per question: what we ask, how we measure it, and what counts as success</text>
+
+  <!-- Column headers -->
+  <text x="150" y="92" font-size="12" font-weight="bold" text-anchor="middle" fill="#64748b">QUESTION</text>
+  <text x="470" y="92" font-size="12" font-weight="bold" text-anchor="middle" fill="#64748b">METRIC</text>
+  <text x="800" y="92" font-size="12" font-weight="bold" text-anchor="middle" fill="#64748b">TARGET</text>
+
+  <!-- RQ1 blue -->
+  <rect x="30" y="104" width="900" height="96" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="70" cy="152" r="19" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="70" y="157" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">RQ1</text>
+  <text x="108" y="145" font-size="15" font-weight="bold" fill="#1e3a8a">Beat the baseline</text>
+  <text x="108" y="167" font-size="12" fill="#334155">Can unsupervised pretraining beat the</text>
+  <text x="108" y="183" font-size="12" fill="#334155">hand-feature Random Forest?</text>
+  <text x="360" y="145" font-size="12" fill="#334155">5-class test accuracy,</text>
+  <text x="360" y="163" font-size="12" fill="#334155">68-clip 70/30 split</text>
+  <line x1="668" y1="124" x2="668" y2="180" stroke="#1d4ed8" stroke-width="1" opacity="0.35"/>
+  <text x="800" y="145" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e3a8a">&#8805; 76 percent (RF),</text>
+  <text x="800" y="163" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e3a8a">clear win &#8805; 80</text>
+
+  <!-- RQ2 green -->
+  <rect x="30" y="212" width="900" height="96" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <circle cx="70" cy="260" r="19" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="70" y="265" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">RQ2</text>
+  <text x="108" y="253" font-size="15" font-weight="bold" fill="#14532d">Label efficiency</text>
+  <text x="108" y="275" font-size="12" fill="#334155">Does it need fewer labels to reach</text>
+  <text x="108" y="291" font-size="12" fill="#334155">the same accuracy?</text>
+  <text x="360" y="253" font-size="12" fill="#334155">Accuracy at 25 / 50 / 75 / 100</text>
+  <text x="360" y="271" font-size="12" fill="#334155">percent of the labels</text>
+  <line x1="668" y1="232" x2="668" y2="288" stroke="#15803d" stroke-width="1" opacity="0.35"/>
+  <text x="800" y="253" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">Beat RF by &#8805; 5 points</text>
+  <text x="800" y="271" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">at 25 percent of labels</text>
+
+  <!-- RQ3 violet -->
+  <rect x="30" y="320" width="900" height="108" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+  <circle cx="70" cy="374" r="19" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+  <text x="70" y="379" font-size="15" font-weight="bold" text-anchor="middle" fill="#4c1d95">RQ3</text>
+  <text x="108" y="360" font-size="15" font-weight="bold" fill="#4c1d95">Clinical structure, learned</text>
+  <text x="108" y="382" font-size="12" fill="#334155">Do frozen embeddings encode the</text>
+  <text x="108" y="398" font-size="12" fill="#334155">clinician-graded gait features?</text>
+  <text x="360" y="360" font-size="12" fill="#334155">R-squared of probes to H-priority</text>
+  <text x="360" y="378" font-size="12" fill="#334155">scalars, plus threshold agreement</text>
+  <line x1="668" y1="340" x2="668" y2="408" stroke="#6d28d9" stroke-width="1" opacity="0.35"/>
+  <text x="800" y="360" font-size="12" font-weight="bold" text-anchor="middle" fill="#4c1d95">R-squared &#8805; 0.3 for an</text>
+  <text x="800" y="378" font-size="12" font-weight="bold" text-anchor="middle" fill="#4c1d95">asymmetry scalar and</text>
+  <text x="800" y="396" font-size="12" font-weight="bold" text-anchor="middle" fill="#4c1d95">stride_time_cv; &gt; 70 percent</text>
+  <text x="800" y="414" font-size="12" font-weight="bold" text-anchor="middle" fill="#4c1d95">threshold agreement</text>
+
+  <!-- RQ4 amber -->
+  <rect x="30" y="440" width="900" height="96" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+  <circle cx="70" cy="488" r="19" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+  <text x="70" y="493" font-size="15" font-weight="bold" text-anchor="middle" fill="#7c2d12">RQ4</text>
+  <text x="108" y="481" font-size="15" font-weight="bold" fill="#7c2d12">VICReg is load-bearing</text>
+  <text x="108" y="503" font-size="12" fill="#334155">Does the anti-collapse term actually</text>
+  <text x="108" y="519" font-size="12" fill="#334155">do the work we claim?</text>
+  <text x="360" y="481" font-size="12" fill="#334155">Embedding std and rank,</text>
+  <text x="360" y="499" font-size="12" fill="#334155">VICReg on vs off</text>
+  <line x1="668" y1="460" x2="668" y2="516" stroke="#c2410c" stroke-width="1" opacity="0.35"/>
+  <text x="800" y="481" font-size="12" font-weight="bold" text-anchor="middle" fill="#7c2d12">Std stays high with VICReg on,</text>
+  <text x="800" y="499" font-size="12" font-weight="bold" text-anchor="middle" fill="#7c2d12">collapses when off</text>
+</svg>

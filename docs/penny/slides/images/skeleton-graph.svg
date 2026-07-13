@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="56" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The BLAZEPOSE_33 skeleton as a graph</text>
+  <text x="640" y="90" font-size="18" text-anchor="middle" fill="#475569">33 tracked joints, connected by edges, colored by six semantic groups.</text>
+
+  <!-- ================= SKELETON PANEL ================= -->
+  <rect x="120" y="120" width="620" height="560" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+  <text x="430" y="152" font-size="18" font-weight="bold" text-anchor="middle" fill="#0f172a">front-facing pose graph</text>
+
+  <!-- Layout note: subject faces viewer, so subject's LEFT is on the viewer's right.
+       Torso center x = 430. face amber, torso slate, left limbs blue, right limbs green. -->
+
+  <!-- ===== EDGES (draw before joints) ===== -->
+  <!-- torso (slate) -->
+  <g stroke="#334155" stroke-width="3" stroke-linecap="round">
+    <line x1="370" y1="300" x2="490" y2="300"/>  <!-- shoulder to shoulder -->
+    <line x1="380" y1="470" x2="480" y2="470"/>  <!-- hip to hip -->
+    <line x1="370" y1="300" x2="380" y2="470"/>  <!-- right shoulder to right hip -->
+    <line x1="490" y1="300" x2="480" y2="470"/>  <!-- left shoulder to left hip -->
+  </g>
+  <!-- face (amber): head to shoulders -->
+  <g stroke="#d97706" stroke-width="2.5" stroke-linecap="round">
+    <line x1="430" y1="228" x2="370" y2="300"/>
+    <line x1="430" y1="228" x2="490" y2="300"/>
+  </g>
+  <!-- right_arm on viewer left (green) -->
+  <g stroke="#15803d" stroke-width="3" stroke-linecap="round">
+    <line x1="370" y1="300" x2="322" y2="372"/>  <!-- shoulder to elbow -->
+    <line x1="322" y1="372" x2="292" y2="446"/>  <!-- elbow to wrist -->
+  </g>
+  <!-- left_arm on viewer right (blue) -->
+  <g stroke="#1d4ed8" stroke-width="3" stroke-linecap="round">
+    <line x1="490" y1="300" x2="538" y2="372"/>
+    <line x1="538" y1="372" x2="568" y2="446"/>
+  </g>
+  <!-- right_leg on viewer left (green) -->
+  <g stroke="#15803d" stroke-width="3" stroke-linecap="round">
+    <line x1="380" y1="470" x2="368" y2="558"/>  <!-- hip to knee -->
+    <line x1="368" y1="558" x2="356" y2="632"/>  <!-- knee to ankle -->
+    <line x1="356" y1="632" x2="330" y2="648"/>  <!-- ankle to foot -->
+  </g>
+  <!-- left_leg on viewer right (blue) -->
+  <g stroke="#1d4ed8" stroke-width="3" stroke-linecap="round">
+    <line x1="480" y1="470" x2="492" y2="558"/>
+    <line x1="492" y1="558" x2="504" y2="632"/>
+    <line x1="504" y1="632" x2="530" y2="648"/>
+  </g>
+
+  <!-- ===== JOINT DOTS ===== -->
+  <!-- face group (amber): nose/head -->
+  <g fill="#fef3c7" stroke="#d97706" stroke-width="2.5">
+    <circle cx="430" cy="222" r="20"/>  <!-- head -->
+    <circle cx="418" cy="216" r="4"/><circle cx="442" cy="216" r="4"/>  <!-- eyes -->
+  </g>
+  <!-- torso group (slate): shoulders, hips -->
+  <g fill="#e2e8f0" stroke="#334155" stroke-width="2.5">
+    <circle cx="370" cy="300" r="9"/>  <!-- right shoulder -->
+    <circle cx="490" cy="300" r="9"/>  <!-- left shoulder -->
+    <circle cx="380" cy="470" r="9"/>  <!-- right hip -->
+    <circle cx="480" cy="470" r="9"/>  <!-- left hip -->
+  </g>
+  <!-- right_arm (green): elbow, wrist (viewer left) -->
+  <g fill="#dcfce7" stroke="#15803d" stroke-width="2.5">
+    <circle cx="322" cy="372" r="8"/>
+    <circle cx="292" cy="446" r="8"/>
+  </g>
+  <!-- left_arm (blue): elbow, wrist (viewer right) -->
+  <g fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.5">
+    <circle cx="538" cy="372" r="8"/>
+    <circle cx="568" cy="446" r="8"/>
+  </g>
+  <!-- right_leg (green): knee, ankle, foot (viewer left) -->
+  <g fill="#dcfce7" stroke="#15803d" stroke-width="2.5">
+    <circle cx="368" cy="558" r="8"/>
+    <circle cx="356" cy="632" r="8"/>
+    <circle cx="330" cy="648" r="7"/>
+  </g>
+  <!-- left_leg (blue): knee, ankle, foot (viewer right) -->
+  <g fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.5">
+    <circle cx="492" cy="558" r="8"/>
+    <circle cx="504" cy="632" r="8"/>
+    <circle cx="530" cy="648" r="7"/>
+  </g>
+
+  <!-- ================= LEGEND ================= -->
+  <rect x="800" y="150" width="400" height="420" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="1000" y="184" font-size="19" font-weight="bold" text-anchor="middle" fill="#0f172a">Six semantic groups</text>
+
+  <!-- face -->
+  <rect x="830" y="212" width="26" height="26" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="872" y="230" font-size="17" font-weight="bold" fill="#92400e">face</text>
+  <text x="872" y="250" font-size="13" fill="#475569">nose, eyes, ears (head)</text>
+
+  <!-- left_arm -->
+  <rect x="830" y="270" width="26" height="26" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="872" y="288" font-size="17" font-weight="bold" fill="#1e3a8a">left_arm</text>
+  <text x="872" y="308" font-size="13" fill="#475569">shoulder, elbow, wrist, hand</text>
+
+  <!-- right_arm -->
+  <rect x="830" y="328" width="26" height="26" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="872" y="346" font-size="17" font-weight="bold" fill="#14532d">right_arm</text>
+  <text x="872" y="366" font-size="13" fill="#475569">shoulder, elbow, wrist, hand</text>
+
+  <!-- torso -->
+  <rect x="830" y="386" width="26" height="26" rx="6" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+  <text x="872" y="404" font-size="17" font-weight="bold" fill="#0f172a">torso</text>
+  <text x="872" y="424" font-size="13" fill="#475569">shoulders and hips (the trunk)</text>
+
+  <!-- left_leg -->
+  <rect x="830" y="444" width="26" height="26" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="872" y="462" font-size="17" font-weight="bold" fill="#1e3a8a">left_leg</text>
+  <text x="872" y="482" font-size="13" fill="#475569">hip, knee, ankle, foot</text>
+
+  <!-- right_leg -->
+  <rect x="830" y="502" width="26" height="26" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="872" y="520" font-size="17" font-weight="bold" fill="#14532d">right_leg</text>
+  <text x="872" y="540" font-size="13" fill="#475569">hip, knee, ankle, foot</text>
+
+  <text x="1000" y="562" font-size="12" text-anchor="middle" font-style="italic" fill="#64748b">arms in blue tones, legs in green tones</text>
+
+  <!-- caption -->
+  <rect x="300" y="628" width="680" height="46" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="640" y="656" font-size="17" font-weight="bold" text-anchor="middle" fill="#92400e">33 joints in 6 groups. Masking hides a whole group over time.</text>
+</svg>
