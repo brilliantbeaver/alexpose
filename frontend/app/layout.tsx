@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AlexPose - Gait Analysis System",
-  description: "AI-powered gait analysis for health condition identification",
+  description: "AI-powered gait analysis that helps you understand movement and support healthier lives",
 };
 
 export default function RootLayout({

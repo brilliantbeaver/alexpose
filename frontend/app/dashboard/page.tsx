@@ -238,9 +238,9 @@ export default function DashboardPage() {
         </Alert>
 
         <Alert>
-          <AlertTitle>No Analyses Yet</AlertTitle>
+          <AlertTitle>Your Gait Analysis Journey Starts Here</AlertTitle>
           <AlertDescription>
-            Get started by uploading a video or analyzing a YouTube URL.
+            Upload a video or analyze a YouTube URL to get your first set of insights.
             <div className="mt-4 flex gap-2">
               <Button asChild size="sm">
                 <Link href="/analyze/upload">📤 Upload Video</Link>
@@ -277,7 +277,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's your overview.</p>
+          <p className="text-muted-foreground">Welcome back! Here's a look at all the progress you've made.</p>
         </div>
         <Button asChild>
           <Link href="/analyze/upload">
@@ -344,9 +344,9 @@ export default function DashboardPage() {
         <CardContent>
           {recent_analyses.length === 0 ? (
             <Alert>
-              <AlertTitle>No Completed Analyses</AlertTitle>
+              <AlertTitle>Ready When You Are</AlertTitle>
               <AlertDescription>
-                Start analyzing videos or upload GAVD datasets to see results here.
+                Analyze a video or upload a GAVD dataset, and your results will appear here.
                 <div className="mt-4 flex gap-2">
                   <Button asChild size="sm">
                     <Link href="/analyze/upload">📤 Upload Video</Link>

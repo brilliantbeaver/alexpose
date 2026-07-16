@@ -138,9 +138,9 @@ export default function RealtimePage() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Realtime Gait Analysis</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">See Your Movement, Live</h1>
                     <p className="text-muted-foreground mt-2">
-                        Live webcam-based pose estimation and gait analysis with immediate feedback
+                        Live webcam-based pose estimation and gait analysis, with feedback the moment you move
                     </p>
                 </div>
 
