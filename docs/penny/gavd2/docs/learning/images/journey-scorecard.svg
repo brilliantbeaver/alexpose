@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="480" fill="#ffffff"/>
+
+  <!-- title + subtitle -->
+  <text x="480" y="36" font-size="19" font-weight="bold" text-anchor="middle" fill="#0f172a">Honest per-sequence numbers vs the leaky number vs the baseline</text>
+  <text x="480" y="58" font-size="12.5" text-anchor="middle" fill="#475569">All bars are accuracy on the same 5-class task. Chance is 0.20.</text>
+
+  <!-- ===== plot geometry =====
+       x = 300 is 0.0, x = 860 is 1.0  (560 px = 1.0, so 5.6 px per 0.01)
+       chance line at x = 300 + 0.20*560 = 412 -->
+
+  <!-- x axis baseline -->
+  <line x1="300" y1="410" x2="860" y2="410" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- x axis ticks + labels -->
+  <line x1="300" y1="410" x2="300" y2="416" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="440" y1="410" x2="440" y2="416" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="580" y1="410" x2="580" y2="416" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="720" y1="410" x2="720" y2="416" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="860" y1="410" x2="860" y2="416" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="300" y="432" font-size="10.5" text-anchor="middle" fill="#64748b">0.0</text>
+  <text x="440" y="432" font-size="10.5" text-anchor="middle" fill="#64748b">0.25</text>
+  <text x="580" y="432" font-size="10.5" text-anchor="middle" fill="#64748b">0.50</text>
+  <text x="720" y="432" font-size="10.5" text-anchor="middle" fill="#64748b">0.75</text>
+  <text x="860" y="432" font-size="10.5" text-anchor="middle" fill="#64748b">1.0</text>
+
+  <!-- chance reference line (grey, dashed) spanning the bars -->
+  <line x1="412" y1="80" x2="412" y2="378" stroke="#64748b" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="412" y="74" font-size="10.5" text-anchor="middle" fill="#64748b">chance 0.20</text>
+
+  <!-- ===== bars: bar height 26, row pitch 52, first bar top at y=92 =====
+       row centers at y = 105, 157, 209, 261, 313, 365 -->
+
+  <!-- Row 1: Chance 0.20 (grey) -->
+  <text x="288" y="109" font-size="12" text-anchor="end" fill="#334155">Chance</text>
+  <rect x="300" y="92" width="112" height="26" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="424" y="109" font-size="11.5" font-weight="bold" text-anchor="start" fill="#64748b">0.20</text>
+
+  <!-- Row 2: gavd2 linear per-seq honest 0.486 (blue) -->
+  <text x="288" y="161" font-size="12" text-anchor="end" fill="#334155">gavd2 linear (per-seq, honest)</text>
+  <rect x="300" y="144" width="272" height="26" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="584" y="161" font-size="11.5" font-weight="bold" text-anchor="start" fill="#1d4ed8">0.486</text>
+
+  <!-- Row 3: gavd2 RF exact-split honest 0.619 (blue) -->
+  <text x="288" y="213" font-size="12" text-anchor="end" fill="#334155">gavd2 RF exact-split (honest)</text>
+  <rect x="300" y="196" width="347" height="26" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="659" y="213" font-size="11.5" font-weight="bold" text-anchor="start" fill="#1d4ed8">0.619</text>
+
+  <!-- Row 4: gavd2 MLP per-seq honest 0.626 (blue, best honest) -->
+  <text x="288" y="265" font-size="12" text-anchor="end" fill="#334155">gavd2 MLP (per-seq, honest)</text>
+  <rect x="300" y="248" width="351" height="26" rx="4" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="663" y="265" font-size="11.5" font-weight="bold" text-anchor="start" fill="#1d4ed8">0.626</text>
+  <text x="663" y="281" font-size="9.5" text-anchor="start" fill="#475569">best honest probe</text>
+
+  <!-- Row 5: Baseline RF 82 features 0.762 (dark reference) -->
+  <text x="288" y="317" font-size="12" text-anchor="end" fill="#334155">Baseline RF, 82 features</text>
+  <rect x="300" y="300" width="427" height="26" rx="4" fill="#334155" stroke="#0f172a" stroke-width="1"/>
+  <text x="739" y="317" font-size="11.5" font-weight="bold" text-anchor="start" fill="#0f172a">0.762</text>
+  <text x="739" y="333" font-size="9.5" text-anchor="start" fill="#475569">the reference</text>
+
+  <!-- Row 6: Per-CLIP diagnostic LEAKY 0.92 (red) -->
+  <text x="288" y="369" font-size="12" text-anchor="end" fill="#b91c1c">Per-clip diagnostic (LEAKY)</text>
+  <rect x="300" y="352" width="515" height="26" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="823" y="369" font-size="11.5" font-weight="bold" text-anchor="start" fill="#b91c1c">0.92</text>
+  <text x="300" y="393" font-size="9.5" text-anchor="start" fill="#b91c1c">window-leaked, NOT comparable</text>
+
+  <!-- footer note -->
+  <text x="480" y="466" font-size="11.5" text-anchor="middle" fill="#d97706">The gap between the red leaky bar and the blue honest bars IS the window leakage.</text>
+</svg>

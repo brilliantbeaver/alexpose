@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 360" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="360" fill="#ffffff"/>
+  <text x="460" y="32" font-size="19" font-weight="bold" text-anchor="middle" fill="#0f172a">Two paths from the same skeletons, compared on the same 68 labels</text>
+  <text x="460" y="54" font-size="12.5" text-anchor="middle" fill="#475569">The prior path hand-designs 82 numbers; our path pools frozen JEPA embeddings.</text>
+
+  <!-- Shared start -->
+  <rect x="370" y="82" width="180" height="52" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+  <text x="460" y="104" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#1e3a8a">MediaPipe skeletons</text>
+  <text x="460" y="122" font-size="10.5" text-anchor="middle" fill="#475569">same 68 labeled clips</text>
+
+  <!-- Prior path (left) -->
+  <rect x="120" y="180" width="200" height="60" rx="8" fill="#fef9c3" stroke="#ca8a04"/>
+  <text x="220" y="205" font-size="12" font-weight="bold" text-anchor="middle" fill="#854d0e">82 hand features</text>
+  <text x="220" y="224" font-size="10.5" text-anchor="middle" fill="#475569">angles, symmetry, timing</text>
+  <rect x="120" y="258" width="200" height="52" rx="8" fill="#fef9c3" stroke="#ca8a04"/>
+  <text x="220" y="282" font-size="12" font-weight="bold" text-anchor="middle" fill="#854d0e">Random Forest</text>
+  <text x="220" y="300" font-size="10.5" text-anchor="middle" fill="#475569">76 percent (prior best)</text>
+
+  <!-- Our path (right) -->
+  <rect x="600" y="180" width="200" height="60" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="700" y="205" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e3a8a">frozen JEPA embedding</text>
+  <text x="700" y="224" font-size="10.5" text-anchor="middle" fill="#475569">pooled, no labels used yet</text>
+  <rect x="600" y="258" width="200" height="52" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="700" y="282" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e3a8a">light probe</text>
+  <text x="700" y="300" font-size="10.5" text-anchor="middle" fill="#475569">linear / MLP: beat 76 percent?</text>
+
+  <!-- arrows -->
+  <line x1="400" y1="134" x2="250" y2="180" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="520" y1="134" x2="670" y2="180" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="220" y1="240" x2="220" y2="258" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="700" y1="240" x2="700" y2="258" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="460" y="342" font-size="12" text-anchor="middle" fill="#334155">Same skeletons and same split, so the comparison isolates features versus classifier.</text>
+</svg>

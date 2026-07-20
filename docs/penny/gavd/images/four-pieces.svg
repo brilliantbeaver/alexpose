@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="420" fill="#ffffff"/>
+  <text x="480" y="34" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">The four pieces of the JEPA, wired together</text>
+  <text x="480" y="57" font-size="13" text-anchor="middle" fill="#475569">Context reads what is visible, a slow EMA target reads the full sequence, a predictor fills the gaps, and a loss compares.</text>
+
+  <!-- ============ 1. CONTEXT ENCODER (blue) ============ -->
+  <rect x="24" y="150" width="200" height="132" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="124" y="176" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">1. Context encoder</text>
+  <text x="124" y="199" font-size="11" text-anchor="middle" fill="#334155">small transformer, 2 layers,</text>
+  <text x="124" y="215" font-size="11" text-anchor="middle" fill="#334155">time and joint pos-embeds</text>
+  <text x="124" y="238" font-size="11" text-anchor="middle" fill="#1e3a8a">reads the VISIBLE</text>
+  <text x="124" y="254" font-size="11" text-anchor="middle" fill="#1e3a8a">joints and frames</text>
+  <text x="124" y="273" font-size="10.5" text-anchor="middle" fill="#475569">the online side</text>
+
+  <!-- 2. TARGET ENCODER (green) -->
+  <rect x="24" y="322" width="200" height="76" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="124" y="346" font-size="14" font-weight="bold" text-anchor="middle" fill="#14532d">2. Target encoder</text>
+  <text x="124" y="367" font-size="11" text-anchor="middle" fill="#14532d">an EMA copy, reads the</text>
+  <text x="124" y="383" font-size="11" text-anchor="middle" fill="#14532d">FULL sequence</text>
+
+  <!-- dashed EMA copy / stop-gradient arrow from context down to target -->
+  <line x1="52" y1="282" x2="52" y2="322" stroke="#15803d" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+  <text x="66" y="300" font-size="10.5" text-anchor="start" fill="#15803d">EMA copy, stop-gradient</text>
+
+  <!-- EMA update rule, placed clear below the green return path -->
+  <text x="248" y="356" font-size="10.5" text-anchor="start" fill="#475569">update:</text>
+  <text x="248" y="373" font-size="10.5" text-anchor="start" fill="#475569">target = m*target + (1-m)*context</text>
+  <text x="248" y="390" font-size="10.5" text-anchor="start" fill="#475569">m near 0.996 (a slow-moving answer key)</text>
+
+  <!-- context embedding output -->
+  <line x1="224" y1="216" x2="280" y2="216" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="252" y="205" font-size="10.5" text-anchor="middle" fill="#334155">context</text>
+  <text x="252" y="235" font-size="10.5" text-anchor="middle" fill="#334155">embedding</text>
+
+  <!-- ============ 3. PREDICTOR (violet) ============ -->
+  <rect x="280" y="150" width="200" height="132" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="380" y="176" font-size="14" font-weight="bold" text-anchor="middle" fill="#5b21b6">3. Predictor</text>
+  <text x="380" y="199" font-size="11" text-anchor="middle" fill="#334155">a small MLP:</text>
+  <text x="380" y="215" font-size="11" text-anchor="middle" fill="#334155">Linear, GELU, Linear</text>
+  <text x="380" y="238" font-size="11" text-anchor="middle" fill="#5b21b6">takes context plus the</text>
+  <text x="380" y="254" font-size="11" text-anchor="middle" fill="#5b21b6">hidden-token positions</text>
+  <text x="380" y="273" font-size="10.5" text-anchor="middle" fill="#475569">to guess the missing parts</text>
+
+  <!-- predicted embeddings output -->
+  <line x1="480" y1="216" x2="560" y2="216" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="520" y="205" font-size="10.5" text-anchor="middle" fill="#334155">predicted</text>
+  <text x="520" y="235" font-size="10.5" text-anchor="middle" fill="#334155">embeddings</text>
+
+  <!-- ============ 4. LOSS (amber) ============ -->
+  <rect x="560" y="150" width="230" height="132" rx="8" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="675" y="176" font-size="14" font-weight="bold" text-anchor="middle" fill="#92400e">4. Loss</text>
+  <text x="675" y="199" font-size="11" text-anchor="middle" fill="#334155">L2 between the prediction and</text>
+  <text x="675" y="215" font-size="11" text-anchor="middle" fill="#334155">the LayerNorm-normalized target</text>
+  <text x="675" y="238" font-size="11" text-anchor="middle" fill="#92400e">plus light VICReg variance and</text>
+  <text x="675" y="254" font-size="11" text-anchor="middle" fill="#92400e">covariance on the ONLINE side only</text>
+  <text x="675" y="273" font-size="10.5" text-anchor="middle" fill="#475569">the guard against collapse</text>
+
+  <!-- target embeddings feed the loss: green path leaves the top-right of the target box,
+       runs along a clear band, then up into the loss box -->
+  <line x1="224" y1="333" x2="850" y2="333" stroke="#15803d" stroke-width="2"/>
+  <line x1="850" y1="333" x2="850" y2="235" stroke="#15803d" stroke-width="2"/>
+  <line x1="850" y1="235" x2="792" y2="235" stroke="#15803d" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="600" y="326" font-size="10.5" text-anchor="middle" fill="#15803d">target embeddings (the answer key), LayerNorm-normalized before the L2</text>
+
+  <!-- Caption line -->
+  <line x1="24" y1="392" x2="936" y2="392" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="480" y="412" font-size="12.5" text-anchor="middle" fill="#334155">No negatives, no decoder. A slow EMA target is a stable answer key.</text>
+</svg>
