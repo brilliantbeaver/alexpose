@@ -329,9 +329,9 @@ export default function ModelsBrowsePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Browse Models</h1>
+          <h1 className="text-3xl font-bold">Explore the Models Behind the Magic</h1>
           <p className="text-muted-foreground">
-            Explore available pose estimation and LLM classification models
+            Discover the pose estimation and LLM classification models powering every analysis
           </p>
         </div>
       </div>

@@ -82,7 +82,7 @@ export default function UploadPage() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Upload Video</h1>
-        <p className="text-muted-foreground">Upload a gait video for analysis</p>
+        <p className="text-muted-foreground">Share a gait video and let's uncover what it reveals</p>
       </div>
 
       <Card>

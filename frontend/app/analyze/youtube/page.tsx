@@ -58,7 +58,7 @@ export default function YouTubePage() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-bold">YouTube URL Analysis</h1>
-        <p className="text-muted-foreground">Analyze gait videos directly from YouTube</p>
+        <p className="text-muted-foreground">Drop in a YouTube link and turn any walking clip into insight</p>
       </div>
 
       <Card>

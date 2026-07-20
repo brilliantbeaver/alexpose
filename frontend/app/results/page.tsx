@@ -14,8 +14,8 @@ export default function ResultsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Analysis Results</h1>
-          <p className="text-muted-foreground">View and manage your gait analysis results</p>
+          <h1 className="text-3xl font-bold">Your Insights, All in One Place</h1>
+          <p className="text-muted-foreground">View and manage every gait analysis you've completed</p>
         </div>
         <Button asChild>
           <Link href="/analyze/upload">

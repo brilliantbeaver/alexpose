@@ -72,9 +72,9 @@ export default function AnalyzePage() {
     <div className="space-y-8">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Analyze Gait Videos</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Discover What Every Step Reveals</h1>
         <p className="text-muted-foreground text-lg">
-          Choose an analysis method to get started with comprehensive gait assessment
+          Choose an analysis method below and turn a walking video into a clear, comprehensive gait assessment
         </p>
       </div>
 
@@ -168,8 +168,8 @@ export default function AnalyzePage() {
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
             <div className="text-4xl mb-2">📊</div>
-            <p>No recent analyses yet</p>
-            <p className="text-sm">Start by selecting an analysis method above</p>
+            <p>Your first analysis is just a click away</p>
+            <p className="text-sm">Pick an option above to get started</p>
           </div>
         </CardContent>
       </Card>

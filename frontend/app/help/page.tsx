@@ -88,9 +88,9 @@ export default function HelpPage() {
     <div className="space-y-8">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Help Center</h1>
+        <h1 className="text-3xl font-bold tracking-tight">We're Here to Help You Succeed</h1>
         <p className="text-muted-foreground text-lg">
-          Everything you need to know about using AlexPose for gait analysis
+          Everything you need to get the most out of AlexPose, all in one friendly place
         </p>
       </div>
 

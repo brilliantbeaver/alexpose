@@ -319,10 +319,10 @@ export default function GAVDUploadPage() {
           <div className="text-6xl mb-4">📊</div>
         </div>
         <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-          GAVD Dataset Analysis
+          Turn Data Into Discovery
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Upload and process GAVD training datasets for gait abnormality detection and model training
+          Upload and process GAVD training datasets to power sharper gait abnormality detection and stronger models
         </p>
       </div>
 
