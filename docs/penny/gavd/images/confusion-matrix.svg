@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 460" font-family="sans-serif">
+  <rect x="0" y="0" width="920" height="460" fill="#ffffff"/>
+  <text x="460" y="34" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">Where the frozen probe is right, and where it confuses conditions</text>
+  <text x="460" y="57" font-size="13" text-anchor="middle" fill="#475569">Row-normalized confusion of the linear probe, aggregated over 20 per-clip splits. Diagonal is recall.</text>
+
+  <!-- grid geometry: 5x5 cells, cell 74px, origin (300,96) -->
+  <!-- column headers -->
+  <g font-size="12" fill="#334155" text-anchor="middle">
+    <text x="337" y="88">normal</text>
+    <text x="411" y="88">park.</text>
+    <text x="485" y="88">stroke</text>
+    <text x="559" y="88">CP</text>
+    <text x="633" y="88">myop.</text>
+  </g>
+  <text x="485" y="70" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e3a8a">predicted</text>
+  <text x="150" y="240" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e3a8a" transform="rotate(-90 150 240)">true condition</text>
+
+  <!-- Row labels -->
+  <g font-size="12" fill="#334155" text-anchor="end">
+    <text x="292" y="137">normal</text>
+    <text x="292" y="211">parkinsons</text>
+    <text x="292" y="285">stroke</text>
+    <text x="292" y="359">cerebral palsy</text>
+    <text x="292" y="433">myopathic</text>
+  </g>
+
+  <!-- cells. Fill opacity encodes value; diagonal green, off-diagonal red-ish. -->
+  <!-- normal row: .91 .01 .05 .01 .03 -->
+  <rect x="300" y="102" width="74" height="74" fill="#15803d" fill-opacity="0.91" stroke="#e2e8f0"/><text x="337" y="144" font-size="13" font-weight="bold" text-anchor="middle" fill="#ffffff">.91</text>
+  <rect x="374" y="102" width="74" height="74" fill="#b91c1c" fill-opacity="0.01" stroke="#e2e8f0"/><text x="411" y="144" font-size="12" text-anchor="middle" fill="#334155">.01</text>
+  <rect x="448" y="102" width="74" height="74" fill="#b91c1c" fill-opacity="0.05" stroke="#e2e8f0"/><text x="485" y="144" font-size="12" text-anchor="middle" fill="#334155">.05</text>
+  <rect x="522" y="102" width="74" height="74" fill="#b91c1c" fill-opacity="0.01" stroke="#e2e8f0"/><text x="559" y="144" font-size="12" text-anchor="middle" fill="#334155">.01</text>
+  <rect x="596" y="102" width="74" height="74" fill="#b91c1c" fill-opacity="0.03" stroke="#e2e8f0"/><text x="633" y="144" font-size="12" text-anchor="middle" fill="#334155">.03</text>
+
+  <!-- parkinsons row: .00 .91 .03 .00 .05 -->
+  <rect x="300" y="176" width="74" height="74" fill="#b91c1c" fill-opacity="0.00" stroke="#e2e8f0"/><text x="337" y="218" font-size="12" text-anchor="middle" fill="#334155">.00</text>
+  <rect x="374" y="176" width="74" height="74" fill="#15803d" fill-opacity="0.91" stroke="#e2e8f0"/><text x="411" y="218" font-size="13" font-weight="bold" text-anchor="middle" fill="#ffffff">.91</text>
+  <rect x="448" y="176" width="74" height="74" fill="#b91c1c" fill-opacity="0.03" stroke="#e2e8f0"/><text x="485" y="218" font-size="12" text-anchor="middle" fill="#334155">.03</text>
+  <rect x="522" y="176" width="74" height="74" fill="#b91c1c" fill-opacity="0.00" stroke="#e2e8f0"/><text x="559" y="218" font-size="12" text-anchor="middle" fill="#334155">.00</text>
+  <rect x="596" y="176" width="74" height="74" fill="#b91c1c" fill-opacity="0.05" stroke="#e2e8f0"/><text x="633" y="218" font-size="12" text-anchor="middle" fill="#334155">.05</text>
+
+  <!-- stroke row: .07 .03 .86 .01 .03 -->
+  <rect x="300" y="250" width="74" height="74" fill="#b91c1c" fill-opacity="0.07" stroke="#e2e8f0"/><text x="337" y="292" font-size="12" text-anchor="middle" fill="#334155">.07</text>
+  <rect x="374" y="250" width="74" height="74" fill="#b91c1c" fill-opacity="0.03" stroke="#e2e8f0"/><text x="411" y="292" font-size="12" text-anchor="middle" fill="#334155">.03</text>
+  <rect x="448" y="250" width="74" height="74" fill="#15803d" fill-opacity="0.86" stroke="#e2e8f0"/><text x="485" y="292" font-size="13" font-weight="bold" text-anchor="middle" fill="#ffffff">.86</text>
+  <rect x="522" y="250" width="74" height="74" fill="#b91c1c" fill-opacity="0.01" stroke="#e2e8f0"/><text x="559" y="292" font-size="12" text-anchor="middle" fill="#334155">.01</text>
+  <rect x="596" y="250" width="74" height="74" fill="#b91c1c" fill-opacity="0.03" stroke="#e2e8f0"/><text x="633" y="292" font-size="12" text-anchor="middle" fill="#334155">.03</text>
+
+  <!-- CP row: .02 .00 .01 .78 .19 -->
+  <rect x="300" y="324" width="74" height="74" fill="#b91c1c" fill-opacity="0.02" stroke="#e2e8f0"/><text x="337" y="366" font-size="12" text-anchor="middle" fill="#334155">.02</text>
+  <rect x="374" y="324" width="74" height="74" fill="#b91c1c" fill-opacity="0.00" stroke="#e2e8f0"/><text x="411" y="366" font-size="12" text-anchor="middle" fill="#334155">.00</text>
+  <rect x="448" y="324" width="74" height="74" fill="#b91c1c" fill-opacity="0.01" stroke="#e2e8f0"/><text x="485" y="366" font-size="12" text-anchor="middle" fill="#334155">.01</text>
+  <rect x="522" y="324" width="74" height="74" fill="#15803d" fill-opacity="0.78" stroke="#e2e8f0"/><text x="559" y="366" font-size="13" font-weight="bold" text-anchor="middle" fill="#ffffff">.78</text>
+  <rect x="596" y="324" width="74" height="74" fill="#d97706" fill-opacity="0.55" stroke="#e2e8f0"/><text x="633" y="366" font-size="13" font-weight="bold" text-anchor="middle" fill="#7c2d12">.19</text>
+
+  <!-- myopathic row: .03 .08 .02 .00 .87 -->
+  <rect x="300" y="398" width="74" height="74" fill="#b91c1c" fill-opacity="0.03" stroke="#e2e8f0"/><text x="337" y="440" font-size="12" text-anchor="middle" fill="#334155">.03</text>
+  <rect x="374" y="398" width="74" height="74" fill="#b91c1c" fill-opacity="0.08" stroke="#e2e8f0"/><text x="411" y="440" font-size="12" text-anchor="middle" fill="#334155">.08</text>
+  <rect x="448" y="398" width="74" height="74" fill="#b91c1c" fill-opacity="0.02" stroke="#e2e8f0"/><text x="485" y="440" font-size="12" text-anchor="middle" fill="#334155">.02</text>
+  <rect x="522" y="398" width="74" height="74" fill="#b91c1c" fill-opacity="0.00" stroke="#e2e8f0"/><text x="559" y="440" font-size="12" text-anchor="middle" fill="#334155">.00</text>
+  <rect x="596" y="398" width="74" height="74" fill="#15803d" fill-opacity="0.87" stroke="#e2e8f0"/><text x="633" y="440" font-size="13" font-weight="bold" text-anchor="middle" fill="#ffffff">.87</text>
+
+  <!-- side note -->
+  <rect x="700" y="150" width="200" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="716" y="176" font-size="13" font-weight="bold" fill="#0f172a">How to read it</text>
+  <text x="716" y="200" font-size="11.5" fill="#334155">Four of five conditions</text>
+  <text x="716" y="216" font-size="11.5" fill="#334155">separate cleanly, with</text>
+  <text x="716" y="232" font-size="11.5" fill="#334155">recall 0.86 to 0.91.</text>
+  <text x="716" y="256" font-size="11.5" fill="#334155">Cerebral palsy is the</text>
+  <text x="716" y="272" font-size="11.5" fill="#334155">weakest at 0.78 and is</text>
+  <text x="716" y="288" font-size="11.5" fill="#334155">most often read as</text>
+  <text x="716" y="304" font-size="11.5" fill="#334155">myopathic (0.19). It also</text>
+  <text x="716" y="320" font-size="11.5" fill="#334155">has the fewest sequences</text>
+  <text x="716" y="336" font-size="11.5" fill="#334155">(4), so it is the least</text>
+  <text x="716" y="352" font-size="11.5" fill="#334155">reliable estimate.</text>
+</svg>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gait-JEPA: Self-Supervised Pose-Sequence Representation Learning for Clinical Gait Classification on GAVD</title>
+<style>
+  :root {
+    --ink: #111;
+    --muted: #444;
+    --line: #bbb;
+    --rule: #222;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Times New Roman", Times, Georgia, serif;
+    color: var(--ink);
+    background: #f4f4f4;
+    margin: 0;
+    padding: 24px 0;
+    line-height: 1.28;
+    font-size: 10pt;
+  }
+  .page {
+    background: #fff;
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.7in 0.6in 0.8in 0.6in;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.12);
+  }
+  /* Title band spans full width */
+  header.band {
+    text-align: center;
+    margin: 0 0 14px 0;
+  }
+  header.band h1 {
+    font-size: 20pt;
+    line-height: 1.15;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+  }
+  .authors {
+    font-size: 11pt;
+    margin: 2px 0;
+  }
+  .affil {
+    font-style: italic;
+    font-size: 10pt;
+    color: var(--muted);
+    margin: 2px 0 6px 0;
+  }
+  .authnote {
+    font-size: 8.5pt;
+    color: var(--muted);
+    margin: 4px auto 0 auto;
+    max-width: 6.2in;
+  }
+  /* Abstract band, single column, italic bold body per IEEE */
+  .abstract, .keywords {
+    margin: 8px 0;
+    padding: 0 0.15in;
+    font-size: 9pt;
+    text-align: justify;
+  }
+  .abstract b, .keywords b { font-weight: bold; }
+  .abstract .body { font-weight: bold; }
+  .keywords .body { font-style: italic; }
+  hr.thin { border: none; border-top: 1px solid var(--line); margin: 12px 0; }
+  /* Two-column body */
+  .cols {
+    column-count: 2;
+    column-gap: 0.3in;
+    column-rule: none;
+    text-align: justify;
+    -webkit-column-count: 2;
+  }
+  .cols h2 {
+    font-size: 10pt;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    margin: 12px 0 6px 0;
+    break-after: avoid;
+  }
+  .cols h3 {
+    font-size: 10pt;
+    font-style: italic;
+    font-weight: normal;
+    margin: 8px 0 4px 0;
+    break-after: avoid;
+  }
+  .cols p { margin: 0 0 6px 0; text-indent: 1.2em; }
+  .cols p.noindent { text-indent: 0; }
+  /* Figures */
+  figure {
+    margin: 8px 0 10px 0;
+    text-align: center;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #e2e2e2;
+    background: #fff;
+  }
+  figcaption {
+    font-size: 8.5pt;
+    text-align: left;
+    margin-top: 4px;
+    color: var(--ink);
+  }
+  figure.full {
+    column-span: all;
+    -webkit-column-span: all;
+    max-width: 5.2in;
+    margin: 10px auto;
+  }
+  /* Tables */
+  .tabblock { break-inside: avoid; margin: 8px 0 12px 0; }
+  .tabnum {
+    text-align: center;
+    font-size: 8.5pt;
+    letter-spacing: 0.02em;
+    margin: 0;
+    font-weight: bold;
+  }
+  .tabtitle {
+    text-align: center;
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+    font-weight: bold;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 8.5pt;
+  }
+  table.full { column-span: all; -webkit-column-span: all; }
+  th, td {
+    padding: 2px 5px;
+    text-align: left;
+  }
+  td.num, th.num { text-align: right; }
+  thead th {
+    border-top: 1.5px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  tbody tr:last-child td { border-bottom: 1.5px solid var(--rule); }
+  tbody tr.total td { font-weight: bold; }
+  .refs { font-size: 8.5pt; }
+  .refs p { text-indent: -1.6em; padding-left: 1.6em; margin: 0 0 4px 0; }
+  @media screen and (max-width: 760px) {
+    .cols { column-count: 1; -webkit-column-count: 1; }
+    figure.full, table.full { max-width: 100%; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 9.5pt; }
+    .page { box-shadow: none; max-width: none; width: auto; padding: 0.5in; }
+    a { color: inherit; text-decoration: none; }
+    figure, .tabblock, .refs p { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="band">
+    <h1>Gait-JEPA: Self-Supervised Pose-Sequence Representation Learning for Clinical Gait Classification on GAVD</h1>
+    <div class="authors">Alex Mui, Penny Inouye, Theodore Mui, and Phil Mui</div>
+  </header>
+
+  <div class="abstract">
+    <b><i>Abstract</i></b><span class="body">.&nbsp;</span>
+    <span class="body">Clinical gait analysis is limited less by video than by labels: unannotated walking clips are plentiful, but clips graded by a clinician are scarce and expensive. We study whether a frozen, self-supervised pose encoder can learn a useful gait representation from unlabeled video and then be probed with only a handful of labels. Our method, Gait-JEPA, is a skeleton Joint-Embedding Predictive Architecture that operates on pose sequences rather than pixels. We extract BlazePose 33-joint skeletons from all of the Gait Abnormality in Video Dataset (GAVD), pretrain a small transformer encoder (71,360 parameters) to predict masked motion in latent space using a LayerNorm-normalized exponential-moving-average target and a light online-only VICReg regularizer, then freeze it and fit linear, MLP, and random-forest probes. We report an honest dual result. On a per-clip stratified split, the linear, MLP, and random-forest probes reach 0.880, 0.915, and 0.881 accuracy, which sit above the 0.76 supervised baseline but are not a fair comparison: the 296 clips are overlapping windows from only 42 labeled sequences, so a per-clip split leaks windows of the same sequence across train and test and inflates the score. That is why we treat the per-clip number as a leaky diagnostic, not a win. A leakage-free per-sequence split gives 0.494 +/- 0.172 accuracy, well above the 0.20 chance level but below the 0.76 baseline and very high variance. The gap between the two numbers, together with the tiny 42-sequence sample, is the central finding: a frozen pose JEPA does learn gait structure, and window leakage plus small-sample ceiling are the obstacles the next iteration must close.</span>
+  </div>
+
+  <div class="keywords">
+    <b><i>Index Terms</i></b><span>.&nbsp;</span>
+    <span class="body">self-supervised learning, joint-embedding predictive architecture, human pose estimation, gait analysis, clinical machine learning, representation learning.</span>
+  </div>
+
+  <hr class="thin">
+
+  <div class="cols">
+
+    <h2>I.&nbsp;&nbsp;Introduction</h2>
+    <p class="noindent">Gait, the way a person walks, carries a large amount of clinical information. A stroke can leave one knee stiff, Parkinson's disease often begins on one side of the body and produces an asymmetric stride, and a myopathy changes how the legs bear load. Clinicians read these patterns by eye, and a long line of machine-learning work has tried to read them automatically. The recurring obstacle is labels.</p>
+    <p>Recording a walking video is easy. Obtaining a walking video that a clinician has annotated with a diagnosis is slow and expensive. That is the label-scarcity problem. On the Gait Abnormality in Video Dataset (GAVD), the prior supervised baseline is a random forest with 100 trees trained on 82 hand-engineered gait features under a 70/30 split, reaching a best test accuracy of 76 percent across five gait classes [4]. Chance on five classes is 20 percent, so 76 percent is a real, hard-won result and it is our reference point.</p>
+    <p>Self-supervised learning offers a different route. Instead of waiting for labels, an encoder can learn the structure of walking, the shapes limbs make and the way motion coordinates across the body, from unlabeled video alone. The few labels that exist then only need to name what the encoder already represents. This is the promise of the Joint-Embedding Predictive Architecture (JEPA) family [1], [2], [6]: predict missing content in a learned latent space rather than in pixel space, so that the model spends its capacity on meaning rather than on rendering fine texture.</p>
+    <p>We apply this idea to pose sequences and call the result Gait-JEPA. The method flavor is a skeleton JEPA: it consumes tracked skeleton joints over time, not raw pixels. We pretrain on all of GAVD without labels, then freeze the encoder and fit a small probe. Our contributions are:</p>
+    <ul>
+      <li>A full-dataset skeleton-JEPA pipeline for GAVD, from bulk video download through pose extraction, corpus windowing, latent-space pretraining, and a frozen-probe evaluation, with the exact dataset funnel reported honestly.</li>
+      <li>A corrected training objective (LayerNorm-normalized EMA target plus online-only VICReg) that is stable over a full 400-step real run, and a documented account of two engineering bugs found while scaling.</li>
+      <li>An explicit, foregrounded measurement of window leakage: per-clip probing reports 0.88 to 0.92 accuracy, but a leakage-free per-sequence split gives only 0.49 on 42 sequences, and we present both numbers everywhere.</li>
+      <li>A set of research questions (probe accuracy, label efficiency, recoverability of clinical scalars, and a VICReg anti-collapse ablation) evaluated on real data.</li>
+    </ul>
+
+    <h2>II.&nbsp;&nbsp;Related Work</h2>
+    <p class="noindent"><b>I-JEPA</b> [1] introduced joint-embedding predictive architectures for images: predict the representations of masked target blocks from a context block, in latent space, avoiding pixel reconstruction. <b>V-JEPA</b> [2] extended the idea to video and contributed the design of normalizing the target with a LayerNorm before computing the prediction loss, which we adopt directly. <b>VICReg</b> [3] regularizes representations with variance, invariance, and covariance terms to prevent collapse without negative pairs; we use a light online-only version of its variance and covariance terms. <b>GAVD</b> [4] is the dataset and supervised baseline we build on, contributing the 82-feature random-forest classifier that reaches 76 percent. <b>BlazePose</b> [5] is the on-device pose estimator that produces the 33-joint skeletons we operate on. Finally, LeCun's world-model position paper [6] frames JEPAs as a path toward predictive world models, which motivates learning in a latent space that captures the structure of motion.</p>
+
+    <h2>III.&nbsp;&nbsp;Dataset</h2>
+    <p class="noindent">GAVD (Gait Abnormality in Video Dataset) is an open pool of annotated walking clips sourced from YouTube and organized as comma-separated-value files [4]. Each CSV is one sequence: a run of frames from a single YouTube video with per-frame annotations. The dataset holds 374 sequence CSVs across 11 condition folders, 91,624 frame-rows, with a mean of 245 frames per sequence.</p>
+    <p>The pipeline narrows this pool at every stage, and we report the funnel exactly (Fig. 1). Of the 374 sequences, 69 unique YouTube videos are referenced, because many sequences share a video. Of those 69, 67 downloaded successfully (2 links were dead or blocked). Real BlazePose skeletons were successfully extracted for 227 sequences. The manifest marks 68 sequences as the intended 5-class labeled subset, but only 42 survived download and extraction to reach the labeled holdout. Windowing the 227 extracted skeletons (T = 32 frames, overlapping) yields an unlabeled pretraining corpus of 1,571 clips of shape (32, 33, 3); this is the bank the encoder pretrains on, with no labels. The 42 labeled sequences yield 296 windowed clips, a mean of 7.0 windows per sequence (range 1 to 60).</p>
+
+    <figure>
+      <img src="../images/dataset-funnel.svg" alt="Dataset funnel from 374 sequences to the labeled holdout">
+      <figcaption>Fig. 1. The GAVD dataset funnel: 374 sequence CSVs reference 69 videos, 67 download, 227 yield real skeletons, windowing gives 1,571 unlabeled corpus clips, and only 42 sequences (296 windows) reach the labeled 5-class holdout.</figcaption>
+    </figure>
+
+    <p>Table I gives the per-condition counts. The abnormal and style pools dominate the raw dataset, while several clinical conditions are represented by only a handful of sequences. The labeled subset that reaches evaluation is small and imbalanced, which is central to interpreting the results.</p>
+
+    <div class="tabblock">
+      <p class="tabnum">TABLE I</p>
+      <p class="tabtitle">GAVD Per-Condition Counts and the Labeled Subset</p>
+      <table>
+        <thead>
+          <tr><th>Condition</th><th class="num">CSVs</th><th class="num">Extracted</th><th class="num">Labeled seq</th><th class="num">Labeled windows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>abnormal</td><td class="num">190</td><td class="num">118</td><td class="num">--</td><td class="num">--</td></tr>
+          <tr><td>antalgic</td><td class="num">4</td><td class="num">2</td><td class="num">--</td><td class="num">--</td></tr>
+          <tr><td>cerebral palsy</td><td class="num">16</td><td class="num">4</td><td class="num">4</td><td class="num">24</td></tr>
+          <tr><td>exercise</td><td class="num">24</td><td class="num">18</td><td class="num">--</td><td class="num">--</td></tr>
+          <tr><td>inebriated</td><td class="num">2</td><td class="num">1</td><td class="num">--</td><td class="num">--</td></tr>
+          <tr><td>myopathic</td><td class="num">47</td><td class="num">33</td><td class="num">12</td><td class="num">69</td></tr>
+          <tr><td>normal</td><td class="num">12</td><td class="num">10</td><td class="num">9</td><td class="num">86</td></tr>
+          <tr><td>parkinsons</td><td class="num">9</td><td class="num">9</td><td class="num">9</td><td class="num">47</td></tr>
+          <tr><td>prosthetic</td><td class="num">3</td><td class="num">3</td><td class="num">--</td><td class="num">--</td></tr>
+          <tr><td>stroke</td><td class="num">12</td><td class="num">8</td><td class="num">8</td><td class="num">70</td></tr>
+          <tr><td>style</td><td class="num">55</td><td class="num">21</td><td class="num">--</td><td class="num">--</td></tr>
+          <tr class="total"><td>Total</td><td class="num">374</td><td class="num">227</td><td class="num">42</td><td class="num">296</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>IV.&nbsp;&nbsp;Method</h2>
+    <p class="noindent">Gait-JEPA has four pieces (Fig. 2): a context encoder, an EMA target encoder, a predictor, and a masking scheme. A pose clip is a tensor of shape (T = 32, J = 33, 3): 32 frames, 33 BlazePose joints, and 3 coordinates per joint. The clip is tokenized into T times J = 1,056 tokens laid out in row-major (t, j) order, so token n corresponds to frame t and joint j via n = t times 33 + j.</p>
+
+    <figure>
+      <img src="../images/four-pieces.svg" alt="The four pieces of a JEPA">
+      <figcaption>Fig. 2. The four pieces of Gait-JEPA: a context encoder sees the visible tokens, an EMA target encoder produces the prediction targets under stop-gradient, a shallow predictor maps context to target space, and a masking scheme decides which tokens are hidden.</figcaption>
+    </figure>
+
+    <p><i>Encoder.</i> The context encoder projects each 3-dimensional coordinate to D = 64 with a Linear(3, 64), adds a learned positional embedding, and passes the tokens through a 2-layer transformer encoder with 4 heads, feed-forward dimension 128, GELU activation, dropout 0, and batch-first ordering. The total encoder parameter count is 71,360. The positional embedding is the factored sum pos[t, j] = time_embed[t] + joint_embed[j], where time_embed has shape (32, 64) and joint_embed has shape (33, 64), both initialized with standard deviation 0.1. This factored scheme is why the tokens carry both a temporal identity (which frame) and a spatial identity (which joint); without it the transformer would see a bag of unordered coordinates and could not tell a hip from an ankle or frame 1 from frame 30 (Fig. 3).</p>
+
+    <figure>
+      <img src="../images/pos-embed-fix.svg" alt="Why positional embeddings matter">
+      <figcaption>Fig. 3. Positional embeddings give each token a temporal identity (which frame) and a spatial identity (which joint). The factored sum time_embed[t] + joint_embed[j] restores order that a permutation-invariant transformer would otherwise lose.</figcaption>
+    </figure>
+
+    <p><i>Target and predictor.</i> The target encoder is an exponential-moving-average copy of the context encoder with momentum m = 0.996 and stop-gradient, following the JEPA recipe [1], [2]. The predictor is a shallow MLP (Linear, GELU, Linear) with hidden width 2D.</p>
+
+    <p><i>Masking.</i> We hide a spatiotemporal block of tokens with mask ratio 0.4 (the reported hidden fraction per batch is about 0.25). We use two masking styles (Fig. 4): Style A, limb-over-time, hides a set of joints across all frames; Style B, time-window, hides all joints across a window of frames. Style A forces the encoder to infer a missing limb from the rest of the body, and Style B forces it to fill in missing time from the surrounding motion.</p>
+
+    <figure>
+      <img src="../images/masking-styles.svg" alt="Two masking styles">
+      <figcaption>Fig. 4. Two block-masking styles. Style A (limb-over-time) hides selected joints across all frames; Style B (time-window) hides all joints across a span of frames. Together they train the encoder to reason spatially and temporally.</figcaption>
+    </figure>
+
+    <p><i>Loss.</i> The objective is an L2 loss between the predictor output and the LayerNorm-normalized EMA target [2], plus a light VICReg [3] variance and covariance term applied only to the online context embedding. The weights are VICREG_SIM 25.0, VICREG_VAR 0.5, VICREG_COV 0.04, variance target gamma 0.5, and epsilon 1e-4. Normalizing the target with a LayerNorm before the loss prevents the target scale from drifting, and the online-only VICReg keeps the online embedding from collapsing without touching the frozen target.</p>
+
+    <p><i>Training.</i> We train for 400 steps with batch size 16, learning rate 1e-3, the Adam optimizer, on CPU, with seed 42. Section VI reports the real trajectory.</p>
+
+    <h2>V.&nbsp;&nbsp;Experimental Setup</h2>
+    <p class="noindent">After pretraining, we freeze the context encoder and use it as a fixed feature extractor. For each labeled clip we mean-pool the encoder's token embeddings into a single D = 64 vector and fit a probe on top. We evaluate three probes: a linear (logistic-regression) probe, an MLP probe, and a random forest on the embeddings. Each probe is fit under a stratified 70/30 split repeated over N_SPLITS = 20 folds, with a StandardScaler refit inside each fold to avoid leaking test statistics into normalization. We study four research questions: RQ1, how well a frozen probe classifies the five gait classes; RQ2, how accuracy scales with the fraction of labels used; RQ3, whether the frozen latent linearly encodes continuous clinical scalars; and RQ4, whether the VICReg terms do real anti-collapse work.</p>
+    <p><i>Per-clip versus per-sequence splitting.</i> This distinction is the crux of the evaluation and we report both. A per-clip stratified split shuffles the 296 windows and assigns them to train or test independently. Because the 296 windows come from only 42 sequences (mean 7 windows per sequence), a per-clip split routinely places windows from the same sequence into both train and test. Those windows are overlapping crops of the same walk, so the encoder can match a test window to a near-duplicate training window. This is window leakage and it inflates accuracy. A per-sequence split (GroupShuffleSplit with the sequence id as the group) keeps every window of a given sequence on one side of the split, which is leakage-free but leaves only about 13 sequences in each test fold. We report per-clip numbers as the metric the notebook prints, clearly labeled as leaky, and per-sequence numbers as the rigorous result.</p>
+
+    <h2>VI.&nbsp;&nbsp;Results</h2>
+    <p class="noindent"><i>Training trajectory (RQ4 context).</i> The corrected loss is stable over the full 400-step real run (Fig. 5). Total loss falls sharply from 32.0 at step 0 to about 9.1 by step 50, then declines gently with minor fluctuations to 5.5 at step 399. The prediction MSE term falls from 1.28 to 0.22. Crucially, the embedding standard deviation rises from 0.38 to 0.76 over training, so there is no collapse; a collapsing model would drive the spread toward zero. The final embedding standard deviation is 0.763, with a mean per-dimension standard deviation of 0.818 and per-dimension min/max of 0.363 and 1.977, indicating that many dimensions are used. This behavior contrasts with the old loss, which drifted upward after about 50 steps.</p>
+
+    <figure>
+      <img src="../images/real-training-curve.svg" alt="Real 400-step training curve">
+      <figcaption>Fig. 5. The real 400-step training trajectory. Total loss falls sharply then settles near 5.5, while the embedding standard deviation grows from 0.38 to 0.76, indicating a healthy, non-collapsed representation.</figcaption>
+    </figure>
+
+    <p><i>RQ1: probe accuracy.</i> Table II gives the headline result under both splitting protocols. On the per-clip split, all three probes score above the 0.76 baseline: linear 0.880, MLP 0.915, random forest 0.881, with macro-F1 of 0.874, 0.910, and 0.879. But these numbers are not a fair comparison, because they carry window leakage. Under the leakage-free per-sequence split, the linear probe drops to 0.494 +/- 0.172, an inflation of about 39 accuracy points. We re-measure only the linear probe per-sequence and take the same correction to apply to the MLP and random forest. The per-sequence number is well above the 0.20 chance level but below the 0.76 baseline, and it is very high variance because only about 13 sequences fall in each test fold. Fig. 6 visualizes this gap. The honest reading is that the frozen encoder learns real gait structure (it more than doubles chance even without leakage), and that window leakage plus the tiny 42-sequence sample, not the representation itself, are the binding constraints.</p>
+
+    <div class="tabblock">
+      <p class="tabnum">TABLE II</p>
+      <p class="tabtitle">RQ1 Probe Accuracy, Per-Clip and Per-Sequence</p>
+      <table>
+        <thead>
+          <tr><th>Probe</th><th>Split</th><th class="num">Accuracy</th><th class="num">Macro-F1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Linear</td><td>per-clip (leaky)</td><td class="num">0.880 +/- 0.026</td><td class="num">0.874</td></tr>
+          <tr><td>MLP</td><td>per-clip (leaky)</td><td class="num">0.915 +/- 0.022</td><td class="num">0.910</td></tr>
+          <tr><td>Random forest</td><td>per-clip (leaky)</td><td class="num">0.881 +/- 0.027</td><td class="num">0.879</td></tr>
+          <tr><td>Linear</td><td>per-seq (rigorous)</td><td class="num">0.494 +/- 0.172</td><td class="num">--</td></tr>
+          <tr><td>Baseline [4]</td><td>70/30</td><td class="num">0.76</td><td class="num">--</td></tr>
+          <tr><td>Chance</td><td>--</td><td class="num">0.20</td><td class="num">--</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure>
+      <img src="../images/clip-vs-sequence.svg" alt="Per-clip versus per-sequence accuracy">
+      <figcaption>Fig. 6. Window leakage as a first-class result: the per-clip linear probe reaches 0.88, but the leakage-free per-sequence split gives 0.49 on 42 sequences. Dashed lines mark the 0.76 baseline and 0.20 chance.</figcaption>
+    </figure>
+
+    <p>The scorecard in Fig. 7 collects RQ1 through RQ4 in one view.</p>
+
+    <figure>
+      <img src="../images/results-scorecard.svg" alt="Results scorecard across RQ1 to RQ4">
+      <figcaption>Fig. 7. Scorecard of the real RQ1 to RQ4 results, summarizing probe accuracy, label efficiency, clinical-scalar recovery, and the VICReg ablation.</figcaption>
+    </figure>
+
+    <p><i>RQ2: label efficiency.</i> Table III reports linear-probe accuracy as we vary the fraction of training labels, under per-clip splits. Accuracy rises quickly from 0.746 at 25 percent to 0.820 at 50 percent, then flattens to 0.864 at 75 percent and 0.880 at 100 percent (Fig. 8). Because these use per-clip splits, the same leakage caveat applies, so the informative takeaway is the shape of the curve, front-loaded gains that flatten, rather than the absolute heights.</p>
+
+    <div class="tabblock">
+      <p class="tabnum">TABLE III</p>
+      <p class="tabtitle">RQ2 Label-Efficiency (Linear Probe, Per-Clip)</p>
+      <table>
+        <thead>
+          <tr><th>Labels used</th><th class="num">Accuracy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>25%</td><td class="num">0.746 +/- 0.047</td></tr>
+          <tr><td>50%</td><td class="num">0.820 +/- 0.051</td></tr>
+          <tr><td>75%</td><td class="num">0.864 +/- 0.024</td></tr>
+          <tr><td>100%</td><td class="num">0.880 +/- 0.026</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure>
+      <img src="../images/label-efficiency.svg" alt="Label-efficiency curve">
+      <figcaption>Fig. 8. Label-efficiency curve. Accuracy climbs steeply from a quarter of the labels to half, then flattens, so most of the gain arrives early.</figcaption>
+    </figure>
+
+    <p><i>RQ3: clinical structure.</i> We fit a Ridge linear probe from the frozen latent to each continuous clinical scalar and report the mean R-squared over 20 splits (Table IV). Step amplitude is strongly recoverable at R-squared 0.719 +/- 0.113, while asymmetry index is only weakly encoded at R-squared 0.154 +/- 0.079. Against verified linear-probe ceilings from raw coordinates (about 0.84 for step amplitude and about 0.70 for asymmetry), the encoder captures most of the step-amplitude ceiling and little of the asymmetry ceiling.</p>
+
+    <div class="tabblock">
+      <p class="tabnum">TABLE IV</p>
+      <p class="tabtitle">RQ3 Clinical-Scalar Recovery (Ridge Probe, Mean R-Squared)</p>
+      <table>
+        <thead>
+          <tr><th>Scalar</th><th class="num">R-squared</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>asymmetry_index</td><td class="num">0.154 +/- 0.079</td></tr>
+          <tr><td>step_amplitude</td><td class="num">0.719 +/- 0.113</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><i>RQ4: VICReg ablation.</i> In a faithful mini training loop on the labeled clips that toggles the variance and covariance terms, the final embedding standard deviation is 0.889 with VICReg and 0.766 without it. The ON run's spread sits above the OFF run, so the variance and covariance terms do real anti-collapse work on top of the EMA target. The OFF run does not collapse to zero on this data; the effect is a healthier spread, not a rescue from total collapse.</p>
+
+    <p><i>Confusion matrix.</i> Aggregated over the 20 per-clip splits (Fig. 9), normal, parkinsons, stroke, and myopathic are cleanly separated with recall between 0.86 and 0.91. Cerebral palsy is the weakest at 0.78 recall and is most often confused with myopathic (0.19), which makes clinical sense because both alter load-bearing and can present as hypotonic. Cerebral palsy also has the fewest sequences (4), so its estimates are the least reliable. This confusion is per-clip and shares the leakage caveat.</p>
+
+    <figure>
+      <img src="../images/confusion-matrix.svg" alt="Row-normalized confusion matrix">
+      <figcaption>Fig. 9. Row-normalized 5-class confusion matrix (per-clip). Cerebral palsy is the weakest class at 0.78 recall, confused mainly with myopathic (0.19); the other four classes separate cleanly.</figcaption>
+    </figure>
+
+    <h2>VII.&nbsp;&nbsp;Discussion</h2>
+    <p class="noindent">The window-leakage finding is a result in its own right, not a footnote. A per-clip stratified split is the default in many small-data pipelines, and here it inflates linear-probe accuracy by about 39 points, turning a rigorous 0.49 into a headline 0.88. Reporting only the per-clip number would have claimed a clean win over the 0.76 baseline that the leakage-free measurement does not support. The lesson is concrete: when clips are overlapping windows of a few underlying sequences, the split must group by sequence.</p>
+    <p>The per-sequence 0.494 +/- 0.172 is the honest signal. It says the frozen encoder more than doubles the 0.20 chance rate on unseen sequences, so it has learned gait structure that transfers across walks, not just across windows of the same walk. It also sits below the 0.76 hand-feature baseline and carries a large standard deviation, both direct consequences of having only 42 labeled sequences with roughly 13 in each test fold. The ceiling here is sample size, not representation quality.</p>
+    <p>Two engineering bugs surfaced while scaling the pipeline to the full dataset, and both are teachable. First, a positional-embedding bug: without the factored time_embed[t] + joint_embed[j] scheme, the transformer treats the pose tokens as an unordered bag and cannot distinguish joints or frames. Second, a loss-drift bug: the earlier objective drove the total loss upward after about 50 steps; normalizing the target with a LayerNorm and applying VICReg only to the online embedding produced the stable 400-step trajectory in Fig. 5.</p>
+    <p><i>Limitations.</i> The labeled set is tiny (42 sequences) and imbalanced (cerebral palsy has 4). The encoder is small (71,360 parameters, 2 layers), training is short (400 steps on CPU), and the clinical-scalar analysis covers only two derived quantities. The confusion matrix and label-efficiency curve are per-clip and therefore optimistic. None of these undercut the main claim, but all of them bound how far the current numbers can be pushed.</p>
+
+    <h2>VIII.&nbsp;&nbsp;Conclusion and Future Work</h2>
+    <p class="noindent">Gait-JEPA shows that a frozen skeleton JEPA learns a gait representation whose honest per-sequence signal is well above the 0.20 chance level but below the 0.76 baseline on this small 42-sequence set. The much higher clip-level number is not a win: it is inflated by window leakage, so it is a diagnostic that measures the leak, not a fair result to compare against the baseline. The clip-versus-sequence gap and the 42-sequence sample are the real obstacles. A follow-up iteration in ../../gavd2/ turns this into a controlled comparison: it locks the exact 68 exp5 sequences, chases coverage to 68 of 68, and reports honest per-sequence numbers (linear 0.486, MLP 0.626, matched random forest 0.579, and 0.619 on the baseline's exact seed-42 split) against the 0.762 baseline. Future work follows directly. First, use per-sequence splitting by default so that reported numbers are leakage-free. Second, grow the labeled set: the large abnormal and style pools offer many more sequences to extract and, once graded, to label. Third, scale the encoder beyond 2 layers and D = 64, and train longer than 400 steps. Fourth, add graph-aware attention that respects the skeleton's joint connectivity rather than treating joints as an unordered set. Fifth, run the full clinical probes when Penny Inouye's cerebral-palsy and myopathic gradings arrive in early August 2026, which will both enlarge and rebalance the two weakest classes.</p>
+
+    <h2>Acknowledgment</h2>
+    <p class="noindent">The authors thank Phil Mui, Research Advisor, for guidance throughout this work.</p>
+
+    <h2>References</h2>
+    <div class="refs">
+      <p>[1] M. Assran et al., "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture" (I-JEPA), in Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR), 2023.</p>
+      <p>[2] A. Bardes et al., "V-JEPA: Latent Video Prediction for Self-Supervised Video Representation Learning," Meta AI, 2024.</p>
+      <p>[3] A. Bardes, J. Ponce, and Y. LeCun, "VICReg: Variance-Invariance-Covariance Regularization for Self-Supervised Learning," in Proc. Int. Conf. Learning Representations (ICLR), 2022.</p>
+      <p>[4] Ranjan et al., "Gait Abnormality in Video Dataset (GAVD)," 2025.</p>
+      <p>[5] V. Bazarevsky et al., "BlazePose: On-device Real-time Body Pose Tracking," 2020.</p>
+      <p>[6] Y. LeCun, "A Path Towards Autonomous Machine Intelligence," 2022.</p>
+    </div>
+
+  </div><!-- /cols -->
+
+</div><!-- /page -->
+</body>
+</html>

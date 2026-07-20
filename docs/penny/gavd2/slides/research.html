@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gait-JEPA iteration 2: a controlled comparison</title>
+
+<!-- reveal.js is vendored locally so this deck renders fully offline. -->
+<link rel="stylesheet" href="reveal/dist/reset.css" />
+<link rel="stylesheet" href="reveal/dist/reveal.css" />
+<link rel="stylesheet" href="reveal/dist/theme/white.css" id="theme" />
+<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css" />
+
+<style>
+  /* Gait-JEPA house palette on top of the reveal white theme. Slate and blue,
+     light and uncluttered. No em-dashes or en-dashes anywhere. */
+  :root {
+    --ink: #0f172a; --body: #334155; --muted: #64748b;
+    --blue: #1d4ed8; --blue-fill: #eff6ff;
+    --green: #15803d; --amber: #d97706; --violet: #7c3aed; --red: #b91c1c;
+    --rule: #e2e8f0;
+  }
+  .reveal { font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; color: var(--body); }
+  .reveal h1, .reveal h2, .reveal h3 { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
+  .reveal h1 { font-size: 2.0em; }
+  .reveal h2 { font-size: 1.5em; }
+  .reveal section { text-align: left; }
+  .reveal .center { text-align: center; }
+  .reveal .kicker { font-family: "SF Mono", "IBM Plex Mono", Menlo, monospace; font-size: 0.5em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3em; }
+  .reveal .kicker.blue { color: var(--blue); } .reveal .kicker.green { color: var(--green); }
+  .reveal .kicker.amber { color: var(--amber); } .reveal .kicker.red { color: var(--red); }
+  .reveal .lede { color: var(--muted); font-size: 0.72em; line-height: 1.5; }
+  .reveal ul { font-size: 0.72em; line-height: 1.45; }
+  .reveal img.fig { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 8px; max-height: 60vh; }
+  .reveal .cap { color: var(--muted); font-size: 0.5em; font-style: italic; margin-top: 0.4em; }
+  .reveal .pill { display: inline-block; background: var(--blue-fill); color: var(--blue); border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.12em 0.7em; font-size: 0.6em; font-weight: 600; }
+  .reveal .metric { color: var(--blue); font-weight: 700; }
+  .reveal .warn { color: var(--red); font-weight: 700; }
+  .reveal table { font-size: 0.62em; }
+  .reveal .small { font-size: 0.6em; color: var(--muted); }
+  .reveal section.title h1 { font-size: 2.2em; }
+  .reveal .authors { color: var(--body); font-size: 0.66em; margin-top: 0.6em; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. Title -->
+  <section class="title center" data-auto-animate>
+    <p class="kicker blue">Gait-JEPA iteration 2</p>
+    <h1>Learning gait from unlabelled walking video</h1>
+    <p class="lede center">A controlled comparison of a frozen pose-sequence JEPA against a hand-feature Random Forest, on the exact same 68 clinical sequences.</p>
+    <p class="authors center">Alex Mui, Penny Inouye, Theodore Mui (equal contribution) &nbsp;|&nbsp; Phil Mui (Research Advisor)</p>
+    <aside class="notes">
+      This deck is the honest iteration-2 story. Iteration 1 proved the pipeline; iteration 2 makes the comparison against the prior Random Forest genuinely controlled and reports the honest per-sequence number. The numbers here are from the full real run on the exact 68 sequences, chased to 68-of-68 coverage.
+    </aside>
+  </section>
+
+  <!-- 2. The one imbalance -->
+  <section>
+    <p class="kicker">The thesis</p>
+    <h2>Unlabelled walking video is cheap. Clinical labels are scarce.</h2>
+    <div style="display:flex; gap:1.5em; align-items:center;">
+      <ul style="flex:1;">
+        <li>GAVD gives us <b>374 sequences</b> across 11 gait conditions.</li>
+        <li>Only <b>68</b> make up the clean 5-class set the prior work labelled.</li>
+        <li>So: <b>pretrain on all 374 with no labels</b>, spend the 68 labels last on a tiny frozen probe.</li>
+      </ul>
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/label-scarcity.svg" alt="label scarcity" /></div>
+    </div>
+    <aside class="notes">The whole method exists to exploit this imbalance. A JEPA can learn from the big cheap pile; a label-hungry classifier cannot. Keep the labels for the very end.</aside>
+  </section>
+
+  <!-- 3. What a Gait-JEPA is -->
+  <section>
+    <p class="kicker blue">Method</p>
+    <h2>A JEPA on pose sequences, not pixels</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/four-pieces.svg" alt="four JEPA pieces" /></div>
+    <p class="cap">Context encoder reads visible joints, EMA target encoder reads the full sequence, a predictor fills the hidden latent, VICReg keeps it from collapsing.</p>
+    <aside class="notes">Four pieces. The target is an EMA copy, stop-gradient. We predict hidden motion in latent space, never reconstruct pixels. Two load-bearing fixes carried from iteration 1: learned time and joint positional embeddings, and a corrected loss.</aside>
+  </section>
+
+  <!-- 4. The corrected loss -->
+  <section>
+    <p class="kicker blue">Method</p>
+    <h2>A loss that stays down</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <ul style="flex:1;">
+        <li>L2 between the prediction and the <b>LayerNorm-normalized</b> EMA target (direction, not magnitude).</li>
+        <li>Light VICReg variance and covariance on the <b>online context only</b>, never the stop-gradient target.</li>
+        <li>Without this the target scale inflates and the loss drifts up. With it: falls sharply then settles.</li>
+      </ul>
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/loss-fix-curves.svg" alt="loss fix curves" /></div>
+    </div>
+    <aside class="notes">This bug is worth teaching: an anti-collapse term applied to the EMA target inflates the representation scale, and an un-normalized L2 turns that into a rising loss. The fix mirrors V-JEPA.</aside>
+  </section>
+
+  <!-- 5. The prior baseline -->
+  <section>
+    <p class="kicker amber">The baseline</p>
+    <h2>The prior work: a Random Forest on 82 hand features</h2>
+    <ul>
+      <li>Curated 5-class set of <b>68 sequences</b> (normal 12, parkinsons 9, stroke 12, cerebralpalsy 15, myopathic 20).</li>
+      <li>82 hand-crafted joint-angle and kinematic features, <b>one vector per sequence</b>.</li>
+      <li>Random Forest (100 trees, depth 5), single seed-42 70/30 split: <span class="metric">0.762</span> test accuracy (16 of 21). Chance is 0.20.</li>
+    </ul>
+    <p class="small">This is the number iteration 2 compares against, on exactly the same 68 sequences.</p>
+    <aside class="notes">The baseline is per sequence, single split, unstratified. Its internal 5-fold CV is only about 0.57, so 0.762 is one optimistic point on a tiny test fold. We reproduce its exact split for a like-for-like point.</aside>
+  </section>
+
+  <!-- 6. What was wrong with iteration 1's comparison -->
+  <section>
+    <p class="kicker red">Why iteration 2</p>
+    <h2>Iteration 1's comparison was not controlled</h2>
+    <ul>
+      <li><b>Wrong set:</b> labelled by first-N-per-class, not the exact exp5 68.</li>
+      <li><b>Wrong unit:</b> classified per overlapping window with a leaky split.</li>
+      <li><b>Silent shrink:</b> coverage fell to 42 of 68 with no flag.</li>
+      <li><b>Mismatched probe:</b> a different Random Forest than the baseline.</li>
+    </ul>
+    <p class="small">Each of these flatters or distorts the comparison. Iteration 2 fixes all four.</p>
+    <aside class="notes">None of this was dishonest by intent; it is what happens when you scale a pipeline without a controlled harness. The fixes are the substance of iteration 2.</aside>
+  </section>
+
+  <!-- 7. Lock to the exact 68 -->
+  <section>
+    <p class="kicker green">Fix 1</p>
+    <h2>Lock the labelled set to the exact exp5 68</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/exact-68-lock.svg" alt="exact 68 lock" /></div>
+    <p class="cap">A three-tier resolver (pickle, folder glob, checked-in constant) with a REAL-mode fail-stop; canonical cerebralpalsy spelling threaded everywhere.</p>
+    <aside class="notes">Verified: the 68 exp5 ids equal the GAVD sequence ids exactly and all exist in the tree. The cerebral-palsy spelling trap (space vs no space) would silently zero the class if canonicalization is missed anywhere, so it is threaded through notebooks 0, 2, 3, and 5.</aside>
+  </section>
+
+  <!-- 8. Window leakage -->
+  <section>
+    <p class="kicker green">Fix 2</p>
+    <h2>Evaluate per sequence, not per window</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/window-leakage.svg" alt="window leakage" /></div>
+    <p class="cap">Per-clip splits let windows from one sequence sit in both train and test. Pooling to one vector per sequence removes the leak.</p>
+    <aside class="notes">This is the single biggest correction. On the real run the per-clip diagnostic read 0.87 to 0.92; the honest per-sequence number is 0.49 (linear) to 0.63 (MLP). That 30-to-40-point gap is pure window leakage. exp5 is per sequence, so per sequence is the only comparable unit.</aside>
+  </section>
+
+  <!-- 9. Co-occurring video exclusion -->
+  <section>
+    <p class="kicker green">Fix 3</p>
+    <h2>Exclude co-occurring videos from pretraining</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/cooccurring-video-exclusion.svg" alt="co-occurring video exclusion" /></div>
+    <p class="cap">A video can back more than one sequence. We drop from pretraining every window whose source video also backs a held-out labelled sequence.</p>
+    <aside class="notes">This makes the train/probe separation video-level, not just sequence-level, so the encoder cannot have seen a near-identical frame from the held-out clip's own video.</aside>
+  </section>
+
+  <!-- 10. Per-sequence pooling -->
+  <section>
+    <p class="kicker blue">The eval</p>
+    <h2>One vector per sequence, matched probe</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/per-sequence-pooling.svg" alt="per sequence pooling" /></div>
+      <ul style="flex:1;">
+        <li>Mean-pool a sequence's window embeddings to one D-dim vector.</li>
+        <li>Probe with a linear model, an MLP, and a <b>Random Forest matched to exp5</b> (100 trees, depth 5, balanced).</li>
+        <li>Report a repeated-split band plus a like-for-like point on <b>exp5's exact seed-42 split</b>.</li>
+      </ul>
+    </div>
+    <aside class="notes">The matched RF gives classifier-family parity. The exact-split point is reproduced from exp5's native feature-list order, restricted to the sequences that survive coverage.</aside>
+  </section>
+
+  <!-- 11. The controlled result -->
+  <section>
+    <p class="kicker red">Result</p>
+    <h2>The honest, controlled comparison</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/controlled-comparison.svg" alt="controlled comparison scorecard" /></div>
+    <p class="cap">Per-sequence frozen probe <span class="metric">0.49</span> (linear) to <span class="metric">0.63</span> (MLP), exp5 exact-split matched RF <span class="metric">0.62</span>, versus the Random Forest <span class="warn">0.76</span>, on the same 68.</p>
+    <aside class="notes">Say it plainly: on all 68 sequences over 20 splits, linear 0.486, MLP 0.626, matched RF 0.579; on exp5's exact seed-42 split the matched RF is 0.619 beside the baseline's 0.762. The frozen probe is well above the 0.20 chance level but below the tuned 82-feature Random Forest. The claim is not "we beat 76 percent"; it is that a label-free encoder learns a genuinely gait-relevant representation, and the honest gap exposes label scarcity and small-sample variance as the real obstacles.</aside>
+  </section>
+
+  <!-- 12. Label efficiency -->
+  <section>
+    <p class="kicker blue">Result</p>
+    <h2>Label efficiency: the real promise</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/label-efficiency.svg" alt="label efficiency curve" /></div>
+    <p class="cap">How gracefully accuracy holds as labels shrink: 0.39 at 25 percent of labels up to 0.49 at full labels, staying roughly double chance throughout. A flatter curve is the payoff of pretraining.</p>
+    <aside class="notes">The headline number is one point; the shape of the label-efficiency curve is the more convincing evidence that the frozen features carry structure a label-hungry model would need many more examples to find.</aside>
+  </section>
+
+  <!-- 13. Clinical axes + VICReg -->
+  <section>
+    <p class="kicker violet">Result</p>
+    <h2>Did the encoder learn clinical axes on its own?</h2>
+    <ul>
+      <li>Linear probes from the frozen latent to interpretable scalars: <b>step amplitude</b> is strongly recoverable (R-squared 0.68), <b>asymmetry</b> weakly (0.08) - a clinical axis learned with no labels.</li>
+      <li>VICReg ablation: the online-only variance and covariance terms do real anti-collapse work on top of the EMA target (embedding spread 0.90 with, 0.74 without).</li>
+    </ul>
+    <div style="display:flex; gap:1em; justify-content:center;">
+      <img class="fig" src="../images/neuroscience-axes.svg" alt="neuroscience axes" style="max-height:34vh;" />
+      <img class="fig" src="../images/collapse-vicreg.svg" alt="collapse vicreg" style="max-height:34vh;" />
+    </div>
+    <aside class="notes">We probe only linearly decodable scalars, so a positive R-squared is meaningful. A nonlinear target like timing variability cannot be read off any embedding by a linear probe, so we do not claim it.</aside>
+  </section>
+
+  <!-- 14. Limits + future work -->
+  <section>
+    <p class="kicker amber">Limits and future work</p>
+    <h2>What is honest, and what is next</h2>
+    <ul>
+      <li><b>Small sample:</b> 68 sequences, imbalanced (parkinsons only 9), high-variance test folds. Report bands, not points.</li>
+      <li><b>Coverage:</b> chased all 68 through download and extraction to 68 of 68 (two sequences needed a bbox-crop recovery and a relaxed length floor).</li>
+      <li><b>Future (not this iteration):</b> deeper or wider encoder, longer pretraining, richer inputs, stronger probe, to test whether the gap to 0.76 closes.</li>
+    </ul>
+    <p class="small">Iteration 2 is a rigor pass. The controlled harness it builds is what a model-upgrade iteration would stand on.</p>
+    <aside class="notes">Being explicit about limits is the point of a rigor pass. The next iteration can pursue the model-upgrade branch with this harness already in place.</aside>
+  </section>
+
+  <!-- 15. Closing -->
+  <section class="center">
+    <p class="kicker blue">Takeaway</p>
+    <h2>Learn first, label last, compare honestly</h2>
+    <p class="lede center">Same 68 sequences, same classes, same split unit. The only intended difference from the baseline is the representation: a learned embedding versus 82 hand features.</p>
+    <p class="small">Notebooks, docs, and this deck live in gait/skeleton-jepa/gavd2. Iteration 1 is preserved in gavd/. For the plain-language story of the whole journey, see docs/learning/learning-journey.md.</p>
+    <aside class="notes">Close on the controlled-comparison framing. Everything held constant except the representation. That is what makes the result interpretable, whichever way the number lands.</aside>
+  </section>
+
+</div></div>
+
+<script src="reveal/dist/reveal.js"></script>
+<script src="reveal/plugin/notes/notes.js"></script>
+<script src="reveal/plugin/highlight/highlight.js"></script>
+<script src="reveal/plugin/zoom/zoom.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: "c/t",
+    transition: "fade",
+    width: 1180, height: 720, margin: 0.06,
+    plugins: [ RevealNotes, RevealHighlight, RevealZoom ],
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 420" font-family="sans-serif">
+  <rect x="0" y="0" width="940" height="420" fill="#ffffff"/>
+  <text x="470" y="32" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">Real pretraining is stable over 400 steps on the 1,571-clip corpus</text>
+  <text x="470" y="55" font-size="13" text-anchor="middle" fill="#475569">The corrected loss falls sharply then settles, while the embedding spread grows: prediction improves and nothing collapses.</text>
+
+  <!-- LEFT panel: total loss + MSE -->
+  <text x="250" y="86" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Loss falls and settles</text>
+  <line x1="90" y1="360" x2="450" y2="360" stroke="#334155" stroke-width="1.5"/>
+  <line x1="90" y1="100" x2="90" y2="360" stroke="#334155" stroke-width="1.5"/>
+  <g font-size="10" fill="#475569" text-anchor="end">
+    <text x="84" y="364">0</text>
+    <text x="84" y="295">10</text>
+    <text x="84" y="230">20</text>
+    <text x="84" y="165">30</text>
+  </g>
+  <text x="46" y="230" font-size="11" text-anchor="middle" fill="#1e3a8a" transform="rotate(-90 46 230)">total loss</text>
+  <g font-size="10" fill="#475569" text-anchor="middle">
+    <text x="90" y="376">0</text><text x="180" y="376">100</text><text x="270" y="376">200</text><text x="360" y="376">300</text><text x="450" y="376">400</text>
+  </g>
+  <text x="270" y="394" font-size="11" text-anchor="middle" fill="#475569">training step</text>
+  <!-- total loss polyline: y = 360 - total*6.5 ; x = 90 + step*0.9 -->
+  <!-- pts: (0,32.02)->y152 (50,9.12)->y301 (100,7.77)->y309.5 (150,6.59)->y317 (200,6.29)->y319 (250,6.36)->y318.7 (300,7.0)->y315.5 (350,7.42)->y312 (399,5.51)->y324 -->
+  <polyline fill="none" stroke="#1d4ed8" stroke-width="2.5"
+    points="90,152 135,301 180,309 225,317 270,319 315,319 360,315 405,312 449,324"/>
+  <circle cx="90" cy="152" r="3" fill="#1d4ed8"/><circle cx="449" cy="324" r="3" fill="#1d4ed8"/>
+  <text x="104" y="146" font-size="11" fill="#1e3a8a">32.0</text>
+  <text x="430" y="338" font-size="11" fill="#1e3a8a">5.5</text>
+  <!-- MSE (sim) scaled x20 for visibility on same axis: 1.28*20=25.6 -> y193.6; 0.22*20=4.34->y331.8 -->
+  <polyline fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="5 3"
+    points="90,194 135,313 180,320 225,326 270,328 315,327 360,325 405,322 449,332"/>
+  <text x="120" y="188" font-size="11" fill="#14532d">MSE 1.28 (x20)</text>
+  <text x="360" y="345" font-size="11" fill="#14532d">MSE 0.22</text>
+
+  <!-- RIGHT panel: embedding std -->
+  <text x="700" y="86" font-size="14" font-weight="bold" text-anchor="middle" fill="#7c3aed">Embedding spread grows (no collapse)</text>
+  <line x1="540" y1="360" x2="900" y2="360" stroke="#334155" stroke-width="1.5"/>
+  <line x1="540" y1="100" x2="540" y2="360" stroke="#334155" stroke-width="1.5"/>
+  <g font-size="10" fill="#475569" text-anchor="end">
+    <text x="534" y="364">0.0</text>
+    <text x="534" y="295">0.25</text>
+    <text x="534" y="230">0.50</text>
+    <text x="534" y="165">0.75</text>
+    <text x="534" y="113">1.0</text>
+  </g>
+  <text x="500" y="230" font-size="11" text-anchor="middle" fill="#7c3aed" transform="rotate(-90 500 230)">embedding std</text>
+  <g font-size="10" fill="#475569" text-anchor="middle">
+    <text x="540" y="376">0</text><text x="630" y="376">100</text><text x="720" y="376">200</text><text x="810" y="376">300</text><text x="900" y="376">400</text>
+  </g>
+  <text x="720" y="394" font-size="11" text-anchor="middle" fill="#475569">training step</text>
+  <!-- std polyline: y = 360 - std*260 ; x = 540 + step*0.9 -->
+  <!-- (0,.377)y262 (50,.367)y265 (100,.539)y220 (150,.625)y198 (200,.659)y189 (250,.658)y189 (300,.726)y171 (350,.751)y165 (399,.763)y162 -->
+  <polyline fill="none" stroke="#7c3aed" stroke-width="2.5"
+    points="540,262 585,265 630,220 675,198 720,189 765,189 810,171 855,165 899,162"/>
+  <circle cx="540" cy="262" r="3" fill="#7c3aed"/><circle cx="899" cy="162" r="3" fill="#7c3aed"/>
+  <text x="552" y="256" font-size="11" fill="#5b21b6">0.38</text>
+  <text x="862" y="156" font-size="11" fill="#5b21b6">0.76</text>
+  <!-- collapse floor -->
+  <line x1="540" y1="360" x2="900" y2="360" stroke="#b91c1c" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="895" y="352" font-size="10" text-anchor="end" fill="#b91c1c">collapse would fall to 0</text>
+</svg>
