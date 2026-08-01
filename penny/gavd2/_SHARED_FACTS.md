@@ -1,7 +1,7 @@
-# Shared facts for the Skeleton-JEPA FULL-DATASET (gavd/) tutorial series
+# Shared facts for the Skeleton-JEPA controlled and enhanced gavd2 series
 
 This is an internal spec that every notebook and every SVG in
-`gait/skeleton-jepa/gavd/` must stay consistent with. It is NOT a
+`gait/skeleton-jepa/gavd2/` must stay consistent with. It is NOT a
 user-facing page. Do not link to it from the tutorials.
 
 ## What this series is (and how it differs from tutorials/)
@@ -10,7 +10,7 @@ user-facing page. Do not link to it from the tutorials.
 demo clip (`B5hrxKe2nP8`) through the whole idea, step by step, to
 teach what a Skeleton-JEPA is.
 
-`gait/skeleton-jepa/gavd/` is the FULL-DATASET series: it scales the
+`gait/skeleton-jepa/gavd2/` is the controlled FULL-DATASET series: it scales the
 exact same pipeline to EVERY GAVD sequence. It scans all 374 CSVs
 across 11 conditions, bulk-downloads the unique YouTube videos,
 batch-extracts skeletons over every sequence (mirroring
@@ -25,7 +25,7 @@ and precious (only 68). The full-dataset series is about turning that
 big cheap pile into a strong encoder, then spending the 68 labels only
 at the very end.
 
-The six notebooks (each `NN-title.ipynb`):
+The ten notebooks (each `NN-title.ipynb`):
 
 - 00-scan-all-gavd-csvs.ipynb   : walk all 11 condition folders and all 374 CSVs, build a manifest DataFrame (one row per sequence: condition, seq id, video id, url, frame span, num frames, bbox present), visualize the dataset at scale (class balance, sequence-length distribution, unique-video count, the 68-clip labeled subset vs the full unlabeled pool). Writes manifest.csv.
 - 01-bulk-download-youtube.ipynb : from the manifest, dedup to the unique YouTube video ids, download each once into the cache (resumable: skip already-cached), record success/failure per video, write download_report.csv. Mirrors alexpose YouTubeHandler with inline yt-dlp fallback.
@@ -33,6 +33,10 @@ The six notebooks (each `NN-title.ipynb`):
 - 03-build-pretraining-corpus.ipynb : load every cached sequence, pelvis-center + torso-normalize, slice into overlapping fixed-length windows (T frames), stack into one big unlabeled clip bank (N, T, 33, 3). Hold out the 68 labeled clips (5-class subset) for the probe only. Writes corpus.npz and labeled_holdout.npz.
 - 04-pretrain-jepa-at-scale.ipynb : train the Skeleton-JEPA (context encoder, EMA target encoder, predictor, VICReg loss) on the full unlabeled corpus with block masking. Monitor loss terms + embedding std to confirm no collapse. Writes jepa_encoder_gavd.pt.
 - 05-frozen-probe-full-eval.ipynb : freeze the encoder, embed the 68 labeled clips, train linear + MLP + RF probes on the 70/30 split, plot the label-efficiency curve, fit neuroscience linear probes to H-priority scalars, run the VICReg on/off ablation, and compare everything to the 76 percent RF baseline.
+- 06-pretrain-enhanced-jepa.ipynb : train the 4-layer, D=128 enhanced encoder for 4,000 updates with the original per-token MLP predictor plus mean-pooled context.
+- 07-enhanced-probe-full-eval.ipynb : strictly load and freeze the Notebook 06 encoder, pool 864 windows into 68 sequence embeddings, and run the same repeated and exact-split probe harness.
+- 08-pretrain-enhanced-predictor.ipynb : hold the enhanced encoder recipe fixed and replace the MLP predictor with a 2-layer, D=128, 8-head transformer predictor that gathers cross-token context by self-attention.
+- 09-enhanced-predictor-full-eval.ipynb : strictly load and freeze the Notebook 08 encoder and run the same sequence-level probe harness. The predictor is discarded and is not evaluated.
 
 ## Cache artifacts passed between notebooks (all under GAVD_CACHE_DIR, default ./cache)
 
@@ -41,6 +45,7 @@ The six notebooks (each `NN-title.ipynb`):
 - 02 writes `skeletons_<condition>.npz` per condition + `extraction_report.csv`. 03 reads them.
 - 03 writes `corpus.npz` (unlabeled windowed bank) + `labeled_holdout.npz` (68-clip 5-class set). 04 and 05 read them.
 - 04 writes `jepa_encoder_gavd.pt`    (encoder weights + config). 05 reads it.
+- 06 and 08 both currently write `jepa_encoder_gavd_enhanced_l4_d128_h8_ff4.pt`; 07 and 09 read it. This is a known collision, not a valid shared artifact contract. Reproduction MUST isolate the 06/07 and 08/09 pairs with separate `GAVD_CACHE_DIR` values until the model id includes predictor provenance.
 
 Every notebook that reads an upstream artifact must gracefully fall
 back to synthetic data (with a clear printed message) if the artifact
@@ -203,16 +208,18 @@ Each landmark has (x, y, z) plus a visibility/confidence score. This series uses
 - Four pieces:
   1. context encoder: reads VISIBLE joints/frames -> context embedding. Small transformer (nn.TransformerEncoder, 2 layers, gelu, batch_first, dropout 0, dim_feedforward = 2*D) PLUS learned positional embeddings. Tokens are the clip flattened to (B, T*33, C) in row-major (t, j) order (token n = t*33 + j). Before the transformer, add a learned time embedding `time_embed` of shape (T, D) and a learned joint embedding `joint_embed` of shape (33, D), broadcast as `pos[t,j] = time_embed[t] + joint_embed[j]` and reshaped to (T*33, D). Init both at std 0.1 so they are on the scale of the projected coordinates (smaller and the transformer's LayerNorm washes them out). WHY (gavd/ divergence from tutorials/03): without positional embeddings a transformer over flattened tokens is permutation-invariant, so a mean-pooled clip embedding is a bag of coordinates that discards frame order and left/right joint identity - it cannot represent gait dynamics at all. This was the root cause of notebook 05 giving negative R-squared for any temporal scalar. The concept tutorials/03-05 still omit pos-embeds (they only teach the pieces); the gavd/ series ADDS them because it actually evaluates the encoder. This is the standard I-JEPA / V-JEPA fix.
   2. target encoder: EMA copy of the context encoder, reads the FULL sequence -> target embeddings (answer key). Update `target = m*target + (1-m)*context`, m near 1 (0.996), stop-gradient (requires_grad False, EMA only).
-  3. predictor: takes context + positions of hidden tokens -> predicts their target embeddings. Shallow MLP (Linear-GELU-Linear, hidden = 2*D) is fine for these notebooks.
+  3. predictor: takes online context embeddings and predicts target embeddings at hidden positions. Notebooks 04 and 06 use a token-wise MLP. Notebook 06 adds one mean-pooled context summary to every token before the MLP. Notebook 08 removes that workaround and uses a 2-layer transformer predictor, so each token can gather content from specific other tokens through self-attention. The transformer predictor has width 128, 8 heads, feed-forward width 256, and 297,984 parameters. It is a skeleton-specific JEPA-style adaptation, not an exact I-JEPA context/target-query path.
   4. loss (gavd/ notebook 04, corrected): L2 (invariance) between the prediction and the LAYER-NORMALIZED EMA target, plus LIGHT VICReg variance + covariance applied to the ONLINE context embedding ONLY (never the stop-gradient target). NO negatives, NO decoder.
 - Collapse trap: model can cheat with a constant embedding; the EMA target plus the light VICReg variance guard prevents it.
 - WHY the loss differs from the concept tutorials/03: applying the VICReg variance/covariance to BOTH pred AND the EMA target (as tutorials/03 does) makes the target encoder's embedding scale inflate over long training, so the raw (un-normalized) L2 climbs and the TOTAL LOSS RISES after ~50 steps. The gavd/ series runs 400 real steps, long enough to expose this, so it (1) LayerNorms the target before the L2 (scale-invariant, V-JEPA style), (2) regularizes the online context only, and (3) uses light weights with a modest variance target. Verified over 400 steps: total falls 12.8 -> 6.0, MSE falls 0.24 -> 0.23, context std stays ~0.37 (no collapse).
 - VICReg weights (gavd/ notebook 04): VICREG_SIM=25.0, VICREG_VAR=0.5, VICREG_COV=0.04, VAR_TARGET=0.5, EPS=1e-4, EMA_M=0.996, EMBED_DIM=64. (The concept tutorials/03 still uses the older 25/25/1, gamma=1 weights on the short toy run where the rise never shows.)
-- The `make_target_encoder`, `ema_update`, `Predictor` definitions match tutorials/03 verbatim. `ContextEncoder` in the gavd/ series takes extra `T` and `n_joints` args and adds the time+joint positional embeddings described in piece 1 (this is the one intentional divergence from tutorials/03). `vicreg_loss` in gavd/ notebook 04 has the corrected signature `vicreg_loss(pred, target, cfg, context=None)` described above. Notebooks 04 and 05 MUST define the SAME `ContextEncoder` (identical pos-embed layout) and 04 MUST save `T` and `N_JOINTS` in the checkpoint config so 05 can rebuild it identically; 05 rebuilds from the saved config and, on any state_dict shape mismatch (for example a stale checkpoint from an older nb04), prints a WARNING to re-run nb04 and falls back to a fresh encoder rather than crashing.
+- `make_target_encoder` and `ema_update` follow the tutorial pattern. The predictors intentionally differ by experiment lane, so no single predictor definition is canonical across all ten notebooks. `ContextEncoder` takes extra `T` and `n_joints` arguments and adds the time and joint positional embeddings described in piece 1. `vicreg_loss` has the corrected signature `vicreg_loss(pred, target, cfg, context=None)`. Every evaluation notebook MUST rebuild the same encoder architecture and load its state dictionary strictly. The checkpoint also needs predictor provenance even though downstream evaluation discards that predictor.
 - Clip embedding for the frozen probe (notebook 05): flatten to (T*33, C) in the SAME (t, j) order, run the frozen encoder, `mean(dim=1)` over tokens -> (D,). With pos-embeds this pooled vector is NOT permutation-invariant, so it carries temporal and left/right structure. (Plain mean beat mean+temporal-std on the small labeled set in testing.)
 - Evaluation story: pretrain encoder on UNLABELED skeletons (here: the whole 374-sequence pool), freeze it, spend the labeled clips (the prior work used 68; a cached labeled_holdout.npz may hold fewer) only on a small probe. North star: match or beat 76 percent RF with a frozen probe. Because the labeled set is small, notebook 05 reports RQ1/RQ2/RQ3 as the MEAN (+/- std) over N_SPLITS=20 stratified 70/30 splits, not a single noisy split.
 - RQ3 clinical scalars (notebook 05): use LINEARLY DECODABLE proxies so a positive R-squared is meaningful - `asymmetry_index` (|L-R leg swing range| ratio) and `step_amplitude` (mean ankle swing range). Do NOT probe a cycle-to-cycle timing coefficient of variation: it is nonlinear in the coordinates (a ratio of statistics of frame-to-frame diffs), so NO linear probe recovers it from ANY embedding - a negative R-squared there is a property of the target, not the encoder. Verified linear-probe ceilings from raw coords: asymmetry ~0.70, step_amplitude ~0.84, stride_time_cv ~0.02.
 - RQ4 ablation (notebook 05): run a faithful miniature of the nb04 loop on the labeled clips (block masking + EMA target + LayerNorm-target L2) and toggle var/cov. Use a faster EMA (0.99) and slightly stronger DEMO-ONLY weights (var 1.0, gamma 1.0), 200 steps, so the effect shows on a fresh encoder. On easy smoke data the EMA target does most anti-collapse work and VICReg ADDS a margin (ON std climbs above OFF); do NOT claim the OFF run crashes to zero.
+- Enhanced predictor stored result (08/09): relative to 06/07, final pretraining loss improves from 0.542 to 0.372 and exact-split RF improves from 0.667 to 0.714. Repeated linear and MLP accuracies decline from 0.621 and 0.660 to 0.595 and 0.629. This is a mixed result, not a general win.
+- Notebook 09 RQ4 warning: the stored mini-ablation ends at std 0.944 ON and 0.945 OFF. The numbers contradict the printed claim that ON is well above OFF. Treat this ablation as inconclusive.
 
 ## The shared inline animation helper (use this exact shape in every notebook)
 

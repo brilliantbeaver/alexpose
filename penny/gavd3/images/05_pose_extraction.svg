@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Annotated frame and pose extraction</title>
+  <desc>The GAVD bbox is scaled to the downloaded video, padded, used for one-person pose detection, and then mapped back to full-frame normalized coordinates.</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker><style>.h{font:700 34px Arial;fill:#10233f}.t{font:700 21px Arial;fill:#10233f}.b{font:16px Arial;fill:#344b62}.a{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1200" height="675" fill="#f5f1e8"/><text x="55" y="62" class="h">Use the annotation to isolate the intended walker</text>
+  <rect x="55" y="150" width="290" height="300" rx="18" fill="#dceaf4" stroke="#18324c" stroke-width="2"/>
+  <rect x="135" y="195" width="120" height="205" fill="none" stroke="#ef7d57" stroke-width="7"/>
+  <circle cx="195" cy="235" r="25" fill="#fff"/><line x1="195" y1="260" x2="195" y2="330" stroke="#fff" stroke-width="12"/><line x1="195" y1="290" x2="155" y2="315" stroke="#fff" stroke-width="10"/><line x1="195" y1="290" x2="235" y2="315" stroke="#fff" stroke-width="10"/><line x1="195" y1="330" x2="165" y2="380" stroke="#fff" stroke-width="10"/><line x1="195" y1="330" x2="225" y2="380" stroke="#fff" stroke-width="10"/>
+  <text x="85" y="490" class="t">1. Scale bbox</text><text x="85" y="520" class="b">annotation size to MP4 size</text>
+  <path d="M345 300H445" class="a"/>
+  <rect x="445" y="175" width="260" height="250" rx="18" fill="#fff" stroke="#18324c" stroke-width="2"/>
+  <circle cx="575" cy="220" r="24" fill="#e9e3f5"/><line x1="575" y1="245" x2="575" y2="320" stroke="#8a6fb3" stroke-width="10"/><line x1="575" y1="275" x2="530" y2="300" stroke="#8a6fb3" stroke-width="8"/><line x1="575" y1="275" x2="620" y2="300" stroke="#8a6fb3" stroke-width="8"/><line x1="575" y1="320" x2="545" y2="390" stroke="#8a6fb3" stroke-width="8"/><line x1="575" y1="320" x2="605" y2="390" stroke="#8a6fb3" stroke-width="8"/>
+  <text x="470" y="490" class="t">2. Detect pose</text><text x="470" y="520" class="b">one person inside padded crop</text>
+  <path d="M705 300H805" class="a"/>
+  <rect x="805" y="150" width="340" height="300" rx="18" fill="#e5f4ed" stroke="#18324c" stroke-width="2"/>
+  <text x="845" y="210" class="t">3. Preserve the timeline</text><text x="845" y="255" class="b">x, y, z, visibility for 33 landmarks</text><text x="845" y="292" class="b">original absolute frame numbers</text><text x="845" y="329" class="b">NaN row if detection fails</text><text x="845" y="366" class="b">actual FPS from the downloaded MP4</text>
+  <text x="805" y="510" class="b">Failed frames stay in place so gait timing is not compressed.</text>
+</svg>

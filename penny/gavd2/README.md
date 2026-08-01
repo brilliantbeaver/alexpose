@@ -1,10 +1,23 @@
 # Gait-JEPA on all of GAVD, iteration 2: the controlled-comparison series
 
-This is iteration 2 of the full-dataset Skeleton-JEPA series. It keeps the iteration-1
-method unchanged and makes the comparison against the prior Random Forest genuinely
-controlled: same 68 labelled sequences, same label taxonomy, same pose-extraction
-contract, and an apples-to-apples per-sequence classification unit and split. Iteration
-1 lives one folder over in [`../gavd/`](../gavd/) and is preserved as a checkpoint.
+> **Current evidence status, reviewed 2026-07-27.** This directory is a historical
+> engineering study. Its strongest result is the demonstration that random splits of
+> overlapping windows greatly inflate accuracy. The sequence-level model scores remain
+> same-video-confounded because 68 sequences come from 12 source videos. The clinical
+> scalar regressions use window-level splits, the VICReg statistics flatten token
+> positions into the sample axis, and the two enhanced predictor lanes share one
+> checkpoint identity. Treat the stored model results as diagnostic and
+> hypothesis-generating. See
+> [`notes/research-experiment-review.md`](notes/research-experiment-review.md) and the
+> [project-level evidence review](../README.md) for the current interpretation.
+
+This is iteration 2 of the full-dataset Skeleton-JEPA series. Its core notebooks 00
+through 05 keep the iteration-1 method unchanged and make the comparison against the
+prior Random Forest genuinely controlled: same 68 labelled sequences, same label
+taxonomy, same pose-extraction contract, and an apples-to-apples per-sequence
+classification unit and split. Later notebooks 06 through 09 are separate model-scaling
+and predictor follow-ups. Iteration 1 lives one folder over in
+[`../gavd/`](../gavd/) and is preserved as a checkpoint.
 
 You do not need a machine-learning background. Every notebook runs on a plain laptop CPU
 in seconds in its default smoke mode.
@@ -31,9 +44,10 @@ small labelled set, below the tuned 0.76 baseline. The point of iteration 2 is t
 controlled harness and the honest reading it produces, not beating the baseline (that is
 future work). See [`docs/paper.md`](docs/paper.md).
 
-## The six notebooks
+## The ten notebooks
 
-Each writes a small cache file the next one reads (all under `cache/`, its own namespace).
+Notebooks 00 through 05 define the controlled baseline pipeline. Notebooks 06 through 09
+are two paired extensions that reuse the locked data artifacts from 00 through 03.
 
 0. [`00-scan-all-gavd-csvs.ipynb`](00-scan-all-gavd-csvs.ipynb) - scan every sequence,
    lock the labelled set to the exact exp5 68, persist exp5's exact split.
@@ -47,6 +61,22 @@ Each writes a small cache file the next one reads (all under `cache/`, its own n
    JEPA on the unlabelled corpus, watch for collapse.
 5. [`05-frozen-probe-full-eval.ipynb`](05-frozen-probe-full-eval.ipynb) - freeze, embed
    per sequence, and compare honestly to the 0.76 baseline.
+6. [`06-pretrain-enhanced-jepa.ipynb`](06-pretrain-enhanced-jepa.ipynb) - train a
+   four-layer, 128-wide encoder with the original per-token MLP predictor.
+7. [`07-enhanced-probe-full-eval.ipynb`](07-enhanced-probe-full-eval.ipynb) - strictly
+   load, freeze, and evaluate the Notebook 06 encoder.
+8. [`08-pretrain-enhanced-predictor.ipynb`](08-pretrain-enhanced-predictor.ipynb) - keep
+   the enhanced encoder and replace the MLP predictor with a two-layer transformer that
+   can gather context across tokens.
+9. [`09-enhanced-predictor-full-eval.ipynb`](09-enhanced-predictor-full-eval.ipynb) -
+   freeze and evaluate the Notebook 08 encoder with the same sequence-level probe harness.
+
+Notebook 08 reduces the stored pretraining loss from 0.542 to 0.372 relative to Notebook
+06. Downstream results are mixed: the exact-split Random Forest improves from 0.667 to
+0.714, while repeated-split linear and MLP accuracies move from 0.621 and 0.660 to 0.595
+and 0.629. The correct conclusion is that cross-token prediction improves objective fit
+and one evaluation lane, but is not uniformly superior. See
+[`docs/enhanced-predictor.md`](docs/enhanced-predictor.md).
 
 ## How to run
 
@@ -63,7 +93,7 @@ uv sync
 uv run jupyter lab 00-scan-all-gavd-csvs.ipynb
 ```
 
-### Real mode (produces the iteration-2 numbers)
+### Real mode for the controlled 00 to 05 pipeline
 
 Copy `.env.example` to `.env` (a filled `.env` is already provided for this machine) and
 set `SMOKE_TEST = False` in each notebook, then run `00` through `05` in order. See
@@ -72,6 +102,18 @@ in the docs and slides are from this real run on the exact exp5 68 sequences (ch
 68-of-68 coverage): the honest per-sequence probe reads 0.49 (linear) to 0.63 (MLP) and
 the exp5 exact-split matched Random Forest reads 0.62, against the 0.762 baseline.
 
+### Real mode for the enhanced experiment pairs
+
+After 00 through 03 have produced the locked corpus and holdout, choose one paired lane:
+
+- run 06 then 07 for the enhanced encoder with the MLP predictor; or
+- run 08 then 09 for the enhanced encoder with the transformer predictor.
+
+Notebooks 06 and 08 currently write the same model ID and checkpoint filename. Use a
+different `GAVD_CACHE_DIR` for each lane, or preserve a copy before switching. Otherwise
+the later pretraining run silently replaces the earlier encoder and the evaluation
+notebook cannot identify which discarded predictor produced it.
+
 ## Slides and docs
 
 - [`slides/research.html`](slides/research.html) - the honest controlled-comparison talk.
@@ -79,6 +121,8 @@ the exp5 exact-split matched Random Forest reads 0.62, against the 0.762 baselin
   Both are reveal.js decks with reveal.js vendored locally (offline). See
   [`slides/README.md`](slides/README.md).
 - [`docs/paper.md`](docs/paper.md) / `docs/paper.html` - the iteration-2 paper.
+- [`docs/enhanced-predictor.md`](docs/enhanced-predictor.md) - the complete Notebook 08
+  and 09 architecture, training, evaluation, results, limitations, and reproduction guide.
 - [`docs/learning/learning-journey.md`](docs/learning/learning-journey.md) -
   the plain-language, high-school-level story of the whole `gavd` to `gavd2` journey: the
   four bugs, the four fixes, why per-clip scoring leaks and per-sequence is the honest

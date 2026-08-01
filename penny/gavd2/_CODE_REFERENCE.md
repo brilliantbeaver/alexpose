@@ -302,7 +302,66 @@ def make_block_mask(T, groups, style, ratio, rng):
 ```
 
 --------------------------------------------------------------------------------
-## CONFIG defaults (JEPA hyperparameters) for the gavd/ series (04 and 05)
+## TRANSFORMER PREDICTOR VARIANT (Notebook 08 and the Notebook 09 RQ4 diagnostic)
+
+This is an experiment-specific replacement for the token-wise MLP above. Do not silently
+substitute it into Notebooks 04 or 06, because that would change their historical
+experiment contracts. It accepts the full context-embedding sequence and performs
+cross-token aggregation with self-attention.
+
+```python
+class TransformerPredictor(nn.Module):
+    """Map (B, N, D) online embeddings to (B, N, D) target predictions."""
+
+    def __init__(
+        self,
+        dim=128,
+        n_layers=2,
+        n_heads=8,
+        ff_mult=2,
+        pred_dim=None,
+    ):
+        super().__init__()
+        pred_dim = pred_dim or dim
+        if pred_dim % n_heads != 0:
+            raise ValueError("pred_dim must be divisible by n_heads")
+        self.in_proj = nn.Linear(dim, pred_dim)
+        layer = nn.TransformerEncoderLayer(
+            d_model=pred_dim,
+            nhead=n_heads,
+            dim_feedforward=pred_dim * ff_mult,
+            batch_first=True,
+            dropout=0.0,
+            activation="gelu",
+        )
+        self.blocks = nn.TransformerEncoder(layer, num_layers=n_layers)
+        self.out_proj = nn.Linear(pred_dim, dim)
+
+    def forward(self, context_embeddings):
+        hidden = self.in_proj(context_embeddings)
+        hidden = self.blocks(hidden)
+        return self.out_proj(hidden)
+```
+
+Notebook 08 constructs it as:
+
+```python
+predictor = TransformerPredictor(
+    dim=128,
+    n_layers=2,
+    n_heads=8,
+    ff_mult=2,
+)
+```
+
+It then calls `pred_all = predictor(ctx)`. The old
+`ctx + ctx.mean(dim=1, keepdim=True)` workaround belongs only to the MLP lane.
+
+The current Notebook 08 checkpoint saves only encoder weights and does not stamp the
+predictor variant. Until that is fixed, run 06/07 and 08/09 in separate cache directories.
+
+--------------------------------------------------------------------------------
+## CONFIG defaults (JEPA hyperparameters) for the gavd2 series
 
 Use the corrected, light weights that go with the corrected vicreg_loss above. Also carry
 T and N_JOINTS so the positional-embedding encoder can be rebuilt in 05.
@@ -314,4 +373,15 @@ T and N_JOINTS so the positional-embedding encoder can be rebuilt in 05.
 ```
 
 (The concept tutorials/03 still uses the older 25/25/1, gamma=1 symmetric loss on its short
-toy run, where the divergence never shows. Do not copy those into the gavd/ series.)
+toy run, where the divergence never shows. Do not copy those into the gavd2 series.)
+
+Enhanced encoder settings shared by Notebooks 06 and 08:
+
+```python
+"T": 32, "N_JOINTS": 33, "C": 3,
+"EMBED_DIM": 128, "N_LAYERS": 4, "N_HEADS": 8, "FF_MULT": 4,
+"EMA_M": 0.999, "BATCH": 4, "STEPS": 4000,
+"LR": 3e-4, "WEIGHT_DECAY": 1e-2, "GRAD_CLIP": 1.0,
+```
+
+Only the predictor construction and the predictor input differ between 06 and 08.
