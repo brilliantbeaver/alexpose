@@ -66,23 +66,31 @@ uv run python -m ipykernel install --user --name gavd3-sjepa --display-name "GAV
 uv run jupyter lab
 ~~~
 
-The project uses only this pyproject.toml for dependencies. A lock file is not included.
+The project pins Python 3.12 in `.python-version` and locks dependencies in `uv.lock`. MediaPipe is constrained to the 0.10 release line because MediaPipe 1.0.0 aborts inside macOS Metal preprocessing under Python 3.14 before Python can report a recoverable exception.
 
-Add paths to the existing repository-root .env file. Do not put secrets in a notebook.
+Copy `.env.example` to this folder as `.env` and adjust the paths. The notebooks load this tutorial file first, then use the repository-root `.env` only for variables that are still unset. Existing shell environment variables retain highest priority. Do not put secrets in a notebook.
 
 ~~~dotenv
 ALEXPOSE_ROOT=/Users/alexmui/dev/alexpose
-GAVD3_CACHE_DIR=/Users/alexmui/dev/alexpose/gait/penny/gavd3/work/cache
-GAVD3_ARTIFACT_DIR=/Users/alexmui/dev/alexpose/gait/penny/gavd3/work/artifacts
+GAVD3_CACHE_DIR=/Users/alexmui/dev/alexpose/penny/gavd3/cache
+GAVD3_ARTIFACT_DIR=/Users/alexmui/dev/alexpose/penny/gavd3/cache/artifacts
 GAVD3_MODE=real
 
 # Add these only when the vault is mounted at this location.
 # GAVD4_ROOT=/Users/pmui/vaults/worldmodels/gait/skeleton-jepa/gavd4
 # GAVD4_DATA_DIR=/Users/pmui/vaults/worldmodels/gait/skeleton-jepa/gavd4/data-gavd
 # GAVD4_YOUTUBE_DIR=/Users/pmui/vaults/worldmodels/gait/skeleton-jepa/gavd4/youtube
+
+# Enable these deliberately for the staged real-data workflow.
+# GAVD_DOWNLOAD=1
+# GAVD_EXTRACT_POSES=1
+# GAVD_EXTRACT_CONDITIONS=normal
+# GAVD_MAX_SEQUENCES=1
 ~~~
 
 The requested vault paths were not mounted while these tutorials were built. The notebooks therefore auto-discover the repository copy under data/gavd when the vault folder is absent. This local copy has the same ten-column CSV schema.
+
+The repository copy also defines the fixed 96-sequence experiment cohort (12 normal, 9 Parkinson's, 12 stroke, 16 cerebral palsy, and 47 myopathic sequences). When a larger vault corpus is mounted, notebooks 01 and 02 select those same sequence IDs from the vault rather than silently expanding the experiment population.
 
 Restart the notebook kernel after changing `.env`; `python-dotenv` does not overwrite values already loaded into a running process. The local `.gitignore` excludes `.venv` and `work`, so videos and checkpoints do not become accidental Git additions.
 
@@ -97,7 +105,7 @@ A missing real file never causes a silent synthetic fallback. A checkpoint recor
 
 To run the full real path:
 
-1. Set GAVD3_MODE=real in the root .env.
+1. Set GAVD3_MODE=real in `penny/gavd3/.env`.
 2. Run notebook 01 and inspect the manifest census.
 3. Set DOWNLOAD_VIDEOS=True in notebook 01, or set GAVD_DOWNLOAD=1, then download the required source videos.
 4. Run notebook 02 with GAVD_EXTRACT_POSES=1, GAVD_EXTRACT_CONDITIONS=normal, and GAVD_MAX_SEQUENCES=1.

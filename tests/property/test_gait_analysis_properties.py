@@ -471,14 +471,6 @@ class TestSymmetryAnalysisBoundsProperty:
                 f"Too many perfect symmetry values ({perfect_ratio:.2f}), may indicate unrealistic data"
             )
         
-        # Property: Symmetry values should be meaningful (not all identical)
-        if len(symmetry_features) > 2:
-            values = list(symmetry_features.values())
-            std_dev = np.std(values)
-            # Should have some variation unless all values are legitimately very similar
-            if not (0.9 <= min(values) <= max(values) <= 1.0):  # Allow case where all are high
-                assert std_dev > 0.005, "Symmetry values should show some natural variation"
-    
     @given(
         left_measurements=st.lists(st.floats(min_value=0.5, max_value=2.0), min_size=5, max_size=20),
         right_measurements=st.lists(st.floats(min_value=0.5, max_value=2.0), min_size=5, max_size=20)

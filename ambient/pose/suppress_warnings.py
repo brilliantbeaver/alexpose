@@ -6,7 +6,7 @@ and related C++ libraries. It uses multiple strategies:
 
 1. Environment variables (set at module import time)
 2. Python warnings module
-3. File descriptor level redirection (most aggressive)
+3. Explicit file descriptor level redirection for scoped operations
 4. Logging filters for C++ messages that bypass stderr
 
 CRITICAL: This module sets environment variables at import time to suppress
@@ -102,93 +102,9 @@ for handler in logging.root.handlers:
         handler.addFilter(_cpp_filter)
 
 
-# ============================================================================
-# File descriptor level stderr filtering (most aggressive)
-# ============================================================================
-# This must happen at module import time to catch C++ logs from MediaPipe
-
-
-def _install_fd_filter():
-    """
-    Install a file descriptor level filter for stderr.
-
-    This creates a pipe that filters stderr output in real-time,
-    catching C++ logs from MediaPipe/TensorFlow before they reach the console.
-    """
-    import threading
-    import select
-
-    # Patterns to suppress (as bytes)
-    SUPPRESSED_PATTERNS = [
-        b"GL version:",
-        b"renderer:",
-        b"Feedback manager requires a model",
-        b"Disabling support for feedback tensors",
-        b"inference_feedback_manager.cc",
-        b"gl_context.cc",
-        b"I0000 00:00:",  # GLOG INFO messages
-        b"W0000 00:00:",  # GLOG WARNING messages
-        b"INFO: Created TensorFlow Lite",  # TFLite delegate messages
-        b"XNNPACK delegate",  # XNNPACK delegate messages
-    ]
-
-    try:
-        # Only do this in normal Python environments, not Jupyter
-        stderr_fd = sys.stderr.fileno()
-
-        # Create a pipe
-        read_fd, write_fd = os.pipe()
-
-        # Save the original stderr
-        original_stderr_fd = os.dup(stderr_fd)
-
-        # Redirect stderr to the write end of the pipe
-        os.dup2(write_fd, stderr_fd)
-        os.close(write_fd)
-
-        # Create a thread to read from the pipe and filter output
-        def filter_thread():
-            """Read from pipe, filter, and write to original stderr."""
-            try:
-                while True:
-                    # Read from the pipe
-                    try:
-                        data = os.read(read_fd, 4096)
-                        if not data:
-                            break
-
-                        # Check if this data contains any suppressed patterns
-                        should_suppress = any(
-                            pattern in data for pattern in SUPPRESSED_PATTERNS
-                        )
-
-                        if not should_suppress:
-                            # Write to original stderr
-                            os.write(original_stderr_fd, data)
-                    except OSError:
-                        break
-            finally:
-                try:
-                    os.close(read_fd)
-                    os.close(original_stderr_fd)
-                except OSError:
-                    pass
-
-        # Start the filter thread as a daemon
-        thread = threading.Thread(target=filter_thread, daemon=True)
-        thread.start()
-
-        return True
-    except (AttributeError, OSError, io.UnsupportedOperation):
-        # Can't install fd filter (Jupyter, etc.)
-        return False
-
-
-# Try to install the FD filter at module import time
-_FD_FILTER_INSTALLED = _install_fd_filter()
-
-# Mark that suppression has been initialized
-_SUPPRESSION_INITIALIZED = True
+# File descriptors are never replaced at import time. Import-time redirection breaks
+# hosts such as pytest that install their own seekable capture streams. Callers that
+# need to silence native MediaPipe output use the scoped context managers below.
 
 
 @contextlib.contextmanager

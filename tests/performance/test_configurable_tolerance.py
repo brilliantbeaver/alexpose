@@ -11,6 +11,13 @@ from tests.performance.benchmark_framework import PerformanceBenchmark, Performa
 from tests.performance.performance_config import PerformanceConfig, get_performance_config, configure_test_tolerance
 
 
+@pytest.fixture(autouse=True)
+def local_environment(monkeypatch):
+    """Keep tolerance tests independent of the CI host environment."""
+    for indicator in ("CI", "GITHUB_ACTIONS", "JENKINS_URL", "TRAVIS", "CIRCLECI"):
+        monkeypatch.delenv(indicator, raising=False)
+
+
 class TestConfigurableTolerance:
     """Test suite for configurable performance regression tolerance."""
     
@@ -263,8 +270,11 @@ class TestConfigurableTolerance:
     def test_convenience_functions(self):
         """Test convenience functions for tolerance configuration."""
         # Test configure_test_tolerance function
-        with patch('tests.performance.performance_config._performance_config', None):
-            # This should create a new config instance
+        isolated_config = PerformanceConfig(self.config_file)
+        with patch(
+            'tests.performance.performance_config._performance_config',
+            isolated_config,
+        ):
             configure_test_tolerance("convenience_test", execution_time=30.0)
             
             # Verify the configuration was set
