@@ -16,15 +16,15 @@ jobs:
       fail-fast: false
     
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7.0.1
     
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v7
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: ${{ matrix.python-version }}
     
     - name: Install uv
-      uses: astral-sh/setup-uv@v9
+      uses: astral-sh/setup-uv@v9.0.0
       with:
         version: "latest"
     
@@ -42,7 +42,7 @@ jobs:
     
     - name: Upload coverage to Codecov
       if: matrix.test-category == 'fast' && matrix.python-version == '3.12'
-      uses: codecov/codecov-action@v7
+      uses: codecov/codecov-action@v7.0.0
       with:
         file: ./coverage.xml
         flags: unittests
@@ -51,7 +51,7 @@ jobs:
     
     - name: Store test results
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: test-results-${{ matrix.python-version }}-${{ matrix.test-category }}
         path: |
@@ -65,15 +65,15 @@ jobs:
     continue-on-error: true
 
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7.0.1
 
     - name: Set up Python 3.12
-      uses: actions/setup-python@v7
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: "3.12"
 
     - name: Install uv
-      uses: astral-sh/setup-uv@v9
+      uses: astral-sh/setup-uv@v9.0.0
       with:
         version: "latest"
 
@@ -96,15 +96,15 @@ jobs:
     if: always()
     
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7.0.1
     
     - name: Set up Python 3.12
-      uses: actions/setup-python@v7
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: "3.12"
     
     - name: Install uv
-      uses: astral-sh/setup-uv@v9
+      uses: astral-sh/setup-uv@v9.0.0
       with:
         version: "latest"
     
@@ -134,15 +134,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7.0.1
     
     - name: Set up Python 3.12
-      uses: actions/setup-python@v7
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: "3.12"
     
     - name: Install uv
-      uses: astral-sh/setup-uv@v9
+      uses: astral-sh/setup-uv@v9.0.0
       with:
         version: "latest"
     
@@ -158,7 +158,7 @@ jobs:
     
     - name: Store property test results
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: property-test-results
         path: |
@@ -169,15 +169,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7.0.1
     
     - name: Set up Python 3.12
-      uses: actions/setup-python@v7
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: "3.12"
     
     - name: Install uv
-      uses: astral-sh/setup-uv@v9
+      uses: astral-sh/setup-uv@v9.0.0
       with:
         version: "latest"
     
@@ -197,7 +197,7 @@ jobs:
     
     - name: Upload security reports
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: security-reports
         path: |
@@ -212,7 +212,7 @@ jobs:
     
     steps:
     - name: Download all artifacts
-      uses: actions/download-artifact@v8
+      uses: actions/download-artifact@v8.0.1
     
     - name: Generate test summary
       run: |
@@ -266,7 +266,7 @@ jobs:
     
     - name: Upload test summary
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@v7.0.1
       with:
         name: test-summary
         path: test_summary.md
