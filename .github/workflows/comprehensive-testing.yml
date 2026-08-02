@@ -62,7 +62,6 @@ jobs:
 
   integration-tests:
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
     - uses: actions/checkout@v7.0.1
@@ -82,11 +81,13 @@ jobs:
         uv sync --python "3.12" --all-extras --dev
 
     - name: Run integration tests
+      id: integration
+      continue-on-error: true
       run: |
         uv run pytest -m "integration" --tb=short -v
 
     - name: Record known integration debt
-      if: failure()
+      if: steps.integration.outcome == 'failure'
       run: |
         echo "Integration failures remain visible but do not block merges until the legacy contracts are remediated."
 
@@ -163,6 +164,7 @@ jobs:
         name: property-test-results
         path: |
           .hypothesis/
+        if-no-files-found: ignore
         retention-days: 30
 
   security-scan:
