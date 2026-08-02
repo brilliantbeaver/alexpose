@@ -1,0 +1,62 @@
+[project]
+name = "ms-sjepa"
+version = "0.1.0"
+description = "Progressive S-JEPA tutorials for gait classification (normal / ms / pd)"
+readme = "README.md"
+# The repository targets Python 3.12 (see the root project's classifiers and
+# tool configuration).  In particular, UMAP's numba/llvmlite stack does not
+# currently support Python 3.14; leaving this open-ended lets uv select 3.14
+# and backtrack to an ancient llvmlite release that cannot build there.
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+
+# These are the concrete libraries the notebooks and the sjepa package need.
+# The Colab install cells pip-install this same set, so local and cloud match.
+# torch is guarded in the notebooks so Colab's preinstalled GPU torch is kept.
+dependencies = [
+    # Pose estimation and video (already used by the alexpose ambient package)
+    "mediapipe>=0.10.31",
+    "opencv-python>=4.12.0.88",
+    # Deep learning (new for this experiment; not in the repo root deps)
+    "torch>=2.2.0",
+    # Classical baseline and metrics
+    "scikit-learn>=1.8.0",
+    # Representation visualisation
+    "umap-learn>=0.5.6",
+    # Data, plotting, notebooks
+    "numpy>=1.24.0",
+    "pandas>=2.3.3",
+    "pyarrow>=15.0.0",
+    "matplotlib>=3.10.8",
+    "seaborn>=0.12.0",
+    "pillow>=10.0.0",
+    "tqdm>=4.66.0",
+    "ipython>=8.0.0",
+    "ipykernel>=7.1.0",
+    "python-dotenv>=1.2.1",
+    # Local pose + classification pipeline used throughout the notebooks.
+    "alexpose",
+    "imageio-ffmpeg>=0.6.0",
+]
+
+# Reuse the ambient pose + classification code from the repo root. When you run
+# `uv sync` from inside this folder, uv installs the root package in editable
+# mode so `import ambient` works.
+[tool.uv.sources]
+alexpose = { path = "../..", editable = true }
+
+[tool.uv]
+# pynndescent's broad `numba>=0.51.2`/`llvmlite>=0.30` requirements allow uv
+# to pair current NumPy with releases from 2021 whose Python compatibility was
+# only enforced at build time. Keep resolution on the modern metadata branch.
+constraint-dependencies = [
+    "numba>=0.61.2",
+    "llvmlite>=0.44.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sjepa"]
