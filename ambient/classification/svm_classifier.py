@@ -208,7 +208,7 @@ class SVMGaitClassifier(BaseGaitClassifier):
             param_grid,
             cv=cv,
             scoring="accuracy",
-            n_jobs=-1,
+            n_jobs=self.config.cv_n_jobs,
             verbose=1,
         )
 
