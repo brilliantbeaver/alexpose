@@ -1,6 +1,8 @@
 # Progress summary: learning gait from video with S-JEPA
 
-_By Alexander Mui and Theodore Mui_
+_By Alexander Mui, Theodore Mui, Jason Liu, Sophia Fan, and Kanu Gupta_
+
+_Principal investigator and research supervision: Phil Mui_
 
 _This is a progress report on our project. We wrote it so that someone new to the topic can follow
 along. It covers what we are trying to do, why we think it is interesting, what we have built so
@@ -104,7 +106,60 @@ on VICReg. Each stage gives the model a bit more to work with.
 
 ---
 
-## 5. What we have built and checked
+## 5. Exactly what we did, step by step
+
+If you have never done a project like this, here is the whole thing in plain steps. Each step
+takes the output of the one before it. Nothing here needs special hardware; it all runs on a
+laptop.
+
+![steps we followed](../images/steps_we_followed.svg)
+
+**Step 1: Collect walking videos.** We gathered 49 short clips of people walking, grouped into
+normal, MS, and PD. They are ordinary videos, the kind you could film on a phone. Some longer
+videos were cut into a few clips each, which matters later for testing fairly.
+
+**Step 2: Find the skeleton in every frame.** We ran a pose detector (MediaPipe) on each frame. For
+every frame it returns 33 points on the body, like the shoulders, hips, knees, and ankles. A whole
+video becomes a stack of these skeletons, one per frame. Two of the 49 clips were too blurry for the
+detector, so we set those aside and kept 47.
+
+**Step 3: Tidy and line up the skeletons.** Real videos have moments where the detector loses a
+joint, so we filled small gaps. Then we moved every skeleton so the hips sit at the center and
+scaled it by the body size. This way the model looks at the *shape* of the walk, not at where the
+person stood or how close the camera was.
+
+**Step 4: Cut each walk into tokens.** We grouped four frames of a single joint into one "token", a
+small summary of how that joint moved over a short moment. A window of the walk becomes a tidy list
+of tokens the model can read.
+
+**Step 5: Teach S-JEPA on normal walking.** We hid the twelve clinically important joints and asked
+the model to guess them, as features rather than exact positions. A slow-moving "teacher" copy of
+the model provided the answers. We started with normal walking only, so the model first learns what
+ordinary walking looks like.
+
+**Step 6: Add MS and PD, and turn on VICReg.** We kept training, now including the MS and PD clips,
+and switched on VICReg to push the three groups toward separate regions of feature space.
+
+**Step 7: Compare against a Random Forest.** Finally we built a traditional Random Forest on
+hand-made gait features and compared it against S-JEPA, using the exact same videos and the exact
+same fair splits.
+
+### The things we actually tried, and how they turned out
+
+Research is mostly trying things and seeing what sticks. Here is an honest log of what we attempted,
+including the parts that did not work the first time.
+
+![what we tried](../images/experiments_tried.svg)
+
+A couple of these are worth calling out. When we tried training **without the slow teacher**, the
+model cheated by turning every skeleton into nearly the same answer (this is called "collapse"), so
+we kept the teacher. And when we ran **very short training runs**, the math sometimes blew up into
+invalid numbers, which we fixed by adding gradient clipping, a standard safety valve that stops the
+model from taking one giant, unstable step.
+
+---
+
+## 6. What we have built and checked
 
 The list below all runs from start to finish. We also wrote a quick test that runs every notebook
 in a tiny fast mode to make sure nothing is broken.
@@ -125,7 +180,7 @@ Here is what is in the project right now:
 
 ---
 
-## 6. How the whole thing fits together
+## 7. How the whole thing fits together
 
 The project is one pipeline that splits into two paths and then meets again for a fair test.
 
@@ -151,10 +206,13 @@ So we keep every piece of one source video on the same side of the split.
 
 ---
 
-## 7. What our first results look like
+## 8. What our first results look like
 
 Using the fast laptop model and the fair split (5-fold grouped cross-validation over the 47
-usable videos), here is how the two models compare.
+usable videos), here is how the two models compare. The picture below sums up the headline numbers
+and how to read them; the tables after it give the full detail.
+
+![how to read the results](../images/results_readout.svg)
 
 ![results](../images/results_bars.svg)
 
@@ -198,7 +256,7 @@ A few honest notes on these numbers:
 
 ---
 
-## 8. What we want to try next
+## 9. What we want to try next
 
 ![roadmap](../images/roadmap.svg)
 
@@ -215,7 +273,7 @@ A few honest notes on these numbers:
 
 ---
 
-## 9. Where to look in the project
+## 10. Where to look in the project
 
 - Start with the [README](../README.md) and the notebooks numbered `00` through `06`.
 - The model and data code is in `sjepa/`.

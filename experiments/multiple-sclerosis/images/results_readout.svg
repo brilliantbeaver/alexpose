@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400">
+<rect width="900" height="400" fill="#ffffff"/>
+<defs>
+<marker id="arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#94a3b8"/></marker>
+<marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#2563eb"/></marker>
+<marker id="arrowOrange" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#ea7317"/></marker>
+<marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#16a34a"/></marker>
+<marker id="arrowSlate" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#475569"/></marker>
+<marker id="arrowMute" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#64748b"/></marker>
+<marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#7c3aed"/></marker>
+</defs>
+<text x="450.0" y="34" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" fill="#1a2733" font-weight="700" text-anchor="middle">How to read the results</text>
+<rect x="51.5" y="102.5" width="360" height="90" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="50" y="100" width="360" height="90" rx="14" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="230.0" y="141.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#16a34a" font-weight="700" text-anchor="middle">Random Forest</text>
+<text x="230.0" y="160.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">accuracy 0.66   •   macro F1 0.67</text>
+<rect x="51.5" y="212.5" width="360" height="90" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="50" y="210" width="360" height="90" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+<text x="230.0" y="251.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" fill="#ea7317" font-weight="700" text-anchor="middle">S-JEPA probe</text>
+<text x="230.0" y="270.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">accuracy 0.57   •   macro F1 0.57</text>
+<rect x="470" y="105" width="12" height="46" rx="4" fill="#2563eb"/>
+<text x="496" y="123" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#1a2733" font-weight="700" text-anchor="start">The test is fair</text>
+<text x="496" y="143" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">same videos, same splits, no leakage</text>
+<rect x="470" y="175" width="12" height="46" rx="4" fill="#475569"/>
+<text x="496" y="193" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#1a2733" font-weight="700" text-anchor="start">Numbers wobble</text>
+<text x="496" y="213" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">only ~35 sources, so a few swap and scores shift</text>
+<rect x="470" y="245" width="12" height="46" rx="4" fill="#7c3aed"/>
+<text x="496" y="263" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#1a2733" font-weight="700" text-anchor="start">S-JEPA has room to grow</text>
+<text x="496" y="283" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="start">its edge shows with more data and less labels</text>
+<text x="450.0" y="360" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">On a few dozen labeled videos a classical model is hard to beat. This is a method demo, not a clinical result.</text>
+</svg>

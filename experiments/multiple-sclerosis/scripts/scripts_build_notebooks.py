@@ -10,12 +10,20 @@ Run:  python scripts_build_notebooks.py
 
 from __future__ import annotations
 
+import argparse
 import json
+import sys
 from pathlib import Path
 
-EXP = Path(__file__).resolve().parent
+EXP = Path(__file__).resolve().parent.parent  # experiment dir (scripts/ is one level down)
 REPO_SLUG = "your-org/alexpose"  # users edit this to their fork for Colab
 COLAB_BASE = f"https://colab.research.google.com/github/{REPO_SLUG}/blob/main/experiments/multiple-sclerosis"
+
+# Where notebooks are written. Overridable via --output-dir so the generator can
+# emit into a temporary directory for an idempotence / diff check without
+# touching the canonical .ipynb files.
+_OUT_DIR = EXP
+_CHECK_ONLY = False
 
 
 def md(*lines):
@@ -129,10 +137,9 @@ def bootstrap_cells(need_torch=True):
     return [install, vendor, paths]
 
 
-def write_nb(name: str, cells):
-    # Give each cell a stable id to satisfy nbformat 4.5+.
-    for i, cell in enumerate(cells):
-        cell.setdefault("id", f"{Path(name).stem}-{i:02d}")
+def _render_nb(cells) -> str:
+    # Give each cell a stable id to satisfy nbformat 4.5+ (id must be set before
+    # rendering; keyed off position, matching the original behaviour).
     nb = {
         "cells": cells,
         "metadata": {
@@ -142,12 +149,46 @@ def write_nb(name: str, cells):
         "nbformat": 4,
         "nbformat_minor": 5,
     }
-    (EXP / name).write_text(json.dumps(nb, indent=1))
-    print("wrote", name)
+    return json.dumps(nb, indent=1)
+
+
+def write_nb(name: str, cells):
+    for i, cell in enumerate(cells):
+        cell.setdefault("id", f"{Path(name).stem}-{i:02d}")
+    content = _render_nb(cells)
+    target = _OUT_DIR / name
+    if _CHECK_ONLY:
+        existing = target.read_text() if target.exists() else ""
+        status = "MATCH" if existing == content else "DIFFERS"
+        print(f"check {name}: {status}")
+        return status == "MATCH"
+    target.write_text(content)
+    print("wrote", target)
+    return True
 
 
 # The per-notebook content is defined in notebook_content.py to keep this file short.
 if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--output-dir", default=None,
+                    help="write notebooks here instead of the experiment dir")
+    ap.add_argument("--check", action="store_true",
+                    help="do not write; report whether each notebook matches on disk")
+    args = ap.parse_args()
+    if args.output_dir:
+        _OUT_DIR = Path(args.output_dir)
+        _OUT_DIR.mkdir(parents=True, exist_ok=True)
+    _CHECK_ONLY = args.check
+
     import notebook_content as nc
-    nc.build(md, code, colab_badge, bootstrap_cells, write_nb)
+    _results = []
+
+    def _write_nb_collect(name, cells):
+        _results.append(write_nb(name, cells))
+
+    nc.build(md, code, colab_badge, bootstrap_cells, _write_nb_collect)
+    if _CHECK_ONLY:
+        ok = all(_results)
+        print("\nIDEMPOTENCE:", "all notebooks match" if ok else "SOME DIFFER")
+        sys.exit(0 if ok else 1)
     print("\nAll notebooks written.")

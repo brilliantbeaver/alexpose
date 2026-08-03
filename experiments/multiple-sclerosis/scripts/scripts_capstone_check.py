@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-EXP_DIR = Path(__file__).resolve().parent
+EXP_DIR = Path(__file__).resolve().parent.parent  # scripts/ -> experiment dir
 sys.path.insert(0, str(EXP_DIR))
 
 from sjepa.config import get_config
