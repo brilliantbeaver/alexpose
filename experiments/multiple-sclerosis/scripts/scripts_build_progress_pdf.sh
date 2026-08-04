@@ -8,7 +8,9 @@
 # vectors, then pandoc + tectonic renders the document.
 
 set -euo pipefail
-cd "$(dirname "$0")"
+# This script lives in scripts/; run everything from the experiment root so the
+# docs/ and images/ relative paths below resolve correctly.
+cd "$(dirname "$0")/.."
 
 BUILD="docs/_pdfbuild"
 mkdir -p "$BUILD"

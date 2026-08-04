@@ -1,0 +1,138 @@
+# Machine-readable evidence ledger for the S-JEPA gait correctness program.
+# Decision-critical sources only (per user direction 2026-08-02). Verified from
+# primary PDFs; the sjepa.github.io project page is unreliable and is NOT cited
+# for mechanics. CVF HTML returned 403 for MAMP/I-JEPA, so ar5iv full text was
+# used as primary-equivalent and labeled as such.
+# verified_by: wave-A lit agents + lead cross-check, 2026-08-02/03.
+
+sources:
+  - source_id: S-JEPA
+    citation: "Abdelfattah & Alahi, S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition"
+    venue_and_status: "ECCV 2024, peer-reviewed"
+    primary_url: "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf"
+    project_page_caution: "https://sjepa.github.io/ mislabels mechanics (attributes motion-aware masking, omits 3D/CE specifics). Do NOT cite for method."
+    input_representation: "3D joints (x,y,z), NTU-style; SO(3) rotation views"
+    method_details_used_here:
+      target_output_masking:
+        verified: yes
+        locator: "Sec 3 'Prediction of the targets'; Sec 4.4 Table 6"
+        number: "Input-mask 78.1 vs Output-mask 85.3 = +7.2 pts (NTU60-XSub linear, 800ep)"
+        translation: "MANDATORY. Repo already masks target-encoder OUTPUT (models.py forward: masks target output by caller). Keep."
+      factorized_position_embeddings:
+        verified: yes
+        locator: "Sec 4.2 Transformer Backbone"
+        translation: "MANDATORY. Repo tokenizer has separate spatial+temporal PEs (tokenizer.py 34-35). Keep; also add to predictor (see I-JEPA)."
+      predictor_target_position:
+        verified: partial
+        locator: "Sec 3 'Views'/'Predictions'"
+        note: "S-JEPA places mask tokens at idx_targets but does not add a per-target PE nor ablate it; position is implicit. Use I-JEPA as the authoritative spec."
+      loss:
+        verified: yes
+        locator: "Sec 3 'Loss'/'Stabilizing training' Eq.2-3; Table 5"
+        detail: "latent CE L=-p2 log p1; softmax(Rp/tau_p) vs softmax(Rt/tau_t); tau_p=0.1, tau_t=0.06; center on TARGET only, EMA beta=0.9; predictor NOT centered; MSE ablation worse."
+        translation: "MANDATORY mechanics. Repo CenteringSharpeningCE matches (losses.py). Keep."
+      scale_knobs:
+        verified: yes
+        locator: "Sec 4.2"
+        values: "mask 0.9; T=120 frames; segment l=4; 1200 epochs; eff batch 256; EMA 0.9999->1.0; 8xA100; AdamW wd0.05 betas(0.9,0.95); lr 1e-3 warmup20 ->5e-4 cosine"
+        translation: "DATASET-SCALE-DEPENDENT. Tuned on ~57K NTU. Do NOT copy to 35 gait groups. Retune down (lower mask, far fewer updates, faster EMA warmup, small batch)."
+    what_does_not_transfer: "SO(3) 3D rotation views are invalid for 2D+visibility; use 2D-safe augments. Our pipeline is a 2D variant."
+    translation_strength: "direct (mechanics) / exploratory (2D modality transfer)"
+
+  - source_id: I-JEPA
+    citation: "Assran et al., Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture"
+    venue_and_status: "CVPR 2023, peer-reviewed"
+    primary_url: "https://openaccess.thecvf.com/content/CVPR2023/html/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.html"
+    fallback_url: "https://ar5iv.labs.arxiv.org/html/2301.08243 (CVF HTML 403; ar5iv used)"
+    method_details_used_here:
+      predictor_conditions_on_target_position:
+        verified: yes
+        locator: "Sec 3 Method 'Prediction'; predictor g_phi(s_x, {m_j})"
+        quote: "mask tokens are parameterized by a shared learnable vector with an added positional embedding ... conditioning on the mask tokens corresponding to the target-block locations"
+        translation: "AUTHORITATIVE SPEC for D1 fix. Predictor input at hidden slots = shared mask token + target-slot positional embedding. Port directly; dataset-independent."
+    translation_strength: "direct"
+
+  - source_id: MAMP
+    citation: "Mao et al., Masked Motion Predictors are Strong 3D Action Representation Learners"
+    venue_and_status: "ICCV 2023, peer-reviewed"
+    primary_url: "https://openaccess.thecvf.com/content/ICCV2023/html/Mao_Masked_Motion_Predictors_are_Strong_3D_Action_Representation_Learners_ICCV_2023_paper.html"
+    fallback_url: "https://ar5iv.labs.arxiv.org/html/2308.07092 (CVF HTML 403; ar5iv used)"
+    input_representation: "3D joints; NTU60/120, PKU-MMD; mask 90%"
+    method_details_used_here:
+      motion_target_beats_coordinate:
+        verified: yes
+        locator: "Sec 3.3 Eq.2; Sec 4.4 Table 7"
+        number: "Joint->Motion 84.9/78.6 vs Joint->Joint 74.8/72.5 (NTU60/120) = +10.1/+6.1"
+        translation: "PLAUSIBLE 2D-safe R2 win: predict frame-to-frame joint differences (velocity in x,y). Deferred to R2 (not R1)."
+      motion_aware_masking:
+        verified: yes
+        locator: "Sec 3.4 Eq.5-6; Table 8"
+        number: "MAM vs random +1.2/+1.3 (small)"
+        translation: "CAUTION. Assumes low-motion is redundant -> clinically WRONG for MS/PD hypokinesia. Do NOT bias masks toward high-motion. Use uniform / low-motion-inclusive. Validates the project's original no-high-motion-masking instinct, but via STOCHASTIC masks not a fixed mask."
+    translation_strength: "plausible (target design) / direct (mechanics)"
+
+synthesis:
+  mandatory_correctness_dataset_independent:
+    - "Target-encoder OUTPUT masking (S-JEPA Table 6, +7.2)."
+    - "EMA target + stop-grad (removing it collapses; S-JEPA Table 5)."
+    - "Centered(target-only,beta=0.9)+sharpened latent-CE, tau_p=0.1 > tau_t=0.06."
+    - "Factorized spatial+temporal PEs in encoder AND predictor."
+    - "Predictor hidden slot = shared mask token + target-slot positional embedding (I-JEPA)."
+  dataset_scale_dependent_do_not_copy:
+    - "0.9 mask ratio, 1200 epochs, 0.9999 EMA, batch 256, encoder depth 8. Retune for 35 groups."
+  exploratory:
+    - "2D+visibility is a variant of the 3D papers; all modality transfer is exploratory."
+    - "Motion (velocity) target for R2 (MAMP)."
+  clinical_caution:
+    - "High-motion masking is contraindicated: reduced motion is the MS/PD signal."
+
+clinical_gait_sources:
+  - source_id: FG2024-clinical-benchmark
+    citation: "Benchmarking Skeleton-based Motion Encoder Models for Clinical Applications (PD severity)"
+    venue_and_status: "IEEE FG 2024, peer-reviewed"
+    primary_url: "https://arxiv.org/abs/2405.17817"
+    claim_verified: yes
+    locator: "PoseFormerV2-FT F1=0.62 LOSOCV vs 0.75 random 70/15/15; 23 PD subjects, 885 seqs, 3-class MDS-UPDRS-III"
+    translation: "DIRECT. Random-split inflates ~0.13 F1 on an analogous clinical-gait task. Report only participant/group-disjoint."
+  - source_id: Paradox-of-Motion
+    citation: "The Paradox of Motion: Spurious Correlations in Skeleton-based Gait Recognition"
+    venue_and_status: "arXiv 2024 preprint (no peer venue on abstract)"
+    primary_url: "https://arxiv.org/abs/2402.08320"
+    claim_verified: yes
+    locator: "Removing height degrades across 3 models/2 benchmarks; static-pose spatial transformer reaches 'unreasonably good accuracy'"
+    translation: "DIRECT mechanism. Anthropometry + static pose are shortcuts to control. Motivates temporal features + our shortcut controls."
+  - source_id: Kaur-JBHI-2023
+    citation: "Kaur et al., A Vision-Based Framework for Predicting MS and PD Gait Dysfunctions"
+    venue_and_status: "IEEE JBHI 2023;27(1):190-201, peer-reviewed (PMID 36126031; IEEE HTML uncrawlable, PubMed fallback)"
+    primary_url: "https://doi.org/10.1109/JBHI.2022.3208077"
+    claim_verified: "yes (3-class MS/PD/control); partial (uses accuracy+AUC, not F1)"
+    locator: "New-subject: W acc 78.1%/AUC 0.87; new subjects across tasks acc 79.3%/AUC 0.93; multi-view lab 3D keypoints"
+    translation: "DIRECT (task = our closest match, explicit new-subject+new-task). PLAUSIBLE (metric differs). Lab 3D != our 2D in-the-wild; validates design not scores."
+  - source_id: GaitForeMer-MICCAI-2022
+    citation: "Endo et al., GaitForeMer: SSL Pre-Training via Human Motion Forecasting for Few-Shot Gait Impairment Severity"
+    venue_and_status: "MICCAI 2022, peer-reviewed"
+    primary_url: "https://doi.org/10.1007/978-3-031-16452-1_13"
+    claim_verified: yes
+    locator: "NTU RGB+D motion-forecast pretrain; 54 participants LOOCV per-subject; macro-F1 scratch 0.60 -> pretrained 0.76 (prior ST-GCN 0.52)"
+    translation: "PLAUSIBLE upside / EXPLORATORY for our task. External motion pretraining = top scaling bet. But this is PD SEVERITY, not multi-class diagnosis."
+  - source_id: CARE-PD-NeurIPS-2025
+    citation: "CARE-PD: A Multi-Site Anonymized Clinical Dataset for PD Gait Assessment"
+    venue_and_status: "NeurIPS 2025 Datasets & Benchmarks, peer-reviewed"
+    primary_url: "https://proceedings.neurips.cc/paper_files/paper/2025/file/bedc73979a95be7727af0c9a99c675ce-Paper-Datasets_and_Benchmarks_Track.pdf"
+    dataset_doi: "https://doi.org/10.5683/SP3/TWIKMK"
+    claim_verified: "yes (scale, SMPL, no S-JEPA ckpt); partial (license CC-BY-NC vs -ND ambiguity)"
+    locator: "362 subjects, 8477 walks, 9 cohorts/8 sites, SMPL meshes 30Hz; LODO macro-F1 ~0.50; benchmarks fine-tune MotionBERT/etc; NO S-JEPA checkpoint"
+    translation: "PLAUSIBLE highest-upside scaling substrate. Non-commercial research-only. PD-only, SMPL topology => remap+work needed; transfer is exploratory. LODO corroborates disjoint-eval degradation."
+  - source_id: MS-markerless-TNSRE-2025-MSARD-2026
+    citation: "Moro et al. TNSRE 2025 (25 MS+25 ctrl); Turolla et al. MSARD 2026 (20 MS, 2D single-camera)"
+    venue_and_status: "peer-reviewed (IEEE/Elsevier HTML uncrawlable; PubMed/S2 fallback)"
+    primary_url: "https://doi.org/10.1109/TNSRE.2025.3589765 ; https://doi.org/10.1016/j.msard.2026.107285"
+    claim_verified: yes
+    locator: "Distal shank/foot elevation-angle ROM + tandem heel-to-toe + reduced stride length/time scale with EDSS"
+    translation: "DIRECT (b is exactly our 2D single-camera paradigm). Clinically meaningful feature-interpretation story for MS; associational small-n, NOT diagnostic validity."
+
+clinical_synthesis:
+  evaluation: "Pooled group macro-F1 + participant/group-disjoint is mandatory & honest (FG-2024 +0.13 inflation; Kaur & CARE-PD LODO corroborate)."
+  shortcuts: "fps/resolution + anthropometry + static pose are known shortcuts (Paradox of Motion). Report controls; MS 60fps/square is a perfect giveaway here."
+  scaling: "External clinical-motion pretraining (GaitForeMer +0.16; CARE-PD substrate) is the top scaling bet, NOT a proven gain. Deferred beyond this session."
+  no_overclaim: "GaitForeMer/CARE-PD are severity; MS studies are small associational cohorts. Our work is a methods/feasibility demo under honest disjoint eval, never a clinical/diagnostic claim."

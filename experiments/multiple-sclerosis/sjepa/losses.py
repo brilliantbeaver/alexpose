@@ -50,16 +50,30 @@ class CenteringSharpeningCE(nn.Module):
         batch_center = target.mean(dim=0, keepdim=True)     # (1, dim)
         self.center.mul_(self.beta).add_(batch_center, alpha=1.0 - self.beta)
 
-    def forward(self, pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        """``pred`` and ``target`` are (M, dim), M = masked tokens across the batch."""
+    def forward(self, pred: torch.Tensor, target: torch.Tensor,
+                update_center: bool = True) -> torch.Tensor:
+        """``pred`` and ``target`` are (M, dim), M = masked tokens.
+
+        The target center is an EMA meant to move once per optimizer batch (paper
+        beta=0.9). When a batch is scored example-by-example, pass
+        ``update_center=False`` on the per-example calls and update the center once
+        from the whole batch via :meth:`update_center_from` so the EMA is applied a
+        single time and every example is centered against the same snapshot.
+        """
         target = target.detach()
         p_pred = F.log_softmax(pred / self.tau_pred, dim=-1)
         with torch.no_grad():
             centered = (target - self.center) / self.tau_target
             p_target = F.softmax(centered, dim=-1)
         loss = -(p_target * p_pred).sum(dim=-1).mean()
-        self._update_center(target)
+        if update_center:
+            self._update_center(target)
         return loss
+
+    @torch.no_grad()
+    def update_center_from(self, target: torch.Tensor) -> None:
+        """Apply one batch-level EMA center update from all masked target tokens."""
+        self._update_center(target.detach())
 
 
 class VICRegLoss(nn.Module):

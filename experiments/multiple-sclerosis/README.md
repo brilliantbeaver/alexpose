@@ -144,14 +144,21 @@ experiments/multiple-sclerosis/
   README.md                  <- you are here
   pyproject.toml             <- uv project, adds torch and umap-learn, reuses ambient
   sjepa/                     <- the shared package (model, data, losses, viz, eval)
-    config.py  data.py  masking.py  tokenizer.py  models.py
-    losses.py  augment.py  train.py  eval.py  viz.py  classical.py
-    tests/test_smoke.py      <- builds and trains both profiles, checks no collapse
-  images/                    <- eight clean SVG diagrams used across the notebooks
+    config.py  data.py  masking.py  masking_v2.py  tokenizer.py  models.py
+    losses.py  augment.py  train.py  train_v2.py  eval.py  viz.py  classical.py
+    tests/test_smoke.py          <- builds and trains both profiles, checks no collapse
+    tests/test_correctness.py    <- predictor positions + mask coverage repairs (Phase 1)
+    tests/test_train_v2.py       <- source-uniform, no-label-leak, save/resume (Phase 2)
+  scripts/                   <- all runnable scripts (build notebooks, diagrams, E0, R1)
+    scripts_build_notebooks.py  notebook_content.py  scripts_make_diagrams.py
+    scripts_make_fixes_diagrams.py  scripts_phase0_provenance.py  scripts_r1_repaired.py
+    scripts_capstone_check.py  scripts_extract_all.py
+  images/                    <- clean SVG diagrams used across the notebooks and docs
   slides/                    <- a slide deck summarizing the whole study
+  docs/                      <- progress, next-steps, fixes plan, literature, final report
   video-data/                <- the 49 walking clips (normal, ms, pd) + manifest.csv
   mapping-data/              <- ms-pd-mapping.md, the source of the masked-joint list
-  artifacts/                 <- cached keypoints and (after you run) checkpoints and results
+  artifacts/                 <- cached keypoints, fold registry, run manifests, OOF, checkpoints
   00..06_*.ipynb             <- the seven tutorial notebooks
 ```
 
