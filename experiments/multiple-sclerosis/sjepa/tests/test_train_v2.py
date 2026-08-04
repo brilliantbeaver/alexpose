@@ -142,9 +142,52 @@ def test_diagnostics_are_finite_and_nontrivial():
     assert all(d >= -1e-6 for d in st.teacher_drift)
 
 
+def test_centering_ema_updates_once_per_batch():
+    """AR-5 P1: the target center must move ONCE per optimizer batch, not once per
+    example. A per-example update applies the beta EMA B times per step, so after a
+    single step of B examples the center is far larger than one beta-step allows and
+    the loss is order-dependent. We check the center moved by exactly one EMA step."""
+    from sjepa.losses import CenteringSharpeningCE
+
+    dim, beta = 4, 0.9
+    ce = CenteringSharpeningCE(dim, center_beta=beta, tau_pred=0.1, tau_target=0.06)
+    torch.manual_seed(0)
+    B, M = 8, 3                          # 8 examples, 3 masked tokens each
+    preds = [torch.randn(M, dim) for _ in range(B)]
+    targs = [torch.randn(M, dim) for _ in range(B)]
+
+    # Batch-level protocol used by the training loop.
+    for p, t in zip(preds, targs):
+        ce(p, t, update_center=False)    # score, do NOT move the center
+    assert torch.allclose(ce.center, torch.zeros(1, dim)), "center moved before batch update"
+    all_targets = torch.cat(targs, dim=0)
+    ce.update_center_from(all_targets)
+
+    # One EMA step from a zero start = (1 - beta) * mean(all masked targets).
+    expected = (1.0 - beta) * all_targets.mean(dim=0, keepdim=True)
+    assert torch.allclose(ce.center, expected, atol=1e-6), (
+        f"center is not a single batch-level EMA step: {ce.center} vs {expected}")
+
+
+def test_mask_keeps_a_clinical_context_cue():
+    """AR-5 P2: when a sampled mask would target every clinical token, at least one
+    clinical (lower-body/shoulder) token must remain visible as context."""
+    from sjepa.masking_v2 import sample_target_mask, CLINICAL_JOINTS
+
+    V, T = 33, 8
+    clinical = sorted(CLINICAL_JOINTS)
+    rng = np.random.default_rng(0)
+    for _ in range(200):                 # many draws, including high target ratios
+        m = sample_target_mask(V, T, rng, target_ratio=0.95).reshape(T, V)
+        # not every clinical token may be a target: at least one stays context
+        assert not m[:, clinical].all(), "all clinical tokens were masked (no cue left)"
+
+
 if __name__ == "__main__":
     test_source_uniform_sampler_equalizes_exposure(); print("[ok] source-uniform sampler")
     test_strict_ssl_ignores_labels(); print("[ok] strict SSL ignores labels (D3)")
     test_save_resume_matches_uninterrupted(); print("[ok] save/resume matches (D4)")
     test_diagnostics_are_finite_and_nontrivial(); print("[ok] diagnostics finite")
+    test_centering_ema_updates_once_per_batch(); print("[ok] centering EMA per batch (AR-5 P1)")
+    test_mask_keeps_a_clinical_context_cue(); print("[ok] clinical context cue kept (AR-5 P2)")
     print("ALL TRAIN_V2 TESTS PASSED")

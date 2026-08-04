@@ -23,8 +23,8 @@ shortcut-driven) S-JEPA and the Random Forest:
 | System (pooled macro-F1 on g1 folds) | macro-F1 | accuracy | PD recall |
 |---|---:|---:|---:|
 | Random Forest (paired baseline) | **0.667** | 0.660 | 0.588 |
-| nuisance control: pose mean+std | 0.694 | – | – |
-| nuisance control: visibility only | 0.602 | – | – |
+| nuisance control: pose mean+std | 0.703 | – | – |
+| nuisance control: visibility only | 0.636 | – | – |
 | old broken S-JEPA (historical) | 0.570 | 0.573 | 0.353 |
 | **S-JEPA (R1, 1000 updates, seed 42)** | **0.438** | 0.447 | 0.235 |
 | chance (3 classes) | 0.333 | – | – |
@@ -128,9 +128,11 @@ No fusion, supervised-adaptation, or RGB branch was run (out of scope this sessi
 
 ## 8. Shortcut / temporal controls and limitations
 
-- Nuisance controls (pose mean+std 0.694; visibility 0.602) **exceed** the S-JEPA score (0.438),
-  which means the learned representation does not yet beat cheap nuisance signals on this cache. No
-  clinical-representation claim is warranted.
+- Nuisance controls (pose mean+std 0.703; visibility 0.636, both **pooled OOF** so they are the
+  same metric as the pooled S-JEPA/RF numbers — an earlier draft compared control fold-means against
+  the pooled S-JEPA score, a non-comparable mix flagged by Codex AR-5 P1 and now corrected) **exceed**
+  the S-JEPA score (0.438), which means the learned representation does not yet beat cheap nuisance
+  signals on this cache. No clinical-representation claim is warranted.
 - Limitations: single seed, 1000 updates (no learning-curve sweep, no inner-fold model selection,
   no multi-seed) — bounded by session scope. Legacy cache with fps mislabeling and speed-erasing
   normalization is unchanged (R1 uses it deliberately for a mechanical comparison). Temporal

@@ -35,12 +35,18 @@ Here are the numbers on the exact same videos and the exact same splits.
 
 | System | macro-F1 |
 |---|---:|
-| A control that only looks at where the joints sit and how much they wiggle | 0.694 |
+| A control that only looks at where the joints sit and how much they wiggle | 0.703 |
 | Random Forest (the classic hand-built baseline) | 0.667 |
-| A control that only looks at the pose detector's confidence numbers | 0.611 |
+| A control that only looks at the pose detector's confidence numbers | 0.636 |
 | The old, buggy version of S-JEPA | 0.570 |
 | **S-JEPA (the corrected version, this study)** | **0.438** |
 | Blind guessing | 0.333 |
+
+All the numbers in this table are computed the same way, called pooled scoring: we gather one
+prediction per video across all the folds and then score the whole pile once. This matters because
+an earlier draft compared S-JEPA's pooled score against the controls' fold-averaged score, which is
+a different and not-quite-comparable number. A review caught this, so the control numbers here are
+the corrected pooled values. The ordering did not change: S-JEPA still sits at the bottom.
 
 The uncomfortable fact is that the corrected S-JEPA sits at the bottom of the list, below even the
 simple "control" systems that were built to be dumb on purpose. The rest of Part 1 explains, step
@@ -174,7 +180,7 @@ This is the part that surprises people most, so we go slowly.
 
 The controls are deliberately simple systems. One of them ignores movement almost entirely and just
 looks at where the joints sit and how much they wiggle. Another looks only at the confidence scores
-the pose detector reports. These score 0.694 and 0.611, both above S-JEPA's 0.438.
+the pose detector reports. These score 0.703 and 0.636, both above S-JEPA's 0.438.
 
 How can a dumb system beat a learned one? The answer is a mismatch between what the controls are
 allowed to exploit and what S-JEPA is built to ignore.

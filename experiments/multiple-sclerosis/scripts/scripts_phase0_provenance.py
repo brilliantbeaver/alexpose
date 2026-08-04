@@ -190,7 +190,8 @@ def run_control(name, featfn, registry, by_clip):
     from sklearn.preprocessing import StandardScaler
 
     fold_metrics_lr, fold_metrics_rf = [], []
-    for fold in registry["folds"]:
+    oof_lr, oof_rf = [], []          # pooled OOF preds, so we can report the SAME
+    for fold in registry["folds"]:   # pooled macro-F1 that R1 reports (AR-5 P1-B)
         tr = [by_clip[c] for c in fold["train_clips"]]
         te = [by_clip[c] for c in fold["test_clips"]]
         Xtr = np.stack([featfn(r) for r in tr])
@@ -206,15 +207,24 @@ def run_control(name, featfn, registry, by_clip):
         # logistic
         lr = LogisticRegression(max_iter=2000, class_weight="balanced")
         lr.fit(Xtr_s, ytr)
-        fold_metrics_lr.append(evaluate(yte, lr.predict(Xte_s), LABELS))
+        lr_pred = lr.predict(Xte_s)
+        fold_metrics_lr.append(evaluate(yte, lr_pred, LABELS))
         # random forest
         rf = RandomForestClassifier(n_estimators=100, max_depth=5, max_features="sqrt",
                                     class_weight="balanced", random_state=SEED, n_jobs=-1)
         rf.fit(Xtr_s, ytr)
-        fold_metrics_rf.append(evaluate(yte, rf.predict(Xte_s), LABELS))
+        rf_pred = rf.predict(Xte_s)
+        fold_metrics_rf.append(evaluate(yte, rf_pred, LABELS))
+        for r, yt, pl, pr in zip(te, yte, lr_pred, rf_pred):
+            oof_lr.append({"clip": r.clip_name, "true": yt, "pred": str(pl)})
+            oof_rf.append({"clip": r.clip_name, "true": yt, "pred": str(pr)})
     return {
-        "logreg": aggregate_folds(fold_metrics_lr),
-        "rf": aggregate_folds(fold_metrics_rf),
+        # fold-mean (kept for continuity) PLUS pooled macro-F1 recomputed from OOF,
+        # which is the apples-to-apples number to compare against R1's pooled S-JEPA/RF.
+        "logreg": {**aggregate_folds(fold_metrics_lr),
+                   "pooled_macro_f1": pooled_macro_f1(oof_lr).macro_f1},
+        "rf": {**aggregate_folds(fold_metrics_rf),
+               "pooled_macro_f1": pooled_macro_f1(oof_rf).macro_f1},
     }
 
 

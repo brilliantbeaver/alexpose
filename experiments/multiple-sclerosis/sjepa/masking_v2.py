@@ -129,6 +129,16 @@ def sample_target_mask(
             for j in joints:
                 target[t, j] = True
 
+    # Guarantee a clinical context cue (AR-5 P2): the module promises at least one
+    # lower-body / contralateral token stays visible. If every clinical token is
+    # targeted, free one clinical token as context (not an arbitrary head/arm one),
+    # so the encoder always has a lower-body reference to reason from.
+    clinical_cols = sorted(CLINICAL_JOINTS)
+    if clinical_cols and target[:, clinical_cols].all():
+        j = int(rng.choice(clinical_cols))
+        t = int(rng.integers(0, T))
+        target[t, j] = False
+
     flat = target.reshape(-1)
     # Guarantee non-empty context: if we masked everything, free a random block.
     if flat.all():

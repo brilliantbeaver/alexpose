@@ -178,17 +178,25 @@ def train_sjepa_v2(
     def get_batch():
         idx = _draw_batch_indices(weights, cfg.batch_size, data_rng)
         xs = np.stack([dataset[int(i)][0].numpy() for i in idx], axis=0)
-        return torch.from_numpy(xs)
+        return torch.from_numpy(xs), idx
 
     state = TrainV2State()
+    # True source exposure: accumulated from the windows actually DRAWN each step
+    # (AR-5 P2), not from stored window counts, so it reflects the update budget,
+    # seed, and replacement-based source-uniform sampling and can reproduce the stream.
+    exposure: Dict[str, int] = {}
     state.ema_half_life_steps = _ema_half_life(cfg.ema_start, cfg.ema_end, horizon)
     warmup = max(1, int(0.1 * horizon))
     model.train()
 
     step = start_step
     while step < total_updates:
-        x = get_batch().to(device).float()            # (B, T, V, C)
+        x_np, drawn_idx = get_batch()
+        x = x_np.to(device).float()                   # (B, T, V, C)
         B = x.shape[0]
+        for i in drawn_idx:
+            s = dataset.source_ids[int(i)]
+            exposure[s] = exposure.get(s, 0) + 1
 
         lr = _cosine_lr(step, horizon, cfg.lr, warmup)
         for g in opt.param_groups:
@@ -207,12 +215,19 @@ def train_sjepa_v2(
         x_view = random_view(x)
         predicted, target = model.forward_repaired(x_view, x, ctx)
 
-        # Per-example CE over each row's own target tokens.
+        # Per-example CE over each row's own target tokens. The centering EMA must
+        # move ONCE per optimizer batch, not once per example, so we score every
+        # example against the same center snapshot (update_center=False) and then
+        # update the center a single time from all masked target tokens in the batch
+        # (AR-5 P1: per-example updates applied the beta EMA B times per step).
         losses = []
+        batch_targets = []
         for b in range(predicted.shape[0]):
             idx = torch.nonzero(tgt[b], as_tuple=False).squeeze(1)
-            losses.append(ce(predicted[b, idx, :], target[b, idx, :]))
+            losses.append(ce(predicted[b, idx, :], target[b, idx, :], update_center=False))
+            batch_targets.append(target[b, idx, :])
         loss = torch.stack(losses).mean()
+        ce.update_center_from(torch.cat(batch_targets, dim=0))
 
         opt.zero_grad(set_to_none=True)
         loss.backward()
@@ -238,10 +253,7 @@ def train_sjepa_v2(
         step += 1
 
     state.total_updates = step
-    counts: Dict[str, int] = {}
-    for s in dataset.source_ids:
-        counts[s] = counts.get(s, 0) + 1
-    state.source_exposure = counts
+    state.source_exposure = exposure
     schedule = {
         "schedule_updates": horizon,
         "seed": seed,
