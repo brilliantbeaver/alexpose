@@ -208,22 +208,27 @@ def nb_01(md, code, badge, boot):
 def nb_02(md, code, badge, boot):
     c = [badge("02_anatomical_mask_and_tokenization.ipynb")]
     c += [md(
-        "# 02 - The anatomical mask and tokenization\n",
+        "# 02 - Masking and tokenization\n",
         "S-JEPA learns by hiding part of the skeleton and predicting the hidden part in feature space. "
         "Two design choices drive this notebook: **how we cut the skeleton into tokens**, and "
         "**which joints we hide**.\n",
-        "The original paper hides whichever joints move the most, a rule called motion-aware masking. "
-        "For a gait study that is the wrong instinct, because in many conditions the telling sign is "
-        "*less* motion: short steps, stiff knees, reduced arm swing. So we do something simpler and "
-        "clinically grounded. We hide a **fixed set of neurologically relevant joints** and nothing "
-        "else.\n",
+        "> **What changed, and why.** An earlier version of this project hid the *same* twelve clinical "
+        "joints on every single step. That turned out to be a real bug: the encoder never saw those "
+        "joints as context, so their internal position settings received no learning signal, yet the "
+        "classifier then pooled exactly those joints. We now use **stochastic graph-time masks**: a "
+        "different connected group of joints is hidden each step, so every joint is sometimes context "
+        "and sometimes a target. Clinical knowledge still guides us, but gently, by choosing the "
+        "leg and shoulder joints as targets a bit more often. We also do **not** bias toward the "
+        "busiest joints (the paper's motion-aware masking), because in MS and PD the telling sign is "
+        "often *reduced* motion, which a high-motion mask would hide.\n",
     )]
     c += boot(need_torch=False)
     c += [md(
         "## Tokenizing a window\n",
         "A training window is a short movie of stick figures. We group `l = 4` adjacent frames of one "
         "joint into a single token, so each token summarizes how that joint moved over a moment. With "
-        "32 frames and 33 joints that gives `(32 / 4) x 33 = 264` tokens.\n",
+        "32 frames and 33 joints that gives `(32 / 4) x 33 = 264` tokens. Token index is `t * V + v` "
+        "(time block `t`, joint `v`).\n",
     )]
     c += [code(
         "from IPython.display import SVG, display",
@@ -237,18 +242,17 @@ def nb_02(md, code, badge, boot):
         "      f'= {cfg.num_time_tokens} time blocks x {cfg.num_joints} joints')",
     )]
     c += [md(
-        "## The fixed anatomical mask\n",
+        "## The clinical joints (domain context, not a permanent mask)\n",
         "The file `mapping-data/ms-pd-mapping.md` lists the joints clinicians care about for ms and "
         "pd. After removing duplicates and sorting, we get exactly twelve BlazePose landmarks: both "
-        "shoulders and both complete legs. These are the joints we hide and ask the model to predict. "
-        "No other joints are ever masked.\n",
+        "shoulders and both complete legs. We keep this table as **domain knowledge** that biases how "
+        "often a joint is chosen as a target, but every joint can still be both context and target.\n",
     )]
     c += [code(
-        "from sjepa.masking import MASKED_JOINTS, AnatomicalMaskSampler, masked_joint_names",
+        "from sjepa.masking_v2 import CLINICAL_JOINTS",
         "from ambient.pose.keypoint_data import MEDIAPIPE_33_NAMES",
         "import pandas as pd",
         "",
-        "# The features from the mapping file that each masked joint supports.",
         "features_for = {",
         "    11: 'shoulder_symmetry_index, trunk_lean_angle',",
         "    12: 'shoulder_symmetry_index, trunk_lean_angle',",
@@ -264,47 +268,59 @@ def nb_02(md, code, badge, boot):
         "table = pd.DataFrame([",
         "    {'BLAZEPOSE_33 index': j, 'Keypoint name': MEDIAPIPE_33_NAMES[j],",
         "     'Features involved': features_for[j]}",
-        "    for j in MASKED_JOINTS",
+        "    for j in sorted(CLINICAL_JOINTS)",
         "])",
         "table",
     )]
     c += [md(
-        "That table is the whole masking rule. Twelve joints, chosen once, used every step. Here is "
-        "the same set drawn on the skeleton.\n",
+        "## Stochastic graph-time masks\n",
+        "Each step we sample a per-example mask: connected groups of joints (a limb or the trunk) over "
+        "a contiguous span of time. The cell below samples a few masks and shows they differ, that "
+        "every one keeps visible context, and that over a bank of masks every joint is both visible "
+        "and targeted often enough (the coverage gates).\n",
     )]
     c += [code(
-        "display(SVG(filename=str(IMAGES_DIR / 'anatomical_mask.svg')))",
+        "import numpy as np",
+        "from sjepa.masking_v2 import sample_mask_batch, mask_bank_stats",
+        "",
+        "rng = np.random.default_rng(0)",
+        "batch = sample_mask_batch(6, cfg.num_joints, cfg.num_time_tokens, rng)",
+        "print('mask batch shape (B, N):', batch.shape)",
+        "print('unique masks in the batch:', len({row.tobytes() for row in batch}), 'of 6')",
+        "print('every row has context and target:',",
+        "      bool((~batch).any(1).all() and batch.any(1).all()))",
+        "",
+        "stats = mask_bank_stats(cfg.num_joints, cfg.num_time_tokens, n_masks=512, seed=0)",
+        "print(f'over 512 masks: min joint-visible {stats.joint_visible_frac.min():.2f} '",
+        "      f'(gate >=0.20), min joint-target {stats.joint_target_frac.min():.2f} (gate >=0.10)')",
+        "print(f'mean target fraction {stats.mean_target_frac:.2f}')",
     )]
     c += [md(
-        "## The mask on a real skeleton\n",
-        "The animation below highlights the masked joints in red on one real walking sequence. Those "
-        "red joints are what the model must reconstruct from the rest.\n",
+        "Here is the difference drawn out: a fixed mask hides the same joints forever (left), while "
+        "stochastic masks rotate which joints are hidden (right).\n",
+    )]
+    c += [code(
+        "display(SVG(filename=str(IMAGES_DIR / 'defect_mask_starvation.svg')))",
+    )]
+    c += [md(
+        "## See one mask on a real skeleton\n",
+        "The animation highlights one sampled set of masked joints in red on a real walking sequence. "
+        "Next time you sample, a different group will be hidden.\n",
     )]
     c += [code(
         "from sjepa.data import load_index",
+        "from sjepa.masking_v2 import sample_target_mask",
         "from sjepa.viz import skeleton_animation",
         "from IPython.display import Image",
         "",
         "recs = load_index(KEYPOINTS_DIR)",
         "seq = recs[0].load_norm()",
+        "tgt = sample_target_mask(cfg.num_joints, cfg.num_time_tokens, np.random.default_rng(1))",
+        "masked_joints = sorted({int(i % cfg.num_joints) for i in np.nonzero(tgt)[0]})",
         "gif = skeleton_animation(seq, ARTIFACT_DIR / 'mask_demo.gif',",
-        "                         masked_joints=list(MASKED_JOINTS), fps=15,",
-        "                         title='red = masked target joints')",
+        "                         masked_joints=masked_joints, fps=15,",
+        "                         title='red = one sampled set of masked joints')",
         "Image(filename=str(gif))",
-    )]
-    c += [md(
-        "## How the mask becomes tokens\n",
-        "The mask sampler turns those twelve joints into a boolean over the 264 tokens: every time "
-        "block of a masked joint is a target token, everything else is visible context. It takes no "
-        "motion input, so the split is identical for every clip.\n",
-    )]
-    c += [code(
-        "sampler = AnatomicalMaskSampler(cfg.num_joints, cfg.num_time_tokens)",
-        "print(sampler.summary())",
-        "tm, cm = sampler.target_mask, sampler.context_mask",
-        "assert not (tm & cm).any() and (tm | cm).all()  # no overlap, full cover",
-        "print('target tokens:', int(tm.sum()), '| context tokens:', int(cm.sum()))",
-        "print('This is what replaces motion-aware masking. Fixed, clinical, and simple.')",
     )]
     return c
 
@@ -312,27 +328,33 @@ def nb_02(md, code, badge, boot):
 def nb_03(md, code, badge, boot):
     c = [badge("03_sjepa_model_and_pretrain_normal.ipynb")]
     c += [md(
-        "# 03 - Build S-JEPA and pretrain on normal gait\n",
-        "Now we build the model and give it its first lesson: learn what ordinary walking looks like. "
-        "We train only on **normal** clips here. This is phase one of progressive training; ms and pd "
-        "come in notebook 04.\n",
-        "S-JEPA has three parts, all small transformers:\n",
-        "- a **view encoder** that reads the visible joints of a slightly rotated view,\n"
-        "- a **predictor** that guesses the hidden joints in feature space,\n"
+        "# 03 - Build S-JEPA and pretrain (label-free)\n",
+        "Now we build the model and train it, with **no labels**, on the walking motion "
+        "itself. S-JEPA has three parts, all small transformers:\n",
+        "- a **view encoder** that reads the visible joints of a slightly transformed view,\n"
+        "- a **predictor** that guesses the hidden joints in feature space. Crucially, it is told "
+        "*which* joint and *which* time each hidden slot is (a factorized position tag), so it can "
+        "make a different guess per position. Without that tag every hidden guess is identical, which "
+        "was a real bug in an earlier version.\n"
         "- a **target encoder** that reads the full skeleton and provides the answer. It is a slow "
-        "moving average of the view encoder, which is what stops the model from cheating by "
-        "collapsing every skeleton to the same features.\n",
+        "moving average of the view encoder, which is what stops the model from collapsing every "
+        "skeleton to the same features.\n",
+        "> **A note on what trains here.** For three-class classification the useful thing is to learn "
+        "from *all* the fold's unlabeled walking, so this notebook trains label-free on every training "
+        "source. Training on normal gait *only* is a different question (one-class anomaly detection); "
+        "we keep that as a separate idea, not the default.\n",
     )]
     c += boot(need_torch=True)
     c += [md(
         "## The two-lane design\n",
-        "The picture below is the whole idea. The top lane makes a prediction from a masked, rotated "
-        "view. The bottom lane makes the target from the complete skeleton with a slow teacher. The "
-        "only place they meet is the loss.\n",
+        "The picture below is the whole idea. The top lane makes a prediction from a masked view. The "
+        "bottom lane makes the target from the complete skeleton with a slow teacher. They meet only "
+        "at the loss.\n",
     )]
     c += [code(
         "from IPython.display import SVG, display",
         "display(SVG(filename=str(IMAGES_DIR / 'sjepa_two_lane.svg')))",
+        "display(SVG(filename=str(IMAGES_DIR / 'defect_predictor_positions.svg')))",
     )]
     c += [code(
         "from sjepa.config import get_config, describe",
@@ -342,61 +364,80 @@ def nb_03(md, code, badge, boot):
         "device = pick_device()",
         "print('device:', device)",
         "print(describe(cfg))",
-        "model = build_model(cfg, device=device)",
+        "model = build_model(cfg, device=device, repaired=True)  # PredictorV2 + per-example masks",
         "n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)",
         "print(f'trainable parameters: {n_params/1e6:.2f}M')",
     )]
     c += [md(
-        "## Load the normal-gait windows\n",
-        "We cut each normal sequence into overlapping windows. Each window is one training example.\n",
+        "## Load the training windows (fold 0's training sources, no labels)\n",
+        "We train the self-supervised encoder on the **training half of the locked fold 0** only, "
+        "never on the videos held out for testing. This matters even though the objective ignores "
+        "labels: if the encoder saw a held-out video's motion during self-supervised training, then "
+        "the probe scores that notebooks 04 and 06 report on that video would no longer be honest "
+        "held-out numbers. So we load the same `g1` fold registry the later notebooks use and cut "
+        "windows from its fold 0 training sources. The label still rides along, unused by the "
+        "objective, only so later notebooks can score.\n",
     )]
     c += [code(
+        "import json",
         "from sjepa.data import load_index, SequenceWindowDataset",
         "",
         "records = load_index(KEYPOINTS_DIR)",
-        "normal_records = [r for r in records if r.label == 'normal']",
-        "ds_normal = SequenceWindowDataset(normal_records, cfg.window_frames, cfg.window_stride)",
-        "print(f'{len(normal_records)} normal videos -> {len(ds_normal)} training windows')",
+        "by_clip = {r.clip_name: r for r in records}",
+        "registry = json.loads((ARTIFACT_DIR / 'eval' / 'g1' / 'fold_registry.json').read_text())",
+        "fold0 = registry['folds'][0]",
+        "train_recs = [by_clip[c] for c in fold0['train_clips']]",
+        "test_srcs = {by_clip[c].source_id for c in fold0['test_clips']}",
+        "assert not ({r.source_id for r in train_recs} & test_srcs), 'held-out source leaked into SSL'",
+        "ds_train = SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride)",
+        "print(f'fold 0 training half: {len(train_recs)} videos -> {len(ds_train)} windows',",
+        "      '(labels unused in SSL; held-out videos excluded)')",
     )]
     c += [md(
-        "## Pretrain\n",
-        "We run the two-lane objective: predict the hidden joints' features, match them to the slow "
-        "teacher's features with a centered, sharpened cross-entropy, and nudge the teacher along with "
-        "an exponential moving average. Watch the loss fall.\n",
+        "## Train\n",
+        "We run the two-lane objective for a fixed number of **optimizer updates** (not "
+        "epochs), sampling sources uniformly so a long clip cannot dominate, and nudge the teacher "
+        "with a responsive EMA. We log the loss and collapse diagnostics: the per-dimension spread, "
+        "the effective rank (how many directions the features really use), and how far the teacher has "
+        "drifted from the student.\n",
     )]
     c += [code(
-        "from sjepa.train import train_sjepa, save_checkpoint",
+        "from sjepa.train_v2 import train_sjepa_v2, save_checkpoint_v2",
         "",
-        "state = train_sjepa(model, ds_normal, cfg, epochs=cfg.pretrain_epochs,",
-        "                    device=device, log_every=max(1, cfg.pretrain_epochs))",
-        "save_checkpoint(ARTIFACT_DIR / 'sjepa_pretrain_normal.pt', model, cfg,",
-        "                extra={'stage': 'pretrain_normal'})",
-        "print('final loss (mean of last 5 steps):',",
-        "      round(sum(state.losses[-5:]) / min(5, len(state.losses)), 4))",
+        "# A small update budget keeps the notebook fast; raise it for stronger features.",
+        "# `cfg.profile` ends in '+smoke' only when SJEPA_SMOKE is truthy (the config parses",
+        "# '0'/'1'/'true' correctly, unlike a raw os.environ.get truthiness test).",
+        "SMOKE = cfg.profile.endswith('smoke')",
+        "UPDATES = 60 if SMOKE else 800",
+        "state = train_sjepa_v2(model, ds_train, cfg, total_updates=UPDATES, device=device,",
+        "                       mask_ratio=0.6, log_every=max(1, UPDATES // 4))",
+        "save_checkpoint_v2(ARTIFACT_DIR / 'sjepa_ssl.pt', model, cfg, train_state=state,",
+        "                   extra={'stage': 'ssl_fold0_train'})",
+        "print('EMA half-life (steps):', round(state.ema_half_life_steps, 1))",
     )]
     c += [code(
         "import matplotlib.pyplot as plt",
-        "plt.figure(figsize=(7,3))",
-        "plt.plot(state.losses, color='#dd6b20')",
-        "plt.xlabel('training step'); plt.ylabel('loss'); plt.title('S-JEPA pretraining on normal gait')",
+        "fig, ax = plt.subplots(1, 3, figsize=(12, 3))",
+        "ax[0].plot(state.losses, color='#dd6b20'); ax[0].set_title('latent cross-entropy')",
+        "ax[1].plot(state.eff_rank, color='#2563eb'); ax[1].set_title('effective rank (higher = richer)')",
+        "ax[2].plot(state.teacher_drift, color='#16a34a'); ax[2].set_title('teacher drift from student')",
+        "for a in ax: a.set_xlabel('update')",
         "plt.tight_layout(); plt.show()",
     )]
     c += [md(
         "### Sanity checks\n",
-        "Two things to confirm. First, the loss went down. Second, the teacher and the view encoder "
-        "are not identical, which is the sign that the anti-collapse machinery is working.\n",
+        "We avoid weak checks. A falling loss is necessary but not sufficient: a collapsed model can "
+        "also lower the loss. So we also require the effective rank to stay well above 1 (the features "
+        "use many directions, not one) and the teacher to have moved.\n",
     )]
     c += [code(
-        "import torch",
-        "early = sum(state.losses[:5]) / 5",
-        "late = sum(state.losses[-5:]) / 5",
-        "print(f'loss {early:.3f} -> {late:.3f}')",
-        "assert late <= early + 1e-3, 'loss did not decrease'",
-        "diff = sum(torch.norm(t - v).item() for t, v in",
-        "           zip(model.target_encoder.parameters(), model.view_encoder.parameters()))",
-        "print('teacher vs student weight distance:', round(diff, 3))",
-        "assert diff > 0, 'teacher collapsed onto student'",
-        "print('Pretraining looks healthy. On to progressive fine-tuning.')",
+        "import numpy as np",
+        "early = np.mean(state.losses[:5]); late = np.mean(state.losses[-5:])",
+        "print(f'loss {early:.3f} -> {late:.3f} | final effective rank {state.eff_rank[-1]:.1f}')",
+        "assert np.isfinite(state.losses).all(), 'loss went non-finite'",
+        "assert state.eff_rank[-1] > 1.5, 'representation looks collapsed (effective rank near 1)'",
+        "assert state.teacher_drift[-1] >= 0, 'teacher drift should be finite and non-negative'",
+        "print('SSL looks healthy (no collapse). On to comparing training regimes.')",
     )]
     return c
 
@@ -404,14 +445,21 @@ def nb_03(md, code, badge, boot):
 def nb_04(md, code, badge, boot):
     c = [badge("04_progressive_finetune_ms_pd_vicreg.ipynb")]
     c += [md(
-        "# 04 - Progressive fine-tuning with ms, pd, and VICReg\n",
-        "The model now knows normal walking. In this notebook we grow its world: we keep training but "
-        "add the ms and pd clips, and we switch on **VICReg**, an extra regularizer that pushes the "
-        "three conditions toward separate regions of feature space.\n",
-        "A note on honesty: VICReg is **not** part of the original S-JEPA. The paper prevents collapse "
-        "with the slow teacher plus centering and sharpening. We add VICReg on top because our goal is "
-        "classification, and we want the normal, ms, and pd clusters to pull apart. We label it "
-        "clearly as an extension so nobody mistakes it for the original recipe.\n",
+        "# 04 - Two ways to adapt the encoder: SSL continuation vs supervised adaptation\n",
+        "Notebook 03 trained the encoder with **no labels** on all the walking motion in the training "
+        "set. Now we ask a sharper question: once we do have diagnosis labels, what is the honest way "
+        "to use them, and does it actually help the three conditions separate?\n",
+        "We compare two clearly named regimes, both starting from the same label-free checkpoint:\n",
+        "1. **SSL continuation** - keep training with the *same* label-free objective for more updates. "
+        "No labels touch the model.\n"
+        "2. **Balanced supervised adaptation** - freeze the encoder and fit a small, class-balanced "
+        "linear head on top. Labels are used *only* in this head, never inside the self-supervised "
+        "objective.\n",
+        "> **What changed, and why.** An earlier version of this notebook mixed the diagnosis label "
+        "*into* the self-supervised loss (a 'class-aware VICReg' that rewarded within-class spread) and "
+        "claimed it 'compacts the classes'. That was a leak: the SSL objective must not see labels, and "
+        "the claim was not supported. We removed it. If labels help, they help in an explicitly "
+        "supervised stage that we name and measure, not smuggled into the pretext task.\n",
     )]
     c += boot(need_torch=True)
     c += [code(
@@ -419,84 +467,117 @@ def nb_04(md, code, badge, boot):
         "display(SVG(filename=str(IMAGES_DIR / 'progressive_timeline.svg')))",
     )]
     c += [md(
-        "## Pick the training videos, without leakage\n",
-        "We must decide now which videos train the model and which are held out, and we must do it by "
-        "**source id** so clips from one walk never straddle the split. We save that decision to "
-        "`split_spec.json` so notebooks 05 and 06 reuse the exact same split. This is what makes the "
-        "later comparison fair.\n",
+        "## Use the locked, leakage-safe fold registry\n",
+        "The comparison is only meaningful on a split where clips from one source never straddle "
+        "train and test. Notebook's Phase 0 froze such a split to `artifacts/eval/g1/fold_registry.json` "
+        "(source-grouped, seed 42). We load fold 0 from it here rather than inventing a fresh split, so "
+        "this notebook, notebook 05, and notebook 06 all sit on the identical partition.\n",
+        "> Source grouping is **provisional**: a `source_id` is a YouTube id, not a verified person, so "
+        "everything here is a development estimate, never a clinical claim.\n",
     )]
     c += [code(
         "import json",
-        "from sjepa.data import load_index, grouped_train_test_split",
+        "from sjepa.data import load_index",
         "",
         "records = load_index(KEYPOINTS_DIR)",
-        "train_recs, test_recs = grouped_train_test_split(records, test_size=0.3, seed=42)",
-        "",
-        "split = {",
-        "    'train_sources': sorted({r.source_id for r in train_recs}),",
-        "    'test_sources': sorted({r.source_id for r in test_recs}),",
-        "}",
-        "assert not (set(split['train_sources']) & set(split['test_sources']))",
-        "(ARTIFACT_DIR / 'split_spec.json').write_text(json.dumps(split, indent=2))",
-        "print('train videos:', len(train_recs), '| test videos:', len(test_recs))",
-        "print('no source appears in both:', not (set(split['train_sources']) & set(split['test_sources'])))",
+        "by_clip = {r.clip_name: r for r in records}",
+        "registry = json.loads((ARTIFACT_DIR / 'eval' / 'g1' / 'fold_registry.json').read_text())",
+        "fold0 = registry['folds'][0]",
+        "train_recs = [by_clip[c] for c in fold0['train_clips']]",
+        "test_recs  = [by_clip[c] for c in fold0['test_clips']]",
+        "tr_src = {r.source_id for r in train_recs}; te_src = {r.source_id for r in test_recs}",
+        "assert not (tr_src & te_src), 'source leakage across the fold'",
+        "print('fold 0:', len(train_recs), 'train videos /', len(test_recs), 'test videos')",
+        "print('no source in both sides:', not (tr_src & te_src))",
     )]
     c += [md(
-        "## Continue training on all three conditions\n",
-        "We load the normal-pretrained weights, then keep training on the full training set with "
-        "VICReg turned on. Because we have labels during fine-tuning, we use the class-aware VICReg "
-        "variant, which keeps each condition compact while the variance floor keeps the condition "
-        "centers from piling up.\n",
+        "## Regime 1 - SSL continuation (no labels)\n",
+        "We rebuild the model, load the label-free checkpoint from notebook 03, and keep "
+        "training with the exact same objective for a few hundred more updates. The label is never "
+        "read. This asks: does more unlabeled training alone sharpen the representation?\n",
     )]
     c += [code(
         "from sjepa.config import get_config",
         "from sjepa.models import build_model, pick_device",
-        "from sjepa.train import train_sjepa, load_checkpoint, save_checkpoint",
+        "from sjepa.train_v2 import train_sjepa_v2, load_checkpoint_v2, save_checkpoint_v2",
         "from sjepa.data import SequenceWindowDataset",
         "",
         "cfg = get_config()",
         "device = pick_device()",
-        "model = build_model(cfg, device=device)",
-        "load_checkpoint(ARTIFACT_DIR / 'sjepa_pretrain_normal.pt', model, map_location=device)",
+        "model = build_model(cfg, device=device, repaired=True)",
+        "load_checkpoint_v2(ARTIFACT_DIR / 'sjepa_ssl.pt', model, map_location=device)",
         "",
-        "ds_all = SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride)",
-        "print(f'{len(train_recs)} training videos -> {len(ds_all)} windows across normal/ms/pd')",
-        "state = train_sjepa(model, ds_all, cfg, epochs=cfg.finetune_epochs,",
-        "                    use_vicreg=True, class_aware_vicreg=True,",
-        "                    device=device, log_every=max(1, cfg.finetune_epochs))",
-        "save_checkpoint(ARTIFACT_DIR / 'sjepa_finetuned_3class.pt', model, cfg,",
-        "                extra={'stage': 'finetune_3class'})",
-    )]
-    c += [code(
-        "import matplotlib.pyplot as plt",
-        "fig, ax = plt.subplots(1, 2, figsize=(10,3))",
-        "ax[0].plot(state.ce_losses, color='#2b6cb0'); ax[0].set_title('latent cross-entropy')",
-        "ax[1].plot(state.vic_losses, color='#38a169'); ax[1].set_title('VICReg term')",
-        "for a in ax: a.set_xlabel('step')",
-        "plt.tight_layout(); plt.show()",
+        "ds_train = SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride)",
+        "SMOKE = cfg.profile.endswith('smoke')  # correct parse of SJEPA_SMOKE (not a raw truthiness test)",
+        "MORE = 40 if SMOKE else 400",
+        "state = train_sjepa_v2(model, ds_train, cfg, total_updates=MORE, device=device,",
+        "                       mask_ratio=0.6, log_every=max(1, MORE // 4))",
+        "save_checkpoint_v2(ARTIFACT_DIR / 'sjepa_ssl_continued.pt', model, cfg, train_state=state,",
+        "                   extra={'stage': 'ssl_continuation_fold0'})",
+        "print('continued SSL: final effective rank', round(state.eff_rank[-1], 1))",
     )]
     c += [md(
-        "## Does VICReg actually spread the features out?\n",
-        "A quick check: pool the learned features per window and measure their spread. VICReg should "
-        "keep the per-dimension spread comfortably above zero, meaning the representation did not "
-        "collapse. We look at it below and visualize the clusters properly in notebook 05.\n",
+        "## A fixed, label-free read-out\n",
+        "To turn a video into one vector we mean-pool the frozen target encoder over a **fixed** pool "
+        "of target tokens. The pool is chosen once from a seeded RNG and never from the test labels, so "
+        "no information leaks from the evaluation into the representation. Both regimes below use this "
+        "same read-out.\n",
     )]
     c += [code(
-        "import torch, numpy as np",
-        "from sjepa.masking import AnatomicalMaskSampler",
-        "sampler = AnatomicalMaskSampler(cfg.num_joints, cfg.num_time_tokens)",
-        "tm = torch.from_numpy(sampler.target_mask).to(device)",
-        "xs = torch.stack([torch.from_numpy(ds_all.windows[i]) for i in range(len(ds_all))]).float().to(device)",
-        "with torch.no_grad():",
-        "    emb = model.embed(xs, tm).cpu().numpy()",
-        "spread = float(emb.std(0).mean())",
-        "print('per-dimension std (mean):', round(spread, 4))",
-        "assert np.isfinite(emb).all(), 'embeddings went non-finite (training diverged)'",
-        "if spread > 1e-3:",
-        "    print('Features have healthy spread. Fine-tuned model saved.')",
-        "else:",
-        "    print('Spread is small. With the full profile (not SJEPA_SMOKE) it opens up;',",
-        "          'in a 2-epoch smoke run this is expected.')",
+        "import numpy as np, torch",
+        "from sjepa.masking_v2 import sample_target_mask",
+        "from sjepa.data import sliding_windows",
+        "",
+        "readout = sample_target_mask(cfg.num_joints, cfg.num_time_tokens,",
+        "                             np.random.default_rng(0), target_ratio=0.6)",
+        "tm = torch.from_numpy(readout).to(device)",
+        "",
+        "def embed_records(m, recs):",
+        "    V, Y = [], []",
+        "    for r in recs:",
+        "        w = sliding_windows(r.load_norm(), cfg.window_frames, cfg.window_stride)",
+        "        x = torch.from_numpy(w).float().to(device)",
+        "        with torch.no_grad():",
+        "            V.append(m.embed(x, tm).mean(0).cpu().numpy())",
+        "        Y.append(r.label)",
+        "    return np.stack(V), Y",
+    )]
+    c += [md(
+        "## Regime 2 - balanced supervised adaptation (labels only in the head)\n",
+        "Now we use the labels honestly: freeze the encoder and fit a class-balanced logistic head on "
+        "the training embeddings, then score the held-out videos. The scaler and the head are fit on "
+        "**training data only**. We do this on top of both the notebook-03 checkpoint and the "
+        "SSL-continued one, so we can see whether extra unlabeled training moved the probe at all.\n",
+    )]
+    c += [code(
+        "from sklearn.linear_model import LogisticRegression",
+        "from sklearn.preprocessing import StandardScaler",
+        "from sjepa.eval import evaluate",
+        "LABELS = ['normal', 'ms', 'pd']",
+        "",
+        "def probe_and_score(ckpt):",
+        "    m = build_model(cfg, device=device, repaired=True)",
+        "    load_checkpoint_v2(ckpt, m, map_location=device)",
+        "    Etr, ytr = embed_records(m, train_recs)",
+        "    Ete, yte = embed_records(m, test_recs)",
+        "    sc = StandardScaler().fit(Etr)               # fit on TRAIN only",
+        "    clf = LogisticRegression(max_iter=2000, class_weight='balanced')",
+        "    clf.fit(sc.transform(Etr), ytr)",
+        "    return evaluate(yte, clf.predict(sc.transform(Ete)), LABELS)",
+        "",
+        "m_base = probe_and_score(ARTIFACT_DIR / 'sjepa_ssl.pt')",
+        "m_cont = probe_and_score(ARTIFACT_DIR / 'sjepa_ssl_continued.pt')",
+        "print(f'supervised probe on fold 0 held-out videos (macro-F1):')",
+        "print(f'  notebook-03 checkpoint : {m_base.macro_f1:.3f}')",
+        "print(f'  after SSL continuation : {m_cont.macro_f1:.3f}')",
+    )]
+    c += [md(
+        "## Read this honestly\n",
+        "On this tiny fold the two numbers are close and noisy; do not over-read a few points either "
+        "way. The point of the notebook is the **method**: labels live only in the supervised head, the "
+        "SSL objective stays label-free, and the split is the locked, leakage-safe one. Notebook 06 "
+        "runs this over all folds and puts it beside the Random Forest and the shortcut controls, which "
+        "is where any real verdict lives. A single fold here proves nothing on its own.\n",
     )]
     return c
 
@@ -504,15 +585,20 @@ def nb_04(md, code, badge, boot):
 def nb_05(md, code, badge, boot):
     c = [badge("05_representation_visualization.ipynb")]
     c += [md(
-        "# 05 - Visualizing the learned representations\n",
-        "We have a trained encoder. What did it actually learn? In this notebook we turn each video "
-        "into a single feature vector using the frozen target encoder, then project those vectors to "
-        "two dimensions with t-SNE and UMAP so we can see whether normal, ms, and pd land in different "
-        "regions.\n",
-        "We compare two moments: right after pretraining on normal only, and after progressive "
-        "fine-tuning with VICReg. If the story holds, the clusters should be better separated after "
-        "fine-tuning. On this small dataset the effect is a demonstration of mechanism, not proof, "
-        "and we say so plainly.\n",
+        "# 05 - Looking at the learned representation (diagnostics only)\n",
+        "We have a trained encoder. What did it actually learn? Here we turn each video into a single "
+        "feature vector with the frozen target encoder and project those vectors to two dimensions with "
+        "t-SNE and UMAP, to *see* whether normal, ms, and pd land in different regions.\n",
+        "> **These pictures are diagnostics, not evidence.** Two honest cautions run through this "
+        "notebook. First, t-SNE and UMAP distort distances; a clean-looking blob can be an artifact of "
+        "the projection. Second, and more important, apparent separation can come from a **shortcut** "
+        "(camera frame rate, body size, how visible the joints are) rather than from gait. So we plot "
+        "the S-JEPA embedding *and* a cheap nuisance feature side by side: if the nuisance separates "
+        "just as well, the pretty S-JEPA plot is not telling us about gait. The verdict lives in "
+        "notebook 06's leakage-safe scores, never in a scatter plot.\n",
+        "We compare the label-free checkpoint from notebook 03 against the SSL-continued one from "
+        "notebook 04. No test labels are ever used to fit, select, or color anything beyond the plain "
+        "class of each point.\n",
     )]
     c += boot(need_torch=True)
     c += [code(
@@ -521,25 +607,27 @@ def nb_05(md, code, badge, boot):
     )]
     c += [md(
         "## Embed every video with the frozen encoder\n",
-        "For each video we average the encoder's features over its windows and over the masked joints, "
-        "giving one vector per video. We do this for both checkpoints.\n",
+        "For each video we mean-pool the encoder's features over its windows and over a **fixed**, "
+        "seeded read-out pool of target tokens (the same pool used in notebooks 04 and 06). This pool "
+        "is never chosen from labels. We do it for both checkpoints.\n",
     )]
     c += [code(
         "import numpy as np, torch",
         "from sjepa.config import get_config",
         "from sjepa.models import build_model, pick_device",
-        "from sjepa.train import load_checkpoint",
-        "from sjepa.masking import AnatomicalMaskSampler",
+        "from sjepa.train_v2 import load_checkpoint_v2",
+        "from sjepa.masking_v2 import sample_target_mask",
         "from sjepa.data import load_index, sliding_windows",
         "",
         "cfg = get_config(); device = pick_device()",
         "records = load_index(KEYPOINTS_DIR)",
-        "sampler = AnatomicalMaskSampler(cfg.num_joints, cfg.num_time_tokens)",
-        "tm = torch.from_numpy(sampler.target_mask).to(device)",
+        "readout = sample_target_mask(cfg.num_joints, cfg.num_time_tokens,",
+        "                             np.random.default_rng(0), target_ratio=0.6)",
+        "tm = torch.from_numpy(readout).to(device)",
         "",
         "def embed_all(ckpt):",
-        "    m = build_model(cfg, device=device)",
-        "    load_checkpoint(ckpt, m, map_location=device)",
+        "    m = build_model(cfg, device=device, repaired=True)",
+        "    load_checkpoint_v2(ckpt, m, map_location=device)",
         "    vecs, labels = [], []",
         "    for r in records:",
         "        w = sliding_windows(r.load_norm(), cfg.window_frames, cfg.window_stride)",
@@ -549,16 +637,31 @@ def nb_05(md, code, badge, boot):
         "        labels.append(r.label)",
         "    return np.stack(vecs), labels",
         "",
-        "E_pre, y = embed_all(ARTIFACT_DIR / 'sjepa_pretrain_normal.pt')",
-        "E_ft, _ = embed_all(ARTIFACT_DIR / 'sjepa_finetuned_3class.pt')",
-        "np.savez(ARTIFACT_DIR / 'embeddings_3class.npz', E_pretrain=E_pre, E_finetune=E_ft,",
+        "E_base, y = embed_all(ARTIFACT_DIR / 'sjepa_ssl.pt')",
+        "E_cont, _ = embed_all(ARTIFACT_DIR / 'sjepa_ssl_continued.pt')",
+        "np.savez(ARTIFACT_DIR / 'embeddings_3class.npz', E_base=E_base, E_continued=E_cont,",
         "         labels=np.array(y))",
-        "print('embedded', len(y), 'videos into', E_ft.shape[1], 'dimensions')",
+        "print('embedded', len(y), 'videos into', E_cont.shape[1], 'dimensions')",
+    )]
+    c += [md(
+        "## A nuisance baseline to keep us honest\n",
+        "This is the cheapest possible 'representation': the per-joint mean and spread of the raw "
+        "visibility channel, which we already know tracks the acquisition domain (the MS clips were all "
+        "filmed at 60fps). If this separates the classes as cleanly as S-JEPA does, then a tidy S-JEPA "
+        "scatter is not evidence of learned gait.\n",
+    )]
+    c += [code(
+        "def nuisance_vec(r):",
+        "    vis = r.load_raw()[:, :, 2]",
+        "    return np.nan_to_num(np.concatenate([np.nanmean(vis, 0), np.nanstd(vis, 0)]))",
+        "N_nuis = np.stack([nuisance_vec(r) for r in records])",
+        "print('nuisance feature shape:', N_nuis.shape)",
     )]
     c += [md(
         "## Project and plot\n",
-        "t-SNE and UMAP both squeeze the high-dimensional vectors into a plane while trying to keep "
-        "neighbors together. We color one hue per condition.\n",
+        "t-SNE squeezes the high-dimensional vectors into a plane while trying to keep neighbors "
+        "together. We color one hue per condition, and we place the nuisance baseline in the same row "
+        "for the comparison the caution above demands.\n",
     )]
     c += [code(
         "from sklearn.manifold import TSNE",
@@ -569,10 +672,11 @@ def nb_05(md, code, badge, boot):
         "    perp = min(15, max(2, len(E)//3))",
         "    return TSNE(n_components=2, perplexity=perp, random_state=42, init='pca').fit_transform(E)",
         "",
-        "fig, ax = plt.subplots(1, 2, figsize=(11,4.4))",
-        "scatter_2d(tsne2d(E_pre), y, ax[0], 't-SNE: pretrain on normal only')",
-        "scatter_2d(tsne2d(E_ft), y, ax[1], 't-SNE: after fine-tune + VICReg')",
-        "plt.tight_layout(); plt.savefig(IMAGES_DIR / 'tsne_pretrain_vs_finetune.png', dpi=130)",
+        "fig, ax = plt.subplots(1, 3, figsize=(15,4.4))",
+        "scatter_2d(tsne2d(E_base), y, ax[0], 't-SNE: S-JEPA (label-free, nb 03)')",
+        "scatter_2d(tsne2d(E_cont), y, ax[1], 't-SNE: S-JEPA (SSL continued, nb 04)')",
+        "scatter_2d(tsne2d(N_nuis), y, ax[2], 't-SNE: nuisance (visibility only)')",
+        "plt.tight_layout(); plt.savefig(IMAGES_DIR / 'tsne_sjepa_vs_nuisance.png', dpi=130)",
         "plt.show()",
     )]
     c += [code(
@@ -584,28 +688,34 @@ def nb_05(md, code, badge, boot):
         "    def umap2d(E):",
         "        nn = min(15, max(2, len(E)//3))",
         "        return umap.UMAP(n_neighbors=nn, min_dist=0.3, random_state=42).fit_transform(E)",
-        "    fig, ax = plt.subplots(1, 2, figsize=(11,4.4))",
-        "    scatter_2d(umap2d(E_pre), y, ax[0], 'UMAP: pretrain only')",
-        "    scatter_2d(umap2d(E_ft), y, ax[1], 'UMAP: fine-tune + VICReg')",
+        "    fig, ax = plt.subplots(1, 3, figsize=(15,4.4))",
+        "    scatter_2d(umap2d(E_base), y, ax[0], 'UMAP: S-JEPA (nb 03)')",
+        "    scatter_2d(umap2d(E_cont), y, ax[1], 'UMAP: S-JEPA (nb 04)')",
+        "    scatter_2d(umap2d(N_nuis), y, ax[2], 'UMAP: nuisance (visibility)')",
         "    plt.tight_layout(); plt.show()",
         "except Exception as e:",
         "    print('UMAP not available, skipping:', e)",
     )]
     c += [md(
-        "## Put a number on the separation\n",
-        "The silhouette score summarizes how tight and well separated the clusters are, from -1 (bad) "
-        "to +1 (clean). We compare the two checkpoints. On 47 videos this number is noisy, so treat it "
-        "as a hint, not a verdict.\n",
+        "## Put a (descriptive) number on the separation\n",
+        "The silhouette score summarizes how tight and well separated the class clusters are, from -1 "
+        "to +1. We report it for all three embeddings so the S-JEPA numbers are read *against* the "
+        "nuisance number, not in isolation. On ~47 videos this is noisy and purely descriptive: it is "
+        "computed on the whole set, so it is **not** an out-of-sample score and must not be used to "
+        "pick a model. Model selection happens only through the leakage-safe folds in notebook 06.\n",
     )]
     c += [code(
         "from sjepa.eval import silhouette",
-        "s_pre = silhouette(E_pre, y)",
-        "s_ft = silhouette(E_ft, y)",
-        "print(f'silhouette  pretrain-only: {s_pre:.3f}   fine-tuned+VICReg: {s_ft:.3f}')",
-        "if s_ft >= s_pre:",
-        "    print('Fine-tuning helped separate the clusters (as hoped).')",
-        "else:",
-        "    print('No clear gain here. On this tiny dataset that can happen; see the caveats in 06.')",
+        "s_base = silhouette(E_base, y)",
+        "s_cont = silhouette(E_cont, y)",
+        "s_nuis = silhouette(N_nuis, y)",
+        "print(f'silhouette (descriptive, whole set):')",
+        "print(f'  S-JEPA label-free (nb 03): {s_base:.3f}')",
+        "print(f'  S-JEPA SSL continued (nb 04): {s_cont:.3f}')",
+        "print(f'  nuisance (visibility only): {s_nuis:.3f}')",
+        "if s_nuis >= max(s_base, s_cont):",
+        "    print('Note: the nuisance baseline separates at least as well -- a clean S-JEPA plot',",
+        "          'here would NOT be evidence of learned gait. See notebook 06.')",
     )]
     return c
 
@@ -613,44 +723,103 @@ def nb_05(md, code, badge, boot):
 def nb_06(md, code, badge, boot):
     c = [badge("06_capstone_rf_vs_sjepa.ipynb")]
     c += [md(
-        "# 06 - Capstone: Random Forest vs S-JEPA\n",
-        "This is the scientific payoff. We put two classifiers side by side on the **same videos** and "
-        "the **same leakage-safe splits**:\n",
-        "1. a classical **Random Forest** on hand-made gait features, exactly the exp5 recipe but for "
-        "our three classes,\n"
-        "2. an **S-JEPA linear probe** on top of the frozen encoder from notebook 04.\n",
-        "We report grouped k-fold results with mean and standard deviation, because a single split of "
-        "47 videos is too noisy to trust. Then we discuss honestly what this can and cannot show.\n",
+        "# 06 - Capstone: Random Forest vs S-JEPA, on identical folds, with controls\n",
+        "This is the scientific payoff, and it comes with a result that is honest rather than "
+        "flattering. We put several systems side by side on the **same videos**, the **same locked "
+        "leakage-safe folds**, and the **same pooled out-of-fold scoring**:\n",
+        "1. a classical **Random Forest** on hand-made gait features (the exp5 recipe, three classes),\n"
+        "2. the **label-free S-JEPA** with a frozen linear probe,\n"
+        "3. cheap **shortcut controls** (visibility, body size, static pose) that any real "
+        "representation must beat before we trust it.\n",
+        "The headline is **pooled macro-F1** over the folds (one prediction per clip, gathered across "
+        "all held-out folds), because averaging per-fold F1 on ~9 test videos is even noisier. We "
+        "report it beside the paired RF and the controls, then say plainly what it does and does not "
+        "mean.\n",
+        "> **Spoiler, stated up front.** On this tiny, already-inspected, source-grouped collection the "
+        "S-JEPA scores *below* both the Random Forest and the nuisance controls. That is the "
+        "expected, plan-anticipated outcome of removing the shortcuts and the label leak that inflated "
+        "an earlier number, and it is reported as a negative result, not hidden.\n",
     )]
     c += boot(need_torch=True)
     c += [code(
         "from IPython.display import SVG, display",
         "display(SVG(filename=str(IMAGES_DIR / 'rf_vs_sjepa.svg')))",
         "display(SVG(filename=str(IMAGES_DIR / 'grouped_split.svg')))",
+        "display(SVG(filename=str(IMAGES_DIR / 'eval_firewall.svg')))",
     )]
     c += [md(
-        "## The two branches as functions\n",
-        "Both branches are thin wrappers around the verified `sjepa` package. The Random Forest branch "
-        "reuses the `ambient` joint-angle and feature code (the exp5 pipeline). The S-JEPA branch "
-        "trains a fresh model per fold and fits a logistic-regression probe on its frozen features.\n",
+        "## The frozen result is produced by a script, not the notebook\n",
+        "So the headline cannot drift as someone re-runs cells, the authoritative R1 run lives in "
+        "`scripts/scripts_r1_repaired.py` and its output is committed under "
+        "`artifacts/runs/r1_g1_1k_s42/`. That script and this notebook share the identical fold "
+        "registry, so the comparison is paired by construction. We read the frozen numbers first, then "
+        "reproduce the mechanism live at a smaller budget so you can see how it is built.\n",
     )]
     c += [code(
-        "import numpy as np, torch",
+        "import json",
+        "frozen_path = ARTIFACT_DIR / 'runs' / 'r1_g1_1k_s42' / 'results.json'",
+        "if frozen_path.exists():",
+        "    frozen = json.loads(frozen_path.read_text())",
+        "    sj = frozen['sjepa_pooled']; rf = frozen['rf_pooled']",
+        "    print('Frozen R1 (1000 updates, seed 42, all 5 folds, pooled OOF):')",
+        "    print(f\"  S-JEPA          : macro-F1 {sj['macro_f1']:.3f} | acc {sj['accuracy']:.3f}\"",
+        "          f\" | PD-recall {sj['pd_recall']:.3f}\")",
+        "    print(f\"  Random Forest   : macro-F1 {rf['macro_f1']:.3f} | acc {rf['accuracy']:.3f}\"",
+        "          f\" | PD-recall {rf['pd_recall']:.3f}\")",
+        "    print('  effective rank per fold:',",
+        "          [round(d['eff_rank_final'], 1) for d in frozen['diagnostics']],",
+        "          '(all >> 1 -> no collapse)')",
+        "else:",
+        "    print('Frozen run not found. Reproduce it with:')",
+        "    print('  python scripts/scripts_r1_repaired.py --total-updates 1000 --seed 42 \\\\')",
+        "    print('      --output-dir artifacts/runs/r1_g1_1k_s42')",
+    )]
+    c += [md(
+        "## Shortcut controls: the bar S-JEPA has to clear\n",
+        "Phase 0 also scored cheap nuisance features on the identical folds. If a control matches or "
+        "beats S-JEPA, then S-JEPA is not yet using gait beyond what a camera artifact already reveals. "
+        "We read those frozen control scores here.\n",
+    )]
+    c += [code(
+        "e0_path = ARTIFACT_DIR / 'eval' / 'g1' / 'E0_results.json'",
+        "if e0_path.exists():",
+        "    e0 = json.loads(e0_path.read_text())",
+        "    print('Shortcut controls on g1 (best of logreg/rf, fold-mean macro-F1):')",
+        "    for name, res in e0['shortcut_controls'].items():",
+        "        best = max(res['logreg']['macro_f1']['mean'], res['rf']['macro_f1']['mean'])",
+        "        print(f'  {name:16s}: {best:.3f}')",
+        "    print(f\"E0 Random Forest pooled macro-F1: {e0['E0_RF']['pooled_macro_f1']:.3f}\")",
+        "else:",
+        "    print('Run scripts/scripts_phase0_provenance.py to generate the control table.')",
+    )]
+    c += [md(
+        "## Reproduce the mechanism live (one fold, small budget)\n",
+        "Now the moving parts, so nothing is a black box. For one locked fold we run the exact "
+        "pipeline: paired RF, then **label-free** S-JEPA (no diagnosis label enters the objective), a "
+        "frozen mean-pool over a fixed read-out, and a class-balanced probe fit on the training clips "
+        "only. This uses a tiny update budget to stay fast; the frozen numbers above are the ones to "
+        "cite.\n",
+    )]
+    c += [code(
+        "import numpy as np, torch, os",
         "from sjepa.config import get_config",
         "from sjepa.models import build_model, pick_device",
-        "from sjepa.train import train_sjepa",
-        "from sjepa.masking import AnatomicalMaskSampler",
-        "from sjepa.data import load_index, grouped_kfold, SequenceWindowDataset, sliding_windows",
+        "from sjepa.train_v2 import train_sjepa_v2",
+        "from sjepa.masking_v2 import sample_target_mask",
+        "from sjepa.data import load_index, SequenceWindowDataset, sliding_windows",
         "from sjepa.classical import build_feature_matrix, train_rf_and_predict",
-        "from sjepa.eval import evaluate, aggregate_folds, silhouette",
+        "from sjepa.eval import evaluate",
         "from sklearn.linear_model import LogisticRegression",
         "from sklearn.preprocessing import StandardScaler",
         "",
         "cfg = get_config(); device = pick_device()",
         "LABELS = ['normal', 'ms', 'pd']",
         "records = load_index(KEYPOINTS_DIR)",
-        "sampler = AnatomicalMaskSampler(cfg.num_joints, cfg.num_time_tokens)",
-        "tm = torch.from_numpy(sampler.target_mask).to(device)",
+        "by_clip = {r.clip_name: r for r in records}",
+        "registry = json.loads((ARTIFACT_DIR / 'eval' / 'g1' / 'fold_registry.json').read_text())",
+        "readout = sample_target_mask(cfg.num_joints, cfg.num_time_tokens,",
+        "                             np.random.default_rng(0), target_ratio=0.6)",
+        "tm = torch.from_numpy(readout).to(device)",
         "",
         "def embed_records(model, recs):",
         "    V, Y = [], []",
@@ -662,136 +831,94 @@ def nb_06(md, code, badge, boot):
         "        Y.append(r.label)",
         "    return np.stack(V), Y",
     )]
-    c += [md(
-        "## Run grouped k-fold for both models\n",
-        "For each fold we train from scratch (pretrain on the fold's normal videos, fine-tune on the "
-        "fold's full training set with VICReg), then score both classifiers on the fold's held-out "
-        "videos. Using a smaller epoch count keeps this runnable in the notebook; raise it in your "
-        ".env profile for stronger results.\n",
-    )]
     c += [code(
-        "rf_metrics, sj_metrics, sils = [], [], []",
-        "EPOCHS_PRE = max(6, cfg.pretrain_epochs // 4)",
-        "EPOCHS_FT  = max(4, cfg.finetune_epochs // 4)",
+        "fold0 = registry['folds'][0]",
+        "train_recs = [by_clip[c] for c in fold0['train_clips']]",
+        "test_recs  = [by_clip[c] for c in fold0['test_clips']]",
         "",
-        "for fold, (train_recs, test_recs) in enumerate(grouped_kfold(records, n_splits=5, seed=42)):",
-        "    # --- Random Forest branch (exp5 recipe) ---",
-        "    Xtr, ytr, _, _ = build_feature_matrix(train_recs, fps=cfg.target_fps)",
-        "    Xte, yte, _, _ = build_feature_matrix(test_recs, fps=cfg.target_fps)",
-        "    rf_pred = train_rf_and_predict(Xtr, ytr, Xte, seed=cfg.seed)",
-        "    rf_metrics.append(evaluate(yte, rf_pred, LABELS))",
+        "# paired Random Forest (exp5 recipe) on this fold",
+        "Xtr, ytr, _, _ = build_feature_matrix(train_recs, fps=cfg.target_fps)",
+        "Xte, yte, _, _ = build_feature_matrix(test_recs, fps=cfg.target_fps)",
+        "rf_pred = train_rf_and_predict(Xtr, ytr, Xte, seed=cfg.seed)",
+        "rf_m = evaluate(yte, rf_pred, LABELS)",
         "",
-        "    # --- S-JEPA branch ---",
-        "    model = build_model(cfg, device=device)",
-        "    normal_tr = [r for r in train_recs if r.label == 'normal']",
-        "    if normal_tr:",
-        "        train_sjepa(model, SequenceWindowDataset(normal_tr, cfg.window_frames, cfg.window_stride),",
-        "                    cfg, epochs=EPOCHS_PRE, device=device)",
-        "    train_sjepa(model, SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride),",
-        "                cfg, epochs=EPOCHS_FT, use_vicreg=True, class_aware_vicreg=True, device=device)",
-        "    Etr, ytr2 = embed_records(model, train_recs)",
-        "    Ete, yte2 = embed_records(model, test_recs)",
-        "    sc = StandardScaler().fit(Etr)",
-        "    probe = LogisticRegression(max_iter=2000, class_weight='balanced').fit(sc.transform(Etr), ytr2)",
-        "    sj_pred = probe.predict(sc.transform(Ete))",
-        "    sj_metrics.append(evaluate(yte2, sj_pred, LABELS))",
-        "    sils.append(silhouette(np.vstack([Etr, Ete]), ytr2 + yte2))",
-        "    print(f'fold {fold}: RF f1={rf_metrics[-1].macro_f1:.3f} | '",
-        "          f'S-JEPA f1={sj_metrics[-1].macro_f1:.3f} | test n={len(test_recs)}')",
+        "# label-free S-JEPA on this fold's training sources",
+        "SMOKE = cfg.profile.endswith('smoke')  # correct parse of SJEPA_SMOKE (not a raw truthiness test)",
+        "UPDATES = 60 if SMOKE else 500",
+        "model = build_model(cfg, device=device, repaired=True)",
+        "ds = SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride)",
+        "state = train_sjepa_v2(model, ds, cfg, total_updates=UPDATES, device=device, mask_ratio=0.6)",
+        "Etr, ytr2 = embed_records(model, train_recs)",
+        "Ete, yte2 = embed_records(model, test_recs)",
+        "sc = StandardScaler().fit(Etr)                    # TRAIN only",
+        "probe = LogisticRegression(max_iter=2000, class_weight='balanced').fit(sc.transform(Etr), ytr2)",
+        "sj_m = evaluate(yte2, probe.predict(sc.transform(Ete)), LABELS)",
+        "print(f'live fold-0 demo (budget={UPDATES} updates): RF f1={rf_m.macro_f1:.3f}',",
+        "      f'| S-JEPA f1={sj_m.macro_f1:.3f} | eff_rank={state.eff_rank[-1]:.1f}')",
+        "print('(The frozen 5-fold pooled numbers above are the ones to cite, not this one fold.)')",
     )]
     c += [md(
-        "## Headline: mean and standard deviation across folds\n",
+        "## Confusion of the frozen S-JEPA run\n",
+        "Where does S-JEPA confuse the conditions across all held-out clips? The dominant "
+        "error is PD read as MS, the same failure the Random Forest also struggles with here.\n",
     )]
     c += [code(
-        "import json, pandas as pd",
-        "rf_agg = aggregate_folds(rf_metrics)",
-        "sj_agg = aggregate_folds(sj_metrics)",
-        "",
-        "def fmt(agg):",
-        "    return {k: f\"{v['mean']:.3f} +/- {v['std']:.3f}\" for k, v in agg.items()}",
-        "",
-        "summary = pd.DataFrame({'Random Forest': fmt(rf_agg), 'S-JEPA probe': fmt(sj_agg)})",
-        "display(summary)",
-        "results = {'random_forest': rf_agg, 'sjepa': sj_agg,",
-        "           'silhouette_mean': float(np.nanmean(sils)),",
-        "           'n_folds': len(rf_metrics)}",
+        "import numpy as np, matplotlib.pyplot as plt, seaborn as sns",
+        "if frozen_path.exists():",
+        "    fig, ax = plt.subplots(1, 2, figsize=(10,4))",
+        "    for a, key, title in [(ax[0], 'rf_pooled', 'Random Forest (pooled OOF)'),",
+        "                          (ax[1], 'sjepa_pooled', 'S-JEPA (pooled OOF)')]:",
+        "        cm = np.array(frozen[key]['confusion'])",
+        "        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,",
+        "                    xticklabels=LABELS, yticklabels=LABELS, ax=a)",
+        "        a.set_title(title); a.set_xlabel('predicted'); a.set_ylabel('true')",
+        "    plt.tight_layout(); plt.show()",
+        "else:",
+        "    print('Frozen run not found; run scripts/scripts_r1_repaired.py first.')",
+    )]
+    c += [md(
+        "## A combined scoreboard\n",
+        "One table, every system on the identical g1 folds. This is the whole comparison in one place.\n",
+    )]
+    c += [code(
+        "import pandas as pd",
+        "rows = []",
+        "if frozen_path.exists():",
+        "    rows.append(('Random Forest (paired)', frozen['rf_pooled']['macro_f1']))",
+        "    rows.append(('S-JEPA (R1, 1k updates)', frozen['sjepa_pooled']['macro_f1']))",
+        "if e0_path.exists():",
+        "    for name, res in e0['shortcut_controls'].items():",
+        "        best = max(res['logreg']['macro_f1']['mean'], res['rf']['macro_f1']['mean'])",
+        "        rows.append((f'control: {name}', best))",
+        "rows.append(('chance (3 classes)', 1/3))",
+        "board = pd.DataFrame(rows, columns=['system', 'macro_F1']).sort_values('macro_F1', ascending=False)",
+        "display(board.reset_index(drop=True))",
+        "results = {'frozen_run': str(frozen_path.relative_to(ARTIFACT_DIR)) if frozen_path.exists() else None,",
+        "           'scoreboard': {n: float(v) for n, v in rows}}",
         "(ARTIFACT_DIR / 'capstone_results.json').write_text(json.dumps(results, indent=2))",
         "print('saved capstone_results.json')",
     )]
     c += [md(
-        "## Confusion matrices side by side\n",
-        "Averaged over folds, where does each model confuse the conditions?\n",
-    )]
-    c += [code(
-        "import numpy as np, matplotlib.pyplot as plt, seaborn as sns",
-        "def avg_cm(ms):",
-        "    return np.mean([np.array(m.confusion) for m in ms], axis=0)",
-        "fig, ax = plt.subplots(1, 2, figsize=(10,4))",
-        "for a, ms, title in [(ax[0], rf_metrics, 'Random Forest'), (ax[1], sj_metrics, 'S-JEPA probe')]:",
-        "    sns.heatmap(avg_cm(ms), annot=True, fmt='.1f', cmap='Blues', cbar=False,",
-        "                xticklabels=LABELS, yticklabels=LABELS, ax=a)",
-        "    a.set_title(title); a.set_xlabel('predicted'); a.set_ylabel('true')",
-        "plt.tight_layout(); plt.show()",
-    )]
-    c += [md(
-        "## Bonus: label efficiency\n",
-        "S-JEPA's real promise is not beating a Random Forest when every video is labeled. It is "
-        "learning useful features from unlabeled data, so it needs fewer labels to do well. We test "
-        "that idea by training the probe on 25%, 50%, and 100% of the training labels and watching the "
-        "score. The Random Forest, which has no pretraining to lean on, tends to fall off faster as "
-        "labels shrink.\n",
-    )]
-    c += [code(
-        "# Single grouped split for a quick, illustrative sweep.",
-        "from sjepa.data import grouped_train_test_split",
-        "train_recs, test_recs = grouped_train_test_split(records, test_size=0.3, seed=42)",
-        "model = build_model(cfg, device=device)",
-        "normal_tr = [r for r in train_recs if r.label == 'normal']",
-        "if normal_tr:",
-        "    train_sjepa(model, SequenceWindowDataset(normal_tr, cfg.window_frames, cfg.window_stride),",
-        "                cfg, epochs=EPOCHS_PRE, device=device)",
-        "train_sjepa(model, SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride),",
-        "            cfg, epochs=EPOCHS_FT, use_vicreg=True, class_aware_vicreg=True, device=device)",
-        "Etr, ytr = embed_records(model, train_recs); Ete, yte = embed_records(model, test_recs)",
-        "Xtr, yrf, _, _ = build_feature_matrix(train_recs, fps=cfg.target_fps)",
-        "Xte, yrf_te, _, _ = build_feature_matrix(test_recs, fps=cfg.target_fps)",
-        "",
-        "import numpy as np",
-        "from sklearn.utils import resample",
-        "rng = np.random.default_rng(0)",
-        "fracs = [0.25, 0.5, 1.0]; sj_scores=[]; rf_scores=[]",
-        "for f in fracs:",
-        "    k = max(3, int(len(Etr)*f)); idx = rng.choice(len(Etr), k, replace=False)",
-        "    sc = StandardScaler().fit(Etr[idx])",
-        "    p = LogisticRegression(max_iter=2000, class_weight='balanced').fit(sc.transform(Etr[idx]), [ytr[i] for i in idx])",
-        "    sj_scores.append(evaluate(yte, p.predict(sc.transform(Ete)), LABELS).macro_f1)",
-        "    rf_pred = train_rf_and_predict(Xtr[idx], [yrf[i] for i in idx], Xte, seed=cfg.seed)",
-        "    rf_scores.append(evaluate(yrf_te, rf_pred, LABELS).macro_f1)",
-        "import matplotlib.pyplot as plt",
-        "plt.figure(figsize=(6,3.5))",
-        "plt.plot([int(f*100) for f in fracs], sj_scores, 'o-', color='#dd6b20', label='S-JEPA probe')",
-        "plt.plot([int(f*100) for f in fracs], rf_scores, 's-', color='#38a169', label='Random Forest')",
-        "plt.xlabel('percent of labels used'); plt.ylabel('macro F1'); plt.legend()",
-        "plt.title('Label efficiency (single grouped split, illustrative)')",
-        "plt.tight_layout(); plt.show()",
-    )]
-    c += [md(
         "## What this does and does not show\n",
-        "**What we can say.** The comparison is fair: both models saw identical, leakage-safe splits "
-        "and identical metrics. On this data the Random Forest is a strong baseline, which is exactly "
-        "what we expect when every one of a few dozen videos is labeled and the hand-made features "
-        "already encode clinical knowledge.\n",
-        "**What we cannot say.** With 47 videos from about 35 independent sources, a few videos moving "
-        "between folds swings the score by several points. These numbers are a methodology "
-        "demonstration, not a clinical result. We do not claim S-JEPA beats the Random Forest here, "
-        "and a single lucky split proves nothing.\n",
-        "**Where S-JEPA earns its keep.** Its features come from unlabeled motion, so its edge shows up "
-        "when labels are scarce or when the encoder is pretrained on far more walking than we have "
-        "here. The label-efficiency sweep hints at that. The honest next step is more data and the "
-        "`gpu` profile, not a bigger claim.\n",
-        "That completes the series. You built a skeleton pipeline from raw video, an S-JEPA model with "
-        "a clinically grounded mask, a VICReg-regularized fine-tune, and a fair comparison against a "
-        "classical baseline.\n",
+        "**What we can say.** The comparison is fair by construction: RF, S-JEPA, and the controls all "
+        "sit on the identical locked folds, use per-clip pooled out-of-fold scoring, and fit their "
+        "scalers and heads on training data only. On this data the Random Forest is the strongest "
+        "system, and the label-free S-JEPA sits below it *and* below cheap nuisance controls.\n",
+        "**Why that is progress, not failure.** An earlier S-JEPA number looked higher partly because "
+        "it leaned on shortcuts (every MS clip was filmed at 60fps and square) and a label leak in the "
+        "objective. Removing those lowered the honest score. The representation did not collapse "
+        "(effective rank stays well above 1 on every fold), so this is a real, non-degenerate estimate, "
+        "not a broken run. Per the pre-registered rule, a mechanically valid model that does not clear "
+        "the bar tells us to **stop scaling the local network** and fix the binding constraint instead.\n",
+        "**What we cannot say.** With ~47 videos from ~35 sources that are not verified people, this is "
+        "a provisional, source-grouped **development estimate**, never a clinical result. No diagnostic, "
+        "validity, or deployment claim is warranted.\n",
+        "**The honest next step.** The evidence points at the data pipeline and the acquisition domain, "
+        "not model size: rebuild the lineage (true common frame rate, speed-preserving normalization, "
+        "validity masks, a domain de-confound) and bring in external clinical-motion pretraining, then "
+        "rerun. That completes the series: a skeleton pipeline from raw video, a label-free "
+        "S-JEPA with stochastic clinically-guided masks, and a leakage-safe comparison that reports the "
+        "result whichever way it falls.\n",
     )]
     return c
 

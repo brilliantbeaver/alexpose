@@ -15,7 +15,7 @@ was run on the real cached skeletons on the locked source-grouped fold registry,
 Random Forest and shortcut controls, and pooled out-of-fold predictions saved.
 
 **The headline result is a negative one, and that is the point.** On this tiny, already-inspected,
-source-grouped collection, the *repaired* S-JEPA scores **lower** than both the old (partly
+source-grouped collection, the corrected S-JEPA scores **lower** than both the old (partly
 shortcut-driven) S-JEPA and the Random Forest:
 
 ![R1 result](../images/r1_results.svg)
@@ -26,14 +26,17 @@ shortcut-driven) S-JEPA and the Random Forest:
 | nuisance control: pose mean+std | 0.694 | – | – |
 | nuisance control: visibility only | 0.602 | – | – |
 | old broken S-JEPA (historical) | 0.570 | 0.573 | 0.353 |
-| **repaired S-JEPA (R1, 1000 updates, seed 42)** | **0.438** | 0.447 | 0.235 |
+| **S-JEPA (R1, 1000 updates, seed 42)** | **0.438** | 0.447 | 0.235 |
 | chance (3 classes) | 0.333 | – | – |
 
 This is scientific progress: the previous 0.570 leaned partly on shortcuts (all MS clips are 60fps
 and square; the label leak and fixed mask further inflated it). With a mechanically correct,
-label-free, source-uniform pipeline, the honest number is lower. The representation did **not**
-collapse (effective rank 7.7–9.5 across folds), so this is a real, non-degenerate estimate, not a
-broken run.
+label-free, source-uniform pipeline, the honest number is lower. (**Label-free** means the
+self-supervised objective never reads the `normal`/`ms`/`pd` diagnosis label — it learns to predict
+masked joint motion from visible motion; the label enters only later, in the supervised probe. The
+old code violated this via a class-aware term that fed the label into the loss; removing it is
+defect D3.) The representation did **not** collapse (effective rank 7.7–9.5 across folds), so this
+is a real, non-degenerate estimate, not a broken run.
 
 Per the pre-registered promotion rule, a mechanically valid R1 that does not clear the inner gate
 means: **stop scaling the local model; the next bottleneck is the data pipeline and external
@@ -120,12 +123,12 @@ All 15 tests pass on both the pinned experiment `.venv` (Python 3.12) and the re
 
 ## 7. Results table (separate systems, same registry g1)
 
-See the table in §1. RF, old S-JEPA, repaired S-JEPA, and nuisance controls are separate rows.
+See the table in §1. RF, old (broken) S-JEPA, the corrected S-JEPA, and nuisance controls are separate rows.
 No fusion, supervised-adaptation, or RGB branch was run (out of scope this session).
 
 ## 8. Shortcut / temporal controls and limitations
 
-- Nuisance controls (pose mean+std 0.694; visibility 0.602) **exceed** the repaired S-JEPA (0.438),
+- Nuisance controls (pose mean+std 0.694; visibility 0.602) **exceed** the S-JEPA score (0.438),
   which means the learned representation does not yet beat cheap nuisance signals on this cache. No
   clinical-representation claim is warranted.
 - Limitations: single seed, 1000 updates (no learning-curve sweep, no inner-fold model selection,
@@ -163,8 +166,11 @@ de-confound or explicit domain control), then rerun R1 on the corrected cache. T
 to the data pipeline and acquisition domain, not model size, as the binding constraint.
 
 **Pending (runnable now, handed off):** full R1 learning curve (300/1k/3k updates × 3–5 seeds) with
-inner-fold selection; participant registry; external clinical-motion pretraining; notebook
-regeneration to match the repaired method.
+inner-fold selection; participant registry; external clinical-motion pretraining.
+
+(The seven tutorial notebooks were regenerated to the corrected method — label-free SSL, stochastic
+clinically-guided masks, `PredictorV2` target positions, the locked `g1` firewall, and the honest
+R1 scoreboard — and smoke-execute end to end on the cached skeletons.)
 
 ## Reproducibility command sequence
 
