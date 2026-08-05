@@ -1427,10 +1427,10 @@ Return to the compact equation:
 
 $$
 \underbrace{\mathcal{L}}_{\text{mismatch}}
-=
+{}={}
 -\sum_{d=1}^{D}
 \underbrace{q_d}_{\text{teacher weight}}
-\underbrace{\log r_d}_{\text{student log-probability}},
+\;\underbrace{\log r_d}_{\text{student log-probability}},
 \qquad D=96.
 $$
 
