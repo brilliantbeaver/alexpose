@@ -9,6 +9,7 @@ current compiled manuscript is four US-letter pages.
 - `urtc2026_sjepa_gait.tex`: IEEE-style manuscript
 - `urtc2026_sjepa_gait.pdf`: compiled review copy
 - `urtc2026_sjepa_gait.md`: high-fidelity readable manuscript with inline PNG figures and IEEE-numbered references
+- `urtc2026_details.md`: illustrated, step-by-step tutorial for the S-JEPA loss
 - `references.bib`: primary and review literature used by the paper
 - `figures/`: PDF publication figures and PNG previews
 - `make_figures.py`: reproducible figure generator using locked real-run artifacts
