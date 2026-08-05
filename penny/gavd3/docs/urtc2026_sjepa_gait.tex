@@ -95,11 +95,9 @@ A token contains one landmark over four adjacent frames. A 64-frame sequence the
 
 For each valid sample, 60\% of eligible tokens are selected uniformly from the 10 literature-linked landmarks. This is a deliberate change from motion-aware masking. It avoids defining clinical importance as large displacement and permits low-motion regions to be prediction targets. Spatial flipping is disabled because laterality can matter in stroke and Parkinson's disease.
 
-The target encoder receives the complete sequence. The view encoder receives the unmasked tokens after a small sequence-wide rotation and translation. If $\mathbf{z}_t$ is a target feature, $\mathbf{c}$ is a running center, and $\mathbf{p}$ is the prediction, the loss is
+The target encoder sees the complete sequence; the view encoder sees augmented unmasked tokens. Define $\mathbf{q}=\operatorname{softmax}((\mathbf{z}_t-\mathbf{c})/\tau_t)$ and $\mathbf{r}=\operatorname{softmax}(\mathbf{p}/\tau_p)$, where $\mathbf{c}$ is the EMA target-feature center that removes persistent channel bias, $\tau_t=0.06$, and $\tau_p=0.10$. For width $D=96$,
 \begin{equation}
-\mathcal{L}=-\sum_d
-\operatorname{softmax}\left(\frac{\mathbf{z}_t-\mathbf{c}}{0.06}\right)_d
-\log \operatorname{softmax}\left(\frac{\mathbf{p}}{0.10}\right)_d .
+\mathcal{L}=-\sum_{d=1}^{D}q_d\log r_d.
 \end{equation}
 The target encoder receives no gradients. Its EMA momentum follows a cosine schedule from 0.999 toward 1.0. Training uses AdamW, batch size 4, seed 42, and 300 epochs on the 12 normal sequences. All 12 come from one source video, which is a central limitation.
 
