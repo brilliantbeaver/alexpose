@@ -1,4 +1,4 @@
-# How the GAVD3 S-JEPA approach evolved
+# How GAVD3 S-JEPA approach evolved to GAVD4
 
 This tutorial explains how the S-JEPA work in this folder changed from a small normal-only prototype into the current five-stage, fingerprinted experiment. It explains what was changed, why it was changed, what the saved results show, and which ideas are still only proposals.
 
