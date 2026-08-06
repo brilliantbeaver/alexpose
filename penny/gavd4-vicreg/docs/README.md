@@ -12,12 +12,12 @@ d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1
 
 ## Current files
 
-- `urtc2026_sjepa_gait.tex`: canonical IEEE-style URTC manuscript
-- `urtc2026_sjepa_gait.pdf`: current 5-page compiled paper
-- `urtc2026_sjepa_gait.md`: readable paper with the same claims and results
-- `urtc2026_details.md`: illustrated step-by-step tutorial
-- `urtc2026_details.pdf`: compiled tutorial
-- `urtc2026_evolution.md`: extensive legacy-to-current methodology and result tutorial
+- `staged_sjepa_gait.tex`: canonical IEEE-style staged manuscript
+- `staged_sjepa_gait.pdf`: current 5-page compiled paper
+- `staged_sjepa_gait.md`: readable paper with the same claims and results
+- `staged_details.md`: illustrated step-by-step tutorial
+- `staged_details.pdf`: compiled tutorial
+- `staged_evolution.md`: extensive legacy-to-current methodology and result tutorial
 - `progressive_training.md`: detailed training and checkpoint contract
 - `result_history.csv`: machine-readable previous and current result ledger
 - `references.bib`: authoritative primary and methods references
@@ -92,7 +92,7 @@ The generators read `classifier_contract.json`, resolve the matching checkpoint 
 From `docs/`:
 
 ```sh
-tectonic urtc2026_sjepa_gait.tex
+tectonic staged_sjepa_gait.tex
 ```
 
 The current result is five US-letter pages. The source uses the IEEE conference class and current vector figures.
@@ -102,13 +102,13 @@ The current result is five US-letter pages. The source uses the IEEE conference 
 From `docs/`:
 
 ```sh
-pandoc urtc2026_details.md --from=markdown --standalone --toc \
+pandoc staged_details.md --from=markdown --standalone --toc \
   --resource-path=.:.. \
   --lua-filter=urtc_pdf_layout.lua --pdf-engine=tectonic \
   -V papersize=letter -V geometry:margin=0.65in -V fontsize=10pt \
   -M title="Detailed tutorial: normal-first S-JEPA for gait" \
   -M author="URTC S-JEPA Gait Project" \
-  -o urtc2026_details.pdf
+  -o staged_details.pdf
 ```
 
 ## Checks completed

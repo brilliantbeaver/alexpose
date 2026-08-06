@@ -73,11 +73,11 @@ re-executed under the ON flag in this session.
    the per-frame observed fraction (64 frames, `all_valid.mean(axis=2)`) = 33 + 64
    = 97 pose-visibility features, zero gait geometry; shortcut floor 0.448 acc
    all-96 (below 0.490 majority = 47/96), 0.333 acc exp5. Files: nb06 cell-013
-   markdown, `README.md`, `docs/urtc2026_details.md`,
-   `docs/urtc2026_sjepa_gait.md`, `docs/urtc2026_sjepa_gait.tex`.
+   markdown, `README.md`, `docs/staged_details.md`,
+   `docs/staged_sjepa_gait.md`, `docs/staged_sjepa_gait.tex`.
 2. Citation correction (from #11 findings): FSGait [10] page range `2248-2264`
    → `313-329` (CrossRef-authoritative) in `docs/references.bib:111` and
-   `docs/urtc2026_sjepa_gait.md:155`. The stray/wrong `arXiv:2309.01480` (an
+   `docs/staged_sjepa_gait.md:155`. The stray/wrong `arXiv:2309.01480` (an
    unrelated BadSQA speech paper) never appeared in any manuscript-facing file —
    it exists only in `notes/`, which correctly document it as wrong — so no
    citation edit was required there.
@@ -125,7 +125,7 @@ corrected `.bib`.
 (`notes/09_diagram_design_system.md`): fixed `viewBox 0 0 1200 720`, muted
 palette, ≥22px text insets, ≥56px inter-card gaps, single-bend connectors with
 ≥16px arrowhead gaps. No code semantics changed. The only cross-repo embed is
-`README.md:7 → images/09_notebook_roadmap.svg`; `docs/urtc2026_details.md`/`.tex`
+`README.md:7 → images/09_notebook_roadmap.svg`; `docs/staged_details.md`/`.tex`
 are decoupled (they use `docs/figures/*` from `make_figures.py`), so no PDF
 rebuild was in scope.
 
@@ -139,10 +139,10 @@ rebuild was in scope.
 - **B — Content accuracy vs revised protocol: PASS.** Exact 12-landmark set
   incl. heels (03:61/65), uniform/no-motion masking, normal-first progression,
   VICReg in Stage 0, group loss only in Stages 1–4 (06:82/84) — matches
-  `urtc2026_details.md:55/89/161`.
+  `staged_details.md:55/89/161`.
 - **C — No leaky / over-claim text: PASS.** No SVG asserts an accuracy/macro-F1
   as a validated result; 08 explicitly refuses an unsupported unseen-video score
-  (08:55), consistent with `urtc2026_details.md:234`.
+  (08:55), consistent with `staged_details.md:234`.
 - **D — README integrity: PASS.** `README.md:7` resolves to the existing
   seven-step roadmap (00 Understand → 06 Probe and audit); no other .md/.tex/
   .ipynb reference to a changed image breaks.

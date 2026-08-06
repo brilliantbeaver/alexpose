@@ -72,8 +72,8 @@ Copy `.env.example` to this folder as `.env` and adjust the paths. The notebooks
 
 ~~~dotenv
 ALEXPOSE_ROOT=/Users/alexmui/dev/alexpose
-GAVD3_CACHE_DIR=/Users/alexmui/dev/alexpose/penny/gavd3/cache
-GAVD3_ARTIFACT_DIR=/Users/alexmui/dev/alexpose/penny/gavd3/cache/artifacts
+GAVD3_CACHE_DIR=/Users/alexmui/dev/alexpose/penny/gavd3-urtc/cache
+GAVD3_ARTIFACT_DIR=/Users/alexmui/dev/alexpose/penny/gavd3-urtc/cache/artifacts
 GAVD3_MODE=real
 
 # Add these only when the vault is mounted at this location.
@@ -105,7 +105,7 @@ A missing real file never causes a silent synthetic fallback. A checkpoint recor
 
 To run the full real path:
 
-1. Set GAVD3_MODE=real in `penny/gavd3/.env`.
+1. Set GAVD3_MODE=real in `penny/gavd3-urtc/.env`.
 2. Run notebook 01 and inspect the manifest census.
 3. Set DOWNLOAD_VIDEOS=True in notebook 01, or set GAVD_DOWNLOAD=1, then download the required source videos.
 4. Run notebook 02 with GAVD_EXTRACT_POSES=1, GAVD_EXTRACT_CONDITIONS=normal, and GAVD_MAX_SEQUENCES=1.
@@ -143,7 +143,7 @@ import os
 os.environ["GAVD3_MODE"] = "real"
 os.environ["GAVD4_DATA_DIR"] = "/content/drive/MyDrive/gavd4/data-gavd"
 os.environ["GAVD4_YOUTUBE_DIR"] = "/content/drive/MyDrive/gavd4/youtube"
-os.environ["GAVD3_ARTIFACT_DIR"] = "/content/drive/MyDrive/gavd3/artifacts"
+os.environ["GAVD3_ARTIFACT_DIR"] = "/content/drive/MyDrive/gavd3-urtc/artifacts"
 ~~~
 
 Long downloads and pretraining should use persistent Drive folders. Colab storage disappears when a runtime is recycled.

@@ -1,12 +1,12 @@
 # Archived planning instruction
 
-> Historical only. This instruction predates the completed 12-target, five-stage augmented-normal run and its corrected evaluation. Its old checkpoint, 10-target, and 61.9% accuracy assumptions must not be reported as current. Use `README.md`, `docs/progressive_training.md`, and `docs/urtc2026_details.md` for the current experiment and revision ledger.
+> Historical only. This instruction predates the completed 12-target, five-stage augmented-normal run and its corrected evaluation. Its old checkpoint, 10-target, and 61.9% accuracy assumptions must not be reported as current. Use `README.md`, `docs/progressive_training.md`, and `docs/staged_details.md` for the current experiment and revision ledger.
 
 # Master Instruction: Refine the S-JEPA Gait Notebooks to Significantly Improve Classification Accuracy
 
 > **What this file is.** A ready-to-paste prompt for a frontier reasoning model
 > (**Anthropic Opus 4.8** or **Fable 5**) running inside **Claude Code**, directing it to
-> correct and refine the notebooks in `penny/gavd3/` so that five-class gait-condition
+> correct and refine the notebooks in `penny/gavd4-vicreg/` so that five-class gait-condition
 > classification in `06_capstone_health_condition_classifiers.ipynb` improves in an
 > *honest, leakage-resistant* way. It encodes best-practice prompting: an explicit role, a
 > hard "ultrathink" reasoning directive, deep authoritative-source research (arXiv / ACM /
@@ -64,7 +64,7 @@ as well as those documents in "docs".
 ## GROUND TRUTH — read before touching anything
 
 Read, in order: `notes/04_improvement_plan.md` (the plan you are executing), then
-`README.md`, `docs/urtc2026_sjepa_gait.md`, and notebooks `00`, `02`, `03`, `04`, `06`.
+`README.md`, `docs/staged_sjepa_gait.md`, and notebooks `00`, `02`, `03`, `04`, `06`.
 Confirm these code facts *from the source* (do not trust this summary blindly):
 
 - **Objective** (`00`/`04` `sjepa_cross_entropy`): DINO-style soft cross-entropy in latent
