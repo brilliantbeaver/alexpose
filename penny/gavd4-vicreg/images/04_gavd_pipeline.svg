@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>GAVD sequence ingestion pipeline</title>
+  <desc>Each CSV identifies annotated frames inside a YouTube source. Full videos are cached once, annotated frames are decoded, and one pose artifact is written per sequence.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .wt{font:700 20px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .card{stroke:#20364e;stroke-width:1.75}
+      .arw{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="64" y="78" class="h">One CSV sequence stays one scientific sample</text>
+
+  <!-- Stage 1: GAVD CSV -->
+  <rect x="64" y="150" width="179" height="230" rx="16" fill="#e7f0f8" class="card"/>
+  <text x="86" y="192" class="t">GAVD CSV</text>
+  <text x="86" y="234" class="b">sequence ID</text>
+  <text x="86" y="266" class="b">absolute frame rows</text>
+  <text x="86" y="298" class="b">bbox per frame</text>
+  <text x="86" y="330" class="b">YouTube ID</text>
+
+  <path d="M243 265H283" class="arw"/>
+
+  <!-- Stage 2: Manifest -->
+  <rect x="299" y="150" width="179" height="230" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="321" y="192" class="t">Manifest</text>
+  <text x="321" y="234" class="b">canonical condition</text>
+  <text x="321" y="266" class="b">first / last frame</text>
+  <text x="321" y="298" class="b">source dimensions</text>
+  <text x="321" y="330" class="b">cache location</text>
+
+  <path d="M478 265H518" class="arw"/>
+
+  <!-- Stage 3: Full MP4 -->
+  <rect x="534" y="150" width="179" height="230" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="556" y="192" class="t">Full MP4</text>
+  <text x="556" y="234" class="b">download once</text>
+  <text x="556" y="266" class="b">keep frame numbers</text>
+  <text x="556" y="298" class="b">probe actual FPS</text>
+  <text x="556" y="330" class="b">validate decoding</text>
+
+  <path d="M713 265H753" class="arw"/>
+
+  <!-- Stage 4: BlazePose -->
+  <rect x="769" y="150" width="179" height="230" rx="16" fill="#ece6f6" class="card"/>
+  <text x="791" y="192" class="t">BlazePose</text>
+  <text x="791" y="234" class="b">decode frames</text>
+  <text x="791" y="266" class="b">crop around bbox</text>
+  <text x="791" y="298" class="b">33 landmarks</text>
+  <text x="791" y="330" class="b">preserve failures</text>
+
+  <path d="M948 265H988" class="arw"/>
+
+  <!-- Stage 5: NPZ -->
+  <rect x="1004" y="150" width="132" height="230" rx="16" fill="#ffffff" class="card"/>
+  <text x="1026" y="192" class="t">NPZ</text>
+  <text x="1026" y="234" class="b">T x 33</text>
+  <text x="1026" y="266" class="b">x 4</text>
+  <text x="1026" y="298" class="s">one file</text>
+  <text x="1026" y="326" class="s">per seq</text>
+
+  <!-- Explainer banner -->
+  <rect x="64" y="470" width="1072" height="170" rx="16" fill="#20364e"/>
+  <text x="96" y="524" class="wt">Why full videos?</text>
+  <text x="96" y="566" class="w">Downloading trimmed clips can change frame numbering, breaking the</text>
+  <text x="96" y="596" class="w">alignment between rows and pixels. The CSV rows refer to the original</text>
+  <text x="96" y="626" class="w">source timeline, so each video is cached once and decoded in place.</text>
+</svg>

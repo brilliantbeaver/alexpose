@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">A valid fold-local evaluation pipeline</title>
+  <desc id="desc">The source-video split happens before preprocessing choices, curriculum training, and classifier fitting. The test videos stay sealed until the final score.</desc>
+  <defs>
+    <style>
+      .title{font:700 42px Arial,sans-serif;fill:#17324d}.sub{font:24px Arial,sans-serif;fill:#40566c}
+      .head{font:700 27px Arial,sans-serif;fill:#17324d}.body{font:22px Arial,sans-serif;fill:#25384a}.small{font:19px Arial,sans-serif;fill:#40566c}
+      .good{font:700 23px Arial,sans-serif;fill:#2f725f}.goodnote{font:700 19px Arial,sans-serif;fill:#2f725f}
+      .bad{font:700 23px Arial,sans-serif;fill:#a33e38}.box{stroke:#17324d;stroke-width:2.5;rx:22}
+      .connector{fill:none;stroke:#17324d;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 12 12" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#17324d"/></marker>
+  </defs>
+  <rect width="1600" height="900" fill="#fbfaf7"/>
+  <text x="70" y="72" class="title">The next valid test must retrain the whole pipeline inside each fold</text>
+  <text x="70" y="114" class="sub">The outer split protects source videos before any learned representation sees them.</text>
+
+  <rect x="70" y="225" width="300" height="270" class="box" fill="#eef3f6"/>
+  <text x="105" y="275" class="head">1. Split by video</text>
+  <text x="105" y="320" class="body">Keep video rows together.</text>
+  <text x="105" y="352" class="body">Assign one outer fold.</text>
+  <text x="105" y="420" class="good">Split before learning</text>
+
+  <path d="M370 360 H438" class="connector"/>
+  <rect x="455" y="150" width="420" height="460" class="box" fill="#e7f0f7"/>
+  <text x="490" y="200" class="head">2. Train within the fold</text>
+  <rect x="500" y="235" width="330" height="75" rx="15" fill="#fff" stroke="#3977a8" stroke-width="3"/>
+  <text x="665" y="265" text-anchor="middle" class="small">Choose preprocessing on train data</text>
+  <text x="665" y="292" text-anchor="middle" class="small">Freeze it before testing</text>
+  <path d="M665 310 V344" class="connector"/>
+  <rect x="500" y="360" width="330" height="110" rx="15" fill="#fff0d6" stroke="#d9a441" stroke-width="3"/>
+  <text x="665" y="403" text-anchor="middle" class="body">Train all five S-JEPA stages</text>
+  <text x="665" y="439" text-anchor="middle" class="small">including the normal-first curriculum</text>
+  <path d="M665 470 V504" class="connector"/>
+  <rect x="500" y="520" width="330" height="62" rx="15" fill="#e4f2e8" stroke="#3d8b7d" stroke-width="3"/>
+  <text x="665" y="559" text-anchor="middle" class="body">Fit the readout classifier</text>
+
+  <path d="M875 360 H948" class="connector"/>
+  <rect x="965" y="180" width="285" height="365" class="box" fill="#f8e4da"/>
+  <text x="1000" y="228" class="head">3. Test once</text>
+  <text x="1000" y="270" class="body">Apply the frozen pipeline</text>
+  <text x="1000" y="302" class="body">to sealed videos once.</text>
+  <rect x="1005" y="350" width="205" height="105" rx="18" fill="#fff" stroke="#d97745" stroke-width="3"/>
+  <text x="1108" y="394" text-anchor="middle" class="head">Outer test</text>
+  <text x="1108" y="430" text-anchor="middle" class="small">unseen videos</text>
+  <text x="1108" y="510" text-anchor="middle" class="goodnote">No information returns.</text>
+
+  <path d="M1250 360 H1318" class="connector"/>
+  <rect x="1335" y="225" width="205" height="270" class="box" fill="#e4f2e8"/>
+  <text x="1438" y="278" text-anchor="middle" class="head">4. Report</text>
+  <text x="1438" y="329" text-anchor="middle" class="body">per-fold scores</text>
+  <text x="1438" y="368" text-anchor="middle" class="body">class support</text>
+  <text x="1438" y="407" text-anchor="middle" class="body">video support</text>
+  <text x="1438" y="461" text-anchor="middle" class="good">honest scope</text>
+
+  <rect x="70" y="665" width="1470" height="150" rx="25" fill="#fff4f2" stroke="#b94e48" stroke-width="3"/>
+  <text x="105" y="715" class="bad">Why the current Lane C is only a stress test</text>
+  <text x="105" y="757" class="body">Its Random Forest folds separate videos, but the S-JEPA encoder was trained once on all 159 sequences.</text>
+  <text x="105" y="793" class="body">A fold-local encoder is the missing step between “grouped classifier” and “unseen-video generalization.”</text>
+</svg>

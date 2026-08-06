@@ -513,6 +513,47 @@ the current gap and any new improvement come with honest error bars. We should s
 run it, that its likely win is separating healthy from slowed walking, not fixing the
 Parkinson's-versus-MS confusion, and that any gain must survive the frame-rate control.
 
+#### What that paragraph means, plainly
+
+The paragraph above is dense, so here is the same recommendation unpacked one piece at a time.
+
+**The action itself: rebuild the data, then retrain the same model.** The pose data that feeds the
+model has three known defects baked into it. First, walking speed was thrown away. When each person's
+skeleton was normalized, meaning re-centered and rescaled so everyone is the same size, that process
+also washed out how fast the person was actually moving. For MS and Parkinson's, slowness is the
+symptom, so discarding speed throws away real signal. Second, the true frame rate is not stored. Every
+clip was treated as if it ran at 15 frames per second, but the original videos ran at different rates,
+so one time step means a different amount of real time in different clips. Third, padded frames are not
+marked. Short clips get filler frames added to reach a fixed length, and nothing labels which frames
+are real, so the model can be learning from frozen, fake frames. The fix is to regenerate the cached
+skeleton data without those three defects and then retrain the identical model, meaning the same
+architecture and the same settings. Same model, cleaner input, so any change in the result comes from
+the data fix and not from tinkering with the model.
+
+**Why this ranks first.** Three reasons. It fixes a defect we have actually confirmed, not one we are
+guessing at. Every fancier idea in Stage R3 depends on motion being present in the data, so if speed is
+missing none of those ideas can even work, which makes this rebuild the gate that unlocks them. And it
+is testable right away: rebuild, retrain, look at the score, with no long research detour.
+
+**Why we pair it with the error-bar measurement.** The confidence-interval step is quick and reuses
+predictions we already have. Doing it alongside the rebuild lets us say not just "the score went from
+one number to another" but "here is the range of uncertainty around each number." With only about 49
+videos, a raw difference could easily be noise, and the error bars tell us whether an apparent
+improvement is real.
+
+**The two honest expectations we set in advance.** We commit to these before seeing results so we
+cannot rationalize afterward. First, the likely win is separating healthy walking from slowed walking,
+because we are handing speed back to the model. It will probably not fix the model confusing Parkinson's
+with MS, because both of those are slowed walks and look similar even once speed is restored. Second,
+any gain must survive the frame-rate control. Because all the MS videos were filmed at 60 frames per
+second, we have to make sure an improvement comes from genuine gait differences and not from the model
+quietly noticing which clips were filmed at which frame rate. If the gain disappears once we account for
+frame rate, it was never real.
+
+**In one line.** Fix the three known defects in the input, retrain the same model, measure with error
+bars, and commit up front to the honest claim: this should help tell normal from slowed walking, it will
+not by itself untangle Parkinson's from MS, and it only counts if it survives the frame-rate check.
+
 **The rule for deciding whether S-JEPA earns its place on this dataset.** S-JEPA earns its place if
 either of two things happens, judged on inner folds and confirmed by touching each outer test fold once.
 Either, after the data rebuild and the motion-prediction change, its score clears the old buggy 0.570,

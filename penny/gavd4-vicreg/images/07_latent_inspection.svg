@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Ways to inspect learned latent motion</title>
+  <desc>Prediction similarity, nearest neighbor retrieval, and distance to the normal reference are diagnostics, not coordinate forecasts.</desc>
+  <defs>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6.5" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L7 3.5 L0 7 Z" fill="#20364e"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="66" class="h">Inspect what the representation learned before classifying</text>
+
+  <!-- Card 1: Masked-token match -->
+  <rect x="48" y="120" width="330" height="416" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="76" y="164" class="t">Masked-token match</text>
+  <text x="76" y="196" class="b">Cosine similarity between</text>
+  <text x="76" y="222" class="b">predicted and target latents</text>
+  <circle cx="213" cy="390" r="72" fill="#ffffff" stroke="#2f6f99" stroke-width="14"/>
+  <path d="M213 318 A72 72 0 0 1 275 426" fill="none" stroke="#e07a4b" stroke-width="14" stroke-linecap="round"/>
+  <text x="213" y="497" class="s" text-anchor="middle">high cosine = good match</text>
+
+  <!-- Card 2: Neighbor retrieval -->
+  <rect x="434" y="120" width="330" height="416" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="462" y="164" class="t">Neighbor retrieval</text>
+  <text x="462" y="196" class="b">Which complete gait clips</text>
+  <text x="462" y="222" class="b">land closest in latent space?</text>
+  <line x1="546" y1="374" x2="628" y2="344" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="628" y1="344" x2="668" y2="418" stroke="#20364e" stroke-width="2.5"/>
+  <circle cx="546" cy="374" r="26" fill="#2f6f99"/>
+  <circle cx="628" cy="344" r="26" fill="#5f9e7e"/>
+  <circle cx="668" cy="418" r="26" fill="#e07a4b"/>
+  <text x="599" y="497" class="s" text-anchor="middle">nearest clips in embedding</text>
+
+  <!-- Card 3: Normal reference -->
+  <rect x="820" y="120" width="330" height="416" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="848" y="164" class="t">Normal reference</text>
+  <text x="848" y="196" class="b">Distance from the normal</text>
+  <text x="848" y="222" class="b">embedding centroid</text>
+  <circle cx="955" cy="392" r="74" fill="none" stroke="#5f9e7e" stroke-width="4" stroke-dasharray="10 8"/>
+  <circle cx="955" cy="392" r="15" fill="#5f9e7e"/>
+  <circle cx="1078" cy="332" r="15" fill="#e07a4b"/>
+  <text x="955" y="497" class="s" text-anchor="middle">outlier sits far from centroid</text>
+
+  <!-- Footer note -->
+  <line x1="48" y1="600" x2="1150" y2="600" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="48" y="644" class="s">S-JEPA performs latent infilling within an observed clip. It does not autoregressively generate future coordinates.</text>
+</svg>
