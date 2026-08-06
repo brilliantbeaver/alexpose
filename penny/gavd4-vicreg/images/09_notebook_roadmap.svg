@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Seven notebook learning path</title>
+  <desc>The tutorials progress from concepts through data, pose extraction, masking, pretraining, latent inspection, and classification.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .w{font:700 20px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .wb{font:16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .card{stroke:#20364e;stroke-width:1.75}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="55" y="72" class="h">Build understanding and evidence in seven steps</text>
+
+  <!-- Row 1: 00 -> 01 -> 02 (left to right) -->
+  <rect x="55"  y="130" width="300" height="120" rx="16" fill="#e7f0f8" class="card"/>
+  <text x="82"  y="182" class="t">00  Understand</text>
+  <text x="82"  y="216" class="b">S-JEPA, MAMP, MTM</text>
+
+  <rect x="450" y="130" width="300" height="120" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="477" y="182" class="t">01  Discover</text>
+  <text x="477" y="216" class="b">CSVs and source videos</text>
+
+  <rect x="845" y="130" width="300" height="120" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="872" y="182" class="t">02  Extract</text>
+  <text x="872" y="216" class="b">Watch 33-point poses</text>
+
+  <path d="M355 190 H434" class="a"/>
+  <path d="M750 190 H829" class="a"/>
+
+  <!-- Wrap connector: down from 02, across left, down to 03 (explicit single-bend dogleg) -->
+  <path d="M995 250 V300 H205 V340" class="a"/>
+
+  <!-- Row 2: 03 -> 04 -> 05 (left to right, continuing the reading order) -->
+  <rect x="55"  y="360" width="300" height="120" rx="16" fill="#ece6f6" class="card"/>
+  <text x="82"  y="412" class="t">03  Constrain</text>
+  <text x="82"  y="446" class="b">Twelve target landmarks</text>
+
+  <rect x="450" y="360" width="300" height="120" rx="16" fill="#e7f0f8" class="card"/>
+  <text x="477" y="412" class="t">04  Train</text>
+  <text x="477" y="446" class="b">Normal first, then 4 stages</text>
+
+  <rect x="845" y="360" width="300" height="120" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="872" y="412" class="t">05  Inspect</text>
+  <text x="872" y="446" class="b">Latent motion quality</text>
+
+  <path d="M355 420 H434" class="a"/>
+  <path d="M750 420 H829" class="a"/>
+
+  <!-- Wrap connector: down from 05, across left, down to 06 capstone -->
+  <path d="M995 480 V525 H600 V564" class="a"/>
+
+  <!-- Row 3: wide dark capstone 06 -->
+  <rect x="55" y="580" width="1090" height="88" rx="16" fill="#20364e"/>
+  <text x="82" y="622" class="w">06  Probe and audit</text>
+  <text x="82" y="650" class="wb">Descriptive RF readouts, representation exposure, missingness, and video leakage</text>
+</svg>
