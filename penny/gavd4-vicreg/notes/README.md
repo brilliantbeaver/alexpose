@@ -5,7 +5,7 @@ The notes directory contains both current documentation and historical planning 
 Start with:
 
 - [10_sjepa_evolution_tutorial.md](10_sjepa_evolution_tutorial.md), the current implementation and methodology evolution guide
-- [docs/urtc2026_evolution.md](../docs/urtc2026_evolution.md), the polished evolution tutorial
+- [docs/staged_evolution.md](../docs/staged_evolution.md), the polished evolution tutorial
 - [06_literature_findings.md](06_literature_findings.md), the citation verification record
 - [08_codex_review_log.md](08_codex_review_log.md), the late adversarial review log
 - [09_diagram_design_system.md](09_diagram_design_system.md), the SVG design rules

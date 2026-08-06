@@ -1,6 +1,6 @@
 # S-JEPA evolution notebook for maintainers
 
-This note is the implementation companion to [docs/urtc2026_evolution.md](../docs/urtc2026_evolution.md). It explains how to trace each methodology change through the notebooks, artifacts, and historical notes.
+This note is the implementation companion to [docs/staged_evolution.md](../docs/staged_evolution.md). It explains how to trace each methodology change through the notebooks, artifacts, and historical notes.
 
 Use this file when:
 
@@ -631,11 +631,11 @@ After implementation:
 - Update result_history.csv.
 - Mark the old result superseded instead of deleting it.
 - Rebuild vector figures from artifacts.
-- Update both docs/urtc2026_evolution.md and this note.
+- Update both docs/staged_evolution.md and this note.
 
 ## 19. Useful audit commands
 
-From the gavd3 root:
+From the `gavd4-vicreg` root:
 
 ~~~bash
 MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_figures.py

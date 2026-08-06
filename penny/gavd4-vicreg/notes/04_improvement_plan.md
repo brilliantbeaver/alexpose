@@ -1,6 +1,6 @@
 # Archived planning note
 
-> Historical only. This plan predates the completed 12-target, five-stage augmented-normal run and its corrected evaluation. Its 10-target, 61.9% accuracy, data-size, and pending-training assumptions are not current results. Use `README.md`, `docs/progressive_training.md`, and `docs/urtc2026_details.md` for the current experiment and revision ledger.
+> Historical only. This plan predates the completed 12-target, five-stage augmented-normal run and its corrected evaluation. Its 10-target, 61.9% accuracy, data-size, and pending-training assumptions are not current results. Use `README.md`, `docs/progressive_training.md`, and `docs/staged_details.md` for the current experiment and revision ledger.
 
 # S-JEPA Gait Classifier: Improvement Plan
 
@@ -122,7 +122,7 @@ difficulty. *Highest collapse/overfit risk* — only safe on the broadened corpu
 the visibility fix (A3), validated under the honest protocol (A2).
 
 **C3. Embedding-dimension `D` — sweep, don't bump; gate width on data breadth.** — *nb04, effort low-medium, contingent*
-`D` is currently **96**, chosen (per `docs/urtc2026_details.md` §24) only because it is compact
+`D` is currently **96**, chosen (per `docs/staged_details.md` §24) only because it is compact
 and divisible by the 4 heads — **there is no width ablation**. Widening it is tempting but is a
 **capacity** change, and here the binding constraint is **data scale, not capacity**: pretraining
 sees only **12 correlated sequences from 1 video** (~12 × 528 ≈ 6.3k highly-correlated tokens).

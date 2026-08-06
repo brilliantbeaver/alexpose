@@ -1,6 +1,6 @@
 # Auditing a Normal-First Skeleton JEPA for Monocular Gait Representations
 
-**Alex Mui, Penny Inouye, Theodore Mui, and Phil Mui**
+**Theodore Mui, Alex Mui, Penny Inouye, and Phil Mui**
 
 *Aspiring Scholars Directed Research Program (ASDRP)*
 

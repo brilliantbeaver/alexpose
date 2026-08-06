@@ -1,6 +1,6 @@
 **Role**: You are a world models expert specializing in Joint Embedding Predictive Architecture, pose estimation and vision transformers
 
-**Task**: You are to create a set of progressive learning, simple to understand, step-by-step detailed tutorials in the folder "penny/gavd3" that implements the S-JEPA approach to predict skeleton motions that could be gait sequences of various health conditions.  You have the following tasks:
+**Task**: You are to create a set of progressive learning, simple to understand, step-by-step detailed tutorials in the folder "penny/gavd4-vicreg" that implements the S-JEPA approach to predict skeleton motions that could be gait sequences of various health conditions.  You have the following tasks:
 
 ## Task 1: undrestand the S-JEPA aproach
 
@@ -61,7 +61,7 @@ Review the methodology for creating the Random Forest classifier in /Users/pmui/
 
 ## Output instructions
 
-Create an output subfolder "gait/penny/gavd3" for your tutorials.  Your outputs have fully explained, detailed, well structured, well written Jupyter notebooks; as well as a README.md file fully explain what these tutorials are and how to setup & run them locally and in Google Colab.  You must illustrate with clear and insightful vector graphics and flow charts (stored in an "images" subfolder).  Ultrathink to ensure that each of the notebooks should be self-contained regarding library dependencies so that they can be run in Google Colab by clicking on a "Google Colab" button at top of the notebook.
+Create an output subfolder "gait/penny/gavd4-vicreg" for your tutorials.  Your outputs have fully explained, detailed, well structured, well written Jupyter notebooks; as well as a README.md file fully explain what these tutorials are and how to setup & run them locally and in Google Colab.  You must illustrate with clear and insightful vector graphics and flow charts (stored in an "images" subfolder).  Ultrathink to ensure that each of the notebooks should be self-contained regarding library dependencies so that they can be run in Google Colab by clicking on a "Google Colab" button at top of the notebook.
 
 In that same output subfolder, create a folder called "slides" that contains illustrative slides documenting step-by-step with plenty of vector graphics, tables, and flowcharts what this entire S-JEPA setup and experiments are.
 
@@ -76,5 +76,4 @@ For each of the tutorial notebooks, ultrathink on how best to enable viewing of 
 Use codex:adversarial-review to review and check all of your work, systematically and thoughtfully fix all issues.
 
 Use fan out subagents with dynamic workflows to parallize your tasks.
-
 

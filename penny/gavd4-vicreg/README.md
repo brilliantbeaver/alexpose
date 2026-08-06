@@ -187,8 +187,8 @@ Copy `.env.example` to `.env`. The completed augmented real path uses:
 
 ```dotenv
 GAVD3_MODE=real
-GAVD3_CACHE_DIR=/absolute/path/to/gavd3/cache
-GAVD3_ARTIFACT_DIR=/absolute/path/to/gavd3/cache/artifacts
+GAVD3_CACHE_DIR=/absolute/path/to/gavd4-vicreg/cache
+GAVD3_ARTIFACT_DIR=/absolute/path/to/gavd4-vicreg/cache/artifacts
 SJEPA_INCLUDE_AUGMENTED_NORMAL=1
 SJEPA_RUN_PROFILE=recommended
 ```
@@ -213,9 +213,9 @@ Real artifacts are written under `cache/artifacts/real`. Smoke artifacts are wri
 
 ## Papers, tutorial, figures, and slides
 
-- [URTC paper](docs/urtc2026_sjepa_gait.md)
-- [Long tutorial](docs/urtc2026_details.md)
-- [S-JEPA methodology evolution tutorial](docs/urtc2026_evolution.md)
+- [Staged paper](docs/staged_sjepa_gait.md)
+- [Long tutorial](docs/staged_details.md)
+- [S-JEPA methodology evolution tutorial](docs/staged_evolution.md)
 - [Progressive training guide](docs/progressive_training.md)
 - [Maintainer evolution notes](notes/10_sjepa_evolution_tutorial.md)
 - [Research notes index](notes/README.md)
