@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="940" height="560" fill="#ffffff"/>
+
+  <text x="470" y="34" font-size="21" font-weight="bold" text-anchor="middle" fill="#0f172a">Two block-masking styles</text>
+  <text x="470" y="58" font-size="13" text-anchor="middle" fill="#475569">Hide blocks on a joint-time grid and predict the hidden embeddings in latent space</text>
+
+  <!-- ============ STYLE A ============ -->
+  <text x="60" y="100" font-size="15" font-weight="bold" fill="#1e3a8a">Style A: limb-over-time</text>
+
+  <!-- grid A geometry: 5 rows x 8 cols, cell 44 wide, 26 tall, origin x=160 y=118 -->
+  <!-- column headers -->
+  <text x="182" y="132" font-size="11" text-anchor="middle" fill="#64748b">t1</text>
+  <text x="226" y="132" font-size="11" text-anchor="middle" fill="#64748b">t2</text>
+  <text x="270" y="132" font-size="11" text-anchor="middle" fill="#64748b">t3</text>
+  <text x="314" y="132" font-size="11" text-anchor="middle" fill="#64748b">t4</text>
+  <text x="358" y="132" font-size="11" text-anchor="middle" fill="#64748b">t5</text>
+  <text x="402" y="132" font-size="11" text-anchor="middle" fill="#64748b">t6</text>
+  <text x="446" y="132" font-size="11" text-anchor="middle" fill="#64748b">t7</text>
+  <text x="490" y="132" font-size="11" text-anchor="middle" fill="#64748b">t8</text>
+
+  <!-- row labels -->
+  <text x="152" y="156" font-size="11" text-anchor="end" fill="#334155">left_arm</text>
+  <text x="152" y="182" font-size="11" text-anchor="end" fill="#334155">right_arm</text>
+  <text x="152" y="208" font-size="11" text-anchor="end" fill="#334155">torso</text>
+  <text x="152" y="234" font-size="11" text-anchor="end" fill="#334155">left_leg</text>
+  <text x="152" y="260" font-size="11" text-anchor="end" fill="#334155">right_leg</text>
+
+  <!-- Style A masked block: left_leg row (row 4), columns t3..t6 -->
+  <rect x="248" y="222" width="176" height="26" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2" rx="4"/>
+
+  <!-- grid A cells (5 rows, 8 cols) unmasked outlines -->
+  <!-- row y-tops: 138,164,190,216,242 -->
+  <!-- row 1 -->
+  <rect x="160" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="292" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="336" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="138" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 2 -->
+  <rect x="160" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="292" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="336" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="164" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 3 -->
+  <rect x="160" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="292" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="336" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="190" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 4 (left_leg) unmasked cells outside t3..t6 -->
+  <rect x="160" y="216" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="216" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="216" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="216" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 5 -->
+  <rect x="160" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="292" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="336" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="242" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+
+  <!-- caption A -->
+  <text x="555" y="180" font-size="12" fill="#1e3a8a" font-weight="bold">hide one whole limb across a</text>
+  <text x="555" y="197" font-size="12" fill="#1e3a8a" font-weight="bold">window of frames</text>
+  <text x="555" y="220" font-size="11" fill="#334155">forces reasoning about coordinated,</text>
+  <text x="555" y="235" font-size="11" fill="#334155">left-right motion</text>
+
+  <!-- ============ STYLE B ============ -->
+  <text x="60" y="330" font-size="15" font-weight="bold" fill="#4c1d95">Style B: time-window</text>
+
+  <!-- grid B geometry: origin x=160 y=348, same cell sizes -->
+  <text x="182" y="362" font-size="11" text-anchor="middle" fill="#64748b">t1</text>
+  <text x="226" y="362" font-size="11" text-anchor="middle" fill="#64748b">t2</text>
+  <text x="270" y="362" font-size="11" text-anchor="middle" fill="#64748b">t3</text>
+  <text x="314" y="362" font-size="11" text-anchor="middle" fill="#64748b">t4</text>
+  <text x="358" y="362" font-size="11" text-anchor="middle" fill="#64748b">t5</text>
+  <text x="402" y="362" font-size="11" text-anchor="middle" fill="#64748b">t6</text>
+  <text x="446" y="362" font-size="11" text-anchor="middle" fill="#64748b">t7</text>
+  <text x="490" y="362" font-size="11" text-anchor="middle" fill="#64748b">t8</text>
+
+  <text x="152" y="386" font-size="11" text-anchor="end" fill="#334155">left_arm</text>
+  <text x="152" y="412" font-size="11" text-anchor="end" fill="#334155">right_arm</text>
+  <text x="152" y="438" font-size="11" text-anchor="end" fill="#334155">torso</text>
+  <text x="152" y="464" font-size="11" text-anchor="end" fill="#334155">left_leg</text>
+  <text x="152" y="490" font-size="11" text-anchor="end" fill="#334155">right_leg</text>
+
+  <!-- Style B masked band: all rows, columns t4..t5 -->
+  <rect x="292" y="368" width="88" height="130" fill="#ede9fe" stroke="#6d28d9" stroke-width="2" rx="4"/>
+
+  <!-- grid B cells: row y-tops 368,394,420,446,472 -->
+  <!-- row 1 -->
+  <rect x="160" y="368" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="368" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="368" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="368" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="368" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="368" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 2 -->
+  <rect x="160" y="394" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="394" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="394" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="394" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="394" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="394" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 3 -->
+  <rect x="160" y="420" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="420" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="420" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="420" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="420" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="420" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 4 -->
+  <rect x="160" y="446" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="446" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="446" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="446" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="446" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="446" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- row 5 -->
+  <rect x="160" y="472" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="204" y="472" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="248" y="472" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="380" y="472" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="424" y="472" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="468" y="472" width="44" height="26" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+
+  <!-- caption B -->
+  <text x="555" y="410" font-size="12" fill="#4c1d95" font-weight="bold">hide all joints in a short window</text>
+  <text x="555" y="433" font-size="11" fill="#334155">forces whole-cycle / body-center</text>
+  <text x="555" y="448" font-size="11" fill="#334155">prediction</text>
+
+  <!-- bottom note -->
+  <rect x="160" y="518" width="620" height="30" fill="#fef2f2" stroke="#b91c1c" stroke-width="2" rx="8"/>
+  <text x="470" y="538" font-size="12" text-anchor="middle" fill="#7f1d1d">block masking, not scattered dots, forces learning coordinated motion</text>
+</svg>

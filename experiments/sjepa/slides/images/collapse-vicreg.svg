@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="66" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The collapse trap and the VICReg fix</text>
+  <text x="640" y="100" font-size="18" text-anchor="middle" fill="#475569">The model can cheat by squeezing every clip to one point. VICReg spreads them back out.</text>
+
+  <!-- ================= LEFT: COLLAPSE ================= -->
+  <rect x="70" y="150" width="490" height="470" rx="12" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="315" y="192" font-size="20" font-weight="bold" text-anchor="middle" fill="#7f1d1d">The collapse cheat</text>
+
+  <!-- axes -->
+  <line x1="140" y1="540" x2="520" y2="540" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="140" y1="230" x2="140" y2="540" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="330" y="566" font-size="13" text-anchor="middle" fill="#64748b">embedding dim 1</text>
+  <text x="118" y="385" font-size="13" text-anchor="middle" fill="#64748b" transform="rotate(-90 118 385)">embedding dim 2</text>
+
+  <!-- all points collapsed to one spot -->
+  <g fill="#b91c1c">
+    <circle cx="330" cy="380" r="9"/>
+    <circle cx="336" cy="374" r="9"/>
+    <circle cx="324" cy="386" r="9"/>
+    <circle cx="342" cy="384" r="9"/>
+    <circle cx="328" cy="372" r="9"/>
+    <circle cx="320" cy="378" r="9"/>
+    <circle cx="338" cy="392" r="9"/>
+  </g>
+  <circle cx="330" cy="382" r="46" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="5,5"/>
+
+  <rect x="120" y="466" width="420" height="60" rx="10" fill="#ffffff" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="330" y="490" font-size="15" font-weight="bold" text-anchor="middle" fill="#7f1d1d">every clip maps to the SAME vector:</text>
+  <text x="330" y="512" font-size="15" font-weight="bold" text-anchor="middle" fill="#7f1d1d">loss is 0 but nothing is learned</text>
+
+  <!-- ================= ARROW BETWEEN PANELS ================= -->
+  <line x1="570" y1="385" x2="712" y2="385" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="641" y="370" font-size="17" font-weight="bold" text-anchor="middle" fill="#334155">add VICReg</text>
+
+  <!-- ================= RIGHT: VICREG ================= -->
+  <rect x="720" y="150" width="490" height="470" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="965" y="192" font-size="20" font-weight="bold" text-anchor="middle" fill="#14532d">VICReg keeps structure</text>
+
+  <!-- axes -->
+  <line x1="790" y1="540" x2="1170" y2="540" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="790" y1="230" x2="790" y2="540" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="980" y="566" font-size="13" text-anchor="middle" fill="#64748b">embedding dim 1</text>
+  <text x="768" y="385" font-size="13" text-anchor="middle" fill="#64748b" transform="rotate(-90 768 385)">embedding dim 2</text>
+
+  <!-- spread-out points in separated clusters -->
+  <g fill="#15803d">
+    <!-- cluster A -->
+    <circle cx="860" cy="300" r="9"/>
+    <circle cx="884" cy="320" r="9"/>
+    <circle cx="850" cy="330" r="9"/>
+    <circle cx="878" cy="292" r="9"/>
+    <!-- cluster B -->
+    <circle cx="1060" cy="290" r="9"/>
+    <circle cx="1090" cy="310" r="9"/>
+    <circle cx="1072" cy="326" r="9"/>
+    <circle cx="1044" cy="308" r="9"/>
+    <!-- cluster C -->
+    <circle cx="940" cy="470" r="9"/>
+    <circle cx="968" cy="486" r="9"/>
+    <circle cx="924" cy="490" r="9"/>
+    <circle cx="984" cy="468" r="9"/>
+    <!-- cluster D -->
+    <circle cx="1108" cy="460" r="9"/>
+    <circle cx="1132" cy="480" r="9"/>
+    <circle cx="1114" cy="494" r="9"/>
+  </g>
+
+  <!-- variance callout chip -->
+  <rect x="795" y="212" width="196" height="30" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="893" y="232" font-size="13" font-weight="bold" text-anchor="middle" fill="#14532d">variance: keep each dim spread out</text>
+
+  <!-- covariance callout chip -->
+  <rect x="1000" y="212" width="200" height="30" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="1100" y="232" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">covariance: dims carry different info</text>
+
+  <text x="965" y="586" font-size="14" text-anchor="middle" font-style="italic" fill="#14532d">clips stay separated, so real structure survives</text>
+</svg>

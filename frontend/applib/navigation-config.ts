@@ -26,15 +26,6 @@ const mainNavigation: NavigationItem[] = [
     showInDesktop: true,
   },
   {
-    id: 'analyses',
-    label: 'Analyses',
-    href: '/analyses',
-    icon: 'FileText',
-    description: 'View all your analyses',
-    showInMobile: true,
-    showInDesktop: true,
-  },
-  {
     id: 'analyze',
     label: 'Analyze',
     href: '/analyze',
@@ -68,6 +59,15 @@ const mainNavigation: NavigationItem[] = [
         showInDesktop: true,
       },
     ],
+  },
+  {
+    id: 'realtime',
+    label: 'Realtime',
+    href: '/realtime',
+    icon: 'Video',
+    description: 'Live webcam gait analysis',
+    showInMobile: true,
+    showInDesktop: true,
   },
   {
     id: 'models',

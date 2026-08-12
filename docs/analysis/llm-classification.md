@@ -12,15 +12,17 @@ The LLM Classification system provides AI-powered gait analysis using large lang
 ### Initialization
 
 ```python
-from ambient.classification.llm_classifier import LLMClassifier
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
 
-classifier = LLMClassifier(
-    config_manager=config_manager,     # Configuration manager instance
-    primary_model="gpt-4o-mini",       # Primary LLM model
-    fallback_model="gemini-1.5-pro",   # Fallback model
-    temperature=0.1,                   # Model temperature (0.0-1.0)
-    max_tokens=1000                    # Maximum response tokens
+# Initialize with configuration
+config = LLMClassifierConfig(
+    model_name="gpt-4o-mini",       # Primary LLM model
+    provider="openai",               # "openai" or "gemini"
+    temperature=0.1,                 # Model temperature (0.0-1.0)
+    max_tokens=1000                  # Maximum response tokens
 )
+
+classifier = LLMClassifier(config)
 ```
 
 ## Supported Models
@@ -219,10 +221,14 @@ prompts:
 
 ```python
 # Enable chain-of-thought reasoning
-classifier = LLMClassifier(
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+
+config = LLMClassifierConfig(
+    model_name="gpt-4o-mini",
     enable_chain_of_thought=True,
-    reasoning_depth="detailed"  # "basic", "detailed", "comprehensive"
+    temperature=0.1
 )
+classifier = LLMClassifier(config)
 
 # Classification with detailed reasoning
 result = classifier.classify_with_reasoning(gait_features)
@@ -415,8 +421,12 @@ from ambient.analysis.gait_analyzer import EnhancedGaitAnalyzer
 from ambient.classification.llm_classifier import LLMClassifier
 
 # Complete analysis pipeline
+from ambient.analysis.gait_analyzer import EnhancedGaitAnalyzer
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+
 analyzer = EnhancedGaitAnalyzer()
-classifier = LLMClassifier()
+config = LLMClassifierConfig(model_name="gpt-4o-mini")
+classifier = LLMClassifier(config)
 
 # Analyze gait sequence
 gait_results = analyzer.analyze_gait_sequence(pose_sequence)
@@ -437,8 +447,12 @@ complete_results = {
 from fastapi import APIRouter
 from ambient.classification.llm_classifier import LLMClassifier
 
+from fastapi import APIRouter
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+
 router = APIRouter()
-classifier = LLMClassifier()
+config = LLMClassifierConfig(model_name="gpt-4o-mini")
+classifier = LLMClassifier(config)
 
 @router.post("/classify-gait")
 async def classify_gait_endpoint(gait_data: GaitAnalysisRequest):

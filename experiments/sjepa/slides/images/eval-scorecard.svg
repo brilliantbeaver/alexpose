@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="46" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">How we will know it worked</text>
+  <text x="640" y="76" font-size="16" text-anchor="middle" fill="#475569">One row per research question: what a good result looks like.</text>
+
+  <!-- ===================== RQ1 (blue) ===================== -->
+  <rect x="60" y="100" width="1160" height="92" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="106" cy="146" r="22" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="106" y="154" font-size="18" font-weight="bold" text-anchor="middle" fill="#1e3a8a">1</text>
+  <path d="M148,146 l12,12 l22,-24" fill="none" stroke="#15803d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="140" font-size="17" font-weight="bold" fill="#1e3a8a">Frozen probe at or above 76 percent (great at 80 percent or more), with confusion matrix + per-class F1</text>
+  <text x="200" y="170" font-size="14" fill="#475569">Baselines: RF 76 percent, kNN (k=3), Decision Tree (depth 5), plus a fair-fight probe on the 82 hand features</text>
+
+  <!-- ===================== RQ2 (green) ===================== -->
+  <rect x="60" y="204" width="1160" height="92" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <circle cx="106" cy="250" r="22" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="106" y="258" font-size="18" font-weight="bold" text-anchor="middle" fill="#14532d">2</text>
+  <path d="M148,250 l12,12 l22,-24" fill="none" stroke="#15803d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="244" font-size="17" font-weight="bold" fill="#14532d">A visibly flatter JEPA label-efficiency curve, especially at 25 and 50 percent</text>
+  <text x="200" y="274" font-size="14" fill="#475569">JEPA probe stays above the Random Forest by a clear margin when labels are scarce</text>
+
+  <!-- ===================== RQ3 (purple) ===================== -->
+  <rect x="60" y="308" width="1160" height="92" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <circle cx="106" cy="354" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="106" y="362" font-size="18" font-weight="bold" text-anchor="middle" fill="#5b21b6">3</text>
+  <path d="M148,354 l12,12 l22,-24" fill="none" stroke="#15803d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="348" font-size="17" font-weight="bold" fill="#5b21b6">R-squared clearly above 0 (target 0.3+) for a symmetry scalar and stride_time_cv</text>
+  <text x="200" y="378" font-size="14" fill="#475569">and ridge probes land on the correct side of the clinical thresholds over 70 percent of the time</text>
+
+  <!-- ===================== RQ4 (amber) ===================== -->
+  <rect x="60" y="412" width="1160" height="92" rx="12" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <circle cx="106" cy="458" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="106" y="466" font-size="18" font-weight="bold" text-anchor="middle" fill="#92400e">4</text>
+  <path d="M148,458 l12,12 l22,-24" fill="none" stroke="#15803d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="452" font-size="17" font-weight="bold" fill="#92400e">A clear std gap: healthy with VICReg on, collapse with it off</text>
+  <text x="200" y="482" font-size="14" fill="#475569">Embedding std stays well above zero with the term on and falls toward zero with it off</text>
+
+  <!-- ===================== NULL-RESULT FOOTER (amber) ===================== -->
+  <rect x="60" y="530" width="1160" height="150" rx="12" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="88" y="566" font-size="20" font-weight="bold" fill="#92400e">Even a null result teaches us</text>
+  <text x="88" y="598" font-size="15" fill="#92400e">If the probe does not match or beat 76 percent or R-squared is low, that tells us the unlabeled pool was too small or noisy,</text>
+  <text x="88" y="622" font-size="15" fill="#92400e">or that block masking on skeletons does not by itself surface the clinical axes.</text>
+  <text x="88" y="656" font-size="16" font-weight="bold" fill="#92400e">A clean negative result on a well-run experiment is real science.</text>
+</svg>

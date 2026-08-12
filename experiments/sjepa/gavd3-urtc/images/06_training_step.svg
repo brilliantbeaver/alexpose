@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>One S-JEPA optimizer step</title>
+  <desc>Prepare normal clips, sample only permitted targets, run student and teacher branches, compute latent cross entropy, update student, then update teacher and center.</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker><style>.h{font:700 34px Arial;fill:#10233f}.n{font:700 21px Arial;fill:#10233f}.b{font:16px Arial;fill:#344b62}.a{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}.box{stroke:#18324c;stroke-width:2}</style></defs>
+  <rect width="1200" height="675" fill="#f6f3ec"/>
+  <text x="55" y="62" class="h">Parallel student and teacher branches meet at latent CE</text>
+  <rect x="55" y="265" width="145" height="95" rx="16" fill="#e8f1f8" class="box"/>
+  <text x="82" y="305" class="n">Normal clip</text><text x="82" y="334" class="b">full sequence</text>
+  <path d="M200 290H245V175H285" class="a"/><path d="M200 335H245V465H285" class="a"/>
+  <rect x="285" y="125" width="185" height="100" rx="16" fill="#f9e5cf" class="box"/>
+  <text x="325" y="166" class="n">Uniform mask</text><text x="309" y="195" class="b">ten eligible joints only</text>
+  <rect x="285" y="415" width="185" height="100" rx="16" fill="#e5f4ed" class="box"/>
+  <text x="326" y="456" class="n">Full target</text><text x="320" y="485" class="b">no input masking</text>
+  <path d="M470 175H530" class="a"/><path d="M470 465H530" class="a"/>
+  <rect x="530" y="125" width="190" height="100" rx="16" fill="#f9e5cf" class="box"/>
+  <text x="563" y="166" class="n">View encoder</text><text x="566" y="195" class="b">visible tokens</text>
+  <rect x="530" y="415" width="190" height="100" rx="16" fill="#dff0e7" class="box"/>
+  <text x="566" y="447" class="n">EMA target</text><text x="576" y="476" class="n">encoder</text><text x="590" y="502" class="b">all tokens</text>
+  <path d="M720 175H780" class="a"/><path d="M720 465H780" class="a"/>
+  <rect x="780" y="125" width="175" height="100" rx="16" fill="#e9e3f5" class="box"/>
+  <text x="824" y="166" class="n">Predictor</text><text x="801" y="195" class="b">restore mask tokens</text>
+  <rect x="780" y="415" width="175" height="100" rx="16" fill="#dff0e7" class="box"/>
+  <text x="810" y="456" class="n">Gather targets</text><text x="815" y="485" class="b">after attention</text>
+  <path d="M955 175H995V285H1025" class="a"/><path d="M955 465H965V370H995V335H1025" class="a"/>
+  <rect x="1025" y="260" width="125" height="100" rx="18" fill="#18324c"/>
+  <text x="1053" y="302" style="font:700 20px Arial;fill:#fff">Latent CE</text><text x="1048" y="331" style="font:15px Arial;fill:#fff">masked tokens</text>
+  <path d="M1088 360V390" class="a"/>
+  <rect x="980" y="390" width="205" height="168" rx="16" fill="#dceaf4" class="box"/>
+  <line x1="980" y1="446" x2="1185" y2="446" stroke="#18324c" stroke-width="1.5"/>
+  <line x1="980" y1="502" x2="1185" y2="502" stroke="#18324c" stroke-width="1.5"/>
+  <text x="995" y="414" style="font:700 16px Arial;fill:#10233f">AdamW</text>
+  <text x="995" y="437" style="font:14px Arial;fill:#344b62">loss gradient</text>
+  <text x="995" y="470" style="font:700 16px Arial;fill:#10233f">Teacher EMA</text>
+  <text x="995" y="493" style="font:14px Arial;fill:#344b62">copy view weights</text>
+  <text x="995" y="526" style="font:700 16px Arial;fill:#10233f">Center EMA</text>
+  <text x="995" y="549" style="font:14px Arial;fill:#344b62">target statistics</text>
+  <rect x="55" y="590" width="1130" height="55" rx="16" fill="#18324c"/>
+  <text x="82" y="624" style="font:16px Arial;fill:#fff">Invariants: at least one target and visible token, zero forbidden targets, and no target-encoder gradients.</text>
+</svg>

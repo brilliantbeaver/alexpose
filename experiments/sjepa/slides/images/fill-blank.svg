@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="70" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">Self-supervised learning: fill in the blank</text>
+  <text x="640" y="104" font-size="18" text-anchor="middle" fill="#475569">Hide part of a walking clip, then train the model to guess the hidden part from what it can still see.</text>
+
+  <!-- ================= CLIP PANEL ================= -->
+  <rect x="90" y="150" width="1100" height="330" rx="12" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+  <text x="640" y="188" font-size="18" font-weight="bold" text-anchor="middle" fill="#0f172a">A walking clip over time</text>
+
+  <!-- ===== FRAME 1 (visible) ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <circle cx="200" cy="248" r="13"/>
+    <line x1="200" y1="261" x2="200" y2="330"/>
+    <line x1="168" y1="282" x2="232" y2="282"/>
+    <line x1="168" y1="282" x2="158" y2="322"/>
+    <line x1="232" y1="282" x2="242" y2="322"/>
+    <line x1="200" y1="330" x2="178" y2="392"/>
+    <line x1="200" y1="330" x2="222" y2="392"/>
+  </g>
+  <text x="200" y="428" font-size="15" text-anchor="middle" fill="#475569">frame 1</text>
+
+  <!-- ===== FRAME 2 (visible) ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <circle cx="360" cy="248" r="13"/>
+    <line x1="360" y1="261" x2="360" y2="330"/>
+    <line x1="328" y1="282" x2="392" y2="282"/>
+    <line x1="328" y1="282" x2="312" y2="318"/>
+    <line x1="392" y1="282" x2="404" y2="320"/>
+    <line x1="360" y1="330" x2="332" y2="388"/>
+    <line x1="360" y1="330" x2="386" y2="392"/>
+  </g>
+  <text x="360" y="428" font-size="15" text-anchor="middle" fill="#475569">frame 2</text>
+
+  <!-- ===== FRAME 3 (visible) ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <circle cx="520" cy="248" r="13"/>
+    <line x1="520" y1="261" x2="520" y2="330"/>
+    <line x1="488" y1="282" x2="552" y2="282"/>
+    <line x1="488" y1="282" x2="474" y2="322"/>
+    <line x1="552" y1="282" x2="566" y2="322"/>
+    <line x1="520" y1="330" x2="496" y2="392"/>
+    <line x1="520" y1="330" x2="546" y2="390"/>
+  </g>
+  <text x="520" y="428" font-size="15" text-anchor="middle" fill="#475569">frame 3</text>
+
+  <!-- ===== FRAME 4 (HIDDEN) ===== -->
+  <rect x="614" y="208" width="132" height="200" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6,5"/>
+  <text x="680" y="322" font-size="52" font-weight="bold" text-anchor="middle" fill="#b91c1c">?</text>
+  <text x="680" y="428" font-size="15" font-weight="bold" text-anchor="middle" fill="#b91c1c">frame 4 hidden</text>
+
+  <!-- ===== FRAME 5 (visible) ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <circle cx="840" cy="248" r="13"/>
+    <line x1="840" y1="261" x2="840" y2="330"/>
+    <line x1="808" y1="282" x2="872" y2="282"/>
+    <line x1="808" y1="282" x2="794" y2="320"/>
+    <line x1="872" y1="282" x2="886" y2="320"/>
+    <line x1="840" y1="330" x2="814" y2="390"/>
+    <line x1="840" y1="330" x2="866" y2="392"/>
+  </g>
+  <text x="840" y="428" font-size="15" text-anchor="middle" fill="#475569">frame 5</text>
+
+  <!-- ===== FRAME 6 (visible) ===== -->
+  <g stroke="#1d4ed8" stroke-width="2.5" fill="#dbeafe" stroke-linecap="round">
+    <circle cx="1000" cy="248" r="13"/>
+    <line x1="1000" y1="261" x2="1000" y2="330"/>
+    <line x1="968" y1="282" x2="1032" y2="282"/>
+    <line x1="968" y1="282" x2="954" y2="322"/>
+    <line x1="1032" y1="282" x2="1046" y2="322"/>
+    <line x1="1000" y1="330" x2="976" y2="392"/>
+    <line x1="1000" y1="330" x2="1024" y2="392"/>
+  </g>
+  <text x="1000" y="428" font-size="15" text-anchor="middle" fill="#475569">frame 6</text>
+
+  <text x="640" y="462" font-size="15" text-anchor="middle" font-style="italic" fill="#475569">the visible frames give context</text>
+
+  <!-- ================= PREDICT ARROW ================= -->
+  <path d="M320,530 C480,560 560,470 660,432" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="470" y="560" font-size="17" font-weight="bold" text-anchor="middle" fill="#334155">predict the hidden part from what you can see</text>
+
+  <!-- ================= BOTTOM CAPTION ================= -->
+  <rect x="260" y="600" width="760" height="76" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="640" y="646" font-size="18" font-weight="bold" text-anchor="middle" fill="#92400e">No human labels: the answer was in the data all along,</text>
+  <text x="640" y="670" font-size="18" font-weight="bold" text-anchor="middle" fill="#92400e">so the guess is scored for free.</text>
+</svg>

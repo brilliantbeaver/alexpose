@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="48" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The four research questions at a glance</text>
+  <text x="640" y="80" font-size="17" text-anchor="middle" fill="#475569">Each question maps to one metric and one success target you can check.</text>
+
+  <!-- ===================== RQ1 (blue) ===================== -->
+  <rect x="60" y="120" width="565" height="255" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="108" cy="168" r="24" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="108" y="176" font-size="20" font-weight="bold" text-anchor="middle" fill="#1e3a8a">1</text>
+  <text x="150" y="162" font-size="21" font-weight="bold" fill="#1e3a8a">Match or beat 76 percent?</text>
+  <text x="150" y="188" font-size="16" fill="#1e3a8a">Does a FROZEN JEPA probe match or beat</text>
+  <text x="150" y="209" font-size="16" fill="#1e3a8a">the Random Forest?</text>
+
+  <rect x="88" y="232" width="509" height="56" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="108" y="256" font-size="14" font-weight="bold" fill="#1e3a8a">METRIC</text>
+  <text x="108" y="278" font-size="15" fill="#1e3a8a">5-class test accuracy, 68-sequence 70/30 split</text>
+
+  <rect x="88" y="298" width="509" height="60" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="108" y="322" font-size="14" font-weight="bold" fill="#14532d">TARGET</text>
+  <text x="108" y="345" font-size="15" fill="#14532d">at or above 76 percent, a clear win is 80 percent or more</text>
+
+  <!-- ===================== RQ2 (green) ===================== -->
+  <rect x="655" y="120" width="565" height="255" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <circle cx="703" cy="168" r="24" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="703" y="176" font-size="20" font-weight="bold" text-anchor="middle" fill="#14532d">2</text>
+  <text x="745" y="162" font-size="21" font-weight="bold" fill="#14532d">Degrade gracefully?</text>
+  <text x="745" y="188" font-size="16" fill="#14532d">Does the JEPA representation hold up</text>
+  <text x="745" y="209" font-size="16" fill="#14532d">as labels shrink?</text>
+
+  <rect x="683" y="232" width="509" height="56" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="703" y="256" font-size="14" font-weight="bold" fill="#14532d">METRIC</text>
+  <text x="703" y="278" font-size="15" fill="#14532d">accuracy at 25 / 50 / 75 / 100 percent of labels</text>
+
+  <rect x="683" y="298" width="509" height="60" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="703" y="322" font-size="14" font-weight="bold" fill="#1e3a8a">TARGET</text>
+  <text x="703" y="345" font-size="15" fill="#1e3a8a">above RF by 5+ points at the 25 percent label point</text>
+
+  <!-- ===================== RQ3 (purple) ===================== -->
+  <rect x="60" y="400" width="565" height="270" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <circle cx="108" cy="448" r="24" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="108" y="456" font-size="20" font-weight="bold" text-anchor="middle" fill="#5b21b6">3</text>
+  <text x="150" y="442" font-size="21" font-weight="bold" fill="#5b21b6">Clinical axes learned?</text>
+  <text x="150" y="468" font-size="16" fill="#5b21b6">Did the encoder find clinical axes</text>
+  <text x="150" y="489" font-size="16" fill="#5b21b6">without being told, no labels used?</text>
+
+  <rect x="88" y="512" width="509" height="66" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="108" y="536" font-size="14" font-weight="bold" fill="#5b21b6">METRIC</text>
+  <text x="108" y="558" font-size="15" fill="#5b21b6">test R-squared of ridge probes to H-priority</text>
+  <text x="108" y="574" font-size="13" fill="#5b21b6">scalars (symmetry indices, stride_time_cv)</text>
+
+  <rect x="88" y="588" width="509" height="66" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="108" y="612" font-size="14" font-weight="bold" fill="#14532d">TARGET</text>
+  <text x="108" y="634" font-size="15" fill="#14532d">R-squared clearly above 0 (target 0.3+) for a symmetry</text>
+  <text x="108" y="650" font-size="13" fill="#14532d">scalar and stride_time_cv, plus over 70 percent threshold agreement</text>
+
+  <!-- ===================== RQ4 (amber) ===================== -->
+  <rect x="655" y="400" width="565" height="270" rx="12" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <circle cx="703" cy="448" r="24" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="703" y="456" font-size="20" font-weight="bold" text-anchor="middle" fill="#92400e">4</text>
+  <text x="745" y="442" font-size="21" font-weight="bold" fill="#92400e">VICReg prevents collapse?</text>
+  <text x="745" y="468" font-size="16" fill="#92400e">Turn the term off and watch what</text>
+  <text x="745" y="489" font-size="16" fill="#92400e">happens to the embeddings (ablation).</text>
+
+  <rect x="683" y="512" width="509" height="66" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="703" y="536" font-size="14" font-weight="bold" fill="#92400e">METRIC</text>
+  <text x="703" y="558" font-size="15" fill="#92400e">mean per-dimension embedding std and</text>
+  <text x="703" y="574" font-size="13" fill="#92400e">effective rank over training steps</text>
+
+  <rect x="683" y="588" width="509" height="66" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="703" y="612" font-size="14" font-weight="bold" fill="#14532d">TARGET</text>
+  <text x="703" y="634" font-size="15" fill="#14532d">on: std stays above ~0.5 of target; off: std falls to zero</text>
+  <text x="703" y="650" font-size="13" fill="#14532d">(ablation confirms the term is load-bearing)</text>
+</svg>

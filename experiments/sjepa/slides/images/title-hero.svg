@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+
+  <!-- ================= LEFT: WALKING SKELETON ================= -->
+  <rect x="120" y="150" width="380" height="420" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="310" y="192" font-size="18" font-weight="bold" text-anchor="middle" fill="#1e3a8a">a pose sequence</text>
+
+  <!-- mid-stride stick skeleton: joints as circles, bones as lines -->
+  <g stroke="#1d4ed8" stroke-width="3" fill="#dbeafe" stroke-linecap="round">
+    <!-- spine -->
+    <line x1="310" y1="285" x2="312" y2="400"/>
+    <!-- head -->
+    <circle cx="310" cy="270" r="18"/>
+    <!-- shoulders line -->
+    <line x1="262" y1="305" x2="360" y2="300"/>
+    <!-- left arm swinging forward -->
+    <line x1="262" y1="305" x2="234" y2="352"/>
+    <line x1="234" y1="352" x2="252" y2="398"/>
+    <!-- right arm swinging back -->
+    <line x1="360" y1="300" x2="392" y2="344"/>
+    <line x1="392" y1="344" x2="376" y2="392"/>
+    <!-- hips line -->
+    <line x1="278" y1="400" x2="346" y2="398"/>
+    <!-- left leg forward -->
+    <line x1="278" y1="400" x2="256" y2="472"/>
+    <line x1="256" y1="472" x2="240" y2="540"/>
+    <!-- right leg back -->
+    <line x1="346" y1="398" x2="378" y2="466"/>
+    <line x1="378" y1="466" x2="398" y2="534"/>
+  </g>
+
+  <!-- joint circles on top -->
+  <g fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.5">
+    <circle cx="262" cy="305" r="7"/>
+    <circle cx="360" cy="300" r="7"/>
+    <circle cx="234" cy="352" r="6"/>
+    <circle cx="392" cy="344" r="6"/>
+    <circle cx="252" cy="398" r="6"/>
+    <circle cx="376" cy="392" r="6"/>
+    <circle cx="278" cy="400" r="7"/>
+    <circle cx="346" cy="398" r="7"/>
+    <circle cx="256" cy="472" r="6"/>
+    <circle cx="378" cy="466" r="6"/>
+    <circle cx="240" cy="540" r="6"/>
+    <circle cx="398" cy="534" r="6"/>
+  </g>
+
+  <text x="310" y="588" font-size="14" text-anchor="middle" fill="#475569">joints in motion, frame after frame</text>
+
+  <!-- ================= ARROW ================= -->
+  <line x1="512" y1="360" x2="640" y2="360" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="576" y="335" font-size="16" font-weight="bold" text-anchor="middle" fill="#334155">learn the shape</text>
+  <text x="576" y="392" font-size="16" font-weight="bold" text-anchor="middle" fill="#334155">of walking</text>
+
+  <!-- ================= RIGHT: LATENT SPACE CLOUD ================= -->
+  <rect x="660" y="150" width="500" height="420" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="910" y="192" font-size="18" font-weight="bold" text-anchor="middle" fill="#14532d">a space of learned meaning</text>
+
+  <!-- soft cluster halos -->
+  <g fill="#dcfce7" stroke="#15803d" stroke-width="1.5" opacity="0.55">
+    <ellipse cx="790" cy="300" rx="66" ry="52"/>
+    <ellipse cx="1010" cy="290" rx="60" ry="48"/>
+    <ellipse cx="900" cy="450" rx="72" ry="54"/>
+    <ellipse cx="1050" cy="440" rx="50" ry="42"/>
+  </g>
+
+  <!-- scattered dots, grouped by cluster -->
+  <g fill="#15803d">
+    <!-- cluster A -->
+    <circle cx="770" cy="286" r="6"/>
+    <circle cx="800" cy="300" r="6"/>
+    <circle cx="782" cy="320" r="6"/>
+    <circle cx="812" cy="284" r="6"/>
+    <circle cx="758" cy="308" r="6"/>
+    <!-- cluster B -->
+    <circle cx="994" cy="278" r="6"/>
+    <circle cx="1022" cy="292" r="6"/>
+    <circle cx="1006" cy="308" r="6"/>
+    <circle cx="1032" cy="274" r="6"/>
+    <circle cx="984" cy="300" r="6"/>
+    <!-- cluster C -->
+    <circle cx="880" cy="436" r="6"/>
+    <circle cx="908" cy="450" r="6"/>
+    <circle cx="892" cy="470" r="6"/>
+    <circle cx="922" cy="434" r="6"/>
+    <circle cx="866" cy="458" r="6"/>
+    <circle cx="936" cy="462" r="6"/>
+    <!-- cluster D -->
+    <circle cx="1038" cy="430" r="6"/>
+    <circle cx="1062" cy="444" r="6"/>
+    <circle cx="1048" cy="458" r="6"/>
+  </g>
+
+  <text x="910" y="548" font-size="14" text-anchor="middle" fill="#475569">similar walks land near each other</text>
+
+  <!-- ================= TAGLINE ================= -->
+  <text x="640" y="648" font-size="19" font-style="italic" text-anchor="middle" fill="#0f172a">pose sequences in, meaning out</text>
+</svg>

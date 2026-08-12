@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#fbfcfe"/>
+  <style>
+    .title { font: 700 34px Arial, sans-serif; fill: #10233f; }
+    .head { font: 700 23px Arial, sans-serif; fill: #10233f; }
+    .body { font: 18px Arial, sans-serif; fill: #334e68; }
+    .warn { font: 700 18px Arial, sans-serif; fill: #a33a2b; }
+    .ok { font: 700 18px Arial, sans-serif; fill: #236b3b; }
+  </style>
+  <text x="600" y="52" text-anchor="middle" class="title">Four designs answer four different questions</text>
+  <g>
+    <rect x="35" y="110" width="260" height="430" rx="24" fill="#e8f1fa" stroke="#40566d" stroke-width="3"/>
+    <text x="165" y="158" text-anchor="middle" class="head">A1: all 96</text>
+    <text x="165" y="200" text-anchor="middle" class="body">67 train rows</text>
+    <text x="165" y="230" text-anchor="middle" class="body">29 test rows</text>
+    <text x="165" y="285" text-anchor="middle" class="body">Class proportions</text>
+    <text x="165" y="315" text-anchor="middle" class="body">are preserved</text>
+    <text x="165" y="380" text-anchor="middle" class="warn">16 shared videos</text>
+    <text x="165" y="415" text-anchor="middle" class="warn">29 / 29 rows exposed</text>
+    <text x="165" y="480" text-anchor="middle" class="body">Engineering readout</text>
+  </g>
+  <g>
+    <rect x="325" y="110" width="260" height="430" rx="24" fill="#fff2cc" stroke="#40566d" stroke-width="3"/>
+    <text x="455" y="158" text-anchor="middle" class="head">A2: exact exp5</text>
+    <text x="455" y="200" text-anchor="middle" class="body">68 selected rows</text>
+    <text x="455" y="230" text-anchor="middle" class="body">47 train, 21 test</text>
+    <text x="455" y="285" text-anchor="middle" class="body">Matches the legacy</text>
+    <text x="455" y="315" text-anchor="middle" class="body">system split</text>
+    <text x="455" y="380" text-anchor="middle" class="warn">9 shared videos</text>
+    <text x="455" y="415" text-anchor="middle" class="warn">21 / 21 rows exposed</text>
+    <text x="455" y="480" text-anchor="middle" class="body">System comparison</text>
+  </g>
+  <g>
+    <rect x="615" y="110" width="260" height="430" rx="24" fill="#fce4d6" stroke="#40566d" stroke-width="3"/>
+    <text x="745" y="158" text-anchor="middle" class="head">C: grouped RF</text>
+    <text x="745" y="200" text-anchor="middle" class="body">Binary: 5 grouped folds</text>
+    <text x="745" y="230" text-anchor="middle" class="body">Five-class: 2 stratified folds</text>
+    <text x="745" y="280" text-anchor="middle" class="body">Five-class train and test</text>
+    <text x="745" y="310" text-anchor="middle" class="body">contain all five labels</text>
+    <text x="745" y="380" text-anchor="middle" class="warn">Full encoder reused</text>
+    <text x="745" y="415" text-anchor="middle" class="warn">159 / 159 rows exposed</text>
+    <text x="745" y="480" text-anchor="middle" class="body">Descriptive stress test</text>
+  </g>
+  <g>
+    <rect x="905" y="110" width="260" height="430" rx="24" fill="#e2f0d9" stroke="#236b3b" stroke-width="4"/>
+    <text x="1035" y="158" text-anchor="middle" class="head">Required future test</text>
+    <text x="1035" y="200" text-anchor="middle" class="body">Split videos first</text>
+    <text x="1035" y="250" text-anchor="middle" class="body">Retrain all 5 stages</text>
+    <text x="1035" y="280" text-anchor="middle" class="body">inside each fold</text>
+    <text x="1035" y="330" text-anchor="middle" class="body">Fit RF on training</text>
+    <text x="1035" y="360" text-anchor="middle" class="body">videos only</text>
+    <text x="1035" y="415" text-anchor="middle" class="ok">No held-out exposure</text>
+    <text x="1035" y="480" text-anchor="middle" class="body">Generalization design</text>
+  </g>
+  <rect x="160" y="580" width="880" height="60" rx="16" fill="#fde9d9" stroke="#b94732" stroke-width="2"/>
+  <text x="600" y="618" text-anchor="middle" class="warn">Only the last design can estimate performance on unseen source videos.</text>
+</svg>

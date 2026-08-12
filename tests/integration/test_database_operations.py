@@ -1828,6 +1828,7 @@ class TestDatabaseOperations:
         connection_errors = []
         
         def create_long_connection(thread_id: int):
+            conn = None
             try:
                 conn = database_engine.connect()
                 connections.append(conn)
@@ -1842,10 +1843,10 @@ class TestDatabaseOperations:
             except Exception as e:
                 connection_errors.append(f"Thread {thread_id}: {e}")
             finally:
-                if connections and len(connections) > thread_id:
+                if conn is not None:
                     try:
-                        connections[thread_id].close()
-                    except:
+                        conn.close()
+                    except Exception:
                         pass
         
         # Start many concurrent threads

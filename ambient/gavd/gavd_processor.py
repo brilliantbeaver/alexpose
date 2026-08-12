@@ -278,7 +278,7 @@ class GAVDDataLoader:
         self,
         rows: List[Dict[str, Any]],
         youtube_dir: str = "data/youtube",
-        cookies_path: Optional[Union[Path, str]] = project_root / "config/yt_cookies.txt",
+        cookies_path: Optional[Union[Path, str]] = None,
     ) -> None:
         """
         Download all unique Youtube videos.
@@ -301,13 +301,11 @@ class GAVDDataLoader:
             output_dir=youtube_dir,
             cookies_file=cookies_arg,
         )
-        loguru_logger.info(f"YouTube cache attempted: {summary['attempted']}")
-        loguru_logger.info(f"YouTube cache skipped: {summary['skipped']}")
-        loguru_logger.info(f"YouTube cache downloaded: {summary['downloaded']}")
+        # loguru_logger.info(f"YouTube cache attempted: {summary['attempted']}")
+        # loguru_logger.info(f"YouTube cache skipped: {summary['skipped']}")
+        # loguru_logger.info(f"YouTube cache downloaded: {summary['downloaded']}")
         if summary["failed"] > 0:
             loguru_logger.warning(f"YouTube cache failed: {summary['failed']}")
-        else:
-            loguru_logger.info(f"YouTube cache failed: {summary['failed']}")
 
     def load_gavd_data(
         self,
@@ -343,8 +341,8 @@ class GAVDDataLoader:
         # Validate file existence
         self._validate_file_path(csv_file_path)
 
-        # Loguru: call directly; sinks control output level
-        self.logger.info(f"Loading GAVD data from: {csv_file_path}")
+        if verbose:
+            self.logger.info(f"Loading GAVD data from: {csv_file_path}")
 
         # Use default dict fields if not specified
         if dict_fields is None:
@@ -382,7 +380,8 @@ class GAVDDataLoader:
 
         # Log loading statistics
         # Loguru: call directly; sinks control output level
-        self._log_loading_statistics(df)
+        if verbose:
+            self._log_loading_statistics(df)
 
         return df
 
@@ -618,22 +617,12 @@ class PoseKeypointExtractor:
         return KeypointGenerator()
 
     def _ensure_sequence_extractor(self):
-        """Lazy initialization of SequenceKeypointExtractor with Windows optimization."""
+        """Lazy initialization of SequenceKeypointExtractor."""
         if self.sequence_extractor is None:
             try:
                 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
-                import os
                 
-                # Use process isolation by default on Windows for GAVD processing
-                # This prevents WinError 1 issues and provides more reliable processing
-                use_process_isolation = os.name == 'nt'  # Windows
-                
-                if use_process_isolation:
-                    loguru_logger.info("Using process isolation for MediaPipe on Windows (GAVD processing)")
-                
-                self.sequence_extractor = SequenceKeypointExtractor(
-                    use_process_isolation=use_process_isolation
-                )
+                self.sequence_extractor = SequenceKeypointExtractor()
             except Exception as e:
                 loguru_logger.warning(f"Failed to initialize SequenceKeypointExtractor: {e}")
                 self.sequence_extractor = False  # Mark as unavailable
@@ -1153,16 +1142,7 @@ class PoseDataConverter:
                                 from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
                                 import os
                                 
-                                # Use process isolation by default on Windows for GAVD processing
-                                # This prevents WinError 1 issues and provides more reliable processing
-                                use_process_isolation = os.name == 'nt'  # Windows
-                                
-                                if use_process_isolation:
-                                    loguru_logger.info("Using process isolation for batch MediaPipe processing on Windows")
-                                
-                                extractor = SequenceKeypointExtractor(
-                                    use_process_isolation=use_process_isolation
-                                )
+                                extractor = SequenceKeypointExtractor()
                                 
                                 # Get all unique frame numbers for this video in this sequence
                                 video_frames = seq_data[seq_data['url'] == url_val]['frame_num'].unique()

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Three evaluation views</title>
+  <desc>All 96 sequences support an exploratory split, 68 curated sequences reproduce exp5, and a video-disjoint scientific test remains blocked because normal has one source video.</desc>
+  <defs><style>.h{font:700 34px Arial;fill:#10233f}.t{font:700 21px Arial;fill:#10233f}.b{font:16px Arial;fill:#344b62}.w{font:700 16px Arial;fill:#fff}.box{stroke:#18324c;stroke-width:2}</style></defs>
+  <rect width="1200" height="675" fill="#f6f3ec"/><text x="55" y="62" class="h">Keep three evaluation questions separate</text>
+  <rect x="45" y="130" width="340" height="420" rx="22" fill="#f9e5cf" class="box"/>
+  <text x="75" y="180" class="t">A1  All available rows</text><text x="75" y="225" class="b">96 sequences, 18 videos</text><text x="75" y="260" class="b">fixed stratified 70/30 split</text><text x="75" y="295" class="b">five-class and four binary RFs</text><text x="75" y="330" class="b">missingness-only audit</text><text x="75" y="365" class="b">source videos can overlap</text>
+  <rect x="75" y="455" width="280" height="58" rx="14" fill="#b66b33"/><text x="108" y="491" class="w">Exploratory, video-confounded</text>
+  <rect x="430" y="130" width="340" height="420" rx="22" fill="#e8f1f8" class="box"/>
+  <text x="460" y="180" class="t">A2  Exact exp5 comparison</text><text x="460" y="225" class="b">68 curated sequences</text><text x="460" y="260" class="b">legacy seed-42 permutation</text><text x="460" y="295" class="b">47 train, 21 test</text><text x="460" y="330" class="b">same Random Forest settings</text><text x="460" y="365" class="b">all test videos overlap training</text>
+  <rect x="460" y="455" width="280" height="58" rx="14" fill="#2f6f99"/><text x="506" y="491" class="w">Comparable, not independent</text>
+  <rect x="815" y="130" width="340" height="420" rx="22" fill="#e5f4ed" class="box"/>
+  <text x="845" y="180" class="t">B  Video-disjoint science</text><text x="845" y="225" class="b">group by YouTube ID</text><text x="845" y="260" class="b">fit preprocessing in each fold</text><text x="845" y="295" class="b">fold-local S-JEPA pretraining</text><text x="845" y="330" class="b">need two videos per class</text><text x="845" y="365" class="b">normal currently has one</text>
+  <rect x="845" y="455" width="280" height="58" rx="14" fill="#a34b34"/><text x="882" y="491" class="w">Blocked by current data</text>
+  <text x="45" y="610" class="b">Only view B could support a claim about unseen videos, and the notebook refuses to invent that score.</text>
+</svg>

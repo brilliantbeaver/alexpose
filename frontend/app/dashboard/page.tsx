@@ -90,14 +90,14 @@ export default function DashboardPage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log('[Dashboard] Fetching statistics from API...');
       const response = await fetch('http://localhost:8000/api/v1/analysis/statistics');
       console.log('[Dashboard] Response status:', response.status);
-      
+
       const result = await response.json();
       console.log('[Dashboard] Response data:', result);
-      
+
       if (response.ok && result.success) {
         setStatistics(result.statistics);
         console.log('[Dashboard] Statistics loaded successfully');
@@ -116,34 +116,34 @@ export default function DashboardPage() {
   };
 
   const handleDeleteAnalysis = async (analysis: RecentAnalysis) => {
-    const title = analysis.type === 'gavd_dataset' 
+    const title = analysis.type === 'gavd_dataset'
       ? (analysis.filename || 'GAVD Dataset')
       : `Analysis ${(analysis.analysis_id || '').substring(0, 8)}`;
     const id = analysis.dataset_id || analysis.analysis_id;
-    
+
     if (!id) return;
-    
+
     const confirmMessage = analysis.type === 'gavd_dataset'
       ? `Are you sure you want to delete "${title}"?\n\nThis will permanently delete:\n• Original CSV file\n• All processing results\n• Pose data\n• Downloaded videos\n\nThis action cannot be undone.`
       : `Are you sure you want to delete analysis "${title}"?\n\nThis will permanently delete all analysis results.\n\nThis action cannot be undone.`;
-    
+
     if (!confirm(confirmMessage)) {
       return;
     }
-    
+
     setDeletingAnalysis(id);
-    
+
     try {
       const endpoint = analysis.type === 'gavd_dataset'
         ? `http://localhost:8000/api/v1/gavd/${id}`
         : `http://localhost:8000/api/v1/analysis/${id}`;
-      
+
       const response = await fetch(endpoint, {
         method: 'DELETE',
       });
-      
+
       const result = await response.json();
-      
+
       if (response.ok && result.success) {
         // Reload dashboard statistics
         loadDashboardStatistics();
@@ -226,9 +226,9 @@ export default function DashboardPage() {
           <AlertTitle>Error Loading Dashboard</AlertTitle>
           <AlertDescription>
             {error || 'Failed to load dashboard data. Please try again.'}
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="ml-4"
               onClick={loadDashboardStatistics}
             >
@@ -238,9 +238,9 @@ export default function DashboardPage() {
         </Alert>
 
         <Alert>
-          <AlertTitle>No Analyses Yet</AlertTitle>
+          <AlertTitle>Your Gait Analysis Journey Starts Here</AlertTitle>
           <AlertDescription>
-            Get started by uploading a video or analyzing a YouTube URL.
+            Upload a video or analyze a YouTube URL to get your first set of insights.
             <div className="mt-4 flex gap-2">
               <Button asChild size="sm">
                 <Link href="/analyze/upload">📤 Upload Video</Link>
@@ -255,21 +255,21 @@ export default function DashboardPage() {
     );
   }
 
-  const { 
-    total_analyses, 
+  const {
+    total_analyses,
     total_gait_analyses,
     total_gavd_datasets,
-    normal_patterns, 
-    abnormal_patterns, 
-    normal_percentage, 
-    abnormal_percentage, 
-    avg_confidence, 
+    normal_patterns,
+    abnormal_patterns,
+    normal_percentage,
+    abnormal_percentage,
+    avg_confidence,
     gavd_completed,
     gavd_processing,
     total_gavd_sequences,
     total_gavd_frames,
-    recent_analyses, 
-    status_breakdown 
+    recent_analyses,
+    status_breakdown
   } = statistics;
 
   return (
@@ -277,7 +277,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's your overview.</p>
+          <p className="text-muted-foreground">Welcome back! Here's a look at all the progress you've made.</p>
         </div>
         <Button asChild>
           <Link href="/analyze/upload">
@@ -338,22 +338,15 @@ export default function DashboardPage() {
       {/* Recent Analyses */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Recent Analyses</CardTitle>
-              <CardDescription>Your latest gait analyses and GAVD datasets</CardDescription>
-            </div>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/analyses">View All →</Link>
-            </Button>
-          </div>
+          <CardTitle>Recent Analyses</CardTitle>
+          <CardDescription>Your latest gait analyses and GAVD datasets</CardDescription>
         </CardHeader>
         <CardContent>
           {recent_analyses.length === 0 ? (
             <Alert>
-              <AlertTitle>No Completed Analyses</AlertTitle>
+              <AlertTitle>Ready When You Are</AlertTitle>
               <AlertDescription>
-                Start analyzing videos or upload GAVD datasets to see results here.
+                Analyze a video or upload a GAVD dataset, and your results will appear here.
                 <div className="mt-4 flex gap-2">
                   <Button asChild size="sm">
                     <Link href="/analyze/upload">📤 Upload Video</Link>
@@ -368,7 +361,7 @@ export default function DashboardPage() {
               </AlertDescription>
             </Alert>
           ) : (
-            <AnalysesTable 
+            <AnalysesTable
               analyses={recent_analyses}
               onDelete={handleDeleteAnalysis}
               deletingAnalysis={deletingAnalysis}

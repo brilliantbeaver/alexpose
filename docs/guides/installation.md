@@ -157,8 +157,9 @@ GPU support is automatically available on Apple Silicon Macs.
 3. **Test LLM classification**:
    ```bash
    python -c "
-   from ambient.classification.llm_classifier import LLMClassifier
-   classifier = LLMClassifier(api_key='test')
+   from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+   config = LLMClassifierConfig(model_name='gpt-4o-mini')
+   classifier = LLMClassifier(config)
    print('LLM classifier initialized successfully')
    "
    ```

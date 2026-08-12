@@ -26,6 +26,7 @@ The AlexPose Analysis System provides comprehensive gait analysis capabilities t
 | **[Symmetry Analysis](symmetry-analysis.md)** | Left-right bilateral comparison | Joint symmetry, asymmetry detection |
 | **[Pose Estimation](pose-estimation.md)** | Pose estimation backends and processing | MediaPipe, OpenPose integration |
 | **[LLM Classification](llm-classification.md)** | AI-powered gait classification | Clinical assessment, condition identification |
+| **[Evidence-Based Features](evidence-based-gait-features-2025.md)** | Research foundations for gait features | Peer-reviewed evidence, clinical thresholds |
 
 ### User Interface
 
@@ -93,14 +94,14 @@ graph TB
 
 ### Feature Categories
 
-| Category | Features | UI Display |
-|----------|----------|------------|
-| **Kinematic** | Velocity, acceleration, jerk | Movement Quality Card |
-| **Temporal** | Cadence, cycle timing, rhythm | Cadence & Gait Cycles Cards |
-| **Symmetry** | Bilateral comparison, asymmetry | Symmetry Assessment Card |
-| **Stability** | Balance, postural control | Stability Card |
-| **Joint Angles** | ROM, patterns, bilateral | Detailed Analysis Panels |
-| **Spatial** | Step length, stride width | Movement Analysis Section |
+| Category | Features | UI Display | Documentation |
+|----------|----------|------------|---------------|
+| **Kinematic** | Velocity, acceleration, jerk (9 features) | Movement Quality Card | [Gait Analysis Tutorial](../guides/gait-analysis-tutorial.md#36-kinematic-features-9-features---new) |
+| **Temporal** | Cadence, cycle timing, rhythm (4 features) | Cadence & Gait Cycles Cards | [Temporal Analysis](temporal-analysis.md) |
+| **Symmetry** | Bilateral comparison, asymmetry (6 features) | Symmetry Assessment Card | [Symmetry Analysis](symmetry-analysis.md) |
+| **Stability** | Balance, postural control (2 features) | Stability Card | [Feature Extraction](feature-extraction.md) |
+| **Joint Angles** | ROM, patterns, bilateral (15 features) | Detailed Analysis Panels | [Feature Extraction](feature-extraction.md) |
+| **Spatial** | Step length, stride width (4 features) | Movement Analysis Section | [Feature Extraction](feature-extraction.md) |
 
 ### Clinical Assessments
 
@@ -178,7 +179,8 @@ const analysisData = await analysisResponse.json();
 ### For Developers
 1. Begin with **[Gait Analysis](gait-analysis.md)** for system architecture
 2. Study **[Feature Extraction](feature-extraction.md)** for detailed algorithms
-3. Review **[Temporal Analysis](temporal-analysis.md)** and **[Symmetry Analysis](symmetry-analysis.md)** for specialized components
+3. Review kinematic features in **[Gait Analysis Tutorial](../guides/gait-analysis-tutorial.md#36-kinematic-features-9-features---new)** for movement quality analysis
+4. Review **[Temporal Analysis](temporal-analysis.md)** and **[Symmetry Analysis](symmetry-analysis.md)** for specialized components
 
 ### For Clinicians
 1. Focus on **[Web Interface Tutorial](web-interface-tutorial.md)** for practical usage

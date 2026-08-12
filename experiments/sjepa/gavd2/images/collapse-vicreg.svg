@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="380" fill="#ffffff"/>
+  <text x="480" y="32" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">The collapse trap and the VICReg fix</text>
+  <text x="480" y="55" font-size="13" text-anchor="middle" fill="#475569">A JEPA can cheat by mapping every clip to one point. VICReg plus a slow EMA target keep the embeddings spread out.</text>
+
+  <!-- LEFT PANEL: collapse -->
+  <rect x="40" y="80" width="400" height="230" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="240" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#7f1d1d">Collapse (the cheat)</text>
+
+  <!-- axes for left -->
+  <line x1="80" y1="270" x2="400" y2="270" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="80" y1="270" x2="80" y2="130" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- all points piled on one spot -->
+  <circle cx="238" cy="200" r="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <circle cx="242" cy="197" r="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <circle cx="236" cy="203" r="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <circle cx="244" cy="202" r="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <circle cx="240" cy="199" r="8" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+  <circle cx="239" cy="204" r="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+  <circle cx="243" cy="205" r="8" fill="#fecaca" stroke="#b91c1c" stroke-width="1.5"/>
+
+  <text x="240" y="252" font-size="11.5" text-anchor="middle" fill="#7f1d1d">all points on one spot</text>
+
+  <text x="240" y="290" font-size="11.5" text-anchor="middle" fill="#7f1d1d">every clip maps to the same vector,</text>
+  <text x="240" y="306" font-size="11.5" text-anchor="middle" fill="#7f1d1d">loss is zero, nothing learned</text>
+
+  <!-- transition arrow -->
+  <line x1="452" y1="195" x2="508" y2="195" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="480" y="182" font-size="11" text-anchor="middle" fill="#334155">fix</text>
+
+  <!-- RIGHT PANEL: VICReg fix -->
+  <rect x="520" y="80" width="400" height="230" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="720" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">With VICReg + EMA target</text>
+
+  <!-- axes for right -->
+  <line x1="560" y1="270" x2="900" y2="270" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="560" y1="270" x2="560" y2="130" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- cluster A (upper left) -->
+  <circle cx="620" cy="150" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+  <circle cx="640" cy="162" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+  <circle cx="628" cy="172" r="7" fill="#15803d" stroke="#14532d" stroke-width="1.5"/>
+  <circle cx="652" cy="148" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+
+  <!-- cluster B (upper right) -->
+  <circle cx="800" cy="146" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+  <circle cx="822" cy="158" r="7" fill="#15803d" stroke="#14532d" stroke-width="1.5"/>
+  <circle cx="810" cy="168" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+  <circle cx="834" cy="150" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+
+  <!-- cluster C (lower middle) -->
+  <circle cx="712" cy="228" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+  <circle cx="732" cy="238" r="7" fill="#15803d" stroke="#14532d" stroke-width="1.5"/>
+  <circle cx="722" cy="248" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+  <circle cx="742" cy="224" r="7" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+
+  <text x="720" y="290" font-size="11.5" text-anchor="middle" fill="#14532d">variance term keeps each dimension spread out;</text>
+  <text x="720" y="306" font-size="11.5" text-anchor="middle" fill="#14532d">covariance term makes dimensions carry different information</text>
+
+  <!-- bottom note -->
+  <line x1="40" y1="332" x2="920" y2="332" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="480" y="356" font-size="12.5" text-anchor="middle" fill="#334155">Collapse is prevented by the slow EMA target plus a LIGHT VICReg variance guard on the online side.</text>
+  <text x="480" y="374" font-size="12.5" text-anchor="middle" fill="#334155">No negatives, no decoder.</text>
+</svg>

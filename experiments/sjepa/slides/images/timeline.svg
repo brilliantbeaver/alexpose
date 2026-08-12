@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="48" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The three-week plan</text>
+  <text x="640" y="80" font-size="17" text-anchor="middle" fill="#475569">Build the data and skeleton first, train and monitor the JEPA, then probe and compare.</text>
+
+  <!-- timeline spine -->
+  <line x1="120" y1="130" x2="1180" y2="130" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <circle cx="270" cy="130" r="9" fill="#1d4ed8"/>
+  <circle cx="640" cy="130" r="9" fill="#15803d"/>
+  <circle cx="1010" cy="130" r="9" fill="#7c3aed"/>
+
+  <!-- ===================== WEEK 1 (blue) ===================== -->
+  <rect x="60" y="165" width="360" height="500" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="240" y="204" font-size="24" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Week 1</text>
+  <text x="240" y="232" font-size="16" text-anchor="middle" fill="#1e3a8a">data + pretraining skeleton</text>
+
+  <circle cx="92" cy="282" r="5" fill="#1d4ed8"/>
+  <text x="112" y="278" font-size="15" fill="#0f172a">Pose data loader (B,T,33,3),</text>
+  <text x="112" y="298" font-size="15" fill="#0f172a">pelvis-center, torso-normalize,</text>
+  <text x="112" y="318" font-size="15" fill="#0f172a">windowing.</text>
+
+  <circle cx="92" cy="362" r="5" fill="#1d4ed8"/>
+  <text x="112" y="358" font-size="15" fill="#0f172a">Run MediaPipe on GAVD links,</text>
+  <text x="112" y="378" font-size="15" fill="#0f172a">cache poses, quality-filter.</text>
+
+  <circle cx="92" cy="432" r="5" fill="#1d4ed8"/>
+  <text x="112" y="428" font-size="15" fill="#0f172a">Tokenize, add joint + time</text>
+  <text x="112" y="448" font-size="15" fill="#0f172a">position embeddings, block</text>
+  <text x="112" y="468" font-size="15" fill="#0f172a">masking (both styles).</text>
+
+  <circle cx="92" cy="532" r="5" fill="#1d4ed8"/>
+  <text x="112" y="528" font-size="15" fill="#0f172a">Get the toy notebook running</text>
+  <text x="112" y="548" font-size="15" fill="#0f172a">end to end.</text>
+
+  <!-- ===================== WEEK 2 (green) ===================== -->
+  <rect x="460" y="165" width="360" height="500" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="640" y="204" font-size="24" font-weight="bold" text-anchor="middle" fill="#14532d">Week 2</text>
+  <text x="640" y="232" font-size="16" text-anchor="middle" fill="#14532d">train + monitor</text>
+
+  <circle cx="492" cy="282" r="5" fill="#15803d"/>
+  <text x="512" y="278" font-size="15" fill="#0f172a">Build context encoder, EMA</text>
+  <text x="512" y="298" font-size="15" fill="#0f172a">target encoder, predictor.</text>
+
+  <circle cx="492" cy="362" r="5" fill="#15803d"/>
+  <text x="512" y="358" font-size="15" fill="#0f172a">Add L2 + VICReg loss and</text>
+  <text x="512" y="378" font-size="15" fill="#0f172a">the EMA momentum ramp.</text>
+
+  <circle cx="492" cy="432" r="5" fill="#15803d"/>
+  <text x="512" y="428" font-size="15" fill="#0f172a">Train on the unlabeled pool;</text>
+  <text x="512" y="448" font-size="15" fill="#0f172a">log loss, std, covariance to</text>
+  <text x="512" y="468" font-size="15" fill="#0f172a">confirm no collapse.</text>
+
+  <circle cx="492" cy="532" r="5" fill="#15803d"/>
+  <text x="512" y="528" font-size="15" fill="#0f172a">Save encoder checkpoints.</text>
+
+  <!-- ===================== WEEK 3 (purple) ===================== -->
+  <rect x="860" y="165" width="360" height="500" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="1040" y="204" font-size="24" font-weight="bold" text-anchor="middle" fill="#5b21b6">Week 3</text>
+  <text x="1040" y="232" font-size="16" text-anchor="middle" fill="#5b21b6">probe + ablations + write-up</text>
+
+  <circle cx="892" cy="282" r="5" fill="#7c3aed"/>
+  <text x="912" y="278" font-size="15" fill="#0f172a">Freeze encoder, build pooled</text>
+  <text x="912" y="298" font-size="15" fill="#0f172a">probe, 70/30 split versus 76 percent</text>
+  <text x="912" y="318" font-size="15" fill="#0f172a">(RQ1).</text>
+
+  <circle cx="892" cy="362" r="5" fill="#7c3aed"/>
+  <text x="912" y="358" font-size="15" fill="#0f172a">Label-efficiency curve and</text>
+  <text x="912" y="378" font-size="15" fill="#0f172a">confusion matrix (RQ2).</text>
+
+  <circle cx="892" cy="432" r="5" fill="#7c3aed"/>
+  <text x="912" y="428" font-size="15" fill="#0f172a">Masking-style and VICReg</text>
+  <text x="912" y="448" font-size="15" fill="#0f172a">on/off ablations (RQ4).</text>
+
+  <circle cx="892" cy="512" r="5" fill="#7c3aed"/>
+  <text x="912" y="508" font-size="15" fill="#0f172a">Neuroscience probes onto</text>
+  <text x="912" y="528" font-size="15" fill="#0f172a">H-priority scalars (RQ3),</text>
+  <text x="912" y="548" font-size="15" fill="#0f172a">then write up results.</text>
+</svg>

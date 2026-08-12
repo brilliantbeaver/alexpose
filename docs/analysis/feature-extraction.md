@@ -2,7 +2,14 @@
 
 ## Overview
 
-The FeatureExtractor component provides comprehensive feature extraction capabilities for gait analysis, extracting 60+ features across multiple domains including kinematic, temporal, symmetry, and stability measures. These features are seamlessly integrated into the AlexPose web interface, providing real-time analysis and visualization capabilities.
+The FeatureExtractor component provides comprehensive feature extraction capabilities for gait analysis, extracting **82 features** across multiple domains including kinematic, temporal, symmetry, and stability measures. These features are seamlessly integrated into the AlexPose web interface, providing real-time analysis and visualization capabilities.
+
+**Recent Enhancements (January 2026)**:
+- Optimized from 94 to **82 features** by removing redundant max/min values (retained std for unique variability information)
+- Added configurable **confidence threshold parameter** (default: 0.3) for improved robustness with real-world data
+- Reduced temporal analysis thresholds for better short-sequence support
+- Enhanced symmetry analysis with lower confidence requirements
+- Improved feature extraction reliability for videos with varying pose confidence
 
 ## System Integration
 
@@ -31,11 +38,43 @@ Features are displayed in the web interface through:
 from ambient.analysis.feature_extractor import FeatureExtractor
 
 extractor = FeatureExtractor(
-    keypoint_format="COCO_17",  # Keypoint format
-    fps=30.0,                   # Video frame rate
-    smoothing_window=5          # Smoothing window size
+    keypoint_format="COCO_17",           # Keypoint format (COCO_17, BODY_25, BLAZEPOSE_33)
+    fps=30.0,                            # Video frame rate
+    smoothing_window=5,                  # Smoothing window size for calculations
+    extract_extended_features=True,      # Extract comprehensive feature set (82 features)
+    include_joint_statistics=True,       # Include joint angle std/max/min statistics
+    include_stability_features=True,     # Include balance and stability features
+    include_advanced_temporal=True,      # Include advanced temporal analysis
+    confidence_threshold=0.3             # Minimum confidence for keypoint validity (NEW)
 )
 ```
+
+**Key Parameters**:
+
+- **`confidence_threshold`** (float, default: 0.3): Minimum confidence score for considering a keypoint valid
+  - **Purpose**: Filters out low-quality keypoint detections while retaining useful data
+  - **Range**: 0.0 to 1.0 (0.0 = accept all, 1.0 = only perfect confidence)
+  - **Recommended Values**:
+    - `0.3`: Default - good balance for real-world videos with varying quality
+    - `0.5`: Higher quality threshold for research-grade data
+    - `0.1`: Very permissive for low-quality or challenging videos
+  - **Impact**: Lower thresholds extract more features from imperfect data; higher thresholds ensure higher quality but may result in more zero-value features
+
+- **`extract_extended_features`** (bool, default: True): Enable comprehensive 82-feature extraction
+  - When `True`: Extracts all available features including extended joint statistics (std only), advanced temporal features, and comprehensive symmetry analysis
+  - When `False`: Extracts only core features for faster processing
+
+- **`include_joint_statistics`** (bool, default: True): Include standard deviation, max, and min for each joint angle
+  - Adds 18 additional features (3 per joint × 6 joints)
+  - Essential for understanding joint angle variability and range of motion
+
+- **`include_stability_features`** (bool, default: True): Include balance and stability analysis
+  - Adds center of mass movement, stability indices, and postural sway metrics
+  - Critical for fall risk assessment and balance evaluation
+
+- **`include_advanced_temporal`** (bool, default: True): Include advanced temporal analysis
+  - Adds frequency analysis, estimated cadence, and enhanced spatiotemporal parameters
+  - Provides deeper insights into gait rhythm and timing patterns
 
 ### Supported Keypoint Formats
 
@@ -53,31 +92,96 @@ extractor = FeatureExtractor(
 
 ## Feature Categories and UI Integration
 
-### 1. Kinematic Features
+### 1. Kinematic Features (9 features)
 
-**Description**: Motion-based features including velocities, accelerations, and movement smoothness.
+**Description**: Motion-based features including velocities, accelerations, and movement smoothness. These features capture the quality and dynamics of movement, providing insights into motor control, coordination, and neurological function.
+
+**Evidence Base**: Journal of Biomechanics (2024) - Kinematic analysis distinguishes normal from pathological gait patterns. Velocity consistency and jerk measures are validated indicators of movement quality and coordination.
 
 **Features Extracted**:
-- `velocity_mean`: Average movement velocity across all keypoints
-- `velocity_std`: Standard deviation of velocities
-- `velocity_max`: Maximum velocity observed
-- `velocity_min`: Minimum velocity observed
-- `acceleration_mean`: Average acceleration magnitude
-- `acceleration_std`: Standard deviation of accelerations
-- `acceleration_max`: Maximum acceleration observed
-- `jerk_mean`: Average jerk (rate of acceleration change)
-- `jerk_std`: Standard deviation of jerk
+
+#### Velocity Features (4 features)
+- `velocity_mean`: Average movement velocity across all keypoints (pixels/s)
+  - **Normal Range**: 50-150 pixels/s
+  - **Clinical Significance**: Overall movement speed and activity level
+  
+- `velocity_std`: Standard deviation of velocities (pixels/s)
+  - **Normal Range**: 20-60 pixels/s
+  - **Clinical Significance**: Movement consistency and smoothness
+  
+- `velocity_max`: Maximum velocity observed (pixels/s)
+  - **Normal Range**: 150-300 pixels/s
+  - **Clinical Significance**: Peak movement capacity during swing phase
+  
+- `velocity_min`: Minimum velocity observed (pixels/s)
+  - **Normal Range**: 0-20 pixels/s
+  - **Clinical Significance**: Baseline movement during stance phase
+
+#### Acceleration Features (4 features)
+- `acceleration_mean`: Average acceleration magnitude (pixels/s²)
+  - **Normal Range**: 10-50 pixels/s²
+  - **Clinical Significance**: Force generation and movement transitions
+  
+- `acceleration_std`: Standard deviation of accelerations (pixels/s²)
+  - **Normal Range**: 5-25 pixels/s²
+  - **Clinical Significance**: Consistency of force application
+  
+- `acceleration_max`: Maximum acceleration observed (pixels/s²)
+  - **Normal Range**: 50-150 pixels/s²
+  - **Clinical Significance**: Peak force generation capacity
+
+#### Jerk Features (2 features)
+- `jerk_mean`: Average jerk - rate of acceleration change (pixels/s³)
+  - **Normal Range**: 5-30 pixels/s³
+  - **Clinical Significance**: Movement smoothness and coordination quality
+  - **Interpretation**: Higher values indicate jerky, poorly coordinated movement
+  
+- `jerk_std`: Standard deviation of jerk (pixels/s³)
+  - **Normal Range**: 2-15 pixels/s³
+  - **Clinical Significance**: Consistency of movement coordination
 
 **UI Integration**:
 - **Movement Quality Card**: Displays velocity consistency and movement smoothness
+  - Velocity CV (Coefficient of Variation) = velocity_std / velocity_mean
+  - Good: CV < 0.3, Moderate: CV 0.3-0.6, Poor: CV > 0.6
 - **Color Coding**: Green (good), Yellow (moderate), Red (poor) based on thresholds
 - **Interactive Tooltips**: Detailed explanations of clinical significance
 - **Real-time Updates**: Features update automatically when sequence changes
+- **Smoothness Indicator**: Based on jerk_mean values
+  - Smooth: jerk_mean < 20, Moderate: 20-40, Jerky: > 40
 
-**Clinical Significance**:
-- Velocity consistency indicates movement smoothness
-- High acceleration variability may suggest motor control issues
-- Jerk measures reflect movement coordination quality
+**Clinical Applications**:
+
+**Parkinson's Disease**:
+- Reduced velocity_mean (bradykinesia)
+- Increased velocity_std (movement variability)
+- Elevated jerk_mean (reduced smoothness)
+
+**Stroke Recovery**:
+- Asymmetric velocity patterns between sides
+- High velocity_cv indicating poor motor control
+- Elevated jerk on affected side
+
+**Cerebellar Ataxia**:
+- High velocity_std (uncoordinated movement)
+- Elevated velocity_cv (inconsistent control)
+- Very high jerk_mean (>40) indicating poor coordination
+
+**Movement Quality Assessment**:
+```python
+def assess_movement_quality(features):
+    velocity_cv = features['velocity_std'] / features['velocity_mean']
+    jerk_threshold = 30
+    
+    if velocity_cv < 0.3 and features['jerk_mean'] < jerk_threshold:
+        return "excellent"
+    elif velocity_cv < 0.5 and features['jerk_mean'] < jerk_threshold * 1.5:
+        return "good"
+    elif velocity_cv < 0.7 and features['jerk_mean'] < jerk_threshold * 2:
+        return "moderate"
+    else:
+        return "poor"
+```
 
 **UI Display Example**:
 ```
@@ -89,8 +193,15 @@ Movement Quality Card:
 │ Smoothness:  [Smooth  ]         │
 │                                 │
 │ Velocity CV: 0.25               │
+│ Jerk Mean:   18.3 pixels/s³     │
+│                                 │
+│ Interpretation:                 │
+│ • Smooth, coordinated movement  │
+│ • Good motor control            │
 └─────────────────────────────────┘
 ```
+
+**See Also**: [Gait Analysis Tutorial - Kinematic Features](../guides/gait-analysis-tutorial.md#36-kinematic-features-9-features---new) for comprehensive details on calculation methods, clinical interpretation, and research applications.
 
 ### 2. Joint Angle Features
 
@@ -495,7 +606,10 @@ from ambient.classification.llm_classifier import LLMClassifier
 features = extractor.extract_features(pose_sequence)
 
 # Use in classification
-classifier = LLMClassifier()
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
+
+config = LLMClassifierConfig(model_name="gpt-4o-mini")
+classifier = LLMClassifier(config)
 classification = classifier.classify_gait({
     'features': features,
     'sequence_info': {...}

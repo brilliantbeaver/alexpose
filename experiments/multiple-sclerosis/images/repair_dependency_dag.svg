@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="440" viewBox="0 0 980 440">
+<rect width="980" height="440" fill="#ffffff"/>
+<defs>
+<marker id="arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#94a3b8"/></marker>
+<marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#2563eb"/></marker>
+<marker id="arrowOrange" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#ea7317"/></marker>
+<marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#16a34a"/></marker>
+<marker id="arrowSlate" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#475569"/></marker>
+<marker id="arrowMute" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#64748b"/></marker>
+<marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#7c3aed"/></marker>
+</defs>
+<text x="490.0" y="34" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" fill="#1a2733" font-weight="700" text-anchor="middle">The order we fix things</text>
+<text x="490.0" y="57" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#64748b" font-weight="400" text-anchor="middle">Mechanics first, then state, then evaluation, then one bounded training run</text>
+<rect x="71.5" y="152.5" width="170" height="74" rx="13" fill="#0f172a" opacity="0.06"/>
+<rect x="70" y="150" width="170" height="74" rx="13" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.6"/>
+<circle cx="92" cy="170" r="14" fill="#475569" stroke="#fff" stroke-width="2"/>
+<text x="92" y="175" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">P0</text>
+<text x="167.0" y="180" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#475569" font-weight="700" text-anchor="middle">Freeze data</text>
+<text x="167.0" y="198" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="middle">&amp; reproduce E0</text>
+<rect x="286.5" y="152.5" width="170" height="74" rx="13" fill="#0f172a" opacity="0.06"/>
+<rect x="285" y="150" width="170" height="74" rx="13" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.6"/>
+<circle cx="307" cy="170" r="14" fill="#ea7317" stroke="#fff" stroke-width="2"/>
+<text x="307" y="175" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">P1</text>
+<text x="382.0" y="180" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#ea7317" font-weight="700" text-anchor="middle">Predictor positions</text>
+<text x="382.0" y="198" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="middle">+ stochastic masks</text>
+<rect x="286.5" y="282.5" width="170" height="74" rx="13" fill="#0f172a" opacity="0.06"/>
+<rect x="285" y="280" width="170" height="74" rx="13" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.6"/>
+<circle cx="307" cy="300" r="14" fill="#2563eb" stroke="#fff" stroke-width="2"/>
+<text x="307" y="305" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">P2</text>
+<text x="382.0" y="310" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#2563eb" font-weight="700" text-anchor="middle">Remove label leak,</text>
+<text x="382.0" y="328" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="middle">source-uniform, resume</text>
+<rect x="541.5" y="217.5" width="170" height="74" rx="13" fill="#0f172a" opacity="0.06"/>
+<rect x="540" y="215" width="170" height="74" rx="13" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1.6"/>
+<circle cx="562" cy="235" r="14" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
+<text x="562" y="240" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">F</text>
+<text x="637.0" y="245" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c3aed" font-weight="700" text-anchor="middle">Evaluation firewall</text>
+<text x="637.0" y="263" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="middle">(nested CV, OOF)</text>
+<rect x="781.5" y="217.5" width="170" height="74" rx="13" fill="#0f172a" opacity="0.06"/>
+<rect x="780" y="215" width="170" height="74" rx="13" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.6"/>
+<circle cx="802" cy="235" r="14" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+<text x="802" y="240" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">R1</text>
+<text x="877.0" y="245" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#16a34a" font-weight="700" text-anchor="middle">Bounded R1 run</text>
+<text x="877.0" y="263" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" fill="#64748b" font-weight="400" text-anchor="middle">+ RF + controls</text>
+<path d="M 240 187.0 H 261 V 187.0 H 283" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowSlate)"/>
+<path d="M 240 187.0 H 261 V 317.0 H 283" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowSlate)"/>
+<path d="M 455 187.0 H 516 V 244.0 H 538" fill="none" stroke="#ea7317" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowOrange)"/>
+<path d="M 455 317.0 H 516 V 260.0 H 538" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowBlue)"/>
+<path d="M 710 252.0 H 778" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowPurple)"/>
+<text x="490.0" y="400" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">Freeze the R1 recipe on inner folds BEFORE the one development evaluation.</text>
+</svg>

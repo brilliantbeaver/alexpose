@@ -15,3 +15,8 @@
 *.mov filter=lfs diff=lfs merge=lfs -text
 *.mpeg filter=lfs diff=lfs merge=lfs -text
 *.mp3 filter=lfs diff=lfs merge=lfs -text
+penny/gavd3/cache/**/*.joblib filter=lfs diff=lfs merge=lfs -text
+penny/gavd3/cache/**/*.npz filter=lfs diff=lfs merge=lfs -text
+penny/gavd3/cache/**/*.parquet filter=lfs diff=lfs merge=lfs -text
+penny/gavd3/cache/**/*.pt filter=lfs diff=lfs merge=lfs -text
+penny/gavd3/cache/**/*.task filter=lfs diff=lfs merge=lfs -text

@@ -46,9 +46,7 @@ class MediaPipeLandmarkerSingleton:
         self._max_frames_before_reset = 500  # Reset every 500 frames to prevent memory leaks
         self._creation_lock = threading.Lock()
         self._initialized = True
-        
-        logger.debug("MediaPipe singleton initialized")
-    
+            
     def get_landmarker(self, model_path: str, landmarker_factory) -> Any:
         """
         Get or create a MediaPipe landmarker instance.
@@ -77,7 +75,7 @@ class MediaPipeLandmarkerSingleton:
                     elif self._frame_count >= self._max_frames_before_reset:
                         reason = f"frame limit reached ({self._frame_count}/{self._max_frames_before_reset})"
                 
-                logger.debug(f"Creating new landmarker: {reason}")
+                # logger.debug(f"Creating new landmarker: {reason}")
                 
                 # Clean up existing landmarker
                 if self._landmarker is not None:
@@ -92,7 +90,7 @@ class MediaPipeLandmarkerSingleton:
                     if self._landmarker is None:
                         raise RuntimeError(f"Failed to create landmarker from {model_path}")
                     
-                    logger.debug("New landmarker created successfully")
+                    # logger.debug("New landmarker created successfully")
                     
                 except Exception as e:
                     logger.error(f"Failed to create landmarker: {e}")
@@ -126,7 +124,7 @@ class MediaPipeLandmarkerSingleton:
     def reset_landmarker(self):
         """Force reset the landmarker instance."""
         with self._creation_lock:
-            logger.debug("Force resetting landmarker")
+            # logger.debug("Force resetting landmarker")
             self._cleanup_landmarker()
             self._landmarker = None
             self._model_path = None
@@ -146,7 +144,7 @@ class MediaPipeLandmarkerSingleton:
                 # Force garbage collection to clean up MediaPipe resources
                 gc.collect()
                 
-                logger.debug("Landmarker cleaned up successfully")
+                # logger.debug("Landmarker cleaned up successfully")
                 
             except Exception as e:
                 logger.warning(f"Error during landmarker cleanup: {e}")

@@ -13,10 +13,10 @@ export default function Home() {
       {/* Hero Section */}
       <div className="text-center space-y-6 max-w-3xl">
         <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          AlexPose Gait Analysis
+          Every Step Tells a Story
         </h1>
         <p className="text-xl text-muted-foreground">
-          AI-powered gait analysis for health condition identification
+          AlexPose turns everyday walking videos into clear, AI-powered insights, helping you understand movement and support healthier lives
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <Button asChild size="lg" className="rounded-full">
@@ -48,7 +48,7 @@ export default function Home() {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              Perfect for analyzing individual patient videos or YouTube URLs
+              Bring a single walking video to life with instant, meaningful insight
             </p>
             <div className="flex flex-wrap gap-2">
               <Button asChild size="sm" className="rounded-full">
@@ -84,7 +84,7 @@ export default function Home() {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              Upload GAVD CSV files for batch processing and model training
+              Fuel smarter models by uploading GAVD CSV files for batch processing and training
             </p>
             <Button asChild size="sm" className="rounded-full w-full bg-purple-600 hover:bg-purple-700">
               <Link href="/gavd">
@@ -105,9 +105,9 @@ export default function Home() {
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="text-4xl mb-2">🎯</div>
-            <CardTitle>Accurate Analysis</CardTitle>
+            <CardTitle>Precision You Can Trust</CardTitle>
             <CardDescription>
-              Advanced AI models for precise gait pattern recognition
+              Advanced AI models built to recognize gait patterns with confidence
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -120,14 +120,14 @@ export default function Home() {
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="text-4xl mb-2">⚡</div>
-            <CardTitle>Fast Processing</CardTitle>
+            <CardTitle>Insights in Moments</CardTitle>
             <CardDescription>
-              Quick analysis with real-time progress tracking
+              Fast, real-time processing so you spend less time waiting and more time learning
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Optimized pipeline for efficient video processing
+              An optimized pipeline that keeps every analysis moving smoothly
             </p>
           </CardContent>
         </Card>
@@ -135,14 +135,14 @@ export default function Home() {
         <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="text-4xl mb-2">📊</div>
-            <CardTitle>Detailed Insights</CardTitle>
+            <CardTitle>Clarity That Empowers</CardTitle>
             <CardDescription>
-              Comprehensive reports with visualizations
+              Rich, visual reports that turn complex movement data into clear understanding
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Interactive charts and condition identification
+              Interactive charts and condition identification you can act on
             </p>
           </CardContent>
         </Card>

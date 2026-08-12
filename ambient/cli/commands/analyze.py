@@ -145,7 +145,13 @@ def analyze(ctx, video, output, format, pose_estimator, frame_rate, use_llm, llm
         
         if use_llm:
             progress.update(f"Using LLM model: {llm_model}")
-            llm_classifier = LLMClassifier(config_manager)
+            from ambient.classification.llm_classifier import LLMClassifierConfig
+            
+            llm_config = LLMClassifierConfig(
+                model_name=llm_model,
+                provider="openai" if llm_model.startswith("gpt") else "gemini"
+            )
+            llm_classifier = LLMClassifier(config=llm_config)
             
             # Run async classification
             classification_result = asyncio.run(

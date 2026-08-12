@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Paper-aligned S-JEPA core training graph</title>
+  <desc>The full sequence goes to the EMA target encoder. A transformed sequence loses selected tokens before the view encoder. A predictor fills latent targets.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 34px Arial;fill:#10233f}.t{font:700 20px Arial;fill:#10233f}.b{font:16px Arial;fill:#344b62}.box{stroke:#18324c;stroke-width:2}.a{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}.ema{stroke:#5c806e;stroke-width:3;stroke-dasharray:8 7;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="675" fill="#f6f3ec"/>
+  <text x="55" y="58" class="h">Predict missing joint representations, not coordinates</text>
+  <rect x="55" y="280" width="150" height="90" rx="16" fill="#fff" class="box"/>
+  <text x="82" y="318" class="t">Full clip</text><text x="78" y="345" class="b">T × 33 × 3</text>
+  <path d="M205 310H280V170H335" class="a"/><path d="M205 340H280V490H335" class="a"/>
+  <rect x="335" y="115" width="185" height="105" rx="16" fill="#e8f1f8" class="box"/>
+  <text x="365" y="153" class="t">Geometry view</text><text x="365" y="181" class="b">one transform per clip</text>
+  <rect x="335" y="438" width="185" height="105" rx="16" fill="#e5f4ed" class="box"/>
+  <text x="362" y="476" class="t">Full target</text><text x="363" y="504" class="b">no input masking</text>
+  <path d="M520 168H580" class="a"/><path d="M520 490H580" class="a"/>
+  <rect x="580" y="115" width="200" height="105" rx="16" fill="#f9e5cf" class="box"/>
+  <text x="614" y="153" class="t">Drop targets</text><text x="608" y="181" class="b">only 10 eligible joints</text>
+  <rect x="580" y="438" width="200" height="105" rx="16" fill="#dff0e7" class="box"/>
+  <text x="610" y="476" class="t">EMA target encoder</text><text x="621" y="504" class="b">sees all tokens</text>
+  <path d="M780 168H835" class="a"/><path d="M780 490H835" class="a"/>
+  <rect x="835" y="115" width="210" height="105" rx="16" fill="#f9e5cf" class="box"/>
+  <text x="868" y="153" class="t">View encoder</text><text x="863" y="181" class="b">visible tokens only</text>
+  <rect x="835" y="438" width="210" height="105" rx="16" fill="#dff0e7" class="box"/>
+  <text x="865" y="476" class="t">Gather outputs</text><text x="871" y="504" class="b">after full attention</text>
+  <path d="M940 220V280" class="a"/>
+  <rect x="835" y="280" width="210" height="105" rx="16" fill="#e9e3f5" class="box"/>
+  <text x="881" y="318" class="t">Predictor</text><text x="857" y="346" class="b">mask tokens + positions</text>
+  <path d="M1045 332H1065V395H1080" class="a"/>
+  <path d="M1045 490H1065V435H1080" class="a"/>
+  <rect x="1080" y="370" width="95" height="90" rx="18" fill="#18324c"/>
+  <text x="1096" y="410" style="font:700 16px Arial;fill:#fff">latent</text>
+  <text x="1108" y="435" style="font:700 16px Arial;fill:#fff">CE</text>
+  <path d="M835 190C805 270 760 365 680 438" class="ema"/>
+  <text x="748" y="328" style="font:700 15px Arial;fill:#5c806e">EMA</text>
+  <text x="55" y="620" class="b">The target encoder is updated by EMA. Only the target encoder is retained downstream.</text>
+</svg>

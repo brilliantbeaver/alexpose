@@ -497,7 +497,9 @@ class TestIntegrationProperties:
         }
         
         pair = (chain["source_component"], chain["target_component"])
-        format_compatible = compatible_pairs.get(pair, chain["transformation_required"])
+        format_compatible = compatible_pairs.get(
+            pair, not chain["transformation_required"]
+        )
         
         # Simulate validation
         validation_passed = True

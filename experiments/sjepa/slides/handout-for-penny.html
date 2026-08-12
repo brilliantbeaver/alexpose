@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gait-JEPA - How your neurological findings are used</title>
+<style>
+  /* ============================================================
+     One-page handout for Penny. Light pastel theme matching the
+     Gait-JEPA slide deck. Print-friendly (fits one to two pages).
+     No em-dashes or en-dashes anywhere.
+     ============================================================ */
+  :root {
+    --ink:    #0f172a;
+    --body:   #334155;
+    --muted:  #64748b;
+    --paper:  #fbfcfe;
+    --rule:   #e2e8f0;
+    --blue:   #1d4ed8; --blue-fill:   #eff6ff; --blue-ink:   #1e3a8a;
+    --green:  #15803d; --green-fill:  #f0fdf4; --green-ink:  #14532d;
+    --amber:  #d97706; --amber-fill:  #fff7ed; --amber-ink:  #92400e;
+    --violet: #7c3aed; --violet-fill: #f5f3ff; --violet-ink: #5b21b6;
+    --sans: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", "IBM Plex Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--body);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 2.4rem 1.5rem 3rem;
+  }
+  .sheet { max-width: 940px; margin: 0 auto; }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 0.4rem;
+  }
+  h1 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+    color: var(--ink);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+  .sub { color: var(--muted); font-size: 1.02rem; max-width: 70ch; margin-bottom: 1.3rem; }
+
+  h2 {
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 700;
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin: 0.5rem 0; max-width: 78ch; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: #f1f5f9;
+    padding: 0.06em 0.32em;
+    border-radius: 4px;
+    color: var(--blue-ink);
+  }
+  b { color: var(--ink); font-weight: 650; }
+
+  /* the "what you built" examples */
+  ul.plain { list-style: none; margin: 0.4rem 0; }
+  ul.plain li {
+    position: relative;
+    padding-left: 1.2rem;
+    margin: 0.35rem 0;
+    max-width: 78ch;
+  }
+  ul.plain li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.55em;
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 2px;
+    background: var(--violet);
+  }
+
+  /* the anchor callout */
+  .anchor {
+    background: var(--amber-fill);
+    border: 1px solid #fed7aa;
+    border-left: 5px solid var(--amber);
+    border-radius: 10px;
+    padding: 0.85rem 1.05rem;
+    margin: 1.1rem 0;
+    color: var(--amber-ink);
+  }
+  .anchor .lbl {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+    opacity: 0.85;
+  }
+
+  /* the three stage cards */
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 0.8rem 0 0.4rem;
+  }
+  .stage {
+    border: 1px solid var(--rule);
+    border-top: 5px solid var(--blue);
+    border-radius: 10px;
+    padding: 0.9rem 1rem 1rem;
+    background: #fff;
+  }
+  .stage.eval { border-top-color: var(--violet); }
+  .stage.infer { border-top-color: var(--green); }
+  .stage .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+  .stage.eval .tag { color: var(--violet); }
+  .stage.infer .tag { color: var(--green); }
+  .stage h3 { font-size: 1rem; color: var(--ink); font-weight: 700; margin-bottom: 0.45rem; }
+  .stage p { font-size: 0.9rem; margin: 0.4rem 0; max-width: none; }
+  .stage .role {
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 0.55rem;
+    border-top: 1px dashed var(--rule);
+    padding-top: 0.45rem;
+  }
+
+  /* one-line takeaway */
+  .takeaway {
+    background: var(--violet-fill);
+    border: 1px solid #ddd6fe;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    margin: 1.3rem 0 0.6rem;
+    color: var(--violet-ink);
+    font-size: 1.02rem;
+  }
+  .takeaway b { color: var(--violet-ink); }
+
+  /* next-steps box */
+  .next {
+    background: var(--green-fill);
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    margin: 1.1rem 0;
+    color: var(--green-ink);
+  }
+  .next h2 { color: var(--green-ink); margin-top: 0; }
+  .next ol { margin: 0.4rem 0 0 1.2rem; }
+  .next li { margin: 0.3rem 0; font-size: 0.94rem; }
+
+  .foot {
+    margin-top: 1.6rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  @media print {
+    body { padding: 0.4in; background: #fff; }
+    .stage, .anchor, .takeaway, .next { break-inside: avoid; }
+    a { color: var(--blue-ink); text-decoration: none; }
+  }
+  @media (max-width: 720px) {
+    .stages { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="kicker">Gait-JEPA &middot; for Penny Inouye</div>
+  <h1>How your neurological findings drive Gait-JEPA</h1>
+  <p class="sub">A one-page guide to where your feature-to-condition mapping plugs into the new self-supervised gait model.</p>
+
+  <h2>What you built</h2>
+  <p>You went through all 82 gait features and, for <b>Parkinson's</b> and <b>stroke</b> separately, graded each one <b>H, M, L, or NA</b> by how directly it traces to the neurological mechanism of that condition. For every feature you recorded a <b>neurological reason</b>, a <b>significance threshold</b>, and a cited source. For example:</p>
+  <ul class="plain">
+    <li><code>stride_time_cv</code> is <b>H for PD</b>, because basal-ganglia rhythm failure makes stride timing vary a lot step to step.</li>
+    <li><code>knee_asymmetry</code> is <b>H for stroke</b>, because a weakened side produces stiff-knee gait, a knee-flexion difference of at least 17 degrees.</li>
+    <li><code>walking_speed_ms</code> is <b>H for stroke</b>, about 0.5 m/s versus about 1.4 normal, from reduced corticospinal drive.</li>
+    <li><code>stride_length_si</code> is <b>H for both</b>, a symmetry index above about 16 percent is suspicious.</li>
+  </ul>
+  <p>That grading is not a side note. It is the map that tells the model where to look.</p>
+
+  <div class="anchor">
+    <span class="lbl">The one thing to hold onto</span>
+    Your thresholds and grades are <b>never used as training labels</b>. The model first learns from lots of unlabeled walking video. Your mapping is used to <b>aim</b> that learning and then to <b>grade</b> what it learned. It shows up at three distinct stages.
+  </div>
+
+  <div class="stages">
+    <div class="stage">
+      <span class="tag">Stage 1</span>
+      <h3>Training aims the task</h3>
+      <p>The model learns by hiding part of a walking clip and predicting it. Your H-priority list decides <b>what we hide</b>.</p>
+      <p>Hiding <b>a whole limb over time</b> forces it to encode the <b>asymmetry</b> features you flagged H (<code>stride_length_si</code>, hip / knee / ankle symmetry).</p>
+      <p>Hiding <b>a whole time window</b> forces it to encode the PD <b>rhythm</b> features (<code>stride_time_cv</code>) and the stroke <b>slowing</b> features (<code>walking_speed_ms</code>).</p>
+      <p class="role">Your mapping is why the masking is mechanism-aware instead of random.</p>
+    </div>
+    <div class="stage eval">
+      <span class="tag">Stage 2</span>
+      <h3>Evaluation grades it</h3>
+      <p>We freeze the model and ask: did it learn your mechanisms without ever being told them?</p>
+      <p>Tiny <b>probes</b> predict each of your H-priority scalars from the model's representation, and we report how well (research question RQ3).</p>
+      <p>Your documented <b>thresholds</b> (symmetry index above 16 percent, <code>stride_time_cv</code> above 0.06, knee-flexion difference at least 17 degrees) are the pass or fail checks: does the probe land on the clinically correct side over 70 percent of the time?</p>
+      <p class="role">Your CSV is literally the answer key for this stage.</p>
+    </div>
+    <div class="stage infer">
+      <span class="tag">Stage 3</span>
+      <h3>Inference reads it out</h3>
+      <p>For a brand-new walking clip, the model does not just output "stroke."</p>
+      <p>Using your mapping, it also reports <b>named clinical scores</b>: an asymmetry score, a rhythm-variability score, a postural-stability score, and a slowing score.</p>
+      <p>Each score is compared to your threshold to flag which mechanism looks abnormal.</p>
+      <p class="role">The output is interpretable, not a black box.</p>
+    </div>
+  </div>
+
+  <h2>Why this matters for the project</h2>
+  <p>Your Parkinson's-versus-stroke distinction is built into the design as a <b>testable hypothesis</b>: both conditions share an asymmetry axis and a postural-instability axis, but Parkinson's keeps a distinct rhythm-and-variability axis while stroke keeps a distinct spatiotemporal-slowing axis. The probes in Stage 2 are how we check whether the model kept them separable, exactly as your research predicts they should be.</p>
+
+  <div class="takeaway">
+    <b>In one sentence:</b> your mapping is the throughline of Gait-JEPA. It aims the masking in training, it is the answer key and threshold set in evaluation, and it turns a raw prediction into a clinical readout at inference.
+  </div>
+
+  <div class="next">
+    <h2>Where your research could go next</h2>
+    <p>The evaluation task has 5 conditions, but only 2 of them (Parkinson's and stroke) have your mapping so far. The highest-value next steps, in order:</p>
+    <ol>
+      <li><b>Cerebral palsy</b> and <b>myopathic</b> first. They are already in the 5-class task, so mapping them makes the clinical-probe story cover the whole task instead of 2 of 5 conditions.</li>
+      <li><b>Deepen Parkinson's and stroke</b> where a source did not give a specific number. Firmer thresholds sharpen the Stage 2 threshold-agreement check.</li>
+      <li><b>Skip for now</b> the catch-all or non-clinical conditions (abnormal, style, exercise, inebriated) unless the evaluation set grows to include them.</li>
+    </ol>
+    <p style="margin-top:0.5rem">A simple rule: map a condition when it is (a) in the evaluation set and (b) has a clear neurological mechanism. That points straight at cerebral palsy and myopathic next.</p>
+  </div>
+
+  <div class="foot">
+    Gait-JEPA research &middot; Alex Mui, Penny Inouye, Theodore Mui, Phil Mui (Research Advisor). See slides 12 to 14 of the deck for the neuroscience map, the feature-mapping bridge, and the train / evaluation / inference usage. Sources: your <code>pd-features.csv</code> and <code>stroke-features.csv</code> in <code>gait/neuroscience/</code>.
+  </div>
+
+</div>
+</body>
+</html>

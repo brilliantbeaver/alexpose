@@ -162,6 +162,69 @@ class JointAngleSequence:
             "valid_count": len(valid_angles)
         }
     
+    def has_valid_data(self) -> bool:
+        """
+        Check if sequence has any valid angle data.
+        
+        Returns:
+            True if at least one joint has at least one valid angle value
+        """
+        for frame in self.frames:
+            if frame.angles:  # Has any angles
+                for angle_obj in frame.angles.values():
+                    if angle_obj and not np.isnan(angle_obj.angle_degrees):
+                        return True
+        return False
+    
+    def get_valid_frame_count(self) -> int:
+        """
+        Get count of frames with at least one valid angle.
+        
+        Returns:
+            Number of frames that have at least one non-NaN angle
+        """
+        count = 0
+        for frame in self.frames:
+            if frame.angles:
+                has_valid = any(
+                    not np.isnan(angle_obj.angle_degrees)
+                    for angle_obj in frame.angles.values()
+                    if angle_obj
+                )
+                if has_valid:
+                    count += 1
+        return count
+    
+    def get_validation_summary(self) -> Dict[str, Any]:
+        """
+        Get detailed validation summary of the sequence.
+        
+        Returns:
+            Dictionary with validation metrics
+        """
+        total_frames = len(self.frames)
+        valid_frames = self.get_valid_frame_count()
+        has_data = self.has_valid_data()
+        
+        # Check each joint
+        joint_validity = {}
+        for joint in ["left_hip", "left_knee", "left_ankle", 
+                      "right_hip", "right_knee", "right_ankle"]:
+            stats = self.get_statistics(joint)
+            joint_validity[joint] = {
+                "valid_count": stats["valid_count"],
+                "has_data": stats["valid_count"] > 0
+            }
+        
+        return {
+            "total_frames": total_frames,
+            "valid_frames": valid_frames,
+            "has_valid_data": has_data,
+            "validity_rate": valid_frames / total_frames if total_frames > 0 else 0.0,
+            "joint_validity": joint_validity,
+            "sequence_id": self.sequence_id
+        }
+    
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary format."""
         return {
@@ -228,7 +291,7 @@ class JointAngleCalculator:
             )
         
         self.mapping = self.KEYPOINT_MAPPINGS[keypoint_format]
-        logger.info(f"JointAngleCalculator initialized for {keypoint_format} format")
+        # logger.info(f"JointAngleCalculator initialized for {keypoint_format} format")
     
     def calculate_angle(
         self,
@@ -477,10 +540,9 @@ class JointAngleCalculator:
             frame_angles = self.calculate_frame_angles(keypoints, frame_idx, timestamp)
             sequence.frames.append(frame_angles)
         
-        logger.info(
-            f"Calculated joint angles for {len(keypoints_array)} frames "
-            f"({self.keypoint_format} format)"
-        )
+        # logger.info(
+        #     f"Calculated joint angles for {len(keypoints_array)} frames ({self.keypoint_format} format)"
+        # )
         
         return sequence
     

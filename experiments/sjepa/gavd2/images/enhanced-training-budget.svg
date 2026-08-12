@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc" font-family="Inter, Arial, sans-serif">
+  <title id="title">Training exposure and EMA timescale</title>
+  <desc id="desc">The baseline and enhanced training recipes compared by clip draws and approximate EMA memory measured in examples.</desc>
+  <rect width="1200" height="520" fill="#ffffff"/>
+  <text x="600" y="42" text-anchor="middle" font-size="27" font-weight="700" fill="#0f172a">A larger model needs enough practice—and a steady teacher</text>
+  <text x="600" y="70" text-anchor="middle" font-size="16" fill="#475569">The corpus has 1,974 clips. Sampling is with replacement, so these are exposure counts, not unique clips.</text>
+
+  <rect x="60" y="115" width="500" height="310" rx="18" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  <text x="310" y="153" text-anchor="middle" font-size="22" font-weight="700" fill="#334155">Baseline recipe</text>
+  <text x="310" y="185" text-anchor="middle" font-size="17" fill="#475569">batch 16 × 400 steps</text>
+  <text x="310" y="229" text-anchor="middle" font-size="34" font-weight="700" fill="#1d4ed8">6,400 clip draws</text>
+  <rect x="112" y="268" width="396" height="54" rx="10" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="310" y="301" text-anchor="middle" font-size="16" fill="#1e3a8a">about 3.2 corpus-equivalent exposures</text>
+  <text x="112" y="356" font-size="15" fill="#334155">EMA momentum: 0.996</text>
+  <text x="112" y="384" font-size="15" fill="#334155">rough memory: 250 updates × 16 ≈ 4,000 examples</text>
+
+  <rect x="640" y="115" width="500" height="310" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="890" y="153" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">Enhanced recipe</text>
+  <text x="890" y="185" text-anchor="middle" font-size="17" fill="#475569">batch 4 × 4,000 steps</text>
+  <text x="890" y="229" text-anchor="middle" font-size="34" font-weight="700" fill="#1d4ed8">16,000 clip draws</text>
+  <rect x="692" y="268" width="396" height="54" rx="10" fill="#bfdbfe" stroke="#2563eb"/>
+  <text x="890" y="301" text-anchor="middle" font-size="16" fill="#1e3a8a">about 8.1 corpus-equivalent exposures</text>
+  <text x="692" y="356" font-size="15" fill="#334155">EMA momentum: 0.999</text>
+  <text x="692" y="384" font-size="15" fill="#334155">rough memory: 1,000 updates × 4 ≈ 4,000 examples</text>
+
+  <rect x="172" y="458" width="856" height="42" rx="10" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="600" y="484" text-anchor="middle" font-size="15" fill="#166534">The slower 0.999 EMA offsets the smaller batch, keeping the teacher’s rough example-scale memory similar.</text>
+</svg>

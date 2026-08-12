@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="sans-serif">
+  <rect x="0" y="0" width="960" height="560" fill="#ffffff"/>
+
+  <!-- Title and subtitle -->
+  <text x="480" y="34" font-size="21" font-weight="bold" text-anchor="middle" fill="#0f172a">Research question 2: the label-efficiency curve we hope to see</text>
+  <text x="480" y="58" font-size="13" text-anchor="middle" fill="#475569">Illustrative, not measured: how accuracy might hold up as labeled training data shrinks</text>
+
+  <!-- Gridlines (horizontal) at y = 40, 55, 70, 85 -->
+  <line x1="140" y1="420" x2="780" y2="420" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="140" y1="313.33" x2="780" y2="313.33" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="140" y1="206.67" x2="780" y2="206.67" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="140" y1="100" x2="780" y2="100" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Axes -->
+  <line x1="140" y1="100" x2="140" y2="420" stroke="#334155" stroke-width="1.5"/>
+  <line x1="140" y1="420" x2="780" y2="420" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Y axis ticks and labels (40,55,70,85) -->
+  <line x1="135" y1="420" x2="140" y2="420" stroke="#334155" stroke-width="1.5"/>
+  <text x="128" y="424" font-size="11" text-anchor="end" fill="#334155">40</text>
+  <line x1="135" y1="313.33" x2="140" y2="313.33" stroke="#334155" stroke-width="1.5"/>
+  <text x="128" y="317.33" font-size="11" text-anchor="end" fill="#334155">55</text>
+  <line x1="135" y1="206.67" x2="140" y2="206.67" stroke="#334155" stroke-width="1.5"/>
+  <text x="128" y="210.67" font-size="11" text-anchor="end" fill="#334155">70</text>
+  <line x1="135" y1="100" x2="140" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <text x="128" y="104" font-size="11" text-anchor="end" fill="#334155">85</text>
+
+  <!-- Y axis title (rotated) -->
+  <text x="52" y="260" font-size="13" text-anchor="middle" fill="#334155" transform="rotate(-90 52 260)">5-class test accuracy (percent)</text>
+
+  <!-- X axis ticks and labels (25,50,75,100) mapped to px 300,460,620,780 -->
+  <line x1="300" y1="420" x2="300" y2="425" stroke="#334155" stroke-width="1.5"/>
+  <text x="300" y="440" font-size="11" text-anchor="middle" fill="#334155">25</text>
+  <line x1="460" y1="420" x2="460" y2="425" stroke="#334155" stroke-width="1.5"/>
+  <text x="460" y="440" font-size="11" text-anchor="middle" fill="#334155">50</text>
+  <line x1="620" y1="420" x2="620" y2="425" stroke="#334155" stroke-width="1.5"/>
+  <text x="620" y="440" font-size="11" text-anchor="middle" fill="#334155">75</text>
+  <line x1="780" y1="420" x2="780" y2="425" stroke="#334155" stroke-width="1.5"/>
+  <text x="780" y="440" font-size="11" text-anchor="middle" fill="#334155">100</text>
+
+  <!-- X axis title -->
+  <text x="460" y="464" font-size="13" text-anchor="middle" fill="#334155">percent of labeled training set used</text>
+
+  <!-- Reference line at accuracy = 76 -->
+  <line x1="140" y1="164" x2="780" y2="164" stroke="#334155" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text x="776" y="158" font-size="11" text-anchor="end" fill="#334155">prior Random Forest on the full labels = 76 percent</text>
+
+  <!-- GREEN curve: frozen Gait-JEPA probe -->
+  <polyline points="300,220.44 460,177.78 620,149.33 780,135.11" fill="none" stroke="#15803d" stroke-width="2.5"/>
+  <circle cx="300" cy="220.44" r="4" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+  <circle cx="460" cy="177.78" r="4" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+  <circle cx="620" cy="149.33" r="4" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+  <circle cx="780" cy="135.11" r="4" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+
+  <!-- BLUE curve: Random Forest (same subsets) -->
+  <polyline points="300,334.67 460,256.44 620,199.56 780,164" fill="none" stroke="#1d4ed8" stroke-width="2.5"/>
+  <circle cx="300" cy="334.67" r="4" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="460" cy="256.44" r="4" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="620" cy="199.56" r="4" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="780" cy="164" r="4" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+
+  <!-- Annotation near 25 percent gap -->
+  <text x="316" y="278" font-size="11" fill="#334155">the gap here (target 5+ points)</text>
+  <text x="316" y="293" font-size="11" fill="#334155">is the evidence that pretraining helped</text>
+  <line x1="300" y1="228" x2="300" y2="327" stroke="#334155" stroke-width="0.8" stroke-dasharray="3 3"/>
+
+  <!-- Legend -->
+  <rect x="560" y="486" width="14" height="14" fill="#15803d"/>
+  <text x="580" y="497" font-size="12" fill="#334155">frozen Gait-JEPA probe</text>
+  <rect x="560" y="508" width="14" height="14" fill="#1d4ed8"/>
+  <text x="580" y="519" font-size="12" fill="#334155">Random Forest (same subsets)</text>
+
+  <!-- Honesty note -->
+  <text x="140" y="512" font-size="11" fill="#475569">Numbers shown are a hypothesis to be tested, not results.</text>
+</svg>

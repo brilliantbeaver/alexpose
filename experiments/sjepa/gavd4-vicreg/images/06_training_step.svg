@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>One progressive S-JEPA optimizer step</title>
+  <desc>Prepare a stage-balanced batch, sample target tokens only from 12 permitted landmark identities, compute the JEPA sub-loss plus VICReg and the post-normal group term, then update the student, teacher, and center.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .wt{font:700 20px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+      .lbl{font:700 14px Arial,Helvetica,sans-serif;fill:#5f9e7e}
+      .u{font:700 16px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .box{stroke:#20364e;stroke-width:1.75}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+      .ema{stroke:#5f9e7e;stroke-width:2.5;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="64" y="58" class="h">One stage step: JEPA + VICReg + post-normal group loss</text>
+
+  <!-- lane captions -->
+  <text x="64" y="112" class="s">Student path</text>
+  <text x="64" y="428" class="s">Teacher path</text>
+
+  <!-- Source clip, vertically centered between the two lanes -->
+  <rect x="64" y="214" width="184" height="96" rx="16" fill="#ffffff" class="box"/>
+  <text x="90" y="262" class="t">Stage batch</text>
+  <text x="90" y="289" class="b">balanced replay</text>
+
+  <!-- split from clip into both lanes -->
+  <path d="M256 249V166H254" class="a"/>
+  <path d="M256 275V358H254" class="a"/>
+
+  <!-- STUDENT LANE (top): mask -> view encoder -> predictor -->
+  <rect x="270" y="118" width="186" height="96" rx="16" fill="#f7e7d8" class="box"/>
+  <text x="296" y="155" class="t">Choose targets</text>
+  <text x="296" y="181" class="b">12 landmark IDs</text>
+  <text x="296" y="202" class="b">are eligible</text>
+
+  <path d="M456 166H496" class="a"/>
+
+  <rect x="512" y="118" width="186" height="96" rx="16" fill="#f7e7d8" class="box"/>
+  <text x="538" y="166" class="t">View encoder</text>
+  <text x="538" y="193" class="b">visible tokens</text>
+
+  <path d="M698 166H738" class="a"/>
+
+  <rect x="754" y="118" width="186" height="96" rx="16" fill="#ece6f6" class="box"/>
+  <text x="780" y="166" class="t">Predictor</text>
+  <text x="780" y="193" class="b">fill mask tokens</text>
+
+  <!-- TEACHER LANE (bottom): full target -> EMA encoder -> gather -->
+  <rect x="270" y="310" width="186" height="96" rx="16" fill="#e6f2ea" class="box"/>
+  <text x="296" y="358" class="t">Full target</text>
+  <text x="296" y="385" class="b">no input masking</text>
+
+  <path d="M456 358H496" class="a"/>
+
+  <rect x="512" y="310" width="186" height="96" rx="16" fill="#e6f2ea" class="box"/>
+  <text x="538" y="358" class="t">EMA encoder</text>
+  <text x="538" y="385" class="b">target, all tokens</text>
+
+  <path d="M698 358H738" class="a"/>
+
+  <rect x="754" y="310" width="186" height="96" rx="16" fill="#e6f2ea" class="box"/>
+  <text x="780" y="358" class="t">Gather targets</text>
+  <text x="780" y="385" class="b">after attention</text>
+
+  <!-- predictor drops, gather rises; both supply the JEPA term -->
+  <path d="M847 214V246H984" class="a"/>
+  <path d="M847 310V278H984" class="a"/>
+
+  <!-- EMA feedback: student view-encoder weights copied down to the EMA encoder -->
+  <path d="M605 214V294" class="ema"/>
+  <text x="619" y="266" class="lbl">EMA copy</text>
+
+  <!-- Total objective: group pressure is inactive during normal-only Stage 0. -->
+  <rect x="990" y="195" width="160" height="135" rx="16" fill="#20364e"/>
+  <text x="1010" y="232" class="wt">Total loss</text>
+  <text x="1010" y="259" class="ws">JEPA</text>
+  <text x="1010" y="282" class="ws">+ VICReg</text>
+  <text x="1010" y="305" class="ws">+ group (S1–4)</text>
+
+  <!-- Total objective down to the Updates card -->
+  <path d="M1070 330V444" class="a"/>
+
+  <!-- Updates card: one update per row, bold action then its note -->
+  <rect x="942" y="460" width="208" height="160" rx="16" fill="#e7f0f8" class="box"/>
+  <text x="968" y="490" class="t">Updates</text>
+  <line x1="942" y1="506" x2="1150" y2="506" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="968" y="538" class="u">AdamW <tspan class="s"> objective</tspan></text>
+  <text x="968" y="568" class="u">Teacher EMA <tspan class="s"> copy</tspan></text>
+  <text x="968" y="598" class="u">Center EMA <tspan class="s"> stats</tspan></text>
+
+  <!-- Invariants banner -->
+  <rect x="64" y="626" width="836" height="46" rx="16" fill="#20364e"/>
+  <text x="90" y="655" class="w">Invariants: at least one target and one visible token, zero forbidden targets, no target gradients.</text>
+</svg>

@@ -1,0 +1,7 @@
+task,condition,mode,split,accuracy,balanced_accuracy,macro_f1,train_sequences,test_sequences,roc_auc
+five_class_exp5_exact,all,real,exp5_exact_video_confounded,0.7142857142857143,0.7295238095238095,0.7416666666666667,,,
+five_class_all_sequences,all,real,all_96_stratified_video_confounded,0.7931034482758621,0.8885714285714286,0.8212836438923394,,,
+one_vs_normal,parkinsons,real,all_96_stratified_video_confounded,1.0,1.0,1.0,14.0,7.0,1.0
+one_vs_normal,stroke,real,all_96_stratified_video_confounded,1.0,1.0,1.0,17.0,7.0,1.0
+one_vs_normal,myopathic,real,all_96_stratified_video_confounded,0.9444444444444444,0.9642857142857143,0.9259259259259258,41.0,18.0,1.0
+one_vs_normal,cerebralpalsy,real,all_96_stratified_video_confounded,0.8888888888888888,0.9,0.8888888888888888,19.0,9.0,1.0

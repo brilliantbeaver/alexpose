@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc" font-family="Inter, Arial, sans-serif">
+  <title id="title">Scaling the baseline encoder into the enhanced encoder</title>
+  <desc id="desc">A side-by-side comparison of the two-layer 64-dimensional baseline and the four-layer 128-dimensional enhanced transformer.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" fill="#ffffff"/>
+  <text x="600" y="42" text-anchor="middle" font-size="27" font-weight="700" fill="#0f172a">From the baseline encoder to the enhanced encoder</text>
+  <text x="600" y="70" text-anchor="middle" font-size="16" fill="#475569">The input stays the same. We give the transformer more room and more processing steps.</text>
+
+  <rect x="48" y="105" width="440" height="430" rx="18" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  <text x="268" y="140" text-anchor="middle" font-size="22" font-weight="700" fill="#334155">Baseline: notebooks 04 and 05</text>
+  <text x="268" y="168" text-anchor="middle" font-size="15" fill="#64748b">same 1,056 skeleton tokens per clip</text>
+
+  <rect x="102" y="205" width="332" height="72" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="268" y="236" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">Transformer layer 1</text>
+  <text x="268" y="260" text-anchor="middle" font-size="14" fill="#475569">attention + feed-forward network</text>
+  <rect x="102" y="296" width="332" height="72" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="268" y="327" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">Transformer layer 2</text>
+  <text x="268" y="351" text-anchor="middle" font-size="14" fill="#475569">attention + feed-forward network</text>
+
+  <text x="100" y="410" font-size="15" fill="#334155">embedding width</text>
+  <text x="430" y="410" text-anchor="end" font-size="15" font-weight="700" fill="#1d4ed8">64</text>
+  <text x="100" y="438" font-size="15" fill="#334155">attention heads</text>
+  <text x="430" y="438" text-anchor="end" font-size="15" font-weight="700" fill="#1d4ed8">4</text>
+  <text x="100" y="466" font-size="15" fill="#334155">feed-forward width</text>
+  <text x="430" y="466" text-anchor="end" font-size="15" font-weight="700" fill="#1d4ed8">128</text>
+  <text x="100" y="494" font-size="15" fill="#334155">encoder parameters</text>
+  <text x="430" y="494" text-anchor="end" font-size="15" font-weight="700" fill="#1d4ed8">71,360</text>
+
+  <line x1="510" y1="320" x2="675" y2="320" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="593" y="295" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">scale capacity</text>
+  <text x="593" y="349" text-anchor="middle" font-size="14" fill="#64748b">not the input</text>
+
+  <rect x="710" y="105" width="442" height="430" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="931" y="140" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">Enhanced: notebooks 06 and 07</text>
+  <text x="931" y="168" text-anchor="middle" font-size="15" fill="#475569">four chances to combine motion evidence</text>
+
+  <g fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2">
+    <rect x="770" y="192" width="322" height="54" rx="10"/>
+    <rect x="770" y="260" width="322" height="54" rx="10"/>
+    <rect x="770" y="328" width="322" height="54" rx="10"/>
+    <rect x="770" y="396" width="322" height="54" rx="10"/>
+  </g>
+  <g text-anchor="middle" font-size="17" font-weight="700" fill="#1e3a8a">
+    <text x="931" y="226">Transformer layer 1</text>
+    <text x="931" y="294">Transformer layer 2</text>
+    <text x="931" y="362">Transformer layer 3</text>
+    <text x="931" y="430">Transformer layer 4</text>
+  </g>
+  <text x="770" y="480" font-size="15" fill="#334155">width 128 · 8 heads · FF width 512</text>
+  <text x="1092" y="508" text-anchor="end" font-size="17" font-weight="700" fill="#1d4ed8">801,920 parameters</text>
+
+  <rect x="185" y="560" width="830" height="42" rx="10" fill="#fff7ed" stroke="#f59e0b"/>
+  <text x="600" y="586" text-anchor="middle" font-size="15" fill="#9a3412">More capacity means more possibilities—not guaranteed better learning. Notebook 07 must test the frozen representation.</text>
+</svg>

@@ -80,9 +80,23 @@ graph LR
 - **Purpose**: Comprehensive analyzer with advanced clinical features
 - **Integration**: Used by `PoseAnalysisServiceAPI` for web interface
 - **Features**:
-  - 60+ comprehensive gait features
-  - Temporal analysis and gait cycle detection
-  - Bilateral symmetry assessment
+  - **94+ comprehensive gait features** including:
+    - **Core Joint Angles (15)**: Mean, range, and asymmetry for hip, knee, ankle
+    - **Extended Joint Statistics (18)**: Standard deviation, max, min for each joint
+    - **Kinematic Features (9)**: Velocity, acceleration, and jerk measurements
+    - **Spatiotemporal Features (4)**: Speed, cadence, stride length, step width
+    - **Temporal Phase Features (4)**: Stance/swing timing and ratios
+    - **Extended Temporal Features (12)**: Cycle counts, durations, phase asymmetry
+    - **Symmetry Indices (6)**: Evidence-based bilateral comparisons (SI formula)
+    - **Extended Symmetry Features (10)**: Joint-specific and overall symmetry scores
+    - **Variability Metrics (3)**: Stride-to-stride consistency measures
+    - **Postural Features (2)**: Trunk lean and pelvic tilt
+    - **Stability Features (4)**: Center of mass movement and balance metrics
+    - **Extended Stride Features (5)**: Step width variability and ankle distances
+    - **Extended Kinematic Features (2)**: Walking speed and stride length in pixels
+  - **Configurable confidence thresholds** (default: 0.3) for robust feature extraction
+  - Temporal analysis with reduced minimum cycle duration (0.5s) for short sequences
+  - Bilateral symmetry assessment with lower confidence requirements (0.3)
   - Clinical assessment with confidence scoring
   - Database persistence and caching
   - Real-time analysis capabilities
@@ -148,10 +162,18 @@ The system implements a 3-layer caching approach for optimal performance:
 ```python
 from ambient.analysis.gait_analyzer import EnhancedGaitAnalyzer
 
-# Initialize analyzer
+# Initialize analyzer with configurable parameters
 analyzer = EnhancedGaitAnalyzer(
     keypoint_format="COCO_17",
-    fps=30.0
+    fps=30.0,
+    comprehensive_features=True,  # Enable all 82 features
+    feature_extraction_config={
+        "confidence_threshold": 0.3,  # Minimum keypoint confidence (NEW)
+        "extract_extended_features": True,
+        "include_joint_statistics": True,
+        "include_stability_features": True,
+        "include_advanced_temporal": True
+    }
 )
 
 # Analyze pose sequence
@@ -223,7 +245,13 @@ The analysis returns a structured JSON object with comprehensive gait assessment
   "features": {
     "velocity_mean": 0.996,
     "velocity_std": 2.109,
+    "velocity_max": 5.234,
+    "velocity_min": 0.123,
     "acceleration_mean": 0.475,
+    "acceleration_std": 1.234,
+    "acceleration_max": 3.456,
+    "jerk_mean": 15.678,
+    "jerk_std": 8.234,
     "left_knee_mean": 145.2,
     "ankle_distance_asymmetry": 0.15,
     "com_stability_index": 0.12
@@ -643,9 +671,29 @@ This evidence-based approach ensures that AlexPose recommendations are grounded 
 analyzer = EnhancedGaitAnalyzer(
     keypoint_format="COCO_17",  # COCO_17, BODY_25, BLAZEPOSE_33
     fps=30.0,                   # Video frame rate
-    config_manager=config       # Optional configuration
+    config_manager=config,      # Optional configuration
+    comprehensive_features=True, # Enable all 82 features
+    feature_extraction_config={  # Fine-grained feature control
+        "confidence_threshold": 0.3,  # Minimum keypoint confidence (NEW)
+        "extract_extended_features": True,
+        "include_joint_statistics": True,
+        "include_stability_features": True,
+        "include_advanced_temporal": True
+    }
 )
 ```
+
+**Key Configuration Parameters**:
+
+- **`confidence_threshold`** (float, default: 0.3): Minimum confidence for keypoint validity
+  - Filters low-quality detections while retaining useful data
+  - Lower values (0.1-0.2): More permissive, better for challenging videos
+  - Higher values (0.5-0.7): Stricter quality, better for research-grade data
+  - **Impact**: Directly affects feature extraction success rate and zero-value features
+
+- **`comprehensive_features`** (bool, default: True): Enable full 94+ feature extraction
+  - When True: Extracts all available features across all categories
+  - When False: Extracts only core features for faster processing
 
 ### Feature Extraction Settings
 
@@ -653,20 +701,52 @@ analyzer = EnhancedGaitAnalyzer(
 feature_extractor = FeatureExtractor(
     keypoint_format="COCO_17",
     fps=30.0,
-    smoothing_window=5          # Smoothing window size
+    smoothing_window=5,              # Smoothing window size
+    confidence_threshold=0.3,        # Minimum keypoint confidence (NEW)
+    extract_extended_features=True,  # Enable comprehensive features
+    include_joint_statistics=True,   # Include std/max/min for joints
+    include_stability_features=True, # Include balance metrics
+    include_advanced_temporal=True   # Include frequency analysis
 )
 ```
+
+**Confidence Threshold Impact**:
+- **0.3 (default)**: Balanced approach for real-world videos
+  - Accepts keypoints with moderate confidence
+  - Reduces zero-value features in typical scenarios
+  - Recommended for clinical applications
+  
+- **0.5 (strict)**: Higher quality threshold
+  - Only accepts high-confidence keypoints
+  - May result in more zero-value features
+  - Recommended for research-grade data
+  
+- **0.1 (permissive)**: Very lenient threshold
+  - Accepts most keypoint detections
+  - Useful for challenging videos or low-quality input
+  - May include some noisy data
 
 ### Temporal Analysis Settings
 
 ```python
 temporal_analyzer = TemporalAnalyzer(
     fps=30.0,
-    min_cycle_duration=0.8,     # Minimum cycle duration (seconds)
-    max_cycle_duration=2.5,     # Maximum cycle duration (seconds)
+    min_cycle_duration=0.5,     # Minimum cycle duration in seconds (REDUCED from 0.8)
+    max_cycle_duration=2.5,     # Maximum cycle duration in seconds
     detection_method="heel_strike"  # heel_strike, toe_off, combined
 )
 ```
+
+**Recent Improvements**:
+- **`min_cycle_duration`** reduced from 0.8s to 0.5s (15 frames at 30fps)
+  - Better support for short video sequences
+  - Improved cycle detection in brief gait samples
+  - More robust for clinical scenarios with limited data
+  
+**Detection Methods**:
+- **heel_strike**: Detects cycles based on heel contact events (most common)
+- **toe_off**: Detects cycles based on toe-off events
+- **combined**: Uses both heel strike and toe-off for robust detection
 
 ### Symmetry Analysis Settings
 
@@ -674,9 +754,21 @@ temporal_analyzer = TemporalAnalyzer(
 symmetry_analyzer = SymmetryAnalyzer(
     keypoint_format="COCO_17",
     symmetry_threshold=0.1,     # Asymmetry threshold (10%)
-    confidence_threshold=0.5    # Minimum keypoint confidence
+    confidence_threshold=0.3    # Minimum keypoint confidence (REDUCED from 0.5)
 )
 ```
+
+**Recent Improvements**:
+- **`confidence_threshold`** reduced from 0.5 to 0.3
+  - More inclusive symmetry analysis with real-world data
+  - Better handling of videos with varying pose confidence
+  - Reduces zero-value symmetry features
+  - Aligns with FeatureExtractor confidence threshold for consistency
+
+**Symmetry Threshold**:
+- **0.1 (10%)**: Standard threshold for clinical significance
+  - Values below 0.1 indicate symmetric gait
+  - Values above 0.1 indicate asymmetric patterns requiring attention
 
 ## Alternative Classification Systems
 
@@ -689,15 +781,16 @@ While the primary recommendation system uses rule-based algorithms, the AlexPose
 The `LLMClassifier` component provides AI-powered gait classification using large language models (OpenAI GPT or Google Gemini):
 
 ```python
-from ambient.classification.llm_classifier import LLMClassifier
+from ambient.classification.llm_classifier import LLMClassifier, LLMClassifierConfig
 
 # Initialize LLM classifier
-llm_classifier = LLMClassifier(
+llm_config = LLMClassifierConfig(
     model_name="gpt-4o-mini",
     provider="openai",
     temperature=0.1,
     confidence_threshold=0.7
 )
+llm_classifier = LLMClassifier(llm_config)
 
 # Perform classification
 classification_result = llm_classifier.classify_gait(

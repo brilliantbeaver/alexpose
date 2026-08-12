@@ -74,7 +74,7 @@ def test_automatic_dimension_capture():
         video_path = create_test_video(width, height)
         
         try:
-            extractor = SequenceKeypointExtractor(use_process_isolation=False)
+            extractor = SequenceKeypointExtractor()
             keypoint_set = extractor.extract_from_video_frame(video_path, frame_number=5)
             
             if keypoint_set:
@@ -110,7 +110,7 @@ def test_dimension_preservation():
     try:
         # Step 1: Extract keypoints
         print(f"\n2. Extracting keypoints...")
-        extractor = SequenceKeypointExtractor(use_process_isolation=False)
+        extractor = SequenceKeypointExtractor()
         keypoint_set = extractor.extract_from_video_frame(video_path, frame_number=5)
         
         if not keypoint_set:

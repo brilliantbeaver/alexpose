@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="420" fill="#ffffff"/>
+
+  <!-- title + subtitle -->
+  <text x="450" y="30" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">RQ2 label efficiency: useful accuracy from few labels</text>
+  <text x="450" y="52" font-size="13" text-anchor="middle" fill="#475569">On real data the honest per-sequence probe accuracy rises steadily as more of the labeled sequences are used, staying roughly double chance throughout.</text>
+
+  <!-- plot frame -->
+  <!-- plot area: x 120..760, y 90..340 ; acc 0..1 -> y = 340 - acc*250 -->
+
+  <!-- light horizontal gridlines at 0.2, 0.4, 0.6, 0.8, 1.0 -->
+  <line x1="120" y1="290" x2="760" y2="290" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="120" y1="240" x2="760" y2="240" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="120" y1="190" x2="760" y2="190" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="120" y1="140" x2="760" y2="140" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="120" y1="90"  x2="760" y2="90"  stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- axes -->
+  <line x1="120" y1="90" x2="120" y2="340" stroke="#334155" stroke-width="2"/>
+  <line x1="120" y1="340" x2="760" y2="340" stroke="#334155" stroke-width="2"/>
+
+  <!-- y tick labels (5-class test accuracy) -->
+  <text x="110" y="344" font-size="10.5" text-anchor="end" fill="#64748b">0.0</text>
+  <text x="110" y="294" font-size="10.5" text-anchor="end" fill="#64748b">0.2</text>
+  <text x="110" y="244" font-size="10.5" text-anchor="end" fill="#64748b">0.4</text>
+  <text x="110" y="194" font-size="10.5" text-anchor="end" fill="#64748b">0.6</text>
+  <text x="110" y="144" font-size="10.5" text-anchor="end" fill="#64748b">0.8</text>
+  <text x="110" y="94"  font-size="10.5" text-anchor="end" fill="#64748b">1.0</text>
+
+  <!-- y axis title -->
+  <text x="34" y="215" font-size="12.5" text-anchor="middle" fill="#334155" transform="rotate(-90 34 215)">5-class test accuracy</text>
+
+  <!-- x tick labels (fraction of the 68 labelled sequences used) -->
+  <text x="120" y="360" font-size="10.5" text-anchor="middle" fill="#64748b">0.25</text>
+  <text x="333" y="360" font-size="10.5" text-anchor="middle" fill="#64748b">0.50</text>
+  <text x="547" y="360" font-size="10.5" text-anchor="middle" fill="#64748b">0.75</text>
+  <text x="760" y="360" font-size="10.5" text-anchor="middle" fill="#64748b">1.00</text>
+
+  <!-- x axis title -->
+  <text x="440" y="386" font-size="12.5" text-anchor="middle" fill="#334155">fraction of the 68 labels used</text>
+
+  <!-- chance reference line at acc 0.20 -> y 290 (faint) -->
+  <line x1="120" y1="290" x2="760" y2="290" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,4"/>
+  <text x="756" y="304" font-size="11" text-anchor="end" fill="#64748b">chance = 20 percent</text>
+
+  <!-- baseline reference line at acc 0.76 -> y 150 (red dashed) -->
+  <line x1="120" y1="150" x2="760" y2="150" stroke="#b91c1c" stroke-width="2" stroke-dasharray="7,5"/>
+  <text x="756" y="132" font-size="11.5" text-anchor="end" fill="#7f1d1d">76 percent RF-on-82-features baseline</text>
+
+  <!-- rising per-SEQUENCE probe curve (blue): 0.393 -> 0.417 -> 0.457 -> 0.486 -->
+  <!-- points: y = 340 - acc*250 -> (120,241.75) (333,235.75) (547,225.75) (760,218.5) -->
+  <polyline points="120,241.75 333,235.75 547,225.75 760,218.5" fill="none" stroke="#1d4ed8" stroke-width="2.5"/>
+
+  <circle cx="120" cy="241.75" r="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="333" cy="235.75" r="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="547" cy="225.75" r="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="760" cy="218.5" r="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+
+  <!-- point value labels -->
+  <text x="128" y="258" font-size="10.5" text-anchor="start" fill="#1e3a8a">0.39</text>
+  <text x="333" y="252" font-size="10.5" text-anchor="middle" fill="#1e3a8a">0.42</text>
+  <text x="547" y="242" font-size="10.5" text-anchor="middle" fill="#1e3a8a">0.46</text>
+  <text x="752" y="212" font-size="10.5" text-anchor="end" fill="#1e3a8a">0.49</text>
+
+  <!-- curve label -->
+  <text x="150" y="205" font-size="12" text-anchor="start" fill="#1e3a8a" font-weight="bold">frozen linear probe (per sequence)</text>
+
+  <!-- caption block -->
+  <text x="120" y="406" font-size="11" text-anchor="start" fill="#475569">The honest per-sequence probe holds roughly double chance from a quarter of the labels up to all 68, mean over 20 stratified 70/30 splits.</text>
+</svg>

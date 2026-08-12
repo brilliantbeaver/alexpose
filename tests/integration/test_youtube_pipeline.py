@@ -35,7 +35,7 @@ class TestYouTubePipeline:
         """Provide YouTube handler for testing."""
         return YouTubeHandler()
 
-    @pytest.fixture(scope="class") 
+    @pytest.fixture
     def mock_youtube_handler(self):
         """Provide mock YouTube handler for fast testing."""
         mock_handler = Mock(spec=YouTubeHandler)

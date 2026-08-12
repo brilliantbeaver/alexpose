@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="340" viewBox="0 0 900 340">
+<rect width="900" height="340" fill="#ffffff"/>
+<defs>
+<marker id="arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#94a3b8"/></marker>
+<marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#2563eb"/></marker>
+<marker id="arrowOrange" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#ea7317"/></marker>
+<marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#16a34a"/></marker>
+<marker id="arrowSlate" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#475569"/></marker>
+<marker id="arrowMute" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#64748b"/></marker>
+<marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#7c3aed"/></marker>
+</defs>
+<text x="450.0" y="34" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" fill="#1a2733" font-weight="700" text-anchor="middle">Progressive training</text>
+<line x1="60" y1="150" x2="840" y2="150" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
+<rect x="71.5" y="52.5" width="220" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="70.0" y="50" width="220" height="66" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+<text x="180.0" y="88.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#2563eb" font-weight="700" text-anchor="middle">Pretrain on normal gait</text>
+<circle cx="180" cy="150" r="8" fill="#2563eb" stroke="#fff" stroke-width="2"/>
+<text x="180" y="180" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#2563eb" font-weight="700" text-anchor="middle">Phase 1</text>
+<rect x="341.5" y="52.5" width="220" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="340.0" y="50" width="220" height="66" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+<text x="450.0" y="88.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#ea7317" font-weight="700" text-anchor="middle">Add ms and pd sequences</text>
+<circle cx="450" cy="150" r="8" fill="#ea7317" stroke="#fff" stroke-width="2"/>
+<text x="450" y="180" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#ea7317" font-weight="700" text-anchor="middle">Phase 2</text>
+<rect x="611.5" y="52.5" width="220" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="610.0" y="50" width="220" height="66" rx="14" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+<text x="720.0" y="88.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#16a34a" font-weight="700" text-anchor="middle">Add VICReg to separate</text>
+<circle cx="720" cy="150" r="8" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+<text x="720" y="180" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#16a34a" font-weight="700" text-anchor="middle">Phase 3</text>
+<path d="M 275 150 H 355" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 545 150 H 625" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="450.0" y="312" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">capacity and robustness grow left to right</text>
+</svg>
