@@ -1,0 +1,7 @@
+task,condition,mode,split,accuracy,balanced_accuracy,macro_f1,train_sequences,test_sequences,roc_auc
+five_class_exp5_exact,all,smoke,smoke_stratified_not_exp5,0.5333333333333333,0.5333333333333333,0.5047619047619047,,,
+five_class_all_sequences,all,smoke,smoke_all_stratified,0.5333333333333333,0.5333333333333333,0.5047619047619047,,,
+one_vs_normal,parkinsons,smoke,smoke_all_stratified,0.6666666666666666,0.6666666666666666,0.625,14.0,6.0,0.9444444444444444
+one_vs_normal,stroke,smoke,smoke_all_stratified,0.6666666666666666,0.6666666666666666,0.6666666666666666,14.0,6.0,0.7777777777777778
+one_vs_normal,myopathic,smoke,smoke_all_stratified,0.6666666666666666,0.6666666666666666,0.6666666666666666,14.0,6.0,0.7777777777777779
+one_vs_normal,cerebralpalsy,smoke,smoke_all_stratified,1.0,1.0,1.0,14.0,6.0,1.0
