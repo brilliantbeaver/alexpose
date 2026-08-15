@@ -1,0 +1,340 @@
+{
+  "mode": "smoke",
+  "splits": {
+    "all_sequences": "smoke_all_stratified",
+    "exp5_exact": "smoke_stratified_not_exp5"
+  },
+  "checkpoint_fingerprint": "a4f979f3c82b065f0cdef44da5140fc00efcbce64034e06c11be011e66777045",
+  "checkpoint_parent_fingerprint": "ff6c1c2367ef5bc69859bd1f086f689b23e241b6d76903edeb03cc313b1a85b7",
+  "curriculum_complete": true,
+  "conditions_seen": [
+    "normal",
+    "parkinsons",
+    "stroke",
+    "myopathic",
+    "cerebralpalsy"
+  ],
+  "completed_stages": [
+    {
+      "stage": 0,
+      "name": "normal_only",
+      "added_condition": "normal",
+      "conditions": [
+        "normal"
+      ],
+      "epochs": 2,
+      "optimizer_updates": 8,
+      "learning_rate": 0.0003
+    },
+    {
+      "stage": 1,
+      "name": "add_parkinsons",
+      "added_condition": "parkinsons",
+      "conditions": [
+        "normal",
+        "parkinsons"
+      ],
+      "epochs": 1,
+      "optimizer_updates": 4,
+      "learning_rate": 0.0003
+    },
+    {
+      "stage": 2,
+      "name": "add_stroke",
+      "added_condition": "stroke",
+      "conditions": [
+        "normal",
+        "parkinsons",
+        "stroke"
+      ],
+      "epochs": 1,
+      "optimizer_updates": 4,
+      "learning_rate": 0.0003
+    },
+    {
+      "stage": 3,
+      "name": "add_myopathic",
+      "added_condition": "myopathic",
+      "conditions": [
+        "normal",
+        "parkinsons",
+        "stroke",
+        "myopathic"
+      ],
+      "epochs": 1,
+      "optimizer_updates": 4,
+      "learning_rate": 0.0003
+    },
+    {
+      "stage": 4,
+      "name": "add_cerebralpalsy",
+      "added_condition": "cerebralpalsy",
+      "conditions": [
+        "normal",
+        "parkinsons",
+        "stroke",
+        "myopathic",
+        "cerebralpalsy"
+      ],
+      "epochs": 1,
+      "optimizer_updates": 4,
+      "learning_rate": 0.0003
+    }
+  ],
+  "loss_config": {
+    "jepa": "centered_sharpened_latent_cross_entropy",
+    "vicreg": {
+      "invariance": 25.0,
+      "variance": 25.0,
+      "covariance": 1.0,
+      "outer_weight": 0.05
+    },
+    "group": {
+      "compactness": 1.0,
+      "centroid_margin": 1.0,
+      "outer_weight": 0.25
+    }
+  },
+  "label_aware_after_stage0": true,
+  "embedding_corpus_sha256": "b21a3ad9a8dfdee3d0fa5809fd11c8d326d5c0e27c9b4727aff469c3e361871e",
+  "mask_keypoints": [
+    11,
+    12,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "feature_count": 128,
+  "class_order": [
+    "cerebralpalsy",
+    "myopathic",
+    "normal",
+    "parkinsons",
+    "stroke"
+  ],
+  "exp5_exact_train_sequence_ids": [
+    "smoke_normal_002",
+    "smoke_normal_000",
+    "smoke_cerebralpalsy_007",
+    "smoke_myopathic_008",
+    "smoke_stroke_001",
+    "smoke_parkinsons_001",
+    "smoke_myopathic_005",
+    "smoke_cerebralpalsy_002",
+    "smoke_normal_008",
+    "smoke_myopathic_004",
+    "smoke_parkinsons_008",
+    "smoke_parkinsons_007",
+    "smoke_stroke_005",
+    "smoke_cerebralpalsy_008",
+    "smoke_parkinsons_000",
+    "smoke_cerebralpalsy_005",
+    "smoke_parkinsons_006",
+    "smoke_myopathic_000",
+    "smoke_myopathic_003",
+    "smoke_stroke_008",
+    "smoke_normal_009",
+    "smoke_normal_005",
+    "smoke_cerebralpalsy_001",
+    "smoke_stroke_007",
+    "smoke_stroke_000",
+    "smoke_stroke_004",
+    "smoke_myopathic_007",
+    "smoke_parkinsons_003",
+    "smoke_parkinsons_002",
+    "smoke_cerebralpalsy_000",
+    "smoke_normal_006",
+    "smoke_stroke_006",
+    "smoke_myopathic_001",
+    "smoke_normal_003",
+    "smoke_cerebralpalsy_009"
+  ],
+  "exp5_exact_test_sequence_ids": [
+    "smoke_myopathic_006",
+    "smoke_cerebralpalsy_006",
+    "smoke_parkinsons_005",
+    "smoke_cerebralpalsy_004",
+    "smoke_normal_004",
+    "smoke_normal_001",
+    "smoke_normal_007",
+    "smoke_myopathic_002",
+    "smoke_myopathic_009",
+    "smoke_stroke_003",
+    "smoke_stroke_002",
+    "smoke_parkinsons_009",
+    "smoke_parkinsons_004",
+    "smoke_cerebralpalsy_003",
+    "smoke_stroke_009"
+  ],
+  "all_sequences_train_sequence_ids": [
+    "smoke_normal_002",
+    "smoke_normal_000",
+    "smoke_cerebralpalsy_007",
+    "smoke_myopathic_008",
+    "smoke_stroke_001",
+    "smoke_parkinsons_001",
+    "smoke_myopathic_005",
+    "smoke_cerebralpalsy_002",
+    "smoke_normal_008",
+    "smoke_myopathic_004",
+    "smoke_parkinsons_008",
+    "smoke_parkinsons_007",
+    "smoke_stroke_005",
+    "smoke_cerebralpalsy_008",
+    "smoke_parkinsons_000",
+    "smoke_cerebralpalsy_005",
+    "smoke_parkinsons_006",
+    "smoke_myopathic_000",
+    "smoke_myopathic_003",
+    "smoke_stroke_008",
+    "smoke_normal_009",
+    "smoke_normal_005",
+    "smoke_cerebralpalsy_001",
+    "smoke_stroke_007",
+    "smoke_stroke_000",
+    "smoke_stroke_004",
+    "smoke_myopathic_007",
+    "smoke_parkinsons_003",
+    "smoke_parkinsons_002",
+    "smoke_cerebralpalsy_000",
+    "smoke_normal_006",
+    "smoke_stroke_006",
+    "smoke_myopathic_001",
+    "smoke_normal_003",
+    "smoke_cerebralpalsy_009"
+  ],
+  "all_sequences_test_sequence_ids": [
+    "smoke_myopathic_006",
+    "smoke_cerebralpalsy_006",
+    "smoke_parkinsons_005",
+    "smoke_cerebralpalsy_004",
+    "smoke_normal_004",
+    "smoke_normal_001",
+    "smoke_normal_007",
+    "smoke_myopathic_002",
+    "smoke_myopathic_009",
+    "smoke_stroke_003",
+    "smoke_stroke_002",
+    "smoke_parkinsons_009",
+    "smoke_parkinsons_004",
+    "smoke_cerebralpalsy_003",
+    "smoke_stroke_009"
+  ],
+  "binary_row_contract": {
+    "parkinsons": {
+      "train_sequence_ids": [
+        "smoke_normal_002",
+        "smoke_normal_000",
+        "smoke_parkinsons_001",
+        "smoke_normal_008",
+        "smoke_parkinsons_008",
+        "smoke_parkinsons_007",
+        "smoke_parkinsons_000",
+        "smoke_parkinsons_006",
+        "smoke_normal_009",
+        "smoke_normal_005",
+        "smoke_parkinsons_003",
+        "smoke_parkinsons_002",
+        "smoke_normal_006",
+        "smoke_normal_003"
+      ],
+      "test_sequence_ids": [
+        "smoke_parkinsons_005",
+        "smoke_normal_004",
+        "smoke_normal_001",
+        "smoke_normal_007",
+        "smoke_parkinsons_009",
+        "smoke_parkinsons_004"
+      ]
+    },
+    "stroke": {
+      "train_sequence_ids": [
+        "smoke_normal_002",
+        "smoke_normal_000",
+        "smoke_stroke_001",
+        "smoke_normal_008",
+        "smoke_stroke_005",
+        "smoke_stroke_008",
+        "smoke_normal_009",
+        "smoke_normal_005",
+        "smoke_stroke_007",
+        "smoke_stroke_000",
+        "smoke_stroke_004",
+        "smoke_normal_006",
+        "smoke_stroke_006",
+        "smoke_normal_003"
+      ],
+      "test_sequence_ids": [
+        "smoke_normal_004",
+        "smoke_normal_001",
+        "smoke_normal_007",
+        "smoke_stroke_003",
+        "smoke_stroke_002",
+        "smoke_stroke_009"
+      ]
+    },
+    "myopathic": {
+      "train_sequence_ids": [
+        "smoke_normal_002",
+        "smoke_normal_000",
+        "smoke_myopathic_008",
+        "smoke_myopathic_005",
+        "smoke_normal_008",
+        "smoke_myopathic_004",
+        "smoke_myopathic_000",
+        "smoke_myopathic_003",
+        "smoke_normal_009",
+        "smoke_normal_005",
+        "smoke_myopathic_007",
+        "smoke_normal_006",
+        "smoke_myopathic_001",
+        "smoke_normal_003"
+      ],
+      "test_sequence_ids": [
+        "smoke_myopathic_006",
+        "smoke_normal_004",
+        "smoke_normal_001",
+        "smoke_normal_007",
+        "smoke_myopathic_002",
+        "smoke_myopathic_009"
+      ]
+    },
+    "cerebralpalsy": {
+      "train_sequence_ids": [
+        "smoke_normal_002",
+        "smoke_normal_000",
+        "smoke_cerebralpalsy_007",
+        "smoke_cerebralpalsy_002",
+        "smoke_normal_008",
+        "smoke_cerebralpalsy_008",
+        "smoke_cerebralpalsy_005",
+        "smoke_normal_009",
+        "smoke_normal_005",
+        "smoke_cerebralpalsy_001",
+        "smoke_cerebralpalsy_000",
+        "smoke_normal_006",
+        "smoke_normal_003",
+        "smoke_cerebralpalsy_009"
+      ],
+      "test_sequence_ids": [
+        "smoke_cerebralpalsy_006",
+        "smoke_cerebralpalsy_004",
+        "smoke_normal_004",
+        "smoke_normal_001",
+        "smoke_normal_007",
+        "smoke_cerebralpalsy_003"
+      ]
+    }
+  },
+  "include_augmented_normal": false,
+  "augmented_normal_sequences": 0,
+  "augmented_normal_videos": 0,
+  "encoder_checkpoint": "sjepa_curriculum_final.pt"
+}
