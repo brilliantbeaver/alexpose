@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Leaky split versus corrected video-disjoint split</title>
+  <desc id="desc">A before and after comparison. In the leaky split, sequences from the same source video appear on both the pretraining side and the reported test side. In the corrected split, every source video is assigned to only one side before any preprocessing.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+</style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0 0L8 3L0 6Z" fill="#20364e"/>
+    </marker>
+
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+<text class="h" x="48" y="76">Same six source videos, two different splits</text>
+<text class="s" x="48" y="100">Every S-JEPA and classifier number reported in this project so far used the split on top.</text>
+<text class="t" x="48" y="136">Leaky: video-confounded split (used until this proposal)</text>
+<rect x="48" y="158" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="70" y="196">V1</text>
+<text class="s" x="70" y="222">pretrain</text>
+<clipPath id="clipL1"><rect x="241" y="158" width="136" height="100" rx="16"/></clipPath>
+<g clip-path="url(#clipL1)">
+<rect x="241" y="158" width="68" height="100" fill="#e7f0f8"/>
+<rect x="309" y="158" width="68" height="100" fill="#f7e7d8"/>
+</g>
+<rect x="241" y="158" width="136" height="100" rx="16" fill="none" stroke="#20364e" stroke-width="1.75"/>
+<line x1="309" y1="158" x2="309" y2="258" stroke="#20364e" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="272" y="168" width="74" height="24" rx="12" fill="#20364e"/>
+<text class="w" x="309" y="185" text-anchor="middle">LEAK</text>
+<text class="b" x="263" y="226">V2</text>
+<rect x="434" y="158" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="456" y="196">V3</text>
+<text class="s" x="456" y="222">pretrain</text>
+<rect x="627" y="158" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="649" y="196">V4</text>
+<text class="s" x="649" y="222">pretrain</text>
+<clipPath id="clipL4"><rect x="820" y="158" width="136" height="100" rx="16"/></clipPath>
+<g clip-path="url(#clipL4)">
+<rect x="820" y="158" width="68" height="100" fill="#e7f0f8"/>
+<rect x="888" y="158" width="68" height="100" fill="#f7e7d8"/>
+</g>
+<rect x="820" y="158" width="136" height="100" rx="16" fill="none" stroke="#20364e" stroke-width="1.75"/>
+<line x1="888" y1="158" x2="888" y2="258" stroke="#20364e" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="851" y="168" width="74" height="24" rx="12" fill="#20364e"/>
+<text class="w" x="888" y="185" text-anchor="middle">LEAK</text>
+<text class="b" x="842" y="226">V5</text>
+<rect x="1013" y="158" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="1035" y="196">V6</text>
+<text class="s" x="1035" y="222">pretrain</text>
+<text class="s" x="48" y="286">V2 and V5 feed both sides: notebook 04 pretrains on them, notebook 06 tests on them again.</text>
+<text class="t" x="48" y="350">Corrected: video-disjoint split (this proposal builds it)</text>
+<rect x="48" y="372" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="70" y="410">V1</text>
+<text class="s" x="70" y="436">pretrain</text>
+<rect x="241" y="372" width="136" height="100" rx="16" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.75"/>
+<text class="t" x="263" y="410">V2</text>
+<text class="s" x="263" y="436">held out</text>
+<rect x="434" y="372" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="456" y="410">V3</text>
+<text class="s" x="456" y="436">pretrain</text>
+<rect x="627" y="372" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="649" y="410">V4</text>
+<text class="s" x="649" y="436">pretrain</text>
+<rect x="820" y="372" width="136" height="100" rx="16" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.75"/>
+<text class="t" x="842" y="410">V5</text>
+<text class="s" x="842" y="436">held out</text>
+<rect x="1013" y="372" width="136" height="100" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="t" x="1035" y="410">V6</text>
+<text class="s" x="1035" y="436">pretrain</text>
+<text class="s" x="48" y="502">V2 and V5 are now fully held out, decided before any preprocessing or training begins.</text>
+<rect x="48" y="548" width="24" height="24" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<text class="s" x="80" y="565">Pretraining (context)</text>
+<rect x="300" y="548" width="24" height="24" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.75"/>
+<text class="s" x="332" y="565">Held-out test</text>
+<rect x="520" y="548" width="12" height="24" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+<rect x="532" y="548" width="12" height="24" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.75"/>
+<text class="s" x="552" y="565">Both sides at once: the leak, now banned</text>
+<text class="s" x="48" y="610">This proposal builds the split once as reusable code; ideas 2 to 7 cite it instead of re-deriving one.</text>
+</svg>
