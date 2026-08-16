@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>A healthy-looking number can hide a collapsed representation</title>
+  <desc>A related, separate codebase checked the same checkpoint two ways. Per-token variance read as healthy at 0.9. Pooled per-clip effective rank was actually 1.4 of 128 possible dimensions. GAVD5 has never run the second check on its own checkpoint.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+      .card{stroke:#20364e;stroke-width:1.75}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="72" class="h">A healthy-looking number can hide a collapsed representation</text>
+  <text x="48" y="100" class="s">What a related, separate codebase found when it checked the same checkpoint two different ways</text>
+
+  <!-- column captions -->
+  <text x="64" y="122" class="s">The metric that was being watched</text>
+  <text x="636" y="122" class="s">The metric downstream probes actually use</text>
+
+  <!-- Row 1: what is measured -->
+  <rect x="64" y="132" width="500" height="108" rx="16" fill="#e7f0f8" class="card"/>
+  <text x="86" y="162" class="t">Per-token variance</text>
+  <text x="86" y="189" class="b">std measured across (batch x token)</text>
+  <text x="86" y="216" class="b">rows, not per finished clip</text>
+
+  <rect x="636" y="132" width="500" height="108" rx="16" fill="#e7f0f8" class="card"/>
+  <text x="658" y="162" class="t">Pooled per-clip covariance</text>
+  <text x="658" y="189" class="b">one embedding vector per sequence,</text>
+  <text x="658" y="216" class="b">eigenvalues of its covariance matrix</text>
+
+  <!-- arrows down -->
+  <path d="M314 240V280" class="a"/>
+  <path d="M886 240V280" class="a"/>
+
+  <!-- Row 2: what was found -->
+  <rect x="64" y="296" width="500" height="108" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="86" y="326" class="t">std &#8776; 0.9</text>
+  <text x="86" y="353" class="b">read as reassuring &#8212;</text>
+  <text x="86" y="380" class="b">no collapse detected</text>
+
+  <rect x="636" y="296" width="500" height="108" rx="16" fill="#f6e2df" stroke="#c0483a" stroke-width="1.75"/>
+  <text x="658" y="326" class="t">rank &#8776; 1.4 of 128</text>
+  <text x="658" y="353" class="b">nearly every clip lands on</text>
+  <text x="658" y="380" class="b">about one shared direction</text>
+
+  <!-- arrows down -->
+  <path d="M314 404V444" class="a"/>
+  <path d="M886 404V444" class="a"/>
+
+  <!-- Row 3: verdicts -->
+  <rect x="64" y="460" width="500" height="81" rx="16" fill="#e6f2ea" stroke="#3f6b53" stroke-width="1.75"/>
+  <text x="86" y="490" class="t">Looked fine</text>
+  <text x="86" y="517" class="b">on the metric being watched</text>
+
+  <rect x="636" y="460" width="500" height="81" rx="16" fill="#f6e2df" stroke="#c0483a" stroke-width="1.75"/>
+  <text x="658" y="490" class="t">Actually collapsed</text>
+  <text x="658" y="517" class="b">on the metric that matters</text>
+
+  <!-- callout banner -->
+  <rect x="64" y="580" width="1072" height="88" rx="16" fill="#20364e"/>
+  <text x="88" y="614" class="w">GAVD5's own final checkpoint has never been checked this way.</text>
+  <text x="88" y="641" class="ws">Feature std 0.414 and cosine silhouette 0.009 fit either outcome equally well.</text>
+</svg>

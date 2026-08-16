@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Representation health metrics, not classification accuracy</title>
+  <desc>Position-target and motion-target frozen encoders are compared on effective rank, per-condition cosine silhouette, and linear-probe R-squared on step_amplitude and asymmetry_index. Classification accuracy is explicitly excluded as the primary metric so a settled null result is not re-litigated.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .box{stroke:#20364e;stroke-width:1.75}
+      .risk{stroke:#c0483a;stroke-width:1.75}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="64" y="58" class="h">Compare representations, not classification accuracy</text>
+  <text x="64" y="88" class="s">Both models are frozen after identical training; only these three metrics are pre-registered as primary.</text>
+
+  <!-- Row 1: two frozen models -->
+  <rect x="90" y="130" width="460" height="90" rx="16" fill="#e7f0f8" class="box"/>
+  <text x="114" y="168" class="t">Position-target model</text>
+  <text x="114" y="195" class="b">frozen after the same curriculum</text>
+
+  <rect x="650" y="130" width="460" height="90" rx="16" fill="#e6f2ea" class="box"/>
+  <text x="674" y="168" class="t">Motion-target model</text>
+  <text x="674" y="195" class="b">frozen after the same curriculum</text>
+
+  <path d="M320 220V244" class="a"/>
+  <path d="M880 220V244" class="a"/>
+
+  <!-- Merge bar -->
+  <rect x="90" y="260" width="1020" height="50" rx="16" fill="#ffffff" class="box"/>
+  <text x="114" y="290" class="b">Same three metrics, computed for both, then compared</text>
+
+  <path d="M240 310V334" class="a"/>
+  <path d="M600 310V334" class="a"/>
+  <path d="M960 310V334" class="a"/>
+
+  <!-- Row 2: three metric cards -->
+  <rect x="90" y="350" width="300" height="110" rx="16" fill="#e7f0f8" class="box"/>
+  <text x="114" y="380" class="t">Effective rank</text>
+  <text x="114" y="406" class="b">independent directions</text>
+  <text x="114" y="428" class="b">the embedding actually uses</text>
+
+  <rect x="450" y="350" width="300" height="110" rx="16" fill="#e6f2ea" class="box"/>
+  <text x="474" y="380" class="t">Cosine silhouette</text>
+  <text x="474" y="406" class="b">per-condition separation</text>
+  <text x="474" y="428" class="b">of the frozen embeddings</text>
+
+  <rect x="810" y="350" width="300" height="110" rx="16" fill="#ece6f6" class="box"/>
+  <text x="834" y="380" class="t">Linear-probe fit</text>
+  <text x="834" y="406" class="b">R-squared on step_amplitude</text>
+  <text x="834" y="428" class="b">and asymmetry_index</text>
+
+  <!-- Row 3: explicitly excluded metric -->
+  <text x="90" y="496" class="s">For contrast, excluded from this study's primary criteria:</text>
+
+  <rect x="90" y="522" width="1020" height="90" rx="16" fill="#f6e2df" class="risk"/>
+  <text x="114" y="557" class="t">Explicitly NOT the primary metric: classification accuracy</text>
+  <text x="114" y="583" class="b">Already tested in this project's history; not re-measured here as evidence.</text>
+</svg>
