@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Proposal-specific evidence modules</title>
+  <desc id="desc">Five partly orthogonal checks cover pipeline validity, matched association, shortcuts, held-out sources, and external replication.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.one{fill:#fff;stroke:#cad4dc;stroke-width:2}.two{fill:#edf4f8;stroke:#2f6f99;stroke-width:2}.three{fill:#eaf4ee;stroke:#5f9e7e;stroke-width:2}.four{fill:#f1edf7;stroke:#8a6fb3;stroke-width:2}.five{fill:#fff0e9;stroke:#e07a4b;stroke-width:3}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.n{font:bold 25px Arial,sans-serif;fill:#fff}.t{font:bold 20px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">Five evidence modules keep each claim proportional</text>
+  <text class="s" x="60" y="91">The workflow is recommended, but shortcut, transfer, and replication evidence remain partly orthogonal.</text>
+
+  <rect class="one" x="60" y="145" rx="16" width="190" height="390"/>
+  <circle cx="155" cy="190" r="27" fill="#607284"/><text class="n" x="148" y="199">1</text>
+  <text class="t" x="80" y="250">Pipeline validity</text>
+  <text class="b" x="80" y="292">finite gradients</text>
+  <text class="b" x="80" y="321">mask invariants</text>
+  <text class="b" x="80" y="350">artifact hashes</text>
+  <text class="s" x="80" y="500">pipeline is valid</text>
+
+  <rect class="two" x="285" y="145" rx="16" width="190" height="390"/>
+  <circle cx="380" cy="190" r="27" fill="#2f6f99"/><text class="n" x="373" y="199">2</text>
+  <text class="t" x="305" y="250">Matched control</text>
+  <text class="b" x="305" y="292">same unit</text>
+  <text class="b" x="305" y="321">same pipeline</text>
+  <text class="b" x="305" y="350">one factor only</text>
+  <text class="s" x="305" y="500">matched association</text>
+
+  <rect class="three" x="510" y="145" rx="16" width="190" height="390"/>
+  <circle cx="605" cy="190" r="27" fill="#5f9e7e"/><text class="n" x="598" y="199">3</text>
+  <text class="t" x="530" y="250">Shortcut stress</text>
+  <text class="b" x="530" y="292">rule baseline</text>
+  <text class="b" x="530" y="321">artifact probe</text>
+  <text class="b" x="530" y="350">ablation</text>
+  <text class="s" x="530" y="500">mechanism evidence</text>
+
+  <rect class="four" x="735" y="145" rx="16" width="190" height="390"/>
+  <circle cx="830" cy="190" r="27" fill="#8a6fb3"/><text class="n" x="823" y="199">4</text>
+  <text class="t" x="755" y="250">Held-out source</text>
+  <text class="b" x="755" y="292">fold-local</text>
+  <text class="b" x="755" y="321">unseen sources</text>
+  <text class="b" x="755" y="350">source effects</text>
+  <text class="s" x="755" y="500">source transfer</text>
+
+  <rect class="five" x="960" y="145" rx="16" width="180" height="390"/>
+  <circle cx="1050" cy="190" r="27" fill="#e07a4b"/><text class="n" x="1043" y="199">5</text>
+  <text class="t" x="980" y="250">External</text>
+  <text class="t" x="980" y="277">replication</text>
+  <text class="b" x="980" y="321">new dataset</text>
+  <text class="b" x="980" y="350">same rule</text>
+  <text class="s" x="980" y="485">cross-dataset</text>
+  <text class="s" x="980" y="510">replication</text>
+
+  <rect x="180" y="600" rx="12" width="840" height="60" fill="#20364e"/>
+  <text x="600" y="637" text-anchor="middle" style="font:bold 19px Arial,sans-serif;fill:#fff">Report the failed check. Do not widen the claim to hide it.</text>
+</svg>
