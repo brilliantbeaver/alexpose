@@ -2,10 +2,10 @@
 
 **Task**: You are to carefully & systematically revise the notebooks (*.ipynb) such that the S-JEPA "View encoder" and "Predictor" were trained first using only "normal" gait.  Only after all the "normal" gait training are done would you progressively add the following distinct types of GAVD gait videos to add to the robustness & capacity of the S-JEPA model:
 
-- parkinsons: data/gavd/parkinsons
-- stroke: data/gavd/stroke
-- myopathic: data/gavd/myopathic
-- cerebralpalsy: data/gavd/cerebralpalsy
+- parkinsons: /Users/pmui/dev/alexpose/data/gavd/parkinsons
+- stroke: /Users/pmui/dev/alexpose/data/gavd/stroke
+- myopathic: /Users/pmui/dev/alexpose/data/gavd/myopathic
+- cerebralpalsy: /Users/pmui/dev/alexpose/data/gavd/cerebralpalsy
 
 <non-negotiables>
 Be explicit in the setup of the tutorial notebooks on how the first set of training is based on "normal" datasets, and then fine-tuned with additional addition of "parkinsons", "stroke", "myopathic", and "cerebralpalsy" datasets to enhance the capacity & robostness of S-JEPA.  We must use anti-collapse mechanism such as VICReg to keep the representation space groupings for "parkinsons", "stroke", "myopathic", "cerebralpalsy", and "normal" be as far apart as possible. 
