@@ -4,8 +4,8 @@
     "all_sequences": "all_96_stratified_video_confounded",
     "exp5_exact": "exp5_exact_video_confounded"
   },
-  "checkpoint_fingerprint": "d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1",
-  "checkpoint_parent_fingerprint": "e81d529a73730ee6912951328ee1b40eaafd8e37d9e63390dfae30d81fa90fff",
+  "checkpoint_fingerprint": "dba24a054eeb0c6c239b88c2666fecd6707b54629646975cc4a5bad5498d7ede",
+  "checkpoint_parent_fingerprint": "a81f62d26096a3f7a4af07f75efc062818251f246fc9457252796d3f2113a806",
   "curriculum_complete": true,
   "conditions_seen": [
     "normal",
@@ -23,7 +23,7 @@
         "normal"
       ],
       "epochs": 300,
-      "optimizer_updates": 5700,
+      "optimizer_updates": 900,
       "learning_rate": 0.001
     },
     {
@@ -35,7 +35,7 @@
         "parkinsons"
       ],
       "epochs": 75,
-      "optimizer_updates": 1425,
+      "optimizer_updates": 225,
       "learning_rate": 0.0003
     },
     {
@@ -48,7 +48,7 @@
         "stroke"
       ],
       "epochs": 75,
-      "optimizer_updates": 1425,
+      "optimizer_updates": 225,
       "learning_rate": 0.0003
     },
     {
@@ -62,7 +62,7 @@
         "myopathic"
       ],
       "epochs": 75,
-      "optimizer_updates": 1425,
+      "optimizer_updates": 900,
       "learning_rate": 0.0003
     },
     {
@@ -77,7 +77,7 @@
         "cerebralpalsy"
       ],
       "epochs": 75,
-      "optimizer_updates": 1425,
+      "optimizer_updates": 900,
       "learning_rate": 0.0003
     }
   ],
@@ -96,7 +96,7 @@
     }
   },
   "label_aware_after_stage0": true,
-  "embedding_corpus_sha256": "ed20c430ed41a376af6b0381959f0b29eab075259e48681f1b840dd2e96f44a5",
+  "embedding_corpus_sha256": "01995c37e1176ad4eefbaf5a42f0003a614d264a8a627095361656fd779e6b2d",
   "mask_keypoints": [
     11,
     12,
@@ -449,8 +449,8 @@
       ]
     }
   },
-  "include_augmented_normal": true,
-  "augmented_normal_sequences": 63,
-  "augmented_normal_videos": 17,
-  "encoder_checkpoint": "sjepa_curriculum_final_augmented.pt"
+  "include_augmented_normal": false,
+  "augmented_normal_sequences": 0,
+  "augmented_normal_videos": 0,
+  "encoder_checkpoint": "sjepa_curriculum_final.pt"
 }
