@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Patchify groups one joint across four frames</title>
+  <desc id="desc">The encoder reshapes and permutes the input so each token contains one joint over a short time segment.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">Patchify groups one joint across four frames</tspan></text>
+  <rect x="48" y="122" width="220" height="158" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="72" y="158" class="t" text-anchor="start"><tspan x="72" dy="0">Input</tspan></text><text x="72" y="194" class="b" text-anchor="start"><tspan x="72" dy="0">[B,64,33,3]</tspan><tspan x="72" dy="26">frames, joints, xyz</tspan></text><rect x="326" y="122" width="240" height="158" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="350" y="158" class="t" text-anchor="start"><tspan x="350" dy="0">Reshape</tspan></text><text x="350" y="194" class="b" text-anchor="start"><tspan x="350" dy="0">[B,16,4,33,3]</tspan><tspan x="350" dy="26">make 16 segments</tspan></text><rect x="624" y="122" width="240" height="158" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="648" y="158" class="t" text-anchor="start"><tspan x="648" dy="0">Permute</tspan></text><text x="648" y="194" class="b" text-anchor="start"><tspan x="648" dy="0">[B,16,33,4,3]</tspan><tspan x="648" dy="26">joint before time</tspan></text><rect x="922" y="122" width="230" height="158" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="946" y="158" class="t" text-anchor="start"><tspan x="946" dy="0">Flatten</tspan></text><text x="946" y="194" class="b" text-anchor="start"><tspan x="946" dy="0">[B,16,33,12]</tspan><tspan x="946" dy="26">4 frames x 3 coords</tspan></text><path d="M 268 201 L 310 201" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 566 201 L 608 201" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 864 201 L 906 201" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="48" y="368" width="1104" height="208" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/><text x="72" y="404" class="t" text-anchor="start"><tspan x="72" dy="0">What one patch contains</tspan></text><text x="72" y="440" class="b" text-anchor="start"><tspan x="72" dy="0">Choose segment 7 and LEFT_ANKLE. Its token starts from 12 numbers:</tspan><tspan x="72" dy="26">(x,y,z) at frame 28, then frames 29, 30, and 31.</tspan><tspan x="72" dy="26">It does not combine multiple joints. A learned Linear(12,D) creates the token.</tspan></text><rect x="368" y="620" width="464" height="36" rx="18" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.5"/><text x="600.0" y="644" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">One token = one joint x one time segment</tspan></text>
+</svg>

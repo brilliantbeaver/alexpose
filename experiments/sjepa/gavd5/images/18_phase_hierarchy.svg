@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Learned phase hierarchy</title>
+  <desc id="desc">Continuous-time skeleton motion feeds a shared encoder state, with circular phase conditioning three predictive time scales.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.card{fill:#fff;stroke:#cad4dc;stroke-width:2}.blue{fill:#edf4f8;stroke:#2f6f99;stroke-width:3}.green{fill:#eaf4ee;stroke:#5f9e7e;stroke-width:3}.violet{fill:#f1edf7;stroke:#8a6fb3;stroke-width:3}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.t{font:bold 21px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}.tag{font:bold 18px Arial,sans-serif;fill:#2f6f99}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">Let dynamics define time, not resized frame bins</text>
+  <text class="s" x="60" y="91">Shared context predicts at three scales. Circular phase is conditioning, not the whole state.</text>
+
+  <rect class="card" x="60" y="215" rx="16" width="250" height="200"/>
+  <text class="t" x="85" y="252">Timed skeletons</text>
+  <path d="M88 335 C125 295 155 365 190 315 C220 275 250 345 282 300" fill="none" stroke="#2f6f99" stroke-width="5"/>
+  <circle cx="88" cy="335" r="6" fill="#e07a4b"/><circle cx="155" cy="365" r="6" fill="#e07a4b"/><circle cx="220" cy="275" r="6" fill="#e07a4b"/>
+  <text class="s" x="85" y="385">native cadence • real timestamps</text>
+  <path d="M310 315 L400 315" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="blue" x="410" y="180" rx="16" width="260" height="270"/>
+  <text class="t" x="435" y="217">Shared encoder state</text>
+  <rect x="440" y="235" rx="8" width="200" height="38" fill="#fff"/>
+  <text class="b" x="478" y="260">context state z</text>
+  <circle cx="540" cy="335" r="48" fill="#fff" stroke="#2f6f99" stroke-width="4"/>
+  <line x1="540" y1="335" x2="568" y2="301" stroke="#e07a4b" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="540" cy="335" r="6" fill="#20364e"/>
+  <text class="tag" x="440" y="405">phase φ wraps at 2π</text>
+  <text class="s" x="440" y="425">test the π ambiguity</text>
+  <text class="s" x="440" y="445">fit L/R anchor on train</text>
+
+  <path d="M670 315 L755 200" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M670 315 L755 315" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M670 315 L755 430" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="card" x="765" y="125" rx="14" width="350" height="120"/>
+  <text class="t" x="790" y="161">Local scale</text>
+  <text class="b" x="790" y="194">masked joints and short motion</text>
+  <text class="s" x="790" y="221">tens of milliseconds</text>
+  <rect class="green" x="765" y="270" rx="14" width="350" height="120"/>
+  <text class="t" x="790" y="306">Step scale</text>
+  <text class="b" x="790" y="339">next support transition</text>
+  <text class="s" x="790" y="366">left or right stance</text>
+  <rect class="violet" x="765" y="415" rx="14" width="350" height="120"/>
+  <text class="t" x="790" y="451">Cycle scale</text>
+  <text class="b" x="790" y="484">next cycle summary</text>
+  <text class="s" x="790" y="511">style across one full period</text>
+
+  <rect x="170" y="615" rx="12" width="860" height="55" fill="#fff0e9" stroke="#e07a4b" stroke-width="2"/>
+  <text class="b" x="198" y="648">Hard test: recover heel-strike events and transfer phase across unseen walking speeds.</text>
+</svg>

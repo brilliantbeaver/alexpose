@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The predictor rebuilds a full token canvas</title>
+  <desc id="desc">Visible encoded features are scattered into their original locations among learned mask tokens before full-sequence prediction.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">The predictor rebuilds a full token canvas</tspan></text>
+  <rect x="48" y="112" width="230" height="168" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="72" y="148" class="t" text-anchor="start"><tspan x="72" dy="0">Visible features</tspan></text><text x="72" y="184" class="b" text-anchor="start"><tspan x="72" dy="0">[B,K,D]</tspan><tspan x="72" dy="26">from view encoder</tspan></text><rect x="334" y="112" width="250" height="168" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="358" y="148" class="t" text-anchor="start"><tspan x="358" dy="0">Project width</tspan></text><text x="358" y="184" class="b" text-anchor="start"><tspan x="358" dy="0">Linear D -&gt; P</tspan><tspan x="358" dy="26">gives [B,K,P]</tspan></text><rect x="640" y="112" width="250" height="168" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="664" y="148" class="t" text-anchor="start"><tspan x="664" dy="0">Full canvas</tspan></text><text x="664" y="184" class="b" text-anchor="start"><tspan x="664" dy="0">start with N mask tokens</tspan><tspan x="664" dy="26">scatter K visible rows</tspan></text><rect x="946" y="112" width="206" height="168" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="970" y="148" class="t" text-anchor="start"><tspan x="970" dy="0">Add positions</tspan></text><text x="970" y="184" class="b" text-anchor="start"><tspan x="970" dy="0">time + joint</tspan><tspan x="970" dy="26">[B,N,P]</tspan></text><path d="M 278 196 L 318 196" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 584 196 L 624 196" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 890 196 L 930 196" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="170" y="394" width="330" height="164" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="194" y="430" class="t" text-anchor="start"><tspan x="194" dy="0">Predict all N positions</tspan></text><text x="194" y="466" class="b" text-anchor="start"><tspan x="194" dy="0">transformer over visible</tspan><tspan x="194" dy="26">features plus mask tokens</tspan></text><rect x="700" y="394" width="330" height="164" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="724" y="430" class="t" text-anchor="start"><tspan x="724" dy="0">Return only M targets</tspan></text><text x="724" y="466" class="b" text-anchor="start"><tspan x="724" dy="0">Linear P -&gt; D</tspan><tspan x="724" dy="26">Boolean gather gives [B,M,D]</tspan></text><path d="M 500 476 L 684 476" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><text x="592.0" y="466" class="s" text-anchor="middle"><tspan x="592.0" dy="0">target_mask gather</tspan></text><path d="M 1048 296 L 1048 354 L 335 354 L 335 378" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="360" y="620" width="480" height="36" rx="18" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.5"/><text x="600.0" y="644" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">Flattened Boolean order preserves alignment</tspan></text>
+</svg>

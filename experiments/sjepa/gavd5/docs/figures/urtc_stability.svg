@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">Centering and exponential moving average stabilize self-supervised learning</title>
+  <desc id="desc">Centering removes persistent feature bias. An exponential moving average updates the teacher as a slow blend of its previous parameters and the current student parameters. Stop-gradient prevents direct optimization of the teacher.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0 0L0 6L9 3z" fill="#34495e"/></marker><style>.t{font:700 27px Arial;fill:#10233f}.h{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#263746}.s{font:13px Arial;fill:#526575}.eq{font:italic 21px Georgia;fill:#10233f}.box{stroke:#34495e;stroke-width:2;rx:14}.ar{stroke:#34495e;stroke-width:2.2;fill:none;marker-end:url(#a)}.no{stroke:#b2453d;stroke-width:4}</style></defs>
+  <rect width="1200" height="650" fill="#fbfcfe"/>
+  <text x="600" y="43" text-anchor="middle" class="t">How centering and EMA stabilize the teacher target</text>
+
+  <rect x="40" y="80" width="535" height="510" rx="18" fill="#f7fafc" stroke="#b7c5d3" stroke-width="2"/>
+  <text x="308" y="118" text-anchor="middle" class="h">A. Running center removes persistent bias</text>
+  <rect x="85" y="155" width="185" height="90" class="box" fill="#d9ead3"/>
+  <text x="178" y="188" text-anchor="middle" class="h">Current targets</text><text x="178" y="217" text-anchor="middle" class="s">mean across batch + tokens</text>
+  <rect x="345" y="155" width="185" height="90" class="box" fill="#fff2cc"/>
+  <text x="438" y="188" text-anchor="middle" class="h">Old center</text><text x="438" y="217" text-anchor="middle" class="s">recent history</text>
+  <path d="M178 245 L178 275 L250 298" class="ar"/>
+  <path d="M438 245 L438 275 L366 298" class="ar"/>
+  <rect x="105" y="300" width="405" height="75" class="box" fill="#e8f1fa"/>
+  <text x="308" y="333" text-anchor="middle" class="eq">c ← 0.9c + 0.1 mean(z_t)</text>
+  <text x="308" y="358" text-anchor="middle" class="s">smooth update; not a sudden batch-to-batch jump</text>
+  <path d="M308 375L308 420" class="ar"/>
+  <rect x="105" y="420" width="405" height="105" class="box" fill="#fce4d6"/>
+  <text x="308" y="454" text-anchor="middle" class="eq">centered target = z_t − c</text>
+  <text x="308" y="484" text-anchor="middle" class="b">A channel that is always large loses its automatic advantage.</text>
+  <text x="308" y="509" text-anchor="middle" class="s">The signal emphasizes what is unusual about this token.</text>
+
+  <rect x="625" y="80" width="535" height="510" rx="18" fill="#f7fafc" stroke="#b7c5d3" stroke-width="2"/>
+  <text x="893" y="118" text-anchor="middle" class="h">B. EMA makes a slow, stable teacher</text>
+  <rect x="680" y="155" width="180" height="90" class="box" fill="#eadcf8"/>
+  <text x="770" y="188" text-anchor="middle" class="h">Student now</text><text x="770" y="217" text-anchor="middle" class="s">theta_v after gradient step</text>
+  <rect x="925" y="155" width="180" height="90" class="box" fill="#d9ead3"/>
+  <text x="1015" y="188" text-anchor="middle" class="h">Teacher before</text><text x="1015" y="217" text-anchor="middle" class="s">previous theta_t</text>
+  <path d="M770 245 L770 275 L835 298" class="ar"/>
+  <path d="M1015 245 L1015 275 L950 298" class="ar"/>
+  <rect x="690" y="300" width="405" height="75" class="box" fill="#e8f1fa"/>
+  <text x="893" y="333" text-anchor="middle" class="eq">theta_t ← m theta_t + (1 − m) theta_v</text>
+  <text x="893" y="358" text-anchor="middle" class="s">m starts at 0.999 and approaches 1.0</text>
+  <path d="M893 375L893 420" class="ar"/>
+  <rect x="690" y="420" width="405" height="105" class="box" fill="#d9ead3"/>
+  <text x="893" y="454" text-anchor="middle" class="h">Teacher after</text>
+  <text x="893" y="482" text-anchor="middle" class="b">Mostly its old state + a tiny amount of the student.</text>
+  <text x="893" y="508" text-anchor="middle" class="s">Stable enough to teach, but able to improve gradually.</text>
+
+  <rect x="750" y="548" width="286" height="42" rx="21" fill="#fff7f6" stroke="#b2453d" stroke-width="2.5"/>
+  <text x="893" y="575" text-anchor="middle" class="b" fill="#b2453d">STOP-GRADIENT: no direct update</text>
+</svg>
