@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Mirror-equivariance: original vs mirrored decoded scalar against the y equals minus x line</title>
+  <desc id="d2">Illustrative expected-shape scatter testing learned reflection-equivariance. The x axis is the decoded signed laterality scalar on the original input; the y axis is the decoded scalar after applying the anatomical LEFT_RIGHT_PAIRS mirror and re-embedding through the same frozen encoder. A dashed line marks the ideal y equals minus x, meaning the sign flips with size preserved. A flips verdict needs the fitted slope negative and inside minus 1.25 to minus 0.8. The mean-and-standard-deviation pooled negative control forms a flat cloud near zero because pooling is permutation-invariant and side-agnostic. All numbers are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Mirror-equivariance: does the anatomical flip negate the sign?</text>
+  <text x="48" y="88" class="s">Illustrative expected shape. Same frozen encoder, input mirrored with LEFT_RIGHT_PAIRS. One dot per source. Transductive.</text>
+
+  <!-- ============ LEFT: scatter card ============ -->
+  <!-- card: y 112..556 (height 444) -->
+  <rect x="48" y="112" width="660" height="444" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Decoded scalar: original vs mirrored input</text>
+
+  <!-- plot frame centered: cx=409, cy=334 -->
+  <!-- x axis line -->
+  <line x1="150" y1="334" x2="668" y2="334" stroke="#20364e" stroke-width="2.5"/>
+  <!-- y axis line -->
+  <line x1="409" y1="176" x2="409" y2="492" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- sign labels -->
+  <text x="420" y="192" class="s">+</text>
+  <text x="420" y="488" class="s">&#8722;</text>
+  <text x="660" y="328" class="s" text-anchor="end">+</text>
+  <text x="158" y="328" class="s">&#8722;</text>
+
+  <!-- ideal y = -x line (flips): top-left to bottom-right through center -->
+  <line x1="248" y1="212" x2="570" y2="456" stroke="#8a6fb3" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <text x="258" y="202" class="s" fill="#8a6fb3">ideal y = &#8722;x  (sign flips)</text>
+
+  <!-- Lane A learned-probe mirror dots: cluster along y=-x (flips verdict) -->
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <circle cx="272" cy="224" r="8"/>
+    <circle cx="298" cy="258" r="8"/>
+    <circle cx="326" cy="244" r="8"/>
+    <circle cx="348" cy="286" r="8"/>
+    <circle cx="374" cy="270" r="8"/>
+    <circle cx="398" cy="318" r="8"/>
+    <circle cx="428" cy="360" r="8"/>
+    <circle cx="452" cy="346" r="8"/>
+    <circle cx="480" cy="392" r="8"/>
+    <circle cx="508" cy="378" r="8"/>
+    <circle cx="534" cy="422" r="8"/>
+    <circle cx="558" cy="448" r="8"/>
+  </g>
+
+  <!-- negative-control cloud: flat near center (no signed axis to flip) -->
+  <g fill="#c4cdd8" stroke="#8a9bab" stroke-width="1">
+    <circle cx="356" cy="328" r="6"/>
+    <circle cx="392" cy="342" r="6"/>
+    <circle cx="420" cy="324" r="6"/>
+    <circle cx="448" cy="344" r="6"/>
+    <circle cx="470" cy="330" r="6"/>
+    <circle cx="404" cy="352" r="6"/>
+  </g>
+
+  <!-- axis labels inside card, clear of frame -->
+  <text x="409" y="524" class="b" text-anchor="middle">Decoded scalar on ORIGINAL input</text>
+  <text x="106" y="334" class="b" text-anchor="middle" transform="rotate(-90 106 334)">Decoded on MIRRORED input</text>
+
+  <!-- ============ RIGHT: verdict cards, 56px gaps ============ -->
+
+  <!-- Flips verdict card: y 112..252 (height 140) -->
+  <rect x="764" y="112" width="388" height="140" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="148" class="t">Verdict rule (secondary)</text>
+  <text x="794" y="176" class="b">Fit slope of mirrored vs original.</text>
+  <text x="794" y="202" class="b">FLIPS: slope negative and inside</text>
+  <text x="794" y="228" class="b">[&#8722;1.25, &#8722;0.8] around ideal &#8722;1.</text>
+
+  <!-- Does-not-flip card: y 308..426 (height 118), gap 252->308 = 56 -->
+  <rect x="764" y="308" width="388" height="118" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="344" class="t">If it does NOT flip</text>
+  <text x="794" y="376" class="b">Slope near zero or positive: licenses</text>
+  <text x="794" y="402" class="b">only non-antisymmetric encoding.</text>
+
+  <!-- Negative control card: y 482..600 (height 118), gap 426->482 = 56 -->
+  <rect x="764" y="482" width="388" height="118" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="518" class="t">Mean/std-pooled control (D)</text>
+  <text x="794" y="550" class="b">Permutation-invariant, side-agnostic.</text>
+  <text x="794" y="576" class="b">Must NOT recover a signed axis.</text>
+
+  <!-- Footer: baseline y=672, 48px above bottom edge; >=24px below cards (556 and 600) -->
+  <text x="48" y="672" class="s">Illustrative expected shape, not measured results. A manipulation check of learned reflection-equivariance, not a claim about anatomy. Labels are dataset annotations.</text>
+</svg>

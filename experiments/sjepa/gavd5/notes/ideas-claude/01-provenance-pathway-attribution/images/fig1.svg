@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Provenance decodability across four probe lanes under one checkpoint</title>
+  <desc id="desc">Illustrative expected shape. A grouped bar chart of balanced accuracy for predicting the extraction pathway from four feature sources: the frozen embedding, a missingness-only feature, an untrained-encoder embedding, and chance. A horizontal source-permutation null band and a chance line are drawn as references. Provenance counts as decodable only if the embedding bar clears the null band and beats the missingness bar by at least 0.05. All numbers are transductive and computed under one checkpoint fingerprint d0acc262.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+
+  <text class="h" x="48" y="72">How much of the pathway can each feature predict?</text>
+  <text class="s" x="48" y="98">Illustrative expected shape. Balanced accuracy predicting augmented-vs-canonical extraction pathway. Transductive; checkpoint d0acc262.</text>
+
+  <!-- Plot frame -->
+  <!-- axis area: x from 150 to 1000, y from 150 (acc 1.0) to 560 (acc 0.0) -->
+  <!-- y scale: acc 0 -> y560, acc 1 -> y150, so y = 560 - acc*410 -->
+
+  <!-- Y axis -->
+  <line x1="150" y1="150" x2="150" y2="560" stroke="#20364e" stroke-width="2.5"/>
+  <!-- X axis (baseline at acc 0) -->
+  <line x1="150" y1="560" x2="1010" y2="560" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- Y gridlines and labels: 0.0, 0.25, 0.5, 0.75, 1.0 -->
+  <line x1="150" y1="150" x2="1010" y2="150" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="138" y="155" text-anchor="end">1.00</text>
+  <line x1="150" y1="252.5" x2="1010" y2="252.5" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="138" y="257" text-anchor="end">0.75</text>
+  <line x1="150" y1="355" x2="1010" y2="355" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="138" y="360" text-anchor="end">0.50</text>
+  <line x1="150" y1="457.5" x2="1010" y2="457.5" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="138" y="462" text-anchor="end">0.25</text>
+  <text class="s" x="138" y="565" text-anchor="end">0.00</text>
+
+  <!-- Y axis title -->
+  <text class="b" x="70" y="360" transform="rotate(-90 70 360)" text-anchor="middle">Balanced accuracy (pathway)</text>
+
+  <!-- Source-permutation null band: roughly 0.42 to 0.58, centered on chance 0.5 -->
+  <!-- acc 0.42 -> y=560-0.42*410=387.8 ; acc 0.58 -> y=560-0.58*410=322.2 -->
+  <rect x="150" y="322" width="860" height="66" fill="#e6f2ea" opacity="0.75"/>
+  <line x1="150" y1="322" x2="1010" y2="322" stroke="#5f9e7e" stroke-width="1.5" stroke-dasharray="7 6"/>
+  <line x1="150" y1="388" x2="1010" y2="388" stroke="#5f9e7e" stroke-width="1.5" stroke-dasharray="7 6"/>
+
+  <!-- Chance line at 0.5 -> y=355 -->
+  <line x1="150" y1="355" x2="1010" y2="355" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
+
+  <!-- Bars. Four groups centered at x = 265, 470, 675, 880. Bar width 130. -->
+  <!-- Embedding: acc ~0.90 -> top y=560-0.90*410=191 ; height=560-191=369 -->
+  <rect x="200" y="191" width="130" height="369" rx="6" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text class="t" x="265" y="180" text-anchor="middle" fill="#2f6f99">~0.90</text>
+
+  <!-- Missingness-only: acc ~0.66 -> top y=560-0.66*410=289.4 ; height=270.6 -->
+  <rect x="405" y="289" width="130" height="271" rx="6" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.75"/>
+  <text class="t" x="470" y="278" text-anchor="middle" fill="#a44c26">~0.66</text>
+
+  <!-- Untrained encoder: acc ~0.55 -> top y=560-0.55*410=334.5 ; height=225.5 -->
+  <rect x="610" y="334" width="130" height="226" rx="6" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text class="t" x="675" y="314" text-anchor="middle" fill="#8a6fb3">~0.55</text>
+
+  <!-- Chance: acc 0.50 -> top y=355 ; height=205 -->
+  <rect x="815" y="355" width="130" height="205" rx="6" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text class="t" x="880" y="314" text-anchor="middle" fill="#0f2440">0.50</text>
+
+  <!-- X labels (two lines each) -->
+  <text class="b" x="265" y="586" text-anchor="middle">Frozen</text>
+  <text class="s" x="265" y="612" text-anchor="middle">embedding (d0acc262)</text>
+
+  <text class="b" x="470" y="586" text-anchor="middle">Missingness-only</text>
+  <text class="s" x="470" y="612" text-anchor="middle">visibility, no coords</text>
+
+  <text class="b" x="675" y="586" text-anchor="middle">Untrained</text>
+  <text class="s" x="675" y="612" text-anchor="middle">encoder (input bound)</text>
+
+  <text class="b" x="880" y="586" text-anchor="middle">Chance</text>
+  <text class="s" x="880" y="612" text-anchor="middle">label-shuffled</text>
+
+  <!-- Legend / reference callouts on the right -->
+  <rect x="1030" y="150" width="90" height="24" fill="#e6f2ea" opacity="0.75" stroke="#5f9e7e" stroke-width="1.5" stroke-dasharray="7 6"/>
+  <text class="s" x="1030" y="200" text-anchor="start">Green band:</text>
+  <text class="s" x="1030" y="226" text-anchor="start">source-perm</text>
+  <text class="s" x="1030" y="252" text-anchor="start">null</text>
+
+  <text class="s" x="1030" y="304" text-anchor="start">Dotted line:</text>
+  <text class="s" x="1030" y="330" text-anchor="start">chance 0.50</text>
+
+  <!-- Margin annotation between embedding and missingness bars -->
+  <line x1="355" y1="191" x2="355" y2="289" stroke="#20364e" stroke-width="1.5"/>
+  <line x1="351" y1="191" x2="359" y2="191" stroke="#20364e" stroke-width="1.5"/>
+  <line x1="351" y1="289" x2="359" y2="289" stroke="#20364e" stroke-width="1.5"/>
+  <text class="s" x="363" y="227" text-anchor="start">gap must</text>
+  <text class="s" x="363" y="253" text-anchor="start">exceed 0.05</text>
+
+  <!-- Footer decision rule -->
+  <line x1="48" y1="626" x2="1152" y2="626" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="48" y="650">Decision rule: pathway is DECODABLE only if the embedding bar clears the null band AND beats missingness-only by at least 0.05 balanced accuracy.</text>
+  <text class="s" x="48" y="672">Folder labels are dataset annotations, not diagnoses. Bar heights shown are illustrative placeholders, not measured results.</text>
+</svg>
