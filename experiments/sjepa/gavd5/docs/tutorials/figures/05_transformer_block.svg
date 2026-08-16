@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">One encoder layer mixes tokens, then transforms each token</title>
+  <desc id="desc">A pre-norm transformer encoder layer contains attention and a two-linear-layer feed-forward network with four-times hidden width.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">One encoder layer mixes tokens, then transforms each token</tspan></text>
+  <rect x="48" y="134" width="180" height="168" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="72" y="170" class="t" text-anchor="start"><tspan x="72" dy="0">Input</tspan></text><text x="72" y="206" class="b" text-anchor="start"><tspan x="72" dy="0">[B,K,D]</tspan><tspan x="72" dy="26">visible tokens</tspan></text><rect x="292" y="112" width="250" height="214" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="316" y="148" class="t" text-anchor="start"><tspan x="316" dy="0">Self-attention</tspan></text><text x="316" y="184" class="b" text-anchor="start"><tspan x="316" dy="0">LayerNorm first</tspan><tspan x="316" dy="26">tokens exchange context</tspan><tspan x="316" dy="26">residual connection</tspan></text><rect x="606" y="112" width="310" height="214" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="630" y="148" class="t" text-anchor="start"><tspan x="630" dy="0">MLP / feed-forward</tspan></text><text x="630" y="184" class="b" text-anchor="start"><tspan x="630" dy="0">LayerNorm first</tspan><tspan x="630" dy="26">Linear D -&gt; 4D</tspan><tspan x="630" dy="26">GELU, then Linear 4D -&gt; D</tspan><tspan x="630" dy="26">residual add</tspan></text><rect x="980" y="134" width="172" height="168" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="1004" y="170" class="t" text-anchor="start"><tspan x="1004" dy="0">Output</tspan></text><text x="1004" y="206" class="b" text-anchor="start"><tspan x="1004" dy="0">[B,K,D]</tspan><tspan x="1004" dy="26">same width</tspan></text><path d="M 228 218 L 276 218" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 542 218 L 590 218" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 916 218 L 964 218" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="180" y="408" width="840" height="166" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/><text x="204" y="444" class="t" text-anchor="start"><tspan x="204" dy="0">Two controls that are easy to confuse</tspan></text><text x="204" y="480" class="b" text-anchor="start"><tspan x="204" dy="0">dim_feedforward = 4D sets hidden units inside each layer.</tspan><tspan x="204" dy="26">depth sets how many complete transformer encoder layers are stacked.</tspan><tspan x="204" dy="26">For D=96: each MLP is 96 -&gt; 384 -&gt; 96.</tspan></text><rect x="378" y="620" width="444" height="36" rx="18" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.5"/><text x="600.0" y="644" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">4x means width, not four layers</tspan></text>
+</svg>

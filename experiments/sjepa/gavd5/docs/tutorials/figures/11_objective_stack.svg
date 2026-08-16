@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Three objectives shape the representation</title>
+  <desc id="desc">The total training objective combines latent prediction, two-view anti-collapse regularization, and a label-aware group term after Stage 0.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">Three objectives shape the representation</tspan></text>
+  <rect x="48" y="124" width="300" height="224" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="72" y="160" class="t" text-anchor="start"><tspan x="72" dy="0">JEPA</tspan></text><text x="72" y="196" class="b" text-anchor="start"><tspan x="72" dy="0">masked latent matching</tspan><tspan x="72" dy="26">all curriculum stages</tspan><tspan x="72" dy="26">default weight 1.0</tspan></text><rect x="450" y="124" width="300" height="224" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="474" y="160" class="t" text-anchor="start"><tspan x="474" dy="0">VICReg</tspan></text><text x="474" y="196" class="b" text-anchor="start"><tspan x="474" dy="0">invariance + variance</tspan><tspan x="474" dy="26">+ covariance</tspan><tspan x="474" dy="26">all stages, default outer 0.05</tspan></text><rect x="852" y="124" width="300" height="224" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="876" y="160" class="t" text-anchor="start"><tspan x="876" dy="0">Group term</tspan></text><text x="876" y="196" class="b" text-anchor="start"><tspan x="876" dy="0">within-label compactness</tspan><tspan x="876" dy="26">+ centroid margin</tspan><tspan x="876" dy="26">Stages 1-4, default outer 0.25</tspan></text><text x="398" y="260" class="h" text-anchor="middle"><tspan x="398" dy="0">+</tspan></text><text x="800" y="260" class="h" text-anchor="middle"><tspan x="800" dy="0">+</tspan></text><rect x="172" y="426" width="856" height="146" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="196" y="462" class="t" text-anchor="start"><tspan x="196" dy="0">Total</tspan></text><text x="196" y="498" class="b" text-anchor="start"><tspan x="196" dy="0">L_total = L_JEPA + 0.05 L_VICReg + 0.25 L_group</tspan><tspan x="196" dy="26">L_group is exactly zero when a batch has fewer than two condition labels.</tspan></text><rect x="294" y="620" width="612" height="36" rx="18" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.5"/><text x="600.0" y="644" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">Later stages are label-informed representation learning</tspan></text>
+</svg>
