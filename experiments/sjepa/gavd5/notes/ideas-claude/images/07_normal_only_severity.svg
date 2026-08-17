@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="figTitle figDesc" font-family="Arial, sans-serif">
+  <title id="figTitle">Item 10: prediction error becomes a severity score</title>
+  <desc id="figDesc">A world model trained only on normal walking receives two new clips. A normal clip produces a small surprise (low severity, green). An abnormal clip produces a big surprise (high severity, orange). A continuous meter turns the size of the surprise into the severity score. A caveat notes that all normal clips came from a single source video, so this stays a within-one-source result.</desc>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <!-- header -->
+  <text x="60" y="58" fill="#0f2440" font-size="30" font-weight="bold">Surprise itself becomes the severity score</text>
+  <text x="60" y="90" fill="#5c6f84" font-size="18">The model learns what normal walking looks like, then measures how much each new clip breaks that expectation.</text>
+
+  <!-- ================= LEFT: world model that learned only NORMAL ================= -->
+  <rect x="60" y="120" width="360" height="330" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="2"/>
+  <text x="80" y="156" fill="#20364e" font-size="20" font-weight="bold">1. What the model expects</text>
+  <text x="80" y="182" fill="#33475e" font-size="15">It practiced on normal walking only. It now</text>
+  <text x="80" y="202" fill="#33475e" font-size="15">carries a private summary of smooth, expected</text>
+  <text x="80" y="222" fill="#33475e" font-size="15">motion (a "latent", a list of numbers).</text>
+
+  <!-- smooth expected motion icon: gentle even wave -->
+  <rect x="80" y="242" width="320" height="150" rx="12" fill="#ffffff" stroke="#2f6f99" stroke-width="1.5"/>
+  <text x="96" y="268" fill="#5c6f84" font-size="14">Expected motion (smooth and regular)</text>
+  <path d="M 96 340 C 132 300, 168 300, 204 340 C 240 380, 276 380, 312 340 C 330 320, 356 320, 384 340" fill="none" stroke="#2f6f99" stroke-width="3"/>
+  <!-- even footstep markers under the wave -->
+  <circle cx="120" cy="366" r="4" fill="#5f9e7e"/>
+  <circle cx="168" cy="366" r="4" fill="#5f9e7e"/>
+  <circle cx="216" cy="366" r="4" fill="#5f9e7e"/>
+  <circle cx="264" cy="366" r="4" fill="#5f9e7e"/>
+  <circle cx="312" cy="366" r="4" fill="#5f9e7e"/>
+  <circle cx="360" cy="366" r="4" fill="#5f9e7e"/>
+
+  <text x="80" y="422" fill="#5c6f84" font-size="14">It never sees "abnormal" labels. It only</text>
+  <text x="80" y="440" fill="#5c6f84" font-size="14">knows what smooth walking should look like.</text>
+
+  <!-- arrows from clips into the model region -->
+  <!-- ================= MIDDLE: two new clips ================= -->
+  <text x="470" y="150" fill="#20364e" font-size="20" font-weight="bold">2. Two new clips come in</text>
+
+  <!-- normal clip card -->
+  <rect x="470" y="170" width="300" height="120" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="2"/>
+  <text x="488" y="198" fill="#20364e" font-size="16" font-weight="bold">A normal walking clip</text>
+  <!-- small surprise wave: matches expected closely -->
+  <path d="M 488 250 C 508 232, 528 232, 548 250 C 568 268, 588 268, 608 250 C 628 232, 648 232, 668 250 C 688 268, 708 268, 728 250" fill="none" stroke="#5f9e7e" stroke-width="2.5"/>
+  <text x="488" y="278" fill="#33475e" font-size="13">Close to what the model expected: small surprise.</text>
+
+  <!-- abnormal clip card -->
+  <rect x="470" y="320" width="300" height="130" rx="16" fill="#ffffff" stroke="#e07a4b" stroke-width="2"/>
+  <text x="488" y="348" fill="#20364e" font-size="16" font-weight="bold">An abnormal walking clip</text>
+  <!-- big surprise wave: jagged, uneven -->
+  <path d="M 488 400 L 508 372 L 522 418 L 546 380 L 566 424 L 590 378 L 612 420 L 640 384 L 664 422 L 692 386 L 718 414 L 728 400" fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+  <text x="488" y="436" fill="#33475e" font-size="13">Far from what the model expected: big surprise.</text>
+
+  <!-- arrows from clips to model (pointing left into the expectation box) and out to meter -->
+  <!-- normal clip -> compare -->
+  <path d="M 420 250 L 468 230" fill="none" stroke="#5f9e7e" stroke-width="2" marker-end="url(#arrGreen)"/>
+  <path d="M 420 360 L 468 385" fill="none" stroke="#e07a4b" stroke-width="2" marker-end="url(#arrOrange)"/>
+
+  <!-- ================= RIGHT: severity meter/gauge ================= -->
+  <text x="830" y="150" fill="#20364e" font-size="20" font-weight="bold">3. Surprise sets the meter</text>
+
+  <!-- vertical meter track from low (bottom) to high (top) -->
+  <defs>
+    <linearGradient id="meterGrad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#5f9e7e"/>
+      <stop offset="55%" stop-color="#e6c34b"/>
+      <stop offset="100%" stop-color="#e07a4b"/>
+    </linearGradient>
+    <marker id="arrGreen" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#5f9e7e"/></marker>
+    <marker id="arrOrange" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#e07a4b"/></marker>
+    <marker id="arrMute" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#5c6f84"/></marker>
+  </defs>
+
+  <rect x="900" y="180" width="60" height="300" rx="14" fill="url(#meterGrad)" stroke="#20364e" stroke-width="1.5"/>
+  <!-- meter labels -->
+  <text x="978" y="196" fill="#e07a4b" font-size="15" font-weight="bold">High severity</text>
+  <text x="978" y="216" fill="#5c6f84" font-size="13">(big surprise)</text>
+  <text x="978" y="474" fill="#5f9e7e" font-size="15" font-weight="bold">Low severity</text>
+  <text x="978" y="494" fill="#5c6f84" font-size="13">(small surprise)</text>
+
+  <!-- normal pointer near the bottom (low) -->
+  <path d="M 866 452 L 898 452" fill="none" stroke="#5f9e7e" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <circle cx="930" cy="452" r="8" fill="#ffffff" stroke="#5f9e7e" stroke-width="3"/>
+  <text x="790" y="448" fill="#20364e" font-size="13" text-anchor="end">normal clip</text>
+  <text x="790" y="465" fill="#5c6f84" font-size="12" text-anchor="end">lands low</text>
+
+  <!-- abnormal pointer near the top (high) -->
+  <path d="M 866 222 L 898 222" fill="none" stroke="#e07a4b" stroke-width="3" marker-end="url(#arrOrange)"/>
+  <circle cx="930" cy="222" r="8" fill="#ffffff" stroke="#e07a4b" stroke-width="3"/>
+  <text x="790" y="218" fill="#20364e" font-size="13" text-anchor="end">abnormal clip</text>
+  <text x="790" y="235" fill="#5c6f84" font-size="12" text-anchor="end">lands high</text>
+
+  <!-- connect clip cards to meter pointers -->
+  <path d="M 770 230 C 810 230, 830 222, 863 222" fill="none" stroke="#e07a4b" stroke-width="2" stroke-dasharray="5 4"/>
+  <path d="M 770 250 C 810 300, 830 452, 863 452" fill="none" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="5 4"/>
+
+  <!-- note that the meter is continuous -->
+  <text x="900" y="510" fill="#5c6f84" font-size="13">The meter slides smoothly: every clip gets a</text>
+  <text x="900" y="528" fill="#5c6f84" font-size="13">number, not just a yes or no.</text>
+
+  <!-- ================= HONEST CAVEAT (muted box) ================= -->
+  <rect x="60" y="560" width="710" height="70" rx="16" fill="#eceae3" stroke="#5c6f84" stroke-width="1.5"/>
+  <text x="80" y="588" fill="#5c6f84" font-size="14" font-weight="bold">Honest caveat</text>
+  <text x="80" y="610" fill="#5c6f84" font-size="14">All the normal clips came from a single video (3KnFt8bH3tE), so this stays a within-one-source</text>
+  <text x="80" y="628" fill="#5c6f84" font-size="14">result. It is not a claim about diagnosing real patients.</text>
+
+  <!-- caption -->
+  <rect x="60" y="650" width="1080" height="52" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.5"/>
+  <text x="80" y="683" fill="#20364e" font-size="16"><tspan font-weight="bold">Caption: </tspan>It never trains on abnormal labels; surprise itself becomes the severity score.</text>
+</svg>
