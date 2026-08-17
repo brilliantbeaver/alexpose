@@ -17,96 +17,87 @@
   </defs>
   <rect class="bg" width="1200" height="720"/>
 
-  <text class="h" x="48" y="72">Within-normal: read the door, against what ceiling?</text>
-  <text class="s" x="48" y="94">Illustrative expected shape. 12 canonical-normal vs 63 augmented-normal windows, all from 1 canonical-normal source,</text>
-  <text class="s" x="48" y="116">so source identity is the ceiling. Transductive; checkpoint d0acc262.</text>
+  <text class="h" x="48" y="72">Read the door, but against what ceiling?</text>
+  <text class="s" x="48" y="98">Illustrative shape only. 12 canonical-normal vs 63 augmented-normal windows, all from 1 normal source, so source id is the ceiling. Transductive; d0acc262.</text>
 
   <!-- ===================== LEFT PANEL ===================== -->
   <text class="t" x="48" y="150">Panel A: 12 canonical vs 63 augmented</text>
+  <rect x="48" y="168" width="524" height="392" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
 
-  <!-- Panel A card -->
-  <rect x="48" y="170" width="520" height="410" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <!-- plot area: x 138..500, y 236..528 ; acc 0->y528, 1->y236 => y=528-acc*292 -->
+  <line x1="138" y1="236" x2="138" y2="528" stroke="#20364e" stroke-width="2"/>
+  <line x1="138" y1="528" x2="540" y2="528" stroke="#20364e" stroke-width="2"/>
 
-  <!-- plot area: x 130..540, y 210..540 ; acc 0->y540, 1->y210 => y=540-acc*330 -->
-  <line x1="130" y1="210" x2="130" y2="540" stroke="#20364e" stroke-width="2"/>
-  <line x1="130" y1="540" x2="540" y2="540" stroke="#20364e" stroke-width="2"/>
+  <!-- gridlines 1.0, 0.75, 0.50 -->
+  <line x1="138" y1="236" x2="540" y2="236" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="128" y="241" text-anchor="end">1.00</text>
+  <line x1="138" y1="309" x2="540" y2="309" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="128" y="314" text-anchor="end">0.75</text>
+  <line x1="138" y1="382" x2="540" y2="382" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="128" y="387" text-anchor="end">0.50</text>
+  <text class="s" x="128" y="533" text-anchor="end">0.00</text>
 
-  <!-- gridlines 0.5,0.75,1.0 -->
-  <line x1="130" y1="210" x2="540" y2="210" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="120" y="215" text-anchor="end">1.00</text>
-  <line x1="130" y1="292.5" x2="540" y2="292.5" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="120" y="297" text-anchor="end">0.75</text>
-  <line x1="130" y1="375" x2="540" y2="375" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="120" y="380" text-anchor="end">0.50</text>
-  <text class="s" x="120" y="545" text-anchor="end">0.00</text>
+  <!-- source-identity ceiling ~0.98 -> y=528-0.98*292=242 -->
+  <line x1="138" y1="242" x2="540" y2="242" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <text class="s" x="540" y="230" text-anchor="end" fill="#3e7a5c">source-id ceiling (cannot beat)</text>
 
-  <!-- source-identity ceiling ~0.99 -> y=540-0.99*330=213.3 -->
-  <line x1="130" y1="213" x2="540" y2="213" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
-  <text class="s" x="536" y="205" text-anchor="end" fill="#3e7a5c">source-identity ceiling (cannot beat)</text>
+  <!-- missingness reference ~0.62 -> y=528-0.62*292=347 -->
+  <line x1="138" y1="347" x2="540" y2="347" stroke="#e07a4b" stroke-width="1.75" stroke-dasharray="5 4"/>
+  <text class="s" x="540" y="365" text-anchor="end" fill="#a44c26">missingness-only ref</text>
 
-  <!-- chance line 0.5 -> y=375 -->
-  <line x1="130" y1="375" x2="540" y2="375" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
-  <text class="s" x="536" y="393" text-anchor="end">chance 0.50</text>
+  <!-- chance line 0.5 -> y=382 -->
+  <line x1="138" y1="382" x2="540" y2="382" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <text class="s" x="540" y="400" text-anchor="end">chance 0.50</text>
 
-  <!-- missingness reference ~0.62 -> y=540-0.62*330=335.4 -->
-  <line x1="130" y1="335" x2="540" y2="335" stroke="#e07a4b" stroke-width="1.75" stroke-dasharray="5 4"/>
-  <text class="s" x="536" y="327" text-anchor="end" fill="#a44c26">missingness-only ref</text>
+  <!-- embedding per-source dots centered ~0.89 (y=528-0.89*292=268) -->
+  <line x1="220" y1="270" x2="460" y2="270" stroke="#20364e" stroke-width="2.5"/>
+  <circle cx="245" cy="263" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="285" cy="276" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="325" cy="258" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="365" cy="282" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="405" cy="266" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="445" cy="278" r="7" fill="#2f6f99" opacity="0.85"/>
+  <text class="b" x="340" y="437" text-anchor="middle" fill="#0f2440">embedding (~0.89)</text>
 
-  <!-- embedding per-source dots: cluster ~0.86-0.92 centered on ~0.89 (y=540-0.89*330=246); clear of ceiling at y=213 -->
-  <circle cx="235" cy="253" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="275" cy="266" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="315" cy="246" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="355" cy="273" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="395" cy="258" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="435" cy="270" r="7" fill="#2f6f99" opacity="0.85"/>
-  <!-- mean marker at ~0.89 -> y=246 -->
-  <line x1="215" y1="260" x2="455" y2="260" stroke="#20364e" stroke-width="2.5"/>
-  <text class="b" x="335" y="316" text-anchor="middle" fill="#0f2440">embedding (~0.89)</text>
-
-  <!-- Y axis title -->
-  <text class="b" x="70" y="375" transform="rotate(-90 70 375)" text-anchor="middle">Balanced accuracy</text>
-  <text class="s" x="335" y="556" text-anchor="middle">Each blue dot = one fold replicate (1 canonical source)</text>
+  <text class="b" x="72" y="382" transform="rotate(-90 72 382)" text-anchor="middle">Balanced accuracy</text>
+  <text class="s" x="340" y="548" text-anchor="middle">Each blue dot = one held-out fold (1 normal source)</text>
 
   <!-- ===================== RIGHT PANEL ===================== -->
-  <text class="t" x="632" y="150">Panel B: leave-one-normal-video-out</text>
+  <text class="t" x="628" y="150">Panel B: leave-the-normal-video-out</text>
+  <rect x="628" y="168" width="524" height="392" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
 
-  <rect x="632" y="170" width="520" height="410" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <!-- plot area: x 718..1120, y 236..528 -->
+  <line x1="718" y1="236" x2="718" y2="528" stroke="#20364e" stroke-width="2"/>
+  <line x1="718" y1="528" x2="1120" y2="528" stroke="#20364e" stroke-width="2"/>
 
-  <!-- plot area: x 714..1124, y 210..540 -->
-  <line x1="714" y1="210" x2="714" y2="540" stroke="#20364e" stroke-width="2"/>
-  <line x1="714" y1="540" x2="1124" y2="540" stroke="#20364e" stroke-width="2"/>
-
-  <line x1="714" y1="210" x2="1124" y2="210" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="704" y="215" text-anchor="end">1.00</text>
-  <line x1="714" y1="292.5" x2="1124" y2="292.5" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="704" y="297" text-anchor="end">0.75</text>
-  <line x1="714" y1="375" x2="1124" y2="375" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="704" y="380" text-anchor="end">0.50</text>
-  <text class="s" x="704" y="545" text-anchor="end">0.00</text>
+  <line x1="718" y1="236" x2="1120" y2="236" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="708" y="241" text-anchor="end">1.00</text>
+  <line x1="718" y1="309" x2="1120" y2="309" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="708" y="314" text-anchor="end">0.75</text>
+  <line x1="718" y1="382" x2="1120" y2="382" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="708" y="387" text-anchor="end">0.50</text>
+  <text class="s" x="708" y="533" text-anchor="end">0.00</text>
 
   <!-- chance line -->
-  <line x1="714" y1="375" x2="1124" y2="375" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
-  <text class="s" x="1120" y="393" text-anchor="end">chance 0.50</text>
+  <line x1="718" y1="382" x2="1120" y2="382" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <text class="s" x="1120" y="400" text-anchor="end">chance 0.50</text>
 
-  <!-- With augmented subsampled to 12 and the single normal video held out, the probe -->
-  <!-- collapses toward chance: dots cluster ~0.48-0.58 -->
-  <circle cx="819" cy="372" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="859" cy="360" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="899" cy="382" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="939" cy="368" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="979" cy="355" r="7" fill="#2f6f99" opacity="0.85"/>
-  <circle cx="1019" cy="378" r="7" fill="#2f6f99" opacity="0.85"/>
-  <line x1="799" y1="369" x2="1039" y2="369" stroke="#20364e" stroke-width="2.5"/>
-  <text class="b" x="919" y="335" text-anchor="middle" fill="#0f2440">diagnostic (~0.53)</text>
+  <!-- dots collapse toward chance ~0.53 (y=528-0.53*292=373) -->
+  <line x1="800" y1="374" x2="1040" y2="374" stroke="#20364e" stroke-width="2.5"/>
+  <circle cx="825" cy="377" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="865" cy="366" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="905" cy="384" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="945" cy="370" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="985" cy="360" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="1025" cy="380" r="7" fill="#2f6f99" opacity="0.85"/>
+  <text class="b" x="920" y="340" text-anchor="middle" fill="#0f2440">diagnostic (~0.53)</text>
 
-  <text class="b" x="736" y="375" transform="rotate(-90 736 375)" text-anchor="middle">Balanced accuracy</text>
-  <text class="s" x="919" y="556" text-anchor="middle">augmented subsampled to 12 to match canonical count</text>
-
-  <!-- Reading arrow between panels meaning -->
+  <text class="b" x="652" y="382" transform="rotate(-90 652 382)" text-anchor="middle">Balanced accuracy</text>
+  <text class="s" x="920" y="548" text-anchor="middle">augmented subsampled to 12 to match canonical</text>
 
   <!-- Footer -->
-  <line x1="48" y1="604" x2="1152" y2="604" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text class="s" x="48" y="628">Panel A cannot beat the source-identity ceiling by design (1 canonical-normal source). Panel B removes the count imbalance and asks what survives.</text>
-  <text class="s" x="48" y="650">A near-chance Panel B rules out a pure count-imbalance artifact; it is never called provenance inflation without the source-count caveat.</text>
-  <text class="s" x="48" y="672">Folder labels are dataset annotations, not diagnoses. Dot positions are illustrative placeholders, not measured results.</text>
+  <line x1="48" y1="592" x2="1152" y2="592" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="48" y="616">Panel A cannot beat the ceiling by design (1 normal source). Panel B removes the count imbalance and asks what survives.</text>
+  <text class="s" x="48" y="638">A near-chance Panel B rules out a pure count-imbalance artifact; it is never called provenance inflation without the source-count caveat.</text>
+  <text class="s" x="48" y="660">Folder labels are dataset annotations, not diagnoses. Dot positions are illustrative placeholders, not measured results.</text>
 </svg>

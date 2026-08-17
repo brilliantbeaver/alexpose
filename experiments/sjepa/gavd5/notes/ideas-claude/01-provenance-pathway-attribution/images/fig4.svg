@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Why the source-identity ceiling exists: three things move together</title>
+  <desc id="desc">A beginner concept diagram of collinearity. Because all twelve normal clips come from one YouTube video, the normal label, the one video, and the augmented door rise and fall together, so they cannot be told apart for normal clips. A probe given the source-video id sets a hard ceiling, and a door-guessing probe can never rise above it by design. That is why every door result in this study is reported against the source-identity ceiling, and why any gap above the ceiling is never read as gait signal. Folder labels are dataset annotations, not diagnoses.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+
+  <text class="h" x="48" y="72">Why the door probe can never beat the source-id ceiling</text>
+  <text class="s" x="48" y="98">All 12 normal clips come from ONE video, so three labels stack on top of each other and cannot be pulled apart.</text>
+
+  <!-- ============ LEFT: three overlapping labels ============ -->
+  <text class="t" x="48" y="152">For a normal clip, these three are the same fact</text>
+
+  <!-- Three stacked pills, tightly overlapping to show collinearity -->
+  <rect x="70" y="178" width="440" height="66" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text class="t" x="94" y="218">The "normal" label</text>
+
+  <rect x="130" y="240" width="440" height="66" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text class="t" x="154" y="280">One video (id 3KnFt8bH3tE)</text>
+
+  <rect x="190" y="302" width="440" height="66" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text class="t" x="214" y="342">The augmented door</text>
+
+  <text class="s" x="48" y="410">They rise and fall together. When three things always move as one,</text>
+  <text class="s" x="48" y="432">we say they are collinear: you cannot tell which one the probe used.</text>
+
+  <!-- ============ RIGHT: the ceiling picture ============ -->
+  <text class="t" x="672" y="152">So the source-id probe sets a hard ceiling</text>
+
+  <rect x="672" y="178" width="480" height="316" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- mini axis inside card: y from acc 0.5 (bottom) to 1.0 (top). plot y 214..454 -->
+  <line x1="740" y1="214" x2="740" y2="454" stroke="#20364e" stroke-width="2"/>
+  <line x1="740" y1="454" x2="1120" y2="454" stroke="#20364e" stroke-width="2"/>
+  <text class="s" x="730" y="219" text-anchor="end">1.00</text>
+  <text class="s" x="730" y="459" text-anchor="end">0.50</text>
+
+  <!-- ceiling line near top -->
+  <line x1="740" y1="230" x2="1120" y2="230" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <text class="s" x="1120" y="222" text-anchor="end" fill="#3e7a5c">source-id probe = ceiling</text>
+
+  <!-- door probe bar (sits below ceiling) centered x=930, top y=300 -->
+  <rect x="865" y="300" width="130" height="154" rx="6" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text class="b" x="930" y="290" text-anchor="middle" fill="#8a6fb3">door probe</text>
+
+  <!-- gap bracket between bar top (300) and ceiling (230) -->
+  <line x1="1030" y1="230" x2="1030" y2="300" stroke="#20364e" stroke-width="1.5"/>
+  <line x1="1026" y1="230" x2="1034" y2="230" stroke="#20364e" stroke-width="1.5"/>
+  <line x1="1026" y1="300" x2="1034" y2="300" stroke="#20364e" stroke-width="1.5"/>
+  <text class="s" x="1042" y="260">we read</text>
+  <text class="s" x="1042" y="280">this gap</text>
+
+  <text class="s" x="762" y="484">The door bar can touch the ceiling but never rise above it.</text>
+
+  <!-- Arrow from left stack to right ceiling card -->
+  <path d="M632,335 L648,335 L648,336 L664,336" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ============ Footer explainer band ============ -->
+  <line x1="48" y1="520" x2="1152" y2="520" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="b" x="48" y="552">How to read any door result in this study:</text>
+  <text class="b" x="48" y="580">1. Never celebrate a door number on its own; always show it next to the source-id ceiling.</text>
+  <text class="b" x="48" y="602">2. Read the gap BELOW the ceiling, not any number that looks like it beats the ceiling.</text>
+  <text class="b" x="48" y="624">3. A gap-above-ceiling is impossible here by design, so it is never read as gait signal.</text>
+  <text class="s" x="48" y="668">Folder labels are dataset annotations, not diagnoses made by this project. Bar and ceiling positions are illustrative, not measured.</text>
+</svg>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">The big idea in five plain steps, from a walking video to two surprise scores</title>
+  <desc id="d3">A gentle left-to-right five-step flow that teaches the central idea without new science. Step one: a walking video becomes a moving stick figure of body joints. Step two: the frozen model hides some lower-body joints and predicts a short summary of each hidden one. Step three: the gap between the guess and the true summary is the residual, which is how surprised the model is. Step four: from that same gap we read two surprise scores, position energy for where a joint sits and motion energy for how it changes from moment to moment. Step five, the one question: does motion energy tell walks apart better than position energy, tested with a simple straight-line check on held-out source videos. Nothing is retrained.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+      .lnk{stroke:#20364e;stroke-width:2.5;fill:none}
+      .bone{stroke:#8a9bab;stroke-width:3;fill:none}
+      .step{font:700 14px Arial,Helvetica,sans-serif;fill:#2f6f99}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="66" class="h">The big idea, in five plain steps</text>
+  <text x="48" y="96" class="s">We reuse the frozen model exactly as it is. Nothing is retrained. Read left to right, then follow the arrow down to the one question.</text>
+
+  <!-- ================= TOP ROW: steps 1..3, tops aligned at y=136, height 216 ================= -->
+
+  <!-- Card 1: video -> skeleton -->
+  <rect x="48" y="136" width="336" height="216" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="168" class="step">STEP 1</text>
+  <text x="70" y="194" class="t">Video becomes a skeleton</text>
+  <text x="70" y="220" class="b">A pose detector turns each frame</text>
+  <text x="70" y="242" class="b">into 33 body joints, so the clip is</text>
+  <text x="70" y="264" class="b">a moving stick figure, no pixels.</text>
+  <g>
+    <circle cx="216" cy="292" r="9" fill="#d8e0e7" stroke="#20364e" stroke-width="1.75"/>
+    <path d="M216 301 V324" class="bone"/>
+    <path d="M216 308 L198 320 M216 308 L234 320" class="bone"/>
+    <path d="M216 324 L202 342 M216 324 L230 342" class="bone"/>
+  </g>
+
+  <!-- Card 2: hide and predict -->
+  <rect x="432" y="136" width="336" height="216" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="454" y="168" class="step">STEP 2</text>
+  <text x="454" y="194" class="t">Hide joints, then predict</text>
+  <text x="454" y="220" class="b">The model hides some lower-body</text>
+  <text x="454" y="242" class="b">joints and predicts a short summary</text>
+  <text x="454" y="264" class="b">of each, not its exact pixels.</text>
+  <g>
+    <circle cx="600" cy="288" r="9" fill="#d8e0e7" stroke="#20364e" stroke-width="1.75"/>
+    <path d="M600 297 V318" class="bone"/>
+    <path d="M600 304 L582 316 M600 304 L618 316" class="bone"/>
+    <path d="M600 318 L586 336 M600 318 L614 336" class="bone"/>
+    <circle cx="586" cy="336" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+    <circle cx="614" cy="336" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  </g>
+
+  <!-- Card 3: residual -->
+  <rect x="816" y="136" width="336" height="216" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="838" y="168" class="step">STEP 3</text>
+  <text x="838" y="194" class="t">Measure the gap (residual)</text>
+  <text x="838" y="220" class="b">Compare the guess to the true</text>
+  <text x="838" y="242" class="b">summary. The leftover gap is the</text>
+  <text x="838" y="264" class="b">residual: the model's surprise.</text>
+  <circle cx="862" cy="304" r="7" fill="#8a6fb3"/>
+  <text x="878" y="309" class="b">guess</text>
+  <path d="M950 304 H1006" class="a"/>
+  <text x="1020" y="309" class="b">truth</text>
+  <circle cx="1096" cy="304" r="7" fill="#5f9e7e"/>
+  <text x="838" y="336" class="s">the gap between them is the residual</text>
+
+  <!-- top-row connectors -->
+  <path d="M384 244 H426" class="a"/>
+  <path d="M768 244 H810" class="a"/>
+
+  <!-- ================= STEP 4: two energies ================= -->
+  <text x="48" y="376" class="step">STEP 4</text>
+  <text x="120" y="376" class="t">Read two surprise scores from that same gap</text>
+
+  <!-- connector: card 3 down to a fork bar, then split down into the two cards -->
+  <path d="M984 352 V398 H414" class="lnk"/>
+  <path d="M414 398 V408" class="a"/>
+  <path d="M786 398 V408" class="a"/>
+
+  <!-- position energy card -->
+  <rect x="256" y="424" width="316" height="128" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <circle cx="286" cy="458" r="7" fill="#2f6f99"/>
+  <text x="304" y="463" class="t">Position energy</text>
+  <text x="278" y="492" class="b">Surprise about WHERE a</text>
+  <text x="278" y="514" class="b">joint sits at each moment.</text>
+  <text x="278" y="540" class="s">the comparison baseline</text>
+
+  <!-- motion energy card -->
+  <rect x="628" y="424" width="316" height="128" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <circle cx="658" cy="458" r="7" fill="#e07a4b"/>
+  <text x="676" y="463" class="t">Motion energy</text>
+  <text x="650" y="492" class="b">Surprise about HOW a joint</text>
+  <text x="650" y="514" class="b">changes moment to moment.</text>
+  <text x="650" y="540" class="s">the main thing we test</text>
+
+  <!-- ================= STEP 5: the one question ================= -->
+  <path d="M600 552 V572" class="a"/>
+  <rect x="168" y="580" width="864" height="64" rx="16" fill="#20364e"/>
+  <text x="192" y="610" class="w">Step 5, the one question: does motion energy tell walks apart better than position energy?</text>
+  <text x="192" y="632" class="ws">We answer with a simple straight-line test on held-out source videos, and a shuffled-time control must stay at chance.</text>
+
+  <!-- footer -->
+  <text x="48" y="668" class="s">Folder labels (normal, parkinsons, stroke, myopathic, cerebral_palsy) are dataset annotations from GAVD, not diagnoses made by this project.</text>
+</svg>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="fig3title fig3desc">
+  <title id="fig3title">The two-songs analogy: forcing everything to the same length erases how fast it really was</title>
+  <desc id="fig3desc">A beginner concept picture in two matching rows. The top row is a music analogy: a slow four minute song and a fast two minute song are both forced to play in exactly 64 beats, so afterwards you cannot tell which was fast. The bottom row is the real version: a slow walking clip and a fast walking clip are both forced to exactly 64 frames, so afterwards you cannot tell who walked faster. Both rows lose the same thing, which is real-time rhythm.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Squeeze everything to one length, and speed disappears</text>
+  <text x="48" y="90" class="s">Same idea told twice: first with songs, then with walking clips. Both lose real-time rhythm. Illustrative example, not measured facts.</text>
+
+  <!-- ================= TOP ROW: SONGS ANALOGY (y 110..332, height 222) ================= -->
+  <!-- Left card: two songs -->
+  <rect x="48" y="110" width="404" height="222" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="142" class="t">Two songs, different real length</text>
+
+  <text x="70" y="176" class="b">Slow song: 4 minutes long</text>
+  <line x1="70" y1="192" x2="430" y2="192" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M70 192 Q104 176 138 192 Q172 208 206 192 Q240 176 274 192 Q308 208 342 192 Q376 176 410 192"
+        fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+
+  <text x="70" y="246" class="b">Fast song: 2 minutes long</text>
+  <line x1="70" y1="262" x2="430" y2="262" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M70 262 Q94 246 118 262 Q142 278 166 262 Q190 246 214 262 Q238 278 262 262 Q286 246 310 262 Q334 278 358 262 Q382 246 406 262"
+        fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+
+  <text x="70" y="306" class="s">One is slow, one is fast, and you can hear it in real time.</text>
+
+  <!-- Machine card (dark) -->
+  <rect x="508" y="164" width="184" height="114" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="600" y="206" text-anchor="middle" class="w">Force to</text>
+  <text x="600" y="230" text-anchor="middle" class="w">64 beats</text>
+  <text x="600" y="256" text-anchor="middle" class="ws">every song</text>
+
+  <!-- Right card: both look the same -->
+  <rect x="748" y="110" width="404" height="222" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="770" y="142" class="t">Now both are 64 beats</text>
+
+  <line x1="770" y1="200" x2="1130" y2="200" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M770 200 Q804 184 838 200 Q872 216 906 200 Q940 184 974 200 Q1008 216 1042 200 Q1076 184 1110 200"
+        fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+  <path d="M770 200 Q804 184 838 200 Q872 216 906 200 Q940 184 974 200 Q1008 216 1042 200 Q1076 184 1110 200"
+        fill="none" stroke="#e07a4b" stroke-width="2.5" stroke-dasharray="7 6"/>
+
+  <text x="770" y="252" class="s">The two curves now sit on top of each other.</text>
+  <text x="770" y="286" class="b">Beats per song look identical.</text>
+  <text x="770" y="308" class="b">Beats per minute are gone.</text>
+
+  <!-- arrows top row (aligned to machine card center y=221) -->
+  <path d="M452 221 L500 221" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M692 221 L740 221" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= BOTTOM ROW: WALKING (y 388..610, height 222; gap from top row = 56) ================= -->
+  <!-- Left card: two clips -->
+  <rect x="48" y="388" width="404" height="222" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="420" class="t">Two walking clips, different length</text>
+
+  <text x="70" y="454" class="b">Slow walk: lasts 4.0 seconds</text>
+  <line x1="70" y1="470" x2="430" y2="470" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M70 470 Q104 454 138 470 Q172 486 206 470 Q240 454 274 470 Q308 486 342 470 Q376 454 410 470"
+        fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+
+  <text x="70" y="524" class="b">Fast walk: lasts 2.0 seconds</text>
+  <line x1="70" y1="540" x2="430" y2="540" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M70 540 Q94 524 118 540 Q142 556 166 540 Q190 524 214 540 Q238 556 262 540 Q286 524 310 540 Q334 556 358 540 Q382 524 406 540"
+        fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+
+  <text x="70" y="584" class="s">One is slow, one is fast, measured in real steps per minute.</text>
+
+  <!-- Machine card (dark) -->
+  <rect x="508" y="442" width="184" height="114" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="600" y="484" text-anchor="middle" class="w">Force to</text>
+  <text x="600" y="508" text-anchor="middle" class="w">64 frames</text>
+  <text x="600" y="534" text-anchor="middle" class="ws">every clip</text>
+
+  <!-- Right card: both look the same -->
+  <rect x="748" y="388" width="404" height="222" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="770" y="420" class="t">Now both are 64 frames</text>
+
+  <line x1="770" y1="478" x2="1130" y2="478" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M770 478 Q804 462 838 478 Q872 494 906 478 Q940 462 974 478 Q1008 494 1042 478 Q1076 462 1110 478"
+        fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+  <path d="M770 478 Q804 462 838 478 Q872 494 906 478 Q940 462 974 478 Q1008 494 1042 478 Q1076 462 1110 478"
+        fill="none" stroke="#e07a4b" stroke-width="2.5" stroke-dasharray="7 6"/>
+
+  <text x="770" y="530" class="s">The two clips now sit on top of each other.</text>
+  <text x="770" y="564" class="b">Steps per clip look identical.</text>
+  <text x="770" y="586" class="b">Steps per minute are gone.</text>
+
+  <!-- arrows bottom row (aligned to machine card center y=499) -->
+  <path d="M452 499 L500 499" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M692 499 L740 499" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <text x="48" y="660" class="s">Blue is the slow one, orange is the fast one. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

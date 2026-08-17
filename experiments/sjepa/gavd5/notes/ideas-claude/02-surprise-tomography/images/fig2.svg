@@ -8,14 +8,14 @@
     .t  { font: 700 20px Arial, Helvetica, sans-serif; fill:#0f2440; }
     .b  { font: 16px Arial, Helvetica, sans-serif; fill:#33475e; }
     .s  { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
-    .axis { font: 13px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+    .axis { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
     .lg { font: 14px Arial, Helvetica, sans-serif; fill:#33475e; }
   </style>
 
   <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
 
   <text class="h" x="48" y="60">Does the surprise map beat the pooled scalar?</text>
-  <text class="s" x="48" y="86">Illustrative expected shape. Source-level ROC-AUC, held-out abnormal vs normal, leave-one-source-out for PD/stroke/CP. All numbers transductive at the encoder. Checkpoint d0acc262.</text>
+  <text class="s" x="48" y="86">Illustrative expected shape. Source-level ROC-AUC, held-out abnormal vs normal, leave-one-source-out for PD, stroke, CP. All numbers transductive; frozen checkpoint d0acc262.</text>
 
   <!-- ================= PLOT AREA ================= -->
   <!-- x axis from x=120 to x=720 ; y axis AUC 0.40 (y=600) to 1.00 (y=150) -->

@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
-  <title>Illustrative expected shape: source-level AUC by scoring target and condition contrast</title>
-  <desc>A grid of three scoring targets (position energy, motion energy, fixed mix) across four x-groups: three condition-vs-matched-negatives contrasts on the canonical acquisition path (PD vs CP+myo, stroke vs CP+myo, PD+stroke vs CP+myo) plus one secondary normal-vs-abnormal lane flagged as confounded. Each cell shows a source-level ROC-AUC point with a bootstrap confidence interval over held-out sources, a chance reference line at 0.5, and a separate shuffled-motion control lane that must not beat motion. Values are an illustrative expected shape, not measured results.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Illustrative expected shape: source-level AUC by scoring target and condition contrast</title>
+  <desc id="d1">A grid of three scoring targets (position energy, motion energy, fixed mix) across four x-groups: the primary mechanism-matched Parkinson's-versus-canonical-myopathic contrast plus three secondary lanes (stroke versus myopathic, the pooled Parkinson's-plus-stroke versus myopathic-plus-cerebral-palsy broad-abnormality lane, and one confounded normal-versus-abnormal lane). Each cell shows a source-level ROC-AUC point with a bootstrap confidence interval over held-out sources, a chance reference line at 0.5, and a separate shuffled-motion control lane that must not beat motion. Values are an illustrative expected shape, not measured results.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0 0L10 5L0 10z" fill="#20364e"/>
@@ -11,6 +11,7 @@
       .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
       .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
       .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
       .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
       .axis{stroke:#20364e;stroke-width:1.75}
       .grid{stroke:#c4cdd8;stroke-width:1}
@@ -21,139 +22,122 @@
 
   <rect width="1200" height="720" fill="#f7f5ef"/>
 
-  <text x="48" y="66" class="h">Does motion-scored energy separate sources better than position?</text>
-  <text x="48" y="96" class="s">Illustrative expected shape. Source-level ROC-AUC per held-out source, bootstrap CI over sources. All numbers transductive, checkpoint d0acc262.</text>
+  <text x="48" y="66" class="h">Does motion separate walks better than position?</text>
+  <text x="48" y="96" class="s">Illustrative expected shape, not measured results. Source-level ROC-AUC per held-out source, bootstrap CI over sources. All numbers transductive, checkpoint d0acc262.</text>
 
   <!-- ================= MAIN AUC PANEL ================= -->
-  <!-- plot box: x 96..792, y 150..560 -->
-  <!-- y axis AUC 0.4 .. 0.9 -->
-  <text x="96" y="132" class="t">Source-level AUC grid</text>
-
-  <!-- y axis -->
-  <line x1="152" y1="150" x2="152" y2="540" class="axis"/>
-  <!-- y gridlines at AUC 0.4,0.5,0.6,0.7,0.8,0.9  -> y 540..150 range across 0.4..0.9 -->
+  <!-- plot box: x 152..760 , y 150..540 ; y axis AUC 0.4 .. 0.9 -->
   <!-- map: y = 540 - (auc-0.4)/0.5*390 -->
-  <line x1="152" y1="540" x2="784" y2="540" class="grid"/>
+  <text x="152" y="134" class="t">Source-level AUC grid</text>
+
+  <line x1="152" y1="150" x2="152" y2="540" class="axis"/>
+  <line x1="152" y1="540" x2="760" y2="540" class="grid"/>
   <text x="140" y="545" class="s" text-anchor="end">0.4</text>
-  <line x1="152" y1="462" x2="784" y2="462" class="chance"/>
+  <line x1="152" y1="462" x2="760" y2="462" class="chance"/>
   <text x="140" y="467" class="s" text-anchor="end">0.5</text>
-  <text x="792" y="467" class="s">chance</text>
-  <line x1="152" y1="384" x2="784" y2="384" class="grid"/>
+  <text x="768" y="467" class="s">chance</text>
+  <line x1="152" y1="384" x2="760" y2="384" class="grid"/>
   <text x="140" y="389" class="s" text-anchor="end">0.6</text>
-  <line x1="152" y1="306" x2="784" y2="306" class="grid"/>
+  <line x1="152" y1="306" x2="760" y2="306" class="grid"/>
   <text x="140" y="311" class="s" text-anchor="end">0.7</text>
-  <line x1="152" y1="228" x2="784" y2="228" class="grid"/>
+  <line x1="152" y1="228" x2="760" y2="228" class="grid"/>
   <text x="140" y="233" class="s" text-anchor="end">0.8</text>
-  <line x1="152" y1="150" x2="784" y2="150" class="grid"/>
+  <line x1="152" y1="150" x2="760" y2="150" class="grid"/>
   <text x="140" y="155" class="s" text-anchor="end">0.9</text>
 
-  <!-- y axis label -->
-  <text x="64" y="350" class="b" transform="rotate(-90 64 350)" text-anchor="middle">ROC-AUC</text>
+  <text x="72" y="345" class="b" transform="rotate(-90 72 345)" text-anchor="middle">ROC-AUC</text>
 
-  <!-- four condition groups along x; group centers at 250, 400, 550, 700 -->
-  <!-- within each group three markers offset -34,0,+34 for position(blue) motion(orange) mix(violet) -->
+  <!-- four condition groups; centers 260, 420, 580, 700 -->
+  <!-- within each group three markers offset -32,0,+32 for position(blue) motion(orange) mix(violet) -->
 
-  <!-- group labels -->
-  <text x="250" y="560" class="s" text-anchor="middle">PD vs</text>
-  <text x="250" y="584" class="s" text-anchor="middle">CP+myo</text>
-  <text x="400" y="560" class="s" text-anchor="middle">Stroke vs</text>
-  <text x="400" y="584" class="s" text-anchor="middle">CP+myo</text>
-  <text x="550" y="560" class="s" text-anchor="middle">PD+stroke</text>
-  <text x="550" y="584" class="s" text-anchor="middle">vs CP+myo</text>
-  <text x="700" y="560" class="s" text-anchor="middle">normal vs</text>
-  <text x="700" y="584" class="s" text-anchor="middle">abnormal*</text>
+  <!-- ===== Group 1: PD vs myo (PRIMARY) center 260 ===== -->
+  <line x1="228" y1="423" x2="228" y2="314" class="ci" stroke="#2f6f99"/>
+  <circle cx="228" cy="368" r="6" fill="#2f6f99"/>
+  <line x1="260" y1="329" x2="260" y2="228" class="ci" stroke="#e07a4b"/>
+  <circle cx="260" cy="275" r="6" fill="#e07a4b"/>
+  <line x1="292" y1="314" x2="292" y2="222" class="ci" stroke="#8a6fb3"/>
+  <circle cx="292" cy="267" r="6" fill="#8a6fb3"/>
 
-  <!-- ===== Group 1: PD  (center 250) ===== -->
-  <!-- position: auc 0.62 -> y=384-(.02/.05*78)?? recompute: y=540-(auc-0.4)/0.5*390 -->
-  <!-- 0.62 -> 540-0.22/0.5*390=540-171.6=368.4 ; CI 0.55..0.69 -> 540-.15/.5*390=540-117=423 ; 540-.29/.5*390=540-226.2=313.8 -->
-  <line x1="216" y1="423" x2="216" y2="314" class="ci" stroke="#2f6f99"/>
-  <circle cx="216" cy="368" r="6" fill="#2f6f99"/>
-  <!-- motion: auc 0.74 -> 540-.34/.5*390=540-265.2=274.8 ; CI 0.67..0.80 -> 540-.27/.5*390=540-210.6=329.4 ; 540-.40/.5*390=540-312=228 -->
-  <line x1="250" y1="329" x2="250" y2="228" class="ci" stroke="#e07a4b"/>
-  <circle cx="250" cy="275" r="6" fill="#e07a4b"/>
-  <!-- mix: auc 0.75 -> 540-.35/.5*390=540-273=267 ; CI 0.69..0.81 -> 314 .. 222 -->
-  <line x1="284" y1="314" x2="284" y2="222" class="ci" stroke="#8a6fb3"/>
-  <circle cx="284" cy="267" r="6" fill="#8a6fb3"/>
+  <!-- ===== Group 2: Stroke vs myo center 420 ===== -->
+  <line x1="388" y1="437" x2="388" y2="361" class="ci" stroke="#2f6f99"/>
+  <circle cx="388" cy="384" r="6" fill="#2f6f99"/>
+  <line x1="420" y1="361" x2="420" y2="243" class="ci" stroke="#e07a4b"/>
+  <circle cx="420" cy="298" r="6" fill="#e07a4b"/>
+  <line x1="452" y1="353" x2="452" y2="235" class="ci" stroke="#8a6fb3"/>
+  <circle cx="452" cy="298" r="6" fill="#8a6fb3"/>
 
-  <!-- ===== Group 2: Stroke (center 400) ===== -->
-  <!-- position 0.60 -> 384 ; CI 0.53..0.67 -> 437..361 -->
-  <line x1="366" y1="437" x2="366" y2="361" class="ci" stroke="#2f6f99"/>
-  <circle cx="366" cy="384" r="6" fill="#2f6f99"/>
-  <!-- motion 0.71 -> 540-.31/.5*390=540-241.8=298 ; CI 0.63..0.78 -> 361..243 -->
-  <line x1="400" y1="361" x2="400" y2="243" class="ci" stroke="#e07a4b"/>
-  <circle cx="400" cy="298" r="6" fill="#e07a4b"/>
-  <!-- mix 0.71 -> 298 ; CI 0.64..0.79 -> 353..235 -->
-  <line x1="434" y1="353" x2="434" y2="235" class="ci" stroke="#8a6fb3"/>
-  <circle cx="434" cy="298" r="6" fill="#8a6fb3"/>
-
-  <!-- ===== Group 3: PD+stroke pooled (center 550) ===== -->
-  <!-- position 0.63 -> 540-.23/.5*390=540-179.4=360.6 ; CI 0.58..0.68 -> 399..423? 0.58->540-.18/.5*390=540-140.4=399.6 ; 0.68->540-.28/.5*390=540-218.4=321.6 -->
-  <line x1="516" y1="399" x2="516" y2="322" class="ci" stroke="#2f6f99"/>
-  <circle cx="516" cy="361" r="6" fill="#2f6f99"/>
-  <!-- motion 0.76 -> 540-.36/.5*390=540-280.8=259 ; CI 0.71..0.81 -> 314..222 -->
-  <line x1="550" y1="314" x2="550" y2="222" class="ci" stroke="#e07a4b"/>
-  <circle cx="550" cy="259" r="6" fill="#e07a4b"/>
-  <!-- mix 0.77 -> 540-.37/.5*390=540-288.6=251 ; CI 0.72..0.82 -> 306..214 -->
-  <line x1="584" y1="306" x2="584" y2="214" class="ci" stroke="#8a6fb3"/>
-  <circle cx="584" cy="251" r="6" fill="#8a6fb3"/>
+  <!-- ===== Group 3: PD+stroke pooled center 580 ===== -->
+  <line x1="548" y1="399" x2="548" y2="322" class="ci" stroke="#2f6f99"/>
+  <circle cx="548" cy="361" r="6" fill="#2f6f99"/>
+  <line x1="580" y1="314" x2="580" y2="222" class="ci" stroke="#e07a4b"/>
+  <circle cx="580" cy="259" r="6" fill="#e07a4b"/>
+  <line x1="612" y1="306" x2="612" y2="214" class="ci" stroke="#8a6fb3"/>
+  <circle cx="612" cy="251" r="6" fill="#8a6fb3"/>
 
   <!-- ===== Group 4: normal vs abnormal (confounded) center 700 ===== -->
-  <!-- position 0.66 -> 540-.26/.5*390=540-202.8=337 ; CI 0.55..0.76 -> 423..243 -->
-  <line x1="666" y1="423" x2="666" y2="243" class="ci" stroke="#2f6f99"/>
-  <circle cx="666" cy="337" r="6" fill="#2f6f99"/>
-  <!-- motion 0.68 -> 540-.28/.5*390=321.6 ; CI 0.56..0.79 -> 415..235 -->
+  <line x1="668" y1="423" x2="668" y2="243" class="ci" stroke="#2f6f99"/>
+  <circle cx="668" cy="337" r="6" fill="#2f6f99"/>
   <line x1="700" y1="415" x2="700" y2="235" class="ci" stroke="#e07a4b"/>
   <circle cx="700" cy="322" r="6" fill="#e07a4b"/>
-  <!-- mix 0.68 -> 322 ; CI 0.57..0.79 -> 408..235 -->
-  <line x1="734" y1="408" x2="734" y2="235" class="ci" stroke="#8a6fb3"/>
-  <circle cx="734" cy="322" r="6" fill="#8a6fb3"/>
+  <line x1="732" y1="408" x2="732" y2="235" class="ci" stroke="#8a6fb3"/>
+  <circle cx="732" cy="322" r="6" fill="#8a6fb3"/>
 
-  <!-- legend inside plot, bottom-left, between chance line (y=462) and x-axis (y=540), clear of all markers -->
-  <rect x="380" y="470" width="184" height="66" rx="16" fill="#ffffff" class="axis" stroke-width="1.75"/>
-  <circle cx="400" cy="490" r="6" fill="#2f6f99"/>
-  <text x="418" y="495" class="s">Position energy</text>
-  <circle cx="400" cy="512" r="6" fill="#e07a4b"/>
-  <text x="418" y="517" class="s">Motion energy</text>
-  <circle cx="400" cy="534" r="6" fill="#8a6fb3"/>
-  <text x="418" y="539" class="s">Fixed mix</text>
+  <!-- group labels below axis -->
+  <text x="260" y="562" class="s" text-anchor="middle">PD vs myo</text>
+  <text x="260" y="584" class="s" text-anchor="middle">(primary)</text>
+  <text x="420" y="562" class="s" text-anchor="middle">stroke vs</text>
+  <text x="420" y="584" class="s" text-anchor="middle">myo</text>
+  <text x="580" y="562" class="s" text-anchor="middle">PD+stroke</text>
+  <text x="580" y="584" class="s" text-anchor="middle">vs myo+CP</text>
+  <text x="700" y="562" class="s" text-anchor="middle">normal vs</text>
+  <text x="700" y="584" class="s" text-anchor="middle">abnormal*</text>
+
+  <!-- ================= LEGEND (empty lower area of plot, below chance line) ================= -->
+  <rect x="176" y="472" width="470" height="60" rx="16" fill="#ffffff" class="axis" stroke-width="1.75"/>
+  <circle cx="200" cy="494" r="6" fill="#2f6f99"/>
+  <text x="218" y="499" class="s">Position energy: where a joint is</text>
+  <circle cx="200" cy="516" r="6" fill="#e07a4b"/>
+  <text x="218" y="521" class="s">Motion energy: how it changes slot to slot</text>
+  <circle cx="470" cy="494" r="6" fill="#8a6fb3"/>
+  <text x="488" y="499" class="s">Fixed mix: a</text>
+  <text x="488" y="521" class="s">blend of both</text>
 
   <!-- ================= SHUFFLED-MOTION CONTROL LANE ================= -->
-  <!-- separate narrow panel on right: x 856..1152 -->
-  <text x="856" y="132" class="t">Control lane</text>
+  <text x="856" y="134" class="t">Control lane</text>
   <line x1="912" y1="150" x2="912" y2="540" class="axis"/>
-  <line x1="912" y1="540" x2="1136" y2="540" class="grid"/>
+  <line x1="912" y1="540" x2="1080" y2="540" class="grid"/>
   <text x="900" y="545" class="s" text-anchor="end">0.4</text>
-  <line x1="912" y1="462" x2="1136" y2="462" class="chance"/>
+  <line x1="912" y1="462" x2="1080" y2="462" class="chance"/>
   <text x="900" y="467" class="s" text-anchor="end">0.5</text>
-  <line x1="912" y1="306" x2="1136" y2="306" class="grid"/>
+  <line x1="912" y1="306" x2="1080" y2="306" class="grid"/>
   <text x="900" y="311" class="s" text-anchor="end">0.7</text>
-  <line x1="912" y1="150" x2="1136" y2="150" class="grid"/>
+  <line x1="912" y1="150" x2="1080" y2="150" class="grid"/>
   <text x="900" y="155" class="s" text-anchor="end">0.9</text>
 
-  <!-- shuffled-motion energy: hugs chance ~0.51 -> 540-.11/.5*390=540-85.8=454 ; CI 0.46..0.56 -> 493..415 -->
-  <line x1="1000" y1="493" x2="1000" y2="415" class="ci" stroke="#e07a4b"/>
-  <circle cx="1000" cy="454" r="6" fill="#e07a4b"/>
-  <text x="1024" y="450" class="s">shuffled</text>
-  <text x="1024" y="472" class="s">motion</text>
-
-  <!-- real motion reference (from pooled group) far above chance for contrast -->
-  <circle cx="1000" cy="259" r="6" fill="#e07a4b" opacity="0.35"/>
-  <text x="1024" y="255" class="s">real motion</text>
-  <text x="1024" y="277" class="s">(for contrast)</text>
-
-  <text x="912" y="560" class="s" text-anchor="middle">time-permuted</text>
-  <text x="912" y="584" class="s" text-anchor="middle">slots</text>
+  <!-- real motion reference (faint) high above chance -->
+  <circle cx="996" cy="259" r="6" fill="#e07a4b" opacity="0.35"/>
+  <text x="1016" y="255" class="s">real motion</text>
+  <text x="1016" y="277" class="s">(for contrast)</text>
 
   <!-- reading arrow: control must fall back to chance -->
-  <path d="M1000 300V440" class="a"/>
-  <text x="1044" y="366" class="s">must drop</text>
-  <text x="1044" y="388" class="s">to chance</text>
+  <path d="M996 300V430" class="a"/>
+  <text x="1016" y="360" class="s">must drop</text>
+  <text x="1016" y="382" class="s">to chance</text>
 
-  <!-- expected ordering call-out banner -->
-  <rect x="152" y="602" width="700" height="70" rx="16" fill="#20364e"/>
-  <text x="176" y="632" class="w">Expected ordering: motion and mix sit above position on the matched contrasts</text>
-  <text x="176" y="656" class="s" fill="#cdd8e4">Primary endpoint: motion AUC minus position AUC, sign-consistent across a majority of sources</text>
+  <!-- shuffled-motion energy hugs chance ~0.51 -->
+  <line x1="996" y1="493" x2="996" y2="450" class="ci" stroke="#e07a4b"/>
+  <circle cx="996" cy="470" r="6" fill="#e07a4b"/>
+  <text x="1016" y="500" class="s">shuffled</text>
+  <text x="1016" y="522" class="s">motion</text>
+
+  <text x="996" y="562" class="s" text-anchor="middle">time-permuted</text>
+  <text x="996" y="584" class="s" text-anchor="middle">slots</text>
+
+  <!-- expected ordering call-out banner (own full-width row) -->
+  <rect x="152" y="594" width="1000" height="50" rx="16" fill="#20364e"/>
+  <text x="176" y="618" class="w">Expected ordering: motion and mix sit above position on the matched contrasts</text>
+  <text x="176" y="638" class="ws">Primary endpoint: motion AUC minus position AUC, sign-consistent across a majority of sources</text>
 
   <!-- footer -->
-  <text x="48" y="700" class="s">*normal-vs-abnormal is secondary and confounded: 1 normal source (3KnFt8bH3tE), augmented-vs-canonical pathway. Folder labels are dataset annotations, not diagnoses.</text>
+  <text x="48" y="668" class="s">*normal-vs-abnormal is secondary and confounded: 1 normal source (3KnFt8bH3tE), augmented-vs-canonical pathway. Folder labels are dataset annotations, not diagnoses.</text>
 </svg>

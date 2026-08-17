@@ -50,12 +50,20 @@
   <!-- ============ PRE-REGISTERED MARGIN LINES ============ -->
   <!-- cadence/speed margin 0.70 -> y = 560 - 0.70*410 = 273 -->
   <!-- double-support margin 0.50 -> y = 355 -->
-  <g>
-    <line x1="150" y1="273" x2="640" y2="273" stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4"/>
-    <text x="158" y="290" class="s" fill="#8a6fb3">floor 0.70</text>
-    <line x1="640" y1="355" x2="900" y2="355" stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4"/>
-    <text x="648" y="372" class="s" fill="#8a6fb3">floor 0.50</text>
+  <!-- Lines are SEGMENTED to skip every bar column (>=16px clearance), so no dashed line crosses a bar. -->
+  <!-- resized cadence bar x280-340, resized speed bar x550-610: 0.70 floor runs 150->640 avoiding both. -->
+  <g stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4">
+    <line x1="150" y1="273" x2="264" y2="273"/>
+    <line x1="356" y1="273" x2="534" y2="273"/>
+    <line x1="626" y1="273" x2="640" y2="273"/>
   </g>
+  <text x="158" y="266" class="s" fill="#8a6fb3">floor 0.70</text>
+  <!-- resized double-support bar x820-880: 0.50 floor runs 640->900 avoiding it. -->
+  <g stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4">
+    <line x1="640" y1="355" x2="804" y2="355"/>
+    <line x1="896" y1="355" x2="900" y2="355"/>
+  </g>
+  <text x="648" y="348" class="s" fill="#8a6fb3">floor 0.50</text>
 
   <!-- ============ SHUFFLED-TIME NULL LINE ============ -->
   <!-- near total error, ~0.97 -> y = 560 - 0.97*410 = 162 -->
