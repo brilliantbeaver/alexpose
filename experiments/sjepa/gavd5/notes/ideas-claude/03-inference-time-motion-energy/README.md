@@ -1,6 +1,12 @@
 # Position-vs-motion prediction energy at inference: does the frozen S-JEPA already know motion, or only pose?
 
-> Using a dense readout of the frozen encoder and predictor over all 16 time slots, with zero retraining, is latent-velocity structure linearly recoverable from prediction residuals, and does a motion-scored energy separate held-out source videos better than a position-scored energy after a shuffled-motion scale control?
+> Plain-language question: we already trained a model to guess WHERE body joints are. Without training it any more, can we also read out of it HOW those joints move, and does the "how it moves" score tell walks apart better than the "where it is" score? (Every technical word in this proposal is defined in plain terms below, and there is a short glossary at the end.)
+
+## The big idea in plain words (start here, 60 seconds)
+
+Imagine you trained a friend to play one game: you cover part of a photo of a walking stick figure with your hand, and your friend guesses WHERE the hidden foot is. You never once asked your friend to guess how FAST the foot was moving. After a lot of practice, you get curious: while learning to guess position, did your friend quietly pick up a sense of speed too, as a free bonus?
+
+That is this whole project in one picture. We have a finished model that we do not change at all (we call that frozen). We poke it two different ways at test time. Once we ask how surprised it is about WHERE a joint sits. Once we ask how surprised it is about HOW a joint changes from one moment to the next. Then we check which of those two scores does a better job telling walking conditions apart. If the "how it moves" score wins, the model quietly learned motion for free. If it does not, motion has to be trained in on purpose, which costs a lot more.
 
 ## The question in plain words
 
@@ -244,6 +250,14 @@ The nearest neighbor is **plan/04, the motion-vs-position TARGET ablation**, whi
 
 ## Figures
 
+Read these in order. Figure 3 is the gentlest one, the whole idea in five steps, so start there. Figure 4 shows the one gait axis this study is built to see. Figures 1 and 2 show what the results would look like.
+
+![The big idea in five plain steps](./images/fig3.svg)
+*Figure 3 (start here): the central idea as a five-step flow, with no new science. A walking video becomes a moving stick figure; the frozen model hides some lower-body joints and predicts a short summary of each; the leftover gap is the residual (the model's surprise); from that same gap we read two scores, position energy (where a joint sits) and motion energy (how it changes); and the one question is whether motion energy tells walks apart better than position energy. Nothing is retrained.*
+
+![The rhythm-regularity axis this study asks the frozen model to see](./images/fig4.svg)
+*Figure 4 (how to read the contrast): the primary mechanism-matched axis. On the left, a Parkinson's-style walk with a broken internal clock gives a scattered per-slot motion residual (high dispersion). On the right, a myopathic walk with an intact clock gives an even residual (low dispersion). The endpoint asks whether the frozen predictor's slot-to-slot residual carries a more-regular-versus-less-regular ordering that separates these two ends. This is a within-window RELATIVE regularity contrast only, not absolute cadence (which the 64-frame resize erases), and it must beat a raw-coordinate speed baseline and survive the time-shuffle control.*
+
 ![Per-source AUC grid across scoring targets](./images/fig1.svg)
 *Figure 1: a 3 (target: position, motion, mix) by 4 grid of source-level AUC. The leftmost x-group is the PRIMARY mechanism-matched PD-versus-canonical-myopathic contrast (the loss-of-automaticity versus symmetric-myopathy axis); the remaining three are secondary exploratory lanes (stroke vs myo, the pooled PD+stroke vs myopathic+CP broad-abnormality lane, and the confounded normal-vs-abnormal lane), all canonical path except the flagged normal lane. Bootstrap CIs over held-out sources, plus a shuffled-motion control lane that must not beat motion.*
 
@@ -253,6 +267,25 @@ The nearest neighbor is **plan/04, the motion-vs-position TARGET ablation**, whi
 ## Responsible use
 
 The folder labels used here (stroke, parkinsons, myopathic, cerebral palsy, normal) are dataset annotations attached to GAVD source videos. They are not diagnoses made by this project, and nothing in this study should be read as a clinical assessment of any individual. All results are transductive representation diagnostics on a small, source-limited cohort, and any separation reported is a statement about the frozen model's features, not about a person's health.
+
+## Glossary
+
+Quick plain-word definitions for the terms this proposal uses. Jump here any time a word is unclear.
+
+- **Token:** the smallest chunk the model reads, one joint at one time position. There are 33 x 16 = 528 of them per clip.
+- **Embedding (feature vector):** a short list of numbers that summarizes a joint, like a fingerprint made of numbers, instead of raw pixels.
+- **JEPA / S-JEPA:** Joint Embedding Predictive Architecture. Hide part of the input and predict the hidden part as a feature vector, not as pixels. The S is for skeleton (Abdelfattah and Alahi, ECCV 2024).
+- **Encoder / target encoder (EMA teacher):** the encoder reads the visible tokens; the target encoder is a slow-moving copy (an exponential moving average, which is a running blend of past weights) that gives stable targets and is never trained by gradients.
+- **Predictor:** a small network that, given the visible tokens, guesses the teacher's features at the hidden positions.
+- **Masking:** hiding some joints on purpose, like covering part of a photo with your hand, so the model has to guess what is behind your hand.
+- **Residual:** the gap between a prediction and its target. Position energy is the per-slot residual; motion energy is the residual of the slot-to-slot change.
+- **Velocity (motion):** how fast a joint changes from one time slot to the next. The motion score is about velocity.
+- **Probe (ridge probe):** a plain straight-line tool (with a gentle smoothing penalty) used to test how much of something a linear readout can recover.
+- **R-squared:** the share of a target's variation a probe explains, from 0 to 1; higher means more structure recovered.
+- **AUC (ROC-AUC):** a separation score from 0 to 1; 0.5 is a coin flip, 1.0 is perfect.
+- **Transductive vs inductive:** transductive means the model was trained on the very clips you later test it on (a high score can just mean memorizing, like being quizzed on the exact practice problems you studied). Inductive means testing on clips the model never saw (like brand-new problems). All numbers here are transductive.
+- **Source-video-disjoint:** every clip from one video lands wholly on one side of the train/test split, so the model cannot win by recognizing the video instead of the gait.
+- **Missingness-only:** a baseline that uses only which joints were found or missing, throwing away all the coordinates.
 
 ## References
 

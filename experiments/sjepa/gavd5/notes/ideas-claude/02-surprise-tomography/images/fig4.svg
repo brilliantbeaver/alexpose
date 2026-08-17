@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">How to read the result: two separate tests, never mixed</title>
+  <desc id="d4">A plain guide to the two tests in this proposal. Test A asks whether the whole map out-ranks the single pooled number and the missingness floor by at least 0.05. Test B asks whether the hot spots land where the biology says they should, checked by a fixed injection threshold of 0.60. The two tests are reported separately and never combined.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h  { font: 700 32px Arial, Helvetica, sans-serif; fill:#0f2440; }
+      .t  { font: 700 20px Arial, Helvetica, sans-serif; fill:#0f2440; }
+      .b  { font: 16px Arial, Helvetica, sans-serif; fill:#33475e; }
+      .s  { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+      .w  { font: 700 16px Arial, Helvetica, sans-serif; fill:#ffffff; }
+      .ws { font: 14px Arial, Helvetica, sans-serif; fill:#cdd8e4; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text class="h" x="48" y="60">Two separate tests, reported side by side</text>
+  <text class="s" x="48" y="88">The proposal never mixes these. One asks if the map wins; the other asks if the hot spots land in the right place.</text>
+
+  <!--
+    Two big test cards, top row, y=112, height=340.
+    Test A x=48 w=520 (right 568). Test B x=624 w=520 (right 1144). Gap 56.
+    Bottom row: two verdict cards, y=508, height=140 (bottom 648). Footer at 690.
+    Verdict A x=48 w=520. Verdict B x=624 w=520.
+    Arrows: A -> verdictA (straight down in gap), B -> verdictB.
+  -->
+
+  <!-- ============ TEST A ============ -->
+  <g>
+    <rect x="48" y="112" width="520" height="340" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="70" y="148">Test A: does the map WIN the contest?</text>
+    <text class="s" x="70" y="174">measures separability only, no biology template</text>
+
+    <text class="b" x="70" y="212">Score three readouts of the same mistakes by</text>
+    <text class="b" x="70" y="234">how well they rank held-out abnormal videos:</text>
+
+    <!-- three mini bars -->
+    <g>
+      <rect x="82" y="256" width="150" height="20" fill="#2f6f99"/>
+      <text class="s" x="242" y="271">pooled total (to beat)</text>
+      <rect x="82" y="284" width="210" height="20" fill="#e07a4b"/>
+      <text class="s" x="302" y="299">full map (primary)</text>
+      <rect x="82" y="312" width="120" height="20" fill="#8a6fb3"/>
+      <text class="s" x="212" y="327">joint + time marginals</text>
+    </g>
+
+    <text class="b" x="70" y="368">The map counts only if it beats BOTH:</text>
+    <text class="b" x="70" y="392">the pooled total by at least +0.05, AND</text>
+    <text class="b" x="70" y="416">the missingness floor by at least +0.05.</text>
+  </g>
+
+  <!-- ============ TEST B ============ -->
+  <g>
+    <rect x="624" y="112" width="520" height="340" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="646" y="148">Test B: do hot spots land in the RIGHT place?</text>
+    <text class="s" x="646" y="174">measures biology match, written down before results</text>
+
+    <text class="b" x="646" y="212">Nudge one side's knee bend in the input, then</text>
+    <text class="b" x="646" y="234">recompute the picture. Ask what share of the</text>
+    <text class="b" x="646" y="256">new surprise lands in that side's knee and</text>
+    <text class="b" x="646" y="278">ankle rows (4 of the 12 rows).</text>
+
+    <text class="b" x="646" y="316">A blind spread would put only 4 / 12 = 0.333</text>
+    <text class="b" x="646" y="338">of it there. We require at least 0.60, almost</text>
+    <text class="b" x="646" y="360">double, before we trust the anatomy reading.</text>
+
+    <text class="s" x="646" y="396">Below 0.60: the map is not tracking the body,</text>
+    <text class="s" x="646" y="418">so no clinical reading of the picture is warranted.</text>
+  </g>
+
+  <!-- arrows down -->
+  <line x1="308" y1="452" x2="308" y2="504" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="884" y1="452" x2="884" y2="504" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ============ VERDICT A ============ -->
+  <g>
+    <rect x="48" y="508" width="520" height="140" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+    <text class="w" x="70" y="544">Verdict A: is the SHAPE informative?</text>
+    <text class="ws" x="70" y="574">Clears both +0.05 margins: the layout carries</text>
+    <text class="ws" x="70" y="596">real structure the single total threw away.</text>
+    <text class="ws" x="70" y="622">Fails: signal lives in the total, not the shape.</text>
+  </g>
+
+  <!-- ============ VERDICT B ============ -->
+  <g>
+    <rect x="624" y="508" width="520" height="140" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+    <text class="w" x="646" y="544">Verdict B: does the shape match BIOLOGY?</text>
+    <text class="ws" x="646" y="574">At least 0.60 in the matched rows: the hot</text>
+    <text class="ws" x="646" y="596">spots track anatomy, as pre-registered.</text>
+    <text class="ws" x="646" y="622">A win in Test A never counts as a Test B win.</text>
+  </g>
+
+  <!-- footer, baseline y=672 (48px above bottom, 24px below the last cards at 648) -->
+  <text class="s" x="48" y="672">Judged on whole held-out source videos; every number is transductive at the encoder. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

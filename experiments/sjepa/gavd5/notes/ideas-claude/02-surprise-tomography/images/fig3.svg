@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">From a walking clip to a where-it-guesses-wrong picture</title>
+  <desc id="d3">A five-step beginner flow. A walking video becomes a stick-figure skeleton. The model hides some joints and guesses them. Where the guess is far off is called surprise. The surprise is drawn as a small 12-by-16 picture. The question is whether the shape of that picture, not just its total, tells apart new clips.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h  { font: 700 32px Arial, Helvetica, sans-serif; fill:#0f2440; }
+      .t  { font: 700 20px Arial, Helvetica, sans-serif; fill:#0f2440; }
+      .b  { font: 16px Arial, Helvetica, sans-serif; fill:#33475e; }
+      .s  { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+      .num { font: 700 16px Arial, Helvetica, sans-serif; fill:#ffffff; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text class="h" x="48" y="60">The one idea: read the SHAPE of the model's mistakes</text>
+  <text class="s" x="48" y="88">A normal-trained model guesses hidden joints. We draw where it guesses wrong, then ask if that picture tells clips apart.</text>
+
+  <!--
+    Top row: three cards, y=120, height=232.
+    Card A x=48 w=336 (right 384). Card B x=440 w=336 (right 776). Card C x=832 w=320 (right 1152).
+    Gaps: 440-384=56 ; 832-776=56. OK.
+    Arrows between at y=236 in the 56px gaps.
+    Bottom row: two cards, y=408, height=228 (bottom 636).
+    Card D x=48 w=520 (right 568). Card E x=624 w=520 (right 1144). Gap 56.
+    A down-elbow connects C (top-right) to D area; a straight arrow D->E.
+  -->
+
+  <!-- ============ STEP 1: raw clip -> skeleton ============ -->
+  <g>
+    <rect x="48" y="120" width="336" height="232" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+    <circle cx="78" cy="150" r="14" fill="#2f6f99"/>
+    <text class="num" x="78" y="155" text-anchor="middle">1</text>
+    <text class="t" x="104" y="156">Video to skeleton</text>
+    <text class="b" x="70" y="192">A pose tracker turns each</text>
+    <text class="b" x="70" y="214">walking clip into a moving</text>
+    <text class="b" x="70" y="236">stick figure of 33 joints.</text>
+    <text class="s" x="70" y="266">No pixels, no face: just</text>
+    <text class="s" x="70" y="286">dots and lines that move.</text>
+
+    <!-- tiny skeleton glyph -->
+    <g stroke="#8a9bab" stroke-width="2.5" fill="none">
+      <line x1="330" y1="196" x2="330" y2="236"/>
+      <line x1="330" y1="206" x2="314" y2="222"/>
+      <line x1="330" y1="206" x2="346" y2="222"/>
+      <line x1="330" y1="236" x2="318" y2="270"/>
+      <line x1="330" y1="236" x2="342" y2="270"/>
+    </g>
+    <circle cx="330" cy="188" r="7" fill="#d8e0e7" stroke="#20364e" stroke-width="1.25"/>
+    <circle cx="314" cy="222" r="3.5" fill="#d8e0e7" stroke="#20364e" stroke-width="1"/>
+    <circle cx="346" cy="222" r="3.5" fill="#d8e0e7" stroke="#20364e" stroke-width="1"/>
+    <circle cx="318" cy="270" r="3.5" fill="#d8e0e7" stroke="#20364e" stroke-width="1"/>
+    <circle cx="342" cy="270" r="3.5" fill="#d8e0e7" stroke="#20364e" stroke-width="1"/>
+  </g>
+
+  <!-- ============ STEP 2: hide and guess ============ -->
+  <g>
+    <rect x="440" y="120" width="336" height="232" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+    <circle cx="470" cy="150" r="14" fill="#8a6fb3"/>
+    <text class="num" x="470" y="155" text-anchor="middle">2</text>
+    <text class="t" x="496" y="156">Hide and guess</text>
+    <text class="b" x="462" y="192">The model hides some leg</text>
+    <text class="b" x="462" y="214">joints, then guesses what</text>
+    <text class="b" x="462" y="236">they should look like.</text>
+    <text class="s" x="462" y="266">When the guess is far off,</text>
+    <text class="s" x="462" y="286">we call that surprise.</text>
+  </g>
+
+  <!-- ============ STEP 3: surprise -> small picture ============ -->
+  <g>
+    <rect x="832" y="120" width="320" height="232" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+    <circle cx="862" cy="150" r="14" fill="#e07a4b"/>
+    <text class="num" x="862" y="155" text-anchor="middle">3</text>
+    <text class="t" x="888" y="156">Draw the surprise</text>
+    <text class="b" x="854" y="192">Stack every miss into a</text>
+    <text class="b" x="854" y="214">small picture: 12 joints</text>
+    <text class="b" x="854" y="236">tall, 16 time slices wide.</text>
+    <text class="s" x="854" y="266">Hot spots show WHERE</text>
+    <text class="s" x="854" y="286">and WHEN it missed.</text>
+  </g>
+
+  <!-- arrows top row -->
+  <line x1="384" y1="236" x2="432" y2="236" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="776" y1="236" x2="824" y2="236" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- elbow from step 3 down to step 4 (single right-angle bend) -->
+  <path d="M 992 352 L 992 384 L 308 384 L 308 400" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ============ STEP 4: two numbers from one picture ============ -->
+  <g>
+    <rect x="48" y="408" width="520" height="228" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <circle cx="78" cy="438" r="14" fill="#5f9e7e"/>
+    <text class="num" x="78" y="443" text-anchor="middle">4</text>
+    <text class="t" x="104" y="444">Two ways to read the same picture</text>
+    <text class="b" x="70" y="480">HOW MUCH: add every hot spot into one</text>
+    <text class="b" x="70" y="502">number (the pooled scalar). This is the old way.</text>
+    <text class="b" x="70" y="536">WHERE: keep the full shape, all 12 by 16 =</text>
+    <text class="b" x="70" y="558">192 cells. This proposal studies the shape.</text>
+    <text class="s" x="70" y="592">Same mistakes, two summaries: a total, or a map.</text>
+  </g>
+
+  <!-- ============ STEP 5: the fair test ============ -->
+  <g>
+    <rect x="624" y="408" width="520" height="228" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+    <circle cx="654" cy="438" r="14" fill="#5f9e7e"/>
+    <text class="num" x="654" y="443" text-anchor="middle">5</text>
+    <text class="t" x="680" y="444">The question we test</text>
+    <text class="b" x="646" y="480">Does the SHAPE of the picture tell new</text>
+    <text class="b" x="646" y="502">clips apart better than the single total,</text>
+    <text class="b" x="646" y="524">and better than boring nuisance patterns?</text>
+    <text class="s" x="646" y="558">Judged on whole held-out videos, not single clips,</text>
+    <text class="s" x="646" y="580">and only counted as a win by a fixed margin.</text>
+  </g>
+
+  <!-- arrow step 4 -> step 5 -->
+  <line x1="568" y1="522" x2="616" y2="522" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- footer, baseline y=672 (48px above bottom, 36px below the last cards at 636) -->
+  <text class="s" x="48" y="672">Nothing is retrained here: we only read a frozen model (checkpoint d0acc262). Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

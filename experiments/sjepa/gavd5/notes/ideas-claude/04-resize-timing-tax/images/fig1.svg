@@ -47,10 +47,10 @@
         fill="none" stroke="#e07a4b" stroke-width="2.5"/>
 
   <!-- ============ ARROWS INTO RESIZE (single right-angle bend each) ============ -->
-  <!-- Clip A: horizontal out, one bend, down into resize box top -->
-  <path d="M518 182 L688 182 L688 216" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
-  <!-- Clip B: horizontal out, one bend, up into resize box bottom -->
-  <path d="M518 402 L688 402 L688 368" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <!-- Clip A: horizontal out, one bend, down onto resize box top edge (y=232) -->
+  <path d="M518 182 L688 182 L688 231" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <!-- Clip B: horizontal out, one bend, up onto resize box bottom edge (y=352) -->
+  <path d="M518 402 L688 402 L688 353" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
 
   <!-- ============ RESIZE OPERATOR ============ -->
   <!-- card: x 618..794, y 232..352 (height 120) -->
@@ -59,8 +59,8 @@
   <text x="706" y="302" text-anchor="middle" class="ws">warp to 64 frames</text>
   <text x="706" y="324" text-anchor="middle" class="ws">= 16 time positions</text>
 
-  <!-- resize -> grid: straight horizontal -->
-  <path d="M794 292 L896 292" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <!-- resize -> grid: straight horizontal, arrowhead lands on grid card left edge (x=918) -->
+  <path d="M794 292 L917 292" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
 
   <!-- ============ SHARED NORMALIZED GRID (RESULT) ============ -->
   <!-- card: x 918..1152, y 100..416 (height 316) -->

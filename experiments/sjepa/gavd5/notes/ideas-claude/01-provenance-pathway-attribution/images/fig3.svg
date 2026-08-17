@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Two doors, one model, one door-guesser: the central idea in plain words</title>
+  <desc id="desc">A beginner concept diagram. Clips arrive through two doors, an augmented path for most normal clips and a canonical path for the abnormal clips. Both go into one frozen model that turns each clip into a fingerprint of numbers. A small probe then tries to guess which door a clip came through, not how the person walked. If the probe can name the door from the fingerprint alone, then some of the normal-versus-abnormal signal was really door-spotting, not gait understanding. Folder labels are dataset annotations, not diagnoses.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+
+  <text class="h" x="48" y="72">Is the model reading the walking, or reading the door?</text>
+  <text class="s" x="48" y="98">The central idea: clips come through two doors. We test whether the model can name the door instead of judging the gait.</text>
+
+  <!-- ================= STEP 1: two doors ================= -->
+  <!-- Augmented door: x48..348, y150..270 -->
+  <rect x="48" y="150" width="300" height="120" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text class="t" x="70" y="186">Door 1: augmented path</text>
+  <text class="b" x="70" y="214">Most NORMAL clips arrive</text>
+  <text class="b" x="70" y="236">this way (extra normal</text>
+  <text class="b" x="70" y="258">windows were mined in).</text>
+
+  <!-- Canonical door: x48..348, y326..446 (56px below Door 1) -->
+  <rect x="48" y="326" width="300" height="120" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text class="t" x="70" y="362">Door 2: canonical path</text>
+  <text class="b" x="70" y="390">Every ABNORMAL clip</text>
+  <text class="b" x="70" y="412">arrives this way (the</text>
+  <text class="b" x="70" y="434">original pipeline).</text>
+
+  <!-- ================= STEP 2: one frozen model ================= -->
+  <!-- x470..760, y212..384, centered on the door pair -->
+  <rect x="470" y="212" width="290" height="172" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text class="t" x="492" y="248">One frozen model</text>
+  <text class="b" x="492" y="276">It turns each walking clip</text>
+  <text class="b" x="492" y="298">into a fingerprint: a short</text>
+  <text class="b" x="492" y="320">list of numbers that stands</text>
+  <text class="b" x="492" y="342">in for the whole clip.</text>
+  <text class="s" x="492" y="368">Same model for both doors (d0acc262).</text>
+
+  <!-- Arrows from doors into model (single right-angle elbows, clear of boxes) -->
+  <!-- Door 1 out at (348,210) -> right to x=410, down to y=266, into model -->
+  <path d="M348,210 L410,210 L410,266 L454,266" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <!-- Door 2 out at (348,386) -> right to x=410, up to y=330, into model -->
+  <path d="M348,386 L410,386 L410,330 L454,330" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ================= STEP 3: the door-guesser probe ================= -->
+  <!-- x852..1152, y212..384 -->
+  <rect x="852" y="212" width="300" height="172" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text class="t" x="874" y="248">The door-guesser</text>
+  <text class="b" x="874" y="276">A tiny straight-line probe.</text>
+  <text class="b" x="874" y="298">It sees only the fingerprint</text>
+  <text class="b" x="874" y="320">and tries to guess: Door 1</text>
+  <text class="b" x="874" y="342">or Door 2?</text>
+  <text class="s" x="874" y="368">It never sees the raw walking.</text>
+
+  <!-- Arrow model -> probe (straight) -->
+  <path d="M760,298 L836,298" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text class="s" x="798" y="288" text-anchor="middle">fingerprint</text>
+
+  <!-- ================= STEP 4: what the answer means ================= -->
+  <!-- Green: cannot guess. x48..570, y502..624 -->
+  <rect x="48" y="502" width="522" height="122" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text class="t" x="70" y="536">If it CANNOT name the door</text>
+  <text class="b" x="70" y="564">The door left no easy fingerprint, so one</text>
+  <text class="b" x="70" y="586">"it is just a processing artifact" story is</text>
+  <text class="b" x="70" y="608">ruled out and the result survives a doubt.</text>
+
+  <!-- Warm: can guess. x628..1152, y502..624 (58px gap from green) -->
+  <rect x="628" y="502" width="524" height="122" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text class="t" x="650" y="536">If it CAN name the door</text>
+  <text class="b" x="650" y="564">Some of the "normal versus abnormal"</text>
+  <text class="b" x="650" y="586">magic was really door-spotting, not gait</text>
+  <text class="b" x="650" y="608">understanding, so distrust that number.</text>
+
+  <!-- Arrow from probe down to a manifold, then to the two verdicts.
+       Manifold at y=474 sits in the clear band between Door 2 (ends y446)
+       and the verdict cards (start y502), and below model and probe (end y384). -->
+  <path d="M1002,384 L1002,474 L309,474 L309,486" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M890,474 L890,486" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Footer -->
+  <line x1="48" y1="654" x2="1152" y2="654" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="48" y="678">Folder labels (normal, stroke, and so on) are dataset annotations, not diagnoses made by this project.</text>
+</svg>
