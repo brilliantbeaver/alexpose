@@ -55,7 +55,7 @@
   <rect x="280" y="454.1" width="26" height="73.9" fill="#8a6fb3" stroke="#20364e" stroke-width="1.25"/>
   <rect x="312" y="468.2" width="26" height="59.8" fill="#5f9e7e" stroke="#20364e" stroke-width="1.25"/>
   <!-- floor line R2=0.10 y=492.8, ceiling line R2=0.18 y=464.6 -->
-  <line x1="210" y1="492.8" x2="350" y2="492.8" stroke="#8a9bab" stroke-width="2" stroke-dasharray="4 5"/>
+  <line x1="210" y1="492.8" x2="350" y2="492.8" stroke="#5c6f84" stroke-width="2" stroke-dasharray="4 5"/>
   <line x1="210" y1="464.6" x2="350" y2="464.6" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
   <text x="280" y="552" class="s" text-anchor="middle">Symmetry ratio</text>
 
@@ -66,7 +66,7 @@
   <rect x="447" y="506.9" width="26" height="21.1" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
   <rect x="479" y="510.4" width="26" height="17.6" fill="#8a6fb3" stroke="#20364e" stroke-width="1.25"/>
   <rect x="511" y="503.4" width="26" height="24.6" fill="#5f9e7e" stroke="#20364e" stroke-width="1.25"/>
-  <line x1="409" y1="517.4" x2="549" y2="517.4" stroke="#8a9bab" stroke-width="2" stroke-dasharray="4 5"/>
+  <line x1="409" y1="517.4" x2="549" y2="517.4" stroke="#5c6f84" stroke-width="2" stroke-dasharray="4 5"/>
   <line x1="409" y1="499.8" x2="549" y2="499.8" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
   <text x="479" y="552" class="s" text-anchor="middle">Stride-time CV</text>
 
@@ -77,13 +77,13 @@
   <rect x="646" y="330.4" width="26" height="197.6" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
   <rect x="678" y="285.2" width="26" height="242.8" fill="#8a6fb3" stroke="#20364e" stroke-width="1.25"/>
   <rect x="710" y="302.6" width="26" height="225.4" fill="#5f9e7e" stroke="#20364e" stroke-width="1.25"/>
-  <line x1="608" y1="450.6" x2="748" y2="450.6" stroke="#8a9bab" stroke-width="2" stroke-dasharray="4 5"/>
+  <line x1="608" y1="450.6" x2="748" y2="450.6" stroke="#5c6f84" stroke-width="2" stroke-dasharray="4 5"/>
   <line x1="608" y1="309.8" x2="748" y2="309.8" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
   <text x="678" y="552" class="s" text-anchor="middle">Anterior pelvic tilt</text>
 
-  <!-- annotation: ceiling / floor labels in clear space at right of plot -->
-  <text x="770" y="313" class="s" fill="#5f9e7e">ceiling</text>
-  <text x="770" y="454" class="s" fill="#8a9bab">floor</text>
+  <!-- annotation: ceiling / floor labels in clear space at right of plot, right-aligned inside the frame -->
+  <text x="802" y="300" class="s" fill="#5f9e7e" text-anchor="end">ceiling</text>
+  <text x="802" y="454" class="s" fill="#5c6f84" text-anchor="end">floor</text>
 
   <!-- footer inside card: axis caption -->
   <text x="479" y="590" class="s" text-anchor="middle">Green dashed = raw-input ceiling. Grey dashed = untrained floor. Band = +0.05 margin.</text>
@@ -118,6 +118,6 @@
   <text x="918" y="568" class="s" fill="#cdd8e4">No clear bar on a mechanism</text>
   <text x="918" y="590" class="s" fill="#cdd8e4">scored an informative null.</text>
 
-  <!-- Footer note: baseline y=672 -->
-  <text x="48" y="672" class="s">Illustrative expected shape, not measured results. Asymmetry weakest-decoded (R-squared ~0.154). Labels are dataset annotations.</text>
+  <!-- Footer note: baseline y=660, glyphs stay clear of the 48px bottom margin -->
+  <text x="48" y="660" class="s">Illustrative expected shape, not measured results. Asymmetry weakest-decoded (R-squared ~0.154). Labels are dataset annotations.</text>
 </svg>

@@ -133,6 +133,16 @@ must keep its quantitative claims consistent with this file. Do not use em-dashe
 - Stenum et al., "Two-dimensional video-based analysis of human gait using pose estimation", PLoS Comput
   Biol 2021, PMID 33891585 (temporal MAE ~0.02 s/step, sagittal joint angles 4-7 deg; skeleton validity).
 
+## Verified external label-level cross-modal anchor (non-skeleton; reach-tier, PD rhythm arm only)
+- Goldberger et al., PhysioNet Gait in Parkinson's Disease Database (gaitpdb), DOI 10.13026/C24H3N;
+  reported by the dataset as 93 Parkinson's plus 73 controls (Hausdorff and colleagues). This is
+  FORCE and IMU data (vertical ground-reaction force under the feet), NOT skeleton pose. Use ONLY as a
+  reach-tier, label-level, cross-modal confirmation that the Parkinson's stride-time-variability axis is
+  real and label-aligned (pairs with Schaafsma 2003 stride-time CV 8.8 vs 4.2 percent and Hausdorff 1998
+  variability about twice controls). It CANNOT confirm skeleton-level recoverability, within-window
+  recoverability, the lateralized stroke/CP cells, or the symmetric myopathy arm, and no proposal may
+  use it as a skeleton clinical-transfer claim.
+
 ## Distinctness from the existing plan/ portfolio (state this in each README)
 Existing plan proposals: 01 honest video-disjoint anomaly screening; 02 clinical threshold audit;
 03 SIGReg effective-rank audit; 04 motion-vs-position TARGET ablation (retrains encoders);

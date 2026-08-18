@@ -63,26 +63,26 @@
 
   <!-- untrained-encoder FLOOR (grey dashed) at R2 ~0.08 -> y = 556-376*0.08 = 526 -->
   <line x1="158" y1="526" x2="668" y2="526" stroke="#c4cdd8" stroke-width="2" stroke-dasharray="4 5"/>
-  <text x="662" y="519" class="s" fill="#c4cdd8" text-anchor="end">untrained-encoder floor</text>
+  <text x="164" y="544" class="s" text-anchor="start">untrained-encoder floor</text>
 
-  <!-- z_asym series (warm) around R2 0.60..0.66, above pass line -->
+  <!-- z_asym series (warm) around R2 0.60..0.66, above pass line. Offset LEFT of each tick to separate from z_posture. -->
   <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
-    <circle cx="210" cy="323" r="8"/>
-    <circle cx="291" cy="315" r="8"/>
-    <circle cx="372" cy="330" r="8"/>
-    <circle cx="453" cy="318" r="8"/>
-    <circle cx="534" cy="326" r="8"/>
-    <circle cx="615" cy="312" r="8"/>
+    <circle cx="198" cy="330" r="7"/>
+    <circle cx="279" cy="322" r="7"/>
+    <circle cx="360" cy="336" r="7"/>
+    <circle cx="441" cy="325" r="7"/>
+    <circle cx="522" cy="332" r="7"/>
+    <circle cx="603" cy="319" r="7"/>
   </g>
 
-  <!-- z_posture series (green) around R2 0.62..0.68, above pass line -->
+  <!-- z_posture series (green) around R2 0.62..0.68, above pass line. Offset RIGHT of each tick to separate from z_asym. -->
   <g fill="#5f9e7e" stroke="#20364e" stroke-width="1.25">
-    <circle cx="210" cy="308" r="8"/>
-    <circle cx="291" cy="300" r="8"/>
-    <circle cx="372" cy="314" r="8"/>
-    <circle cx="453" cy="304" r="8"/>
-    <circle cx="534" cy="296" r="8"/>
-    <circle cx="615" cy="310" r="8"/>
+    <circle cx="222" cy="304" r="7"/>
+    <circle cx="303" cy="296" r="7"/>
+    <circle cx="384" cy="310" r="7"/>
+    <circle cx="465" cy="300" r="7"/>
+    <circle cx="546" cy="292" r="7"/>
+    <circle cx="627" cy="306" r="7"/>
   </g>
 
   <!-- z_rhythm series (violet) LOW, near floor, below pass line -->
@@ -135,5 +135,6 @@
   <text x="802" y="594" class="ws">length limit, not a bottleneck failure.</text>
 
   <!-- Footer note -->
-  <text x="48" y="672" class="s">Illustrative expected shape, not measured results. Asymmetry readout R-squared &#8776; 0.154 today; stride-time CV not linearly decodable from ~2s windows. Labels are dataset annotations.</text>
+  <text x="48" y="650" class="s">Illustrative expected shape, not measured results. Asymmetry readout R-squared &#8776; 0.154 today;</text>
+  <text x="48" y="672" class="s">stride-time CV not linearly decodable from ~2s windows. Labels are dataset annotations.</text>
 </svg>

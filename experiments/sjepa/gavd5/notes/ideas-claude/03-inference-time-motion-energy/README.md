@@ -2,6 +2,8 @@
 
 > Plain-language question: we already trained a model to guess WHERE body joints are. Without training it any more, can we also read out of it HOW those joints move, and does the "how it moves" score tell walks apart better than the "where it is" score? (Every technical word in this proposal is defined in plain terms below, and there is a short glossary at the end.)
 
+*If you want to actually run this, see [METHODOLOGY.md](./METHODOLOGY.md).*
+
 ## The big idea in plain words (start here, 60 seconds)
 
 Imagine you trained a friend to play one game: you cover part of a photo of a walking stick figure with your hand, and your friend guesses WHERE the hidden foot is. You never once asked your friend to guess how FAST the foot was moving. After a lot of practice, you get curious: while learning to guess position, did your friend quietly pick up a sense of speed too, as a free bonus?

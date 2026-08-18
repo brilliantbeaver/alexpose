@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">How a target family earns credit on one mechanism</title>
+  <desc id="d4">Beginner decision picture for a single mechanism. A vertical R-squared ladder has two reference rungs: a lower grey dashed rung for the untrained-encoder floor and a higher green dashed rung for the raw-input ceiling, with a shaded green band spanning the pre-registered 0.05 margin above the ceiling. Three example bars are shown. Bar A is short and stays below the floor, so it is not credited. Bar B lands just above the ceiling but inside the 0.05 gap below the band, so it is not credited. Bar C reaches into the shaded margin band above the ceiling and above the floor, so it is credited. The rule is that a bar must clear the grey floor rung and clear the green ceiling rung by a clear 0.05 gap to earn credit. All numbers are illustrative; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">How a target earns credit on one mechanism</text>
+  <text x="48" y="88" class="s">Illustrative decision sketch, not measured results. A bar must clear the floor and clear the ceiling by a full 0.05 gap.</text>
+
+  <!-- ============ LEFT: the ladder card. x 48..760, y 120..600 ============ -->
+  <rect x="48" y="120" width="712" height="480" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="158" class="t">The credit ladder (one mechanism)</text>
+
+  <!-- plot frame: baseline y=540 is R2=0.0, top y=192 is R2=1.0. scale 348px per 1.0 -->
+  <!-- y axis -->
+  <line x1="150" y1="192" x2="150" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="540" x2="720" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <text x="112" y="545" class="s" text-anchor="end">0.0</text>
+  <text x="112" y="366" class="s" text-anchor="end">0.5</text>
+  <text x="112" y="197" class="s" text-anchor="end">1.0</text>
+  <line x1="150" y1="366" x2="144" y2="366" stroke="#20364e" stroke-width="2"/>
+  <line x1="150" y1="192" x2="144" y2="192" stroke="#20364e" stroke-width="2"/>
+  <text x="86" y="366" class="b" text-anchor="middle" transform="rotate(-90 86 366)">R-squared</text>
+
+  <!-- floor rung R2=0.10 -> y=540-34.8=505.2 ; ceiling rung R2=0.40 -> y=540-139.2=400.8 -->
+  <!-- margin band ceiling..ceiling+0.05 : 0.40..0.45 -> y 400.8..383.4 -->
+  <rect x="150" y="383.4" width="570" height="17.4" fill="#e6f2ea" stroke="none"/>
+  <line x1="150" y1="505.2" x2="720" y2="505.2" stroke="#5c6f84" stroke-width="2.5" stroke-dasharray="4 5"/>
+  <line x1="150" y1="400.8" x2="720" y2="400.8" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
+
+  <!-- rung labels to the right, in clear space -->
+  <text x="726" y="372" class="s">margin</text>
+  <text x="726" y="404" class="s" fill="#5f9e7e">ceiling</text>
+  <text x="726" y="510" class="s" fill="#5c6f84">floor</text>
+
+  <!-- three example bars, width 70, centred at x=250, 420, 590 -->
+  <!-- Bar A: R2=0.06 -> height 20.9, y=519.1 (below floor) NOT credited -->
+  <rect x="215" y="519.1" width="70" height="20.9" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="250" y="560" class="b" text-anchor="middle" font-weight="700">A</text>
+
+  <!-- Bar B: R2=0.42 -> height 146.2, y=393.8 (above ceiling but inside the gap below band top) NOT credited -->
+  <rect x="385" y="393.8" width="70" height="146.2" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <text x="420" y="560" class="b" text-anchor="middle" font-weight="700">B</text>
+
+  <!-- Bar C: R2=0.50 -> height 174.0, y=366.0 (into and past the band) CREDITED -->
+  <rect x="555" y="366.0" width="70" height="174.0" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="590" y="560" class="b" text-anchor="middle" font-weight="700">C</text>
+
+  <!-- small credit tick on C, above the bar with clearance -->
+  <path d="M572,352 l8,9 l16,-19" fill="none" stroke="#5f9e7e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="435" y="588" class="s" text-anchor="middle">Green band = ceiling + 0.05 margin. A bar wins only if its top reaches the band.</text>
+
+  <!-- ============ RIGHT: three verdict cards. x 816..1152 ============ -->
+
+  <!-- Card A: not credited, below floor -->
+  <rect x="816" y="120" width="336" height="140" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="846" y="156" class="t">Bar A: below the floor</text>
+  <text x="846" y="186" class="b">It scores no better than a random,</text>
+  <text x="846" y="210" class="b">untrained network.</text>
+  <text x="846" y="240" class="s">Verdict: not credited.</text>
+
+  <!-- Card B: not credited, too small a gap -->
+  <rect x="816" y="316" width="336" height="140" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="846" y="352" class="t">Bar B: just over the ceiling</text>
+  <text x="846" y="382" class="b">It beats raw coordinates, but by</text>
+  <text x="846" y="406" class="b">less than the 0.05 margin.</text>
+  <text x="846" y="436" class="s">Verdict: not credited (gap too small).</text>
+
+  <!-- Card C: credited -->
+  <rect x="816" y="512" width="336" height="140" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="846" y="548" class="t">Bar C: into the margin band</text>
+  <text x="846" y="578" class="b">It clears the floor and clears the</text>
+  <text x="846" y="602" class="b">ceiling by a full 0.05 or more.</text>
+  <text x="846" y="632" class="s">Verdict: credited on this mechanism.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="658" class="s">Illustrative decision sketch, not measured results. Both thresholds are on the 0-to-1 R-squared scale. Labels are dataset annotations.</text>
+</svg>

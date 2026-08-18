@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">How to read the steering test: before and after nudging only the z_asym block</title>
+  <desc id="d4">A beginner explainer of the steering test as a before-and-after picture. The left card shows the three biomarker readings before any nudge, drawn as three equal bars: one-sidedness, rhythm wobble, and posture lean. The right card shows the readings after we push only the z_asym block: a clean pass means only the one-sidedness bar grows while rhythm and posture stay the same height. A verdict strip at the bottom explains that if only the own bar moved it is a pass, if all three bars moved it is a fail (tangled), and a small ceiling tick reminds you the change only counts if it also beats plain joint positions. All numbers are illustrative; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">The steering test: push one block, read all three bars</text>
+  <text x="48" y="88" class="s">Illustrative expected shape. We nudge only z_asym, then check which readings moved. Transductive, per held-out source.</text>
+
+  <!-- ===================== LEFT CARD: BEFORE ===================== -->
+  <!-- card x 48..528, y 116..540 -->
+  <rect x="48" y="116" width="480" height="424" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="152" class="t">Before the nudge</text>
+  <text x="78" y="178" class="s">Three readings sit at their starting height.</text>
+
+  <!-- baseline for bars at y=456; bars grow upward. three bar slots centered x=138, 288, 438 -->
+  <line x1="88" y1="456" x2="500" y2="456" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- BEFORE bars: all equal, height 120 -> top at y=336 -->
+  <rect x="108" y="336" width="60" height="120" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <rect x="258" y="336" width="60" height="120" fill="#8a6fb3" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="408" y="336" width="60" height="120" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- bar labels below baseline, 22px line spacing -->
+  <text x="138" y="480" class="s" text-anchor="middle">one-</text>
+  <text x="138" y="502" class="s" text-anchor="middle">sidedness</text>
+  <text x="288" y="480" class="s" text-anchor="middle">rhythm</text>
+  <text x="288" y="502" class="s" text-anchor="middle">wobble</text>
+  <text x="438" y="480" class="s" text-anchor="middle">posture</text>
+  <text x="438" y="502" class="s" text-anchor="middle">lean</text>
+
+  <text x="78" y="528" class="s">Bars are the three biomarker readings (standardized).</text>
+
+  <!-- ===================== center arrow: the nudge ===================== -->
+  <line x1="540" y1="336" x2="660" y2="336" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="600" y="322" class="b" text-anchor="middle" font-weight="700">push</text>
+  <text x="600" y="360" class="s" text-anchor="middle">only z_asym</text>
+
+  <!-- ===================== RIGHT CARD: AFTER (clean pass) ===================== -->
+  <!-- card x 672..1152, y 116..540 (matches left card bottom) -->
+  <rect x="672" y="116" width="480" height="424" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="702" y="152" class="t">After: a clean pass</text>
+  <text x="702" y="178" class="s">Only the pushed reading grows; the others hold still.</text>
+
+  <line x1="712" y1="456" x2="1124" y2="456" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- AFTER bars: one-sidedness taller (top y=250, height 206); others unchanged (top y=336) -->
+  <rect x="732" y="250" width="60" height="206" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <rect x="882" y="336" width="60" height="120" fill="#8a6fb3" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="1032" y="336" width="60" height="120" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- ceiling tick reminder: a short dark tick on the pushed bar; label 22px line spacing -->
+  <line x1="720" y1="300" x2="804" y2="300" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="810" y="296" class="s" fill="#5f9e7e" text-anchor="start">ceiling: the growth</text>
+  <text x="810" y="318" class="s" fill="#5f9e7e" text-anchor="start">only counts above</text>
+  <text x="810" y="340" class="s" fill="#5f9e7e" text-anchor="start">this line</text>
+
+  <!-- "moved" marker above the grown bar -->
+  <text x="762" y="240" class="s" text-anchor="middle" font-weight="700">grew</text>
+
+  <!-- "same" markers above the unchanged bars -->
+  <text x="912" y="326" class="s" text-anchor="middle">same</text>
+  <text x="1062" y="326" class="s" text-anchor="middle">same</text>
+
+  <!-- bar labels below baseline -->
+  <text x="762" y="480" class="s" text-anchor="middle">one-</text>
+  <text x="762" y="502" class="s" text-anchor="middle">sidedness</text>
+  <text x="912" y="480" class="s" text-anchor="middle">rhythm</text>
+  <text x="912" y="502" class="s" text-anchor="middle">wobble</text>
+  <text x="1062" y="480" class="s" text-anchor="middle">posture</text>
+  <text x="1062" y="502" class="s" text-anchor="middle">lean</text>
+
+  <text x="702" y="528" class="s">This one-bar-only shift is what disentangled looks like.</text>
+
+  <!-- ===================== BOTTOM: verdict strip (dark banner) ===================== -->
+  <!-- gap 540->596 = 56; banner y=596 height=68 ends at 664 (56px from bottom edge) -->
+  <rect x="48" y="596" width="1104" height="68" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="628" class="w">PASS: only the pushed bar grew, and it cleared the ceiling.</text>
+  <text x="78" y="652" class="ws">FAIL (tangled): all three bars shifted, so pushing one axis dragged the others. Illustrative shape; labels are dataset annotations.</text>
+</svg>

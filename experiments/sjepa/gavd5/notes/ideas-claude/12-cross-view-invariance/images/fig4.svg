@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">Why a mirror is dangerous: it flips the sign of the one-sided clue</title>
+  <desc id="d4">A two-panel before-and-after explainer. On the left, a walker with a weaker left leg and a signed left-minus-right asymmetry value that is positive. On the right, the same walker after a left-right mirror: the weakness now appears on the right and the signed value has become negative, the opposite sign. A caption notes that stroke, hemiplegic cerebral palsy, and early Parkinson's all live on this one-sided axis, so flipping erases exactly the clue that matters. Follow the plus-or-minus number under each walker to see the sign flip.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Why the mirror is banned: it flips the one-sided clue</text>
+  <text x="48" y="88" class="s">Follow the plus-or-minus number under each walker. A mirror turns plus into minus, which swaps the affected side.</text>
+
+  <!-- ============ LEFT panel: original ============ -->
+  <!-- card: x 48..524, y 120..556 (height 436) -->
+  <rect x="48" y="120" width="476" height="436" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="156" class="t">Original walk</text>
+
+  <!-- stick figure: weaker LEFT leg (walker's left, on our right side) -->
+  <!-- torso center (286, 300) -->
+  <g stroke="#20364e" stroke-width="3.5" fill="none" stroke-linecap="round">
+    <circle cx="286" cy="260" r="18" fill="#ffffff"/>
+    <line x1="286" y1="278" x2="286" y2="348"/>
+    <line x1="286" y1="296" x2="258" y2="328"/>
+    <line x1="286" y1="296" x2="314" y2="328"/>
+    <!-- right leg strong (our left) -->
+    <line x1="286" y1="348" x2="262" y2="404"/>
+  </g>
+  <!-- left leg weak, drawn warm and shorter step -->
+  <line x1="286" y1="348" x2="304" y2="396" stroke="#e07a4b" stroke-width="5" stroke-linecap="round"/>
+  <text x="216" y="428" class="s" text-anchor="middle">right (strong)</text>
+  <text x="356" y="428" class="s" text-anchor="middle" fill="#a44c26">left (weak)</text>
+
+  <!-- signed value card inside -->
+  <rect x="120" y="452" width="332" height="74" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="286" y="482" class="b" text-anchor="middle">signed asymmetry (left minus right)</text>
+  <text x="286" y="512" class="t" text-anchor="middle" fill="#a44c26">value is POSITIVE (+)</text>
+
+  <!-- ============ MIDDLE: mirror arrow ============ -->
+  <!-- gap between cards: 524..676 -->
+  <line x1="536" y1="300" x2="664" y2="300" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="600" y="284" class="s" text-anchor="middle">left-right</text>
+  <text x="600" y="330" class="s" text-anchor="middle">mirror</text>
+
+  <!-- ============ RIGHT panel: mirrored ============ -->
+  <!-- card: x 676..1152, y 120..556 (height 436) -->
+  <rect x="676" y="120" width="476" height="436" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="706" y="156" class="t">After a mirror flip</text>
+
+  <!-- stick figure mirrored: weakness now on the RIGHT (our left) -->
+  <!-- torso center (914, 300) -->
+  <g stroke="#20364e" stroke-width="3.5" fill="none" stroke-linecap="round">
+    <circle cx="914" cy="260" r="18" fill="#ffffff"/>
+    <line x1="914" y1="278" x2="914" y2="348"/>
+    <line x1="914" y1="296" x2="886" y2="328"/>
+    <line x1="914" y1="296" x2="942" y2="328"/>
+    <!-- left leg strong now (our right) -->
+    <line x1="914" y1="348" x2="938" y2="404"/>
+  </g>
+  <!-- right leg now appears weak, warm and shorter (our left) -->
+  <line x1="914" y1="348" x2="896" y2="396" stroke="#e07a4b" stroke-width="5" stroke-linecap="round"/>
+  <text x="822" y="428" class="s" text-anchor="middle" fill="#a44c26">right (looks weak)</text>
+  <text x="990" y="428" class="s" text-anchor="middle">left (looks strong)</text>
+
+  <!-- signed value card inside -->
+  <rect x="748" y="452" width="332" height="74" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="914" y="482" class="b" text-anchor="middle">signed asymmetry (left minus right)</text>
+  <text x="914" y="512" class="t" text-anchor="middle" fill="#2f6f99">value is NEGATIVE (-)</text>
+
+  <!-- Footer note -->
+  <text x="48" y="600" class="s">The plus flipped to a minus, so a left-affected walker now reads as right-affected. Training with mirrors teaches the model</text>
+  <text x="48" y="624" class="s">that left and right do not matter, which erases the axis. Stroke, hemiplegic cerebral palsy, and early Parkinson's live on this one-sided axis.</text>
+  <text x="48" y="656" class="s">Folder labels are dataset annotations, not diagnoses. The signed value is a representation diagnostic, not a clinical measurement.</text>
+</svg>

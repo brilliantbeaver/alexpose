@@ -4,6 +4,8 @@
 
 In plain words: we build a small picture of where a normal-trained model guesses wrong on a body (12 joints across 16 time slices). The question is whether the shape of that picture tells apart new abnormal clips from normal clips better, by a fixed amount we set in advance, than just adding up all the error into one number. And we require that the picture is not just re-drawing two boring effects: joints the tracker lost, or the way the clip was extracted. Each hard term in the sentence above is defined below: held-out sources (the split section), pre-registered margin (+0.05, defined under the endpoint), pooled surprise scalar (the single average, defined next), and the missingness-only and provenance-only maps (defined under the baselines). There is also a plain-words Glossary near the end of this page if you want a single place to look terms up.
 
+*If you want to actually run this, see [METHODOLOGY.md](./METHODOLOGY.md).*
+
 **Portfolio role:** world-model / predictive direction, rank 2
 **Three-week endpoint:** 5 September 2026
 **Estimated effort:** 8 to 12 researcher-days, almost entirely CPU: no encoder is retrained.

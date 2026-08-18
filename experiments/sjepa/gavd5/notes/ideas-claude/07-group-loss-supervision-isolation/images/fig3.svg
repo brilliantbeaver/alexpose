@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">The one knob this study turns on and off</title>
+  <desc id="d3">A gentle five-step flow that a beginner meets first. Step one, a short walking clip. Step two, a pose detector turns it into a stick figure of 33 joints. Step three, the model turns the skeleton into a list of numbers so that similar walks land close together. Step four, training adds up three separate jobs, and only the third job, the group loss, is allowed to read the condition label and pull same-condition clips together. This study turns that one job on and off. Step five is the test: if turning the job on only helps on videos the model already saw, it is memorizing, but if it also helps on brand-new videos, it learned something real.</desc>
+
+  <style>
+    .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+    .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+    .w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}
+    .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="58" class="h">The one knob this study turns on and off</text>
+  <text x="48" y="86" class="s">Follow a walking clip left to right. Only the third training job, the group loss, is allowed to read the condition label.</text>
+
+  <!-- ===================== TOP ROW: 3-step pipeline ===================== -->
+  <!-- Card 1: clip -->
+  <rect x="48" y="120" width="264" height="152" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="152" class="t">1. Walking clip</text>
+  <text x="70" y="186" class="b">A short video of one</text>
+  <text x="70" y="210" class="b">person walking.</text>
+  <text x="70" y="248" class="s">Just pixels. No labels yet.</text>
+
+  <!-- Card 2: skeleton -->
+  <rect x="368" y="120" width="264" height="152" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="390" y="152" class="t">2. Stick figure</text>
+  <text x="390" y="186" class="b">A pose detector finds</text>
+  <text x="390" y="210" class="b">33 body joints.</text>
+  <text x="390" y="248" class="s">Now a moving skeleton.</text>
+
+  <!-- Card 3: numbers -->
+  <rect x="688" y="120" width="264" height="152" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="710" y="152" class="t">3. List of numbers</text>
+  <text x="710" y="186" class="b">The model turns the</text>
+  <text x="710" y="210" class="b">skeleton into a vector.</text>
+  <text x="710" y="248" class="s">Similar walks land close.</text>
+
+  <!-- arrows top row -->
+  <line x1="312" y1="196" x2="362" y2="196" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="632" y1="196" x2="682" y2="196" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- down arrow from card 3 to training card -->
+  <line x1="820" y1="280" x2="820" y2="326" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===================== MIDDLE: training = 3 jobs added up ===================== -->
+  <rect x="48" y="342" width="904" height="182" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="374" class="t">4. Training adds up three jobs</text>
+  <text x="70" y="400" class="b">The model makes one total score small. That score is a weighted sum of three separate jobs it does at once.</text>
+
+  <!-- job A -->
+  <rect x="70" y="422" width="270" height="82" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="90" y="450" class="b">Job A: predict hidden joints</text>
+  <text x="90" y="474" class="s">Self-supervised. Never</text>
+  <text x="90" y="496" class="s">sees the condition label.</text>
+
+  <!-- job B -->
+  <rect x="358" y="422" width="270" height="82" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="378" y="450" class="b">Job B: do not collapse</text>
+  <text x="378" y="474" class="s">Stops every clip landing</text>
+  <text x="378" y="496" class="s">on one point. No label.</text>
+
+  <!-- job C = the knob -->
+  <rect x="646" y="422" width="286" height="82" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="666" y="450" class="b">Job C: group loss (THE KNOB)</text>
+  <text x="666" y="474" class="s">Reads the label. Pulls same-</text>
+  <text x="666" y="496" class="s">condition clips together.</text>
+
+  <!-- down arrow from knob to test -->
+  <line x1="789" y1="524" x2="789" y2="546" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===================== BOTTOM: the test ===================== -->
+  <rect x="48" y="562" width="904" height="94" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="592" class="w">5. The test: turn Job C on, then off, and compare</text>
+  <text x="70" y="616" class="ws">Only helps on videos the model already saw: that is memorizing.</text>
+  <text x="70" y="638" class="ws">Also helps on brand-new videos: that is real learning that transfers.</text>
+
+  <!-- ===================== RIGHT: plain summary card ===================== -->
+  <rect x="1008" y="120" width="144" height="404" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="1030" y="152" class="t">In one</text>
+  <text x="1030" y="178" class="t">line</text>
+  <text x="1030" y="216" class="b">Turn Job C</text>
+  <text x="1030" y="238" class="b">off. See if</text>
+  <text x="1030" y="260" class="b">the model</text>
+  <text x="1030" y="282" class="b">still tells</text>
+  <text x="1030" y="304" class="b">walks apart</text>
+  <text x="1030" y="326" class="b">on videos it</text>
+  <text x="1030" y="348" class="b">never saw.</text>
+  <text x="1030" y="396" class="s">Still helps?</text>
+  <text x="1030" y="420" class="s">Real. Only</text>
+  <text x="1030" y="444" class="s">on old ones?</text>
+  <text x="1030" y="468" class="s">Just memory.</text>
+
+  <text x="48" y="672" class="s">Illustrative concept diagram. Folder labels (normal, parkinsons, stroke, myopathic, cerebral palsy) are dataset annotations, not diagnoses.</text>
+</svg>
