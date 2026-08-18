@@ -225,6 +225,8 @@ Smoke artifacts have no clinical meaning.
 - [S-JEPA class and tensor-flow guide](docs/tutorials/sjepa_model_internals.md)
 - [Maintainer evolution notes](notes/10_sjepa_evolution_tutorial.md)
 - [Research notes index](notes/README.md)
+- [Research idea portfolio](notes/ideas-claude/README.md)
+- [Three-week research portfolio](plan/README.md)
 - [Documentation build guide](docs/README.md)
 - [Presentation source and deck](slides/README.md)
 
