@@ -218,7 +218,7 @@ Run from this folder:
 
 ```bash
 uv sync
-uv run python -m ipykernel install --user --name gavd3-sjepa --display-name "GAVD3 S-JEPA"
+uv run python -m ipykernel install --user --name gavd5-sjepa --display-name "GAVD5 S-JEPA"
 uv run jupyter lab
 ```
 
@@ -226,8 +226,8 @@ Copy `.env.example` to `.env`. The completed augmented real path uses:
 
 ```dotenv
 GAVD_MODE=real
-GAVD_CACHE_DIR=/absolute/path/to/gavd4-vicreg/cache
-GAVD_ARTIFACT_DIR=/absolute/path/to/gavd4-vicreg/cache/artifacts
+GAVD_CACHE_DIR=/absolute/path/to/gavd5/cache
+GAVD_ARTIFACT_DIR=/absolute/path/to/gavd5/work/artifacts
 SJEPA_INCLUDE_AUGMENTED_NORMAL=1
 SJEPA_RUN_PROFILE=recommended
 ```
@@ -236,7 +236,52 @@ Leave `SJEPA_INSPECT_CHECKPOINT` and `SJEPA_CLASSIFIER_CHECKPOINT` unset unless 
 
 The recommended profile uses 300 Stage 0 epochs, four 75-epoch continuation stages, a 0.999 starting target-encoder EMA, AdamW, gradient clipping, VICReg weight 0.05, group weight 0.25, and group margin 1.0. The quick profile only checks that the data and checkpoint path work.
 
-Real artifacts are written under `cache/artifacts/real`. Smoke artifacts are written under `cache/artifacts/smoke` and have no clinical meaning.
+All artifact-producing code resolves paths from the same settings: `GAVD_CACHE_DIR` holds runtime
+cache such as the MediaPipe model, while `GAVD_ARTIFACT_DIR` is the sole root for generated
+experiment artifacts. Real artifacts therefore live under `GAVD_ARTIFACT_DIR/real`; smoke artifacts
+live under `GAVD_ARTIFACT_DIR/smoke` and have no clinical meaning. Restart the kernel after changing
+these settings.
+
+### Augmented-normal pose workflow and legacy migration
+
+With `SJEPA_INCLUDE_AUGMENTED_NORMAL=1`, notebook 04 requires both of these files below the **same**
+active real artifact root:
+
+```text
+$GAVD_ARTIFACT_DIR/real/poses_augmented/normal/*.npz
+$GAVD_ARTIFACT_DIR/real/augmented_pose_extraction_report.csv
+```
+
+For a new extraction, first create the matching augmentation CSV/video pair with
+`notes/annotate_normal_clips.py`, then run:
+
+```bash
+uv run python notes/extract_augmented_poses.py
+```
+
+The extractor loads `gavd5/.env` and honours `GAVD_MODE`, `GAVD_CACHE_DIR`, and
+`GAVD_ARTIFACT_DIR`. It runs only in `GAVD_MODE=real` and performs all input checks before writing a
+report or pose archive. In particular, the augmentation videos must be the exact clips used to create
+the CSVs; renaming a full YouTube video to a clip ID is invalid because its frame numbers and crops do
+not match the CSV contract.
+
+Older versions wrote valid augmentation artifacts under the hard-coded legacy root
+`gavd5/cache/artifacts/real`. If that completed legacy cohort is available, migrate it without
+re-extracting poses:
+
+```bash
+# Inspection only: validates the report, all 63 eligible archives, and destination compatibility.
+uv run python notes/migrate_augmented_pose_artifacts.py
+
+# Copies only after the dry run succeeds. It never overwrites different files or deletes anything.
+uv run python notes/migrate_augmented_pose_artifacts.py --apply
+```
+
+The migration utility requires `GAVD_MODE=real`, expects exactly 63 report-eligible archives by
+default, validates every archive against notebook 04's input contract, and compares SHA-256 hashes
+after copying. Use `--source-root`, `--destination-root`, or `--expected-count` only when deliberately
+migrating a different known cohort. After a successful migration, restart the kernel and rerun notebook
+04 from its first cell.
 
 ## Main saved artifacts
 

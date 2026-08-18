@@ -5,33 +5,42 @@ full-frame-normalized (T,33,4) sequence -> np.savez_compressed with the identica
 key set), but reads the *augmentation* GAVD CSVs written by annotate_normal_clips.py
 and writes to a SEPARATE pose dir so the locked-96 canonical cohort is untouched.
 
-Output: cache/artifacts/real/poses_augmented/normal/<sequence_id>.npz
-        cache/artifacts/real/augmented_pose_extraction_report.csv
+Output: $GAVD_ARTIFACT_DIR/$GAVD_MODE/poses_augmented/normal/<sequence_id>.npz
+        $GAVD_ARTIFACT_DIR/$GAVD_MODE/augmented_pose_extraction_report.csv
 """
 from __future__ import annotations
 
 import ast
 import glob
 import hashlib
+import os
 from functools import lru_cache
 from pathlib import Path
 
 import cv2
 import numpy as np
 import pandas as pd
+from dotenv import load_dotenv
 
 import mediapipe as mp
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision
 
 TUTORIAL_DIR = Path(__file__).resolve().parent.parent
-CACHE_DIR = TUTORIAL_DIR / "cache"
+load_dotenv(TUTORIAL_DIR / ".env", override=False)
+CACHE_DIR = Path(
+    os.getenv("GAVD_CACHE_DIR", TUTORIAL_DIR / "work" / "cache")
+).expanduser()
+ARTIFACT_ROOT = Path(
+    os.getenv("GAVD_ARTIFACT_DIR", TUTORIAL_DIR / "work" / "artifacts")
+).expanduser()
+MODE = os.getenv("GAVD_MODE", "real").strip().lower()
 POSE_MODEL_PATH = CACHE_DIR / "models" / "pose_landmarker_lite.task"
 
 AUG_CSV_DIR = TUTORIAL_DIR / "data-augmented" / "gavd" / "normal"
 AUG_VIDEO_DIR = TUTORIAL_DIR / "data-augmented" / "youtube" / "normal"
-OUT_POSE_DIR = CACHE_DIR / "artifacts" / "real" / "poses_augmented" / "normal"
-REPORT_CSV = CACHE_DIR / "artifacts" / "real" / "augmented_pose_extraction_report.csv"
+OUT_POSE_DIR = ARTIFACT_ROOT / MODE / "poses_augmented" / "normal"
+REPORT_CSV = ARTIFACT_ROOT / MODE / "augmented_pose_extraction_report.csv"
 
 # match nb02 exactly
 EXTRACTION_VERSION = "gavd3_pose_v2_video_mode"

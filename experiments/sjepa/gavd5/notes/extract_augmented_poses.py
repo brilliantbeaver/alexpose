@@ -5,14 +5,26 @@ full-frame-normalized (T,33,4) sequence -> np.savez_compressed with the identica
 key set), but reads the *augmentation* GAVD CSVs written by annotate_normal_clips.py
 and writes to a SEPARATE pose dir so the locked-96 canonical cohort is untouched.
 
-Output: cache/artifacts/real/poses_augmented/normal/<sequence_id>.npz
-        cache/artifacts/real/augmented_pose_extraction_report.csv
+The script loads ``gavd5/.env`` (then the project-root ``.env``) without
+overriding shell variables. It honours the same settings as notebooks 01-04:
+
+``GAVD_MODE``
+    Must be ``real``. This script never writes augmentation artifacts in smoke
+    mode.
+``GAVD_CACHE_DIR``
+    Locates the MediaPipe model and runtime cache.
+``GAVD_ARTIFACT_DIR``
+    Locates the active artifact root. Outputs are written below
+    ``<GAVD_ARTIFACT_DIR>/real``.
+
+Output: <GAVD_ARTIFACT_DIR>/real/poses_augmented/normal/<sequence_id>.npz
+        <GAVD_ARTIFACT_DIR>/real/augmented_pose_extraction_report.csv
 """
 from __future__ import annotations
 
 import ast
-import glob
 import hashlib
+import os
 from functools import lru_cache
 from pathlib import Path
 
@@ -23,15 +35,30 @@ import pandas as pd
 import mediapipe as mp
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision
+from dotenv import load_dotenv
 
 TUTORIAL_DIR = Path(__file__).resolve().parent.parent
-CACHE_DIR = TUTORIAL_DIR / "cache"
+PROJECT_ROOT = TUTORIAL_DIR.parents[2]
+load_dotenv(TUTORIAL_DIR / ".env", override=False)
+load_dotenv(PROJECT_ROOT / ".env", override=False)
+
+MODE = os.getenv("GAVD_MODE", "smoke").strip().lower()
+if MODE not in {"smoke", "real"}:
+    raise ValueError("GAVD_MODE must be smoke or real")
+
+CACHE_DIR = Path(
+    os.getenv("GAVD_CACHE_DIR", TUTORIAL_DIR / "work" / "cache")
+).expanduser()
+ARTIFACT_ROOT = Path(
+    os.getenv("GAVD_ARTIFACT_DIR", TUTORIAL_DIR / "work" / "artifacts")
+).expanduser()
+ARTIFACT_DIR = ARTIFACT_ROOT / MODE
 POSE_MODEL_PATH = CACHE_DIR / "models" / "pose_landmarker_lite.task"
 
 AUG_CSV_DIR = TUTORIAL_DIR / "data-augmented" / "gavd" / "normal"
 AUG_VIDEO_DIR = TUTORIAL_DIR / "data-augmented" / "youtube" / "normal"
-OUT_POSE_DIR = CACHE_DIR / "artifacts" / "real" / "poses_augmented" / "normal"
-REPORT_CSV = CACHE_DIR / "artifacts" / "real" / "augmented_pose_extraction_report.csv"
+OUT_POSE_DIR = ARTIFACT_DIR / "poses_augmented" / "normal"
+REPORT_CSV = ARTIFACT_DIR / "augmented_pose_extraction_report.csv"
 
 # match nb02 exactly
 EXTRACTION_VERSION = "gavd3_pose_v2_video_mode"
@@ -126,6 +153,46 @@ def find_video(clip_id):
     raise FileNotFoundError(f"No augmentation video for {clip_id}")
 
 
+def preflight() -> list[Path]:
+    """Validate all inputs before creating a report or a single pose archive."""
+    if MODE != "real":
+        raise RuntimeError(
+            "Augmented-pose extraction is real-data only. Set GAVD_MODE=real and restart."
+        )
+    if not POSE_MODEL_PATH.is_file():
+        raise FileNotFoundError(
+            f"Pose model not found at {POSE_MODEL_PATH}. Run notebook 02 with the same "
+            "GAVD_CACHE_DIR first."
+        )
+    csvs = sorted(AUG_CSV_DIR.glob("*.csv"))
+    if not csvs:
+        raise FileNotFoundError(
+            f"No augmentation CSVs found in {AUG_CSV_DIR}. "
+            "Run notes/annotate_normal_clips.py first."
+        )
+
+    missing_clips = []
+    for csv_path in csvs:
+        first = pd.read_csv(csv_path, nrows=1)
+        if first.empty or "id" not in first.columns:
+            raise ValueError(f"Augmentation CSV {csv_path} has no usable id column")
+        clip_id = str(first.iloc[0]["id"])
+        try:
+            find_video(clip_id)
+        except FileNotFoundError:
+            missing_clips.append(clip_id)
+    if missing_clips:
+        unique_missing = sorted(set(missing_clips))
+        preview = ", ".join(unique_missing[:8])
+        suffix = " ..." if len(unique_missing) > 8 else ""
+        raise FileNotFoundError(
+            f"Missing {len(unique_missing)} augmentation video clips in {AUG_VIDEO_DIR}: "
+            f"{preview}{suffix}. No artifacts were written. Restore the matching clips or "
+            "regenerate the CSV/video pair with notes/annotate_normal_clips.py."
+        )
+    return csvs
+
+
 def extract_one(csv_path: Path):
     annotations = pd.read_csv(csv_path).sort_values("frame_num")
     annotations["frame_num"] = annotations["frame_num"].astype(int)
@@ -192,7 +259,10 @@ def extract_one(csv_path: Path):
 
 
 def main():
-    csvs = sorted(AUG_CSV_DIR.glob("*.csv"))
+    csvs = preflight()
+    print(f"mode -> {MODE}")
+    print(f"cache -> {CACHE_DIR}")
+    print(f"artifacts -> {ARTIFACT_DIR}")
     print(f"Extracting {len(csvs)} augmentation sequences...")
     rows = []
     for i, c in enumerate(csvs, 1):
