@@ -1,5 +1,6 @@
-# Reflection-equivariant representation: separating lateralized from symmetric gait by construction
-
+# Reflection-equivariant representation
+> How to separate lateralized from symmetric gait by construction?
+>
 > On source-video-disjoint folds, does building the signed left-minus-right axis to be antisymmetric BY CONSTRUCTION (an encoder whose readout the anatomical mirror is guaranteed to negate) separate lateralized gait (stroke, hemiplegic cerebral palsy, early Parkinson's) from symmetric gait (myopathy) better than the standard `d0acc262` encoder that was only allowed to learn that behavior, measured by item 05's frozen signed-decodability and mirror-slope instrument at a pre-registered margin?
 
 If you want to actually run this, see METHODOLOGY.md.

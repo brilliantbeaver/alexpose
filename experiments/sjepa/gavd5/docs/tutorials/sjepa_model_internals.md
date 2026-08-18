@@ -553,6 +553,21 @@ Two independently transformed views are encoded with the trainable view encoder,
 - **variance:** a hinge penalty when per-dimension standard deviation falls below 1;
 - **covariance:** squared off-diagonal covariance, which discourages redundant dimensions.
 
+In plain language, the three terms answer different questions. Invariance asks whether two altered views of the same sequence map to the same place. Variance asks whether each projected coordinate still changes across different sequences in the batch; a coordinate that is nearly constant cannot carry much discriminating information. Covariance asks whether two different coordinates repeatedly rise and fall together; if they do, they may be duplicating one another.
+
+For view matrices `first` and `second`, each with shape `[B,D]`, the implementation is equivalent to:
+
+```text
+invariance = mean((first - second) ** 2)
+std_a[d] = sqrt(population_variance(first[:, d]) + 1e-4)
+std_b[d] = sqrt(population_variance(second[:, d]) + 1e-4)
+variance = 0.5 * mean(max(0, 1 - std_a))
+         + 0.5 * mean(max(0, 1 - std_b))
+covariance = mean squared off-diagonal covariance across both views
+```
+
+The `1e-4` stabilizer prevents an undefined square-root gradient at exactly zero variance. The variance hinge stops contributing once a projected dimension reaches standard deviation 1; it does not reward unlimited spread. The covariance diagonal is excluded because it contains each feature's own variance, while VICReg uses this term specifically to reduce dependence between different features.
+
 The helper combines them as:
 
 ```text
@@ -560,6 +575,8 @@ The helper combines them as:
 ```
 
 The outer training weight of 0.05 is applied after this internal combination.
+
+Consequently, a printed `VICReg 12.8508` means an epoch mean of the inner combined value. Its nominal contribution to the batch objective is scaled by 0.05. The three component values are preserved separately in training history, and their scale should not be confused with the unprojected diagnostic called `feature_std`.
 
 ### `condition_group_terms`
 
@@ -569,9 +586,34 @@ This helper receives unprojected authorized-pooled view features and integer con
 - a squared hinge penalty for centroid pairs whose Euclidean distance in unit-normalized space is below the default margin 1.0;
 - the minimum centroid distance.
 
+For one normalized sequence vector $u_n$ with label $y_n$, the centroid for condition $k$ is the normalized mean of all $u_n$ having $y_n=k$. Compactness averages $\|u_n-c_{y_n}\|_2^2$. Separation averages
+
+\[
+\left[\max(0,1-\|c_i-c_j\|_2)\right]^2
+\]
+
+over all centroid pairs. A pair at distance 1.2 contributes 0; distances 0.9, 0.8, and 0.5 contribute 0.01, 0.04, and 0.25. Because centroids are unit vectors, distance 1.0 means a 60-degree angular separation, equivalently cosine similarity 0.5. The loss only penalizes a shortfall below that margin; it does not keep pushing already-separated centroids farther apart.
+
 For unit vectors, squared Euclidean distance and cosine similarity are related by `distance_squared = 2 - 2*cosine_similarity`. This metric should not be confused with the separate downstream cosine-geometry report.
 
 With fewer than two unique labels, the helper returns zeros that remain attached to the autograd graph, plus a NaN minimum distance. The attached zeros allow the combined loss to backpropagate normally without group gradients. Stage 0 has only normal samples, so the group objective is exactly zero. Stages 1 through 4 use folder condition labels, which makes the later representation training label-informed rather than purely self-supervised.
+
+### Read the abbreviated training output exactly
+
+The epoch print statement uses:
+
+```text
+JEPA 0.4585  VICReg 12.8508  group 0.0005  std 0.4297
+```
+
+The names are not four parallel loss terms:
+
+- `JEPA` is the mean JEPA loss over the epoch's optimizer batches.
+- `VICReg` is the mean inner VICReg loss over those batches, before its outer 0.05 multiplier.
+- `group` is `group_separation` only. The optimized group objective is `group_compactness + group_separation`, followed by the outer 0.25 multiplier. The compactness part is saved in history but omitted from the short print line.
+- `std` is `feature_std`, calculated once after the epoch. The whole active corpus passes through the EMA target encoder; authorized valid tokens are pooled without the VICReg projector; population standard deviation is computed independently for each embedding dimension; and those standard deviations are averaged.
+
+Therefore `group 0.0005` means the squared centroid-margin shortfall was small on average across pairs and balanced batches. It cannot be converted into one exact distance. `std 0.4297` means EMA-teacher features retained nonzero spread on average. It is not the VICReg variance hinge, is not optimized directly, and has no target of 1. Both values can look healthy while representations still encode background, video identity, pose-estimation artifacts, or other nuisance signals.
 
 ## 11. One complete optimizer step
 

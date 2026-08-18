@@ -1,4 +1,6 @@
-# Idea 5, in plain words: can we read a signed left-minus-right axis out of the model, and does a mirror flip it?
+# Idea 5: Signed Laterality Decodability
+
+> in plain words: can we read a signed left-minus-right axis out of the model, and does a mirror flip it?
 
 This is the "how to actually do it" guide for Idea 5, written so a motivated high-school student can follow every
 step. The science comes from the folder's [`README.md`](./README.md). Every number here is kept true to

@@ -373,7 +373,9 @@ $$
 - Variance penalizes dimensions whose spread falls below the target.
 - Covariance reduces redundant dimensions.
 
-VICReg is active during every stage.
+More exactly, invariance is mean squared error between paired projected vectors. Variance measures the population standard deviation of each projected dimension in each view and applies a hinge `max(0, 1 - standard deviation)`. Covariance centers each projected batch, squares the off-diagonal entries of its feature covariance matrix, and averages them. The diagonal is excluded because it measures a feature's own variance rather than dependence between different features.
+
+The logged `VICReg` number is the inner expression above, averaged over optimizer batches; its contribution to total loss is 0.05 times that value. VICReg is active during every stage, uses no condition label, and should not be credited with the label-centroid separation performed by the group term.
 
 ### 8.3 Label-aware group pressure
 
@@ -387,6 +389,16 @@ L_{\mathrm{sep}}
 \frac{1}{P}\sum_{i<j}
 \left[\max(0,1-\|c_i-c_j\|_2)\right]^2.
 $$
+
+The input sequence vectors and their condition centroids are L2-normalized. Thus distances lie between 0 and 2; margin 1.0 corresponds to a 60-degree angle, or cosine similarity 0.5, between centroid directions. A distance of 1.2 has no penalty, 0.9 contributes 0.01, and 0.5 contributes 0.25. The full optimized group term is compactness plus separation.
+
+The epoch line abbreviates these quantities in a way that can be misread:
+
+```text
+JEPA 0.4585  VICReg 12.8508  group 0.0005  std 0.4297
+```
+
+Here `group` is only the mean separation penalty, not compactness plus separation. It is averaged across centroid pairs and balanced batches, so it is not one centroid distance. `std` is not a VICReg term at all: after the epoch, the unprojected EMA-teacher vectors for the whole active corpus are measured dimension by dimension, and their population standard deviations are averaged. Nonzero `std` argues against every row mapping to one constant vector, but it cannot show that the variation is clinically meaningful.
 
 This means the complete five-stage method is not fully self-supervised. Stage 0 is label-free representation learning. Stages 1 through 4 are label-informed representation fine-tuning.
 

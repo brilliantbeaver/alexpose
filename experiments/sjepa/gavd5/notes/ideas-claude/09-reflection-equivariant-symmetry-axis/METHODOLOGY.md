@@ -1,4 +1,4 @@
-# How to actually run this idea: a plain-language guide
+# Idea 9: Reflection-Equivariant Symmetry
 
 This is the hands-on guide for the reflection-equivariant symmetry-axis idea. The big-picture
 story lives in [README.md](./README.md). Every number in this guide comes from

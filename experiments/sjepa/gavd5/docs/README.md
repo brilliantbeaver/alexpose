@@ -2,6 +2,17 @@
 
 This folder now reflects the completed augmented-normal real run. The paper, long tutorial, generated figures, and PDFs use the same final checkpoint and the same leakage-aware interpretation.
 
+## Loss and logging terminology
+
+All maintained documents use the following meanings:
+
+- **VICReg** is only the label-free invariance, variance-hinge, and covariance regularizer computed on projected student features.
+- **Group loss** is a separate label-aware term equal to within-condition compactness plus a centroid-margin penalty in Stages 1 through 4.
+- The notebook's abbreviated `group` log field is only the centroid-margin penalty, not the complete group loss.
+- The abbreviated `std` field is the mean feature standard deviation of unprojected EMA-teacher embeddings over the active corpus. It is a diagnostic, not a VICReg component and not a loss.
+
+The plain-language derivation and numerical examples are in the root `README.md`, `progressive_training.md`, Section 8 of `staged_details.md`, Section 8 of `staged_evolution.md`, and Section 10 of `tutorials/sjepa_model_internals.md`.
+
 Final checkpoint: `sjepa_curriculum_final_augmented.pt`
 
 Experiment fingerprint:
@@ -115,7 +126,7 @@ pandoc staged_details.md --from=markdown --standalone --toc \
 ## Checks completed
 
 - paper compiles to 5 pages, at the five-page maximum;
-- tutorial compiles to 15 pages with vector illustrations;
+- tutorial compiles to 17 pages with vector illustrations and the expanded VICReg, group-loss, and feature-spread explanation;
 - citations resolve in the TeX paper;
 - the paper and tutorial contain the corrected Lane C values;
 - the legacy 10-keypoint and first Lane C values are preserved only in the change ledger and are not presented as current results;

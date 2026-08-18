@@ -92,6 +92,53 @@ This batch-minimum rule gives tensors a common target count. A sample with more 
 
 `L_group` is zero at Stage 0. In later stages it combines within-label compactness with a squared penalty when normalized condition centroids are closer than margin 1.0. Its outer weight is 0.25. Because this term reads folder labels, Stages 1 through 4 are label-informed representation fine-tuning.
 
+### VICReg step by step
+
+VICReg and the group term operate on related but different tensors:
+
+1. Create two independent geometric views of every sequence.
+2. Run both through the trainable view encoder.
+3. Pool valid tokens belonging to the 12 authorized landmark identities into one vector per sequence and view.
+4. Pass both pooled vectors through the VICReg projector.
+5. Compute VICReg on those **projected** vectors.
+6. Compute the group terms separately from the **unprojected** pooled vector for the first view.
+
+For projected batches $z_a$ and $z_b$, the invariance term is their elementwise mean squared error. The variance term computes the population standard deviation of every feature dimension in each view and penalizes only shortfalls below 1:
+
+$$
+L_{var}=\frac{1}{2}\left[
+\operatorname{mean}_d\max(0,1-\sigma_d(z_a))
++\operatorname{mean}_d\max(0,1-\sigma_d(z_b))
+\right].
+$$
+
+The covariance term centers each view, forms its feature covariance matrix, squares its off-diagonal entries, and averages them. Diagonal entries describe each feature's own variance; off-diagonal entries describe features changing together. Penalizing only the off-diagonal entries discourages duplicated information without directly suppressing each feature's own spread.
+
+These terms are combined inside VICReg as `25 * invariance + 25 * variance + covariance`. The result printed as `VICReg` is this inner, unscaled value averaged over the epoch. The total optimizer objective multiplies it by 0.05. VICReg never reads folder labels and does not directly create condition clusters.
+
+### What the centroid penalty does
+
+For the group objective, each unprojected pooled sequence vector is scaled to unit length. Vectors sharing a condition label are averaged to form a condition centroid, and the centroid is normalized again. For each pair of centroids with Euclidean distance $d_{ij}$, the separation term is
+
+$$
+L_{sep}=\operatorname{mean}_{i<j}\left[\max(0,1-d_{ij})\right]^2.
+$$
+
+Distances at or above margin 1.0 contribute zero. Distances 0.9, 0.8, and 0.5 contribute 0.01, 0.04, and 0.25. On the unit sphere, distance 1.0 corresponds to a 60-degree angle and cosine similarity 0.5. The companion compactness term is the mean squared distance from each normalized sequence vector to its own normalized centroid. The optimized group loss is `compactness + separation`; one term tightens each labeled cloud and the other discourages centroid overlap.
+
+### Decode the abbreviated epoch line
+
+For example:
+
+```text
+JEPA 0.4585  VICReg 12.8508  group 0.0005  std 0.4297
+```
+
+- `group 0.0005` is only the epoch-mean $L_{sep}$, averaged over centroid pairs and balanced batches. It is not `compactness + separation`, so it is not the full group contribution to total loss. A small value says that batch centroids usually met or nearly met the margin; it does not prove individual samples form clean clusters.
+- `std 0.4297` is computed after the epoch from unprojected, authorized-pooled **EMA target-encoder** vectors for the entire active corpus. The code takes the population standard deviation of every feature dimension and then averages across dimensions. It is not the VICReg variance term, does not use the VICReg projector, is not backpropagated, and has no required target of 1. A nonzero value is evidence against every sequence mapping to exactly the same vector, but it does not identify what information created the variation.
+
+The printed losses are epoch means over optimizer batches, whereas `std` is one whole-corpus diagnostic measured after those updates. Their numeric scales should not be compared directly.
+
 ## Measured stage endpoints
 
 |Stage|JEPA loss|VICReg loss|Compactness|Margin penalty|Feature std|Pair cosine|Minimum training centroid distance|Normal-anchor cosine|

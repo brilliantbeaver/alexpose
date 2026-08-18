@@ -93,7 +93,9 @@ The view encoder reads a masked pose. The target encoder reads the complete pose
 \begin{equation}
 \mathcal L=\mathcal L_{\mathrm{JEPA}}+0.05\mathcal L_{\mathrm{VICReg}}+0.25\mathcal L_{\mathrm{group}}.
 \end{equation}
-VICReg combines invariance, variance-hinge, and covariance terms \cite{bardes2022vicreg}. It discourages collapse but does not know folder names. The separate group term is label-aware: it encourages within-folder compactness and penalizes centroid distances below 1.0. It is zero in Stage 0.
+VICReg uses projected student features from two views. Its invariance term is paired mean squared error, its variance hinge penalizes dimensions with batch standard deviation below one, and its covariance term penalizes off-diagonal feature covariance \cite{bardes2022vicreg}. The logged inner value is $25L_{inv}+25L_{var}+L_{cov}$ before the outer weight 0.05. VICReg does not read folder labels.
+
+The separate group term normalizes unprojected pooled vectors, forms one normalized centroid per condition, and combines within-condition compactness with $[\max(0,1-d)]^2$ for centroid distances $d<1$. The log's abbreviated ``group'' field reports only this separation penalty, not the complete group loss. Its ``std'' field is a post-epoch mean feature standard deviation of whole-corpus EMA-target embeddings, not a loss or VICReg term. Both are training-health signals, not evidence of clinical clustering. The group term is zero in Stage 0.
 
 \subsection{Continuing curriculum and audit design}
 One model continues through all stages. The view encoder, predictor, target encoder, target center, and VICReg projector are never reinitialized. Later batches balance all active groups, so earlier groups remain in training.
