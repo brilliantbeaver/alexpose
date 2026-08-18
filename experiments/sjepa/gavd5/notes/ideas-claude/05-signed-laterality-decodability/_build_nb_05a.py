@@ -101,11 +101,11 @@ except Exception:
     pass
 
 # Artifact locations follow the SAME env resolution as notebook 05 exactly:
-#   ARTIFACT_ROOT = GAVD3_ARTIFACT_DIR or TUTORIAL_DIR/work/artifacts
+#   ARTIFACT_ROOT = GAVD_ARTIFACT_DIR or TUTORIAL_DIR/work/artifacts
 #   ARTIFACT_DIR  = ARTIFACT_ROOT / MODE   (checkpoints live directly here)
 #   POSE_DIR      = ARTIFACT_DIR / "poses"
 ARTIFACT_ROOT = Path(
-    os.getenv("GAVD3_ARTIFACT_DIR", TUTORIAL_DIR / "work" / "artifacts")
+    os.getenv("GAVD_ARTIFACT_DIR", TUTORIAL_DIR / "work" / "artifacts")
 ).expanduser()
 
 REQUESTED_MODE = os.getenv("GAVD_MODE", "smoke").strip().lower()
