@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" role="img" aria-labelledby="title desc">
+  <title id="title">Four matched models separate output repair from encoder parity</title>
+  <desc id="desc">Four models all receive an original and mirrored input. The equivariant encoder is compared both with exact output repair and with a same-size paired encoder without branch-swap ties. Those two comparisons separate a parity benefit from ordinary two-branch fusion.</desc>
+  <defs>
+    <marker id="openArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M10 1 L1 6 L10 11" fill="none" stroke="#334155" stroke-width="2"/></marker>
+    <style>
+      .title{font:700 30px Arial,sans-serif;fill:#0f172a}.head{font:700 18px Arial,sans-serif;fill:#0f172a}
+      .body{font:17px Arial,sans-serif;fill:#1e293b}.note{font:17px Arial,sans-serif;fill:#334155}
+      .check{font:700 17px Arial,sans-serif;fill:#15803d}.cross{font:700 17px Arial,sans-serif;fill:#b91c1c}
+      .bar{font:700 20px Arial,sans-serif;fill:#fff}
+    </style>
+  </defs>
+  <rect width="1000" height="700" fill="#f8fafc"/>
+  <rect x="0.5" y="0.5" width="999" height="699" fill="none" stroke="#cbd5e1"/>
+  <text x="500" y="45" text-anchor="middle" class="title">What must the full encoder beat?</text>
+  <text x="500" y="73" text-anchor="middle" class="note">All four models get the same people, two inputs, tuning chances, and paired seeds.</text>
+
+  <g>
+    <rect x="30" y="112" width="220" height="290" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+    <text x="140" y="146" text-anchor="middle" class="head">FREE TWO-VIEW</text>
+    <text x="140" y="171" text-anchor="middle" class="head">READOUT</text>
+    <text x="140" y="204" text-anchor="middle" class="body">standard encoder</text>
+    <line x1="49" y1="225" x2="231" y2="225" stroke="#cbd5e1"/>
+    <text x="55" y="254" class="body">second branch</text><text x="220" y="254" text-anchor="end" class="check">✓ yes</text>
+    <text x="55" y="290" class="body">exact final sign</text><text x="220" y="290" text-anchor="end" class="cross">✗ no</text>
+    <text x="55" y="326" class="body">inside pair</text><text x="220" y="326" text-anchor="end" class="cross">✗ no</text>
+    <rect x="50" y="350" width="180" height="31" rx="10" fill="#e2e8f0"/><text x="140" y="371" text-anchor="middle" class="note">rules out “two looks”</text>
+  </g>
+  <g>
+    <rect x="270" y="112" width="220" height="290" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+    <text x="380" y="146" text-anchor="middle" class="head">EXACT ODD</text>
+    <text x="380" y="171" text-anchor="middle" class="head">OUTPUT REPAIR</text>
+    <text x="380" y="204" text-anchor="middle" class="body">standard encoder</text>
+    <line x1="289" y1="225" x2="471" y2="225" stroke="#cbd5e1"/>
+    <text x="295" y="254" class="body">second branch</text><text x="460" y="254" text-anchor="end" class="check">✓ yes</text>
+    <text x="295" y="290" class="body">exact final sign</text><text x="460" y="290" text-anchor="end" class="check">✓ yes</text>
+    <text x="295" y="326" class="body">inside pair</text><text x="460" y="326" text-anchor="end" class="cross">✗ no</text>
+    <rect x="290" y="350" width="180" height="31" rx="10" fill="#e2e8f0"/><text x="380" y="371" text-anchor="middle" class="note">the hard output baseline</text>
+  </g>
+  <g>
+    <rect x="510" y="112" width="220" height="290" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+    <text x="620" y="146" text-anchor="middle" class="head">PAIRED,</text>
+    <text x="620" y="171" text-anchor="middle" class="head">UNCONSTRAINED</text>
+    <text x="620" y="204" text-anchor="middle" class="body">same-size paired encoder</text>
+    <line x1="529" y1="225" x2="711" y2="225" stroke="#cbd5e1"/>
+    <text x="535" y="254" class="body">second branch</text><text x="700" y="254" text-anchor="end" class="check">✓ yes</text>
+    <text x="535" y="290" class="body">exact final sign</text><text x="700" y="290" text-anchor="end" class="check">✓ yes</text>
+    <text x="535" y="326" class="body">inside pair</text><text x="700" y="326" text-anchor="end" class="body">talks, free</text>
+    <rect x="530" y="350" width="180" height="31" rx="10" fill="#e2e8f0"/><text x="620" y="371" text-anchor="middle" class="note">controls two-branch fusion</text>
+  </g>
+  <g>
+    <rect x="750" y="112" width="220" height="290" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+    <text x="860" y="146" text-anchor="middle" class="head">EQUIVARIANT</text>
+    <text x="860" y="171" text-anchor="middle" class="head">ENCODER</text>
+    <text x="860" y="204" text-anchor="middle" class="body">paired and swap-tied</text>
+    <line x1="769" y1="225" x2="951" y2="225" stroke="#cbd5e1"/>
+    <text x="775" y="254" class="body">second branch</text><text x="940" y="254" text-anchor="end" class="check">✓ yes</text>
+    <text x="775" y="290" class="body">exact final sign</text><text x="940" y="290" text-anchor="end" class="check">✓ yes</text>
+    <text x="775" y="326" class="body">inside pair</text><text x="940" y="326" text-anchor="end" class="body">talks, tied</text>
+    <rect x="770" y="350" width="180" height="31" rx="10" fill="#e2e8f0"/><text x="860" y="371" text-anchor="middle" class="note">the proposed encoder</text>
+  </g>
+
+  <text x="500" y="447" text-anchor="middle" class="head">THE TWO PRIMARY COMPARISONS</text>
+  <path d="M380 483 H860" fill="none" stroke="#334155" stroke-width="2" marker-start="url(#openArrow)" marker-end="url(#openArrow)"/>
+  <rect x="437" y="459" width="366" height="48" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="620" y="480" text-anchor="middle" class="head">PRIMARY: parity inside versus</text><text x="620" y="499" text-anchor="middle" class="head">final output repair</text>
+  <path d="M620 558 H860" fill="none" stroke="#334155" stroke-width="2" marker-start="url(#openArrow)" marker-end="url(#openArrow)"/>
+  <rect x="652" y="534" width="176" height="48" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="740" y="555" text-anchor="middle" class="head">PRIMARY: tied</text><text x="740" y="574" text-anchor="middle" class="head">versus free pair</text>
+  <text x="500" y="614" text-anchor="middle" class="note">Both comparisons use participant-orbit-averaged MAE.</text>
+  <rect x="130" y="638" width="740" height="44" rx="14" fill="#0f172a"/>
+  <text x="500" y="667" text-anchor="middle" class="bar">Parity wins only if it beats output repair and the matched free paired encoder.</text>
+</svg>

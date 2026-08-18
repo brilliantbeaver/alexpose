@@ -53,6 +53,17 @@ The full mechanism chains, condition by condition, live in `_neuro_facts.md`. Th
 
 ## The twelve proposals at a glance
 
+Proposals 05 and 09 now also have a joined, milestone-driven research program: [**GaitParity: teaching a gait model the difference between left and right**](./05-09-gait-parity/README.md). The original proposals remain in their original folders for reference.
+
+GaitParity is written to be readable without a background in machine learning, biomechanics, or symmetry math. It contains six documents plus a plain-language [glossary](./05-09-gait-parity/GLOSSARY.md):
+
+| Document | What it is for |
+|---|---|
+| [README.md](./05-09-gait-parity/README.md) | The concepts from scratch: mirrors, odd and even quantities, encoders, readouts, and JEPAs. Start here. |
+| [METHODOLOGY.md](./05-09-gait-parity/METHODOLOGY.md) | Rules both studies share: the reflection operator, the force target, participant-safe splits, metrics, falsification. |
+| [README_SHORT_TERM.md](./05-09-gait-parity/README_SHORT_TERM.md) + [METHODOLOGY_SHORT_TERM.md](./05-09-gait-parity/METHODOLOGY_SHORT_TERM.md) | **GaitParity Prototype.** Decides whether an exact sign rule is worth building an architecture around. Milestone-gated, not time-boxed. |
+| [README_LONG_TERM.md](./05-09-gait-parity/README_LONG_TERM.md) + [METHODOLOGY_LONG_TERM.md](./05-09-gait-parity/METHODOLOGY_LONG_TERM.md) | **GaitParity Study.** The max-effort version: a layer-tested equivariant JEPA, matched controls, and a locked clinical replication. |
+
 The proposals span four themes: evaluation validity, world-model / predictive, mechanism / design, and a fourth theme, neuro-grounded world model, for the biomarker-anchored items 08 to 12 (items 05 and 09 also carry a mechanism reading). The table is sorted by scorecard composite, highest first. The full graded rubric, with all five axes per item, is in [SCORECARD.md](./SCORECARD.md).
 
 | # | Proposal | Plain question | Theme | ICLR/ICML band | Effort |
