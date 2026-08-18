@@ -2,8 +2,8 @@
   <title id="title">Difficulty audit: masked-count distribution and visible-neighbor fraction across mask arms</title>
   <desc id="desc">Illustrative expected shape. Left panel: per-sample masked-token count distributions for the uniform mask, the structured mask, and the marginal-matched scrambled control, expected to sit at the same controlled count. Right panel: fraction of masked tokens that still have a visible same-side or temporal neighbor, expected to be high for the uniform mask and low for the structured mask, with the scrambled control matching the structured mask on marginals but not on coherence.</desc>
   <defs>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
     </marker>
   </defs>
   <style>
@@ -77,13 +77,14 @@
   <rect x="1012" y="288" width="72" height="252" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
   <text x="1048" y="566" class="b" text-anchor="middle">S-scram</text>
 
-  <!-- the meaningful gap annotation, placed in clear space between the U and S-scram bars -->
-  <text x="862" y="366" class="s" text-anchor="start">coherence gap:</text>
-  <text x="862" y="388" class="s" text-anchor="start">S removes neighbors</text>
-  <path d="M905,402 L922,438" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <!-- the meaningful gap annotation, placed in clear space above the S bar -->
+  <text x="862" y="372" class="s" text-anchor="start">coherence gap:</text>
+  <text x="862" y="394" class="s" text-anchor="start">S removes neighbors</text>
+  <!-- straight vertical arrow pointing down to the top of the low S bar -->
+  <path d="M934,406 L934,440" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
 
   <!-- Footer -->
-  <text x="48" y="632" class="s" text-anchor="start">S-scram shares S's joint and time marginal histograms and its masked count, yet keeps neighbors visible like U: so any S advantage that survives against S-scram is due to structure,</text>
-  <text x="48" y="656" class="s" text-anchor="start">not to which joints or times were hidden. Reconstruction-difficulty proxies (masked-position loss, teacher-target entropy) are reported per arm alongside these panels.</text>
-  <text x="48" y="686" class="s" text-anchor="start">Folder labels are dataset annotations, not diagnoses. Bars, curves, and dots are placeholders for expected ordering only.</text>
+  <text x="48" y="620" class="s" text-anchor="start">S-scram shares S's joint and time marginal histograms and its masked count, yet keeps neighbors visible like U: so any S advantage that survives against S-scram is due to structure,</text>
+  <text x="48" y="644" class="s" text-anchor="start">not to which joints or times were hidden. Reconstruction-difficulty proxies (masked-position loss, teacher-target entropy) are reported per arm alongside these panels.</text>
+  <text x="48" y="668" class="s" text-anchor="start">Folder labels are dataset annotations, not diagnoses. Bars, curves, and dots are placeholders for expected ordering only.</text>
 </svg>

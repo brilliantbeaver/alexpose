@@ -35,8 +35,8 @@
 
   <!-- scale: y=205 ->1.0, y=540->0.2. per 0.2 = 83.75px. value v: y=205+(1.0-v)/0.2*83.75 -->
   <!-- missingness floor at 0.429 -> y=205+(1.0-0.429)/0.2*83.75 = 205+239 = 444 -->
-  <line x1="150" y1="444" x2="540" y2="444" stroke="#c0483a" stroke-width="2" stroke-dasharray="6 5"/>
-  <text x="156" y="232" class="s" fill="#c0483a">missingness-only floor 0.429</text>
+  <line x1="150" y1="444" x2="540" y2="444" stroke="#a44c26" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="208" y="438" class="s" fill="#a44c26" text-anchor="end">floor 0.429</text>
 
   <!-- ON bar (transductive high ~0.86 -> y=205+(1.0-0.86)/0.2*83.75=205+58.6=264) -->
   <rect x="215" y="264" width="90" height="276" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
@@ -81,8 +81,8 @@
   <text x="720" y="540" class="s" text-anchor="end">0.2</text>
 
   <!-- floor -->
-  <line x1="730" y1="444" x2="1120" y2="444" stroke="#c0483a" stroke-width="2" stroke-dasharray="6 5"/>
-  <text x="736" y="232" class="s" fill="#c0483a">missingness-only floor 0.429</text>
+  <line x1="730" y1="444" x2="1120" y2="444" stroke="#a44c26" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="788" y="438" class="s" fill="#a44c26" text-anchor="end">floor 0.429</text>
 
   <!-- ON inductive ~0.64 -> y=205+(1.0-0.64)/0.2*83.75=205+150.75=356 -->
   <rect x="795" y="356" width="90" height="184" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>

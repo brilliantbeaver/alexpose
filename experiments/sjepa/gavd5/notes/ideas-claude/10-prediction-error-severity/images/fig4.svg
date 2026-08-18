@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">How to read the result: five scoring lanes and the four honest outcomes each verdict allows</title>
+  <desc id="d4">A how-to-read-the-result explainer for the normal-only gait world model. The left card lists the five scoring lanes: A the trained normal-only world model that we test, B the untrained random-encoder floor it must beat, C the visibility-only nuisance that must not copy the channel pattern, D the pooled single-scalar control, and E the non-neural raw-coordinate ceiling it must reach at least 80 percent of. The right column is a ladder of four possible outcomes. F1 clean positive: it beats the floor, is selective, and reaches at least 80 percent of the ceiling, so the mechanism-decomposition claim is earned. F2 localizing null: it beats the floor and is selective but falls below 80 percent of the ceiling, so it only localizes the corrupted joint. F3 diffuse null: it fails to beat the floor or shows no selectivity, so the surprise is unstructured. F4 artifact: the visibility-only lane reproduces the pattern, so the effect is a missingness artifact and the claim is withdrawn. All illustrative and transductive to the single normal source video; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">How to read the result: five lanes, four honest outcomes</text>
+  <text x="48" y="88" class="s">Illustrative expected shapes, not measured results. Transductive to the single normal source video.</text>
+
+  <!-- ============ LEFT: the five lanes ============ -->
+  <rect x="48" y="112" width="392" height="524" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="148" class="t">The five scoring lanes</text>
+
+  <!-- Lane A -->
+  <rect x="72" y="166" width="344" height="80" rx="10" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.5"/>
+  <text x="90" y="192" class="t" fill="#a44c26">A  Normal-only world model</text>
+  <text x="90" y="216" class="b">Trained on normal only, then frozen.</text>
+  <text x="90" y="236" class="s">The thing we test. Reads 3 channels.</text>
+
+  <!-- Lane B -->
+  <rect x="72" y="256" width="344" height="72" rx="10" fill="#ffffff" stroke="#5c6f84" stroke-width="1.5"/>
+  <text x="90" y="282" class="t" fill="#5c6f84">B  Random-encoder floor</text>
+  <text x="90" y="306" class="b">Same shape, never trained.</text>
+  <text x="90" y="323" class="s">The floor. A must clearly beat it.</text>
+
+  <!-- Lane C -->
+  <rect x="72" y="338" width="344" height="72" rx="10" fill="#ffffff" stroke="#5c6f84" stroke-width="1.5"/>
+  <text x="90" y="364" class="t" fill="#5c6f84">C  Visibility-only nuisance</text>
+  <text x="90" y="388" class="b">Reads which joints are seen, not motion.</text>
+  <text x="90" y="405" class="s">Must NOT copy the channel pattern.</text>
+
+  <!-- Lane D -->
+  <rect x="72" y="420" width="344" height="72" rx="10" fill="#ffffff" stroke="#5c6f84" stroke-width="1.5"/>
+  <text x="90" y="446" class="t" fill="#5c6f84">D  Pooled single scalar</text>
+  <text x="90" y="470" class="b">One surprise number, no channels.</text>
+  <text x="90" y="487" class="s">If it matches A, channels add nothing.</text>
+
+  <!-- Lane E -->
+  <rect x="72" y="502" width="344" height="80" rx="10" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.5"/>
+  <text x="90" y="528" class="t" fill="#2f6f99">E  Raw-coordinate ceiling</text>
+  <text x="90" y="552" class="b">Handcrafted reader, no network at all.</text>
+  <text x="90" y="572" class="s">The decisive bar. A must reach 80% of it.</text>
+
+  <text x="72" y="612" class="s">A is credited only if it beats B, is selective,</text>
+  <text x="72" y="632" class="s">is NOT copied by C, and reaches 80% of E.</text>
+
+  <!-- ============ RIGHT: four outcomes ladder (one grouped panel of sub-cards) ============ -->
+  <rect x="496" y="112" width="656" height="524" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="520" y="148" class="t">What each outcome lets us claim</text>
+
+  <!-- F1 -->
+  <rect x="520" y="166" width="608" height="100" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <rect x="520" y="166" width="128" height="100" rx="10" fill="#5f9e7e"/>
+  <text x="542" y="204" class="w" font-size="20">F1</text>
+  <text x="542" y="228" class="w">clean</text>
+  <text x="542" y="250" class="w">positive</text>
+  <text x="670" y="198" class="b">Beats floor, is selective, reaches 80% of the</text>
+  <text x="670" y="220" class="b">ceiling, is monotone, and C does not copy it.</text>
+  <text x="670" y="250" class="t" fill="#5f9e7e">Claim: the mechanism decomposition is earned.</text>
+
+  <!-- F2 -->
+  <rect x="520" y="282" width="608" height="100" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <rect x="520" y="282" width="128" height="100" rx="10" fill="#e07a4b"/>
+  <text x="542" y="320" class="w" font-size="20">F2</text>
+  <text x="542" y="344" class="w">localizing</text>
+  <text x="542" y="366" class="w">null</text>
+  <text x="670" y="314" class="b">Beats floor and is selective, but falls</text>
+  <text x="670" y="336" class="b">below 80% of the raw-coordinate ceiling.</text>
+  <text x="670" y="366" class="t" fill="#a44c26">Claim: it only localizes the corrupted joint.</text>
+
+  <!-- F3 -->
+  <rect x="520" y="398" width="608" height="100" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <rect x="520" y="398" width="128" height="100" rx="10" fill="#5c6f84"/>
+  <text x="542" y="436" class="w" font-size="20">F3</text>
+  <text x="542" y="460" class="w">diffuse</text>
+  <text x="542" y="482" class="w">null</text>
+  <text x="670" y="430" class="b">Does not beat the floor, or shows</text>
+  <text x="670" y="452" class="b">no channel selectivity at all.</text>
+  <text x="670" y="482" class="t" fill="#5c6f84">Claim: the surprise is unstructured.</text>
+
+  <!-- F4 -->
+  <rect x="520" y="514" width="608" height="100" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <rect x="520" y="514" width="128" height="100" rx="10" fill="#20364e"/>
+  <text x="542" y="552" class="w" font-size="20">F4</text>
+  <text x="542" y="578" class="w">artifact</text>
+  <text x="670" y="546" class="b">Lane C (visibility only) reproduces</text>
+  <text x="670" y="568" class="b">the same channel pattern.</text>
+  <text x="670" y="598" class="t" fill="#a44c26">Claim withdrawn: a missingness artifact.</text>
+
+  <!-- Footer -->
+  <text x="48" y="666" class="s">Illustrative expected shapes, not measured results. The random-encoder floor and raw-coordinate ceiling carry the verdict. Labels are dataset annotations.</text>
+</svg>

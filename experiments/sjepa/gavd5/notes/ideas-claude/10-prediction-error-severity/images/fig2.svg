@@ -28,11 +28,11 @@
   <text x="78" y="148" class="t">Per-token relative error on the skeleton</text>
 
   <!-- channel band labels (right side, in clear space) -->
-  <text x="80" y="196" class="s" fill="#5c6f84">Channels:</text>
+  <text x="80" y="196" class="s" fill="#5c6f84">Bigger warm halo means more surprise at that joint.</text>
 
   <!-- POSTURE region marker: pelvis + trunk anchors, top -->
   <!-- bones (grey) -->
-  <g stroke="#8a9bab" stroke-width="5" stroke-linecap="round" fill="none">
+  <g stroke="#c4cdd8" stroke-width="5" stroke-linecap="round" fill="none">
     <!-- trunk shoulders line -->
     <line x1="252" y1="248" x2="360" y2="248"/>
     <!-- shoulder to hip left -->
@@ -59,7 +59,7 @@
   <circle cx="266" cy="360" r="13" fill="#e07a4b" fill-opacity="0.26"/>
 
   <!-- joint nodes (drawn on top of bones and halos) -->
-  <g fill="#d8e0e7" stroke="#20364e" stroke-width="1.75">
+  <g fill="#c4cdd8" stroke="#20364e" stroke-width="1.75">
     <circle cx="252" cy="248" r="9"/>
     <circle cx="360" cy="248" r="9"/>
     <circle cx="266" cy="360" r="9"/>
@@ -124,7 +124,7 @@
   <text x="984" y="562" class="b" text-anchor="middle">Posture</text>
 
   <!-- Control bar: error beyond injected coordinate, low ~1.12 -> y=487 (height 37) grey -->
-  <rect x="1048" y="487" width="72" height="37" fill="#ffffff" stroke="#8a9bab" stroke-width="1.75"/>
+  <rect x="1048" y="487" width="72" height="37" fill="#ffffff" stroke="#5c6f84" stroke-width="1.75"/>
   <text x="1084" y="477" class="s" fill="#5c6f84" text-anchor="middle">1.12</text>
   <text x="1084" y="562" class="b" text-anchor="middle">Control</text>
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">The big idea: learn what normal walking looks like, then measure how surprising a new clip is</title>
+  <desc id="d3">A gentle five-step concept flow for a normal-only gait world model read as a severity score. Step one: show the model many clips of normal walking only, so it can never memorize an abnormal label. Step two: it turns each clip into a moving stick-figure skeleton of body joints. Step three: it plays a hide-and-guess game, hiding some joints and predicting them, until normal walking is easy to guess. Step four: freeze the model and show it a brand-new clip it never saw, playing the game once. Step five: measure the guessing error, called surprise; a small surprise means the new clip looks normal and a large surprise means it looks different from normal, and how much bigger becomes a label-free severity score. All illustrative; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">The big idea: learn normal, then measure surprise</text>
+  <text x="48" y="88" class="s">The gentlest way in. Read left to right. Illustrative only; folder labels are dataset annotations, not diagnoses.</text>
+
+  <!-- ============ TOP ROW: three training cards ============ -->
+  <!-- Card 1: only normal clips -->
+  <rect x="48" y="120" width="344" height="252" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="156" class="t">1. Show only normal walking</text>
+  <text x="72" y="190" class="b">Feed the model many clips of</text>
+  <text x="72" y="212" class="b">healthy walking, and nothing</text>
+  <text x="72" y="234" class="b">else. It never sees stroke,</text>
+  <text x="72" y="256" class="b">Parkinson's, or any other</text>
+  <text x="72" y="278" class="b">condition during training.</text>
+  <text x="72" y="330" class="s">So it cannot memorize a label.</text>
+  <text x="72" y="352" class="s">It only learns what normal is.</text>
+
+  <!-- Card 2: skeleton -->
+  <rect x="448" y="120" width="344" height="252" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="472" y="156" class="t">2. Turn video into a skeleton</text>
+  <text x="472" y="190" class="b">A pose detector finds 33 body</text>
+  <text x="472" y="212" class="b">joints in each frame, so a clip</text>
+  <text x="472" y="234" class="b">becomes a moving stick figure.</text>
+  <text x="472" y="256" class="b">No pixels, no face, just the</text>
+  <text x="472" y="278" class="b">joints and how they move.</text>
+  <text x="472" y="330" class="s">Much smaller than video, and</text>
+  <text x="472" y="352" class="s">it hides who the person is.</text>
+
+  <!-- Card 3: hide and guess -->
+  <rect x="848" y="120" width="304" height="252" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="872" y="156" class="t">3. Hide and guess</text>
+  <text x="872" y="190" class="b">Hide some joints, then let</text>
+  <text x="872" y="212" class="b">the model guess the hidden</text>
+  <text x="872" y="234" class="b">ones from the rest. Repeat</text>
+  <text x="872" y="256" class="b">until guessing normal walking</text>
+  <text x="872" y="278" class="b">is easy for it.</text>
+  <text x="872" y="330" class="s">This is the JEPA game: guess</text>
+  <text x="872" y="352" class="s">the missing part of the body.</text>
+
+  <!-- arrows across top row -->
+  <line x1="392" y1="230" x2="444" y2="230" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="792" y1="230" x2="844" y2="230" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- down connector from card 3 to bottom row (single right-angle bend) -->
+  <line x1="1000" y1="372" x2="1000" y2="410" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="1000" y1="410" x2="354" y2="410" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="354" y1="410" x2="354" y2="444" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ============ BOTTOM ROW: freeze + test + surprise readout ============ -->
+  <!-- Card 4: freeze and test a new clip -->
+  <rect x="48" y="452" width="612" height="184" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="490" class="t">4. Freeze it, then show a brand-new clip</text>
+  <text x="72" y="524" class="b">Lock the model so it stops learning. Now show it a clip it has</text>
+  <text x="72" y="546" class="b">never seen, and play the same hide-and-guess game once.</text>
+  <text x="72" y="590" class="s">If the new clip is normal, the guess is accurate and the error is small.</text>
+  <text x="72" y="612" class="s">If the new clip is different from normal, the guess is off and the error grows.</text>
+
+  <!-- arrow from card 4 to card 5 -->
+  <line x1="660" y1="544" x2="712" y2="544" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Card 5: surprise = severity (dark banner) -->
+  <rect x="716" y="452" width="436" height="184" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="740" y="490" class="w" font-size="20">5. Guessing error = surprise</text>
+  <text x="740" y="524" class="w">Small surprise: looks normal.</text>
+  <text x="740" y="552" class="w">Big surprise: looks abnormal.</text>
+  <line x1="740" y1="574" x2="1128" y2="574" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="740" y="600" class="ws">How much bigger becomes a</text>
+  <text x="740" y="622" class="ws">label-free severity score.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="666" class="s">Because the model only ever learned normal, its surprise on a new clip is not a memorized label. The next figures split that surprise into channels.</text>
+</svg>

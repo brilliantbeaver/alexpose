@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">The fair comparison: a built-in guarantee versus a hope the model learns the mirror rule</title>
+  <desc id="d4">A plain how-to-read-it explainer with two stacked paths. The top path is the built-in head: the left joint and the right joint go through the same shared box, only their difference comes out, so a mirror is guaranteed to flip the sign for every input, even ones never seen. The bottom path is the standard d0acc262 encoder: it dumps all joints into one vector and is only nudged toward the mirror rule by training, so the flip is a hope that holds only as far as training taught it. A center note states that both encoders keep left-right flip off during training (flip probability 0.0) so the only difference is the wiring. This proposal tests whether the guarantee beats the hope, and folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Built-in guarantee vs hoping the model learns it</text>
+  <text x="48" y="88" class="s">Two ways to get the mirror rule. Top path forces it by wiring; bottom path only nudges toward it in training.</text>
+
+  <!-- ============ TOP PATH: built-in guarantee ============ -->
+  <!-- band y 116..356 -->
+  <rect x="48" y="116" width="1104" height="240" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="152" class="t">Path A: build the rule in (a guarantee)</text>
+
+  <!-- input pair card -->
+  <rect x="78" y="176" width="196" height="150" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="176" y="204" class="b" text-anchor="middle">Left joint</text>
+  <text x="176" y="228" class="b" text-anchor="middle">and</text>
+  <text x="176" y="252" class="b" text-anchor="middle">right joint</text>
+  <text x="176" y="292" class="s" text-anchor="middle">one paired body part</text>
+  <text x="176" y="312" class="s" text-anchor="middle">(for example, the knees)</text>
+
+  <!-- arrow -> shared box -->
+  <line x1="274" y1="251" x2="342" y2="251" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- shared box (violet: the predictor/map) -->
+  <rect x="358" y="196" width="196" height="110" rx="12" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text x="456" y="240" class="b" text-anchor="middle">Same shared box</text>
+  <text x="456" y="264" class="s" text-anchor="middle">treats both sides</text>
+  <text x="456" y="284" class="s" text-anchor="middle">exactly alike</text>
+
+  <!-- arrow -> difference -->
+  <line x1="554" y1="251" x2="622" y2="251" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- subtract box -->
+  <rect x="638" y="196" width="196" height="110" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="736" y="240" class="b" text-anchor="middle">Take the</text>
+  <text x="736" y="264" class="b" text-anchor="middle">difference:</text>
+  <text x="736" y="288" class="s" text-anchor="middle">left result minus right</text>
+
+  <!-- arrow -> guarantee -->
+  <line x1="834" y1="251" x2="902" y2="251" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- guarantee card (dark) -->
+  <rect x="918" y="176" width="204" height="150" rx="12" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="1020" y="212" class="w" text-anchor="middle">Mirror flips</text>
+  <text x="1020" y="236" class="w" text-anchor="middle">the sign</text>
+  <text x="1020" y="266" class="ws" text-anchor="middle">every time, for</text>
+  <text x="1020" y="288" class="ws" text-anchor="middle">every input, even</text>
+  <text x="1020" y="310" class="ws" text-anchor="middle">ones never seen</text>
+
+  <!-- ============ BOTTOM PATH: hope ============ -->
+  <!-- band y 412..596 (gap from 356 = 56) -->
+  <rect x="48" y="412" width="1104" height="184" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="448" class="t">Path B: hope training teaches it (a hope)</text>
+
+  <!-- all joints card -->
+  <rect x="78" y="472" width="240" height="102" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="198" y="512" class="b" text-anchor="middle">All joints dumped</text>
+  <text x="198" y="536" class="b" text-anchor="middle">into one vector</text>
+
+  <!-- arrow -->
+  <line x1="318" y1="523" x2="386" y2="523" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- standard encoder card (orange: student/hot) -->
+  <rect x="402" y="472" width="300" height="102" rx="12" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="552" y="506" class="b" text-anchor="middle">Standard d0acc262 encoder,</text>
+  <text x="552" y="530" class="b" text-anchor="middle">only nudged by training</text>
+  <text x="552" y="554" class="s" text-anchor="middle">toward the mirror rule</text>
+
+  <!-- arrow -->
+  <line x1="702" y1="523" x2="770" y2="523" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- hope card -->
+  <rect x="786" y="472" width="336" height="102" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="954" y="506" class="b" text-anchor="middle">Mirror maybe flips the sign,</text>
+  <text x="954" y="530" class="b" text-anchor="middle">only as far as training taught it</text>
+  <text x="954" y="554" class="s" text-anchor="middle">no promise on new inputs</text>
+
+  <!-- Footer note -->
+  <text x="48" y="644" class="s">Both encoders keep left-right flip OFF in training (flip probability 0.0), so the only difference is the wiring. This proposal tests whether the guarantee beats the hope.</text>
+  <text x="48" y="668" class="s">Folder labels (normal, parkinsons, stroke, myopathic, cerebral_palsy) are dataset annotations from GAVD, not diagnoses made here.</text>
+</svg>

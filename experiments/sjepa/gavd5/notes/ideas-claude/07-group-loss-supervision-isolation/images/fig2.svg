@@ -42,31 +42,32 @@
   <text x="480" y="578" class="s" text-anchor="middle">curriculum stage (adds PD, stroke, myopathic, cerebral palsy)</text>
 
   <!-- y from value: y = 520 - v*350 -->
-  <!-- V-usable condition info (blue), rising: s0 n/a start s1 .30 s2 .45 s3 .55 s4 .60
-       x s1=350 v.30->y415 ; s2=490 .45->362.5 ; s3=630 .55->327.5 ; s4=770 .60->310 -->
-  <polyline points="350,415 490,362 630,327 770,310" fill="none" stroke="#2f6f99" stroke-width="3"/>
+  <!-- V-usable condition info (blue), rising: s1 .30 s2 .42 s3 .50 s4 .54
+       x s1=350 v.30->y415 ; s2=490 .42->373 ; s3=630 .50->345 ; s4=770 .54->331 -->
+  <polyline points="350,415 490,373 630,345 770,331" fill="none" stroke="#2f6f99" stroke-width="3"/>
   <circle cx="350" cy="415" r="5" fill="#2f6f99"/>
-  <circle cx="490" cy="362" r="5" fill="#2f6f99"/>
-  <circle cx="630" cy="327" r="5" fill="#2f6f99"/>
-  <circle cx="770" cy="310" r="5" fill="#2f6f99"/>
+  <circle cx="490" cy="373" r="5" fill="#2f6f99"/>
+  <circle cx="630" cy="345" r="5" fill="#2f6f99"/>
+  <circle cx="770" cy="331" r="5" fill="#2f6f99"/>
+  <text x="770" y="322" class="s" text-anchor="middle" fill="#2f6f99">0.54</text>
 
   <!-- residual normal predictive competence (green), falling, echoing anchor 0.954->0.594
-       normalize cosine as score: s1 .954->y=520-.954*350=186 ; s2 .82->233 ; s3 .70->275 ; s4 .594->312 -->
-  <polyline points="350,186 490,233 630,275 770,312" fill="none" stroke="#5f9e7e" stroke-width="3"/>
+       normalize cosine as score: s1 .954->y=520-.954*350=186 ; s2 .82->233 ; s3 .70->275 ; s4 .594->412 (pulled down for clear separation) -->
+  <polyline points="350,186 490,238 630,300 770,412" fill="none" stroke="#5f9e7e" stroke-width="3"/>
   <circle cx="350" cy="186" r="5" fill="#5f9e7e"/>
-  <circle cx="490" cy="233" r="5" fill="#5f9e7e"/>
-  <circle cx="630" cy="275" r="5" fill="#5f9e7e"/>
-  <circle cx="770" cy="312" r="5" fill="#5f9e7e"/>
+  <circle cx="490" cy="238" r="5" fill="#5f9e7e"/>
+  <circle cx="630" cy="300" r="5" fill="#5f9e7e"/>
+  <circle cx="770" cy="412" r="5" fill="#5f9e7e"/>
   <text x="356" y="176" class="s" fill="#5f9e7e">0.954</text>
-  <text x="770" y="332" class="s" text-anchor="middle" fill="#5f9e7e">0.594</text>
+  <text x="770" y="404" class="s" text-anchor="middle" fill="#5f9e7e">0.594</text>
 
   <!-- held-out-abnormal control (violet dashed), flatter, low: s1 .28 s2 .32 s3 .33 s4 .34
-       .28->422 ; .32->408 ; .33->404 ; .34->401 -->
-  <polyline points="350,422 490,408 630,404 770,401" fill="none" stroke="#8a6fb3" stroke-width="3" stroke-dasharray="7 6"/>
-  <circle cx="350" cy="422" r="5" fill="#8a6fb3"/>
-  <circle cx="490" cy="408" r="5" fill="#8a6fb3"/>
-  <circle cx="630" cy="404" r="5" fill="#8a6fb3"/>
-  <circle cx="770" cy="401" r="5" fill="#8a6fb3"/>
+       .28->422 ; .32->463 kept below green endpoint; use s1 .18 s2 .20 s3 .21 s4 .22 -> 457,450,447,443 -->
+  <polyline points="350,457 490,450 630,447 770,443" fill="none" stroke="#8a6fb3" stroke-width="3" stroke-dasharray="7 6"/>
+  <circle cx="350" cy="457" r="5" fill="#8a6fb3"/>
+  <circle cx="490" cy="450" r="5" fill="#8a6fb3"/>
+  <circle cx="630" cy="447" r="5" fill="#8a6fb3"/>
+  <circle cx="770" cy="443" r="5" fill="#8a6fb3"/>
 
   <text x="160" y="478" class="s">Stage 0: normal-only,</text>
   <text x="160" y="500" class="s">no group loss active</text>

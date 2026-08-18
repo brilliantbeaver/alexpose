@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">How to read the result: two yes-or-no questions give four honest outcomes</title>
+  <desc id="d4">A plain how-to-read-the-result guide. The study asks two separate yes-or-no questions. Question one: can a simple straight-line rule read the signed left-minus-right number out of the frozen model, and does it clear the fair baseline of what raw joint coordinates already give? Question two: when the body is mirrored left-to-right, does the number flip to the same size with the opposite sign? Crossing the two answers gives four outcomes. Clean flip means the signed axis is present and behaves like a true mirror. Reads but does not flip means the number is there but the model does not store it as a clean mirror. Does not read is an informative null that explains the weak recorded asymmetry score. Only the side-blind control fires means the signal was an artifact and the signed claim is withdrawn. All numbers are illustrative and transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">How to read the result: two questions, four honest outcomes</text>
+  <text x="48" y="88" class="s">Two separate yes-or-no checks. Crossing them gives four boxes, each with its own honest claim.</text>
+  <text x="48" y="108" class="s">Asymmetry is the weakest scalar (R&#178; &#8776; 0.154), so the two right-hand outcomes are the more likely, and both are publishable.</text>
+
+  <!-- ============ Two question banners across the top ============ -->
+  <!-- Q1 banner: x 48..600 (w 552), y 128..212 (h 84) -->
+  <rect x="48" y="128" width="552" height="84" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="160" class="w" font-size="20">Question 1: does it READ?</text>
+  <text x="72" y="186" class="ws">Pull the signed number out AND reach 80% of the raw baseline.</text>
+
+  <!-- Q2 banner: x 656..1152 (w 496) -->
+  <rect x="656" y="128" width="496" height="84" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="680" y="160" class="w" font-size="20">Question 2: does it FLIP?</text>
+  <text x="680" y="186" class="ws">Mirror the body: the number comes back same size, opposite sign.</text>
+
+  <!-- ============ 2x2 outcome grid ============ -->
+
+  <!-- Top-left: reads YES + flips YES = clean-flip positive. y 268..436 (h 168) -->
+  <rect x="48" y="268" width="552" height="168" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="300" class="t">Reads YES, flips YES</text>
+  <text x="72" y="326" class="s" fill="#5f9e7e">Best case (F1: clean-flip positive)</text>
+  <text x="72" y="356" class="b">The signed left-minus-right axis is really in the</text>
+  <text x="72" y="378" class="b">model, and it behaves like a true mirror.</text>
+  <text x="72" y="404" class="b">Licenses BOTH: the axis is decodable and the</text>
+  <text x="72" y="426" class="b">encoder learned reflection-equivariance.</text>
+
+  <!-- Top-right: reads YES + flips NO. y 268..436 -->
+  <rect x="656" y="268" width="496" height="168" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="680" y="300" class="t">Reads YES, flips NO</text>
+  <text x="680" y="326" class="s" fill="#a44c26">(F2: reads but does not mirror)</text>
+  <text x="680" y="356" class="b">The number is there, but a mirror does</text>
+  <text x="680" y="378" class="b">not cleanly negate it.</text>
+  <text x="680" y="404" class="b">Licenses ONLY the weaker claim: the</text>
+  <text x="680" y="426" class="b">encoding is non-antisymmetric.</text>
+
+  <!-- Bottom-left: reads NO = informative null. y 492..634 (h 142), gap 436->492 = 56 -->
+  <rect x="48" y="492" width="552" height="142" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="524" class="t">Reads NO</text>
+  <text x="72" y="550" class="s" fill="#2f6f99">Informative null (F3)</text>
+  <text x="72" y="580" class="b">The signed axis is not linearly present above raw</text>
+  <text x="72" y="602" class="b">coordinates. Directly explains the weak recorded</text>
+  <text x="72" y="624" class="b">asymmetry score (R&#178; &#8776; 0.154).</text>
+
+  <!-- Bottom-right: side-blind control fires = artifact. y 492..634 -->
+  <rect x="656" y="492" width="496" height="142" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="680" y="524" class="t">Only the side-blind control fires</text>
+  <text x="680" y="550" class="s">Artifact (F4)</text>
+  <text x="680" y="580" class="b">The mean/std-pooled control is side-blind</text>
+  <text x="680" y="602" class="b">by design. If it recovers a signed number,</text>
+  <text x="680" y="624" class="b">the signed claim is withdrawn.</text>
+
+  <!-- Footer note: baseline y=672 (48px from bottom); >=24px below cards (end 634) -->
+  <text x="48" y="672" class="s">Illustrative expected shapes, not measured results. All results are transductive. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>
