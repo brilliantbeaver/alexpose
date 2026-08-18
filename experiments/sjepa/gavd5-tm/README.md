@@ -187,7 +187,7 @@ Copy `.env.example` to `.env`. The completed augmented real path uses:
 
 ```dotenv
 GAVD_MODE=real
-GAVD3_CACHE_DIR=/absolute/path/to/gavd4-vicreg/cache
+GAVD_CACHE_DIR=/absolute/path/to/gavd5-tm/work/cache
 GAVD_ARTIFACT_DIR=/absolute/path/to/gavd5-tm/work/artifacts
 SJEPA_INCLUDE_AUGMENTED_NORMAL=1
 SJEPA_RUN_PROFILE=recommended
@@ -200,9 +200,21 @@ They intentionally do not guess a latest checkpoint. Restart the kernel after ch
 
 The recommended profile uses 300 Stage 0 epochs, four 75-epoch continuation stages, a 0.999 starting target-encoder EMA, AdamW, gradient clipping, VICReg weight 0.05, group weight 0.25, and group margin 1.0. The quick profile only checks that the data and checkpoint path work.
 
-Extraction artifacts are written under `cache/artifacts/<mode>/cohorts/<cohort>/runs/<extraction-run>`.
+Extraction artifacts are written under `GAVD_ARTIFACT_DIR/<mode>/cohorts/<cohort>/runs/<extraction-run>`.
 Checkpoint-bound artifacts add `/checkpoints/<model-state-sha256>/runs/<run-id>`.
 Smoke artifacts have no clinical meaning.
+
+The augmentation extractor uses the same `GAVD_CACHE_DIR`, `GAVD_ARTIFACT_DIR`,
+and `GAVD_MODE` settings as notebooks 02–06. If you have a legacy cohort under
+`cache/artifacts/real` from an earlier checkout, validate and migrate it once:
+
+```bash
+.venv/bin/python notes/migrate_augmented_pose_artifacts.py
+```
+
+Then restart the notebook kernel and rerun notebook 04 from the configuration
+cell. Do not create an empty `poses_augmented/normal` directory: the report and
+its selected pose files are a single reproducibility contract.
 
 ## Main saved artifacts
 
