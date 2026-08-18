@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Matched experiment arms isolate where reflection parity helps</title>
+  <desc id="desc">Five main arms compare standard one-view and two-view models, sign-aware learning, exact odd output projection, and a fully C2-equivariant encoder under a shared data, compute, and tuning contract.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#52677E"/>
+    </marker>
+    <style>
+      .title{font:700 30px Arial,sans-serif;fill:#0F2440}
+      .sub{font:17px Arial,sans-serif;fill:#52677E}
+      .contract{font:700 16px Arial,sans-serif;fill:#0F2440}
+      .head{font:700 18px Arial,sans-serif;fill:#0F2440}
+      .body{font:16px Arial,sans-serif;fill:#33475E}
+      .contrast{font:700 15px Arial,sans-serif;fill:#0F2440}
+      .control{font:700 16px Arial,sans-serif;fill:#33475E}
+      .out{font:700 17px Arial,sans-serif;fill:#FFFFFF}
+      .foot{font:16px Arial,sans-serif;fill:#52677E}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#F7F5EF"/>
+  <text x="45" y="52" class="title">Matched arms isolate where parity helps</text>
+  <text x="45" y="81" class="sub">A and F are pretrained; A2, B, and D reuse A to isolate the parity intervention.</text>
+
+  <line x1="150" y1="187" x2="150" y2="219" stroke="#52677E" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="375" y1="187" x2="375" y2="219" stroke="#52677E" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="187" x2="600" y2="219" stroke="#52677E" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="825" y1="187" x2="825" y2="219" stroke="#52677E" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1050" y1="187" x2="1050" y2="219" stroke="#52677E" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="150" y1="425" x2="150" y2="530" stroke="#52677E" stroke-width="2"/>
+  <line x1="375" y1="425" x2="375" y2="530" stroke="#52677E" stroke-width="2"/>
+  <line x1="600" y1="425" x2="600" y2="530" stroke="#52677E" stroke-width="2"/>
+  <line x1="825" y1="425" x2="825" y2="530" stroke="#52677E" stroke-width="2"/>
+  <line x1="1050" y1="425" x2="1050" y2="530" stroke="#52677E" stroke-width="2"/>
+  <line x1="150" y1="530" x2="1050" y2="530" stroke="#52677E" stroke-width="2"/>
+  <line x1="600" y1="530" x2="600" y2="551" stroke="#52677E" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="45" y="112" width="1110" height="76" rx="12" fill="#EEF1F4" stroke="#6F7E8C" stroke-width="2"/>
+  <text x="600" y="143" text-anchor="middle" class="contract">SAME CONTRACT</text>
+  <text x="600" y="169" text-anchor="middle" class="body">Participants, samples, updates, tuning trials, five seeds, parameters within 5%, and equal-FLOP report</text>
+
+  <rect x="45" y="220" width="210" height="205" rx="14" fill="#E7F0F8" stroke="#2F6F99" stroke-width="2"/>
+  <text x="65" y="255" class="head">A  Standard</text>
+  <text x="65" y="289" class="body">
+    <tspan x="65" dy="0">One-view pure S-JEPA</tspan>
+    <tspan x="65" dy="23">No mirror rule</tspan>
+    <tspan x="65" dy="30">Practical reference</tspan>
+  </text>
+
+  <rect x="270" y="220" width="210" height="205" rx="14" fill="#E7F0F8" stroke="#2F6F99" stroke-width="2"/>
+  <text x="290" y="255" class="head">A2  Two-view</text>
+  <text x="290" y="289" class="body">
+    <tspan x="290" dy="0">Frozen A, two views</tspan>
+    <tspan x="290" dy="23">Same passes as F</tspan>
+    <tspan x="290" dy="30">Compute reference</tspan>
+  </text>
+
+  <rect x="495" y="220" width="210" height="205" rx="14" fill="#F7E7D8" stroke="#B85C2F" stroke-width="2"/>
+  <text x="515" y="255" class="head">B  Sign-aware head</text>
+  <text x="515" y="289" class="body">
+    <tspan x="515" dy="0">Frozen A, signed pairs</tspan>
+    <tspan x="515" dy="23">No exact guarantee</tspan>
+    <tspan x="515" dy="30">B minus A</tspan>
+  </text>
+
+  <rect x="720" y="220" width="210" height="205" rx="14" fill="#ECE6F6" stroke="#755A9F" stroke-width="2"/>
+  <text x="740" y="255" class="head">D  Exact output</text>
+  <text x="740" y="289" class="body">
+    <tspan x="740" dy="0">Odd projection</tspan>
+    <tspan x="740" dy="23">Final scalar only</tspan>
+    <tspan x="740" dy="30">D versus A2</tspan>
+  </text>
+
+  <rect x="945" y="220" width="210" height="205" rx="14" fill="#E6F2EA" stroke="#47775D" stroke-width="3"/>
+  <text x="965" y="255" class="head">F  C₂ encoder</text>
+  <text x="965" y="289" class="body">
+    <tspan x="965" dy="0">Parity in every layer</tspan>
+    <tspan x="965" dy="23">Main architecture</tspan>
+    <tspan x="965" dy="30">F versus A2 and D</tspan>
+  </text>
+
+  <rect x="45" y="457" width="1110" height="50" rx="10" fill="#EEF1F4" stroke="#6F7E8C" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="600" y="488" text-anchor="middle" class="control">COMPARATORS AND CHECKS: invariant head | paired head | raw | MotionBERT | ST-GCN | falsification</text>
+
+  <rect x="90" y="552" width="1020" height="86" rx="13" fill="#20364E"/>
+  <text x="600" y="585" text-anchor="middle" class="out">PRIMARY: F minus A2 in held-out stroke error and low-label AULC</text>
+  <text x="600" y="614" text-anchor="middle" class="out">KEY TEST: F minus D asks whether encoder structure beats output repair</text>
+
+  <text x="600" y="680" text-anchor="middle" class="foot">Exact parity is never counted as predictive success by itself.</text>
+</svg>

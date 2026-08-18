@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t0 d0">
+  <title id="t0">Twelve Skeleton-JEPA research proposals grouped by four themes along one symmetry axis</title>
+  <desc id="d0">Illustrative map of twelve three-week-scale research proposals that extend the Skeleton-JEPA gait project, organized into four themed columns: evaluation validity, world-model and predictive, mechanism and design, and neuro-grounded world model. Each compact card names a proposal number, a short label, and its ICLR/ICML band as a pill (Strong main-track candidate or Competitive with revision). A caption states the unifying symmetry-axis thesis (lateralized versus rhythm and variability versus symmetric and proximal). Items 05 and 09 also carry a mechanism reading. All numbers are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+      .n{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#33475e;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Twelve ideas to extend Skeleton-JEPA, grouped by four themes</text>
+  <text x="48" y="88" class="s">Illustrative map. One symmetry-axis thesis: lateralized (stroke, hemiplegic CP, early PD) vs rhythm and variability (PD) vs symmetric and proximal (myopathic).</text>
+  <text x="48" y="110" class="s">Pill = ICLR/ICML band. All numbers transductive. Folder labels are dataset annotations, not diagnoses.</text>
+
+  <!-- ============ THEME BANNERS (row of four dark banners) ============ -->
+  <!-- columns: x = 48, 331, 614, 897 ; width 255 -->
+  <rect x="48" y="128" width="255" height="46" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="157" class="w">Evaluation validity</text>
+
+  <rect x="331" y="128" width="255" height="46" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="353" y="157" class="w">World-model / predictive</text>
+
+  <rect x="614" y="128" width="255" height="46" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="636" y="157" class="w">Mechanism / design</text>
+
+  <rect x="897" y="128" width="255" height="46" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="919" y="157" class="w">Neuro-grounded world model</text>
+
+  <!-- ============ COLUMN 1: Evaluation validity (blue) ============ -->
+  <!-- 01 -->
+  <rect x="48" y="202" width="255" height="118" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="70" y="234" class="n">01</text>
+  <text x="98" y="234" class="t">Provenance</text>
+  <text x="70" y="260" class="b">Is the signal pathway,</text>
+  <text x="70" y="282" class="b">not the walking?</text>
+  <rect x="70" y="294" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="80" y="308" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- 04 -->
+  <rect x="48" y="348" width="255" height="118" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="70" y="380" class="n">04</text>
+  <text x="98" y="380" class="t">Resize timing tax</text>
+  <text x="70" y="406" class="b">Does 64-frame resize</text>
+  <text x="70" y="428" class="b">erase cadence?</text>
+  <rect x="70" y="440" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="80" y="454" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- ============ COLUMN 2: World-model / predictive (green) ============ -->
+  <!-- 02 -->
+  <rect x="331" y="202" width="255" height="118" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text x="353" y="234" class="n">02</text>
+  <text x="381" y="234" class="t">Surprise image</text>
+  <text x="353" y="260" class="b">Does the 12x16 error</text>
+  <text x="353" y="282" class="b">beat one scalar?</text>
+  <rect x="353" y="294" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="363" y="308" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- 03 -->
+  <rect x="331" y="348" width="255" height="118" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text x="353" y="380" class="n">03</text>
+  <text x="381" y="380" class="t">Motion energy</text>
+  <text x="353" y="406" class="b">Motion or only static</text>
+  <text x="353" y="428" class="b">pose, at test time?</text>
+  <rect x="353" y="440" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="363" y="454" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- ============ COLUMN 3: Mechanism / design (violet) ============ -->
+  <!-- 05 -->
+  <rect x="614" y="202" width="255" height="118" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text x="636" y="234" class="n">05</text>
+  <text x="664" y="234" class="t">Signed laterality</text>
+  <text x="636" y="260" class="b">Is the left-right axis</text>
+  <text x="636" y="282" class="b">decodable and signed?</text>
+  <rect x="636" y="294" width="196" height="20" rx="10" fill="#5f9e7e"/>
+  <text x="646" y="308" class="s" fill="#ffffff">Strong main-track candidate</text>
+
+  <!-- 06 -->
+  <rect x="614" y="348" width="255" height="118" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text x="636" y="380" class="n">06</text>
+  <text x="664" y="380" class="t">Mask geometry</text>
+  <text x="636" y="406" class="b">Does a structured mask</text>
+  <text x="636" y="428" class="b">beat the uniform one?</text>
+  <rect x="636" y="440" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="646" y="454" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- 07 -->
+  <rect x="614" y="494" width="255" height="118" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text x="636" y="526" class="n">07</text>
+  <text x="664" y="526" class="t">Group-loss</text>
+  <text x="636" y="552" class="b">Generalization, or just</text>
+  <text x="636" y="574" class="b">memorization?</text>
+  <rect x="636" y="586" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="646" y="600" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- ============ COLUMN 4: Neuro-grounded world model (blue, dark banner family) ============ -->
+  <!-- 08 -->
+  <rect x="897" y="202" width="255" height="76" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="919" y="234" class="n">08</text>
+  <text x="947" y="234" class="t">Concept bottleneck</text>
+  <rect x="919" y="248" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="929" y="262" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- 09 -->
+  <rect x="897" y="296" width="255" height="76" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="919" y="328" class="n">09</text>
+  <text x="947" y="328" class="t">Reflection axis</text>
+  <rect x="919" y="342" width="196" height="20" rx="10" fill="#5f9e7e"/>
+  <text x="929" y="356" class="s" fill="#ffffff">Strong main-track candidate</text>
+
+  <!-- 10 -->
+  <rect x="897" y="390" width="255" height="76" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="919" y="422" class="n">10</text>
+  <text x="947" y="422" class="t">Error as severity</text>
+  <rect x="919" y="436" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="929" y="450" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- 11 -->
+  <rect x="897" y="484" width="255" height="76" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="919" y="516" class="n">11</text>
+  <text x="947" y="516" class="t">Target isolation</text>
+  <rect x="919" y="530" width="196" height="20" rx="10" fill="#e07a4b"/>
+  <text x="929" y="544" class="s" fill="#ffffff">Competitive with revision</text>
+
+  <!-- 12 -->
+  <rect x="897" y="578" width="255" height="76" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="919" y="610" class="n">12</text>
+  <text x="947" y="610" class="t">Cross-view</text>
+  <rect x="919" y="624" width="196" height="20" rx="10" fill="#5f9e7e"/>
+  <text x="929" y="638" class="s" fill="#ffffff">Strong main-track candidate</text>
+
+  <!-- Footer caption: two lines, own rows, clear of the last cards in every column -->
+  <text x="48" y="644" class="s">Items 05 and 09 also carry a mechanism reading. Illustrative grouping, not measured results.</text>
+  <text x="48" y="668" class="s">Every proposal splits by source video before fitting, then reports seen (transductive) and unseen (inductive) apart.</text>
+</svg>
