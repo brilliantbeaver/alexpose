@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Selective symmetry and anatomical chirality</title>
+  <desc id="desc">A new camera preserves anatomical joint identities, while a separate body reflection permutes left and right chirality channels.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.card{fill:#fff;stroke:#cad4dc;stroke-width:2}.blue{fill:#edf4f8;stroke:#2f6f99;stroke-width:3}.violet{fill:#f1edf7;stroke:#8a6fb3;stroke-width:3}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.t{font:bold 21px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}.tag{font:bold 18px Arial,sans-serif;fill:#2f6f99}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">Ignore the camera, preserve the body side</text>
+  <text class="s" x="60" y="91">Camera rendering preserves joint identity. Body reflection permutes left and right.</text>
+
+  <rect class="card" x="60" y="220" rx="16" width="225" height="220"/>
+  <text class="t" x="85" y="255">Original walk</text>
+  <circle cx="168" cy="300" r="20" fill="#20364e"/>
+  <path d="M168 322L168 380M168 340L125 365M168 340L211 358M168 380L135 420M168 380L208 417" fill="none" stroke="#20364e" stroke-width="9" stroke-linecap="round"/>
+
+  <path d="M285 300 L390 210" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M285 365 L390 485" stroke="#8a6fb3" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="blue" x="400" y="125" rx="16" width="310" height="170"/>
+  <text class="t" x="425" y="162">Camera action g</text>
+  <text class="b" x="425" y="202">Render 3D motion from a new view</text>
+  <text class="s" x="425" y="238">desired rule: invariance</text>
+  <text class="tag" x="425" y="268">z_inv(gx) ≈ z_inv(x)</text>
+
+  <rect class="violet" x="400" y="420" rx="16" width="310" height="170"/>
+  <text class="t" x="425" y="457">Body action r</text>
+  <text class="b" x="425" y="497">Reflect 3D body and permute L/R</text>
+  <text class="s" x="425" y="533">desired rule: equivariance</text>
+  <text class="tag" x="425" y="563">z_lat(rx) ≈ ρ(r) z_lat(x)</text>
+
+  <path d="M710 210 L805 285" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M710 505 L805 365" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <rect class="card" x="815" y="235" rx="16" width="325" height="200"/>
+  <text class="t" x="840" y="272">Structured latent</text>
+  <rect x="840" y="305" width="125" height="55" rx="8" fill="#dbeaf2"/>
+  <rect x="972" y="305" width="142" height="55" rx="8" fill="#e7def0"/>
+  <text class="b" x="865" y="339">view-free</text>
+  <text class="b" x="1010" y="339">L | R</text>
+  <text class="s" x="840" y="386">ρ(r) swaps L ↔ R</text>
+  <text class="s" x="840" y="411">test view leakage vs chirality accuracy</text>
+
+  <rect x="185" y="640" rx="12" width="830" height="48" fill="#fff0e9" stroke="#e07a4b" stroke-width="2"/>
+  <text class="b" x="213" y="671">Hypothesis: joint invariance loses chirality; selective symmetry retains it.</text>
+</svg>

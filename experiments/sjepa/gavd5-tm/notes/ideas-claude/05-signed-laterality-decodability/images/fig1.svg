@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Signed-laterality decodability against the raw-coordinate ceiling and untrained-encoder floor</title>
+  <desc id="d1">Illustrative expected-shape scatter of the decoded signed left-minus-right laterality scalar versus the ground-truth signed target, one dot per held-out source video, pooled across conditions. A dashed identity line marks perfect decoding. The frozen S-JEPA learned probe (Lane A) sits between an untrained-encoder floor near chance and a raw-coordinate non-neural ceiling; the pre-registered pass margin is at least 0.05 R-squared above the floor and at least 80 percent of the ceiling R-squared. All numbers are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Signed-laterality decodability vs the raw-coordinate ceiling</text>
+  <text x="48" y="88" class="s">Illustrative expected shape. One dot per held-out source video, pooled across conditions. All numbers transductive.</text>
+
+  <!-- ============ LEFT: scatter plot card ============ -->
+  <!-- card: y 112..556 (height 444) -->
+  <rect x="48" y="112" width="660" height="444" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Decoded signed scalar vs ground-truth target</text>
+
+  <!-- plot frame: x 150..668, y 176..492 -->
+  <!-- axes -->
+  <line x1="150" y1="176" x2="150" y2="492" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="492" x2="668" y2="492" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- tick markers: 0 near center -->
+  <line x1="409" y1="492" x2="409" y2="498" stroke="#20364e" stroke-width="2"/>
+  <text x="409" y="510" class="s" text-anchor="middle">0</text>
+  <line x1="150" y1="334" x2="144" y2="334" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="339" class="s" text-anchor="end">0</text>
+
+  <!-- identity line y = x (perfect decoding), dashed -->
+  <line x1="170" y1="476" x2="648" y2="196" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="180" y="210" class="s" fill="#5f9e7e">identity y = x (perfect)</text>
+
+  <!-- Lane A learned-probe dots: moderate-positive-slope trend, below identity -->
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <circle cx="200" cy="440" r="8"/>
+    <circle cx="242" cy="422" r="8"/>
+    <circle cx="270" cy="450" r="8"/>
+    <circle cx="300" cy="412" r="8"/>
+    <circle cx="336" cy="426" r="8"/>
+    <circle cx="360" cy="396" r="8"/>
+    <circle cx="392" cy="376" r="8"/>
+    <circle cx="418" cy="402" r="8"/>
+    <circle cx="452" cy="360" r="8"/>
+    <circle cx="486" cy="372" r="8"/>
+    <circle cx="512" cy="344" r="8"/>
+    <circle cx="548" cy="356" r="8"/>
+    <circle cx="576" cy="316" r="8"/>
+    <circle cx="612" cy="332" r="8"/>
+  </g>
+
+  <!-- best-fit trend for Lane A (shallower than identity) -->
+  <line x1="188" y1="440" x2="628" y2="312" stroke="#e07a4b" stroke-width="2.5"/>
+
+  <!-- floor cloud: untrained encoder, near-flat around center (left/negative side, clear of the warm trend) -->
+  <g fill="#c4cdd8" stroke="#20364e" stroke-width="1">
+    <circle cx="188" cy="342" r="6"/>
+    <circle cx="230" cy="328" r="6"/>
+    <circle cx="272" cy="346" r="6"/>
+    <circle cx="314" cy="330" r="6"/>
+    <circle cx="356" cy="344" r="6"/>
+  </g>
+  <line x1="172" y1="336" x2="388" y2="336" stroke="#20364e" stroke-width="2" stroke-dasharray="4 5"/>
+
+  <!-- axis label below the plot frame, inside the card -->
+  <text x="409" y="534" class="b" text-anchor="middle">Ground-truth signed target  (left minus right)</text>
+  <!-- y axis label -->
+  <text x="106" y="334" class="b" text-anchor="middle" transform="rotate(-90 106 334)">Decoded signed scalar</text>
+
+  <!-- ============ RIGHT: legend + verdict cards stacked ============ -->
+
+  <!-- Lane legend card: y 112..338 (height 226) -->
+  <rect x="764" y="112" width="388" height="226" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="148" class="t">Four lanes, one held-out fold</text>
+
+  <circle cx="802" cy="178" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="822" y="183" class="b">A Frozen learned probe (primary)</text>
+
+  <line x1="794" y1="212" x2="810" y2="212" stroke="#5f9e7e" stroke-width="2.5"/>
+  <text x="822" y="217" class="b">B Raw-coordinate null: ceiling</text>
+
+  <circle cx="802" cy="244" r="7" fill="#c4cdd8" stroke="#20364e" stroke-width="1"/>
+  <text x="822" y="249" class="b">C Untrained-encoder: floor</text>
+
+  <text x="794" y="286" class="s">D Mean/std-pooled control (Fig 2):</text>
+  <text x="794" y="308" class="s">permutation-invariant, must NOT recover.</text>
+
+  <!-- Pass-margin card (dark banner style): y 394..624 (height 230), gap 338->394 = 56 -->
+  <rect x="764" y="394" width="388" height="230" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="430" class="w" font-size="20">Pre-registered pass margin</text>
+
+  <text x="794" y="466" class="w">R&#178; over floor  &#8805; 0.05</text>
+  <text x="794" y="498" class="w">AND  &#8805; 80% of the ceiling R&#178;</text>
+  <text x="794" y="530" class="w">AND sign correct on &#8805; 75% of sources</text>
+
+  <line x1="794" y1="552" x2="1122" y2="552" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="794" y="580" class="s" fill="#cdd8e4">Falling short is scored as an informative</text>
+  <text x="794" y="602" class="s" fill="#cdd8e4">null: no signed axis above raw coordinates.</text>
+
+  <!-- Footer note: baseline y=672, 48px above bottom edge; >=24px below cards (556 and 624) -->
+  <text x="48" y="672" class="s">Illustrative expected shape, not measured results. Provenance-matched canonical subset. Documented asymmetry readout R&#178; &#8776; 0.154. Labels are dataset annotations.</text>
+</svg>

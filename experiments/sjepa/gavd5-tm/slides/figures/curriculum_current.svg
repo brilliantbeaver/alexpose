@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#fbfcfe"/>
+  <style>
+    .title { font: 700 34px Arial, sans-serif; fill: #10233f; }
+    .stage { font: 700 23px Arial, sans-serif; fill: #10233f; }
+    .body { font: 18px Arial, sans-serif; fill: #334e68; }
+    .tiny { font: 16px Arial, sans-serif; fill: #526575; }
+    .arrow { stroke: #40566d; stroke-width: 6; fill: none; marker-end: url(#arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#40566d"/></marker>
+  </defs>
+  <text x="600" y="52" text-anchor="middle" class="title">One model continues through five ordered stages</text>
+  <path d="M195 310 H275" class="arrow"/>
+  <path d="M415 310 H495" class="arrow"/>
+  <path d="M635 310 H715" class="arrow"/>
+  <path d="M855 310 H935" class="arrow"/>
+
+  <g>
+    <rect x="25" y="145" width="170" height="330" rx="22" fill="#e2f0d9" stroke="#40566d" stroke-width="3"/>
+    <text x="110" y="190" text-anchor="middle" class="stage">Stage 0</text>
+    <text x="110" y="225" text-anchor="middle" class="body">Normal only</text>
+    <text x="110" y="280" text-anchor="middle" class="stage">300 epochs</text>
+    <text x="110" y="320" text-anchor="middle" class="body">75 sequences</text>
+    <text x="110" y="350" text-anchor="middle" class="body">18 videos</text>
+    <text x="110" y="405" text-anchor="middle" class="tiny">JEPA + VICReg</text>
+    <text x="110" y="435" text-anchor="middle" class="tiny">No label group loss</text>
+  </g>
+  <g>
+    <rect x="275" y="175" width="140" height="300" rx="22" fill="#e8f1fa" stroke="#40566d" stroke-width="3"/>
+    <text x="345" y="220" text-anchor="middle" class="stage">Stage 1</text>
+    <text x="345" y="258" text-anchor="middle" class="body">Add</text>
+    <text x="345" y="288" text-anchor="middle" class="body">Parkinson's</text>
+    <text x="345" y="338" text-anchor="middle" class="stage">75 epochs</text>
+    <text x="345" y="395" text-anchor="middle" class="tiny">Replay normal</text>
+    <text x="345" y="425" text-anchor="middle" class="tiny">Use group loss</text>
+  </g>
+  <g>
+    <rect x="495" y="205" width="140" height="270" rx="22" fill="#dcebf7" stroke="#40566d" stroke-width="3"/>
+    <text x="565" y="250" text-anchor="middle" class="stage">Stage 2</text>
+    <text x="565" y="288" text-anchor="middle" class="body">Add stroke</text>
+    <text x="565" y="338" text-anchor="middle" class="stage">75 epochs</text>
+    <text x="565" y="395" text-anchor="middle" class="tiny">Replay 3 groups</text>
+    <text x="565" y="425" text-anchor="middle" class="tiny">Same model state</text>
+  </g>
+  <g>
+    <rect x="715" y="235" width="140" height="240" rx="22" fill="#fff2cc" stroke="#40566d" stroke-width="3"/>
+    <text x="785" y="280" text-anchor="middle" class="stage">Stage 3</text>
+    <text x="785" y="318" text-anchor="middle" class="body">Add myopathic</text>
+    <text x="785" y="368" text-anchor="middle" class="stage">75 epochs</text>
+    <text x="785" y="425" text-anchor="middle" class="tiny">Replay 4 groups</text>
+  </g>
+  <g>
+    <rect x="935" y="265" width="235" height="210" rx="22" fill="#fce4d6" stroke="#40566d" stroke-width="3"/>
+    <text x="1052" y="310" text-anchor="middle" class="stage">Stage 4</text>
+    <text x="1052" y="348" text-anchor="middle" class="body">Add cerebral palsy</text>
+    <text x="1052" y="398" text-anchor="middle" class="stage">75 epochs</text>
+    <text x="1052" y="438" text-anchor="middle" class="tiny">Replay all 5 groups</text>
+  </g>
+
+  <rect x="155" y="535" width="890" height="92" rx="18" fill="#eef2f6" stroke="#40566d" stroke-width="2"/>
+  <text x="600" y="571" text-anchor="middle" class="stage">Weights and state do not restart.</text>
+  <text x="600" y="602" text-anchor="middle" class="body">View encoder, predictor, EMA teacher, center, and VICReg projector all continue.</text>
+</svg>

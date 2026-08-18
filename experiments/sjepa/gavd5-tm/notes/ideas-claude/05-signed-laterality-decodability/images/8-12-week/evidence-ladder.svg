@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Full evidence map for signed gait laterality</title>
+  <desc id="desc">Five main rows assign distinct roles to GAVD, held-out non-clinical motion, external geometry data, stroke, and gated Parkinson disease replication. GaitRec is a target-only side branch rather than stronger encoder evidence.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#52677E"/>
+    </marker>
+    <style>
+      .title{font:700 30px Arial,sans-serif;fill:#0F2440}
+      .sub{font:17px Arial,sans-serif;fill:#52677E}
+      .col{font:700 15px Arial,sans-serif;fill:#52677E}
+      .num{font:700 17px Arial,sans-serif;fill:#FFFFFF}
+      .data{font:700 18px Arial,sans-serif;fill:#0F2440}
+      .body{font:16px Arial,sans-serif;fill:#33475E}
+      .claim{font:700 16px Arial,sans-serif;fill:#0F2440}
+      .foot{font:700 16px Arial,sans-serif;fill:#FFFFFF}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#F7F5EF"/>
+  <text x="50" y="50" class="title">Full evidence map: stronger claims need stronger tests</text>
+  <text x="50" y="79" class="sub">No dataset is asked to establish every kind of validity.</text>
+  <text x="135" y="113" class="col">DATASET ROLE</text>
+  <text x="390" y="113" class="col">EVIDENCE OR TEST</text>
+  <text x="830" y="113" class="col">LICENSED CLAIM</text>
+
+  <line x1="72" y1="157" x2="72" y2="496" stroke="#52677E" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="110" y="128" width="1040" height="70" rx="12" fill="#F7E7D8" stroke="#B85C2F" stroke-width="2"/>
+  <circle cx="72" cy="163" r="20" fill="#B85C2F"/>
+  <text x="72" y="169" text-anchor="middle" class="num">1</text>
+  <text x="135" y="158" class="data">GAVD pilot</text>
+  <text x="135" y="182" class="body">Transductive local subset</text>
+  <text x="390" y="158" class="body">Coordinate-derived target</text>
+  <text x="390" y="182" class="body">Source-video grouping</text>
+  <text x="830" y="170" class="claim">Checkpoint retention only</text>
+
+  <rect x="110" y="207" width="1040" height="70" rx="12" fill="#E7F0F8" stroke="#2F6F99" stroke-width="2"/>
+  <circle cx="72" cy="242" r="20" fill="#2F6F99"/>
+  <text x="72" y="248" text-anchor="middle" class="num">2</text>
+  <text x="135" y="237" class="data">AMASS + held-out set</text>
+  <text x="135" y="261" class="body">Named held-out identities</text>
+  <text x="390" y="237" class="body">Known reflection and perturbation dose</text>
+  <text x="390" y="261" class="body">Held-out set excluded from pretraining</text>
+  <text x="830" y="249" class="claim">Generic sign and dose recovery</text>
+
+  <rect x="110" y="286" width="1040" height="70" rx="12" fill="#E7F0F8" stroke="#2F6F99" stroke-width="2"/>
+  <circle cx="72" cy="321" r="20" fill="#2F6F99"/>
+  <text x="72" y="327" text-anchor="middle" class="num">3</text>
+  <text x="135" y="316" class="data">MoVi / OUMVLP-Pose</text>
+  <text x="135" y="340" class="body">Unseen actors and views</text>
+  <text x="390" y="316" class="body">Mirror separated from camera view</text>
+  <text x="390" y="340" class="body">Mocap geometry where available</text>
+  <text x="830" y="328" class="claim">External geometric validity</text>
+
+  <rect x="110" y="365" width="1040" height="70" rx="12" fill="#E6F2EA" stroke="#47775D" stroke-width="2"/>
+  <circle cx="72" cy="400" r="20" fill="#47775D"/>
+  <text x="72" y="406" text-anchor="middle" class="num">4</text>
+  <text x="135" y="395" class="data">Stroke primary</text>
+  <text x="135" y="419" class="body">Participant-held-out kinematics</text>
+  <text x="390" y="395" class="body">Force target; 30+ stroke participants pass QC</text>
+  <text x="390" y="419" class="body">Five outer folds; grouped inner tuning</text>
+  <text x="830" y="407" class="claim">Concurrent force evidence</text>
+
+  <rect x="110" y="444" width="1040" height="70" rx="12" fill="#ECE6F6" stroke="#755A9F" stroke-width="2"/>
+  <circle cx="72" cy="479" r="20" fill="#755A9F"/>
+  <text x="72" y="485" text-anchor="middle" class="num">5</text>
+  <text x="135" y="474" class="data">PD gated replication</text>
+  <text x="135" y="498" class="body">ON and OFF grouped by person</text>
+  <text x="390" y="474" class="body">15+ participants pass force QC</text>
+  <text x="390" y="498" class="body">Protocol locked; side field separate</text>
+  <text x="830" y="486" class="claim">Replication only if CI is below zero</text>
+
+  <path d="M1150 400 H1172 V558 H1150" fill="none" stroke="#6F7E8C" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+  <rect x="330" y="523" width="820" height="70" rx="12" fill="#EEF1F4" stroke="#6F7E8C" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="355" y="553" class="data">GaitRec side check</text>
+  <text x="355" y="577" class="body">No skeleton encoder input</text>
+  <text x="610" y="553" class="body">75,732 bilateral GRF trials</text>
+  <text x="610" y="577" class="body">Affected-side metadata</text>
+  <text x="905" y="552" class="claim">
+    <tspan x="905" dy="0">Affected-side alignment</tspan>
+    <tspan x="905" dy="22">at scale</tspan>
+  </text>
+
+  <rect x="50" y="628" width="1100" height="54" rx="12" fill="#20364E"/>
+  <text x="600" y="661" text-anchor="middle" class="foot">No branch licenses diagnosis, prognosis, or treatment claims.</text>
+</svg>

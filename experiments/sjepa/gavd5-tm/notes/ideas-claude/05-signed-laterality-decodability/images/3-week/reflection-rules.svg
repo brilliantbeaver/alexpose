@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">What a mirror should change and what a camera change should not</title>
+  <desc id="desc">Three rows show that even gait stays unchanged under reflection, signed laterality flips sign under anatomical reflection, and signed laterality stays stable under a camera view change.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52677E"/>
+    </marker>
+    <style>
+      .title{font:700 30px Arial,sans-serif;fill:#0F2440}
+      .sub{font:17px Arial,sans-serif;fill:#52677E}
+      .rowhead{font:700 18px Arial,sans-serif;fill:#0F2440}
+      .body{font:17px Arial,sans-serif;fill:#33475E}
+      .formula{font:700 20px Arial,sans-serif;fill:#0F2440}
+      .verdict{font:700 17px Arial,sans-serif;fill:#0F2440}
+      .foot{font:700 16px Arial,sans-serif;fill:#FFFFFF}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#F7F5EF"/>
+  <text x="60" y="54" class="title">What a mirror should change, and what a camera should not</text>
+  <text x="60" y="84" class="sub">Signed laterality is odd under anatomical reflection and stable under a change of viewpoint.</text>
+
+  <rect x="60" y="125" width="1080" height="135" rx="14" fill="#E7F0F8" stroke="#2F6F99" stroke-width="2"/>
+  <line x1="510" y1="192" x2="635" y2="192" stroke="#52677E" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="82" y="170" class="rowhead">EVEN FEATURE</text>
+  <text x="82" y="197" class="body">shared gait</text>
+  <rect x="260" y="154" width="250" height="76" rx="12" fill="#FFFFFF" stroke="#2F6F99" stroke-width="2"/>
+  <text x="385" y="199" text-anchor="middle" class="formula">e(x) = a</text>
+  <text x="572" y="177" text-anchor="middle" class="body">mirror M</text>
+  <rect x="650" y="154" width="250" height="76" rx="12" fill="#FFFFFF" stroke="#2F6F99" stroke-width="2"/>
+  <text x="775" y="199" text-anchor="middle" class="formula">e(Mx) = a</text>
+  <rect x="940" y="154" width="170" height="76" rx="12" fill="#D6E8F5" stroke="#2F6F99" stroke-width="2"/>
+  <text x="1025" y="198" text-anchor="middle" class="verdict">UNCHANGED</text>
+
+  <rect x="60" y="295" width="1080" height="135" rx="14" fill="#ECE6F6" stroke="#755A9F" stroke-width="2"/>
+  <line x1="510" y1="362" x2="635" y2="362" stroke="#52677E" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="82" y="340" class="rowhead">ODD FEATURE</text>
+  <text x="82" y="367" class="body">right minus left</text>
+  <rect x="260" y="324" width="250" height="76" rx="12" fill="#FFFFFF" stroke="#755A9F" stroke-width="2"/>
+  <text x="385" y="369" text-anchor="middle" class="formula">o(x) = +b</text>
+  <text x="572" y="347" text-anchor="middle" class="body">mirror M</text>
+  <rect x="650" y="324" width="250" height="76" rx="12" fill="#FFFFFF" stroke="#755A9F" stroke-width="2"/>
+  <text x="775" y="369" text-anchor="middle" class="formula">o(Mx) = −b</text>
+  <rect x="940" y="324" width="170" height="76" rx="12" fill="#DDD2EF" stroke="#755A9F" stroke-width="2"/>
+  <text x="1025" y="368" text-anchor="middle" class="verdict">SIGN FLIPS</text>
+
+  <rect x="60" y="465" width="1080" height="135" rx="14" fill="#E6F2EA" stroke="#47775D" stroke-width="2"/>
+  <line x1="510" y1="532" x2="635" y2="532" stroke="#52677E" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="82" y="510" class="rowhead">VIEW CHECK</text>
+  <text x="82" y="537" class="body">same anatomy</text>
+  <rect x="260" y="494" width="250" height="76" rx="12" fill="#FFFFFF" stroke="#47775D" stroke-width="2"/>
+  <text x="385" y="539" text-anchor="middle" class="formula">o(x) = +b</text>
+  <text x="572" y="517" text-anchor="middle" class="body">camera V</text>
+  <rect x="650" y="494" width="250" height="76" rx="12" fill="#FFFFFF" stroke="#47775D" stroke-width="2"/>
+  <text x="775" y="539" text-anchor="middle" class="formula">o(Vx) ≈ +b</text>
+  <rect x="940" y="494" width="170" height="76" rx="12" fill="#D3E8D9" stroke="#47775D" stroke-width="2"/>
+  <text x="1025" y="538" text-anchor="middle" class="verdict">SIGN STAYS</text>
+
+  <rect x="60" y="635" width="1080" height="52" rx="12" fill="#20364E"/>
+  <text x="600" y="668" text-anchor="middle" class="foot">A camera change is not an anatomical mirror. Only M swaps anatomical left and right.</text>
+</svg>

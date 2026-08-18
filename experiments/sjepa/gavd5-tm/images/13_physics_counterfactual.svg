@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Constraint counterfactual experiment</title>
+  <desc id="desc">One observed context branches into a generator-matched valid future and a future with an independently validated constraint violation.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.card{fill:#fff;stroke:#cad4dc;stroke-width:2}.good{fill:#eaf4ee;stroke:#5f9e7e;stroke-width:3}.bad{fill:#fff0e9;stroke:#e07a4b;stroke-width:3}.ctrl{fill:#f1edf7;stroke:#8a6fb3;stroke-width:2}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.t{font:bold 21px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}.goodtxt{font:bold 18px Arial,sans-serif;fill:#3e7e60}.badtxt{font:bold 18px Arial,sans-serif;fill:#c45f36}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">Can a predictor detect a validated constraint violation?</text>
+  <text class="s" x="60" y="90">Hold context and generator fixed. Change one audited relation in the future.</text>
+
+  <rect class="card" x="60" y="185" rx="16" width="240" height="180"/>
+  <text class="t" x="85" y="222">Observed context</text>
+  <circle cx="138" cy="248" r="15" fill="#20364e"/>
+  <path d="M138 265 L138 306 M138 279 L105 299 M138 279 L174 296 M138 306 L108 328 M138 306 L174 327" fill="none" stroke="#20364e" stroke-width="7" stroke-linecap="round"/>
+  <text class="s" x="85" y="344">same subject • same detector</text>
+
+  <path d="M300 275 C360 275 360 195 420 195" fill="none" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M300 275 C360 275 360 415 420 415" fill="none" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="good" x="430" y="125" rx="16" width="300" height="150"/>
+  <text class="goodtxt" x="455" y="160">VALID FUTURE  y+</text>
+  <text class="b" x="455" y="195">Passes the declared</text>
+  <text class="b" x="455" y="220">contact or kinematic check</text>
+  <text class="s" x="455" y="250">same generator as y−</text>
+
+  <rect class="bad" x="430" y="345" rx="16" width="300" height="150"/>
+  <text class="badtxt" x="455" y="380">VIOLATING FUTURE  y−</text>
+  <text class="b" x="455" y="415">Fails one independently</text>
+  <text class="b" x="455" y="440">validated constraint</text>
+  <text class="s" x="455" y="470">design goal: matched statistics</text>
+
+  <path d="M730 200 L815 270" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M730 420 L815 335" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <rect class="card" x="825" y="230" rx="16" width="300" height="160"/>
+  <text class="t" x="850" y="268">Masked-future error</text>
+  <text class="b" x="850" y="305">same tokens • frozen target</text>
+  <text class="goodtxt" x="850" y="342">goal: E(y+) + m &lt; E(y−)</text>
+  <text class="s" x="850" y="372">test generator B</text>
+
+  <rect class="ctrl" x="210" y="555" rx="14" width="780" height="100"/>
+  <text class="t" x="235" y="590">Critical control</text>
+  <text class="b" x="235" y="622">Unusual outer-held-out gait should not equal a validated violation.</text>
+  <text class="s" x="235" y="645">If a generator-only baseline separates the pair, rebuild the benchmark.</text>
+</svg>

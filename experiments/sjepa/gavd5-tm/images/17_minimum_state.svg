@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Empirical context-capacity frontier</title>
+  <desc id="desc">Vary elapsed history and latent capacity to find the smallest tested state within a fixed risk tolerance.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.card{fill:#fff;stroke:#cad4dc;stroke-width:2}.blue{fill:#edf4f8;stroke:#2f6f99;stroke-width:3}.green{fill:#eaf4ee;stroke:#5f9e7e;stroke-width:3}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.t{font:bold 21px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}.tag{font:bold 18px Arial,sans-serif;fill:#2f6f99}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">How little history is enough to predict the future?</text>
+  <text class="s" x="60" y="91">Measure a finite frontier. Do not claim exact information-theoretic minimality.</text>
+
+  <rect class="card" x="60" y="175" rx="16" width="300" height="210"/>
+  <text class="t" x="85" y="212">Observed history</text>
+  <g fill="#cad4dc">
+    <rect x="88" y="280" width="35" height="45"/><rect x="132" y="268" width="35" height="57"/><rect x="176" y="255" width="35" height="70"/><rect x="220" y="242" width="35" height="83"/><rect x="264" y="230" width="35" height="95"/>
+  </g>
+  <text class="s" x="85" y="353">vary seconds or phase • joints</text>
+  <path d="M360 280 L445 280" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="blue" x="455" y="175" rx="16" width="285" height="210"/>
+  <text class="t" x="480" y="212">Predictive bottleneck</text>
+  <g fill="#2f6f99">
+    <circle cx="500" cy="275" r="12"/><circle cx="535" cy="275" r="12"/><circle cx="570" cy="275" r="12"/><circle cx="605" cy="275" r="12" opacity=".55"/><circle cx="640" cy="275" r="12" opacity=".25"/>
+  </g>
+  <text class="b" x="480" y="320">vary latent channels</text>
+  <text class="s" x="480" y="353">state s summarizes the past</text>
+  <path d="M740 280 L825 280" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="green" x="835" y="175" rx="16" width="305" height="210"/>
+  <text class="t" x="860" y="212">Hidden future</text>
+  <text class="b" x="860" y="255">near-future joints</text>
+  <text class="b" x="860" y="287">next support change</text>
+  <text class="b" x="860" y="319">longer-horizon latent</text>
+  <text class="s" x="860" y="353">risk R(history, capacity)</text>
+
+  <rect class="card" x="175" y="475" rx="16" width="850" height="160"/>
+  <text class="t" x="200" y="512">Operational result</text>
+  <path d="M235 600 L235 535 L490 535" fill="none" stroke="#607284" stroke-width="2"/>
+  <rect x="235" y="582" width="255" height="12" fill="#eaf4ee"/>
+  <path d="M245 545 C300 570 345 584 410 588 C445 590 470 590 490 590" fill="none" stroke="#2f6f99" stroke-width="4"/>
+  <line x1="365" y1="535" x2="365" y2="600" stroke="#e07a4b" stroke-width="3" stroke-dasharray="7 6"/>
+  <text class="tag" x="385" y="572">first CI in ε-band</text>
+  <text class="s" x="240" y="528">risk</text>
+  <text class="s" x="300" y="620">history and capacity</text>
+  <text class="b" x="605" y="550">Choose the smallest state whose 95% CI</text>
+  <text class="b" x="605" y="578">enters the full-context ε-band.</text>
+  <text class="s" x="605" y="610">Then test robustness and label efficiency.</text>
+  <text class="s" x="60" y="686">Kill criterion: a simple phase-plus-velocity baseline matches the learned state on every test.</text>
+</svg>
