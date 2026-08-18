@@ -26,3 +26,15 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+# External (non-Python) build tools used by this project.
+# Tectonic is the LaTeX engine that compiles the URTC paper in docs/. It is a
+# self-contained Rust binary, not a Python package, so it is not listed under
+# [project.dependencies]. The PyPI name "tectonic" is an unrelated placeholder
+# and must not be installed here. Install the real engine with Homebrew:
+#   brew install tectonic
+# Then build the paper from docs/ with:
+#   tectonic urtc2026_sjepa_gait.tex
+# This project was verified against Tectonic 0.17.0.
+[tool.gavd3.external-tools]
+tectonic = { install = "brew install tectonic", verified = "0.17.0" }

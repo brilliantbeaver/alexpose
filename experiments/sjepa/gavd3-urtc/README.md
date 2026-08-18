@@ -169,6 +169,43 @@ A valid five-class video-disjoint evaluation is currently blocked because the no
 
 When more normal videos are added, each outer fold must also pretrain a fresh target encoder without the held-out videos. Grouping only the Random Forest is not enough.
 
+## The missingness-only control, step by step
+
+The pose detector does not always find every landmark. When a joint is occluded, moves off screen, or is returned with low confidence, notebook 02 marks it invalid. This produces a per-sequence validity mask shaped [frames, 33 joints] that records only whether the detector saw each joint at each frame, and nothing about how the person actually moved.
+
+Invalid landmarks are kept as explicit zeros inside the encoders so that the timeline and tensor shape never change. Validity-masked pooling then stops those zero tokens from contributing to the pooled statistics. Even so, a neighboring Transformer token can still carry the failure pattern into the frozen embedding. The missingness-only control measures how much a classifier can learn from that failure pattern by itself.
+
+### Why we build it
+
+Different conditions in this cohort come from different source videos filmed under different conditions. If one condition is systematically harder to track, then the pattern of detector failures becomes correlated with the label. A classifier could then score well by reading which landmarks tend to disappear rather than by reading gait. The control gives an explicit upper bound on how much of the result that shortcut could explain. A strong missingness-only score would not prove the latent classifier uses the shortcut, but it would make a gait-only reading unsafe.
+
+### How it is constructed
+
+The steps in notebook 06 are:
+
+1. Start from `all_valid`, the stacked validity masks for all 96 sequences, shaped [sequences, frames, 33 joints].
+2. Average over the frame axis to get, for each sequence, the fraction of frames in which each of the 33 joints was visible. This is 33 numbers per sequence.
+3. Average over the joint axis to get, for each sequence, the fraction of joints visible in each of the 64 frames. This is 64 numbers per sequence.
+4. Concatenate the two into a 97-number missingness signature per sequence. This signature contains no coordinates, so it describes only which landmarks were missing and when.
+5. Fit the exact same Random Forest, on the exact same train and test split, using this signature in place of the S-JEPA embedding. Everything else is held constant so the only difference is the input.
+
+The signature is saved to `pose_missingness_features.csv`, and the audit scores are saved to `missingness_only_classifier_metrics.csv`.
+
+### What the results show
+
+The control is run on both evaluation splits and compared with the frozen S-JEPA embeddings and the trivial baselines.
+
+|Split|S-JEPA embeddings accuracy|Missingness-only accuracy|Trivial baseline|
+|---|---:|---:|---:|
+|Exact 47/21 exp5 split|0.619|0.333 (macro-F1 0.336)|0.294 majority class|
+|All 96 stratified split|0.621|0.448|0.490 majority class|
+
+Three readings follow. First, missingness is not pure noise, since 0.333 on the exp5 split sits above the 0.294 majority baseline. Detector-failure patterns do carry some label-associated information, and the notebooks state this openly. Second, missingness does not explain the S-JEPA result, because the embeddings reach 0.619 against 0.333 on the identical split, a gap of about 0.29. Third, on the all-96 split the missingness-only score of 0.448 actually falls below the 0.490 majority baseline, so on that split the failure pattern is close to useless while the embeddings still clear both.
+
+### What the control does not do
+
+This audit rules out one specific shortcut. It does not rule out source-video leakage, which the leakage audit reports separately and which remains the central limitation. Every exp5 test sequence shares a source video with training, and a few test sequences were even present during self-supervised pretraining. A clean missingness audit therefore does not make this an independent-subject test. Present the control as evidence against the detector-failure shortcut, never as evidence against confounding in general.
+
 ## Primary sources
 
 - S-JEPA ECCV 2024 paper: https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf
