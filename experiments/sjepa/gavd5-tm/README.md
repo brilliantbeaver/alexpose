@@ -188,7 +188,7 @@ Copy `.env.example` to `.env`. The completed augmented real path uses:
 ```dotenv
 GAVD_MODE=real
 GAVD3_CACHE_DIR=/absolute/path/to/gavd4-vicreg/cache
-GAVD3_ARTIFACT_DIR=/absolute/path/to/gavd4-vicreg/cache/artifacts
+GAVD_ARTIFACT_DIR=/absolute/path/to/gavd5-tm/work/artifacts
 SJEPA_INCLUDE_AUGMENTED_NORMAL=1
 SJEPA_RUN_PROFILE=recommended
 ```
