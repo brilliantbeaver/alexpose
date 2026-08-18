@@ -90,7 +90,7 @@ One model continued through all five stages. Earlier groups remained available t
 |4|Cerebral palsy|159|75|0.594|
 
 Each rerun writes an explicit `training_manifest.json` beneath
-`cache/artifacts/<mode>/cohorts/<cohort>/checkpoints/<model-state-sha256>/runs/<run-id>/`.
+`GAVD_ARTIFACT_DIR/<mode>/cohorts/<cohort>/checkpoints/<model-state-sha256>/runs/<run-id>/`.
 Notebooks 05 and 06 require that manifest, re-hash the loaded tensor state, and put their
 own outputs in an analysis-run directory below the same state hash. A data/config
 fingerprint is retained for lineage, but it is not a model-weight checksum.
