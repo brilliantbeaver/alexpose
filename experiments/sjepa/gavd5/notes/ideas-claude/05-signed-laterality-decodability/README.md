@@ -1,6 +1,8 @@
-# Signed laterality decodability: is left-minus-right asymmetry a linear axis, and does an anatomical mirror flip the decoded sign?
+# Signed laterality decodability
 
-> On source-video-disjoint folds, is a signed left-minus-right laterality axis linearly decodable from the frozen S-JEPA token tensor above a raw-coordinate null by a pre-registered margin, and does the anatomical mirror that swaps left and right landmarks negate the decoded scalar?
+> Is left-minus-right asymmetry a linear axis, and does an anatomical mirror flip the decoded sign?
+>
+> More details: On source-video-disjoint folds, is a signed left-minus-right laterality axis linearly decodable from the frozen S-JEPA token tensor above a raw-coordinate null by a pre-registered margin, and does the anatomical mirror that swaps left and right landmarks negate the decoded scalar?
 
 ## The question in plain words
 

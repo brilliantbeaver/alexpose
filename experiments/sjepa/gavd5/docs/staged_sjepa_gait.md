@@ -79,7 +79,11 @@ $$
 +0.25\mathcal L_{\mathrm{group}}.
 $$
 
-VICReg compares two geometric views. Its invariance term keeps paired views close, its variance hinge discourages constant dimensions, and its covariance term discourages redundant dimensions [8]. The group loss is separate and label-aware. It pulls representations from the same folder together and penalizes condition centroids that are closer than a margin of 1.0. It is zero during normal-only Stage 0.
+VICReg compares projected student features from two geometric views. Its invariance term is their mean squared error, its variance hinge penalizes projected dimensions with batch standard deviation below 1, and its covariance term penalizes squared off-diagonal feature covariance [8]. The logged VICReg value is `25 * invariance + 25 * variance + covariance`; the outer objective multiplies it by 0.05. VICReg does not use condition labels.
+
+The group loss is separate and label-aware. It normalizes unprojected pooled student vectors, forms one normalized centroid per condition, and combines within-condition compactness with $[\max(0,1-d)]^2$ for centroid distances $d$ below margin 1.0. On unit vectors that margin corresponds to a 60-degree angle, or cosine similarity 0.5. It is zero during normal-only Stage 0.
+
+The abbreviated epoch log requires a further distinction. Its `group` field reports only the centroid-separation penalty, not compactness plus separation. Its `std` field is not a loss or a VICReg term: it is the mean per-feature standard deviation of unprojected EMA-target embeddings over the full active corpus after the epoch. Nonzero `std` is evidence against total collapse, but neither it nor a small centroid penalty demonstrates clinically meaningful or generalizable clusters.
 
 ### 3.4 Continuing curriculum
 

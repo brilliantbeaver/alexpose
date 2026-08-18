@@ -1,101 +1,124 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
-  <title>One progressive S-JEPA optimizer step</title>
-  <desc>Prepare a stage-balanced batch, sample target tokens only from 12 permitted landmark identities, compute the JEPA sub-loss plus VICReg and the post-normal group term, then update the student, teacher, and center.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 720" role="img" aria-labelledby="title desc">
+  <title id="title">One progressive S-JEPA training step</title>
+  <desc id="desc">A stage-balanced batch splits into aligned student and teacher lanes. Both lanes move left to right into one total objective and one update card. Solid navy arrows show tensor or loss flow. A single dashed green arrow shows the student encoder weights copied to the EMA teacher.</desc>
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#20364e"/></marker>
+    <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <marker id="ema-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#4f8b6d"/>
+    </marker>
     <style>
-      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
-      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
-      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
-      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
-      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
-      .wt{font:700 20px Arial,Helvetica,sans-serif;fill:#ffffff}
-      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
-      .lbl{font:700 14px Arial,Helvetica,sans-serif;fill:#5f9e7e}
-      .u{font:700 16px Arial,Helvetica,sans-serif;fill:#0f2440}
-      .box{stroke:#20364e;stroke-width:1.75}
-      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
-      .ema{stroke:#5f9e7e;stroke-width:2.5;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+      .heading{font:700 32px Arial,Helvetica,sans-serif;fill:#102840}
+      .subheading{font:16px Arial,Helvetica,sans-serif;fill:#52667a}
+      .step{font:700 13px Arial,Helvetica,sans-serif;letter-spacing:1.2px;fill:#68798a}
+      .lane-title{font:700 14px Arial,Helvetica,sans-serif;letter-spacing:.7px;fill:#52667a}
+      .card-title{font:700 19px Arial,Helvetica,sans-serif;fill:#102840}
+      .card-body{font:15px Arial,Helvetica,sans-serif;fill:#40566d}
+      .dark-title{font:700 19px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .dark-body{font:15px Arial,Helvetica,sans-serif;fill:#dbe5ee}
+      .legend{font:14px Arial,Helvetica,sans-serif;fill:#52667a}
+      .invariant{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .card{stroke:#20364e;stroke-width:1.6}
+      .lane{stroke:#d8dee5;stroke-width:1.2}
+      .divider{stroke:#c5d0da;stroke-width:1.2}
+      .flow{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#flow-arrow)}
+      .ema{stroke:#4f8b6d;stroke-width:2.5;stroke-dasharray:7 6;fill:none;marker-end:url(#ema-arrow)}
     </style>
   </defs>
-  <rect width="1200" height="720" fill="#f7f5ef"/>
-  <text x="64" y="58" class="h">One stage step: JEPA + VICReg + post-normal group loss</text>
 
-  <!-- lane captions -->
-  <text x="64" y="112" class="s">Student path</text>
-  <text x="64" y="428" class="s">Teacher path</text>
+  <rect width="1400" height="720" fill="#f7f5ef"/>
+  <text x="40" y="52" class="heading">One training step</text>
+  <text x="40" y="82" class="subheading">Two aligned forward paths, one objective, then one state update</text>
 
-  <!-- Source clip, vertically centered between the two lanes -->
-  <rect x="64" y="214" width="184" height="96" rx="16" fill="#ffffff" class="box"/>
-  <text x="90" y="262" class="t">Stage batch</text>
-  <text x="90" y="289" class="b">balanced replay</text>
+  <!-- Column headings establish a single left-to-right reading order. -->
+  <text x="40" y="124" class="step">1 · BUILD BATCH</text>
+  <text x="250" y="124" class="step">2 · RUN PARALLEL PATHS</text>
+  <text x="960" y="124" class="step">3 · COMBINE LOSSES</text>
+  <text x="1200" y="124" class="step">4 · UPDATE STATE</text>
 
-  <!-- split from clip into both lanes -->
-  <path d="M256 249V166H254" class="a"/>
-  <path d="M256 275V358H254" class="a"/>
+  <!-- Input -->
+  <rect x="40" y="250" width="170" height="110" rx="14" fill="#ffffff" class="card"/>
+  <text x="64" y="290" class="card-title">Stage batch</text>
+  <text x="64" y="319" class="card-body">balanced replay</text>
+  <text x="64" y="343" class="card-body">+ condition labels</text>
 
-  <!-- STUDENT LANE (top): mask -> view encoder -> predictor -->
-  <rect x="270" y="118" width="186" height="96" rx="16" fill="#f7e7d8" class="box"/>
-  <text x="296" y="155" class="t">Choose targets</text>
-  <text x="296" y="181" class="b">12 landmark IDs</text>
-  <text x="296" y="202" class="b">are eligible</text>
+  <!-- Lane backgrounds keep the paired paths visually aligned. -->
+  <rect x="250" y="140" width="650" height="140" rx="18" fill="#fbf0e7" class="lane"/>
+  <text x="270" y="166" class="lane-title">STUDENT · GRADIENTS ON</text>
 
-  <path d="M456 166H496" class="a"/>
+  <rect x="250" y="330" width="650" height="140" rx="18" fill="#edf5ef" class="lane"/>
+  <text x="270" y="356" class="lane-title">TEACHER · NO GRADIENTS</text>
 
-  <rect x="512" y="118" width="186" height="96" rx="16" fill="#f7e7d8" class="box"/>
-  <text x="538" y="166" class="t">View encoder</text>
-  <text x="538" y="193" class="b">visible tokens</text>
+  <!-- Batch fork: both arrowheads land on the left face of their destination. -->
+  <path d="M210 285H230V210H270" class="flow"/>
+  <path d="M210 325H230V400H270" class="flow"/>
 
-  <path d="M698 166H738" class="a"/>
+  <!-- Student lane -->
+  <rect x="270" y="180" width="170" height="80" rx="12" fill="#f7e1cf" class="card"/>
+  <text x="290" y="212" class="card-title">Masked view</text>
+  <text x="290" y="239" class="card-body">12 eligible IDs</text>
 
-  <rect x="754" y="118" width="186" height="96" rx="16" fill="#ece6f6" class="box"/>
-  <text x="780" y="166" class="t">Predictor</text>
-  <text x="780" y="193" class="b">fill mask tokens</text>
+  <path d="M440 220H480" class="flow"/>
 
-  <!-- TEACHER LANE (bottom): full target -> EMA encoder -> gather -->
-  <rect x="270" y="310" width="186" height="96" rx="16" fill="#e6f2ea" class="box"/>
-  <text x="296" y="358" class="t">Full target</text>
-  <text x="296" y="385" class="b">no input masking</text>
+  <rect x="480" y="180" width="170" height="80" rx="12" fill="#f7e1cf" class="card"/>
+  <text x="500" y="212" class="card-title">View encoder</text>
+  <text x="500" y="239" class="card-body">visible tokens</text>
 
-  <path d="M456 358H496" class="a"/>
+  <path d="M650 220H690" class="flow"/>
 
-  <rect x="512" y="310" width="186" height="96" rx="16" fill="#e6f2ea" class="box"/>
-  <text x="538" y="358" class="t">EMA encoder</text>
-  <text x="538" y="385" class="b">target, all tokens</text>
+  <rect x="690" y="180" width="170" height="80" rx="12" fill="#ebe4f5" class="card"/>
+  <text x="710" y="212" class="card-title">Predictor</text>
+  <text x="710" y="239" class="card-body">masked latents</text>
 
-  <path d="M698 358H738" class="a"/>
+  <!-- Teacher lane -->
+  <rect x="270" y="370" width="170" height="80" rx="12" fill="#dfeee4" class="card"/>
+  <text x="290" y="402" class="card-title">Full target</text>
+  <text x="290" y="429" class="card-body">no input masking</text>
 
-  <rect x="754" y="310" width="186" height="96" rx="16" fill="#e6f2ea" class="box"/>
-  <text x="780" y="358" class="t">Gather targets</text>
-  <text x="780" y="385" class="b">after attention</text>
+  <path d="M440 410H480" class="flow"/>
 
-  <!-- predictor drops, gather rises; both supply the JEPA term -->
-  <path d="M847 214V246H984" class="a"/>
-  <path d="M847 310V278H984" class="a"/>
+  <rect x="480" y="370" width="170" height="80" rx="12" fill="#dfeee4" class="card"/>
+  <text x="500" y="402" class="card-title">EMA teacher</text>
+  <text x="500" y="429" class="card-body">all target latents</text>
 
-  <!-- EMA feedback: student view-encoder weights copied down to the EMA encoder -->
-  <path d="M605 214V294" class="ema"/>
-  <text x="619" y="266" class="lbl">EMA copy</text>
+  <path d="M650 410H690" class="flow"/>
 
-  <!-- Total objective: group pressure is inactive during normal-only Stage 0. -->
-  <rect x="990" y="195" width="160" height="135" rx="16" fill="#20364e"/>
-  <text x="1010" y="232" class="wt">Total loss</text>
-  <text x="1010" y="259" class="ws">JEPA</text>
-  <text x="1010" y="282" class="ws">+ VICReg</text>
-  <text x="1010" y="305" class="ws">+ group (S1–4)</text>
+  <rect x="690" y="370" width="170" height="80" rx="12" fill="#dfeee4" class="card"/>
+  <text x="710" y="402" class="card-title">Select targets</text>
+  <text x="710" y="429" class="card-body">same positions</text>
 
-  <!-- Total objective down to the Updates card -->
-  <path d="M1070 330V444" class="a"/>
+  <!-- The one exceptional connector is explicitly styled and labeled as state flow. -->
+  <path d="M565 260V370" class="ema"/>
+  <rect x="576" y="294" width="92" height="24" rx="12" fill="#f7f5ef"/>
+  <text x="589" y="311" class="legend" fill="#4f8b6d">EMA weights</text>
 
-  <!-- Updates card: one update per row, bold action then its note -->
-  <rect x="942" y="460" width="208" height="160" rx="16" fill="#e7f0f8" class="box"/>
-  <text x="968" y="490" class="t">Updates</text>
-  <line x1="942" y1="506" x2="1150" y2="506" stroke="#c4cdd8" stroke-width="1.5"/>
-  <text x="968" y="538" class="u">AdamW <tspan class="s"> objective</tspan></text>
-  <text x="968" y="568" class="u">Teacher EMA <tspan class="s"> copy</tspan></text>
-  <text x="968" y="598" class="u">Center EMA <tspan class="s"> stats</tspan></text>
+  <!-- Both lane outputs enter the same face of the objective card. -->
+  <path d="M860 220H920V270H960" class="flow"/>
+  <path d="M860 410H920V330H960" class="flow"/>
 
-  <!-- Invariants banner -->
-  <rect x="64" y="626" width="836" height="46" rx="16" fill="#20364e"/>
-  <text x="90" y="655" class="w">Invariants: at least one target and one visible token, zero forbidden targets, no target gradients.</text>
+  <rect x="960" y="230" width="200" height="140" rx="14" fill="#20364e"/>
+  <text x="984" y="264" class="dark-title">Total objective</text>
+  <line x1="984" y1="279" x2="1136" y2="279" stroke="#63778b" stroke-width="1.2"/>
+  <text x="984" y="306" class="dark-body">JEPA · match latents</text>
+  <text x="984" y="331" class="dark-body">VICReg · two views</text>
+  <text x="984" y="356" class="dark-body">Group · stages 1–4</text>
+
+  <path d="M1160 300H1200" class="flow"/>
+
+  <rect x="1200" y="230" width="160" height="140" rx="14" fill="#e5eef6" class="card"/>
+  <text x="1220" y="264" class="card-title">Update</text>
+  <line x1="1220" y1="279" x2="1340" y2="279" class="divider"/>
+  <text x="1220" y="306" class="card-body">AdamW · student</text>
+  <text x="1220" y="331" class="card-body">EMA · teacher</text>
+  <text x="1220" y="356" class="card-body">EMA · center</text>
+
+  <!-- A compact legend explains connector semantics without another visual branch. -->
+  <path d="M40 525H94" class="flow"/>
+  <text x="108" y="530" class="legend">tensor or loss flow · always left to right</text>
+  <path d="M460 525H514" class="ema"/>
+  <text x="528" y="530" class="legend">EMA weight transfer · the only dashed connector</text>
+
+  <rect x="40" y="580" width="1320" height="54" rx="14" fill="#20364e"/>
+  <text x="68" y="613" class="invariant">Invariants · ≥1 target · ≥1 visible token · zero forbidden targets · no target gradients</text>
 </svg>

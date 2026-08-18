@@ -186,9 +186,9 @@ Only valid, authorized hidden positions contribute.
 
 Two geometric views of the same sequence pass through the view encoder. Valid authorized features are pooled and projected. VICReg then applies three ideas [6]:
 
-- **Invariance:** paired views of the same sequence should agree.
-- **Variance:** each feature dimension should keep enough spread.
-- **Covariance:** different feature dimensions should avoid repeating the same signal.
+- **Invariance:** paired views of the same sequence should agree. The implementation uses mean squared error between the two projected vectors.
+- **Variance:** each projected feature dimension should keep enough spread. For each view, the implementation measures population standard deviation across the batch and applies `max(0, 1 - standard deviation)`. A dimension at or above 1 has no variance penalty; a dimension with standard deviation 0.7 contributes a shortfall of 0.3.
+- **Covariance:** different projected dimensions should avoid repeating the same changing signal. The implementation centers each view, constructs its feature covariance matrix, squares the off-diagonal entries, and averages them. The covariance diagonal is excluded because it describes a feature's own variance rather than redundancy between different features.
 
 The implemented inner expression is:
 
@@ -196,13 +196,46 @@ $$
 L_{VICReg}=25L_{inv}+25L_{var}+L_{cov}.
 $$
 
-VICReg can resist a constant representation. It does not know that two folder labels should form different groups.
+The logged `VICReg` number is this inner expression averaged across the epoch. The optimizer then multiplies it by the outer weight 0.05. VICReg uses projected features from two trainable-student views. It can resist a constant or highly redundant representation, but it does not read folder labels and does not directly ask health-condition groups to separate.
+
+The commonly printed `std` value is not the VICReg variance term. After an epoch, the code runs the whole active corpus through the EMA target encoder, pools valid authorized tokens without the VICReg projector, computes the population standard deviation of each feature dimension, and averages those standard deviations. This is a read-only representation-health diagnostic. A nonzero value is evidence against total collapse; it has no required target of 1 and cannot establish that the variation represents gait rather than nuisance information.
 
 ### 8.3 Label-aware group pressure
 
-After Stage 0, the model also receives condition labels. The group term pulls normalized examples toward their label centroid and penalizes centroid pairs that are closer than margin 1.0.
+After Stage 0, the model also receives condition labels. This calculation uses the unprojected pooled student vector from the first geometric view. Each sequence vector is scaled to unit length. Vectors with the same condition label are averaged to form a condition centroid, and that centroid is normalized again.
+
+The group objective has two parts. Compactness is the mean squared distance from a normalized sequence vector to its own normalized condition centroid. Separation considers every centroid pair. For pair distance $d_{ij}$ and margin 1.0, it applies:
+
+$$
+L_{sep}
+=
+\operatorname{mean}_{i<j}
+\left[\max(0,1-d_{ij})\right]^2.
+$$
+
+A pair at distance 1.2 contributes 0, 0.9 contributes 0.01, and 0.5 contributes 0.25. Since unit-vector distances range from 0 to 2, margin 1.0 corresponds to at least a 60-degree angle, or cosine similarity no greater than 0.5, between centroid directions. The complete optimized term is:
+
+$$
+L_{group}=L_{compact}+L_{sep}.
+$$
+
+The abbreviated training printout is potentially confusing: `group` reports only $L_{sep}$, not $L_{group}$. The printed value is averaged across condition pairs and balanced batches, so it cannot be inverted into one exact centroid distance. A small number means batch centroid pairs usually met or nearly met the margin. It does not mean every sequence is well classified.
 
 This is supervised information. It is correct to call the first stage label-free representation learning. It is not correct to call the complete five-stage curriculum label-free.
+
+### 8.4 Read one abbreviated training line
+
+For
+
+```text
+JEPA 0.4585  VICReg 12.8508  group 0.0005  std 0.4297
+```
+
+- `JEPA` and `VICReg` are epoch means of optimizer-batch losses before their outer combination.
+- `group 0.0005` is the epoch-mean centroid separation penalty only. Optimization also includes compactness and multiplies their sum by 0.25.
+- `std 0.4297` is one post-epoch whole-corpus EMA-teacher diagnostic. It is neither a loss nor a VICReg projector statistic.
+
+These values have different definitions and scales. They should be trended against their own histories, not compared to one another as if the smallest number were automatically the least important term.
 
 ## 9. Read training health without overclaiming
 
