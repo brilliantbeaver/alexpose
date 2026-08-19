@@ -169,7 +169,7 @@ Only F1 is an architecture win. F2 is a valuable negative result, F3 prevents a 
 
 Both notebooks default to `GAVD_MODE=smoke`. Smoke mode uses a planted sign-flipping toy signal solely to test plumbing; every artifact is labelled `illustrative`. `nb_09a` now uses exactly 05a's startup requirements: real mode activates only when the selected curriculum-final checkpoint **and** `poses/` cache exist under the usual GAVD artifact directory; otherwise it falls back to smoke mode. `nb_09b`, like 05b, requires no checkpoint or pose cache at all. An optional `IDEA9_RUN_ID`, output directory, and comparison manifest can make a real architecture run traceable, but their absence does not stop the contract or futures notebooks. Neither notebook downloads AMASS, MoVi, or clinical data, and neither labels a full-corpus GAVD encoder as source-held-out generalization.
 
-`nb_09a` mirrors `nb_05a`: environment and frozen contract; mirror/swap operators; paired modules and unconstrained control; layer/teacher tests and health gates; smoke or explicit-real run; core comparison; figures; JSON bundle.
+`nb_09a` mirrors `nb_05a`: environment and frozen contract; mirror/swap operators; paired modules and unconstrained control; layer/teacher tests and health gates; smoke or explicit-real run; core comparison; figures; JSON bundle. It uses Jupyter's standard `python3` kernel metadata, and embeds its saved architecture-contract PNG in the notebook output so the visual audit remains available after headless execution.
 
 `nb_09b` mirrors `nb_05b`: frozen practical margins and scoring; the six futures; decision table and expected-shape panels; AMASS split/overlap scaffold; MoVi actor-held-out scaffold; JSON bundle.
 
