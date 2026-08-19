@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The tensor symbols used throughout the model</title>
+  <desc id="desc">A legend maps the batch, frame, joint, coordinate, segment, token, width, visible, and masked dimensions.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">The tensor symbols used throughout the model</tspan></text>
+  <rect x="48" y="112" width="340" height="228" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="72" y="148" class="t" text-anchor="start"><tspan x="72" dy="0">Raw pose dimensions</tspan></text><text x="72" y="184" class="b" text-anchor="start"><tspan x="72" dy="0">B  batch size</tspan><tspan x="72" dy="26">F  frames</tspan><tspan x="72" dy="26">V  joints</tspan><tspan x="72" dy="26">C  coordinates per joint</tspan></text><rect x="430" y="112" width="340" height="228" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="454" y="148" class="t" text-anchor="start"><tspan x="454" dy="0">Patch dimensions</tspan></text><text x="454" y="184" class="b" text-anchor="start"><tspan x="454" dy="0">L  frames per segment</tspan><tspan x="454" dy="26">S = F / L  segments</tspan><tspan x="454" dy="26">N = S x V  total tokens</tspan><tspan x="454" dy="26">D  encoder width</tspan></text><rect x="812" y="112" width="340" height="228" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="836" y="148" class="t" text-anchor="start"><tspan x="836" dy="0">Mask dimensions</tspan></text><text x="836" y="184" class="b" text-anchor="start"><tspan x="836" dy="0">M  hidden target tokens</tspan><tspan x="836" dy="26">K = N - M  visible tokens</tspan><tspan x="836" dy="26">P  predictor width</tspan><tspan x="836" dy="26">Current wrapper sets P = D</tspan></text><rect x="48" y="400" width="1104" height="176" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/><text x="72" y="436" class="t" text-anchor="start"><tspan x="72" dy="0">Standard 64-frame example</tspan></text><text x="72" y="472" class="b" text-anchor="start"><tspan x="72" dy="0">F=64, V=33, C=3, L=4, S=16, N=528</tspan><tspan x="72" dy="26">Encoder input [B,64,33,3]  |  visible output [B,K,D]</tspan><tspan x="72" dy="26">Predictor and selected teacher target [B,M,D]</tspan></text><rect x="338" y="620" width="524" height="36" rx="18" fill="#f7e7d8" stroke="#e07a4b" stroke-width="1.5"/><text x="600.0" y="644" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">D=96 in the recommended real profile</tspan></text>
+</svg>

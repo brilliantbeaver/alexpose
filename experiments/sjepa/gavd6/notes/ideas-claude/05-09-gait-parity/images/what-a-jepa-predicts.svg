@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" role="img" aria-labelledby="title desc">
+  <title id="title">What exactly is the model asked to guess?</title>
+  <desc id="desc">A JEPA predicts the description of the hidden part of the walk, not the picture. That is why it learns what the motion means instead of memorising tracker noise.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
+    <marker id="arrow-g" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#94a3b8"/></marker>
+    <marker id="v-open" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#334155" stroke-width="1.6"/></marker>
+    <marker id="v-start" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto"><path d="M9 1 L1 5 L9 9" fill="none" stroke="#334155" stroke-width="1.6"/></marker>
+    <filter id="wob" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.7"/></filter>
+    <style>
+      .t{font:700 30px Arial,Helvetica,sans-serif;fill:#0f172a}
+      .h{font:700 21px Arial,Helvetica,sans-serif;fill:#0f172a;letter-spacing:.5px}
+      .hg{font:700 21px Arial,Helvetica,sans-serif;fill:#64748b;letter-spacing:.5px}
+      .a{font:400 17px Arial,Helvetica,sans-serif;fill:#334155}
+      .ag{font:400 17px Arial,Helvetica,sans-serif;fill:#64748b}
+      .ab{font:700 17px Arial,Helvetica,sans-serif;fill:#0f172a}
+      .aw{font:700 17px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .w{font:700 20px Arial,Helvetica,sans-serif;fill:#ffffff}
+    </style>
+  </defs>
+
+  <rect width="1000" height="680" fill="#f8fafc"/>
+  <rect x="0.5" y="0.5" width="999" height="679" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+
+  <text x="500" y="44" text-anchor="middle" class="t">What exactly is the model asked to guess?</text>
+
+  <!-- ================= SHARED FILMSTRIP ================= -->
+  <g fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5">
+    <rect x="182" y="62" width="76" height="80"/><rect x="262" y="62" width="76" height="80"/>
+    <rect x="342" y="62" width="76" height="80"/><rect x="422" y="62" width="76" height="80"/>
+    <rect x="502" y="62" width="76" height="80"/><rect x="582" y="62" width="76" height="80"/>
+    <rect x="662" y="62" width="76" height="80"/><rect x="742" y="62" width="76" height="80"/>
+  </g>
+  <g fill="#1e293b">
+    <circle cx="220" cy="80" r="7"/><circle cx="300" cy="80" r="7"/><circle cx="380" cy="80" r="7"/>
+    <circle cx="460" cy="80" r="7"/><circle cx="540" cy="80" r="7"/><circle cx="620" cy="80" r="7"/>
+    <circle cx="700" cy="80" r="7"/><circle cx="780" cy="80" r="7"/>
+  </g>
+  <g stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round">
+    <path d="M220 87 V106 M220 93 L236 101 M220 93 L204 100 M220 106 L204 128 M220 106 L236 128"/>
+    <path d="M300 87 V106 M300 93 L318 101 M300 93 L288 100 M300 106 L292 128 M300 106 L318 128"/>
+    <path d="M380 87 V106 M380 93 L396 101 M380 93 L366 100 M380 106 L382 128 M380 106 L396 128"/>
+    <path d="M460 87 V106 M460 93 L472 101 M460 93 L446 100 M460 106 L470 128 M460 106 L468 128"/>
+    <path d="M540 87 V106 M540 93 L548 101 M540 93 L524 100 M540 106 L556 128 M540 106 L534 128"/>
+    <path d="M620 87 V106 M620 93 L604 101 M620 93 L636 100 M620 106 L636 128 M620 106 L606 128"/>
+    <path d="M700 87 V106 M700 93 L684 101 M700 93 L714 100 M700 106 L708 128 M700 106 L682 128"/>
+    <path d="M780 87 V106 M780 93 L764 101 M780 93 L794 100 M780 106 L778 128 M780 106 L764 128"/>
+  </g>
+  <!-- hidden block over frames 4 and 5 -->
+  <rect x="422" y="62" width="156" height="80" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+  <text x="500" y="96" text-anchor="middle" class="w">HIDDEN</text>
+  <text x="500" y="120" text-anchor="middle" class="aw">frames 4 to 5</text>
+  <text x="440" y="162" text-anchor="middle" class="a">one gait cycle, 8 frames in time order</text>
+
+  <!-- arrow to lane 1 -->
+  <path d="M700 144 V168" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="712" y="162" class="a">the same clip</text>
+  <!-- routed arrow to lane 2 (forks to both sub-paths) -->
+  <text x="124" y="92" text-anchor="middle" class="a">the same clip</text>
+  <path d="M182 104 H76 V391 H172" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M76 391 V493 H172" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- ================= LANE 1 : NOT a JEPA ================= -->
+  <rect x="160" y="172" width="800" height="132" rx="14" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+  <circle cx="186" cy="194" r="11" fill="none" stroke="#64748b" stroke-width="2.5"/>
+  <path d="M181 189 L191 199 M191 189 L181 199" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="206" y="201" class="hg">NOT WHAT A JEPA DOES</text>
+
+  <rect x="178" y="212" width="300" height="80" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="190" y="234" class="ab" fill="#64748b">reconstruct every coordinate</text>
+  <g filter="url(#wob)">
+    <circle cx="222" cy="252" r="8" fill="#94a3b8"/>
+    <path d="M222 260 V273 M222 264 L208 271 M222 264 L237 269 M222 273 L211 288 M222 273 L234 286" fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="226" cy="250" r="8" fill="#cbd5e1"/>
+    <path d="M226 258 V271 M226 262 L213 270 M226 262 L241 266 M226 271 L216 287 M226 271 L239 284" fill="none" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <text x="272" y="252" class="ag">x = 0.4123</text>
+  <text x="272" y="270" class="ag">y = −0.9982</text>
+  <text x="272" y="288" class="ag">z = 0.0071</text>
+
+  <text x="496" y="228" class="ag">must nail the exact position of the left fifth toe,</text>
+  <text x="496" y="252" class="ag">plus the tracker's jitter and noise.</text>
+  <text x="496" y="276" class="ag">Effort spent on detail that does not matter.</text>
+
+  <!-- ================= LANE 2 : what a JEPA does ================= -->
+  <rect x="160" y="316" width="800" height="222" rx="14" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <path d="M178 338 L185 346 L197 330" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="206" y="344" class="h">WHAT A JEPA DOES</text>
+
+  <!-- describer -->
+  <rect x="178" y="356" width="194" height="70" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="190" y="378" class="ab">DESCRIBER</text>
+  <text x="190" y="398" class="a">sees the TRUE hidden</text>
+  <text x="190" y="417" class="a">frames 4 to 5</text>
+  <!-- EMA link -->
+  <path d="M196 456 V432" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#v-open)"/>
+  <text x="210" y="450" class="a">slowly copied from</text>
+  <!-- predictor -->
+  <rect x="178" y="458" width="194" height="70" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="190" y="480" class="ab">PREDICTOR</text>
+  <text x="190" y="500" class="a">sees only the</text>
+  <text x="190" y="519" class="a">visible frames</text>
+
+  <path d="M374 391 H390" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M374 493 L390 452" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- slot highlight bands (behind the cells) -->
+  <g fill="#e2e8f0">
+    <rect x="438" y="372" width="28" height="32" rx="4"/><rect x="576" y="372" width="28" height="32" rx="4"/>
+    <rect x="438" y="428" width="28" height="30" rx="4"/><rect x="576" y="428" width="28" height="30" rx="4"/>
+  </g>
+
+  <text x="396" y="368" class="a">the true description</text>
+  <g fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5">
+    <rect x="396" y="376" width="20" height="24" rx="3"/><rect x="419" y="376" width="20" height="24" rx="3"/>
+    <rect x="442" y="376" width="20" height="24" rx="3"/><rect x="465" y="376" width="20" height="24" rx="3"/>
+    <rect x="488" y="376" width="20" height="24" rx="3"/><rect x="511" y="376" width="20" height="24" rx="3"/>
+    <rect x="534" y="376" width="20" height="24" rx="3"/><rect x="557" y="376" width="20" height="24" rx="3"/>
+    <rect x="580" y="376" width="20" height="24" rx="3"/><rect x="603" y="376" width="20" height="24" rx="3"/>
+    <rect x="626" y="376" width="20" height="24" rx="3"/><rect x="649" y="376" width="20" height="24" rx="3"/>
+  </g>
+
+  <text x="396" y="424" class="a">the predictor's guess</text>
+  <g fill="#ffffff" stroke="#1d4ed8" stroke-width="1.5">
+    <rect x="396" y="432" width="20" height="24" rx="3"/><rect x="419" y="432" width="20" height="24" rx="3"/>
+    <rect x="442" y="432" width="20" height="24" rx="3"/><rect x="465" y="432" width="20" height="24" rx="3"/>
+    <rect x="488" y="432" width="20" height="24" rx="3"/><rect x="511" y="432" width="20" height="24" rx="3"/>
+    <rect x="534" y="432" width="20" height="24" rx="3"/><rect x="557" y="432" width="20" height="24" rx="3"/>
+    <rect x="580" y="432" width="20" height="24" rx="3"/><rect x="603" y="432" width="20" height="24" rx="3"/>
+    <rect x="626" y="432" width="20" height="24" rx="3"/><rect x="649" y="432" width="20" height="24" rx="3"/>
+  </g>
+
+  <!-- slot glosses -->
+  <text x="452" y="478" text-anchor="middle" class="ab">slot 3</text>
+  <text x="452" y="498" text-anchor="middle" class="a">how far the</text>
+  <text x="452" y="516" text-anchor="middle" class="a">swinging leg has</text>
+  <text x="452" y="534" text-anchor="middle" class="a">travelled</text>
+  <text x="590" y="478" text-anchor="middle" class="ab">slot 9</text>
+  <text x="590" y="498" text-anchor="middle" class="a">how much</text>
+  <text x="590" y="516" text-anchor="middle" class="a">weight is on</text>
+  <text x="590" y="534" text-anchor="middle" class="a">the left</text>
+
+  <!-- bracket + error -->
+  <text x="678" y="368" class="ab">match these two lists</text>
+  <path d="M678 376 H692 V456 H678" fill="none" stroke="#0f172a" stroke-width="2"/>
+  <path d="M706 404 V428" stroke="#334155" stroke-width="2" marker-end="url(#v-open)" marker-start="url(#v-start)"/>
+  <text x="718" y="422" class="ab">error</text>
+
+  <!-- caveat chip -->
+  <rect x="678" y="446" width="272" height="80" rx="10" fill="#e2e8f0"/>
+  <text x="694" y="472" class="a">These labels are examples.</text>
+  <text x="694" y="492" class="a">The model learns what its</text>
+  <text x="694" y="512" class="a">own numbers are useful for.</text>
+
+  <!-- ================= footer ================= -->
+  <text x="500" y="558" text-anchor="middle" class="a">Predicting the description rather than the picture is the “JE” in JEPA:</text>
+  <text x="500" y="578" text-anchor="middle" class="a">Joint-Embedding Predictive Architecture. Embedding = the short list of numbers.</text>
+
+  <rect x="130" y="592" width="740" height="48" rx="14" fill="#0f172a"/>
+  <text x="500" y="623" text-anchor="middle" class="w">Predict the description of the hidden part, not the picture.</text>
+</svg>

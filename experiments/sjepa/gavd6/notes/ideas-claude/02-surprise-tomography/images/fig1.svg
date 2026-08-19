@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Per-condition surprise tomograms</title>
+  <desc id="d1">Illustrative expected-shape schematic. Four source-averaged surprise images, one per condition, each a grid of 12 maskable joints by 16 time segments, showing how a normal-only predictor is expected to be surprised in different anatomical and temporal patterns. Encoder-exposure labels mark every panel as transductive.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h  { font: 700 32px Arial, Helvetica, sans-serif; fill:#0f2440; }
+      .t  { font: 700 20px Arial, Helvetica, sans-serif; fill:#0f2440; }
+      .b  { font: 16px Arial, Helvetica, sans-serif; fill:#33475e; }
+      .s  { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+      .rowlab { font: 9px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+      .expo { font: 700 13px Arial, Helvetica, sans-serif; fill:#a44c26; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text class="h" x="48" y="60">Surprise tomograms: where a normal-only predictor fails</text>
+  <text class="s" x="48" y="88">Illustrative expected shape. Each panel: 12 maskable joints (rows) x 16 time segments (columns). Checkpoint d0acc262.</text>
+
+  <!-- ============ colour legend (own row, right, clear of title) ============ -->
+  <g>
+    <text class="s" x="760" y="88">low</text>
+    <rect x="786" y="76" width="16" height="14" fill="#e7f0f8" stroke="#c4cdd8" stroke-width="1"/>
+    <rect x="802" y="76" width="16" height="14" fill="#cfe0ee" stroke="#c4cdd8" stroke-width="1"/>
+    <rect x="818" y="76" width="16" height="14" fill="#f7e7d8" stroke="#c4cdd8" stroke-width="1"/>
+    <rect x="834" y="76" width="16" height="14" fill="#eeb98f" stroke="#c4cdd8" stroke-width="1"/>
+    <rect x="850" y="76" width="16" height="14" fill="#e07a4b" stroke="#c4cdd8" stroke-width="1"/>
+    <rect x="866" y="76" width="16" height="14" fill="#c0483a" stroke="#c4cdd8" stroke-width="1"/>
+    <text class="s" x="890" y="88">high masked-token error</text>
+  </g>
+
+  <!--
+    Layout: 2x2 cards.
+    Left cards  x=48,  width=520 (right edge 568).
+    Right cards x=624, width=520 (right edge 1144, 56px from canvas edge; 56px gap between columns).
+    Top row    y=100, height=244 (bottom 344).
+    Bottom row y=400, height=244 (bottom 644, 56px gap; footer 28px below).
+    Header stack per card: title (top+32), exposure tag (top+58), reading key (top+84).
+    Heatmap grid per panel: 16 columns x 16px = 256px wide ; 12 rows x 10px = 120px tall.
+    Grid top at top+96; grid bottom at top+216, leaving >=22px caption-free inset to the card bottom.
+    Row order top->bottom: shoulders(2), hips(2), knees(2), ankles(2), heels(2), foot index(2), L then R.
+  -->
+
+  <!-- ===================== PANEL 1: stroke (top-left) ===================== -->
+  <g>
+    <rect x="48" y="100" width="520" height="244" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="70" y="132">Stroke</text>
+    <text class="expo" x="70" y="158">transductive: encoder saw these sources</text>
+    <text class="s" x="70" y="184">reading key: unilateral (paretic-side) ankle/heel/foot in swing</text>
+
+    <!-- row labels -->
+    <g transform="translate(288,196)">
+      <text class="rowlab" x="-8" y="8"   text-anchor="end">shoulder L</text>
+      <text class="rowlab" x="-8" y="18"  text-anchor="end">shoulder R</text>
+      <text class="rowlab" x="-8" y="28"  text-anchor="end">hip L</text>
+      <text class="rowlab" x="-8" y="38"  text-anchor="end">hip R</text>
+      <text class="rowlab" x="-8" y="48"  text-anchor="end">knee L</text>
+      <text class="rowlab" x="-8" y="58"  text-anchor="end">knee R</text>
+      <text class="rowlab" x="-8" y="68"  text-anchor="end">ankle L</text>
+      <text class="rowlab" x="-8" y="78"  text-anchor="end">ankle R</text>
+      <text class="rowlab" x="-8" y="88"  text-anchor="end">heel L</text>
+      <text class="rowlab" x="-8" y="98"  text-anchor="end">heel R</text>
+      <text class="rowlab" x="-8" y="108" text-anchor="end">foot L</text>
+      <text class="rowlab" x="-8" y="118" text-anchor="end">foot R</text>
+    </g>
+    <!-- heatmap 256x120 at (294,196); paretic (right) ankle/heel/foot hot mid-late -->
+    <g transform="translate(294,196)">
+      <rect x="0" y="0" width="256" height="120" fill="#e7f0f8"/>
+      <rect x="0" y="0"  width="256" height="10" fill="#cfe0ee"/>
+      <rect x="0" y="20" width="256" height="10" fill="#cfe0ee"/>
+      <!-- ankle R (row idx 7 -> y=70) -->
+      <rect x="112" y="70" width="32" height="10" fill="#eeb98f"/>
+      <rect x="144" y="70" width="48" height="10" fill="#e07a4b"/>
+      <rect x="192" y="70" width="32" height="10" fill="#c0483a"/>
+      <!-- heel R (row idx 9 -> y=90) -->
+      <rect x="128" y="90" width="32" height="10" fill="#eeb98f"/>
+      <rect x="160" y="90" width="48" height="10" fill="#e07a4b"/>
+      <rect x="208" y="90" width="32" height="10" fill="#c0483a"/>
+      <!-- foot R (row idx 11 -> y=110) -->
+      <rect x="144" y="110" width="48" height="10" fill="#e07a4b"/>
+      <rect x="192" y="110" width="48" height="10" fill="#c0483a"/>
+      <!-- mild left-side warmth -->
+      <rect x="160" y="60" width="32" height="10" fill="#f7e7d8"/>
+      <rect x="160" y="80" width="32" height="10" fill="#f7e7d8"/>
+      <rect x="0" y="0" width="256" height="120" fill="none" stroke="#20364e" stroke-width="1.25"/>
+    </g>
+  </g>
+
+  <!-- ===================== PANEL 2: Parkinson's (top-right) ===================== -->
+  <g>
+    <rect x="624" y="100" width="520" height="244" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="646" y="132">Parkinson's</text>
+    <text class="expo" x="646" y="158">transductive: encoder saw these sources</text>
+    <text class="s" x="646" y="184">reading key: asymmetric shoulder/hip sway, cadence stripes</text>
+
+    <g transform="translate(864,196)">
+      <text class="rowlab" x="-8" y="8"   text-anchor="end">shoulder L</text>
+      <text class="rowlab" x="-8" y="18"  text-anchor="end">shoulder R</text>
+      <text class="rowlab" x="-8" y="28"  text-anchor="end">hip L</text>
+      <text class="rowlab" x="-8" y="38"  text-anchor="end">hip R</text>
+      <text class="rowlab" x="-8" y="48"  text-anchor="end">knee L</text>
+      <text class="rowlab" x="-8" y="58"  text-anchor="end">knee R</text>
+      <text class="rowlab" x="-8" y="68"  text-anchor="end">ankle L</text>
+      <text class="rowlab" x="-8" y="78"  text-anchor="end">ankle R</text>
+      <text class="rowlab" x="-8" y="88"  text-anchor="end">heel L</text>
+      <text class="rowlab" x="-8" y="98"  text-anchor="end">heel R</text>
+      <text class="rowlab" x="-8" y="108" text-anchor="end">foot L</text>
+      <text class="rowlab" x="-8" y="118" text-anchor="end">foot R</text>
+    </g>
+    <!-- heatmap: shoulder+hip asymmetric warmth plus vertical cadence stripes -->
+    <g transform="translate(870,196)">
+      <rect x="0" y="0" width="256" height="120" fill="#e7f0f8"/>
+      <!-- cadence stripes across whole body -->
+      <rect x="48" y="0"  width="16" height="120" fill="#f7e7d8"/>
+      <rect x="112" y="0" width="16" height="120" fill="#f7e7d8"/>
+      <rect x="176" y="0" width="16" height="120" fill="#f7e7d8"/>
+      <rect x="240" y="0" width="16" height="120" fill="#f7e7d8"/>
+      <!-- shoulder L (row0) hot asymmetric -->
+      <rect x="0" y="0"  width="256" height="10" fill="#eeb98f"/>
+      <rect x="48" y="0" width="16" height="10" fill="#e07a4b"/>
+      <rect x="176" y="0" width="16" height="10" fill="#e07a4b"/>
+      <!-- hip L (row2) moderate hot -->
+      <rect x="0" y="20" width="256" height="10" fill="#f7e7d8"/>
+      <rect x="112" y="20" width="16" height="10" fill="#e07a4b"/>
+      <rect x="0" y="0" width="256" height="120" fill="none" stroke="#20364e" stroke-width="1.25"/>
+    </g>
+  </g>
+
+  <!-- ===================== PANEL 3: cerebral palsy (bottom-left) ===================== -->
+  <g>
+    <rect x="48" y="400" width="520" height="244" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="70" y="432">Cerebral palsy</text>
+    <text class="expo" x="70" y="458">transductive: encoder saw these sources</text>
+    <text class="s" x="70" y="484">reading key: crouch (bilateral knee/ankle), reduced hip extension</text>
+
+    <g transform="translate(288,496)">
+      <text class="rowlab" x="-8" y="8"   text-anchor="end">shoulder L</text>
+      <text class="rowlab" x="-8" y="18"  text-anchor="end">shoulder R</text>
+      <text class="rowlab" x="-8" y="28"  text-anchor="end">hip L</text>
+      <text class="rowlab" x="-8" y="38"  text-anchor="end">hip R</text>
+      <text class="rowlab" x="-8" y="48"  text-anchor="end">knee L</text>
+      <text class="rowlab" x="-8" y="58"  text-anchor="end">knee R</text>
+      <text class="rowlab" x="-8" y="68"  text-anchor="end">ankle L</text>
+      <text class="rowlab" x="-8" y="78"  text-anchor="end">ankle R</text>
+      <text class="rowlab" x="-8" y="88"  text-anchor="end">heel L</text>
+      <text class="rowlab" x="-8" y="98"  text-anchor="end">heel R</text>
+      <text class="rowlab" x="-8" y="108" text-anchor="end">foot L</text>
+      <text class="rowlab" x="-8" y="118" text-anchor="end">foot R</text>
+    </g>
+    <!-- heatmap: bilateral knee+ankle sustained hot, hips warm, broad -->
+    <g transform="translate(294,496)">
+      <rect x="0" y="0" width="256" height="120" fill="#e7f0f8"/>
+      <!-- hips warm (rows 2,3 -> y=20,30) -->
+      <rect x="0" y="20" width="256" height="10" fill="#f7e7d8"/>
+      <rect x="0" y="30" width="256" height="10" fill="#f7e7d8"/>
+      <!-- knees bilateral hot (rows 4,5 -> y=40,50) -->
+      <rect x="0" y="40" width="256" height="10" fill="#e07a4b"/>
+      <rect x="0" y="50" width="256" height="10" fill="#e07a4b"/>
+      <rect x="80" y="40" width="96" height="10" fill="#c0483a"/>
+      <rect x="80" y="50" width="96" height="10" fill="#c0483a"/>
+      <!-- ankles bilateral hot (rows 6,7 -> y=60,70) -->
+      <rect x="0" y="60" width="256" height="10" fill="#eeb98f"/>
+      <rect x="0" y="70" width="256" height="10" fill="#eeb98f"/>
+      <rect x="96" y="60" width="80" height="10" fill="#e07a4b"/>
+      <rect x="96" y="70" width="80" height="10" fill="#e07a4b"/>
+      <rect x="0" y="0" width="256" height="120" fill="none" stroke="#20364e" stroke-width="1.25"/>
+    </g>
+  </g>
+
+  <!-- ===================== PANEL 4: myopathic (bottom-right) ===================== -->
+  <g>
+    <rect x="624" y="400" width="520" height="244" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="646" y="432">Myopathic</text>
+    <text class="expo" x="646" y="458">transductive: encoder saw these sources</text>
+    <text class="s" x="646" y="484">reading key: bilateral symmetric proximal (hip/knee), near-normal timing</text>
+
+    <g transform="translate(864,496)">
+      <text class="rowlab" x="-8" y="8"   text-anchor="end">shoulder L</text>
+      <text class="rowlab" x="-8" y="18"  text-anchor="end">shoulder R</text>
+      <text class="rowlab" x="-8" y="28"  text-anchor="end">hip L</text>
+      <text class="rowlab" x="-8" y="38"  text-anchor="end">hip R</text>
+      <text class="rowlab" x="-8" y="48"  text-anchor="end">knee L</text>
+      <text class="rowlab" x="-8" y="58"  text-anchor="end">knee R</text>
+      <text class="rowlab" x="-8" y="68"  text-anchor="end">ankle L</text>
+      <text class="rowlab" x="-8" y="78"  text-anchor="end">ankle R</text>
+      <text class="rowlab" x="-8" y="88"  text-anchor="end">heel L</text>
+      <text class="rowlab" x="-8" y="98"  text-anchor="end">heel R</text>
+      <text class="rowlab" x="-8" y="108" text-anchor="end">foot L</text>
+      <text class="rowlab" x="-8" y="118" text-anchor="end">foot R</text>
+    </g>
+    <!-- heatmap: symmetric proximal hip+knee moderate, flat in time, feet cool -->
+    <g transform="translate(870,496)">
+      <rect x="0" y="0" width="256" height="120" fill="#e7f0f8"/>
+      <!-- hips symmetric moderate (rows 2,3 -> y=20,30) -->
+      <rect x="0" y="20" width="256" height="10" fill="#eeb98f"/>
+      <rect x="0" y="30" width="256" height="10" fill="#eeb98f"/>
+      <!-- knees symmetric moderate (rows 4,5 -> y=40,50) -->
+      <rect x="0" y="40" width="256" height="10" fill="#f7e7d8"/>
+      <rect x="0" y="50" width="256" height="10" fill="#f7e7d8"/>
+      <rect x="0" y="0" width="256" height="120" fill="none" stroke="#20364e" stroke-width="1.25"/>
+    </g>
+  </g>
+
+  <!-- shared footer note -->
+  <text class="s" x="48" y="672">columns = 16 time segments (early stance to late swing); rows = 12 maskable joints. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

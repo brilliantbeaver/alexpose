@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Paired transformation operators</title>
+  <desc id="desc">Within-person baseline and transformed walks define response vectors that transfer across people and compose.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.card{fill:#fff;stroke:#cad4dc;stroke-width:2}.green{fill:#eaf4ee;stroke:#5f9e7e;stroke-width:3}.blue{fill:#edf4f8;stroke:#2f6f99;stroke-width:3}.violet{fill:#f1edf7;stroke:#8a6fb3;stroke-width:3}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.t{font:bold 21px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}.math{font:bold 19px Arial,sans-serif;fill:#2f6f99}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">Learn what a paired condition does to a walk</text>
+  <text class="s" x="60" y="91">Pair each participant with themself, then test transfer and composition.</text>
+
+  <rect class="card" x="60" y="155" rx="16" width="275" height="205"/>
+  <text class="t" x="85" y="192">Within-person pairs</text>
+  <text class="b" x="85" y="235">baseline  →  faster pace</text>
+  <text class="b" x="85" y="269">baseline  →  carried load</text>
+  <text class="b" x="85" y="303">baseline  →  jacket</text>
+  <text class="s" x="85" y="337">same person, matched trial</text>
+
+  <path d="M335 255 L430 255" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <rect class="blue" x="440" y="155" rx="16" width="310" height="205"/>
+  <text class="t" x="465" y="192">Response operator</text>
+  <text class="math" x="465" y="237">Δᵃ = z(xᵃ) − z(x)</text>
+  <text class="b" x="465" y="278">Align responses across people</text>
+  <text class="s" x="465" y="316">fit a small Tᵃ in latent space</text>
+
+  <path d="M750 255 L830 255" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <rect class="green" x="840" y="155" rx="16" width="300" height="205"/>
+  <text class="t" x="865" y="192">Cross-person transfer</text>
+  <text class="b" x="865" y="235">Apply Tᵃ to an unseen</text>
+  <text class="b" x="865" y="266">participant's baseline</text>
+  <text class="s" x="865" y="306">retrieve their transformed walk</text>
+  <text class="math" x="865" y="337">Tᵃ(z new) ≈ zᵃ new</text>
+
+  <rect class="violet" x="250" y="450" rx="16" width="700" height="180"/>
+  <text class="t" x="275" y="487">Hard test: composition</text>
+  <rect x="285" y="505" rx="8" width="580" height="32" fill="#fff"/>
+  <rect x="285" y="545" rx="8" width="580" height="32" fill="#fff"/>
+  <text class="b" x="310" y="527">T load(T pace(z))  →  observed load + pace target</text>
+  <text class="b" x="310" y="567">T pace(T load(z))  →  same target, order tested</text>
+  <text class="s" x="275" y="610">Train single changes only. The two orders need not commute.</text>
+  <text class="s" x="60" y="682">Success means more than detecting pace: the operator transfers, composes, and beats simple cadence features.</text>
+</svg>

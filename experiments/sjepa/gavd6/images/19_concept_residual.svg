@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Reliability-audited concept-residual benchmark</title>
+  <desc id="desc">A known concept-residual architecture is audited for measurement reliability, nuisance leakage, and concept interventions.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}.card{fill:#fff;stroke:#cad4dc;stroke-width:2}.green{fill:#eaf4ee;stroke:#5f9e7e;stroke-width:3}.violet{fill:#f1edf7;stroke:#8a6fb3;stroke-width:3}.orange{fill:#fff0e9;stroke:#e07a4b;stroke-width:3}.h{font:bold 34px Arial,sans-serif;fill:#20364e}.t{font:bold 21px Arial,sans-serif;fill:#20364e}.b{font:18px Arial,sans-serif;fill:#20364e}.s{font:18px Arial,sans-serif;fill:#607284}.tag{font:bold 18px Arial,sans-serif;fill:#2f6f99}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6Z" fill="#2f6f99"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="h" x="60" y="60">Explain what is measured, retain what is not</text>
+  <text class="s" x="60" y="91">The architecture is prior work. The contribution is a gait-specific reliability and intervention test.</text>
+
+  <rect class="card" x="60" y="235" rx="16" width="235" height="190"/>
+  <text class="t" x="85" y="272">S-JEPA encoder</text>
+  <text class="b" x="85" y="315">timed skeleton</text>
+  <text class="b" x="85" y="347">confidence channels</text>
+  <text class="s" x="85" y="389">masked latent prediction</text>
+  <path d="M295 330 L390 230" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M295 330 L390 455" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+
+  <rect class="green" x="400" y="135" rx="16" width="310" height="200"/>
+  <text class="t" x="425" y="172">Concept channel c</text>
+  <text class="b" x="425" y="210">cadence • step-time asymmetry</text>
+  <text class="b" x="425" y="241">knee range • trunk sway</text>
+  <text class="b" x="425" y="272">only independently reliable targets</text>
+  <text class="s" x="425" y="308">targets carry measurement uncertainty</text>
+
+  <rect class="violet" x="400" y="385" rx="16" width="310" height="170"/>
+  <text class="t" x="425" y="422">Residual channel r</text>
+  <text class="b" x="425" y="462">remaining predictive structure</text>
+  <text class="s" x="425" y="500">audit concept redundancy, provenance,</text>
+  <text class="s" x="425" y="525">and detector-missingness leakage</text>
+
+  <path d="M710 230 L805 310" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M710 470 L805 375" stroke="#2f6f99" stroke-width="3" marker-end="url(#a)"/>
+  <rect class="card" x="815" y="250" rx="16" width="325" height="190"/>
+  <text class="t" x="840" y="287">Prediction h(c, r)</text>
+  <text class="b" x="840" y="328">future latent</text>
+  <text class="b" x="840" y="360">low-label readout</text>
+  <text class="s" x="840" y="402">compare concept and latent baselines</text>
+
+  <rect class="orange" x="220" y="610" rx="14" width="760" height="72"/>
+  <text class="t" x="245" y="641">Intervention test</text>
+  <text class="b" x="430" y="641">c → verified c* → output changes predictably</text>
+  <text class="s" x="245" y="668">If prediction h ignores c, the explanation path is decorative.</text>
+</svg>

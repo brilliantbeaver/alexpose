@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Illustrative expected shape: raw versus nuisance-orthogonalized velocity recoverability per held-out source</title>
+  <desc id="d2">A scatter of raw residual-velocity recoverability R-squared on the horizontal axis against the orthogonalized R-squared after regressing out per-source frame rate, clip length, and provenance on the vertical axis, one dot per held-out source video. The two axes share an equal 0 to 0.8 scale so the y equals x reference line sits at a true 45 degrees and marks nuisance-robust recoverability. Dots dropping below the line toward the axis mark recoverability that was carried by nuisance variables. Values are an illustrative expected shape, not measured results.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+      .axis{stroke:#20364e;stroke-width:1.75}
+      .grid{stroke:#c4cdd8;stroke-width:1}
+      .diag{stroke:#5f9e7e;stroke-width:2;stroke-dasharray:7 6}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="66" class="h">Does velocity recoverability survive removing nuisances?</text>
+  <text x="48" y="96" class="s">Illustrative expected shape. One dot per held-out source video. All numbers transductive, checkpoint d0acc262.</text>
+
+  <!-- SQUARE plot box: x 152..562 , y 150..560 (410 x 410, equal 0..0.8 scale both axes) -->
+  <!-- map x: R2 0..0.8 -> px 152..562 ; px = 152 + R2/0.8*410 ; scale 512.5 px/unit -->
+  <!-- map y: R2 0..0.8 -> py 560..150 ; py = 560 - R2/0.8*410 -->
+
+  <!-- axes -->
+  <line x1="152" y1="150" x2="152" y2="560" class="axis"/>
+  <line x1="152" y1="560" x2="562" y2="560" class="axis"/>
+
+  <!-- x gridlines 0,0.2,0.4,0.6,0.8 -> 152,254.5,357,459.5,562 -->
+  <line x1="152" y1="150" x2="152" y2="560" class="grid"/>
+  <text x="152" y="584" class="s" text-anchor="middle">0.0</text>
+  <line x1="255" y1="150" x2="255" y2="560" class="grid"/>
+  <text x="255" y="584" class="s" text-anchor="middle">0.2</text>
+  <line x1="357" y1="150" x2="357" y2="560" class="grid"/>
+  <text x="357" y="584" class="s" text-anchor="middle">0.4</text>
+  <line x1="460" y1="150" x2="460" y2="560" class="grid"/>
+  <text x="460" y="584" class="s" text-anchor="middle">0.6</text>
+  <line x1="562" y1="150" x2="562" y2="560" class="grid"/>
+  <text x="562" y="584" class="s" text-anchor="middle">0.8</text>
+
+  <!-- y gridlines 0,0.2,0.4,0.6,0.8 -> 560,457.5,355,252.5,150 -->
+  <line x1="152" y1="560" x2="562" y2="560" class="grid"/>
+  <text x="140" y="565" class="s" text-anchor="end">0.0</text>
+  <line x1="152" y1="458" x2="562" y2="458" class="grid"/>
+  <text x="140" y="463" class="s" text-anchor="end">0.2</text>
+  <line x1="152" y1="355" x2="562" y2="355" class="grid"/>
+  <text x="140" y="360" class="s" text-anchor="end">0.4</text>
+  <line x1="152" y1="252" x2="562" y2="252" class="grid"/>
+  <text x="140" y="257" class="s" text-anchor="end">0.6</text>
+  <line x1="152" y1="150" x2="562" y2="150" class="grid"/>
+  <text x="140" y="155" class="s" text-anchor="end">0.8</text>
+
+  <!-- axis titles -->
+  <text x="357" y="614" class="b" text-anchor="middle">Raw residual-velocity recoverability (R-squared)</text>
+  <text x="72" y="355" class="b" transform="rotate(-90 72 355)" text-anchor="middle">Orthogonalized R-squared</text>
+
+  <!-- y = x reference (nuisance-robust): from (0,0)=(152,560) to (0.8,0.8)=(562,150), true 45 degrees -->
+  <line x1="152" y1="560" x2="562" y2="150" class="diag"/>
+  <text x="470" y="180" class="s" fill="#5f9e7e">y = x: nuisance-robust</text>
+
+  <!-- dots: per held-out source. px = 152 + rawR2/0.8*410 ; py = 560 - orthoR2/0.8*410 -->
+  <!-- source A: raw .55 ortho .48 -> px=152+282=434 ; py=560-246=314 -->
+  <circle cx="434" cy="314" r="7" fill="#e07a4b"/>
+  <!-- source B: raw .62 ortho .30 (nuisance-heavy) -> px=152+318=470 ; py=560-154=406 -->
+  <circle cx="470" cy="406" r="7" fill="#e07a4b"/>
+  <!-- source C: raw .48 ortho .42 -> px=152+246=398 ; py=560-215=345 -->
+  <circle cx="398" cy="345" r="7" fill="#e07a4b"/>
+  <!-- source D: raw .40 ortho .12 (heavily nuisance) -> px=152+205=357 ; py=560-62=498 -->
+  <circle cx="357" cy="498" r="7" fill="#e07a4b"/>
+  <!-- source E: raw .58 ortho .50 -> px=152+297=449 ; py=560-256=304 -->
+  <circle cx="449" cy="304" r="7" fill="#e07a4b"/>
+  <!-- source F: raw .35 ortho .30 -> px=152+179=331 ; py=560-154=406 -->
+  <circle cx="331" cy="406" r="7" fill="#e07a4b"/>
+  <!-- source G: raw .28 ortho .10 -> px=152+144=296 ; py=560-51=509 -->
+  <circle cx="296" cy="509" r="7" fill="#e07a4b"/>
+  <!-- source H: raw .66 ortho .55 -> px=152+338=490 ; py=560-282=278 -->
+  <circle cx="490" cy="278" r="7" fill="#e07a4b"/>
+  <!-- source I: raw .22 ortho .18 -> px=152+113=265 ; py=560-92=468 -->
+  <circle cx="265" cy="468" r="7" fill="#e07a4b"/>
+
+  <!-- robust cluster call-out near source H, in clear space right of the diagonal top -->
+  <text x="500" y="250" class="s">robust:</text>
+  <text x="500" y="272" class="s">on the line</text>
+
+  <!-- nuisance-driven call-out block, right of plot in clear space; points to source B -->
+  <path d="M660 406H493" class="a"/>
+  <text x="668" y="380" class="b">nuisance-driven:</text>
+  <text x="668" y="406" class="s">R-squared collapses after</text>
+  <text x="668" y="428" class="s">regressing out fps, clip</text>
+  <text x="668" y="450" class="s">length, provenance</text>
+
+  <!-- pre-registered floor note -->
+  <text x="668" y="500" class="s">Pass floor: raw R-squared beats the</text>
+  <text x="668" y="522" class="s">untrained-encoder baseline by 0.10</text>
+
+  <!-- interpretation detail, right-side clear space -->
+  <text x="668" y="560" class="s">A source on the line keeps its structure</text>
+  <text x="668" y="582" class="s">after orthogonalization; one that falls to</text>
+  <text x="668" y="604" class="s">the axis rode fps, length, or pathway.</text>
+
+  <!-- side legend of what a dot means, top-left inside plot, clear space -->
+  <rect x="176" y="170" width="300" height="80" rx="16" fill="#ffffff" class="axis" stroke-width="1.75"/>
+  <circle cx="200" cy="198" r="7" fill="#e07a4b"/>
+  <text x="218" y="203" class="s">one held-out source video</text>
+  <text x="200" y="228" class="s">below the line = nuisance-carried</text>
+
+  <!-- interpretation banner -->
+  <rect x="152" y="618" width="900" height="54" rx="16" fill="#20364e"/>
+  <text x="174" y="650" class="w">Read the vertical drop below y = x as the recoverability share carried by nuisances, not gait</text>
+</svg>

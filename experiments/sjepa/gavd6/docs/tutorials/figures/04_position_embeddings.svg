@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Time and joint identity are added to every token</title>
+  <desc id="desc">Learned time and joint vectors broadcast across a segment by joint grid and are added to patch embeddings.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">Time and joint identity are added to every token</tspan></text>
+  <rect x="48" y="112" width="286" height="180" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="72" y="148" class="t" text-anchor="start"><tspan x="72" dy="0">Patch embedding</tspan></text><text x="72" y="184" class="b" text-anchor="start"><tspan x="72" dy="0">content vector</tspan><tspan x="72" dy="26">[B,S,V,D]</tspan></text><rect x="457" y="112" width="286" height="180" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="481" y="148" class="t" text-anchor="start"><tspan x="481" dy="0">Time position</tspan></text><text x="481" y="184" class="b" text-anchor="start"><tspan x="481" dy="0">one vector per segment</tspan><tspan x="481" dy="26">[S,D]</tspan></text><rect x="866" y="112" width="286" height="180" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="890" y="148" class="t" text-anchor="start"><tspan x="890" dy="0">Joint position</tspan></text><text x="890" y="184" class="b" text-anchor="start"><tspan x="890" dy="0">one vector per joint</tspan><tspan x="890" dy="26">[V,D]</tspan></text><text x="382" y="218" class="h" text-anchor="middle"><tspan x="382" dy="0">+</tspan></text><text x="791" y="218" class="h" text-anchor="middle"><tspan x="791" dy="0">+</tspan></text><rect x="196" y="392" width="808" height="174" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="220" y="428" class="t" text-anchor="start"><tspan x="220" dy="0">Broadcasted addition</tspan></text><text x="220" y="464" class="b" text-anchor="start"><tspan x="220" dy="0">token[b,s,v] = patch[b,s,v] + time_pos[s] + joint_pos[v]</tspan><tspan x="220" dy="26">The vectors are added, not concatenated. The width remains D.</tspan><tspan x="220" dy="26">A zero coordinate patch can still become nonzero after bias and position terms.</tspan></text><path d="M 600 308 L 600 376" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="408" y="618" width="384" height="36" rx="18" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.5"/><text x="600.0" y="642" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">Shape stays [B,S,V,D]</tspan></text>
+</svg>

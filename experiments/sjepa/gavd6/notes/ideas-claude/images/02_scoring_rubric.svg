@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="t0 d0">
+  <title id="t0">The five scoring axes, their plain-language meaning, and their weights</title>
+  <desc id="d0">Illustrative explainer of the research scorecard. Five horizontal bars, one per axis, sized by weight: Generalizability 25 percent (does the answer matter beyond this dataset), Rigor 25 percent (is the test fair and hard to fool), Novelty 20 percent (is the question new), Mechanism-grounding 20 percent (is it tied to real biology), and Feasibility 10 percent (can it actually be done). A composite band legend lists four ranges: at or above 4.3 Strong main-track candidate, 3.6 to 4.2 Competitive with revision, 2.8 to 3.5 Workshop or borderline, and below 2.8 Not yet conference-level. A side note explains that effort is scored separately so an ambitious idea is not punished twice. All numbers are transductive and illustrative.</desc>
+
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:18px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .wp{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:22px;fill:#ffffff;}
+      .lt{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:18px;fill:#0f2440;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="640" fill="#f7f5ef"/>
+
+  <text x="48" y="56" class="h">How each idea is scored: five axes and their weights</text>
+  <text x="48" y="84" class="s">Illustrative. Composite = 0.20 Novelty + 0.20 Mechanism + 0.25 Generalizability + 0.25 Rigor + 0.10 Feasibility, on a 1.0 to 5.0 scale.</text>
+  <text x="48" y="106" class="s">Wider bar = heavier weight. All numbers transductive.</text>
+
+  <!-- ============ FIVE AXIS BARS ============ -->
+  <!-- Scale: 25% = 300px, so 1% = 12px. Bars start at x=300. Labels sit in x=48..292 gutter. -->
+
+  <!-- Generalizability 25% (blue) -->
+  <rect x="300" y="140" width="300" height="52" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <rect x="300" y="140" width="88" height="52" rx="16" fill="#2f6f99"/>
+  <text x="344" y="173" class="wp" text-anchor="middle">25%</text>
+  <text x="48" y="162" class="t">Generalizability</text>
+  <text x="48" y="183" class="s">Does the answer matter beyond this dataset?</text>
+
+  <!-- Rigor 25% (blue) -->
+  <rect x="300" y="210" width="300" height="52" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <rect x="300" y="210" width="88" height="52" rx="16" fill="#2f6f99"/>
+  <text x="344" y="243" class="wp" text-anchor="middle">25%</text>
+  <text x="48" y="232" class="t">Rigor</text>
+  <text x="48" y="253" class="s">Is the test fair and hard to fool?</text>
+
+  <!-- Novelty 20% (green) -->
+  <rect x="300" y="280" width="240" height="52" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <rect x="300" y="280" width="88" height="52" rx="16" fill="#5f9e7e"/>
+  <text x="344" y="313" class="wp" text-anchor="middle">20%</text>
+  <text x="48" y="302" class="t">Novelty</text>
+  <text x="48" y="323" class="s">Is the question new?</text>
+
+  <!-- Mechanism-grounding 20% (violet) -->
+  <rect x="300" y="350" width="240" height="52" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <rect x="300" y="350" width="88" height="52" rx="16" fill="#8a6fb3"/>
+  <text x="344" y="383" class="wp" text-anchor="middle">20%</text>
+  <text x="48" y="372" class="t">Mechanism</text>
+  <text x="48" y="393" class="s">Is it tied to real biology?</text>
+
+  <!-- Feasibility 10% (orange) -->
+  <rect x="300" y="420" width="120" height="52" rx="16" fill="#f7e6dc" stroke="#e07a4b" stroke-width="1.75"/>
+  <rect x="300" y="420" width="88" height="52" rx="16" fill="#e07a4b"/>
+  <text x="344" y="453" class="wp" text-anchor="middle">10%</text>
+  <text x="48" y="442" class="t">Feasibility</text>
+  <text x="48" y="463" class="s">Can it actually be done?</text>
+
+  <!-- ============ BANDS LEGEND ============ -->
+  <rect x="700" y="140" width="452" height="332" rx="16" fill="#ffffff" stroke="#5c6f84" stroke-width="1.75"/>
+  <rect x="700" y="140" width="452" height="46" rx="16" fill="#20364e"/>
+  <rect x="700" y="164" width="452" height="22" fill="#20364e"/>
+  <text x="724" y="169" class="w">Composite bands (1.0 to 5.0 scale)</text>
+
+  <!-- band 1 -->
+  <rect x="724" y="208" width="112" height="30" rx="12" fill="#5f9e7e"/>
+  <text x="780" y="228" class="w" text-anchor="middle">&#8805; 4.3</text>
+  <text x="852" y="228" class="b">Strong main-track candidate</text>
+
+  <!-- band 2 -->
+  <rect x="724" y="266" width="112" height="30" rx="12" fill="#2f6f99"/>
+  <text x="780" y="286" class="w" text-anchor="middle">3.6 to 4.2</text>
+  <text x="852" y="286" class="b">Competitive with revision</text>
+
+  <!-- band 3 -->
+  <rect x="724" y="324" width="112" height="30" rx="12" fill="#e07a4b"/>
+  <text x="780" y="344" class="w" text-anchor="middle">2.8 to 3.5</text>
+  <text x="852" y="344" class="b">Workshop or borderline</text>
+
+  <!-- band 4 -->
+  <rect x="724" y="382" width="112" height="30" rx="12" fill="#8a6fb3"/>
+  <text x="780" y="402" class="w" text-anchor="middle">&lt; 2.8</text>
+  <text x="852" y="402" class="b">Not yet conference-level</text>
+
+  <text x="724" y="446" class="s">Reading the number: 4.3 or higher clears the main-track bar;</text>
+  <text x="724" y="464" class="s">below 2.8 is not ready yet.</text>
+
+  <!-- ============ SIDE NOTE (left, below bars) ============ -->
+  <rect x="48" y="502" width="552" height="96" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="72" y="533" class="lt">Effort is scored separately.</text>
+  <text x="72" y="558" class="b">So an ambitious idea is not punished twice: the extra</text>
+  <text x="72" y="580" class="b">work does not lower these five axes.</text>
+
+  <!-- ============ EFFORT NOTE (right, below legend) ============ -->
+  <text x="700" y="524" class="s">Effort is reported apart as (core weeks / plus reach weeks),</text>
+  <text x="700" y="544" class="s">with a retrain scale and a data or compute need. It is kept</text>
+  <text x="700" y="564" class="s">out of the five axes above.</text>
+
+  <!-- Footer -->
+  <text x="48" y="624" class="s">Illustrative. All numbers transductive. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

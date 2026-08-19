@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="tt dd">
+  <title id="tt">The discriminative symmetry axis: three ways walking breaks, each with a skeleton-measurable biomarker</title>
+  <desc id="dd">Illustrative landscape diagram with three labeled regions side by side. Left region, Lateralized (one-sided), shows a stick figure with one side highlighted and lists stroke, hemiplegic cerebral palsy, and early Parkinson's, with the biomarker being a signed left-minus-right Symmetry Ratio (Patterson 2010, PMID 19932621). Middle region, Rhythm and variability (a shaky internal clock), shows an irregular wavy beat and lists Parkinson's, with the biomarker being stride-time CV, 8.8 percent in fallers versus 4.2 percent in non-fallers. Right region, Symmetric and proximal (both sides weak, rhythm kept), shows a balanced two-sided figure with a forward-tilted pelvis and lists myopathy, with the biomarker being low asymmetry plus anterior pelvic tilt 16.4 versus 11.6 degrees. A note states Parkinson's spans both the lateralized and rhythm regions. All numbers are transductive and illustrative; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:30px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:21px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:15px;fill:#33475e;}
+      .bb{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:15px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:15px;fill:#ffffff;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" fill="#f7f5ef"/>
+
+  <text x="48" y="52" class="h">The discriminative symmetry axis: three ways walking breaks</text>
+  <text x="48" y="80" class="s">Illustrative. Conditions separate by HOW they break walking, and each way has a validated biomarker a skeleton can measure.</text>
+
+  <!-- ================= LEFT: Lateralized (violet) ================= -->
+  <rect x="48" y="104" width="352" height="384" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <rect x="48" y="104" width="352" height="46" rx="16" fill="#20364e"/>
+  <rect x="48" y="128" width="352" height="22" fill="#20364e"/>
+  <text x="70" y="133" class="w">Lateralized (one-sided)</text>
+
+  <!-- stick figure: right side (viewer left) highlighted -->
+  <g transform="translate(224,170)">
+    <!-- highlighted weak side (orange), figure's left = viewer right -->
+    <circle cx="0" cy="18" r="14" fill="none" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="0" y1="32" x2="0" y2="86" stroke="#33475e" stroke-width="2.5"/>
+    <!-- arms -->
+    <line x1="0" y1="46" x2="-26" y2="66" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="0" y1="46" x2="26" y2="70" stroke="#e07a4b" stroke-width="4"/>
+    <!-- legs -->
+    <line x1="0" y1="86" x2="-22" y2="130" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="0" y1="86" x2="24" y2="126" stroke="#e07a4b" stroke-width="4"/>
+    <!-- feet -->
+    <line x1="-22" y1="130" x2="-38" y2="130" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="24" y1="126" x2="40" y2="126" stroke="#e07a4b" stroke-width="4"/>
+    <text x="34" y="150" class="s" fill="#e07a4b">weak side</text>
+  </g>
+
+  <text x="70" y="352" class="bb">Seen in:</text>
+  <text x="70" y="374" class="b">stroke, hemiplegic cerebral palsy,</text>
+  <text x="70" y="394" class="b">early Parkinson's</text>
+
+  <text x="70" y="426" class="bb">Biomarker:</text>
+  <text x="70" y="448" class="b">signed left-minus-right</text>
+  <text x="70" y="468" class="b">Symmetry Ratio (Patterson 2010,</text>
+  <text x="70" y="482" class="s">PMID 19932621)</text>
+
+  <!-- ================= MIDDLE: Rhythm / variability (green) ================= -->
+  <rect x="424" y="104" width="352" height="384" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <rect x="424" y="104" width="352" height="46" rx="16" fill="#20364e"/>
+  <rect x="424" y="128" width="352" height="22" fill="#20364e"/>
+  <text x="446" y="133" class="w">Rhythm / variability (shaky clock)</text>
+
+  <!-- irregular beat cue: uneven wave + uneven ticks -->
+  <g transform="translate(446,196)">
+    <path d="M0,60 L20,60 L28,20 L44,100 L58,60 L88,60 L98,34 L112,88 L124,60 L152,60 L166,26 L178,96 L190,60 L216,60 L228,40 L240,84 L252,60 L308,60"
+          fill="none" stroke="#5f9e7e" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- uneven step ticks below -->
+    <line x1="16" y1="118" x2="16" y2="134" stroke="#e07a4b" stroke-width="3"/>
+    <line x1="70" y1="118" x2="70" y2="134" stroke="#e07a4b" stroke-width="3"/>
+    <line x1="104" y1="118" x2="104" y2="134" stroke="#e07a4b" stroke-width="3"/>
+    <line x1="178" y1="118" x2="178" y2="134" stroke="#e07a4b" stroke-width="3"/>
+    <line x1="222" y1="118" x2="222" y2="134" stroke="#e07a4b" stroke-width="3"/>
+    <text x="152" y="158" class="s" text-anchor="middle">step timing wobbles</text>
+  </g>
+
+  <text x="446" y="352" class="bb">Seen in:</text>
+  <text x="446" y="374" class="b">Parkinson's</text>
+
+  <text x="446" y="406" class="bb">Biomarker:</text>
+  <text x="446" y="428" class="b">stride-time CV (coefficient</text>
+  <text x="446" y="448" class="b">of variation)</text>
+  <text x="446" y="470" class="b">8.8% fallers vs 4.2% non-fallers</text>
+
+  <!-- ================= RIGHT: Symmetric and proximal (blue) ================= -->
+  <rect x="800" y="104" width="352" height="384" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <rect x="800" y="104" width="352" height="46" rx="16" fill="#20364e"/>
+  <rect x="800" y="128" width="352" height="22" fill="#20364e"/>
+  <text x="822" y="133" class="w">Symmetric and proximal</text>
+
+  <!-- balanced figure with forward-tilted pelvis -->
+  <g transform="translate(976,170)">
+    <circle cx="0" cy="18" r="14" fill="none" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="0" y1="32" x2="0" y2="80" stroke="#33475e" stroke-width="2.5"/>
+    <!-- symmetric arms -->
+    <line x1="0" y1="46" x2="-26" y2="68" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="0" y1="46" x2="26" y2="68" stroke="#33475e" stroke-width="2.5"/>
+    <!-- forward-tilted pelvis bar -->
+    <line x1="-20" y1="76" x2="20" y2="88" stroke="#e07a4b" stroke-width="4"/>
+    <!-- symmetric legs -->
+    <line x1="-16" y1="83" x2="-24" y2="130" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="16" y1="87" x2="24" y2="130" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="-24" y1="130" x2="-40" y2="130" stroke="#33475e" stroke-width="2.5"/>
+    <line x1="24" y1="130" x2="40" y2="130" stroke="#33475e" stroke-width="2.5"/>
+    <text x="30" y="82" class="s" fill="#e07a4b">tilt</text>
+  </g>
+
+  <text x="822" y="326" class="b">both sides weak, rhythm kept</text>
+
+  <text x="822" y="356" class="bb">Seen in:</text>
+  <text x="822" y="378" class="b">myopathy</text>
+
+  <text x="822" y="410" class="bb">Biomarker:</text>
+  <text x="822" y="432" class="b">low asymmetry + anterior</text>
+  <text x="822" y="452" class="b">pelvic tilt</text>
+  <text x="822" y="474" class="b">16.4 vs 11.6 deg</text>
+
+  <!-- Parkinson's spans note -->
+  <text x="48" y="516" class="s">Note: Parkinson's spans both the lateralized region (dopamine loss usually starts on one side) and the rhythm region (it loses automatic rhythm).</text>
+
+  <!-- Footer -->
+  <text x="48" y="540" class="s">Illustrative. All numbers transductive. Folder labels are dataset annotations, not diagnoses. A skeleton cannot recover forces, EMG, or the exact muscle-disease cause.</text>
+</svg>

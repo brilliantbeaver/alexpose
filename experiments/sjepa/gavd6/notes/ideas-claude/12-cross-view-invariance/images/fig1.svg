@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Leave-one-view-out feature drift across held-out camera views</title>
+  <desc id="d1">Illustrative expected-shape line chart. The x axis is the held-out camera view across public multi-view pose cohorts CASIA-B, OU-MVLP-Pose, GREW, and Gait3D; the y axis is held-out-view feature drift where lower is better. Three series: Lane A view-as-action with a no-flip rule sits lowest (warm), Lane B flip-augmented baseline sits higher (blue), and Lane C Procrustes raw-coordinate baseline sits highest (grey). A bracket marks the pre-registered relative drift-reduction margin of at least 10 percent between Lane A and Lane B. These cohorts are non-clinical multi-view pose; any clinical claim is reach-tier only.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Leave-one-view-out feature drift, lower is better</text>
+  <text x="48" y="88" class="s">Illustrative expected shape, not measured results. One point per held-out camera view, pooled across public multi-view cohorts.</text>
+
+  <!-- ============ LEFT: line chart card ============ -->
+  <!-- card: x 48..708, y 112..556 (height 444) -->
+  <rect x="48" y="112" width="660" height="444" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Feature drift vs held-out camera view</text>
+
+  <!-- plot frame: x 150..668, y 176..488 -->
+  <!-- axes -->
+  <line x1="150" y1="176" x2="150" y2="488" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="488" x2="668" y2="488" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- y axis ticks (drift, arbitrary units): high at top, low at bottom -->
+  <line x1="150" y1="200" x2="144" y2="200" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="205" class="s" text-anchor="end">high</text>
+  <line x1="150" y1="464" x2="144" y2="464" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="469" class="s" text-anchor="end">low</text>
+
+  <!-- x axis ticks: four cohorts at x 210, 350, 490, 620 -->
+  <line x1="210" y1="488" x2="210" y2="494" stroke="#20364e" stroke-width="2"/>
+  <text x="210" y="512" class="s" text-anchor="middle">CASIA-B</text>
+  <line x1="350" y1="488" x2="350" y2="494" stroke="#20364e" stroke-width="2"/>
+  <text x="350" y="512" class="s" text-anchor="middle">OU-MVLP</text>
+  <line x1="490" y1="488" x2="490" y2="494" stroke="#20364e" stroke-width="2"/>
+  <text x="490" y="512" class="s" text-anchor="middle">GREW</text>
+  <line x1="620" y1="488" x2="620" y2="494" stroke="#20364e" stroke-width="2"/>
+  <text x="620" y="512" class="s" text-anchor="middle">Gait3D</text>
+
+  <!-- Lane C Procrustes raw-coordinate (grey, highest drift) -->
+  <polyline points="210,232 350,248 490,240 620,258" fill="none" stroke="#8a9bab" stroke-width="2.5"/>
+  <g fill="#c4cdd8" stroke="#8a9bab" stroke-width="1.25">
+    <circle cx="210" cy="232" r="7"/>
+    <circle cx="350" cy="248" r="7"/>
+    <circle cx="490" cy="240" r="7"/>
+    <circle cx="620" cy="258" r="7"/>
+  </g>
+
+  <!-- Lane B flip-augmented baseline (blue, middle drift) -->
+  <polyline points="210,314 350,330 490,322 620,342" fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+  <g fill="#2f6f99" stroke="#20364e" stroke-width="1.0">
+    <circle cx="210" cy="314" r="7"/>
+    <circle cx="350" cy="330" r="7"/>
+    <circle cx="490" cy="322" r="7"/>
+    <circle cx="620" cy="342" r="7"/>
+  </g>
+
+  <!-- Lane A view-as-action no-flip (warm, lowest drift) -->
+  <polyline points="210,388 350,402 490,392 620,414" fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <circle cx="210" cy="388" r="7"/>
+    <circle cx="350" cy="402" r="7"/>
+    <circle cx="490" cy="392" r="7"/>
+    <circle cx="620" cy="414" r="7"/>
+  </g>
+
+  <!-- pre-registered margin bracket between B and A at Gait3D (x=620) shifted right into clear space -->
+  <line x1="656" y1="342" x2="656" y2="414" stroke="#20364e" stroke-width="1.5"/>
+  <line x1="650" y1="342" x2="656" y2="342" stroke="#20364e" stroke-width="1.5"/>
+  <line x1="650" y1="414" x2="656" y2="414" stroke="#20364e" stroke-width="1.5"/>
+
+  <!-- axis labels -->
+  <text x="409" y="534" class="b" text-anchor="middle">Held-out camera view (cohort)</text>
+  <text x="104" y="332" class="b" text-anchor="middle" transform="rotate(-90 104 332)">Feature drift across views</text>
+
+  <!-- ============ RIGHT: legend card ============ -->
+  <!-- card: x 764..1152, y 112..368 (height 256) -->
+  <rect x="764" y="112" width="388" height="256" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="148" class="t">Three lanes, per held-out view</text>
+
+  <circle cx="802" cy="182" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="822" y="187" class="b">A view-as-action, no flip (lowest)</text>
+
+  <circle cx="802" cy="222" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.0"/>
+  <text x="822" y="227" class="b">B flip-augmented baseline</text>
+
+  <circle cx="802" cy="262" r="8" fill="#c4cdd8" stroke="#8a9bab" stroke-width="1.25"/>
+  <text x="822" y="267" class="b">C Procrustes raw-coordinate</text>
+
+  <line x1="794" y1="292" x2="1122" y2="292" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="794" y="320" class="s">Lane A is the treatment; Lane B is the</text>
+  <text x="794" y="342" class="s">named-factor control; Lane C is non-neural.</text>
+
+  <!-- ============ RIGHT: pass card (dark banner) ============ -->
+  <!-- card: x 764..1152, y 424..624 (height 200), gap 368->424 = 56 -->
+  <rect x="764" y="424" width="388" height="200" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="460" class="w" font-size="20">Pre-registered pass margin</text>
+
+  <text x="794" y="496" class="w">Lane A drift &#8804; 0.90 &#215; Lane B drift</text>
+  <text x="794" y="524" class="ws">(at least 10 percent relative reduction)</text>
+  <text x="794" y="556" class="w">AND reconstruction &#8805; Lane B</text>
+
+  <line x1="794" y1="576" x2="1122" y2="576" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="794" y="602" class="ws">Missing either is scored as an informative null.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="672" class="s">Illustrative expected shape, not measured results. Cohorts are non-clinical multi-view pose; any clinical claim is reach-tier only.</text>
+</svg>

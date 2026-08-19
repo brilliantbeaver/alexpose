@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Within-normal provenance separability against the source-identity ceiling</title>
+  <desc id="desc">Illustrative expected shape. Two panels. The left panel plots per-source balanced accuracy for telling the 12 canonical-normal sequences from the 63 augmented-normal windows, shown against a source-identity upper bound that the probe cannot beat by design, plus the missingness and chance references. The right panel shows the leave-the-single-normal-video-out diagnostic with augmented-normal subsampled to 12 to match the canonical count. All numbers are transductive and computed under one checkpoint fingerprint d0acc262.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f5ef}
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+
+  <text class="h" x="48" y="72">Within-normal: read the door, against what ceiling?</text>
+  <text class="s" x="48" y="94">Illustrative expected shape. 12 canonical-normal vs 63 augmented-normal windows, all from 1 canonical-normal source,</text>
+  <text class="s" x="48" y="116">so source identity is the ceiling. Transductive; checkpoint d0acc262.</text>
+
+  <!-- ===================== LEFT PANEL ===================== -->
+  <text class="t" x="48" y="150">Panel A: 12 canonical vs 63 augmented</text>
+
+  <!-- Panel A card -->
+  <rect x="48" y="170" width="520" height="410" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- plot area: x 130..540, y 210..540 ; acc 0->y540, 1->y210 => y=540-acc*330 -->
+  <line x1="130" y1="210" x2="130" y2="540" stroke="#20364e" stroke-width="2"/>
+  <line x1="130" y1="540" x2="540" y2="540" stroke="#20364e" stroke-width="2"/>
+
+  <!-- gridlines 0.5,0.75,1.0 -->
+  <line x1="130" y1="210" x2="540" y2="210" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="120" y="215" text-anchor="end">1.00</text>
+  <line x1="130" y1="292.5" x2="540" y2="292.5" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="120" y="297" text-anchor="end">0.75</text>
+  <line x1="130" y1="375" x2="540" y2="375" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="120" y="380" text-anchor="end">0.50</text>
+  <text class="s" x="120" y="545" text-anchor="end">0.00</text>
+
+  <!-- source-identity ceiling ~0.99 -> y=540-0.99*330=213.3 -->
+  <line x1="130" y1="213" x2="540" y2="213" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <text class="s" x="536" y="205" text-anchor="end" fill="#3e7a5c">source-identity ceiling (cannot beat)</text>
+
+  <!-- chance line 0.5 -> y=375 -->
+  <line x1="130" y1="375" x2="540" y2="375" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <text class="s" x="536" y="393" text-anchor="end">chance 0.50</text>
+
+  <!-- missingness reference ~0.62 -> y=540-0.62*330=335.4 -->
+  <line x1="130" y1="335" x2="540" y2="335" stroke="#e07a4b" stroke-width="1.75" stroke-dasharray="5 4"/>
+  <text class="s" x="536" y="327" text-anchor="end" fill="#a44c26">missingness-only ref</text>
+
+  <!-- embedding per-source dots: cluster ~0.86-0.92 centered on ~0.89 (y=540-0.89*330=246); clear of ceiling at y=213 -->
+  <circle cx="235" cy="253" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="275" cy="266" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="315" cy="246" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="355" cy="273" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="395" cy="258" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="435" cy="270" r="7" fill="#2f6f99" opacity="0.85"/>
+  <!-- mean marker at ~0.89 -> y=246 -->
+  <line x1="215" y1="260" x2="455" y2="260" stroke="#20364e" stroke-width="2.5"/>
+  <text class="b" x="335" y="316" text-anchor="middle" fill="#0f2440">embedding (~0.89)</text>
+
+  <!-- Y axis title -->
+  <text class="b" x="70" y="375" transform="rotate(-90 70 375)" text-anchor="middle">Balanced accuracy</text>
+  <text class="s" x="335" y="556" text-anchor="middle">Each blue dot = one fold replicate (1 canonical source)</text>
+
+  <!-- ===================== RIGHT PANEL ===================== -->
+  <text class="t" x="632" y="150">Panel B: leave-one-normal-video-out</text>
+
+  <rect x="632" y="170" width="520" height="410" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- plot area: x 714..1124, y 210..540 -->
+  <line x1="714" y1="210" x2="714" y2="540" stroke="#20364e" stroke-width="2"/>
+  <line x1="714" y1="540" x2="1124" y2="540" stroke="#20364e" stroke-width="2"/>
+
+  <line x1="714" y1="210" x2="1124" y2="210" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="704" y="215" text-anchor="end">1.00</text>
+  <line x1="714" y1="292.5" x2="1124" y2="292.5" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="704" y="297" text-anchor="end">0.75</text>
+  <line x1="714" y1="375" x2="1124" y2="375" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="704" y="380" text-anchor="end">0.50</text>
+  <text class="s" x="704" y="545" text-anchor="end">0.00</text>
+
+  <!-- chance line -->
+  <line x1="714" y1="375" x2="1124" y2="375" stroke="#20364e" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <text class="s" x="1120" y="393" text-anchor="end">chance 0.50</text>
+
+  <!-- With augmented subsampled to 12 and the single normal video held out, the probe -->
+  <!-- collapses toward chance: dots cluster ~0.48-0.58 -->
+  <circle cx="819" cy="372" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="859" cy="360" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="899" cy="382" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="939" cy="368" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="979" cy="355" r="7" fill="#2f6f99" opacity="0.85"/>
+  <circle cx="1019" cy="378" r="7" fill="#2f6f99" opacity="0.85"/>
+  <line x1="799" y1="369" x2="1039" y2="369" stroke="#20364e" stroke-width="2.5"/>
+  <text class="b" x="919" y="335" text-anchor="middle" fill="#0f2440">diagnostic (~0.53)</text>
+
+  <text class="b" x="736" y="375" transform="rotate(-90 736 375)" text-anchor="middle">Balanced accuracy</text>
+  <text class="s" x="919" y="556" text-anchor="middle">augmented subsampled to 12 to match canonical count</text>
+
+  <!-- Reading arrow between panels meaning -->
+
+  <!-- Footer -->
+  <line x1="48" y1="604" x2="1152" y2="604" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text class="s" x="48" y="628">Panel A cannot beat the source-identity ceiling by design (1 canonical-normal source). Panel B removes the count imbalance and asks what survives.</text>
+  <text class="s" x="48" y="650">A near-chance Panel B rules out a pure count-imbalance artifact; it is never called provenance inflation without the source-count caveat.</text>
+  <text class="s" x="48" y="672">Folder labels are dataset annotations, not diagnoses. Dot positions are illustrative placeholders, not measured results.</text>
+</svg>
