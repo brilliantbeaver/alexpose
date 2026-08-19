@@ -855,7 +855,11 @@ axes[1].tick_params(axis="x", rotation=25)
 fig.tight_layout()
 figure_path = OUT_DIR / "idea9_architecture_contract.png"
 fig.savefig(figure_path, dpi=140)
-plt.show()
+# The notebook deliberately uses the non-interactive Agg backend so it also works in headless
+# execution. Explicitly embed the saved PNG so users still see the result in the notebook.
+from IPython.display import Image, display
+display(Image(filename=str(figure_path)))
+plt.close(fig)
 
 bundle = {
     "notebook": "nb_09a_equivariant_encoder_contract",
@@ -894,7 +898,10 @@ print(f"Wrote {bundle_path}")
 notebook = {
     "cells": cells,
     "metadata": {
-        "kernelspec": {"display_name": "Python 3 (gavd3-sjepa)", "language": "python", "name": "gavd3-sjepa"},
+        # Use Jupyter's standard kernel name so the generated notebook executes
+        # in a fresh environment after `uv sync`, without requiring a legacy
+        # gavd3-specific kernelspec to be installed globally.
+        "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
         "language_info": {"name": "python", "version": "3.11"},
     },
     "nbformat": 4,
