@@ -1,5 +1,38 @@
 # Reflection-equivariant representation: separating lateralized from symmetric gait by construction
 
+> **Canonical protocol and notebooks:** [METHODOLOGY.md](./METHODOLOGY.md), [nb_09a](../../../nb_09a_equivariant_encoder_contract.ipynb), and [nb_09b](../../../nb_09b_equivariant_futures_and_reach.ipynb). They supersede the earlier readout-only shorthand in this page wherever it would call a tied output head an “equivariant encoder.”
+
+## 0. Implementation correction and notebook map
+
+An antisymmetric left-minus-right head is a useful **readout ablation**, but it does not make an ordinary
+backbone reflection-equivariant. In general, a shared head over arbitrary features does not imply
+
+$$
+f(E(Mx)_L)-f(E(Mx)_R)=-[f(E(x)_L)-f(E(x)_R)].
+$$
+
+The Idea 9 core model therefore uses a paired lift
+$H^0(x)=[\phi(x),\phi(Mx)]$, whose slots exchange under the anatomical mirror, and requires every
+online, target/EMA, predictor, normalisation, and cross-branch layer to commute with that exchange:
+$F_\ell(SH)=SF_\ell(H)$. The head described later in this README remains an ablation; it is not the
+evidence for encoder-wide equivariance.
+
+The decisive comparison has three matched systems, all using the same exact odd final wrapper
+$[d(H(x))-d(H(Mx))]/2$: each term is one complete paired-state forward pass, so the rule stays exact
+even for the deliberately non-equivariant paired control.
+
+| System | What differs | What it rules out |
+|---|---|---|
+| `odd_output` | ordinary one-view encoder, output repaired as $(d(x)-d(Mx))/2$ | whether a cheap sign repair is already enough |
+| `paired_unconstrained` | two branches and cross-branch fusion, but no swap-preserving ties | whether generic two-view fusion explains a gain |
+| `equivariant_encoder` | paired lift and swap-commuting layers throughout | whether the organised interior adds value |
+
+GAVD is the local feasibility arm and remains transductive unless every encoder is retrained inside an
+outer source split. AMASS is for participant-disjoint, label-free generic motion pretraining; it cannot
+support a clinical claim. MoVi is held out for actor-disjoint calibrated-view stability testing; it is
+not generic pretraining and cannot support a clinical claim. See the methodology for the full dataset
+table, health gates, matching ledger, stop conditions, and six possible futures.
+
 > On source-video-disjoint folds, does building the signed left-minus-right axis to be antisymmetric BY CONSTRUCTION (an encoder whose readout the anatomical mirror is guaranteed to negate) separate lateralized gait (stroke, hemiplegic cerebral palsy, early Parkinson's) from symmetric gait (myopathy) better than the standard `d0acc262` encoder that was only allowed to learn that behavior, measured by item 05's frozen signed-decodability and mirror-slope instrument at a pre-registered margin?
 
 ## The question in plain words
