@@ -1,7 +1,7 @@
 ---
-title: "How the GAVD3 S-JEPA study evolved"
+title: "How the GAVD6 S-JEPA study evolved"
 subtitle: "What changed, what improved, and what still remains untested"
-author: "GAVD3 S-JEPA tutorial"
+author: "GAVD6 S-JEPA tutorial"
 date: "August 2026"
 slide-level: 1
 lang: en-US

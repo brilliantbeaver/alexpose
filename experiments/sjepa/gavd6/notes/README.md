@@ -1,4 +1,4 @@
-# GAVD3 research notes
+# GAVD6 research notes
 
 The notes directory contains both current documentation and historical planning material.
 

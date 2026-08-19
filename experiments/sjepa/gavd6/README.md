@@ -1,4 +1,4 @@
-# GAVD3 S-JEPA gait tutorials
+# GAVD6 S-JEPA gait tutorials
 
 This folder is an executable course on learning motion features from gait video. It starts with a source video, extracts a 33-landmark skeleton, hides selected joint-time tokens, and asks a Skeleton Joint-Embedding Predictive Architecture, or S-JEPA, to predict their latent features. Training begins with normal gait and then continues through four cumulative condition stages.
 

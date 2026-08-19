@@ -1,4 +1,4 @@
-# GAVD3 S-JEPA tutorial slides
+# GAVD6 S-JEPA tutorial slides
 
 This folder contains two runnable versions of the August 2026 presentation:
 
