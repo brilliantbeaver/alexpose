@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Group loss ON vs OFF: transductive versus inductive separation</title>
+  <desc id="d1">Illustrative expected shape. Two panels of held-out-source macro-F1 for group-loss ON versus OFF-matched. On seen videos (transductive) ON beats OFF; on new videos (inductive) ON is about equal to OFF, the signature of memorization. A missingness-only floor at macro-F1 0.429 is drawn as a reference line and the pre-registered plus 0.05 inductive margin is annotated.</desc>
+
+  <style>
+    .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+    .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+    .lab{font:700 15px Arial,Helvetica,sans-serif;fill:#0f2440}
+  </style>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="58" class="h">Does the group loss buy generalization or memorization?</text>
+  <text x="48" y="86" class="s">Illustrative expected shape. Held-out-source macro-F1, group-loss ON vs OFF-matched. Numbers are placeholders, not measured.</text>
+
+  <!-- ================= LEFT PANEL: TRANSDUCTIVE ================= -->
+  <rect x="48" y="112" width="524" height="500" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="146" class="t">Transductive: videos the encoder saw</text>
+  <text x="70" y="170" class="s">Separation on seen videos. Both arms high; ON pulls ahead.</text>
+
+  <!-- plot area: x 96..540, y 200..540 -->
+  <!-- y axis -->
+  <line x1="150" y1="200" x2="150" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="540" x2="540" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <text x="70" y="380" class="s" transform="rotate(-90 70 380)">macro-F1 (seen videos)</text>
+  <!-- gridline ticks -->
+  <text x="140" y="205" class="s" text-anchor="end">1.0</text>
+  <text x="140" y="290" class="s" text-anchor="end">0.8</text>
+  <text x="140" y="375" class="s" text-anchor="end">0.6</text>
+  <text x="140" y="460" class="s" text-anchor="end">0.4</text>
+  <text x="140" y="540" class="s" text-anchor="end">0.2</text>
+
+  <!-- scale: y=205 ->1.0, y=540->0.2. per 0.2 = 83.75px. value v: y=205+(1.0-v)/0.2*83.75 -->
+  <!-- missingness floor at 0.429 -> y=205+(1.0-0.429)/0.2*83.75 = 205+239 = 444 -->
+  <line x1="150" y1="444" x2="540" y2="444" stroke="#c0483a" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="156" y="232" class="s" fill="#c0483a">missingness-only floor 0.429</text>
+
+  <!-- ON bar (transductive high ~0.86 -> y=205+(1.0-0.86)/0.2*83.75=205+58.6=264) -->
+  <rect x="215" y="264" width="90" height="276" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="260" y="326" class="lab" text-anchor="middle" fill="#fff">0.86</text>
+  <text x="260" y="566" class="lab" text-anchor="middle">ON</text>
+  <!-- CI whisker on ON -->
+  <line x1="260" y1="250" x2="260" y2="282" stroke="#20364e" stroke-width="2"/>
+  <line x1="250" y1="250" x2="270" y2="250" stroke="#20364e" stroke-width="2"/>
+  <line x1="250" y1="282" x2="270" y2="282" stroke="#20364e" stroke-width="2"/>
+  <!-- per-source dots -->
+  <circle cx="248" cy="270" r="3.5" fill="#20364e"/>
+  <circle cx="272" cy="258" r="3.5" fill="#20364e"/>
+  <circle cx="255" cy="278" r="3.5" fill="#20364e"/>
+  <circle cx="266" cy="266" r="3.5" fill="#20364e"/>
+
+  <!-- OFF bar (transductive ~0.71 -> y=205+(1.0-0.71)/0.2*83.75=205+121.4=326) -->
+  <rect x="385" y="326" width="90" height="214" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <text x="430" y="384" class="lab" text-anchor="middle" fill="#fff">0.71</text>
+  <text x="430" y="566" class="lab" text-anchor="middle">OFF</text>
+  <line x1="430" y1="312" x2="430" y2="344" stroke="#20364e" stroke-width="2"/>
+  <line x1="420" y1="312" x2="440" y2="312" stroke="#20364e" stroke-width="2"/>
+  <line x1="420" y1="344" x2="440" y2="344" stroke="#20364e" stroke-width="2"/>
+  <circle cx="418" cy="330" r="3.5" fill="#20364e"/>
+  <circle cx="442" cy="320" r="3.5" fill="#20364e"/>
+  <circle cx="425" cy="338" r="3.5" fill="#20364e"/>
+  <circle cx="436" cy="328" r="3.5" fill="#20364e"/>
+
+  <text x="70" y="595" class="s">Gap present: ON &gt; OFF on seen videos.</text>
+
+  <!-- ================= RIGHT PANEL: INDUCTIVE ================= -->
+  <rect x="628" y="112" width="524" height="500" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="650" y="146" class="t">Inductive: held-out source videos</text>
+  <text x="650" y="170" class="s">Separation on new videos. ON and OFF collapse together.</text>
+
+  <line x1="730" y1="200" x2="730" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="730" y1="540" x2="1120" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <text x="650" y="380" class="s" transform="rotate(-90 650 380)">macro-F1 (new videos)</text>
+  <text x="720" y="205" class="s" text-anchor="end">1.0</text>
+  <text x="720" y="290" class="s" text-anchor="end">0.8</text>
+  <text x="720" y="375" class="s" text-anchor="end">0.6</text>
+  <text x="720" y="460" class="s" text-anchor="end">0.4</text>
+  <text x="720" y="540" class="s" text-anchor="end">0.2</text>
+
+  <!-- floor -->
+  <line x1="730" y1="444" x2="1120" y2="444" stroke="#c0483a" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="736" y="232" class="s" fill="#c0483a">missingness-only floor 0.429</text>
+
+  <!-- ON inductive ~0.64 -> y=205+(1.0-0.64)/0.2*83.75=205+150.75=356 -->
+  <rect x="795" y="356" width="90" height="184" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="840" y="414" class="lab" text-anchor="middle" fill="#fff">0.64</text>
+  <text x="840" y="566" class="lab" text-anchor="middle">ON</text>
+  <line x1="840" y1="336" x2="840" y2="378" stroke="#20364e" stroke-width="2"/>
+  <line x1="830" y1="336" x2="850" y2="336" stroke="#20364e" stroke-width="2"/>
+  <line x1="830" y1="378" x2="850" y2="378" stroke="#20364e" stroke-width="2"/>
+  <circle cx="828" cy="352" r="3.5" fill="#20364e"/>
+  <circle cx="852" cy="368" r="3.5" fill="#20364e"/>
+  <circle cx="835" cy="344" r="3.5" fill="#20364e"/>
+  <circle cx="847" cy="360" r="3.5" fill="#20364e"/>
+
+  <!-- OFF inductive ~0.62 -> y=205+(1.0-0.62)/0.2*83.75=205+159.1=364 -->
+  <rect x="965" y="364" width="90" height="176" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <text x="1010" y="418" class="lab" text-anchor="middle" fill="#fff">0.62</text>
+  <text x="1010" y="566" class="lab" text-anchor="middle">OFF</text>
+  <line x1="1010" y1="344" x2="1010" y2="386" stroke="#20364e" stroke-width="2"/>
+  <line x1="1000" y1="344" x2="1020" y2="344" stroke="#20364e" stroke-width="2"/>
+  <line x1="1000" y1="386" x2="1020" y2="386" stroke="#20364e" stroke-width="2"/>
+  <circle cx="998" cy="360" r="3.5" fill="#20364e"/>
+  <circle cx="1022" cy="372" r="3.5" fill="#20364e"/>
+  <circle cx="1005" cy="352" r="3.5" fill="#20364e"/>
+  <circle cx="1017" cy="368" r="3.5" fill="#20364e"/>
+
+  <!-- pre-registered margin annotation between the two inductive bars -->
+  <line x1="885" y1="356" x2="965" y2="356" stroke="#8a6fb3" stroke-width="2"/>
+  <text x="925" y="342" class="s" text-anchor="middle" fill="#8a6fb3">gap &lt; 0.05</text>
+  <text x="925" y="320" class="s" text-anchor="middle" fill="#8a6fb3">= null</text>
+
+  <text x="650" y="595" class="s">No gap: ON approx OFF on new videos = memorization null.</text>
+
+  <!-- footer -->
+  <text x="48" y="644" class="s">Reads as memorization: the label-aware group term lifts seen-video separation but not new-video separation. Per-source dots and bootstrap-CI whiskers shown; each number carries checkpoint fingerprint d0acc262.</text>
+  <text x="48" y="668" class="s">Pre-registered rule: ON must beat OFF-matched by at least +0.05 inductive macro-F1 with consistent sign, else scored a null. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

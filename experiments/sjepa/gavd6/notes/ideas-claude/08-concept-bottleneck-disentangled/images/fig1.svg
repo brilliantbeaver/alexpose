@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Steerability matrix: intervening on each named subspace versus the change in each biomarker</title>
+  <desc id="d1">Illustrative expected-shape three-by-three matrix. Rows are the latent subspace we intervene on (z_asym, z_rhythm, z_posture); columns are the biomarker whose change we observe (symmetry ratio, stride-time CV, anterior pelvic tilt). Diagonal cells carry a large dark marker labeled above the raw-coordinate probe ceiling; off-diagonal cells carry a small pale marker labeled leak below the pre-registered bound. A legend card states the pass rule: steerability ratio at least 3 and leak at most 0.2. This is the causal-intervention hero figure. All numbers are transductive and illustrative; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Steerability matrix: push one subspace, watch each biomarker</text>
+  <text x="48" y="88" class="s">Illustrative expected shape. Rows = subspace intervened on, columns = biomarker change. Transductive, per held-out source.</text>
+
+  <!-- ============ LEFT: 3x3 matrix card ============ -->
+  <!-- card: x 48..716, y 112..628 -->
+  <rect x="48" y="112" width="668" height="516" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Change in biomarker j when intervening on subspace i</text>
+
+  <!-- column headers (biomarkers), baseline y=196, subheader y=222 (delta 26) -->
+  <text x="360" y="196" class="b" text-anchor="middle" font-weight="700">symmetry ratio</text>
+  <text x="496" y="196" class="b" text-anchor="middle" font-weight="700">stride-time CV</text>
+  <text x="632" y="196" class="b" text-anchor="middle" font-weight="700">pelvic tilt</text>
+  <text x="360" y="222" class="s" text-anchor="middle">(z_asym)</text>
+  <text x="496" y="222" class="s" text-anchor="middle">(z_rhythm)</text>
+  <text x="632" y="222" class="s" text-anchor="middle">(z_posture)</text>
+
+  <!-- matrix grid: 3 columns centered at 360, 496, 632 ; cell width 108, gap 28; rows centered at 300, 420, 540 -->
+  <!-- grid frame: x 306..686 (within card inset 694), y 248..592 -->
+  <!-- vertical row-label axis sits left of the grid -->
+
+  <!-- row cells drawn as light bordered squares; diagonal filled dark, off-diagonal pale -->
+  <!-- Row 1: z_asym  (row center y=300) -->
+  <rect x="306" y="248" width="108" height="104" rx="10" fill="#f7e7d8" stroke="#20364e" stroke-width="1.5"/>
+  <rect x="442" y="248" width="108" height="104" rx="10" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+  <rect x="578" y="248" width="108" height="104" rx="10" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+  <!-- Row 2: z_rhythm (row center y=420) -->
+  <rect x="306" y="368" width="108" height="104" rx="10" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+  <rect x="442" y="368" width="108" height="104" rx="10" fill="#ece6f6" stroke="#20364e" stroke-width="1.5"/>
+  <rect x="578" y="368" width="108" height="104" rx="10" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+  <!-- Row 3: z_posture (row center y=540) -->
+  <rect x="306" y="488" width="108" height="104" rx="10" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+  <rect x="442" y="488" width="108" height="104" rx="10" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+  <rect x="578" y="488" width="108" height="104" rx="10" fill="#e6f2ea" stroke="#20364e" stroke-width="1.5"/>
+
+  <!-- diagonal markers: large filled, on-hue dark accent stroke -->
+  <circle cx="360" cy="300" r="30" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <circle cx="496" cy="420" r="28" fill="#8a6fb3" stroke="#20364e" stroke-width="1.75"/>
+  <circle cx="632" cy="540" r="30" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- off-diagonal markers: small pale -->
+  <circle cx="496" cy="300" r="7" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+  <circle cx="632" cy="300" r="6" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+  <circle cx="360" cy="420" r="7" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+  <circle cx="632" cy="420" r="6" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+  <circle cx="360" cy="540" r="6" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+  <circle cx="496" cy="540" r="7" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+
+  <!-- row labels (subspace intervened on), left of grid, right-anchored, well clear of cells -->
+  <text x="290" y="296" class="b" text-anchor="end" font-weight="700">z_asym</text>
+  <text x="290" y="416" class="b" text-anchor="end" font-weight="700">z_rhythm</text>
+  <text x="290" y="536" class="b" text-anchor="end" font-weight="700">z_posture</text>
+
+  <!-- vertical axis caption for rows -->
+  <text x="118" y="420" class="s" text-anchor="middle" transform="rotate(-90 118 420)">intervene on subspace i</text>
+
+  <!-- footer inside card: axis-of-columns caption, clear space below grid (grid bottom 592) -->
+  <text x="496" y="620" class="s" text-anchor="middle">observed change in biomarker j (standardized units)</text>
+
+  <!-- ============ RIGHT: legend card + pass-rule dark banner ============ -->
+
+  <!-- Legend card: y 112..362 (height 250) -->
+  <rect x="772" y="112" width="380" height="250" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="802" y="148" class="t">Reading a cell</text>
+
+  <circle cx="812" cy="182" r="15" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="840" y="180" class="b">Diagonal: STEER.</text>
+  <text x="840" y="202" class="s">Own biomarker moves, above ceiling.</text>
+
+  <circle cx="812" cy="242" r="6" fill="#cdd8e4" stroke="#8a9bab" stroke-width="1"/>
+  <text x="840" y="240" class="b">Off-diagonal: LEAK.</text>
+  <text x="840" y="262" class="s">Other biomarkers stay below bound.</text>
+
+  <line x1="802" y1="288" x2="1122" y2="288" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="802" y="314" class="s">A clean diagonal (dark on-axis, pale off)</text>
+  <text x="802" y="336" class="s">means the named axes are disentangled.</text>
+
+  <!-- Pass-rule dark banner: y 418..628 (height 210), gap 362->418 = 56 -->
+  <rect x="772" y="418" width="380" height="210" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="802" y="452" class="w" font-size="20">Pre-registered pass rule</text>
+
+  <text x="802" y="486" class="w">Steerability ratio  &#8805; 3</text>
+  <text x="802" y="514" class="w">AND leak  &#8804; 0.2 (standardized)</text>
+  <text x="802" y="542" class="w">AND recovery  &#8805; 80% of ceiling</text>
+
+  <line x1="802" y1="560" x2="1122" y2="560" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="802" y="582" class="ws">Missing any one is an informative null</text>
+  <text x="802" y="606" class="ws">for that subspace, not a positive.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="650" class="s">Illustrative expected shape, not measured results. Labels are dataset annotations.</text>
+  <text x="48" y="672" class="s">z_rhythm is the highest-risk axis: stride-time CV is not linearly decodable from ~2s windows.</text>
+</svg>

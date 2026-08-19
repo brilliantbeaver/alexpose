@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Three evaluation views with current results</title>
+  <desc>Two sequence-split readouts and one video-grouped Random Forest readout answer different questions. Every evaluation row was already seen by the final encoder, so none is an independent performance estimate.</desc>
+  <defs>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .m{font:700 24px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="62" class="h">Three evaluation questions, three careful claims</text>
+
+  <rect x="48" y="108" width="330" height="490" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="151" class="t">A1  All 96 canonical rows</text>
+  <line x1="70" y1="171" x2="356" y2="171" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="70" y="207" class="b">67 train, 29 test, stratified</text>
+  <text x="70" y="239" class="b">16 source videos cross the split</text>
+  <text x="70" y="271" class="b">all 29 test rows seen by encoder</text>
+  <text x="70" y="322" class="s">Five-class S-JEPA readout</text>
+  <text x="70" y="360" class="m">0.793 accuracy</text>
+  <text x="70" y="392" class="b">0.821 macro-F1</text>
+  <text x="70" y="431" class="s">Missingness-only accuracy: 0.448</text>
+  <rect x="70" y="518" width="286" height="52" rx="16" fill="#d97745"/>
+  <text x="213" y="550" class="w" text-anchor="middle">Descriptive and confounded</text>
+
+  <rect x="435" y="108" width="330" height="490" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="457" y="151" class="t">A2  Exact exp5 comparison</text>
+  <line x1="457" y1="171" x2="743" y2="171" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="457" y="207" class="b">47 train, 21 test, legacy split</text>
+  <text x="457" y="239" class="b">9 source videos cross the split</text>
+  <text x="457" y="271" class="b">all 21 test rows seen by encoder</text>
+  <text x="457" y="322" class="s">Five-class S-JEPA readout</text>
+  <text x="457" y="360" class="m">0.714 accuracy</text>
+  <text x="457" y="392" class="b">0.742 macro-F1</text>
+  <text x="457" y="431" class="s">82-feature reference: 0.762 accuracy</text>
+  <rect x="457" y="518" width="286" height="52" rx="16" fill="#3977a8"/>
+  <text x="600" y="550" class="w" text-anchor="middle">Comparable, not independent</text>
+
+  <rect x="822" y="108" width="330" height="490" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="844" y="151" class="t">C  Group Random Forest by video</text>
+  <line x1="844" y1="171" x2="1130" y2="171" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="844" y="207" class="b">159 rows, 35 source videos</text>
+  <text x="844" y="239" class="b">binary: 5 folds; five class: 2 folds</text>
+  <text x="844" y="271" class="b">all rows seen by the final encoder</text>
+  <text x="844" y="322" class="s">Normal vs abnormal mean</text>
+  <text x="844" y="360" class="m">0.849 accuracy</text>
+  <text x="844" y="392" class="b">0.826 macro-F1</text>
+  <text x="844" y="431" class="s">Five-class mean: 0.653, still exposed</text>
+  <rect x="844" y="518" width="286" height="52" rx="16" fill="#72a66a"/>
+  <text x="987" y="550" class="w" text-anchor="middle">Video-grouped, still exposed</text>
+
+  <rect x="48" y="626" width="1104" height="54" rx="14" fill="#20364e"/>
+  <text x="600" y="649" class="w" text-anchor="middle">Independent performance requires fold-local pose processing and fold-local retraining of all five stages.</text>
+  <text x="600" y="669" class="s" text-anchor="middle" style="fill:#d9e3ec">Current values describe this corpus. They do not validate diagnosis or unseen-patient performance.</text>
+</svg>

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Paper-aligned S-JEPA core training graph</title>
+  <desc>The full sequence goes to the EMA target encoder. A transformed sequence loses selected tokens before the view encoder. A predictor fills latent targets.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .card{stroke:#20364e;stroke-width:1.75}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+      .ema{stroke:#5f9e7e;stroke-width:2.5;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+      .emalbl{font:700 14px Arial,Helvetica,sans-serif;fill:#5f9e7e}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="72" class="h">Predict missing joint representations, not coordinates</text>
+
+  <!-- lane captions -->
+  <text x="224" y="106" class="s">Student path</text>
+  <text x="424" y="458" class="s">Teacher path</text>
+
+  <!-- Source: Full clip, vertically centered between the two rows -->
+  <rect x="49" y="294" width="128" height="112" rx="16" fill="#ffffff" class="card"/>
+  <text x="75" y="344" class="t">Full clip</text>
+  <text x="75" y="372" class="b">T x 33 x 3</text>
+
+  <!-- Split from Full clip up to student row and down to teacher row (single riser, one bend each) -->
+  <path d="M177 350H196V174H208" class="a"/>
+  <path d="M177 350H196V526H408" class="a"/>
+
+  <!-- STUDENT ROW (top): Geometry view -> choose targets -> View encoder -> Predictor -->
+  <rect x="224" y="118" width="160" height="112" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="250" y="162" class="t">Geometry view</text>
+  <text x="250" y="190" class="b">one transform</text>
+  <text x="250" y="212" class="b">per clip</text>
+
+  <path d="M384 174H408" class="a"/>
+
+  <rect x="424" y="118" width="160" height="112" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="450" y="162" class="t">Choose targets</text>
+  <text x="450" y="190" class="b">only from 12</text>
+  <text x="450" y="212" class="b">landmark identities</text>
+
+  <path d="M584 174H608" class="a"/>
+
+  <rect x="624" y="118" width="160" height="112" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="650" y="162" class="t">View encoder</text>
+  <text x="650" y="190" class="b">visible</text>
+  <text x="650" y="212" class="b">tokens only</text>
+
+  <path d="M784 174H808" class="a"/>
+
+  <rect x="824" y="118" width="160" height="112" rx="16" fill="#ece6f6" class="card"/>
+  <text x="850" y="162" class="t">Predictor</text>
+  <text x="850" y="190" class="b">mask tokens</text>
+  <text x="850" y="212" class="b">+ positions</text>
+
+  <!-- TEACHER ROW (bottom): Full target -> EMA target encoder -> Gather outputs -->
+  <rect x="424" y="470" width="160" height="112" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="450" y="514" class="t">Full target</text>
+  <text x="450" y="542" class="b">no input</text>
+  <text x="450" y="564" class="b">masking</text>
+
+  <path d="M584 526H608" class="a"/>
+
+  <rect x="624" y="470" width="160" height="112" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="650" y="510" class="t">EMA target</text>
+  <text x="650" y="534" class="t">encoder</text>
+  <text x="650" y="562" class="b">sees all tokens</text>
+
+  <path d="M784 526H808" class="a"/>
+
+  <rect x="824" y="470" width="160" height="112" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="850" y="514" class="t">Gather outputs</text>
+  <text x="850" y="542" class="b">after full</text>
+  <text x="850" y="564" class="b">attention</text>
+
+  <!-- Predictor and Gather outputs converge on the dark latent CE node (one bend each, distinct entry rows) -->
+  <path d="M984 174H1002V336H1004" class="a"/>
+  <path d="M984 526H1002V364H1004" class="a"/>
+
+  <rect x="1020" y="302" width="104" height="96" rx="16" fill="#20364e"/>
+  <text x="1042" y="344" class="w">latent</text>
+  <text x="1056" y="368" class="w">CE</text>
+
+  <!-- EMA feedback: single straight vertical from view encoder down to EMA target encoder (16px arrowhead gap) -->
+  <path d="M704 230V454" class="ema"/>
+  <text x="718" y="354" class="emalbl">EMA update</text>
+
+  <!-- Footer note -->
+  <text x="48" y="662" class="s">The target encoder is updated by EMA. Only the target encoder is retained downstream.</text>
+</svg>

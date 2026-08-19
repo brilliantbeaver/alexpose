@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The JEPA loss compares distributions over latent dimensions</title>
+  <desc id="desc">Teacher and predictor vectors are separate aligned inputs to cross-entropy. The teacher is centered and sharpened, while the predictor keeps the gradient path.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">The JEPA loss compares distributions over latent dimensions</tspan></text>
+  <rect x="48" y="112" width="300" height="170" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="72" y="148" class="t" text-anchor="start"><tspan x="72" dy="0">Teacher target</tspan></text><text x="72" y="184" class="b" text-anchor="start"><tspan x="72" dy="0">subtract target_center</tspan><tspan x="72" dy="26">divide by 0.06</tspan><tspan x="72" dy="26">softmax over D</tspan></text><rect x="48" y="400" width="300" height="170" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="72" y="436" class="t" text-anchor="start"><tspan x="72" dy="0">Predictor output</tspan></text><text x="72" y="472" class="b" text-anchor="start"><tspan x="72" dy="0">divide by 0.10</tspan><tspan x="72" dy="26">log_softmax over D</tspan><tspan x="72" dy="26">keep gradient path</tspan></text><rect x="520" y="210" width="300" height="220" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="544" y="246" class="t" text-anchor="start"><tspan x="544" dy="0">Cross-entropy</tspan></text><text x="544" y="282" class="b" text-anchor="start"><tspan x="544" dy="0">two aligned inputs</tspan><tspan x="544" dy="26">sum over D</tspan><tspan x="544" dy="26">mean over B and M</tspan><tspan x="544" dy="26">one scalar loss</tspan></text><path d="M 348 197 L 450 197 L 450 278 L 504 278" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 348 485 L 450 485 L 450 362 L 504 362" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="852" y="112" width="300" height="170" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="876" y="148" class="t" text-anchor="start"><tspan x="876" dy="0">Center update</tspan></text><text x="876" y="184" class="b" text-anchor="start"><tspan x="876" dy="0">after the loss</tspan><tspan x="876" dy="26">mean selected targets</tspan><tspan x="876" dy="26">updates next-batch center</tspan></text><rect x="852" y="400" width="300" height="170" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="876" y="436" class="t" text-anchor="start"><tspan x="876" dy="0">What D does not mean</tspan></text><text x="876" y="472" class="b" text-anchor="start"><tspan x="876" dy="0">D components are learned</tspan><tspan x="876" dy="26">latent features, not classes.</tspan></text><rect x="328" y="620" width="544" height="36" rx="18" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.5"/><text x="600.0" y="644" class="s strong" text-anchor="middle"><tspan x="600.0" dy="0">This is latent prediction, not classification</tspan></text>
+</svg>
