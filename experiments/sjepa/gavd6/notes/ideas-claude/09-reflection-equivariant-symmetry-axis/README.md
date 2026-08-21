@@ -1,6 +1,6 @@
 # Reflection-equivariant representation: separating lateralized from symmetric gait by construction
 
-> **Canonical protocol and notebooks:** [METHODOLOGY.md](./METHODOLOGY.md), [nb_09a](../../../nb_09a_equivariant_encoder_contract.ipynb), and [nb_09b](../../../nb_09b_equivariant_futures_and_reach.ipynb). They supersede the earlier readout-only shorthand in this page wherever it would call a tied output head an “equivariant encoder.”
+> **Canonical protocol and notebooks:** [METHODOLOGY.md](./METHODOLOGY.md), [nb_09a](../../../nb_09a_equivariant_encoder_contract.ipynb), [nb_09b](../../../nb_09b_equivariant_futures_and_reach.ipynb), and the full-GAVD feasibility sequence [nb_09c](../../../nb_09c_gavd_matched_jepa_contract.ipynb) → [nb_09d](../../../nb_09d_gavd_matched_jepa_training.ipynb) → [nb_09e](../../../nb_09e_gavd_matched_jepa_audit.ipynb). They supersede the earlier readout-only shorthand in this page wherever it would call a tied output head an “equivariant encoder.”
 
 ## 0. Implementation correction and notebook map
 
@@ -32,6 +32,13 @@ outer source split. AMASS is for participant-disjoint, label-free generic motion
 support a clinical claim. MoVi is held out for actor-disjoint calibrated-view stability testing; it is
 not generic pretraining and cannot support a clinical claim. See the methodology for the full dataset
 table, health gates, matching ledger, stop conditions, and six possible futures.
+
+The executable GAVD feasibility arm is deliberately split into three notebooks. `nb_09c` freezes the
+96-sequence cohort, preprocessing, objective, health gates, seeds, and exposure- or compute-matching
+allocation. `nb_09d` trains fresh standard, paired-unconstrained, and reflection-equivariant JEPAs with
+one label-free masked-token objective and parity-resolved VICReg. `nb_09e` reloads the checkpoints and
+audits representation health plus masked/unmasked, train/eval, online/EMA commutation. Passing this arm
+licenses implementation feasibility only; it is the prerequisite for AMASS, not a substitute for it.
 
 > On source-video-disjoint folds, does building the signed left-minus-right axis to be antisymmetric BY CONSTRUCTION (an encoder whose readout the anatomical mirror is guaranteed to negate) separate lateralized gait (stroke, hemiplegic cerebral palsy, early Parkinson's) from symmetric gait (myopathy) better than the standard `d0acc262` encoder that was only allowed to learn that behavior, measured by item 05's frozen signed-decodability and mirror-slope instrument at a pre-registered margin?
 

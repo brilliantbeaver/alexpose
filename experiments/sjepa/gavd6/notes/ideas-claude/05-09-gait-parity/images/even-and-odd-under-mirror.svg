@@ -1,21 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
   <title id="title">A mirror leaves even quantities alone and reverses odd quantities</title>
   <desc id="desc">Walking speed stays 0.94 metres per second after a left-right swap. A signed right-minus-left propulsion target changes from negative 0.41 to positive 0.41. The number line stays fixed; the odd value moves across zero.</desc>
-  <defs><style>.t{font:700 30px Arial,sans-serif;fill:#0f172a}.h{font:700 21px Arial,sans-serif;fill:#0f172a}.b{font:400 19px Arial,sans-serif;fill:#1e293b}.n{font:700 25px Arial,sans-serif;fill:#0f172a}.s{font:400 17px Arial,sans-serif;fill:#334155}.w{font:700 20px Arial,sans-serif;fill:#fff}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker></defs>
+  <defs><style>.t{font:700 30px Arial,sans-serif;fill:#0f172a}.h{font:700 21px Arial,sans-serif;fill:#0f172a}.b{font:400 19px Arial,sans-serif;fill:#1e293b}.n{font:700 25px Arial,sans-serif;fill:#0f172a}.s{font:400 17px Arial,sans-serif;fill:#334155}.m{font:400 16px Arial,sans-serif;fill:#475569}.w{font:700 20px Arial,sans-serif;fill:#fff}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker><marker id="ao" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#b45309"/></marker></defs>
   <rect width="1000" height="560" fill="#f8fafc"/><rect x=".5" y=".5" width="999" height="559" fill="none" stroke="#cbd5e1"/>
   <text x="500" y="50" text-anchor="middle" class="t">What does a left-right mirror do to a measurement?</text>
+
   <rect x="45" y="90" width="420" height="345" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="75" y="128" class="h">EVEN: THE VALUE STAYS PUT</text><text x="75" y="158" class="b">Walking speed does not care which leg is called right.</text>
-  <circle cx="160" cy="205" r="28" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/><text x="160" y="214" text-anchor="middle" class="n">0.94</text><text x="160" y="252" text-anchor="middle" class="s">as recorded</text>
-  <path d="M207 205 H295" stroke="#334155" stroke-width="3" marker-end="url(#a)"/><text x="251" y="190" text-anchor="middle" class="s">mirror</text>
-  <circle cx="400" cy="205" r="28" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/><text x="400" y="214" text-anchor="middle" class="n">0.94</text><text x="400" y="252" text-anchor="middle" class="s">after swap</text>
-  <path d="M95 282 H416" stroke="#334155" stroke-width="2"/><text x="95" y="308" class="s">unchanged</text><text x="414" y="308" text-anchor="end" class="s">metres per second</text>
+  <text x="75" y="126" class="h">EVEN: THE VALUE STAYS PUT</text>
+  <text x="75" y="152" class="m">Speed does not care which leg is called right.</text>
+  <text x="255" y="196" text-anchor="middle" class="m">mirror</text>
+  <path d="M188 212 H322" stroke="#334155" stroke-width="3" marker-end="url(#a)"/>
+  <circle cx="155" cy="212" r="28" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/><text x="155" y="221" text-anchor="middle" class="n">0.94</text>
+  <circle cx="355" cy="212" r="28" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/><text x="355" y="221" text-anchor="middle" class="n">0.94</text>
+  <text x="155" y="262" text-anchor="middle" class="m">as recorded</text>
+  <text x="355" y="262" text-anchor="middle" class="m">after swap</text>
+  <path d="M95 292 H415" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="95" y="318" class="m">unchanged</text><text x="415" y="318" text-anchor="end" class="m">metres per second</text>
+  <text x="255" y="398" text-anchor="middle" class="s">Even quantities carry no side information.</text>
+
   <rect x="535" y="90" width="420" height="345" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="565" y="128" class="h">ODD: THE SIGN REVERSES</text><text x="565" y="158" class="b">Right minus left propulsion changes direction.</text>
-  <path d="M585 285 H905" stroke="#334155" stroke-width="2"/><path d="M745 273 V297" stroke="#334155" stroke-width="2"/><text x="745" y="321" text-anchor="middle" class="s">0</text>
-  <circle cx="655" cy="285" r="12" fill="#b45309"/><text x="655" y="255" text-anchor="middle" class="n">−0.41</text><text x="655" y="345" text-anchor="middle" class="s">left pushes harder</text>
-  <path d="M675 220 C730 180 790 180 835 220" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#a)"/><text x="755" y="194" text-anchor="middle" class="s">mirror swaps sides</text>
-  <circle cx="835" cy="285" r="12" fill="#b45309"/><text x="835" y="255" text-anchor="middle" class="n">+0.41</text><text x="835" y="345" text-anchor="middle" class="s">right pushes harder</text>
-  <text x="745" y="395" text-anchor="middle" class="b">Odd does not mean an odd integer.</text>
+  <text x="565" y="126" class="h">ODD: THE SIGN REVERSES</text>
+  <text x="565" y="152" class="m">Right minus left propulsion changes direction.</text>
+  <text x="752" y="182" text-anchor="middle" class="m">mirror swaps sides</text>
+  <path d="M672 220 C725 194 785 194 832 220" fill="none" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#ao)"/>
+  <text x="655" y="256" text-anchor="middle" class="n">−0.41</text>
+  <text x="835" y="256" text-anchor="middle" class="n">+0.41</text>
+  <path d="M585 290 H905" stroke="#334155" stroke-width="2"/><path d="M745 278 V302" stroke="#334155" stroke-width="2"/>
+  <circle cx="655" cy="290" r="12" fill="#b45309"/>
+  <circle cx="835" cy="290" r="12" fill="#b45309"/>
+  <text x="745" y="326" text-anchor="middle" class="m">0</text>
+  <text x="655" y="352" text-anchor="middle" class="m">left pushes harder</text>
+  <text x="835" y="352" text-anchor="middle" class="m">right pushes harder</text>
+  <text x="745" y="398" text-anchor="middle" class="s">Odd does not mean an odd integer.</text>
+
   <rect x="125" y="475" width="750" height="55" rx="14" fill="#0f172a"/><text x="500" y="510" text-anchor="middle" class="w">A mirror preserves even quantities and flips the sign of odd quantities.</text>
 </svg>

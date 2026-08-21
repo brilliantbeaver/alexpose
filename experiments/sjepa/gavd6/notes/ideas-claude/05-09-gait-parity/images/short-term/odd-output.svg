@@ -3,9 +3,12 @@
   <desc id="desc">The original walk and its anatomical mirror pass through the same locked encoder. Both the free and exact-odd readouts receive both representations. The exact-odd readout subtracts the two scores, so its final sign flips exactly.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
+    <marker id="arrow-b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#1d4ed8"/></marker>
+    <marker id="arrow-o" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#b45309"/></marker>
     <style>
       .title{font:700 30px Arial,sans-serif;fill:#0f172a}.head{font:700 21px Arial,sans-serif;fill:#0f172a}
       .body{font:19px Arial,sans-serif;fill:#1e293b}.note{font:17px Arial,sans-serif;fill:#334155}
+      .mini{font:16px Arial,sans-serif;fill:#475569}
       .strong{font:700 18px Arial,sans-serif;fill:#0f172a}.good{font:700 18px Arial,sans-serif;fill:#15803d}.bar{font:700 20px Arial,sans-serif;fill:#fff}
     </style>
   </defs>
@@ -16,48 +19,47 @@
 
   <rect x="48" y="130" width="155" height="74" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
   <text x="126" y="161" text-anchor="middle" class="head">ORIGINAL x</text>
-  <text x="126" y="188" text-anchor="middle" class="note">solid branch</text>
+  <text x="126" y="188" text-anchor="middle" class="mini">solid branch</text>
   <rect x="48" y="286" width="155" height="74" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
   <text x="126" y="317" text-anchor="middle" class="head">MIRROR Mx</text>
-  <text x="126" y="344" text-anchor="middle" class="note">dashed branch</text>
-  <path d="M203 167 H242" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M203 323 H242" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <text x="126" y="344" text-anchor="middle" class="mini">dashed branch</text>
+  <path d="M203 167 H236" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+  <path d="M236 167 V260 H266" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow-b)"/>
+  <path d="M203 323 H236" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3"/>
+  <path d="M236 323 V330 H266" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow-o)"/>
 
-  <rect x="248" y="109" width="236" height="278" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
-  <path d="M345 145 v13 h40 v-13 a20 20 0 0 0 -40 0" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
-  <rect x="340" y="157" width="50" height="34" rx="5" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
-  <text x="406" y="177" class="strong">FROZEN ENCODER E</text>
-  <text x="366" y="210" text-anchor="middle" class="note">same weights for both</text>
-  <path d="M276 250 H452" fill="none" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round"/>
-  <text x="366" y="242" text-anchor="middle" class="strong">E(x)</text>
-  <path d="M276 321 H452" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="6 3" stroke-linecap="round"/>
-  <text x="366" y="313" text-anchor="middle" class="strong">E(Mx)</text>
-  <path d="M242 167 V250 H276" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M242 323 H276" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <rect x="248" y="109" width="222" height="278" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="359" y="143" text-anchor="middle" class="strong">FROZEN ENCODER E</text>
+  <path d="M339 176 v13 h40 v-13 a20 20 0 0 0 -40 0" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <rect x="334" y="188" width="50" height="34" rx="5" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+  <text x="359" y="252" text-anchor="middle" class="strong">E(x)</text>
+  <path d="M272 262 H448" fill="none" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round"/>
+  <text x="359" y="322" text-anchor="middle" class="strong">E(Mx)</text>
+  <path d="M272 332 H448" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="6 3" stroke-linecap="round"/>
+  <text x="359" y="368" text-anchor="middle" class="mini">same weights for both</text>
 
-  <circle cx="520" cy="250" r="7" fill="#1d4ed8"/>
-  <circle cx="520" cy="321" r="7" fill="#b45309"/>
-  <text x="520" y="228" text-anchor="middle" class="note">two frozen features</text>
-  <path d="M452 250 H513" fill="none" stroke="#1d4ed8" stroke-width="3"/>
-  <path d="M452 321 H513" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3"/>
+  <path d="M448 262 H560" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+  <path d="M560 262 V176 H631" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow-b)"/>
+  <path d="M560 262 V399 H631" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow-b)"/>
+  <circle cx="560" cy="262" r="7" fill="#1d4ed8"/>
+  <path d="M448 332 H596" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3"/>
+  <path d="M596 332 V232 H631" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow-o)"/>
+  <path d="M596 332 V450 H631" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow-o)"/>
+  <circle cx="596" cy="332" r="7" fill="#b45309"/>
 
   <rect x="635" y="108" width="310" height="176" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
-  <text x="665" y="141" class="head">FREE TWO-BRANCH OUTPUT</text>
-  <text x="790" y="180" text-anchor="middle" class="body">a E(x) + b E(Mx) + c</text>
-  <text x="790" y="213" text-anchor="middle" class="note">both features, freely combined</text>
-  <text x="790" y="247" text-anchor="middle" class="strong">no exact sign rule</text>
-  <text x="914" y="266" text-anchor="end" class="note">✎ trained</text>
-  <path d="M527 250 H590 V176 H635" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M527 321 H608 V232 H635" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <text x="790" y="143" text-anchor="middle" class="head">FREE TWO-BRANCH OUTPUT</text>
+  <text x="790" y="181" text-anchor="middle" class="body">a E(x) + b E(Mx) + c</text>
+  <text x="790" y="212" text-anchor="middle" class="mini">both features, freely combined</text>
+  <text x="790" y="246" text-anchor="middle" class="strong">no exact sign rule</text>
+  <text x="914" y="270" text-anchor="end" class="mini">✎ trained</text>
 
   <rect x="635" y="332" width="310" height="176" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
-  <text x="665" y="365" class="head">EXACT ODD OUTPUT</text>
-  <text x="790" y="402" text-anchor="middle" class="body">(+0.7 − +0.1) / 2 = +0.3</text>
-  <text x="790" y="432" text-anchor="middle" class="body">on Mx, the score is −0.3</text>
-  <text x="790" y="468" text-anchor="middle" class="good">✓ final sign flips exactly</text>
-  <text x="914" y="489" text-anchor="end" class="note">✎ trained</text>
-  <path d="M527 250 H574 V399 H635" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M527 321 H595 V450 H635" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <text x="790" y="367" text-anchor="middle" class="head">EXACT ODD OUTPUT</text>
+  <text x="790" y="404" text-anchor="middle" class="body">(+0.7 − +0.1) / 2 = +0.3</text>
+  <text x="790" y="434" text-anchor="middle" class="body">on Mx, the score is −0.3</text>
+  <text x="790" y="470" text-anchor="middle" class="good">✓ final sign flips exactly</text>
+  <text x="914" y="494" text-anchor="end" class="mini">✎ trained</text>
 
   <rect x="130" y="555" width="740" height="44" rx="14" fill="#0f172a"/>
   <text x="500" y="584" text-anchor="middle" class="bar">Both readouts get both features. Only one forces the final sign.</text>

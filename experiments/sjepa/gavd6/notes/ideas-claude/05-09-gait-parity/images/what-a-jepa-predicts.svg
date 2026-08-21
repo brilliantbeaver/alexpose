@@ -52,12 +52,10 @@
   <text x="500" y="120" text-anchor="middle" class="aw">frames 4 to 5</text>
   <text x="440" y="162" text-anchor="middle" class="a">one gait cycle, 8 frames in time order</text>
 
-  <!-- arrow to lane 1 -->
-  <path d="M700 144 V168" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="712" y="162" class="a">the same clip</text>
-  <!-- routed arrow to lane 2 (forks to both sub-paths) -->
+  <!-- one shared clip bus feeding both lanes -->
   <text x="124" y="92" text-anchor="middle" class="a">the same clip</text>
   <path d="M182 104 H76 V391 H172" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M76 238 H156" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
   <path d="M76 391 V493 H172" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
 
   <!-- ================= LANE 1 : NOT a JEPA ================= -->
@@ -144,7 +142,7 @@
   <text x="678" y="368" class="ab">match these two lists</text>
   <path d="M678 376 H692 V456 H678" fill="none" stroke="#0f172a" stroke-width="2"/>
   <path d="M706 404 V428" stroke="#334155" stroke-width="2" marker-end="url(#v-open)" marker-start="url(#v-start)"/>
-  <text x="718" y="422" class="ab">error</text>
+  <text x="722" y="422" class="ab">error</text>
 
   <!-- caveat chip -->
   <rect x="678" y="446" width="272" height="80" rx="10" fill="#e2e8f0"/>

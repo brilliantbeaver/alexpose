@@ -170,6 +170,8 @@ The outer source-video split must happen first. Pose preprocessing rules, all fi
 |`04_pretrain_sjepa_on_normal.ipynb`|The complete five-stage checkpoint lineage and training history|
 |`05_inspect_latent_motion.ipynb`|Prediction, collapse, drift, retrieval, and condition-geometry audits|
 |`06_capstone_health_condition_classifiers.ipynb`|Three leakage-aware readout lanes and missingness controls|
+|`nb_09f_full_gavd_cpu_replication.ipynb`|Opt-in, three-seed full-96 CPU replication under exposure and compute matching|
+|`nb_09g_full_gavd_gpu_replication.ipynb`|Opt-in, three-seed full-96 CUDA replication under exposure and compute matching|
 
 Each notebook repeats the code it needs. Later notebooks reject missing, incomplete, wrong-mode, or wrong-cohort artifacts instead of silently falling back.
 

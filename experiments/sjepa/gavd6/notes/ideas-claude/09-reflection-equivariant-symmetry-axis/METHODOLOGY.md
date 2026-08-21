@@ -1,9 +1,12 @@
 # Idea 9 methodology: a layer-tested reflection-equivariant Skeleton-JEPA
 
-This is the implementation and analysis contract for Idea 9. It turns [README.md](./README.md) into a falsifiable experiment and two runnable notebooks. It is deliberately stricter than putting a shared left/right head on an ordinary encoder: that head can make a *final scalar* odd, but cannot make the preceding representation equivariant. The distinction is the scientific point.
+This is the implementation and analysis contract for Idea 9. It turns [README.md](./README.md) into a falsifiable experiment and an executable notebook sequence. It is deliberately stricter than putting a shared left/right head on an ordinary encoder: that head can make a *final scalar* odd, but cannot make the preceding representation equivariant. The distinction is the scientific point.
 
 - [`nb_09a_equivariant_encoder_contract.ipynb`](../../../nb_09a_equivariant_encoder_contract.ipynb) is the executable architecture contract, smoke-mode training path, and core matched comparison.
 - [`nb_09b_equivariant_futures_and_reach.ipynb`](../../../nb_09b_equivariant_futures_and_reach.ipynb) is the pre-registered future simulator, decision table, and non-clinical multi-view reach scaffold.
+- [`nb_09c_gavd_matched_jepa_contract.ipynb`](../../../nb_09c_gavd_matched_jepa_contract.ipynb) freezes the complete local-GAVD cohort, preprocessing, objective, health gates, and matching ledger.
+- [`nb_09d_gavd_matched_jepa_training.ipynb`](../../../nb_09d_gavd_matched_jepa_training.ipynb) trains fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPAs.
+- [`nb_09e_gavd_matched_jepa_audit.ipynb`](../../../nb_09e_gavd_matched_jepa_audit.ipynb) reloads every checkpoint and independently audits collapse and the numerical geometry contract.
 
 All GAVD results are source-video-level and descriptive unless every encoder is trained inside an outer source-disjoint fold. Folder names are dataset annotations, not diagnoses. Neither AMASS nor MoVi contains a clinical outcome and neither can establish clinical benefit.
 
@@ -172,6 +175,20 @@ Both notebooks default to `GAVD_MODE=smoke`. Smoke mode uses a planted sign-flip
 `nb_09a` mirrors `nb_05a`: environment and frozen contract; mirror/swap operators; paired modules and unconstrained control; layer/teacher tests and health gates; smoke or explicit-real run; core comparison; figures; JSON bundle. It uses Jupyter's standard `python3` kernel metadata, and embeds its saved architecture-contract PNG in the notebook output so the visual audit remains available after headless execution.
 
 `nb_09b` mirrors `nb_05b`: frozen practical margins and scoring; the six futures; decision table and expected-shape panels; AMASS split/overlap scaffold; MoVi actor-held-out scaffold; JSON bundle.
+
+`nb_09c` through `nb_09e` default to a deterministic CPU smoke run. A real run requires an explicit,
+versioned `GAIT_PARITY_RUN_ID`; the device remains CPU unless `GAIT_PARITY_DEVICE=cuda` is set. The CPU
+profile uses every canonical GAVD sequence at reduced width and temporal density. The GPU profile uses
+denser windows, the 96-wide four-layer encoder, more epochs and paired seeds, and CUDA autocast. Both
+profiles use the same centered/sharpened JEPA target and the same even/odd VICReg anti-collapse terms.
+
+Run the sequence twice when resources permit: once with `GAIT_PARITY_MATCHING=exposure`, which fixes
+updates and orbit exposure, and once with `GAIT_PARITY_MATCHING=compute`, which fixes a predeclared
+analytic token-parameter budget while allowing update counts to differ. The proxy is recorded as a
+proxy rather than mislabeled exact FLOPs; measured wall time, parameters, actual exposures, precision,
+and device are recorded separately. The audit covers online and EMA encoders, training and evaluation
+modes, masked and unmasked tokens, checkpoint reload, float32, and CUDA autocast precision when CUDA is
+selected.
 
 ## 8. Threats, stop conditions, and references
 

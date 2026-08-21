@@ -8,6 +8,7 @@
       .head{font:700 21px Arial,sans-serif;fill:#0f172a}
       .body{font:19px Arial,sans-serif;fill:#1e293b}
       .note{font:17px Arial,sans-serif;fill:#334155}
+      .mini{font:16px Arial,sans-serif;fill:#475569}
       .small{font:700 17px Arial,sans-serif;fill:#0f172a}
       .bar{font:700 20px Arial,sans-serif;fill:#fff}
     </style>
@@ -18,49 +19,50 @@
   <text x="500" y="45" text-anchor="middle" class="title">Does the swap rule work in either order?</text>
   <text x="500" y="74" text-anchor="middle" class="note">Every claimed layer must make these two routes agree.</text>
 
-  <rect x="92" y="116" width="255" height="92" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
-  <text x="219" y="151" text-anchor="middle" class="head">START: PAIRED STATE</text>
-  <line x1="148" y1="180" x2="194" y2="180" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
-  <line x1="244" y1="180" x2="290" y2="180" stroke="#334155" stroke-width="3" stroke-dasharray="6 3" stroke-linecap="round"/>
-  <text x="219" y="197" text-anchor="middle" class="note">solid branch + dashed branch</text>
+  <rect x="55" y="116" width="300" height="110" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="205" y="150" text-anchor="middle" class="head">START: PAIRED STATE</text>
+  <line x1="132" y1="178" x2="186" y2="178" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <line x1="224" y1="178" x2="278" y2="178" stroke="#334155" stroke-width="3" stroke-dasharray="6 3" stroke-linecap="round"/>
+  <text x="205" y="208" text-anchor="middle" class="mini">solid branch + dashed branch</text>
 
-  <rect x="653" y="116" width="255" height="92" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
-  <text x="780" y="151" text-anchor="middle" class="head">PROCESS FIRST</text>
-  <text x="780" y="181" text-anchor="middle" class="body">F(H)</text>
+  <rect x="645" y="116" width="300" height="110" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="795" y="150" text-anchor="middle" class="head">PROCESS FIRST</text>
+  <text x="795" y="182" text-anchor="middle" class="body">F(H)</text>
+  <text x="795" y="208" text-anchor="middle" class="mini">processed, not yet swapped</text>
 
-  <rect x="92" y="304" width="255" height="92" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
-  <text x="219" y="336" text-anchor="middle" class="head">SWAP FIRST</text>
-  <text x="219" y="366" text-anchor="middle" class="body">S(H)</text>
-  <path d="M155 380 L283 349 M155 349 L283 380" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
-  <text x="219" y="389" text-anchor="middle" class="note">the two branches trade places</text>
+  <rect x="55" y="304" width="300" height="110" rx="14" fill="#fff" stroke="#334155" stroke-width="2"/>
+  <text x="205" y="338" text-anchor="middle" class="head">SWAP FIRST</text>
+  <line x1="132" y1="366" x2="186" y2="366" stroke="#334155" stroke-width="3" stroke-dasharray="6 3" stroke-linecap="round"/>
+  <line x1="224" y1="366" x2="278" y2="366" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+  <text x="205" y="396" text-anchor="middle" class="mini">S(H): the branches trade places</text>
 
-  <rect x="653" y="304" width="255" height="92" rx="14" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
-  <text x="780" y="336" text-anchor="middle" class="head">SAME FINAL STATE</text>
-  <text x="780" y="366" text-anchor="middle" class="body">S(F(H))</text>
-  <text x="780" y="389" text-anchor="middle" class="small" fill="#15803d">✓ numbers agree within tolerance</text>
+  <rect x="645" y="304" width="300" height="110" rx="14" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
+  <text x="795" y="338" text-anchor="middle" class="head">SAME FINAL STATE</text>
+  <text x="795" y="370" text-anchor="middle" class="body">S(F(H))</text>
+  <text x="795" y="398" text-anchor="middle" class="small" fill="#15803d">✓ agrees within tolerance</text>
 
-  <path d="M347 162 H635" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="491" y="147" text-anchor="middle" class="small">1. PROCESS</text>
-  <path d="M219 208 V284" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="244" y="256" class="small">2. SWAP</text>
-  <path d="M347 350 H635" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="491" y="335" text-anchor="middle" class="small">1. PROCESS</text>
-  <path d="M780 208 V284" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="805" y="256" class="small">2. SWAP</text>
+  <path d="M355 171 H637" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="496" y="156" text-anchor="middle" class="small">1. PROCESS</text>
+  <path d="M205 226 V296" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="228" y="266" class="small">2. SWAP</text>
+  <path d="M355 359 H637" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="496" y="344" text-anchor="middle" class="small">1. PROCESS</text>
+  <path d="M795 226 V296" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="818" y="266" class="small">2. SWAP</text>
 
-  <rect x="390" y="222" width="220" height="82" rx="14" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="500" y="251" text-anchor="middle" class="head">THE REQUIRED TEST</text>
-  <text x="500" y="279" text-anchor="middle" class="body">swap then process</text>
-  <text x="500" y="299" text-anchor="middle" class="body">= process then swap</text>
+  <rect x="380" y="222" width="240" height="86" rx="14" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="500" y="252" text-anchor="middle" class="head">THE REQUIRED TEST</text>
+  <text x="500" y="280" text-anchor="middle" class="body">swap then process</text>
+  <text x="500" y="300" text-anchor="middle" class="body">= process then swap</text>
 
   <rect x="55" y="438" width="890" height="103" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
   <text x="82" y="471" class="head">LAYER CHECKS</text>
   <rect x="272" y="457" width="275" height="63" rx="10" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
   <text x="409" y="484" text-anchor="middle" class="small" fill="#15803d">✓ shared layer settings</text>
-  <text x="409" y="507" text-anchor="middle" class="note">both branches get the same rule</text>
+  <text x="409" y="507" text-anchor="middle" class="mini">both branches get the same rule</text>
   <rect x="588" y="457" width="320" height="63" rx="10" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
   <text x="748" y="484" text-anchor="middle" class="small" fill="#b91c1c">✗ different dropout masks</text>
-  <text x="748" y="507" text-anchor="middle" class="note">branches roll different dice</text>
+  <text x="748" y="507" text-anchor="middle" class="mini">branches roll different dice</text>
 
   <rect x="130" y="559" width="740" height="44" rx="14" fill="#0f172a"/>
   <text x="500" y="588" text-anchor="middle" class="bar">Mirror then process must equal process then mirror, layer by layer.</text>

@@ -22,15 +22,15 @@
   <rect x="225" y="126" width="166" height="58" rx="12" fill="#fff" stroke="#334155" stroke-width="2"/><text x="308" y="151" text-anchor="middle" class="head">ENCODER E</text><text x="308" y="173" text-anchor="middle" class="note">run once</text>
   <rect x="225" y="198" width="166" height="58" rx="12" fill="#fff" stroke="#334155" stroke-width="2"/><text x="308" y="223" text-anchor="middle" class="head">ENCODER E</text><text x="308" y="245" text-anchor="middle" class="note">run again</text>
   <path d="M407 147 v82" fill="none" stroke="#334155" stroke-width="2"/><path d="M400 147 h14 M400 229 h14" fill="none" stroke="#334155" stroke-width="2"/>
-  <text x="425" y="192" class="note">same weights</text>
+  <text x="425" y="198" class="note">same weights</text>
   <path d="M391 156 H488" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
   <path d="M391 228 H488" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
   <rect x="493" y="133" width="96" height="47" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/><text x="541" y="163" text-anchor="middle" class="strong">q</text>
   <rect x="493" y="205" width="96" height="47" rx="10" fill="#fff" stroke="#334155" stroke-width="2"/><text x="541" y="235" text-anchor="middle" class="strong">q</text>
-  <path d="M589 156 H674" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M589 228 H674" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
-  <circle cx="710" cy="192" r="40" fill="#e2e8f0" stroke="#334155" stroke-width="2"/><text x="710" y="188" text-anchor="middle" class="strong">subtract</text><text x="710" y="210" text-anchor="middle" class="strong">then ÷2</text>
-  <path d="M750 192 H789" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M589 156 H658" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M589 228 H658" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <circle cx="710" cy="192" r="46" fill="#e2e8f0" stroke="#334155" stroke-width="2"/><text x="710" y="188" text-anchor="middle" class="strong">subtract</text><text x="710" y="210" text-anchor="middle" class="strong">then ÷2</text>
+  <path d="M756 192 H789" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
   <rect x="794" y="160" width="154" height="64" rx="12" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/><text x="871" y="187" text-anchor="middle" class="head">ODD SCORE</text><text x="871" y="210" text-anchor="middle" class="note">exact at exit</text>
 
   <text x="48" y="326" class="head">ENCODER PARITY</text>
@@ -61,9 +61,9 @@
     <path d="M571 389 L613 467 M571 467 L613 389" fill="none" stroke="#334155" stroke-width="2"/>
     <text x="592" y="496" text-anchor="middle" class="note">swap checked</text>
   </g>
-  <path d="M655 370 H678 V398 H690" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/><path d="M655 479 H678 V458 H690" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
-  <circle cx="730" cy="428" r="40" fill="#e2e8f0" stroke="#334155" stroke-width="2"/><text x="730" y="424" text-anchor="middle" class="strong">subtract</text><text x="730" y="446" text-anchor="middle" class="strong">then ÷2</text>
-  <path d="M770 428 H790" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M655 370 H678 V398 H684" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/><path d="M655 479 H678 V458 H684" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <circle cx="730" cy="428" r="46" fill="#e2e8f0" stroke="#334155" stroke-width="2"/><text x="730" y="424" text-anchor="middle" class="strong">subtract</text><text x="730" y="446" text-anchor="middle" class="strong">then ÷2</text>
+  <path d="M776 428 H790" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
   <rect x="795" y="396" width="153" height="64" rx="12" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/><text x="871" y="423" text-anchor="middle" class="head">ODD SCORE</text><text x="871" y="446" text-anchor="middle" class="note">exact at every test</text>
 
   <rect x="130" y="555" width="740" height="44" rx="14" fill="#0f172a"/>

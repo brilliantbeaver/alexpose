@@ -1,75 +1,76 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="740" viewBox="0 0 1000 740" role="img" aria-labelledby="title desc">
   <title id="title">Each research stage earns a stronger claim</title>
-  <desc id="desc">The GaitParity research path rises from a code audit through an output prototype, an encoder study, and a locked replication. Each gate must pass before the next claim is allowed, and a later stage cannot repair weak earlier evidence.</desc>
+  <desc id="desc">The GaitParity research path rises from a code audit through an output prototype, an encoder study, and a locked replication. Each gate must pass before the next claim is allowed, and any failed gate routes to a narrower claim rather than to the next stage.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
-    <marker id="open-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11" fill="none" stroke="#b91c1c" stroke-width="2"/></marker>
+    <marker id="fail-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#b91c1c"/></marker>
     <style>
       .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
       .heading { font: 700 21px Arial, sans-serif; fill: #0f172a; }
       .body { font: 19px Arial, sans-serif; fill: #1e293b; }
       .small { font: 17px Arial, sans-serif; fill: #334155; }
+      .claim { font: 700 16px Arial, sans-serif; fill: #475569; }
+      .gate { font: 700 17px Arial, sans-serif; fill: #15803d; }
       .bar { font: 700 20px Arial, sans-serif; fill: #ffffff; }
       .step { font: 700 17px Arial, sans-serif; fill: #ffffff; }
     </style>
   </defs>
-  <rect width="1000" height="620" fill="#f8fafc"/>
-  <rect x="0.5" y="0.5" width="999" height="619" fill="none" stroke="#cbd5e1"/>
-  <text x="500" y="48" text-anchor="middle" class="title">Each stage earns a stronger claim</text>
-  <text x="500" y="78" text-anchor="middle" class="body">A later experiment can add evidence. It cannot fix a broken earlier one.</text>
-  <path d="M72 474 V114" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="43" y="310" text-anchor="middle" transform="rotate(-90 43 310)" class="body">strength of claim you may make</text>
+  <rect width="1000" height="740" fill="#f8fafc"/>
+  <rect x="0.5" y="0.5" width="999" height="739" fill="none" stroke="#cbd5e1"/>
+  <text x="500" y="46" text-anchor="middle" class="title">Each stage earns a stronger claim</text>
+  <text x="500" y="76" text-anchor="middle" class="body">A later experiment can add evidence. It cannot fix a broken earlier one.</text>
 
-  <rect x="112" y="350" width="172" height="116" rx="14" fill="#ffffff" stroke="#475569" stroke-width="2"/>
-  <circle cx="139" cy="379" r="17" fill="#475569"/><text x="139" y="385" text-anchor="middle" class="step">1</text>
-  <text x="166" y="385" class="heading">CODE AUDIT</text>
-  <text x="132" y="417" class="small">Signs, mirrors, splits</text>
-  <text x="132" y="439" class="small">work as specified.</text>
-  <text x="132" y="459" class="small">Claim: code is valid.</text>
+  <path d="M56 628 V104" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="28" y="366" text-anchor="middle" transform="rotate(-90 28 366)" class="small">strength of claim you may make</text>
 
-  <path d="M284 393 L310 369 L336 393 L310 417 Z" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
-  <text x="310" y="400" text-anchor="middle" class="heading" fill="#15803d">✓</text>
-  <text x="310" y="349" text-anchor="middle" class="small">checks pass?</text>
-  <path d="M327 379 L350 348" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="96" y="104" width="550" height="84" rx="14" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <circle cx="134" cy="132" r="17" fill="#15803d"/><text x="134" y="138" text-anchor="middle" class="step">4</text>
+  <text x="162" y="139" class="heading">REPEAT</text>
+  <text x="626" y="139" text-anchor="end" class="claim">Claim: it repeats.</text>
+  <text x="162" y="168" class="small">Second cohort, frozen plan, no new tuning.</text>
 
-  <rect x="350" y="270" width="182" height="126" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
-  <circle cx="378" cy="300" r="17" fill="#1d4ed8"/><text x="378" y="306" text-anchor="middle" class="step">2</text>
-  <text x="405" y="306" class="heading">PROTOTYPE</text>
-  <text x="370" y="337" class="small">Held-out people test</text>
-  <text x="370" y="359" class="small">the exact output rule.</text>
-  <text x="370" y="381" class="small">Claim: the rule helps.</text>
+  <path d="M376 248 V196" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="236" y="198" width="280" height="36" rx="18" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+  <text x="376" y="222" text-anchor="middle" class="gate"><tspan>✓</tspan><tspan dx="7">beats output repair?</tspan></text>
+  <path d="M516 216 H660" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5"/>
 
-  <path d="M532 313 L558 289 L584 313 L558 337 Z" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
-  <text x="558" y="320" text-anchor="middle" class="heading" fill="#15803d">✓</text>
-  <text x="558" y="269" text-anchor="middle" class="small">benefit?</text>
-  <path d="M575 299 L598 268" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="96" y="248" width="550" height="84" rx="14" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+  <circle cx="134" cy="276" r="17" fill="#334155"/><text x="134" y="282" text-anchor="middle" class="step">3</text>
+  <text x="162" y="283" class="heading">ENCODER STUDY</text>
+  <text x="626" y="283" text-anchor="end" class="claim">Claim: parity helps.</text>
+  <text x="162" y="312" class="small">Layer-tested model must beat output repair.</text>
 
-  <rect x="598" y="190" width="182" height="150" rx="14" fill="#ffffff" stroke="#334155" stroke-width="2"/>
-  <circle cx="626" cy="220" r="17" fill="#334155"/><text x="626" y="226" text-anchor="middle" class="step">3</text>
-  <text x="653" y="226" class="heading">ENCODER</text>
-  <text x="653" y="247" class="heading">STUDY</text>
-  <text x="618" y="268" class="small">Layer-tested model</text>
-  <text x="618" y="288" class="small">must beat output</text>
-  <text x="618" y="308" class="small">repair.</text>
-  <text x="618" y="328" class="small">Claim: rule helps.</text>
+  <path d="M376 392 V340" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="236" y="342" width="280" height="36" rx="18" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+  <text x="376" y="366" text-anchor="middle" class="gate"><tspan>✓</tspan><tspan dx="7">held-out benefit?</tspan></text>
+  <path d="M516 360 H660" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5"/>
 
-  <path d="M780 233 L806 209 L832 233 L806 257 Z" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
-  <text x="806" y="240" text-anchor="middle" class="heading" fill="#15803d">✓</text>
-  <text x="806" y="189" text-anchor="middle" class="small">pass?</text>
-  <path d="M823 219 L842 188" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="96" y="392" width="550" height="84" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="134" cy="420" r="17" fill="#1d4ed8"/><text x="134" y="426" text-anchor="middle" class="step">2</text>
+  <text x="162" y="427" class="heading">PROTOTYPE</text>
+  <text x="626" y="427" text-anchor="end" class="claim">Claim: the rule helps.</text>
+  <text x="162" y="456" class="small">Held-out people test the exact output rule.</text>
 
-  <rect x="822" y="110" width="140" height="126" rx="14" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
-  <circle cx="849" cy="140" r="17" fill="#15803d"/><text x="849" y="146" text-anchor="middle" class="step">4</text>
-  <text x="876" y="146" class="heading">REPEAT</text>
-  <text x="842" y="177" class="small">Second cohort,</text>
-  <text x="842" y="199" class="small">frozen plan.</text>
-  <text x="842" y="221" class="small">Claim: repeats.</text>
+  <path d="M376 536 V484" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="236" y="486" width="280" height="36" rx="18" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+  <text x="376" y="510" text-anchor="middle" class="gate"><tspan>✓</tspan><tspan dx="7">code checks pass?</tspan></text>
+  <path d="M516 504 H660" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5"/>
 
-  <path d="M310 417 C330 462 385 490 435 505" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
-  <path d="M558 337 C560 422 525 465 500 505" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
-  <path d="M806 257 C760 404 650 469 580 505" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
-  <rect x="285" y="502" width="430" height="39" rx="10" fill="#fef2f2" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 3"/>
-  <text x="500" y="528" text-anchor="middle" class="body">Gate fails: narrow the claim, revise, or stop.</text>
-  <rect x="130" y="558" width="740" height="54" rx="14" fill="#0f172a"/>
-  <text x="500" y="592" text-anchor="middle" class="bar">No later stage can repair weak evidence from an earlier stage.</text>
+  <rect x="96" y="536" width="550" height="84" rx="14" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+  <circle cx="134" cy="564" r="17" fill="#475569"/><text x="134" y="570" text-anchor="middle" class="step">1</text>
+  <text x="162" y="571" class="heading">CODE AUDIT</text>
+  <text x="626" y="571" text-anchor="end" class="claim">Claim: code is valid.</text>
+  <text x="162" y="600" class="small">Signs, mirrors, and splits work as specified.</text>
+
+  <path d="M660 216 V560 H686" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#fail-arrow)"/>
+  <text x="670" y="252" class="claim" fill="#b91c1c">any no</text>
+
+  <rect x="700" y="496" width="268" height="128" rx="14" fill="#fef2f2" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="834" y="532" text-anchor="middle" class="heading" fill="#b91c1c">GATE FAILS</text>
+  <text x="834" y="563" text-anchor="middle" class="small">Narrow the claim,</text>
+  <text x="834" y="586" text-anchor="middle" class="small">revise the plan,</text>
+  <text x="834" y="609" text-anchor="middle" class="small">or stop and report.</text>
+
+  <rect x="130" y="650" width="740" height="56" rx="14" fill="#0f172a"/>
+  <text x="500" y="685" text-anchor="middle" class="bar">No later stage can repair weak evidence from an earlier stage.</text>
 </svg>
