@@ -2,7 +2,7 @@
 
 **New here?** Read this page first. It assumes no background in machine learning, biomechanics, or symmetry math. Every technical word is defined either on this page or in the [glossary](./GLOSSARY.md).
 
-> **How to use this folder.** Start with sections 1 through 3 for the question. Read sections 4 through 6 only when you want the model and mirror mechanics. Then choose the [Prototype](./README_SHORT_TERM.md) if you are testing the simple output fix, or the [Study](./README_LONG_TERM.md) if you are building a new encoder. The methodology files are specifications for running the work, not first-pass tutorials. Open the [glossary](./GLOSSARY.md) only when a word blocks you.
+> **How to use this folder.** Start with sections 1 through 3 for the question. Read sections 4 through 6 only when you want the model and mirror mechanics. Then choose the [Prototype](./README_SHORT_TERM.md) if you are testing the simple output fix, or the [Study](./README_LONG_TERM.md) if you are building a new encoder. For a guided summary of the foundations, current evidence, planned work, and notebook graph, open the [tutorial guide](./tutorials/README.md). The methodology files are specifications for running the work, not first-pass tutorials. Open the [glossary](./GLOSSARY.md) only when a word blocks you.
 
 ---
 

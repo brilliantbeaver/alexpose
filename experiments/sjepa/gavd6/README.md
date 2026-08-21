@@ -170,6 +170,11 @@ The outer source-video split must happen first. Pose preprocessing rules, all fi
 |`04_pretrain_sjepa_on_normal.ipynb`|The complete five-stage checkpoint lineage and training history|
 |`05_inspect_latent_motion.ipynb`|Prediction, collapse, drift, retrieval, and condition-geometry audits|
 |`06_capstone_health_condition_classifiers.ipynb`|Three leakage-aware readout lanes and missingness controls|
+|`nb_09a_equivariant_encoder_contract.ipynb`|The reflection-equivariant encoder contract and smoke-mode matched comparison|
+|`nb_09b_equivariant_futures_and_reach.ipynb`|Pre-registered futures, decision tables, and non-clinical reach scaffolds|
+|`nb_09c_gavd_matched_jepa_contract.ipynb`|The frozen full-GAVD cohort, objective, health gates, and matching ledger|
+|`nb_09d_gavd_matched_jepa_training.ipynb`|Fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPA training|
+|`nb_09e_gavd_matched_jepa_audit.ipynb`|Checkpoint health and reflection-geometry audits for the matched GAVD run|
 |`nb_09f_full_gavd_cpu_replication.ipynb`|Opt-in, three-seed full-96 CPU replication under exposure and compute matching|
 |`nb_09g_full_gavd_gpu_replication.ipynb`|Opt-in, three-seed full-96 CUDA replication under exposure and compute matching|
 
