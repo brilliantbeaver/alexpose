@@ -3,15 +3,18 @@
   <desc id="desc">The primary input is a core 11 lower-body skeleton sequence. A frozen encoder, trained earlier without labels, makes a compact representation. Only the small readout learns from force-labelled participants. A core 13 shoulder version is a separate sensitivity analysis, not mixed with the primary result.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
-    <marker id="open-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11" fill="none" stroke="#b91c1c" stroke-width="2"/></marker>
+    <marker id="blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#1d4ed8"/></marker>
     <style>
       .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
       .heading { font: 700 21px Arial, sans-serif; fill: #0f172a; }
+      .sub { font: 700 19px Arial, sans-serif; fill: #0f172a; }
       .body { font: 19px Arial, sans-serif; fill: #1e293b; }
       .small { font: 17px Arial, sans-serif; fill: #334155; }
+      .mini { font: 16px Arial, sans-serif; fill: #334155; }
+      .tiny { font: 15px Arial, sans-serif; fill: #475569; }
       .number { font: 700 22px Arial, sans-serif; fill: #0f172a; }
       .bar { font: 700 20px Arial, sans-serif; fill: #ffffff; }
-      .red { font: 17px Arial, sans-serif; fill: #b91c1c; }
+      .red { font: 16px Arial, sans-serif; fill: #b91c1c; }
     </style>
   </defs>
   <rect width="1000" height="680" fill="#f8fafc"/>
@@ -19,56 +22,61 @@
   <text x="500" y="48" text-anchor="middle" class="title">Only the small readout sees the scarce force labels</text>
   <text x="500" y="79" text-anchor="middle" class="body">Freezing the encoder lets us test what its representation already contains.</text>
 
-  <rect x="40" y="124" width="220" height="248" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
-  <text x="150" y="160" text-anchor="middle" class="heading">CORE-11 PRIMARY</text>
-  <path d="M150 185 V264 M150 205 L116 228 M150 205 L184 228 M150 264 L122 308 M150 264 L178 308" fill="none" stroke="#1e293b" stroke-width="7" stroke-linecap="round"/>
-  <circle cx="150" cy="174" r="11" fill="#ffffff" stroke="#1d4ed8" stroke-width="3"/>
-  <g fill="#1d4ed8"><circle cx="150" cy="264" r="5"/><circle cx="122" cy="308" r="5"/><circle cx="178" cy="308" r="5"/><circle cx="114" cy="333" r="5"/><circle cx="186" cy="333" r="5"/><circle cx="109" cy="351" r="5"/><circle cx="191" cy="351" r="5"/></g>
-  <text x="150" y="288" text-anchor="middle" class="small">pelvis + 5 left/right pairs</text>
-  <text x="150" y="319" text-anchor="middle" class="body">64 frames × 11 joints × 3</text>
-  <text x="150" y="348" text-anchor="middle" class="number">2,112 coordinates</text>
-  <path d="M260 248 H296" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="40" y="124" width="236" height="296" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="158" y="160" text-anchor="middle" class="heading">CORE-11 PRIMARY</text>
+  <path d="M158 196 V252 M158 210 L128 232 M158 210 L188 232 M158 252 L134 296 M158 252 L182 296" fill="none" stroke="#1e293b" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="158" cy="186" r="11" fill="#ffffff" stroke="#1d4ed8" stroke-width="3"/>
+  <g fill="#1d4ed8"><circle cx="158" cy="252" r="5"/><circle cx="146" cy="274" r="5"/><circle cx="170" cy="274" r="5"/><circle cx="134" cy="296" r="5"/><circle cx="182" cy="296" r="5"/><circle cx="128" cy="232" r="5"/><circle cx="188" cy="232" r="5"/></g>
+  <line x1="62" y1="318" x2="254" y2="318" stroke="#bfdbfe" stroke-width="2"/>
+  <text x="158" y="342" text-anchor="middle" class="mini">pelvis + 5 left/right pairs</text>
+  <text x="158" y="366" text-anchor="middle" class="mini">64 frames × 11 joints × 3</text>
+  <text x="158" y="398" text-anchor="middle" class="number">2,112 coordinates</text>
+  <path d="M276 260 H312" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
 
-  <rect x="40" y="404" width="220" height="104" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
-  <text x="150" y="437" text-anchor="middle" class="heading">CORE-13 CHECK</text>
-  <text x="150" y="463" text-anchor="middle" class="small">Add shoulders.</text>
-  <text x="150" y="484" text-anchor="middle" class="small">2,496 coordinates.</text>
-  <text x="150" y="504" text-anchor="middle" class="small">Separate report.</text>
+  <rect x="40" y="440" width="236" height="118" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="158" y="474" text-anchor="middle" class="heading">CORE-13 CHECK</text>
+  <text x="158" y="500" text-anchor="middle" class="mini">Add shoulders.</text>
+  <text x="158" y="521" text-anchor="middle" class="mini">2,496 coordinates.</text>
+  <text x="158" y="542" text-anchor="middle" class="mini">Separate report.</text>
 
-  <rect x="300" y="112" width="265" height="300" rx="14" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
-  <path d="M327 157 V146 a12 12 0 0 1 24 0 V157" fill="none" stroke="#0f172a" stroke-width="4"/>
-  <rect x="321" y="156" width="36" height="28" rx="5" fill="#0f172a"/>
-  <circle cx="339" cy="167" r="4" fill="#e2e8f0"/>
-  <text x="378" y="176" class="heading">FROZEN ENCODER E</text>
-  <g fill="#cbd5e1"><rect x="326" y="215" width="28" height="120" rx="4"/><rect x="366" y="215" width="28" height="120" rx="4"/><rect x="406" y="215" width="28" height="120" rx="4"/><rect x="446" y="215" width="28" height="120" rx="4"/><rect x="486" y="215" width="28" height="120" rx="4"/></g>
-  <text x="432" y="357" text-anchor="middle" class="body">learned earlier from</text>
-  <text x="432" y="380" text-anchor="middle" class="body">unlabelled walks</text>
-  <text x="432" y="403" text-anchor="middle" class="small">frozen during this comparison</text>
-  <path d="M565 253 H602" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="320" y="112" width="260" height="296" rx="14" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+  <path d="M438 135 V124 a12 12 0 0 1 24 0 V135" fill="none" stroke="#0f172a" stroke-width="4"/>
+  <rect x="432" y="134" width="36" height="28" rx="5" fill="#0f172a"/>
+  <circle cx="450" cy="145" r="4" fill="#e2e8f0"/>
+  <text x="450" y="196" text-anchor="middle" class="heading">FROZEN ENCODER E</text>
+  <g fill="#cbd5e1"><rect x="356" y="216" width="28" height="104" rx="4"/><rect x="396" y="216" width="28" height="104" rx="4"/><rect x="436" y="216" width="28" height="104" rx="4"/><rect x="476" y="216" width="28" height="104" rx="4"/><rect x="516" y="216" width="28" height="104" rx="4"/></g>
+  <text x="450" y="348" text-anchor="middle" class="small">learned earlier from</text>
+  <text x="450" y="370" text-anchor="middle" class="small">unlabelled walks</text>
+  <text x="450" y="394" text-anchor="middle" class="mini">frozen during this comparison</text>
+  <path d="M580 260 H608" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
 
-  <rect x="610" y="170" width="124" height="166" rx="14" fill="#ffffff" stroke="#475569" stroke-width="2"/>
-  <text x="672" y="205" text-anchor="middle" class="heading">h</text>
-  <text x="672" y="233" text-anchor="middle" class="small">256-number</text>
-  <text x="672" y="255" text-anchor="middle" class="small">walk summary</text>
-  <g fill="#ffffff" stroke="#475569" stroke-width="1.5"><rect x="632" y="274" width="10" height="24" rx="2"/><rect x="646" y="274" width="10" height="24" rx="2"/><rect x="660" y="274" width="10" height="24" rx="2"/><rect x="674" y="274" width="10" height="24" rx="2"/><rect x="688" y="274" width="10" height="24" rx="2"/><rect x="702" y="274" width="10" height="24" rx="2"/></g>
-  <path d="M734 253 H770" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="616" y="188" width="116" height="144" rx="14" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+  <text x="674" y="222" text-anchor="middle" class="heading">h</text>
+  <text x="674" y="252" text-anchor="middle" class="mini">256-number</text>
+  <text x="674" y="274" text-anchor="middle" class="mini">per walk</text>
+  <g fill="#ffffff" stroke="#475569" stroke-width="1.5"><rect x="634" y="290" width="10" height="24" rx="2"/><rect x="648" y="290" width="10" height="24" rx="2"/><rect x="662" y="290" width="10" height="24" rx="2"/><rect x="676" y="290" width="10" height="24" rx="2"/><rect x="690" y="290" width="10" height="24" rx="2"/><rect x="704" y="290" width="10" height="24" rx="2"/></g>
+  <path d="M732 260 H768" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
 
-  <rect x="778" y="150" width="178" height="218" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
-  <text x="867" y="185" text-anchor="middle" class="heading">READOUT q</text>
-  <path d="M824 244 L853 215 L865 227 L836 256 Z" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
-  <path d="M824 244 L836 256 L816 264 Z" fill="#1d4ed8"/>
-  <text x="867" y="289" text-anchor="middle" class="body">few hundred weights</text>
-  <text x="867" y="314" text-anchor="middle" class="small">learns from force labels</text>
-  <rect x="809" y="329" width="116" height="48" rx="10" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
-  <text x="867" y="360" text-anchor="middle" class="number">−0.41</text>
-  <text x="867" y="398" text-anchor="middle" class="small">signed right-minus-left</text>
-  <text x="867" y="420" text-anchor="middle" class="small">estimate</text>
+  <rect x="776" y="128" width="196" height="264" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="874" y="164" text-anchor="middle" class="heading">READOUT q</text>
+  <path d="M858 209 L887 180 L899 192 L870 221 Z" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <path d="M858 209 L870 221 L850 229 Z" fill="#1d4ed8"/>
+  <text x="874" y="256" text-anchor="middle" class="mini">a few hundred weights</text>
+  <text x="874" y="278" text-anchor="middle" class="tiny">learns from labels</text>
+  <text x="874" y="306" text-anchor="middle" class="tiny">signed right-minus-left</text>
+  <rect x="816" y="320" width="116" height="48" rx="10" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="874" y="352" text-anchor="middle" class="number">−0.41</text>
 
-  <text x="825" y="454" text-anchor="middle" class="heading">4 LABELLED PEOPLE</text>
-  <g stroke="#1d4ed8" stroke-width="4" fill="none" stroke-linecap="round"><circle cx="770" cy="480" r="7" fill="#1d4ed8" stroke="none"/><path d="M770 489 V510 M760 496 H780 M770 510 L762 524 M770 510 L778 524"/><circle cx="807" cy="480" r="7" fill="#1d4ed8" stroke="none"/><path d="M807 489 V510 M797 496 H817 M807 510 L799 524 M807 510 L815 524"/><circle cx="844" cy="480" r="7" fill="#1d4ed8" stroke="none"/><path d="M844 489 V510 M834 496 H854 M844 510 L836 524 M844 510 L852 524"/><circle cx="881" cy="480" r="7" fill="#1d4ed8" stroke="none"/><path d="M881 489 V510 M871 496 H891 M881 510 L873 524 M881 510 L889 524"/></g>
-  <path d="M881 531 H950 V377" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M755 530 L552 392" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
-  <text x="625" y="475" text-anchor="middle" class="red">force labels must not reach encoder E</text>
+  <g stroke="#1d4ed8" stroke-width="4" fill="none" stroke-linecap="round"><circle cx="799" cy="447" r="7" fill="#1d4ed8" stroke="none"/><path d="M799 456 V477 M789 463 H809 M799 477 L791 491 M799 477 L807 491"/><circle cx="849" cy="447" r="7" fill="#1d4ed8" stroke="none"/><path d="M849 456 V477 M839 463 H859 M849 477 L841 491 M849 477 L857 491"/><circle cx="899" cy="447" r="7" fill="#1d4ed8" stroke="none"/><path d="M899 456 V477 M889 463 H909 M899 477 L891 491 M899 477 L907 491"/><circle cx="949" cy="447" r="7" fill="#1d4ed8" stroke="none"/><path d="M949 456 V477 M939 463 H959 M949 477 L941 491 M949 477 L957 491"/></g>
+  <path d="M799 440 V428 M849 440 V428 M899 440 V428 M949 440 V428 M799 428 H949" fill="none" stroke="#1d4ed8" stroke-width="2.5"/>
+  <path d="M874 428 V398" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#blue-arrow)"/>
+  <text x="874" y="522" text-anchor="middle" class="sub">4 LABELLED PEOPLE</text>
+
+  <path d="M772 466 L646 424" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5"/>
+  <circle cx="634" cy="419" r="14" fill="#fef2f2" stroke="#b91c1c" stroke-width="3"/>
+  <path d="M625 410 L643 428" stroke="#b91c1c" stroke-width="3"/>
+  <text x="470" y="450" text-anchor="middle" class="red">force labels never reach encoder E</text>
+
   <rect x="130" y="592" width="740" height="54" rx="14" fill="#0f172a"/>
   <text x="500" y="626" text-anchor="middle" class="bar">The readout tests what the frozen representation already contains.</text>
 </svg>

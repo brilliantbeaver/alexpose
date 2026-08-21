@@ -1,17 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
   <title id="title">The target compares the forward push of each leg</title>
   <desc id="desc">For each foot contact, the positive part of the forward-backward force curve is the propulsive impulse. The right and left impulses are compared with a signed log ratio. The model receives skeleton motion, never force data.</desc>
-  <defs><style>.t{font:700 30px Arial,sans-serif;fill:#0f172a}.h{font:700 21px Arial,sans-serif;fill:#0f172a}.b{font:400 19px Arial,sans-serif;fill:#1e293b}.s{font:400 17px Arial,sans-serif;fill:#334155}.w{font:700 20px Arial,sans-serif;fill:#fff}</style></defs>
+  <defs><style>.t{font:700 30px Arial,sans-serif;fill:#0f172a}.h{font:700 21px Arial,sans-serif;fill:#0f172a}.b{font:400 19px Arial,sans-serif;fill:#1e293b}.s{font:400 17px Arial,sans-serif;fill:#334155}.m{font:400 16px Arial,sans-serif;fill:#475569}.w{font:700 20px Arial,sans-serif;fill:#fff}</style></defs>
   <rect width="1000" height="560" fill="#f8fafc"/><rect x=".5" y=".5" width="999" height="559" fill="none" stroke="#cbd5e1"/>
   <text x="500" y="50" text-anchor="middle" class="t">What does the signed force target measure?</text>
+
   <rect x="45" y="90" width="545" height="335" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="72" y="127" class="h">ONE FOOT CONTACT</text><path d="M105 270 H535 M140 165 V390" stroke="#334155" stroke-width="2"/><text x="515" y="294" text-anchor="end" class="s">time in stance</text><text x="118" y="185" text-anchor="end" class="s">forward</text><text x="118" y="204" text-anchor="end" class="s">force</text>
+  <text x="72" y="127" class="h">ONE FOOT CONTACT</text>
+  <path d="M105 270 H535 M140 165 V330" stroke="#334155" stroke-width="2"/>
+  <text x="515" y="294" text-anchor="end" class="m">time in stance</text>
+  <text x="132" y="185" text-anchor="end" class="m">forward</text><text x="132" y="204" text-anchor="end" class="m">force</text>
+  <path d="M258 270 C298 205 338 188 390 225 C430 252 455 267 535 270 L535 270 L258 270 Z" fill="#fef3c7" stroke="none"/>
   <path d="M140 270 C185 330 218 335 258 270 C298 205 338 188 390 225 C430 252 455 267 535 270" fill="none" stroke="#1d4ed8" stroke-width="4"/>
-  <path d="M258 270 C298 205 338 188 390 225 C430 252 455 267 535 270 L535 270 L258 270 Z" fill="#fef3c7" stroke="none"/><path d="M258 270 C298 205 338 188 390 225 C430 252 455 267 535 270" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3"/>
-  <text x="205" y="350" text-anchor="middle" class="s">braking: do not count</text><text x="390" y="205" text-anchor="middle" class="b">shaded positive area</text><text x="390" y="228" text-anchor="middle" class="s">propulsive impulse J</text>
+  <path d="M258 270 C298 205 338 188 390 225 C430 252 455 267 535 270" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3"/>
+  <text x="152" y="352" class="m">braking: does not count</text>
+  <rect x="152" y="374" width="30" height="18" fill="#fef3c7" stroke="#b45309" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="192" y="389" class="m">shaded positive area = propulsive impulse J</text>
+
   <rect x="640" y="90" width="315" height="335" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="798" y="127" text-anchor="middle" class="h">COMPARE THE TWO LEGS</text><text x="680" y="188" class="b">right leg: J<tspan baseline-shift="sub" font-size="13">R</tspan> = 8 N·s</text><text x="680" y="226" class="b">left leg: J<tspan baseline-shift="sub" font-size="13">L</tspan> = 12 N·s</text><path d="M682 258 H915" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="798" y="302" text-anchor="middle" class="b">log(J<tspan baseline-shift="sub" font-size="13">R</tspan> / J<tspan baseline-shift="sub" font-size="13">L</tspan>) = log(8 / 12)</text><text x="798" y="340" text-anchor="middle" class="h">= −0.41</text><text x="798" y="375" text-anchor="middle" class="s">negative: left pushes harder</text>
+  <text x="798" y="127" text-anchor="middle" class="h">COMPARE THE TWO LEGS</text>
+  <text x="680" y="188" class="b">right leg: J<tspan baseline-shift="sub" font-size="13">R</tspan> = 8 N·s</text>
+  <text x="680" y="226" class="b">left leg: J<tspan baseline-shift="sub" font-size="13">L</tspan> = 12 N·s</text>
+  <path d="M682 258 H915" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="798" y="302" text-anchor="middle" class="b">log(J<tspan baseline-shift="sub" font-size="13">R</tspan> / J<tspan baseline-shift="sub" font-size="13">L</tspan>) = log(8 / 12)</text>
+  <text x="798" y="340" text-anchor="middle" class="h">= −0.41</text>
+  <text x="798" y="375" text-anchor="middle" class="m">negative: left pushes harder</text>
+
   <rect x="140" y="447" width="720" height="34" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/><text x="500" y="470" text-anchor="middle" class="b">The model sees the skeleton. It never sees this force curve.</text>
   <rect x="125" y="495" width="750" height="45" rx="14" fill="#0f172a"/><text x="500" y="525" text-anchor="middle" class="w">Force gives an independent right-left target.</text>
 </svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence established and questions still open</title>
+  <desc id="desc">A green column lists established engineering evidence. An orange column lists open scientific questions.</desc>
+  <defs><style>.title{font:700 28px Arial,sans-serif;fill:#17324d}.head{font:700 22px Arial,sans-serif;fill:#fff}.item{font:18px Arial,sans-serif;fill:#263f52}.small{font:16px Arial,sans-serif;fill:#53697a}.check{font:700 20px Arial,sans-serif;fill:#197a74}.q{font:700 20px Arial,sans-serif;fill:#b96824}</style></defs>
+  <rect width="1200" height="480" rx="24" fill="#fff"/>
+  <text x="60" y="58" class="title">The foundation is useful, but its claim ceiling is clear</text>
+  <g transform="translate(60 90)">
+    <rect width="515" height="330" rx="18" fill="#eef8f6" stroke="#7ab7b0" stroke-width="2"/>
+    <path d="M0 18 Q0 0 18 0 H497 Q515 0 515 18 V60 H0 Z" fill="#197a74"/>
+    <text x="28" y="39" class="head">Established inside this corpus</text>
+    <text x="28" y="102" class="check">✓</text><text x="65" y="102" class="item">A reproducible video-to-skeleton pipeline</text>
+    <text x="28" y="154" class="check">✓</text><text x="65" y="154" class="item">Masked latent learning runs without total collapse</text>
+    <text x="28" y="206" class="check">✓</text><text x="65" y="206" class="item">The representation carries some readable structure</text>
+    <text x="28" y="258" class="check">✓</text><text x="65" y="258" class="item">Source and missingness shortcuts are measurable</text>
+    <text x="28" y="305" class="small">Evidence type: engineering and transductive audit</text>
+  </g>
+  <g transform="translate(625 90)">
+    <rect width="515" height="330" rx="18" fill="#fff5eb" stroke="#dfad78" stroke-width="2"/>
+    <path d="M0 18 Q0 0 18 0 H497 Q515 0 515 18 V60 H0 Z" fill="#b96824"/>
+    <text x="28" y="39" class="head">Still unanswered</text>
+    <text x="28" y="102" class="q">?</text><text x="65" y="102" class="item">Does it work on a genuinely new person?</text>
+    <text x="28" y="154" class="q">?</text><text x="65" y="154" class="item">Does it preserve anatomical left and right?</text>
+    <text x="28" y="206" class="q">?</text><text x="65" y="206" class="item">Can motion estimate a separate force target?</text>
+    <text x="28" y="258" class="q">?</text><text x="65" y="258" class="item">Does model structure help beyond a simple rule?</text>
+    <text x="28" y="305" class="small">Required next: participant-held-out clinical evidence</text>
+  </g>
+</svg>

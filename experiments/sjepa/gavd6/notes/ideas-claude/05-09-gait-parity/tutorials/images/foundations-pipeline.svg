@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Foundation notebook pipeline</title>
+  <desc id="desc">Notebooks 00 through 06 proceed from the JEPA idea to data audit, pose extraction, training, and a limited final audit.</desc>
+  <defs>
+    <style>
+      .title{font:700 28px Arial,sans-serif;fill:#17324d}.step{font:700 19px Arial,sans-serif;fill:#17324d}.body{font:17px Arial,sans-serif;fill:#3e5366}.tag{font:700 13px Arial,sans-serif;fill:#ffffff}.arrow{stroke:#7b91a5;stroke-width:3;fill:none}.box{fill:#f7fafc;stroke:#b7c6d3;stroke-width:2}.accent{fill:#197a74}.warn{fill:#9c4f17}
+    </style>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#7b91a5"/></marker>
+  </defs>
+  <rect width="1200" height="420" rx="24" fill="#ffffff"/>
+  <text x="60" y="58" class="title">How notebooks 00 through 06 build one research instrument</text>
+  <path d="M245 198 H260" class="arrow" marker-end="url(#arrow)"/>
+  <path d="M465 198 H480" class="arrow" marker-end="url(#arrow)"/>
+  <path d="M685 198 H700" class="arrow" marker-end="url(#arrow)"/>
+  <path d="M905 198 H920" class="arrow" marker-end="url(#arrow)"/>
+  <g transform="translate(45 105)">
+    <rect width="200" height="188" rx="16" class="box"/>
+    <rect x="16" y="16" width="52" height="25" rx="12" class="accent"/><text x="42" y="34" text-anchor="middle" class="tag">00</text>
+    <text x="18" y="72" class="step">JEPA idea</text>
+    <text x="18" y="102" class="body"><tspan x="18">Hide motion parts</tspan><tspan x="18" dy="25">Predict descriptions</tspan><tspan x="18" dy="25">Learn without labels</tspan></text>
+  </g>
+  <g transform="translate(265 105)">
+    <rect width="200" height="188" rx="16" class="box"/>
+    <rect x="16" y="16" width="52" height="25" rx="12" class="accent"/><text x="42" y="34" text-anchor="middle" class="tag">01</text>
+    <text x="18" y="72" class="step">Source audit</text>
+    <text x="18" y="102" class="body"><tspan x="18">96 sequences</tspan><tspan x="18" dy="25">18 source videos</tspan><tspan x="18" dy="25">Frame provenance</tspan></text>
+  </g>
+  <g transform="translate(485 105)">
+    <rect width="200" height="188" rx="16" class="box"/>
+    <rect x="16" y="16" width="52" height="25" rx="12" class="accent"/><text x="42" y="34" text-anchor="middle" class="tag">02</text>
+    <text x="18" y="72" class="step">Pose extraction</text>
+    <text x="18" y="102" class="body"><tspan x="18">33 body landmarks</tspan><tspan x="18" dy="25">Visibility retained</tspan><tspan x="18" dy="25">Visual alignment gate</tspan></text>
+  </g>
+  <g transform="translate(705 105)">
+    <rect width="200" height="188" rx="16" class="box"/>
+    <rect x="16" y="16" width="62" height="25" rx="12" class="accent"/><text x="47" y="34" text-anchor="middle" class="tag">03, 04</text>
+    <text x="18" y="72" class="step">Mask and train</text>
+    <text x="18" y="102" class="body"><tspan x="18">12 allowed targets</tspan><tspan x="18" dy="25">Normal gait first</tspan><tspan x="18" dy="25">Conditions added</tspan></text>
+  </g>
+  <g transform="translate(925 105)">
+    <rect width="230" height="188" rx="16" class="box"/>
+    <rect x="16" y="16" width="62" height="25" rx="12" class="warn"/><text x="47" y="34" text-anchor="middle" class="tag">05, 06</text>
+    <text x="18" y="72" class="step">Audit, with limits</text>
+    <text x="18" y="102" class="body"><tspan x="18">Inspect representation</tspan><tspan x="18" dy="25">Test small readouts</tspan><tspan x="18" dy="25">Expose leakage</tspan></text>
+  </g>
+  <rect x="245" y="329" width="710" height="48" rx="24" fill="#fff4e8" stroke="#e4b37f"/>
+  <text x="600" y="359" text-anchor="middle" class="body">A trustworthy final result depends on every earlier link.</text>
+</svg>

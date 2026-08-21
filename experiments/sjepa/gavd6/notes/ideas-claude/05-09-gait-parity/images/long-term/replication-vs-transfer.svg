@@ -11,6 +11,7 @@
       .small { font: 17px Arial, sans-serif; fill: #334155; }
       .bar { font: 700 20px Arial, sans-serif; fill: #ffffff; }
       .check { font: 700 26px Arial, sans-serif; fill: #15803d; }
+      .mini { font: 16px Arial, sans-serif; fill: #475569; }
     </style>
   </defs>
   <rect width="1000" height="620" fill="#f8fafc"/>
@@ -29,9 +30,11 @@
   <text x="157" y="382" text-anchor="middle" class="small">learned on cohort A</text>
 
   <path d="M266 259 H350" fill="none" stroke="#15803d" stroke-width="3" marker-end="url(#arrow)"/>
-  <path d="M236 363 H300 V455 H390" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
-  <text x="307" y="244" text-anchor="middle" class="small">recipe travels</text>
-  <text x="319" y="438" text-anchor="middle" class="small">weights travel</text>
+  <path d="M236 363 H286 V455 H390" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
+  <text x="308" y="238" text-anchor="middle" class="mini">recipe</text>
+  <text x="308" y="256" text-anchor="middle" class="mini">travels</text>
+  <text x="330" y="424" text-anchor="middle" class="mini">weights</text>
+  <text x="330" y="442" text-anchor="middle" class="mini">travel</text>
 
   <rect x="370" y="110" width="565" height="181" rx="14" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
   <text x="397" y="149" class="check">✓</text>
@@ -48,7 +51,7 @@
   <text x="652" y="280" text-anchor="middle" class="small">Question: does the result reappear under the same plan?</text>
 
   <rect x="370" y="329" width="565" height="181" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
-  <text x="397" y="368" class="heading">TRANSFER: DO NOT REFIT ON COHORT B</text>
+  <text x="405" y="368" class="heading">TRANSFER: DO NOT REFIT ON COHORT B</text>
   <text x="405" y="405" class="body">Carry the trained weights to new people as they are.</text>
   <rect x="405" y="430" width="148" height="51" rx="10" fill="#ffffff" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
   <text x="479" y="461" text-anchor="middle" class="body">old weights</text>
