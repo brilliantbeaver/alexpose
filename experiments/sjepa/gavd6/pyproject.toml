@@ -27,9 +27,13 @@ dependencies = [
 
 [tool.uv]
 package = false
+override-dependencies = [
+  "torch==2.6.0+cu124",
+]
 
 [tool.uv.sources]
 torch = { index = "pytorch-cu124" }
+human-body-prior = { git = "https://github.com/nghorbani/human_body_prior.git", rev = "78c86eae5ed518ae22bf197fd74211bbfa45551a" }
 
 [[tool.uv.index]]
 name = "pytorch-cu124"
