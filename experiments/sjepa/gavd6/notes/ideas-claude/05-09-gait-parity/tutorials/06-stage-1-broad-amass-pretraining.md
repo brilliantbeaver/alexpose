@@ -51,7 +51,7 @@ The HAIC head node is for lightweight setup and job submission. Do not preproces
 Set project-specific paths without repurposing `$HOME`:
 
 ```bash
-export GAITPARITY_REPO=/absolute/path/to/alexpose/experiments/sjepa
+export GAVD6_ROOT=/absolute/path/to/alexpose/experiments/sjepa/gavd6
 export AMASS_EXTRACTED_ROOT=/hai/scratch/YOUR_SUNETID/amass/extracted
 export AMASS_RUN_ROOT=/hai/scratch/YOUR_SUNETID/gait-parity/amass-v1
 ```
@@ -60,8 +60,8 @@ Create the manifest directory and copy the inventory from the checkout if it is 
 
 ```bash
 mkdir -p "$AMASS_RUN_ROOT/manifests"
-if test -f "$GAITPARITY_REPO/gavd6/amass_raw_inventory.csv"; then
-  cp "$GAITPARITY_REPO/gavd6/amass_raw_inventory.csv" \
+if test -f "$GAVD6_ROOT/amass_raw_inventory.csv"; then
+  cp "$GAVD6_ROOT/amass_raw_inventory.csv" \
     "$AMASS_RUN_ROOT/manifests/amass_raw_inventory.csv"
 fi
 test -f "$AMASS_RUN_ROOT/manifests/amass_raw_inventory.csv"
@@ -113,7 +113,7 @@ srun \
 Inside that allocation:
 
 ```bash
-cd "$GAITPARITY_REPO/gavd6"
+cd "$GAVD6_ROOT"
 uv sync
 uv run --no-sync python -m unittest tests.test_convert_amass_core11
 uv run python -c 'import torch; print(torch.__version__); print(torch.cuda.is_available())'
@@ -125,7 +125,7 @@ Do not submit a full run until `torch.cuda.is_available()` prints `True` in the 
 If the interactive request remains pending because its requested resources are unavailable or reserved, cancel only that unused request and submit the same checks to the normal batch partition. Create the job file in the run directory, not in the source tree:
 
 ```bash
-mkdir -p "$AMASS_RUN_ROOT/jobs" "$AMASS_RUN_ROOT/logs"
+mkdir -p "$AMASS_RUN_ROOT/jobs" "$GAVD6_ROOT/data/amass/outputs/logs"
 
 cat > "$AMASS_RUN_ROOT/jobs/check-gpu-env.sbatch" <<'SBATCH'
 #!/usr/bin/env bash
@@ -135,13 +135,13 @@ cat > "$AMASS_RUN_ROOT/jobs/check-gpu-env.sbatch" <<'SBATCH'
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --time=00:30:00
-#SBATCH --output=/hai/scratch/%u/gait-parity/amass-v1/logs/gp-env-%j.out
-#SBATCH --error=/hai/scratch/%u/gait-parity/amass-v1/logs/gp-env-%j.err
+#SBATCH --output=/hai/scratch/%u/alexpose/experiments/sjepa/gavd6/data/amass/outputs/logs/gp-env-%j.out
+#SBATCH --error=/hai/scratch/%u/alexpose/experiments/sjepa/gavd6/data/amass/outputs/logs/gp-env-%j.err
 
 set -euo pipefail
-: "${GAITPARITY_REPO:?Set GAITPARITY_REPO when submitting}"
+: "${GAVD6_ROOT:?Set GAVD6_ROOT when submitting}"
 
-cd "$GAITPARITY_REPO/gavd6"
+cd "$GAVD6_ROOT"
 uv sync
 uv run --no-sync python -m unittest tests.test_convert_amass_core11
 uv run --no-sync python - <<'PY'
@@ -695,13 +695,13 @@ cat > "$AMASS_RUN_ROOT/jobs/convert-core11-smoke.sbatch" <<'SBATCH'
 #SBATCH --time=01:00:00
 
 set -euo pipefail
-: "${GAITPARITY_REPO:?}"
+: "${GAVD6_ROOT:?}"
 : "${AMASS_EXTRACTED_ROOT:?}"
 : "${AMASS_RUN_ROOT:?}"
 : "${AMASS_BODY_MODEL_ROOT:?}"
 : "${AMASS_SUBJECT_SPLITS:?}"
 
-cd "$GAITPARITY_REPO/gavd6"
+cd "$GAVD6_ROOT"
 nvidia-smi
 set -o pipefail
 uv run --no-sync python scripts/convert_amass_core11.py \
