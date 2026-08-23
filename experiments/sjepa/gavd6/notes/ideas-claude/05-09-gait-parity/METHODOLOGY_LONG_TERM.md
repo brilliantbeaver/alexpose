@@ -112,7 +112,7 @@ Use GaitRec to check that the force target and unilateral metadata behave consis
 
 ## 4. Build auditable inputs
 
-Use the shared processing pipeline, with per-dataset tests for joint mappings, anatomical left-right labels, walking direction and body axes, pelvis centring and robust scale, joint cycle resampling, marker-only event detection, visibility masks, and trial and participant aggregation.
+Use the shared processing pipeline, with per-dataset tests for joint mappings, anatomical left-right labels, walking direction and body axes, pelvis centring and robust scale, joint cycle resampling, Howmarker-only event detection, visibility masks, and trial and participant aggregation.
 
 ### Why a human still has to look
 

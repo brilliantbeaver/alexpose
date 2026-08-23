@@ -53,8 +53,10 @@ def scalar_text(archive, key: str) -> str:
     return item.decode() if isinstance(item, bytes) else str(item)
 
 
+paths = sorted(amass_root.rglob("*_poses.npz"))
 rows = []
-for path in sorted(amass_root.rglob("*_poses.npz")):
+
+for index, path in enumerate(paths, start=1):
     relative = path.relative_to(amass_root)
     parts = relative.parts
 
@@ -102,6 +104,14 @@ for path in sorted(amass_root.rglob("*_poses.npz")):
         row["error"] = f"{type(exc).__name__}: {exc}"
 
     rows.append(row)
+
+    if index % 100 == 0 or index == len(paths):
+        print(
+            f"[{index:,}/{len(paths):,}] "
+            f"ok={sum(r['status'] == 'ok' for r in rows):,} "
+            f"latest={path.name}",
+            flush=True,
+        )
 
 with inventory_path.open("w", newline="") as handle:
     writer = csv.DictWriter(handle, fieldnames=FIELDS)

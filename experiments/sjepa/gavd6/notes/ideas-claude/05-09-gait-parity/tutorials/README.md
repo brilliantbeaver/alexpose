@@ -6,6 +6,9 @@ This short series explains a research project about how people walk and how a co
 - [What the current experiments tell us](./02-current-direction-and-results.md) explains the first test of left-right reasoning, including an important result that did *not* support the hoped-for claim.
 - [What the planned study will test](./03-planned-research-direction.md) explains how the research will test the idea fairly with independent movement and force measurements.
 - [Reading the notebook graphs](./04-notebook-graph-guide.md) explains the saved graphs from the research notebooks in everyday language.
+- [Two-stage AMASS training](./05-two-stage-amass-training-overview.md) explains why the proposed full study first learns from broad motion and then continues on walking-focused motion.
+- [Stage 1: broad AMASS pretraining](./06-stage-1-broad-amass-pretraining.md) gives a preparation and HAIC runbook for general-motion pretraining.
+- [Stage 2: BABEL-guided walking continuation](./07-stage-2-walking-focused-continuation.md) explains how to build the walking corpus, continue matched checkpoints, and run the second stage on HAIC.
 
 Every graph in this guide is a saved output from an executed notebook. We do not replace those results with cleaned-up vector redraws. Captions identify what each graph can show and, just as importantly, what it cannot show.
 

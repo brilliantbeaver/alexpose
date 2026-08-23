@@ -7,6 +7,7 @@ starts a training run.
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 
@@ -14,20 +15,24 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def markdown(source: str) -> dict:
+    source = source.strip("\n") + "\n"
     return {
         "cell_type": "markdown",
+        "id": hashlib.sha256(("md:" + source).encode()).hexdigest()[:12],
         "metadata": {},
-        "source": source.strip("\n").splitlines(keepends=True),
+        "source": source.splitlines(keepends=True),
     }
 
 
 def code(source: str) -> dict:
+    source = source.strip("\n") + "\n"
     return {
         "cell_type": "code",
         "execution_count": None,
+        "id": hashlib.sha256(("code:" + source).encode()).hexdigest()[:12],
         "metadata": {},
         "outputs": [],
-        "source": source.strip("\n").splitlines(keepends=True),
+        "source": source.splitlines(keepends=True),
     }
 
 
@@ -66,9 +71,30 @@ exact contract, training, and audit outputs are retained.
 import os
 import sys
 
-PROJECT_DIR = Path.cwd().resolve()
-if not (PROJECT_DIR / "gait_parity_jepa.py").is_file():
-    raise FileNotFoundError("Open this launcher from experiments/sjepa/gavd6.")
+STARTUP_REVISION = "ide-safe-v2"
+KERNEL_START_DIR = Path.cwd().resolve()
+
+def find_notebook_root(start=None):
+    start = Path(start or Path.cwd()).expanduser().resolve()
+    relative_path = Path("experiments") / "sjepa" / "gavd6"
+    candidates = []
+    override = os.getenv("GAIT_PARITY_PROJECT_DIR")
+    if override:
+        candidates.append(Path(override).expanduser().resolve())
+    for base in (start, *start.parents):
+        candidates.extend((base, base / relative_path))
+    for candidate in dict.fromkeys(candidates):
+        if ((candidate / "gait_parity_jepa.py").is_file()
+                and (candidate / "notebooks" / "nb_09a_equivariant_encoder_contract.ipynb").is_file()):
+            return candidate
+    searched = "\\n - ".join(str(path) for path in dict.fromkeys(candidates))
+    raise FileNotFoundError(
+        "Could not locate experiments/sjepa/gavd6. "
+        "Set GAIT_PARITY_PROJECT_DIR to that directory.\\n"
+        f"Searched:\\n - {{searched}}"
+    )
+
+PROJECT_DIR = find_notebook_root()
 if str(PROJECT_DIR) not in sys.path:
     sys.path.insert(0, str(PROJECT_DIR))
 
@@ -89,6 +115,9 @@ POSE_DIR = Path(os.getenv(
 )).expanduser().resolve()
 
 print({{
+    "startup_revision": STARTUP_REVISION,
+    "kernel_start_dir": str(KERNEL_START_DIR),
+    "project_dir": str(PROJECT_DIR),
     "run_pipeline": RUN_PIPELINE,
     "run_id": RUN_ID,
     "profile": PROFILE,
@@ -153,7 +182,7 @@ matching run directory.
             executed_dir.mkdir(parents=True, exist_ok=True)
             print(f"\\n=== {matching}: 09c → 09d → 09e ===")
             for name in child_notebooks:
-                notebook = nbformat.read(PROJECT_DIR / name, as_version=4)
+                notebook = nbformat.read(PROJECT_DIR / "notebooks" / name, as_version=4)
                 client = NotebookClient(
                     notebook,
                     timeout=None,
@@ -196,6 +225,6 @@ for profile, device, name, run_id in [
     ("cpu", "cpu", "nb_09f_full_gavd_cpu_replication.ipynb", "gavd96-cpu-strong-v1"),
     ("gpu", "cuda", "nb_09g_full_gavd_gpu_replication.ipynb", "gavd96-gpu-strong-v1"),
 ]:
-    path = ROOT / name
+    path = ROOT / "notebooks" / name
     path.write_text(json.dumps(build_notebook(profile, device, run_id), indent=1) + "\n", encoding="utf-8")
     print(f"Wrote {path}")
