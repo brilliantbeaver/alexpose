@@ -254,8 +254,8 @@ class HumanBodyPriorBackend:
         self.backend_source_sha256 = (
             sha256_file(Path(backend_source)) if backend_source is not None else "unknown"
         )
-        lbs_module = importlib.import_module("human_body_prior.body_model.lbs")
-        lbs_source = inspect.getsourcefile(lbs_module)
+        body_model_module = importlib.import_module("human_body_prior.body_model.body_model")
+        lbs_source = inspect.getsourcefile(body_model_module.lbs)
         self.lbs_source_sha256 = (
             sha256_file(Path(lbs_source)) if lbs_source is not None else "unknown"
         )
