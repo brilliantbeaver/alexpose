@@ -38,11 +38,24 @@ from pathlib import Path
 import json, math, os, sys
 
 def find_notebook_root(start=None):
-    start = Path(start or Path.cwd()).resolve()
-    for candidate in [start, *start.parents]:
-        if (candidate / "gait_parity_jepa.py").exists() and (candidate / "nb_09a_equivariant_encoder_contract.ipynb").exists():
+    start = Path(start or Path.cwd()).expanduser().resolve()
+    relative_path = Path("experiments") / "sjepa" / "gavd6"
+    candidates = []
+    override = os.getenv("GAIT_PARITY_PROJECT_DIR")
+    if override:
+        candidates.append(Path(override).expanduser().resolve())
+    for base in (start, *start.parents):
+        candidates.extend((base, base / relative_path))
+    for candidate in dict.fromkeys(candidates):
+        if ((candidate / "gait_parity_jepa.py").is_file()
+                and (candidate / "notebooks" / "nb_09a_equivariant_encoder_contract.ipynb").is_file()):
             return candidate
-    raise FileNotFoundError("Run this notebook from experiments/sjepa/gavd6 or set the working directory there")
+    searched = "\n - ".join(str(path) for path in dict.fromkeys(candidates))
+    raise FileNotFoundError(
+        "Could not locate experiments/sjepa/gavd6. "
+        "Set GAIT_PARITY_PROJECT_DIR to that directory.\n"
+        f"Searched:\n - {searched}"
+    )
 
 PROJECT_DIR = find_notebook_root()
 if str(PROJECT_DIR) not in sys.path:
@@ -468,9 +481,9 @@ print("Wrote", OUT_DIR / "checkpoint_audit.json")
 
 
 outputs = {
-    ROOT / "nb_09c_gavd_matched_jepa_contract.ipynb": cells_09c,
-    ROOT / "nb_09d_gavd_matched_jepa_training.ipynb": cells_09d,
-    ROOT / "nb_09e_gavd_matched_jepa_audit.ipynb": cells_09e,
+    ROOT / "notebooks" / "nb_09c_gavd_matched_jepa_contract.ipynb": cells_09c,
+    ROOT / "notebooks" / "nb_09d_gavd_matched_jepa_training.ipynb": cells_09d,
+    ROOT / "notebooks" / "nb_09e_gavd_matched_jepa_audit.ipynb": cells_09e,
 }
 for path, cells in outputs.items():
     path.write_text(json.dumps(notebook(cells), indent=1), encoding="utf-8")
