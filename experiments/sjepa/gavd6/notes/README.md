@@ -1,22 +1,38 @@
-# GAVD6 research notes
+# Notes index
 
-The notes directory contains both current documentation and historical planning material.
+The notes tree separates current references, active research, and historical
+inputs. This prevents an old prompt or draft from looking like an implemented
+protocol.
 
-Start with:
+## Current references
 
-- [10_sjepa_evolution_tutorial.md](10_sjepa_evolution_tutorial.md), the current implementation and methodology evolution guide
-- [docs/staged_evolution.md](../docs/staged_evolution.md), the polished evolution tutorial
-- [06_literature_findings.md](06_literature_findings.md), the citation verification record
-- [08_codex_review_log.md](08_codex_review_log.md), the late adversarial review log
-- [09_diagram_design_system.md](09_diagram_design_system.md), the SVG design rules
+- [S-JEPA evolution tutorial](current/methodology/sjepa_evolution_tutorial.md): implementation and methodology evolution
+- [Citation verification](current/literature/citation_verification.md): literature and citation audit
+- [Codex review log](current/reviews/codex_review_log.md): adversarial implementation review
+- [Diagram design system](current/design/diagram_design_system.md): SVG conventions
 
-Historical inputs:
+Polished project documentation remains under [`docs/`](../docs/README.md).
 
-- [01_train_sjepa.md](01_train_sjepa.md), original research brief
-- [02_paper_draft.md](02_paper_draft.md), early paper framing
-- [03_nextstep_improvements.md](03_nextstep_improvements.md), improvement-planning request
-- [04_improvement_plan.md](04_improvement_plan.md), archived proposals
-- [05_improvement_instr.md](05_improvement_instr.md), archived execution prompt
-- [07_adding_diversity.md](07_adding_diversity.md), progressive-training pivot instruction
+## Active research
 
-The archived plan and instruction are not descriptions of the current checkpoint. Always verify a proposed method against the executable notebooks and artifact contract before calling it implemented.
+- [Research portfolio](research/README.md): index of the twelve proposals
+- [Research scorecard](research/SCORECARD.md): proposal evaluation rubric and scores
+- [Shared facts](research/_shared_facts.md): common quantitative and provenance constraints
+- [Neuroscience facts](research/_neuro_facts.md): verified domain anchors
+- [GaitParity program](research/programs/gait_parity/README.md): joined Idea 05/09 research program and AMASS tutorials
+- [`research/ideas/`](research/ideas/): one directory per proposal
+
+Research notebook source lives under [`notebooks/experiments/`](../notebooks/experiments/),
+and its deterministic builders live under
+[`scripts/notebook_builders/`](../scripts/notebook_builders/).
+
+## Archive
+
+- [`archive/prompts/`](archive/prompts/): original requests and execution prompts
+- [`archive/early_plans/`](archive/early_plans/): superseded planning documents
+- [`archive/paper_drafts/`](archive/paper_drafts/): early manuscript framing
+
+Archive files are preserved as historical records. Their commands and paths may
+refer to the repository layout that existed when they were written and should
+not be treated as current instructions. Verify implementation claims against
+the executable notebooks, builders, and artifact manifests.
