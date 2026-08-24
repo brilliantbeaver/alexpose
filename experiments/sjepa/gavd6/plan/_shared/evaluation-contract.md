@@ -22,7 +22,7 @@ This is necessary but not sufficient. Two classes (Parkinson's and cerebral pals
 
 - A missingness-only control: a model trained only on the fraction of frames/joints that MediaPipe detected, with zero gait geometry. If a proposed method does not clearly beat this, it may be picking up which joints the pose detector tends to lose, not gait itself.
 - A provenance-only control where relevant: since canonical and "added normal" sequences use different extraction pipelines, check whether a result changes when provenance is controlled for.
-- The existing frozen S-JEPA checkpoint's current numbers (documented in `notes/02_paper_draft.md` and `docs/staged_sjepa_gait.md`), clearly labeled as coming from an evaluation with encoder-side exposure to the test data, not as a fair external baseline.
+- The existing frozen S-JEPA checkpoint's current numbers (documented in `notes/archive/paper_drafts/urtc_paper_draft.md` and `docs/staged_sjepa_gait.md`), clearly labeled as coming from an evaluation with encoder-side exposure to the test data, not as a fair external baseline.
 
 ## Statistics
 

@@ -9,14 +9,17 @@ from pathlib import Path
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
-NOTEBOOK_DIR = PROJECT_DIR / "notebooks"
+NOTEBOOK_DIR = (
+    PROJECT_DIR / "notebooks" / "experiments" / "idea09_reflection_equivariance"
+)
 REPO_DIR = PROJECT_DIR.parents[2]
 EXPECTED_NOTEBOOKS = {
-    "nb_09c_gavd_matched_jepa_contract.ipynb",
-    "nb_09d_gavd_matched_jepa_training.ipynb",
-    "nb_09e_gavd_matched_jepa_audit.ipynb",
-    "nb_09f_full_gavd_cpu_replication.ipynb",
-    "nb_09g_full_gavd_gpu_replication.ipynb",
+    "03_gavd_contract.ipynb",
+    "04_gavd_training.ipynb",
+    "05_gavd_audit.ipynb",
+    "06_cpu_replication.ipynb",
+    "07_gpu_replication.ipynb",
+    "08_amass_core11_training.ipynb",
 }
 
 
@@ -62,7 +65,7 @@ def main() -> None:
         assert_startup_from(path, NOTEBOOK_DIR)
         assert_code_cells_compile(path)
 
-    cpu_source = (NOTEBOOK_DIR / "nb_09f_full_gavd_cpu_replication.ipynb").read_text(encoding="utf-8")
+    cpu_source = (NOTEBOOK_DIR / "06_cpu_replication.ipynb").read_text(encoding="utf-8")
     assert 'STARTUP_REVISION = \\"ide-safe-v2\\"' in cpu_source
 
     previous_override = os.environ.get("GAIT_PARITY_PROJECT_DIR")
@@ -77,17 +80,25 @@ def main() -> None:
         else:
             os.environ["GAIT_PARITY_PROJECT_DIR"] = previous_override
 
-    for name in ("nb_09f_full_gavd_cpu_replication.ipynb", "nb_09g_full_gavd_gpu_replication.ipynb"):
+    for name in ("06_cpu_replication.ipynb", "07_gpu_replication.ipynb"):
         source = (NOTEBOOK_DIR / name).read_text(encoding="utf-8")
-        assert 'PROJECT_DIR / \\"notebooks\\" / name' in source
+        assert 'PROJECT_DIR / \\"notebooks\\" / \\"experiments\\" /' in source
+        assert '\\"idea09_reflection_equivariance\\" / name' in source
 
-    generator_dir = PROJECT_DIR / "notes" / "ideas-claude" / "09-reflection-equivariant-symmetry-axis"
-    for name in ("_build_nb_09cde.py", "_build_nb_09fg.py"):
+    generator_dir = PROJECT_DIR / "scripts" / "notebook_builders" / "idea09"
+    for name in (
+        "build_gavd_sequence.py",
+        "build_replications.py",
+        "build_amass_training.py",
+    ):
         path = generator_dir / name
         source = path.read_text(encoding="utf-8")
         compile(source, str(path), "exec")
-        assert 'ROOT / "notebooks"' in source
-        assert 'candidate / "notebooks" / "nb_09a_equivariant_encoder_contract.ipynb"' in source
+        assert '"notebooks" / "experiments" / "idea09_reflection_equivariance"' in source
+        if name == "build_amass_training.py":
+            assert '"08_amass_core11_training.ipynb"' in source
+        else:
+            assert '/ "01_encoder_contract.ipynb"' in source
 
     print(f"PASS: {len(paths)} notebooks start from repo, project, notebook, and override directories")
 

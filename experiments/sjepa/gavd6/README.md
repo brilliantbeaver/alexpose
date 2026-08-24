@@ -163,22 +163,24 @@ The outer source-video split must happen first. Pose preprocessing rules, all fi
 
 |Notebook|Main output|
 |---|---|
-|`00_sjepa_from_first_principles.ipynb`|A small S-JEPA learning graph built from first principles|
-|`01_gavd_manifest_and_youtube.ipynb`|A traceable manifest and one cached copy of each source video|
-|`02_extract_and_watch_skeletons.ipynb`|Versioned 33-landmark pose sequences and alignment checks|
-|`03_neurologic_keypoint_masking.ipynb`|The whitelist parser, uniform sampler, and forbidden-target assertions|
-|`04_pretrain_sjepa_on_normal.ipynb`|The complete five-stage checkpoint lineage and training history|
-|`05_inspect_latent_motion.ipynb`|Prediction, collapse, drift, retrieval, and condition-geometry audits|
-|`06_capstone_health_condition_classifiers.ipynb`|Three leakage-aware readout lanes and missingness controls|
-|`nb_09a_equivariant_encoder_contract.ipynb`|The reflection-equivariant encoder contract and smoke-mode matched comparison|
-|`nb_09b_equivariant_futures_and_reach.ipynb`|Pre-registered futures, decision tables, and non-clinical reach scaffolds|
-|`nb_09c_gavd_matched_jepa_contract.ipynb`|The frozen full-GAVD cohort, objective, health gates, and matching ledger|
-|`nb_09d_gavd_matched_jepa_training.ipynb`|Fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPA training|
-|`nb_09e_gavd_matched_jepa_audit.ipynb`|Checkpoint health and reflection-geometry audits for the matched GAVD run|
-|`nb_09f_full_gavd_cpu_replication.ipynb`|Opt-in, three-seed full-96 CPU replication under exposure and compute matching|
-|`nb_09g_full_gavd_gpu_replication.ipynb`|Opt-in, three-seed full-96 CUDA replication under exposure and compute matching|
+|[`foundations/00`](notebooks/foundations/00_sjepa_from_first_principles.ipynb)|A small S-JEPA learning graph built from first principles|
+|[`foundations/01`](notebooks/foundations/01_gavd_manifest_and_youtube.ipynb)|A traceable manifest and one cached copy of each source video|
+|[`foundations/02`](notebooks/foundations/02_extract_and_watch_skeletons.ipynb)|Versioned 33-landmark pose sequences and alignment checks|
+|[`foundations/03`](notebooks/foundations/03_neurologic_keypoint_masking.ipynb)|The whitelist parser, uniform sampler, and forbidden-target assertions|
+|[`foundations/04`](notebooks/foundations/04_pretrain_sjepa_on_normal.ipynb)|The complete five-stage checkpoint lineage and training history|
+|[`foundations/05`](notebooks/foundations/05_inspect_latent_motion.ipynb)|Prediction, collapse, drift, retrieval, and condition-geometry audits|
+|[`foundations/06`](notebooks/foundations/06_capstone_health_condition_classifiers.ipynb)|Three leakage-aware readout lanes and missingness controls|
+|[`idea09/01`](notebooks/experiments/idea09_reflection_equivariance/01_encoder_contract.ipynb)|The reflection-equivariant encoder contract and smoke-mode matched comparison|
+|[`idea09/02`](notebooks/experiments/idea09_reflection_equivariance/02_futures_and_reach.ipynb)|Pre-registered futures, decision tables, and non-clinical reach scaffolds|
+|[`idea09/03`](notebooks/experiments/idea09_reflection_equivariance/03_gavd_contract.ipynb)|The frozen full-GAVD cohort, objective, health gates, and matching ledger|
+|[`idea09/04`](notebooks/experiments/idea09_reflection_equivariance/04_gavd_training.ipynb)|Fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPA training|
+|[`idea09/05`](notebooks/experiments/idea09_reflection_equivariance/05_gavd_audit.ipynb)|Checkpoint health and reflection-geometry audits for the matched GAVD run|
+|[`idea09/06`](notebooks/experiments/idea09_reflection_equivariance/06_cpu_replication.ipynb)|Opt-in, three-seed full-96 CPU replication under exposure and compute matching|
+|[`idea09/07`](notebooks/experiments/idea09_reflection_equivariance/07_gpu_replication.ipynb)|Opt-in, three-seed full-96 CUDA replication under exposure and compute matching|
 
 Each notebook repeats the code it needs. Later notebooks reject missing, incomplete, wrong-mode, or wrong-cohort artifacts instead of silently falling back.
+See the [complete notebook index](notebooks/README.md) for the AMASS utility,
+Idea 05 notebooks, builder ownership, and batch-execution conventions.
 
 ## Local setup
 
@@ -216,7 +218,7 @@ and `GAVD_MODE` settings as notebooks 02–06. If you have a legacy cohort under
 `cache/artifacts/real` from an earlier checkout, validate and migrate it once:
 
 ```bash
-.venv/bin/python notes/migrate_augmented_pose_artifacts.py
+uv run python scripts/data_preparation/migrate_augmented_pose_artifacts.py
 ```
 
 Then restart the notebook kernel and rerun notebook 04 from the configuration
@@ -242,9 +244,9 @@ its selected pose files are a single reproducibility contract.
 - [S-JEPA methodology evolution tutorial](docs/staged_evolution.md)
 - [Progressive training guide](docs/progressive_training.md)
 - [S-JEPA class and tensor-flow guide](docs/tutorials/sjepa_model_internals.md)
-- [Maintainer evolution notes](notes/10_sjepa_evolution_tutorial.md)
+- [Maintainer evolution notes](notes/current/methodology/sjepa_evolution_tutorial.md)
 - [Research notes index](notes/README.md)
-- [Research idea portfolio](notes/ideas-claude/README.md)
+- [Research idea portfolio](notes/research/README.md)
 - [Three-week research portfolio](plan/README.md)
 - [Documentation build guide](docs/README.md)
 - [Presentation source and deck](slides/README.md)

@@ -2,6 +2,7 @@
 work/
 __pycache__/
 .ipynb_checkpoints/
+.DS_Store
 cache/matplotlib/
 cache/models/
 cache/artifacts/
@@ -11,3 +12,6 @@ data-augmented/
 # remain available locally for reproduction but are not published in Git.
 data/amass/
 cache/artifacts/real/
+
+# Executed notebook copies are run artifacts, not source notebooks.
+artifacts/notebook_runs/
