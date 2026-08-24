@@ -1,0 +1,263 @@
+{"kind":"deck","id":"pr/qu2q99","name":"Deck"}
+{"kind":"layout","layoutId":"df667960-c95f-46f7-96b5-fbd166929236","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"6a11a4cb-9c56-430e-83f8-f68040282275","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/x3ysrz","slide":1,"title":"GAITPARITY","textShapes":5}
+{"kind":"shape","id":"sh/yd8vat8f","slide":1,"bbox":[0,0,735,720]}
+{"kind":"textbox","id":"sh/jehc3yp0","slide":1,"text":"GAITPARITY","textPreview":"GAITPARITY","textChars":10,"textLines":1,"bbox":[56,48,260,32]}
+{"kind":"textbox","id":"sh/wb6d8jq9","slide":1,"name":"cover-question","text":"Can a camera tell which leg needs help?","textPreview":"Can a camera tell which leg needs help?","textChars":39,"textLines":1,"bbox":[56,166,650,250]}
+{"kind":"textbox","id":"sh/xczu1o7u","slide":1,"text":"Teaching video models to preserve left-right gait asymmetry","textPreview":"Teaching video models to preserve left-right gait asymmetry","textChars":59,"textLines":1,"bbox":[56,455,600,78]}
+{"kind":"textbox","id":"sh/a9ov698j","slide":1,"text":"Theodore Mui","textPreview":"Theodore Mui","textChars":12,"textLines":1,"bbox":[56,624,300,30]}
+{"kind":"textbox","id":"sh/baxcze94","slide":1,"text":"Reflection-equivariant S-JEPA","textPreview":"Reflection-equivariant S-JEPA","textChars":29,"textLines":1,"bbox":[56,656,420,28]}
+{"kind":"image","id":"im/grq94n6p","slide":1,"name":"","geometry":"rect","alt":"Older adult walking with a mobility aid at home","bbox":[735,0,545,720]}
+{"kind":"notes","id":"nt/x3ysrz","slide":1,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slides 1 and 6 (title, project framing, and home gait visual).\n[/Sources]"}
+{"kind":"slide","id":"sl/jbu83c","slide":2,"title":"THE STARTING POINT","textShapes":4}
+{"kind":"textbox","id":"sh/3il0ru94","slide":2,"name":"section-2","text":"THE STARTING POINT","textPreview":"THE STARTING POINT","textChars":18,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/oju10zap","slide":2,"name":"title-2","text":"A walk becomes 11 moving points","textPreview":"A walk becomes 11 moving points","textChars":31,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/pknit4ra","slide":2,"name":"page-2","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"shape","id":"sh/bm50ve9g","slide":2,"bbox":[56,603,1168,1]}
+{"kind":"textbox","id":"sh/cne14ja1","slide":2,"text":"Pose estimation removes appearance and keeps the changing geometry of the body.","textPreview":"Pose estimation removes appearance and keeps the changing geometry of the body.","textChars":79,"textLines":1,"bbox":[56,620,1040,48]}
+{"kind":"image","id":"im/7218nq9g","slide":2,"name":"","geometry":"rect","alt":"Video frames converted into skeletal keypoints","bbox":[56,182,1168,402]}
+{"kind":"notes","id":"nt/jbu83c","slide":2,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 2.\n[/Sources]"}
+{"kind":"slide","id":"sl/dpr6x7","slide":3,"title":"WHY GAIT MATTERS","textShapes":9}
+{"kind":"textbox","id":"sh/98betcz2","slide":3,"name":"section-3","text":"WHY GAIT MATTERS","textPreview":"WHY GAIT MATTERS","textChars":16,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/m5kvyxgr","slide":3,"name":"title-3","text":"Different conditions leave different gait signatures","textPreview":"Different conditions leave different gait signatures","textChars":52,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/n6twr2hw","slide":3,"name":"page-3","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/z29wnih0","slide":3,"text":"Stroke","textPreview":"Stroke","textChars":6,"textLines":1,"bbox":[56,510,350,42]}
+{"kind":"textbox","id":"sh/czidsny9","slide":3,"text":"Side-to-side propulsion can become unequal.","textPreview":"Side-to-side propulsion can become unequal.","textChars":43,"textLines":1,"bbox":[56,556,350,86]}
+{"kind":"textbox","id":"sh/d0rulszu","slide":3,"text":"Parkinson's","textPreview":"Parkinson's","textChars":11,"textLines":1,"bbox":[454,510,350,42]}
+{"kind":"textbox","id":"sh/lkrahony","slide":3,"text":"Steps can shorten while posture and arm swing change.","textPreview":"Steps can shorten while posture and arm swing change.","textChars":53,"textLines":1,"bbox":[454,556,350,86]}
+{"kind":"textbox","id":"sh/0ji98j6d","slide":3,"text":"Cerebral palsy","textPreview":"Cerebral palsy","textChars":14,"textLines":1,"bbox":[852,510,350,42]}
+{"kind":"textbox","id":"sh/zy9sfe58","slide":3,"text":"Joint flexion and foot position can follow distinct patterns.","textPreview":"Joint flexion and foot position can follow distinct patterns.","textChars":61,"textLines":1,"bbox":[852,556,350,86]}
+{"kind":"image","id":"im/p8naxgb6","slide":3,"name":"","geometry":"rect","alt":"Post-stroke gait with pose skeleton overlay","bbox":[56,202,350,280]}
+{"kind":"image","id":"im/o7e94bal","slide":3,"name":"","geometry":"rect","alt":"Parkinson disease input and pose-estimation output","bbox":[454,202,350,280]}
+{"kind":"image","id":"im/36l8v6t0","slide":3,"name":"","geometry":"rect","alt":"Markerless pose estimation during cerebral palsy gait","bbox":[852,202,350,280]}
+{"kind":"notes","id":"nt/dpr6x7","slide":3,"text":"[Sources]\n- Stroke figure: https://link.springer.com/article/10.1186/s12984-025-01726-5\n- Parkinson's figure: https://link.springer.com/article/10.1007/s44196-025-01071-4\n- Cerebral palsy figure: https://www.nature.com/articles/s41598-024-62119-7\n- Condition summaries adapted from user-provided GaitParity Presentation.pdf, slide 3.\n[/Sources]"}
+{"kind":"slide","id":"sl/0ure64","slide":4,"title":"THE GAP","textShapes":14}
+{"kind":"textbox","id":"sh/21sv25gn","slide":4,"name":"section-4","text":"THE GAP","textPreview":"THE GAP","textChars":7,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/p4jed0fe","slide":4,"name":"title-4","text":"Pose tells us what moved - not what caused it","textPreview":"Pose tells us what moved - not what caused it","textChars":45,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/o3ad4fyt","slide":4,"name":"page-4","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"shape","id":"sh/fy1w7qxw","slide":4,"bbox":[56,196,500,390]}
+{"kind":"textbox","id":"sh/ex8vylgr","slide":4,"text":"VISIBLE IN VIDEO","textPreview":"VISIBLE IN VIDEO","textChars":16,"textLines":1,"bbox":[88,228,420,32]}
+{"kind":"textbox","id":"sh/10je90f2","slide":4,"text":"Where each joint went","textPreview":"Where each joint went","textChars":21,"textLines":1,"bbox":[88,286,410,76]}
+{"kind":"shape","id":"sh/gzad0vyh","slide":4,"bbox":[88,403,10,10]}
+{"kind":"textbox","id":"sh/ruhw3qx0","slide":4,"text":"Joint positions","textPreview":"Joint positions","textChars":15,"textLines":1,"bbox":[114,392,364,68]}
+{"kind":"shape","id":"sh/698vulgf","slide":4,"bbox":[88,469,10,10]}
+{"kind":"textbox","id":"sh/gbuhkvmh","slide":4,"text":"Walking speed","textPreview":"Walking speed","textChars":13,"textLines":1,"bbox":[114,458,364,68]}
+{"kind":"shape","id":"sh/hwnitg3m","slide":4,"bbox":[88,535,10,10]}
+{"kind":"textbox","id":"sh/u9czil4b","slide":4,"text":"Timing and posture","textPreview":"Timing and posture","textChars":18,"textLines":1,"bbox":[114,524,364,68]}
+{"kind":"textbox","id":"sh/fal0rqlw","slide":4,"text":"->","textPreview":"->","textChars":2,"textLines":1,"bbox":[584,340,110,80]}
+{"kind":"shape","id":"sh/s7uhgbm5","slide":4,"bbox":[724,196,500,390]}
+{"kind":"textbox","id":"sh/t83ipg3q","slide":4,"text":"NEEDED FOR BIOMECHANICS","textPreview":"NEEDED FOR BIOMECHANICS","textChars":23,"textLines":1,"bbox":[756,228,420,32]}
+{"kind":"textbox","id":"sh/65cze14z","slide":4,"text":"How the movement was produced","textPreview":"How the movement was produced","textChars":29,"textLines":1,"bbox":[756,286,410,96]}
+{"kind":"shape","id":"sh/76l0n6lk","slide":4,"bbox":[756,419,10,10]}
+{"kind":"textbox","id":"sh/c3y1sf29","slide":4,"text":"Foot-ground contact","textPreview":"Foot-ground contact","textChars":19,"textLines":1,"bbox":[782,408,364,68]}
+{"kind":"shape","id":"sh/d47i103u","slide":4,"bbox":[756,485,10,10]}
+{"kind":"textbox","id":"sh/lk3il0vy","slide":4,"text":"Force and propulsion","textPreview":"Force and propulsion","textChars":20,"textLines":1,"bbox":[782,474,364,68]}
+{"kind":"shape","id":"sh/0juhcvut","slide":4,"bbox":[756,551,10,10]}
+{"kind":"textbox","id":"sh/zil0jad8","slide":4,"text":"Balance and uncertainty","textPreview":"Balance and uncertainty","textChars":23,"textLines":1,"bbox":[782,540,384,68]}
+{"kind":"notes","id":"nt/0ure64","slide":4,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slides 4 and 5.\n[/Sources]"}
+{"kind":"slide","id":"sl/etlkxi","slide":5,"title":"THE CLINICAL MOTIVATION","textShapes":8}
+{"kind":"textbox","id":"sh/3upknmto","slide":5,"name":"section-5","text":"THE CLINICAL MOTIVATION","textPreview":"THE CLINICAL MOTIVATION","textChars":23,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/4vylwru9","slide":5,"name":"title-5","text":"A faster walk can still hide the wrong kind of recovery","textPreview":"A faster walk can still hide the wrong kind of recovery","textChars":55,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/5w72pwbu","slide":5,"name":"page-5","text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/qxg3y1cf","slide":5,"text":"After a stroke, speed may improve because...","textPreview":"After a stroke, speed may improve because...","textChars":44,"textLines":1,"bbox":[56,194,520,58]}
+{"kind":"shape","id":"sh/rypkr6t0","slide":5,"bbox":[56,284,500,112]}
+{"kind":"textbox","id":"sh/szyl0bul","slide":5,"text":"the affected leg recovered","textPreview":"the affected leg recovered","textChars":26,"textLines":1,"bbox":[88,318,430,48]}
+{"kind":"textbox","id":"sh/dk72tgb6","slide":5,"text":"OR","textPreview":"OR","textChars":2,"textLines":1,"bbox":[250,414,100,38]}
+{"kind":"shape","id":"sh/elg32lcb","slide":5,"bbox":[56,470,500,112]}
+{"kind":"textbox","id":"sh/fm94vqtw","slide":5,"text":"the stronger leg compensated","textPreview":"the stronger leg compensated","textChars":28,"textLines":1,"bbox":[88,504,430,48]}
+{"kind":"textbox","id":"sh/ji1w76x8","slide":5,"text":"Those outcomes look similar in speed, but they imply different care.","textPreview":"Those outcomes look similar in speed, but they imply different care.","textChars":68,"textLines":1,"bbox":[56,612,560,58]}
+{"kind":"image","id":"im/dgr2ts7u","slide":5,"name":"","geometry":"rect","alt":"Post-stroke participants with skeleton overlays and optical-flow traces","bbox":[670,192,554,420]}
+{"kind":"notes","id":"nt/etlkxi","slide":5,"text":"[Sources]\n- Compensation framing adapted from user-provided GaitParity Presentation.pdf, slide 7.\n- Stroke figure: https://link.springer.com/article/10.1186/s12984-025-01726-5\n[/Sources]"}
+{"kind":"slide","id":"sl/psot15","slide":6,"title":"THE GOAL","textShapes":9}
+{"kind":"textbox","id":"sh/218bqlwn","slide":6,"name":"section-6","text":"THE GOAL","textPreview":"THE GOAL","textChars":8,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/p4ju10fe","slide":6,"name":"title-6","text":"The opportunity: gait insight from ordinary video","textPreview":"The opportunity: gait insight from ordinary video","textChars":49,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/43atsvet","slide":6,"name":"page-6","text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/ux8bmlwb","slide":6,"text":"Accessible","textPreview":"Accessible","textChars":10,"textLines":1,"bbox":[688,210,450,42]}
+{"kind":"textbox","id":"sh/h0zuxgf2","slide":6,"text":"Use video captured in clinics or at home.","textPreview":"Use video captured in clinics or at home.","textChars":41,"textLines":1,"bbox":[688,260,490,72]}
+{"kind":"textbox","id":"sh/gzqtobeh","slide":6,"text":"Consistent","textPreview":"Consistent","textChars":10,"textLines":1,"bbox":[688,350,450,42]}
+{"kind":"textbox","id":"sh/7ahsr6x0","slide":6,"text":"Keep left-right meaning stable across viewpoints and mirrors.","textPreview":"Keep left-right meaning stable across viewpoints and mirrors.","textChars":61,"textLines":1,"bbox":[688,400,490,72]}
+{"kind":"textbox","id":"sh/69obi1wf","slide":6,"text":"Longitudinal","textPreview":"Longitudinal","textChars":12,"textLines":1,"bbox":[688,490,450,42]}
+{"kind":"textbox","id":"sh/4ba98bep","slide":6,"text":"Separate changes in the person from changes in the camera.","textPreview":"Separate changes in the person from changes in the camera.","textChars":58,"textLines":1,"bbox":[688,540,490,72]}
+{"kind":"image","id":"im/uxkfytcz","slide":6,"name":"","geometry":"rect","alt":"Ordinary cameras positioned around a person walking","bbox":[56,184,564,430]}
+{"kind":"notes","id":"nt/psot15","slide":6,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slides 5 and 6.\n[/Sources]"}
+{"kind":"slide","id":"sl/4vlg3n","slide":7,"title":"THE RESEARCH QUESTION","textShapes":5}
+{"kind":"textbox","id":"sh/kfih432d","slide":7,"text":"THE RESEARCH QUESTION","textPreview":"THE RESEARCH QUESTION","textChars":21,"textLines":1,"bbox":[56,48,420,30]}
+{"kind":"textbox","id":"sh/ze9gvy1s","slide":7,"text":"Can a video-derived skeleton reveal which side propels less?","textPreview":"Can a video-derived skeleton reveal which side propels less?","textChars":60,"textLines":1,"bbox":[56,152,1100,196]}
+{"kind":"shape","id":"sh/ydgz2tk7","slide":7,"bbox":[56,402,1168,2]}
+{"kind":"textbox","id":"sh/xc7ytoj2","slide":7,"text":"GaitParity tests whether a model built to respect reflection can recover a signed right-versus-left force target for a person it has never seen.","textPreview":"GaitParity tests whether a model built to respect reflection can recover a signed right-versus-left force target for a person it has neve...","textChars":144,"textLines":1,"bbox":[56,452,1120,118]}
+{"kind":"textbox","id":"sh/cbyh032h","slide":7,"text":"If the input is mirrored, the answer must reverse.","textPreview":"If the input is mirrored, the answer must reverse.","textChars":50,"textLines":1,"bbox":[56,605,920,52]}
+{"kind":"textbox","id":"sh/bapgry1w","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"notes","id":"nt/4vlg3n","slide":7,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 7.\n[/Sources]"}
+{"kind":"slide","id":"sl/6ylfv8","slide":8,"title":"GROUND TRUTH","textShapes":9}
+{"kind":"textbox","id":"sh/l0vi5kz6","slide":8,"name":"section-8","text":"GROUND TRUTH","textPreview":"GROUND TRUTH","textChars":12,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/yxkzap0v","slide":8,"name":"title-8","text":"The answer comes from the force under each foot","textPreview":"The answer comes from the force under each foot","textChars":47,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/jytg3uhg","slide":8,"name":"page-8","text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/83mhgzix","slide":8,"text":"A force plate measures forward propulsion during stance.","textPreview":"A force plate measures forward propulsion during stance.","textChars":56,"textLines":1,"bbox":[56,194,500,72]}
+{"kind":"textbox","id":"sh/t4vi94zi","slide":8,"text":"Right impulse","textPreview":"Right impulse","textChars":13,"textLines":1,"bbox":[56,324,210,38]}
+{"kind":"textbox","id":"sh/614zep0r","slide":8,"text":"versus","textPreview":"versus","textChars":6,"textLines":1,"bbox":[280,324,110,38]}
+{"kind":"textbox","id":"sh/72d07uhc","slide":8,"text":"Left impulse","textPreview":"Left impulse","textChars":12,"textLines":1,"bbox":[394,324,190,38]}
+{"kind":"shape","id":"sh/grmhkjit","slide":8,"bbox":[56,395,520,100]}
+{"kind":"textbox","id":"sh/hsfidoze","slide":8,"text":"signed target = ln(JR / JL)","textPreview":"signed target = ln(JR / JL)","textChars":27,"textLines":1,"bbox":[84,421,470,48]}
+{"kind":"textbox","id":"sh/pwnyx8zy","slide":8,"text":"The sign identifies the stronger side; the magnitude shows how unequal they are.","textPreview":"The sign identifies the stronger side; the magnitude shows how unequal they are.","textChars":80,"textLines":1,"bbox":[56,536,520,94]}
+{"kind":"image","id":"im/bahgvads","slide":8,"name":"","geometry":"rect","alt":"Forward force curve with the propulsive impulse shaded","bbox":[648,194,576,418]}
+{"kind":"notes","id":"nt/6ylfv8","slide":8,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 8.\n[/Sources]"}
+{"kind":"slide","id":"sl/06r3u4","slide":9,"title":"THE SYMMETRY RULE","textShapes":5}
+{"kind":"textbox","id":"sh/ylw7ehoz","slide":9,"name":"section-9","text":"THE SYMMETRY RULE","textPreview":"THE SYMMETRY RULE","textChars":17,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/lo7q9c7q","slide":9,"name":"title-9","text":"A mirror should reverse the answer","textPreview":"A mirror should reverse the answer","textChars":34,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/0nypgr65","slide":9,"name":"page-9","text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/nqp8bmpg","slide":9,"text":"A valid anatomical reflection requires three coordinated changes.","textPreview":"A valid anatomical reflection requires three coordinated changes.","textChars":65,"textLines":1,"bbox":[56,170,920,52]}
+{"kind":"textbox","id":"sh/9c7qdw7m","slide":9,"text":"The geometry, the joint names, and the visibility flags must all agree.","textPreview":"The geometry, the joint names, and the visibility flags must all agree.","textChars":71,"textLines":1,"bbox":[56,625,1090,42]}
+{"kind":"image","id":"im/n21gru90","slide":9,"name":"","geometry":"rect","alt":"Three steps for reflecting skeletal gait data: flip axis, swap joint names, and swap visibility","bbox":[56,240,1168,365]}
+{"kind":"notes","id":"nt/06r3u4","slide":9,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 9.\n[/Sources]"}
+{"kind":"slide","id":"sl/va2w9b","slide":10,"title":"SELF-SUPERVISED LEARNING","textShapes":12}
+{"kind":"textbox","id":"sh/xgfahkre","slide":10,"name":"section-10","text":"SELF-SUPERVISED LEARNING","textPreview":"SELF-SUPERVISED LEARNING","textChars":24,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/ad4r65sn","slide":10,"name":"title-10","text":"The model learns by predicting hidden motion","textPreview":"The model learns by predicting hidden motion","textChars":44,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/bedsfa98","slide":10,"name":"page-10","text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/9cvqd0ri","slide":10,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[676,214,54,58]}
+{"kind":"textbox","id":"sh/m94r25sr","slide":10,"text":"Hide pieces","textPreview":"Hide pieces","textChars":11,"textLines":1,"bbox":[750,214,450,38]}
+{"kind":"textbox","id":"sh/nad8bq9c","slide":10,"text":"Mask some joints across time.","textPreview":"Mask some joints across time.","textChars":29,"textLines":1,"bbox":[750,256,450,62]}
+{"kind":"textbox","id":"sh/0n290val","slide":10,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[676,342,54,58]}
+{"kind":"textbox","id":"sh/1ovq90r6","slide":10,"text":"Predict the missing motion","textPreview":"Predict the missing motion","textChars":26,"textLines":1,"bbox":[750,342,450,38]}
+{"kind":"textbox","id":"sh/dozex4na","slide":10,"text":"Use the visible context to estimate the hidden representation.","textPreview":"Use the visible context to estimate the hidden representation.","textChars":62,"textLines":1,"bbox":[750,384,450,62]}
+{"kind":"textbox","id":"sh/cnqx4z6p","slide":10,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[676,470,54,58]}
+{"kind":"textbox","id":"sh/rmhwvu5k","slide":10,"text":"Learn structure without labels","textPreview":"Learn structure without labels","textChars":30,"textLines":1,"bbox":[750,470,450,38]}
+{"kind":"textbox","id":"sh/ql8f2poz","slide":10,"text":"Repeated prediction teaches a compact model of movement.","textPreview":"Repeated prediction teaches a compact model of movement.","textChars":56,"textLines":1,"bbox":[750,512,450,62]}
+{"kind":"image","id":"im/t0rmx8b6","slide":10,"name":"","geometry":"rect","alt":"JEPA context encoder, predictor, and target encoder","bbox":[56,200,548,392]}
+{"kind":"notes","id":"nt/va2w9b","slide":10,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 10.\n[/Sources]"}
+{"kind":"slide","id":"sl/obme80","slide":11,"title":"THE GAITPARITY IDEA","textShapes":32}
+{"kind":"textbox","id":"sh/fql4329o","slide":11,"name":"section-11","text":"THE GAITPARITY IDEA","textPreview":"THE GAITPARITY IDEA","textChars":19,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/grulc7q9","slide":11,"name":"title-11","text":"GaitParity sees every walk in two matched views","textPreview":"GaitParity sees every walk in two matched views","textChars":47,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/1s3m5cru","slide":11,"name":"page-11","text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"shape","id":"sh/2tc3eh8f","slide":11,"bbox":[306,278,86,4]}
+{"kind":"textbox","id":"sh/3ul47m90","slide":11,"text":">","textPreview":">","textChars":1,"textLines":1,"bbox":[362,258,38,44]}
+{"kind":"shape","id":"sh/ovelgrql","slide":11,"bbox":[306,442,86,4]}
+{"kind":"textbox","id":"sh/pwnm9w7q","slide":11,"text":">","textPreview":">","textChars":1,"textLines":1,"bbox":[362,422,38,44]}
+{"kind":"shape","id":"sh/ixs32x8b","slide":11,"bbox":[660,278,102,4]}
+{"kind":"textbox","id":"sh/jy14vi9g","slide":11,"text":">","textPreview":">","textChars":1,"textLines":1,"bbox":[731,258,38,44]}
+{"kind":"shape","id":"sh/velsjqhw","slide":11,"bbox":[660,442,102,4]}
+{"kind":"textbox","id":"sh/adcral0b","slide":11,"text":">","textPreview":">","textChars":1,"textLines":1,"bbox":[731,422,38,44]}
+{"kind":"shape","id":"sh/xgnal0z2","slide":11,"bbox":[992,516,4,56]}
+{"kind":"textbox","id":"sh/wfe9cvih","slide":11,"text":"v","textPreview":"v","textChars":1,"textLines":1,"bbox":[976,540,36,36]}
+{"kind":"textbox","id":"sh/nalsfqh0","slide":11,"text":"1  MATCHED INPUTS","textPreview":"1  MATCHED INPUTS","textChars":17,"textLines":1,"bbox":[56,178,260,24]}
+{"kind":"textbox","id":"sh/m9cr6l0f","slide":11,"text":"2  SHARED LEARNING","textPreview":"2  SHARED LEARNING","textChars":18,"textLines":1,"bbox":[390,178,280,24]}
+{"kind":"textbox","id":"sh/9c3ahgzq","slide":11,"text":"3  FEATURE SPLIT","textPreview":"3  FEATURE SPLIT","textChars":16,"textLines":1,"bbox":[760,178,464,24]}
+{"kind":"shape","id":"sh/8bu98bil","slide":11,"bbox":[56,214,250,130]}
+{"kind":"textbox","id":"sh/z61sb6ho","slide":11,"text":"ORIGINAL VIEW  x","textPreview":"ORIGINAL VIEW  x","textChars":16,"textLines":1,"bbox":[76,234,214,26]}
+{"kind":"textbox","id":"sh/y5sr2103","slide":11,"text":"Measured joint\nmotion","textPreview":"Measured joint | motion","textChars":21,"textLines":2,"bbox":[76,271,214,58]}
+{"kind":"shape","id":"sh/2hsbe1kb","slide":11,"bbox":[56,368,250,148]}
+{"kind":"textbox","id":"sh/3i1sn61g","slide":11,"text":"MIRRORED VIEW  M(x)","textPreview":"MIRRORED VIEW  M(x)","textChars":19,"textLines":1,"bbox":[76,386,214,26]}
+{"kind":"textbox","id":"sh/ojatgb21","slide":11,"text":"Swap left/right\njoints","textPreview":"Swap left/right | joints","textChars":22,"textLines":2,"bbox":[76,423,214,58]}
+{"kind":"textbox","id":"sh/p4japgjm","slide":11,"text":"+ reflect the body axis","textPreview":"+ reflect the body axis","textChars":23,"textLines":1,"bbox":[76,486,214,22]}
+{"kind":"shape","id":"sh/q5sbi1k7","slide":11,"bbox":[390,214,270,302]}
+{"kind":"textbox","id":"sh/b61sr61s","slide":11,"text":"ONE SHARED\nENCODER  E","textPreview":"ONE SHARED | ENCODER  E","textChars":21,"textLines":2,"bbox":[416,234,218,48]}
+{"kind":"textbox","id":"sh/c7atkb2d","slide":11,"text":"Learns patterns\nacross joints + time","textPreview":"Learns patterns | across joints + time","textChars":36,"textLines":2,"bbox":[416,295,218,66]}
+{"kind":"shape","id":"sh/d83utgjy","slide":11,"bbox":[420,384,210,1]}
+{"kind":"textbox","id":"sh/y9cbmlkj","slide":11,"text":"same weights","textPreview":"same weights","textChars":12,"textLines":1,"bbox":[416,401,218,28]}
+{"kind":"textbox","id":"sh/zalcvq1o","slide":11,"text":"same masks and\nnormalization","textPreview":"same masks and | normalization","textChars":28,"textLines":2,"bbox":[416,443,218,48]}
+{"kind":"shape","id":"sh/94nelk36","slide":11,"bbox":[760,214,464,130]}
+{"kind":"textbox","id":"sh/83edsfml","slide":11,"text":"EVEN FEATURES  h_even","textPreview":"EVEN FEATURES  h_even","textChars":21,"textLines":1,"bbox":[784,232,216,24]}
+{"kind":"textbox","id":"sh/n25wjal0","slide":11,"text":"What stays\nthe same","textPreview":"What stays | the same","textChars":19,"textLines":2,"bbox":[784,263,220,54]}
+{"kind":"textbox","id":"sh/m1wvq54f","slide":11,"text":"pace  |  gait phase  |  identity","textPreview":"pace  |  gait phase  |  identity","textChars":32,"textLines":1,"bbox":[784,319,280,20]}
+{"kind":"textbox","id":"sh/x87ep432","slide":11,"text":"h_even(Mx) =\nh_even(x)","textPreview":"h_even(Mx) = | h_even(x)","textChars":22,"textLines":2,"bbox":[1032,254,168,54]}
+{"kind":"shape","id":"sh/w7ydwzmh","slide":11,"bbox":[760,368,464,148]}
+{"kind":"textbox","id":"sh/v65wnulw","slide":11,"text":"ODD FEATURES  h_odd","textPreview":"ODD FEATURES  h_odd","textChars":19,"textLines":1,"bbox":[784,386,216,24]}
+{"kind":"textbox","id":"sh/a5wvup4r","slide":11,"text":"What changes\ndirection","textPreview":"What changes | direction","textChars":22,"textLines":2,"bbox":[784,417,220,54]}
+{"kind":"textbox","id":"sh/5w7et43e","slide":11,"text":"left-right contribution","textPreview":"left-right contribution","textChars":23,"textLines":1,"bbox":[784,479,220,20]}
+{"kind":"textbox","id":"sh/kvyx0zmt","slide":11,"text":"h_odd(Mx) =\n-h_odd(x)","textPreview":"h_odd(Mx) = | -h_odd(x)","textChars":21,"textLines":2,"bbox":[1020,412,186,60]}
+{"kind":"shape","id":"sh/gr2hs361","slide":11,"bbox":[390,572,834,66]}
+{"kind":"textbox","id":"sh/1sbyl8nm","slide":11,"text":"4  SIGNED READOUT","textPreview":"4  SIGNED READOUT","textChars":17,"textLines":1,"bbox":[414,585,190,22]}
+{"kind":"textbox","id":"sh/up0zqtov","slide":11,"text":"s(x) = w^T h_odd","textPreview":"s(x) = w^T h_odd","textChars":16,"textLines":1,"bbox":[608,580,228,30]}
+{"kind":"textbox","id":"sh/fqtgjy5g","slide":11,"text":"s(Mx) = -s(x)","textPreview":"s(Mx) = -s(x)","textChars":13,"textLines":1,"bbox":[840,580,188,30]}
+{"kind":"textbox","id":"sh/sniho36p","slide":11,"text":"Mirror consistency is guaranteed by construction.","textPreview":"Mirror consistency is guaranteed by construction.","textChars":49,"textLines":1,"bbox":[604,612,586,18]}
+{"kind":"notes","id":"nt/obme80","slide":11,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slides 8, 11, and 12 (paired-view architecture and signed readout).\n[/Sources]"}
+{"kind":"slide","id":"sl/bos02n","slide":12,"title":"THE READOUT","textShapes":11}
+{"kind":"textbox","id":"sh/6ds329c7","slide":12,"name":"section-12","text":"THE READOUT","textPreview":"THE READOUT","textChars":11,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/tgj2doby","slide":12,"name":"title-12","text":"One signed score: which side contributes more?","textPreview":"One signed score: which side contributes more?","textChars":46,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/8fal4jud","slide":12,"name":"page-12","text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/vi1kfyt4","slide":12,"text":"ln(JR / JL)","textPreview":"ln(JR / JL)","textChars":11,"textLines":1,"bbox":[462,182,356,78]}
+{"kind":"shape","id":"sh/uhs36tcj","slide":12,"bbox":[162,356,956,6]}
+{"kind":"shape","id":"sh/hkjmh8bu","slide":12,"bbox":[632,331,16,56]}
+{"kind":"shape","id":"sh/gjal83up","slide":12,"bbox":[280,338,24,42]}
+{"kind":"shape","id":"sh/bmhk3utk","slide":12,"bbox":[976,338,24,42]}
+{"kind":"textbox","id":"sh/alo3upcz","slide":12,"text":"negative","textPreview":"negative","textChars":8,"textLines":1,"bbox":[154,405,250,40]}
+{"kind":"textbox","id":"sh/w7u9cbe5","slide":12,"text":"left > right","textPreview":"left > right","textChars":12,"textLines":1,"bbox":[154,450,250,44]}
+{"kind":"textbox","id":"sh/h83algfa","slide":12,"text":"zero","textPreview":"zero","textChars":4,"textLines":1,"bbox":[515,405,250,40]}
+{"kind":"textbox","id":"sh/u5cra1wz","slide":12,"text":"equal propulsion","textPreview":"equal propulsion","textChars":16,"textLines":1,"bbox":[515,450,250,44]}
+{"kind":"textbox","id":"sh/v6lsj6xk","slide":12,"text":"positive","textPreview":"positive","textChars":8,"textLines":1,"bbox":[876,405,250,40]}
+{"kind":"textbox","id":"sh/4be9gbe1","slide":12,"text":"right > left","textPreview":"right > left","textChars":12,"textLines":1,"bbox":[876,450,250,44]}
+{"kind":"textbox","id":"sh/5cnapgvm","slide":12,"text":"Mirroring the skeleton should multiply this score by -1.","textPreview":"Mirroring the skeleton should multiply this score by -1.","textChars":56,"textLines":1,"bbox":[236,575,808,52]}
+{"kind":"notes","id":"nt/bos02n","slide":12,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slides 8 and 12.\n[/Sources]"}
+{"kind":"slide","id":"sl/s2hf4r","slide":13,"title":"DATA STAGE 1","textShapes":9}
+{"kind":"textbox","id":"sh/horqpc32","slide":13,"name":"section-13","text":"DATA STAGE 1","textPreview":"DATA STAGE 1","textChars":12,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/u1greh4b","slide":13,"name":"title-13","text":"We start with 96 real-world abnormal gait videos","textPreview":"We start with 96 real-world abnormal gait videos","textChars":48,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/v298nmlw","slide":13,"name":"page-13","text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/8zy9c7m5","slide":13,"text":"96","textPreview":"96","textChars":2,"textLines":1,"bbox":[56,205,220,78]}
+{"kind":"textbox","id":"sh/907qlc3q","slide":13,"text":"gait videos","textPreview":"gait videos","textChars":11,"textLines":1,"bbox":[56,283,220,62]}
+{"kind":"textbox","id":"sh/mxg7ax4f","slide":13,"text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[300,205,220,78]}
+{"kind":"textbox","id":"sh/7yp8j2l0","slide":13,"text":"gait categories","textPreview":"gait categories","textChars":15,"textLines":1,"bbox":[300,283,220,62]}
+{"kind":"textbox","id":"sh/sv29ormp","slide":13,"text":"Normal\nParkinson's\nStroke\nMyopathic\nCerebral palsy","textPreview":"Normal | Parkinson's | Stroke | Myopathic | Cerebral palsy","textChars":50,"textLines":5,"bbox":[56,390,400,220]}
+{"kind":"textbox","id":"sh/xsv2l87m","slide":13,"text":"A small, varied set is useful for geometry checks - not yet for clinical claims.","textPreview":"A small, varied set is useful for geometry checks - not yet for clinical claims.","textChars":80,"textLines":1,"bbox":[536,620,660,48]}
+{"kind":"image","id":"im/sji54zid","slide":13,"name":"","geometry":"rect","alt":"Examples and camera viewpoints from the Gait Abnormality Video Dataset","bbox":[536,190,688,414]}
+{"kind":"notes","id":"nt/s2hf4r","slide":13,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 13.\n[/Sources]"}
+{"kind":"slide","id":"sl/b764ub","slide":14,"title":"DATA STAGE 2","textShapes":9}
+{"kind":"textbox","id":"sh/kv2xojep","slide":14,"name":"section-14","text":"DATA STAGE 2","textPreview":"DATA STAGE 2","textChars":12,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/jutgved4","slide":14,"name":"title-14","text":"Scale motion learning with 10,941 walking sequences","textPreview":"Scale motion learning with 10,941 walking sequences","textChars":51,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/it0fm9wj","slide":14,"name":"page-14","text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/xsryt4ve","slide":14,"text":"AMASS supplies diverse 3D motion before force labels are introduced.","textPreview":"AMASS supplies diverse 3D motion before force labels are introduced.","textChars":68,"textLines":1,"bbox":[56,188,520,72]}
+{"kind":"textbox","id":"sh/w7ixkzet","slide":14,"text":"10,941","textPreview":"10,941","textChars":6,"textLines":1,"bbox":[56,310,280,78]}
+{"kind":"textbox","id":"sh/v69wrud8","slide":14,"text":"walking sequences","textPreview":"walking sequences","textChars":17,"textLines":1,"bbox":[56,388,280,62]}
+{"kind":"textbox","id":"sh/a50fipwn","slide":14,"text":"3D","textPreview":"3D","textChars":2,"textLines":1,"bbox":[342,310,300,78]}
+{"kind":"textbox","id":"sh/1ovy5ovi","slide":14,"text":"body motion converted to joint keypoints","textPreview":"body motion converted to joint keypoints","textChars":40,"textLines":1,"bbox":[342,388,300,62]}
+{"kind":"textbox","id":"sh/g3mxw3ex","slide":14,"text":"Purpose: learn broad movement structure first, then specialize to biomechanics.","textPreview":"Purpose: learn broad movement structure first, then specialize to biomechanics.","textChars":79,"textLines":1,"bbox":[56,516,560,78]}
+{"kind":"image","id":"im/h87mx8zq","slide":14,"name":"","geometry":"rect","alt":"Multiple 3D body-motion sequences from the AMASS dataset","bbox":[650,176,574,450]}
+{"kind":"notes","id":"nt/b764ub","slide":14,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 14.\n[/Sources]"}
+{"kind":"slide","id":"sl/9yc7nf","slide":15,"title":"EARLY EVIDENCE","textShapes":8}
+{"kind":"textbox","id":"sh/ato7qx0b","slide":15,"name":"section-15","text":"EARLY EVIDENCE","textPreview":"EARLY EVIDENCE","textChars":14,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/xgfqlsz2","slide":15,"name":"title-15","text":"Checkpoint 1: the model learned nontrivial motion","textPreview":"Checkpoint 1: the model learned nontrivial motion","textChars":49,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/cf6ps7ih","slide":15,"name":"page-15","text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/2p47md0f","slide":15,"text":"Loss fell","textPreview":"Loss fell","textChars":9,"textLines":1,"bbox":[806,220,340,46]}
+{"kind":"textbox","id":"sh/psfqhszq","slide":15,"text":"The prediction objective moved in the expected direction.","textPreview":"The prediction objective moved in the expected direction.","textChars":57,"textLines":1,"bbox":[806,274,350,82]}
+{"kind":"textbox","id":"sh/or6poni5","slide":15,"text":"Features varied","textPreview":"Features varied","textChars":15,"textLines":1,"bbox":[806,392,350,46]}
+{"kind":"textbox","id":"sh/7mh8rmh4","slide":15,"text":"The encoder did not settle on the same representation for every walk.","textPreview":"The encoder did not settle on the same representation for every walk.","textChars":69,"textLines":1,"bbox":[806,446,350,104]}
+{"kind":"textbox","id":"sh/ml8ryh0j","slide":15,"text":"Meaning: the self-supervised stage learned nontrivial motion structure.","textPreview":"Meaning: the self-supervised stage learned nontrivial motion structure.","textChars":71,"textLines":1,"bbox":[806,590,360,66]}
+{"kind":"image","id":"im/m9sj25wv","slide":15,"name":"","geometry":"rect","alt":"Training curves showing falling loss and persistent feature variation","bbox":[56,188,680,430]}
+{"kind":"notes","id":"nt/9yc7nf","slide":15,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 15.\n[/Sources]"}
+{"kind":"slide","id":"sl/uh0xsw","slide":16,"title":"BASELINE FAILURE","textShapes":7}
+{"kind":"textbox","id":"sh/zixwzm58","slide":16,"name":"section-16","text":"BASELINE FAILURE","textPreview":"BASELINE FAILURE","textChars":16,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/kj6d8r6t","slide":16,"name":"title-16","text":"Checkpoint 2: a standard model loses left versus right","textPreview":"Checkpoint 2: a standard model loses left versus right","textChars":54,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/l4fe1wne","slide":16,"name":"page-16","text":"16","textPreview":"16","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"shape","id":"sh/76xw3m5k","slide":16,"bbox":[768,210,410,146]}
+{"kind":"textbox","id":"sh/876xcr6p","slide":16,"text":"R² = -0.07","textPreview":"R² = -0.07","textChars":10,"textLines":1,"bbox":[802,244,340,56]}
+{"kind":"textbox","id":"sh/98ze5wna","slide":16,"text":"No useful signed direction","textPreview":"No useful signed direction","textChars":26,"textLines":1,"bbox":[802,304,340,34]}
+{"kind":"textbox","id":"sh/u98fe1ov","slide":16,"text":"The baseline can encode motion and still fail to know which side is which.","textPreview":"The baseline can encode motion and still fail to know which side is which.","textChars":74,"textLines":1,"bbox":[768,404,410,112]}
+{"kind":"textbox","id":"sh/vahw765g","slide":16,"text":"That failure motivates building symmetry into the representation itself.","textPreview":"That failure motivates building symmetry into the representation itself.","textChars":72,"textLines":1,"bbox":[768,548,410,76]}
+{"kind":"image","id":"im/juxsry54","slide":16,"name":"","geometry":"rect","alt":"Scatter plot showing poor recovery of the signed gait target","bbox":[56,194,648,410]}
+{"kind":"notes","id":"nt/uh0xsw","slide":16,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 16.\n[/Sources]"}
+{"kind":"slide","id":"sl/fx483l","slide":17,"title":"WHAT THE EARLY TESTS SAY","textShapes":9}
+{"kind":"textbox","id":"sh/lon6lwfm","slide":17,"name":"section-17","text":"WHAT THE EARLY TESTS SAY","textPreview":"WHAT THE EARLY TESTS SAY","textChars":24,"textLines":1,"bbox":[56,30,300,30]}
+{"kind":"textbox","id":"sh/y1wnqhgb","slide":17,"name":"title-17","text":"The symmetry works. Clinical usefulness is still open.","textPreview":"The symmetry works. Clinical usefulness is still open.","textChars":54,"textLines":1,"bbox":[56,68,1168,88]}
+{"kind":"textbox","id":"sh/jm54jmhg","slide":17,"name":"page-17","text":"17","textPreview":"17","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"textbox","id":"sh/ts76pgfy","slide":17,"text":"PASSED","textPreview":"PASSED","textChars":6,"textLines":1,"bbox":[728,206,360,32]}
+{"kind":"textbox","id":"sh/6pwnu1g7","slide":17,"text":"Mirror consistency","textPreview":"Mirror consistency","textChars":18,"textLines":1,"bbox":[728,250,430,52]}
+{"kind":"textbox","id":"sh/7qpon6xs","slide":17,"text":"The reflection-equivariant encoder follows the intended swap rule exactly in the geometry audit.","textPreview":"The reflection-equivariant encoder follows the intended swap rule exactly in the geometry audit.","textChars":96,"textLines":1,"bbox":[728,312,440,112]}
+{"kind":"shape","id":"sh/gvy50by9","slide":17,"bbox":[728,455,440,2]}
+{"kind":"textbox","id":"sh/hw76tgfu","slide":17,"text":"STILL TO PROVE","textPreview":"STILL TO PROVE","textChars":14,"textLines":1,"bbox":[728,488,360,32]}
+{"kind":"textbox","id":"sh/5wfq1kze","slide":17,"text":"Force prediction on unseen people","textPreview":"Force prediction on unseen people","textChars":33,"textLines":1,"bbox":[728,532,440,84]}
+{"kind":"textbox","id":"sh/4b698zyt","slide":17,"text":"Architecture check first; biomechanical validation next.","textPreview":"Architecture check first; biomechanical validation next.","textChars":56,"textLines":1,"bbox":[728,624,440,34]}
+{"kind":"image","id":"im/tczi9kv2","slide":17,"name":"","geometry":"rect","alt":"Layerwise swap residual chart comparing model variants","bbox":[56,194,604,386]}
+{"kind":"notes","id":"nt/fx483l","slide":17,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 17.\n[/Sources]"}
+{"kind":"slide","id":"sl/118mw9","slide":18,"title":"NEXT","textShapes":10}
+{"kind":"textbox","id":"sh/tk3al0ji","slide":18,"text":"NEXT","textPreview":"NEXT","textChars":4,"textLines":1,"bbox":[56,42,180,30]}
+{"kind":"textbox","id":"sh/6hsbql07","slide":18,"text":"From tracking movement toward explaining it","textPreview":"From tracking movement toward explaining it","textChars":43,"textLines":1,"bbox":[56,128,1050,112]}
+{"kind":"shape","id":"sh/ri1sjq1c","slide":18,"bbox":[56,304,1168,2]}
+{"kind":"textbox","id":"sh/0nutwfi9","slide":18,"text":"1. Pretrain","textPreview":"1. Pretrain","textChars":11,"textLines":1,"bbox":[56,354,330,42]}
+{"kind":"textbox","id":"sh/1o3apkju","slide":18,"text":"Finish large-scale AMASS motion pretraining.","textPreview":"Finish large-scale AMASS motion pretraining.","textChars":44,"textLines":1,"bbox":[56,410,330,110]}
+{"kind":"textbox","id":"sh/elcbu503","slide":18,"text":"2. Ground","textPreview":"2. Ground","textChars":9,"textLines":1,"bbox":[452,354,330,42]}
+{"kind":"textbox","id":"sh/fmlsna1o","slide":18,"text":"Connect motion to force, contact, and uncertainty.","textPreview":"Connect motion to force, contact, and uncertainty.","textChars":50,"textLines":1,"bbox":[452,410,330,110]}
+{"kind":"textbox","id":"sh/wrq9kbip","slide":18,"text":"3. Validate","textPreview":"3. Validate","textChars":11,"textLines":1,"bbox":[848,354,330,42]}
+{"kind":"textbox","id":"sh/hsjadgja","slide":18,"text":"Test signed predictions on unseen people and viewpoints.","textPreview":"Test signed predictions on unseen people and viewpoints.","textChars":56,"textLines":1,"bbox":[848,410,330,110]}
+{"kind":"shape","id":"sh/t03epcj6","slide":18,"bbox":[56,565,1168,78]}
+{"kind":"textbox","id":"sh/szuxg7i1","slide":18,"text":"Long-term vision: ordinary video that supports biomechanical understanding, not just pose tracking.","textPreview":"Long-term vision: ordinary video that supports biomechanical understanding, not just pose tracking.","textChars":99,"textLines":1,"bbox":[82,587,1116,42]}
+{"kind":"textbox","id":"sh/7y1wn21g","slide":18,"text":"18","textPreview":"18","textChars":2,"textLines":1,"bbox":[1175,675,48,22]}
+{"kind":"notes","id":"nt/118mw9","slide":18,"text":"[Sources]\n- User-provided GaitParity Presentation.pdf, slide 18, with the roadmap expanded from the stated AMASS and biomechanical-JEPA next steps.\n[/Sources]"}

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+  <title id="title">A perfect sign flip can still contain no information</title>
+  <desc id="desc">An alive odd channel gives different signed values to different participants and passes the mirror sign-flip check. A collapsed odd channel gives every participant exactly zero, also passes the sign-flip check, and is therefore useless until its information is tested separately.</desc>
+  <defs>
+    <style>
+      .title{font:700 30px Arial,sans-serif;fill:#0f172a}
+      .head{font:700 21px Arial,sans-serif;fill:#0f172a}
+      .body{font:19px Arial,sans-serif;fill:#1e293b}
+      .note{font:17px Arial,sans-serif;fill:#334155}
+      .small{font:700 17px Arial,sans-serif;fill:#0f172a}
+      .bar{font:700 20px Arial,sans-serif;fill:#fff}
+    </style>
+  </defs>
+
+  <rect width="1000" height="620" fill="#f8fafc"/>
+  <rect x="0.5" y="0.5" width="999" height="619" fill="none" stroke="#cbd5e1"/>
+  <text x="500" y="45" text-anchor="middle" class="title">Why is a perfect sign flip not enough?</text>
+  <text x="500" y="74" text-anchor="middle" class="note">Check the rule, then check whether the odd channel carries participant information.</text>
+
+  <rect x="55" y="108" width="410" height="326" rx="14" fill="#fff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="260" y="143" text-anchor="middle" class="head">ALIVE ODD CHANNEL</text>
+  <text x="260" y="171" text-anchor="middle" class="note">different people get different values</text>
+  <line x1="145" y1="213" x2="400" y2="213" stroke="#cbd5e1" stroke-width="1"/>
+  <line x1="272" y1="195" x2="272" y2="360" stroke="#334155" stroke-width="2"/>
+  <text x="145" y="198" text-anchor="middle" class="note">−1</text>
+  <text x="272" y="198" text-anchor="middle" class="note">0</text>
+  <text x="400" y="198" text-anchor="middle" class="note">+1</text>
+  <text x="95" y="249" class="small">P1</text>
+  <line x1="145" y1="242" x2="400" y2="242" stroke="#e2e8f0" stroke-width="2"/>
+  <circle cx="219" cy="242" r="9" fill="#1d4ed8"/>
+  <text x="455" y="249" text-anchor="end" class="body">−0.42</text>
+  <text x="95" y="294" class="small">P2</text>
+  <line x1="145" y1="287" x2="400" y2="287" stroke="#e2e8f0" stroke-width="2"/>
+  <rect x="291" y="278" width="18" height="18" fill="#1d4ed8"/>
+  <text x="455" y="294" text-anchor="end" class="body">+0.18</text>
+  <text x="95" y="339" class="small">P3</text>
+  <line x1="145" y1="332" x2="400" y2="332" stroke="#e2e8f0" stroke-width="2"/>
+  <path d="M350 320 L361 340 L339 340 Z" fill="#1d4ed8"/>
+  <text x="455" y="339" text-anchor="end" class="body">+0.61</text>
+  <rect x="86" y="371" width="348" height="43" rx="10" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
+  <text x="260" y="399" text-anchor="middle" class="small" fill="#15803d">✓ values vary by person</text>
+
+  <rect x="535" y="108" width="410" height="326" rx="14" fill="#fff" stroke="#b91c1c" stroke-width="2"/>
+  <text x="740" y="143" text-anchor="middle" class="head">COLLAPSED ODD CHANNEL</text>
+  <text x="740" y="171" text-anchor="middle" class="note">every person gets exactly the same value</text>
+  <line x1="625" y1="213" x2="880" y2="213" stroke="#cbd5e1" stroke-width="1"/>
+  <line x1="752" y1="195" x2="752" y2="360" stroke="#334155" stroke-width="2"/>
+  <text x="625" y="198" text-anchor="middle" class="note">−1</text>
+  <text x="752" y="198" text-anchor="middle" class="note">0</text>
+  <text x="880" y="198" text-anchor="middle" class="note">+1</text>
+  <text x="575" y="249" class="small">P1</text>
+  <line x1="625" y1="242" x2="880" y2="242" stroke="#e2e8f0" stroke-width="2"/>
+  <circle cx="752" cy="242" r="9" fill="#b91c1c"/>
+  <text x="935" y="249" text-anchor="end" class="body">0</text>
+  <text x="575" y="294" class="small">P2</text>
+  <line x1="625" y1="287" x2="880" y2="287" stroke="#e2e8f0" stroke-width="2"/>
+  <rect x="743" y="278" width="18" height="18" fill="#b91c1c"/>
+  <text x="935" y="294" text-anchor="end" class="body">0</text>
+  <text x="575" y="339" class="small">P3</text>
+  <line x1="625" y1="332" x2="880" y2="332" stroke="#e2e8f0" stroke-width="2"/>
+  <path d="M752 320 L763 340 L741 340 Z" fill="#b91c1c"/>
+  <text x="935" y="339" text-anchor="end" class="body">0</text>
+  <rect x="566" y="371" width="348" height="43" rx="10" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="740" y="399" text-anchor="middle" class="small" fill="#b91c1c">✗ no person-to-person variation</text>
+
+  <rect x="124" y="461" width="752" height="76" rx="14" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="500" y="491" text-anchor="middle" class="head">BOTH COLUMNS PASS THIS RULE</text>
+  <text x="500" y="519" text-anchor="middle" class="body">s(Mx) = −s(x): for zero, 0 = −0</text>
+
+  <rect x="130" y="559" width="740" height="44" rx="14" fill="#0f172a"/>
+  <text x="500" y="588" text-anchor="middle" class="bar">A mirror rule needs information, not just a sign flip.</text>
+</svg>

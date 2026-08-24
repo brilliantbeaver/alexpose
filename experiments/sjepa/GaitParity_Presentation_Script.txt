@@ -1,0 +1,134 @@
+GaitParity Presentation Script
+Estimated speaking time: 12-15 minutes
+
+SLIDE 1 - GaitParity
+
+Good morning. This project asks a simple but difficult question: can we look at a person's skeleton motion and infer a hidden biomechanical imbalance - specifically, which leg produces more propulsive force and by how much?
+
+Our approach is called GaitParity. It combines predictive learning from skeleton motion with an explicit rule for how left and right should behave when a walk is mirrored. Today, I will explain the motivation, the model design, what we have demonstrated so far, and what remains to be validated.
+
+SLIDE 2 - Modeling gait with skeletal keypoints
+
+We begin by converting ordinary walking video into a sequence of skeletal keypoints. Instead of asking the model to interpret clothing, background, or appearance, we represent each frame through the estimated locations of important joints.
+
+This gives us a compact description of how the body moves over time. The examples here show that even when people and camera views differ, the underlying skeleton retains information about posture, stride, joint timing, and coordination. The key question is whether that motion also contains enough information to recover biomechanics that are not directly visible.
+
+SLIDE 3 - Different conditions leave different gait signals
+
+Different health conditions can produce different patterns of movement. Stroke can be associated with reduced propulsion on one side and compensatory leg motion. Parkinson's disease can produce shorter steps, reduced arm swing, and a shuffling pattern. Cerebral palsy can involve crouched posture and increased hip or knee flexion.
+
+These are broad examples rather than diagnostic rules. Individuals within the same condition can walk very differently, and similar movement patterns can arise from different causes. Still, the examples motivate the idea that clinically meaningful information may be reflected in the organization of skeletal motion.
+
+SLIDE 4 - Pose tells us what moved, but not what caused it
+
+Skeleton tracking tells us where the joints moved. From that, we can estimate quantities such as walking speed, posture, and timing.
+
+Biomechanics asks a deeper question: how was that movement produced? That involves foot-to-ground contact, force, propulsion, balance, and uncertainty. These quantities are not uniquely determined by pixels. Two people can show similar joint trajectories while producing those trajectories with different forces.
+
+So we should not treat pose as a direct force measurement. Instead, we are testing whether patterns distributed across joints and time contain a useful indirect signature of the underlying mechanics.
+
+SLIDE 5 - A faster walk can hide the wrong kind of recovery
+
+This distinction matters clinically. After a stroke, a person may walk faster because the affected leg has recovered and contributes more propulsion. But the person may also walk faster because the stronger leg is compensating even more.
+
+Those two outcomes can look similar if we only measure speed, but they imply different recovery processes and potentially different treatment decisions. A useful model should therefore go beyond asking whether walking improved. It should help distinguish how the two sides contributed to that improvement.
+
+SLIDE 6 - Can skeleton motion reveal propulsion imbalance?
+
+This leads to our central research question: can skeleton motion encode a generalizable biomechanical signature of left-right force asymmetry that is strong enough to predict both its direction and magnitude?
+
+Direction means identifying which side contributes more propulsion. Magnitude means estimating how unequal the two sides are. Our hypothesis is that a model that explicitly preserves the left-right relationship will learn this signal more efficiently and require fewer force-labeled participants than a model with no built-in symmetry.
+
+We call that symmetry-aware approach GaitParity.
+
+SLIDE 7 - Mirroring changes the side of gait asymmetry
+
+To define the prediction target, we compare right and left propulsive impulse. We use the logarithm of the ratio between them. A positive or negative sign identifies which side is stronger, while the absolute size indicates the degree of imbalance.
+
+Now consider mirroring the skeleton. A correct mirror operation reflects the side axis and swaps the names of corresponding left and right joints. The physical walk is otherwise the same, but the direction of the signed asymmetry must reverse.
+
+That gives us a strong learning rule: properties such as pace should remain stable under reflection, while left-right contribution should change sign.
+
+SLIDE 8 - Self-supervised learning
+
+Force-labeled gait data are expensive and relatively scarce, so we first learn from motion without requiring force labels. This is self-supervised learning: the data provide their own training task.
+
+The model learns general structure from many motion sequences and can later be adapted to a smaller labeled biomechanics dataset. The goal is not to replace labeled force measurements. It is to use unlabeled motion to build a better starting representation, so that the limited force labels can be used more effectively.
+
+SLIDE 9 - Joint-embedding predictive architecture
+
+Our predictive architecture learns by reconstructing hidden information in representation space rather than reconstructing raw pixels.
+
+We divide each 64-frame skeleton sequence into short time patches across selected joints. Some valid joint-time tokens are hidden from the student encoder. Using the visible context, a predictor estimates the teacher encoder's representation of those hidden tokens. The teacher changes gradually by following the student through an exponential moving average.
+
+We also monitor variance, similarity, and feature rank. These checks matter because a low training loss alone does not prove that the model learned a useful representation; it could otherwise converge to nearly identical features for every walk.
+
+SLIDE 10 - Two matched views
+
+GaitParity processes every walk in two coordinated views: the original skeleton and its correctly mirrored version. Both views pass through the same encoder with the same normalization and masking rules.
+
+The representation is separated conceptually into two types of information. Even features capture properties that should remain unchanged after mirroring, such as pace or gait phase. Odd features capture properties that should reverse direction, especially left-versus-right contribution.
+
+This is the central design idea. Instead of hoping that an unconstrained model will discover the meaning of left and right, we encode the expected transformation directly into the representation.
+
+SLIDE 11 - Initial real-world gait data
+
+We begin with 96 labeled gait sequences from the Gait Abnormality Video Dataset. Technically, these sequences come from a smaller number of source videos, so they should not be interpreted as 96 independent people.
+
+The cohort covers five walking categories: typical gait, Parkinson's disease, stroke, myopathic gait, and cerebral palsy. This is a useful starting point because it provides varied real-world motion, but it is small and unevenly distributed across conditions. The category names are dataset annotations, not diagnoses produced by our model.
+
+SLIDE 12 - Model training stages
+
+Training proceeds as a curriculum rather than introducing every condition at once. The first stage establishes a normal-walking reference. Later stages add Parkinson's disease, stroke, myopathic gait, and cerebral palsy, while replaying examples from conditions already introduced.
+
+The same model continues across all five stages, and balanced sampling prevents the largest category from dominating each batch. This makes it possible to observe how the representation changes as the motion distribution becomes more complex.
+
+The counts at the top describe one stratified classifier split of the 96 canonical sequences. The curriculum below uses an expanded representation-training cohort, beginning with 75 normal sequences and ending with 159 sequences across 35 source videos. These are related but distinct evaluation and training views of the data.
+
+SLIDE 13 - Checkpoint 1: non-trivial motion learning
+
+Our first checkpoint asks whether the predictive model learned anything beyond a constant representation.
+
+The latent prediction loss falls substantially, showing that the model improves at predicting hidden motion features. At the same time, the anti-collapse diagnostics remain active and the learned features retain variation across sequences.
+
+Together, these results support a limited but important conclusion: the training process learned non-trivial motion structure and did not simply map every walk to the same vector. They do not yet show that the representation predicts propulsion, distinguishes conditions on new people, or supports clinical use.
+
+SLIDE 14 - Checkpoint 2: the standard model loses left versus right
+
+The second checkpoint is a negative but informative result. We ask whether a standard motion representation preserves signed left-right information.
+
+The coefficient of determination is negative, at approximately minus 0.07. In practical terms, the predictions do not track the true signed target and perform worse than simply predicting the average value.
+
+This tells us that learning general motion structure is not enough. A model can represent gait while still discarding which side produced the pattern. That failure directly motivates the reflection-aware design: signed asymmetry must be protected explicitly rather than assumed to emerge automatically.
+
+SLIDE 15 - Reflection-equivariant symmetry works
+
+This graph tests whether the architecture obeys the intended mirror rule. The reflection-equivariant model has essentially zero swap residual across layers, meaning that mirroring the input produces the corresponding transformation in the representation. The unconstrained control does not maintain that relationship.
+
+So the architectural mechanism works: the model preserves the left-right transformation as designed.
+
+However, this is a consistency test, not yet a force-prediction result. It proves that the representation follows the symmetry rule. It does not prove that the representation can accurately predict propulsion direction or magnitude for unseen people.
+
+SLIDE 16 - Skeleton motion contains a measurable signal
+
+As a supporting test, we ask whether the learned skeleton features contain information related to walking condition.
+
+With a random example-level split, accuracy is 72.4 percent and the F1 score is 75.0 percent. When source videos are kept separate at the classifier stage, accuracy falls to 56.6 percent and the F1 score falls to 49.6 percent. This drop shows that some of the stronger result is associated with source-specific information and that transfer across videos remains difficult.
+
+The matched 21-example comparison correctly classifies 16 examples, but the condition-level sample sizes are very small. These classification results show measurable motion signal; they do not directly answer the propulsion-asymmetry question, and they are not yet an independent estimate on unseen people because the representation model was trained on the full curriculum corpus.
+
+SLIDE 17 - Scaling with approximately 11,000 walking sequences
+
+The main limitation is data scale. To address that, the next phase uses 10,941 walking sequences from the Archive of Motion Capture as Surface Shapes dataset. These sequences provide diverse three-dimensional body motion that can be converted into joint keypoints.
+
+The purpose is to learn broad movement structure before introducing scarce force labels. This dataset does not provide the final propulsion target by itself. It supplies motion diversity, after which the model must still be specialized and evaluated using synchronized biomechanics data from independent participants.
+
+SLIDE 18 - Next steps
+
+The immediate next step is full pretraining on the larger motion corpus, followed by force-supervised evaluation on unseen participants. The decisive experiment must measure direction accuracy and magnitude error while keeping participants separate before every stage of model training.
+
+The longer-term goal is a biomechanics-grounded predictive model that connects video motion to a probabilistic physical state. Such a model could quantify uncertainty, flag physically inconsistent interpretations, and eventually compare possible intervention-conditioned futures.
+
+The main takeaway is that we have established the learning framework, demonstrated non-trivial motion learning, identified the failure of a standard representation to preserve signed direction, and verified the reflection-equivariant mechanism. The remaining scientific question is the most important one: whether that mechanism produces accurate, generalizable force-asymmetry predictions in new people.
+
+Thank you.

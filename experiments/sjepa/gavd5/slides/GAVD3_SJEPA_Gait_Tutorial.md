@@ -101,36 +101,36 @@ Do not read a falling loss as proof of a useful representation. Use the diagnost
 Notebook 05 freezes the final target encoder before any Random Forest is fitted. For each canonical sequence, it joins four 96-value summaries: global mean, global standard deviation, authorized-target mean, and authorized-target standard deviation. This makes a 384-value vector. On the 96 canonical rows, the mean within-condition cosine distance was 0.120. The smallest distance between condition centers was only 0.037, between myopathic and cerebral-palsy rows. Cosine silhouette was 0.009, close to the point where within-group and nearest-other-group distances balance. The representation contains label-related structure, but these numbers do not show five clean clusters. The same rows and labels shaped the later training stages, so this geometry is descriptive and label-informed. Source for silhouette theory: reference 9.
 :::
 
-# Three readout lanes answer three limited questions
+# Three evaluation approaches answer three limited questions
 
-![A1, A2, and Lane C differ in row selection and classifier grouping, but all reuse an exposed encoder.](../docs/figures/evidence_ladder.svg){width=92%}
+![Three evaluation approaches differ in how examples and source videos are divided.](figures/current_evaluation_approaches.png){width=92%}
 
 ::: notes
-A1 asks whether a shallow classifier can recover labels inside the full known canonical corpus. It uses 67 training rows and 29 test rows, but 16 source videos cross the split and all 29 test rows trained the encoder. A2 reproduces the historical 47 training and 21 test assignment. Nine videos cross that classifier split, and all 21 test rows trained the encoder. Lane C groups source videos inside the Random Forest evaluation. The binary task has five folds and the five-class task has two. However, the final encoder was trained once on all 159 rows. Lane C is therefore classifier-video-disjoint but encoder-exposed. None of these lanes estimates performance for a new person, video, camera, or clinic. Grouped-data guidance comes from reference 7.
+The first approach divides all 96 examples at random into 67 for training and 29 for testing. The second preserves a historical comparison with 47 training examples and 21 test examples. Source videos can appear on both sides in both approaches. The third keeps source videos separate while testing the final classifier. However, every video had already helped shape the learned movement features. None of these approaches estimates performance for a wholly new person, video, camera, or clinic. Grouped-data guidance comes from reference 7.
 :::
 
-# “All-96 stratified” balances classes, not videos
+# Dividing 96 examples at random balances conditions, not videos
 
 ![A step-by-step view of the 67-row training split, 29-row test split, and two forms of exposure.](../images/10_all96_stratification.svg){width=90%}
 
 ::: notes
-Stratification means that each class keeps roughly the same proportion on each side. The full cohort has 12 normal, 9 Parkinson's, 12 stroke, 47 myopathic, and 16 cerebral-palsy sequences. The training side receives 67 rows and the test side receives 29. This helps prevent the small classes from disappearing from the test set. It does not separate videos. Every one of the 16 test videos also occurs in classifier training. It also does not undo representation training. The encoder had already used all 96 rows and, after Stage 0, their folder labels. The current A1 result is 0.793 accuracy, 0.889 balanced accuracy, and 0.821 macro-F1. The visibility-only control is 0.448 accuracy. The valid conclusion is that the vector contains class-related structure inside this known corpus.
+Keeping condition proportions similar on both sides helps prevent the small conditions from disappearing from the test set. The full group has 12 typical-gait, 9 Parkinson's-disease, 12 stroke, 47 myopathic-gait, and 16 cerebral-palsy examples. The training side receives 67 examples and the test side receives 29. It does not separate source videos: every test video also occurs in classifier training. This test reaches 72.4% accuracy and a 75.0% F1 score. The valid conclusion is that the movement features contain condition-related structure inside this known collection.
 :::
 
-# Previous and current scores changed for different reasons
+# How accurately were the five walking conditions identified?
 
-![The exact-split change used a new model; the Lane C change kept the same model and repaired the fold definition.](../docs/figures/result_changes.svg){width=94%}
+![Accuracy and F1 scores for four ways of evaluating the five-condition classifier.](figures/current_downstream_scores.png){width=94%}
 
 ::: notes
-The left chart compares two different representation systems on the same historical 47/21 assignment. The legacy normal-only model reached 0.619 accuracy and 0.613 macro-F1. The current five-stage model reached 0.714 accuracy, 0.730 balanced accuracy, and 0.742 macro-F1. The approximate changes are plus 0.095 accuracy and plus 0.129 macro-F1. Data, targets, losses, training, and provenance contracts changed together, so this is not a component ablation. The right chart is an evaluation repair. The checkpoint and all 159 embeddings stayed fixed. Replacing five ordinary group folds with two stratified group folds moved mean accuracy from 0.604 to 0.653 and fixed-label macro-F1 from 0.407 to 0.625. That change reflects a better-defined five-class task, not a better encoder.
+Dividing the 96 examples at random gives 72.4% accuracy and a 75.0% F1 score. Repeating the matched 47-training and 21-testing comparison gives 76.2% accuracy and a 76.5% F1 score. When source videos are kept separate for the final classifier, the two-split average falls to 56.4% accuracy and a 49.5% F1 score. Combining all predictions from those two splits gives 56.6% accuracy and a 49.6% F1 score. The first two tests can place clips from the same source video on both sides. The final two are more cautious, but every video still contributed to the earlier learning of movement features.
 :::
 
-# Lane C repaired the evaluation, not the model
+# Keeping source videos separate changes the result
 
-![Two is the largest fold count that keeps every class in both training and testing.](../docs/figures/evolution_lane_c_repair.svg){width=92%}
+![Accuracy and F1 scores are lower when source videos cannot cross the final classifier split.](figures/current_video_separation.png){width=92%}
 
 ::: notes
-The earlier five-fold version was superseded because one training fold had no cerebral-palsy rows and the macro-F1 label list changed from fold to fold. Parkinson's and cerebral palsy each have only two source videos. Two StratifiedGroupKFold folds are therefore the largest feasible design that keeps all five labels on both sides. The corrected mean is 0.653 accuracy, 0.603 balanced accuracy, and 0.625 fixed-label macro-F1. Pooled predictions give 0.654 accuracy and 0.619 macro-F1. The actual majority baseline in these 159 rows is normal at 75 divided by 159, or 0.472. The encoder still saw 159 of 159 fold-test rows. A grouped Random Forest cannot undo that exposure. Call this a classifier-level stress test, not unseen-video generalization.
+The clearest comparison uses the same five walking conditions. Dividing examples at random gives 72.4% accuracy and a 75.0% F1 score. Keeping source videos separate and combining all test predictions gives 56.6% accuracy and a 49.6% F1 score. The lower value is the more cautious summary because repeated clips from one source video cannot appear on both sides of the final classifier test. It is still not a fully unseen-video test: all 159 examples helped shape the learned movement features before the classifier was evaluated.
 :::
 
 # The next valid test must split videos before learning
@@ -226,88 +226,86 @@ The current whitelist contains 12 landmark identities. The legacy whitelist cont
 The readout has no trainable sequence head. This keeps variance low for a small dataset and makes the feature probe easy to audit. Its cost is clear: mean and standard deviation cannot preserve the order of 16 time patches, absolute walking rate after resizing, or the timing of left-right asymmetry. The right-hand card is a proposed ablation, not a completed result.
 :::
 
-# Appendix: aggregate scores hide class behavior
+# Appendix: performance varies by walking condition
 
-![A2 macro-F1 is 0.742, but its stroke F1 is 0.333. Support below each class is A1 followed by A2.](../docs/figures/evolution_class_f1.svg){width=92%}
+![F1 scores for each walking condition in the matched 21-example test.](figures/current_condition_f1.png){width=92%}
 
 ::: notes
-Macro-F1 gives every class equal weight, which is useful in an imbalanced cohort. It can still hide a weak class. On A2, normal and Parkinson's each had F1 of 1.000, while stroke had F1 of 0.333. The test support is tiny: three rows each for normal, Parkinson's, and stroke. Always read class support and the confusion pattern beside the aggregate value.
+The overall F1 score gives every condition equal weight, which is useful when the conditions have different numbers of examples. It can still hide variation. In the matched comparison, the condition-level F1 scores range from 66.7% for stroke to 85.7% for Parkinson's disease. Typical gait, Parkinson's disease, and stroke each have only three test examples, so a single changed prediction moves the percentage sharply. Always read the number of examples and the error pattern beside an aggregate score.
 :::
 
-# Appendix: exact-split errors repeat by source video
+# Appendix: where the matched comparison made mistakes
 
 ::: columns
 ::: {.column width="62%"}
 
-![Exact historical 47/21 split confusion matrix. Source: notebook 06.](../cache/artifacts/real/five_class_confusion_matrix.png){width=100%}
+![Confusion matrix for the matched 21-example test, with correct predictions on the diagonal.](figures/current_confusion_matrix.png){width=100%}
 
 :::
 ::: {.column width="38%"}
 
-**Examples**
+**Five mistakes**
 
-- Two stroke sequences from `5gpoegYv1hs` were predicted as myopathic.
-- Two cerebral-palsy sequences from `DlPDuHBAP7A` were predicted as myopathic.
-- Two myopathic errors came from two different source videos and were predicted as stroke.
+- Two cerebral-palsy examples from one source video were assigned to other conditions.
+- One myopathic-gait example was assigned to Parkinson's disease.
+- One typical-gait example was assigned to myopathic gait.
+- One stroke example was assigned to myopathic gait.
 
-Repeated rows from one video are not independent patients.
+Repeated clips from one video are not independent people.
 
 :::
 :::
 
 ::: notes
-The confusion matrix contains only 21 test rows. It is more informative than accuracy alone because it shows that the same source video can contribute repeated errors. The split is preserved for historical comparison, not for an unseen-video claim.
+The confusion matrix contains only 21 test examples. Sixteen are correct and five are incorrect, giving 76.2% accuracy. The matrix is more informative than accuracy alone because it shows which conditions are confused. It also reveals that one source video can contribute repeated errors. The assignment is preserved for comparison, not as a claim about unseen videos.
 :::
 
-# Appendix: the current readouts are stress tests
+# Appendix: what the current evidence can and cannot show
 
-![Every current score has a clear use and a clear exposure warning.](figures/results_current.svg){width=93%}
+![The current evidence supports condition-related signal but not fully unseen-video performance.](figures/current_interpretation_boundary.png){width=93%}
 
 ::: notes
-The all-96 and exact-split lanes are sequence-level descriptive readouts. The grouped Random Forest lane prevents the same video from appearing on both sides of a classifier fold. The encoder exposure remains complete in every lane. The binary and five-class Lane C values also answer different tasks, so their bar heights should not be compared as though the class sets were identical.
+The current results support a limited but useful conclusion: the movement features contain information related to the five walking conditions. The more cautious source-video-separated result is lower than the random division. The results do not estimate performance for a new person, clinic, camera, or source video because every example helped shape the movement features. The next valid test must separate complete source videos before any feature learning begins.
 :::
 
-# Appendix: model history and current result ledger
+# Appendix: current five-condition result ledger
 
-|Readout version|Accuracy|Balanced accuracy|Macro-F1|Status and meaning|
+|Evaluation approach|Accuracy|Balanced accuracy|F1 score|Meaning|
 |---|---:|---:|---:|---|
-|Legacy A2 normal-only|0.619|0.596|0.613|Superseded model; same confounded 47/21 assignment|
-|Current A2 five-stage|0.714|0.730|0.742|Current model; same assignment and encoder exposure|
-|Legacy A1 normal-only|0.621|0.624|0.594|Superseded model; sequence split|
-|Current A1 five-stage|0.793|0.889|0.821|Current model; 29 of 29 test rows exposed|
-|Lane C five-class, old five-fold mean|0.604|0.595|0.407|Superseded evaluation; label support changed by fold|
-|Lane C five-class, corrected two-fold mean|0.653|0.603|0.625|Same checkpoint; every fold has all five labels|
-|Lane C five-class, corrected pooled predictions|0.654|0.600|0.619|Current summary; all 159 rows exposed|
+|All 96 examples divided at random|72.4%|82.4%|75.0%|Source videos can appear on both sides|
+|Matched 47 training, 21 testing|76.2%|75.8%|76.5%|Repeats the historical assignment|
+|Source videos separate, average of two splits|56.4%|48.4%|49.5%|Averages the two test results equally|
+|Source videos separate, all predictions combined|56.6%|50.6%|49.6%|Most direct combined summary|
 
 ::: notes
-The legacy and current A1 and A2 rows compare different models. The old and corrected Lane C rows compare different evaluation definitions with the same model and embeddings. The legacy A2 accuracy of 0.619 and the corrected pooled Lane C macro-F1 of 0.619 are different metrics that happen to round to the same value.
+All four rows use the same saved movement features. The first two approaches allow source videos to cross between training and testing. The final two keep source videos separate for the final classifier, but they do not undo the earlier feature learning from all 159 examples. Accuracy is the share of correct identifications. Balanced accuracy gives each condition equal influence. The F1 score balances missed cases with incorrect assignments.
 :::
 
-# Appendix: small binary probes are regression checks
+# Appendix: small two-condition checks are regression checks
 
-|Condition versus normal|Legacy accuracy|Current accuracy|Legacy macro-F1|Current macro-F1|Test rows|
-|---|---:|---:|---:|---:|---:|
-|Parkinson's|0.714|1.000|0.708|1.000|7|
-|Stroke|0.857|1.000|0.857|1.000|7|
-|Myopathic|0.778|0.944|0.679|0.926|18|
-|Cerebral palsy|0.889|0.889|0.883|0.889|9|
+|Condition compared with typical gait|Accuracy|Balanced accuracy|F1 score|Test examples|
+|---|---:|---:|---:|---:|
+|Parkinson's disease|100.0%|100.0%|100.0%|7|
+|Stroke|100.0%|100.0%|100.0%|7|
+|Myopathic gait|88.9%|83.9%|83.9%|18|
+|Cerebral palsy|100.0%|100.0%|100.0%|9|
 
 ::: notes
-These four readouts complete the legacy-to-current history recovered in the result ledger. The apparent gains are not independent estimates because the test sets contain only 7 to 18 rows, source videos cross the sequence splits, and the final encoder already saw the evaluated rows and labels. Cerebral-palsy accuracy did not change. This is another reason to preserve per-task history rather than report only the best-looking values.
+These four checks ask an easier question than the five-condition task: each distinguishes one condition from typical gait. The test groups contain only 7 to 18 examples, source videos can cross between training and testing, and every evaluated example helped shape the movement features earlier. Treat these as regression checks, not independent estimates of clinical performance.
 :::
 
-# Appendix: controls, baselines, and binary Lane C
+# Appendix: controls and simple baselines
 
-|Check|Accuracy|Balanced accuracy|Macro-F1|Additional detail|
+|Check|Accuracy|Balanced accuracy|F1 score|Additional detail|
 |---|---:|---:|---:|---|
-|A1 missingness only|0.448|0.466|0.429|97 visibility fractions, no coordinates|
-|A2 missingness only|0.333|0.364|0.336|Same control on the 47/21 assignment|
-|A1 majority baseline|0.490|0.200|0.132|Canonical majority is myopathic, 47 of 96|
-|Lane C five-class majority|0.472|0.200|0.128|Lane C majority is normal, 75 of 159|
-|Lane C normal versus abnormal|0.849|0.874|0.826|Five grouped RF folds; mean ROC AUC 0.966|
+|Detection success only, all 96 examples|48.3%|50.7%|47.7%|Uses visibility fractions without body coordinates|
+|Detection success only, matched comparison|28.6%|27.0%|27.7%|Same control on the 47-training, 21-testing assignment|
+|Always choose myopathic gait|49.0%|20.0%|13.2%|Largest condition among the 96 examples|
+|Always choose typical gait|47.2%|20.0%|12.8%|Largest condition among all 159 examples|
+|Typical gait versus all other conditions, videos separate|78.7%|83.0%|76.5%|Average of five source-video-separated splits|
 
 ::: notes
-The missingness controls show how much label structure exists in detector success and failure alone. The learned vector exceeds these controls on A1 and A2, but both systems remain inside the same confounded split. The Lane C binary task uses five grouped classifier folds. Its accuracy range from 0.800 to 0.906 summarizes five related fold scores and is not a population confidence interval.
+The detection-success controls show how much condition information exists in pose detection success and failure alone. The learned movement features exceed those controls in the first two evaluations, but all remain within the same known collection. The typical-gait-versus-other-conditions check keeps source videos separate for the final classifier. It asks a two-condition question, so its score should not be compared directly with the five-condition scores.
 :::
 
 # Appendix: the artifact contract rejects silent substitution
@@ -326,38 +324,35 @@ Notebook 05 and notebook 06 do not accept an arbitrary file with a familiar name
 Notebook 00 defines the learning graph and invariants. Notebook 01 builds the manifest and source-video cache. Notebook 02 extracts and displays skeletons. Notebook 03 proves the target mask rule. Notebook 04 trains and fingerprints the five-stage curriculum. Notebook 05 freezes and inspects the representation. Notebook 06 fits the readouts, controls, overlap audits, and Lane C stress tests. Real mode stops when a required artifact or fingerprint is missing.
 :::
 
-# Appendix: reproduce and verify
+# Appendix: reproduce the current figures
 
 ::: columns
 ::: {.column width="52%"}
 
-**Primary artifacts**
+**Saved result files**
 
-- `sjepa_curriculum_final_augmented.pt`
-- `curriculum_training_history_augmented.csv`
-- `curriculum_stage_summary_augmented.csv`
-- `sequence_embeddings.parquet`
 - `classifier_metrics.csv`
 - `lane_c_video_disjoint_metrics.csv`
-- `classifier_contract.json`
-- `result_history.csv`
+- `five_class_classification_report.csv`
+- `five_class_confusion_matrix.csv`
+- `missingness_only_classifier_metrics.csv`
 
 :::
 ::: {.column width="48%"}
 
-**Current experiment identity**
+**Rebuild**
 
-`d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1`
+Run notebooks 00 through 06 in order using real data, then run:
 
-The fingerprint names data and configuration lineage. It is not a byte checksum.
+`uv run python slides/make_current_result_figures.py`
 
-Run notebooks 00 through 06 in order. Use real mode for reported values.
+`uv run python slides/build_slides.py`
 
 :::
 :::
 
 ::: notes
-The final checkpoint alias ends in augmented. Consumers verify its lineage before loading it. The result ledger keeps superseded and current values together instead of overwriting history. Rebuilding figures from the saved CSV files provides a further consistency check.
+The figure script reads the saved score tables, verifies the completed artifact set, and recreates every updated result figure with the same Matplotlib typography, palette, percentage axis, grid, and annotation style used elsewhere in this tutorial. The slide builder then recreates both the PowerPoint and the offline HTML deck.
 :::
 
 # Appendix: separate completed work from proposed work

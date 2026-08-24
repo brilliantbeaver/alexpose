@@ -22,7 +22,7 @@ Every method in this document has one of three statuses.
 |Superseded|The method or result was used earlier and is retained only to explain the evolution.|
 |Proposed|The idea appears in the improvement notes, but the current checkpoint does not implement it.|
 
-This distinction is especially important for the [archived improvement plan](../notes/04_improvement_plan.md) and [archived execution prompt](../notes/05_improvement_instr.md). They contain useful research hypotheses, but they predate the completed five-stage run. They must not be read as a list of current features.
+This distinction is especially important for the [archived improvement plan](../notes/archive/early_plans/improvement_plan.md) and [archived execution prompt](../notes/archive/prompts/improvement_instruction.md). They contain useful research hypotheses, but they predate the completed five-stage run. They must not be read as a list of current features.
 
 ![Implemented work, proposed experiments, and rejected interpretations](figures/evolution_status_map.svg)
 

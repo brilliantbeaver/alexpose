@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" role="img" aria-labelledby="title desc">
+  <title id="title">Why every record from one participant must stay together</title>
+  <desc id="desc">Putting cycles from the same participant in both training and testing produces a deceptively small error of 0.09. Keeping people, their cycles, and their reflected copies together gives the honest held-out error of 0.31, and each person contributes one vote.</desc>
+  <defs>
+    <marker id="tick" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#334155"/></marker>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
+    <marker id="open-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11" fill="none" stroke="#b91c1c" stroke-width="2"/></marker>
+    <style>
+      .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+      .heading { font: 700 21px Arial, sans-serif; fill: #0f172a; }
+      .sub { font: 700 19px Arial, sans-serif; fill: #0f172a; }
+      .body { font: 19px Arial, sans-serif; fill: #1e293b; }
+      .small { font: 17px Arial, sans-serif; fill: #334155; }
+      .mini { font: 16px Arial, sans-serif; fill: #334155; }
+      .tag { font: 700 15px Arial, sans-serif; fill: #1e293b; }
+      .bar { font: 700 20px Arial, sans-serif; fill: #ffffff; }
+      .cross { font: 700 28px Arial, sans-serif; fill: #b91c1c; }
+      .check { font: 700 26px Arial, sans-serif; fill: #15803d; }
+    </style>
+  </defs>
+  <rect width="1000" height="700" fill="#f8fafc"/>
+  <rect x="0.5" y="0.5" width="999" height="699" fill="none" stroke="#cbd5e1"/>
+  <text x="500" y="48" text-anchor="middle" class="title">One person’s records must not cross the outer split</text>
+  <text x="500" y="78" text-anchor="middle" class="body">Many cycles are useful measurements. They are not many independent people.</text>
+
+  <rect x="40" y="102" width="920" height="142" rx="14" fill="#fef2f2" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="68" y="138" class="cross">×</text>
+  <text x="107" y="137" class="heading">WRONG: P1 APPEARS IN BOTH OUTER GROUPS</text>
+  <circle cx="90" cy="196" r="18" fill="#ffffff" stroke="#1e293b" stroke-width="3"/>
+  <text x="90" y="203" text-anchor="middle" class="tag">P1</text>
+  <text x="124" y="182" class="mini">one walk, six cycles</text>
+  <path d="M130 206 H318" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
+  <rect x="330" y="168" width="220" height="56" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="440" y="192" text-anchor="middle" class="heading">TRAIN</text>
+  <text x="440" y="215" text-anchor="middle" class="mini">P1: c1 c2 c3 c4</text>
+  <path d="M556 196 H588" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
+  <rect x="600" y="168" width="220" height="56" rx="10" fill="#ffffff" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="710" y="192" text-anchor="middle" class="heading">TEST</text>
+  <text x="710" y="215" text-anchor="middle" class="mini">P1: c5 c6</text>
+  <text x="890" y="183" text-anchor="middle" class="mini">looks better:</text>
+  <text x="890" y="212" text-anchor="middle" class="sub">error 0.09</text>
+
+  <rect x="40" y="278" width="305" height="282" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="192" y="314" text-anchor="middle" class="heading">COLLAPSE THE REPEATS</text>
+  <circle cx="76" cy="358" r="16" fill="#ffffff" stroke="#1e293b" stroke-width="3"/>
+  <text x="76" y="364" text-anchor="middle" class="tag">P1</text>
+  <g fill="#eff6ff" stroke="#1d4ed8" stroke-width="2">
+    <rect x="112" y="344" width="24" height="24" rx="4"/><rect x="144" y="344" width="24" height="24" rx="4"/><rect x="176" y="344" width="24" height="24" rx="4"/>
+    <rect x="112" y="372" width="24" height="24" rx="4"/><rect x="144" y="372" width="24" height="24" rx="4"/><rect x="176" y="372" width="24" height="24" rx="4"/>
+  </g>
+  <text x="192" y="422" text-anchor="middle" class="mini">6 cycles, plus Mx copies</text>
+  <path d="M192 432 V468" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#tick)"/>
+  <rect x="64" y="472" width="258" height="34" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="193" y="495" text-anchor="middle" class="sub">1 trial → 1 participant vote</text>
+  <text x="192" y="530" text-anchor="middle" class="mini">Cycles increase precision,</text>
+  <text x="192" y="551" text-anchor="middle" class="mini">not sample size.</text>
+
+  <rect x="372" y="278" width="588" height="282" rx="14" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="400" y="314" class="check">✓</text>
+  <text x="434" y="314" class="heading">RIGHT: SPLIT WHOLE PEOPLE</text>
+
+  <rect x="400" y="338" width="292" height="150" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="546" y="371" text-anchor="middle" class="heading">OUTER TRAIN</text>
+  <circle cx="516" cy="404" r="17" fill="#ffffff" stroke="#1e293b" stroke-width="3"/><text x="516" y="410" text-anchor="middle" class="tag">P1</text>
+  <rect x="561" y="387" width="34" height="34" rx="3" fill="#ffffff" stroke="#1e293b" stroke-width="3"/><text x="578" y="410" text-anchor="middle" class="tag">P2</text>
+  <text x="546" y="443" text-anchor="middle" class="mini">all cycles and Mx</text>
+  <rect x="424" y="452" width="244" height="30" rx="8" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="546" y="473" text-anchor="middle" class="mini">inner validation rotates here</text>
+
+  <circle cx="708" cy="413" r="12" fill="#ffffff" stroke="#b91c1c" stroke-width="3"/>
+  <path d="M700 405 L716 421" stroke="#b91c1c" stroke-width="3"/>
+
+  <rect x="724" y="338" width="202" height="150" rx="10" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+  <text x="825" y="371" text-anchor="middle" class="heading">OUTER TEST</text>
+  <path d="M825 386 L851 430 L799 430 Z" fill="#ffffff" stroke="#1e293b" stroke-width="3"/>
+  <text x="825" y="424" text-anchor="middle" class="tag">P3</text>
+  <text x="825" y="465" text-anchor="middle" class="mini">all cycles and Mx</text>
+
+  <text x="666" y="516" text-anchor="middle" class="mini">No person appears in both groups.</text>
+  <text x="666" y="544" text-anchor="middle" class="body">honest held-out error 0.31</text>
+
+  <rect x="130" y="612" width="740" height="54" rx="14" fill="#0f172a"/>
+  <text x="500" y="646" text-anchor="middle" class="bar">People, not cycles, are the independent observations.</text>
+</svg>

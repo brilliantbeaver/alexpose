@@ -58,6 +58,10 @@ class TrainConfig:
     odd_vicreg_weight: float
     max_yaw_degrees: float
     amp: bool
+    joints: int = 33
+    mask_joints: tuple[int, ...] = tuple(MASK_JOINTS)
+    mirror_pairs: tuple[tuple[int, int], ...] = tuple(LEFT_RIGHT_PAIRS)
+    mirror_channel: int = 0
 
 
 PROFILES = {
@@ -272,18 +276,26 @@ def cohort_manifest(records: list[dict], windows: pd.DataFrame, config: TrainCon
     }
 
 
-def anatomical_mirror(x: torch.Tensor) -> torch.Tensor:
+def anatomical_mirror(
+    x: torch.Tensor,
+    pairs: Iterable[tuple[int, int]] = LEFT_RIGHT_PAIRS,
+    channel: int = 0,
+) -> torch.Tensor:
     mirrored = x.clone()
-    mirrored[..., 0] *= -1
+    mirrored[..., channel] *= -1
     original = mirrored.clone()
-    for left, right in LEFT_RIGHT_PAIRS:
+    for left, right in pairs:
         mirrored[..., left, :] = original[..., right, :]
         mirrored[..., right, :] = original[..., left, :]
     return mirrored
 
 
-def lift_orbit(x: torch.Tensor) -> torch.Tensor:
-    return torch.stack([x, anatomical_mirror(x)], dim=1)
+def lift_orbit(
+    x: torch.Tensor,
+    pairs: Iterable[tuple[int, int]] = LEFT_RIGHT_PAIRS,
+    channel: int = 0,
+) -> torch.Tensor:
+    return torch.stack([x, anatomical_mirror(x, pairs, channel)], dim=1)
 
 
 def augment_canonical(x: torch.Tensor, max_degrees: float) -> torch.Tensor:
@@ -297,12 +309,19 @@ def augment_canonical(x: torch.Tensor, max_degrees: float) -> torch.Tensor:
     return view.masked_fill(~present[..., None], 0.0)
 
 
-def sample_mask(valid_patch: torch.Tensor, fraction: float, generator: torch.Generator) -> torch.Tensor:
+def sample_mask(
+    valid_patch: torch.Tensor,
+    fraction: float,
+    generator: torch.Generator,
+    mask_joints: Iterable[int] = MASK_JOINTS,
+) -> torch.Tensor:
     valid = valid_patch.bool().cpu()
-    eligible_joint = torch.zeros(33, dtype=torch.bool)
-    eligible_joint[MASK_JOINTS] = True
+    eligible_joint = torch.zeros(valid.shape[-1], dtype=torch.bool)
+    eligible_joint[list(mask_joints)] = True
     eligible = valid & eligible_joint[None, None]
     counts = eligible.flatten(1).sum(1)
+    if int(counts.min()) < 2:
+        raise ValueError("Every sample needs at least two valid maskable tokens")
     n_mask = max(1, int(torch.floor(counts.min().float() * fraction).item()))
     n_mask = min(n_mask, int(counts.min().item()) - 1)
     result = torch.zeros_like(eligible)
@@ -321,15 +340,15 @@ class SkeletonTokenizer(nn.Module):
         self.frames = config.frames
         self.segment_length = config.segment_length
         self.segments = config.frames // config.segment_length
-        self.joints = 33
+        self.joints = config.joints
         self.embed_dim = config.embed_dim
         self.patch = nn.Linear(config.segment_length * 3, config.embed_dim)
         self.time_pos = nn.Parameter(torch.randn(self.segments, config.embed_dim) * 0.02)
-        self.joint_pos = nn.Parameter(torch.randn(33, config.embed_dim) * 0.02)
+        self.joint_pos = nn.Parameter(torch.randn(config.joints, config.embed_dim) * 0.02)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         batch = len(x)
-        patches = x.reshape(batch, self.segments, self.segment_length, 33, 3)
+        patches = x.reshape(batch, self.segments, self.segment_length, self.joints, 3)
         patches = patches.permute(0, 1, 3, 2, 4).flatten(3)
         return self.patch(patches) + self.time_pos[None, :, None] + self.joint_pos[None, None]
 
@@ -417,10 +436,10 @@ class TokenPredictor(nn.Module):
     def __init__(self, config: TrainConfig):
         super().__init__()
         segments = config.frames // config.segment_length
-        self.segments, self.joints, self.dim = segments, 33, config.embed_dim
+        self.segments, self.joints, self.dim = segments, config.joints, config.embed_dim
         self.mask_token = nn.Parameter(torch.randn(1, 1, config.embed_dim) * 0.02)
         self.time_pos = nn.Parameter(torch.randn(segments, config.embed_dim) * 0.02)
-        self.joint_pos = nn.Parameter(torch.randn(33, config.embed_dim) * 0.02)
+        self.joint_pos = nn.Parameter(torch.randn(config.joints, config.embed_dim) * 0.02)
         self.layers = nn.ModuleList([transformer_layer(config) for _ in range(config.predictor_depth)])
         self.norm = nn.LayerNorm(config.embed_dim)
 
@@ -528,7 +547,7 @@ def parameter_count(module: nn.Module, trainable_only: bool = True) -> int:
 
 def compute_proxy_per_step(model: OrbitJEPA, config: TrainConfig) -> int:
     """A frozen analytic allocation proxy, explicitly not an exact FLOP count."""
-    tokens = (config.frames // config.segment_length) * 33
+    tokens = (config.frames // config.segment_length) * config.joints
     branch_passes = 8  # student+teacher JEPA and two complete-view VICReg forwards
     return int(branch_passes * config.batch_size * tokens * parameter_count(model.encoder))
 
@@ -595,9 +614,19 @@ def train_variant(
     for step, indices in enumerate(cyclic_batches(len(windows), config.batch_size, updates, seed + 17)):
         canonical = windows[indices].to(device)
         valid = valid_patch[indices]
-        target_mask = sample_mask(valid, config.mask_fraction, mask_generator).to(device)
-        first_orbit = lift_orbit(augment_canonical(canonical, config.max_yaw_degrees))
-        second_orbit = lift_orbit(augment_canonical(canonical, config.max_yaw_degrees))
+        target_mask = sample_mask(
+            valid, config.mask_fraction, mask_generator, config.mask_joints
+        ).to(device)
+        first_orbit = lift_orbit(
+            augment_canonical(canonical, config.max_yaw_degrees),
+            config.mirror_pairs,
+            config.mirror_channel,
+        )
+        second_orbit = lift_orbit(
+            augment_canonical(canonical, config.max_yaw_degrees),
+            config.mirror_pairs,
+            config.mirror_channel,
+        )
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp_enabled):
             predicted, targets = model(first_orbit, target_mask)
@@ -633,7 +662,11 @@ def collect_parity_features(encoder: OrbitEncoder, windows: torch.Tensor, batch_
     encoder.eval()
     evens, odds = [], []
     for start in range(0, len(windows), batch_size):
-        orbit = lift_orbit(windows[start:start + batch_size])
+        orbit = lift_orbit(
+            windows[start:start + batch_size],
+            encoder.config.mirror_pairs,
+            encoder.config.mirror_channel,
+        )
         even, odd = parity_channels(encoder(orbit))
         evens.append(even.cpu())
         odds.append(odd.cpu())
@@ -675,9 +708,21 @@ def commutation_report(
     keep_mask = keep_mask.to(device) if keep_mask is not None else None
     amp_enabled = bool(mixed_precision and device.type == "cuda")
     with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp_enabled):
-        (_, states) = encoder(lift_orbit(x), keep_mask=keep_mask, return_states=True)
+        (_, states) = encoder(
+            lift_orbit(x, encoder.config.mirror_pairs, encoder.config.mirror_channel),
+            keep_mask=keep_mask,
+            return_states=True,
+        )
         (_, mirrored_states) = encoder(
-            lift_orbit(anatomical_mirror(x)), keep_mask=keep_mask, return_states=True
+            lift_orbit(
+                anatomical_mirror(
+                    x, encoder.config.mirror_pairs, encoder.config.mirror_channel
+                ),
+                encoder.config.mirror_pairs,
+                encoder.config.mirror_channel,
+            ),
+            keep_mask=keep_mask,
+            return_states=True,
         )
     rows = []
     for layer, ((a, b), (ma, mb)) in enumerate(zip(states, mirrored_states)):

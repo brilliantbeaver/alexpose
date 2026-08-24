@@ -17,10 +17,10 @@ The goal is to make every tensor transformation and state update inspectable. By
 
 The core class cell is currently duplicated byte-for-byte in four notebooks:
 
-- [00_sjepa_from_first_principles.ipynb](../../00_sjepa_from_first_principles.ipynb), the smallest teaching path;
-- [04_pretrain_sjepa_on_normal.ipynb](../../04_pretrain_sjepa_on_normal.ipynb), the full training path and the main source for this guide;
-- [05_inspect_latent_motion.ipynb](../../05_inspect_latent_motion.ipynb), the representation inspection path;
-- [06_capstone_health_condition_classifiers.ipynb](../../06_capstone_health_condition_classifiers.ipynb), the downstream readout path.
+- [00_sjepa_from_first_principles.ipynb](../../notebooks/foundations/00_sjepa_from_first_principles.ipynb), the smallest teaching path;
+- [04_pretrain_sjepa_on_normal.ipynb](../../notebooks/foundations/04_pretrain_sjepa_on_normal.ipynb), the full training path and the main source for this guide;
+- [05_inspect_latent_motion.ipynb](../../notebooks/foundations/05_inspect_latent_motion.ipynb), the representation inspection path;
+- [06_capstone_health_condition_classifiers.ipynb](../../notebooks/foundations/06_capstone_health_condition_classifiers.ipynb), the downstream readout path.
 
 The duplication is convenient for standalone notebooks, but it creates a maintenance risk. A class change must be synchronized across all four copies and tested in every consumer.
 
@@ -862,4 +862,4 @@ When changing these classes or helpers:
 .venv/bin/python docs/tutorials/make_class_figures.py
 ```
 
-8. keep every figure accessible, standalone, and consistent with [the diagram design system](../../notes/09_diagram_design_system.md).
+8. keep every figure accessible, standalone, and consistent with [the diagram design system](../../notes/current/design/diagram_design_system.md).

@@ -1,0 +1,254 @@
+{"kind":"deck","id":"pr/96tpzy","name":"Deck"}
+{"kind":"layout","layoutId":"560a62f2-ed28-4091-8d34-5b8b7482b092","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"4760fdd7-b7a0-4da0-8860-d83cbf1324e1","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/l5yk02","slide":1,"title":"ADVANCED HIGH-SCHOOL RESEARCH TALK","textShapes":4}
+{"kind":"shape","id":"sh/t0nal0vi","slide":1,"bbox":[0,0,1280,12]}
+{"kind":"textbox","id":"sh/6xwbq5w7","slide":1,"text":"ADVANCED HIGH-SCHOOL RESEARCH TALK","textPreview":"ADVANCED HIGH-SCHOOL RESEARCH TALK","textChars":34,"textLines":1,"bbox":[64,58,700,32]}
+{"kind":"textbox","id":"sh/ry5sjads","slide":1,"text":"GaitParity: Teaching AI Which Side of the Body Is Which","textPreview":"GaitParity: Teaching AI Which Side of the Body Is Which","textChars":55,"textLines":1,"bbox":[64,148,1050,190]}
+{"kind":"textbox","id":"sh/g3ytwfe9","slide":1,"text":"A mirror test for movement models—and a path from video skeletons toward trustworthy biomechanics.","textPreview":"A mirror test for movement models—and a path from video skeletons toward trustworthy biomechanics.","textChars":98,"textLines":1,"bbox":[68,375,980,105]}
+{"kind":"shape","id":"sh/147apkvu","slide":1,"bbox":[64,543,1152,92]}
+{"kind":"textbox","id":"sh/e1wbu5w3","slide":1,"text":"Question → physical rule → controlled audit → force-plate study → physics-grounded world model","textPreview":"Question → physical rule → controlled audit → force-plate study → physics-grounded world model","textChars":94,"textLines":1,"bbox":[92,568,1095,45]}
+{"kind":"notes","id":"nt/l5yk02","slide":1,"text":"Open with the scientific question: can a movement model keep left and right straight when the body is mirrored?\n\n[Sources]\n- /Users/theodoremui/Downloads/GaitParity Study.pdf\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/tutorials/02-current-direction-and-results.md"}
+{"kind":"slide","id":"sl/rybopa","slide":2,"title":"MOTIVATION","textShapes":11}
+{"kind":"shape","id":"sh/54rmtcbi","slide":2,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/ihgnyxsr","slide":2,"text":"MOTIVATION","textPreview":"MOTIVATION","textChars":10,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/3i94r2tc","slide":2,"text":"Why left and right are not interchangeable","textPreview":"Why left and right are not interchangeable","textChars":42,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/gfy5w7a1","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/hg7mpsb6","slide":2,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/udgnuxsv","slide":2,"text":"The same movement can look similar while each leg contributes very differently.","textPreview":"The same movement can look similar while each leg contributes very differently.","textChars":79,"textLines":1,"bbox":[48,118,1120,54]}
+{"kind":"shape","id":"sh/vep4n2tg","slide":2,"bbox":[48,188,545,392]}
+{"kind":"shape","id":"sh/0b258ra5","slide":2,"bbox":[48,188,545,6]}
+{"kind":"textbox","id":"sh/1cb61wbq","slide":2,"text":"BIOMECHANICS","textPreview":"BIOMECHANICS","textChars":12,"textLines":1,"bbox":[70,210,501,22]}
+{"kind":"textbox","id":"sh/h47m94vi","slide":2,"text":"Balance is often a side-to-side problem","textPreview":"Balance is often a side-to-side problem","textChars":39,"textLines":1,"bbox":[70,242,501,60]}
+{"kind":"textbox","id":"sh/g3ylgzux","slide":2,"text":"After stroke, one leg may push less or support the body differently.\n\nForce plates measure that difference. Video alone can hide it.","textPreview":"After stroke, one leg may push less or support the body differently. |  | Force plates measure that difference. Video alone can hide it.","textChars":132,"textLines":3,"bbox":[70,308,501,252]}
+{"kind":"shape","id":"sh/f2pk7uds","slide":2,"bbox":[623,188,545,392]}
+{"kind":"shape","id":"sh/u1g3epc7","slide":2,"bbox":[623,188,545,6]}
+{"kind":"textbox","id":"sh/t0725kvm","slide":2,"text":"AMBIENT INTELLIGENCE","textPreview":"AMBIENT INTELLIGENCE","textChars":20,"textLines":1,"bbox":[645,210,501,22]}
+{"kind":"textbox","id":"sh/szylcfu1","slide":2,"text":"Cameras can create a false side change","textPreview":"Cameras can create a false side change","textChars":38,"textLines":1,"bbox":[645,242,501,60]}
+{"kind":"textbox","id":"sh/7y5k3udg","slide":2,"text":"A flipped feed, a new viewpoint, or a missing heel can make the same person look different.\n\nA useful room-scale system must separate anatomy from observation.","textPreview":"A flipped feed, a new viewpoint, or a missing heel can make the same person look different. |  | A useful room-scale system must separate...","textChars":159,"textLines":3,"bbox":[645,308,501,252]}
+{"kind":"shape","id":"sh/6xw3apcv","slide":2,"bbox":[48,600,1120,56]}
+{"kind":"textbox","id":"sh/dwrmhobq","slide":2,"text":"A body mirror should flip a signed asymmetry. A camera move should not.","textPreview":"A body mirror should flip a signed asymmetry. A camera move should not.","textChars":71,"textLines":1,"bbox":[70,616,1076,30]}
+{"kind":"notes","id":"nt/rybopa","slide":2,"text":"[Sources]\n- /Users/theodoremui/Downloads/GaitParity Study.pdf\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/METHODOLOGY.md"}
+{"kind":"slide","id":"sl/aedn9d","slide":3,"title":"PREVIOUS WORK","textShapes":5}
+{"kind":"shape","id":"sh/p87mdgfu","slide":3,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/25g3ilg3","slide":3,"text":"PREVIOUS WORK","textPreview":"PREVIOUS WORK","textChars":13,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/n6p4bqxo","slide":3,"text":"The earlier project built a complete motion pipeline","textPreview":"The earlier project built a complete motion pipeline","textChars":52,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/0jelgbyx","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/14nm9gzi","slide":3,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/ehw3e1gr","slide":3,"text":"Public gait video became a fixed-length skeleton sequence, then a self-supervised motion representation.","textPreview":"Public gait video became a fixed-length skeleton sequence, then a self-supervised motion representation.","textChars":104,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/fi5476hc","slide":3,"bbox":[48,178,1120,390]}
+{"kind":"shape","id":"sh/dgnm5wzm","slide":3,"bbox":[48,586,1120,80]}
+{"kind":"textbox","id":"sh/tojmx8fe","slide":3,"text":"96 canonical sequences came from 18 source videos. The source video—not the clip—is the real independence boundary.","textPreview":"96 canonical sequences came from 18 source videos. The source video—not the clip—is the real independence boundary.","textChars":115,"textLines":1,"bbox":[72,605,1072,44]}
+{"kind":"image","id":"im/5cnuxgne","slide":3,"name":"","alt":"Prior S-JEPA pipeline from public video to audited readouts","bbox":[64,192,1088,362]}
+{"kind":"notes","id":"nt/aedn9d","slide":3,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notebooks/foundations/01_gavd_manifest_and_youtube.ipynb\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/slides/gait_parity_decks/images/prior-sjepa-pipeline.svg"}
+{"kind":"slide","id":"sl/xdesbw","slide":4,"title":"METHOD","textShapes":20}
+{"kind":"shape","id":"sh/bex8juho","slide":4,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/wf69sfy9","slide":4,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/xgfqlkzu","slide":4,"text":"S-JEPA learns by predicting what was hidden","textPreview":"S-JEPA learns by predicting what was hidden","textChars":43,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/mp4rm5g7","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/nqd8fahs","slide":4,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/or69ofyx","slide":4,"text":"The model does not reconstruct pixels. It predicts a useful representation of missing movement.","textPreview":"The model does not reconstruct pixels. It predicts a useful representation of missing movement.","textChars":95,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"textbox","id":"sh/9sfqhkzi","slide":4,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[305.5,300,28,42]}
+{"kind":"textbox","id":"sh/6l8ri9gb","slide":4,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[594,300,28,42]}
+{"kind":"textbox","id":"sh/7mhsrehw","slide":4,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[882.5,300,28,42]}
+{"kind":"shape","id":"sh/rq903qlk","slide":4,"bbox":[48,218,254.5,255]}
+{"kind":"textbox","id":"sh/qp0zal4z","slide":4,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[66,236,40,26]}
+{"kind":"textbox","id":"sh/dsri5g3q","slide":4,"text":"Observe","textPreview":"Observe","textChars":7,"textLines":1,"bbox":[66,276,218.5,64]}
+{"kind":"textbox","id":"sh/crihcvm5","slide":4,"text":"64 frames\n33 body landmarks\nvisibility carried along","textPreview":"64 frames | 33 body landmarks | visibility carried along","textChars":52,"textLines":3,"bbox":[66,350,218.5,98]}
+{"kind":"shape","id":"sh/zut07qlg","slide":4,"bbox":[336.5,218,254.5,255]}
+{"kind":"textbox","id":"sh/etkzel4v","slide":4,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[354.5,236,40,26]}
+{"kind":"textbox","id":"sh/1gbi903m","slide":4,"text":"Hide","textPreview":"Hide","textChars":4,"textLines":1,"bbox":[354.5,276,218.5,64]}
+{"kind":"textbox","id":"sh/0v21gvm1","slide":4,"text":"Mask selected joints and times without inventing a fake injury","textPreview":"Mask selected joints and times without inventing a fake injury","textChars":62,"textLines":1,"bbox":[354.5,350,218.5,98]}
+{"kind":"shape","id":"sh/nit0bals","slide":4,"bbox":[625,218,254.5,255]}
+{"kind":"textbox","id":"sh/mhkji547","slide":4,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[643,236,40,26]}
+{"kind":"textbox","id":"sh/ydo3a9of","slide":4,"text":"Predict","textPreview":"Predict","textChars":7,"textLines":1,"bbox":[643,276,218.5,64]}
+{"kind":"textbox","id":"sh/jexk3e50","slide":4,"text":"Use visible motion to predict the hidden target features","textPreview":"Use visible motion to predict the hidden target features","textChars":56,"textLines":1,"bbox":[643,350,218.5,98]}
+{"kind":"shape","id":"sh/kf6lcj6l","slide":4,"bbox":[913.5,218,254.5,255]}
+{"kind":"textbox","id":"sh/lgf254nq","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[931.5,236,40,26]}
+{"kind":"textbox","id":"sh/ap436po3","slide":4,"text":"Audit","textPreview":"Audit","textChars":5,"textLines":1,"bbox":[931.5,276,218.5,64]}
+{"kind":"textbox","id":"sh/badkzu5o","slide":4,"text":"Check feature variation, confounds, splits, and downstream readouts","textPreview":"Check feature variation, confounds, splits, and downstream readouts","textChars":67,"textLines":1,"bbox":[931.5,350,218.5,98]}
+{"kind":"shape","id":"sh/wbml8z69","slide":4,"bbox":[178,524,864,72]}
+{"kind":"textbox","id":"sh/xcf214nu","slide":4,"text":"The objective teaches motion structure. It does not automatically teach physics or left–right meaning.","textPreview":"The objective teaches motion structure. It does not automatically teach physics or left–right meaning.","textChars":102,"textLines":1,"bbox":[208,545,804,34]}
+{"kind":"notes","id":"nt/xdesbw","slide":4,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notebooks/foundations/04_pretrain_sjepa_on_normal.ipynb\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/METHODOLOGY.md"}
+{"kind":"slide","id":"sl/1okxxy","slide":5,"title":"PREVIOUS RESULTS","textShapes":15}
+{"kind":"shape","id":"sh/6p8zi5wn","slide":5,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/tszytkfy","slide":5,"text":"PREVIOUS RESULTS","textPreview":"PREVIOUS RESULTS","textChars":16,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/srqhkfed","slide":5,"text":"The training run learned—but did not become a diagnosis","textPreview":"The training run learned—but did not become a diagnosis","textChars":55,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/jmxgnaxw","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/iloze5wb","slide":5,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/5ozypkf2","slide":5,"text":"The representation stayed varied and the prediction loss fell substantially.","textPreview":"The representation stayed varied and the prediction loss fell substantially.","textChars":76,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/knqhgfeh","slide":5,"bbox":[48,195,350,255]}
+{"kind":"textbox","id":"sh/vixgjqx0","slide":5,"text":"6.56 → 0.59","textPreview":"6.56 → 0.59","textChars":11,"textLines":1,"bbox":[72,225,302,72]}
+{"kind":"textbox","id":"sh/axofalgf","slide":5,"text":"JEPA loss","textPreview":"JEPA loss","textChars":9,"textLines":1,"bbox":[72,307,302,52]}
+{"kind":"textbox","id":"sh/cbypwby1","slide":5,"text":"Normal-only Stage 0, 300 epochs","textPreview":"Normal-only Stage 0, 300 epochs","textChars":31,"textLines":1,"bbox":[72,369,302,55]}
+{"kind":"shape","id":"sh/dcr6pwzm","slide":5,"bbox":[433,195,350,255]}
+{"kind":"textbox","id":"sh/q9g7u10v","slide":5,"text":".296 → .465","textPreview":".296 → .465","textChars":11,"textLines":1,"bbox":[457,225,302,72]}
+{"kind":"textbox","id":"sh/rapon6hg","slide":5,"text":"feature spread","textPreview":"feature spread","textChars":14,"textLines":1,"bbox":[457,307,302,52]}
+{"kind":"textbox","id":"sh/47ypsri5","slide":5,"text":"Evidence against total constant collapse","textPreview":"Evidence against total constant collapse","textChars":40,"textLines":1,"bbox":[457,369,302,55]}
+{"kind":"shape","id":"sh/p876lwza","slide":5,"bbox":[818,195,350,255]}
+{"kind":"textbox","id":"sh/2lg7qh0z","slide":5,"text":"0.414","textPreview":"0.414","textChars":5,"textLines":1,"bbox":[842,225,302,72]}
+{"kind":"textbox","id":"sh/36pojmhk","slide":5,"text":"final feature std","textPreview":"final feature std","textChars":17,"textLines":1,"bbox":[842,307,302,52]}
+{"kind":"textbox","id":"sh/832p4vy9","slide":5,"text":"After five condition-aware stages","textPreview":"After five condition-aware stages","textChars":33,"textLines":1,"bbox":[842,369,302,55]}
+{"kind":"shape","id":"sh/94bqxgzu","slide":5,"bbox":[48,483,1120,120]}
+{"kind":"textbox","id":"sh/h076hgry","slide":5,"text":"What this supports","textPreview":"What this supports","textChars":18,"textLines":1,"bbox":[76,508,260,32]}
+{"kind":"textbox","id":"sh/wzypobqd","slide":5,"text":"The learning system ran correctly and produced nontrivial features. These are training-health results—not clinical validation.","textPreview":"The learning system ran correctly and produced nontrivial features. These are training-health results—not clinical validation.","textChars":126,"textLines":1,"bbox":[330,503,810,70]}
+{"kind":"notes","id":"nt/1okxxy","slide":5,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notebooks/foundations/04_pretrain_sjepa_on_normal.ipynb"}
+{"kind":"slide","id":"sl/qph1h1","slide":6,"title":"PREVIOUS RESULTS","textShapes":7}
+{"kind":"shape","id":"sh/xkre983u","slide":6,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/axgvetk3","slide":6,"text":"PREVIOUS RESULTS","textPreview":"PREVIOUS RESULTS","textChars":16,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/bipw7ylo","slide":6,"text":"Condition labels were readable inside the exposed corpus","textPreview":"Condition labels were readable inside the exposed corpus","textChars":56,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/ovydcj2x","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/pw7e5o3i","slide":6,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/2tgvatk7","slide":6,"text":"The harder question is whether the same signal survives new source videos and new people.","textPreview":"The harder question is whether the same signal survives new source videos and new people.","textChars":89,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/nupw3elc","slide":6,"bbox":[48,184,680,420]}
+{"kind":"shape","id":"sh/9sbehs32","slide":6,"bbox":[758,184,410,420]}
+{"kind":"shape","id":"sh/dsvqtgne","slide":6,"bbox":[758,184,410,6]}
+{"kind":"textbox","id":"sh/crmp0bmt","slide":6,"text":"READ CAREFULLY","textPreview":"READ CAREFULLY","textChars":14,"textLines":1,"bbox":[780,206,366,22]}
+{"kind":"textbox","id":"sh/bqd8rq58","slide":6,"text":"Useful signal, limited claim","textPreview":"Useful signal, limited claim","textChars":28,"textLines":1,"bbox":[780,238,366,60]}
+{"kind":"textbox","id":"sh/qpk7yl4n","slide":6,"text":"All-96 five-class accuracy: 0.724\nGrouped normal-vs-abnormal: 0.843\n\nThe encoder had still seen every held-out classifier row. This is not unseen-person performance.","textPreview":"All-96 five-class accuracy: 0.724 | Grouped normal-vs-abnormal: 0.843 |  | The encoder had still seen every held-out classifier row. This...","textChars":165,"textLines":4,"bbox":[780,304,366,280]}
+{"kind":"chart","id":"ch/gjy9gbid","slide":6,"name":"","chartType":"bar","bbox":[78,218,620,340]}
+{"kind":"notes","id":"nt/qph1h1","slide":6,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notebooks/foundations/06_capstone_health_condition_classifiers.ipynb"}
+{"kind":"slide","id":"sl/qlriu4","slide":7,"title":"GAITPARITY","textShapes":5}
+{"kind":"shape","id":"sh/5oze18nu","slide":7,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/il8fqto3","slide":7,"text":"GAITPARITY","textPreview":"GAITPARITY","textChars":10,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/jmhwzy5o","slide":7,"text":"The anatomical mirror creates a testable rule","textPreview":"The anatomical mirror creates a testable rule","textChars":45,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/sraxw3ml","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/tsje58nq","slide":7,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/6psfut4f","slide":7,"text":"Mirroring the body exchanges anatomy. Moving the camera only changes how the same anatomy is observed.","textPreview":"Mirroring the body exchanges anatomy. Moving the camera only changes how the same anatomy is observed.","textChars":102,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/rq1w3y50","slide":7,"bbox":[48,178,1120,390]}
+{"kind":"shape","id":"sh/1gjy9sn2","slide":7,"bbox":[48,586,1120,80]}
+{"kind":"textbox","id":"sh/p8ja9sb6","slide":7,"text":"Overall pace should stay similar. A right-minus-left quantity must reverse sign.","textPreview":"Overall pace should stay similar. A right-minus-left quantity must reverse sign.","textChars":80,"textLines":1,"bbox":[72,605,1072,44]}
+{"kind":"image","id":"im/h47ehsbi","slide":7,"name":"","alt":"Comparison of anatomical mirror and camera movement","bbox":[64,192,1088,362]}
+{"kind":"notes","id":"nt/qlriu4","slide":7,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/METHODOLOGY.md\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/slides/gait_parity_decks/images/mirror-versus-camera.svg"}
+{"kind":"slide","id":"sl/y17hlz","slide":8,"title":"GAITPARITY RESULT 1","textShapes":5}
+{"kind":"shape","id":"sh/7mhs3ex0","slide":8,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/8nq9wjel","slide":8,"text":"GAITPARITY RESULT 1","textPreview":"GAITPARITY RESULT 1","textChars":19,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/toza5of6","slide":8,"text":"The first signed-laterality test failed","textPreview":"The first signed-laterality test failed","textChars":39,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/up8rytwr","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/vqhs7yxc","slide":8,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/grqt03ex","slide":8,"text":"A simple reader could not recover the constructed left–right score from the old representation.","textPreview":"A simple reader could not recover the constructed left–right score from the old representation.","textChars":95,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/hsza98f2","slide":8,"bbox":[48,178,1120,390]}
+{"kind":"shape","id":"sh/3e1sbyd8","slide":8,"bbox":[48,586,1120,80]}
+{"kind":"textbox","id":"sh/nilwzu5o","slide":8,"text":"Learned R² = −0.068 · mirror slope = −0.337, not near −1 · sign consistency = 0.444","textPreview":"Learned R² = −0.068 · mirror slope = −0.337, not near −1 · sign consistency = 0.444","textChars":83,"textLines":1,"bbox":[72,605,1072,44]}
+{"kind":"image","id":"im/vatkvih4","slide":8,"name":"","alt":"Signed laterality probe scatter plots","bbox":[64,192,1088,362]}
+{"kind":"notes","id":"nt/y17hlz","slide":8,"text":"Call this an informative null result: it stops the project from presenting a weak side signal as a discovery.\n\n[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/artifacts/notebook_runs/organized-2026-08-23/experiments/idea05_signed_laterality/01_probe.ipynb\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/slides/gait_parity_decks/images/notebook-05a-signed-laterality-probe.png"}
+{"kind":"slide","id":"sl/7angsv","slide":9,"title":"GAITPARITY METHOD","textShapes":5}
+{"kind":"shape","id":"sh/s3y94ral","slide":9,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/r2p8vm90","slide":9,"text":"GAITPARITY METHOD","textPreview":"GAITPARITY METHOD","textChars":17,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/q1wr2hsf","slide":9,"text":"The next experiment compares three matched models","textPreview":"The next experiment compares three matched models","textChars":49,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/50nq9cru","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/4zep07a9","slide":9,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/3y58729o","slide":9,"text":"The hard baseline is not an ordinary model. Three lines of arithmetic can already force the final answer to flip.","textPreview":"The hard baseline is not an ordinary model. Three lines of arithmetic can already force the final answer to flip.","textChars":113,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/ixw7yxs3","slide":9,"bbox":[48,178,1120,390]}
+{"kind":"shape","id":"sh/gvepw7ad","slide":9,"bbox":[48,586,1120,80]}
+{"kind":"textbox","id":"sh/e5wra1kv","slide":9,"text":"The equivariant model must beat output repair and equally capable two-branch fusion—not merely a weaker one-view model.","textPreview":"The equivariant model must beat output repair and equally capable two-branch fusion—not merely a weaker one-view model.","textChars":119,"textLines":1,"bbox":[72,605,1072,44]}
+{"kind":"image","id":"im/87qtkb2p","slide":9,"name":"","alt":"Standard, paired-unconstrained, and reflection-equivariant model comparison","bbox":[64,192,1088,362]}
+{"kind":"notes","id":"nt/7angsv","slide":9,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/README_LONG_TERM.md\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/slides/gait_parity_decks/images/model-comparisons.svg"}
+{"kind":"slide","id":"sl/ccouwl","slide":10,"title":"GAITPARITY RESULT 2","textShapes":11}
+{"kind":"shape","id":"sh/5cr618r6","slide":10,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/i9gnqt8v","slide":10,"text":"GAITPARITY RESULT 2","textPreview":"GAITPARITY RESULT 2","textChars":19,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/japozy9g","slide":10,"text":"The controlled audit can detect broken mirror geometry","textPreview":"The controlled audit can detect broken mirror geometry","textChars":54,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/w7y5o3qp","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/x876xora","slide":10,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/a5gnmt8j","slide":10,"text":"Across matched runs, the equivariant encoder followed the rule exactly; the unrestricted control did not.","textPreview":"Across matched runs, the equivariant encoder followed the rule exactly; the unrestricted control did not.","textChars":105,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/v6povy94","slide":10,"bbox":[48,184,620,390]}
+{"kind":"textbox","id":"sh/9476tory","slide":10,"text":"Lower is better; pass gate = 5×10⁻⁵","textPreview":"Lower is better; pass gate = 5×10⁻⁵","textChars":35,"textLines":1,"bbox":[95,531,520,24]}
+{"kind":"shape","id":"sh/9kvqdone","slide":10,"bbox":[700,184,468,188]}
+{"kind":"shape","id":"sh/8jm94j6t","slide":10,"bbox":[700,184,468,6]}
+{"kind":"textbox","id":"sh/7id8be5o","slide":10,"text":"CHANNEL HEALTH","textPreview":"CHANNEL HEALTH","textChars":14,"textLines":1,"bbox":[722,206,424,22]}
+{"kind":"textbox","id":"sh/mh4r29o3","slide":10,"text":"Exact—and non-empty","textPreview":"Exact—and non-empty","textChars":19,"textLines":1,"bbox":[722,238,424,60]}
+{"kind":"textbox","id":"sh/lgvq94ni","slide":10,"text":"Odd/even energy ratio 0.022\nOdd effective rank 1.532\nAll registered health gates passed","textPreview":"Odd/even energy ratio 0.022 | Odd effective rank 1.532 | All registered health gates passed","textChars":87,"textLines":3,"bbox":[722,304,424,48]}
+{"kind":"shape","id":"sh/kf290z6x","slide":10,"bbox":[700,391,468,183]}
+{"kind":"shape","id":"sh/zet87u5c","slide":10,"bbox":[700,391,468,6]}
+{"kind":"textbox","id":"sh/ydkrypor","slide":10,"text":"BOUNDARY","textPreview":"BOUNDARY","textChars":8,"textLines":1,"bbox":[722,413,424,22]}
+{"kind":"textbox","id":"sh/xsbq5kn6","slide":10,"text":"A geometry result","textPreview":"A geometry result","textChars":17,"textLines":1,"bbox":[722,445,424,60]}
+{"kind":"textbox","id":"sh/cr29wz61","slide":10,"text":"96 sequences · 18 videos · 394 windows · 3 seeds\nNo force target. No participant-held-out clinical endpoint.","textPreview":"96 sequences · 18 videos · 394 windows · 3 seeds | No force target. No participant-held-out clinical endpoint.","textChars":108,"textLines":2,"bbox":[722,511,424,43]}
+{"kind":"chart","id":"ch/w3i1c3ih","slide":10,"name":"","chartType":"bar","bbox":[82,218,550,305]}
+{"kind":"notes","id":"nt/ccouwl","slide":10,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/artifacts/notebook_runs/organized-2026-08-23/experiments/idea09_reflection_equivariance/06_cpu_replication.ipynb\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/slides/gait_parity_decks/images/notebook-09f-full-gavd-audit.png"}
+{"kind":"slide","id":"sl/4dqxtn","slide":11,"title":"DISCUSSION","textShapes":11}
+{"kind":"shape","id":"sh/bi5kfat4","slide":11,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/cjelofup","slide":11,"text":"DISCUSSION","textPreview":"DISCUSSION","textChars":10,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/xkn2hkba","slide":11,"text":"What the current evidence supports—and where it stops","textPreview":"What the current evidence supports—and where it stops","textChars":53,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/2dc3i5cn","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/nelkbat8","slide":11,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/ofelkfut","slide":11,"text":"Passing a rule is not the same as solving a biomechanical task.","textPreview":"Passing a rule is not the same as solving a biomechanical task.","textChars":63,"textLines":1,"bbox":[48,118,1120,54]}
+{"kind":"shape","id":"sh/pgn2d0be","slide":11,"bbox":[48,188,545,392]}
+{"kind":"shape","id":"sh/m9g3upcr","slide":11,"bbox":[48,188,545,6]}
+{"kind":"textbox","id":"sh/7ap4nutc","slide":11,"text":"SUPPORTED NOW","textPreview":"SUPPORTED NOW","textChars":13,"textLines":1,"bbox":[70,210,501,22]}
+{"kind":"textbox","id":"sh/bqp4zux8","slide":11,"text":"A trustworthy research instrument","textPreview":"A trustworthy research instrument","textChars":33,"textLines":1,"bbox":[70,242,501,60]}
+{"kind":"textbox","id":"sh/qpwnqpgn","slide":11,"text":"✓ Correct anatomical reflection\n✓ Exact layerwise swap behavior\n✓ Audit catches the unrestricted control\n✓ Odd channel passes registered health gates","textPreview":"✓ Correct anatomical reflection | ✓ Exact layerwise swap behavior | ✓ Audit catches the unrestricted control | ✓ Odd channel passes regis...","textChars":149,"textLines":4,"bbox":[70,308,501,252]}
+{"kind":"shape","id":"sh/xs7m1kfy","slide":11,"bbox":[623,188,545,392]}
+{"kind":"shape","id":"sh/cry5sfyd","slide":11,"bbox":[623,188,545,6]}
+{"kind":"textbox","id":"sh/zup43ux4","slide":11,"text":"NOT YET SUPPORTED","textPreview":"NOT YET SUPPORTED","textChars":17,"textLines":1,"bbox":[645,210,501,22]}
+{"kind":"textbox","id":"sh/ytgnupgj","slide":11,"text":"A useful clinical measurement","textPreview":"A useful clinical measurement","textChars":29,"textLines":1,"bbox":[645,242,501,60]}
+{"kind":"textbox","id":"sh/lw7m54fa","slide":11,"text":"No force-plate target\nNo participant-held-out endpoint\nNo balance or diagnosis result\nNo GPU replication result","textPreview":"No force-plate target | No participant-held-out endpoint | No balance or diagnosis result | No GPU replication result","textChars":111,"textLines":4,"bbox":[645,308,501,252]}
+{"kind":"shape","id":"sh/kvy5wzyp","slide":11,"bbox":[48,600,1120,56]}
+{"kind":"textbox","id":"sh/7y9o7exg","slide":11,"text":"The honest claim is engineering feasibility plus a clear reason to run the force-plate study.","textPreview":"The honest claim is engineering feasibility plus a clear reason to run the force-plate study.","textChars":93,"textLines":1,"bbox":[70,616,1076,30]}
+{"kind":"notes","id":"nt/4dqxtn","slide":11,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/artifacts/notebook_runs/organized-2026-08-23/experiments/idea09_reflection_equivariance/06_cpu_replication.ipynb\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/tutorials/02-current-direction-and-results.md"}
+{"kind":"slide","id":"sl/nvmnoe","slide":12,"title":"PLANNED STUDY","textShapes":5}
+{"kind":"shape","id":"sh/fad8bydw","slide":12,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/gbmpk3eh","slide":12,"text":"PLANNED STUDY","textPreview":"PLANNED STUDY","textChars":13,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/hcvqd8vm","slide":12,"text":"The decisive study gives one person one vote","textPreview":"The decisive study gives one person one vote","textChars":44,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/2d4rmdw7","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/3ed8fids","slide":12,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/4fm9oned","slide":12,"text":"All cycles from one participant stay together during training, tuning, and testing.","textPreview":"All cycles from one participant stay together during training, tuning, and testing.","textChars":83,"textLines":1,"bbox":[48,118,1120,48]}
+{"kind":"shape","id":"sh/pgfqhsvy","slide":12,"bbox":[48,178,1120,390]}
+{"kind":"shape","id":"sh/b2x8jid4","slide":12,"bbox":[48,586,1120,80]}
+{"kind":"textbox","id":"sh/vadwzepo","slide":12,"text":"Primary question: does the equivariant encoder reduce participant-level force MAE beyond output repair and the paired control?","textPreview":"Primary question: does the equivariant encoder reduce participant-level force MAE beyond output repair and the paired control?","textChars":126,"textLines":1,"bbox":[72,605,1072,44]}
+{"kind":"image","id":"im/bilova18","slide":12,"name":"","alt":"Participant-safe outer split for force-plate evaluation","bbox":[64,192,1088,362]}
+{"kind":"notes","id":"nt/nvmnoe","slide":12,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/METHODOLOGY.md\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/tutorials/03-planned-research-direction.md\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/slides/gait_parity_decks/images/participant-safe-split.svg"}
+{"kind":"slide","id":"sl/siauot","slide":13,"title":"FUTURE WORK","textShapes":20}
+{"kind":"shape","id":"sh/tgfylsf2","slide":13,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/6d4fadwr","slide":13,"text":"FUTURE WORK","textPreview":"FUTURE WORK","textChars":11,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/7exgjixw","slide":13,"text":"Future direction: a physics-grounded movement world model","textPreview":"Future direction: a physics-grounded movement world model","textChars":57,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/kbmx83el","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/5cvyh8f6","slide":13,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/ip4f6dwf","slide":13,"text":"GaitParity can become one structural rule inside a larger Biomech-JEPA that represents the body, scene, contact, dynamics, and uncertainty.","textPreview":"GaitParity can become one structural rule inside a larger Biomech-JEPA that represents the body, scene, contact, dynamics, and uncertainty.","textChars":139,"textLines":1,"bbox":[48,118,1120,58]}
+{"kind":"textbox","id":"sh/jadgfix0","slide":13,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[243,298,30,40]}
+{"kind":"textbox","id":"sh/47qhk7ep","slide":13,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[498,298,30,40]}
+{"kind":"textbox","id":"sh/p8zytcfa","slide":13,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[753,298,30,40]}
+{"kind":"textbox","id":"sh/lgfu9g76","slide":13,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[983,298,30,40]}
+{"kind":"shape","id":"sh/0f6dgb6l","slide":13,"bbox":[48,214,190,230]}
+{"kind":"textbox","id":"sh/zuxc76pg","slide":13,"text":"OBSERVE","textPreview":"OBSERVE","textChars":7,"textLines":1,"bbox":[62,239,162,30]}
+{"kind":"textbox","id":"sh/ytovelov","slide":13,"text":"RGB video\nDepth\nWearables","textPreview":"RGB video | Depth | Wearables","textChars":25,"textLines":3,"bbox":[62,294,162,110]}
+{"kind":"shape","id":"sh/dsfu5g7a","slide":13,"bbox":[278,214,215,230]}
+{"kind":"textbox","id":"sh/cr6dcb6p","slide":13,"text":"CANONICAL STATE","textPreview":"CANONICAL STATE","textChars":15,"textLines":1,"bbox":[292,239,187,30]}
+{"kind":"textbox","id":"sh/bqxc36p4","slide":13,"text":"Body · scene\nContact · dynamics\nUncertainty","textPreview":"Body · scene | Contact · dynamics | Uncertainty","textChars":43,"textLines":3,"bbox":[292,294,187,110]}
+{"kind":"shape","id":"sh/qp4ba1oj","slide":13,"bbox":[533,214,215,230]}
+{"kind":"textbox","id":"sh/xozuh07e","slide":13,"text":"BIOMECH-JEPA","textPreview":"BIOMECH-JEPA","textChars":12,"textLines":1,"bbox":[547,239,187,30]}
+{"kind":"textbox","id":"sh/wnqdov6t","slide":13,"text":"Mask and predict\nFuture state\nCounterfactual state","textPreview":"Mask and predict | Future state | Counterfactual state","textChars":50,"textLines":3,"bbox":[547,294,187,110]}
+{"kind":"shape","id":"sh/g3i503ih","slide":13,"bbox":[788,214,190,230]}
+{"kind":"textbox","id":"sh/h4r698z2","slide":13,"text":"PHYSICS CHECK","textPreview":"PHYSICS CHECK","textChars":13,"textLines":1,"bbox":[802,239,162,30]}
+{"kind":"textbox","id":"sh/u10nyt0b","slide":13,"text":"OpenSim / robot sim\nForce residuals\nGroundedness","textPreview":"OpenSim / robot sim | Force residuals | Groundedness","textChars":48,"textLines":3,"bbox":[802,294,162,110]}
+{"kind":"shape","id":"sh/f29o7yhw","slide":13,"bbox":[1018,214,150,230]}
+{"kind":"textbox","id":"sh/szi5w3i5","slide":13,"text":"ACT","textPreview":"ACT","textChars":3,"textLines":1,"bbox":[1032,239,122,30]}
+{"kind":"textbox","id":"sh/t0r658zq","slide":13,"text":"Estimate\nGenerate\nAsk tools","textPreview":"Estimate | Generate | Ask tools","textChars":27,"textLines":3,"bbox":[1032,294,122,110]}
+{"kind":"shape","id":"sh/6xgnut0f","slide":13,"bbox":[130,484,1028,108]}
+{"kind":"textbox","id":"sh/7ypo3yhk","slide":13,"text":"The first decisive experiment should start from clean biomechanical state—not raw video.","textPreview":"The first decisive experiment should start from clean biomechanical state—not raw video.","textChars":88,"textLines":1,"bbox":[164,506,970,28]}
+{"kind":"textbox","id":"sh/kby5sji9","slide":13,"text":"Then bridge to ambient video with depth, segmentation, monocular motion, simulation teachers, and an active Qwen tool agent.","textPreview":"Then bridge to ambient video with depth, segmentation, monocular motion, simulation teachers, and an active Qwen tool agent.","textChars":124,"textLines":1,"bbox":[164,542,970,34]}
+{"kind":"notes","id":"nt/siauot","slide":13,"text":"[Sources]\n- User-provided research mentor meeting notes, 2026-08-23\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/README_LONG_TERM.md\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/tutorials/03-planned-research-direction.md"}
+{"kind":"slide","id":"sl/ypegg0","slide":14,"title":"CONCLUSION","textShapes":14}
+{"kind":"shape","id":"sh/wf6tgrmx","slide":14,"bbox":[0,0,1280,8]}
+{"kind":"textbox","id":"sh/vexc7mlc","slide":14,"text":"CONCLUSION","textPreview":"CONCLUSION","textChars":10,"textLines":1,"bbox":[48,24,480,24]}
+{"kind":"textbox","id":"sh/utobeh4r","slide":14,"text":"The mirror rule turns a vague goal into a falsifiable study","textPreview":"The mirror rule turns a vague goal into a falsifiable study","textChars":59,"textLines":1,"bbox":[48,53,1160,62]}
+{"kind":"textbox","id":"sh/5kzudw3e","slide":14,"text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1185,671,48,20]}
+{"kind":"shape","id":"sh/4jqtkrmt","slide":14,"bbox":[48,671,1108,1]}
+{"kind":"textbox","id":"sh/jihcbmlo","slide":14,"text":"We are not yet estimating force from everyday video. We now have a precise rule, a model that follows it, and an experiment that can decide whether it matters.","textPreview":"We are not yet estimating force from everyday video. We now have a precise rule, a model that follows it, and an experiment that can deci...","textChars":159,"textLines":1,"bbox":[92,145,1096,118]}
+{"kind":"shape","id":"sh/ih8bih43","slide":14,"bbox":[90,318,330,220]}
+{"kind":"shape","id":"sh/tojuhw3q","slide":14,"bbox":[90,318,330,6]}
+{"kind":"textbox","id":"sh/snqdobm5","slide":14,"text":"LEARNED","textPreview":"LEARNED","textChars":7,"textLines":1,"bbox":[112,340,286,22]}
+{"kind":"textbox","id":"sh/ipcjq10z","slide":14,"text":"Motion structure","textPreview":"Motion structure","textChars":16,"textLines":1,"bbox":[112,372,286,60]}
+{"kind":"textbox","id":"sh/jqlkz6hk","slide":14,"text":"Earlier S-JEPA runs produced nontrivial but confounded representations.","textPreview":"Earlier S-JEPA runs produced nontrivial but confounded representations.","textChars":71,"textLines":1,"bbox":[112,438,286,80]}
+{"kind":"shape","id":"sh/4ru1sbi5","slide":14,"bbox":[455,318,330,220]}
+{"kind":"shape","id":"sh/5sn21gzq","slide":14,"bbox":[455,318,330,6]}
+{"kind":"textbox","id":"sh/6twjul0b","slide":14,"text":"FIXED","textPreview":"FIXED","textChars":5,"textLines":1,"bbox":[477,340,286,22]}
+{"kind":"textbox","id":"sh/ru5k3qhw","slide":14,"text":"Left–right geometry","textPreview":"Left–right geometry","textChars":19,"textLines":1,"bbox":[477,372,286,60]}
+{"kind":"textbox","id":"sh/sfe1wvi1","slide":14,"text":"The equivariant encoder passes the exact mirror contract across matched audits.","textPreview":"The equivariant encoder passes the exact mirror contract across matched audits.","textChars":79,"textLines":1,"bbox":[477,438,286,80]}
+{"kind":"shape","id":"sh/tgn25gzm","slide":14,"bbox":[820,318,330,220]}
+{"kind":"shape","id":"sh/mxsjih0r","slide":14,"bbox":[820,318,330,6]}
+{"kind":"textbox","id":"sh/7y10rmhc","slide":14,"text":"NEXT","textPreview":"NEXT","textChars":4,"textLines":1,"bbox":[842,340,286,22]}
+{"kind":"textbox","id":"sh/rqx83yts","slide":14,"text":"Physical meaning","textPreview":"Physical meaning","textChars":16,"textLines":1,"bbox":[842,372,286,60]}
+{"kind":"textbox","id":"sh/qpo7atcn","slide":14,"text":"Force plates and new participants must test whether structure becomes useful.","textPreview":"Force plates and new participants must test whether structure becomes useful.","textChars":77,"textLines":1,"bbox":[842,438,286,80]}
+{"kind":"shape","id":"sh/dsfq5oby","slide":14,"bbox":[128,578,1024,60]}
+{"kind":"textbox","id":"sh/cr6pc3ud","slide":14,"text":"A stronger claim requires a stronger gate.","textPreview":"A stronger claim requires a stronger gate.","textChars":42,"textLines":1,"bbox":[160,595,960,30]}
+{"kind":"notes","id":"nt/ypegg0","slide":14,"text":"[Sources]\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/tutorials/02-current-direction-and-results.md\n- /Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/notes/research/programs/gait_parity/tutorials/03-planned-research-direction.md\n- User-provided research mentor meeting notes, 2026-08-23"}
