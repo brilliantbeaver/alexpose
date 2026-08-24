@@ -2,6 +2,11 @@
 
 This folder now reflects the completed augmented-normal real run. The paper, long tutorial, generated figures, and PDFs use the same final checkpoint and the same leakage-aware interpretation.
 
+> **Current workspace rerun:** the newer `gavd5/work` checkpoint with file SHA-256
+> `6e67fc5c4a02...` produces different probe scores from this historical paper
+> package. See [downstream_probe_reproduction.md](downstream_probe_reproduction.md)
+> for the verified current accuracy and macro-F1. Do not mix the two result sets.
+
 ## Loss and logging terminology
 
 All maintained documents use the following meanings:
@@ -31,10 +36,12 @@ d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1
 - `staged_evolution.md`: extensive legacy-to-current methodology and result tutorial
 - `tutorials/sjepa_model_internals.md`: illustrated class and tensor-flow reference for the S-JEPA implementation
 - `progressive_training.md`: detailed training and checkpoint contract
+- `downstream_probe_reproduction.md`: exact rerun command and current accuracy/macro-F1 results
 - `result_history.csv`: machine-readable previous and current result ledger
 - `references.bib`: authoritative primary and methods references
 - `figures/`: current PDF, SVG, and PNG figures
 - `make_figures.py`: artifact-bound figure generator
+- `make_downstream_probe_figure.py`: artifact-bound accuracy/macro-F1 probe scorecard
 - `make_evolution_figures.py`: artifact-bound generator for 12 evolution figure sets
 - `urtc_pdf_layout.lua`: table layout rules for the tutorial PDF
 
@@ -94,6 +101,7 @@ From the repository root:
 
 ```sh
 MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_figures.py
+MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_downstream_probe_figure.py
 MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_evolution_figures.py
 ```
 

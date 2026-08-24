@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+  <title id="title">An anatomical reflection requires three coordinated edits</title>
+  <desc id="desc">To mirror a skeleton, negate the side-to-side coordinate, exchange left and right joint labels, and exchange their visibility flags. Doing all three edits twice returns the original sequence.</desc>
+  <defs><style>.t{font:700 30px Arial,sans-serif;fill:#0f172a}.h{font:700 21px Arial,sans-serif;fill:#0f172a}.b{font:400 19px Arial,sans-serif;fill:#1e293b}.s{font:400 17px Arial,sans-serif;fill:#334155}.m{font:400 16px Arial,sans-serif;fill:#475569}.w{font:700 20px Arial,sans-serif;fill:#fff}</style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker><marker id="sw" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#334155"/></marker><marker id="ab" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#1d4ed8"/></marker></defs>
+  <rect width="1000" height="620" fill="#f8fafc"/><rect x=".5" y=".5" width="999" height="619" fill="none" stroke="#cbd5e1"/>
+  <text x="500" y="50" text-anchor="middle" class="t">How do you mirror a skeleton without creating a fake body?</text>
+  <text x="500" y="80" text-anchor="middle" class="b">Apply all three edits together. Stopping after one is a bug.</text>
+
+  <g>
+    <rect x="45" y="115" width="275" height="340" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="182" y="151" text-anchor="middle" class="h">1. FLIP THE SIDE AXIS</text>
+    <text x="182" y="180" text-anchor="middle" class="m">right +0.30 becomes −0.30</text>
+    <path d="M85 245 H280" stroke="#334155" stroke-width="2"/><path d="M182 233 V257" stroke="#334155" stroke-width="2"/>
+    <circle cx="245" cy="245" r="10" fill="#1d4ed8"/>
+    <circle cx="120" cy="245" r="10" fill="#b45309"/>
+    <path d="M245 290 C225 320 145 320 122 292" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#ab)"/>
+    <text x="182" y="354" text-anchor="middle" class="b">Change the coordinate,</text>
+    <text x="182" y="378" text-anchor="middle" class="b">not the walking direction.</text>
+    <rect x="74" y="399" width="216" height="32" rx="10" fill="#fee2e2"/><text x="182" y="421" text-anchor="middle" class="m">Only this edit: wrong</text>
+  </g>
+
+  <g>
+    <rect x="362" y="115" width="275" height="340" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="499" y="151" text-anchor="middle" class="h">2. SWAP JOINT NAMES</text>
+    <text x="499" y="180" text-anchor="middle" class="m">left knee trades with right knee</text>
+    <rect x="379" y="225" width="94" height="52" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="426" y="257" text-anchor="middle" class="s">L knee</text>
+    <rect x="525" y="225" width="94" height="52" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="572" y="257" text-anchor="middle" class="s">R knee</text>
+    <path d="M426 220 C450 192 548 192 570 217" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#sw)"/>
+    <path d="M572 282 C548 310 450 310 428 285" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#sw)"/>
+    <text x="499" y="354" text-anchor="middle" class="b">The geometry and names</text>
+    <text x="499" y="378" text-anchor="middle" class="b">must agree.</text>
+    <rect x="391" y="399" width="216" height="32" rx="10" fill="#fee2e2"/><text x="499" y="421" text-anchor="middle" class="m">Skip names: wrong</text>
+  </g>
+
+  <g>
+    <rect x="680" y="115" width="275" height="340" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="817" y="151" text-anchor="middle" class="h">3. SWAP VISIBILITY</text>
+    <text x="817" y="180" text-anchor="middle" class="m">the “seen” flag moves too</text>
+    <rect x="697" y="225" width="94" height="52" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+    <text x="744" y="257" text-anchor="middle" class="s">L: seen ✓</text>
+    <rect x="843" y="225" width="94" height="52" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+    <text x="890" y="257" text-anchor="middle" class="s">R: hidden</text>
+    <path d="M744 220 C768 192 866 192 888 217" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#sw)"/>
+    <path d="M890 282 C866 310 768 310 746 285" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#sw)"/>
+    <text x="817" y="354" text-anchor="middle" class="b">Otherwise the model sees</text>
+    <text x="817" y="378" text-anchor="middle" class="b">an impossible quality pattern.</text>
+    <rect x="709" y="399" width="216" height="32" rx="10" fill="#fee2e2"/><text x="817" y="421" text-anchor="middle" class="m">Skip masks: wrong</text>
+  </g>
+
+  <text x="495" y="478" text-anchor="middle" class="s">apply all three twice</text>
+  <path d="M380 496 H610" stroke="#334155" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="125" y="540" width="750" height="55" rx="14" fill="#0f172a"/>
+  <text x="500" y="575" text-anchor="middle" class="w">A correct reflection swaps anatomy, labels, and data-quality flags together.</text>
+</svg>

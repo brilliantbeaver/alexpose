@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="660" viewBox="0 0 1000 660" role="img" aria-labelledby="title desc">
+  <title id="title">A body mirror and a camera move have different consequences</title>
+  <desc id="desc">Starting from the same asymmetric walk, a synthetic anatomical mirror swaps left and right and reverses the signed propulsion score from negative 0.41 to positive 0.41. A new camera view leaves the body labels and score unchanged after body-frame alignment.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
+    <marker id="open-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11" fill="none" stroke="#b45309" stroke-width="2"/></marker>
+    <style>
+      .title { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+      .heading { font: 700 21px Arial, sans-serif; fill: #0f172a; }
+      .sub { font: 700 19px Arial, sans-serif; fill: #0f172a; }
+      .body { font: 19px Arial, sans-serif; fill: #1e293b; }
+      .small { font: 17px Arial, sans-serif; fill: #334155; }
+      .mini { font: 16px Arial, sans-serif; fill: #475569; }
+      .number { font: 700 22px Arial, sans-serif; }
+      .side { font: 700 20px Arial, sans-serif; fill: #0f172a; }
+      .bar { font: 700 20px Arial, sans-serif; fill: #ffffff; }
+    </style>
+  </defs>
+  <rect width="1000" height="660" fill="#f8fafc"/>
+  <rect x="0.5" y="0.5" width="999" height="659" fill="none" stroke="#cbd5e1"/>
+  <text x="500" y="48" text-anchor="middle" class="title">A body mirror and a camera move are different</text>
+  <text x="500" y="79" text-anchor="middle" class="body">Both begin with the same walk. Only one exchanges the person’s body sides.</text>
+
+  <rect x="36" y="112" width="252" height="420" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="162" y="148" text-anchor="middle" class="heading">AS-RECORDED WALK</text>
+  <line x1="162" y1="168" x2="162" y2="330" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 3"/>
+  <path d="M162 193 V285 M162 214 L114 242 L90 226 M162 214 L211 252 L224 288 M162 285 L118 338 L104 384 M162 285 L202 341 L226 381" fill="none" stroke="#1e293b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="162" cy="178" r="15" fill="#ffffff" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="80" y="404" class="side">L</text>
+  <text x="238" y="404" class="side">R</text>
+  <path d="M80 424 H244" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="162" y="446" text-anchor="middle" class="mini">side-to-side coordinate</text>
+  <line x1="60" y1="464" x2="264" y2="464" stroke="#bfdbfe" stroke-width="2"/>
+  <text x="162" y="488" text-anchor="middle" class="body">J<tspan baseline-shift="sub" font-size="14">R</tspan> = 8, J<tspan baseline-shift="sub" font-size="14">L</tspan> = 12</text>
+  <text x="162" y="518" text-anchor="middle" class="number" fill="#1d4ed8">ln(8 / 12) = −0.41</text>
+
+  <path d="M288 235 H364" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="8 5" marker-end="url(#open-arrow)"/>
+  <text x="326" y="200" text-anchor="middle" class="mini">mirror</text>
+  <text x="326" y="221" text-anchor="middle" class="mini">swaps L/R</text>
+
+  <rect x="376" y="112" width="264" height="272" rx="14" fill="#fff7ed" stroke="#b45309" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="508" y="148" text-anchor="middle" class="heading">REFLECTED WALK</text>
+  <line x1="508" y1="166" x2="508" y2="262" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 3"/>
+  <path d="M508 184 V244 M508 199 L556 227 L580 211 M508 199 L459 237 L446 273 M508 244 L552 281 L566 306 M508 244 L468 284 L444 296" fill="none" stroke="#1e293b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="508" cy="171" r="13" fill="#ffffff" stroke="#b45309" stroke-width="3" stroke-dasharray="6 3"/>
+  <text x="424" y="316" class="side">R</text>
+  <text x="586" y="316" class="side">L</text>
+  <text x="508" y="348" text-anchor="middle" class="body">J<tspan baseline-shift="sub" font-size="14">R</tspan> = 12, J<tspan baseline-shift="sub" font-size="14">L</tspan> = 8</text>
+  <text x="508" y="374" text-anchor="middle" class="number" fill="#b45309">ln(12 / 8) = +0.41</text>
+
+  <path d="M288 350 C324 396 330 424 364 424" fill="none" stroke="#1d4ed8" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="326" y="386" text-anchor="middle" class="mini">new view</text>
+  <text x="326" y="407" text-anchor="middle" class="mini">same L/R</text>
+
+  <rect x="376" y="400" width="264" height="132" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="508" y="432" text-anchor="middle" class="heading">NEW VIEW</text>
+  <path d="M410 464 L440 449 L470 464 L440 479 Z" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <circle cx="440" cy="464" r="7" fill="#1d4ed8"/>
+  <text x="552" y="464" text-anchor="middle" class="body">J<tspan baseline-shift="sub" font-size="14">R</tspan> = 8, J<tspan baseline-shift="sub" font-size="14">L</tspan> = 12</text>
+  <text x="552" y="494" text-anchor="middle" class="number" fill="#1d4ed8">about −0.41</text>
+  <text x="508" y="516" text-anchor="middle" class="mini">body sides unchanged</text>
+
+  <rect x="676" y="128" width="288" height="296" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="820" y="166" text-anchor="middle" class="heading">KEEP THESE SEPARATE</text>
+  <text x="704" y="212" class="sub">Body mirror</text>
+  <text x="704" y="240" class="small">swaps left and right</text>
+  <text x="704" y="264" class="small">score flips exactly</text>
+  <line x1="704" y1="290" x2="936" y2="290" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="704" y="326" class="sub">Camera move</text>
+  <text x="704" y="354" class="small">keeps the same anatomy</text>
+  <text x="704" y="378" class="small">score stays about equal</text>
+  <text x="704" y="406" class="mini">after body-frame alignment</text>
+
+  <rect x="130" y="562" width="740" height="54" rx="14" fill="#0f172a"/>
+  <text x="500" y="596" text-anchor="middle" class="bar">A body mirror flips the signed score. A camera move should not.</text>
+</svg>
