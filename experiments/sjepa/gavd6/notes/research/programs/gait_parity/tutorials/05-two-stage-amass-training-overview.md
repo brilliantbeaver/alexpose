@@ -9,7 +9,7 @@ The two stages solve different problems:
 
 Neither stage uses clinical outcomes. Both use the same self-supervised JEPA task: hide part of the motion and predict the teacher encoder's representation of the hidden part.
 
-> **Implementation status.** This is a proposed full-study training protocol. The repository already contains the three matched model variants and their GAVD feasibility loop in `gavd6/gait_parity_jepa.py`, plus the AMASS inventory builder in `gavd6/scripts/make_amass_inventory.py`. It does **not** yet contain the production AMASS-to-core-schema converter, BABEL manifest builder, or command-line AMASS trainer named in these tutorials. Commands that use `prepare_amass_windows.py`, `build_babel_walking_manifests.py`, `train_gait_parity_amass.py`, or `audit_gait_parity_pretraining.py` describe the interface those scripts should implement; they are not currently runnable files.
+> **Implementation status.** The repository contains the matched model variants in `src/gavd6_sjepa/gait.py`, the Core11 streaming trainer in `src/gavd6_sjepa/amass.py`, and the `train-amass-core11` command. The AMASS inventory and conversion utilities remain under `scripts/`.
 
 ## 1. The complete path
 

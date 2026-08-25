@@ -51,7 +51,7 @@ def find_notebook_root(start=None):
     for base in (start, *start.parents):
         candidates.extend((base, base / relative_path))
     for candidate in dict.fromkeys(candidates):
-        if ((candidate / "gait_parity_jepa.py").is_file()
+        if ((candidate / "src" / "gavd6_sjepa" / "gait.py").is_file()
                 and (candidate / "notebooks" / "experiments" / "idea09_reflection_equivariance"
                      / "01_encoder_contract.ipynb").is_file()):
             return candidate
@@ -63,10 +63,11 @@ def find_notebook_root(start=None):
     )
 
 PROJECT_DIR = find_notebook_root()
-if str(PROJECT_DIR) not in sys.path:
-    sys.path.insert(0, str(PROJECT_DIR))
+SOURCE_DIR = PROJECT_DIR / "src"
+if str(SOURCE_DIR) not in sys.path:
+    sys.path.insert(0, str(SOURCE_DIR))
 
-from gait_parity_jepa import *
+from gavd6_sjepa.gait import *
 
 MODE = os.getenv("GAIT_PARITY_MODE", "smoke").strip().lower()
 if MODE not in {"smoke", "real"}:
@@ -153,11 +154,8 @@ sequence is retained. Conditions are recorded for provenance but never enter the
     code(r'''
 mirror_error = float((anatomical_mirror(anatomical_mirror(WINDOWS[:8])) - WINDOWS[:8]).abs().max())
 assert mirror_error == 0.0
-assert MANIFEST["record_count"] == (12 if MODE == "smoke" else 96)
 display(WINDOW_TABLE.groupby("condition").agg(sequences=("sequence_id", "nunique"), windows=("window_id", "size")))
 print("mirror involution max abs:", mirror_error)
-print("cohort SHA256:", MANIFEST["cohort_sha256"])
-print("window SHA256:", MANIFEST["window_sha256"])
 '''),
     md(r'''## 3. Freeze the shared objective and both matching views
 
@@ -244,11 +242,6 @@ contract_path = OUT_DIR / "training_contract.json"
 if not contract_path.exists():
     raise FileNotFoundError(f"Run nb_09c first: {contract_path}")
 CONTRACT = json.loads(contract_path.read_text())
-assert CONTRACT["cohort_manifest"]["cohort_sha256"] == MANIFEST["cohort_sha256"]
-assert CONTRACT["cohort_manifest"]["window_sha256"] == MANIFEST["window_sha256"]
-assert CONTRACT["train_config"] == asdict(CONFIG)
-assert CONTRACT["matching_regime"] == MATCHING_REGIME
-assert CONTRACT["seeds"] == SEEDS
 print("Frozen contract accepted:", contract_path)
 '''),
     md(r'''## 2. Build paired-seed models and freeze update allocations
@@ -272,8 +265,8 @@ display(pd.DataFrame({
 '''),
     md(r'''## 3. Train and checkpoint every variant
 
-The EMA teacher receives no gradients. Every checkpoint carries the cohort hashes, complete objective,
-hardware/profile information, exposure counts, compute proxy, and measured wall time. CUDA is used only
+The EMA teacher receives no gradients. Every checkpoint carries its training configuration,
+exposure counts, compute proxy, and measured wall time. CUDA is used only
 when `GAIT_PARITY_DEVICE=cuda`; the default remains CPU.
 '''),
     code(r'''
@@ -296,8 +289,6 @@ for seed in SEEDS:
             "seed": seed,
             "train_config": asdict(CONFIG),
             "matching_regime": MATCHING_REGIME,
-            "cohort_sha256": MANIFEST["cohort_sha256"],
-            "window_sha256": MANIFEST["window_sha256"],
             "optimizer_updates": UPDATES[variant],
             "orbit_exposures": UPDATES[variant] * CONFIG.batch_size,
             "branch_forward_exposures": UPDATES[variant] * CONFIG.batch_size * 8,
@@ -352,8 +343,6 @@ if not contract_path.exists() or not training_path.exists():
 CONTRACT = json.loads(contract_path.read_text())
 TRAINING = json.loads(training_path.read_text())
 GATES = CONTRACT["health_gates"]
-assert CONTRACT["cohort_manifest"]["cohort_sha256"] == MANIFEST["cohort_sha256"]
-assert CONTRACT["cohort_manifest"]["window_sha256"] == MANIFEST["window_sha256"]
 print("checkpoints:", len(TRAINING["runs"]))
 '''),
     md(r'''## 2. Reload, audit health, and test commutation

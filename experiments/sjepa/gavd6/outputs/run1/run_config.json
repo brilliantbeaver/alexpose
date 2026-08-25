@@ -1,0 +1,80 @@
+{
+  "code_sha256": {
+    "amass_core11_jepa.py": "6dd218b3e26cc09a287ae928ded035d830274185ddf6d5979016c2579dac2886",
+    "gait_parity_jepa.py": "2ffce2fbcdc41a8dc85e562807db4445dd1cfefd6f769969aa3bf3a6fe8ab949"
+  },
+  "manifest_path": "/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs/manifests/amass_core11_conversion.csv",
+  "manifest_sha256": "eab660d44c9d6abd80a6c1f5034c7e608c633f0500ef2fdb890b2967dc55ff58",
+  "optimizer_updates_per_variant": 248600,
+  "profile": "full",
+  "run_id": "amass-core11-full-v1",
+  "seeds": [
+    7,
+    19,
+    31
+  ],
+  "tensor_root": "/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs/core11",
+  "train_config": {
+    "amp": true,
+    "batch_size": 32,
+    "ema_start": 0.996,
+    "embed_dim": 96,
+    "encoder_depth": 4,
+    "epochs": 100,
+    "frames": 64,
+    "heads": 8,
+    "joints": 11,
+    "learning_rate": 0.0002,
+    "mask_fraction": 0.6,
+    "mask_joints": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "max_yaw_degrees": 8.0,
+    "mirror_channel": 2,
+    "mirror_pairs": [
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        9,
+        10
+      ]
+    ],
+    "odd_vicreg_weight": 1.0,
+    "predictor_depth": 2,
+    "profile": "amass-full",
+    "segment_length": 4,
+    "stride": 32,
+    "vicreg_weight": 0.05,
+    "weight_decay": 0.05
+  },
+  "variants": [
+    "standard",
+    "paired_unconstrained",
+    "reflection_equivariant"
+  ],
+  "window_index_sha256": "43e9a4783052b6528be0e1eea90c8092504f5167bd85b1d8a0d481c40edf0d56"
+}
