@@ -6,8 +6,8 @@
 
 Primary package:
 
-- `src/gavd6_sjepa/gait.py`
-- `src/gavd6_sjepa/amass.py`
+- `src/gavd6_sjepa/gait_parity_jepa.py`
+- `src/gavd6_sjepa/amass_core11_jepa.py`
 - `src/gavd6_sjepa/train_amass.py`
 - `tests/test_amass_core11_jepa.py`
 

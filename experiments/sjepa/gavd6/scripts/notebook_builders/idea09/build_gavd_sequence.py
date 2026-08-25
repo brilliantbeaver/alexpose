@@ -51,7 +51,7 @@ def find_notebook_root(start=None):
     for base in (start, *start.parents):
         candidates.extend((base, base / relative_path))
     for candidate in dict.fromkeys(candidates):
-        if ((candidate / "src" / "gavd6_sjepa" / "gait.py").is_file()
+        if ((candidate / "src" / "gavd6_sjepa" / "gait_parity_jepa.py").is_file()
                 and (candidate / "notebooks" / "experiments" / "idea09_reflection_equivariance"
                      / "01_encoder_contract.ipynb").is_file()):
             return candidate
@@ -67,7 +67,7 @@ SOURCE_DIR = PROJECT_DIR / "src"
 if str(SOURCE_DIR) not in sys.path:
     sys.path.insert(0, str(SOURCE_DIR))
 
-from gavd6_sjepa.gait import *
+from gavd6_sjepa.gait_parity_jepa import *
 
 MODE = os.getenv("GAIT_PARITY_MODE", "smoke").strip().lower()
 if MODE not in {"smoke", "real"}:

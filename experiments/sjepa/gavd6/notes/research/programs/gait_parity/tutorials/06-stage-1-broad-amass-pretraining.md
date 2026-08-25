@@ -10,7 +10,7 @@ Stage 1 will eventually teach each GaitParity S-JEPA variant general human-motio
 | `scripts/make_amass_inventory.py` | Yes | Rebuilding the raw inventory |
 | `scripts/convert_amass_core11.py` | Yes | Converting AMASS SMPL+H/DMPL sequences to the frozen core-11 representation |
 | `tests/test_convert_amass_core11.py` | Yes | Testing converter contracts that do not require licensed body-model files |
-| `src/gavd6_sjepa/gait.py` | Yes | The existing 33-landmark GAVD feasibility experiment only |
+| `src/gavd6_sjepa/gait_parity_jepa.py` | Yes | The existing 33-landmark GAVD feasibility experiment only |
 | Extracted AMASS NPZ corpus | Not stored in Git | Must be staged separately and match the inventory |
 | Licensed SMPL-H and DMPL model files | Not stored in Git | Must be obtained and staged under the applicable licenses |
 | Production subject-split helper | No | Use the auditable inline procedure in section 4 |
@@ -20,7 +20,7 @@ Stage 1 will eventually teach each GaitParity S-JEPA variant general human-motio
 
 The runnable code path in this tutorial therefore ends with an audited core-11 conversion, provided the licensed AMASS and body-model inputs are already available. If they are absent, the current checkout can still stage the inventory, create the subject-registry scaffold, and run converter unit tests, but it cannot synthesize those licensed inputs. This tutorial does **not** claim that pretraining can start from the current checkout. Commands shown through section 5 use software that exists now; section 6 marks the hard stop and specifies the remaining implementation work without inventing command-line interfaces.
 
-Do not feed raw AMASS or converted core-11 arrays directly to `src/gavd6_sjepa/gait.py`. Use `src/gavd6_sjepa/amass.py`, which defines the Core11 joint and reflection contract.
+Do not feed raw AMASS or converted core-11 arrays directly to `src/gavd6_sjepa/gait_parity_jepa.py`. Use `src/gavd6_sjepa/amass_core11_jepa.py`, which defines the Core11 joint and reflection contract.
 
 ## Fastest valid path with the files present
 

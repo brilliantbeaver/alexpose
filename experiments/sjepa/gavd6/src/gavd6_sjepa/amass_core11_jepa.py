@@ -15,7 +15,7 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-from .gait import *
+from .gait_parity_jepa import *
 
 
 SCHEMA = "core11-v1"

@@ -9,7 +9,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Subset
 
-from gavd6_sjepa.amass import (
+from gavd6_sjepa.amass_core11_jepa import (
     CHANNEL_NAMES,
     JOINT_NAMES,
     MIRROR_CHANNEL,
@@ -25,7 +25,7 @@ from gavd6_sjepa.amass import (
     validate_archives,
     window_starts,
 )
-from gavd6_sjepa.gait import (
+from gavd6_sjepa.gait_parity_jepa import (
     VARIANTS,
     VICRegProjector,
     anatomical_mirror,

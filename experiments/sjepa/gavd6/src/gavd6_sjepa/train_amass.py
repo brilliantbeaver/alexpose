@@ -10,7 +10,7 @@ from pathlib import Path
 import pandas as pd
 import torch
 
-from .amass import (
+from .amass_core11_jepa import (
     Core11WindowDataset,
     WINDOW_FRAMES,
     build_window_index,
@@ -20,7 +20,7 @@ from .amass import (
     load_conversion_manifest,
     make_synthetic_core11_datasets,
 )
-from .gait import (
+from .gait_parity_jepa import (
     VARIANTS,
     VICRegProjector,
     build_model,

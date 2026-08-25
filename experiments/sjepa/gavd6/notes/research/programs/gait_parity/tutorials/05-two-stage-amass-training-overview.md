@@ -9,7 +9,7 @@ The two stages solve different problems:
 
 Neither stage uses clinical outcomes. Both use the same self-supervised JEPA task: hide part of the motion and predict the teacher encoder's representation of the hidden part.
 
-> **Implementation status.** The repository contains the matched model variants in `src/gavd6_sjepa/gait.py`, the Core11 streaming trainer in `src/gavd6_sjepa/amass.py`, and the `train-amass-core11` command. The AMASS inventory and conversion utilities remain under `scripts/`.
+> **Implementation status.** The repository contains the matched model variants in `src/gavd6_sjepa/gait_parity_jepa.py`, the Core11 streaming trainer in `src/gavd6_sjepa/amass_core11_jepa.py`, and the `train-amass-core11` command. The AMASS inventory and conversion utilities remain under `scripts/`.
 
 ## 1. The complete path
 
