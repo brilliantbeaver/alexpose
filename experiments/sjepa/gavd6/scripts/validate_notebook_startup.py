@@ -68,17 +68,23 @@ def main() -> None:
     cpu_source = (NOTEBOOK_DIR / "06_cpu_replication.ipynb").read_text(encoding="utf-8")
     assert 'STARTUP_REVISION = \\"ide-safe-v2\\"' in cpu_source
 
-    previous_override = os.environ.get("GAIT_PARITY_PROJECT_DIR")
+    previous_gait_parity_override = os.environ.get("GAIT_PARITY_PROJECT_DIR")
+    previous_gavd6_override = os.environ.get("GAVD6_ROOT")
     try:
         os.environ["GAIT_PARITY_PROJECT_DIR"] = str(PROJECT_DIR)
+        os.environ["GAVD6_ROOT"] = str(PROJECT_DIR)
         with tempfile.TemporaryDirectory() as temporary_directory:
             for path in paths:
                 assert_startup_from(path, Path(temporary_directory))
     finally:
-        if previous_override is None:
+        if previous_gait_parity_override is None:
             os.environ.pop("GAIT_PARITY_PROJECT_DIR", None)
         else:
-            os.environ["GAIT_PARITY_PROJECT_DIR"] = previous_override
+            os.environ["GAIT_PARITY_PROJECT_DIR"] = previous_gait_parity_override
+        if previous_gavd6_override is None:
+            os.environ.pop("GAVD6_ROOT", None)
+        else:
+            os.environ["GAVD6_ROOT"] = previous_gavd6_override
 
     for name in ("06_cpu_replication.ipynb", "07_gpu_replication.ipynb"):
         source = (NOTEBOOK_DIR / name).read_text(encoding="utf-8")

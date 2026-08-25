@@ -20,10 +20,4 @@ export AMASS_OUTPUT_DIR="$AMASS_RUN_ROOT/run1"
 
 mkdir -p "$AMASS_OUTPUT_DIR"
 
-exec uv run --no-sync jupyter nbconvert \
-  --to notebook \
-  --execute \
-  --ExecutePreprocessor.timeout=-1 \
-  --output 08_amass_core11_training.executed.ipynb \
-  --output-dir "$AMASS_OUTPUT_DIR" \
-  notebooks/experiments/idea09_reflection_equivariance/08_amass_core11_training.ipynb
+exec uv run --no-sync python scripts/train_amass_core11.py
