@@ -78,7 +78,7 @@ def find_notebook_root(start=None):
     start = Path(start or Path.cwd()).expanduser().resolve()
     relative = Path("experiments") / "sjepa" / "gavd6"
     candidates = []
-    override = os.getenv("GAIT_PARITY_PROJECT_DIR")
+    override = os.getenv("GAVD6_ROOT")
     if override:
         candidates.append(Path(override).expanduser().resolve())
     for base in (start, *start.parents):
@@ -90,7 +90,7 @@ def find_notebook_root(start=None):
     searched = "\n - ".join(str(path) for path in dict.fromkeys(candidates))
     raise FileNotFoundError(
         "Could not locate experiments/sjepa/gavd6. "
-        "Set GAIT_PARITY_PROJECT_DIR to that directory.\n"
+        "Set GAVD6_ROOT to that directory.\n"
         f"Searched:\n - {searched}"
     )
 
