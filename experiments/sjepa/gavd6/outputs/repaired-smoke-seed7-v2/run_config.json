@@ -1,0 +1,79 @@
+{
+  "capacity_spread": 0.03788187372708762,
+  "manifest_path": null,
+  "profile": "smoke",
+  "run_id": "repaired-smoke-seed7-v2",
+  "seeds": [
+    7
+  ],
+  "synthetic_smoke": true,
+  "tensor_root": null,
+  "train_config": {
+    "amp": false,
+    "batch_size": 8,
+    "capacity_variant": null,
+    "cross_scale": 0.1,
+    "early_stopping_patience": 3,
+    "ema_start": 0.996,
+    "embed_dim": 32,
+    "encoder_depth": 2,
+    "epochs": 3,
+    "evaluation_draws": 1,
+    "feedforward_dim": null,
+    "frames": 64,
+    "heads": 4,
+    "joints": 11,
+    "learning_rate": 0.0003,
+    "mask_fraction": 0.6,
+    "mask_joints": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "max_yaw_degrees": 8.0,
+    "minimum_feature_variance": 1e-06,
+    "mirror_channel": 2,
+    "mirror_pairs": [
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        9,
+        10
+      ]
+    ],
+    "odd_vicreg_weight": 1.0,
+    "predictor_depth": 1,
+    "profile": "amass-smoke",
+    "segment_length": 4,
+    "stride": 32,
+    "vicreg_weight": 0.05,
+    "weight_decay": 0.05
+  },
+  "variants": [
+    "paired_shared_no_cross",
+    "reflection_equivariant",
+    "paired_unconstrained"
+  ]
+}

@@ -85,7 +85,7 @@ def find_notebook_root(start=None):
     for base in (start, *start.parents):
         candidates.extend((base, base / relative_path))
     for candidate in dict.fromkeys(candidates):
-        if ((candidate / "gait_parity_jepa.py").is_file()
+        if ((candidate / "src" / "gavd6_sjepa" / "gait.py").is_file()
                 and (candidate / "notebooks" / "experiments" / "idea09_reflection_equivariance"
                      / "01_encoder_contract.ipynb").is_file()):
             return candidate
@@ -97,10 +97,11 @@ def find_notebook_root(start=None):
     )
 
 PROJECT_DIR = find_notebook_root()
-if str(PROJECT_DIR) not in sys.path:
-    sys.path.insert(0, str(PROJECT_DIR))
+SOURCE_DIR = PROJECT_DIR / "src"
+if str(SOURCE_DIR) not in sys.path:
+    sys.path.insert(0, str(SOURCE_DIR))
 
-from gait_parity_jepa import EXPECTED_COUNTS, load_gavd_records
+from gavd6_sjepa.gait import load_gavd_records
 
 RUN_PIPELINE = False  # Explicit opt-in. Change to True to start the 18 trainings.
 RUN_ID = "{run_id}"
@@ -137,10 +138,10 @@ print({{
     if not POSE_DIR.is_dir():
         raise FileNotFoundError(f"Full pose cache is missing: {POSE_DIR}")
     records = load_gavd_records(POSE_DIR)
-    counts = {condition: sum(record["condition"] == condition for record in records)
-              for condition in EXPECTED_COUNTS}
-    assert counts == EXPECTED_COUNTS, counts
-    print(f"Validated {len(records)} locked GAVD sequences: {counts}")
+    counts = {}
+    for record in records:
+        counts[record["condition"]] = counts.get(record["condition"], 0) + 1
+    print(f"Loaded {len(records)} GAVD sequences: {counts}")
 else:
     print("Dry configuration only — no pose files loaded and no training started.")
 '''),

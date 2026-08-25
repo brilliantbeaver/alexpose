@@ -192,6 +192,14 @@ uv run python -m ipykernel install --user --name python3 --display-name "GAVD6 S
 uv run jupyter lab
 ```
 
+The shared training implementation uses a conventional `src` package:
+
+- `src/gavd6_sjepa/gait.py` contains the model and GAVD training components;
+- `src/gavd6_sjepa/amass.py` contains Core11 loading and streaming training;
+- `src/gavd6_sjepa/train_amass.py` provides the `train-amass-core11` command.
+
+The script and AMASS notebook launch that command instead of duplicating training logic.
+
 Copy `.env.example` to `.env`. The completed augmented real path uses:
 
 ```dotenv
