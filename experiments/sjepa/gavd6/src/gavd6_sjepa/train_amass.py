@@ -13,7 +13,9 @@ import torch
 from .amass_core11_jepa import (
     Core11WindowDataset,
     WINDOW_FRAMES,
+    atomic_dataframe_to_csv,
     build_window_index,
+    configure_worker_tensor_sharing,
     core11_train_config,
     evaluate_variant,
     fit_variant,
@@ -39,7 +41,11 @@ def env_flag(name: str, default: bool = False) -> bool:
 def write_json(path: Path, payload: object) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    os.replace(temporary, path)
 
 
 def _paths(run_root: Path | None, run_id: str) -> tuple[Path, Path, Path]:
@@ -92,6 +98,11 @@ def main() -> None:
         for value in os.getenv("AMASS_SEEDS", "7").split(",")
     )
     num_workers = int(os.getenv("AMASS_NUM_WORKERS", "4"))
+    if num_workers < 0:
+        raise ValueError("AMASS_NUM_WORKERS must be non-negative")
+    sharing_strategy = (
+        configure_worker_tensor_sharing() if num_workers else "single_process"
+    )
     run_root_text = os.getenv("AMASS_RUN_ROOT")
     run_root = Path(run_root_text).expanduser().resolve() if run_root_text else None
     manifest_path, tensor_root, output_dir = _paths(run_root, run_id)
@@ -129,6 +140,8 @@ def main() -> None:
             "run_id": run_id,
             "device": device_name,
             "seeds": seeds,
+            "num_workers": num_workers,
+            "tensor_sharing_strategy": sharing_strategy,
             "epochs": config.epochs,
             "patience": config.early_stopping_patience,
             "manifest": None if synthetic else str(manifest_path),
@@ -182,9 +195,7 @@ def main() -> None:
         _ = datasets["train"][0]
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    if window_index is not None:
-        window_index.to_csv(output_dir / "window_index.csv", index=False)
-    allocation.to_csv(output_dir / "capacity.csv", index=False)
+    atomic_dataframe_to_csv(allocation, output_dir / "capacity.csv")
     write_json(
         output_dir / "run_config.json",
         {
@@ -193,6 +204,8 @@ def main() -> None:
             "synthetic_smoke": synthetic,
             "evaluate_test": evaluate_test,
             "seeds": seeds,
+            "num_workers": num_workers,
+            "tensor_sharing_strategy": sharing_strategy,
             "variants": VARIANTS,
             "capacity_spread": capacity_spread,
             "manifest_path": None if synthetic else str(manifest_path),
@@ -213,7 +226,7 @@ def main() -> None:
                     allocation.variant == variant, "trainable_parameters"
                 ].iloc[0]
             )
-            best_model, best_projector, history, result, validation_layers = fit_variant(
+            best_model, best_projector, _history, result, _ = fit_variant(
                 model,
                 datasets["train"],
                 datasets["validation"],
@@ -223,17 +236,12 @@ def main() -> None:
                 num_workers=num_workers,
             )
             stem = f"seed-{seed}_{variant}"
-            history.to_csv(output_dir / f"{stem}_history.csv", index=False)
-            validation_layers.to_csv(
-                output_dir / f"{stem}_validation_commutation.csv", index=False
-            )
-
             test_metrics = None
             if evaluate_test:
                 # Test is opt-in for full runs and occurs only after best-checkpoint reload.
                 best_model = best_model.to(device)
                 best_projector = best_projector.to(device)
-                test_metrics, test_layers = evaluate_variant(
+                test_metrics, _ = evaluate_variant(
                     best_model,
                     best_projector,
                     datasets["test"],
@@ -241,9 +249,6 @@ def main() -> None:
                     seed=seed,
                     split="test",
                     num_workers=num_workers,
-                )
-                test_layers.to_csv(
-                    output_dir / f"{stem}_test_commutation.csv", index=False
                 )
             peak_memory = (
                 int(torch.cuda.max_memory_allocated(device))
@@ -267,6 +272,9 @@ def main() -> None:
             if test_metrics is not None:
                 row.update({f"test_{name}": value for name, value in test_metrics.items()})
             run_rows.append(row)
+            # Update the one allowed summary artifact after each completed
+            # seed/variant, rather than waiting for the entire matrix to finish.
+            atomic_dataframe_to_csv(pd.DataFrame(run_rows), output_dir / "summary.csv")
             message = (
                 f"completed {stem}: selected epoch {result['selected_epoch']}, "
                 f"validation KL {result['validation']['kl_divergence']:.4f}"
@@ -279,19 +287,6 @@ def main() -> None:
                 torch.cuda.empty_cache()
 
     summary = pd.DataFrame(run_rows)
-    summary.to_csv(output_dir / "summary.csv", index=False)
-    if len(seeds) > 1:
-        numeric = [
-            column
-            for column in summary.select_dtypes(include="number").columns
-            if column != "seed"
-        ]
-        aggregate = summary.groupby("variant")[numeric].agg(["mean", "std"])
-        aggregate.columns = [f"{name}_{stat}" for name, stat in aggregate.columns]
-        aggregate.reset_index().to_csv(
-            output_dir / "aggregate_summary.csv", index=False
-        )
-    write_json(output_dir / "training_manifest.json", {"run_id": run_id, "runs": run_rows})
     print(summary.to_string(index=False), flush=True)
 
 

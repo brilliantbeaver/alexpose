@@ -69,9 +69,11 @@ __all__ = [
     "Core11WindowDataset",
     "FixedBatchPlan",
     "SyntheticCore11Dataset",
+    "atomic_dataframe_to_csv",
     "atomic_torch_save",
     "build_window_index",
     "checkpoint_payload",
+    "configure_worker_tensor_sharing",
     "core11_train_config",
     "evaluate_variant",
     "fit_variant",
@@ -377,6 +379,13 @@ def make_train_loader(
     *,
     num_workers: int,
 ) -> DataLoader:
+    # Linux defaults to the ``file_descriptor`` sharing strategy.  With workers,
+    # every prefetched tensor is then sent over a Unix file descriptor.  This
+    # training loop constructs a loader per epoch, so avoiding descriptor-backed
+    # tensor transfer prevents worker queues from exhausting the Slurm process
+    # descriptor limit.
+    if num_workers:
+        configure_worker_tensor_sharing()
     kwargs = {
         "dataset": dataset,
         "batch_sampler": FixedBatchPlan(len(dataset), config.batch_size, updates, seed + 17),
@@ -384,8 +393,36 @@ def make_train_loader(
         "pin_memory": torch.cuda.is_available(),
     }
     if num_workers:
-        kwargs.update({"persistent_workers": True, "prefetch_factor": 2})
+        # A loader is deliberately scoped to one epoch.  Persistent workers are
+        # only appropriate when the same loader is reused, and otherwise leave
+        # file-descriptor-heavy queues alive across epoch boundaries.
+        kwargs.update({"persistent_workers": False, "prefetch_factor": 1})
     return DataLoader(**kwargs)
+
+
+def configure_worker_tensor_sharing() -> str:
+    """Use shared-memory files rather than one file descriptor per tensor."""
+
+    strategies = torch.multiprocessing.get_all_sharing_strategies()
+    if "file_system" not in strategies:
+        raise RuntimeError(
+            "PyTorch does not provide the file_system sharing strategy required "
+            "for multi-worker AMASS loading"
+        )
+    torch.multiprocessing.set_sharing_strategy("file_system")
+    return torch.multiprocessing.get_sharing_strategy()
+
+
+def _loader_batches(loader: DataLoader) -> Iterator:
+    """Yield batches and promptly close worker processes on every exit path."""
+
+    iterator = iter(loader)
+    try:
+        yield from iterator
+    finally:
+        shutdown = getattr(iterator, "_shutdown_workers", None)
+        if shutdown is not None:
+            shutdown()
 
 
 def _augment_canonical(
@@ -435,7 +472,7 @@ def train_streaming_variant(
     history = []
     start = time.perf_counter()
     model.train()
-    for step, batch in enumerate(loader):
+    for step, batch in enumerate(_loader_batches(loader)):
         canonical = batch["coordinates"].to(device, non_blocking=True)
         valid = batch["valid"]
         orbit_valid = valid & mirror_validity(valid)
@@ -573,7 +610,7 @@ def _train_epoch(
     weight = 0
     model.train()
     projector.train()
-    for batch in loader:
+    for batch in _loader_batches(loader):
         canonical = batch["coordinates"].to(device, non_blocking=True)
         valid = batch["valid"]
         orbit_valid = valid & mirror_validity(valid)
@@ -637,6 +674,8 @@ def evaluate_variant(
 
     if split not in {"validation", "test"}:
         raise ValueError("Evaluation split must be validation or test")
+    if num_workers:
+        configure_worker_tensor_sharing()
     config = model.config
     draws = int(draws or config.evaluation_draws)
     prior_model_mode, prior_projector_mode = model.training, projector.training
@@ -664,7 +703,7 @@ def evaluate_variant(
         view_generator = torch.Generator(device="cpu").manual_seed(
             seed + split_offset + 400_000 + draw
         )
-        for batch in loader:
+        for batch in _loader_batches(loader):
             canonical = batch["coordinates"].to(device, non_blocking=True)
             valid = batch["valid"]
             orbit_valid = valid & mirror_validity(valid)
@@ -770,8 +809,8 @@ def fit_variant(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     stem = f"seed-{seed}_{model.variant}"
-    latest_path = output_dir / f"{stem}_latest.pt"
     best_path = output_dir / f"{stem}_best.pt"
+    history_path = output_dir / f"{stem}_history.csv"
     history = []
     best_kl = float("inf")
     best_epoch = None
@@ -826,7 +865,6 @@ def fit_variant(
             epoch=epoch,
             validation_metrics=validation_metrics,
         )
-        atomic_torch_save(latest_path, payload)
         if eligible and validation_metrics["kl_divergence"] < best_kl:
             best_kl = validation_metrics["kl_divergence"]
             best_epoch = epoch
@@ -836,6 +874,9 @@ def fit_variant(
             atomic_torch_save(best_path, payload)
         else:
             stale_epochs += 1
+        # Persist every completed epoch. If Slurm terminates the job, the CSV
+        # retains all epochs completed before the interruption.
+        atomic_dataframe_to_csv(pd.DataFrame(history), history_path)
         if stale_epochs >= patience:
             break
     wall_seconds = time.perf_counter() - started
@@ -850,7 +891,6 @@ def fit_variant(
         "optimizer_updates": int(metadata["optimizer_updates"]),
         "wall_seconds": wall_seconds,
         "best_checkpoint": str(best_path),
-        "latest_checkpoint": str(latest_path),
         "validation": best_metrics,
     }
     return best_model, best_projector, pd.DataFrame(history), result, best_layer_audit
@@ -896,6 +936,16 @@ def atomic_torch_save(path: Path, payload: Mapping) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     torch.save(dict(payload), temporary)
+    os.replace(temporary, path)
+
+
+def atomic_dataframe_to_csv(frame: pd.DataFrame, path: Path) -> None:
+    """Replace a CSV atomically so interruption cannot corrupt the prior copy."""
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    frame.to_csv(temporary, index=False)
     os.replace(temporary, path)
 
 

@@ -60,7 +60,7 @@ AMASS_SEEDS=7,19,31 AMASS_NUM_WORKERS=4 AMASS_EVALUATE_TEST=1 \
 uv run --no-sync train-amass-core11
 ```
 
-Run these commands from a workspace containing the repaired source. The pilot never opens the real test split. The frozen three-seed run writes both per-seed `summary.csv` and mean/standard-deviation `aggregate_summary.csv`, and evaluates each selected checkpoint on test once.
+Run these commands from a workspace containing the repaired source. The pilot never opens the real test split. The frozen three-seed run writes every seed and variant to `summary.csv` and evaluates each selected checkpoint on test once.
 
 ## Verification
 
