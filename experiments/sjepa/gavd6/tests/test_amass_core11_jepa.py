@@ -40,7 +40,10 @@ from gavd6_sjepa.gait_parity_jepa import (
     sjepa_distribution_metrics,
     trainable_parameter_count,
 )
-from gavd6_sjepa.train_amass import main as train_amass_main
+from gavd6_sjepa.train_amass import (
+    main as train_amass_main,
+    selected_variants_from_env,
+)
 
 
 class AmassCore11JepaTests(unittest.TestCase):
@@ -100,6 +103,22 @@ class AmassCore11JepaTests(unittest.TestCase):
         self.assertEqual(window_starts(64), [0])
         self.assertEqual(window_starts(96), [0, 32])
         self.assertEqual(window_starts(97), [0, 32, 33])
+
+    def test_variant_selection_is_canonical_and_validated(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(selected_variants_from_env(), tuple(VARIANTS))
+        with patch.dict(
+            os.environ,
+            {"AMASS_VARIANTS": "paired_unconstrained,reflection_equivariant"},
+            clear=True,
+        ):
+            self.assertEqual(
+                selected_variants_from_env(),
+                ("reflection_equivariant", "paired_unconstrained"),
+            )
+        with patch.dict(os.environ, {"AMASS_VARIANTS": "not-a-variant"}, clear=True):
+            with self.assertRaisesRegex(ValueError, "Unknown AMASS variant"):
+                selected_variants_from_env()
 
     def test_core11_mirror_is_an_involution(self):
         coordinates = torch.randn(2, 64, 11, 3)
