@@ -17,7 +17,7 @@ exec uv run --no-sync python scripts/convert_amass_core11.py \
   --inventory "$AMASS_RUN_ROOT/manifests/amass_raw_inventory_eligible.csv" \
   --subject-splits "$AMASS_RUN_ROOT/manifests/amass_subject_splits.csv" \
   --body-model-root "$AMASS_BODY_MODEL_ROOT" \
-  --canonical-fps 30 
+  --canonical-fps 30 \
   --device cuda \
   --batch-size 256 \
   --output-root "$AMASS_RUN_ROOT/core11" \

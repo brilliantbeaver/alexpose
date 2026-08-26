@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -16,10 +18,12 @@ from gavd6_sjepa.amass_core11_jepa import (
     MIRROR_PAIRS,
     Core11WindowDataset,
     build_window_index,
+    configure_worker_tensor_sharing,
     core11_train_config,
     evaluate_variant,
     fit_variant,
     load_conversion_manifest,
+    make_train_loader,
     make_synthetic_core11_datasets,
     mirror_validity,
     validate_archives,
@@ -36,6 +40,7 @@ from gavd6_sjepa.gait_parity_jepa import (
     sjepa_distribution_metrics,
     trainable_parameter_count,
 )
+from gavd6_sjepa.train_amass import main as train_amass_main
 
 
 class AmassCore11JepaTests(unittest.TestCase):
@@ -134,6 +139,23 @@ class AmassCore11JepaTests(unittest.TestCase):
             sample = dataset[0]
             self.assertEqual(tuple(sample["coordinates"].shape), (64, 11, 3))
             self.assertEqual(tuple(sample["valid"].shape), (16, 11))
+
+    def test_multi_worker_loader_bounds_descriptor_pressure(self):
+        datasets = make_synthetic_core11_datasets()
+        config = core11_train_config("smoke")
+        prior_strategy = torch.multiprocessing.get_sharing_strategy()
+        try:
+            loader = make_train_loader(
+                datasets["train"], config, updates=1, seed=7, num_workers=1
+            )
+            self.assertEqual(
+                torch.multiprocessing.get_sharing_strategy(), "file_system"
+            )
+            self.assertFalse(loader.persistent_workers)
+            self.assertEqual(loader.prefetch_factor, 1)
+            self.assertEqual(configure_worker_tensor_sharing(), "file_system")
+        finally:
+            torch.multiprocessing.set_sharing_strategy(prior_strategy)
 
     def test_variant_names_capacity_and_paired_predictor_contracts(self):
         self.assertEqual(
@@ -286,6 +308,21 @@ class AmassCore11JepaTests(unittest.TestCase):
             )
             self.assertEqual(result["selected_epoch"], selected)
             self.assertTrue(Path(result["best_checkpoint"]).is_file())
+            self.assertEqual(
+                {path.name for path in Path(temporary).iterdir()},
+                {
+                    "seed-7_reflection_equivariant_best.pt",
+                    "seed-7_reflection_equivariant_history.csv",
+                },
+            )
+            persisted_history = pd.read_csv(
+                Path(temporary) / "seed-7_reflection_equivariant_history.csv"
+            )
+            pd.testing.assert_frame_equal(
+                persisted_history,
+                history,
+                check_dtype=False,
+            )
             reloaded_metrics, _ = evaluate_variant(
                 best_model,
                 best_projector,
@@ -299,6 +336,69 @@ class AmassCore11JepaTests(unittest.TestCase):
                 result["validation"]["kl_divergence"],
                 places=7,
             )
+
+    def test_completed_epoch_history_survives_later_interruption(self):
+        datasets = make_synthetic_core11_datasets()
+        train = Subset(datasets["train"], range(8))
+        model = build_model(
+            core11_train_config("smoke"), "paired_unconstrained", seed=7
+        )
+        evaluations = 0
+
+        def interrupt_second_evaluation(*args, **kwargs):
+            nonlocal evaluations
+            evaluations += 1
+            if evaluations == 2:
+                raise RuntimeError("simulated scheduler interruption")
+            return evaluate_variant(*args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            history_path = (
+                Path(temporary) / "seed-7_paired_unconstrained_history.csv"
+            )
+            with patch(
+                "gavd6_sjepa.amass_core11_jepa.evaluate_variant",
+                side_effect=interrupt_second_evaluation,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "scheduler interruption"):
+                    fit_variant(
+                        model,
+                        train,
+                        datasets["validation"],
+                        torch.device("cpu"),
+                        seed=7,
+                        output_dir=Path(temporary),
+                        num_workers=0,
+                        max_epochs=2,
+                        patience=2,
+                    )
+
+            persisted = pd.read_csv(history_path)
+            self.assertEqual(persisted.epoch.tolist(), [1])
+            self.assertFalse(history_path.with_suffix(".csv.tmp").exists())
+
+    def test_training_entrypoint_writes_only_compact_artifact_contract(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary)
+            environment = {
+                "AMASS_RUN_TRAINING": "1",
+                "AMASS_PROFILE": "smoke",
+                "AMASS_SYNTHETIC_SMOKE": "1",
+                "AMASS_DEVICE": "cpu",
+                "AMASS_NUM_WORKERS": "0",
+                "AMASS_SEEDS": "7,19",
+                "AMASS_EVALUATE_TEST": "1",
+                "AMASS_OUTPUT_DIR": str(output_dir),
+            }
+            with patch.dict(os.environ, environment, clear=True):
+                train_amass_main()
+
+            expected = {"summary.csv", "run_config.json", "capacity.csv"}
+            for seed in (7, 19):
+                for variant in VARIANTS:
+                    expected.add(f"seed-{seed}_{variant}_history.csv")
+                    expected.add(f"seed-{seed}_{variant}_best.pt")
+            self.assertEqual({path.name for path in output_dir.iterdir()}, expected)
 
 
 if __name__ == "__main__":
