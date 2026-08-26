@@ -38,6 +38,23 @@ def env_flag(name: str, default: bool = False) -> bool:
     return default if value is None else value.strip().lower() in {"1", "true", "yes"}
 
 
+def selected_variants_from_env() -> tuple[str, ...]:
+    """Select a non-empty, unique subset while retaining canonical run order."""
+
+    raw = os.getenv("AMASS_VARIANTS")
+    if raw is None:
+        return tuple(VARIANTS)
+    requested = tuple(value.strip() for value in raw.split(","))
+    if not requested or any(not value for value in requested):
+        raise ValueError("AMASS_VARIANTS must be a non-empty comma-separated list")
+    unknown = set(requested).difference(VARIANTS)
+    if unknown:
+        raise ValueError(f"Unknown AMASS variant(s): {sorted(unknown)}")
+    if len(set(requested)) != len(requested):
+        raise ValueError("AMASS_VARIANTS must not contain duplicates")
+    return tuple(variant for variant in VARIANTS if variant in requested)
+
+
 def write_json(path: Path, payload: object) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -97,6 +114,7 @@ def main() -> None:
         int(value)
         for value in os.getenv("AMASS_SEEDS", "7").split(",")
     )
+    variants = selected_variants_from_env()
     num_workers = int(os.getenv("AMASS_NUM_WORKERS", "4"))
     if num_workers < 0:
         raise ValueError("AMASS_NUM_WORKERS must be non-negative")
@@ -140,6 +158,7 @@ def main() -> None:
             "run_id": run_id,
             "device": device_name,
             "seeds": seeds,
+            "variants": variants,
             "num_workers": num_workers,
             "tensor_sharing_strategy": sharing_strategy,
             "epochs": config.epochs,
@@ -206,7 +225,8 @@ def main() -> None:
             "seeds": seeds,
             "num_workers": num_workers,
             "tensor_sharing_strategy": sharing_strategy,
-            "variants": VARIANTS,
+            "variants": variants,
+            "capacity_reference_variants": VARIANTS,
             "capacity_spread": capacity_spread,
             "manifest_path": None if synthetic else str(manifest_path),
             "tensor_root": None if synthetic else str(tensor_root),
@@ -217,7 +237,7 @@ def main() -> None:
     device = torch.device(device_name)
     run_rows = []
     for seed in seeds:
-        for variant in VARIANTS:
+        for variant in variants:
             if device.type == "cuda":
                 torch.cuda.reset_peak_memory_stats(device)
             model = build_model(config, variant, seed)
