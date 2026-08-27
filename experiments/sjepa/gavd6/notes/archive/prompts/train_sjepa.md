@@ -75,4 +75,4 @@ For each of the tutorial notebooks, ultrathink on how best to enable viewing of 
 
 Use codex:adversarial-review to review and check all of your work, systematically and thoughtfully fix all issues.
 
-Use fan out subagents with dynamic workflows to parallize your tasks.
+Use fan out subagents with dynamic workflows to parallelize your tasks.

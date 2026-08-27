@@ -441,6 +441,32 @@ def _augment_canonical(
     return view.masked_fill(~present[..., None], 0.0)
 
 
+def _variant_views(
+    model,
+    canonical: torch.Tensor,
+    valid: torch.Tensor,
+    mask_generator: torch.Generator,
+    view_generator: torch.Generator,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Build matched augmented views without giving standard S-JEPA a mirror branch."""
+
+    target_mask = sample_mask(
+        valid if model.variant == "standard_sjepa" else valid & mirror_validity(valid),
+        model.config.mask_fraction,
+        mask_generator,
+        model.config.mask_joints,
+    ).to(canonical.device, non_blocking=True)
+    first = _augment_canonical(canonical, model.config.max_yaw_degrees, view_generator)
+    second = _augment_canonical(canonical, model.config.max_yaw_degrees, view_generator)
+    if model.variant == "standard_sjepa":
+        return first, second, target_mask
+    return (
+        lift_orbit(first, model.config.mirror_pairs, model.config.mirror_channel),
+        lift_orbit(second, model.config.mirror_pairs, model.config.mirror_channel),
+        target_mask,
+    )
+
+
 def train_streaming_variant(
     model: OrbitJEPA,
     dataset: Core11WindowDataset,
@@ -475,27 +501,15 @@ def train_streaming_variant(
     for step, batch in enumerate(_loader_batches(loader)):
         canonical = batch["coordinates"].to(device, non_blocking=True)
         valid = batch["valid"]
-        orbit_valid = valid & mirror_validity(valid)
-        target_mask = sample_mask(
-            orbit_valid, config.mask_fraction, mask_generator, config.mask_joints
-        ).to(device, non_blocking=True)
-        first_orbit = lift_orbit(
-            _augment_canonical(canonical, config.max_yaw_degrees, view_generator),
-            config.mirror_pairs,
-            config.mirror_channel,
-        )
-        second_orbit = lift_orbit(
-            _augment_canonical(canonical, config.max_yaw_degrees, view_generator),
-            config.mirror_pairs,
-            config.mirror_channel,
+        first_view, second_view, target_mask = _variant_views(
+            model, canonical, valid, mask_generator, view_generator
         )
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp_enabled):
-            predicted, targets = model(first_orbit, target_mask)
-            jepa = sjepa_cross_entropy(predicted, targets, model.target_center)
-            even_terms, odd_terms = orbit_vicreg(model, projector, first_orbit, second_orbit)
-            vicreg = even_terms[0] + config.odd_vicreg_weight * odd_terms[0]
-            total = jepa + config.vicreg_weight * vicreg
+            terms, representation_terms, targets = _objective_terms(
+                model, projector, first_view, second_view, target_mask
+            )
+            total = terms["total_loss"]
         if not torch.isfinite(total):
             raise FloatingPointError(f"Non-finite loss at update {step + 1}")
         scaler.scale(total).backward()
@@ -511,33 +525,71 @@ def train_streaming_variant(
             {
                 "update": step + 1,
                 "total_loss": float(total.detach().cpu()),
-                "jepa_loss": float(jepa.detach().cpu()),
-                "vicreg_loss": float(vicreg.detach().cpu()),
-                "even_variance": float(even_terms[2].detach().cpu()),
-                "odd_variance": float(odd_terms[2].detach().cpu()),
+                "jepa_loss": float(terms["jepa_cross_entropy"].detach().cpu()),
+                "vicreg_loss": float(terms["vicreg_loss"].detach().cpu()),
                 "ema_momentum": momentum,
                 "learning_rate": optimizer.param_groups[0]["lr"],
+            }
+        )
+        history[-1].update(
+            {
+                f"{name}_{term_name}": float(value.detach().cpu())
+                for name, values in representation_terms.items()
+                for term_name, value in values.items()
+                if term_name != "features"
             }
         )
     return model.cpu(), projector.cpu(), optimizer, pd.DataFrame(history), time.perf_counter() - start
 
 
 def _objective_terms(
-    model: OrbitJEPA,
+    model,
     projector: VICRegProjector,
-    first_orbit: torch.Tensor,
-    second_orbit: torch.Tensor,
+    first_view: torch.Tensor,
+    second_view: torch.Tensor,
     target_mask: torch.Tensor,
-) -> tuple[dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor]:
-    predicted, targets = model(first_orbit, target_mask)
+) -> tuple[
+    dict[str, torch.Tensor], dict[str, dict[str, torch.Tensor]], torch.Tensor
+]:
+    predicted, targets = model(first_view, target_mask)
     cross_entropy, teacher_entropy, kl_divergence = sjepa_distribution_metrics(
         predicted, targets, model.target_center
     )
-    first_even, first_odd = parity_channels(model.encoder(first_orbit))
-    second_even, second_odd = parity_channels(model.encoder(second_orbit))
-    even_terms = vicreg_terms(projector(first_even), projector(second_even))
-    odd_terms = vicreg_terms(projector(first_odd), projector(second_odd))
-    vicreg_loss = even_terms[0] + model.config.odd_vicreg_weight * odd_terms[0]
+    if model.variant == "standard_sjepa":
+        first_standard = model.encoder(first_view).mean(1)
+        second_standard = model.encoder(second_view).mean(1)
+        standard_terms = vicreg_terms(
+            projector(first_standard), projector(second_standard)
+        )
+        vicreg_loss = standard_terms[0]
+        representation_terms = {
+            "standard": {
+                "features": first_standard,
+                "invariance": standard_terms[1],
+                "variance": standard_terms[2],
+                "covariance": standard_terms[3],
+            }
+        }
+    else:
+        first_even, first_odd = parity_channels(model.encoder(first_view))
+        second_even, second_odd = parity_channels(model.encoder(second_view))
+        even_terms = vicreg_terms(projector(first_even), projector(second_even))
+        odd_terms = vicreg_terms(projector(first_odd), projector(second_odd))
+        vicreg_loss = even_terms[0] + model.config.odd_vicreg_weight * odd_terms[0]
+        representation_terms = {
+            "even": {
+                "features": first_even,
+                "invariance": even_terms[1],
+                "variance": even_terms[2],
+                "covariance": even_terms[3],
+            },
+            "odd": {
+                "features": first_odd,
+                "invariance": odd_terms[1],
+                "variance": odd_terms[2],
+                "covariance": odd_terms[3],
+            },
+        }
     total_loss = cross_entropy + model.config.vicreg_weight * vicreg_loss
     terms = {
         "total_loss": total_loss,
@@ -545,24 +597,25 @@ def _objective_terms(
         "teacher_entropy": teacher_entropy,
         "kl_divergence": kl_divergence,
         "vicreg_loss": vicreg_loss,
-        "even_invariance": even_terms[1],
-        "even_variance": even_terms[2],
-        "even_covariance": even_terms[3],
-        "odd_invariance": odd_terms[1],
-        "odd_variance": odd_terms[2],
-        "odd_covariance": odd_terms[3],
     }
-    return terms, first_even, first_odd, targets
+    for name, values in representation_terms.items():
+        terms.update(
+            {
+                f"{name}_{term_name}": value
+                for term_name, value in values.items()
+                if term_name != "features"
+            }
+        )
+    return terms, representation_terms, targets
 
 
 def _finish_metrics(
     totals: dict[str, float],
     weight: int,
-    even_features: list[torch.Tensor],
-    odd_features: list[torch.Tensor],
+    representation_features: Mapping[str, list[torch.Tensor]],
 ) -> dict[str, float]:
     metrics = {name: value / max(weight, 1) for name, value in totals.items()}
-    for parity, features in (("even", even_features), ("odd", odd_features)):
+    for parity, features in representation_features.items():
         health = representation_metrics(torch.cat(features, dim=0))
         metrics.update({f"{parity}_{name}": value for name, value in health.items()})
     return metrics
@@ -605,34 +658,22 @@ def _train_epoch(
     trainable = [parameter for parameter in model.parameters() if parameter.requires_grad]
     trainable += list(projector.parameters())
     totals: dict[str, float] = {}
-    even_features: list[torch.Tensor] = []
-    odd_features: list[torch.Tensor] = []
+    representation_features: dict[str, list[torch.Tensor]] = {}
     weight = 0
     model.train()
     projector.train()
     for batch in _loader_batches(loader):
         canonical = batch["coordinates"].to(device, non_blocking=True)
         valid = batch["valid"]
-        orbit_valid = valid & mirror_validity(valid)
-        target_mask = sample_mask(
-            orbit_valid, config.mask_fraction, mask_generator, config.mask_joints
-        ).to(device, non_blocking=True)
-        first_orbit = lift_orbit(
-            _augment_canonical(canonical, config.max_yaw_degrees, view_generator),
-            config.mirror_pairs,
-            config.mirror_channel,
-        )
-        second_orbit = lift_orbit(
-            _augment_canonical(canonical, config.max_yaw_degrees, view_generator),
-            config.mirror_pairs,
-            config.mirror_channel,
+        first_view, second_view, target_mask = _variant_views(
+            model, canonical, valid, mask_generator, view_generator
         )
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(
             device_type=device.type, dtype=torch.float16, enabled=amp_enabled
         ):
-            terms, even, odd, targets = _objective_terms(
-                model, projector, first_orbit, second_orbit, target_mask
+            terms, representations, targets = _objective_terms(
+                model, projector, first_view, second_view, target_mask
             )
         if not all(torch.isfinite(value) for value in terms.values()):
             raise FloatingPointError(f"Non-finite training metric in epoch {epoch}")
@@ -648,10 +689,12 @@ def _train_epoch(
         global_update += 1
         batch_weight = len(canonical)
         _accumulate_terms(totals, terms, batch_weight)
-        even_features.append(even.detach().float().cpu())
-        odd_features.append(odd.detach().float().cpu())
+        for name, values in representations.items():
+            representation_features.setdefault(name, []).append(
+                values["features"].detach().float().cpu()
+            )
         weight += batch_weight
-    metrics = _finish_metrics(totals, weight, even_features, odd_features)
+    metrics = _finish_metrics(totals, weight, representation_features)
     metrics["learning_rate"] = float(optimizer.param_groups[0]["lr"])
     metrics["ema_momentum"] = float(momentum)
     metrics["window_exposures"] = float(weight)
@@ -690,8 +733,7 @@ def evaluate_variant(
     )
     split_offset = 0 if split == "validation" else 1_000_000
     totals: dict[str, float] = {}
-    even_features: list[torch.Tensor] = []
-    odd_features: list[torch.Tensor] = []
+    representation_features: dict[str, list[torch.Tensor]] = {}
     weight = 0
     audit_coordinates = None
     audit_mask = None
@@ -706,41 +748,35 @@ def evaluate_variant(
         for batch in _loader_batches(loader):
             canonical = batch["coordinates"].to(device, non_blocking=True)
             valid = batch["valid"]
-            orbit_valid = valid & mirror_validity(valid)
-            target_mask = sample_mask(
-                orbit_valid, config.mask_fraction, mask_generator, config.mask_joints
-            ).to(device, non_blocking=True)
-            first_orbit = lift_orbit(
-                _augment_canonical(canonical, config.max_yaw_degrees, view_generator),
-                config.mirror_pairs,
-                config.mirror_channel,
-            )
-            second_orbit = lift_orbit(
-                _augment_canonical(canonical, config.max_yaw_degrees, view_generator),
-                config.mirror_pairs,
-                config.mirror_channel,
+            first_view, second_view, target_mask = _variant_views(
+                model, canonical, valid, mask_generator, view_generator
             )
             with torch.autocast(
                 device_type=device.type, dtype=torch.float16, enabled=amp_enabled
             ):
-                terms, even, odd, _ = _objective_terms(
-                    model, projector, first_orbit, second_orbit, target_mask
+                terms, representations, _ = _objective_terms(
+                    model, projector, first_view, second_view, target_mask
                 )
             if not all(torch.isfinite(value) for value in terms.values()):
                 raise FloatingPointError(f"Non-finite {split} metric")
             batch_weight = len(canonical)
             _accumulate_terms(totals, terms, batch_weight)
-            even_features.append(even.detach().float().cpu())
-            odd_features.append(odd.detach().float().cpu())
+            for name, values in representations.items():
+                representation_features.setdefault(name, []).append(
+                    values["features"].detach().float().cpu()
+                )
             weight += batch_weight
             if audit_coordinates is None:
                 audit_coordinates = canonical[:2].detach()
                 audit_mask = target_mask[:2].detach()
-    metrics = _finish_metrics(totals, weight, even_features, odd_features)
-    audit, layer_audit = complete_commutation_audit(
-        model, audit_coordinates, audit_mask, device=device
-    )
-    metrics.update(audit)
+    metrics = _finish_metrics(totals, weight, representation_features)
+    if model.variant != "standard_sjepa":
+        audit, layer_audit = complete_commutation_audit(
+            model, audit_coordinates, audit_mask, device=device
+        )
+        metrics.update(audit)
+    else:
+        layer_audit = pd.DataFrame(columns=["layer", "max_abs", "max_rel", "module"])
     model.train(prior_model_mode)
     projector.train(prior_projector_mode)
     return metrics, layer_audit
@@ -754,6 +790,8 @@ def checkpoint_is_eligible(
 ) -> bool:
     if not all(math.isfinite(float(value)) for value in metrics.values()):
         return False
+    if variant == "standard_sjepa":
+        return metrics["standard_feature_variance"] > minimum_feature_variance
     if metrics["even_feature_variance"] <= minimum_feature_variance:
         return False
     if metrics["odd_feature_variance"] <= minimum_feature_variance:
@@ -961,7 +999,7 @@ def checkpoint_payload(
     epoch: int | None = None,
     validation_metrics: Mapping[str, float] | None = None,
 ) -> dict:
-    if variant not in VARIANTS:
+    if variant not in AMASS_VARIANTS:
         raise ValueError(variant)
     return {
         "model_state": model.state_dict(),
