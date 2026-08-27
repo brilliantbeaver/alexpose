@@ -38,6 +38,7 @@ VARIANTS = [
     "reflection_equivariant",
     "paired_unconstrained",
 ]
+AMASS_VARIANTS = ["standard_sjepa", *VARIANTS]
 
 
 @dataclass(frozen=True)
@@ -387,6 +388,35 @@ class UnconstrainedPairedLayer(nn.Module):
         return a0 + self.cross_scale * a_cross, b0 + self.cross_scale * b_cross
 
 
+class StandardEncoder(nn.Module):
+    """Single-view Transformer encoder used by the ordinary S-JEPA control."""
+
+    def __init__(self, config: TrainConfig):
+        super().__init__()
+        self.config = config
+        self.tokenizer = SkeletonTokenizer(config)
+        self.layers = nn.ModuleList(
+            [transformer_layer(config) for _ in range(config.encoder_depth)]
+        )
+        self.norm = nn.LayerNorm(config.embed_dim)
+
+    def forward(
+        self, x: torch.Tensor, keep_mask: torch.Tensor | None = None
+    ) -> torch.Tensor:
+        if x.ndim != 4:
+            raise ValueError(f"Expected [B,T,J,C], got {tuple(x.shape)}")
+        tokens = self.tokenizer(x).flatten(1, 2)
+        if keep_mask is not None:
+            keep = keep_mask.flatten(1)
+            counts = keep.sum(1)
+            if not torch.equal(counts, counts[:1].expand_as(counts)):
+                raise ValueError("Every sample must keep the same token count")
+            tokens = tokens[keep].reshape(len(tokens), int(counts[0]), -1)
+        for layer in self.layers:
+            tokens = layer(tokens)
+        return self.norm(tokens)
+
+
 class OrbitEncoder(nn.Module):
     def __init__(self, config: TrainConfig, variant: str):
         super().__init__()
@@ -478,6 +508,76 @@ class PairedTokenPredictor(nn.Module):
             return a, b
         selected = [branch[mask].reshape(len(branch), -1, self.dim) for branch in (a, b)]
         return torch.stack(selected, dim=1)
+
+
+class StandardTokenPredictor(nn.Module):
+    """Single-view masked-token predictor for the ordinary S-JEPA control."""
+
+    def __init__(self, config: TrainConfig):
+        super().__init__()
+        self.segments = config.frames // config.segment_length
+        self.joints, self.dim = config.joints, config.embed_dim
+        self.mask_token = nn.Parameter(torch.randn(1, 1, config.embed_dim) * 0.02)
+        self.time_pos = nn.Parameter(torch.randn(self.segments, config.embed_dim) * 0.02)
+        self.joint_pos = nn.Parameter(torch.randn(config.joints, config.embed_dim) * 0.02)
+        self.layers = nn.ModuleList(
+            [transformer_layer(config) for _ in range(config.predictor_depth)]
+        )
+        self.norm = nn.LayerNorm(config.embed_dim)
+
+    def forward(self, visible: torch.Tensor, target_mask: torch.Tensor) -> torch.Tensor:
+        mask = target_mask.flatten(1)
+        expected = (~mask).sum(1)
+        if not torch.equal(expected, expected[:1].expand_as(expected)):
+            raise ValueError("Every sample must expose the same number of visible tokens")
+        if visible.shape[1] != int(expected[0]):
+            raise ValueError("Visible token count does not match the target mask")
+        full = self.mask_token.expand(len(visible), self.segments * self.joints, -1).clone()
+        full[~mask] = visible.flatten(0, 1)
+        positions = (
+            self.time_pos[:, None] + self.joint_pos[None]
+        ).reshape(1, self.segments * self.joints, -1)
+        full = full + positions
+        for layer in self.layers:
+            full = layer(full)
+        full = self.norm(full)
+        return full[mask].reshape(len(full), -1, self.dim)
+
+
+class StandardJEPA(nn.Module):
+    """Ordinary single-view S-JEPA with an EMA teacher and masked predictor."""
+
+    def __init__(self, config: TrainConfig):
+        super().__init__()
+        self.config, self.variant = config, "standard_sjepa"
+        self.encoder = StandardEncoder(config)
+        self.target_encoder = copy.deepcopy(self.encoder)
+        for parameter in self.target_encoder.parameters():
+            parameter.requires_grad_(False)
+        self.predictor = StandardTokenPredictor(config)
+        self.register_buffer("target_center", torch.zeros(config.embed_dim))
+
+    def forward(
+        self, x: torch.Tensor, target_mask: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        student = self.encoder(x, keep_mask=~target_mask)
+        predicted = self.predictor(student, target_mask)
+        with torch.no_grad():
+            targets = self.target_encoder(x)
+            mask = target_mask.flatten(1)
+            targets = targets[mask].reshape(len(x), -1, targets.shape[-1])
+        return predicted, targets
+
+    @torch.no_grad()
+    def update_target(self, momentum: float) -> None:
+        for target, online in zip(
+            self.target_encoder.parameters(), self.encoder.parameters()
+        ):
+            target.mul_(momentum).add_(online, alpha=1 - momentum)
+
+    @torch.no_grad()
+    def update_center(self, targets: torch.Tensor, beta: float = 0.9) -> None:
+        self.target_center.mul_(beta).add_(targets.mean((0, 1)), alpha=1 - beta)
 
 
 class OrbitJEPA(nn.Module):
@@ -842,7 +942,7 @@ def model_config_payload(config: TrainConfig, variant: str) -> dict:
 def capacity_matched_config(config: TrainConfig, variant: str) -> TrainConfig:
     """Use fixed, predeclared widths that keep optimized parameters within 5%."""
 
-    if variant not in VARIANTS:
+    if variant not in AMASS_VARIANTS:
         raise ValueError(variant)
     if config.capacity_variant is not None:
         if config.capacity_variant != variant:
@@ -852,18 +952,21 @@ def capacity_matched_config(config: TrainConfig, variant: str) -> TrainConfig:
         return config
     if config.profile == "amass-full":
         dimensions = {
+            "standard_sjepa": (64, 8, 903),
             "paired_shared_no_cross": (64, 8, 903),
             "reflection_equivariant": (64, 8, 773),
             "paired_unconstrained": (64, 8, 256),
         }
     elif config.profile == "amass-smoke":
         dimensions = {
+            "standard_sjepa": (24, 4, 343),
             "paired_shared_no_cross": (24, 4, 343),
             "reflection_equivariant": (24, 4, 293),
             "paired_unconstrained": (24, 4, 96),
         }
     else:
         multiplier = {
+            "standard_sjepa": 14,
             "paired_shared_no_cross": 14,
             "reflection_equivariant": 12,
             "paired_unconstrained": 4,
@@ -885,12 +988,17 @@ def capacity_matched_config(config: TrainConfig, variant: str) -> TrainConfig:
     )
 
 
-def build_model(config: TrainConfig, variant: str, seed: int) -> OrbitJEPA:
+def build_model(config: TrainConfig, variant: str, seed: int) -> OrbitJEPA | StandardJEPA:
+    if variant not in AMASS_VARIANTS:
+        raise ValueError(variant)
     seed_everything(seed)
-    return OrbitJEPA(capacity_matched_config(config, variant), variant)
+    matched = capacity_matched_config(config, variant)
+    return StandardJEPA(matched) if variant == "standard_sjepa" else OrbitJEPA(matched, variant)
 
 
-def trainable_parameter_count(model: OrbitJEPA, projector: VICRegProjector) -> int:
+def trainable_parameter_count(
+    model: OrbitJEPA | StandardJEPA, projector: VICRegProjector
+) -> int:
     """Count every optimized parameter and exclude the frozen EMA teacher."""
 
     return parameter_count(model) + parameter_count(projector)

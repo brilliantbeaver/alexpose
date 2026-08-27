@@ -10,24 +10,8 @@ from pathlib import Path
 import pandas as pd
 import torch
 
-from .amass_core11_jepa import (
-    Core11WindowDataset,
-    WINDOW_FRAMES,
-    atomic_dataframe_to_csv,
-    build_window_index,
-    configure_worker_tensor_sharing,
-    core11_train_config,
-    evaluate_variant,
-    fit_variant,
-    load_conversion_manifest,
-    make_synthetic_core11_datasets,
-)
-from .gait_parity_jepa import (
-    VARIANTS,
-    VICRegProjector,
-    build_model,
-    trainable_parameter_count,
-)
+from .amass_core11_jepa import *
+from .gait_parity_jepa import *
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
@@ -43,16 +27,16 @@ def selected_variants_from_env() -> tuple[str, ...]:
 
     raw = os.getenv("AMASS_VARIANTS")
     if raw is None:
-        return tuple(VARIANTS)
+        return tuple(AMASS_VARIANTS)
     requested = tuple(value.strip() for value in raw.split(","))
     if not requested or any(not value for value in requested):
         raise ValueError("AMASS_VARIANTS must be a non-empty comma-separated list")
-    unknown = set(requested).difference(VARIANTS)
+    unknown = set(requested).difference(AMASS_VARIANTS)
     if unknown:
         raise ValueError(f"Unknown AMASS variant(s): {sorted(unknown)}")
     if len(set(requested)) != len(requested):
         raise ValueError("AMASS_VARIANTS must not contain duplicates")
-    return tuple(variant for variant in VARIANTS if variant in requested)
+    return tuple(variant for variant in AMASS_VARIANTS if variant in requested)
 
 
 def write_json(path: Path, payload: object) -> None:
@@ -172,7 +156,7 @@ def main() -> None:
     print(index_summary.to_string(), flush=True)
 
     allocation_rows = []
-    for variant in VARIANTS:
+    for variant in AMASS_VARIANTS:
         model = build_model(config, variant, seeds[0])
         projector = VICRegProjector(model.config.embed_dim)
         allocation_rows.append(
@@ -226,7 +210,7 @@ def main() -> None:
             "num_workers": num_workers,
             "tensor_sharing_strategy": sharing_strategy,
             "variants": variants,
-            "capacity_reference_variants": VARIANTS,
+            "capacity_reference_variants": AMASS_VARIANTS,
             "capacity_spread": capacity_spread,
             "manifest_path": None if synthetic else str(manifest_path),
             "tensor_root": None if synthetic else str(tensor_root),

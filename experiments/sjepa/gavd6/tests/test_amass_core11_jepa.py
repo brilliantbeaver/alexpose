@@ -30,6 +30,7 @@ from gavd6_sjepa.amass_core11_jepa import (
     window_starts,
 )
 from gavd6_sjepa.gait_parity_jepa import (
+    AMASS_VARIANTS,
     VARIANTS,
     VICRegProjector,
     anatomical_mirror,
@@ -106,7 +107,7 @@ class AmassCore11JepaTests(unittest.TestCase):
 
     def test_variant_selection_is_canonical_and_validated(self):
         with patch.dict(os.environ, {}, clear=True):
-            self.assertEqual(selected_variants_from_env(), tuple(VARIANTS))
+            self.assertEqual(selected_variants_from_env(), tuple(AMASS_VARIANTS))
         with patch.dict(
             os.environ,
             {"AMASS_VARIANTS": "paired_unconstrained,reflection_equivariant"},
@@ -229,6 +230,23 @@ class AmassCore11JepaTests(unittest.TestCase):
                 self.assertTrue(all(abs(value - 0.1) < 1e-7 for value in gates))
         self.assertLess(max(counts) / min(counts) - 1, 0.05)
         self.assertEqual(len(set(embedding_dims)), 1)
+
+    def test_standard_sjepa_is_single_branch_and_capacity_matched(self):
+        config = core11_train_config("smoke")
+        standard = build_model(config, "standard_sjepa", seed=7)
+        self.assertEqual(standard.variant, "standard_sjepa")
+        coordinates, target_mask = self._model_inputs(standard.config)
+        visible = standard.encoder(coordinates, keep_mask=~target_mask)
+        predicted = standard.predictor(visible, target_mask)
+        self.assertEqual(predicted.shape[0], len(coordinates))
+        self.assertEqual(predicted.ndim, 3)
+        self.assertEqual(predicted.shape[-1], standard.config.embed_dim)
+        projector = VICRegProjector(standard.config.embed_dim)
+        counts = [
+            trainable_parameter_count(build_model(config, variant, 7), projector)
+            for variant in AMASS_VARIANTS
+        ]
+        self.assertLess(max(counts) / min(counts) - 1, 0.05)
 
     def test_complete_swap_commutation_contract(self):
         config = core11_train_config("smoke")
@@ -356,6 +374,37 @@ class AmassCore11JepaTests(unittest.TestCase):
                 places=7,
             )
 
+    def test_standard_sjepa_trains_and_records_standard_health_metrics(self):
+        datasets = make_synthetic_core11_datasets()
+        train = Subset(datasets["train"], range(8))
+        model = build_model(core11_train_config("smoke"), "standard_sjepa", seed=7)
+        with tempfile.TemporaryDirectory() as temporary:
+            best_model, best_projector, history, result, layer_audit = fit_variant(
+                model,
+                train,
+                datasets["validation"],
+                torch.device("cpu"),
+                seed=7,
+                output_dir=Path(temporary),
+                num_workers=0,
+                max_epochs=2,
+                patience=2,
+            )
+            self.assertIn("validation_standard_feature_variance", history.columns)
+            self.assertNotIn("validation_odd_feature_variance", history.columns)
+            self.assertTrue(layer_audit.empty)
+            metrics, _ = evaluate_variant(
+                best_model,
+                best_projector,
+                datasets["validation"],
+                torch.device("cpu"),
+                seed=7,
+                split="validation",
+            )
+            self.assertAlmostEqual(
+                metrics["kl_divergence"], result["validation"]["kl_divergence"], places=7
+            )
+
     def test_completed_epoch_history_survives_later_interruption(self):
         datasets = make_synthetic_core11_datasets()
         train = Subset(datasets["train"], range(8))
@@ -414,7 +463,7 @@ class AmassCore11JepaTests(unittest.TestCase):
 
             expected = {"summary.csv", "run_config.json", "capacity.csv"}
             for seed in (7, 19):
-                for variant in VARIANTS:
+                for variant in AMASS_VARIANTS:
                     expected.add(f"seed-{seed}_{variant}_history.csv")
                     expected.add(f"seed-{seed}_{variant}_best.pt")
             self.assertEqual({path.name for path in output_dir.iterdir()}, expected)
