@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -26,19 +27,25 @@ from gavd6_sjepa.amass_core11_jepa import (
     make_train_loader,
     make_synthetic_core11_datasets,
     mirror_validity,
+    _variant_views,
     validate_archives,
     window_starts,
 )
 from gavd6_sjepa.gait_parity_jepa import (
     AMASS_VARIANTS,
+    PAIRED_MASK_CONTRACT,
+    PROFILES,
     VARIANTS,
     VICRegProjector,
     anatomical_mirror,
     build_model,
     complete_commutation_audit,
     lift_orbit,
+    orbit_closed_target_masks,
+    permute_bilateral_tokens,
     sample_mask,
     sjepa_distribution_metrics,
+    train_variant,
     trainable_parameter_count,
 )
 from gavd6_sjepa.train_amass import (
@@ -98,6 +105,11 @@ class AmassCore11JepaTests(unittest.TestCase):
             config.mask_joints,
         )
         return coordinates, target_mask
+
+    @staticmethod
+    def _paired_model_inputs(config):
+        coordinates, target_mask = AmassCore11JepaTests._model_inputs(config)
+        return coordinates, orbit_closed_target_masks(target_mask, config.mirror_pairs)
 
     def test_frozen_window_policy(self):
         self.assertEqual(window_starts(63), [])
@@ -194,7 +206,7 @@ class AmassCore11JepaTests(unittest.TestCase):
             embedding_dims.append(model.config.embed_dim)
             projector = VICRegProjector(model.config.embed_dim)
             counts.append(trainable_parameter_count(model, projector))
-            coordinates, target_mask = self._model_inputs(model.config)
+            coordinates, target_mask = self._paired_model_inputs(model.config)
             orbit = lift_orbit(
                 coordinates, model.config.mirror_pairs, model.config.mirror_channel
             )
@@ -202,13 +214,13 @@ class AmassCore11JepaTests(unittest.TestCase):
             predicted = model.predictor(state, target_mask)
             self.assertEqual(predicted.shape[:2], (2, 2))
             self.assertEqual(predicted.shape[-1], model.config.embed_dim)
-            self.assertEqual(predicted.shape[2], int(target_mask[0].sum()))
+            self.assertEqual(predicted.shape[2], int(target_mask[0, 0].sum()))
 
-            restored = model.predictor.restore_branch(state[0], target_mask)
+            restored = model.predictor.restore_branch(state[0], target_mask[:, 0])
             positions = (
                 model.predictor.time_pos[:, None] + model.predictor.joint_pos[None]
             ).reshape(1, -1, model.config.embed_dim)
-            mask = target_mask.flatten(1)
+            mask = target_mask[:, 0].flatten(1)
             torch.testing.assert_close(
                 (restored - positions)[~mask], state[0].flatten(0, 1)
             )
@@ -248,12 +260,144 @@ class AmassCore11JepaTests(unittest.TestCase):
         ]
         self.assertLess(max(counts) / min(counts) - 1, 0.05)
 
+    def test_orbit_closed_masks_hide_physical_counterparts(self):
+        config = core11_train_config("smoke")
+        base = torch.zeros(1, config.frames // config.segment_length, config.joints, dtype=torch.bool)
+        left, right = config.mirror_pairs[0]
+        base[:, 1, left] = True
+        target_mask = orbit_closed_target_masks(base, config.mirror_pairs)
+
+        self.assertTrue(target_mask[:, 0, 1, left].all())
+        self.assertTrue(target_mask[:, 1, 1, right].all())
+        self.assertFalse(target_mask[:, 1, 1, left].any())
+        self.assertFalse((target_mask[:, 0, :, left] & ~target_mask[:, 1, :, right]).any())
+        self.assertFalse((target_mask[:, 0, :, right] & ~target_mask[:, 1, :, left]).any())
+
+        model = build_model(config, "reflection_equivariant", seed=7)
+        coordinates = torch.randn(1, config.frames, config.joints, 3)
+        orbit = lift_orbit(coordinates, config.mirror_pairs, config.mirror_channel)
+        predicted, targets = model(orbit, target_mask)
+        self.assertEqual(predicted.shape, targets.shape)
+        with torch.no_grad():
+            full_targets = model.target_encoder(orbit)
+        expected_targets = torch.stack(
+            [
+                branch[mask.flatten(1)].reshape(len(orbit), -1, branch.shape[-1])
+                for branch, mask in zip(full_targets, target_mask.unbind(1))
+            ],
+            dim=1,
+        )
+        torch.testing.assert_close(targets, expected_targets)
+
+        invalid_mask = target_mask.clone()
+        invalid_mask[:, 1, 1, right] = False
+        with self.assertRaisesRegex(ValueError, "not closed"):
+            model(orbit, invalid_mask)
+
+    def test_streaming_views_lift_paired_masks_but_not_standard_masks(self):
+        config = core11_train_config("smoke")
+        canonical = torch.randn(2, config.frames, config.joints, 3)
+        valid = torch.ones(
+            2,
+            config.frames // config.segment_length,
+            config.joints,
+            dtype=torch.bool,
+        )
+        paired = build_model(config, "reflection_equivariant", seed=7)
+        first, second, paired_mask = _variant_views(
+            paired,
+            canonical,
+            valid,
+            torch.Generator().manual_seed(131),
+            torch.Generator().manual_seed(132),
+        )
+        self.assertEqual(first.shape[1], 2)
+        self.assertEqual(second.shape[1], 2)
+        token_shape = (config.frames // config.segment_length, config.joints)
+        self.assertEqual(tuple(paired_mask.shape), (2, 2, *token_shape))
+        torch.testing.assert_close(paired_mask[:, 1], mirror_validity(paired_mask[:, 0]))
+
+        standard = build_model(config, "standard_sjepa", seed=7)
+        first, second, standard_mask = _variant_views(
+            standard,
+            canonical,
+            valid,
+            torch.Generator().manual_seed(131),
+            torch.Generator().manual_seed(132),
+        )
+        self.assertEqual(tuple(first.shape), tuple(canonical.shape))
+        self.assertEqual(tuple(second.shape), tuple(canonical.shape))
+        self.assertEqual(tuple(standard_mask.shape), (2, *token_shape))
+
+    def test_streaming_paired_mask_lifts_one_sided_validity(self):
+        """A valid canonical target stays valid after transport to branch one."""
+
+        config = replace(
+            core11_train_config("smoke"),
+            mirror_pairs=((0, 1),),
+            mask_joints=(0, 1),
+        )
+        model = build_model(config, "reflection_equivariant", seed=7)
+        canonical = torch.randn(1, config.frames, config.joints, 3)
+        valid = torch.zeros(
+            1,
+            config.frames // config.segment_length,
+            config.joints,
+            dtype=torch.bool,
+        )
+        valid[..., 0] = True
+        first_view, _, target_mask = _variant_views(
+            model,
+            canonical,
+            valid,
+            torch.Generator().manual_seed(131),
+            torch.Generator().manual_seed(132),
+        )
+        expected_targets = int(
+            (config.frames // config.segment_length) * config.mask_fraction
+        )
+        self.assertEqual(int(target_mask[:, 0].sum()), expected_targets)
+        self.assertTrue(target_mask[:, 0, :, 0].any())
+        self.assertFalse(target_mask[:, 0, :, 1].any())
+        self.assertTrue(target_mask[:, 1, :, 1].any())
+        self.assertFalse(target_mask[:, 1, :, 0].any())
+        torch.testing.assert_close(
+            target_mask[:, 1],
+            permute_bilateral_tokens(target_mask[:, 0], config.mirror_pairs),
+        )
+        predicted, targets = model(first_view, target_mask)
+        self.assertEqual(predicted.shape, targets.shape)
+
+    def test_legacy_gavd_trainer_uses_paired_mask_contract(self):
+        config = PROFILES["smoke"]
+        model = build_model(config, "reflection_equivariant", seed=7)
+        windows = torch.randn(
+            config.batch_size, config.frames, config.joints, 3
+        )
+        valid = torch.ones(
+            config.batch_size,
+            config.frames // config.segment_length,
+            config.joints,
+            dtype=torch.bool,
+        )
+        _, _, history, _ = train_variant(
+            model,
+            windows,
+            valid,
+            config,
+            torch.device("cpu"),
+            updates=1,
+            seed=7,
+        )
+        self.assertEqual(len(history), 1)
+        self.assertTrue(torch.isfinite(torch.tensor(history.total_loss.iloc[0])))
+
     def test_complete_swap_commutation_contract(self):
         config = core11_train_config("smoke")
         audits = {}
         for variant in VARIANTS:
             model = build_model(config, variant, seed=11)
-            coordinates, target_mask = self._model_inputs(model.config)
+            coordinates, target_mask = self._paired_model_inputs(model.config)
             summary, layers = complete_commutation_audit(
                 model, coordinates, target_mask, device=torch.device("cpu")
             )
@@ -345,6 +489,13 @@ class AmassCore11JepaTests(unittest.TestCase):
             )
             self.assertEqual(result["selected_epoch"], selected)
             self.assertTrue(Path(result["best_checkpoint"]).is_file())
+            payload = torch.load(
+                result["best_checkpoint"], map_location="cpu", weights_only=True
+            )
+            self.assertEqual(
+                payload["metadata"]["paired_mask_contract"],
+                PAIRED_MASK_CONTRACT,
+            )
             self.assertEqual(
                 {path.name for path in Path(temporary).iterdir()},
                 {

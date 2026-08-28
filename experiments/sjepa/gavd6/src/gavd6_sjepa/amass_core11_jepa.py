@@ -450,8 +450,8 @@ def _variant_views(
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """Build matched augmented views without giving standard S-JEPA a mirror branch."""
 
-    target_mask = sample_mask(
-        valid if model.variant == "standard_sjepa" else valid & mirror_validity(valid),
+    base_target_mask = sample_mask(
+        valid,
         model.config.mask_fraction,
         mask_generator,
         model.config.mask_joints,
@@ -459,7 +459,10 @@ def _variant_views(
     first = _augment_canonical(canonical, model.config.max_yaw_degrees, view_generator)
     second = _augment_canonical(canonical, model.config.max_yaw_degrees, view_generator)
     if model.variant == "standard_sjepa":
-        return first, second, target_mask
+        return first, second, base_target_mask
+    target_mask = orbit_closed_target_masks(
+        base_target_mask, model.config.mirror_pairs
+    )
     return (
         lift_orbit(first, model.config.mirror_pairs, model.config.mirror_channel),
         lift_orbit(second, model.config.mirror_pairs, model.config.mirror_channel),
@@ -1009,6 +1012,11 @@ def checkpoint_payload(
             "variant": variant,
             "seed": seed,
             "train_config": asdict(config),
+            "paired_mask_contract": (
+                PAIRED_MASK_CONTRACT
+                if variant != "standard_sjepa"
+                else "single-branch-v1"
+            ),
             "optimizer_updates": updates,
             "epoch": epoch,
             "validation_metrics": dict(validation_metrics or {}),

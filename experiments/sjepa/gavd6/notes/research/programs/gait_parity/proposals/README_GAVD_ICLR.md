@@ -21,7 +21,7 @@ The retained clinical signed-force proposal in [README_FORCE_FUTURE.md](./README
 
 The existing `repaired-jepa-seed7-v2` checkpoints are useful diagnostics, not paper results.
 
-- The paired JEPA uses one token-index mask for both an original skeleton and its reflected counterpart. A masked physical joint can remain visible in the other branch at its swapped left/right index, allowing cross-attention to copy the target.
+- The existing `repaired-jepa-seed7-v2` checkpoints were trained when paired JEPA used one token-index mask for both an original skeleton and its reflected counterpart. A masked physical joint could then remain visible in the other branch at its swapped left/right index, allowing cross-attention to copy the target. The current code has repaired this contract, but those checkpoints cannot be treated as repaired-model results.
 - Invalid joints are zero-filled but not carried as attention validity, so missingness can become a pose shortcut.
 - The run contains only configured seed 7, omits the ordinary S-JEPA arm, has no AMASS test evaluation, and chooses an endpoint from one validation draw.
 - The legacy GAVD cache has only 18 source videos, with 12 normal sequences from one video. It is source-confounded and must not appear in a paper result.

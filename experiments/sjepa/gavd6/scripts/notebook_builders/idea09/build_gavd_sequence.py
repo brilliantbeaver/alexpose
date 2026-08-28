@@ -288,6 +288,7 @@ for seed in SEEDS:
             "variant": variant,
             "seed": seed,
             "train_config": asdict(CONFIG),
+            "paired_mask_contract": PAIRED_MASK_CONTRACT,
             "matching_regime": MATCHING_REGIME,
             "optimizer_updates": UPDATES[variant],
             "orbit_exposures": UPDATES[variant] * CONFIG.batch_size,
@@ -358,8 +359,14 @@ health_rows, geometry_rows = [], []
 contract_size = min(8, len(WINDOWS))
 contract_batch = WINDOWS[:contract_size]
 contract_valid = VALID_PATCH[:contract_size]
-contract_target_mask = sample_mask(
-    contract_valid, CONFIG.mask_fraction, torch.Generator().manual_seed(909)
+contract_target_mask = orbit_closed_target_masks(
+    sample_mask(
+        contract_valid,
+        CONFIG.mask_fraction,
+        torch.Generator().manual_seed(909),
+        CONFIG.mask_joints,
+    ),
+    CONFIG.mirror_pairs,
 )
 contract_keep_mask = ~contract_target_mask
 AUDIT_DEVICE = device_from_environment()
@@ -368,6 +375,11 @@ if AUDIT_DEVICE.type == "cuda" and CONFIG.amp:
     precision_cases.append(("float16_autocast", True))
 for run in TRAINING["runs"]:
     model, projector, metadata = load_checkpoint(run["checkpoint"])
+    if metadata.get("paired_mask_contract") != PAIRED_MASK_CONTRACT:
+        raise ValueError(
+            "Checkpoint predates the branch-specific P-closed mask contract. "
+            "Rerun 04_gavd_training before using this audit."
+        )
     even, odd = collect_parity_features(model.target_encoder, WINDOWS, batch_size=CONFIG.batch_size)
     even_metrics, odd_metrics = representation_metrics(even), representation_metrics(odd)
     ratio = odd_metrics["energy"] / max(even_metrics["energy"], 1e-12)

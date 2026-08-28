@@ -12,9 +12,9 @@ diagnostic system.
 | [02: semantic-gauge predictive representations](./studies/02-semantic-gauge-predictive-representations/) | Identifiability-aware representation-learning contribution | Proposed main direction; gated |
 | [03: biomechanics validation](./studies/03-biomechanics-validation/) | Force, stability, and balance usefulness tests | Secondary validation |
 
-Read the [shared contracts](./shared/) before comparing studies. The
-[adversarial novelty audit](./studies/02-semantic-gauge-predictive-representations/novelty-audit.md)
-defines which ideas are prior art and which specific claim remains available.
+Read the [shared contracts](./shared/) before comparing studies. The Study 02
+[proposal and related-work audit](./studies/02-semantic-gauge-predictive-representations/proposal.md)
+define which ideas are prior art and which specific claim remains available.
 The [tutorial guide](./tutorials/README.md) separates fixed-reflection
 runbooks from future semantic-gauge tutorials.
 
