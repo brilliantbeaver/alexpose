@@ -1,4 +1,8 @@
-# The planned GaitParity study
+# The planned fixed-reflection baseline study
+
+> **Study 01/03 material.** This document describes the retained
+> fixed-reflection force-validation route. The program's proposed
+> representation-learning contribution is [Study 02](../studies/02-semantic-gauge-predictive-representations/).
 
 ## The decision the study is designed to make
 
