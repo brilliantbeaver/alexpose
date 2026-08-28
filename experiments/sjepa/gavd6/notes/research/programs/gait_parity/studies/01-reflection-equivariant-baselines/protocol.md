@@ -29,8 +29,9 @@ mask_B[t, p(j)] = mask_A[t, j]
 valid_B[t, p(j)] = valid_A[t, j]
 ```
 
-The current paired implementation still accepts one `target_mask` for both
-branches. It is therefore ineligible for a repaired-leakage claim until it
-accepts and tests `(mask_A, mask_B)`, and a copyability test proves that no
-masked physical target is visible through the counterpart branch, time context,
-or cross-attention route.
+The paired implementation now requires an orbit-closed mask with shape
+`[B, 2, S, J]`, rather than reusing one target mask at the same joint index in
+both branches. Its regression tests reject a mask that violates the rule and
+verify that a target's reflected physical counterpart is hidden from the other
+branch. Existing checkpoints trained before this change remain ineligible for a
+repaired-leakage claim; they must be rerun under the new contract.

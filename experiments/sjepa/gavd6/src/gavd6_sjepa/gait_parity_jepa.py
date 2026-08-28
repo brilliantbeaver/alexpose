@@ -39,6 +39,7 @@ VARIANTS = [
     "paired_unconstrained",
 ]
 AMASS_VARIANTS = ["standard_sjepa", *VARIANTS]
+PAIRED_MASK_CONTRACT = "branch-specific-p-closed-v1"
 
 
 @dataclass(frozen=True)
@@ -284,6 +285,76 @@ def anatomical_mirror(
     return mirrored
 
 
+def permute_bilateral_tokens(
+    values: torch.Tensor,
+    pairs: Iterable[tuple[int, int]] = LEFT_RIGHT_PAIRS,
+) -> torch.Tensor:
+    """Exchange bilateral token identities without changing token contents.
+
+    This is the index action shared by validity maps and masks.  It is not an
+    anatomical reflection: :func:`anatomical_mirror` also negates the declared
+    mediolateral coordinate.  Keeping these operations separate is necessary
+    both for target isolation in the fixed-reflection baseline and for the
+    semantic-gauge study, where an uncertain convention exchanges names rather
+    than physical coordinates.
+    """
+
+    if values.ndim < 1:
+        raise ValueError("Bilateral token permutation requires at least one dimension")
+    result = values.clone()
+    original = values.clone()
+    for left, right in pairs:
+        result[..., left] = original[..., right]
+        result[..., right] = original[..., left]
+    return result
+
+
+def orbit_closed_target_masks(
+    target_mask: torch.Tensor,
+    pairs: Iterable[tuple[int, int]] = LEFT_RIGHT_PAIRS,
+) -> torch.Tensor:
+    """Lift one branch's `[B, S, J]` target mask into a closed paired orbit.
+
+    For an anatomical reflection, branch 1 token ``p(j)`` represents the same
+    physical joint as branch 0 token ``j``.  Therefore both tokens must be
+    targets together.  Reusing the same index mask in both branches leaves
+    branch 1's ``p(j)`` visible whenever ``p(j) != j`` and permits a paired
+    cross-attention model to copy the answer rather than predict it.
+    """
+
+    if target_mask.ndim != 3:
+        raise ValueError(
+            "Expected a single-branch target mask with shape [B, S, J], "
+            f"got {tuple(target_mask.shape)}"
+        )
+    if target_mask.dtype != torch.bool:
+        raise TypeError("Target masks must have dtype torch.bool")
+    return torch.stack(
+        [target_mask, permute_bilateral_tokens(target_mask, pairs)], dim=1
+    )
+
+
+def require_orbit_closed_mask(
+    mask: torch.Tensor,
+    pairs: Iterable[tuple[int, int]] = LEFT_RIGHT_PAIRS,
+    *,
+    label: str = "mask",
+) -> None:
+    """Validate `[B, 2, S, J]` paired mask geometry and physical closure."""
+
+    if mask.ndim != 4 or mask.shape[1] != 2:
+        raise ValueError(
+            f"Expected {label} with shape [B, 2, S, J], got {tuple(mask.shape)}"
+        )
+    if mask.dtype != torch.bool:
+        raise TypeError(f"{label.capitalize()} must have dtype torch.bool")
+    expected_second = permute_bilateral_tokens(mask[:, 0], pairs)
+    if not torch.equal(mask[:, 1], expected_second):
+        raise ValueError(
+            f"{label.capitalize()} is not closed under the paired bilateral permutation"
+        )
+
+
 def lift_orbit(
     x: torch.Tensor,
     pairs: Iterable[tuple[int, int]] = LEFT_RIGHT_PAIRS,
@@ -442,12 +513,23 @@ class OrbitEncoder(nn.Module):
         a, b = self.tokenizer(orbit[:, 0]), self.tokenizer(orbit[:, 1])
         a, b = a.flatten(1, 2), b.flatten(1, 2)
         if keep_mask is not None:
-            keep = keep_mask.flatten(1)
-            counts = keep.sum(1)
+            require_orbit_closed_mask(
+                keep_mask, self.config.mirror_pairs, label="paired keep mask"
+            )
+            if tuple(keep_mask.shape[2:]) != (self.segments, self.config.joints):
+                raise ValueError(
+                    "Paired keep mask does not match the encoder token geometry"
+                )
+            first_keep, second_keep = keep_mask.flatten(2).unbind(1)
+            counts = torch.stack(
+                [first_keep.sum(1), second_keep.sum(1)], dim=1
+            )
             if not torch.equal(counts, counts[:1].expand_as(counts)):
-                raise ValueError("Every sample must keep the same token count")
-            a = a[keep].reshape(len(a), int(counts[0]), -1)
-            b = b[keep].reshape(len(b), int(counts[0]), -1)
+                raise ValueError(
+                    "Every paired branch and sample must keep the same token count"
+                )
+            a = a[first_keep].reshape(len(a), int(counts[0, 0]), -1)
+            b = b[second_keep].reshape(len(b), int(counts[0, 0]), -1)
         states = [(a, b)]
         for layer in self.layers:
             if self.variant == "paired_shared_no_cross":
@@ -470,6 +552,7 @@ class PairedTokenPredictor(nn.Module):
         segments = config.frames // config.segment_length
         self.segments, self.joints, self.dim = segments, config.joints, config.embed_dim
         self.variant = variant
+        self.mirror_pairs = config.mirror_pairs
         self.mask_token = nn.Parameter(torch.randn(1, 1, config.embed_dim) * 0.02)
         self.time_pos = nn.Parameter(torch.randn(segments, config.embed_dim) * 0.02)
         self.joint_pos = nn.Parameter(torch.randn(config.joints, config.embed_dim) * 0.02)
@@ -495,9 +578,16 @@ class PairedTokenPredictor(nn.Module):
         return full + positions
 
     def forward(self, state, target_mask, return_full: bool = False):
-        mask = target_mask.flatten(1)
-        a = self.restore_branch(state[0], target_mask)
-        b = self.restore_branch(state[1], target_mask)
+        require_orbit_closed_mask(
+            target_mask, self.mirror_pairs, label="paired target mask"
+        )
+        if tuple(target_mask.shape[2:]) != (self.segments, self.joints):
+            raise ValueError(
+                "Paired target mask does not match the predictor token geometry"
+            )
+        first_mask, second_mask = target_mask.unbind(1)
+        a = self.restore_branch(state[0], first_mask)
+        b = self.restore_branch(state[1], second_mask)
         for layer in self.layers:
             if self.variant == "paired_shared_no_cross":
                 a, b = layer(a), layer(b)
@@ -506,7 +596,10 @@ class PairedTokenPredictor(nn.Module):
         a, b = self.norm(a), self.norm(b)
         if return_full:
             return a, b
-        selected = [branch[mask].reshape(len(branch), -1, self.dim) for branch in (a, b)]
+        selected = [
+            branch[mask.flatten(1)].reshape(len(branch), -1, self.dim)
+            for branch, mask in ((a, first_mask), (b, second_mask))
+        ]
         return torch.stack(selected, dim=1)
 
 
@@ -592,12 +685,17 @@ class OrbitJEPA(nn.Module):
         self.register_buffer("target_center", torch.zeros(config.embed_dim))
 
     def forward(self, orbit, target_mask):
+        require_orbit_closed_mask(
+            target_mask, self.config.mirror_pairs, label="paired target mask"
+        )
         student = self.encoder(orbit, keep_mask=~target_mask)
         predicted = self.predictor(student, target_mask)
         with torch.no_grad():
             targets = self.target_encoder(orbit)
-            mask = target_mask.flatten(1)
-            selected = [branch[mask].reshape(len(orbit), -1, branch.shape[-1]) for branch in targets]
+            selected = [
+                branch[mask.flatten(1)].reshape(len(orbit), -1, branch.shape[-1])
+                for branch, mask in zip(targets, target_mask.unbind(1))
+            ]
             selected = torch.stack(selected, dim=1)
         return predicted, selected
 
@@ -761,8 +859,11 @@ def train_variant(
     for step, indices in enumerate(cyclic_batches(len(windows), config.batch_size, updates, seed + 17)):
         canonical = windows[indices].to(device)
         valid = valid_patch[indices]
-        target_mask = sample_mask(
-            valid, config.mask_fraction, mask_generator, config.mask_joints
+        target_mask = orbit_closed_target_masks(
+            sample_mask(
+                valid, config.mask_fraction, mask_generator, config.mask_joints
+            ),
+            config.mirror_pairs,
         ).to(device)
         first_orbit = lift_orbit(
             augment_canonical(canonical, config.max_yaw_degrees),
@@ -856,6 +957,7 @@ def commutation_report(
     encoder.train(train_mode)
     x = x.to(device)
     keep_mask = keep_mask.to(device) if keep_mask is not None else None
+    mirrored_keep_mask = keep_mask[:, [1, 0]] if keep_mask is not None else None
     amp_enabled = bool(mixed_precision and device.type == "cuda")
     with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp_enabled):
         (_, states) = encoder(
@@ -871,7 +973,7 @@ def commutation_report(
                 encoder.config.mirror_pairs,
                 encoder.config.mirror_channel,
             ),
-            keep_mask=keep_mask,
+            keep_mask=mirrored_keep_mask,
             return_states=True,
         )
     rows = []
@@ -905,15 +1007,16 @@ def complete_commutation_audit(
     orbit = lift_orbit(x, model.config.mirror_pairs, model.config.mirror_channel)
     mirrored = anatomical_mirror(x, model.config.mirror_pairs, model.config.mirror_channel)
     swapped_orbit = lift_orbit(mirrored, model.config.mirror_pairs, model.config.mirror_channel)
+    swapped_target_mask = target_mask[:, [1, 0]]
     state = model.encoder(orbit, keep_mask=keep_mask)
     swapped_state = (state[1], state[0])
     prediction = model.predictor(state, target_mask)
-    predictor_swapped = model.predictor(swapped_state, target_mask)
+    predictor_swapped = model.predictor(swapped_state, swapped_target_mask)
     predictor_residual = max(
         float((predictor_swapped[:, 0] - prediction[:, 1]).abs().max()),
         float((predictor_swapped[:, 1] - prediction[:, 0]).abs().max()),
     )
-    masked_swapped, _ = model(swapped_orbit, target_mask)
+    masked_swapped, _ = model(swapped_orbit, swapped_target_mask)
     masked_residual = max(
         float((masked_swapped[:, 0] - prediction[:, 1]).abs().max()),
         float((masked_swapped[:, 1] - prediction[:, 0]).abs().max()),
