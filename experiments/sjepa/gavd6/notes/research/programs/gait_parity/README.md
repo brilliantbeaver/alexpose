@@ -1,10 +1,36 @@
-# GaitParity: teaching a gait model the difference between left and right
+# GaitParity research program
 
-**New here?** Read this page first. It assumes no background in machine learning, biomechanics, or symmetry math. Every technical word is defined either on this page or in the [glossary](./GLOSSARY.md).
+GaitParity studies what a motion representation can legitimately say about
+left/right anatomy, sensor coordinates, and biomechanics. It is not a
+diagnostic system.
 
-> **How to use this folder.** Start with sections 1 through 3 for the question. Read sections 4 through 6 only when you want the model and mirror mechanics. Then choose the [Prototype](./README_SHORT_TERM.md) if you are testing the simple output fix, or the [Study](./README_LONG_TERM.md) if you are building a new encoder. For a guided summary of the foundations, current evidence, planned work, and notebook graph, open the [tutorial guide](./tutorials/README.md). The methodology files are specifications for running the work, not first-pass tutorials. Open the [glossary](./GLOSSARY.md) only when a word blocks you.
+## Program map
+
+| Study | Role | Status |
+| --- | --- | --- |
+| [01: fixed-reflection JEPA baselines](./studies/01-reflection-equivariant-baselines/) | Correctness, fair controls, and known-symmetry feasibility | Active baseline work |
+| [02: semantic-gauge predictive representations](./studies/02-semantic-gauge-predictive-representations/) | Identifiability-aware representation-learning contribution | Proposed main direction; gated |
+| [03: biomechanics validation](./studies/03-biomechanics-validation/) | Force, stability, and balance usefulness tests | Secondary validation |
+
+Read the [shared contracts](./shared/) before comparing studies. The
+[adversarial novelty audit](./studies/02-semantic-gauge-predictive-representations/novelty-audit.md)
+defines which ideas are prior art and which specific claim remains available.
+The [tutorial guide](./tutorials/README.md) separates fixed-reflection
+runbooks from future semantic-gauge tutorials.
+
+> **Current evidence boundary.** `outputs/repaired-jepa-seed7-v2` establishes
+> AMASS pretraining and baseline readiness, not downstream transfer,
+> biomechanics, or semantic-gauge performance.
 
 ---
+
+## Legacy fixed-reflection background
+
+The remaining sections are retained plain-language background for Study 01.
+They explain the fixed anatomical-reflection formulation and must not be read
+as the current main-paper claim. Study 02 distinguishes an anatomical-side
+action from a sensor-frame action and models an uncertain semantic gauge; see
+its [proposal](./studies/02-semantic-gauge-predictive-representations/).
 
 ## 1. Start with a person, not an equation
 
@@ -94,27 +120,29 @@ Here is the leap that makes this a research project rather than a definition.
 
 We want to build a model that reads movement and estimates that signed right-minus-left number. That model is a big pile of learned parameters. Nothing about it automatically knows the rule "mirror the input, flip the output." It has to either learn that rule from examples or be built so that the rule is impossible to violate.
 
-Those are two genuinely different engineering strategies, and which one is better is an open empirical question. **That question is what GaitParity is.**
+Those are two genuinely different engineering strategies, and which one is better is the legacy **fixed-reflection baseline question**.
 
 ---
 
-## 3. What this folder contains
+## 3. Legacy fixed-reflection material
 
-GaitParity joins two earlier research proposals from this repository into one program.
+This retained background originally described one immediate fixed-reflection
+study and one later force study. They are now both parts of Study 01/Study 03,
+while Study 02 is the program's proposed representation-learning direction.
 
 - **Proposal 05 asked a measurement question.** Given a representation that some model already learned, can we read a signed right-versus-left signal out of it at all?
 - **Proposal 09 asked a design question.** If we build the mirror rule into the model's architecture, does the model get better?
 
-Asking them in that order matters. There is no point building an elaborate mirror-aware architecture if the signal you want turns out not to be there, or if the far simpler fix already captures everything available. So the program splits into two studies:
+The clinical question remains deliberately harder: it asks whether an equivariant encoder beats both output repair and unconstrained paired fusion. The immediate public-data study first establishes whether the repaired architecture transfers under strict video grouping. The programme therefore has one active and one future study:
 
 | Study | What it is for | Proposal | Protocol |
 |---|---|---|---|
-| **GaitParity Prototype** | Check that the target, the mirror code, the data splits, and the simple fix all work, and decide whether the hard version is worth building | [README_SHORT_TERM.md](./README_SHORT_TERM.md) | [METHODOLOGY_SHORT_TERM.md](./METHODOLOGY_SHORT_TERM.md) |
-| **GaitParity Study** | Build a genuinely mirror-aware skeleton JEPA and test it properly across clinical and non-clinical data | [README_LONG_TERM.md](./README_LONG_TERM.md) | [METHODOLOGY_LONG_TERM.md](./METHODOLOGY_LONG_TERM.md) |
+| **Study 01: GAVD fixed-reflection baseline** | Repair the paired JEPA and test video-disjoint gait-pattern transfer on a uniformly re-extracted public cohort | [legacy proposal](./proposals/README_GAVD_ICLR.md) | [legacy method](./methods/METHODS_GAVD_ICLR.md) |
+| **Study 03: fixed-reflection force validation** | Test whether the fixed equivariant encoder improves signed force estimation beyond output repair and unconstrained fusion | [legacy proposal](./proposals/README_FORCE_FUTURE.md) | [legacy method](./methods/METHODS_FORCE_FUTURE.md) |
 
-Both share one set of definitions and rules: [METHODOLOGY.md](./METHODOLOGY.md).
+The active GAVD study uses an even, source-video-grouped protocol. The future force study uses an odd, participant-grouped protocol. Their outputs and independent units differ, so their results must stay separate.
 
-The two studies are separated by **evidence, not by calendar time**. The prototype is not "the three-week version." It is "the version that ends when we can honestly answer one specific question." Someone who codes quickly might get there fast. A data audit that uncovers a problem with the force recordings might take much longer, and no amount of coding speed fixes that.
+The two tracks are separated by **evidence, not by calendar time**. GAVD does not become clinical evidence by producing a good score; force data do not become credible without a participant-safe audit.
 
 ---
 
@@ -174,7 +202,7 @@ Why does that twist matter? Because exact coordinates contain a lot of genuinely
 
 **You should have an objection right about now.** If the model produces both the answer and the grading key, why doesn't it cheat by outputting the same thing for every input? Zero for everything would match zero for everything, and the score would be perfect.
 
-That is exactly right, and that failure has a name: **collapse**. It is the central engineering problem in this whole family of models. The slowly-updated copy is one defence against it; extra penalty terms that force the representation to stay varied are another. Collapse comes back later as a real risk in this project specifically, in [section 5 of the full study](./README_LONG_TERM.md), because a channel built by subtraction is unusually easy to collapse to zero.
+That is exactly right, and that failure has a name: **collapse**. It is the central engineering problem in this whole family of models. The slowly-updated copy is one defence against it; extra penalty terms that force the representation to stay varied are another. Collapse remains a real risk in the fixed-reflection baseline because a channel built by subtraction is unusually easy to collapse to zero; see [Study 01](./studies/01-reflection-equivariant-baselines/).
 
 ### 4.4 The readout
 
@@ -410,10 +438,9 @@ GaitParity is a study of representations and biomechanics. It is not a diagnosti
 
 1. **This page**, for what is being asked and why.
 2. **[GLOSSARY.md](./GLOSSARY.md)**, when a word stops you. Keep it open in a second tab.
-3. **[METHODOLOGY.md](./METHODOLOGY.md)**, for the definitions and rules both studies share: the exact reflection operator, the force target, the split rules, the metrics, and the honesty constraints.
-4. Then pick your study:
-   - **[README_SHORT_TERM.md](./README_SHORT_TERM.md)** plus **[METHODOLOGY_SHORT_TERM.md](./METHODOLOGY_SHORT_TERM.md)** for the prototype that decides whether the hard version is worth building.
-   - **[README_LONG_TERM.md](./README_LONG_TERM.md)** plus **[METHODOLOGY_LONG_TERM.md](./METHODOLOGY_LONG_TERM.md)** for the full study.
+3. **[Study 01](./studies/01-reflection-equivariant-baselines/)** and its retained [GAVD runbook](./methods/METHODS_GAVD_ICLR.md) for fixed-reflection baseline work.
+4. **[Study 02](./studies/02-semantic-gauge-predictive-representations/)** for the proposed representation-learning contribution and its gates.
+5. **[Study 03](./studies/03-biomechanics-validation/)** only when a participant-safe biomechanics study is ready.
 
 ---
 

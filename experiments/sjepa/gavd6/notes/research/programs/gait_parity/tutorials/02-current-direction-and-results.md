@@ -1,5 +1,9 @@
 # What the GaitParity experiments currently show
 
+> **Study 01 evidence only.** These results concern fixed known reflection and
+> baseline readiness. They do not test the semantic-gauge contribution; see
+> [Study 02](../studies/02-semantic-gauge-predictive-representations/).
+
 ## The new question
 
 GaitParity asks whether a movement model preserves which side of the body is which. To test this, the researchers make an **anatomical mirror** of a walking skeleton. This swaps the body's paired landmarks and reverses the body-centred left-right direction. It is not the same as moving a camera or asking a person to turn around.

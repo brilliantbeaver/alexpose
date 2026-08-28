@@ -1,6 +1,10 @@
 # GaitParity glossary
 
-Every technical word used anywhere in this folder, explained once, in plain language, with a small example. If a sentence in another document loses you, the word is probably here.
+Every technical word used anywhere in this program, explained once, in plain
+language, with a small example. If a sentence in another document loses you,
+the word is probably here. The fixed-reflection baseline and semantic-gauge
+study use related but not interchangeable meanings of mirror, sensor frame,
+and laterality.
 
 Terms are grouped by where they come from. Inside each group they run roughly from most basic to most specialized, not alphabetically, so you can read a group top to bottom as a short lesson.
 
@@ -54,7 +58,11 @@ Any measurable difference between what the left side does and what the right sid
 Side-ness. Which of the two body sides something belongs to, or favours. "Signed laterality" is therefore just a right-minus-left number with its direction preserved.
 
 **Parity**
-Which of the two mirror categories a quantity belongs to: even or odd. The project is named GaitParity because sorting gait quantities into those two categories, and keeping them sorted, is what it is about. "Parity-aware" means the system knows and respects that distinction.
+Which of the two anatomical-side categories a quantity belongs to: even or odd.
+The fixed-reflection baseline sorts gait quantities into those categories.
+Study 02 retains the target types but additionally asks whether the anatomical
+side convention itself is known. "Parity-aware" means the system knows and
+respects the stated target action.
 
 **Kinematics versus kinetics**
 **Kinematics** describes motion: positions, angles, speeds, accelerations. **Kinetics** describes the forces that caused the motion. This project feeds kinematics in (a skeleton) and predicts kinetics out (a force ratio). Mixing the two up is exactly how force information leaks into the input, which would invalidate the whole result.
@@ -91,7 +99,33 @@ Getting joint positions out of ordinary video using a computer vision model, wit
 A function that takes a whole object and returns another object of the same kind. "Reflect this skeleton sequence" is an operator: sequence in, sequence out. Written as $M$ in these documents, so $Mx$ means "the reflected version of $x$."
 
 **Reflection / mirror**
-Flipping something across a plane. In this project the relevant mirror is *anatomical*: it exchanges left and right body parts. Doing it correctly means three things at once, and skipping any one of them breaks the whole study. See the reflection operator section in [METHODOLOGY.md](./METHODOLOGY.md).
+Flipping something across a plane. In the fixed-reflection baseline the
+relevant mirror is *anatomical*: it exchanges left and right body parts. Doing
+it correctly means three things at once, and skipping any one of them breaks
+the study. Study 02 separately names sensor-frame transformations and an
+uncertain semantic gauge; see the [coordinate contract](./shared/coordinate-contracts.md).
+
+**Sensor-frame transformation**
+A change to the coordinates used to record the body, such as a camera's
+handedness or a coordinate-axis convention. It does not itself exchange which
+anatomical foot produced a force-plate measurement. Treating it as an anatomy
+swap would make a signed physical target change for the wrong reason.
+
+**Semantic gauge**
+An unobserved convention that determines which observed limb label corresponds
+to anatomical left or right in a particular pose window. It represents
+uncertain labeling in the observation pipeline, not a changing human body.
+
+**Anchor**
+Information that fixes a semantic gauge, such as a documented anatomical
+landmark convention or an independently side-labelled force measurement. Without
+an anchor, some signed quantities can be identifiable only up to sign.
+
+**Orbit-valued prediction**
+A prediction that reports all target values indistinguishable under the
+unresolved symmetry. For an unknown left/right convention, the signed target's
+orbit is usually `{y, -y}`. It is an honest answer to an unidentifiable
+question, not a confidence interval around a single chosen sign.
 
 **Involution**
 An operation that undoes itself when applied twice. Reflection is one: $M(Mx) = x$. Mirror a mirror and you are back where you started. This is the single easiest property to unit-test, which is why it is the first check in the pipeline.
@@ -105,7 +139,7 @@ Something that keeps the same size but flips sign when you mirror the body. Righ
 Note that "even" and "odd" here have nothing to do with even and odd integers. The words are borrowed from function terminology, where $x^2$ is an even function ($f(-x) = f(x)$) and $x^3$ is an odd function ($f(-x) = -f(x)$). Same idea, applied to mirroring a body instead of negating a number.
 
 **Group (in the math sense)**
-A set of operations that can be composed, that includes a "do nothing" operation, and where every operation can be undone. The group here is tiny: exactly two elements, "leave the body alone" and "mirror the body." It is written $C_2$. You never need general group theory to follow this project; you need the fact that this particular group has two elements and mirroring twice returns you to the start.
+A set of operations that can be composed, that includes a "do nothing" operation, and where every operation can be undone. In the fixed-reflection baseline the group is tiny: exactly two elements, "leave the body alone" and "mirror the body." It is written $C_2$. Study 02 uses the same two-state structure for an uncertain local gauge, while keeping sensor and anatomical actions semantically distinct.
 
 **Invariance**
 A quantity is invariant under an operation if the operation does not change it. Walking speed is invariant under reflection. In the language above, invariant and even mean the same thing.
@@ -359,7 +393,7 @@ The smallest improvement you would care about, decided in advance. Without it, a
 ## Group 5: datasets used in this project
 
 **GAVD**
-Gait Abnormality in Video Dataset. Gait clips harvested from public online video with condition annotations. Used here strictly as a code and pipeline audit, because participant identities are unavailable, the same video contributes many clips, and the historical model in this project already saw the evaluation recordings.
+Gait Abnormality in Video Dataset. Gait clips harvested from public online video with condition annotations. The **legacy cache** is a code/pipeline audit only because the historical model saw those recordings and its sequence split leaks source videos. The active `GAVD-VideoGroup-v2` cohort re-extracts the full official release with source-video grouping; it supports video-disjoint gait-pattern transfer, but not participant-disjoint or clinical-diagnostic claims.
 
 **Public stroke gait cohort (Van Criekinge et al.)**
 Laboratory recordings of 138 able-bodied adults and 50 stroke survivors, with full-body motion capture and force plates. The decisive clinical dataset here, because it provides an independently measured force target alongside kinematics.
@@ -388,7 +422,8 @@ These names mean the same thing in every document in this folder.
 | `sign_augmented` | Same, but trained on mirrored copies with flipped labels | Is showing mirrored examples enough, without enforcing anything? |
 | `two_view_free` | Readout sees both the original and the mirrored input, with no constraint on how it combines them | Was the benefit just from looking twice? |
 | `odd_output` | Final answer computed as $[q(E(x)) - q(E(Mx))]/2$, guaranteed to flip sign | Does the *rule itself* help, beyond the second look? |
-| `paired_unconstrained_encoder` | The same paired branches, cross-branch fusion, and exact odd output wrapper as the equivariant encoder, but without the swap-preserving weight ties | Did two-branch fusion, rather than equivariance, explain a gain? |
+| `even_output` | Class logits computed for $x$ and $Mx$, then averaged | Does a reflection-invariant output wrapper explain a gain for a reflection-invariant label? |
+| `paired_unconstrained_encoder` | The same paired branches and cross-branch fusion as the equivariant encoder, but without the swap-preserving weight ties; it receives the same task-appropriate output wrapper | Did two-branch fusion, rather than equivariance, explain a gain? |
 | `equivariant_encoder` | Mirror structure preserved through every layer, not just the final number | Does organizing the whole representation beat patching the output? |
 | `raw_kinematics` | Hand-computed motion features, no learned representation | Did learning buy anything over straightforward measurement? |
 | `random_encoder` | Untrained encoder with random weights, matched readout | How much of the score comes from pretraining versus from the readout? |
@@ -401,7 +436,7 @@ The last three are meant to fail on the **paired** task. If `side_agnostic` pred
 
 ## Where to go next
 
-- [README.md](./README.md): what the whole program is asking and why.
-- [METHODOLOGY.md](./METHODOLOGY.md): the rules both studies share.
-- [README_SHORT_TERM.md](./README_SHORT_TERM.md) and [METHODOLOGY_SHORT_TERM.md](./METHODOLOGY_SHORT_TERM.md): the fast prototype.
-- [README_LONG_TERM.md](./README_LONG_TERM.md) and [METHODOLOGY_LONG_TERM.md](./METHODOLOGY_LONG_TERM.md): the full study.
+- [README.md](./README.md): the program map and current evidence boundary.
+- [Study 01](./studies/01-reflection-equivariant-baselines/): fixed-reflection baseline work.
+- [Study 02](./studies/02-semantic-gauge-predictive-representations/): the proposed semantic-gauge representation direction.
+- [Study 03](./studies/03-biomechanics-validation/): participant-safe biomechanics validation.

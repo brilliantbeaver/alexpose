@@ -202,4 +202,4 @@ The comparison must distinguish these possibilities rather than reporting only t
 1. [Stage 1: broad AMASS pretraining](./06-stage-1-broad-amass-pretraining.md)
 2. [Stage 2: BABEL-guided walking continuation](./07-stage-2-walking-focused-continuation.md)
 
-The detailed study requirements remain authoritative in [GaitParity Study methodology](../METHODOLOGY_LONG_TERM.md).
+The fixed-reflection baseline requirements are in [the GAVD methodology](../methods/METHODS_GAVD_ICLR.md). The participant-held-out force requirements are in [the force methodology](../methods/METHODS_FORCE_FUTURE.md). Neither document defines the semantic-gauge method.
