@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="te1 de1">
+  <title id="te1">The seven experiments of the Latent Laterality study</title>
+  <desc id="de1">Seven stacked rows, E0 through E6. E0 is the implemented frozen-encoder swap probe. E1 is the integrity and leakage suite. E2 is the repaired four-arm baseline. E3 is the decisive learned-arm comparison. E4 is the component ablations. E5 is the sealed test evaluation. E6 is the GAVD ecological audit, which runs in parallel. Each row carries its guiding question and its GPU budget.</desc>
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#4d6074;}
+      .badge{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:18px;fill:#ffffff;}
+      .cost{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#33475e;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="62" class="h">Seven experiments, each with its own stopping rule</text>
+  <text x="48" y="92" class="s">Read E0 through E5 as gates. E6 is a parallel scope audit. Every stopping point produces an informative result.</text>
+
+  <!-- E0 -->
+  <rect x="48" y="122" width="1104" height="64" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="68" y="134" width="54" height="40" rx="10" fill="#3f7a60"/>
+  <text x="80" y="160" class="badge">E0</text>
+  <text x="142" y="150" class="t">Frozen-encoder swap probe</text>
+  <text x="142" y="172" class="s">Is the corruption consequential and recoverable at all? Implemented and locally verified; run AMASS validation next.</text>
+  <text x="1128" y="160" class="cost" text-anchor="end">4 GPU-h</text>
+
+  <!-- E1 -->
+  <rect x="48" y="196" width="1104" height="64" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="68" y="208" width="54" height="40" rx="10" fill="#2f6f99"/>
+  <text x="80" y="234" class="badge">E1</text>
+  <text x="142" y="224" class="t">Integrity and leakage suite</text>
+  <text x="142" y="246" class="s">Is the benchmark honest, meaning no hidden side cue, and nontrivial, meaning correction actually changes the endpoint?</text>
+  <text x="1128" y="234" class="cost" text-anchor="end">6 GPU-h incl. E0</text>
+
+  <!-- E2 -->
+  <rect x="48" y="270" width="1104" height="64" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="68" y="282" width="54" height="40" rx="10" fill="#2f6f99"/>
+  <text x="80" y="308" class="badge">E2</text>
+  <text x="142" y="298" class="t">Repaired four-arm baseline</text>
+  <text x="142" y="320" class="s">Under repaired masks, a neutral frame, and validity inputs, how does the existing architecture family behave?</text>
+  <text x="1128" y="308" class="cost" text-anchor="end">12 GPU-h</text>
+
+  <!-- E3 -->
+  <rect x="48" y="344" width="1104" height="64" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="68" y="356" width="54" height="40" rx="10" fill="#e07a4b"/>
+  <text x="80" y="382" class="badge">E3</text>
+  <text x="142" y="372" class="t">Learned-arm comparison</text>
+  <text x="142" y="394" class="s">Does SG-JEPA beat correction-first and every capacity control? This is the decisive experiment of the study.</text>
+  <text x="1128" y="382" class="cost" text-anchor="end">up to 54 GPU-h</text>
+
+  <!-- E4 -->
+  <rect x="48" y="418" width="1104" height="64" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="68" y="430" width="54" height="40" rx="10" fill="#2f6f99"/>
+  <text x="80" y="456" class="badge">E4</text>
+  <text x="142" y="446" class="t">Component ablations</text>
+  <text x="142" y="468" class="s">If SG-JEPA wins, which of marginalization, finite-duration structure, parity split, or validity input caused the win?</text>
+  <text x="1128" y="456" class="cost" text-anchor="end">8 GPU-h</text>
+
+  <!-- E5 -->
+  <rect x="48" y="492" width="1104" height="64" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <rect x="68" y="504" width="54" height="40" rx="10" fill="#2f6f99"/>
+  <text x="80" y="530" class="badge">E5</text>
+  <text x="142" y="520" class="t">Sealed test evaluation</text>
+  <text x="142" y="542" class="s">Does the frozen contrast reproduce on identities nothing has touched? Opened once, after every choice is written down.</text>
+  <text x="1128" y="530" class="cost" text-anchor="end">4 GPU-h</text>
+
+  <!-- E6 -->
+  <rect x="48" y="566" width="1104" height="64" rx="16" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.75" stroke-dasharray="7 6"/>
+  <rect x="68" y="578" width="54" height="40" rx="10" fill="#6f4f93"/>
+  <text x="80" y="604" class="badge">E6</text>
+  <text x="142" y="594" class="t">GAVD ecological audit</text>
+  <text x="142" y="616" class="s">Do coherent local naming errors occur in uncontrolled video? Runs in parallel from day 1 and never blocks E1 to E5.</text>
+  <text x="1128" y="604" class="cost" text-anchor="end">8 GPU-h</text>
+
+  <text x="48" y="672" class="s">Hard cap: eight suite equivalents, about 96 reference-GPU hours. The cap is a ceiling. Failing a gate early is the cheaper and better outcome.</text>
+</svg>

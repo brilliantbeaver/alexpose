@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="te4 de4">
+  <title id="te4">The aggregation funnel from overlapping windows to an identity-clustered interval</title>
+  <desc id="de4">Six narrowing rows. Overlapping windows are stitched onto unique sequence blocks, metrics are computed per sequence and corruption draw, draw variation is averaged within sequence for additive summaries, sequences are aggregated within identity, and identities are resampled jointly. Nonlinear pooled and identity-macro estimands are recomputed inside each bootstrap replicate.</desc>
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#4d6074;}
+      .n{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:15px;fill:#2f6f99;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="62" class="h">Aggregate in this order, and no other</text>
+  <text x="48" y="92" class="s">The nominal independent clusters are 19 identities. Overlapping windows do not create independent people.</text>
+
+  <rect x="48" y="124" width="1104" height="68" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="154" class="t">Overlapping 64-frame windows</text>
+  <text x="72" y="176" class="s">Heavily correlated. Never the unit of inference.</text>
+  <text x="1128" y="160" class="n" text-anchor="end">8,220 test windows</text>
+
+  <rect x="110" y="206" width="980" height="68" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="134" y="236" class="t">Stitch onto unique sequence blocks</text>
+  <text x="134" y="258" class="s">So a shared source frame is counted once, not once per window that covers it.</text>
+  <text x="1066" y="242" class="n" text-anchor="end">unique blocks</text>
+
+  <rect x="172" y="288" width="856" height="68" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="196" y="318" class="t">One metric per sequence and draw</text>
+  <text x="196" y="340" class="s">Full-path and switch-event metrics are computed here, never reconstructed later.</text>
+  <text x="1004" y="324" class="n" text-anchor="end">824 x 10 draws</text>
+
+  <rect x="234" y="370" width="732" height="68" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="258" y="400" class="t">Aggregate draws within sequence</text>
+  <text x="258" y="422" class="s">Reduces Monte Carlo variation without creating new subjects.</text>
+  <text x="942" y="406" class="n" text-anchor="end">824 sequences</text>
+
+  <rect x="296" y="452" width="608" height="68" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="320" y="482" class="t">Average sequences within identity</text>
+  <text x="320" y="504" class="s">Every person gets equal weight.</text>
+  <text x="880" y="488" class="n" text-anchor="end">19 identities</text>
+
+  <rect x="358" y="534" width="484" height="68" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="382" y="564" class="t">Bootstrap the identities</text>
+  <text x="382" y="586" class="s">10,000 joint resamples; recompute nonlinear statistics.</text>
+  <text x="818" y="570" class="n" text-anchor="end">19 clusters</text>
+
+  <text x="48" y="650" class="s">Recompute nonlinear metrics, including AUPRC, event F1, and segment IoU, inside every bootstrap replicate.</text>
+  <text x="48" y="677" class="s">Never average nonlinear statistics from window-level values.</text>
+</svg>

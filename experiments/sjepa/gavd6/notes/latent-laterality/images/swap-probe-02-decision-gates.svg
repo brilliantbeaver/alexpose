@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">Decision gates for experiment E0</title>
+  <desc id="desc">Four ordered gates ask whether the oracle changes the odd target, whether learned motion evidence beats the input-free and mask-only controls, whether a simple continuity correction leaves an oracle gap, and whether posterior summation helps in uncertain cases without harming even targets. Failure leads to stop or simplify decisions.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#20364e"/></marker><style>.head{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.label{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.body{font:18px Arial,Helvetica,sans-serif;fill:#33475e}.small{font:18px Arial,Helvetica,sans-serif;fill:#4d6074}.white{font:700 18px Arial,Helvetica,sans-serif;fill:#ffffff}.yes{font:700 18px Arial,Helvetica,sans-serif;fill:#3f7a60}.no{font:700 18px Arial,Helvetica,sans-serif;fill:#a44c26}</style></defs>
+  <rect width="1200" height="680" fill="#ffffff"/>
+  <text x="50" y="60" class="head">E0 is a screen with explicit stop and simplify branches</text>
+  <text x="50" y="94" class="small">A complete run is not automatically a pass. Apply the frozen rubric and write a decision memo.</text>
+
+  <rect x="50" y="165" width="245" height="160" rx="15" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="78" y="205" class="label">1. Consequence</text><text x="78" y="244" class="body">Oracle lowers odd NMSE</text><text x="78" y="275" class="body">by at least 5%?</text>
+  <path d="M295 245 L335 245" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="302" y="230" class="yes">yes</text>
+  <rect x="345" y="165" width="245" height="160" rx="15" fill="#f5f1fa" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="373" y="205" class="label">2. Evidence</text><text x="373" y="244" class="body">Learned NLL + Brier</text><text x="373" y="275" class="body">beat both controls?</text>
+  <path d="M590 245 L630 245" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="597" y="230" class="yes">yes</text>
+  <rect x="640" y="165" width="245" height="160" rx="15" fill="#fff7ed" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="668" y="205" class="label">3. Necessity</text><text x="668" y="244" class="body">Continuity remains at least</text><text x="668" y="275" class="body">5% worse than oracle?</text>
+  <path d="M885 245 L925 245" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="892" y="230" class="yes">yes</text>
+  <rect x="935" y="165" width="215" height="160" rx="15" fill="#eaf4ee" stroke="#3f7a60" stroke-width="2"/>
+  <text x="963" y="205" class="label">4. Uncertainty</text><text x="963" y="244" class="body">Posterior beats MAP</text><text x="963" y="275" class="body">without even-task tax?</text>
+
+  <path d="M172 325 L172 385" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="190" y="365" class="no">no</text>
+  <path d="M467 325 L467 385" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="485" y="365" class="no">no</text>
+  <path d="M762 325 L762 385" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="780" y="365" class="no">no</text>
+  <path d="M1042 325 L1042 385" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><text x="1060" y="365" class="no">no</text>
+
+  <rect x="50" y="400" width="245" height="115" rx="14" fill="#fff0e8"/><text x="78" y="440" class="label">Stop</text><text x="78" y="474" class="body">Redesign endpoint</text><text x="78" y="502" class="body">or corruption.</text>
+  <rect x="345" y="400" width="245" height="115" rx="14" fill="#fff0e8"/><text x="373" y="440" class="label">Stop</text><text x="373" y="474" class="body">Fix evidence or</text><text x="373" y="502" class="body">leakage contract.</text>
+  <rect x="640" y="400" width="245" height="115" rx="14" fill="#eef4f8"/><text x="668" y="440" class="label">Simplify</text><text x="668" y="474" class="body">Report continuity</text><text x="668" y="502" class="body">correction.</text>
+  <rect x="935" y="400" width="215" height="115" rx="14" fill="#eef4f8"/><text x="963" y="440" class="label">Simplify</text><text x="963" y="474" class="body">Do not claim value</text><text x="963" y="502" class="body">from marginalization.</text>
+
+  <rect x="235" y="565" width="730" height="76" rx="14" fill="#0f2440"/>
+  <text x="275" y="600" class="white">All four pass: proceed to E1, but make no SG-JEPA claim yet.</text>
+  <text x="275" y="629" class="small" style="fill:#dbe7f1">E0 licenses implementation work, not a confirmatory conclusion.</text>
+</svg>

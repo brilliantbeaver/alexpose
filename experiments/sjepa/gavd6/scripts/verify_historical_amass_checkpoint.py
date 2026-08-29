@@ -120,19 +120,19 @@ def main() -> None:
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=PROJECT_DIR / "outputs" / "run1" / "seed-7_standard.pt",
+        default=PROJECT_DIR / "outputs" / "archive" / "run1" / "seed-7_standard.pt",
         help="Immutable historical checkpoint to verify.",
     )
     parser.add_argument(
         "--run-config",
         type=Path,
-        default=PROJECT_DIR / "outputs" / "run1" / "run_config.json",
+        default=PROJECT_DIR / "outputs" / "archive" / "run1" / "run_config.json",
         help="Run provenance sidecar written with the checkpoint.",
     )
     parser.add_argument(
         "--report",
         type=Path,
-        default=PROJECT_DIR / "outputs" / "run1" / "pilot_probe_c2385c1" / "compatibility_report.json",
+        default=PROJECT_DIR / "outputs" / "archive" / "run1" / "pilot_probe_c2385c1" / "compatibility_report.json",
         help="New JSON report path. The checkpoint is never written.",
     )
     parser.add_argument(

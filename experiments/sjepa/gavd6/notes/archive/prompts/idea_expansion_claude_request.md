@@ -1,3 +1,7 @@
+> **Archived prompt.** The external and `gavd5` paths below describe the
+> originating workspace and are not available here. Current and archived
+> gavd6 studies are indexed in [notes/README.md](../README.md).
+
 **Role**: You are an expert AI/ML research scientist and a specialist for world models and Joint Embedding Predictive Architecture (JEPA)
 
 **Task**: You are to deeply and thoughtfully synthesize the methods, experiments, and results from notebooks 00 to 06 in gavd5. Ultrathink on how to creatively extend the experiments toward an insightful new research direction. You must be grounded in hard evidence, logical reasoning, compelling inferences, and insightful analysis of real data.

@@ -1,6 +1,6 @@
 # Archived planning instruction
 
-> Historical only. This instruction predates the completed 12-target, five-stage augmented-normal run and its corrected evaluation. Its old checkpoint, 10-target, and 61.9% accuracy assumptions must not be reported as current. Use `README.md`, `docs/progressive_training.md`, and `docs/staged_details.md` for the current experiment and revision ledger.
+> Historical only. This instruction predates the completed 12-target, five-stage augmented-normal run and its corrected evaluation. Its old checkpoint, 10-target, and 61.9% accuracy assumptions must not be reported as current. The paths embedded in the prompt are retained verbatim as a snapshot and are not current repository locations. See the [URTC historical package](../../docs/history/urtc-2026/) for its revision ledger; use [current study documentation](../../docs/studies/) for execution decisions.
 
 # Master Instruction: Refine the S-JEPA Gait Notebooks to Significantly Improve Classification Accuracy
 

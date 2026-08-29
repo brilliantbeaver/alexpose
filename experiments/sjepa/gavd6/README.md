@@ -1,5 +1,13 @@
 # GAVD6 S-JEPA gait tutorials
 
+> **Documentation status:** the original augmented-normal five-stage GAVD
+> tutorial below is preserved historical context, not the active research
+> contract. Start with the [current documentation](docs/), especially the
+> [Latent Laterality study](docs/studies/latent-laterality/) and its
+> [validation-only swap probe](docs/studies/latent-laterality/swap-probe.md).
+> The prior manuscript, figures, and result ledger now live in
+> [docs/history/urtc-2026/](docs/history/urtc-2026/).
+
 This folder is an executable course on learning motion features from gait video. It starts with a source video, extracts a 33-landmark skeleton, hides selected joint-time tokens, and asks a Skeleton Joint-Embedding Predictive Architecture, or S-JEPA, to predict their latent features. Training begins with normal gait and then continues through four cumulative condition stages.
 
 The completed real run used 159 sequences from 35 source videos. It stayed numerically stable and did not totally collapse. It did not produce clean five-condition clusters. The classifier results are useful engineering diagnostics inside this known corpus. They are not estimates for a new patient, video, camera, or clinic.
@@ -20,7 +28,7 @@ The implementation follows the main learning graph in S-JEPA, but it is a paper-
 - a label-aware group term is active after Stage 0;
 - every readout reports video overlap and prior encoder exposure.
 
-![End-to-end method](docs/figures/pipeline.svg)
+![End-to-end method](docs/history/urtc-2026/figures/pipeline.svg)
 
 ## Data layers
 
@@ -38,7 +46,7 @@ The canonical class counts are 12 normal, 9 Parkinson's, 12 stroke, 47 myopathic
 
 This provenance difference matters. Most normal rows use the added extraction path, while every abnormal row uses the canonical path. A normal-versus-abnormal classifier could learn acquisition or extraction differences as well as gait differences.
 
-![Cohort and curriculum](docs/figures/cohort_curriculum.svg)
+![Cohort and curriculum](docs/history/urtc-2026/figures/cohort_curriculum.svg)
 
 ## Model in plain language
 
@@ -101,7 +109,7 @@ fingerprint is retained for lineage, but it is not a model-weight checksum.
 
 The final feature standard deviation was 0.414, so the representation did not shrink to one constant vector. The mean pairwise cosine similarity was 0.609. However, the normal-anchor cosine fell to 0.594. This is substantial drift, so the run does not show strong retention of the original normal representation.
 
-![Training health](docs/figures/training_health.svg)
+![Training health](docs/history/urtc-2026/figures/training_health.svg)
 
 ### Canonical five-condition geometry
 
@@ -117,7 +125,7 @@ current run; legacy displayed values below are no longer a current result.
 
 A silhouette near zero means that many samples sit near class boundaries. The minimum centroid distance is also smaller than the mean within-condition spread. These values do not support a claim of clean five-class clustering.
 
-![Canonical representation geometry](docs/figures/representation_geometry.svg)
+![Canonical representation geometry](docs/history/urtc-2026/figures/representation_geometry.svg)
 
 ### Descriptive classifier readouts
 
@@ -134,7 +142,7 @@ Lane C reports must be regenerated after the state-hash namespace and full-patte
 missingness repair. If run, they remain label-aware after Stage 0 and transductive:
 grouping only the Random Forest does not remove the encoder's exposure to those rows.
 
-![Readout results](docs/figures/readout_results.svg)
+![Readout results](docs/history/urtc-2026/figures/readout_results.svg)
 
 ## What “all-96 stratified” means
 
@@ -247,17 +255,15 @@ its selected pose files are a single reproducibility contract.
 
 ## Papers, tutorial, figures, and slides
 
-- [Staged paper](docs/staged_sjepa_gait.md)
-- [Long tutorial](docs/staged_details.md)
-- [S-JEPA methodology evolution tutorial](docs/staged_evolution.md)
-- [Progressive training guide](docs/progressive_training.md)
+- [Current documentation](docs/)
+- [Latent Laterality study](docs/studies/latent-laterality/)
+- [Fixed-reflection baseline contract](docs/studies/fixed-reflection-baselines/)
+- [Historical staged paper](docs/history/urtc-2026/staged_sjepa_gait.md)
+- [Historical long tutorial](docs/history/urtc-2026/staged_details.md)
+- [Historical methodology evolution tutorial](docs/history/urtc-2026/staged_evolution.md)
 - [S-JEPA class and tensor-flow guide](docs/tutorials/sjepa_model_internals.md)
-- [Maintainer evolution notes](notes/current/methodology/sjepa_evolution_tutorial.md)
 - [Research notes index](notes/README.md)
-- [Research idea portfolio](notes/research/README.md)
-- [Three-week research portfolio](plan/README.md)
-- [Documentation build guide](docs/README.md)
-- [Presentation source and deck](slides/README.md)
+- Presentation sources and decks are not included in this checkout.
 
 ## Authoritative sources
 

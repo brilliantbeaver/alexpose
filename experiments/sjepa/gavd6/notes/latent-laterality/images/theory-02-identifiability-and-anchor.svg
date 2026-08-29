@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">Global ambiguity and the effect of an anatomical anchor</title>
+  <desc id="desc">Two latent worlds with complementary convention paths produce the same observation under gauge-symmetric assumptions. Relative edges can receive statistical evidence. One exact anchor and exact connected edges select one world, while uncertain evidence produces a posterior rather than a certain path.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#20364e"/></marker>
+    <style>
+      .head{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.label{font:700 22px Arial,Helvetica,sans-serif;fill:#0f2440}.body{font:18px Arial,Helvetica,sans-serif;fill:#33475e}.small{font:18px Arial,Helvetica,sans-serif;fill:#4d6074}.white{font:700 18px Arial,Helvetica,sans-serif;fill:#ffffff}.bit{font:700 18px Arial,Helvetica,sans-serif;fill:#0f2440}
+    </style>
+  </defs>
+  <rect width="1200" height="690" fill="#ffffff"/>
+  <text x="50" y="60" class="head">Identifiability asks whether observations separate hidden worlds</text>
+  <text x="50" y="94" class="small">Assumption: no anchor or asymmetric cue remains, and the prior and corruption law are gauge symmetric.</text>
+
+  <rect x="50" y="150" width="330" height="170" rx="16" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="80" y="190" class="label">World A</text>
+  <text x="80" y="222" class="body">latent motion z</text>
+  <text x="80" y="262" class="body">path g</text>
+  <g transform="translate(150 241)">
+    <rect x="0" y="0" width="34" height="34" rx="5" fill="#eaf4ee"/><rect x="42" y="0" width="34" height="34" rx="5" fill="#eaf4ee"/><rect x="84" y="0" width="34" height="34" rx="5" fill="#fff0e8"/><rect x="126" y="0" width="34" height="34" rx="5" fill="#fff0e8"/><rect x="168" y="0" width="34" height="34" rx="5" fill="#eaf4ee"/>
+    <text x="17" y="23" text-anchor="middle" class="bit">0</text><text x="59" y="23" text-anchor="middle" class="bit">0</text><text x="101" y="23" text-anchor="middle" class="bit">1</text><text x="143" y="23" text-anchor="middle" class="bit">1</text><text x="185" y="23" text-anchor="middle" class="bit">0</text>
+  </g>
+
+  <rect x="50" y="350" width="330" height="170" rx="16" fill="#fff7ed" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="80" y="390" class="label">World B</text>
+  <text x="80" y="422" class="body">latent motion Pz</text>
+  <text x="80" y="462" class="body">path g XOR 1</text>
+  <g transform="translate(150 441)">
+    <rect x="0" y="0" width="34" height="34" rx="5" fill="#fff0e8"/><rect x="42" y="0" width="34" height="34" rx="5" fill="#fff0e8"/><rect x="84" y="0" width="34" height="34" rx="5" fill="#eaf4ee"/><rect x="126" y="0" width="34" height="34" rx="5" fill="#eaf4ee"/><rect x="168" y="0" width="34" height="34" rx="5" fill="#fff0e8"/>
+    <text x="17" y="23" text-anchor="middle" class="bit">1</text><text x="59" y="23" text-anchor="middle" class="bit">1</text><text x="101" y="23" text-anchor="middle" class="bit">0</text><text x="143" y="23" text-anchor="middle" class="bit">0</text><text x="185" y="23" text-anchor="middle" class="bit">1</text>
+  </g>
+
+  <path d="M380 235 L455 290" stroke="#20364e" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M380 435 L455 350" stroke="#20364e" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <rect x="465" y="235" width="250" height="170" rx="16" fill="#f5f1fa" stroke="#6f4f93" stroke-width="3"/>
+  <text x="500" y="280" class="label">Observed tensor x</text>
+  <text x="500" y="320" class="body">Identical in both worlds</text>
+  <text x="500" y="352" class="body">under the stated assumptions</text>
+
+  <path d="M715 320 L775 320" stroke="#20364e" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <rect x="785" y="150" width="365" height="370" rx="16" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="820" y="195" class="label">What can be concluded?</text>
+  <circle cx="830" cy="247" r="9" fill="#2f6f99"/>
+  <text x="855" y="253" class="body">Relative edges may carry evidence</text>
+  <text x="855" y="282" class="small">under a declared motion model.</text>
+  <circle cx="830" cy="335" r="9" fill="#a44c26"/>
+  <text x="855" y="341" class="body">The global bit is not identified</text>
+  <text x="855" y="370" class="small">without an independent cue.</text>
+  <circle cx="830" cy="423" r="9" fill="#3f7a60"/>
+  <text x="855" y="429" class="body">Exact anchor + exact edges</text>
+  <text x="855" y="458" class="small">selects one complete path.</text>
+
+  <rect x="50" y="570" width="1100" height="74" rx="14" fill="#0f2440"/>
+  <text x="80" y="604" class="white">Uncertain edges or a noisy anchor update a posterior. They do not create certainty.</text>
+  <text x="80" y="631" class="small" style="fill:#dbe7f1">The honest unanchored odd output is a symmetric distribution or orbit {y, -y}.</text>
+</svg>

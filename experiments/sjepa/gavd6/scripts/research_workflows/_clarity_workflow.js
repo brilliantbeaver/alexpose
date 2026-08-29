@@ -9,7 +9,7 @@ export const meta = {
 }
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '')
-const IDEAS = `${ROOT}/notes/research/ideas`
+const IDEAS = `${ROOT}/notes/archive/portfolio-ideas/ideas`
 const FACTS = `${ROOT}/notes/research/_shared_facts.md`
 
 const SLUGS = args && Array.isArray(args) && args.length ? args : [

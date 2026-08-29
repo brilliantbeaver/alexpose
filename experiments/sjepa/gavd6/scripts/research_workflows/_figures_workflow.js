@@ -10,7 +10,7 @@ export const meta = {
 
 const RESEARCH_DIR = new URL('../../notes/research', import.meta.url).pathname.replace(/\/$/, '')
 const DIR = `${RESEARCH_DIR}/ideas`
-const DESIGN = new URL('../../notes/current/design/diagram_design_system.md', import.meta.url).pathname
+const DESIGN = new URL('../../docs/contributing/diagram_design_system.md', import.meta.url).pathname
 
 // ---- The SVG design contract, inlined so every agent obeys the SAME rules ----
 const SVG_RULES = `

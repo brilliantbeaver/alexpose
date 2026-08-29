@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">Four layers from physical motion to a learned representation</title>
+  <desc id="desc">A left-to-right flow shows a moving body, a camera observation, a named pose tensor, and a learned representation. The latent left-right convention is highlighted between the camera observation and named tensor.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .head{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .label{font:700 22px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .body{font:18px Arial,Helvetica,sans-serif;fill:#33475e}
+      .small{font:18px Arial,Helvetica,sans-serif;fill:#4d6074}
+      .step{font:700 18px Arial,Helvetica,sans-serif;fill:#ffffff}
+    </style>
+  </defs>
+  <rect width="1200" height="660" fill="#ffffff"/>
+  <text x="50" y="62" class="head">Where latent laterality enters the data pipeline</text>
+  <text x="50" y="96" class="small">The coordinates do not carry their anatomical names. A convention attaches meaning to tensor slots.</text>
+
+  <rect x="50" y="180" width="230" height="260" rx="18" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/>
+  <circle cx="86" cy="216" r="20" fill="#2f6f99"/>
+  <text x="86" y="223" text-anchor="middle" class="step">1</text>
+  <text x="82" y="272" class="label">Physical state</text>
+  <circle cx="165" cy="320" r="24" fill="none" stroke="#20364e" stroke-width="5"/>
+  <path d="M165 344 L165 390 M120 360 L210 360 M165 390 L132 425 M165 390 L198 425" fill="none" stroke="#20364e" stroke-width="5" stroke-linecap="round"/>
+  <text x="82" y="478" class="body">A body moves in the world.</text>
+
+  <path d="M280 310 L330 310" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="340" y="180" width="230" height="260" rx="18" fill="#f5f1fa" stroke="#8aa0b5" stroke-width="2"/>
+  <circle cx="376" cy="216" r="20" fill="#6f4f93"/>
+  <text x="376" y="223" text-anchor="middle" class="step">2</text>
+  <text x="372" y="272" class="label">Sensor observation</text>
+  <rect x="405" y="315" width="100" height="70" rx="8" fill="none" stroke="#20364e" stroke-width="5"/>
+  <circle cx="455" cy="350" r="17" fill="none" stroke="#20364e" stroke-width="4"/>
+  <path d="M505 330 L535 315 L535 385 L505 370" fill="none" stroke="#20364e" stroke-width="5" stroke-linejoin="round"/>
+  <text x="372" y="478" class="body">Pixels measure the scene.</text>
+
+  <path d="M570 310 L620 310" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="590" y="125" width="290" height="80" rx="14" fill="#fff0e8" stroke="#a44c26" stroke-width="2"/>
+  <text x="735" y="158" text-anchor="middle" class="label">Latent convention g</text>
+  <text x="735" y="186" text-anchor="middle" class="body">Which slot name means which limb?</text>
+  <path d="M735 205 L735 235" stroke="#a44c26" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="630" y="240" width="230" height="200" rx="18" fill="#fff7ed" stroke="#a44c26" stroke-width="3"/>
+  <circle cx="666" cy="276" r="20" fill="#a44c26"/>
+  <text x="666" y="283" text-anchor="middle" class="step">3</text>
+  <text x="662" y="326" class="label">Named pose tensor</text>
+  <text x="662" y="370" class="body">left_knee   (x, y, z)</text>
+  <text x="662" y="402" class="body">right_knee  (x, y, z)</text>
+  <text x="662" y="478" class="body">Numbers plus semantic slots.</text>
+
+  <path d="M860 310 L910 310" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="920" y="180" width="230" height="260" rx="18" fill="#eaf4ee" stroke="#8aa0b5" stroke-width="2"/>
+  <circle cx="956" cy="216" r="20" fill="#3f7a60"/>
+  <text x="956" y="223" text-anchor="middle" class="step">4</text>
+  <text x="952" y="272" class="label">Learned representation</text>
+  <rect x="960" y="318" width="150" height="25" rx="5" fill="#3f7a60" opacity="0.9"/>
+  <rect x="960" y="354" width="112" height="25" rx="5" fill="#2f6f99" opacity="0.9"/>
+  <rect x="960" y="390" width="74" height="25" rx="5" fill="#6f4f93" opacity="0.9"/>
+  <text x="952" y="478" class="body">Features used downstream.</text>
+
+  <rect x="50" y="540" width="1100" height="74" rx="14" fill="#0f2440"/>
+  <text x="80" y="575" class="step">Study target</text>
+  <text x="230" y="575" class="step">Infer uncertainty about layer 3, then prevent it from corrupting layer 4.</text>
+  <text x="80" y="602" class="small" style="fill:#dbe7f1">A network can be correct relative to its input and still inherit the wrong token meaning.</text>
+</svg>

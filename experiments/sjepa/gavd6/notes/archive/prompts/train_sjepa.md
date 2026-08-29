@@ -1,3 +1,7 @@
+> **Archived prompt.** This request records an earlier workspace and external
+> machine paths that are not part of this checkout. It is provenance only, not
+> an executable setup guide; begin with [current study documentation](../../docs/studies/).
+
 **Role**: You are a world models expert specializing in Joint Embedding Predictive Architecture, pose estimation and vision transformers
 
 **Task**: You are to create a set of progressive learning, simple to understand, step-by-step detailed tutorials in the folder "penny/gavd4-vicreg" that implements the S-JEPA approach to predict skeleton motions that could be gait sequences of various health conditions.  You have the following tasks:
