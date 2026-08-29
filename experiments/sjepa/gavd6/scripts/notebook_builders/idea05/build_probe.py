@@ -36,7 +36,7 @@ CELLS.append(md(r"""
 # Notebook 05a: Signed-laterality decodability probe (Idea 5, core arm)
 
 This notebook reifies the core, zero-retrain arm of research idea 5,
-[signed-laterality-decodability](../../../notes/research/ideas/05-signed-laterality-decodability/README.md).
+[signed-laterality-decodability](../../../notes/archive/portfolio-ideas/ideas/05-signed-laterality-decodability/README.md).
 It asks one falsifiable question on the frozen `d0acc262` Skeleton-JEPA (S-JEPA) checkpoint:
 
 > On source-video-disjoint folds, is a signed left-minus-right laterality axis linearly decodable

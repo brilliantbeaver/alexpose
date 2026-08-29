@@ -10,9 +10,9 @@ export const meta = {
 }
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '')
-const IDEAS = `${ROOT}/notes/research/ideas`
+const IDEAS = `${ROOT}/notes/archive/portfolio-ideas/ideas`
 const FACTS = `${ROOT}/notes/research/_shared_facts.md`
-const DESIGN = `${ROOT}/notes/current/design/diagram_design_system.md`
+const DESIGN = `${ROOT}/docs/contributing/diagram_design_system.md`
 const SELECTION = `${ROOT}/notes/research/_selection.json`
 
 // The 7 proposals with their hardened specs (mirrors _selection.json; inlined so agents need not parse JSON).

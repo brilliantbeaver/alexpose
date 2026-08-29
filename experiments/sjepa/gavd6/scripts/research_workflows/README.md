@@ -4,7 +4,8 @@ These JavaScript workflow definitions generated and reviewed the research
 portfolio. They are tooling, not scientific evidence or current experiment
 results.
 
-All repository paths are resolved relative to each workflow file, so the
-workflows remain portable across local and HAIC checkouts. Proposal content is
-under `notes/research/ideas/`; shared facts, scorecards, and portfolio assets are
-under `notes/research/`.
+Proposal content retained from this effort is under
+[`notes/archive/portfolio-ideas/ideas/`](../../notes/archive/portfolio-ideas/ideas/).
+The workflow definitions still target the retired `notes/research/` working
+tree, which is not included in this checkout. They are therefore preserved as
+historical tooling records and must not be run as a current workflow.

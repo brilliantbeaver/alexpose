@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Experimental arms ordered by the information and structure they receive</title>
+  <desc id="desc">Six horizontal levels compare raw continuity, ordinary representation learning, known-reflection structure, a generic paired model, correction-first synchronization, and SG-JEPA. Oracle and uniform-posterior references bound the mechanism but are not competitors.</desc>
+  <style>.head{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.label{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.body{font:18px Arial,Helvetica,sans-serif;fill:#33475e}.small{font:18px Arial,Helvetica,sans-serif;fill:#4d6074}.white{font:700 18px Arial,Helvetica,sans-serif;fill:#ffffff}</style>
+  <rect width="1200" height="700" fill="#ffffff"/>
+  <text x="50" y="60" class="head">Each arm removes one simpler explanation for a gain</text>
+  <text x="50" y="94" class="small">Higher rows receive more task-specific structure. Parameters, FLOPs, labels, and draws must still be matched.</text>
+
+  <text x="55" y="145" class="label">Arm</text><text x="455" y="145" class="label">What it receives</text><text x="825" y="145" class="label">Question isolated</text>
+  <rect x="50" y="165" width="1100" height="66" rx="11" fill="#eef4f8"/><text x="75" y="205" class="label">Raw continuity + Viterbi</text><text x="455" y="205" class="body">coordinates only</text><text x="825" y="205" class="body">Can a transparent rule solve it?</text>
+  <rect x="50" y="241" width="1100" height="66" rx="11" fill="#f7fafc" stroke="#d3dde6"/><text x="75" y="281" class="label">Standard S-JEPA + head</text><text x="455" y="281" class="body">corruption labels + validity</text><text x="825" y="281" class="body">Does ordinary learning suffice?</text>
+  <rect x="50" y="317" width="1100" height="66" rx="11" fill="#eaf4ee"/><text x="75" y="357" class="label">Fixed-reflection JEPA</text><text x="455" y="357" class="body">known mirror action M</text><text x="825" y="357" class="body">Does chirality structure transfer?</text>
+  <rect x="50" y="393" width="1100" height="66" rx="11" fill="#f5f1fa"/><text x="75" y="433" class="label">Generic paired transformer</text><text x="455" y="433" class="body">second branch + flexible attention</text><text x="825" y="433" class="body">Is extra capacity the cause?</text>
+  <rect x="50" y="469" width="1100" height="66" rx="11" fill="#fff7ed"/><text x="75" y="509" class="label">Synchronize, correct, then learn</text><text x="455" y="509" class="body">one hard path before encoding</text><text x="825" y="509" class="body">Is modular correction enough?</text>
+  <rect x="50" y="545" width="1100" height="66" rx="11" fill="#0f2440"/><text x="75" y="585" class="white">SG-JEPA</text><text x="455" y="585" class="white">duration posterior + parity split</text><text x="825" y="585" class="white">Does in-objective uncertainty help?</text>
+
+  <text x="50" y="657" class="small">References, not competitors: oracle path gives a mechanism ceiling; a uniform posterior gives a non-informative floor.</text>
+</svg>

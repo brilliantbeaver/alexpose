@@ -1,3 +1,7 @@
+> **Archived prompt.** This is a record of a prior request. The numbered
+> `notes/` paths named below were retired; use [current study
+> documentation](../../docs/studies/) rather than executing this prompt.
+
 **Role**: You are an expert in AI/ML, specializing in JEPA and gait analysis.
 
 **Task**: You are to first systematically review the Skeleton JEPA implementation & results in this folder (and subfolders) to understand weaknesses and shortcomings of the current approach.

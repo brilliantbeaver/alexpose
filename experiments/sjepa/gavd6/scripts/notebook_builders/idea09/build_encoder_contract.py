@@ -48,7 +48,7 @@ The notebook uses the **same GAVD mode contract as 05a**:
 
 A shared left-minus-right head alone is not an equivariant encoder. The decisive architecture comparison
 is `equivariant_encoder` versus both `odd_output` and `paired_unconstrained`. See
-`notes/research/ideas/09-reflection-equivariant-symmetry-axis/METHODOLOGY.md` for the binding protocol.
+`notes/archive/portfolio-ideas/ideas/09-reflection-equivariant-symmetry-axis/METHODOLOGY.md` for the binding protocol.
 """),
 md("""## 0. Environment, data requirements, and mode
 

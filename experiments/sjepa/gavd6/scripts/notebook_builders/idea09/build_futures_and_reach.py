@@ -38,7 +38,7 @@ Notebook 09a proves the paired architecture contract. This notebook does the wor
    results.
 
 The notebook mirrors Idea 05's `02_futures_and_reach.ipynb`. See the binding protocol at
-`notes/research/ideas/09-reflection-equivariant-symmetry-axis/METHODOLOGY.md`.
+`notes/archive/portfolio-ideas/ideas/09-reflection-equivariant-symmetry-axis/METHODOLOGY.md`.
 """),
 md("""## 0. Frozen decision inputs and data-free startup
 

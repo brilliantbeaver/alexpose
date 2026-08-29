@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">SG-JEPA prediction with an explicit posterior over semantic convention paths</title>
+  <desc id="desc">The visible observed blocks feed a shared encoder, an exact even and odd parity split, and a predictor. A separate correspondence head and finite-duration chain infer a posterior over convention paths from visible context only. The posterior enters the predictor. An exponential-moving-average teacher supplies a target through a separate stop-gradient path. Predictor output and teacher target meet only at the loss.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 z" fill="#20364e"/></marker>
+    <marker id="green-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 z" fill="#3f7a60"/></marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .lane{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#4d6074;letter-spacing:1px;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:18px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#4d6074;}
+      .light{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#ffffff;}
+      .chip{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#0f2440;text-anchor:middle;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h">SG-JEPA keeps correspondence uncertainty inside prediction</text>
+  <text x="48" y="88" class="s">The teacher target and student prediction remain separate until the loss. The gauge posterior sees visible context only.</text>
+
+  <text x="48" y="132" class="lane">TARGET PATH</text>
+  <rect x="270" y="108" width="410" height="100" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="294" y="146" class="t">EMA teacher</text>
+  <text x="294" y="176" class="s">masked target blocks → target latent h+, h−</text>
+  <path d="M680 158 L1030 158 L1030 284" fill="none" stroke="#3f7a60" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#green-arrow)"/>
+  <text x="844" y="144" class="s">target only</text>
+
+  <text x="48" y="264" class="lane">STUDENT PREDICTION PATH</text>
+  <rect x="48" y="284" width="190" height="148" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="322" class="t">Visible blocks</text>
+  <text x="72" y="352" class="s">pose + validity</text>
+  <rect x="72" y="372" width="22" height="36" rx="5" fill="#e7f0f8" stroke="#20364e"/><rect x="100" y="372" width="22" height="36" rx="5" fill="#f7e7d8" stroke="#a44c26"/><rect x="128" y="372" width="22" height="36" rx="5" fill="#f7e7d8" stroke="#a44c26"/><rect x="156" y="372" width="22" height="36" rx="5" fill="#e7f0f8" stroke="#20364e"/><rect x="184" y="372" width="22" height="36" rx="5" fill="#e7f0f8" stroke="#20364e"/>
+
+  <path d="M238 358 L270 358" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="286" y="284" width="190" height="148" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="310" y="322" class="t">Shared encoder F</text>
+  <text x="310" y="352" class="s">reads x and Px</text>
+  <rect x="310" y="372" width="62" height="36" rx="9" fill="#ffffff" stroke="#20364e"/><text x="341" y="396" class="chip">x</text>
+  <rect x="386" y="372" width="66" height="36" rx="9" fill="#ffffff" stroke="#20364e"/><text x="419" y="396" class="chip">Px</text>
+
+  <path d="M476 358 L508 358" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="524" y="284" width="190" height="148" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="548" y="322" class="t">Exact parity split</text>
+  <text x="548" y="352" class="s">sum and difference</text>
+  <rect x="548" y="372" width="62" height="36" rx="9" fill="#ffffff" stroke="#20364e"/><text x="579" y="396" class="chip">h+</text>
+  <rect x="624" y="372" width="66" height="36" rx="9" fill="#ffffff" stroke="#20364e"/><text x="657" y="396" class="chip">h−</text>
+
+  <path d="M714 358 L746 358" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="762" y="284" width="190" height="148" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="786" y="322" class="t">Predictor</text>
+  <text x="786" y="352" class="s">marginalizes over q(path)</text>
+  <text x="786" y="382" class="b">predicts masked</text><text x="786" y="408" class="b">target latents</text>
+
+  <path d="M952 358 L992 358" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="1008" y="284" width="144" height="148" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="1032" y="328" class="t">JEPA loss</text>
+  <text x="1032" y="360" class="s">prediction</text><text x="1032" y="384" class="s">vs target</text><text x="1032" y="412" class="s">+ variance</text>
+
+  <text x="48" y="488" class="lane">CORRESPONDENCE PATH</text>
+  <path d="M143 432 L143 524 L270 524" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="286" y="474" width="190" height="112" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="310" y="512" class="t">Edge head</text><text x="310" y="542" class="s">visible context only</text><text x="310" y="568" class="s">scores adjacent blocks</text>
+  <path d="M476 530 L508 530" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="524" y="474" width="190" height="112" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="548" y="512" class="t">Duration chain</text><text x="548" y="542" class="s">forward-backward</text><text x="548" y="568" class="s">posterior q(path)</text>
+  <path d="M714 530 L857 530 L857 448" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="744" y="554" class="s">uncertainty, not a hard correction</text>
+
+  <rect x="48" y="624" width="1104" height="64" rx="16" fill="#20364e"/>
+  <text x="72" y="653" class="light">For block k relative to reference r, the odd channel is weighted by E_q[(-1)^(g_k xor g_r)].</text>
+  <text x="72" y="677" class="light">A posterior mean near zero records unresolved orientation instead of silently choosing a sign.</text>
+</svg>

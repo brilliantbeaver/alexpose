@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Learning path for the mathematical foundations of latent laterality</title>
+  <desc id="desc">Three prerequisite subjects feed four core subjects, which support the study-specific conclusions. A separate lower row lists optional extensions.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#20364e"/></marker>
+    <style>.head{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.label{font:700 21px Arial,Helvetica,sans-serif;fill:#0f2440}.body{font:18px Arial,Helvetica,sans-serif;fill:#33475e}.small{font:18px Arial,Helvetica,sans-serif;fill:#4d6074}.white{font:700 18px Arial,Helvetica,sans-serif;fill:#ffffff}</style>
+  </defs>
+  <rect width="1200" height="700" fill="#ffffff"/>
+  <text x="50" y="60" class="head">Learn the dependencies, not a bag of terms</text>
+  <text x="50" y="94" class="small">Read left to right. The optional row is useful only when an extension enters scope.</text>
+
+  <text x="50" y="150" class="label">Prerequisites</text>
+  <rect x="50" y="175" width="210" height="92" rx="14" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/><text x="78" y="215" class="label">Linear algebra</text><text x="78" y="246" class="body">matrices, rank, tensors</text>
+  <rect x="285" y="175" width="210" height="92" rx="14" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/><text x="313" y="215" class="label">Probability</text><text x="313" y="246" class="body">conditioning, expectation</text>
+  <rect x="520" y="175" width="250" height="92" rx="14" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/><text x="548" y="215" class="label">Graphs + GF(2)</text><text x="548" y="246" class="body">paths, incidence, XOR</text>
+  <rect x="795" y="175" width="355" height="92" rx="14" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/><text x="823" y="215" class="label">Statistical inference</text><text x="823" y="246" class="body">estimands, intervals, held-out tests</text>
+
+  <path d="M155 267 L155 315" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><path d="M390 267 L390 315" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><path d="M645 267 L645 315" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><path d="M973 267 L973 315" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="50" y="310" class="label">Core machinery</text>
+  <rect x="50" y="330" width="250" height="108" rx="14" fill="#f5f1fa" stroke="#6f4f93" stroke-width="2"/><text x="78" y="371" class="label">Group actions</text><text x="78" y="402" class="body">orbits, parity, quotients</text>
+  <rect x="325" y="330" width="250" height="108" rx="14" fill="#f5f1fa" stroke="#6f4f93" stroke-width="2"/><text x="353" y="371" class="label">Graphical models</text><text x="353" y="402" class="body">CRFs, duration, messages</text>
+  <rect x="600" y="330" width="250" height="108" rx="14" fill="#f5f1fa" stroke="#6f4f93" stroke-width="2"/><text x="628" y="371" class="label">Representation learning</text><text x="628" y="402" class="body">masked prediction, probes</text>
+  <rect x="875" y="330" width="275" height="108" rx="14" fill="#f5f1fa" stroke="#6f4f93" stroke-width="2"/><text x="903" y="371" class="label">Decision theory</text><text x="903" y="402" class="body">risk, calibration, abstention</text>
+
+  <path d="M175 438 L175 485" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><path d="M450 438 L450 485" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><path d="M725 438 L725 485" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/><path d="M1012 438 L1012 485" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="50" y="500" width="1100" height="86" rx="14" fill="#0f2440"/>
+  <text x="80" y="536" class="white">Study conclusions</text>
+  <text x="270" y="536" class="white">relative evidence is empirical</text>
+  <text x="575" y="536" class="white">global sign needs an anchor</text>
+  <text x="875" y="536" class="white">uncertainty changes decisions</text>
+  <text x="80" y="568" class="small" style="fill:#dbe7f1">Each conclusion has a matching experiment, metric, and stopping rule.</text>
+
+  <text x="50" y="632" class="label">Optional extensions</text>
+  <text x="255" y="632" class="body">synchronization</text><text x="430" y="632" class="body">missing-data mechanisms</text><text x="685" y="632" class="body">learned permutations</text><text x="900" y="632" class="body">continuous gauge groups</text>
+</svg>

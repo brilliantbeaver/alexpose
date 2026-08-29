@@ -295,8 +295,8 @@ def permute_bilateral_tokens(
     anatomical reflection: :func:`anatomical_mirror` also negates the declared
     mediolateral coordinate.  Keeping these operations separate is necessary
     both for target isolation in the fixed-reflection baseline and for the
-    semantic-gauge study, where an uncertain convention exchanges names rather
-    than physical coordinates.
+    Latent Laterality study, where an uncertain convention exchanges names
+    rather than physical coordinates.
     """
 
     if values.ndim < 1:

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">Three sequential gates and the claim each failure licenses</title>
+  <desc id="d4">Three gates run left to right. Gate one asks whether an oracle correction improves the odd-target error. Gate two asks whether SG-JEPA beats the best transparent corrector. Gate three asks whether the result is calibrated with no clean-data tax and no invented global sign. Below each gate is the conclusion that a failure licenses. A banner at the bottom states the single claim licensed when all three gates pass.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#4d6074;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#e3eaf1;}
+      .yes{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#3f7a60;}
+      .no{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#a44c26;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="62" class="h">Every outcome is reportable; only one licenses the strong claim</text>
+  <text x="48" y="92" class="s">Gates are evaluated in this fixed order. Testing stops at the first failure, and the failure itself is the reported result.</text>
+
+  <!-- ============ GATES ============ -->
+  <rect x="48" y="150" width="320" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="186" class="t">Gate 1: Consequence</text>
+  <text x="72" y="216" class="b">Does knowing the true path</text>
+  <text x="72" y="242" class="b">improve the odd-target error</text>
+  <text x="72" y="268" class="b">on validation data?</text>
+
+  <path d="M368 225 L408 225" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="376" y="212" class="yes">yes</text>
+
+  <rect x="424" y="150" width="320" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="448" y="186" class="t">Gate 2: Necessity</text>
+  <text x="448" y="216" class="b">Does SG-JEPA beat the best</text>
+  <text x="448" y="242" class="b">transparent corrector by the</text>
+  <text x="448" y="268" class="b">prespecified margin?</text>
+
+  <path d="M744 225 L784 225" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="752" y="212" class="yes">yes</text>
+
+  <rect x="800" y="150" width="320" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="824" y="186" class="t">Gate 3: Integrity</text>
+  <text x="824" y="216" class="b">Calibrated edges, no clean</text>
+  <text x="824" y="242" class="b">data tax, and no confident</text>
+  <text x="824" y="268" class="b">unanchored sign?</text>
+
+  <!-- ============ FAILURE ARROWS ============ -->
+  <path d="M208 300 L208 340" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="222" y="326" class="no">no</text>
+  <path d="M584 300 L584 340" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="598" y="326" class="no">no</text>
+  <path d="M960 300 L960 340" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="974" y="326" class="no">no</text>
+
+  <!-- ============ FAILURE OUTCOMES ============ -->
+  <rect x="48" y="356" width="320" height="150" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="392" class="t">Stop early</text>
+  <text x="72" y="422" class="b">The corruption does not move</text>
+  <text x="72" y="448" class="b">the endpoint. Redesign it</text>
+  <text x="72" y="474" class="b">before training anything.</text>
+
+  <rect x="424" y="356" width="320" height="150" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="448" y="392" class="t">Ship the simpler method</text>
+  <text x="448" y="422" class="b">Correction first is enough.</text>
+  <text x="448" y="448" class="b">Report that, and reject the</text>
+  <text x="448" y="474" class="b">architecture claim.</text>
+
+  <rect x="800" y="356" width="320" height="150" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="824" y="392" class="t">Narrow the claim</text>
+  <text x="824" y="422" class="b">Either a stress-only</text>
+  <text x="824" y="448" class="b">robustness finding, or a leak</text>
+  <text x="824" y="474" class="b">that must be fixed first.</text>
+
+  <!-- ============ BANNER ============ -->
+  <rect x="48" y="562" width="1104" height="110" rx="16" fill="#20364e"/>
+  <rect x="48" y="562" width="10" height="110" rx="5" fill="#3f7a60"/>
+  <text x="82" y="602" class="w">All three gates pass</text>
+  <text x="82" y="630" class="ws">Licensed claim: posterior-aware latent correspondence improved controlled predictive motion representation under the coherent-swap model.</text>
+  <text x="82" y="656" class="ws">The separate GAVD audit decides only whether that claim may be extended to uncontrolled video. It never blocks the controlled result.</text>
+</svg>

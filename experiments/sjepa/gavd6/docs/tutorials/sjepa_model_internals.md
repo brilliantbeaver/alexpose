@@ -862,4 +862,4 @@ When changing these classes or helpers:
 .venv/bin/python docs/tutorials/make_class_figures.py
 ```
 
-8. keep every figure accessible, standalone, and consistent with [the diagram design system](../../notes/current/design/diagram_design_system.md).
+8. keep every figure accessible, standalone, and consistent with [the diagram design system](../contributing/diagram_design_system.md).

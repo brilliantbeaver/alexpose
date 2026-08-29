@@ -25,9 +25,9 @@ These notebooks are their own authoritative source. Edit them directly.
 |---|---|
 | [Visualize AMASS SMPL-H poses](amass/01_visualize_amass_smplh_poses.ipynb) | Inspect raw `*_poses.npz` recordings and rendered SMPL-H motion |
 
-The HAIC batch launcher is
-[`slurm/run-notebook-07.sbatch`](../slurm/run-notebook-07.sbatch). Its historical
-“notebook 07” name is retained so existing submission commands remain valid.
+The repository's current HPC submission scripts are in
+[`slurm/`](../slurm/). They cover AMASS conversion/training and the swap probe;
+there is no checked-in generic notebook-07 launcher.
 
 ## Research experiments
 
@@ -59,12 +59,12 @@ uv run jupyter lab
 For a non-interactive run, keep the executed copy outside the source tree:
 
 ```bash
-mkdir -p artifacts/notebook_runs
+mkdir -p work/artifacts/notebook_runs
 uv run jupyter nbconvert \
   --to notebook --execute notebooks/path/to/notebook.ipynb \
-  --output-dir artifacts/notebook_runs
+  --output-dir work/artifacts/notebook_runs
 ```
 
-`artifacts/notebook_runs/` is ignored because executed notebooks are run
+`work/artifacts/notebook_runs/` is ignored because executed notebooks are run
 artifacts. Scientific outputs should continue to use each notebook's explicit,
 versioned artifact contract.

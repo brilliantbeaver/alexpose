@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Experimental flow for the frozen-encoder swap probe</title>
+  <desc id="desc">Training identities fit lightweight boundary models and a clean ridge readout. Validation windows receive typed corruption, branch into five correction arms, pass through one frozen S-JEPA encoder, and are evaluated with common odd and even targets. No JEPA weights or test tensors are used.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#20364e"/></marker><style>.head{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.label{font:700 21px Arial,Helvetica,sans-serif;fill:#0f2440}.body{font:18px Arial,Helvetica,sans-serif;fill:#33475e}.small{font:18px Arial,Helvetica,sans-serif;fill:#4d6074}.white{font:700 18px Arial,Helvetica,sans-serif;fill:#ffffff}</style></defs>
+  <rect width="1200" height="700" fill="#ffffff"/>
+  <text x="50" y="60" class="head">E0 asks whether correction matters before training a new JEPA</text>
+  <text x="50" y="94" class="small">Train identities fit small heads. Validation identities test the mechanism. Test tensors remain sealed.</text>
+
+  <rect x="50" y="150" width="300" height="175" rx="16" fill="#eef4f8" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="80" y="195" class="label">Training identities</text>
+  <text x="80" y="235" class="body">Fit continuity + learned edges</text>
+  <text x="80" y="268" class="body">Calibrate path temperature</text>
+  <text x="80" y="301" class="body">Fit one clean ridge readout</text>
+
+  <rect x="425" y="150" width="350" height="175" rx="16" fill="#fff7ed" stroke="#a44c26" stroke-width="2"/>
+  <text x="455" y="195" class="label">Validation corruption</text>
+  <text x="455" y="235" class="body">sensor reflection + noise</text>
+  <text x="455" y="268" class="body">occlusion + semantic path</text>
+  <text x="455" y="301" class="body">one of 12 admissible paths</text>
+
+  <path d="M350 237 L415 237" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M600 325 L600 375" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="50" y="390" width="1100" height="110" rx="16" fill="#f5f1fa" stroke="#8aa0b5" stroke-width="2"/>
+  <text x="80" y="430" class="label">Five correction arms use the same nuisance draw</text>
+  <text x="80" y="470" class="body">uncorrected</text><text x="265" y="470" class="body">continuity MAP</text><text x="485" y="470" class="body">learned MAP</text><text x="685" y="470" class="body">posterior sum</text><text x="910" y="470" class="body">oracle path</text>
+
+  <path d="M600 500 L600 545" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="240" y="560" width="310" height="88" rx="15" fill="#0f2440"/>
+  <text x="275" y="596" class="white">Frozen seed-7 S-JEPA</text>
+  <text x="275" y="626" class="small" style="fill:#dbe7f1">same encoder for every arm</text>
+  <path d="M550 604 L620 604" stroke="#20364e" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="630" y="560" width="330" height="88" rx="15" fill="#eaf4ee" stroke="#3f7a60" stroke-width="2"/>
+  <text x="665" y="596" class="label">Common frozen readout</text>
+  <text x="665" y="626" class="body">odd + even motion targets</text>
+  <text x="990" y="590" class="small">No JEPA</text><text x="990" y="619" class="small">updates</text>
+</svg>

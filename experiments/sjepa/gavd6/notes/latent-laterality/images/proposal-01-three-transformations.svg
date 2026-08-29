@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Three transformations that look alike in a skeleton tensor</title>
+  <desc id="d1">Three cards compare a sensor coordinate action, an anatomical reflection, and a semantic token permutation. The action families are declared by the experiment. Only the realized blockwise path of the semantic permutation is hidden.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#4d6074;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#e3eaf1;}
+      .chip{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:15px;fill:#0f2440;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="62" class="h">Three operations, one tensor, different answers</text>
+  <text x="48" y="92" class="s">Blue circle = physical left limb. Orange triangle = physical right limb. Only the realized path in the third card is latent.</text>
+
+  <!-- ============ CARD 1: sensor action ============ -->
+  <rect x="48" y="150" width="330" height="400" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="186" class="t">Sensor action C_R</text>
+  <text x="72" y="210" class="s">the camera or frame moved</text>
+
+  <rect x="85" y="226" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="107" y="255" class="chip">L</text>
+  <circle cx="165" cy="248" r="11" fill="#2f6f99"/>
+  <rect x="223" y="226" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="245" y="255" class="chip">R</text>
+  <path d="M292 239 L303 257 L281 257 z" fill="#e07a4b"/>
+
+  <path d="M213 280 L213 302" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="85" y="310" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="107" y="339" class="chip">L</text>
+  <circle cx="165" cy="332" r="11" fill="#2f6f99"/>
+  <rect x="223" y="310" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="245" y="339" class="chip">R</text>
+  <path d="M292 323 L303 341 L281 341 z" fill="#e07a4b"/>
+
+  <path d="M72 378 L354 378" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="72" y="404" class="b">Slot contents: unchanged</text>
+  <text x="72" y="430" class="b">Coordinates: rotated by R</text>
+  <text x="72" y="456" class="b">Applied transform: observed</text>
+
+  <rect x="72" y="474" width="282" height="40" rx="12" fill="#ffffff" stroke="#2f6f99" stroke-width="1.5"/>
+  <text x="94" y="500" class="s">A declared preprocessing choice</text>
+
+  <!-- ============ CARD 2: anatomical reflection ============ -->
+  <rect x="434" y="150" width="330" height="400" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="458" y="186" class="t">Anatomical reflection M</text>
+  <text x="458" y="210" class="s">a mirrored counterfactual body</text>
+
+  <rect x="471" y="226" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="493" y="255" class="chip">L</text>
+  <circle cx="551" cy="248" r="11" fill="#2f6f99"/>
+  <rect x="609" y="226" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="631" y="255" class="chip">R</text>
+  <path d="M678 239 L689 257 L667 257 z" fill="#e07a4b"/>
+
+  <path d="M599 280 L599 302" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="471" y="310" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="493" y="339" class="chip">L</text>
+  <path d="M562 323 L573 341 L551 341 z" fill="#e07a4b"/>
+  <rect x="609" y="310" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="631" y="339" class="chip">R</text>
+  <circle cx="678" cy="332" r="11" fill="#2f6f99"/>
+
+  <path d="M458 378 L740 378" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="458" y="404" class="b">Slot contents: exchanged</text>
+  <text x="458" y="430" class="b">Coordinates: side axis negated</text>
+  <text x="458" y="456" class="b">Applied transform: constructed</text>
+
+  <rect x="458" y="474" width="282" height="40" rx="12" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.5"/>
+  <text x="480" y="500" class="s">A deliberately constructed mirror</text>
+
+  <!-- ============ CARD 3: semantic permutation ============ -->
+  <rect x="820" y="150" width="330" height="400" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="844" y="186" class="t">Semantic permutation P</text>
+  <text x="844" y="210" class="s">nothing physical changed</text>
+
+  <rect x="857" y="226" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="879" y="255" class="chip">L</text>
+  <circle cx="937" cy="248" r="11" fill="#2f6f99"/>
+  <rect x="995" y="226" width="118" height="44" rx="10" fill="#ffffff" stroke="#20364e" stroke-width="1.5"/>
+  <text x="1017" y="255" class="chip">R</text>
+  <path d="M1064 239 L1075 257 L1053 257 z" fill="#e07a4b"/>
+
+  <path d="M985 280 L985 302" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="857" y="310" width="118" height="44" rx="10" fill="#ffffff" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="879" y="339" class="chip">L</text>
+  <path d="M948 323 L959 341 L937 341 z" fill="#e07a4b"/>
+  <rect x="995" y="310" width="118" height="44" rx="10" fill="#ffffff" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="1017" y="339" class="chip">R</text>
+  <circle cx="1064" cy="332" r="11" fill="#2f6f99"/>
+
+  <path d="M844 378 L1126 378" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="844" y="404" class="b">Slot contents: exchanged</text>
+  <text x="844" y="430" class="b">Coordinates: untouched</text>
+  <text x="844" y="456" class="b">Realized blockwise path: hidden</text>
+
+  <rect x="844" y="474" width="282" height="40" rx="12" fill="#ffffff" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="866" y="500" class="s">The latent variable of this study</text>
+
+  <!-- ============ FOOTER BANNER ============ -->
+  <rect x="48" y="596" width="1104" height="76" rx="16" fill="#20364e"/>
+  <text x="76" y="630" class="w">Cards 2 and 3 rearrange the same slots, so they are easy to confuse.</text>
+  <text x="76" y="656" class="ws">A reflection is constructed by the experiment. A semantic path must be inferred from imperfect temporal evidence.</text>
+</svg>
