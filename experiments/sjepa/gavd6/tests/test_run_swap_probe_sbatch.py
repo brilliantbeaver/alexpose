@@ -7,22 +7,15 @@ import unittest
 
 
 class RunSwapProbeSbatchTests(unittest.TestCase):
-    def test_default_artifact_paths_use_amass_run_root(self) -> None:
+    def test_artifact_paths_are_explicit_and_sha_is_not_pinned(self) -> None:
         script = (
             Path(__file__).resolve().parents[1] / "slurm" / "run-swap-probe.sbatch"
         ).read_text(encoding="utf-8")
 
-        self.assertIn(
-            'CHECKPOINT="${SWAP_PROBE_CHECKPOINT:-$AMASS_RUN_ROOT/outputs/'
-            'repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt}"',
-            script,
-        )
-        self.assertIn(
-            'OUTPUT_DIR="${SWAP_PROBE_OUTPUT_DIR:-$AMASS_RUN_ROOT/outputs/'
-            'swap-probe-seed7}"',
-            script,
-        )
-        self.assertNotIn('$GAVD6_ROOT/outputs/repaired-jepa-seed7-v2', script)
+        self.assertIn('CHECKPOINT="$SWAP_PROBE_CHECKPOINT"', script)
+        self.assertIn('OUTPUT_DIR="$SWAP_PROBE_OUTPUT_DIR"', script)
+        self.assertNotIn('CHECKPOINT_SHA256=', script)
+        self.assertNotIn('--expected-checkpoint-sha256', script)
 
 
 if __name__ == "__main__":

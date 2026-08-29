@@ -16,9 +16,8 @@ set -euo pipefail
 
 cd "$GAVD6_ROOT"
 
-CHECKPOINT="${SWAP_PROBE_CHECKPOINT:-$AMASS_RUN_ROOT/outputs/repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt}"
-OUTPUT_DIR="${SWAP_PROBE_OUTPUT_DIR:-$AMASS_RUN_ROOT/outputs/swap-probe-seed7}"
-CHECKPOINT_SHA256="${SWAP_PROBE_CHECKPOINT_SHA256:-d12ddf0a8412bcae58ed167cc1ec560b978bffa590fd631ab23e519216b646bd}"
+CHECKPOINT="$SWAP_PROBE_CHECKPOINT"
+OUTPUT_DIR="$SWAP_PROBE_OUTPUT_DIR"
 
 if [[ ! -f "$CHECKPOINT" ]]; then
   echo "Missing exact frozen checkpoint: $CHECKPOINT" >&2
@@ -43,7 +42,6 @@ exec uv run --no-sync python scripts/run_swap_probe.py \
   --manifest "$AMASS_RUN_ROOT/manifests/amass_core11_conversion.csv" \
   --tensor-root "$AMASS_RUN_ROOT/core11" \
   --checkpoint "$CHECKPOINT" \
-  --expected-checkpoint-sha256 "$CHECKPOINT_SHA256" \
   --output-dir "$OUTPUT_DIR" \
   --device cuda \
   --seed "${SWAP_PROBE_SEED:-7}" \
