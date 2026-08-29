@@ -16,8 +16,8 @@ set -euo pipefail
 
 cd "$GAVD6_ROOT"
 
-CHECKPOINT="${SWAP_PROBE_CHECKPOINT:-$GAVD6_ROOT/outputs/repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt}"
-OUTPUT_DIR="${SWAP_PROBE_OUTPUT_DIR:-$AMASS_RUN_ROOT/swap-probe-seed7}"
+CHECKPOINT="${SWAP_PROBE_CHECKPOINT:-$AMASS_RUN_ROOT/outputs/repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt}"
+OUTPUT_DIR="${SWAP_PROBE_OUTPUT_DIR:-$AMASS_RUN_ROOT/outputs/swap-probe-seed7}"
 CHECKPOINT_SHA256="${SWAP_PROBE_CHECKPOINT_SHA256:-d12ddf0a8412bcae58ed167cc1ec560b978bffa590fd631ab23e519216b646bd}"
 
 if [[ ! -f "$CHECKPOINT" ]]; then
