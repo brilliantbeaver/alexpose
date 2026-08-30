@@ -528,7 +528,7 @@ version, on the cluster:
 ```bash
 cd "$GAVD6_ROOT"
 export HAIC_ACCOUNT=mind  # Replace with the allocation you are authorized to use.
-export AMASS_RUN_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs
+export AMASS_RUN_ROOT="$GAVD6_ROOT/outputs"
 export SWAP_PROBE_OUTPUT_DIR="$AMASS_RUN_ROOT/swap-probe-seed7-initial"
 
 sbatch --account="$HAIC_ACCOUNT" --export=ALL slurm/run-swap-probe.sbatch
@@ -539,8 +539,8 @@ sbatch --account="$HAIC_ACCOUNT" --export=ALL slurm/run-swap-probe.sbatch
 Dry configuration, no test access, no training:
 
 ```bash
-AMASS_RUN_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs \
-AMASS_OUTPUT_DIR=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs/dry-config-seed7 \
+AMASS_RUN_ROOT="$GAVD6_ROOT/outputs" \
+AMASS_OUTPUT_DIR="$GAVD6_ROOT/outputs/dry-config-seed7" \
 AMASS_PROFILE=full AMASS_DEVICE=cuda AMASS_SEEDS=7 \
 AMASS_EVALUATE_TEST=0 AMASS_RUN_TRAINING=0 \
 uv run --no-sync train-amass-core11
@@ -550,7 +550,7 @@ After the repaired mask and metadata tests pass, run each seed or Slurm-array
 task into a **unique** directory:
 
 ```bash
-export AMASS_RUN_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs
+export AMASS_RUN_ROOT="$GAVD6_ROOT/outputs"
 export AMASS_RUN_ID=repaired-baseline-seed7
 export AMASS_OUTPUT_DIR="$AMASS_RUN_ROOT/runs/$AMASS_RUN_ID"
 AMASS_RUN_TRAINING=1 AMASS_PROFILE=full AMASS_DEVICE=cuda \
@@ -587,7 +587,7 @@ Intended usage after implementation:
 ```bash
 uv run --no-sync python scripts/build_amass_gauge_manifest.py \
   --source-manifest manifests/amass_core11_conversion.csv \
-  --source-tensor-root /hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs/core11 \
+  --source-tensor-root "$GAVD6_ROOT/outputs/core11" \
   --subject-splits manifests/amass_subject_splits.csv \
   --coordinate-contract gauge-neutral-v1 \
   --output-root /hai/scratch/tedmui/amass-gauge-v1

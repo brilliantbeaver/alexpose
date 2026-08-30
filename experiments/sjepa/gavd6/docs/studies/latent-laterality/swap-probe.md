@@ -150,7 +150,7 @@ For the real run, set the AMASS root and verify the exact inputs:
 ```bash
 export GAVD6_ROOT=/path/to/gavd6
 cd "$GAVD6_ROOT"
-export AMASS_RUN_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs
+export AMASS_RUN_ROOT="$GAVD6_ROOT/outputs"
 
 test -f "$AMASS_RUN_ROOT/manifests/amass_core11_conversion.csv"
 test -f outputs/repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt
@@ -219,7 +219,7 @@ For Slurm:
 ```bash
 cd "$GAVD6_ROOT"
 export HAIC_ACCOUNT=mind  # Replace with the allocation you are authorized to use.
-export AMASS_RUN_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs
+export AMASS_RUN_ROOT="$GAVD6_ROOT/outputs"
 export SWAP_PROBE_OUTPUT_DIR="$AMASS_RUN_ROOT/swap-probe-seed7-initial"
 
 sbatch --account="$HAIC_ACCOUNT" --export=ALL \
