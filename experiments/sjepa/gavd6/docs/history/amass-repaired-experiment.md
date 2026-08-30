@@ -51,7 +51,8 @@ AMASS_OUTPUT_DIR=outputs/repaired-smoke-seed7-final \
 Full seed-7 pilot on HAIC after interactive authentication:
 
 ```bash
-export AMASS_RUN_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/data/amass/outputs
+export GAVD6_ROOT=/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6
+export AMASS_RUN_ROOT="$GAVD6_ROOT/outputs"
 export AMASS_OUTPUT_DIR="$AMASS_RUN_ROOT/repaired-jepa-seed7"
 AMASS_RUN_TRAINING=1 AMASS_PROFILE=full AMASS_DEVICE=cuda \
 AMASS_SEEDS=7 AMASS_NUM_WORKERS=4 AMASS_EVALUATE_TEST=0 \
