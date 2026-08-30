@@ -146,6 +146,9 @@ under the declared corruption contract.
   specifies corruption artifacts and model arms, separates available commands
   from interfaces still to implement, budgets cluster time, and explains how
   to interpret each result pattern.
+- [implementation-tutorial.md](implementation-tutorial.md) gives the ordered
+  code-level migration from the legacy AMASS artifacts to gauge-neutral,
+  validity-aware baselines and the harder sequence-level AMASS-Gauge benchmark.
 
 ## Definition of done
 
