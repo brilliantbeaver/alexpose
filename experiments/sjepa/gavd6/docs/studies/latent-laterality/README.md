@@ -3,9 +3,12 @@
 **Study 02: predictive motion representations under unknown left/right
 correspondence.**
 
-> **Status:** two-week, controlled-mechanism study. The core deliverable is an
-> AMASS benchmark and a predictive representation evaluated for relative-gauge
-> and output calibration. A GAVD
+> **Status:** the gauge-neutral/validity-aware local implementation, persistent
+> sequence benchmark, duration-model gate, source-route screen, and gated
+> SG-JEPA objective are implemented and CPU-smoke-tested. Real AMASS/GAVD gates
+> and GPU training remain to run on HAIC. The core deliverable is an AMASS
+> benchmark and a predictive representation evaluated for relative-gauge and
+> output calibration. A GAVD
 > natural-event result is included only if a blinded audit passes its evidence
 > gate. This study does not claim force prediction or clinical validity.
 
@@ -149,6 +152,8 @@ under the declared corruption contract.
 - [implementation-tutorial.md](implementation-tutorial.md) gives the ordered
   code-level migration from the legacy AMASS artifacts to gauge-neutral,
   validity-aware baselines and the harder sequence-level AMASS-Gauge benchmark.
+- [haic-run-guide.md](haic-run-guide.md) gives the exact benchmark gate,
+  three-route source screen, common readout, and gated SG-JEPA commands.
 
 ## Definition of done
 

@@ -18,3 +18,9 @@ artifacts/notebook_runs/
 
 # Local experiment outputs are retained for reproducibility but never committed.
 outputs/
+
+# Generated AMASS/GAVD inventories and benchmark manifests are local data
+# artifacts. Their schema is defined by the checked-in builder scripts.
+manifests/amass/
+manifests/gavd/
+manifests/archive/
