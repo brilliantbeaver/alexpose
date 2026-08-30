@@ -70,6 +70,7 @@ SMPLH_VERTEX_INDEX = {
 }
 
 AMASS_UP_WORLD = np.array([0.0, 0.0, 1.0], dtype=np.float64)
+GAUGE_NEUTRAL_COORDINATE_FRAME = "gauge-neutral-travel-v1"
 
 
 @dataclass(frozen=True)
@@ -100,7 +101,11 @@ class ConversionConfig:
             raise ValueError("min_abs_lateral_hip_alignment must be finite and in [0, 1]")
         if not 0 < self.min_leg_length_m < self.max_leg_length_m:
             raise ValueError("leg-length bounds must satisfy 0 < minimum < maximum")
-        if self.forward_policy not in {"travel-or-hips", "require-travel"}:
+        if self.forward_policy not in {
+            "travel-or-hips",
+            "require-travel",
+            "gauge-neutral-travel",
+        }:
             raise ValueError(f"unsupported forward_policy: {self.forward_policy!r}")
 
 
@@ -124,7 +129,7 @@ class ForwardFrame:
     path_length_m: float
     straightness: float
     linearity: float
-    lateral_hip_alignment: float
+    lateral_hip_alignment: float | None
 
     @property
     def world_to_body_transform(self) -> np.ndarray:
@@ -447,9 +452,10 @@ def estimate_forward_frame(
             method = "pelvis_travel_pca_signed_by_robust_displacement"
 
     if forward is None:
-        if forward_policy == "require-travel":
+        if forward_policy in {"require-travel", "gauge-neutral-travel"}:
             raise ConversionError(
-                "pelvis travel is insufficient or ambiguous under --forward-policy=require-travel"
+                "pelvis travel is insufficient or ambiguous under the traveling-only "
+                f"forward policy {forward_policy!r}"
             )
         hips_ok = valid[:, 1] & valid[:, 2]
         hip_lateral = coordinates_world[hips_ok, 1] - coordinates_world[hips_ok, 2]
@@ -463,26 +469,37 @@ def estimate_forward_frame(
         forward = _safe_unit(np.cross(anatomical_left, up), "hip-facing direction")
         method = "hip_facing_fallback"
 
-    hips_ok = valid[:, 1] & valid[:, 2]
-    if not hips_ok.any():
-        raise ConversionError("cannot verify body-frame laterality: no valid bilateral hip frame")
-    hip_axis = coordinates_world[hips_ok, 1] - coordinates_world[hips_ok, 2]
-    hip_axis = np.median(hip_axis, axis=0).astype(np.float64)
-    hip_axis -= np.dot(hip_axis, up) * up
-    anatomical_left = _safe_unit(hip_axis, "hip alignment")
-
     lateral = _safe_unit(np.cross(up, forward), "mediolateral direction")
     forward = _safe_unit(np.cross(lateral, up), "orthogonalized forward direction")
-    hip_alignment = float(np.dot(lateral, anatomical_left))
-    if method.startswith("pelvis_travel") and abs(hip_alignment) < min_abs_lateral_hip_alignment:
-        if forward_policy == "require-travel":
+    if forward_policy == "gauge-neutral-travel":
+        # This policy intentionally never reads side-named joints while choosing
+        # or validating orientation. Its unresolved lateral sign is a sensor
+        # chart choice, kept separate from the later semantic permutation P.
+        hip_alignment = None
+        method = "gauge_neutral_pelvis_travel_pca_signed_by_net_displacement"
+    else:
+        hips_ok = valid[:, 1] & valid[:, 2]
+        if not hips_ok.any():
             raise ConversionError(
-                "pelvis travel is not sufficiently orthogonal to the anatomical hip axis"
+                "cannot verify body-frame laterality: no valid bilateral hip frame"
             )
-        forward = _safe_unit(np.cross(anatomical_left, up), "hip-facing direction")
-        lateral = _safe_unit(np.cross(up, forward), "mediolateral direction")
+        hip_axis = coordinates_world[hips_ok, 1] - coordinates_world[hips_ok, 2]
+        hip_axis = np.median(hip_axis, axis=0).astype(np.float64)
+        hip_axis -= np.dot(hip_axis, up) * up
+        anatomical_left = _safe_unit(hip_axis, "hip alignment")
         hip_alignment = float(np.dot(lateral, anatomical_left))
-        method = "hip_facing_fallback_due_to_travel_anatomy_misalignment"
+        if (
+            method.startswith("pelvis_travel")
+            and abs(hip_alignment) < min_abs_lateral_hip_alignment
+        ):
+            if forward_policy == "require-travel":
+                raise ConversionError(
+                    "pelvis travel is not sufficiently orthogonal to the anatomical hip axis"
+                )
+            forward = _safe_unit(np.cross(anatomical_left, up), "hip-facing direction")
+            lateral = _safe_unit(np.cross(up, forward), "mediolateral direction")
+            hip_alignment = float(np.dot(lateral, anatomical_left))
+            method = "hip_facing_fallback_due_to_travel_anatomy_misalignment"
 
     physical_basis = np.stack([forward, lateral, up], axis=1)
     if not np.allclose(physical_basis.T @ physical_basis, np.eye(3), atol=1e-6):
@@ -751,12 +768,20 @@ MANIFEST_FIELDS = (
 )
 
 
+def _coordinate_frame_name(config: ConversionConfig) -> str:
+    return (
+        GAUGE_NEUTRAL_COORDINATE_FRAME
+        if config.forward_policy == "gauge-neutral-travel"
+        else COORDINATE_FRAME
+    )
+
+
 def _configuration_fingerprint(config: ConversionConfig, model_info: Mapping[str, str]) -> str:
     payload = {
         "converter_version": CONVERTER_VERSION,
         "converter_source_sha256": CONVERTER_SOURCE_SHA256,
         "schema": SCHEMA,
-        "coordinate_frame": COORDINATE_FRAME,
+        "coordinate_frame": _coordinate_frame_name(config),
         "joint_names": CORE11_NAMES,
         "channel_names": CHANNEL_NAMES,
         "smplh_joint_indices": SMPLH_JOINT_INDEX,
@@ -908,10 +933,13 @@ def _provenance(
             "validity_semantics": VALIDITY_SEMANTICS,
         },
         "coordinate_frame": {
-            "name": COORDINATE_FRAME,
+            "name": _coordinate_frame_name(config),
             "source_up_axis": "+z",
             "positive_mediolateral": (
-                "up cross forward; aligns with anatomical left when the body faces travel direction"
+                "up cross pelvis-travel forward; a sensor-chart direction with no "
+                "anatomical-side claim"
+                if config.forward_policy == "gauge-neutral-travel"
+                else "up cross forward; aligns with anatomical left when the body faces travel direction"
             ),
             "centering": "per-frame SMPL-H pelvis",
             "scale": "median over frames of mean bilateral hip-knee plus knee-ankle length",
@@ -1029,7 +1057,7 @@ def convert_inventory_row(
                 "body_model_sha256": model_info["body_model_sha256"],
                 "dmpl_model_sha256": model_info["dmpl_model_sha256"],
                 "schema": SCHEMA,
-                "coordinate_frame": COORDINATE_FRAME,
+                "coordinate_frame": _coordinate_frame_name(config),
                 "valid_fraction": float(existing_valid.mean()),
                 "forward_method": frame_info["forward_method"],
                 "travel_displacement_m": frame_info["travel_displacement_m"],
@@ -1095,7 +1123,7 @@ def convert_inventory_row(
             "body_model_sha256": model_info["body_model_sha256"],
             "dmpl_model_sha256": model_info["dmpl_model_sha256"],
             "schema": SCHEMA,
-            "coordinate_frame": COORDINATE_FRAME,
+            "coordinate_frame": _coordinate_frame_name(config),
             "valid_fraction": float(converted["valid"].mean()),
             "forward_method": frame.method,
             "travel_displacement_m": frame.displacement_m,
@@ -1196,7 +1224,7 @@ def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--min-travel-straightness", type=float, default=0.20)
     parser.add_argument(
         "--forward-policy",
-        choices=("travel-or-hips", "require-travel"),
+        choices=("travel-or-hips", "require-travel", "gauge-neutral-travel"),
         default="travel-or-hips",
     )
     parser.add_argument("--overwrite", action="store_true")
@@ -1215,6 +1243,11 @@ def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     parser.set_defaults(verify_source_sha256=True)
     parser.add_argument("--fail-fast", action="store_true")
+    parser.add_argument(
+        "--allow-rejects",
+        action="store_true",
+        help="Exit successfully after recording ineligible rows (for declared strata)",
+    )
     parser.add_argument("--limit", type=int, default=None, help="Convert only the first N rows for a smoke test")
     parser.add_argument("--report-every", type=int, default=25)
     args = parser.parse_args(argv)
@@ -1311,7 +1344,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     rejected = sum(item["status"] == "error" for item in results)
     print(f"Wrote conversion manifest: {args.output_manifest}")
     print(f"Wrote reject manifest: {args.rejects}")
-    return 1 if rejected else 0
+    return 1 if rejected and not args.allow_rejects else 0
 
 
 if __name__ == "__main__":

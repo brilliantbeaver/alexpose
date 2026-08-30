@@ -45,6 +45,14 @@ class AdapterConfig:
     minimum_travel_straightness: float = 0.20
     minimum_abs_lateral_hip_alignment: float = 0.95
     minimum_token_valid_fraction: float = 0.95
+    frame_policy: str = "legacy-anatomical"
+
+    def __post_init__(self) -> None:
+        if self.frame_policy not in {
+            "legacy-anatomical",
+            "gauge-neutral-travel-or-image",
+        }:
+            raise ValueError(f"Unsupported GAVD frame policy: {self.frame_policy!r}")
 
 
 def _video_aspect_ratio(path: str | Path) -> float:
@@ -213,6 +221,22 @@ def _body_frame(
             forward = _safe_unit(forward, "pelvis-travel direction")
             method = "pelvis_travel_pca_signed_by_robust_displacement"
 
+    if config.frame_policy == "gauge-neutral-travel-or-image":
+        if forward is None:
+            # The pseudo-world axes are [image-right, depth, image-up]. Keep a
+            # declared image chart instead of manufacturing anatomy from named
+            # hips. Odd outputs in this chart must be evaluated up to sign.
+            return np.asarray(
+                [[0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]],
+                dtype=np.float64,
+            ), "declared_image_space_unanchored"
+        lateral = _safe_unit(np.cross(up, forward), "mediolateral direction")
+        forward = _safe_unit(np.cross(lateral, up), "orthogonalized forward direction")
+        return (
+            np.stack([forward, up, lateral], axis=0),
+            "gauge_neutral_pelvis_travel_pca_signed_by_net_displacement",
+        )
+
     hips_ok = valid[:, 1] & valid[:, 2]
     hip_axis = np.median(coordinates[hips_ok, 1] - coordinates[hips_ok, 2], axis=0)
     hip_axis = hip_axis.astype(np.float64) - np.dot(hip_axis, up) * up
@@ -272,6 +296,18 @@ def adapt_mediapipe_sequence(
     world, valid, observed_valid = mediapipe_to_core11_world(
         sequence, aspect_ratio=aspect_ratio, config=config
     )
+    source_confidence = np.zeros((len(sequence), len(JOINT_NAMES)), dtype=np.float32)
+    indexed_confidence = np.nan_to_num(
+        sequence[:, list(MEDIAPIPE_CORE_INDEX.values()), 3],
+        nan=0.0,
+        posinf=0.0,
+        neginf=0.0,
+    ).clip(0.0, 1.0)
+    source_confidence[:, 1:] = indexed_confidence
+    source_confidence[:, 0] = np.minimum(
+        indexed_confidence[:, 0], indexed_confidence[:, 1]
+    )
+    source_confidence[~valid] = 0.0
     leg_length = _leg_length(world, valid)
     transform, frame_method = _body_frame(world, valid, leg_length, config)
     centered = (world - world[:, 0:1]) / np.float32(leg_length)
@@ -280,12 +316,21 @@ def adapt_mediapipe_sequence(
     coordinates, canonical_valid = _resample(
         body, valid, source_fps, config.canonical_fps
     )
+    confidence, confidence_valid = _resample(
+        source_confidence[..., None], valid, source_fps, config.canonical_fps
+    )
+    if not np.array_equal(confidence_valid, canonical_valid):
+        raise ValueError("Detector confidence and coordinate validity diverged")
+    confidence = confidence[..., 0]
+    confidence[~canonical_valid] = 0.0
     return {
         "coordinates": coordinates,
         "valid": canonical_valid,
+        "detector_confidence": confidence.astype(np.float32),
         "observed_core_joint_fraction": float(observed_valid.mean()),
         "leg_length_image_units": leg_length,
         "frame_method": frame_method,
+        "odd_sign_anchored": False,
     }
 
 

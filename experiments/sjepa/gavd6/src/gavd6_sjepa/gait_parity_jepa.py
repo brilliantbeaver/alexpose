@@ -38,8 +38,10 @@ VARIANTS = [
     "reflection_equivariant",
     "paired_unconstrained",
 ]
-AMASS_VARIANTS = ["standard_sjepa", *VARIANTS]
+STANDARD_VARIANTS = ["standard_sjepa", "standard_mirror_aug"]
+AMASS_VARIANTS = [*STANDARD_VARIANTS, *VARIANTS]
 PAIRED_MASK_CONTRACT = "branch-specific-p-closed-v1"
+INPUT_CONTRACT = "coordinates-plus-token-validity-v1"
 
 
 @dataclass(frozen=True)
@@ -72,6 +74,7 @@ class TrainConfig:
     mask_joints: tuple[int, ...] = tuple(MASK_JOINTS)
     mirror_pairs: tuple[tuple[int, int], ...] = tuple(LEFT_RIGHT_PAIRS)
     mirror_channel: int = 0
+    validity_input: bool = True
 
 
 PROFILES = {
@@ -407,15 +410,49 @@ class SkeletonTokenizer(nn.Module):
         self.segments = config.frames // config.segment_length
         self.joints = config.joints
         self.embed_dim = config.embed_dim
+        self.validity_input = bool(config.validity_input)
         self.patch = nn.Linear(config.segment_length * 3, config.embed_dim)
+        self.validity_embedding = nn.Embedding(2, config.embed_dim)
+        # Zero initialization preserves old all-valid checkpoint behavior while
+        # making missingness a separately learnable input in every fresh run.
+        nn.init.zeros_(self.validity_embedding.weight)
         self.time_pos = nn.Parameter(torch.randn(self.segments, config.embed_dim) * 0.02)
         self.joint_pos = nn.Parameter(torch.randn(config.joints, config.embed_dim) * 0.02)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self, x: torch.Tensor, valid_patch: torch.Tensor | None = None
+    ) -> torch.Tensor:
+        if x.ndim != 4 or x.shape[1:] != (
+            self.frames,
+            self.joints,
+            3,
+        ):
+            raise ValueError(
+                f"Expected coordinates [B,{self.frames},{self.joints},3], "
+                f"got {tuple(x.shape)}"
+            )
         batch = len(x)
         patches = x.reshape(batch, self.segments, self.segment_length, self.joints, 3)
         patches = patches.permute(0, 1, 3, 2, 4).flatten(3)
-        return self.patch(patches) + self.time_pos[None, :, None] + self.joint_pos[None, None]
+        if valid_patch is None:
+            valid_patch = torch.ones(
+                batch,
+                self.segments,
+                self.joints,
+                dtype=torch.bool,
+                device=x.device,
+            )
+        if valid_patch.shape != (batch, self.segments, self.joints):
+            raise ValueError(
+                "Token validity must have shape "
+                f"[B,{self.segments},{self.joints}], got {tuple(valid_patch.shape)}"
+            )
+        if valid_patch.dtype != torch.bool:
+            raise TypeError("Token validity must have dtype torch.bool")
+        tokens = self.patch(patches)
+        if self.validity_input:
+            tokens = tokens + self.validity_embedding(valid_patch.long())
+        return tokens + self.time_pos[None, :, None] + self.joint_pos[None, None]
 
 
 def transformer_layer(config: TrainConfig) -> nn.TransformerEncoderLayer:
@@ -472,11 +509,14 @@ class StandardEncoder(nn.Module):
         self.norm = nn.LayerNorm(config.embed_dim)
 
     def forward(
-        self, x: torch.Tensor, keep_mask: torch.Tensor | None = None
+        self,
+        x: torch.Tensor,
+        keep_mask: torch.Tensor | None = None,
+        valid_patch: torch.Tensor | None = None,
     ) -> torch.Tensor:
         if x.ndim != 4:
             raise ValueError(f"Expected [B,T,J,C], got {tuple(x.shape)}")
-        tokens = self.tokenizer(x).flatten(1, 2)
+        tokens = self.tokenizer(x, valid_patch).flatten(1, 2)
         if keep_mask is not None:
             keep = keep_mask.flatten(1)
             counts = keep.sum(1)
@@ -507,10 +547,26 @@ class OrbitEncoder(nn.Module):
     def segments(self):
         return self.tokenizer.segments
 
-    def forward(self, orbit: torch.Tensor, keep_mask: torch.Tensor | None = None, return_states: bool = False):
+    def forward(
+        self,
+        orbit: torch.Tensor,
+        keep_mask: torch.Tensor | None = None,
+        return_states: bool = False,
+        valid_patch: torch.Tensor | None = None,
+    ):
         if orbit.ndim != 5 or orbit.shape[1] != 2:
             raise ValueError(f"Expected [B,2,T,J,C], got {tuple(orbit.shape)}")
-        a, b = self.tokenizer(orbit[:, 0]), self.tokenizer(orbit[:, 1])
+        if valid_patch is not None:
+            require_orbit_closed_mask(
+                valid_patch, self.config.mirror_pairs, label="paired validity"
+            )
+            if tuple(valid_patch.shape[2:]) != (self.segments, self.config.joints):
+                raise ValueError("Paired validity does not match encoder token geometry")
+            first_valid, second_valid = valid_patch.unbind(1)
+        else:
+            first_valid = second_valid = None
+        a = self.tokenizer(orbit[:, 0], first_valid)
+        b = self.tokenizer(orbit[:, 1], second_valid)
         a, b = a.flatten(1, 2), b.flatten(1, 2)
         if keep_mask is not None:
             require_orbit_closed_mask(
@@ -640,9 +696,11 @@ class StandardTokenPredictor(nn.Module):
 class StandardJEPA(nn.Module):
     """Ordinary single-view S-JEPA with an EMA teacher and masked predictor."""
 
-    def __init__(self, config: TrainConfig):
+    def __init__(self, config: TrainConfig, variant: str = "standard_sjepa"):
         super().__init__()
-        self.config, self.variant = config, "standard_sjepa"
+        if variant not in STANDARD_VARIANTS:
+            raise ValueError(variant)
+        self.config, self.variant = config, variant
         self.encoder = StandardEncoder(config)
         self.target_encoder = copy.deepcopy(self.encoder)
         for parameter in self.target_encoder.parameters():
@@ -651,12 +709,22 @@ class StandardJEPA(nn.Module):
         self.register_buffer("target_center", torch.zeros(config.embed_dim))
 
     def forward(
-        self, x: torch.Tensor, target_mask: torch.Tensor
+        self,
+        x: torch.Tensor,
+        target_mask: torch.Tensor,
+        valid_patch: torch.Tensor | None = None,
     ) -> tuple[torch.Tensor, torch.Tensor]:
-        student = self.encoder(x, keep_mask=~target_mask)
+        if valid_patch is not None:
+            if valid_patch.shape != target_mask.shape:
+                raise ValueError("Validity and target mask must have identical token geometry")
+            if (target_mask & ~valid_patch).any():
+                raise ValueError("Invalid tokens must never be JEPA targets")
+        student = self.encoder(
+            x, keep_mask=~target_mask, valid_patch=valid_patch
+        )
         predicted = self.predictor(student, target_mask)
         with torch.no_grad():
-            targets = self.target_encoder(x)
+            targets = self.target_encoder(x, valid_patch=valid_patch)
             mask = target_mask.flatten(1)
             targets = targets[mask].reshape(len(x), -1, targets.shape[-1])
         return predicted, targets
@@ -684,14 +752,24 @@ class OrbitJEPA(nn.Module):
         self.predictor = PairedTokenPredictor(config, variant)
         self.register_buffer("target_center", torch.zeros(config.embed_dim))
 
-    def forward(self, orbit, target_mask):
+    def forward(self, orbit, target_mask, valid_patch: torch.Tensor | None = None):
         require_orbit_closed_mask(
             target_mask, self.config.mirror_pairs, label="paired target mask"
         )
-        student = self.encoder(orbit, keep_mask=~target_mask)
+        if valid_patch is not None:
+            require_orbit_closed_mask(
+                valid_patch, self.config.mirror_pairs, label="paired validity"
+            )
+            if valid_patch.shape != target_mask.shape:
+                raise ValueError("Validity and target mask must have identical token geometry")
+            if (target_mask & ~valid_patch).any():
+                raise ValueError("Invalid tokens must never be JEPA targets")
+        student = self.encoder(
+            orbit, keep_mask=~target_mask, valid_patch=valid_patch
+        )
         predicted = self.predictor(student, target_mask)
         with torch.no_grad():
-            targets = self.target_encoder(orbit)
+            targets = self.target_encoder(orbit, valid_patch=valid_patch)
             selected = [
                 branch[mask.flatten(1)].reshape(len(orbit), -1, branch.shape[-1])
                 for branch, mask in zip(targets, target_mask.unbind(1))
@@ -1056,6 +1134,7 @@ def capacity_matched_config(config: TrainConfig, variant: str) -> TrainConfig:
     if config.profile == "amass-full":
         dimensions = {
             "standard_sjepa": (64, 8, 903),
+            "standard_mirror_aug": (64, 8, 903),
             "paired_shared_no_cross": (64, 8, 903),
             "reflection_equivariant": (64, 8, 773),
             "paired_unconstrained": (64, 8, 256),
@@ -1063,6 +1142,7 @@ def capacity_matched_config(config: TrainConfig, variant: str) -> TrainConfig:
     elif config.profile == "amass-smoke":
         dimensions = {
             "standard_sjepa": (24, 4, 343),
+            "standard_mirror_aug": (24, 4, 343),
             "paired_shared_no_cross": (24, 4, 343),
             "reflection_equivariant": (24, 4, 293),
             "paired_unconstrained": (24, 4, 96),
@@ -1070,6 +1150,7 @@ def capacity_matched_config(config: TrainConfig, variant: str) -> TrainConfig:
     else:
         multiplier = {
             "standard_sjepa": 14,
+            "standard_mirror_aug": 14,
             "paired_shared_no_cross": 14,
             "reflection_equivariant": 12,
             "paired_unconstrained": 4,
@@ -1096,7 +1177,11 @@ def build_model(config: TrainConfig, variant: str, seed: int) -> OrbitJEPA | Sta
         raise ValueError(variant)
     seed_everything(seed)
     matched = capacity_matched_config(config, variant)
-    return StandardJEPA(matched) if variant == "standard_sjepa" else OrbitJEPA(matched, variant)
+    return (
+        StandardJEPA(matched, variant)
+        if variant in STANDARD_VARIANTS
+        else OrbitJEPA(matched, variant)
+    )
 
 
 def trainable_parameter_count(
@@ -1121,7 +1206,18 @@ def load_checkpoint(path: Path):
     payload = torch.load(path, map_location="cpu", weights_only=True)
     config = TrainConfig(**payload["metadata"]["train_config"])
     model = build_model(config, payload["metadata"]["variant"], payload["metadata"]["seed"])
-    model.load_state_dict(payload["model_state"])
+    incompatible = model.load_state_dict(payload["model_state"], strict=False)
+    allowed_missing = {
+        name
+        for name in incompatible.missing_keys
+        if name.endswith("tokenizer.validity_embedding.weight")
+    }
+    unexpected = set(incompatible.unexpected_keys)
+    if set(incompatible.missing_keys) != allowed_missing or unexpected:
+        raise RuntimeError(
+            "Checkpoint state is incompatible beyond the legacy validity input: "
+            f"missing={incompatible.missing_keys}, unexpected={incompatible.unexpected_keys}"
+        )
     projector = VICRegProjector(config.embed_dim)
     projector.load_state_dict(payload["projector_state"])
     return model, projector, payload["metadata"]

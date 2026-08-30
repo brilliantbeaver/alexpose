@@ -8,7 +8,7 @@ import time
 from collections import OrderedDict
 from dataclasses import asdict
 from pathlib import Path, PurePosixPath
-from typing import Iterable, Iterator, Mapping
+from typing import Iterable, Iterator, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
@@ -67,6 +67,7 @@ __all__ = [
     "TIME_PATCH_FRAMES",
     "WINDOW_FRAMES",
     "Core11WindowDataset",
+    "BalancedGroupBatchPlan",
     "FixedBatchPlan",
     "SyntheticCore11Dataset",
     "atomic_dataframe_to_csv",
@@ -97,6 +98,10 @@ def load_conversion_manifest(path: Path) -> pd.DataFrame:
     missing = REQUIRED_MANIFEST_COLUMNS.difference(frame.columns)
     if missing:
         raise ValueError(f"Manifest is missing columns: {sorted(missing)}")
+    if "status" in frame:
+        frame = frame.loc[
+            frame.status.isin({"converted", "skipped_valid_existing"})
+        ].copy()
     if frame.empty:
         raise ValueError("Conversion manifest is empty")
     if not frame["tensor_relative_path"].is_unique:
@@ -218,6 +223,7 @@ class Core11WindowDataset(Dataset):
         *,
         split: str,
         cache_sequences: int = 2,
+        balance_source_groups: bool = False,
     ) -> None:
         if split not in {"train", "validation", "test"}:
             raise ValueError(split)
@@ -227,6 +233,8 @@ class Core11WindowDataset(Dataset):
         self.tensor_root = Path(tensor_root).expanduser().resolve()
         self.split = split
         self.cache_sequences = max(int(cache_sequences), 0)
+        self.balance_source_groups = bool(balance_source_groups)
+        self.sampling_groups = [str(item["identity"]) for item in self.windows]
         self._cache: OrderedDict[int, tuple[np.ndarray, np.ndarray]] = OrderedDict()
 
     def __len__(self) -> int:
@@ -371,6 +379,50 @@ class FixedBatchPlan:
             yield batch.tolist()
 
 
+class BalancedGroupBatchPlan:
+    """Draw groups uniformly, then cycle deterministically through their windows."""
+
+    def __init__(
+        self,
+        groups: Sequence[str],
+        batch_size: int,
+        updates: int,
+        seed: int,
+    ) -> None:
+        if not groups or batch_size < 1 or updates < 1:
+            raise ValueError("groups, batch_size, and updates must be nonempty/positive")
+        self.batch_size = int(batch_size)
+        self.updates = int(updates)
+        self.seed = int(seed)
+        self.indices: dict[str, np.ndarray] = {}
+        for index, group in enumerate(groups):
+            self.indices.setdefault(str(group), []).append(index)
+        self.indices = {
+            group: np.asarray(values, dtype=np.int64)
+            for group, values in self.indices.items()
+        }
+
+    def __len__(self) -> int:
+        return self.updates
+
+    def __iter__(self) -> Iterator[list[int]]:
+        rng = np.random.default_rng(self.seed)
+        names = np.asarray(sorted(self.indices), dtype=object)
+        orders = {name: rng.permutation(self.indices[name]) for name in names}
+        cursors = {name: 0 for name in names}
+        for _ in range(self.updates):
+            selected_groups = rng.choice(names, size=self.batch_size, replace=True)
+            batch = []
+            for name in selected_groups:
+                cursor = cursors[name]
+                if cursor >= len(orders[name]):
+                    orders[name] = rng.permutation(self.indices[name])
+                    cursor = 0
+                batch.append(int(orders[name][cursor]))
+                cursors[name] = cursor + 1
+            yield batch
+
+
 def make_train_loader(
     dataset: Core11WindowDataset,
     config: TrainConfig,
@@ -386,9 +438,20 @@ def make_train_loader(
     # descriptor limit.
     if num_workers:
         configure_worker_tensor_sharing()
+    if getattr(dataset, "balance_source_groups", False):
+        batch_sampler = BalancedGroupBatchPlan(
+            dataset.sampling_groups,
+            config.batch_size,
+            updates,
+            seed + 17,
+        )
+    else:
+        batch_sampler = FixedBatchPlan(
+            len(dataset), config.batch_size, updates, seed + 17
+        )
     kwargs = {
         "dataset": dataset,
-        "batch_sampler": FixedBatchPlan(len(dataset), config.batch_size, updates, seed + 17),
+        "batch_sampler": batch_sampler,
         "num_workers": int(num_workers),
         "pin_memory": torch.cuda.is_available(),
     }
@@ -447,27 +510,59 @@ def _variant_views(
     valid: torch.Tensor,
     mask_generator: torch.Generator,
     view_generator: torch.Generator,
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    *,
+    return_validity: bool = False,
+) -> tuple[torch.Tensor, ...]:
     """Build matched augmented views without giving standard S-JEPA a mirror branch."""
 
+    canonical_valid = valid.bool()
+    if model.variant == "standard_mirror_aug":
+        mirror_bits = torch.rand(
+            len(canonical), generator=view_generator, device="cpu"
+        ) < 0.5
+        mirrored_coordinates = anatomical_mirror(
+            canonical, model.config.mirror_pairs, model.config.mirror_channel
+        )
+        coordinate_bits = mirror_bits.to(canonical.device)[:, None, None, None]
+        canonical = torch.where(coordinate_bits, mirrored_coordinates, canonical)
+        mirrored_valid = permute_bilateral_tokens(
+            canonical_valid, model.config.mirror_pairs
+        )
+        canonical_valid = torch.where(
+            mirror_bits[:, None, None], mirrored_valid, canonical_valid
+        )
     base_target_mask = sample_mask(
-        valid,
+        canonical_valid,
         model.config.mask_fraction,
         mask_generator,
         model.config.mask_joints,
     ).to(canonical.device, non_blocking=True)
     first = _augment_canonical(canonical, model.config.max_yaw_degrees, view_generator)
     second = _augment_canonical(canonical, model.config.max_yaw_degrees, view_generator)
-    if model.variant == "standard_sjepa":
-        return first, second, base_target_mask
+    canonical_valid = canonical_valid.to(canonical.device, non_blocking=True)
+    if model.variant in STANDARD_VARIANTS:
+        result = (first, second, base_target_mask)
+        if return_validity:
+            result += (canonical_valid, canonical_valid)
+        return result
     target_mask = orbit_closed_target_masks(
         base_target_mask, model.config.mirror_pairs
     )
-    return (
+    result = (
         lift_orbit(first, model.config.mirror_pairs, model.config.mirror_channel),
         lift_orbit(second, model.config.mirror_pairs, model.config.mirror_channel),
         target_mask,
     )
+    if return_validity:
+        paired_valid = torch.stack(
+            [
+                canonical_valid,
+                permute_bilateral_tokens(canonical_valid, model.config.mirror_pairs),
+            ],
+            dim=1,
+        )
+        result += (paired_valid, paired_valid)
+    return result
 
 
 def train_streaming_variant(
@@ -504,13 +599,24 @@ def train_streaming_variant(
     for step, batch in enumerate(_loader_batches(loader)):
         canonical = batch["coordinates"].to(device, non_blocking=True)
         valid = batch["valid"]
-        first_view, second_view, target_mask = _variant_views(
-            model, canonical, valid, mask_generator, view_generator
+        first_view, second_view, target_mask, first_valid, second_valid = _variant_views(
+            model,
+            canonical,
+            valid,
+            mask_generator,
+            view_generator,
+            return_validity=True,
         )
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp_enabled):
             terms, representation_terms, targets = _objective_terms(
-                model, projector, first_view, second_view, target_mask
+                model,
+                projector,
+                first_view,
+                second_view,
+                target_mask,
+                first_valid,
+                second_valid,
             )
             total = terms["total_loss"]
         if not torch.isfinite(total):
@@ -551,16 +657,18 @@ def _objective_terms(
     first_view: torch.Tensor,
     second_view: torch.Tensor,
     target_mask: torch.Tensor,
+    first_valid: torch.Tensor | None = None,
+    second_valid: torch.Tensor | None = None,
 ) -> tuple[
     dict[str, torch.Tensor], dict[str, dict[str, torch.Tensor]], torch.Tensor
 ]:
-    predicted, targets = model(first_view, target_mask)
+    predicted, targets = model(first_view, target_mask, valid_patch=first_valid)
     cross_entropy, teacher_entropy, kl_divergence = sjepa_distribution_metrics(
         predicted, targets, model.target_center
     )
-    if model.variant == "standard_sjepa":
-        first_standard = model.encoder(first_view).mean(1)
-        second_standard = model.encoder(second_view).mean(1)
+    if model.variant in STANDARD_VARIANTS:
+        first_standard = model.encoder(first_view, valid_patch=first_valid).mean(1)
+        second_standard = model.encoder(second_view, valid_patch=second_valid).mean(1)
         standard_terms = vicreg_terms(
             projector(first_standard), projector(second_standard)
         )
@@ -574,8 +682,12 @@ def _objective_terms(
             }
         }
     else:
-        first_even, first_odd = parity_channels(model.encoder(first_view))
-        second_even, second_odd = parity_channels(model.encoder(second_view))
+        first_even, first_odd = parity_channels(
+            model.encoder(first_view, valid_patch=first_valid)
+        )
+        second_even, second_odd = parity_channels(
+            model.encoder(second_view, valid_patch=second_valid)
+        )
         even_terms = vicreg_terms(projector(first_even), projector(second_even))
         odd_terms = vicreg_terms(projector(first_odd), projector(second_odd))
         vicreg_loss = even_terms[0] + model.config.odd_vicreg_weight * odd_terms[0]
@@ -668,15 +780,26 @@ def _train_epoch(
     for batch in _loader_batches(loader):
         canonical = batch["coordinates"].to(device, non_blocking=True)
         valid = batch["valid"]
-        first_view, second_view, target_mask = _variant_views(
-            model, canonical, valid, mask_generator, view_generator
+        first_view, second_view, target_mask, first_valid, second_valid = _variant_views(
+            model,
+            canonical,
+            valid,
+            mask_generator,
+            view_generator,
+            return_validity=True,
         )
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(
             device_type=device.type, dtype=torch.float16, enabled=amp_enabled
         ):
             terms, representations, targets = _objective_terms(
-                model, projector, first_view, second_view, target_mask
+                model,
+                projector,
+                first_view,
+                second_view,
+                target_mask,
+                first_valid,
+                second_valid,
             )
         if not all(torch.isfinite(value) for value in terms.values()):
             raise FloatingPointError(f"Non-finite training metric in epoch {epoch}")
@@ -751,14 +874,25 @@ def evaluate_variant(
         for batch in _loader_batches(loader):
             canonical = batch["coordinates"].to(device, non_blocking=True)
             valid = batch["valid"]
-            first_view, second_view, target_mask = _variant_views(
-                model, canonical, valid, mask_generator, view_generator
+            first_view, second_view, target_mask, first_valid, second_valid = _variant_views(
+                model,
+                canonical,
+                valid,
+                mask_generator,
+                view_generator,
+                return_validity=True,
             )
             with torch.autocast(
                 device_type=device.type, dtype=torch.float16, enabled=amp_enabled
             ):
                 terms, representations, _ = _objective_terms(
-                    model, projector, first_view, second_view, target_mask
+                    model,
+                    projector,
+                    first_view,
+                    second_view,
+                    target_mask,
+                    first_valid,
+                    second_valid,
                 )
             if not all(torch.isfinite(value) for value in terms.values()):
                 raise FloatingPointError(f"Non-finite {split} metric")
@@ -773,7 +907,7 @@ def evaluate_variant(
                 audit_coordinates = canonical[:2].detach()
                 audit_mask = target_mask[:2].detach()
     metrics = _finish_metrics(totals, weight, representation_features)
-    if model.variant != "standard_sjepa":
+    if model.variant not in STANDARD_VARIANTS:
         audit, layer_audit = complete_commutation_audit(
             model, audit_coordinates, audit_mask, device=device
         )
@@ -793,7 +927,7 @@ def checkpoint_is_eligible(
 ) -> bool:
     if not all(math.isfinite(float(value)) for value in metrics.values()):
         return False
-    if variant == "standard_sjepa":
+    if variant in STANDARD_VARIANTS:
         return metrics["standard_feature_variance"] > minimum_feature_variance
     if metrics["even_feature_variance"] <= minimum_feature_variance:
         return False
@@ -1014,9 +1148,10 @@ def checkpoint_payload(
             "train_config": asdict(config),
             "paired_mask_contract": (
                 PAIRED_MASK_CONTRACT
-                if variant != "standard_sjepa"
+                if variant not in STANDARD_VARIANTS
                 else "single-branch-v1"
             ),
+            "input_contract": INPUT_CONTRACT,
             "optimizer_updates": updates,
             "epoch": epoch,
             "validation_metrics": dict(validation_metrics or {}),
