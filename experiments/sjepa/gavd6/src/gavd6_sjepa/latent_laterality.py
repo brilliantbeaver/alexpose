@@ -14,6 +14,7 @@ shared source frame.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 from dataclasses import asdict, dataclass
 from typing import Iterable, Mapping, Sequence
@@ -41,6 +42,7 @@ class SequenceGaugeConfig:
     repeated_switch_rate: float = 0.06
     maximum_repeated_switches: int = 4
     nuisance_boundaries: int = 4
+    nuisance_selection: str = "matched"
     boundary_radius_frames: int = 1
     boundary_mode: str = "interpolate"
     noise_scale: float = 0.0
@@ -67,12 +69,34 @@ class SequenceGaugeConfig:
             raise ValueError("repeated_switch_rate must be in [0, 1]")
         if self.maximum_repeated_switches < 1:
             raise ValueError("maximum_repeated_switches must be positive")
-        if self.nuisance_boundaries < self.maximum_repeated_switches:
-            raise ValueError("nuisance_boundaries must cover every possible true switch")
+        if self.nuisance_selection not in {"matched", "independent"}:
+            raise ValueError("Nuisance selection must be matched or independent")
+        if (
+            self.nuisance_selection == "matched"
+            and self.nuisance_boundaries < self.maximum_repeated_switches
+        ):
+            raise ValueError("Matched nuisances must cover every possible true switch")
         if self.boundary_mode not in {"interpolate", "gap"}:
             raise ValueError("boundary_mode must be interpolate or gap")
         if self.boundary_radius_frames < 0 or self.noise_scale < 0:
             raise ValueError("Boundary radius and noise scale must be nonnegative")
+
+
+def sequence_gauge_config_json(config: SequenceGaugeConfig) -> str:
+    """Return the canonical, manifest-safe representation of a gauge config."""
+
+    return json.dumps(asdict(config), sort_keys=True, separators=(",", ":"))
+
+
+def sequence_gauge_config_from_json(value: str) -> SequenceGaugeConfig:
+    """Load and validate the exact configuration embedded in a draw manifest."""
+
+    payload = json.loads(value)
+    if not isinstance(payload, dict):
+        raise ValueError("Sequence gauge configuration must be a JSON object")
+    if "local_durations" in payload:
+        payload["local_durations"] = tuple(payload["local_durations"])
+    return SequenceGaugeConfig(**payload)
 
 
 @dataclass(frozen=True)
@@ -315,12 +339,20 @@ def generate_sequence_draw(
     switch_blocks = np.flatnonzero(path[1:] != path[:-1]) + 1
     switch_frames = tuple(int(item * config.block_frames) for item in switch_blocks)
     nuisance_rng = np.random.default_rng(stable_seed(seed, "boundary", key))
-    nuisance_blocks = list(map(int, switch_blocks))
-    remaining = np.setdiff1d(boundaries, np.asarray(nuisance_blocks, dtype=int))
-    needed = min(config.nuisance_boundaries, len(boundaries)) - len(nuisance_blocks)
-    if needed > 0:
-        pseudo = nuisance_rng.choice(remaining, size=needed, replace=False)
-        nuisance_blocks.extend(map(int, pseudo))
+    if config.nuisance_selection == "matched":
+        nuisance_blocks = list(map(int, switch_blocks))
+        remaining = np.setdiff1d(boundaries, np.asarray(nuisance_blocks, dtype=int))
+        needed = min(config.nuisance_boundaries, len(boundaries)) - len(nuisance_blocks)
+        if needed > 0:
+            pseudo = nuisance_rng.choice(remaining, size=needed, replace=False)
+            nuisance_blocks.extend(map(int, pseudo))
+    else:
+        # Gaps must not be guaranteed at true changes: that would make the
+        # validity pattern a weak switch detector.  Draw them with an
+        # independent RNG, so a subset of events is obscured while the rest
+        # remain visible and mask-only evidence has no label association.
+        count = min(config.nuisance_boundaries, len(boundaries))
+        nuisance_blocks = list(map(int, nuisance_rng.choice(boundaries, size=count, replace=False)))
     nuisance_frames = tuple(sorted(block * config.block_frames for block in nuisance_blocks))
     bit_rng = np.random.default_rng(stable_seed(seed, "independent-bits", key))
     draw = SequenceGaugeDraw(

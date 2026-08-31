@@ -117,6 +117,12 @@ GPU jobs request one H100. Manifest construction and sequence benchmarks are
 CPU-only. Training matrices use Slurm arrays so every model gets an independent
 allocation, exit status, and log.
 
+The original AMASS `gauge-seed7.csv` and `amass-benchmark-seed7` artifacts are
+diagnostics, not training inputs. They have a learnable global-chart label and
+their local swaps are solved exactly by the adjacent-frame continuity rule.
+Use the v2 scripts below for AMASS SG-JEPA. They write new paths and never
+replace those historical artifacts.
+
 | Job | Runs | HAIC request |
 | --- | --- | --- |
 | `01-convert-amass-neutral.sbatch` | AMASS neutral Core11 conversion | 1 H100, 8 CPU, 64 GB, 24 h |
@@ -129,6 +135,12 @@ allocation, exit status, and log.
 | `08-run-selected-sequence-benchmark.sbatch` | Selected-route benchmark gate | 8 CPU, 64 GB, 8 h |
 | `09-train-gauge-seed7.sbatch` | Correction-first, SG-JEPA, uniform; array `0-2` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
 | `10-train-gauge-confirmation.sbatch` | Correction-first and SG-JEPA at seeds 19/31; array `0-3` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
+| `11-build-amass-gauge-v2-chart-paired.sbatch` | Exact chart-paired, gap-boundary AMASS draws | 4 CPU, 16 GB, 4 h |
+| `12-run-amass-sequence-benchmark-v2.sbatch` | v2 AMASS eligibility gate | 8 CPU, 64 GB, 8 h |
+| `13-train-amass-gauge-v2-seed7.sbatch` | v2 correction-first, SG-JEPA, uniform; array `0-2` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
+| `14-evaluate-amass-gauge-v2-seed7-validation.sbatch` | Development-only common readout | 1 H100, 8 CPU, 64 GB, 8 h |
+| `15-train-amass-gauge-v2-confirmation.sbatch` | v2 correction-first and SG-JEPA at 19/31; array `0-3` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
+| `16-evaluate-amass-gauge-v2-confirmation-test.sbatch` | Sealed common test readout | 1 H100, 8 CPU, 64 GB, 8 h |
 
 The array task mappings are frozen as follows:
 
@@ -141,14 +153,92 @@ The array task mappings are frozen as follows:
 Array logs use `%A_%a`, so each task has separate standard-output and error
 files keyed by the parent job ID and task ID.
 
-## 1. Build neutral AMASS tensors and run the real gate
+## AMASS v2 repair workflow — use this for SG-JEPA
+
+The v2 generator fixes the two empirical defects in the current AMASS gate.
+For each source draw it emits `(z, chart=0)` and `(Pz, chart=1)`, with the
+same path, sensor action, and boundary nuisance. The two rows produce exactly
+the same observed coordinates and validity masks while retaining opposite chart
+labels. The benchmark verifies that equality on the loaded arrays, so an
+absolute-chart probe cannot exploit participant, joint-slot, or split
+imbalance. The pair is counted once for path/oracle estimands and the second
+view is not a second training exposure.
+
+It also places four fixed one-frame validity gaps at independently sampled
+boundaries. Thus only a random subset of true switches is obscured, while the
+gap pattern itself is independent of switching and cannot serve as a mask-only
+detector. This removes the v1 one-frame discontinuity where a gap coincides
+with an event, while retaining motion on both sides of every gap. The policy is
+frozen in the CSV and replayed by training/evaluation; do not tune its width
+after seeing the gate.
+
+If neutral AMASS tensors do not already exist, first run
+`01-convert-amass-neutral.sbatch`. Then build and gate v2:
+
+```bash
+cd "$GAVD6_ROOT"
+j11=$(sbatch --parsable --export=ALL slurm/latent-laterality/11-build-amass-gauge-v2-chart-paired.sbatch)
+j12=$(sbatch --parsable --export=ALL --dependency="afterok:$j11" slurm/latent-laterality/12-run-amass-sequence-benchmark-v2.sbatch)
+```
+
+`j12` exits 2 when the scientific eligibility gate fails; that is an intended
+stop, even though it writes all diagnostics. Inspect:
+
+```bash
+cat "$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/gate_decision.json"
+cat "$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/effective_config.json"
+```
+
+Continue only if `ready_for_sg_jepa` is true. In particular, verify that the
+effective config reports `chart_pairing_verified: true`, 6,152 chart views and
+3,076 independent source draws for the present AMASS manifest. A pass makes
+training an honest test; it does not guarantee that SG-JEPA will win.
+
+Submit the three matched seed-7 arms manually after that check (the training
+entry point also rejects a gate produced from another manifest hash):
+
+```bash
+j13=$(sbatch --parsable --export=ALL slurm/latent-laterality/13-train-amass-gauge-v2-seed7.sbatch)
+```
+
+After every array task has finished successfully, run the development-only
+common readout. It fits the fixed linear readout on train identities and reports
+identity-macro unanchored odd-magnitude and even NMAE on validation identities;
+it does not load test rows.
+
+```bash
+j14=$(sbatch --parsable --export=ALL --dependency="afterok:$j13" slurm/latent-laterality/14-evaluate-amass-gauge-v2-seed7-validation.sbatch)
+```
+
+Review `amass-gauge-v2-seed7-validation/gauge_readout_summary.csv`. Advance
+only if SG-JEPA beats correction-first on odd-orbit NMAE without a material
+even-channel loss, and if the uniform-posterior ablation does not match that
+improvement. Otherwise report the simpler result and do not run confirmation.
+
+If it advances, train the prespecified seeds 19 and 31, then run the sole
+test-reading job. The final readout includes seed 7 as well, so all three seeds
+are evaluated through one common test contract.
+
+```bash
+j15=$(sbatch --parsable --export=ALL slurm/latent-laterality/15-train-amass-gauge-v2-confirmation.sbatch)
+j16=$(sbatch --parsable --export=ALL --dependency="afterok:$j15" slurm/latent-laterality/16-evaluate-amass-gauge-v2-confirmation-test.sbatch)
+```
+
+The test outputs are `gauge_readout_summary.csv`,
+`gauge_readout_predictions.csv`, `gauge_path_metrics.csv`, and
+`evaluation_contract.json` under `amass-gauge-v2-confirmation-test`. The final
+claim needs the same SG-JEPA direction at seeds 7, 19, and 31. It must remain
+an unanchored controlled-robustness claim: the odd target is an orbit magnitude,
+not a named anatomical side.
+
+## Historical v1 AMASS diagnostic workflow
 
 The conversion job uses the gauge-neutral traveling-only policy. It rejects a
 sequence when forward direction cannot be estimated from pelvis trajectory and
 never uses named left/right joints to select or validate orientation.
 
-Submit conversion, gauge-manifest construction, and the benchmark as one
-dependency chain:
+This chain reproduces the v1 diagnostic only. Its result must not authorize
+v2 SG-JEPA training:
 
 ```bash
 cd "$GAVD6_ROOT"

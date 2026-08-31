@@ -1,19 +1,28 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import unittest
 from dataclasses import replace
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 
 import numpy as np
+import pandas as pd
 import torch
 
 from gavd6_sjepa.amass_core11_jepa import (
     BalancedGroupBatchPlan,
     MIRROR_CHANNEL,
     MIRROR_PAIRS,
+    checkpoint_payload,
     core11_train_config,
 )
 from gavd6_sjepa.gauge_training import semantic_gauge_objective
+from gavd6_sjepa.gauge_evaluation import GaugeWindows, _encoder_features, evaluate
 from gavd6_sjepa.gait_parity_jepa import (
+    VICRegProjector,
     build_model,
     lift_orbit,
     orbit_closed_target_masks,
@@ -28,11 +37,19 @@ from gavd6_sjepa.latent_laterality import (
     path_hamming_up_to_global_flip,
     run_length_decode,
     semantic_permute,
+    sequence_gauge_config_json,
     sensor_reflect,
     slice_corrupted_windows,
     structured_parity_prediction_loss,
 )
-from gavd6_sjepa.study_protocol import ARM_SPECS, source_screen_jobs
+from gavd6_sjepa.sequence_benchmark import (
+    load_manifest_sequence_config,
+    make_manifest_examples,
+    one_example_per_chart_pair,
+    run_sequence_benchmark,
+)
+from gavd6_sjepa.study_protocol import ARM_SPECS, require_benchmark_gate, source_screen_jobs
+from scripts.build_amass_gauge_manifest import build as build_amass_gauge_manifest
 from scripts.convert_amass_core11 import (
     ConversionConfig,
     convert_sequence_arrays,
@@ -192,6 +209,210 @@ class TypedInputTests(unittest.TestCase):
 
 
 class SequenceBenchmarkTests(unittest.TestCase):
+    def test_paired_manifest_has_identical_observations_and_one_effective_draw(self):
+        coordinates, valid, pelvis = synthetic_sequence()
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            tensor_root = root / "tensors"
+            tensor_root.mkdir()
+            np.savez(
+                tensor_root / "sequence.npz",
+                coordinates=coordinates,
+                valid=valid,
+                pelvis_world_m=pelvis,
+            )
+            source_manifest = root / "source.csv"
+            pd.DataFrame(
+                [
+                    {
+                        "tensor_relative_path": "sequence.npz",
+                        "identity": "participant-1",
+                        "split": "train",
+                        "canonical_frames": len(coordinates),
+                        "coordinate_frame": "gauge-neutral-travel-v1",
+                        "status": "converted",
+                        "motion_id": "reused-readable-name",
+                    }
+                ]
+            ).to_csv(source_manifest, index=False)
+            output_manifest = root / "gauge-v2.csv"
+            config = SequenceGaugeConfig(
+                boundary_mode="gap", boundary_radius_frames=1
+            )
+            written = build_amass_gauge_manifest(
+                source_manifest,
+                tensor_root,
+                output_manifest,
+                draws=1,
+                seed=7,
+                config=config,
+                chart_pairs=True,
+            )
+            self.assertEqual(len(written), 2)
+            self.assertEqual(written.source_chart_bit.tolist(), [0, 1])
+            self.assertEqual(written.latent_chart_bit.tolist(), [0, 1])
+            self.assertEqual(
+                written.sequence_gauge_config.iloc[0], sequence_gauge_config_json(config)
+            )
+            self.assertEqual(load_manifest_sequence_config(output_manifest), config)
+            examples = make_manifest_examples(output_manifest, tensor_root, config=config)
+            self.assertEqual(len(examples), 2)
+            np.testing.assert_array_equal(
+                examples[0].corrupted["coordinates"], examples[1].corrupted["coordinates"]
+            )
+            np.testing.assert_array_equal(
+                examples[0].corrupted["valid"], examples[1].corrupted["valid"]
+            )
+            self.assertEqual(len(one_example_per_chart_pair(examples)), 1)
+            self.assertEqual(
+                len(
+                    make_manifest_examples(
+                        output_manifest,
+                        tensor_root,
+                        config=config,
+                        chart_members=(0,),
+                    )
+                ),
+                1,
+            )
+
+    def test_training_gate_rejects_a_decision_for_a_different_manifest(self):
+        with TemporaryDirectory() as temporary:
+            path = Path(temporary) / "gate.json"
+            path.write_text(
+                '{"ready_for_sg_jepa": true, "gauge_manifest_sha256": "a"}'
+            )
+            with self.assertRaisesRegex(RuntimeError, "different gauge manifest"):
+                require_benchmark_gate(path, gauge_manifest_sha256="b")
+
+    def test_common_readout_extracts_standard_and_semantic_orbit_features(self):
+        coordinates, valid, _ = synthetic_sequence(64)
+        windows = GaugeWindows(
+            coordinates=np.stack([coordinates, coordinates]),
+            valid=np.stack([valid[::4], valid[::4]]),
+            targets=np.zeros((2, 2), dtype=np.float64),
+            metadata=pd.DataFrame({"identity": ["a", "b"]}),
+        )
+        for variant in ("standard_sjepa", "reflection_equivariant"):
+            model = build_model(core11_train_config("smoke"), variant, seed=7)
+            features = _encoder_features(
+                model, windows, batch_size=2, device=torch.device("cpu")
+            )
+            self.assertEqual(features.shape, (2, 2 * model.config.embed_dim))
+            self.assertTrue(np.isfinite(features).all())
+
+    def test_common_readout_is_test_only_and_binds_runs_to_the_gated_manifest(self):
+        coordinates, valid, pelvis = synthetic_sequence(64)
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            tensor_root = root / "tensors"
+            tensor_root.mkdir()
+            source_rows = []
+            for index, split in enumerate(
+                ("train", "train", "train", "train", "train", "validation", "validation", "test", "test")
+            ):
+                relative = f"sequence-{index}.npz"
+                np.savez(
+                    tensor_root / relative,
+                    coordinates=coordinates + index * 1e-4,
+                    valid=valid,
+                    pelvis_world_m=pelvis,
+                )
+                source_rows.append(
+                    {
+                        "tensor_relative_path": relative,
+                        "identity": f"participant-{index}",
+                        "split": split,
+                        "canonical_frames": len(coordinates),
+                        "coordinate_frame": "gauge-neutral-travel-v1",
+                        "status": "converted",
+                    }
+                )
+            source_manifest = root / "source.csv"
+            pd.DataFrame(source_rows).to_csv(source_manifest, index=False)
+            gauge_manifest = root / "gauge-v2.csv"
+            config = SequenceGaugeConfig(
+                clean_probability=0.0,
+                global_probability=0.0,
+                local_probability=1.0,
+                repeated_probability=0.0,
+                local_durations=(2,),
+                boundary_mode="gap",
+                boundary_radius_frames=1,
+                nuisance_selection="independent",
+            )
+            build_amass_gauge_manifest(
+                source_manifest,
+                tensor_root,
+                gauge_manifest,
+                draws=1,
+                seed=7,
+                config=config,
+                chart_pairs=True,
+            )
+            digest = hashlib.sha256(gauge_manifest.read_bytes()).hexdigest()
+            gate_dir = root / "gate"
+            gate = run_sequence_benchmark(
+                gate_dir,
+                seed=7,
+                config=config,
+                examples=make_manifest_examples(gauge_manifest, tensor_root, config=config),
+                gauge_manifest_sha256=digest,
+            )
+            self.assertTrue(gate["ready_for_sg_jepa"], gate)
+            run_dirs = []
+            for arm, variant in (
+                ("correction_first_sjepa", "standard_sjepa"),
+                ("sg_jepa", "reflection_equivariant"),
+                ("uniform_posterior", "reflection_equivariant"),
+            ):
+                run_dir = root / arm
+                run_dir.mkdir()
+                model = build_model(core11_train_config("smoke"), variant, seed=7)
+                projector = VICRegProjector(model.config.embed_dim)
+                optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
+                checkpoint = run_dir / "best.pt"
+                torch.save(
+                    checkpoint_payload(
+                        model,
+                        projector,
+                        optimizer,
+                        variant=model.variant,
+                        seed=7,
+                        config=model.config,
+                        updates=0,
+                    ),
+                    checkpoint,
+                )
+                (run_dir / "run_result.json").write_text(
+                    json.dumps(
+                        {
+                            "arm": arm,
+                            "gauge_manifest_sha256": digest,
+                            "result": {"best_checkpoint": str(checkpoint)},
+                        }
+                    )
+                )
+                run_dirs.append(f"{arm}={run_dir}")
+            output = root / "test-readout"
+            summary = evaluate(
+                SimpleNamespace(
+                    gate_decision=gate_dir / "gate_decision.json",
+                    gauge_manifest=gauge_manifest,
+                    tensor_root=tensor_root,
+                    run_dir=run_dirs,
+                    output_dir=output,
+                    mode="decisive",
+                    split="test",
+                    device="cpu",
+                    batch_size=2,
+                )
+            )
+            self.assertEqual(len(summary), 6)
+            contract = json.loads((output / "evaluation_contract.json").read_text())
+            self.assertTrue(contract["test_split_evaluated"])
+            self.assertEqual(contract["evaluation_split"], "test")
+
     def test_every_path_family_and_overlap_contract(self):
         coordinates, valid, pelvis = synthetic_sequence()
         families = {

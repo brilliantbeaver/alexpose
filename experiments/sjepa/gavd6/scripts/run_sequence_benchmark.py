@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
 from gavd6_sjepa.latent_laterality import SequenceGaugeConfig
 from gavd6_sjepa.sequence_benchmark import (
+    load_manifest_sequence_config,
     make_manifest_examples,
     run_sequence_benchmark,
     run_synthetic_benchmark,
@@ -43,7 +45,7 @@ def main() -> int:
             frames=args.frames,
         )
     else:
-        config = SequenceGaugeConfig()
+        config = load_manifest_sequence_config(args.gauge_manifest.resolve())
         examples = make_manifest_examples(
             args.gauge_manifest.resolve(),
             args.tensor_root.resolve(),
@@ -55,6 +57,9 @@ def main() -> int:
             config=config,
             examples=examples,
             synthetic_smoke=False,
+            gauge_manifest_sha256=hashlib.sha256(
+                args.gauge_manifest.read_bytes()
+            ).hexdigest(),
         )
     print(json.dumps(gates, indent=2, sort_keys=True))
     return 0 if gates["ready_for_sg_jepa"] else 2

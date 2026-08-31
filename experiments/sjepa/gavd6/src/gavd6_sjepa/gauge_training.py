@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -38,6 +39,7 @@ from .latent_laterality import (
     TwoStateDurationModel,
     apply_block_correction,
     semantic_permute_by_frame,
+    sequence_gauge_config_json,
     structured_parity_prediction_loss,
 )
 from .sequence_benchmark import (
@@ -45,6 +47,7 @@ from .sequence_benchmark import (
     _continuity_logits,
     _fit_continuity_head,
     _identity_partition,
+    load_manifest_sequence_config,
     make_manifest_examples,
 )
 from .study_protocol import require_benchmark_gate
@@ -402,14 +405,23 @@ def fit_sg(
 
 
 def run(args: argparse.Namespace) -> dict:
-    gate = require_benchmark_gate(args.gate_decision)
+    manifest_path = args.gauge_manifest.resolve()
+    manifest_sha256 = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    gate = require_benchmark_gate(
+        args.gate_decision, gauge_manifest_sha256=manifest_sha256
+    )
     output_dir = args.output_dir.resolve()
     if output_dir.exists() and any(output_dir.iterdir()):
         raise FileExistsError(f"Output directory is not empty: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
-    config = SequenceGaugeConfig()
+    config = load_manifest_sequence_config(manifest_path)
     examples = make_manifest_examples(
-        args.gauge_manifest.resolve(), args.tensor_root.resolve(), config=config
+        manifest_path,
+        args.tensor_root.resolve(),
+        config=config,
+        # The second chart view is an audit/control, not a second independent
+        # training exposure.  Orbit lifting supplies the complementary branch.
+        chart_members=(0,),
     )
     fit_examples, calibration_examples, validation_examples = _identity_partition(examples)
     head = _fit_continuity_head(fit_examples, config)
@@ -480,6 +492,9 @@ def run(args: argparse.Namespace) -> dict:
         "seed": args.seed,
         "temperature": temperature,
         "gate_decision": gate,
+        "gauge_manifest_sha256": manifest_sha256,
+        "sequence_gauge_config": sequence_gauge_config_json(config),
+        "effective_training_source_draws": len(examples),
         "test_split_evaluated": False,
         "initial_checkpoint": (
             str(args.initial_checkpoint.resolve())
