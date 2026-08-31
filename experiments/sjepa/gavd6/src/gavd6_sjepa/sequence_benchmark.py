@@ -30,6 +30,8 @@ from .latent_laterality import (
     relative_reduction,
     run_length_decode,
     semantic_permute,
+    sequence_gauge_config_from_json,
+    sequence_gauge_config_json,
     switch_f1,
 )
 
@@ -46,6 +48,8 @@ class BenchmarkExample:
     draw: object
     path: np.ndarray
     corrupted: dict
+    chart_pair_id: str | None = None
+    source_chart_bit: int = 0
 
 
 def _atomic_json(path: Path, payload: object) -> None:
@@ -60,6 +64,124 @@ def _atomic_csv(path: Path, frame: pd.DataFrame) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     frame.to_csv(temporary, index=False)
     os.replace(temporary, path)
+
+
+_PAIRED_MANIFEST_VERSION = "sequence-gauge-v2-chart-paired"
+_PAIRED_MANIFEST_COLUMNS = {
+    "chart_pair_id",
+    "source_chart_bit",
+    "sequence_gauge_config",
+}
+
+
+def _manifest_sequence_config(
+    frame: pd.DataFrame, config: SequenceGaugeConfig | None
+) -> SequenceGaugeConfig:
+    """Resolve the immutable v2 config, rejecting silent replay mismatches."""
+
+    paired = frame.generator_version.astype(str) == _PAIRED_MANIFEST_VERSION
+    if not paired.any():
+        return config or SequenceGaugeConfig()
+    if not paired.all():
+        raise ValueError("Gauge manifest mixes paired-v2 and other generator versions")
+    missing = _PAIRED_MANIFEST_COLUMNS.difference(frame.columns)
+    if missing:
+        raise ValueError(f"Paired gauge manifest is missing {sorted(missing)}")
+    values = frame.sequence_gauge_config.astype(str).unique()
+    if len(values) != 1:
+        raise ValueError("Paired gauge manifest must contain exactly one configuration")
+    manifest_config = sequence_gauge_config_from_json(values[0])
+    if config is not None and sequence_gauge_config_json(config) != values[0]:
+        raise ValueError("Caller config does not match the paired gauge manifest")
+    return manifest_config
+
+
+def load_manifest_sequence_config(gauge_manifest: Path) -> SequenceGaugeConfig:
+    """Read the protocol configuration frozen in a persistent gauge manifest."""
+
+    return _manifest_sequence_config(pd.read_csv(gauge_manifest), None)
+
+
+def _validate_chart_pairs(frame: pd.DataFrame) -> bool:
+    """Validate the exact complementary-chart contract before loading tensors."""
+
+    paired = frame.generator_version.astype(str) == _PAIRED_MANIFEST_VERSION
+    if not paired.any():
+        return False
+    if not paired.all():
+        raise ValueError("Gauge manifest mixes paired-v2 and other generator versions")
+    missing = _PAIRED_MANIFEST_COLUMNS.difference(frame.columns)
+    if missing:
+        raise ValueError(f"Paired gauge manifest is missing {sorted(missing)}")
+    invariant_columns = (
+        "sequence_id",
+        "tensor_relative_path",
+        "identity",
+        "split",
+        "corruption_draw",
+        "path_family",
+        "gauge_path_rle",
+        "switch_frames",
+        "semantic_scope",
+        "sensor_reflection_bit",
+        "nuisance_boundary_frames",
+        "occlusion_seed",
+        "noise_seed",
+        "generator_version",
+        "sequence_gauge_config",
+    )
+    for pair_id, pair in frame.groupby("chart_pair_id", sort=False, dropna=False):
+        if not isinstance(pair_id, str) or not pair_id or len(pair) != 2:
+            raise ValueError("Every paired chart id must name exactly two nonempty rows")
+        source_bits = sorted(pd.to_numeric(pair.source_chart_bit, errors="raise").astype(int))
+        latent_bits = pd.to_numeric(pair.latent_chart_bit, errors="raise").astype(int)
+        if source_bits != [0, 1] or not np.array_equal(
+            latent_bits.to_numpy(), pair.source_chart_bit.to_numpy(dtype=int)
+        ):
+            raise ValueError(f"Chart pair {pair_id!r} is not a complementary source/chart pair")
+        if any(pair[column].nunique(dropna=False) != 1 for column in invariant_columns):
+            raise ValueError(f"Chart pair {pair_id!r} changes a non-chart corruption field")
+    return True
+
+
+def one_example_per_chart_pair(examples: Sequence[BenchmarkExample]) -> list[BenchmarkExample]:
+    """Keep one member of each exact pair for any non-chart estimand."""
+
+    paired = [example.chart_pair_id is not None for example in examples]
+    if not any(paired):
+        return list(examples)
+    if not all(paired):
+        raise ValueError("Examples mix paired and unpaired chart conventions")
+    chosen = []
+    seen = set()
+    for example in examples:
+        if example.chart_pair_id in seen:
+            continue
+        if example.source_chart_bit != 0:
+            continue
+        seen.add(example.chart_pair_id)
+        chosen.append(example)
+    if len(chosen) * 2 != len(examples):
+        raise ValueError("Every chart pair must contain one chart-zero member")
+    return chosen
+
+
+def _assert_paired_observations(examples: Sequence[BenchmarkExample]) -> None:
+    """Verify the invariant on real arrays, not merely the manifest metadata."""
+
+    pairs: dict[str, list[BenchmarkExample]] = {}
+    for example in examples:
+        if example.chart_pair_id is not None:
+            pairs.setdefault(example.chart_pair_id, []).append(example)
+    for pair_id, members in pairs.items():
+        if len(members) != 2:
+            raise ValueError(f"Chart pair {pair_id!r} was not loaded completely")
+        first, second = members
+        if not (
+            np.array_equal(first.corrupted["coordinates"], second.corrupted["coordinates"])
+            and np.array_equal(first.corrupted["valid"], second.corrupted["valid"])
+        ):
+            raise ValueError(f"Chart pair {pair_id!r} does not yield identical observations")
 
 
 def synthetic_travel_motion(
@@ -149,6 +271,8 @@ def make_synthetic_examples(
                     draw=draw,
                     path=path.copy(),
                     corrupted=corrupted,
+                    chart_pair_id=f"{sequence_id}:draw-0",
+                    source_chart_bit=chart_label,
                 )
             )
     return examples
@@ -158,9 +282,11 @@ def make_manifest_examples(
     gauge_manifest: Path,
     tensor_root: Path,
     *,
-    config: SequenceGaugeConfig,
+    config: SequenceGaugeConfig | None = None,
+    chart_members: tuple[int, ...] | None = None,
+    splits: tuple[str, ...] | None = None,
 ) -> list[BenchmarkExample]:
-    """Load only train/validation tensors named by a persistent draw manifest."""
+    """Load named manifest members, defaulting to the development-only splits."""
 
     frame = pd.read_csv(gauge_manifest)
     required = {
@@ -182,8 +308,22 @@ def make_manifest_examples(
     missing = required.difference(frame.columns)
     if missing:
         raise ValueError(f"Gauge manifest is missing {sorted(missing)}")
-    if "test" in set(frame.split):
-        frame = frame.loc[frame.split != "test"].copy()
+    config = _manifest_sequence_config(frame, config)
+    is_paired = _validate_chart_pairs(frame)
+    if chart_members is not None and not set(chart_members).issubset({0, 1}):
+        raise ValueError("Chart members must be a subset of {0, 1}")
+    allowed_splits = {"train", "validation"} if splits is None else set(splits)
+    if not allowed_splits:
+        raise ValueError("At least one split must be requested")
+    if splits is not None:
+        unknown_splits = allowed_splits.difference(set(frame.split.astype(str)))
+        if unknown_splits:
+            raise ValueError(f"Gauge manifest does not contain {sorted(unknown_splits)}")
+    frame = frame.loc[frame.split.isin(allowed_splits)].copy()
+    if chart_members is not None:
+        if not is_paired:
+            raise ValueError("Selecting chart members requires a paired-v2 manifest")
+        frame = frame.loc[frame.source_chart_bit.isin(chart_members)].copy()
     root = tensor_root.resolve()
     examples = []
     for row in frame.to_dict(orient="records"):
@@ -200,6 +340,10 @@ def make_manifest_examples(
                 if "pelvis_world_m" in archive.files
                 else coordinates[:, 0].copy()
             )
+        source_chart_bit = int(row.get("source_chart_bit", 0))
+        if source_chart_bit:
+            coordinates = semantic_permute(coordinates)
+            valid = semantic_permute(valid)
         draw = SequenceGaugeDraw(
             sequence_id=str(row.get("sequence_id", row["tensor_relative_path"])),
             identity=str(row["identity"]),
@@ -236,6 +380,8 @@ def make_manifest_examples(
                 draw=draw,
                 path=block_path,
                 corrupted=corrupted,
+                chart_pair_id=(str(row["chart_pair_id"]) if is_paired else None),
+                source_chart_bit=source_chart_bit,
             )
         )
     if not examples:
@@ -433,6 +579,7 @@ def run_sequence_benchmark(
     config: SequenceGaugeConfig | None = None,
     examples: Sequence[BenchmarkExample] | None = None,
     synthetic_smoke: bool = False,
+    gauge_manifest_sha256: str | None = None,
 ) -> dict:
     output_dir = Path(output_dir)
     if output_dir.exists() and any(output_dir.iterdir()):
@@ -447,6 +594,12 @@ def run_sequence_benchmark(
             config=config,
         )
         synthetic_smoke = True
+    # Complementary chart views are required for the absolute-chart probe, but
+    # are the same physical draw.  They must not double the effective sample
+    # size of path, oracle, or uncertainty estimands.
+    chart_examples = list(examples)
+    _assert_paired_observations(chart_examples)
+    examples = one_example_per_chart_pair(chart_examples)
     identities = len({example.identity for example in examples})
     fit_examples, calibration_examples, validation_examples = _identity_partition(examples)
     head = _fit_continuity_head(fit_examples, config)
@@ -557,17 +710,30 @@ def run_sequence_benchmark(
         )
     metrics = pd.DataFrame(rows)
 
-    train_for_probe = fit_examples + calibration_examples
+    probe_fit_identities = {
+        example.identity for example in fit_examples + calibration_examples
+    }
+    probe_validation_identities = {example.identity for example in validation_examples}
+    train_for_probe = [
+        example for example in chart_examples if example.identity in probe_fit_identities
+    ]
     train_x = np.stack([_absolute_features(example) for example in train_for_probe])
     train_y = np.asarray([example.chart_label for example in train_for_probe])
     probe = LogisticRegression(C=0.1, max_iter=1000, random_state=seed).fit(train_x, train_y)
-    validation_x = np.stack([_absolute_features(example) for example in validation_examples])
-    validation_y = np.asarray([example.chart_label for example in validation_examples])
+    probe_validation_examples = [
+        example
+        for example in chart_examples
+        if example.identity in probe_validation_identities
+    ]
+    validation_x = np.stack(
+        [_absolute_features(example) for example in probe_validation_examples]
+    )
+    validation_y = np.asarray([example.chart_label for example in probe_validation_examples])
     validation_score = probe.predict_proba(validation_x)[:, 1]
     absolute_auc, absolute_auc_upper = _cluster_bootstrap_auc_upper(
         validation_y,
         validation_score,
-        np.asarray([example.identity for example in validation_examples]),
+        np.asarray([example.identity for example in probe_validation_examples]),
         seed=seed,
     )
 
@@ -603,6 +769,9 @@ def run_sequence_benchmark(
         and gates["absolute_chart_gate_pass"]
         and gates["oracle_gate_pass"]
     )
+    # A successful gate authorizes only the exact, immutable manifest it
+    # evaluated.  Training rechecks this digest before allocating a GPU.
+    gates["gauge_manifest_sha256"] = gauge_manifest_sha256
     gate_rows = pd.DataFrame(
         [
             {
@@ -663,6 +832,14 @@ def run_sequence_benchmark(
                 "calibration": len({example.identity for example in calibration_examples}),
                 "validation": len({example.identity for example in validation_examples}),
             },
+            "example_counts": {
+                "chart_views": len(chart_examples),
+                "independent_source_draws": len(examples),
+            },
+            "chart_pairing_verified": bool(
+                chart_examples and chart_examples[0].chart_pair_id is not None
+            ),
+            "gauge_manifest_sha256": gauge_manifest_sha256,
             "synthetic_smoke": synthetic_smoke,
             "test_split_evaluated": False,
         },

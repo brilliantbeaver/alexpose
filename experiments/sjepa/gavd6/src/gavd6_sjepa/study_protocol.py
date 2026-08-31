@@ -46,12 +46,20 @@ SOURCE_SCREEN_ARMS = ("standard_sjepa", "reflection_equivariant")
 CONFIRMATION_SEEDS = (7, 19, 31)
 
 
-def require_benchmark_gate(path: Path) -> dict:
+def require_benchmark_gate(
+    path: Path, *, gauge_manifest_sha256: str | None = None
+) -> dict:
     payload = json.loads(Path(path).read_text())
     if payload.get("ready_for_sg_jepa") is not True:
         raise RuntimeError(
             "SG-JEPA is blocked: the sequence benchmark did not pass every "
             "mask-leakage, global-chart, and oracle-versus-continuity gate"
+        )
+    gated_manifest = payload.get("gauge_manifest_sha256")
+    if gauge_manifest_sha256 is not None and gated_manifest != gauge_manifest_sha256:
+        raise RuntimeError(
+            "SG-JEPA is blocked: the benchmark decision was made for a different "
+            "gauge manifest"
         )
     return payload
 

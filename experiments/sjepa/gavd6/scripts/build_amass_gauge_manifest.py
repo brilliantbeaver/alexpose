@@ -6,12 +6,17 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from dataclasses import replace
 from pathlib import Path, PurePosixPath
 
 import numpy as np
 import pandas as pd
 
-from gavd6_sjepa.latent_laterality import SequenceGaugeConfig, generate_sequence_draw
+from gavd6_sjepa.latent_laterality import (
+    SequenceGaugeConfig,
+    generate_sequence_draw,
+    sequence_gauge_config_json,
+)
 
 
 def _safe_tensor(root: Path, relative_text: str) -> Path:
@@ -30,6 +35,8 @@ def build(
     *,
     draws: int,
     seed: int,
+    config: SequenceGaugeConfig | None = None,
+    chart_pairs: bool = False,
 ) -> pd.DataFrame:
     source = pd.read_csv(source_manifest)
     required = {
@@ -61,7 +68,8 @@ def build(
             "Every sequence must use a declared gauge-neutral travel or image-space "
             "chart; legacy named-hip frames are diagnostic-only"
         )
-    config = SequenceGaugeConfig()
+    config = config or SequenceGaugeConfig()
+    config_json = sequence_gauge_config_json(config)
     source = source.loc[
         pd.to_numeric(source.canonical_frames, errors="coerce") >= config.window_frames
     ].copy()
@@ -79,11 +87,15 @@ def build(
                 else None
             )
         sequence_id = str(row.get("motion_id", row.tensor_relative_path))
+        # AMASS has repeated human-readable motion names.  Use the immutable
+        # archive path to seed the corruption, while preserving the readable
+        # name in the manifest for reporting.
+        generation_key = str(row.tensor_relative_path)
         for corruption_draw in range(draws):
             draw, _ = generate_sequence_draw(
                 coordinates,
                 valid,
-                sequence_id=sequence_id,
+                sequence_id=generation_key,
                 identity=str(row.identity),
                 split=str(row.split),
                 corruption_draw=corruption_draw,
@@ -91,9 +103,20 @@ def build(
                 config=config,
                 pelvis_world=pelvis,
             )
-            payload = draw.to_dict()
-            rows.append(
-                {
+            chart_bits = (0, 1) if chart_pairs else (draw.latent_chart_bit,)
+            pair_id = f"{row.tensor_relative_path}:draw-{corruption_draw}"
+            for chart_bit in chart_bits:
+                member = (
+                    replace(
+                        draw,
+                        latent_chart_bit=int(chart_bit),
+                        generator_version="sequence-gauge-v2-chart-paired",
+                    )
+                    if chart_pairs
+                    else draw
+                )
+                payload = member.to_dict()
+                record = {
                     "sequence_index": int(sequence_index),
                     "sequence_id": sequence_id,
                     "tensor_relative_path": str(row.tensor_relative_path),
@@ -101,21 +124,32 @@ def build(
                     "split": str(row.split),
                     "canonical_frames": int(row.canonical_frames),
                     "corruption_draw": corruption_draw,
-                    "path_family": draw.path_family,
+                    "path_family": member.path_family,
                     "gauge_path_rle": json.dumps(payload["gauge_path_rle"]),
                     "switch_frames": json.dumps(payload["switch_frames"]),
-                    "semantic_scope": draw.semantic_scope,
-                    "sensor_reflection_bit": draw.sensor_reflection_bit,
-                    "latent_chart_bit": draw.latent_chart_bit,
+                    "semantic_scope": member.semantic_scope,
+                    "sensor_reflection_bit": member.sensor_reflection_bit,
+                    "latent_chart_bit": member.latent_chart_bit,
                     "nuisance_boundary_frames": json.dumps(
                         payload["nuisance_boundary_frames"]
                     ),
-                    "occlusion_seed": draw.occlusion_seed,
-                    "noise_seed": draw.noise_seed,
-                    "generator_version": draw.generator_version,
+                    "occlusion_seed": member.occlusion_seed,
+                    "noise_seed": member.noise_seed,
+                    "generator_version": member.generator_version,
                     "source_sha256": str(row.get("source_sha256", "")),
                 }
-            )
+                if chart_pairs:
+                    # The complementary source and chart actions cancel:
+                    # P^(path xor chart) P^chart z = P^path z.  Thus neither
+                    # observed coordinates nor validity can reveal this label.
+                    record.update(
+                        {
+                            "chart_pair_id": pair_id,
+                            "source_chart_bit": int(chart_bit),
+                            "sequence_gauge_config": config_json,
+                        }
+                    )
+                rows.append(record)
     output = pd.DataFrame(rows)
     output_manifest.parent.mkdir(parents=True, exist_ok=True)
     temporary = output_manifest.with_suffix(output_manifest.suffix + ".tmp")
@@ -131,9 +165,29 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-manifest", type=Path, required=True)
     parser.add_argument("--draws", type=int, default=1)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument(
+        "--chart-pairs",
+        action="store_true",
+        help="Emit complementary source/chart rows with identical observations.",
+    )
+    parser.add_argument(
+        "--boundary-mode",
+        choices=("interpolate", "gap"),
+        default="interpolate",
+        help="Apply the same boundary nuisance at true and pseudo events.",
+    )
+    parser.add_argument("--boundary-radius-frames", type=int, default=1)
+    parser.add_argument(
+        "--nuisance-selection",
+        choices=("matched", "independent"),
+        default="matched",
+        help="Whether gap locations are conditioned on switches or sampled independently.",
+    )
     args = parser.parse_args()
     if args.draws < 1:
         parser.error("--draws must be positive")
+    if args.boundary_radius_frames < 0:
+        parser.error("--boundary-radius-frames must be nonnegative")
     return args
 
 
@@ -145,6 +199,12 @@ def main() -> int:
         args.output_manifest.resolve(),
         draws=args.draws,
         seed=args.seed,
+        config=SequenceGaugeConfig(
+            boundary_mode=args.boundary_mode,
+            boundary_radius_frames=args.boundary_radius_frames,
+            nuisance_selection=args.nuisance_selection,
+        ),
+        chart_pairs=args.chart_pairs,
     )
     print(f"Wrote {len(output):,} full-sequence corruption draws to {args.output_manifest}")
     return 0
