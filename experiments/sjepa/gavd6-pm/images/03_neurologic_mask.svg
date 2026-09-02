@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Twelve project-selected BlazePose target landmarks</title>
+  <desc>Shoulders, hips, knees, ankles, heels, and foot indices are highlighted. The full target encoder sees all tokens, while the view encoder sees only tokens not selected as prediction targets.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .bone{stroke:#8a9bab;stroke-width:11;stroke-linecap:round;fill:none}
+      .node{fill:#d8e0e7;stroke:#20364e;stroke-width:2}
+      .hot{fill:#e07a4b;stroke:#a44c26;stroke-width:2.5}
+      .card{stroke:#20364e;stroke-width:1.75}
+      .a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="60" y="66" class="h">Only 12 landmarks may become S-JEPA targets</text>
+
+  <!-- Left: stick figure with highlighted target nodes -->
+  <g transform="translate(120,150)">
+    <rect x="0" y="0" width="360" height="450" rx="16" class="card" fill="#ffffff"/>
+    <text x="30" y="42" class="t">BlazePose skeleton</text>
+    <g transform="translate(80,64)">
+      <!-- head -->
+      <circle cx="100" cy="30" r="22" class="node"/>
+      <!-- shoulders bar -->
+      <line x1="48" y1="86" x2="152" y2="86" class="bone"/>
+      <!-- torso sides -->
+      <line x1="48" y1="86" x2="68" y2="178" class="bone"/>
+      <line x1="152" y1="86" x2="132" y2="178" class="bone"/>
+      <!-- hips bar -->
+      <line x1="68" y1="178" x2="132" y2="178" class="bone"/>
+      <!-- thighs -->
+      <line x1="68" y1="178" x2="60" y2="258" class="bone"/>
+      <line x1="132" y1="178" x2="140" y2="258" class="bone"/>
+      <!-- shins -->
+      <line x1="60" y1="258" x2="54" y2="326" class="bone"/>
+      <line x1="140" y1="258" x2="146" y2="326" class="bone"/>
+      <!-- feet -->
+      <line x1="54" y1="326" x2="32" y2="342" class="bone"/>
+      <line x1="146" y1="326" x2="168" y2="342" class="bone"/>
+      <!-- highlighted target nodes (12) -->
+      <circle cx="48" cy="86" r="12" class="hot"/><circle cx="152" cy="86" r="12" class="hot"/>
+      <circle cx="68" cy="178" r="12" class="hot"/><circle cx="132" cy="178" r="12" class="hot"/>
+      <circle cx="60" cy="258" r="12" class="hot"/><circle cx="140" cy="258" r="12" class="hot"/>
+      <circle cx="54" cy="326" r="12" class="hot"/><circle cx="146" cy="326" r="12" class="hot"/>
+      <circle cx="45" cy="335" r="12" class="hot"/><circle cx="155" cy="335" r="12" class="hot"/>
+      <circle cx="32" cy="342" r="12" class="hot"/><circle cx="168" cy="342" r="12" class="hot"/>
+    </g>
+  </g>
+
+  <!-- connector from figure to eligible list -->
+  <path d="M488 300H558" class="a"/>
+
+  <!-- Right column, top card: eligible landmark identities -->
+  <g transform="translate(576,150)">
+    <rect x="0" y="0" width="470" height="260" rx="16" class="card" fill="#f7e7d8"/>
+    <text x="30" y="44" class="t">Eligible landmark identities</text>
+    <text x="30" y="80" class="b">11, 12  shoulders</text>
+    <text x="30" y="112" class="b">23, 24  hips</text>
+    <text x="30" y="144" class="b">25, 26  knees</text>
+    <text x="30" y="176" class="b">27, 28  ankles</text>
+    <text x="30" y="208" class="b">29, 30  heels</text>
+    <text x="30" y="240" class="b">31, 32  foot indices</text>
+  </g>
+
+  <!-- connector down to hard rule -->
+  <path d="M811 418V452" class="a"/>
+
+  <!-- Right column, middle card: hard rule -->
+  <g transform="translate(576,470)">
+    <rect x="0" y="0" width="470" height="130" rx="16" class="card" fill="#ffffff"/>
+    <text x="30" y="44" class="t">Hard rule</text>
+    <text x="30" y="80" class="b">Uniform sampling within this set.</text>
+    <text x="30" y="108" class="b">No motion score. No fallback joints.</text>
+  </g>
+
+  <!-- Footer note lines -->
+  <text x="60" y="676" class="b">Target encoder: all 33 landmark tokens.   View context: unmasked tokens only.</text>
+</svg>

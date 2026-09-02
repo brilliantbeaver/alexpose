@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="figTitle figDesc" font-family="Arial, sans-serif">
+  <title id="figTitle">Item 05: a signed left-minus-right score and the mirror flip test</title>
+  <desc id="figDesc">A horizontal number line runs from left-weak (minus) on the left to right-weak (plus) on the right, with a healthy walk sitting near zero in the middle. A stick-figure walker leaning on the left sits at the minus end and one leaning on the right sits at the plus end. Below, a mirror test panel shows that flipping a clip left to right should flip its dot to the opposite side of the line, the ideal y equals negative x rule.</desc>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <!-- main title -->
+  <text x="600" y="52" text-anchor="middle" font-size="30" font-weight="bold" fill="#0f2440">Item 05: a "signed" left-minus-right score</text>
+  <text x="600" y="84" text-anchor="middle" font-size="18" fill="#5c6f84">One number that tells you WHICH side is weaker, and by how much.</text>
+
+  <!-- ===================== NUMBER LINE CARD ===================== -->
+  <rect x="40" y="110" width="1120" height="300" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="2"/>
+
+  <!-- the number line itself -->
+  <line x1="140" y1="300" x2="1060" y2="300" stroke="#20364e" stroke-width="3"/>
+  <!-- arrow heads on both ends -->
+  <polygon points="140,300 158,291 158,309" fill="#20364e"/>
+  <polygon points="1060,300 1042,291 1042,309" fill="#20364e"/>
+
+  <!-- tick marks -->
+  <line x1="600" y1="290" x2="600" y2="310" stroke="#20364e" stroke-width="3"/>
+  <line x1="370" y1="293" x2="370" y2="307" stroke="#20364e" stroke-width="2"/>
+  <line x1="830" y1="293" x2="830" y2="307" stroke="#20364e" stroke-width="2"/>
+
+  <!-- zero label (healthy middle) -->
+  <text x="600" y="340" text-anchor="middle" font-size="17" font-weight="bold" fill="#20364e">0</text>
+  <text x="600" y="362" text-anchor="middle" font-size="15" fill="#33475e">healthy walk sits here</text>
+  <text x="600" y="382" text-anchor="middle" font-size="15" fill="#33475e">(both sides about even)</text>
+
+  <!-- minus end label -->
+  <text x="200" y="255" text-anchor="middle" font-size="20" font-weight="bold" fill="#e07a4b">minus (left-weak)</text>
+  <!-- plus end label -->
+  <text x="1000" y="255" text-anchor="middle" font-size="20" font-weight="bold" fill="#e07a4b">plus (right-weak)</text>
+
+  <!-- healthy walker dot near zero -->
+  <circle cx="600" cy="300" r="8" fill="#5f9e7e" stroke="#20364e" stroke-width="1.5"/>
+
+  <!-- LEFT-WEAK stick figure (leans to its left) at minus end -->
+  <g stroke="#20364e" stroke-width="3" fill="none" stroke-linecap="round">
+    <!-- head -->
+    <circle cx="210" cy="170" r="14" fill="#e07a4b" stroke="#20364e" stroke-width="2"/>
+    <!-- body, tilted so the weak (left) side sags -->
+    <line x1="210" y1="184" x2="196" y2="232"/>
+    <!-- arms -->
+    <line x1="204" y1="200" x2="176" y2="214"/>
+    <line x1="204" y1="200" x2="230" y2="196"/>
+    <!-- strong leg (right, planted) -->
+    <line x1="196" y1="232" x2="216" y2="272"/>
+    <!-- weak leg (left, dragging, dashed) -->
+    <line x1="196" y1="232" x2="172" y2="270" stroke-dasharray="5 5"/>
+  </g>
+  <text x="205" y="300" text-anchor="middle" font-size="14" fill="#33475e">weak on the</text>
+  <text x="205" y="318" text-anchor="middle" font-size="14" font-weight="bold" fill="#33475e">LEFT side</text>
+
+  <!-- RIGHT-WEAK stick figure (leans to its right) at plus end -->
+  <g stroke="#20364e" stroke-width="3" fill="none" stroke-linecap="round">
+    <!-- head -->
+    <circle cx="990" cy="170" r="14" fill="#e07a4b" stroke="#20364e" stroke-width="2"/>
+    <!-- body, tilted so the weak (right) side sags -->
+    <line x1="990" y1="184" x2="1004" y2="232"/>
+    <!-- arms -->
+    <line x1="996" y1="200" x2="1024" y2="214"/>
+    <line x1="996" y1="200" x2="970" y2="196"/>
+    <!-- strong leg (left, planted) -->
+    <line x1="1004" y1="232" x2="984" y2="272"/>
+    <!-- weak leg (right, dragging, dashed) -->
+    <line x1="1004" y1="232" x2="1028" y2="270" stroke-dasharray="5 5"/>
+  </g>
+  <text x="995" y="300" text-anchor="middle" font-size="14" fill="#33475e">weak on the</text>
+  <text x="995" y="318" text-anchor="middle" font-size="14" font-weight="bold" fill="#33475e">RIGHT side</text>
+
+  <!-- ===================== MIRROR TEST CARD ===================== -->
+  <rect x="40" y="440" width="1120" height="230" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="2"/>
+
+  <text x="70" y="480" font-size="22" font-weight="bold" fill="#0f2440">The mirror test: a fairness check on the score</text>
+  <text x="70" y="508" font-size="15" fill="#33475e">If you flip a walking clip left-to-right (like looking in a mirror), a truly "signed" score should just flip its sign.</text>
+  <text x="70" y="530" font-size="15" fill="#33475e">A left-weak walk should read as right-weak, so its dot jumps to the exact opposite spot. This is the ideal y = negative x rule.</text>
+
+  <!-- mini number line: original -->
+  <text x="240" y="572" text-anchor="middle" font-size="14" font-weight="bold" fill="#20364e">original clip</text>
+  <line x1="90" y1="600" x2="390" y2="600" stroke="#20364e" stroke-width="2.5"/>
+  <polygon points="90,600 104,593 104,607" fill="#20364e"/>
+  <polygon points="390,600 376,593 376,607" fill="#20364e"/>
+  <line x1="240" y1="592" x2="240" y2="608" stroke="#20364e" stroke-width="2"/>
+  <text x="240" y="628" text-anchor="middle" font-size="12" fill="#5c6f84">0</text>
+  <text x="112" y="628" text-anchor="middle" font-size="11" fill="#5c6f84">minus</text>
+  <text x="368" y="628" text-anchor="middle" font-size="11" fill="#5c6f84">plus</text>
+  <!-- original dot on the minus (left-weak) side -->
+  <circle cx="150" cy="600" r="8" fill="#e07a4b" stroke="#20364e" stroke-width="1.5"/>
+  <text x="150" y="588" text-anchor="middle" font-size="11" fill="#33475e">left-weak</text>
+
+  <!-- flip arrow with mirror -->
+  <line x1="450" y1="600" x2="720" y2="600" stroke="#8a6fb3" stroke-width="3"/>
+  <polygon points="720,600 700,590 700,610" fill="#8a6fb3"/>
+  <!-- mirror line in the middle of the arrow -->
+  <line x1="585" y1="575" x2="585" y2="625" stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="585" y="568" text-anchor="middle" font-size="12" font-style="italic" fill="#8a6fb3">mirror</text>
+  <text x="585" y="648" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6fb3">flip left and right</text>
+
+  <!-- mini number line: mirrored -->
+  <text x="930" y="572" text-anchor="middle" font-size="14" font-weight="bold" fill="#20364e">mirrored clip</text>
+  <line x1="780" y1="600" x2="1080" y2="600" stroke="#20364e" stroke-width="2.5"/>
+  <polygon points="780,600 794,593 794,607" fill="#20364e"/>
+  <polygon points="1080,600 1066,593 1066,607" fill="#20364e"/>
+  <line x1="930" y1="592" x2="930" y2="608" stroke="#20364e" stroke-width="2"/>
+  <text x="930" y="628" text-anchor="middle" font-size="12" fill="#5c6f84">0</text>
+  <text x="802" y="628" text-anchor="middle" font-size="11" fill="#5c6f84">minus</text>
+  <text x="1058" y="628" text-anchor="middle" font-size="11" fill="#5c6f84">plus</text>
+  <!-- mirrored dot on the plus (right-weak) side, opposite spot -->
+  <circle cx="1020" cy="600" r="8" fill="#e07a4b" stroke="#20364e" stroke-width="1.5"/>
+  <text x="1020" y="588" text-anchor="middle" font-size="11" fill="#33475e">right-weak</text>
+
+  <!-- ===================== CAPTION ===================== -->
+  <text x="600" y="702" text-anchor="middle" font-size="17" font-weight="bold" fill="#20364e">Signed means the number tells you WHICH side, not just how much.</text>
+</svg>

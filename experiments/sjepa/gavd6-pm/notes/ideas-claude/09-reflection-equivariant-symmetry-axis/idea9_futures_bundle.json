@@ -1,0 +1,159 @@
+{
+  "notebook": "nb_09c_futures_and_reach",
+  "gates": {
+    "floor_margin": 0.05,
+    "perm_alpha": 0.05,
+    "nuisance_abs": 0.05,
+    "y_between_min": 0.3,
+    "mirror_band": [
+      -1.25,
+      -0.8
+    ]
+  },
+  "futures": [
+    {
+      "future": "F1 head beats bar (positive)",
+      "A'_r2": 0.42,
+      "Ac_r2": 0.1,
+      "C_r2": 0.05,
+      "D_r2": -0.02,
+      "E_r2": 0.01,
+      "binding_bar": 0.05,
+      "A'_perm_p": 0.004,
+      "C_perm_p": 0.6,
+      "y_between": 0.55,
+      "mirror_slope": -1.02,
+      "primary": "ANTISYMMETRY BEATS BINDING BAR AND CAPACITY-MATCHED CONTROL",
+      "mirror": "FLIPS (measured slope antisymmetric through the encoder)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": true,
+      "c_null_significant": false
+    },
+    {
+      "future": "F2 decodable but non-flipping",
+      "A'_r2": 0.4,
+      "Ac_r2": 0.09,
+      "C_r2": 0.05,
+      "D_r2": -0.02,
+      "E_r2": 0.01,
+      "binding_bar": 0.05,
+      "A'_perm_p": 0.01,
+      "C_perm_p": 0.55,
+      "y_between": 0.52,
+      "mirror_slope": -0.3,
+      "primary": "ANTISYMMETRY BEATS BINDING BAR AND CAPACITY-MATCHED CONTROL",
+      "mirror": "DOES NOT FLIP (measured slope not antisymmetric)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": true,
+      "c_null_significant": false
+    },
+    {
+      "future": "F3 informative null (Idea-05 anchor)",
+      "A'_r2": -0.1,
+      "Ac_r2": -0.05,
+      "C_r2": 0.147,
+      "D_r2": -0.187,
+      "E_r2": -0.014,
+      "binding_bar": 0.147,
+      "A'_perm_p": 0.55,
+      "C_perm_p": 0.01,
+      "y_between": 0.48,
+      "mirror_slope": -0.34,
+      "primary": "INFORMATIVE NULL (constrained head does not beat max(D,C) above the floor)",
+      "mirror": "DOES NOT FLIP (measured slope not antisymmetric)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": false,
+      "c_null_significant": true
+    },
+    {
+      "future": "F4 artifact (nuisance control fires)",
+      "A'_r2": 0.47,
+      "Ac_r2": 0.11,
+      "C_r2": 0.06,
+      "D_r2": -0.02,
+      "E_r2": 0.46,
+      "binding_bar": 0.06,
+      "A'_perm_p": 0.004,
+      "C_perm_p": 0.55,
+      "y_between": 0.52,
+      "mirror_slope": -0.9,
+      "primary": "ARTIFACT (nuisance control fired; signed claim withdrawn)",
+      "mirror": "FLIPS (measured slope antisymmetric through the encoder)",
+      "nuisance_ok": false,
+      "beats_capacity_matched": true,
+      "c_null_significant": false
+    },
+    {
+      "future": "F5 not attributable (Ac not beaten)",
+      "A'_r2": 0.3,
+      "Ac_r2": 0.28,
+      "C_r2": 0.05,
+      "D_r2": -0.02,
+      "E_r2": 0.01,
+      "binding_bar": 0.05,
+      "A'_perm_p": 0.02,
+      "C_perm_p": 0.6,
+      "y_between": 0.5,
+      "mirror_slope": -0.7,
+      "primary": "NOT ATTRIBUTABLE TO ANTISYMMETRY (does not beat the capacity-matched control)",
+      "mirror": "DOES NOT FLIP (measured slope not antisymmetric)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": false,
+      "c_null_significant": false
+    }
+  ],
+  "decision": {
+    "F1 head beats bar (positive)": {
+      "primary": "ANTISYMMETRY BEATS BINDING BAR AND CAPACITY-MATCHED CONTROL",
+      "mirror": "FLIPS (measured slope antisymmetric through the encoder)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": true,
+      "c_null_significant": false,
+      "claim": "LICENSED: the antisymmetry-constrained head decodes the signed axis above the binding bar max(standard-ea59fea0, untrained-floor), beats the capacity-matched control Ac, AND clears its permutation null, and the MEASURED anatomical mirror flips it. Arm 1: the constraint extracts a signed axis the unconstrained probe missed. Arm 2: the equivariance loss built one. (The exact wiring -1 is a separate by-construction check, always true.)"
+    },
+    "F2 decodable but non-flipping": {
+      "primary": "ANTISYMMETRY BEATS BINDING BAR AND CAPACITY-MATCHED CONTROL",
+      "mirror": "DOES NOT FLIP (measured slope not antisymmetric)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": true,
+      "c_null_significant": false,
+      "claim": "LICENSED: signed axis is decodable above the binding bar and the capacity-matched control. WITHHELD: the MEASURED anatomical equivariance; the encoding decodes side but the through-encoder mirror slope is not in the flip band. The exact wiring-swap -1 still holds by construction."
+    },
+    "F3 informative null (Idea-05 anchor)": {
+      "primary": "INFORMATIVE NULL (constrained head does not beat max(D,C) above the floor)",
+      "mirror": "DOES NOT FLIP (measured slope not antisymmetric)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": false,
+      "c_null_significant": true,
+      "claim": "LICENSED (negative): antisymmetry-by-construction alone does NOT lift the frozen encoder above the binding bar. Matches Idea 05's measured result and is the expected Arm-1 outcome; a clean publishable negative for the representation audit. The significant C-permutation here is REPORTED as floor characterization (the untrained floor is strong, which just raises the binding bar) and does not change the verdict. Motivates Arm 2 (retrain), which is the only arm that can change the encoder."
+    },
+    "F4 artifact (nuisance control fires)": {
+      "primary": "ARTIFACT (nuisance control fired; signed claim withdrawn)",
+      "mirror": "FLIPS (measured slope antisymmetric through the encoder)",
+      "nuisance_ok": false,
+      "beats_capacity_matched": true,
+      "c_null_significant": false,
+      "claim": "WITHHELD: the signed claim is withdrawn. The anatomically invariant nuisance control recovered the 'axis', which a genuinely signed quantity cannot allow, so Lane A' reflects a magnitude/acquisition artifact, not a signed quantity."
+    },
+    "F5 not attributable (Ac not beaten)": {
+      "primary": "NOT ATTRIBUTABLE TO ANTISYMMETRY (does not beat the capacity-matched control)",
+      "mirror": "DOES NOT FLIP (measured slope not antisymmetric)",
+      "nuisance_ok": true,
+      "beats_capacity_matched": false,
+      "c_null_significant": false,
+      "claim": "WITHHELD (not attributable): Lane A' beats the binding bar and clears its null, but it does NOT beat the capacity-matched control Ac by the margin. The win rides on the head's generic capacity (nonlinearity, width, pair information), which Ac holds identical, rather than on the antisymmetry CONSTRAINT. Report as not attributable to antisymmetry rather than a constraint win."
+    }
+  },
+  "external_reach": {
+    "cohorts": [
+      "CASIA-B (Yu 2006)",
+      "OU-MVLP-Pose (Takemura 2018)"
+    ],
+    "status": "scaffold only; real loaders are marked TODO",
+    "tier": "non-clinical reach; tests reflection stability + genuine-mirror flip, not diagnosis",
+    "fixture_view_stability_corr": 0.9999999999999415,
+    "fixture_genuine_mirror_slope": -0.9999999999999997
+  },
+  "supersedes": "The proposal-level gates in the idea-9 README/METHODOLOGY worked example are superseded by these hardened gates (binding bar max(D,C), permutation nulls, absolute nuisance control, y-quality gate). See IMPLEMENTATION.md.",
+  "notes": "Simulated expected shapes, NOT data. The clinical claim on this cohort is internal-validity only. The exact wiring-swap slope -1 is a by-construction check (nb_09a section 5), not a future. Folder labels are dataset annotations, not diagnoses; all results transductive."
+}

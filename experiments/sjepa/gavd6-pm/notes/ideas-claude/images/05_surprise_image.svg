@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="figTitle figDesc" font-family="Arial, sans-serif">
+  <title id="figTitle">One surprise number versus a surprise map</title>
+  <desc id="figDesc">On the left, a single big circle stands for one lump-sum surprise number that only tells you how surprised the model was. On the right, a grid of 12 body-part rows by 16 time columns shades some cells darker to show where the model was surprised. In the example the darker cells cluster on the right knee and right ankle rows, showing a one-sided pattern.</desc>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <!-- main title -->
+  <text x="600" y="52" text-anchor="middle" font-size="34" font-weight="bold" fill="#0f2440">One number tells you HOW surprised.</text>
+  <text x="600" y="90" text-anchor="middle" font-size="34" font-weight="bold" fill="#20364e">The map tells you WHERE.</text>
+  <text x="600" y="122" text-anchor="middle" font-size="17" fill="#5c6f84">"Surprised" means the model expected one thing and the real movement did something else.</text>
+
+  <!-- ================= LEFT CARD: one lump-sum number ================= -->
+  <rect x="40" y="150" width="380" height="500" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="2"/>
+  <text x="230" y="188" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f2440">The lump-sum way</text>
+  <text x="230" y="214" text-anchor="middle" font-size="15" fill="#33475e">Squash everything into one score.</text>
+
+  <!-- one big circle -->
+  <circle cx="230" cy="380" r="120" fill="#e07a4b" stroke="#20364e" stroke-width="3"/>
+  <text x="230" y="368" text-anchor="middle" font-size="58" font-weight="bold" fill="#ffffff">7.3</text>
+  <text x="230" y="410" text-anchor="middle" font-size="17" fill="#ffffff">surprise</text>
+
+  <text x="230" y="560" text-anchor="middle" font-size="15" fill="#33475e">You learn HOW surprised</text>
+  <text x="230" y="582" text-anchor="middle" font-size="15" fill="#33475e">the model was overall.</text>
+  <text x="230" y="616" text-anchor="middle" font-size="15" fill="#5c6f84">But not WHICH body part,</text>
+  <text x="230" y="638" text-anchor="middle" font-size="15" fill="#5c6f84">and not WHEN.</text>
+
+  <!-- ================= RIGHT CARD: the full map ================= -->
+  <rect x="450" y="150" width="710" height="500" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="2"/>
+  <text x="805" y="188" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f2440">The map way (surprise tomography)</text>
+  <text x="805" y="214" text-anchor="middle" font-size="15" fill="#33475e">A grid: 12 body-part rows across 16 slices of time (a heatmap, meaning darker = more surprise).</text>
+
+  <!--
+    Grid geometry.
+    12 rows = the 12 maskable landmarks (both shoulders plus the hip, knee, ankle, heel, and foot on each side; the points the model is allowed to hide and then guess).
+    16 columns = 16 time positions in a short clip.
+    Cell size 30 x 26. Grid origin at x=680, y=246.
+    Darker cells cluster on the RIGHT knee and RIGHT ankle rows: a one-sided pattern.
+  -->
+
+  <!-- row labels -->
+  <text x="672" y="264" text-anchor="end" font-size="13" fill="#33475e">L shoulder</text>
+  <text x="672" y="290" text-anchor="end" font-size="13" fill="#33475e">R shoulder</text>
+  <text x="672" y="316" text-anchor="end" font-size="13" fill="#33475e">L hip</text>
+  <text x="672" y="342" text-anchor="end" font-size="13" fill="#33475e">R hip</text>
+  <text x="672" y="368" text-anchor="end" font-size="13" fill="#33475e">L knee</text>
+  <text x="672" y="394" text-anchor="end" font-size="13" font-weight="bold" fill="#0f2440">R knee</text>
+  <text x="672" y="420" text-anchor="end" font-size="13" fill="#33475e">L ankle</text>
+  <text x="672" y="446" text-anchor="end" font-size="13" font-weight="bold" fill="#0f2440">R ankle</text>
+  <text x="672" y="472" text-anchor="end" font-size="13" fill="#33475e">L heel</text>
+  <text x="672" y="498" text-anchor="end" font-size="13" fill="#33475e">R heel</text>
+  <text x="672" y="524" text-anchor="end" font-size="13" fill="#33475e">L foot</text>
+  <text x="672" y="550" text-anchor="end" font-size="13" fill="#33475e">R foot</text>
+
+  <!-- ROW 1: L shoulder (light) -->
+  <rect x="680" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="252" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="740" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="800" y="252" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="830" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="890" y="252" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="920" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="252" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1010" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="252" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1100" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="252" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- ROW 2: R shoulder (light) -->
+  <rect x="680" y="278" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="710" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="278" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="800" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="830" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="278" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="890" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="920" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="278" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="980" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1010" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="278" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1070" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1100" y="278" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="278" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+
+  <!-- ROW 3: L hip (light) -->
+  <rect x="680" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="304" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="770" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="800" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="830" y="304" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="860" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="890" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="920" y="304" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="950" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1010" y="304" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1040" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1100" y="304" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1130" y="304" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- ROW 4: R hip (mild on right side) -->
+  <rect x="680" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="330" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="740" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="800" y="330" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="830" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="890" y="330" width="30" height="26" fill="#d8b79e" stroke="#c9d6cd"/>
+  <rect x="920" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="330" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1010" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="330" width="30" height="26" fill="#d8b79e" stroke="#c9d6cd"/>
+  <rect x="1070" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1100" y="330" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="330" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+
+  <!-- ROW 5: L knee (light) -->
+  <rect x="680" y="356" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="710" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="356" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="800" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="830" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="356" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="890" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="920" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="356" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1010" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="356" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1100" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="356" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- ROW 6: R knee (DARK CLUSTER) -->
+  <rect x="680" y="382" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="382" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="382" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="770" y="382" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="800" y="382" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="830" y="382" width="30" height="26" fill="#b8552a" stroke="#c9d6cd"/>
+  <rect x="860" y="382" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="890" y="382" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="920" y="382" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="950" y="382" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="382" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="1010" y="382" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="1040" y="382" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="1070" y="382" width="30" height="26" fill="#b8552a" stroke="#c9d6cd"/>
+  <rect x="1100" y="382" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="1130" y="382" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+
+  <!-- ROW 7: L ankle (light) -->
+  <rect x="680" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="408" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="740" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="800" y="408" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="830" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="890" y="408" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="920" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="408" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1010" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="408" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1100" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="408" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- ROW 8: R ankle (DARK CLUSTER) -->
+  <rect x="680" y="434" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="434" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="740" y="434" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="770" y="434" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="800" y="434" width="30" height="26" fill="#b8552a" stroke="#c9d6cd"/>
+  <rect x="830" y="434" width="30" height="26" fill="#a84a24" stroke="#c9d6cd"/>
+  <rect x="860" y="434" width="30" height="26" fill="#b8552a" stroke="#c9d6cd"/>
+  <rect x="890" y="434" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="920" y="434" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="950" y="434" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="980" y="434" width="30" height="26" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="1010" y="434" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="1040" y="434" width="30" height="26" fill="#b8552a" stroke="#c9d6cd"/>
+  <rect x="1070" y="434" width="30" height="26" fill="#a84a24" stroke="#c9d6cd"/>
+  <rect x="1100" y="434" width="30" height="26" fill="#b8552a" stroke="#c9d6cd"/>
+  <rect x="1130" y="434" width="30" height="26" fill="#c96a3a" stroke="#c9d6cd"/>
+
+  <!-- ROW 9: L heel (light) -->
+  <rect x="680" y="460" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="710" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="460" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="800" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="830" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="460" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="890" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="920" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="460" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="980" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1010" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="460" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1070" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1100" y="460" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="460" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+
+  <!-- ROW 10: R heel (mild on right side) -->
+  <rect x="680" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="486" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="770" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="800" y="486" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="830" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="890" y="486" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="920" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="486" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="1010" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="486" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1100" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="486" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- ROW 11: L foot (light) -->
+  <rect x="680" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="710" y="512" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="740" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="800" y="512" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="830" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="890" y="512" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="920" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="950" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="512" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1010" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1040" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="512" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1100" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1130" y="512" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- ROW 12: R foot (mild on right side) -->
+  <rect x="680" y="538" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="710" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="740" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="770" y="538" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="800" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="830" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="860" y="538" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="890" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="920" y="538" width="30" height="26" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="950" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="980" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1010" y="538" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1040" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1070" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="1100" y="538" width="30" height="26" fill="#eef4ef" stroke="#c9d6cd"/>
+  <rect x="1130" y="538" width="30" height="26" fill="#f3f0e6" stroke="#c9d6cd"/>
+
+  <!-- time axis label -->
+  <text x="905" y="586" text-anchor="middle" font-size="13" fill="#5c6f84">time, 16 slices of one short clip, left to right</text>
+
+  <!-- callout bracket for the one-sided cluster -->
+  <path d="M 1163 382 L 1173 382 L 1173 460 L 1163 460" fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+  <text x="805" y="612" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f2440">The dark cells cluster on the RIGHT knee and ankle: a one-sided pattern.</text>
+  <text x="805" y="634" text-anchor="middle" font-size="14" fill="#33475e">Same total surprise as the circle, but now you see WHERE and WHEN it happened.</text>
+
+  <!-- ============ legend / scale strip ============ -->
+  <rect x="40" y="662" width="1120" height="48" rx="10" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.5"/>
+  <text x="72" y="691" font-size="14" fill="#33475e">Cell shade =</text>
+  <rect x="168" y="678" width="26" height="16" fill="#f3f0e6" stroke="#c9d6cd"/>
+  <rect x="194" y="678" width="26" height="16" fill="#e0bda3" stroke="#c9d6cd"/>
+  <rect x="220" y="678" width="26" height="16" fill="#d99a6f" stroke="#c9d6cd"/>
+  <rect x="246" y="678" width="26" height="16" fill="#c96a3a" stroke="#c9d6cd"/>
+  <rect x="272" y="678" width="26" height="16" fill="#a84a24" stroke="#c9d6cd"/>
+  <text x="306" y="691" font-size="14" fill="#33475e">less surprised, left, to more surprised, right.</text>
+  <text x="1148" y="691" text-anchor="end" font-size="13" fill="#5c6f84">Reminder: the model's own guess of a hidden joint, not a diagnosis.</text>
+</svg>

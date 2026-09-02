@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Injection direction test: matched mechanism channel rises with magnitude while the unmatched channel stays flat</title>
+  <desc id="d1">Illustrative expected-shape plot of the synthetic-injection direction test for a normal-only gait world model. Two stacked sub-panels share an x axis of injection magnitude. In the top panel a one-sided knee-flexion injection drives the asymmetry-channel relative error (warm) up steeply while the posture-channel error (blue) stays flat. In the bottom panel a symmetric proximal-deficit injection drives the posture channel up while asymmetry stays flat. A grey dashed random-encoder control lane stays near flat in both panels. A dark pass card lists the pre-registered margins over the random-encoder control. All numbers are illustrative and transductive to the single normal source video; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Injection direction test: the matched channel rises, the other stays flat</text>
+  <text x="48" y="88" class="s">Illustrative expected shape, not measured results. Relative error, 1.0 is normal surprise. Transductive to the single normal source.</text>
+
+  <!-- ============ LEFT: two stacked sub-panels ============ -->
+  <!-- outer plot card: x 48..760 (width 712), y 112..636 (height 524) -->
+  <rect x="48" y="112" width="712" height="524" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- TOP sub-panel: one-sided knee-flexion injection -->
+  <text x="78" y="150" class="t">One-sided knee-flexion injection (lateralized)</text>
+  <!-- plot frame: x 150..712, y 176..340 -->
+  <line x1="150" y1="176" x2="150" y2="340" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="340" x2="712" y2="340" stroke="#20364e" stroke-width="2.5"/>
+  <!-- y baseline tick at rel=1.0 -->
+  <line x1="150" y1="308" x2="144" y2="308" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="313" class="s" text-anchor="end">1.0</text>
+  <line x1="150" y1="196" x2="144" y2="196" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="201" class="s" text-anchor="end">2.0</text>
+
+  <!-- asymmetry channel rises steeply (warm) -->
+  <polyline points="164,302 274,284 384,252 494,214 604,188 700,182" fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <circle cx="164" cy="302" r="6"/>
+    <circle cx="274" cy="286" r="6"/>
+    <circle cx="384" cy="252" r="6"/>
+    <circle cx="494" cy="214" r="6"/>
+    <circle cx="604" cy="188" r="6"/>
+    <circle cx="700" cy="182" r="6"/>
+  </g>
+  <text x="678" y="176" class="s" fill="#a44c26" text-anchor="end">asymmetry channel</text>
+
+  <!-- posture channel flat (blue), sits on the 1.0 baseline -->
+  <polyline points="164,308 274,307 384,308 494,307 604,308 700,307" fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+  <g fill="#2f6f99" stroke="#20364e" stroke-width="1">
+    <circle cx="164" cy="308" r="5"/>
+    <circle cx="384" cy="308" r="5"/>
+    <circle cx="604" cy="308" r="5"/>
+  </g>
+  <text x="500" y="297" class="s" fill="#2f6f99">posture channel (flat)</text>
+
+  <!-- random-encoder control, grey dashed flat, clearly below the 1.0 baseline -->
+  <polyline points="164,326 700,325" fill="none" stroke="#5c6f84" stroke-width="2" stroke-dasharray="7 6"/>
+
+  <!-- BOTTOM sub-panel: symmetric proximal-deficit injection -->
+  <text x="78" y="392" class="t">Symmetric proximal-deficit injection (posture)</text>
+  <!-- plot frame: x 150..712, y 414..578 -->
+  <line x1="150" y1="414" x2="150" y2="578" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="578" x2="712" y2="578" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="546" x2="144" y2="546" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="551" class="s" text-anchor="end">1.0</text>
+  <line x1="150" y1="434" x2="144" y2="434" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="439" class="s" text-anchor="end">2.0</text>
+
+  <!-- posture channel rises (blue) -->
+  <polyline points="164,540 274,524 384,494 494,456 604,430 700,424" fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+  <g fill="#2f6f99" stroke="#20364e" stroke-width="1">
+    <circle cx="164" cy="540" r="6"/>
+    <circle cx="274" cy="526" r="6"/>
+    <circle cx="384" cy="494" r="6"/>
+    <circle cx="494" cy="456" r="6"/>
+    <circle cx="604" cy="430" r="6"/>
+    <circle cx="700" cy="424" r="6"/>
+  </g>
+  <text x="678" y="418" class="s" fill="#2f6f99" text-anchor="end">posture channel</text>
+
+  <!-- asymmetry channel flat (warm), sits on the 1.0 baseline -->
+  <polyline points="164,546 274,545 384,546 494,545 604,546 700,545" fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1">
+    <circle cx="164" cy="546" r="5"/>
+    <circle cx="384" cy="546" r="5"/>
+    <circle cx="604" cy="546" r="5"/>
+  </g>
+  <text x="470" y="535" class="s" fill="#a44c26">asymmetry channel (flat)</text>
+
+  <!-- random-encoder control, grey dashed flat, clearly below the 1.0 baseline -->
+  <polyline points="164,564 700,563" fill="none" stroke="#5c6f84" stroke-width="2" stroke-dasharray="7 6"/>
+
+  <!-- shared x axis label + control label, inside card bottom -->
+  <text x="431" y="606" class="b" text-anchor="middle">Injection magnitude  (small to large)</text>
+  <text x="431" y="626" class="s" text-anchor="middle">Grey dashed lane: random-encoder floor (flat in both panels)</text>
+
+  <!-- ============ RIGHT: legend card + pass card ============ -->
+
+  <!-- legend card: x 816..1152 (width 336), y 112..344 (height 232) -->
+  <rect x="816" y="112" width="336" height="232" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="846" y="148" class="t">Reading the curves</text>
+
+  <line x1="846" y1="178" x2="874" y2="178" stroke="#e07a4b" stroke-width="2.5"/>
+  <text x="886" y="183" class="b">Asymmetry channel (signed L-R)</text>
+
+  <line x1="846" y1="212" x2="874" y2="212" stroke="#2f6f99" stroke-width="2.5"/>
+  <text x="886" y="217" class="b">Posture channel (pelvis, trunk)</text>
+
+  <line x1="846" y1="246" x2="874" y2="246" stroke="#5c6f84" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="886" y="251" class="b">Random-encoder floor (Lane B)</text>
+
+  <text x="846" y="288" class="s">Matched channel tracks magnitude;</text>
+  <text x="846" y="310" class="s">the other channel stays near 1.0.</text>
+
+  <!-- pass card (dark banner): x 816..1152 (width 336), y 400..636 (height 236), gap 344->400 = 56 -->
+  <rect x="816" y="400" width="336" height="236" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="846" y="436" class="w" font-size="20">Pre-registered pass margin</text>
+
+  <text x="846" y="472" class="w">Matched rise &#8805; floor + 0.05</text>
+  <text x="846" y="504" class="w">Selectivity &#8805; 0.05 over other</text>
+  <text x="846" y="536" class="w">Reaches &#8805; 80% of ceiling</text>
+
+  <line x1="846" y1="558" x2="1122" y2="558" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="846" y="586" class="ws">Monotone across &#8805; 3 magnitudes.</text>
+  <text x="846" y="608" class="ws">Miss any one: informative null.</text>
+
+  <!-- Footer note: baseline y=666, >=24px below cards -->
+  <text x="48" y="666" class="s">Illustrative expected shape, not measured results. Random-encoder control is the floor; the raw-coordinate ceiling is the decisive bar. Labels are dataset annotations.</text>
+</svg>

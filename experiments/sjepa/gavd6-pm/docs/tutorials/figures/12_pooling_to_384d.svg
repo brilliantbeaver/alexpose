@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Token width D and downstream vector width 4D are different</title>
+  <desc id="desc">Target tokens fan out into independent global and authorized validity-aware pools. Their four summaries then fan in by concatenation.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; }
+    .t { font-size: 20px; font-weight: 700; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .strong { font-weight: 700; fill: #20364e; }
+    .mono { font-family: Menlo, Consolas, monospace; font-size: 15px; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text x="48" y="58" class="h" text-anchor="start"><tspan x="48" dy="0">Token width D and downstream vector width 4D are different</tspan></text>
+  <rect x="450" y="112" width="300" height="160" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text x="474" y="148" class="t" text-anchor="start"><tspan x="474" dy="0">Target tokens</tspan></text><text x="474" y="184" class="b" text-anchor="start"><tspan x="474" dy="0">[B,S,V,D]</tspan><tspan x="474" dy="26">D=96 in real profile</tspan></text><rect x="140" y="350" width="300" height="160" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text x="164" y="386" class="t" text-anchor="start"><tspan x="164" dy="0">Global pool</tspan></text><text x="164" y="422" class="b" text-anchor="start"><tspan x="164" dy="0">valid mean [B,D]</tspan><tspan x="164" dy="26">valid std [B,D]</tspan></text><rect x="760" y="350" width="300" height="160" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text x="784" y="386" class="t" text-anchor="start"><tspan x="784" dy="0">Authorized pool</tspan></text><text x="784" y="422" class="b" text-anchor="start"><tspan x="784" dy="0">12-joint mean [B,D]</tspan><tspan x="784" dy="26">12-joint std [B,D]</tspan></text><path d="M 550 288 L 550 318 L 290 318 L 290 334" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 650 288 L 650 318 L 910 318 L 910 334" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><rect x="260" y="558" width="680" height="108" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text x="284" y="594" class="t" text-anchor="start"><tspan x="284" dy="0">Concatenate four D-vectors</tspan></text><text x="284" y="630" class="b" text-anchor="start"><tspan x="284" dy="0">global mean | global std | authorized mean | authorized std</tspan><tspan x="284" dy="26">[B,4D] = [B,384] when D=96</tspan></text><path d="M 290 526 L 290 542 L 480 542" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 910 526 L 910 542 L 720 542" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+</svg>

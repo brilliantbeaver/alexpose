@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img">
+  <title>Probing biomechanical content of a frozen gait encoder</title>
+  <desc>Six linear probes read speed, cadence, asymmetry, excursion, sway, and gait phase out of frozen pooled latents, compared with raw-coordinate and missingness baselines.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="620" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">Probing: what did normal-only S-JEPA learn?</text>
+<rect x="40" y="90" width="250" height="120" rx="14" fill="#f9e5cf" class="box"/>
+<text x="60" y="124" class="t">Raw pose cache</text>
+<text x="60" y="150" class="b">33 landmarks x frames</text>
+<text x="60" y="172" class="b">fps and frame numbers kept</text>
+<path d="M290 150H350" class="arr"/>
+<rect x="350" y="90" width="250" height="120" rx="14" fill="#e8f1f8" class="box"/>
+<text x="370" y="124" class="t">Frozen target encoder</text>
+<text x="370" y="150" class="b">never trained on labels</text>
+<text x="370" y="172" class="b">pools to 384 values</text>
+<path d="M600 150H660" class="arr"/>
+<rect x="660" y="90" width="200" height="120" rx="14" fill="#fff" class="box"/>
+<text x="680" y="124" class="t">Frozen latents</text>
+<text x="680" y="150" class="b">one vector per clip</text>
+<text x="680" y="172" class="b">no fine-tuning</text>
+<rect x="60" y="260" width="350" height="140" rx="14" fill="#fff" class="box"/>
+<text x="80" y="294" class="t">cadence</text>
+<text x="80" y="318" class="b">steps per second</text>
+<rect x="80" y="334" width="200" height="14" rx="7" fill="#e4e0d8"/>
+<rect x="80" y="334" width="128" height="14" rx="7" fill="#ef7d57"/>
+<text x="292" y="346" class="b">R2 probe</text>
+<rect x="80" y="358" width="180" height="30" rx="14" fill="#dde2e6" class="box"/>
+<text x="96" y="378" class="s">ridge readout, CV</text>
+<rect x="440" y="260" width="350" height="140" rx="14" fill="#fff" class="box"/>
+<text x="460" y="294" class="t">speed</text>
+<text x="460" y="318" class="b">pelvis travel rate</text>
+<rect x="460" y="334" width="200" height="14" rx="7" fill="#e4e0d8"/>
+<rect x="460" y="334" width="128" height="14" rx="7" fill="#c98d5e"/>
+<text x="672" y="346" class="b">R2 probe</text>
+<rect x="460" y="358" width="180" height="30" rx="14" fill="#dde2e6" class="box"/>
+<text x="476" y="378" class="s">ridge readout, CV</text>
+<rect x="820" y="260" width="350" height="140" rx="14" fill="#fff" class="box"/>
+<text x="840" y="294" class="t">asymmetry</text>
+<text x="840" y="318" class="b">left vs right excursion</text>
+<rect x="840" y="334" width="200" height="14" rx="7" fill="#e4e0d8"/>
+<rect x="840" y="334" width="128" height="14" rx="7" fill="#5c806e"/>
+<text x="1052" y="346" class="b">R2 probe</text>
+<rect x="840" y="358" width="180" height="30" rx="14" fill="#dde2e6" class="box"/>
+<text x="856" y="378" class="s">ridge readout, CV</text>
+<rect x="60" y="430" width="350" height="140" rx="14" fill="#fff" class="box"/>
+<text x="80" y="464" class="t">excursion</text>
+<text x="80" y="488" class="b">knee and ankle range</text>
+<rect x="80" y="504" width="200" height="14" rx="7" fill="#e4e0d8"/>
+<rect x="80" y="504" width="128" height="14" rx="7" fill="#5c93b8"/>
+<text x="292" y="516" class="b">R2 probe</text>
+<rect x="80" y="528" width="180" height="30" rx="14" fill="#dde2e6" class="box"/>
+<text x="96" y="548" class="s">ridge readout, CV</text>
+<rect x="440" y="430" width="350" height="140" rx="14" fill="#fff" class="box"/>
+<text x="460" y="464" class="t">sway</text>
+<text x="460" y="488" class="b">pelvis wobble</text>
+<rect x="460" y="504" width="200" height="14" rx="7" fill="#e4e0d8"/>
+<rect x="460" y="504" width="128" height="14" rx="7" fill="#8a6fb8"/>
+<text x="672" y="516" class="b">R2 probe</text>
+<rect x="460" y="528" width="180" height="30" rx="14" fill="#dde2e6" class="box"/>
+<text x="476" y="548" class="s">ridge readout, CV</text>
+<rect x="820" y="430" width="350" height="140" rx="14" fill="#fff" class="box"/>
+<text x="840" y="464" class="t">phase</text>
+<text x="840" y="488" class="b">position in gait cycle</text>
+<rect x="840" y="504" width="200" height="14" rx="7" fill="#e4e0d8"/>
+<rect x="840" y="504" width="128" height="14" rx="7" fill="#b85c8a"/>
+<text x="1052" y="516" class="b">R2 probe</text>
+<rect x="840" y="528" width="180" height="30" rx="14" fill="#dde2e6" class="box"/>
+<text x="856" y="548" class="s">ridge readout, CV</text>
+<rect x="60" y="520" width="350" height="76" rx="14" fill="#e5f4ed" class="box"/>
+<text x="80" y="548" class="t">Baselines from the same clips</text>
+<text x="80" y="572" class="b">raw coordinate pooling</text>
+<text x="80" y="590" class="b">and missingness features</text>
+<rect x="470" y="520" width="390" height="76" rx="14" fill="#e9e3f5" class="box"/>
+<text x="490" y="548" class="t">Question answered</text>
+<text x="490" y="572" class="b">which parameters survive in latent space,</text>
+<text x="490" y="590" class="b">and whether pretraining beats raw pose</text>
+</svg>

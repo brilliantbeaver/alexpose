@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Roadmap from the audited baseline to the workshop paper</title>
+  <desc>The verified 00-06 baseline feeds four parallel experiment lanes, and their results merge into a five-page evaluation-protocol paper.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">Roadmap to the five-page workshop paper</text>
+<rect x="340" y="80" width="520" height="96" rx="14" fill="#e5f4ed" class="box"/>
+<text x="600" y="112" class="t" text-anchor="middle">Verified baseline: notebooks 00-06</text>
+<text x="600" y="138" class="b" text-anchor="middle">61.9 percent sequence-split accuracy, 76.2 handcrafted reference,</text>
+<text x="600" y="158" class="b" text-anchor="middle">full source-video overlap, missingness control</text>
+<rect x="40" y="210" width="270" height="170" rx="14" fill="#f9e5cf" class="box"/>
+<rect x="56" y="226" width="56" height="32" rx="14" fill="#fff" class="box"/>
+<text x="70" y="248" class="t">07</text>
+<text x="124" y="248" class="t">Source-ID audit</text>
+<text x="56" y="300" class="b">video-ID probe, grouped splits, gap</text>
+<text x="56" y="330" class="b">low effort</text>
+<text x="56" y="358" class="s">novelty ★★★</text>
+<rect x="335" y="210" width="270" height="170" rx="14" fill="#e8f1f8" class="box"/>
+<rect x="351" y="226" width="56" height="32" rx="14" fill="#fff" class="box"/>
+<text x="365" y="248" class="t">08</text>
+<text x="419" y="248" class="t">Biomech probes</text>
+<text x="351" y="300" class="b">speed, cadence, asymmetry, phase</text>
+<text x="351" y="330" class="b">low effort</text>
+<text x="351" y="358" class="s">novelty ★★★</text>
+<rect x="630" y="210" width="270" height="170" rx="14" fill="#e9e3f5" class="box"/>
+<rect x="646" y="226" width="56" height="32" rx="14" fill="#fff" class="box"/>
+<text x="660" y="248" class="t">09</text>
+<text x="714" y="248" class="t">Mask ablation</text>
+<text x="646" y="300" class="b">clinical vs random vs motion</text>
+<text x="646" y="330" class="b">medium effort</text>
+<text x="646" y="358" class="s">novelty ★★</text>
+<rect x="925" y="210" width="270" height="170" rx="14" fill="#e5f4ed" class="box"/>
+<rect x="941" y="226" width="56" height="32" rx="14" fill="#fff" class="box"/>
+<text x="955" y="248" class="t">10</text>
+<text x="1009" y="248" class="t">Causal forecasting</text>
+<text x="941" y="300" class="b">infilling becomes forecasting</text>
+<text x="941" y="330" class="b">medium effort</text>
+<text x="941" y="358" class="s">novelty ★★</text>
+<path d="M175 380V430" class="arr"/><path d="M470 380V430" class="arr"/><path d="M765 380V430" class="arr"/><path d="M1060 380V430" class="arr"/>
+<rect x="40" y="430" width="1120" height="120" rx="14" fill="#fff" class="box"/>
+<text x="600" y="462" class="t" text-anchor="middle">Merge lane: one five-page story</text>
+<text x="600" y="488" class="b" text-anchor="middle">1. movement encoders on internet video leak source identity; 2. our four-audit protocol measures it;</text>
+<text x="600" y="508" class="b" text-anchor="middle">3. probes show what the encoder did learn (cadence, asymmetry, phase); 4. the mask ablation and causal</text>
+<text x="600" y="528" class="b" text-anchor="middle">forecasting point from evaluation to better models</text>
+<path d="M600 550V592" class="arr"/>
+<rect x="340" y="594" width="520" height="92" rx="14" fill="#f9e5cf" class="box"/>
+<text x="600" y="626" class="t" text-anchor="middle">Workshop paper, five pages, due Sep 5</text>
+<text x="600" y="652" class="b" text-anchor="middle">Foundation Models for the Brain and Body, NeurIPS 2026</text>
+<text x="600" y="672" class="b" text-anchor="middle">movement, motor control, and evaluation protocols track</text>
+</svg>

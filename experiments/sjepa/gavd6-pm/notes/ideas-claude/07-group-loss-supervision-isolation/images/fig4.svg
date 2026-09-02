@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1200 720" role="img" aria-labelledby="t4 d4">
+  <title id="t4">The fair comparison: one knob, three matched arms, and the rule for reading the result</title>
+  <desc id="d4">A diagram of the single-factor design. One shared Stage-0 start splits into three arms that differ only in the named factor. Arm ON keeps the group-loss weight at 0.25. Arm OFF-matched sets that weight to 0 but keeps the same balanced sampler and is the primary contrast. Arm OFF-random sets the weight to 0 and swaps to a plain random sampler to bound sampler leakage. Every arm is scored twice, on seen videos (transductive) and on new source videos (inductive). The pre-registered rule at the bottom turns the inductive gap into a verdict: a gap of at least plus 0.05 with consistent sign is a positive, a smaller or sign-flipping gap is a memorization null.</desc>
+
+  <style>
+    .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+    .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+    .w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}
+    .ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="58" class="h">One knob, three matched arms, one fair rule</text>
+  <text x="48" y="86" class="s">Every arm shares the same Stage-0 start, same steps, same seeds. Only the named factor changes. Illustrative diagram, no measured numbers.</text>
+
+  <!-- shared start -->
+  <rect x="48" y="118" width="238" height="120" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="150" class="t">Shared start</text>
+  <text x="70" y="180" class="b">Frozen ea59fea0</text>
+  <text x="70" y="202" class="b">lineage, cached</text>
+  <text x="70" y="224" class="b">528-token tensors.</text>
+
+  <!-- connector trunk from start to three arms -->
+  <line x1="286" y1="178" x2="322" y2="178" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="322" y1="150" x2="322" y2="430" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="322" y1="150" x2="366" y2="150" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="322" y1="290" x2="366" y2="290" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="322" y1="430" x2="366" y2="430" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Arm ON -->
+  <rect x="378" y="118" width="366" height="64" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="400" y="146" class="t">Arm ON (deployed recipe)</text>
+  <text x="400" y="170" class="s">group weight 0.25, balanced sampler kept</text>
+
+  <!-- Arm OFF-matched -->
+  <rect x="378" y="258" width="366" height="64" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="400" y="286" class="t">Arm OFF-matched (primary)</text>
+  <text x="400" y="310" class="s">group weight 0, same balanced sampler</text>
+
+  <!-- Arm OFF-random -->
+  <rect x="378" y="398" width="366" height="64" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="400" y="426" class="t">Arm OFF-random (sampler check)</text>
+  <text x="400" y="450" class="s">group weight 0, plain random sampler</text>
+
+  <!-- scoring arrows -->
+  <line x1="744" y1="150" x2="806" y2="150" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="744" y1="290" x2="806" y2="290" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="744" y1="430" x2="806" y2="430" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- scoring cards -->
+  <rect x="818" y="118" width="334" height="64" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="840" y="146" class="t">Score each arm twice</text>
+  <text x="840" y="170" class="s">seen videos and new source videos</text>
+
+  <rect x="818" y="258" width="334" height="64" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="840" y="286" class="t">Two numbers each</text>
+  <text x="840" y="310" class="s">macro-F1 and min-centroid-cosine gap</text>
+
+  <rect x="818" y="398" width="334" height="64" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="840" y="426" class="t">Bounds sampler leakage</text>
+  <text x="840" y="450" class="s">OFF-random near OFF-matched: sampler did little</text>
+
+  <!-- decision rule banner -->
+  <rect x="48" y="484" width="1104" height="164" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="516" class="w">The pre-registered rule, decided before any fitting: read only the NEW-video (inductive) gap</text>
+  <text x="70" y="546" class="ws">Positive: ON beats OFF-matched by at least +0.05 macro-F1 with the same sign across the myopathic held-out sources.</text>
+  <text x="90" y="568" class="ws">Meaning: the group loss teaches transferable gait structure.</text>
+  <text x="70" y="596" class="ws">Null: the gap is under +0.05, or it flips sign, while ON still wins only on seen videos.</text>
+  <text x="90" y="618" class="ws">Meaning: the group loss bought memorization, not generalization. Both outcomes are reportable.</text>
+  <text x="70" y="642" class="ws">Every arm must also clear the missingness-only floor of macro-F1 0.477 and pass the collapse gate (feature std near 0.362567).</text>
+
+  <text x="48" y="672" class="s">Illustrative diagram. Every real number carries fingerprint ea59fea0. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

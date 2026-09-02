@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Mirror-slope check: the exact wiring swap versus the measured anatomical mirror against the y = -x line</title>
+  <desc id="d2">Illustrative expected-shape scatter with two distinct checks. The x axis is the decoded signed-laterality scalar on the original input; the y axis is the decoded scalar on the mirrored input. A green dashed y equals minus x line marks a perfect sign flip. The WIRING check swaps left and right at the head input and lands exactly on the line (warm dots, slope minus 1 by construction, true for both arms and any encoder). The ANATOMICAL mirror negates the sideways coordinate and swaps landmarks on the raw skeleton, then runs it back through the encoder, so it scatters near but off the line with a fitted slope that is measured and approximate (blue dots, minus 0.741 for the standard ea59fea0 encoder). The exact minus 1 belongs only to the wiring check; the anatomical slope is never called minus 1. A footer notes that a mirror flips the sign of the lateralized biomarker (Patterson 2010). All numbers are illustrative and transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Two mirror checks against the y = -x reflection line</text>
+  <text x="48" y="88" class="s">Illustrative expected shape. Exact wiring swap (slope -1 by construction) vs measured anatomical mirror through the encoder. Transductive.</text>
+
+  <!-- ============ LEFT: scatter plot card ============ -->
+  <!-- card: x 48..708, y 112..600 -->
+  <rect x="48" y="112" width="660" height="488" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Decoded scalar: mirrored vs original</text>
+  <text x="78" y="170" class="s">Warm = wiring swap (exact). Blue = anatomical mirror (measured).</text>
+
+  <!-- plot frame: x 160..660 (width 500), y 178..508 (height 330). Origin at center. -->
+  <!-- Map data range [-1,1] on both axes. cx0=410 (center x), cy0=343 (center y). -->
+  <!-- x: 410 + val*250 ; y: 343 - val*165 -->
+  <!-- axes drawn through center -->
+  <line x1="160" y1="343" x2="660" y2="343" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="410" y1="178" x2="410" y2="508" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- tick 0 labels -->
+  <text x="402" y="362" class="s" text-anchor="end">0</text>
+  <!-- x tick marks at -1 (x=160) and +1 (x=660) -->
+  <text x="176" y="362" class="s" text-anchor="middle">-1</text>
+  <text x="644" y="362" class="s" text-anchor="middle">+1</text>
+  <!-- y tick marks at +1 (y=178) and -1 (y=508) -->
+  <text x="398" y="183" class="s" text-anchor="end">+1</text>
+  <text x="398" y="513" class="s" text-anchor="end">-1</text>
+
+  <!-- y = -x reflection line (green dashed): from (-0.9,0.9) to (0.9,-0.9) -->
+  <!-- (-0.9): x=410-225=185, y=343-148.5=194.5 ; (0.9): x=635, y=491.5 -->
+  <line x1="185" y1="194" x2="635" y2="492" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="196" y="188" class="s" fill="#5f9e7e">y = -x (perfect flip)</text>
+
+  <!-- WIRING-swap dots: exactly on y = -x. warm dots. Left/right swapped at head input; -1 by construction, both arms, any encoder. -->
+  <!-- pairs (val, -val): choose vals -0.7,-0.45,-0.2,0.15,0.4,0.62 -->
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <!-- val -0.7: x=235, y=343-115.5=... y=-(-0.7)=0.7 -> y=343-115.5=227.5 -->
+    <circle cx="235" cy="228" r="8"/>
+    <!-- val -0.45: x=297, y=343-74=... y=0.45 -> 343-74.25=268.75 -->
+    <circle cx="297" cy="269" r="8"/>
+    <!-- val -0.2: x=360, y=0.2 -> 343-33=310 -->
+    <circle cx="360" cy="310" r="8"/>
+    <!-- val 0.15: x=447, y=-0.15 -> 343+24.75=367.75 -->
+    <circle cx="447" cy="368" r="8"/>
+    <!-- val 0.4: x=510, y=-0.4 -> 343+66=409 -->
+    <circle cx="510" cy="409" r="8"/>
+    <!-- val 0.62: x=565, y=-0.62 -> 343+102.3=445.3 -->
+    <circle cx="565" cy="445" r="8"/>
+  </g>
+  <!-- wiring-swap label near the warm cluster, in clear space (upper-left, off the line) -->
+  <text x="235" y="205" class="s" fill="#a44c26" text-anchor="middle">wiring swap</text>
+  <text x="235" y="221" class="s" fill="#a44c26" text-anchor="middle">(exact -1)</text>
+
+  <!-- ANATOMICAL-mirror dots: near but off the line, scattered. blue dots. Raw skeleton mirrored, re-run through the encoder. -->
+  <!-- place slightly off y=-x with noise -->
+  <g fill="#2f6f99" stroke="#20364e" stroke-width="1.25">
+    <circle cx="252" cy="252" r="7"/>
+    <circle cx="290" cy="300" r="7"/>
+    <circle cx="345" cy="288" r="7"/>
+    <circle cx="372" cy="340" r="7"/>
+    <circle cx="432" cy="330" r="7"/>
+    <circle cx="468" cy="392" r="7"/>
+    <circle cx="500" cy="368" r="7"/>
+    <circle cx="548" cy="418" r="7"/>
+  </g>
+  <!-- fitted approximate slope line for the anatomical mirror through the encoder (shallower than -1) -->
+  <line x1="240" y1="270" x2="560" y2="405" stroke="#2f6f99" stroke-width="2.5"/>
+  <text x="574" y="404" class="s" fill="#2f6f99">anatomical,</text>
+  <text x="574" y="428" class="s" fill="#2f6f99">measured</text>
+  <text x="574" y="452" class="s" fill="#2f6f99">(not -1)</text>
+
+  <!-- x axis label -->
+  <text x="410" y="540" class="b" text-anchor="middle">Decoded scalar on ORIGINAL input</text>
+  <!-- y axis label -->
+  <text x="112" y="343" class="b" text-anchor="middle" transform="rotate(-90 112 343)">Decoded scalar on MIRRORED input</text>
+
+  <!-- ============ RIGHT: explainer + pass card ============ -->
+
+  <!-- Explainer card: x 764..1152, y 112..344 -->
+  <rect x="764" y="112" width="388" height="232" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="148" class="t">Two checks, one head</text>
+
+  <circle cx="802" cy="178" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="822" y="183" class="b">Wiring swap: exact slope -1,</text>
+  <text x="822" y="205" class="s">by construction, both arms.</text>
+
+  <circle cx="802" cy="240" r="7" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <text x="822" y="245" class="b">Anatomical mirror: near but off,</text>
+  <text x="822" y="267" class="s">measured (-0.741 for ea59fea0).</text>
+
+  <text x="794" y="298" class="s">s(swap of x) = -s(x) is exact for every</text>
+  <text x="794" y="320" class="s">input; the anatomical slope is measured.</text>
+
+  <!-- Pass card (dark banner): x 764..1152, y 400..624; gap 56 -->
+  <rect x="764" y="400" width="388" height="224" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="436" class="w" font-size="20">Manipulation check (wiring)</text>
+
+  <text x="794" y="472" class="w">The head's WIRING-swap slope must</text>
+  <text x="794" y="498" class="w">be -1 to floating-point tolerance.</text>
+  <text x="794" y="524" class="w">The anatomical slope stays measured.</text>
+
+  <line x1="794" y1="546" x2="1122" y2="546" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="794" y="574" class="ws">A perfectly symmetric walker maps to</text>
+  <text x="794" y="596" class="ws">exactly 0; sign says which side leans.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="664" class="s">Illustrative expected shape, not measured results. A mirror flips the sign of the lateralized biomarker (Patterson 2010). Labels are dataset annotations.</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#fbfcfe"/>
+  <style>
+    .title { font: 700 34px Arial, sans-serif; fill: #10233f; }
+    .head { font: 700 21px Arial, sans-serif; fill: #10233f; }
+    .label { font: 18px Arial, sans-serif; fill: #334e68; }
+    .value { font: 700 19px Arial, sans-serif; fill: #10233f; }
+    .big { font: 700 43px Arial, sans-serif; fill: #10233f; }
+    .body { font: 18px Arial, sans-serif; fill: #526575; }
+  </style>
+  <text x="600" y="50" text-anchor="middle" class="title">Centroid geometry is weak, not clean separation</text>
+  <text x="350" y="93" text-anchor="middle" class="head">Cosine distance between condition centroids</text>
+
+  <g transform="translate(165 125)">
+    <text x="180" y="-8" text-anchor="middle" class="label">Normal</text>
+    <text x="270" y="-8" text-anchor="middle" class="label">PD</text>
+    <text x="360" y="-8" text-anchor="middle" class="label">Stroke</text>
+    <text x="450" y="-8" text-anchor="middle" class="label">Myo</text>
+    <text x="540" y="-8" text-anchor="middle" class="label">CP</text>
+    <text x="75" y="50" text-anchor="end" class="label">Normal</text>
+    <text x="75" y="140" text-anchor="end" class="label">PD</text>
+    <text x="75" y="230" text-anchor="end" class="label">Stroke</text>
+    <text x="75" y="320" text-anchor="end" class="label">Myo</text>
+    <text x="75" y="410" text-anchor="end" class="label">CP</text>
+    <!-- row 1 -->
+    <rect x="135" y="10" width="90" height="80" fill="#f3f6f8"/><rect x="225" y="10" width="90" height="80" fill="#386cb0"/><rect x="315" y="10" width="90" height="80" fill="#9ecae1"/><rect x="405" y="10" width="90" height="80" fill="#dcebf4"/><rect x="495" y="10" width="90" height="80" fill="#e3eff6"/>
+    <!-- row 2 -->
+    <rect x="135" y="100" width="90" height="80" fill="#386cb0"/><rect x="225" y="100" width="90" height="80" fill="#f3f6f8"/><rect x="315" y="100" width="90" height="80" fill="#b8d8e9"/><rect x="405" y="100" width="90" height="80" fill="#79b4d4"/><rect x="495" y="100" width="90" height="80" fill="#5b98c6"/>
+    <!-- row 3 -->
+    <rect x="135" y="190" width="90" height="80" fill="#9ecae1"/><rect x="225" y="190" width="90" height="80" fill="#b8d8e9"/><rect x="315" y="190" width="90" height="80" fill="#f3f6f8"/><rect x="405" y="190" width="90" height="80" fill="#d5e8f3"/><rect x="495" y="190" width="90" height="80" fill="#c8e0ed"/>
+    <!-- row 4 -->
+    <rect x="135" y="280" width="90" height="80" fill="#dcebf4"/><rect x="225" y="280" width="90" height="80" fill="#79b4d4"/><rect x="315" y="280" width="90" height="80" fill="#d5e8f3"/><rect x="405" y="280" width="90" height="80" fill="#f3f6f8"/><rect x="495" y="280" width="90" height="80" fill="#edf4f8" stroke="#b94732" stroke-width="4"/>
+    <!-- row 5 -->
+    <rect x="135" y="370" width="90" height="80" fill="#e3eff6"/><rect x="225" y="370" width="90" height="80" fill="#5b98c6"/><rect x="315" y="370" width="90" height="80" fill="#c8e0ed"/><rect x="405" y="370" width="90" height="80" fill="#edf4f8" stroke="#b94732" stroke-width="4"/><rect x="495" y="370" width="90" height="80" fill="#f3f6f8"/>
+    <g class="value" text-anchor="middle">
+      <text x="180" y="60">0.000</text><text x="270" y="60">0.821</text><text x="360" y="60">0.334</text><text x="450" y="60">0.081</text><text x="540" y="60">0.044</text>
+      <text x="180" y="150">0.821</text><text x="270" y="150">0.000</text><text x="360" y="150">0.241</text><text x="450" y="150">0.546</text><text x="540" y="150">0.666</text>
+      <text x="180" y="240">0.334</text><text x="270" y="240">0.241</text><text x="360" y="240">0.000</text><text x="450" y="240">0.149</text><text x="540" y="240">0.224</text>
+      <text x="180" y="330">0.081</text><text x="270" y="330">0.546</text><text x="360" y="330">0.149</text><text x="450" y="330">0.000</text><text x="540" y="330">0.026</text>
+      <text x="180" y="420">0.044</text><text x="270" y="420">0.666</text><text x="360" y="420">0.224</text><text x="450" y="420">0.026</text><text x="540" y="420">0.000</text>
+    </g>
+  </g>
+
+  <rect x="800" y="125" width="345" height="120" rx="20" fill="#fde9d9" stroke="#b94732" stroke-width="3"/>
+  <text x="972" y="175" text-anchor="middle" class="big">0.026</text>
+  <text x="972" y="215" text-anchor="middle" class="body">smallest centroid distance</text>
+  <rect x="800" y="270" width="345" height="120" rx="20" fill="#fff2cc" stroke="#9a6700" stroke-width="3"/>
+  <text x="972" y="320" text-anchor="middle" class="big">0.104</text>
+  <text x="972" y="360" text-anchor="middle" class="body">mean within-group distance</text>
+  <rect x="800" y="415" width="345" height="120" rx="20" fill="#e8f1fa" stroke="#40566d" stroke-width="3"/>
+  <text x="972" y="465" text-anchor="middle" class="big">0.054</text>
+  <text x="972" y="505" text-anchor="middle" class="body">cosine silhouette</text>
+  <text x="600" y="620" text-anchor="middle" class="head">The final encoder saw these rows and their folder labels. This is descriptive geometry.</text>
+</svg>

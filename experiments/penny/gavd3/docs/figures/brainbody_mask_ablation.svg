@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img">
+  <title>Mask geometry ablation under matched compute</title>
+  <desc>Four mask samplers hide the same number of tokens from the same student view; only the geometry of the mask changes.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="640" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">One change at a time: the mask geometry</text>
+<rect x="40" y="90" width="270" height="150" rx="14" fill="#f9e5cf" class="box"/>
+<text x="58" y="122" class="t">neurologic-10</text>
+<text x="58" y="146" class="b">uniform over the 10 literature landmarks</text>
+<circle cx="175" cy="195" r="9" fill="#18324c"/>
+<circle cx="145" cy="225" r="9" fill="#9ac7bf"/>
+<circle cx="205" cy="225" r="9" fill="#18324c"/>
+<circle cx="160" cy="255" r="9" fill="#9ac7bf"/>
+<circle cx="190" cy="255" r="9" fill="#18324c"/>
+<text x="58" y="224" class="b">same hidden count per clip</text>
+<rect x="335" y="90" width="270" height="150" rx="14" fill="#e8f1f8" class="box"/>
+<text x="353" y="122" class="t">random-10</text>
+<text x="353" y="146" class="b">uniform over any 10 landmarks</text>
+<circle cx="470" cy="195" r="9" fill="#9ac7bf"/>
+<circle cx="440" cy="225" r="9" fill="#18324c"/>
+<circle cx="500" cy="225" r="9" fill="#9ac7bf"/>
+<circle cx="455" cy="255" r="9" fill="#9ac7bf"/>
+<circle cx="485" cy="255" r="9" fill="#9ac7bf"/>
+<text x="353" y="224" class="b">same hidden count per clip</text>
+<rect x="630" y="90" width="270" height="150" rx="14" fill="#e9e3f5" class="box"/>
+<text x="648" y="122" class="t">motion-aware-10</text>
+<text x="648" y="146" class="b">displacement-weighted, neurologic</text>
+<circle cx="765" cy="195" r="9" fill="#9ac7bf"/>
+<circle cx="735" cy="225" r="9" fill="#9ac7bf"/>
+<circle cx="795" cy="225" r="9" fill="#18324c"/>
+<circle cx="750" cy="255" r="9" fill="#18324c"/>
+<circle cx="780" cy="255" r="9" fill="#18324c"/>
+<text x="648" y="224" class="b">same hidden count per clip</text>
+<rect x="925" y="90" width="270" height="150" rx="14" fill="#e5f4ed" class="box"/>
+<text x="943" y="122" class="t">full-body-33</text>
+<text x="943" y="146" class="b">uniform over all 33 landmarks</text>
+<circle cx="1060" cy="195" r="9" fill="#18324c"/>
+<circle cx="1030" cy="225" r="9" fill="#18324c"/>
+<circle cx="1090" cy="225" r="9" fill="#18324c"/>
+<circle cx="1045" cy="255" r="9" fill="#18324c"/>
+<circle cx="1075" cy="255" r="9" fill="#18324c"/>
+<text x="943" y="224" class="b">same hidden count per clip</text>
+<rect x="40" y="300" width="1120" height="90" rx="14" fill="#fff" class="box"/>
+<text x="60" y="330" class="t">Matched compute: same model, same updates, same seeds, same evaluation</text>
+<text x="60" y="356" class="b">The only change is the sampler, so a difference can be attributed to the mask.</text>
+<text x="60" y="380" class="b">Samplers carry assertions: never mask invalid tokens, keep equal counts across the batch.</text>
+<rect x="40" y="430" width="350" height="140" rx="14" fill="#e5f4ed" class="box"/>
+<text x="60" y="462" class="t">Downstream probes</text>
+<text x="60" y="488" class="b">five-class Random Forest</text>
+<text x="60" y="508" class="b">source-grouped fold score</text>
+<text x="60" y="528" class="b">collapse diagnostics</text>
+<text x="60" y="548" class="b">cadence ridge probe</text>
+<rect x="430" y="430" width="350" height="140" rx="14" fill="#e8f1f8" class="box"/>
+<text x="450" y="462" class="t">Question answered</text>
+<text x="450" y="488" class="b">does the literature-guided mask</text>
+<text x="450" y="508" class="b">produce a better gait</text>
+<text x="450" y="528" class="b">representation than random,</text>
+<text x="450" y="548" class="b">motion, or whole-body masks?</text>
+<rect x="820" y="430" width="340" height="140" rx="14" fill="#fff" class="box"/>
+<text x="840" y="462" class="t">Expected honest outcome</text>
+<text x="840" y="488" class="b">small differences at 12 normal</text>
+<text x="840" y="508" class="b">sequences; direction and</text>
+<text x="840" y="528" class="b">variance across seeds are</text>
+<text x="840" y="548" class="b">the publishable result</text>
+</svg>

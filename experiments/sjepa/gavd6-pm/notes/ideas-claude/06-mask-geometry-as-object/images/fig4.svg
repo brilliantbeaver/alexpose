@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The fair comparison: three masks trained the same way, then four checks to call it a real win</title>
+  <desc id="desc">A plain how-to-read explainer. Three masks are each trained from scratch the same way and on the same walking videos: the uniform baseline U, the gait-shaped mask S, and the scrambled control S-scram that copies S's amounts but destroys its shape. To count as a real win, the gait-shaped mask S must pass four checks in order: beat U by at least ten percent lower error, also beat the scrambled control by at least ten percent, hold that direction on at least three of every four held-out videos, and not get any better at guessing the recording source. Failing any one check means the result is called a null.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; fill: #0f2440; }
+    .t { font-size: 20px; font-weight: 700; fill: #0f2440; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+    .ws { font-size: 14px; font-weight: 700; fill: #cdd8e4; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="56" class="h" text-anchor="start">How to read the result: the fair comparison</text>
+  <text x="48" y="84" class="s" text-anchor="start">Three masks, trained the same way on the same videos. To call the gait-shaped mask a real win, it must clear all four checks in order.</text>
+
+  <!-- ===== TOP: the three arms ===== -->
+  <text x="48" y="128" class="t" text-anchor="start">The three masks (each retrained from scratch, matched compute and steps)</text>
+
+  <!-- Arm U -->
+  <rect x="48" y="146" width="330" height="132" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="180" class="t" text-anchor="start">U: uniform (baseline)</text>
+  <text x="70" y="210" class="b" text-anchor="start">Scattered holes, body-blind.</text>
+  <text x="70" y="232" class="b" text-anchor="start">The current recipe.</text>
+  <text x="70" y="262" class="s" text-anchor="start">What we must beat.</text>
+
+  <!-- Arm S -->
+  <rect x="435" y="146" width="330" height="132" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="457" y="180" class="t" text-anchor="start">S: gait-shaped (treatment)</text>
+  <text x="457" y="210" class="b" text-anchor="start">Hide one leg over a block of</text>
+  <text x="457" y="232" class="b" text-anchor="start">time. The idea being tested.</text>
+  <text x="457" y="262" class="s" text-anchor="start">Should win, if shape matters.</text>
+
+  <!-- Arm S-scram -->
+  <rect x="822" y="146" width="330" height="132" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="844" y="180" class="t" text-anchor="start">S-scram: scrambled control</text>
+  <text x="844" y="210" class="b" text-anchor="start">Same amounts as S, but the</text>
+  <text x="844" y="232" class="b" text-anchor="start">shape is shuffled away.</text>
+  <text x="844" y="262" class="s" text-anchor="start">Rules out "easier", not shape.</text>
+
+  <!-- ===== MIDDLE: the four checks in order ===== -->
+  <text x="48" y="330" class="t" text-anchor="start">The four checks (S must pass every one, in order)</text>
+
+  <!-- Check 1 -->
+  <rect x="48" y="350" width="234" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="384" class="t" text-anchor="start">Check 1</text>
+  <text x="70" y="414" class="b" text-anchor="start">Beat U by at least</text>
+  <text x="70" y="436" class="b" text-anchor="start">10% lower error.</text>
+  <text x="70" y="470" class="s" text-anchor="start">Is the gait-shaped</text>
+  <text x="70" y="488" class="s" text-anchor="start">mask actually better?</text>
+
+  <!-- Check 2 -->
+  <rect x="338" y="350" width="234" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="360" y="384" class="t" text-anchor="start">Check 2</text>
+  <text x="360" y="414" class="b" text-anchor="start">Beat S-scram by at</text>
+  <text x="360" y="436" class="b" text-anchor="start">least 10% too.</text>
+  <text x="360" y="470" class="s" text-anchor="start">The win is from the</text>
+  <text x="360" y="488" class="s" text-anchor="start">shape, not the amount.</text>
+
+  <!-- Check 3 -->
+  <rect x="628" y="350" width="234" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="650" y="384" class="t" text-anchor="start">Check 3</text>
+  <text x="650" y="414" class="b" text-anchor="start">Win direction holds</text>
+  <text x="650" y="436" class="b" text-anchor="start">on &#8805;75% of videos.</text>
+  <text x="650" y="470" class="s" text-anchor="start">Not just one lucky</text>
+  <text x="650" y="488" class="s" text-anchor="start">source video.</text>
+
+  <!-- Check 4 (kill gate) -->
+  <rect x="918" y="350" width="234" height="150" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="940" y="384" class="t" text-anchor="start">Check 4: kill gate</text>
+  <text x="940" y="414" class="b" text-anchor="start">No better at guessing</text>
+  <text x="940" y="436" class="b" text-anchor="start">the recording source.</text>
+  <text x="940" y="470" class="s" text-anchor="start">Within 0.02 of U, or</text>
+  <text x="940" y="488" class="s" text-anchor="start">the study is stopped.</text>
+
+  <!-- arrows chaining the four checks -->
+  <path d="M282,425 L332,425" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M572,425 L622,425" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M862,425 L912,425" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== BOTTOM: the two verdicts ===== -->
+  <!-- Pass banner -->
+  <rect x="48" y="548" width="544" height="96" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="582" class="w" text-anchor="start">All four pass = a real win</text>
+  <text x="72" y="608" class="ws" text-anchor="start">The gait-shaped hole forced the model to encode timing and</text>
+  <text x="72" y="628" class="ws" text-anchor="start">left-right balance better than the body-blind mask.</text>
+
+  <!-- Null banner -->
+  <rect x="620" y="548" width="532" height="96" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="644" y="582" class="t" text-anchor="start">Any one fails = a null</text>
+  <text x="644" y="610" class="b" text-anchor="start">Just as useful: at this small scale, mask shape is</text>
+  <text x="644" y="632" class="b" text-anchor="start">not the lever, so effort should go elsewhere.</text>
+
+  <text x="48" y="668" class="s" text-anchor="start">Numbers (10%, 75%, 0.02) are the study's pre-registered continuation rules, not clinical thresholds. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Three related skeleton representation learning methods</title>
+  <desc>MAMP predicts coordinate motion, S-JEPA predicts latent targets, and motion-topology MTM combines reconstruction with contrastive learning.</desc>
+  <defs>
+    <style>
+      .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+      .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+      .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+      .w{font:700 16px Arial,Helvetica,sans-serif;fill:#ffffff}
+      .card{stroke:#20364e;stroke-width:1.75}
+      .sub{stroke:#20364e;stroke-width:1.5}
+      .rule{stroke:#c4cdd8;stroke-width:1.5}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="52" y="74" class="h">Related methods differ most in what they predict</text>
+  <line x1="52" y1="100" x2="1148" y2="100" class="rule"/>
+
+  <!-- Card 1: MAMP (blue) -->
+  <rect x="52" y="140" width="328" height="440" rx="16" fill="#e7f0f8" class="card"/>
+  <text x="80" y="188" class="t">MAMP</text>
+  <text x="80" y="228" class="b">Visible joint-time patches</text>
+  <text x="80" y="262" class="b">Transformer encoder</text>
+  <text x="80" y="296" class="b">Transformer decoder</text>
+  <rect x="80" y="326" width="272" height="98" rx="12" fill="#ffffff" class="sub"/>
+  <text x="106" y="362" class="t">Target</text>
+  <text x="106" y="396" class="b">normalized coordinate motion</text>
+  <text x="80" y="500" class="s">Motion also biases which</text>
+  <text x="80" y="528" class="s">tokens are masked.</text>
+
+  <!-- Card 2: S-JEPA (green, chosen foundation) -->
+  <rect x="436" y="140" width="328" height="440" rx="16" fill="#e6f2ea" class="card"/>
+  <text x="464" y="188" class="t">S-JEPA</text>
+  <text x="464" y="228" class="b">Visible joint-time patches</text>
+  <text x="464" y="262" class="b">View encoder + predictor</text>
+  <text x="464" y="296" class="b">EMA target encoder</text>
+  <rect x="464" y="326" width="272" height="98" rx="12" fill="#ffffff" class="sub"/>
+  <text x="490" y="362" class="t">Target</text>
+  <text x="490" y="396" class="b">contextual latent vector</text>
+  <text x="464" y="500" class="s">This tutorial keeps this</text>
+  <text x="464" y="528" class="s">learning objective.</text>
+
+  <!-- Card 3: motion-topology MTM (warm) -->
+  <rect x="820" y="140" width="328" height="440" rx="16" fill="#f7e7d8" class="card"/>
+  <text x="848" y="188" class="t">Motion-topology MTM</text>
+  <text x="848" y="228" class="b">Motion + topology masks</text>
+  <text x="848" y="262" class="b">Bi-GRU encoder and decoder</text>
+  <text x="848" y="296" class="b">Contrastive queue</text>
+  <rect x="848" y="326" width="272" height="98" rx="12" fill="#ffffff" class="sub"/>
+  <text x="874" y="362" class="t">Targets</text>
+  <text x="874" y="396" class="b">coordinates + contrast</text>
+  <text x="848" y="500" class="s">Related work, not an</text>
+  <text x="848" y="528" class="s">S-JEPA implementation.</text>
+
+  <!-- Chosen foundation banner under S-JEPA -->
+  <rect x="436" y="620" width="328" height="52" rx="16" fill="#20364e"/>
+  <text x="600" y="653" class="w" text-anchor="middle">Chosen foundation: S-JEPA</text>
+</svg>

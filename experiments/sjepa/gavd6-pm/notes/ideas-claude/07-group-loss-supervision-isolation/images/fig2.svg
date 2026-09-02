@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Per-stage V-usable information and normal-forgetting across the curriculum</title>
+  <desc id="d2">Illustrative expected shape. As the label-aware curriculum adds conditions in Stages 1 to 4, V-usable condition information on held-out sources is expected to rise while residual normal predictive competence, measured against a fixed Stage-0 reference, is expected to fall, echoing the documented normal-anchor cosine drift from 0.959 to 0.617. A held-out-abnormal control line stays flatter, warning that transductive gains may not transfer.</desc>
+
+  <style>
+    .h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}
+    .b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}
+    .s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}
+    .lab{font:700 15px Arial,Helvetica,sans-serif;fill:#0f2440}
+  </style>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="58" class="h">Per-stage information gain vs normal forgetting</text>
+  <text x="48" y="86" class="s">Illustrative expected shape. Secondary panel. Predictive competence measured against a fixed Stage-0 reference. Curves are placeholders, not measured.</text>
+
+  <!-- ================= PLOT CARD ================= -->
+  <rect x="48" y="112" width="812" height="500" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- axes: plot area x 150..800, y 170..520 -->
+  <line x1="150" y1="160" x2="150" y2="520" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="520" x2="810" y2="520" stroke="#20364e" stroke-width="2.5"/>
+  <text x="78" y="350" class="s" transform="rotate(-90 78 350)">normalized score (0 to 1)</text>
+
+  <!-- y ticks: y=170->1.0, y=520->0.0 ; per 0.2 = 70px -->
+  <text x="140" y="175" class="s" text-anchor="end">1.0</text>
+  <text x="140" y="245" class="s" text-anchor="end">0.8</text>
+  <text x="140" y="315" class="s" text-anchor="end">0.6</text>
+  <text x="140" y="385" class="s" text-anchor="end">0.4</text>
+  <text x="140" y="455" class="s" text-anchor="end">0.2</text>
+  <text x="140" y="525" class="s" text-anchor="end">0.0</text>
+
+  <!-- x ticks: stages 0..4 at x = 210,360,510,660,760? use even spacing 210..770 -->
+  <!-- 5 stages: x = 210, 350, 490, 630, 770 -->
+  <text x="210" y="548" class="s" text-anchor="middle">Stage 0</text>
+  <text x="350" y="548" class="s" text-anchor="middle">Stage 1</text>
+  <text x="490" y="548" class="s" text-anchor="middle">Stage 2</text>
+  <text x="630" y="548" class="s" text-anchor="middle">Stage 3</text>
+  <text x="770" y="548" class="s" text-anchor="middle">Stage 4</text>
+  <text x="480" y="578" class="s" text-anchor="middle">curriculum stage (adds PD, stroke, myopathic, cerebral palsy)</text>
+
+  <!-- y from value: y = 520 - v*350 -->
+  <!-- V-usable condition info (blue), rising: s1 .30 s2 .42 s3 .50 s4 .54
+       x s1=350 v.30->y415 ; s2=490 .42->373 ; s3=630 .50->345 ; s4=770 .54->331 -->
+  <polyline points="350,415 490,373 630,345 770,331" fill="none" stroke="#2f6f99" stroke-width="3"/>
+  <circle cx="350" cy="415" r="5" fill="#2f6f99"/>
+  <circle cx="490" cy="373" r="5" fill="#2f6f99"/>
+  <circle cx="630" cy="345" r="5" fill="#2f6f99"/>
+  <circle cx="770" cy="331" r="5" fill="#2f6f99"/>
+  <text x="770" y="322" class="s" text-anchor="middle" fill="#2f6f99">0.54</text>
+
+  <!-- residual normal predictive competence (green), falling, echoing anchor 0.959->0.617
+       normalize cosine as score: s1 .954->y=520-.954*350=186 ; s2 .82->233 ; s3 .70->275 ; s4 .594->412 (pulled down for clear separation) -->
+  <polyline points="350,186 490,238 630,300 770,412" fill="none" stroke="#5f9e7e" stroke-width="3"/>
+  <circle cx="350" cy="186" r="5" fill="#5f9e7e"/>
+  <circle cx="490" cy="238" r="5" fill="#5f9e7e"/>
+  <circle cx="630" cy="300" r="5" fill="#5f9e7e"/>
+  <circle cx="770" cy="412" r="5" fill="#5f9e7e"/>
+  <text x="356" y="176" class="s" fill="#5f9e7e">0.959</text>
+  <text x="770" y="404" class="s" text-anchor="middle" fill="#5f9e7e">0.617</text>
+
+  <!-- held-out-abnormal control (violet dashed), flatter, low: s1 .28 s2 .32 s3 .33 s4 .34
+       .28->422 ; .32->463 kept below green endpoint; use s1 .18 s2 .20 s3 .21 s4 .22 -> 457,450,447,443 -->
+  <polyline points="350,457 490,450 630,447 770,443" fill="none" stroke="#8a6fb3" stroke-width="3" stroke-dasharray="7 6"/>
+  <circle cx="350" cy="457" r="5" fill="#8a6fb3"/>
+  <circle cx="490" cy="450" r="5" fill="#8a6fb3"/>
+  <circle cx="630" cy="447" r="5" fill="#8a6fb3"/>
+  <circle cx="770" cy="443" r="5" fill="#8a6fb3"/>
+
+  <text x="160" y="478" class="s">Stage 0: normal-only,</text>
+  <text x="160" y="500" class="s">no group loss active</text>
+
+  <!-- ================= LEGEND CARD ================= -->
+  <rect x="916" y="112" width="236" height="302" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="938" y="146" class="t">Legend</text>
+
+  <line x1="938" y1="180" x2="978" y2="180" stroke="#2f6f99" stroke-width="3"/>
+  <circle cx="958" cy="180" r="5" fill="#2f6f99"/>
+  <text x="938" y="206" class="b">V-usable condition</text>
+  <text x="938" y="228" class="b">information (rising)</text>
+
+  <line x1="938" y1="262" x2="978" y2="262" stroke="#5f9e7e" stroke-width="3"/>
+  <circle cx="958" cy="262" r="5" fill="#5f9e7e"/>
+  <text x="938" y="288" class="b">residual normal</text>
+  <text x="938" y="310" class="b">competence (falling)</text>
+
+  <line x1="938" y1="344" x2="978" y2="344" stroke="#8a6fb3" stroke-width="3" stroke-dasharray="7 6"/>
+  <circle cx="958" cy="344" r="5" fill="#8a6fb3"/>
+  <text x="938" y="370" class="b">held-out-abnormal</text>
+  <text x="938" y="392" class="b">control (flatter)</text>
+
+  <!-- interpretation card -->
+  <rect x="916" y="470" width="236" height="150" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="938" y="504" class="lab">Reads as</text>
+  <text x="938" y="530" class="s">Info rises as normal</text>
+  <text x="938" y="552" class="s">competence falls: the</text>
+  <text x="938" y="574" class="s">curriculum trades away</text>
+  <text x="938" y="596" class="s">the normal anchor.</text>
+
+  <!-- footer -->
+  <text x="48" y="644" class="s">Green mirrors the documented normal-anchor cosine drift 0.959 (after Stage 1) to 0.617 (after Stage 4). All curves single-run and descriptive, not inferential.</text>
+  <text x="48" y="668" class="s">All scores on held-out sources against a fixed Stage-0 reference (one ruler). Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

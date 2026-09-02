@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="fig2title fig2desc">
+  <title id="fig2title">Illustrative expected shape: recovery error is low from native-rate coordinates and near-total from resized coordinates</title>
+  <desc id="fig2desc">Grouped bar chart of expected normalized recovery error for three handcrafted timing targets: absolute cadence, walking speed, and double-support real-time duration. For each target a native-rate bar is low and a resized bar is high, with a representative subset of per-source-video dots scattered on each bar to show spread. A shuffled-time null reference line sits near total error, which both arms must reach when real-time order is permuted. This is an illustrative expected shape, not measured results.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">The resize tax: timing survives native-rate, lost on resized</text>
+  <text x="48" y="90" class="s">Illustrative expected shape. Error = fraction of native-rate timing variance NOT recovered. Dots show the per-source spread (subset drawn).</text>
+  <text x="48" y="112" class="s">Pre-registered tax floor: 0.70 for cadence and speed, 0.50 for double-support.</text>
+
+  <!-- ============ PLOT FRAME ============ -->
+  <!-- plot area: x 150 to 900, y 150 (err=1.0) to 560 (err=0.0) -->
+  <g>
+    <!-- y axis -->
+    <line x1="150" y1="150" x2="150" y2="560" stroke="#20364e" stroke-width="2.5"/>
+    <line x1="150" y1="560" x2="900" y2="560" stroke="#20364e" stroke-width="2.5"/>
+
+    <!-- y gridlines + labels: 0.0, 0.25, 0.5, 0.75, 1.0 -->
+    <g stroke="#c4cdd8" stroke-width="1.5">
+      <line x1="150" y1="150" x2="900" y2="150"/>
+      <line x1="150" y1="252.5" x2="900" y2="252.5"/>
+      <line x1="150" y1="355" x2="900" y2="355"/>
+      <line x1="150" y1="457.5" x2="900" y2="457.5"/>
+    </g>
+    <text x="138" y="155" text-anchor="end" class="s">1.0</text>
+    <text x="138" y="257" text-anchor="end" class="s">0.75</text>
+    <text x="138" y="360" text-anchor="end" class="s">0.50</text>
+    <text x="138" y="462" text-anchor="end" class="s">0.25</text>
+    <text x="138" y="565" text-anchor="end" class="s">0.0</text>
+
+    <!-- y axis title -->
+    <text x="72" y="360" text-anchor="middle" class="b" transform="rotate(-90 72 360)">recovery error (fraction of variance lost)</text>
+  </g>
+
+  <!-- ============ PRE-REGISTERED MARGIN LINES ============ -->
+  <!-- cadence/speed margin 0.70 -> y = 560 - 0.70*410 = 273 -->
+  <!-- double-support margin 0.50 -> y = 355 -->
+  <!-- Lines are SEGMENTED to skip every bar column (>=16px clearance), so no dashed line crosses a bar. -->
+  <!-- resized cadence bar x280-340, resized speed bar x550-610: 0.70 floor runs 150->640 avoiding both. -->
+  <g stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4">
+    <line x1="150" y1="273" x2="264" y2="273"/>
+    <line x1="356" y1="273" x2="534" y2="273"/>
+    <line x1="626" y1="273" x2="640" y2="273"/>
+  </g>
+  <text x="158" y="266" class="s" fill="#8a6fb3">floor 0.70</text>
+  <!-- resized double-support bar x820-880: 0.50 floor runs 640->900 avoiding it. -->
+  <g stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4">
+    <line x1="640" y1="355" x2="804" y2="355"/>
+    <line x1="896" y1="355" x2="900" y2="355"/>
+  </g>
+  <text x="648" y="348" class="s" fill="#8a6fb3">floor 0.50</text>
+
+  <!-- ============ SHUFFLED-TIME NULL LINE ============ -->
+  <!-- near total error, ~0.97 -> y = 560 - 0.97*410 = 162 -->
+  <line x1="150" y1="162" x2="900" y2="162" stroke="#e07a4b" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <text x="894" y="182" text-anchor="end" class="s" fill="#e07a4b">shuffled-time null: both arms must reach here</text>
+
+  <!-- ============ GROUP 1: CADENCE ============ -->
+  <!-- group center ~270; native bar x=200 w=60, resized bar x=280 w=60 -->
+  <g>
+    <!-- native-rate bar: error ~0.12 -> h = 0.12*410 = 49, top y = 511 -->
+    <rect x="200" y="511" width="60" height="49" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+    <!-- resized bar: error ~0.93 -> h = 381, top y = 179 -->
+    <rect x="280" y="179" width="60" height="381" fill="#e07a4b" stroke="#20364e" stroke-width="1.75"/>
+    <text x="270" y="590" text-anchor="middle" class="t">cadence</text>
+  </g>
+
+  <!-- ============ GROUP 2: SPEED ============ -->
+  <g>
+    <!-- native ~0.16 -> h=66, top=494 -->
+    <rect x="470" y="494" width="60" height="66" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+    <!-- resized ~0.88 -> h=361, top=199 -->
+    <rect x="550" y="199" width="60" height="361" fill="#e07a4b" stroke="#20364e" stroke-width="1.75"/>
+    <text x="540" y="590" text-anchor="middle" class="t">speed</text>
+  </g>
+
+  <!-- ============ GROUP 3: DOUBLE-SUPPORT ============ -->
+  <g>
+    <!-- native ~0.22 -> h=90, top=470 -->
+    <rect x="740" y="470" width="60" height="90" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+    <!-- resized ~0.62 -> h=254, top=306 -->
+    <rect x="820" y="306" width="60" height="254" fill="#e07a4b" stroke="#20364e" stroke-width="1.75"/>
+    <text x="810" y="590" text-anchor="middle" class="t">double-support</text>
+  </g>
+
+  <!-- ============ PER-SOURCE DOTS ============ -->
+  <!-- native-rate dots: low, scattered around each native bar center -->
+  <g fill="#20364e">
+    <!-- cadence native, center x=230 -->
+    <circle cx="222" cy="516" r="3.5"/><circle cx="238" cy="508" r="3.5"/><circle cx="228" cy="524" r="3.5"/>
+    <circle cx="242" cy="519" r="3.5"/><circle cx="218" cy="503" r="3.5"/><circle cx="234" cy="530" r="3.5"/>
+    <!-- speed native, center x=500 -->
+    <circle cx="492" cy="498" r="3.5"/><circle cx="508" cy="490" r="3.5"/><circle cx="498" cy="506" r="3.5"/>
+    <circle cx="512" cy="500" r="3.5"/><circle cx="488" cy="484" r="3.5"/><circle cx="504" cy="512" r="3.5"/>
+    <!-- double-support native, center x=770 -->
+    <circle cx="762" cy="475" r="3.5"/><circle cx="778" cy="465" r="3.5"/><circle cx="768" cy="482" r="3.5"/>
+    <circle cx="782" cy="478" r="3.5"/><circle cx="758" cy="460" r="3.5"/><circle cx="774" cy="488" r="3.5"/>
+  </g>
+  <!-- resized dots: high, scattered around each resized bar center -->
+  <g fill="#20364e">
+    <!-- cadence resized, center x=310 -->
+    <circle cx="302" cy="185" r="3.5"/><circle cx="318" cy="176" r="3.5"/><circle cx="308" cy="194" r="3.5"/>
+    <circle cx="322" cy="188" r="3.5"/><circle cx="298" cy="171" r="3.5"/><circle cx="314" cy="200" r="3.5"/>
+    <!-- speed resized, center x=580 -->
+    <circle cx="572" cy="205" r="3.5"/><circle cx="588" cy="196" r="3.5"/><circle cx="578" cy="214" r="3.5"/>
+    <circle cx="592" cy="208" r="3.5"/><circle cx="568" cy="191" r="3.5"/><circle cx="584" cy="220" r="3.5"/>
+    <!-- double-support resized, center x=850 -->
+    <circle cx="842" cy="312" r="3.5"/><circle cx="858" cy="300" r="3.5"/><circle cx="848" cy="322" r="3.5"/>
+    <circle cx="862" cy="316" r="3.5"/><circle cx="838" cy="294" r="3.5"/><circle cx="854" cy="330" r="3.5"/>
+  </g>
+
+  <!-- ============ RESIZE-TAX BRACKET on cadence ============ -->
+  <path d="M362 511 L378 511 L378 179 L362 179" fill="none" stroke="#8a6fb3" stroke-width="2"/>
+  <text x="386" y="349" class="s" fill="#8a6fb3">resize tax</text>
+
+  <!-- ============ LEGEND ============ -->
+  <g>
+    <rect x="948" y="150" width="204" height="224" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <text x="970" y="184" class="t">Legend</text>
+
+    <rect x="970" y="204" width="26" height="18" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+    <text x="1006" y="218" class="b">native-rate arm</text>
+
+    <rect x="970" y="238" width="26" height="18" fill="#e07a4b" stroke="#20364e" stroke-width="1.75"/>
+    <text x="1006" y="252" class="b">resized arm</text>
+
+    <circle cx="983" cy="281" r="3.5" fill="#20364e"/>
+    <text x="1006" y="286" class="b">one source video</text>
+
+    <line x1="970" y1="312" x2="996" y2="312" stroke="#e07a4b" stroke-width="2.5" stroke-dasharray="7 6"/>
+    <text x="1006" y="317" class="b">shuffled-time null</text>
+
+    <line x1="970" y1="344" x2="996" y2="344" stroke="#8a6fb3" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="1006" y="349" class="b">pre-reg tax floor</text>
+  </g>
+
+  <!-- ============ READ-OFF NOTE ============ -->
+  <!-- gap 374 -> 430 = 56 -->
+  <g>
+    <rect x="948" y="430" width="204" height="190" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+    <text x="970" y="464" class="t">Expected read</text>
+    <text x="970" y="492" class="b">Resized bars clear the</text>
+    <text x="970" y="518" class="b">tax floor; native bars</text>
+    <text x="970" y="544" class="b">stay low; both arms hit</text>
+    <text x="970" y="570" class="b">the null when time is</text>
+    <text x="970" y="596" class="b">shuffled.</text>
+  </g>
+
+  <text x="48" y="642" class="s">Bar heights and dot positions are illustrative expected shapes, not measured results. Source-video-disjoint; all values non-transductive to any fit.</text>
+  <text x="48" y="672" class="s">Handcrafted gait descriptors on raw coordinates. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

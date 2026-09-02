@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Matched-substrate audit: only the prediction target differs across the four target arms</title>
+  <desc id="d2">Illustrative internal-validity control figure. A four-row table, one row per target arm (T1 raw coordinates, T2 one-frame motion, T3 centered-sharpened latent, T4 normalized latent regression), with four columns: Encoder, Compute budget, Updates, and Mask. Every cell shows identical values across all four rows (same embed 96 and encoder depth 4, same ea59fea0 curriculum budget, same 11,400 optimizer updates, same 12-joint mask at 0.60 of eligible tokens). A green checkmark column on the right confirms each arm is substrate-matched, and a banner states that only the target differs. All values are illustrative of the pre-registered fixed substrate; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Matched substrate: everything fixed except the target</text>
+  <text x="48" y="88" class="s">Illustrative internal-validity control, not measured results. A config diff must show prediction target as the sole difference across the four runs.</text>
+
+  <!-- ============ One framed table card: x 48..1152, y 116..500 ============ -->
+  <rect x="48" y="116" width="1104" height="384" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- Column header band inside the card top: y 116..164 (rounded top only) -->
+  <rect x="48" y="116" width="1104" height="48" rx="16" fill="#20364e"/>
+  <rect x="48" y="146" width="1104" height="18" fill="#20364e"/>
+  <text x="80" y="147" class="w">Target arm (varies)</text>
+  <text x="392" y="147" class="w" text-anchor="middle">Encoder</text>
+  <text x="592" y="147" class="w" text-anchor="middle">Compute budget</text>
+  <text x="772" y="147" class="w" text-anchor="middle">Updates</text>
+  <text x="928" y="147" class="w" text-anchor="middle">Mask</text>
+  <text x="1074" y="147" class="w" text-anchor="middle">Matched</text>
+
+  <!-- Row 1: T1  centre y=206 -->
+  <text x="80" y="200" class="t">T1</text>
+  <text x="80" y="222" class="s">raw coordinates</text>
+  <text x="392" y="200" class="b" text-anchor="middle">embed 96 / depth 4</text>
+  <text x="392" y="222" class="s" text-anchor="middle">4 heads, GELU, pre-norm</text>
+  <text x="592" y="200" class="b" text-anchor="middle">ea59fea0 curriculum</text>
+  <text x="592" y="222" class="s" text-anchor="middle">5 stages, 600 epochs</text>
+  <text x="772" y="211" class="b" text-anchor="middle">11,400</text>
+  <text x="928" y="200" class="b" text-anchor="middle">12-joint, 0.60</text>
+  <text x="928" y="222" class="s" text-anchor="middle">of eligible tokens</text>
+  <path d="M1062,206 l8,9 l16,-19" fill="none" stroke="#5f9e7e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <line x1="72" y1="246" x2="1128" y2="246" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- Row 2: T2  centre y=288 -->
+  <text x="80" y="282" class="t">T2</text>
+  <text x="80" y="304" class="s">one-frame motion</text>
+  <text x="392" y="282" class="b" text-anchor="middle">embed 96 / depth 4</text>
+  <text x="392" y="304" class="s" text-anchor="middle">4 heads, GELU, pre-norm</text>
+  <text x="592" y="282" class="b" text-anchor="middle">ea59fea0 curriculum</text>
+  <text x="592" y="304" class="s" text-anchor="middle">5 stages, 600 epochs</text>
+  <text x="772" y="293" class="b" text-anchor="middle">11,400</text>
+  <text x="928" y="282" class="b" text-anchor="middle">12-joint, 0.60</text>
+  <text x="928" y="304" class="s" text-anchor="middle">of eligible tokens</text>
+  <path d="M1062,288 l8,9 l16,-19" fill="none" stroke="#5f9e7e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <line x1="72" y1="328" x2="1128" y2="328" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- Row 3: T3  centre y=370 -->
+  <text x="80" y="364" class="t">T3</text>
+  <text x="80" y="386" class="s">centered-sharpened</text>
+  <text x="392" y="364" class="b" text-anchor="middle">embed 96 / depth 4</text>
+  <text x="392" y="386" class="s" text-anchor="middle">4 heads, GELU, pre-norm</text>
+  <text x="592" y="364" class="b" text-anchor="middle">ea59fea0 curriculum</text>
+  <text x="592" y="386" class="s" text-anchor="middle">5 stages, 600 epochs</text>
+  <text x="772" y="375" class="b" text-anchor="middle">11,400</text>
+  <text x="928" y="364" class="b" text-anchor="middle">12-joint, 0.60</text>
+  <text x="928" y="386" class="s" text-anchor="middle">of eligible tokens</text>
+  <path d="M1062,370 l8,9 l16,-19" fill="none" stroke="#5f9e7e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <line x1="72" y1="410" x2="1128" y2="410" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- Row 4: T4  centre y=452 -->
+  <text x="80" y="446" class="t">T4</text>
+  <text x="80" y="468" class="s">normalized latent reg.</text>
+  <text x="392" y="446" class="b" text-anchor="middle">embed 96 / depth 4</text>
+  <text x="392" y="468" class="s" text-anchor="middle">4 heads, GELU, pre-norm</text>
+  <text x="592" y="446" class="b" text-anchor="middle">ea59fea0 curriculum</text>
+  <text x="592" y="468" class="s" text-anchor="middle">5 stages, 600 epochs</text>
+  <text x="772" y="457" class="b" text-anchor="middle">11,400</text>
+  <text x="928" y="446" class="b" text-anchor="middle">12-joint, 0.60</text>
+  <text x="928" y="468" class="s" text-anchor="middle">of eligible tokens</text>
+  <path d="M1062,452 l8,9 l16,-19" fill="none" stroke="#5f9e7e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- thin vertical separators: after the varied column, and before the matched column -->
+  <line x1="176" y1="164" x2="176" y2="484" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="1024" y1="164" x2="1024" y2="484" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- ============ Bottom banner: the single varied factor. x 48..1152, y 556..612 ============ -->
+  <rect x="48" y="556" width="1104" height="56" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="80" y="590" class="b">Only the prediction target differs. Because every other column is identical down all four rows, any recovery gap is the target alone.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="660" class="s">Illustrative shape, not measured results. Reference checkpoint std 0.362567, mean cosine 0.659870. Labels are dataset annotations.</text>
+</svg>
