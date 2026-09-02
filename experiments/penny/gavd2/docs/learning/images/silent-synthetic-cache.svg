@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="600" fill="#ffffff"/>
+
+  <!-- ===== Title ===== -->
+  <text x="480" y="36" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">Bug 1: the silent synthetic cache</text>
+  <text x="480" y="59" font-size="12.5" text-anchor="middle" fill="#475569">Notebooks 00 to 03 ran in SMOKE mode and wrote fake data. The one guard was too weak to catch it.</text>
+
+  <!-- ===== LEFT: notebooks 00-03 produce synthetic cache ===== -->
+  <rect x="40" y="96" width="250" height="200" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="165" y="122" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#b91c1c">Notebooks 00 to 03</text>
+  <text x="165" y="141" font-size="11.5" text-anchor="middle" fill="#475569">SMOKE mode = tiny fake run</text>
+
+  <!-- synthetic cache file chips -->
+  <rect x="60" y="156" width="210" height="44" rx="6" fill="#ffffff" stroke="#b91c1c"/>
+  <text x="165" y="174" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#7f1d1d">corpus.npz</text>
+  <text x="165" y="191" font-size="11" text-anchor="middle" fill="#334155">shape (16, 32, 33, 3)</text>
+
+  <rect x="60" y="208" width="210" height="44" rx="6" fill="#ffffff" stroke="#b91c1c"/>
+  <text x="165" y="226" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#7f1d1d">labeled_holdout.npz</text>
+  <text x="165" y="243" font-size="11" text-anchor="middle" fill="#334155">26 clips, ids say "synthetic"</text>
+
+  <text x="165" y="272" font-size="11" text-anchor="middle" fill="#7f1d1d">classes {6, 5, 5, 5, 5}</text>
+  <text x="165" y="289" font-size="11" text-anchor="middle" fill="#64748b">NOT the real {12, 9, 12, 15, 20} = 68</text>
+
+  <!-- arrow to guard -->
+  <line x1="290" y1="196" x2="360" y2="196" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ===== MIDDLE: weak guard ===== -->
+  <rect x="362" y="112" width="236" height="168" rx="10" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="480" y="138" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#92400e">The only guard</text>
+
+  <rect x="384" y="154" width="192" height="40" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="480" y="179" font-size="12.5" font-family="monospace" text-anchor="middle" fill="#334155">clips.shape[0] &lt; 10 ?</text>
+
+  <text x="480" y="220" font-size="11.5" text-anchor="middle" fill="#334155">26 is not less than 10</text>
+
+  <!-- green check but labeled too weak -->
+  <circle cx="425" cy="250" r="12" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <path d="M419,250 L423,255 L432,244" fill="none" stroke="#15803d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="510" y="248" font-size="12" font-weight="bold" text-anchor="middle" fill="#b91c1c">false pass</text>
+  <text x="510" y="264" font-size="11" text-anchor="middle" fill="#92400e">guard too weak</text>
+
+  <!-- arrow to right -->
+  <line x1="598" y1="196" x2="668" y2="196" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ===== RIGHT: notebooks 04-05 consume fake cache ===== -->
+  <rect x="670" y="96" width="250" height="200" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="795" y="122" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#b91c1c">Notebooks 04 to 05</text>
+  <text x="795" y="141" font-size="11.5" text-anchor="middle" fill="#475569">SMOKE_TEST = False (real mode)</text>
+
+  <rect x="690" y="158" width="210" height="44" rx="6" fill="#ffffff" stroke="#b91c1c"/>
+  <text x="795" y="176" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#7f1d1d">consume the fake cache</text>
+  <text x="795" y="193" font-size="11" text-anchor="middle" fill="#334155">think it is the real 68</text>
+
+  <rect x="690" y="212" width="210" height="44" rx="6" fill="#ffffff" stroke="#b91c1c"/>
+  <text x="795" y="230" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#7f1d1d">accuracy ~ 0.25</text>
+  <text x="795" y="247" font-size="11" text-anchor="middle" fill="#334155">just noise, 8-item test set</text>
+
+  <text x="795" y="277" font-size="11" text-anchor="middle" fill="#64748b">the headline number was meaningless</text>
+
+  <!-- ===== BOTTOM: the fix in gavd2 ===== -->
+  <rect x="40" y="336" width="880" height="94" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="480" y="362" font-size="14" font-weight="bold" text-anchor="middle" fill="#15803d">Fix in gavd2</text>
+
+  <rect x="66" y="376" width="270" height="40" rx="6" fill="#ffffff" stroke="#15803d"/>
+  <text x="201" y="401" font-size="11.5" text-anchor="middle" fill="#14532d">mode-stamped provenance</text>
+
+  <rect x="345" y="376" width="270" height="40" rx="6" fill="#ffffff" stroke="#15803d"/>
+  <text x="480" y="401" font-size="11.5" text-anchor="middle" fill="#14532d">canonical_id_hash on artifacts</text>
+
+  <rect x="624" y="376" width="270" height="40" rx="6" fill="#ffffff" stroke="#15803d"/>
+  <text x="759" y="401" font-size="11.5" text-anchor="middle" fill="#14532d">hard fail-stop, not silent pass</text>
+
+  <!-- ===== FOOTER caption ===== -->
+  <text x="480" y="470" font-size="12.5" text-anchor="middle" fill="#475569">A synthetic or stale cache can no longer masquerade as a real run: the pipeline stops instead of scoring noise.</text>
+</svg>

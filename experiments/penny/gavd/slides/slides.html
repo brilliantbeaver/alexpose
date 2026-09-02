@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gait-JEPA on all of GAVD - Interactive Slides</title>
+<style>
+  /* ============================================================
+     Gait-JEPA full-dataset (GAVD) slides.
+     Light, uncluttered, pastel theme. Self-contained: one file,
+     inline CSS and JS, SVG illustrations pulled from ../images/.
+     No em-dashes or en-dashes anywhere.
+     ============================================================ */
+
+  :root {
+    --ink:       #0f172a;   /* headings, slate-900 */
+    --body:      #334155;   /* body text, slate-700 */
+    --muted:     #64748b;   /* captions, slate-500 */
+    --paper:     #fbfcfe;   /* near-white page */
+    --card:      #ffffff;
+    --rule:      #e2e8f0;
+
+    --blue:      #1d4ed8;   --blue-fill:   #eff6ff;   --blue-ink:   #1e3a8a;
+    --green:     #15803d;   --green-fill:  #f0fdf4;   --green-ink:  #14532d;
+    --amber:     #d97706;   --amber-fill:  #fff7ed;   --amber-ink:  #92400e;
+    --violet:    #7c3aed;   --violet-fill: #f5f3ff;   --violet-ink: #5b21b6;
+    --red:       #b91c1c;   --red-fill:    #fee2e2;   --red-ink:    #7f1d1d;
+
+    --sans: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", "IBM Plex Mono", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--paper);
+    color: var(--body);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- Deck frame ---- */
+  #deck {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3.2vh 3.5vw 6vh;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1180px;
+    height: 100%;
+    max-height: 92vh;
+    flex-direction: column;
+    animation: fade 0.32s ease;
+  }
+  .slide.active { display: flex; }
+
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Slide typography ---- */
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .kicker.blue   { color: var(--blue); }
+  .kicker.green  { color: var(--green); }
+  .kicker.amber  { color: var(--amber); }
+  .kicker.violet { color: var(--violet); }
+  .kicker.red    { color: var(--red); }
+
+  h1.slide-title {
+    font-size: clamp(1.5rem, 3vw, 2.35rem);
+    line-height: 1.12;
+    color: var(--ink);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+  }
+  p.lede {
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--muted);
+    max-width: 60ch;
+    margin-bottom: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+  /* slides whose body is a text-beside-figure split or a card grid read
+     better anchored near the top than floating in the dead center. */
+  .body.top { justify-content: flex-start; padding-top: 0.4rem; }
+
+  /* figure that holds an SVG */
+  .figwrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .figwrap img {
+    max-width: 100%;
+    max-height: 64vh;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+  .caption {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.7rem;
+    max-width: 72ch;
+    line-height: 1.45;
+  }
+
+  /* two-column split: text beside a figure */
+  .split {
+    flex: 0 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 1.6rem;
+    align-items: center;
+  }
+  .split.text-right { grid-template-columns: 1.08fr 0.92fr; }
+  .split .col-fig { display: flex; align-items: center; justify-content: center; min-height: 0; }
+  .split .col-fig img { max-width: 100%; max-height: 58vh; height: auto; object-fit: contain; border-radius: 12px; }
+
+  ul.points { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  ul.points li {
+    position: relative;
+    padding-left: 1.3rem;
+    font-size: clamp(0.92rem, 1.35vw, 1.08rem);
+    line-height: 1.5;
+    color: var(--body);
+  }
+  ul.points li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.55em;
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 2px;
+    background: var(--blue);
+  }
+  ul.points li.g::before { background: var(--green); }
+  ul.points li.a::before { background: var(--amber); }
+  ul.points li.v::before { background: var(--violet); }
+  ul.points li.r::before { background: var(--red); }
+  ul.points li b { color: var(--ink); font-weight: 650; }
+
+  code, .mono { font-family: var(--mono); font-size: 0.9em; background: #f1f5f9; padding: 0.08em 0.35em; border-radius: 4px; color: var(--blue-ink); }
+
+  /* callout cards */
+  .cards { display: grid; gap: 1rem; }
+  .cards.two   { grid-template-columns: 1fr 1fr; }
+  .cards.three { grid-template-columns: repeat(3, 1fr); }
+  .cards.four  { grid-template-columns: repeat(2, 1fr); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--blue);
+    border-radius: 10px;
+    padding: 0.9rem 1.05rem;
+  }
+  .card.g { border-left-color: var(--green); }
+  .card.a { border-left-color: var(--amber); }
+  .card.v { border-left-color: var(--violet); }
+  .card.r { border-left-color: var(--red); }
+  .card h3 { font-size: 1rem; color: var(--ink); margin-bottom: 0.3rem; font-weight: 650; }
+  .card p  { font-size: 0.9rem; line-height: 1.45; color: var(--body); }
+  .card .metric { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 0.4rem; display: block; }
+  .card .target { font-size: 0.85rem; font-weight: 600; margin-top: 0.25rem; display: block; }
+  .card.g .target { color: var(--green); }
+  .card.a .target { color: var(--amber-ink); }
+  .card.v .target { color: var(--violet); }
+  .card.r .target { color: var(--red-ink); }
+  .card .target.blue { color: var(--blue); }
+
+  .callout {
+    background: var(--blue-fill);
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--blue-ink);
+  }
+  .callout.g { background: var(--green-fill); border-color: #bbf7d0; color: var(--green-ink); }
+  .callout.a { background: var(--amber-fill); border-color: #fed7aa; color: var(--amber-ink); }
+  .callout.v { background: var(--violet-fill); border-color: #ddd6fe; color: var(--violet-ink); }
+  .callout.r { background: var(--red-fill); border-color: #fecaca; color: var(--red-ink); }
+  .callout .lbl {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+    opacity: 0.85;
+  }
+  .callout b { font-weight: 700; }
+
+  /* ---- Title slide ---- */
+  .titleslide { align-items: center; justify-content: center; text-align: center; }
+  .titleslide .figwrap { flex: 0 0 auto; height: 40vh; width: 100%; margin-bottom: 1.2rem; }
+  .titleslide .figwrap img { max-height: 40vh; width: auto; }
+  .titleslide h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    color: var(--ink);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 0.6rem;
+  }
+  .titleslide .sub {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: var(--body);
+    max-width: 52ch;
+    margin: 0 auto 0.5rem;
+    line-height: 1.4;
+  }
+  .titleslide .meta {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-top: 0.8rem;
+  }
+  .titleslide .authors {
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.45;
+    margin-top: 1.1rem;
+  }
+  .pill {
+    display: inline-block;
+    background: var(--green-fill);
+    color: var(--green-ink);
+    border: 1px solid #bbf7d0;
+    border-radius: 999px;
+    padding: 0.2rem 0.8rem;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    margin: 0.15rem;
+  }
+  .pill.blue { background: var(--blue-fill); color: var(--blue-ink); border-color: #bfdbfe; }
+  .pill.violet { background: var(--violet-fill); color: var(--violet-ink); border-color: #ddd6fe; }
+  .pill.amber { background: var(--amber-fill); color: var(--amber-ink); border-color: #fed7aa; }
+
+  /* ---- Chrome: progress, counter, hint, nav ---- */
+  #progress {
+    position: fixed;
+    left: 0; top: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), var(--violet));
+    width: 0%;
+    transition: width 0.3s ease;
+    z-index: 50;
+  }
+  #counter {
+    position: fixed;
+    right: 1.4rem; bottom: 1rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    z-index: 50;
+    user-select: none;
+  }
+  #counter b { color: var(--ink); }
+  #hint {
+    position: fixed;
+    left: 1.4rem; bottom: 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    z-index: 50;
+    user-select: none;
+  }
+  .navbtn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: rgba(255,255,255,0.8);
+    color: var(--blue);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, opacity 0.15s;
+    backdrop-filter: blur(4px);
+  }
+  .navbtn:hover { background: #fff; }
+  #prevbtn { left: 0.7rem; }
+  #nextbtn { right: 0.7rem; }
+  .navbtn:disabled { opacity: 0.25; cursor: default; }
+
+  /* dots */
+  #dots {
+    position: fixed;
+    left: 50%; bottom: 0.85rem;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.4rem;
+    z-index: 50;
+  }
+  #dots .dot {
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 999px;
+    background: var(--rule);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  #dots .dot.on { background: var(--blue); transform: scale(1.25); }
+
+  /* overview grid (press O) */
+  #overview {
+    position: fixed;
+    inset: 0;
+    background: rgba(251,252,254,0.97);
+    z-index: 100;
+    display: none;
+    padding: 3rem 2rem;
+    overflow-y: auto;
+  }
+  #overview.show { display: block; }
+  #overview h2 { text-align: center; color: var(--ink); margin-bottom: 1.4rem; font-size: 1.2rem; }
+  #ovgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .ovcard {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    padding: 0.8rem 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+  .ovcard:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .ovcard .n { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+  .ovcard .t { font-size: 0.92rem; color: var(--ink); font-weight: 600; margin-top: 0.2rem; line-height: 1.25; }
+
+  @media (max-width: 820px) {
+    .split, .split.text-right { grid-template-columns: 1fr; gap: 0.9rem; }
+    .cards.two, .cards.three, .cards.four { grid-template-columns: 1fr; }
+    .navbtn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="deck">
+
+  <!-- ============ SLIDE 1: TITLE ============ -->
+  <section class="slide titleslide active" data-title="Title">
+    <div class="figwrap"><img src="../images/pipeline-overview.svg" alt="The six-notebook Gait-JEPA journey drawn as one row of stage boxes from scan to probe" /></div>
+    <h1>Gait-JEPA on all of GAVD</h1>
+    <p class="sub">Learn the shape of walking from every unlabeled clip first, then spend the 68 precious labels last.</p>
+    <div>
+      <span class="pill blue">learn first</span>
+      <span class="pill">label last</span>
+      <span class="pill violet">six notebooks, all 374 sequences</span>
+    </div>
+    <p class="authors">Alex Mui &middot; Penny Inouye &middot; Theodore Mui &middot; Phil Mui (Research Advisor)</p>
+    <p class="meta">A pose-sequence JEPA scaled to the whole Gait Abnormality in Video Dataset</p>
+  </section>
+
+  <!-- ============ SLIDE 2: THE PROBLEM, PART 1 ============ -->
+  <section class="slide" data-title="Scarce labels">
+    <div class="kicker">Part 1 &middot; the problem</div>
+    <h1 class="slide-title">Unlabeled walking is cheap, clinical labels are precious</h1>
+    <p class="lede">GAVD gives us 374 walking sequences we can turn into pose data for free. Only 68 of them carry a clinical diagnosis. That mismatch is the whole reason this project exists.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li>GAVD holds <b>374 sequences</b> across 11 condition folders, 91,624 rows of tracked walking in total.</li>
+            <li class="g">Every one of those 374 can be pretrained on <b>with no labels at all</b>, because self-supervision makes the data label itself.</li>
+            <li class="a">Only <b>68 sequences</b> carry a clinical diagnosis: normal 12, parkinsons 9, stroke 12, cerebral palsy 15, myopathic 20.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the one idea</span>
+            Pretrain on all 374 unlabeled sequences, then spend the 68 labels only at the very end on a frozen-encoder probe.
+          </div>
+        </div>
+        <div class="col-fig"><img src="../images/label-scarcity.svg" alt="A large pool of 374 unlabeled sequences beside a tiny stack of 68 labeled sequences" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 3: THE DATASET FUNNEL ============ -->
+  <section class="slide" data-title="The dataset funnel">
+    <div class="kicker amber">Part 1 &middot; what really survived</div>
+    <h1 class="slide-title">From 374 sequences to 1,571 clips and 42 labeled walks</h1>
+    <p class="lede">The plan wants every sequence, but real video is lossy. Dead links, failed downloads, and quality filtering shrink the pool at every stage. Here is exactly what came out the other end, and it sets the ceiling on everything that follows.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li>The 374 sequences reference only <b>69 unique YouTube videos</b>, since many sequences share one video. <b>67 of 69</b> downloaded, with 2 dead or blocked links.</li>
+            <li class="g"><b>227 sequences</b> got a real MediaPipe skeleton through download and extraction, which windows into an unlabeled pretraining corpus of <b>1,571 clips</b> of shape (32, 33, 3).</li>
+            <li class="a">Of the 68 labeled sequences, only <b>42 survived to the labeled holdout</b>: normal 9, parkinsons 9, stroke 8, cerebral palsy 4, myopathic 12. Those become <b>296 windowed clips</b>, about 7 per sequence.</li>
+          </ul>
+          <div class="callout a" style="margin-top:1rem">
+            <span class="lbl">why this matters later</span>
+            42 labeled sequences is a very small evaluation set. Remember this number: it is the reason the honest per-sequence result is so high in variance.
+          </div>
+        </div>
+        <div class="col-fig"><img src="../images/dataset-funnel.svg" alt="A funnel narrowing from 374 sequences through 69 videos, 67 downloaded, 227 extracted, to 1,571 corpus clips and 42 labeled sequences" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 4: THE PROBLEM, PART 2 ============ -->
+  <section class="slide" data-title="Hand features do not scale">
+    <div class="kicker amber">Part 1 &middot; the second problem</div>
+    <h1 class="slide-title">Squeezing a walk into 82 numbers throws the walk away</h1>
+    <p class="lede">The prior best was a Random Forest of 100 trees on 82 hand-engineered gait features: 76 percent test accuracy across 5 classes on a 70/30 split. Real signal, since chance is 20 percent. But the base is shaky.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/probe-vs-baseline.svg" alt="A frozen probe on learned features compared against the 76 percent hand-feature baseline" /></div>
+        <div>
+          <ul class="points">
+            <li class="a">Describing a whole song with 82 numbers like average loudness and tempo <b>loses the melody</b>, and a walking cycle is no different.</li>
+            <li class="a">Every new feature is <b>a person-week of engineering</b>, and it bakes in the designer's guesses about which motions matter.</li>
+            <li class="a">Hand features <b>do not scale</b> to a large, varied pool of video, which is exactly what GAVD is.</li>
+          </ul>
+          <div class="callout a" style="margin-top:1rem">
+            <span class="lbl">the north star</span>
+            Match or beat that 76 percent using a frozen encoder plus a small probe, features learned rather than hand-picked.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 5: THE BIG IDEA ============ -->
+  <section class="slide" data-title="Learn first, label last">
+    <div class="kicker blue">Part 2 &middot; the big idea</div>
+    <h1 class="slide-title">Learn first, label last</h1>
+    <p class="lede">The whole plan is two steps, and the order is what matters. Step one learns from the mountain of unlabeled video. Step two spends the tiny stack of 68 labels on a small final probe.</p>
+    <div class="body">
+      <div class="figwrap"><img src="../images/pipeline-overview.svg" alt="Six stages from scan through download, extract, corpus, pretrain, and finally the labeled probe" /></div>
+      <p class="caption">Six notebooks carry the idea end to end: notebooks 00 through 04 build the corpus and pretrain with no labels, and only notebook 05 freezes the encoder and fits a small 5-class classifier on the pooled features of the labeled clips (296 windows from the 42 surviving labeled sequences).</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 6: SELF-SUPERVISED LEARNING ============ -->
+  <section class="slide" data-title="Fill in the blank">
+    <div class="kicker blue">Part 2 &middot; self-supervised learning</div>
+    <h1 class="slide-title">Self-supervised learning is fill-in-the-blank</h1>
+    <p class="lede">Take something you already have, hide part of it, and train the model to predict the hidden part from the visible part. No human labels anything, because the data labels itself.</p>
+    <div class="body">
+      <div class="figwrap"><img src="../images/jepa-training.svg" alt="A training loop that hides part of a pose sequence and learns to predict the hidden part" /></div>
+      <p class="caption">Cover one leg for half a second and the frames around it already tell you what it was doing, so the model can score its own guess for free. Do this across all 374 sequences and the model is forced to learn how bodies move.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 7: PREDICT MEANING NOT PIXELS ============ -->
+  <section class="slide" data-title="Predict meaning, not pixels">
+    <div class="kicker green">Part 2 &middot; what makes a JEPA special</div>
+    <h1 class="slide-title">A JEPA predicts meaning, not pixels</h1>
+    <p class="lede">Predicting the hidden part exactly, every joint coordinate, wastes effort on unpredictable noise like camera shake and fingertip wobble. A JEPA makes a smarter move.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/four-pieces.svg" alt="The four JEPA pieces compare predictions to targets in a learned embedding space rather than in raw coordinates" /></div>
+        <div>
+          <ul class="points">
+            <li><b>Embedding:</b> a short list of numbers that summarizes something, like "person walking, left leg forward, upright posture".</li>
+            <li><b>Latent space:</b> the space of all those summaries, the compressed meaning rather than the exact appearance.</li>
+            <li class="g">A JEPA predicts <b>a summary of the hidden part</b> in latent space, so it can ignore unpredictable detail and focus on structure that carries meaning. This is the design of <b>I-JEPA</b> and <b>V-JEPA</b>.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the name</span>
+            <b>JEPA</b> is a Joint Embedding Predictive Architecture. It predicts hidden parts in latent space.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 8: THE FOUR PIECES ============ -->
+  <section class="slide" data-title="The four pieces">
+    <div class="kicker blue">Part 2 &middot; the architecture</div>
+    <h1 class="slide-title">A JEPA has four pieces</h1>
+    <p class="lede">A context encoder reads the visible part, a slow-moving EMA target encoder makes the answer key, a predictor guesses, and a loss compares the guess to the answer in latent space.</p>
+    <div class="body">
+      <div class="figwrap"><img src="../images/four-pieces.svg" alt="Context encoder, EMA target encoder with stop-gradient, predictor, and loss wired together" /></div>
+      <p class="caption">The target encoder is a slow EMA copy of the context encoder (target = m times target + (1 minus m) times context, m near 0.996). A slow copy is a stable answer key, so the model is not chasing a moving target. The predictor is a shallow MLP, and there are no negative pairs and no decoder.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 9: COLLAPSE + VICREG ============ -->
+  <section class="slide" data-title="Collapse and the VICReg fix">
+    <div class="kicker red">Part 2 &middot; the collapse trap and the fix</div>
+    <h1 class="slide-title">Stopping the model from cheating</h1>
+    <p class="lede">If nothing stops it, the model can cheat by outputting the same constant embedding for everything. The error is zero, the loss is happy, and the model learned nothing. This is representation collapse.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li class="r">The cheat: every clip maps to <b>the same vector</b>, so the prediction is always right and always useless.</li>
+            <li class="g"><b>VICReg</b> adds a variance term that keeps each embedding dimension spread out across a batch, so no dimension can flatten to a constant.</li>
+            <li class="g">It adds a covariance term that pushes dimensions to <b>carry different information</b> instead of copying each other.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">no tricks needed</span>
+            Collapse is prevented purely by the slow EMA target plus VICReg. No negative examples and no decoder.
+          </div>
+        </div>
+        <div class="col-fig"><img src="../images/collapse-vicreg.svg" alt="Left, all points collapse to one spot. Right, VICReg spreads them into separated clusters" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 10: JEPA ON SKELETONS ============ -->
+  <section class="slide" data-title="JEPA on skeletons">
+    <div class="kicker violet">Part 2 &middot; the twist</div>
+    <h1 class="slide-title">Run the JEPA on skeletons, never on pixels</h1>
+    <p class="lede">Most JEPAs work on image or video pixels. This one runs on pose sequences, the 33 tracked joints over time, arranged as a small graph that changes frame by frame.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/crop-and-pose.svg" alt="Cropping to the walking person and running MediaPipe pose to get 33 joints per frame" /></div>
+        <div>
+          <ul class="points">
+            <li class="v">MediaPipe <b>BLAZEPOSE_33</b> finds 33 landmarks in 3D per frame, grouped into 6 semantic parts: face, left arm, right arm, torso, left leg, right leg.</li>
+            <li class="v">Clips are <b>pelvis-centered and torso-normalized</b>, so absolute camera position and scale do not matter.</li>
+            <li class="v">A clip flattens to <b>T times 33 tokens</b> in row-major (t, j) order, so a joint at a frame is one token. Working on joints, not pixels, keeps it light enough to run on a CPU for the toy version.</li>
+          </ul>
+          <div class="callout v" style="margin-top:1rem">
+            <span class="lbl">why it fits gait</span>
+            The pose graph exposes exactly the joints and phases clinicians care about, so the task can be aimed at real mechanisms.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 11: MASKING STYLES ============ -->
+  <section class="slide" data-title="Two block-masking styles">
+    <div class="kicker violet">Part 2 &middot; the self-supervised task</div>
+    <h1 class="slide-title">Hide blocks, not scattered dots</h1>
+    <p class="lede">Hiding random scattered joints is too easy, since a neighbor usually gives the answer away. Instead we hide spatiotemporal blocks, which forces the model to reason about coordinated motion, and coordinated motion is exactly what walking is.</p>
+    <div class="body">
+      <div class="figwrap"><img src="../images/masking-styles.svg" alt="Style A hides one limb over a window of frames; Style B hides all joints in a short window" /></div>
+      <p class="caption">Style A, limb-over-time, hides one whole limb across a window of frames. Style B, time-window, hides all 33 joints in a short window. The two styles are mixed across the batch so the model cannot lean on either shortcut.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 12: PIPELINE 00-01 SCAN + DOWNLOAD ============ -->
+  <section class="slide" data-title="Notebooks 00-01: scan and download">
+    <div class="kicker blue">Part 3 &middot; the six-notebook pipeline</div>
+    <h1 class="slide-title">00 Scan, then 01 Download</h1>
+    <p class="lede">The first two notebooks turn a folder of CSVs into a manifest and pull the raw video down once. Each notebook writes a small cache file the next one reads, and each runs top to bottom with zero errors on a laptop CPU.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/bulk-download.svg" alt="Deduplicating video ids from the manifest and downloading each unique video once" /></div>
+        <div>
+          <ul class="points">
+            <li><b>00 Scan:</b> walk all 11 condition folders and all 374 sequence CSVs into one manifest DataFrame, one row per sequence, and visualize class balance, sequence length, and the 68-sequence labeled subset. Writes <code>manifest.csv</code>.</li>
+            <li class="g"><b>01 Download:</b> dedup the manifest to <b>unique YouTube ids</b> (many sequences share one video), download each once, and skip anything already cached so the run is resumable. Writes <code>download_report.csv</code>.</li>
+          </ul>
+          <div class="callout" style="margin-top:1rem">
+            <span class="lbl">robust by design</span>
+            Notebook 01 mirrors the alexpose YouTube handler with an inline yt-dlp fallback, so it still runs on a fresh Colab.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 13: PIPELINE 02-03 EXTRACT + CORPUS ============ -->
+  <section class="slide" data-title="Notebooks 02-03: extract and corpus">
+    <div class="kicker blue">Part 3 &middot; the six-notebook pipeline</div>
+    <h1 class="slide-title">02 Extract skeletons, then 03 Build the corpus</h1>
+    <p class="lede">With video in hand, the middle two notebooks turn pixels into pose and pose into a clean, windowed clip bank that the JEPA can train on.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/corpus-build.svg" alt="Normalizing poses, slicing them into overlapping windows, and splitting off the labeled sequences" /></div>
+        <div>
+          <ul class="points">
+            <li><b>02 Extract:</b> run MediaPipe BLAZEPOSE_33 over every downloaded sequence, quality-filter, and cache one <code>skeletons_&lt;condition&gt;.npz</code> per condition. Writes <code>extraction_report.csv</code>, with an inline MediaPipe fallback.</li>
+            <li class="g"><b>03 Corpus:</b> pelvis-center and torso-normalize every sequence, slice into overlapping fixed-length windows, and stack one big unlabeled clip bank of shape (N, T, 33, 3). Writes <code>corpus.npz</code> plus <code>labeled_holdout.npz</code>.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the fair-fight guard</span>
+            The labeled sequences are held out of pretraining, so the final 70/30 comparison against the baseline stays honest.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 14: PIPELINE 04-05 PRETRAIN + PROBE ============ -->
+  <section class="slide" data-title="Notebooks 04-05: pretrain and probe">
+    <div class="kicker blue">Part 3 &middot; the six-notebook pipeline</div>
+    <h1 class="slide-title">04 Pretrain the JEPA, then 05 Probe it</h1>
+    <p class="lede">The last two notebooks are where the idea pays off. Notebook 04 learns the encoder on everything with no labels. Notebook 05 freezes it and spends the 68 labels.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/probe-vs-baseline.svg" alt="A frozen encoder feeds a small probe that is compared to the 76 percent hand-feature baseline" /></div>
+        <div>
+          <ul class="points">
+            <li><b>04 Pretrain:</b> train the context encoder, EMA target encoder, predictor, and VICReg loss on the full unlabeled corpus with block masking, watching loss terms and embedding std to confirm no collapse. Writes <code>jepa_encoder_gavd.pt</code>.</li>
+            <li class="r"><b>05 Probe:</b> freeze the encoder, embed the 296 labeled clips (from the 42 surviving sequences), train linear, MLP, and RF probes, plot the label-efficiency curve, fit the neuroscience probes, run the VICReg on/off ablation, and compare all of it to the 76 percent baseline.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the payoff</span>
+            The encoder is trained once with no labels and reused frozen, so a good encoder reaches useful accuracy with very few labels.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 15: POS-EMBED BUG ============ -->
+  <section class="slide" data-title="The positional-embedding bug">
+    <div class="kicker amber">Part 4 &middot; a scaling bug we found and fixed</div>
+    <h1 class="slide-title">Bug one: the encoder could not tell time from side</h1>
+    <p class="lede">Scaling up surfaced a real root-cause bug. A transformer over flattened (t, j) tokens with no positional signal is permutation-invariant, so a mean-pooled clip embedding is just a bag of coordinates that discards frame order and left/right joint identity.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li class="a"><b>The tell:</b> permuting all 1,056 tokens changed the pooled embedding by only about <b>2e-7</b>, and notebook 05 gave negative R-squared for temporal scalars.</li>
+            <li class="g"><b>The fix:</b> add a learned <b>time embedding (T, D)</b> plus a <b>joint embedding (33, D)</b>, added as pos[t, j] = time[t] + joint[j], the standard I-JEPA and V-JEPA design.</li>
+            <li class="g">Notebook 04 saves T and N_JOINTS in the checkpoint so notebook 05 rebuilds the encoder identically, and a stale checkpoint warns and falls back rather than crashing.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">why the concept tutorials skip this</span>
+            The concept tutorials only teach the pieces, so they omit pos-embeds. The gavd series adds them because it actually evaluates the encoder.
+          </div>
+        </div>
+        <div class="col-fig"><img src="../images/pos-embed-fix.svg" alt="Before, a permutation-invariant bag of coordinates. After, time and joint embeddings carry order and side" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 16: LOSS-DRIFT BUG ============ -->
+  <section class="slide" data-title="The loss-drift bug">
+    <div class="kicker amber">Part 4 &middot; a scaling bug we found and fixed</div>
+    <h1 class="slide-title">Bug two: the loss fell, then quietly climbed</h1>
+    <p class="lede">Over about 400 real steps the total loss fell for roughly 50 steps and then climbed steadily, with prediction MSE climbing too. This was not collapse: the embedding std kept rising. Rising MSE plus rising std together is the tell.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/loss-fix-curves.svg" alt="Before, the loss drifts upward. After, the loss falls monotonically with steady embedding std" /></div>
+        <div>
+          <ul class="points">
+            <li class="a"><b>Why:</b> the variance term was applied to the EMA target and kept inflating its scale, and the L2 was on the raw un-normalized target, so the distance to cover grew mechanically as the target drifted away.</li>
+            <li class="g"><b>Fix, three parts:</b> LayerNorm the target before the L2 (V-JEPA style), regularize the <b>online side only</b>, and keep VICReg light as a guard rail (var 25 to 0.5, cov 1 to 0.04, gamma 1 to 0.5).</li>
+            <li class="g"><b>Verified over 400 real steps:</b> total loss falls about 32.0 to 5.5, MSE about 1.28 to 0.22, and the embedding std rises about 0.38 to 0.76, which is the no-collapse signal.</li>
+          </ul>
+          <div class="callout a" style="margin-top:0.9rem">
+            <span class="lbl">the lesson</span>
+            Normalize the target, regularize the online side only, keep VICReg light. Two forces must stay balanced or the loss drifts.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 17: RESEARCH QUESTIONS ============ -->
+  <section class="slide" data-title="The four research questions">
+    <div class="kicker">Part 5 &middot; the research questions</div>
+    <h1 class="slide-title">Four measurable questions</h1>
+    <p class="lede">Notebook 05 answers each with a metric, reporting the mean and standard deviation over 20 stratified 70/30 splits, since a single split of a tiny labeled set is far too noisy.</p>
+    <div class="body top">
+      <div class="cards four">
+        <div class="card">
+          <h3>RQ1 &middot; Match or beat the baseline?</h3>
+          <p>Fit linear, MLP, and RF probes on the pooled frozen embeddings and compare to the 76 percent RF-on-82-features baseline.</p>
+          <span class="metric">metric: 5-class test accuracy, 296-clip (42-sequence) 70/30 splits</span>
+          <span class="target blue">target: at or above 76 percent</span>
+        </div>
+        <div class="card g">
+          <h3>RQ2 &middot; Label efficiency?</h3>
+          <p>Plot accuracy against the fraction of labels used. A good pretrained encoder reaches useful accuracy with few labels.</p>
+          <span class="metric">metric: accuracy vs label fraction</span>
+          <span class="target">target: a rising curve that is useful early</span>
+        </div>
+        <div class="card v">
+          <h3>RQ3 &middot; Clinical structure?</h3>
+          <p>Fit tiny linear probes to two linearly-decodable clinical proxies, asymmetry_index and step_amplitude, and report test R-squared.</p>
+          <span class="metric">metric: R-squared of linear probes</span>
+          <span class="target">target: R-squared clearly above 0</span>
+        </div>
+        <div class="card a">
+          <h3>RQ4 &middot; Does VICReg matter?</h3>
+          <p>A faithful miniature of the nb04 loop toggling variance and covariance on versus off, watching the embedding std.</p>
+          <span class="metric">metric: embedding std, ON vs OFF</span>
+          <span class="target">target: ON std sits above OFF as a margin</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 18: RESULTS SCORECARD ============ -->
+  <section class="slide" data-title="Real GAVD results">
+    <div class="kicker green">Part 5 &middot; real GAVD results</div>
+    <h1 class="slide-title">The real run is done, and the encoder is learning gait</h1>
+    <p class="lede">Notebooks 04 and 05 both re-executed top to bottom in real mode on the real GAVD corpus, seed 42, on a laptop CPU. Here is what each research question actually returned. The per-clip probe numbers carry a leakage caveat that the next slide unpacks in full.</p>
+    <div class="body">
+      <div class="figwrap"><img src="../images/results-scorecard.svg" alt="A scorecard mapping each research question to its real GAVD result" /></div>
+      <p class="caption">Real results: notebook 04 total loss falls 32 to 5.5 while the embedding std rises 0.38 to 0.76, so no collapse. RQ1 per-clip probes over 20 splits read MLP 0.92, linear 0.88, RF 0.88 (macro-F1 0.91, 0.87, 0.88), which look like they clear the 0.76 baseline, but see the next slide: those clips overlap so this metric is window-leaked and is not comparable to the baseline. RQ3 the frozen latent linearly preserves step_amplitude well (R-squared 0.72) and asymmetry only faintly (0.15). RQ4 embedding std with VICReg 0.89 sits above 0.77 without it, so variance and covariance do real anti-collapse work on top of the EMA target.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 19: THE HONEST GAP ============ -->
+  <section class="slide" data-title="The honest gap: per-clip vs per-sequence">
+    <div class="kicker red">Part 5 &middot; the central honest finding</div>
+    <h1 class="slide-title">The honest gap: per-clip 0.88 versus per-sequence 0.49</h1>
+    <p class="lede">This is the most important slide in the deck, not a footnote. The leaky per-clip 0.88 and the honest per-sequence 0.49 are the same encoder measured two ways, and the difference between them is window leakage. The 0.88 is not comparable to the baseline, so it is not a real win.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li class="r">The 296 labeled clips are <b>overlapping windows from only 42 sequences</b>, about 7 windows per sequence. A per-clip split drops windows of the same walk into both train and test, so the probe can match a test window to a near-duplicate it already saw. That is <b>window leakage</b>, and it inflates the number.</li>
+            <li class="a">The leaky per-clip metric, which is what notebook 05 currently prints, gives <b>linear accuracy 0.88</b>. It sits above 0.76, but because it is window-leaked it is <b>not comparable</b> to the per-sequence baseline, so it is not a win.</li>
+            <li class="g">The leakage-free split groups by sequence, so no walk appears on both sides. That honest per-sequence number is <b>0.49 plus or minus 0.17</b>: well above the 0.20 chance level, below the 0.76 baseline, and very high variance because only 42 sequences means about 13 per test fold.</li>
+          </ul>
+          <div class="callout r" style="margin-top:1rem">
+            <span class="lbl">the honest thesis</span>
+            A frozen pose JEPA learns a gait representation that is well above chance at the sequence level but still below the 0.76 baseline. The clip-level number is inflated by window leakage and is not comparable, so it is not a win. The clip-vs-sequence gap and the tiny 42-sequence sample are the real obstacles the next iteration must close.
+          </div>
+        </div>
+        <div class="col-fig"><img src="../images/clip-vs-sequence.svg" alt="A bar chart contrasting the leaky per-clip accuracy near 0.88 with the leakage-free per-sequence accuracy near 0.49, against the 0.76 baseline line and the 0.20 chance line" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 20: LABEL EFFICIENCY ============ -->
+  <section class="slide" data-title="The label-efficiency curve">
+    <div class="kicker green">Part 5 &middot; RQ2 in one picture</div>
+    <h1 class="slide-title">Fewer labels still go a long way</h1>
+    <p class="lede">RQ2 is the JEPA promise made visible. A frozen encoder that already understands walking needs only a handful of labels to reach useful accuracy, and adding more labels keeps helping.</p>
+    <div class="body">
+      <div class="figwrap"><img src="../images/label-efficiency.svg" alt="Accuracy rising as the fraction of labels used increases" /></div>
+      <p class="caption">On the real run the per-clip linear probe rises from 0.75 at a quarter of the labels through 0.82 and 0.86 to 0.88 at the full budget. Read the shape, not the heights: these are per-clip accuracies and carry the same window-leakage caveat as the previous slide, so the takeaway is that the curve rises fast then flattens, which is what a good pretrained encoder should do when labels are scarce.</p>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 21: CONFUSION MATRIX ============ -->
+  <section class="slide" data-title="Which conditions get confused">
+    <div class="kicker green">Part 5 &middot; where the errors land</div>
+    <h1 class="slide-title">Four conditions separate cleanly, one is hard</h1>
+    <p class="lede">Aggregating the per-clip probe over 20 splits into a row-normalized confusion matrix shows the encoder is not guessing. Normal, parkinsons, stroke, and myopathic land on the diagonal, and the one weak class is the one with the fewest sequences.</p>
+    <div class="body top">
+      <div class="split">
+        <div class="col-fig"><img src="../images/confusion-matrix.svg" alt="A 5 by 5 row-normalized confusion matrix with a strong diagonal and cerebral palsy leaking into myopathic" /></div>
+        <div>
+          <ul class="points">
+            <li class="g">Normal, parkinsons, stroke, and myopathic are cleanly separated, with <b>0.86 to 0.91 recall</b> on the diagonal.</li>
+            <li class="a"><b>Cerebral palsy is the weakest at 0.78</b> and is most often confused with myopathic (0.19), which makes clinical sense because both alter load-bearing and can look hypotonic.</li>
+            <li class="r">Cerebral palsy also has the <b>fewest sequences, only 4</b>, so its estimates are the least reliable. This is a per-clip confusion, so it shares the window-leakage caveat.</li>
+          </ul>
+          <div class="callout g" style="margin-top:1rem">
+            <span class="lbl">the reading</span>
+            The errors are structured and clinically sensible, not random. The hard class is the rare class, which points straight at the small-sample obstacle.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 22: NEUROSCIENCE ============ -->
+  <section class="slide" data-title="The neuroscience connection">
+    <div class="kicker violet">Part 6 &middot; the neuroscience connection</div>
+    <h1 class="slide-title">Does the embedding keep the axes clinicians care about?</h1>
+    <p class="lede">A frozen embedding is only clinically useful if it preserves the axes that separate conditions. RQ3 tests this by reading two linearly-decodable proxies back out of the latent space with tiny linear probes.</p>
+    <div class="body top">
+      <div class="split text-right">
+        <div>
+          <ul class="points">
+            <li class="v">The probed proxies are <b>asymmetry_index</b>, the left/right leg swing ratio, and <b>step_amplitude</b>, the mean ankle swing range, both linearly decodable from coordinates.</li>
+            <li class="a">We do <b>not</b> probe <code>stride_time_cv</code>: it is nonlinear in the coordinates, so no linear probe recovers it from any embedding. A negative R-squared there is a property of the target, not the encoder.</li>
+            <li class="v">Penny's feature-to-condition mapping grades features H/M/L/NA with a documented reason, for example stroke knee_asymmetry graded H from stiff-knee gait (17 degrees or more), delivered in full by early August 2026.</li>
+          </ul>
+          <div class="callout v" style="margin-top:0.9rem">
+            <span class="lbl">a hypothesis, not a guarantee</span>
+            RQ3 tests whether the frozen embedding preserves asymmetry and step amplitude. It is a claim the probes check, not something assumed.
+          </div>
+        </div>
+        <div class="col-fig"><img src="../images/neuroscience-axes.svg" alt="A representation space where clinical axes such as asymmetry and step amplitude are readable from the frozen embedding" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 23: RUN + EXTEND + CAVEAT ============ -->
+  <section class="slide" data-title="Run it, extend it, the honest caveat">
+    <div class="kicker">Part 7 &middot; how to run and what is next</div>
+    <h1 class="slide-title">Run it in seconds, then take it to the real data</h1>
+    <p class="lede">Every notebook runs two ways and repeats the instructions in its own second cell. The default smoke path needs no network and no pose model. The real path is a few flags and one honest step away.</p>
+    <div class="body top">
+      <div class="cards two" style="align-content:start">
+        <div class="card">
+          <h3>Colab</h3>
+          <p>Open a notebook, click the Open In Colab badge, and run top to bottom. Cell 0 installs only what is missing.</p>
+        </div>
+        <div class="card g">
+          <h3>Local with uv</h3>
+          <p>From the gavd folder run <code>uv sync</code>, register a kernel, then <code>uv run jupyter lab 00-scan-all-gavd-csvs.ipynb</code>. The real path adds <code>uv sync --extra real</code> and reads local paths from a .env.</p>
+        </div>
+        <div class="card v">
+          <h3>Reproduce the real run</h3>
+          <p>Flip <code>SMOKE_TEST=False</code> to reproduce the full real pipeline: 00 through 03 build the real corpus and 42-sequence holdout, 04 pretrains the pos-embed encoder for 400 steps, and 05 runs the frozen probes. When alexpose is missing it falls back to an inline yt-dlp, OpenCV, and MediaPipe pipeline, so nothing crashes.</p>
+        </div>
+        <div class="card a">
+          <h3>The honest caveat</h3>
+          <p>The real run is done: at the clip level the frozen probe scores about 0.88, but that per-clip metric leaks overlapping windows, so it is not comparable to the baseline and is not a win. <b>Per-sequence is the rigorous metric</b>, and at 0.49 plus or minus 0.17 it is well above chance but below the 0.76 baseline. Closing the clip-vs-sequence gap and growing past 42 labeled sequences is the next iteration's job.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 24: SUMMARY / CLOSE ============ -->
+  <section class="slide titleslide" data-title="Summary">
+    <div class="kicker" style="margin-bottom:1rem">the whole series, in one breath</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.9rem)">Learn the shape of walking<br/>from all 374 sequences,<br/>then spend the labels wisely.</h1>
+    <p class="sub" style="margin-top:1rem">A real GAVD run of six notebooks scaling a pose-sequence JEPA to the whole dataset: block masking, learned positional embeddings, a corrected loss that stays balanced over 400 steps with no collapse, and interpretable probes. At the clip level the frozen probe scores about 0.88, but that number is window-leaked and not comparable to the baseline, so per-sequence is the rigorous metric, and the honest 0.49 plus or minus 0.17 on 42 sequences sits above the 0.20 chance level and below the 0.76 baseline, naming the real obstacles: window leakage and a tiny labeled set.</p>
+    <div style="margin-top:1.2rem">
+      <span class="pill blue">real GAVD run</span>
+      <span class="pill">no collapse</span>
+      <span class="pill amber">two real bugs, fixed</span>
+      <span class="pill violet">per-sequence is the rigorous metric</span>
+    </div>
+    <p class="authors" style="margin-top:1.4rem">Alex Mui &middot; Penny Inouye &middot; Theodore Mui &middot; Phil Mui (Research Advisor)</p>
+    <p class="meta" style="margin-top:0.7rem">Run the six-notebook series in gavd/ &middot; read the walkthrough in gavd/docs/tutorial.md<br/>Key sources: I-JEPA (Assran 2023), V-JEPA (2024), VICReg (Bardes 2022), GAVD (Ranjan 2025), BlazePose (Bazarevsky 2020)</p>
+  </section>
+
+</div>
+
+<!-- ---- Chrome ---- -->
+<button id="prevbtn" class="navbtn" aria-label="Previous slide">&#8592;</button>
+<button id="nextbtn" class="navbtn" aria-label="Next slide">&#8594;</button>
+<div id="dots"></div>
+<div id="counter"><b id="cur">1</b> / <span id="total">24</span></div>
+<div id="hint">arrows or space to move &middot; O for overview &middot; F fullscreen</div>
+
+<!-- ---- Overview grid ---- -->
+<div id="overview">
+  <h2>All slides &middot; click to jump &middot; press O or Esc to close</h2>
+  <div id="ovgrid"></div>
+</div>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var total = slides.length;
+    var idx = 0;
+
+    var progress = document.getElementById('progress');
+    var curEl = document.getElementById('cur');
+    var totalEl = document.getElementById('total');
+    var prevBtn = document.getElementById('prevbtn');
+    var nextBtn = document.getElementById('nextbtn');
+    var dotsWrap = document.getElementById('dots');
+    var overview = document.getElementById('overview');
+    var ovgrid = document.getElementById('ovgrid');
+
+    totalEl.textContent = total;
+
+    // build dots
+    slides.forEach(function (s, i) {
+      var d = document.createElement('div');
+      d.className = 'dot';
+      d.title = s.getAttribute('data-title') || ('Slide ' + (i + 1));
+      d.addEventListener('click', function () { go(i); });
+      dotsWrap.appendChild(d);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+
+    // build overview cards
+    slides.forEach(function (s, i) {
+      var c = document.createElement('div');
+      c.className = 'ovcard';
+      c.innerHTML = '<div class="n">' + (i + 1) + ' / ' + total + '</div>' +
+                    '<div class="t">' + (s.getAttribute('data-title') || '') + '</div>';
+      c.addEventListener('click', function () { go(i); closeOverview(); });
+      ovgrid.appendChild(c);
+    });
+
+    function render() {
+      slides.forEach(function (s, i) { s.classList.toggle('active', i === idx); });
+      dots.forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+      progress.style.width = (total > 1 ? (idx / (total - 1)) * 100 : 100) + '%';
+      curEl.textContent = idx + 1;
+      prevBtn.disabled = (idx === 0);
+      nextBtn.disabled = (idx === total - 1);
+      try { history.replaceState(null, '', '#' + (idx + 1)); } catch (e) {}
+    }
+
+    function go(i) {
+      idx = Math.max(0, Math.min(total - 1, i));
+      render();
+    }
+    function next() { if (idx < total - 1) go(idx + 1); }
+    function prev() { if (idx > 0) go(idx - 1); }
+
+    function openOverview() { overview.classList.add('show'); }
+    function closeOverview() { overview.classList.remove('show'); }
+    function toggleOverview() { overview.classList.toggle('show'); }
+
+    // Fullscreen with a webkit fallback for older Safari, calling each method
+    // on its owner so the browser does not throw an illegal-invocation error.
+    function toggleFullscreen() {
+      var el = document.documentElement;
+      var isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!isFs) {
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
+    }
+
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    document.addEventListener('keydown', function (e) {
+      if (overview.classList.contains('show')) {
+        if (e.key === 'Escape' || e.key === 'o' || e.key === 'O') { closeOverview(); e.preventDefault(); }
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          next(); e.preventDefault(); break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          prev(); e.preventDefault(); break;
+        case 'Home': go(0); e.preventDefault(); break;
+        case 'End': go(total - 1); e.preventDefault(); break;
+        case 'o':
+        case 'O': toggleOverview(); e.preventDefault(); break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          e.preventDefault(); break;
+      }
+    });
+
+    // click left/right thirds of the deck to move (but not on links/buttons)
+    document.getElementById('deck').addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;
+      var x = e.clientX / window.innerWidth;
+      if (x > 0.72) next();
+      else if (x < 0.28) prev();
+    });
+
+    // touch swipe
+    var tx = 0;
+    document.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+    }, { passive: true });
+
+    // deep link via hash (#3 opens slide 3)
+    var h = parseInt((location.hash || '').replace('#', ''), 10);
+    if (!isNaN(h) && h >= 1 && h <= total) idx = h - 1;
+
+    render();
+  })();
+</script>
+
+</body>
+</html>

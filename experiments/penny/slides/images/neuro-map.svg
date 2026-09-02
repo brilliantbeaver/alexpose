@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="52" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The neuroscience map: shared axes plus one distinct axis each</text>
+  <text x="640" y="86" font-size="18" text-anchor="middle" fill="#475569">Parkinson's and stroke share two axes and each keeps a distinct third axis that should stay separate.</text>
+
+  <!-- ===== SHARED AXES (center, stacked) ===== -->
+  <rect x="440" y="130" width="400" height="106" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="640" y="160" font-size="17" font-weight="bold" text-anchor="middle" fill="#5b21b6">Shared axis 1: asymmetry (left versus right)</text>
+  <text x="640" y="185" font-size="14" text-anchor="middle" fill="#5b21b6">stride_length_si, hip / knee / ankle_symmetry_index</text>
+  <text x="640" y="208" font-size="13" text-anchor="middle" fill="#7c3aed">PD threshold: symmetry index above ~16 percent is suspicious</text>
+  <text x="640" y="226" font-size="13" text-anchor="middle" fill="#7c3aed">stroke threshold: knee-flexion difference at least 17 degrees</text>
+
+  <rect x="440" y="252" width="400" height="106" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="640" y="282" font-size="17" font-weight="bold" text-anchor="middle" fill="#5b21b6">Shared axis 2: postural instability (body sway)</text>
+  <text x="640" y="307" font-size="14" text-anchor="middle" fill="#5b21b6">com_movement_mean / std, com_stability_index</text>
+  <text x="640" y="330" font-size="13" text-anchor="middle" fill="#7c3aed">clips are pelvis-centered, so pooled center-of-mass</text>
+  <text x="640" y="348" font-size="13" text-anchor="middle" fill="#7c3aed">trajectory is a sway proxy (postural_sway_area)</text>
+
+  <text x="640" y="388" font-size="15" font-weight="bold" text-anchor="middle" fill="#334155">shared by BOTH conditions</text>
+
+  <!-- ===== PD SIDE (left, purple) ===== -->
+  <rect x="40" y="130" width="360" height="256" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="220" y="162" font-size="20" font-weight="bold" text-anchor="middle" fill="#5b21b6">Parkinson's disease (PD)</text>
+  <text x="220" y="186" font-size="14" text-anchor="middle" fill="#5b21b6">basal-ganglia rhythm failure, festination</text>
+
+  <rect x="64" y="206" width="312" height="160" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="220" y="234" font-size="16" font-weight="bold" text-anchor="middle" fill="#5b21b6">PD distinct axis:</text>
+  <text x="220" y="256" font-size="16" font-weight="bold" text-anchor="middle" fill="#5b21b6">rhythm and variability</text>
+  <text x="220" y="282" font-size="14" text-anchor="middle" fill="#5b21b6">stride_time_cv, step_length_cv</text>
+  <text x="220" y="304" font-size="14" text-anchor="middle" fill="#7c3aed">suspicious above ~0.06 to 0.08</text>
+  <text x="220" y="330" font-size="14" text-anchor="middle" fill="#5b21b6">shuffling stride_length_m</text>
+  <text x="220" y="352" font-size="14" text-anchor="middle" fill="#7c3aed">below ~0.7 to 0.9 m</text>
+
+  <!-- ===== STROKE SIDE (right, blue) ===== -->
+  <rect x="880" y="130" width="360" height="256" rx="12" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="1060" y="162" font-size="20" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Stroke</text>
+  <text x="1060" y="186" font-size="14" text-anchor="middle" fill="#1e3a8a">reduced corticospinal drive, one-sided</text>
+
+  <rect x="904" y="206" width="312" height="160" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="1060" y="234" font-size="16" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Stroke distinct axis:</text>
+  <text x="1060" y="256" font-size="16" font-weight="bold" text-anchor="middle" fill="#1e3a8a">spatiotemporal slowing</text>
+  <text x="1060" y="282" font-size="14" text-anchor="middle" fill="#1e3a8a">walking_speed_ms ~0.5 versus ~1.4</text>
+  <text x="1060" y="304" font-size="14" text-anchor="middle" fill="#1e3a8a">cadence_steps_min ~50 to 65</text>
+  <text x="1060" y="326" font-size="14" text-anchor="middle" fill="#1e3a8a">double_support ~30 to 40 percent</text>
+  <text x="1060" y="348" font-size="14" text-anchor="middle" fill="#1d4ed8">stance_swing_ratio ~2.3 versus ~1.6</text>
+
+  <!-- connectors: both conditions touch BOTH shared axes -->
+  <line x1="400" y1="200" x2="440" y2="178" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="400" y1="270" x2="440" y2="300" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="880" y1="200" x2="840" y2="178" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="880" y1="270" x2="840" y2="300" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ===== SEPARATION NOTE ===== -->
+  <rect x="200" y="410" width="880" height="60" rx="10" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="640" y="436" font-size="16" font-weight="bold" text-anchor="middle" fill="#92400e">The claim: PD rhythm and variability should not merge with stroke slowing,</text>
+  <text x="640" y="458" font-size="15" text-anchor="middle" fill="#92400e">so PD and stroke should stay separable. This is a hypothesis the probes test, not a guarantee.</text>
+
+  <!-- ===== MASKING-TO-AXIS TIES ===== -->
+  <text x="640" y="510" font-size="17" font-weight="bold" text-anchor="middle" fill="#0f172a">How the method pressures each axis</text>
+
+  <rect x="120" y="528" width="320" height="120" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="280" y="558" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">limb-over-time masking</text>
+  <line x1="280" y1="568" x2="280" y2="596" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="280" y="618" font-size="15" text-anchor="middle" fill="#1e3a8a">asymmetry</text>
+  <text x="280" y="638" font-size="12" text-anchor="middle" font-style="italic" fill="#475569">left versus right differences</text>
+
+  <rect x="480" y="528" width="320" height="120" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="640" y="558" font-size="15" font-weight="bold" text-anchor="middle" fill="#5b21b6">pelvis-centered CoM</text>
+  <line x1="640" y1="568" x2="640" y2="596" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="640" y="618" font-size="15" text-anchor="middle" fill="#5b21b6">postural stability</text>
+  <text x="640" y="638" font-size="12" text-anchor="middle" font-style="italic" fill="#475569">body sway proxy</text>
+
+  <rect x="840" y="528" width="320" height="120" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+  <text x="1000" y="558" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">whole-cycle masking</text>
+  <line x1="1000" y1="568" x2="1000" y2="596" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="1000" y="618" font-size="15" text-anchor="middle" fill="#14532d">rhythm and slowing</text>
+  <text x="1000" y="638" font-size="12" text-anchor="middle" font-style="italic" fill="#475569">PD variability, stroke pace</text>
+
+  <!-- caption -->
+  <rect x="230" y="666" width="820" height="42" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="640" y="692" font-size="15" font-weight="bold" text-anchor="middle" fill="#92400e">Shared axes plus one distinct axis each should keep PD and stroke separable if the probes confirm it.</text>
+</svg>

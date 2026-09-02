@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" font-family="sans-serif">
+  <defs>
+    <marker id="fdArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="420" fill="#ffffff"/>
+  <text x="480" y="34" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">From 374 raw sequences to the corpus and the labeled holdout</text>
+  <text x="480" y="57" font-size="13" text-anchor="middle" fill="#475569">Real GAVD run: every download and extraction that survived is counted, so the paper reports what actually reached the model.</text>
+
+  <!-- funnel stages, left to right -->
+  <!-- 1 -->
+  <rect x="20" y="96" width="150" height="96" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="95" y="128" font-size="26" font-weight="bold" text-anchor="middle" fill="#1e3a8a">374</text>
+  <text x="95" y="150" font-size="12" text-anchor="middle" fill="#334155">sequence CSVs</text>
+  <text x="95" y="168" font-size="11" text-anchor="middle" fill="#475569">11 conditions</text>
+  <text x="95" y="183" font-size="11" text-anchor="middle" fill="#475569">91,624 frames</text>
+
+  <line x1="174" y1="144" x2="204" y2="144" stroke="#334155" stroke-width="2" marker-end="url(#fdArrow)"/>
+
+  <!-- 2 -->
+  <rect x="208" y="96" width="150" height="96" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="283" y="128" font-size="26" font-weight="bold" text-anchor="middle" fill="#1e3a8a">69</text>
+  <text x="283" y="150" font-size="12" text-anchor="middle" fill="#334155">unique videos</text>
+  <text x="283" y="168" font-size="11" text-anchor="middle" fill="#475569">many sequences</text>
+  <text x="283" y="183" font-size="11" text-anchor="middle" fill="#475569">share one video</text>
+
+  <line x1="362" y1="144" x2="392" y2="144" stroke="#334155" stroke-width="2" marker-end="url(#fdArrow)"/>
+
+  <!-- 3 -->
+  <rect x="396" y="96" width="150" height="96" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="471" y="128" font-size="26" font-weight="bold" text-anchor="middle" fill="#14532d">67</text>
+  <text x="471" y="150" font-size="12" text-anchor="middle" fill="#334155">downloaded ok</text>
+  <text x="471" y="168" font-size="11" text-anchor="middle" fill="#475569">2 dead or</text>
+  <text x="471" y="183" font-size="11" text-anchor="middle" fill="#475569">blocked links</text>
+
+  <line x1="550" y1="144" x2="580" y2="144" stroke="#334155" stroke-width="2" marker-end="url(#fdArrow)"/>
+
+  <!-- 4 -->
+  <rect x="584" y="96" width="150" height="96" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="659" y="128" font-size="26" font-weight="bold" text-anchor="middle" fill="#14532d">227</text>
+  <text x="659" y="150" font-size="12" text-anchor="middle" fill="#334155">skeletons extracted</text>
+  <text x="659" y="168" font-size="11" text-anchor="middle" fill="#475569">MediaPipe pose</text>
+  <text x="659" y="183" font-size="11" text-anchor="middle" fill="#475569">over the frames</text>
+
+  <line x1="738" y1="144" x2="768" y2="144" stroke="#334155" stroke-width="2" marker-end="url(#fdArrow)"/>
+
+  <!-- 5 -->
+  <rect x="772" y="96" width="166" height="96" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="855" y="128" font-size="26" font-weight="bold" text-anchor="middle" fill="#5b21b6">1,571</text>
+  <text x="855" y="150" font-size="12" text-anchor="middle" fill="#334155">windowed clips</text>
+  <text x="855" y="168" font-size="11" text-anchor="middle" fill="#475569">(32, 33, 3) each</text>
+  <text x="855" y="183" font-size="11" text-anchor="middle" fill="#475569">unlabeled corpus</text>
+
+  <!-- split off: labeled holdout -->
+  <line x1="659" y1="192" x2="659" y2="250" stroke="#334155" stroke-width="2" marker-end="url(#fdArrow)"/>
+  <rect x="360" y="252" width="600" height="132" rx="8" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="380" y="278" font-size="14" font-weight="bold" fill="#92400e">Labeled 5-class holdout (used only by the frozen probe)</text>
+  <text x="380" y="300" font-size="12" fill="#334155">Of the 68 sequences the prior work labeled, 42 survived download and extraction and reached the holdout.</text>
+  <text x="380" y="320" font-size="12" fill="#334155">Those 42 sequences yield 296 overlapping windows (mean 7 windows per sequence).</text>
+  <!-- per-class chips -->
+  <g font-size="11.5" fill="#334155">
+    <rect x="380" y="334" width="104" height="38" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+    <text x="432" y="351" font-size="11" text-anchor="middle" fill="#92400e">normal</text>
+    <text x="432" y="366" font-size="12" font-weight="bold" text-anchor="middle" fill="#0f172a">9 seq / 86 win</text>
+
+    <rect x="492" y="334" width="104" height="38" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+    <text x="544" y="351" font-size="11" text-anchor="middle" fill="#92400e">parkinsons</text>
+    <text x="544" y="366" font-size="12" font-weight="bold" text-anchor="middle" fill="#0f172a">9 seq / 47 win</text>
+
+    <rect x="604" y="334" width="104" height="38" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+    <text x="656" y="351" font-size="11" text-anchor="middle" fill="#92400e">stroke</text>
+    <text x="656" y="366" font-size="12" font-weight="bold" text-anchor="middle" fill="#0f172a">8 seq / 70 win</text>
+
+    <rect x="716" y="334" width="112" height="38" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+    <text x="772" y="351" font-size="11" text-anchor="middle" fill="#92400e">cerebral palsy</text>
+    <text x="772" y="366" font-size="12" font-weight="bold" text-anchor="middle" fill="#0f172a">4 seq / 24 win</text>
+
+    <rect x="836" y="334" width="112" height="38" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+    <text x="892" y="351" font-size="11" text-anchor="middle" fill="#92400e">myopathic</text>
+    <text x="892" y="366" font-size="12" font-weight="bold" text-anchor="middle" fill="#0f172a">12 seq / 69 win</text>
+  </g>
+  <text x="24" y="300" font-size="12" fill="#475569">The corpus is</text>
+  <text x="24" y="318" font-size="12" fill="#475569">unlabeled: the</text>
+  <text x="24" y="336" font-size="12" fill="#475569">encoder never</text>
+  <text x="24" y="354" font-size="12" fill="#475569">sees a label</text>
+  <text x="24" y="372" font-size="12" fill="#475569">during training.</text>
+</svg>

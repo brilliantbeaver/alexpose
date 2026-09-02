@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="440" fill="#ffffff"/>
+  <text x="480" y="34" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">Results scorecard: the four research questions on real GAVD data</text>
+  <text x="480" y="57" font-size="13" text-anchor="middle" fill="#475569">Frozen probe on a real MediaPipe corpus, each number a mean over 20 repeated splits in notebook 05.</text>
+
+  <!-- RQ1 blue: top-left -->
+  <rect x="24" y="80" width="450" height="128" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="44" y="106" font-size="14" font-weight="bold" fill="#1e3a8a">RQ1  Frozen probe vs baseline</text>
+  <text x="44" y="132" font-size="11.5" fill="#334155">Per-clip splits beat the baseline; the leakage-free per-sequence</text>
+  <text x="44" y="150" font-size="11.5" fill="#334155">split is far above chance but below it (see the honesty note).</text>
+  <text x="44" y="180" font-size="12.5" font-weight="bold" fill="#1e3a8a">MLP 0.92, Linear 0.88 (per clip)</text>
+  <text x="44" y="198" font-size="11.5" fill="#334155">0.49 per sequence, vs baseline 0.76, chance 0.20</text>
+
+  <!-- RQ2 green: top-right -->
+  <rect x="486" y="80" width="450" height="128" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="506" y="106" font-size="14" font-weight="bold" fill="#14532d">RQ2  Label efficiency</text>
+  <text x="506" y="132" font-size="11.5" fill="#334155">Per-clip accuracy climbs as the probe is given more labels,</text>
+  <text x="506" y="150" font-size="11.5" fill="#334155">then flattens: the encoder is useful even when labels are scarce.</text>
+  <text x="506" y="182" font-size="12.5" font-weight="bold" fill="#14532d">0.75</text>
+  <line x1="548" y1="178" x2="588" y2="178" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="600" y="182" font-size="12.5" font-weight="bold" fill="#14532d">0.88</text>
+  <text x="648" y="182" font-size="11.5" fill="#334155">as labels go 25 to 100 percent</text>
+
+  <!-- RQ3 violet: bottom-left -->
+  <rect x="24" y="224" width="450" height="128" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="44" y="250" font-size="14" font-weight="bold" fill="#5b21b6">RQ3  Clinical structure</text>
+  <text x="44" y="276" font-size="11.5" fill="#334155">A ridge probe reads step amplitude out of the frozen latent well,</text>
+  <text x="44" y="294" font-size="11.5" fill="#334155">and asymmetry only weakly, so that axis survives more faintly.</text>
+  <text x="44" y="324" font-size="12.5" font-weight="bold" fill="#5b21b6">step amplitude R2 0.72</text>
+  <text x="262" y="324" font-size="12.5" font-weight="bold" fill="#5b21b6">asymmetry R2 0.15</text>
+
+  <!-- RQ4 amber: bottom-right -->
+  <rect x="486" y="224" width="450" height="128" rx="8" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="506" y="250" font-size="14" font-weight="bold" fill="#92400e">RQ4  VICReg ablation</text>
+  <text x="506" y="276" font-size="11.5" fill="#334155">Toggling variance and covariance on vs off, the ON run keeps a</text>
+  <text x="506" y="294" font-size="11.5" fill="#334155">higher embedding std; VICReg adds a margin over the EMA guard.</text>
+  <text x="506" y="324" font-size="12.5" font-weight="bold" fill="#92400e">std ON 0.89</text>
+  <text x="636" y="324" font-size="12.5" font-weight="bold" fill="#92400e">above OFF 0.77</text>
+
+  <!-- footer band -->
+  <rect x="24" y="374" width="912" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="480" y="395" font-size="12" text-anchor="middle" fill="#64748b">Real data. Per-clip numbers carry window leakage; the per-sequence number is the rigorous one on only 42 sequences.</text>
+  <text x="480" y="412" font-size="11" text-anchor="middle" fill="#64748b">Reported as mean over 20 stratified 70/30 splits; chance across the 5 classes is 20 percent; prior baseline 0.76.</text>
+</svg>

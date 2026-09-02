@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Ten project-selected BlazePose target landmarks</title>
+  <desc>Shoulders, hips, knees, ankles, and foot indices are highlighted. The full target encoder sees all tokens, while the view encoder sees only tokens not selected as prediction targets.</desc>
+  <defs><style>.h{font:700 34px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:17px Arial;fill:#344b62}.bone{stroke:#72879a;stroke-width:12;stroke-linecap:round}.node{fill:#d8e0e7;stroke:#596f83;stroke-width:2}.hot{fill:#ef7d57;stroke:#8f2d1f;stroke-width:3}</style></defs>
+  <rect width="1200" height="675" fill="#f5f1e8"/>
+  <text x="55" y="58" class="h">Only ten landmarks may become S-JEPA targets</text>
+  <g transform="translate(250,60)">
+    <circle cx="190" cy="55" r="38" class="node"/>
+    <line x1="125" y1="155" x2="255" y2="155" class="bone"/>
+    <line x1="125" y1="155" x2="155" y2="305" class="bone"/><line x1="255" y1="155" x2="225" y2="305" class="bone"/>
+    <line x1="155" y1="305" x2="225" y2="305" class="bone"/>
+    <line x1="155" y1="305" x2="142" y2="450" class="bone"/><line x1="225" y1="305" x2="238" y2="450" class="bone"/>
+    <line x1="142" y1="450" x2="132" y2="565" class="bone"/><line x1="238" y1="450" x2="248" y2="565" class="bone"/>
+    <line x1="132" y1="565" x2="95" y2="590" class="bone"/><line x1="248" y1="565" x2="285" y2="590" class="bone"/>
+    <circle cx="125" cy="155" r="15" class="hot"/><circle cx="255" cy="155" r="15" class="hot"/>
+    <circle cx="155" cy="305" r="15" class="hot"/><circle cx="225" cy="305" r="15" class="hot"/>
+    <circle cx="142" cy="450" r="15" class="hot"/><circle cx="238" cy="450" r="15" class="hot"/>
+    <circle cx="132" cy="565" r="15" class="hot"/><circle cx="248" cy="565" r="15" class="hot"/>
+    <circle cx="95" cy="590" r="15" class="hot"/><circle cx="285" cy="590" r="15" class="hot"/>
+  </g>
+  <g transform="translate(705,135)">
+    <text x="0" y="0" class="t">Eligible prediction targets</text>
+    <text x="0" y="42" class="b">11, 12  shoulders</text>
+    <text x="0" y="78" class="b">23, 24  hips</text>
+    <text x="0" y="114" class="b">25, 26  knees</text>
+    <text x="0" y="150" class="b">27, 28  ankles</text>
+    <text x="0" y="186" class="b">31, 32  foot indices</text>
+    <rect x="0" y="238" width="390" height="118" rx="16" fill="#fff" stroke="#18324c" stroke-width="2"/>
+    <text x="25" y="274" class="t">Hard rule</text>
+    <text x="25" y="310" class="b">Uniform sampling within this set.</text>
+    <text x="25" y="340" class="b">No motion score. No fallback joints.</text>
+    <text x="0" y="398" class="b">Target encoder: all 33 landmark tokens.</text>
+    <text x="0" y="430" class="b">View context: unmasked tokens only.</text>
+  </g>
+</svg>

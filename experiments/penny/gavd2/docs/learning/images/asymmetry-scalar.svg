@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="500" fill="#ffffff"/>
+
+  <!-- Title + subtitle -->
+  <text x="480" y="34" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">Two clinical scalars read straight from one pose clip (nb05)</text>
+  <text x="480" y="57" font-size="13" text-anchor="middle" fill="#475569">Compare how far the left ankle (joint 27) and right ankle (joint 28) swing. These are Penny's two axes.</text>
+
+  <!-- ================= LEFT: skeleton with highlighted ankles ================= -->
+  <rect x="40" y="82" width="330" height="380" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="205" y="106" font-size="13" font-weight="bold" text-anchor="middle" fill="#0f172a">One walker, ankles highlighted</text>
+
+  <!-- skeleton (simple stick figure), centered around x=205 -->
+  <!-- head -->
+  <circle cx="205" cy="140" r="15" fill="#ffffff" stroke="#64748b" stroke-width="3"/>
+  <!-- torso -->
+  <line x1="205" y1="155" x2="205" y2="250" stroke="#64748b" stroke-width="3"/>
+  <!-- arms -->
+  <line x1="205" y1="175" x2="165" y2="215" stroke="#64748b" stroke-width="3"/>
+  <line x1="205" y1="175" x2="245" y2="215" stroke="#64748b" stroke-width="3"/>
+  <!-- hips -->
+  <line x1="170" y1="250" x2="240" y2="250" stroke="#64748b" stroke-width="3"/>
+  <circle cx="170" cy="250" r="4" fill="#64748b"/>
+  <circle cx="240" cy="250" r="4" fill="#64748b"/>
+
+  <!-- LEFT leg = joint 27 (walker's left, drawn on viewer right) -> big swing, blue -->
+  <line x1="240" y1="250" x2="255" y2="315" stroke="#64748b" stroke-width="3"/>
+  <circle cx="255" cy="315" r="4" fill="#64748b"/>
+  <line x1="255" y1="315" x2="285" y2="378" stroke="#1d4ed8" stroke-width="4"/>
+  <!-- left ankle joint 27 highlighted -->
+  <circle cx="285" cy="378" r="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="285" y="382" font-size="9" font-weight="bold" text-anchor="middle" fill="#1d4ed8">27</text>
+
+  <!-- RIGHT leg = joint 28 (walker's right, drawn on viewer left) -> small swing, green -->
+  <line x1="170" y1="250" x2="160" y2="315" stroke="#64748b" stroke-width="3"/>
+  <circle cx="160" cy="315" r="4" fill="#64748b"/>
+  <line x1="160" y1="315" x2="150" y2="378" stroke="#15803d" stroke-width="4"/>
+  <!-- right ankle joint 28 highlighted -->
+  <circle cx="150" cy="378" r="9" fill="#f0fdf4" stroke="#15803d" stroke-width="3"/>
+  <text x="150" y="382" font-size="9" font-weight="bold" text-anchor="middle" fill="#15803d">28</text>
+
+  <!-- swing-range brackets under each ankle (clearly different lengths) -->
+  <!-- LEFT ankle (joint 27) big range: 262 to 308 -->
+  <line x1="262" y1="410" x2="308" y2="410" stroke="#1d4ed8" stroke-width="2.5"/>
+  <line x1="262" y1="404" x2="262" y2="416" stroke="#1d4ed8" stroke-width="2.5"/>
+  <line x1="308" y1="404" x2="308" y2="416" stroke="#1d4ed8" stroke-width="2.5"/>
+  <text x="285" y="434" font-size="11" font-weight="bold" text-anchor="middle" fill="#1d4ed8">left range (27)</text>
+
+  <!-- RIGHT ankle (joint 28) small range: 132 to 168 -->
+  <line x1="138" y1="410" x2="162" y2="410" stroke="#15803d" stroke-width="2.5"/>
+  <line x1="138" y1="404" x2="138" y2="416" stroke="#15803d" stroke-width="2.5"/>
+  <line x1="162" y1="404" x2="162" y2="416" stroke="#15803d" stroke-width="2.5"/>
+  <text x="150" y="434" font-size="11" font-weight="bold" text-anchor="middle" fill="#15803d">right range (28)</text>
+
+  <text x="205" y="454" font-size="11" text-anchor="middle" fill="#475569">unequal lengths = asymmetry</text>
+
+  <!-- ================= RIGHT: formula boxes + result chips ================= -->
+  <!-- step_amplitude box -->
+  <rect x="410" y="92" width="510" height="118" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="430" y="118" font-size="14" font-weight="bold" text-anchor="start" fill="#14532d">step_amplitude</text>
+  <text x="430" y="145" font-size="13" text-anchor="start" fill="#334155">= 0.5 * (left_range + right_range)</text>
+  <text x="430" y="171" font-size="12" text-anchor="start" fill="#475569">Stride size. Small when steps shrink:</text>
+  <text x="430" y="190" font-size="12" text-anchor="start" fill="#475569">PD shuffling, myopathic short steps.</text>
+  <!-- result chip -->
+  <rect x="708" y="150" width="196" height="44" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="806" y="169" font-size="13" font-weight="bold" text-anchor="middle" fill="#14532d">R2 = 0.682</text>
+  <text x="806" y="186" font-size="11" text-anchor="middle" fill="#15803d">captured, no labels</text>
+
+  <!-- asymmetry_index box -->
+  <rect x="410" y="232" width="510" height="118" rx="8" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="430" y="258" font-size="14" font-weight="bold" text-anchor="start" fill="#9a3412">asymmetry_index</text>
+  <text x="430" y="285" font-size="13" text-anchor="start" fill="#334155">= abs(left_range - right_range)</text>
+  <text x="430" y="304" font-size="13" text-anchor="start" fill="#334155">&#160;&#160;/ (left_range + right_range)</text>
+  <text x="430" y="330" font-size="12" text-anchor="start" fill="#475569">One-sidedness. High for stroke and PD.</text>
+  <!-- result chip -->
+  <rect x="708" y="290" width="196" height="44" rx="8" fill="#ffedd5" stroke="#d97706" stroke-width="2"/>
+  <text x="806" y="309" font-size="13" font-weight="bold" text-anchor="middle" fill="#9a3412">R2 = 0.081</text>
+  <text x="806" y="326" font-size="11" text-anchor="middle" fill="#d97706">present but faint</text>
+
+  <!-- connectors from skeleton brackets to formulas (non-crossing) -->
+  <path d="M320,410 C365,410 375,175 408,155" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M320,414 C365,414 375,295 408,295" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= footer ================= -->
+  <line x1="410" y1="378" x2="920" y2="378" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="410" y="406" font-size="12" text-anchor="start" fill="#334155">A Ridge probe reads each scalar from the FROZEN latent (RQ3).</text>
+  <text x="410" y="426" font-size="12" text-anchor="start" fill="#334155">Both are linearly decodable, so a positive R2 is meaningful.</text>
+  <text x="410" y="452" font-size="11.5" text-anchor="start" fill="#64748b">These stand in for Penny Inouye's stride-length and asymmetry</text>
+  <text x="410" y="470" font-size="11.5" text-anchor="start" fill="#64748b">features (PD and stroke are one-sided; PD shuffles).</text>
+</svg>

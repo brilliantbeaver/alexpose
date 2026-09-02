@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#15803d"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="50" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">The four pieces of a JEPA</text>
+  <text x="640" y="80" font-size="17" text-anchor="middle" fill="#475569">Read the visible part, make an answer key from the hidden part, guess it, compare in latent space.</text>
+
+  <!-- =============== TOP ROW (blue): context path =============== -->
+  <!-- visible tokens -->
+  <text x="132" y="150" font-size="15" font-weight="bold" text-anchor="middle" fill="#0f172a">VISIBLE tokens</text>
+  <g>
+    <rect x="70" y="164" width="30" height="30" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <rect x="106" y="164" width="30" height="30" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <rect x="142" y="164" width="30" height="30" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <rect x="178" y="164" width="30" height="30" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  </g>
+
+  <!-- 1. context encoder -->
+  <rect x="270" y="140" width="210" height="82" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="375" y="170" font-size="17" font-weight="bold" text-anchor="middle" fill="#1e3a8a">1. Context encoder</text>
+  <text x="375" y="196" font-size="13" text-anchor="middle" fill="#1e3a8a">reads the visible tokens</text>
+
+  <!-- context embedding -->
+  <rect x="540" y="146" width="150" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="615" y="176" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">context</text>
+  <text x="615" y="196" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">embedding</text>
+
+  <!-- 3. predictor -->
+  <rect x="750" y="140" width="210" height="82" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="855" y="170" font-size="17" font-weight="bold" text-anchor="middle" fill="#1e3a8a">3. Predictor</text>
+  <text x="855" y="196" font-size="13" text-anchor="middle" fill="#1e3a8a">guesses the hidden targets</text>
+
+  <!-- predicted embeddings -->
+  <rect x="1020" y="146" width="180" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="1110" y="176" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">predicted</text>
+  <text x="1110" y="196" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e3a8a">embeddings</text>
+
+  <!-- top-row arrows -->
+  <line x1="216" y1="179" x2="266" y2="179" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="480" y1="181" x2="536" y2="181" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="690" y1="181" x2="746" y2="181" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="960" y1="181" x2="1016" y2="181" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- mask-token positions feeding the predictor from below -->
+  <rect x="750" y="270" width="210" height="52" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="855" y="293" font-size="13" font-weight="bold" text-anchor="middle" fill="#475569">mask-token positions</text>
+  <text x="855" y="312" font-size="12" text-anchor="middle" fill="#64748b">where to guess</text>
+  <line x1="855" y1="270" x2="855" y2="226" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- =============== BOTTOM ROW (green): target path =============== -->
+  <!-- hidden tokens -->
+  <text x="132" y="470" font-size="15" font-weight="bold" text-anchor="middle" fill="#0f172a">HIDDEN tokens</text>
+  <g>
+    <rect x="88" y="484" width="30" height="30" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="2" stroke-dasharray="5,4"/>
+    <rect x="124" y="484" width="30" height="30" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="2" stroke-dasharray="5,4"/>
+    <rect x="160" y="484" width="30" height="30" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="2" stroke-dasharray="5,4"/>
+  </g>
+
+  <!-- 2. EMA target encoder -->
+  <rect x="270" y="452" width="210" height="96" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="375" y="482" font-size="17" font-weight="bold" text-anchor="middle" fill="#14532d">2. EMA target encoder</text>
+  <text x="375" y="506" font-size="13" text-anchor="middle" fill="#14532d">makes the answer key</text>
+  <rect x="305" y="516" width="140" height="20" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="375" y="531" font-size="12" font-weight="bold" text-anchor="middle" fill="#166534">stop-gradient</text>
+
+  <!-- target embeddings (answer key) -->
+  <rect x="540" y="450" width="150" height="82" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="615" y="480" font-size="14" font-weight="bold" text-anchor="middle" fill="#14532d">target</text>
+  <text x="615" y="500" font-size="14" font-weight="bold" text-anchor="middle" fill="#14532d">embeddings</text>
+  <text x="615" y="520" font-size="12" text-anchor="middle" fill="#166534">the answer key</text>
+
+  <!-- 4. loss -->
+  <rect x="820" y="440" width="240" height="104" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="940" y="472" font-size="17" font-weight="bold" text-anchor="middle" fill="#14532d">4. Loss</text>
+  <text x="940" y="497" font-size="14" text-anchor="middle" fill="#14532d">L2 in latent space + VICReg</text>
+  <rect x="846" y="510" width="188" height="22" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="940" y="526" font-size="12" font-weight="bold" text-anchor="middle" fill="#166534">no negatives, no decoder</text>
+
+  <!-- bottom-row arrows -->
+  <line x1="198" y1="499" x2="266" y2="499" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <line x1="480" y1="495" x2="536" y2="493" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <line x1="690" y1="493" x2="816" y2="493" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- predicted embeddings -> loss (blue prediction arm meets loss) -->
+  <path d="M1110,216 L1110,492 L1064,492" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="1122" y="360" font-size="12" text-anchor="start" fill="#475569">prediction</text>
+
+  <!-- =============== EMA copy: context encoder -> target encoder (routed on the far left, clear of all text) =============== -->
+  <path d="M270,205 L240,205 L240,485 L266,485" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="6,5" marker-end="url(#arrowGreen)"/>
+  <rect x="34" y="300" width="184" height="92" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+  <text x="126" y="326" font-size="13" font-weight="bold" text-anchor="middle" fill="#15803d">slow EMA copy</text>
+  <text x="126" y="348" font-size="12" text-anchor="middle" fill="#166534">target = m*target</text>
+  <text x="126" y="365" font-size="12" text-anchor="middle" fill="#166534">+ (1-m)*context</text>
+  <text x="126" y="382" font-size="12" text-anchor="middle" fill="#166534">m ~ 0.996, ramped to 1</text>
+
+  <!-- =============== training signal feedback (red), routed along the bottom and up the far-left margin (x=18), clear of the EMA box and arrow =============== -->
+  <path d="M940,544 L940,662 L18,662 L18,140 L266,140" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,5" marker-end="url(#arrowRed)"/>
+  <text x="940" y="580" font-size="13" font-weight="bold" text-anchor="middle" fill="#7f1d1d">gradients</text>
+  <text x="600" y="684" font-size="13" text-anchor="middle" fill="#7f1d1d">gradients train the context encoder and predictor only. The EMA target is never trained.</text>
+</svg>

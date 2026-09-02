@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="300" fill="#ffffff"/>
+  <text x="480" y="32" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">The full-dataset journey: all 374 GAVD sequences to a frozen probe</text>
+  <text x="480" y="55" font-size="13" text-anchor="middle" fill="#475569">Scale the whole pipeline to every walking sequence, pretrain with no labels, then spend the 68 labels only at the end.</text>
+
+  <!-- 6 stage boxes in one row -->
+  <!-- box 0 -->
+  <rect x="24" y="105" width="140" height="96" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="94" y="132" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">00 Scan</text>
+  <text x="94" y="154" font-size="10.5" text-anchor="middle" fill="#475569">read all CSVs,</text>
+  <text x="94" y="170" font-size="10.5" text-anchor="middle" fill="#475569">build one</text>
+  <text x="94" y="186" font-size="10.5" text-anchor="middle" fill="#475569">manifest</text>
+
+  <!-- box 1 -->
+  <rect x="180" y="105" width="140" height="96" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="250" y="132" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">01 Download</text>
+  <text x="250" y="154" font-size="10.5" text-anchor="middle" fill="#475569">dedup videos,</text>
+  <text x="250" y="170" font-size="10.5" text-anchor="middle" fill="#475569">fetch each once,</text>
+  <text x="250" y="186" font-size="10.5" text-anchor="middle" fill="#475569">resumable</text>
+
+  <!-- box 2 -->
+  <rect x="336" y="105" width="140" height="96" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="406" y="132" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">02 Extract</text>
+  <text x="406" y="154" font-size="10.5" text-anchor="middle" fill="#475569">MediaPipe pose,</text>
+  <text x="406" y="170" font-size="10.5" text-anchor="middle" fill="#475569">33 joints,</text>
+  <text x="406" y="186" font-size="10.5" text-anchor="middle" fill="#475569">cache skeletons</text>
+
+  <!-- box 3 -->
+  <rect x="492" y="105" width="140" height="96" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="562" y="132" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">03 Corpus</text>
+  <text x="562" y="154" font-size="10.5" text-anchor="middle" fill="#475569">normalize,</text>
+  <text x="562" y="170" font-size="10.5" text-anchor="middle" fill="#475569">window, split</text>
+  <text x="562" y="186" font-size="10.5" text-anchor="middle" fill="#475569">off the 68</text>
+
+  <!-- box 4 -->
+  <rect x="648" y="105" width="140" height="96" rx="8" fill="#dbeafe" stroke="#1d4ed8"/>
+  <text x="718" y="132" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">04 Pretrain</text>
+  <text x="718" y="154" font-size="10.5" text-anchor="middle" fill="#475569">JEPA on the</text>
+  <text x="718" y="170" font-size="10.5" text-anchor="middle" fill="#475569">unlabeled bank,</text>
+  <text x="718" y="186" font-size="10.5" text-anchor="middle" fill="#475569">watch collapse</text>
+
+  <!-- box 5 -->
+  <rect x="804" y="105" width="140" height="96" rx="8" fill="#fee2e2" stroke="#b91c1c"/>
+  <text x="874" y="132" font-size="13" font-weight="bold" text-anchor="middle" fill="#7f1d1d">05 Probe</text>
+  <text x="874" y="154" font-size="10.5" text-anchor="middle" fill="#475569">freeze encoder,</text>
+  <text x="874" y="170" font-size="10.5" text-anchor="middle" fill="#475569">spend 68 labels,</text>
+  <text x="874" y="186" font-size="10.5" text-anchor="middle" fill="#475569">beat 76 percent</text>
+
+  <!-- arrows between boxes -->
+  <line x1="164" y1="153" x2="180" y2="153" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="320" y1="153" x2="336" y2="153" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="476" y1="153" x2="492" y2="153" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="632" y1="153" x2="648" y2="153" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="788" y1="153" x2="804" y2="153" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="480" y="250" font-size="12.5" text-anchor="middle" fill="#334155">Unlabeled pool (all sequences): stages 00 to 04.  Labeled 68 clips: only stage 05.</text>
+  <text x="480" y="272" font-size="11.5" text-anchor="middle" fill="#94a3b8">Each stage writes a small cache file the next stage reads, so the series is resumable.</text>
+</svg>

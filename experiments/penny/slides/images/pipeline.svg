@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
+  <text x="640" y="44" font-size="30" font-weight="bold" text-anchor="middle" fill="#0f172a">End-to-end pipeline versus the prior hand-feature path</text>
+  <text x="640" y="72" font-size="16" text-anchor="middle" fill="#475569">Both pipelines start from the SAME poses. Only our path taps the mountain of unlabeled data.</text>
+
+  <!-- ================= SHARED FRONT END ================= -->
+  <rect x="40" y="100" width="290" height="96" rx="12" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+  <text x="185" y="130" font-size="17" font-weight="bold" text-anchor="middle" fill="#0f172a">MediaPipe poses</text>
+  <text x="185" y="153" font-size="15" text-anchor="middle" fill="#0f172a">BLAZEPOSE_33</text>
+  <text x="185" y="176" font-size="14" text-anchor="middle" fill="#475569">pose sequences (T, 33, 3)</text>
+
+  <!-- preprocessing chain feeding the shared start -->
+  <rect x="40" y="220" width="290" height="150" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text x="185" y="246" font-size="14" font-weight="bold" text-anchor="middle" fill="#334155">preprocessing (shared)</text>
+  <text x="60" y="274" font-size="14" fill="#475569">1. drop low-confidence clips</text>
+  <text x="60" y="300" font-size="14" fill="#475569">2. pelvis-center + torso-normalize</text>
+  <text x="60" y="326" font-size="14" fill="#475569">3. resample rate + window length</text>
+  <text x="60" y="352" font-size="14" fill="#475569">4. augment (pretraining only)</text>
+  <text x="60" y="371" font-size="12" fill="#64748b" font-style="italic"></text>
+  <line x1="185" y1="220" x2="185" y2="196" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- split point -->
+  <line x1="330" y1="148" x2="380" y2="148" stroke="#334155" stroke-width="1.5"/>
+  <circle cx="386" cy="148" r="6" fill="#334155"/>
+  <text x="398" y="128" font-size="13" font-weight="bold" fill="#0f172a">the paths diverge</text>
+  <path d="M386,148 C420,148 420,240 460,240" fill="none" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M386,148 C420,148 420,510 460,510" fill="none" stroke="#1d4ed8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= PRIOR PATH (top, amber) ================= -->
+  <rect x="460" y="188" width="780" height="185" rx="12" fill="#fff7ed" stroke="#d97706" stroke-width="2"/>
+  <text x="480" y="216" font-size="17" font-weight="bold" fill="#92400e">PRIOR path: only the 68 labeled sequences are ever used</text>
+
+  <rect x="480" y="234" width="205" height="110" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="582" y="278" font-size="16" font-weight="bold" text-anchor="middle" fill="#92400e">82 hand features</text>
+  <text x="582" y="302" font-size="13" text-anchor="middle" fill="#92400e">angles, symmetry,</text>
+  <text x="582" y="320" font-size="13" text-anchor="middle" fill="#92400e">spatiotemporal, kinematics</text>
+
+  <rect x="735" y="234" width="205" height="110" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="837" y="284" font-size="16" font-weight="bold" text-anchor="middle" fill="#92400e">Random Forest</text>
+  <text x="837" y="308" font-size="13" text-anchor="middle" fill="#92400e">100 trees</text>
+
+  <rect x="990" y="234" width="230" height="110" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="1105" y="286" font-size="26" font-weight="bold" text-anchor="middle" fill="#92400e">76 percent</text>
+  <text x="1105" y="312" font-size="13" text-anchor="middle" fill="#92400e">best so far</text>
+
+  <line x1="685" y1="289" x2="735" y2="289" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="940" y1="289" x2="990" y2="289" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= OUR PATH (bottom, blue/green) ================= -->
+  <rect x="460" y="400" width="780" height="290" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="480" y="428" font-size="17" font-weight="bold" fill="#1e3a8a">OUR path: pretrain on the UNLABELED GAVD pool, then spend the 68 held-out labels at the end</text>
+
+  <rect x="480" y="446" width="180" height="118" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="570" y="484" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Pretrain JEPA</text>
+  <text x="570" y="506" font-size="13" text-anchor="middle" fill="#1e3a8a">on the UNLABELED</text>
+  <text x="570" y="524" font-size="13" text-anchor="middle" fill="#1e3a8a">GAVD pool</text>
+  <text x="570" y="548" font-size="12" text-anchor="middle" fill="#1e3a8a">68 labeled clips held out</text>
+
+  <rect x="690" y="446" width="150" height="118" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="765" y="498" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Freeze</text>
+  <text x="765" y="519" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">encoder</text>
+
+  <rect x="870" y="446" width="160" height="118" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="950" y="491" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Pool token</text>
+  <text x="950" y="512" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e3a8a">embeddings</text>
+  <text x="950" y="536" font-size="12" text-anchor="middle" fill="#475569">one vector per clip</text>
+
+  <rect x="1060" y="446" width="160" height="118" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="1140" y="491" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">Small probe</text>
+  <text x="1140" y="512" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">on 68 labels</text>
+  <text x="1140" y="536" font-size="12" text-anchor="middle" fill="#14532d">linear / small MLP</text>
+
+  <line x1="660" y1="505" x2="690" y2="505" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="840" y1="505" x2="870" y2="505" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1030" y1="505" x2="1060" y2="505" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <text x="850" y="592" font-size="14" text-anchor="middle" fill="#1e3a8a">the 68 labeled clips never enter pretraining, so the 70/30 probe stays a fair comparison to the Random Forest</text>
+
+  <rect x="480" y="608" width="740" height="60" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="850" y="632" font-size="16" font-weight="bold" text-anchor="middle" fill="#14532d">Compare to the 76 percent Random Forest baseline</text>
+  <text x="850" y="654" font-size="13" text-anchor="middle" fill="#14532d">same probe on the 82 hand features is the fair-fight control</text>
+</svg>
