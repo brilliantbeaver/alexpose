@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 475" role="img" aria-labelledby="title desc">
+  <title id="title">Two labels, one observation</title>
+  <desc id="desc">A single source motion branches into paired views with different arbitrary starting labels, then merges into the same observed sequence.</desc>
+  <defs>
+    <style>
+      .title { font: 700 27px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #102a43; }
+      .label { font: 700 19px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #243b53; }
+      .note { font: 400 17px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #627d98; }
+      .outcome { font: 700 22px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #102a43; }
+    </style>
+  </defs>
+  <rect width="560" height="475" fill="#f7fbff"/>
+  <text x="36" y="44" class="title">Two labels, one observation</text>
+
+  <text x="280" y="91" text-anchor="middle" class="label">one source motion</text>
+  <path d="M175 120 C210 96 251 130 290 107 S367 102 406 123" fill="none" stroke="#1f9d8b" stroke-width="7" stroke-linecap="round"/>
+  <path d="M175 143 C214 160 255 125 296 150 S366 150 406 132" fill="none" stroke="#e07a3f" stroke-width="7" stroke-linecap="round"/>
+  <path d="M280 160 L280 185 M280 185 L150 213 M280 185 L410 213" fill="none" stroke="#829ab1" stroke-width="3" stroke-linecap="round"/>
+
+  <circle cx="150" cy="233" r="24" fill="#c9f1eb"/>
+  <text x="150" y="240" text-anchor="middle" class="label">A</text>
+  <text x="150" y="279" text-anchor="middle" class="note">starting label A</text>
+  <circle cx="410" cy="233" r="24" fill="#fde0cf"/>
+  <text x="410" y="240" text-anchor="middle" class="label">B</text>
+  <text x="410" y="279" text-anchor="middle" class="note">starting label B</text>
+
+  <path d="M150 302 L280 336 L410 302" fill="none" stroke="#829ab1" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="280" cy="336" r="6" fill="#829ab1"/>
+  <path d="M280 348 L280 367" fill="none" stroke="#829ab1" stroke-width="3"/>
+  <text x="280" y="402" text-anchor="middle" class="outcome">same observed sequence</text>
+  <text x="280" y="432" text-anchor="middle" class="note">The starting label gives no clue.</text>
+</svg>

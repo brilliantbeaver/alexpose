@@ -5,8 +5,9 @@ correspondence.**
 
 > **Status:** the gauge-neutral/validity-aware local implementation, persistent
 > sequence benchmark, duration-model gate, source-route screen, and gated
-> SG-JEPA objective are implemented and CPU-smoke-tested. Real AMASS/GAVD gates
-> and GPU training remain to run on HAIC. The core deliverable is an AMASS
+> SG-JEPA objective are implemented and CPU-smoke-tested. The real paired AMASS
+> eligibility gate has passed; the real GAVD gate and GPU training remain to run
+> on HAIC. The core deliverable is an AMASS
 > benchmark and a predictive representation evaluated for relative-gauge and
 > output calibration. A GAVD
 > natural-event result is included only if a blinded audit passes its evidence
@@ -135,6 +136,13 @@ under the declared corruption contract.
 
 ## Documents
 
+- [study-so-far.md](study-so-far.md) is the plain-language progress report.
+  It explains the motivation, the generated results, why the first AMASS gate
+  correctly stopped training, and why the repaired AMASS gate now permits a
+  fair model comparison.
+- [visual-review-workflow.md](visual-review-workflow.md) is the checklist for
+  making the study's conceptual figures readable and keeping them distinct from
+  experimental evidence.
 - [proposal.md](../../../notes/latent-laterality/proposal.md) is the
   general-audience scientific case. It
   states the question and hypotheses, situates the work, audits current

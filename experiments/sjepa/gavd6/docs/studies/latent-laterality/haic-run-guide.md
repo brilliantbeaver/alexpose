@@ -1,21 +1,28 @@
 # Latent Laterality: ordered HAIC run guide
 
-The local synthetic gate is a code/mechanism check only. It does not authorize
-real SG-JEPA training. Run the real sequence gate first and stop unless its
-`gate_decision.json` sets `ready_for_sg_jepa=true`.
+The local synthetic gate is a code/mechanism check only. The real paired-AMASS
+v2 gate has already passed and authorizes the current seed-7 training run. Do
+not rerun that gate in place. A fresh run root must run the real sequence gate
+and stop unless its `gate_decision.json` sets `ready_for_sg_jepa=true`.
 
-## Inputs to supply
+## Inputs and prerequisites
+
+### Required for the current paired-AMASS v2 run
 
 - `GAVD6_ROOT`, `AMASS_EXTRACTED_ROOT`, `AMASS_RUN_ROOT`,
-  `AMASS_BODY_MODEL_ROOT`, `AMASS_SUBJECT_SPLITS`, and `GAVD_FULL_ROOT` from
-  the HAIC environment contract below.
+  `AMASS_BODY_MODEL_ROOT`, and `AMASS_SUBJECT_SPLITS` from the HAIC environment
+  contract below. The latter three are needed only if script 01 must rebuild
+  the neutral AMASS tensors.
 - The eligible AMASS inventory under `AMASS_RUN_ROOT/manifests`. Do not use the
   unrestricted inventory: the eligible inventory contains the 201 identities
   covered by the audited subject split.
-- A full-GAVD pose manifest with `pose_path`, `sequence_id`, `video_id`,
-  `split`, `fps`, `aspect_ratio`, and optional `condition`. Every source video
-  must occur in one split only.
 - Tensor/output roots with enough space.
+
+### Required only for the deferred GAVD/source-route screen
+
+- `GAVD_FULL_ROOT` and a full-GAVD pose manifest with `pose_path`,
+  `sequence_id`, `video_id`, `split`, `fps`, `aspect_ratio`, and optional
+  `condition`. Every source video must occur in one split only.
 
 The following variables are already part of the HAIC environment:
 
@@ -52,11 +59,28 @@ mkdir -p "$LATENT_LATERALITY_RUN_ROOT"
 ```
 
 `CODY_JEPA_ROOT`, `BABEL_ROOT`, `GAVD5TM_ROOT`, and the two swap-probe
-variables are not inputs to this study. In particular, `GAIT_PARITY_POSE_DIR`
-is the older fixed 96-sequence cache and is not a substitute for a full-GAVD
-pose manifest.
+variables are not inputs to the current paired-AMASS v2 run. In particular,
+`GAIT_PARITY_POSE_DIR` is the older fixed 96-sequence cache and is not a
+substitute for a full-GAVD pose manifest.
 
-### Status of `manifests/gavd`
+### AMASS source-rebuild preflight (only if script 01 is needed)
+
+Do not run these checks for the current seed-7 training path unless the shared
+neutral AMASS tensors are genuinely absent. They are the prerequisites for a
+fresh execution of script 01:
+
+```bash
+test -d "$GAVD6_ROOT"
+test -d "$AMASS_EXTRACTED_ROOT"
+test -f "$AMASS_INVENTORY"
+test -f "$AMASS_SUBJECT_SPLITS"
+test -f "$AMASS_BODY_MODEL_ROOT/smplh/male/model.npz"
+test -f "$AMASS_BODY_MODEL_ROOT/smplh/female/model.npz"
+test -f "$AMASS_BODY_MODEL_ROOT/dmpls/male/model.npz"
+test -f "$AMASS_BODY_MODEL_ROOT/dmpls/female/model.npz"
+```
+
+## Deferred GAVD prerequisites (not required for the current AMASS run)
 
 The checked-in GAVD index is internally consistent: it contains 1,874 unique
 annotated sequences over 348 unique YouTube videos and 458,116 annotated
@@ -90,155 +114,156 @@ The current foundation notebooks are locked to 96 sequences, and
 `scripts/data_preparation/extract_augmented_poses.py` handles only the separate
 augmented-normal cohort.
 
-Preflight the currently available inputs:
+For the deferred GAVD/source-route screen, also verify:
 
 ```bash
-test -d "$GAVD6_ROOT"
-test -d "$AMASS_EXTRACTED_ROOT"
-test -f "$AMASS_INVENTORY"
-test -f "$AMASS_SUBJECT_SPLITS"
-test -f "$AMASS_BODY_MODEL_ROOT/smplh/male/model.npz"
-test -f "$AMASS_BODY_MODEL_ROOT/smplh/female/model.npz"
-test -f "$AMASS_BODY_MODEL_ROOT/dmpls/male/model.npz"
-test -f "$AMASS_BODY_MODEL_ROOT/dmpls/female/model.npz"
 test -f "$GAVD_SEQUENCE_MANIFEST"
 test -f "$GAVD_VIDEO_MANIFEST"
 ```
 
-## Run the study through Slurm
+## Current execution order: paired AMASS v2
 
-Submit the study from the HAIC login node with the batch scripts in
+Submit jobs from the HAIC login node with the batch scripts in
 `slurm/latent-laterality`. Do not run the Python workloads directly on the
-login node. Each batch script imports the submitting shell environment, checks
-its inputs, changes to `GAVD6_ROOT`, and invokes the appropriate project entry
-point inside its allocation.
+login node. GPU jobs request one H100; manifest construction and the benchmark
+gate are CPU-only. Array jobs give each model its own allocation, exit status,
+and log.
 
-GPU jobs request one H100. Manifest construction and sequence benchmarks are
-CPU-only. Training matrices use Slurm arrays so every model gets an independent
-allocation, exit status, and log.
+This is the only current route for the AMASS SG-JEPA experiment:
 
-The original AMASS `gauge-seed7.csv` and `amass-benchmark-seed7` artifacts are
-diagnostics, not training inputs. They have a learnable global-chart label and
-their local swaps are solved exactly by the adjacent-frame continuity rule.
-Use the v2 scripts below for AMASS SG-JEPA. They write new paths and never
-replace those historical artifacts.
+| Order | Script | Current action | Purpose |
+| --- | --- | --- | --- |
+| Prerequisite | `01-convert-amass-neutral.sbatch` | **Already complete.** Run only if the neutral AMASS tensors or their manifest are genuinely absent. | Create the shared neutral Core11 tensors. |
+| Completed | `11-build-amass-gauge-v2-chart-paired.sbatch` | **Do not resubmit.** | Create the paired v2 corruption manifest. |
+| Completed | `12-run-amass-sequence-benchmark-v2.sbatch` | **Passed. Do not resubmit.** | Verify that the paired manifest is fair and leaves meaningful learning headroom. |
+| **Run now** | `13-train-amass-gauge-v2-seed7.sbatch` | Submit once as its declared three-task array. | Train correction-first, SG-JEPA, and the uniform-uncertainty control at seed 7. |
+| Then | `14-evaluate-amass-gauge-v2-seed7-validation.sbatch` | Submit only after every task in 13 succeeds. | Compare all three seed-7 runs on validation people only. |
+| Conditional | `15-train-amass-gauge-v2-confirmation.sbatch` | Submit only after manually reviewing 14. | Repeat correction-first and SG-JEPA at seeds 19 and 31. |
+| Last | `16-evaluate-amass-gauge-v2-confirmation-test.sbatch` | Submit only after every task in 15 succeeds. | Read the sealed test split once for all three seeds. |
 
-| Job | Runs | HAIC request |
-| --- | --- | --- |
-| `01-convert-amass-neutral.sbatch` | AMASS neutral Core11 conversion | 1 H100, 8 CPU, 64 GB, 24 h |
-| `02-build-amass-gauge-manifest.sbatch` | Seed-7 full-sequence gauge draws | 4 CPU, 16 GB, 4 h |
-| `03-run-amass-sequence-benchmark.sbatch` | Real AMASS benchmark gate | 8 CPU, 64 GB, 8 h |
-| `04-build-gavd-core11.sbatch` | Full-GAVD pose-to-Core11 adapter | 8 CPU, 64 GB, 8 h |
-| `05-source-screen-seed7.sbatch` | Six route/variant runs, array `0-5` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
-| `06-evaluate-source-transfer.sbatch` | Frozen validation readout over six checkpoints | 1 H100, 8 CPU, 64 GB, 8 h |
-| `07-build-selected-gauge-manifest.sbatch` | Gauge draws for the selected single-source route | 4 CPU, 16 GB, 4 h |
-| `08-run-selected-sequence-benchmark.sbatch` | Selected-route benchmark gate | 8 CPU, 64 GB, 8 h |
-| `09-train-gauge-seed7.sbatch` | Correction-first, SG-JEPA, uniform; array `0-2` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
-| `10-train-gauge-confirmation.sbatch` | Correction-first and SG-JEPA at seeds 19/31; array `0-3` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
-| `11-build-amass-gauge-v2-chart-paired.sbatch` | Exact chart-paired, gap-boundary AMASS draws | 4 CPU, 16 GB, 4 h |
-| `12-run-amass-sequence-benchmark-v2.sbatch` | v2 AMASS eligibility gate | 8 CPU, 64 GB, 8 h |
-| `13-train-amass-gauge-v2-seed7.sbatch` | v2 correction-first, SG-JEPA, uniform; array `0-2` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
-| `14-evaluate-amass-gauge-v2-seed7-validation.sbatch` | Development-only common readout | 1 H100, 8 CPU, 64 GB, 8 h |
-| `15-train-amass-gauge-v2-confirmation.sbatch` | v2 correction-first and SG-JEPA at 19/31; array `0-3` | 1 H100 per task, 8 CPU, 64 GB, 24 h |
-| `16-evaluate-amass-gauge-v2-confirmation-test.sbatch` | Sealed common test readout | 1 H100, 8 CPU, 64 GB, 8 h |
+Scripts `02` and `03` are the failed historical v1 AMASS diagnostic. Scripts
+`04` through `10` are a separate, future GAVD/source-route screen. Neither
+group is part of the approved AMASS v2 run below.
 
-The array task mappings are frozen as follows:
+### 0. Verify the completed v2 artifacts; do not rebuild them
 
-| Array | Task IDs |
+The current v2 manifest and gate already exist and passed. Scripts 11 and 12
+intentionally refuse to replace their existing manifest or non-empty output
+directory. Rebuilding either one in place would fail, and creating a different
+manifest would require a new gate before training.
+
+On HAIC, verify that the stored files are present and still match the passing
+gate before requesting GPUs:
+
+```bash
+GAUGE_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/gauge-seed7-v2-chart-paired.csv"
+GATE_DECISION="$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/gate_decision.json"
+
+test -f "$GAUGE_MANIFEST"
+test -f "$GATE_DECISION"
+jq -e '.ready_for_sg_jepa == true' "$GATE_DECISION"
+test "$(shasum -a 256 "$GAUGE_MANIFEST" | awk '{print $1}')" = \
+  "ffd0b358fadaacaa875aec886caa48c941b00de60e947be89d9aeb898493c125"
+```
+
+The passing record also reports `chart_pairing_verified: true`, 5,466 paired
+chart views, and 2,733 independent fitting/development source draws. It did
+not read the sealed test rows. A gate pass makes the training comparison fair;
+it does not predict that SG-JEPA will win.
+
+If these v2 artifacts are genuinely missing in a fresh run root, the rebuild
+order is `01` (only if needed) → `11` → `12`. Stop after 12 and inspect its
+decision before submitting 13. Do not use that rebuild recipe to overwrite the
+current approved artifacts.
+
+### 1. Run the seed-7 development comparison now
+
+Script 13 is a three-task array. Its task mapping is fixed:
+
+| Task | Model arm |
 | --- | --- |
-| Source screen | `0` AMASS standard; `1` GAVD standard; `2` staged standard; `3` AMASS equivariant; `4` GAVD equivariant; `5` staged equivariant |
-| Decisive seed 7 | `0` correction-first; `1` SG-JEPA; `2` uniform posterior |
-| Confirmation | `0` correction-first seed 19; `1` SG-JEPA seed 19; `2` correction-first seed 31; `3` SG-JEPA seed 31 |
+| `0` | Correction-first baseline |
+| `1` | SG-JEPA |
+| `2` | Uniform-uncertainty control |
+
+It rechecks both the gate decision and the manifest fingerprint itself. Submit
+it once:
+
+```bash
+cd "$GAVD6_ROOT"
+j13=$(sbatch --parsable --export=ALL slurm/latent-laterality/13-train-amass-gauge-v2-seed7.sbatch)
+printf 'Seed-7 training array: %s\n' "$j13"
+```
+
+### 2. Evaluate seed 7 on validation people only
+
+Wait until **all three** tasks in `j13` have succeeded. Then submit 14 with an
+`afterok` dependency; it refuses to run if any expected `run_result.json` is
+missing. This evaluation uses the validation split, not the test split.
+
+```bash
+j14=$(sbatch --parsable --export=ALL --dependency="afterok:$j13" \
+  slurm/latent-laterality/14-evaluate-amass-gauge-v2-seed7-validation.sbatch)
+printf 'Seed-7 validation readout: %s\n' "$j14"
+```
+
+Review `amass-gauge-v2-seed7-validation/gauge_readout_summary.csv` before any
+further submission. Advance only if SG-JEPA improves the identity-macro
+side-sensitive score over correction-first without a material even-channel
+loss, and if the uniform-uncertainty control does not reproduce the gain.
+
+### 3. Confirm only a development-supported result
+
+Script 15 does not automatically interpret the validation result. Do **not**
+submit it merely because script 14 completed. Submit it only after the manual
+decision in Step 2 supports the pre-set SG-JEPA contrast.
+
+Its four tasks are fixed:
+
+| Task | Model arm and seed |
+| --- | --- |
+| `0` | Correction-first, seed 19 |
+| `1` | SG-JEPA, seed 19 |
+| `2` | Correction-first, seed 31 |
+| `3` | SG-JEPA, seed 31 |
+
+```bash
+j15=$(sbatch --parsable --export=ALL slurm/latent-laterality/15-train-amass-gauge-v2-confirmation.sbatch)
+printf 'Confirmation training array: %s\n' "$j15"
+```
+
+### 4. Read the sealed test split once
+
+Script 16 is the only step in this path that evaluates AMASS test rows. Wait
+for all four tasks in `j15` to succeed, then submit it once. It evaluates the
+six required completed runs: correction-first and SG-JEPA at seeds 7, 19, and
+31.
+
+```bash
+j16=$(sbatch --parsable --export=ALL --dependency="afterok:$j15" \
+  slurm/latent-laterality/16-evaluate-amass-gauge-v2-confirmation-test.sbatch)
+printf 'Sealed confirmation test: %s\n' "$j16"
+```
+
+The final outputs are `gauge_readout_summary.csv`,
+`gauge_readout_predictions.csv`, `gauge_path_metrics.csv`, and
+`evaluation_contract.json` under `amass-gauge-v2-confirmation-test`. The final
+claim requires the same SG-JEPA direction at seeds 7, 19, and 31. It remains an
+unanchored controlled-robustness claim: the score does not name an anatomical
+left or right side.
 
 Array logs use `%A_%a`, so each task has separate standard-output and error
 files keyed by the parent job ID and task ID.
 
-## AMASS v2 repair workflow — use this for SG-JEPA
-
-The v2 generator fixes the two empirical defects in the current AMASS gate.
-For each source draw it emits `(z, chart=0)` and `(Pz, chart=1)`, with the
-same path, sensor action, and boundary nuisance. The two rows produce exactly
-the same observed coordinates and validity masks while retaining opposite chart
-labels. The benchmark verifies that equality on the loaded arrays, so an
-absolute-chart probe cannot exploit participant, joint-slot, or split
-imbalance. The pair is counted once for path/oracle estimands and the second
-view is not a second training exposure.
-
-It also places four fixed one-frame validity gaps at independently sampled
-boundaries. Thus only a random subset of true switches is obscured, while the
-gap pattern itself is independent of switching and cannot serve as a mask-only
-detector. This removes the v1 one-frame discontinuity where a gap coincides
-with an event, while retaining motion on both sides of every gap. The policy is
-frozen in the CSV and replayed by training/evaluation; do not tune its width
-after seeing the gate.
-
-If neutral AMASS tensors do not already exist, first run
-`01-convert-amass-neutral.sbatch`. Then build and gate v2:
-
-```bash
-cd "$GAVD6_ROOT"
-j11=$(sbatch --parsable --export=ALL slurm/latent-laterality/11-build-amass-gauge-v2-chart-paired.sbatch)
-j12=$(sbatch --parsable --export=ALL --dependency="afterok:$j11" slurm/latent-laterality/12-run-amass-sequence-benchmark-v2.sbatch)
-```
-
-`j12` exits 2 when the scientific eligibility gate fails; that is an intended
-stop, even though it writes all diagnostics. Inspect:
-
-```bash
-cat "$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/gate_decision.json"
-cat "$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/effective_config.json"
-```
-
-Continue only if `ready_for_sg_jepa` is true. In particular, verify that the
-effective config reports `chart_pairing_verified: true`, 6,152 chart views and
-3,076 independent source draws for the present AMASS manifest. A pass makes
-training an honest test; it does not guarantee that SG-JEPA will win.
-
-Submit the three matched seed-7 arms manually after that check (the training
-entry point also rejects a gate produced from another manifest hash):
-
-```bash
-j13=$(sbatch --parsable --export=ALL slurm/latent-laterality/13-train-amass-gauge-v2-seed7.sbatch)
-```
-
-After every array task has finished successfully, run the development-only
-common readout. It fits the fixed linear readout on train identities and reports
-identity-macro unanchored odd-magnitude and even NMAE on validation identities;
-it does not load test rows.
-
-```bash
-j14=$(sbatch --parsable --export=ALL --dependency="afterok:$j13" slurm/latent-laterality/14-evaluate-amass-gauge-v2-seed7-validation.sbatch)
-```
-
-Review `amass-gauge-v2-seed7-validation/gauge_readout_summary.csv`. Advance
-only if SG-JEPA beats correction-first on odd-orbit NMAE without a material
-even-channel loss, and if the uniform-posterior ablation does not match that
-improvement. Otherwise report the simpler result and do not run confirmation.
-
-If it advances, train the prespecified seeds 19 and 31, then run the sole
-test-reading job. The final readout includes seed 7 as well, so all three seeds
-are evaluated through one common test contract.
-
-```bash
-j15=$(sbatch --parsable --export=ALL slurm/latent-laterality/15-train-amass-gauge-v2-confirmation.sbatch)
-j16=$(sbatch --parsable --export=ALL --dependency="afterok:$j15" slurm/latent-laterality/16-evaluate-amass-gauge-v2-confirmation-test.sbatch)
-```
-
-The test outputs are `gauge_readout_summary.csv`,
-`gauge_readout_predictions.csv`, `gauge_path_metrics.csv`, and
-`evaluation_contract.json` under `amass-gauge-v2-confirmation-test`. The final
-claim needs the same SG-JEPA direction at seeds 7, 19, and 31. It must remain
-an unanchored controlled-robustness claim: the odd target is an orbit magnitude,
-not a named anatomical side.
-
-## Historical v1 AMASS diagnostic workflow
+## Historical v1 AMASS diagnostic (do not run for v2)
 
 The conversion job uses the gauge-neutral traveling-only policy. It rejects a
 sequence when forward direction cannot be estimated from pelvis trajectory and
 never uses named left/right joints to select or validate orientation.
 
-This chain reproduces the v1 diagnostic only. Its result must not authorize
-v2 SG-JEPA training:
+This chain reproduces the v1 diagnostic only. Its recorded gate failed, and it
+must not authorize v2 SG-JEPA training. Do not submit scripts 02 or 03 as part
+of the current run; keep them only for historical reproduction:
 
 ```bash
 cd "$GAVD6_ROOT"
@@ -272,14 +297,10 @@ Inspect the decision before continuing:
 cat "$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7/gate_decision.json"
 ```
 
-Continue only when it contains `"ready_for_sg_jepa": true`.
+The historical decision is `ready_for_sg_jepa: false`. Its output documents
+why the v2 paired benchmark was needed; it is not a route to current training.
 
-Stop if mask-only path-NLL improvement exceeds 1%, the absolute-chart AUROC
-upper 95% bound is at least 0.55, or oracle odd error improves on continuity by
-less than 5%. If oracle is within 5% of continuity, continuity is the result;
-do not train SG-JEPA.
-
-## 2. Build GAVD Core11 and screen the three data routes
+## Separate GAVD/source-route screen (not part of the current AMASS run)
 
 This stage cannot start until the separate full-corpus pose extraction has
 produced `GAVD_POSE_MANIFEST`. Verify that prerequisite, then submit the Core11
@@ -320,7 +341,7 @@ variance in `source_transfer_summary.csv`. Do not use self-KL or GAVD condition
 accuracy for selection. If raw coordinates or the random encoder win, report
 that result and stop representation expansion.
 
-## 3. Gate the selected route and run the decisive comparison
+### If the GAVD/source-route screen is intentionally pursued
 
 The current decisive-training entry point is safe for the `amass-only` and
 `gavd-only` selections. Do **not** submit a staged `amass-to-gavd` decisive run
@@ -403,7 +424,7 @@ Use Slurm to inspect pending/running work and accounting results:
 
 ```bash
 squeue --me
-sacct -j "$j1,$j2,$j3" --format=JobID,JobName%30,State,ExitCode,Elapsed,MaxRSS
+sacct -j "$j13" --format=JobID,JobName%30,State,ExitCode,Elapsed,MaxRSS
 ```
 
 Standard output and error files are written in the submission directory as
@@ -412,5 +433,5 @@ Standard output and error files are written in the submission directory as
 All output guards are conservative: a job refuses to replace a completed
 manifest or write into a non-empty experiment directory. The AMASS converter is
 the exception because it has its own compatibility checks and safely resumes
-valid existing tensors. To rerun another experiment, choose a new run root or
-deliberately archive/remove only the exact prior output after reviewing it.
+valid existing tensors. To repeat an experiment, use a new run root and retain
+the approved manifest and gate as an immutable record.
