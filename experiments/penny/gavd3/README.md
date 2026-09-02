@@ -23,6 +23,10 @@ GAVD supplies monocular video, so MediaPipe depth is relative and is not equival
 |04_pretrain_sjepa_on_normal.ipynb|Clean and normalize poses, build joint-time patches, train only on normal gait, update the target encoder by EMA, and monitor collapse diagnostics.|
 |05_inspect_latent_motion.ipynb|Measure predicted-target similarity, retrieve nearest gait clips, and inspect distance from a normal reference.|
 |06_capstone_health_condition_classifiers.ipynb|Freeze the target encoder, use validity-masked pooling, train on all 96 sequences, run four one-versus-normal Random Forests, reproduce the 68-row exp5 split, and audit leakage plus pose-detector missingness.|
+|07_source_video_identity_audit.ipynb|Probe how much of the frozen latents is source-video identity, run source-grouped evaluation with correct majority controls, and measure the sequence-versus-source generalization gap.|
+|08_gait_parameter_probing.ipynb|Compute gait parameters from the raw cached poses and probe the frozen 384-d latents for speed, cadence, asymmetry, excursion, sway, and gait phase against raw-coordinate and missingness baselines.|
+|09_mask_geometry_ablation.ipynb|Train four mask samplers (neurologic-10, random-10, motion-aware-10, full-body-33) under matched compute and compare downstream classifiers, collapse diagnostics, and a cadence probe.|
+|10_latent_world_model_forward_prediction.ipynb|Replace infilling with causal future prediction (world-model variant), evaluate per-horizon loss against a phase-bin baseline, and check out-of-distribution forecast error on abnormal clips.|
 
 Each notebook repeats the code it needs. There is no runtime helper module and no hidden import from a previous notebook. Later notebooks require the checkpoint or pose artifacts produced by earlier notebooks, and they fail clearly when a real artifact is missing.
 

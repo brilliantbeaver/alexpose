@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">The three questions you can ask about the hidden joints</title>
+  <desc id="d3">Beginner concept picture. A walking stick figure has part of its lower body covered by a hand. Three speech bubbles show the three kinds of question you can ask about the hidden part. Bubble one says guess the exact positions, labelled T1 raw coordinates. Bubble two says guess how they are moving, labelled T2 one-frame motion. Bubble three says guess a short fingerprint of them, labelled T3 and T4 latent targets. The point is that the hand and the stick figure never change; only the question you pick changes, and that single choice is the whole experiment. Folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .bub{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:18px;fill:#0f2440;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Same skeleton, same hand: only the question changes</text>
+  <text x="48" y="88" class="s">The one thing this study varies is which question we make the model answer about the hidden joints.</text>
+
+  <!-- ============ LEFT: stick figure with a hand covering the legs ============ -->
+  <!-- card: x 48..452, y 112..612 -->
+  <rect x="48" y="112" width="404" height="500" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">A walking stick figure</text>
+  <text x="78" y="172" class="s">The model sees dots, not video. Some joints are hidden.</text>
+
+  <!-- stick figure, centred around x=259 -->
+  <!-- head -->
+  <circle cx="259" cy="230" r="26" fill="none" stroke="#20364e" stroke-width="4"/>
+  <!-- torso -->
+  <line x1="259" y1="256" x2="259" y2="390" stroke="#20364e" stroke-width="4"/>
+  <!-- shoulders -->
+  <line x1="205" y1="290" x2="313" y2="290" stroke="#20364e" stroke-width="4"/>
+  <circle cx="205" cy="290" r="6" fill="#2f6f99"/>
+  <circle cx="313" cy="290" r="6" fill="#2f6f99"/>
+  <!-- arms -->
+  <line x1="205" y1="290" x2="180" y2="360" stroke="#20364e" stroke-width="4"/>
+  <line x1="313" y1="290" x2="340" y2="360" stroke="#20364e" stroke-width="4"/>
+  <!-- hips -->
+  <line x1="228" y1="390" x2="290" y2="390" stroke="#20364e" stroke-width="4"/>
+  <circle cx="228" cy="390" r="6" fill="#2f6f99"/>
+  <circle cx="290" cy="390" r="6" fill="#2f6f99"/>
+  <!-- legs (a mid-stride pose) -->
+  <line x1="228" y1="390" x2="210" y2="470" stroke="#20364e" stroke-width="4"/>
+  <line x1="210" y1="470" x2="196" y2="540" stroke="#20364e" stroke-width="4"/>
+  <circle cx="210" cy="470" r="6" fill="#8a6fb3"/>
+  <circle cx="196" cy="540" r="6" fill="#8a6fb3"/>
+  <line x1="290" y1="390" x2="312" y2="470" stroke="#20364e" stroke-width="4"/>
+  <line x1="312" y1="470" x2="330" y2="540" stroke="#20364e" stroke-width="4"/>
+  <circle cx="312" cy="470" r="6" fill="#8a6fb3"/>
+  <circle cx="330" cy="540" r="6" fill="#8a6fb3"/>
+
+  <!-- hand covering the lower body -->
+  <ellipse cx="263" cy="500" rx="120" ry="80" fill="#e07a4b" opacity="0.30"/>
+  <path d="M195,560 q-6,-70 12,-96 q10,-14 16,4 l4,40 l6,-58 q3,-16 15,-14 q10,2 9,18 l-2,44 l10,-52 q4,-16 16,-12 q9,3 7,18 l-6,46 l14,-38 q6,-14 16,-8 q8,5 3,18 l-20,58 q-8,24 -30,30 q-40,10 -74,-8 q-14,-8 -16,-30 z" fill="#e07a4b" stroke="#a44c26" stroke-width="2.5"/>
+  <text x="263" y="600" class="b" text-anchor="middle" fill="#a44c26">hand hides the lower-body joints</text>
+
+  <!-- ============ RIGHT: three question bubbles, >=56px vertical gap between bubbles ============ -->
+  <!-- Bubble 1: T1 raw coordinates. y 124..248 -->
+  <rect x="510" y="124" width="642" height="124" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <path d="M510,172 l-26,14 l26,14 z" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="538" y="166" class="bub">Question 1: "Guess the exact positions."</text>
+  <text x="538" y="196" class="b">Predict where each hidden joint is (its x, y, z coordinates).</text>
+  <text x="538" y="222" class="s">This is the T1 raw-coordinates target: the plainest bet.</text>
+
+  <!-- Bubble 2: T2 one-frame motion. y 304..428 (gap 56 above) -->
+  <rect x="510" y="304" width="642" height="124" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <path d="M510,352 l-26,14 l26,14 z" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="538" y="346" class="bub">Question 2: "Guess how they are moving."</text>
+  <text x="538" y="376" class="b">Predict each hidden joint's one-frame motion (its velocity).</text>
+  <text x="538" y="402" class="s">This is the T2 one-frame-motion target (MAMP-style).</text>
+
+  <!-- Bubble 3: T3 and T4 latent targets. y 484..624 (gap 56 above) -->
+  <rect x="510" y="484" width="642" height="140" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <path d="M510,540 l-26,14 l26,14 z" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="538" y="518" class="bub">Question 3: "Guess a short fingerprint of them."</text>
+  <text x="538" y="548" class="b">Predict a compressed summary (a latent) a teacher copy computed.</text>
+  <text x="538" y="576" class="s">This is the T3 centered-sharpened latent (current S-JEPA) and</text>
+  <text x="538" y="600" class="s">the T4 normalized latent regression (V-JEPA-style) target.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="658" class="s">Beginner concept picture, not measured results. The hand and skeleton never change; only the question does. Labels are dataset annotations.</text>
+</svg>

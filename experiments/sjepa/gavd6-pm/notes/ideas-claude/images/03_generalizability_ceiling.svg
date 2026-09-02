@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="tG dG">
+  <title id="tG">What can earn a Generalizability 5 versus what stays capped near 3</title>
+  <desc id="dG">Illustrative two-column figure for the Generalizability axis. The left green column, headed "Can reach 5 (a real external dataset backs it)", holds two cards. Card one: PD variability is backed by PhysioNet Gait-in-PD (gaitpdb, DOI 10.13026/C24H3N), which is force-plate and IMU data, not skeletons, so it confirms the biomarker at the label level (cross-modal, not a BlazePose skeleton transfer). Card two: cross-view invariance is backed by CASIA-B, OU-MVLP-Pose, GREW, and Gait3D, which are large, non-clinical, multi-view pose cohorts. The right amber column, headed "Capped near 3 (no matching external skeleton dataset exists)", holds one card: cerebral-palsy-specific and myopathy-specific claims have no participant-disjoint public skeleton cohort, so each stays an internal, transductive result. All numbers are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:30px;fill:#0f2440;}
+      .sub{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .ban{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#ffffff;}
+      .ct{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:15px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .pillg{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:14px;fill:#ffffff;}
+      .foot{font-family:Arial,Helvetica,sans-serif;font-size:13px;fill:#5c6f84;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" fill="#f7f5ef"/>
+
+  <text x="48" y="52" class="h">What earns a Generalizability 5, and what is capped near 3</text>
+  <text x="48" y="78" class="sub">The rubric only lets a claim reach 5 when a real external cohort backs it. With no matching external skeleton cohort, a claim stays near 3. All numbers transductive.</text>
+
+  <!-- ============ LEFT COLUMN: can reach 5 (green) ============ -->
+  <!-- banner -->
+  <rect x="48" y="100" width="556" height="52" rx="16" fill="#5f9e7e" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text x="72" y="133" class="ban">Can reach 5 (a real external dataset backs it)</text>
+
+  <!-- card A: PD variability -->
+  <rect x="48" y="168" width="556" height="150" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text x="72" y="200" class="ct">PD variability</text>
+  <rect x="72" y="212" width="252" height="22" rx="11" fill="#5f9e7e"/>
+  <text x="84" y="228" class="pillg">PhysioNet Gait-in-PD (gaitpdb)</text>
+  <text x="72" y="256" class="b">Force-plate and IMU data, not skeletons, so it confirms the</text>
+  <text x="72" y="277" class="b">variability biomarker at the label level (cross-modal), not a</text>
+  <text x="72" y="298" class="b">BlazePose skeleton transfer. DOI 10.13026/C24H3N.</text>
+
+  <!-- card B: cross-view invariance -->
+  <rect x="48" y="334" width="556" height="150" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text x="72" y="366" class="ct">Cross-view invariance</text>
+  <rect x="72" y="378" width="356" height="22" rx="11" fill="#5f9e7e"/>
+  <text x="84" y="394" class="pillg">CASIA-B, OU-MVLP-Pose, GREW, Gait3D</text>
+  <text x="72" y="422" class="b">Large, non-clinical, multi-view pose cohorts. A skeleton can</text>
+  <text x="72" y="443" class="b">be tested on people it never saw, from angles it never saw,</text>
+  <text x="72" y="464" class="b">so the claim can transfer beyond the tiny internal cohort.</text>
+
+  <!-- ============ RIGHT COLUMN: capped near 3 (orange/amber) ============ -->
+  <!-- banner (two lines to fit the full heading) -->
+  <rect x="628" y="100" width="524" height="52" rx="16" fill="#e07a4b" stroke="#e07a4b" stroke-width="1.75"/>
+  <text x="652" y="124" class="ban" font-size="18">Capped near 3 (no matching</text>
+  <text x="652" y="144" class="ban" font-size="18">external skeleton dataset exists)</text>
+
+  <!-- card C: CP and myopathy -->
+  <rect x="628" y="168" width="524" height="316" rx="16" fill="#fbe9de" stroke="#e07a4b" stroke-width="1.75"/>
+  <text x="652" y="200" class="ct">Cerebral-palsy-specific and</text>
+  <text x="652" y="224" class="ct">myopathy-specific claims</text>
+
+  <rect x="652" y="240" width="356" height="22" rx="11" fill="#e07a4b"/>
+  <text x="664" y="256" class="pillg">No participant-disjoint skeleton cohort</text>
+
+  <text x="652" y="290" class="b">No public skeleton dataset exists with different people for</text>
+  <text x="652" y="311" class="b">either condition. There is nothing external to test on, so</text>
+  <text x="652" y="332" class="b">the result cannot leave the training set.</text>
+
+  <text x="652" y="366" class="b">It stays an internal, transductive result: the frozen encoder</text>
+  <text x="652" y="387" class="b">already saw every clip it is scored on, so the score shows</text>
+  <text x="652" y="408" class="b">separability on seen data, not transfer to new people.</text>
+
+  <text x="652" y="442" class="s">This honest limit is stated on every relevant item. The</text>
+  <text x="652" y="461" class="s">neuroscience defines the target, it does not lift the ceiling.</text>
+
+  <!-- Footer -->
+  <text x="48" y="520" class="foot">Illustrative. All numbers transductive. Folder labels are dataset annotations, not diagnoses. Rubric: Generalizability weight 0.25; a 5 needs a real external cohort.</text>
+</svg>

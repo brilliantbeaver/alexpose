@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Paper-aligned S-JEPA core training graph</title>
+  <desc id="desc">A full skeleton clip splits into a warm-colored student path and a green teacher path. Solid arrows carry data left to right. A dashed vertical arrow updates the teacher encoder by exponential moving average. The prediction and teacher target meet at the latent cross-entropy loss.</desc>
+  <defs>
+    <marker id="student-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M1 1L7 4L1 7" fill="none" stroke="#b45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="teacher-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M1 1L7 4L1 7" fill="none" stroke="#287557" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ema-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M1 1L7 4L1 7" fill="none" stroke="#4f46e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0f172a" flood-opacity=".10"/>
+    </filter>
+    <style>
+      .heading{font:700 30px Inter,Arial,Helvetica,sans-serif;fill:#0f172a}
+      .subtitle{font:15px Inter,Arial,Helvetica,sans-serif;fill:#64748b}
+      .lane-title{font:700 14px Inter,Arial,Helvetica,sans-serif;letter-spacing:.5px}
+      .card-title{font:700 17px Inter,Arial,Helvetica,sans-serif;fill:#172033}
+      .card-body{font:14px Inter,Arial,Helvetica,sans-serif;fill:#526277}
+      .source-title{font:700 19px Inter,Arial,Helvetica,sans-serif;fill:#172033}
+      .loss-title{font:700 17px Inter,Arial,Helvetica,sans-serif;fill:#ffffff}
+      .loss-body{font:13px Inter,Arial,Helvetica,sans-serif;fill:#dbeafe}
+      .flow-label{font:700 12px Inter,Arial,Helvetica,sans-serif}
+      .legend{font:13px Inter,Arial,Helvetica,sans-serif;fill:#64748b}
+      .student-line{stroke:#b45309;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#student-arrow)}
+      .teacher-line{stroke:#287557;stroke-width:2.25;fill:none;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#teacher-arrow)}
+      .ema-line{stroke:#4f46e5;stroke-width:2.25;stroke-dasharray:7 7;fill:none;stroke-linecap:round;marker-end:url(#ema-arrow)}
+      .student-card{fill:#fffaf5;stroke:#d97706;stroke-width:1.6}
+      .teacher-card{fill:#f7fcf9;stroke:#3d8b6c;stroke-width:1.6}
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#f8fafc"/>
+
+  <text x="48" y="54" class="heading">Predict missing joint representations, not coordinates</text>
+  <text x="48" y="82" class="subtitle">Follow the two color-coded paths from one clip to one latent learning objective.</text>
+
+  <!-- Swimlanes -->
+  <rect x="204" y="108" width="952" height="218" rx="24" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+  <rect x="204" y="390" width="952" height="218" rx="24" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+
+  <rect x="224" y="126" width="132" height="28" rx="14" fill="#ffedd5"/>
+  <circle cx="242" cy="140" r="5" fill="#b45309"/>
+  <text x="254" y="145" class="lane-title" fill="#9a4708">STUDENT PATH</text>
+
+  <rect x="224" y="408" width="132" height="28" rx="14" fill="#dcfce7"/>
+  <circle cx="242" cy="422" r="5" fill="#287557"/>
+  <text x="254" y="427" class="lane-title" fill="#236247">TEACHER PATH</text>
+
+  <!-- Shared source -->
+  <rect x="44" y="278" width="132" height="148" rx="20" fill="#ffffff" stroke="#94a3b8" stroke-width="1.6" filter="url(#shadow)"/>
+  <rect x="62" y="298" width="36" height="28" rx="6" fill="#e2e8f0"/>
+  <path d="M69 305h22M69 312h22M69 319h14" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+  <text x="62" y="354" class="source-title">Full clip</text>
+  <text x="62" y="380" class="card-body">T × 33 × 3</text>
+  <text x="62" y="402" class="card-body">same source</text>
+
+  <!-- Explicit split junction -->
+  <path d="M176 352H190" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="190" cy="352" r="6" fill="#ffffff" stroke="#475569" stroke-width="3"/>
+  <path d="M190 346V227H226" class="student-line"/>
+  <path d="M190 358V499H226" class="teacher-line"/>
+  <text x="200" y="292" class="flow-label" fill="#b45309">transformed view</text>
+  <text x="200" y="374" class="flow-label" fill="#287557">full target</text>
+
+  <!-- Student data path -->
+  <rect x="232" y="174" width="150" height="106" rx="16" class="student-card" filter="url(#shadow)"/>
+  <text x="252" y="210" class="card-title">Geometry view</text>
+  <text x="252" y="238" class="card-body">one transform</text>
+  <text x="252" y="260" class="card-body">per clip</text>
+
+  <path d="M382 227H414" class="student-line"/>
+
+  <rect x="420" y="174" width="150" height="106" rx="16" class="student-card" filter="url(#shadow)"/>
+  <text x="440" y="206" class="card-title">Choose + drop</text>
+  <text x="440" y="228" class="card-title">targets</text>
+  <text x="440" y="254" class="card-body">12 landmark IDs</text>
+
+  <path d="M570 227H602" class="student-line"/>
+
+  <rect x="608" y="174" width="150" height="106" rx="16" class="student-card" filter="url(#shadow)"/>
+  <text x="628" y="210" class="card-title">View encoder</text>
+  <text x="628" y="238" class="card-body">visible tokens</text>
+  <text x="628" y="260" class="card-body">only</text>
+
+  <path d="M758 227H790" class="student-line"/>
+
+  <rect x="796" y="174" width="150" height="106" rx="16" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6" filter="url(#shadow)"/>
+  <text x="816" y="210" class="card-title">Predictor</text>
+  <text x="816" y="238" class="card-body">mask tokens</text>
+  <text x="816" y="260" class="card-body">+ positions</text>
+
+  <!-- Teacher data path -->
+  <rect x="232" y="446" width="150" height="106" rx="16" class="teacher-card" filter="url(#shadow)"/>
+  <text x="252" y="482" class="card-title">Full target</text>
+  <text x="252" y="510" class="card-body">no input</text>
+  <text x="252" y="532" class="card-body">masking</text>
+
+  <path d="M382 499H602" class="teacher-line"/>
+  <text x="448" y="486" class="flow-label" fill="#236247">all tokens</text>
+
+  <rect x="608" y="446" width="150" height="106" rx="16" class="teacher-card" filter="url(#shadow)"/>
+  <text x="628" y="478" class="card-title">EMA target</text>
+  <text x="628" y="500" class="card-title">encoder</text>
+  <text x="628" y="528" class="card-body">full attention</text>
+
+  <path d="M758 499H790" class="teacher-line"/>
+
+  <rect x="796" y="446" width="150" height="106" rx="16" class="teacher-card" filter="url(#shadow)"/>
+  <text x="816" y="482" class="card-title">Gather outputs</text>
+  <text x="816" y="510" class="card-body">same target</text>
+  <text x="816" y="532" class="card-body">positions</text>
+
+  <!-- Parameter update is visually distinct from data flow -->
+  <path d="M683 280V440" class="ema-line"/>
+  <rect x="696" y="340" width="96" height="26" rx="13" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text x="710" y="358" class="flow-label" fill="#4f46e5">EMA update</text>
+
+  <!-- Separate loss ports prevent the two inputs from visually merging -->
+  <path d="M946 227H974V326H1018" class="student-line"/>
+  <text x="960" y="252" class="flow-label" fill="#9a4708">prediction</text>
+
+  <path d="M946 499H974V374H1018" class="teacher-line"/>
+  <text x="986" y="488" class="flow-label" fill="#236247">target</text>
+
+  <rect x="1024" y="298" width="112" height="104" rx="18" fill="#172554" filter="url(#shadow)"/>
+  <text x="1048" y="338" class="loss-title">Latent CE</text>
+  <path d="M1048 351H1112" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1042" y="378" class="loss-body">compare only</text>
+  <text x="1042" y="395" class="loss-body">target positions</text>
+
+  <!-- Legend and takeaway -->
+  <line x1="48" y1="652" x2="80" y2="652" stroke="#b45309" stroke-width="3" stroke-linecap="round"/>
+  <text x="90" y="657" class="legend">student data</text>
+  <line x1="200" y1="652" x2="232" y2="652" stroke="#287557" stroke-width="3" stroke-linecap="round"/>
+  <text x="242" y="657" class="legend">teacher data</text>
+  <line x1="358" y1="652" x2="390" y2="652" stroke="#4f46e5" stroke-width="3" stroke-dasharray="7 6" stroke-linecap="round"/>
+  <text x="400" y="657" class="legend">parameter update</text>
+  <text x="48" y="688" class="legend">Only the EMA target encoder is retained for downstream representation learning.</text>
+</svg>

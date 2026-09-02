@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Mechanism-grouped error decomposition: per-token relative error on the lower-body skeleton and per-channel error on a held-out abnormal source</title>
+  <desc id="d2">Illustrative expected-shape figure of the mechanism-channel error decomposition for a normal-only gait world model. On the left a desaturated grey lower-body stick skeleton carries warm halos whose size shows per-token relative error, grouped into three labeled channels: asymmetry (left-vs-right lower limb), rhythm (temporal), and posture (pelvis and hip). On the right a three-bar chart shows per-channel relative error on a held-out abnormal source, with a fourth near-tautology control bar for error beyond the injected coordinate, which stays low to show the signal is not merely echoing the perturbed coordinate. All numbers are illustrative and transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Mechanism-grouped error decomposition</text>
+  <text x="48" y="88" class="s">Illustrative expected shape, not measured results. Halo size is per-token relative error. Transductive; folder labels are dataset annotations.</text>
+
+  <!-- ============ LEFT card: skeleton with per-token halos ============ -->
+  <!-- card: x 48..576 (width 528), y 112..636 (height 524) -->
+  <rect x="48" y="112" width="528" height="524" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Per-token relative error on the skeleton</text>
+
+  <!-- channel band labels (right side, in clear space) -->
+  <text x="80" y="196" class="s" fill="#5c6f84">Bigger warm halo means more surprise at that joint.</text>
+
+  <!-- POSTURE region marker: pelvis + trunk anchors, top -->
+  <!-- bones (grey) -->
+  <g stroke="#c4cdd8" stroke-width="5" stroke-linecap="round" fill="none">
+    <!-- trunk shoulders line -->
+    <line x1="252" y1="248" x2="360" y2="248"/>
+    <!-- shoulder to hip left -->
+    <line x1="252" y1="248" x2="266" y2="360"/>
+    <!-- shoulder to hip right -->
+    <line x1="360" y1="248" x2="346" y2="360"/>
+    <!-- pelvis line hips -->
+    <line x1="266" y1="360" x2="346" y2="360"/>
+    <!-- left leg: hip-knee-ankle -->
+    <line x1="266" y1="360" x2="230" y2="470"/>
+    <line x1="230" y1="470" x2="238" y2="576"/>
+    <!-- right leg: hip-knee-ankle -->
+    <line x1="346" y1="360" x2="382" y2="470"/>
+    <line x1="382" y1="470" x2="374" y2="576"/>
+  </g>
+
+  <!-- warm halos (per-token relative error): bigger = more surprise, on the injured left leg -->
+  <!-- left knee: large halo (lateralized deficit) -->
+  <circle cx="230" cy="470" r="30" fill="#e07a4b" fill-opacity="0.28"/>
+  <circle cx="230" cy="470" r="19" fill="#e07a4b" fill-opacity="0.30"/>
+  <!-- left ankle: medium halo -->
+  <circle cx="238" cy="576" r="20" fill="#e07a4b" fill-opacity="0.28"/>
+  <!-- left hip: small halo -->
+  <circle cx="266" cy="360" r="13" fill="#e07a4b" fill-opacity="0.26"/>
+
+  <!-- joint nodes (drawn on top of bones and halos) -->
+  <g fill="#c4cdd8" stroke="#20364e" stroke-width="1.75">
+    <circle cx="252" cy="248" r="9"/>
+    <circle cx="360" cy="248" r="9"/>
+    <circle cx="266" cy="360" r="9"/>
+    <circle cx="346" cy="360" r="9"/>
+    <circle cx="230" cy="470" r="9"/>
+    <circle cx="382" cy="470" r="9"/>
+    <circle cx="238" cy="576" r="9"/>
+    <circle cx="374" cy="576" r="9"/>
+  </g>
+
+  <!-- channel bracket labels in clear space (right of skeleton) -->
+  <!-- posture bracket -->
+  <line x1="408" y1="248" x2="408" y2="360" stroke="#2f6f99" stroke-width="2"/>
+  <line x1="408" y1="248" x2="400" y2="248" stroke="#2f6f99" stroke-width="2"/>
+  <line x1="408" y1="360" x2="400" y2="360" stroke="#2f6f99" stroke-width="2"/>
+  <text x="422" y="299" class="b" fill="#2f6f99">Posture</text>
+  <text x="422" y="321" class="s">pelvis, trunk</text>
+
+  <!-- asymmetry bracket -->
+  <line x1="408" y1="378" x2="408" y2="576" stroke="#a44c26" stroke-width="2"/>
+  <line x1="408" y1="378" x2="400" y2="378" stroke="#a44c26" stroke-width="2"/>
+  <line x1="408" y1="576" x2="400" y2="576" stroke="#a44c26" stroke-width="2"/>
+  <text x="422" y="470" class="b" fill="#a44c26">Asymmetry</text>
+  <text x="422" y="492" class="s">left vs right limb</text>
+
+  <!-- rhythm note (temporal, not spatial) -->
+  <text x="80" y="612" class="s">Rhythm channel is temporal (cycle-to-cycle timing), exploratory.</text>
+
+  <!-- ============ RIGHT card: 3+1 bar chart ============ -->
+  <!-- card: x 632..1152 (width 520), y 112..636 (height 524) -->
+  <rect x="632" y="112" width="520" height="524" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="662" y="148" class="t">Per-channel error, held-out abnormal source</text>
+
+  <!-- plot frame: x 720..1120, y 200..540 -->
+  <line x1="720" y1="200" x2="720" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="720" y1="540" x2="1120" y2="540" stroke="#20364e" stroke-width="2.5"/>
+  <!-- y ticks -->
+  <line x1="720" y1="524" x2="714" y2="524" stroke="#20364e" stroke-width="2"/>
+  <text x="708" y="529" class="s" text-anchor="end">1.0</text>
+  <line x1="720" y1="370" x2="714" y2="370" stroke="#20364e" stroke-width="2"/>
+  <text x="708" y="375" class="s" text-anchor="end">1.5</text>
+  <line x1="720" y1="216" x2="714" y2="216" stroke="#20364e" stroke-width="2"/>
+  <text x="708" y="221" class="s" text-anchor="end">2.0</text>
+
+  <!-- baseline (rel = 1.0) reference dashed line -->
+  <line x1="720" y1="524" x2="1120" y2="524" stroke="#c4cdd8" stroke-width="1.5" stroke-dasharray="4 5"/>
+
+  <!-- bars: baseline at y=524 (rel 1.0). scale: 1.0 unit = 308px over 0..2.0? use 1.0->524, 2.0->216 => 308px per 1.0 -->
+  <!-- Asymmetry bar: rel ~1.85 -> y=262 (height 262) warm -->
+  <rect x="748" y="262" width="72" height="262" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="784" y="252" class="s" fill="#a44c26" text-anchor="middle">1.85</text>
+  <text x="784" y="562" class="b" text-anchor="middle">Asym</text>
+
+  <!-- Rhythm bar: rel ~1.22 -> y=456 (height 68) -->
+  <rect x="848" y="456" width="72" height="68" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="884" y="446" class="s" fill="#a44c26" text-anchor="middle">1.22</text>
+  <text x="884" y="562" class="b" text-anchor="middle">Rhythm</text>
+
+  <!-- Posture bar: rel ~1.15 -> y=478 (height 46) blue -->
+  <rect x="948" y="478" width="72" height="46" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="984" y="468" class="s" fill="#2f6f99" text-anchor="middle">1.15</text>
+  <text x="984" y="562" class="b" text-anchor="middle">Posture</text>
+
+  <!-- Control bar: error beyond injected coordinate, low ~1.12 -> y=487 (height 37) grey -->
+  <rect x="1048" y="487" width="72" height="37" fill="#ffffff" stroke="#5c6f84" stroke-width="1.75"/>
+  <text x="1084" y="477" class="s" fill="#5c6f84" text-anchor="middle">1.12</text>
+  <text x="1084" y="562" class="b" text-anchor="middle">Control</text>
+
+  <!-- y axis label -->
+  <text x="676" y="370" class="b" text-anchor="middle" transform="rotate(-90 676 370)">Relative error</text>
+
+  <!-- control-bar annotation in clear space (below labels) -->
+  <text x="662" y="588" class="s">Control bar: error beyond the injected coordinate stays low,</text>
+  <text x="662" y="610" class="s">so the signal is not merely echoing the perturbed coordinate.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="666" class="s">Illustrative expected shape, not measured results. Relative error near 1.0 is normal surprise. Transductive to the single normal source; labels are dataset annotations.</text>
+</svg>

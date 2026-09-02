@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Mirror probe: signed asymmetry on original vs left-right-flipped input</title>
+  <desc id="d2">Illustrative expected-shape scatter. The x axis is the signed lateralized biomarker decoded from the original input; the y axis is the same biomarker decoded from the left-right-flipped input. A green dashed line marks the ideal reflection y equals minus x, where a mirror correctly inverts the sign. The no-flip view-conditioned predictor (warm) preserves the sign and falls along y equals minus x, so a mirror correctly inverts it. The flip-augmented baseline (blue) collapses the sign toward y equals plus x, so a mirror does not invert it and the asymmetry axis is destroyed. This separates the invariance benefit from the asymmetry-protection benefit. All numbers are illustrative expected shape.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Mirror probe: a flip should invert a lateralized sign</text>
+  <text x="48" y="88" class="s">Illustrative expected shape, not measured results. One dot per held-out source; signed left-minus-right asymmetry scalar.</text>
+
+  <!-- ============ LEFT: scatter plot card ============ -->
+  <!-- card: x 48..708, y 112..556 (height 444) -->
+  <rect x="48" y="112" width="660" height="444" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Signed asymmetry: original vs flipped input</text>
+
+  <!-- plot frame: x 150..668, y 176..492; origin at center (409, 334) -->
+  <!-- axes centered -->
+  <line x1="150" y1="334" x2="668" y2="334" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="409" y1="176" x2="409" y2="492" stroke="#c4cdd8" stroke-width="1.5"/>
+  <!-- frame border axes (left + bottom) -->
+  <line x1="150" y1="176" x2="150" y2="492" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="150" y1="492" x2="668" y2="492" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- zero tick labels -->
+  <line x1="409" y1="492" x2="409" y2="498" stroke="#20364e" stroke-width="2"/>
+  <text x="409" y="516" class="s" text-anchor="middle">0</text>
+  <line x1="150" y1="334" x2="144" y2="334" stroke="#20364e" stroke-width="2"/>
+  <text x="138" y="339" class="s" text-anchor="end">0</text>
+
+  <!-- ideal reflection line y = -x (green dashed): from top-left to bottom-right through center -->
+  <line x1="180" y1="192" x2="638" y2="476" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <!-- label in clear space at the upper-left, above the line's start (line at x=180 is y=192) -->
+  <text x="188" y="184" class="s" fill="#5f9e7e">ideal y = -x (mirror inverts)</text>
+
+  <!-- reference y = +x line (faint, where sign is NOT inverted) -->
+  <line x1="180" y1="476" x2="638" y2="192" stroke="#c4cdd8" stroke-width="1.5" stroke-dasharray="3 5"/>
+  <!-- label in clear space at the upper-right, above the line's end (line at x=638 is y=192) -->
+  <text x="638" y="184" class="s" text-anchor="end">y = +x (sign not inverted)</text>
+
+  <!-- Lane A no-flip warm dots: along y = -x (preserves sign, mirror inverts) -->
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <circle cx="222" cy="213" r="8"/>
+    <circle cx="266" cy="249" r="8"/>
+    <circle cx="300" cy="263" r="8"/>
+    <circle cx="342" cy="297" r="8"/>
+    <circle cx="386" cy="316" r="8"/>
+    <circle cx="440" cy="356" r="8"/>
+    <circle cx="478" cy="372" r="8"/>
+    <circle cx="524" cy="409" r="8"/>
+    <circle cx="566" cy="428" r="8"/>
+    <circle cx="606" cy="461" r="8"/>
+  </g>
+
+  <!-- Lane B flip-augmented blue dots: collapse toward y = +x (sign NOT inverted) -->
+  <g fill="#2f6f99" stroke="#20364e" stroke-width="1.0">
+    <circle cx="230" cy="404" r="8"/>
+    <circle cx="278" cy="384" r="8"/>
+    <circle cx="316" cy="392" r="8"/>
+    <circle cx="358" cy="360" r="8"/>
+    <circle cx="398" cy="348" r="8"/>
+    <circle cx="444" cy="322" r="8"/>
+    <circle cx="486" cy="316" r="8"/>
+    <circle cx="528" cy="288" r="8"/>
+    <circle cx="570" cy="276" r="8"/>
+    <circle cx="612" cy="256" r="8"/>
+  </g>
+
+  <!-- axis labels -->
+  <text x="409" y="540" class="b" text-anchor="middle">Signed asymmetry on ORIGINAL input</text>
+  <text x="104" y="334" class="b" text-anchor="middle" transform="rotate(-90 104 334)">On FLIPPED input</text>
+
+  <!-- ============ RIGHT: two behavior cards + null card ============ -->
+
+  <!-- Lane A behavior card (warm): x 764..1152, y 112..288 (height 176) -->
+  <rect x="764" y="112" width="388" height="176" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <circle cx="802" cy="150" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="822" y="155" class="t">No-flip predictor</text>
+  <text x="794" y="192" class="b">Falls on y = -x. A mirror correctly</text>
+  <text x="794" y="218" class="b">inverts the sign, so the lateralized</text>
+  <text x="794" y="244" class="b">axis is preserved (slope near -1).</text>
+  <text x="794" y="266" class="s">Asymmetry protection intact.</text>
+
+  <!-- Lane B behavior card (blue): x 764..1152, y 344..520 (height 176), gap 288->344 = 56 -->
+  <rect x="764" y="344" width="388" height="176" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <circle cx="802" cy="382" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.0"/>
+  <text x="822" y="387" class="t">Flip-augmented baseline</text>
+  <text x="794" y="424" class="b">Collapses toward y = +x. A mirror</text>
+  <text x="794" y="450" class="b">does NOT invert the sign, so the</text>
+  <text x="794" y="476" class="b">asymmetry axis is destroyed.</text>
+  <text x="794" y="498" class="s">Slope outside the band [-1.25, -0.8].</text>
+
+  <!-- Null note card (dark banner): x 764..1152, y 576..624 too short; make one-line footer note instead -->
+
+  <!-- Footer note -->
+  <text x="48" y="644" class="s">Encoder read credited only above the raw-coordinate signed left-minus-right null (Lane E); gavd5 probe is transductive and reach-tier.</text>
+  <text x="48" y="672" class="s">Illustrative expected shape, not measured results. Cohorts are non-clinical multi-view pose; any clinical claim is reach-tier only.</text>
+</svg>

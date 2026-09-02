@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img">
+  <title>Blueprint of the five-page workshop paper</title>
+  <desc>Each page carries one job: the gap, the protocol, the audit results, the probes and ablation, and the limits with a reporting checklist.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="700" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">A five-page blueprint: audit first, then improvements</text>
+<rect x="40" y="80" width="250" height="40" rx="14" fill="#e8f1f8" class="box"/>
+<text x="165" y="107" class="t" text-anchor="middle">P1: The gap</text>
+<rect x="40" y="128" width="250" height="240" rx="14" fill="#fff" class="box"/>
+<text x="52" y="158" class="b">• movement encoders on</text>
+<text x="52" y="184" class="b">• internet video</text>
+<text x="52" y="210" class="b">• identity leakage in EEG</text>
+<text x="52" y="236" class="b">• foundation models</text>
+<text x="52" y="262" class="b">• no source-disjoint</text>
+<text x="52" y="288" class="b">• gait SSL baseline</text>
+<text x="52" y="314" class="b">• GAVD and S-JEPA as</text>
+<text x="52" y="340" class="b">• the study vehicle</text>
+<rect x="300" y="80" width="250" height="40" rx="14" fill="#e5f4ed" class="box"/>
+<text x="425" y="107" class="t" text-anchor="middle">P2: The protocol</text>
+<rect x="300" y="128" width="250" height="240" rx="14" fill="#fff" class="box"/>
+<text x="312" y="158" class="b">• locked 96-clip cohort,</text>
+<text x="312" y="184" class="b">• 18 source videos</text>
+<text x="312" y="210" class="b">• normal-only S-JEPA</text>
+<text x="312" y="236" class="b">• pretraining</text>
+<text x="312" y="262" class="b">• four audits: identity,</text>
+<text x="312" y="288" class="b">• groups, overlap, LOOVO</text>
+<text x="312" y="314" class="b">• probes: cadence,</text>
+<text x="312" y="340" class="b">• asymmetry, phase</text>
+<rect x="560" y="80" width="250" height="40" rx="14" fill="#f9e5cf" class="box"/>
+<text x="685" y="107" class="t" text-anchor="middle">P3: Audit results</text>
+<rect x="560" y="128" width="250" height="240" rx="14" fill="#fff" class="box"/>
+<text x="572" y="158" class="b">• video-ID probe vs</text>
+<text x="572" y="184" class="b">• raw-pose baseline</text>
+<text x="572" y="210" class="b">• sequence vs grouped</text>
+<text x="572" y="236" class="b">• split gap</text>
+<text x="572" y="262" class="b">• majority and</text>
+<text x="572" y="288" class="b">• missingness controls</text>
+<text x="572" y="314" class="b">• pretraining-overlap</text>
+<text x="572" y="340" class="b">• counts</text>
+<rect x="820" y="80" width="250" height="40" rx="14" fill="#e9e3f5" class="box"/>
+<text x="945" y="107" class="t" text-anchor="middle">P4: Honest nulls</text>
+<rect x="820" y="128" width="250" height="240" rx="14" fill="#fff" class="box"/>
+    <text x="832" y="158" class="b">• probe table: cadence</text>
+    <text x="832" y="184" class="b">• and phase null; knee</text>
+    <text x="832" y="210" class="b">• equals raw-pose R2</text>
+    <text x="832" y="236" class="b">• mask ablation: no</text>
+    <text x="832" y="262" class="b">• benefit for the clinical</text>
+    <text x="832" y="288" class="b">• prior; causal forecast</text>
+    <text x="832" y="314" class="b">• separates abnormal clips</text>
+<rect x="340" y="400" width="520" height="130" rx="14" fill="#fff" class="box"/>
+<text x="360" y="432" class="t">P5: honest limits and the reporting checklist</text>
+<text x="360" y="458" class="b">• one normal video for pretraining; classes entangled with videos</text>
+<text x="360" y="478" class="b">• grouped scores are descriptive, not clinical estimates</text>
+<text x="360" y="498" class="b">• five-line template for every movement-encoder paper</text>
+<text x="360" y="518" class="b">• code, notebooks, and figures released with fingerprints</text>
+<rect x="900" y="400" width="240" height="130" rx="14" fill="#e5f4ed" class="box"/>
+<text x="920" y="432" class="t">Workshop hooks</text>
+<text x="920" y="458" class="b">• pose as a biosignal</text>
+<text x="920" y="478" class="b">• movement / motor track</text>
+<text x="920" y="498" class="b">• measuring whether</text>
+<text x="920" y="518" class="b">  pretraining helps</text>
+<path d="M600 530V560" class="arr"/>
+<rect x="60" y="562" width="1080" height="96" rx="14" fill="#f9e5cf" class="box"/>
+<text x="80" y="594" class="t">Novelty in one sentence</text>
+<text x="80" y="620" class="b">No prior gait or skeleton self-supervised work reports a source-video identity probe, a measured sequence-versus-source</text>
+<text x="80" y="642" class="b">generalization gap, or biomechanical probes of a latent predictor, so this paper supplies all three plus the protocol to reuse them.</text>
+</svg>

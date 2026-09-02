@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">The big idea in five steps: from a walking video to a left-minus-right number and a mirror check</title>
+  <desc id="d3">A gentle five-step flow that teaches the central idea of this proposal. Step 1: a short walking video. Step 2: a pose detector turns it into a moving stick figure called a skeleton. Step 3: the frozen S-JEPA model reads the skeleton and produces a fingerprint, a list of numbers that summarizes the motion. Step 4: a simple straight-line rule reads one signed left-minus-right number out of the fingerprint, positive leans left and negative leans right. Step 5: the mirror check flips the body left-to-right and asks whether the number changes to the same size with the opposite sign. All numbers are illustrative and transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">The big idea: read one left-minus-right number, then mirror it</text>
+  <text x="48" y="88" class="s">Follow the arrows. Each box does one small job. Numbers here are made up to show the shape, not real results.</text>
+
+  <!-- ============ TOP ROW: three steps ============ -->
+  <!-- card A: video. x 48..344 (w 296), y 120..320 (h 200) -->
+  <rect x="48" y="120" width="296" height="200" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="152" class="t">1. Walking video</text>
+  <text x="70" y="182" class="b">A short clip of one person</text>
+  <text x="70" y="204" class="b">walking. Just pixels.</text>
+  <!-- tiny film frame icon -->
+  <rect x="70" y="226" width="200" height="70" rx="8" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <circle cx="120" cy="261" r="10" fill="#2f6f99"/>
+  <line x1="120" y1="271" x2="120" y2="290" stroke="#2f6f99" stroke-width="3"/>
+  <line x1="120" y1="278" x2="106" y2="286" stroke="#2f6f99" stroke-width="3"/>
+  <line x1="120" y1="278" x2="134" y2="286" stroke="#2f6f99" stroke-width="3"/>
+  <text x="210" y="266" class="s" text-anchor="middle">frames</text>
+
+  <!-- arrow A -> B -->
+  <line x1="344" y1="220" x2="400" y2="220" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- card B: skeleton. x 400..696 (w 296) -->
+  <rect x="400" y="120" width="296" height="200" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="422" y="152" class="t">2. Stick figure</text>
+  <text x="422" y="182" class="b">A pose detector marks 33</text>
+  <text x="422" y="204" class="b">body joints per frame.</text>
+  <!-- simple stick figure -->
+  <g stroke="#5f9e7e" stroke-width="3" fill="#5f9e7e">
+    <circle cx="548" cy="238" r="9" fill="#5f9e7e" stroke="none"/>
+    <line x1="548" y1="247" x2="548" y2="276"/>
+    <line x1="548" y1="254" x2="528" y2="270"/>
+    <line x1="548" y1="254" x2="568" y2="270"/>
+    <line x1="548" y1="276" x2="532" y2="300"/>
+    <line x1="548" y1="276" x2="564" y2="300"/>
+  </g>
+  <text x="548" y="313" class="s" text-anchor="middle">no face, no clothes</text>
+
+  <!-- arrow B -> C -->
+  <line x1="696" y1="220" x2="752" y2="220" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- card C: fingerprint. x 752..1152 (w 400) -->
+  <rect x="752" y="120" width="400" height="200" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="774" y="152" class="t">3. Fingerprint of numbers</text>
+  <text x="774" y="182" class="b">The frozen S-JEPA model reads the</text>
+  <text x="774" y="204" class="b">skeleton and outputs a list of numbers</text>
+  <text x="774" y="226" class="b">that describes how it moved.</text>
+  <!-- number chips -->
+  <g>
+    <rect x="774" y="250" width="52" height="34" rx="7" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.75"/>
+    <rect x="838" y="250" width="52" height="34" rx="7" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.75"/>
+    <rect x="902" y="250" width="52" height="34" rx="7" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.75"/>
+    <rect x="966" y="250" width="52" height="34" rx="7" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.75"/>
+    <rect x="1030" y="250" width="52" height="34" rx="7" fill="#ffffff" stroke="#8a6fb3" stroke-width="1.75"/>
+  </g>
+  <text x="800" y="273" class="s" text-anchor="middle">0.7</text>
+  <text x="864" y="273" class="s" text-anchor="middle">-0.2</text>
+  <text x="928" y="273" class="s" text-anchor="middle">1.1</text>
+  <text x="992" y="273" class="s" text-anchor="middle">0.4</text>
+  <text x="1056" y="273" class="s" text-anchor="middle">...</text>
+  <text x="774" y="306" class="s">"frozen" means we do not retrain it, we only read it.</text>
+
+  <!-- arrow C down to D (single right-angle bend) -->
+  <line x1="952" y1="320" x2="952" y2="360" stroke="#20364e" stroke-width="2.5" fill="none"/>
+  <line x1="952" y1="360" x2="700" y2="360" stroke="#20364e" stroke-width="2.5" fill="none"/>
+  <line x1="700" y1="360" x2="700" y2="404" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ============ BOTTOM ROW: two steps ============ -->
+  <!-- card D: straight-line read. x 48..696 (w 648), y 420..636 (h 216) -->
+  <rect x="48" y="420" width="648" height="216" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="452" class="t">4. Read the left-minus-right number</text>
+  <text x="70" y="482" class="b">A simple straight-line rule reads ONE signed number out of the</text>
+  <text x="70" y="504" class="b">fingerprint: how different are the two sides, and which way it leans.</text>
+
+  <!-- signed number bar -->
+  <line x1="90" y1="560" x2="640" y2="560" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="365" y1="548" x2="365" y2="572" stroke="#20364e" stroke-width="2.5"/>
+  <text x="365" y="592" class="s" text-anchor="middle">0  (both sides the same)</text>
+  <circle cx="200" cy="560" r="9" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <circle cx="520" cy="560" r="9" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <text x="120" y="540" class="s">negative: leans right</text>
+  <text x="470" y="540" class="s">positive: leans left</text>
+
+  <!-- arrow D -> E -->
+  <line x1="696" y1="528" x2="752" y2="528" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- card E: mirror check. x 752..1152 (w 400), y 420..636 -->
+  <rect x="752" y="420" width="400" height="216" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="774" y="452" class="t">5. Mirror check</text>
+  <text x="774" y="482" class="b">Flip the body left-to-right and</text>
+  <text x="774" y="504" class="b">read the number again.</text>
+  <text x="774" y="530" class="b">A true signed number should come</text>
+  <text x="774" y="552" class="b">back the same size, opposite sign.</text>
+  <!-- +0.7 flips to -0.7 -->
+  <text x="806" y="600" class="t" fill="#e07a4b">+0.7</text>
+  <line x1="866" y1="594" x2="922" y2="594" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="990" y="600" class="t" fill="#2f6f99">-0.7</text>
+
+  <!-- Footer note -->
+  <text x="48" y="672" class="s">Illustrative numbers only, not measured facts. All results are transductive. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

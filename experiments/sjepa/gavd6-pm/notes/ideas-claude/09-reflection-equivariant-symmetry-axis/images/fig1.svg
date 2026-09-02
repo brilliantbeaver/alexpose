@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Antisymmetric-head readout (Lane A prime) vs the binding bar on held-out-source signed decodability</title>
+  <desc id="d1">Illustrative expected-shape paired-dots comparison. For each held-out source video one warm dot (the antisymmetric-head readout, Lane A prime) and one blue dot (the standard ea59fea0 encoder, Lane D) are plotted at their signed-laterality R-squared on item 05's frozen instrument, joined by a thin connector. The warm readout sits above the binding bar by roughly the pre-registered margin, shown as a shaded plus 0.05 R-squared band. The antisymmetric head is applied without retraining on ea59fea0 in Arm 1, and on the retrained encoder in Arm 2; the binding bar is the maximum of the standard encoder D and the untrained floor C, because the untrained floor already beat the learned encoder in item 05. A right-hand lane legend and a dark pass card state that Lane A prime must beat max(D, C) and a capacity-matched control Ac, each by at least 0.05 held-out-source R-squared, and clear its permutation null. The capacity-matched control Ac is the same head with the symmetric left-plus-right path added, so beating it attributes the win to the antisymmetry constraint rather than to head capacity. All numbers are illustrative and transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Antisymmetric head (A prime) vs the binding bar max(D, C)</text>
+  <text x="48" y="88" class="s">Illustrative expected shape. Paired dots, one held-out source per column, signed R-squared on item 05's frozen probe. Arm 1 reads ea59fea0 as is; Arm 2 retrains. Transductive.</text>
+
+  <!-- ============ LEFT: paired-dots plot card ============ -->
+  <!-- card: x 48..708, y 112..600 -->
+  <rect x="48" y="112" width="660" height="488" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Held-out-source signed-decodability R-squared</text>
+
+  <!-- plot frame: x 160..660, y 178..508 -->
+  <!-- y axis maps R-squared 0.00 (y=508) .. 0.60 (y=178); 550px per unit, so y = 508 - val*550 -->
+  <!-- axes -->
+  <line x1="160" y1="178" x2="160" y2="508" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="160" y1="508" x2="660" y2="508" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- y ticks: 0.0 at 508, 0.2 at 398, 0.4 at 288, 0.6 at 178 -->
+  <line x1="160" y1="508" x2="154" y2="508" stroke="#20364e" stroke-width="2"/>
+  <text x="148" y="513" class="s" text-anchor="end">0.0</text>
+  <line x1="160" y1="398" x2="154" y2="398" stroke="#20364e" stroke-width="2"/>
+  <text x="148" y="403" class="s" text-anchor="end">0.2</text>
+  <line x1="160" y1="288" x2="154" y2="288" stroke="#20364e" stroke-width="2"/>
+  <text x="148" y="293" class="s" text-anchor="end">0.4</text>
+  <line x1="160" y1="178" x2="154" y2="178" stroke="#20364e" stroke-width="2"/>
+  <text x="148" y="183" class="s" text-anchor="end">0.6</text>
+
+  <!-- raw-coordinate ceiling reference (green dashed), R-squared 0.50 -> y = 508 - 0.50*550 = 508-275 = 233 -->
+  <line x1="160" y1="233" x2="660" y2="233" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="654" y="225" class="s" fill="#5f9e7e" text-anchor="end">raw-coordinate ceiling (Lane B)</text>
+
+  <!-- untrained floor reference (rule dashed), R-squared 0.05 -> y = 508 - 0.05*550 = 508-27.5 = 480.5 -->
+  <line x1="160" y1="481" x2="660" y2="481" stroke="#c4cdd8" stroke-width="2" stroke-dasharray="4 5"/>
+  <text x="654" y="473" class="s" text-anchor="end">untrained-encoder floor (Lane C)</text>
+
+  <!-- Five held-out source columns at x = 235, 320, 405, 490, 575 -->
+  <!-- Each column: blue dot (standard, lower), warm dot (equivariant, higher), thin connector -->
+
+  <!-- column 1: x=235; standard R2 0.34 -> y=508-0.34*550=321; equiv 0.40 -> y=508-0.40*550=288 -->
+  <line x1="235" y1="321" x2="235" y2="288" stroke="#20364e" stroke-width="1.5"/>
+  <circle cx="235" cy="321" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <circle cx="235" cy="288" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+
+  <!-- column 2: x=320; standard 0.30 -> y=343; equiv 0.37 -> y=305 -->
+  <line x1="320" y1="343" x2="320" y2="305" stroke="#20364e" stroke-width="1.5"/>
+  <circle cx="320" cy="343" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <circle cx="320" cy="305" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+
+  <!-- column 3: x=405; standard 0.37 -> y=305; equiv 0.44 -> y=266 -->
+  <line x1="405" y1="305" x2="405" y2="266" stroke="#20364e" stroke-width="1.5"/>
+  <circle cx="405" cy="305" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <circle cx="405" cy="266" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+
+  <!-- column 4: x=490; standard 0.32 -> y=332; equiv 0.39 -> y=294 -->
+  <line x1="490" y1="332" x2="490" y2="294" stroke="#20364e" stroke-width="1.5"/>
+  <circle cx="490" cy="332" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <circle cx="490" cy="294" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+
+  <!-- column 5: x=575; standard 0.39 -> y=294; equiv 0.45 -> y=261 -->
+  <line x1="575" y1="294" x2="575" y2="261" stroke="#20364e" stroke-width="1.5"/>
+  <circle cx="575" cy="294" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <circle cx="575" cy="261" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+
+  <!-- +0.05 advantage band annotation: bracket at right of columns, x ~ 622; labels below-right in clear space, right-anchored inside card (ends <= x686) -->
+  <line x1="622" y1="266" x2="622" y2="305" stroke="#a44c26" stroke-width="2"/>
+  <line x1="618" y1="266" x2="626" y2="266" stroke="#a44c26" stroke-width="2"/>
+  <line x1="618" y1="305" x2="626" y2="305" stroke="#a44c26" stroke-width="2"/>
+  <text x="686" y="333" class="s" fill="#a44c26" text-anchor="end">+0.05 over the</text>
+  <text x="686" y="357" class="s" fill="#a44c26" text-anchor="end">binding bar max(D, C)</text>
+
+  <!-- x axis label -->
+  <text x="410" y="540" class="b" text-anchor="middle">Held-out source video (each column, one paired comparison)</text>
+  <!-- y axis label -->
+  <text x="112" y="343" class="b" text-anchor="middle" transform="rotate(-90 112 343)">Signed-decodability R-squared</text>
+
+  <!-- in-plot legend for the two dot colors, lower-left of plot in genuine clear space below the data and above the floor line -->
+  <circle cx="182" cy="432" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="196" y="437" class="s">antisymmetric head readout (Lane A prime)</text>
+  <circle cx="182" cy="460" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <text x="196" y="465" class="s">standard ea59fea0 (Lane D)</text>
+
+  <!-- ============ RIGHT: lane legend + pass card ============ -->
+
+  <!-- Lane legend card: x 764..1152, y 112..344 -->
+  <rect x="764" y="112" width="388" height="232" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="144" class="t">Lanes on one held-out fold</text>
+
+  <circle cx="802" cy="170" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="822" y="175" class="b">A' Antisymmetric head (primary)</text>
+
+  <circle cx="802" cy="198" r="7" fill="#f0b48a" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="822" y="203" class="b">Ac Capacity-matched control</text>
+
+  <circle cx="802" cy="226" r="8" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <text x="822" y="231" class="b">D Standard ea59fea0 (comparator)</text>
+
+  <circle cx="802" cy="254" r="7" fill="#c4cdd8" stroke="#20364e" stroke-width="1.25"/>
+  <text x="822" y="259" class="b">C Untrained floor: binding constraint</text>
+
+  <line x1="794" y1="282" x2="810" y2="282" stroke="#5f9e7e" stroke-width="2.5"/>
+  <text x="822" y="287" class="b">B Raw-coordinate null: ceiling only</text>
+
+  <text x="794" y="316" class="s">Every source video is its own dot, pooled across conditions.</text>
+
+  <!-- Pass card (dark banner): x 764..1152, y 400..624; gap 344->400 = 56 -->
+  <rect x="764" y="400" width="388" height="224" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="794" y="436" class="w" font-size="20">Pre-registered pass margin</text>
+
+  <text x="794" y="472" class="w">Lane A' must beat max(D, C)</text>
+  <text x="794" y="498" class="w">and the capacity-matched Ac by &#8805; 0.05,</text>
+  <text x="794" y="524" class="w">clear its null, keep Lane E quiet.</text>
+
+  <line x1="794" y1="546" x2="1122" y2="546" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="794" y="574" class="ws">Falling short is scored as an informative</text>
+  <text x="794" y="596" class="ws">null: the constraint bought nothing here.</text>
+
+  <!-- Footer note -->
+  <text x="48" y="664" class="s">Illustrative expected shape, not measured results. Provenance-matched canonical subset. Item 05 asymmetry readout R-squared &#8776; 0.154. Labels are dataset annotations.</text>
+</svg>

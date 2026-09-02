@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">The one idea: change the shape of what we hide from the model</title>
+  <desc id="desc">A gentle left-to-right flow. A walking video becomes a stick-figure skeleton, cut into small joint-time pieces called tokens. We hide some tokens and train a small network to guess them back. The whole study changes only ONE thing: the shape of the hidden set. The scattered mask hides dots spread all over. The gait-shaped mask hides one whole leg over a stretch of time. The claim is that the shape of the hole decides whether the model is forced to learn walking timing and left-right balance.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; fill: #0f2440; }
+    .t { font-size: 20px; font-weight: 700; fill: #0f2440; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+    .ws { font-size: 14px; font-weight: 700; fill: #cdd8e4; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="56" class="h" text-anchor="start">The one idea: change only the shape of the hidden set</text>
+  <text x="48" y="84" class="s" text-anchor="start">The model learns by hiding part of a skeleton and guessing it back. This study changes ONE thing: the shape of what is hidden.</text>
+
+  <!-- ===== TOP ROW: the shared pipeline (three cards left to right) ===== -->
+  <!-- Card 1: video -->
+  <rect x="48" y="116" width="272" height="150" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="150" class="t" text-anchor="start">1. Walking video</text>
+  <text x="70" y="180" class="b" text-anchor="start">A short clip of one</text>
+  <text x="70" y="202" class="b" text-anchor="start">person walking.</text>
+  <text x="70" y="238" class="s" text-anchor="start">Raw pixels, nothing</text>
+  <text x="70" y="256" class="s" text-anchor="start">measured yet.</text>
+
+  <!-- Card 2: skeleton tokens -->
+  <rect x="376" y="116" width="272" height="150" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="398" y="150" class="t" text-anchor="start">2. Skeleton pieces</text>
+  <text x="398" y="180" class="b" text-anchor="start">Track 33 joints over</text>
+  <text x="398" y="202" class="b" text-anchor="start">16 time windows.</text>
+  <text x="398" y="238" class="s" text-anchor="start">That makes 33 x 16 =</text>
+  <text x="398" y="256" class="s" text-anchor="start">528 joint-time tokens.</text>
+
+  <!-- Card 3: hide and guess -->
+  <rect x="704" y="116" width="272" height="150" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="726" y="150" class="t" text-anchor="start">3. Hide and guess</text>
+  <text x="726" y="180" class="b" text-anchor="start">Hide some tokens; a</text>
+  <text x="726" y="202" class="b" text-anchor="start">small net guesses them.</text>
+  <text x="726" y="238" class="s" text-anchor="start">It learns walking by</text>
+  <text x="726" y="256" class="s" text-anchor="start">rebuilding hidden parts.</text>
+
+  <!-- arrows across the top row -->
+  <path d="M320,191 L370,191" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M648,191 L698,191" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- fork label -->
+  <text x="1024" y="150" class="t" text-anchor="start">The one</text>
+  <text x="1024" y="176" class="t" text-anchor="start">choice:</text>
+  <text x="1024" y="208" class="b" text-anchor="start">which tokens</text>
+  <text x="1024" y="230" class="b" text-anchor="start">do we hide?</text>
+  <!-- arrow from card 3 down-splitting handled by the two arrows below into the two mask cards -->
+
+  <!-- ===== MIDDLE ROW: two mask shapes side by side ===== -->
+  <!-- Left: scattered mask (baseline) -->
+  <rect x="48" y="336" width="536" height="234" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="370" class="t" text-anchor="start">A. Scattered mask (today's recipe)</text>
+  <text x="70" y="398" class="b" text-anchor="start">Hide dots spread evenly, ignoring the body.</text>
+  <text x="70" y="420" class="b" text-anchor="start">A neighbor of each hidden dot is usually still</text>
+  <text x="70" y="442" class="b" text-anchor="start">visible, so guessing stays easy and local.</text>
+
+  <!-- little skeleton grid A: rows = joints, cols = time; scattered X marks -->
+  <g>
+    <rect x="70" y="470" width="360" height="72" rx="8" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+    <!-- dots grid -->
+    <circle cx="100" cy="490" r="5" fill="#5f9e7e"/><circle cx="140" cy="490" r="5" fill="#e07a4b"/><circle cx="180" cy="490" r="5" fill="#5f9e7e"/><circle cx="220" cy="490" r="5" fill="#5f9e7e"/><circle cx="260" cy="490" r="5" fill="#e07a4b"/><circle cx="300" cy="490" r="5" fill="#5f9e7e"/><circle cx="340" cy="490" r="5" fill="#5f9e7e"/><circle cx="380" cy="490" r="5" fill="#5f9e7e"/>
+    <circle cx="100" cy="512" r="5" fill="#e07a4b"/><circle cx="140" cy="512" r="5" fill="#5f9e7e"/><circle cx="180" cy="512" r="5" fill="#5f9e7e"/><circle cx="220" cy="512" r="5" fill="#e07a4b"/><circle cx="260" cy="512" r="5" fill="#5f9e7e"/><circle cx="300" cy="512" r="5" fill="#5f9e7e"/><circle cx="340" cy="512" r="5" fill="#e07a4b"/><circle cx="380" cy="512" r="5" fill="#5f9e7e"/>
+    <circle cx="100" cy="534" r="5" fill="#5f9e7e"/><circle cx="140" cy="534" r="5" fill="#5f9e7e"/><circle cx="180" cy="534" r="5" fill="#e07a4b"/><circle cx="220" cy="534" r="5" fill="#5f9e7e"/><circle cx="260" cy="534" r="5" fill="#5f9e7e"/><circle cx="300" cy="534" r="5" fill="#e07a4b"/><circle cx="340" cy="534" r="5" fill="#5f9e7e"/><circle cx="380" cy="534" r="5" fill="#5f9e7e"/>
+  </g>
+  <text x="450" y="492" class="s" text-anchor="start">green = shown</text>
+  <text x="450" y="516" class="s" text-anchor="start">orange = hidden</text>
+  <text x="450" y="540" class="s" text-anchor="start">holes scattered</text>
+
+  <!-- Right: gait-shaped mask (treatment) -->
+  <rect x="640" y="336" width="512" height="234" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="662" y="370" class="t" text-anchor="start">B. Gait-shaped mask (this study)</text>
+  <text x="662" y="398" class="b" text-anchor="start">Hide one whole leg across a stretch of time,</text>
+  <text x="662" y="420" class="b" text-anchor="start">so the net must rebuild a real limb motion</text>
+  <text x="662" y="442" class="b" text-anchor="start">using left-right balance and walking rhythm.</text>
+
+  <g>
+    <rect x="662" y="470" width="330" height="72" rx="8" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.5"/>
+    <!-- one row (a leg) hidden across a block of time -->
+    <circle cx="692" cy="490" r="5" fill="#5f9e7e"/><circle cx="732" cy="490" r="5" fill="#5f9e7e"/><circle cx="772" cy="490" r="5" fill="#5f9e7e"/><circle cx="812" cy="490" r="5" fill="#5f9e7e"/><circle cx="852" cy="490" r="5" fill="#5f9e7e"/><circle cx="892" cy="490" r="5" fill="#5f9e7e"/><circle cx="932" cy="490" r="5" fill="#5f9e7e"/><circle cx="972" cy="490" r="5" fill="#5f9e7e"/>
+    <!-- hidden block: same joint (row), several adjacent time steps -->
+    <circle cx="692" cy="512" r="5" fill="#5f9e7e"/><circle cx="732" cy="512" r="5" fill="#5f9e7e"/><circle cx="772" cy="512" r="5" fill="#e07a4b"/><circle cx="812" cy="512" r="5" fill="#e07a4b"/><circle cx="852" cy="512" r="5" fill="#e07a4b"/><circle cx="892" cy="512" r="5" fill="#e07a4b"/><circle cx="932" cy="512" r="5" fill="#5f9e7e"/><circle cx="972" cy="512" r="5" fill="#5f9e7e"/>
+    <circle cx="692" cy="534" r="5" fill="#5f9e7e"/><circle cx="732" cy="534" r="5" fill="#5f9e7e"/><circle cx="772" cy="534" r="5" fill="#5f9e7e"/><circle cx="812" cy="534" r="5" fill="#5f9e7e"/><circle cx="852" cy="534" r="5" fill="#5f9e7e"/><circle cx="892" cy="534" r="5" fill="#5f9e7e"/><circle cx="932" cy="534" r="5" fill="#5f9e7e"/><circle cx="972" cy="534" r="5" fill="#5f9e7e"/>
+  </g>
+  <text x="1006" y="504" class="s" text-anchor="start">one leg,</text>
+  <text x="1006" y="528" class="s" text-anchor="start">hidden in</text>
+  <text x="1006" y="552" class="s" text-anchor="start">a block</text>
+
+  <!-- split from card 3 into the two mask cards: one stem down, a horizontal splitter, two short vertical drops -->
+  <path d="M840,266 L840,300" stroke="#20364e" stroke-width="2.5" fill="none"/>
+  <path d="M316,300 L896,300" stroke="#20364e" stroke-width="2.5" fill="none"/>
+  <path d="M316,300 L316,330" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M896,300 L896,330" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== FOOTER banner: the claim ===== -->
+  <rect x="48" y="590" width="1104" height="56" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="616" class="w" text-anchor="start">The claim: the SHAPE of the hole decides what the model must learn. A gait-shaped hole should force better timing and left-right balance.</text>
+  <text x="72" y="638" class="ws" text-anchor="start">Everything else (the network, the compute, the number of training steps) is held identical, so only the mask shape can explain any change.</text>
+
+  <text x="48" y="672" class="s" text-anchor="start">Folder labels are dataset annotations, not diagnoses. Grids and dots are a simple picture of the idea, not measured results.</text>
+</svg>

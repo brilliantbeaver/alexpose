@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t3 d3">
+  <title id="t3">The whole idea in plain steps: video to skeleton to a 96-number fingerprint split into three named light switches</title>
+  <desc id="d3">A gentle beginner concept diagram. Top row is a left-to-right flow of four cards: a walking video becomes a stick-figure skeleton, the model hides some joints and predicts them, and it writes a fingerprint of 96 numbers. The fingerprint is drawn as a strip of small boxes, with three colored named blocks (z_asym, z_rhythm, z_posture) and a gray leftover block (z_free). The bottom panel shows the three named blocks wired as light switches, each connected to one bulb: one-sidedness, rhythm wobble, and posture lean. The test is that flipping one switch should light only its own bulb. All numbers are illustrative or from the shared facts; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">From a walking video to three named light switches</text>
+  <text x="48" y="88" class="s">The gentlest picture of the idea: turn a walk into a fingerprint of numbers, then name three parts of it.</text>
+
+  <!-- ===================== TOP FLOW ROW (4 cards) ===================== -->
+  <!-- 4 cards, each 234 wide, 168 tall, tops at y=116. gaps 56. x = 48, 338, 628, 918 -->
+
+  <!-- Card 1: video -->
+  <rect x="48" y="116" width="234" height="168" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="150" class="t">1. Video</text>
+  <text x="70" y="180" class="b">A short clip of</text>
+  <text x="70" y="202" class="b">someone walking.</text>
+  <text x="70" y="236" class="s">We do not keep the</text>
+  <text x="70" y="260" class="s">pixels or the face.</text>
+
+  <!-- Card 2: skeleton -->
+  <rect x="338" y="116" width="234" height="168" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="360" y="150" class="t">2. Skeleton</text>
+  <text x="360" y="180" class="b">A moving stick</text>
+  <text x="360" y="202" class="b">figure of 33 joints.</text>
+  <text x="360" y="236" class="s">Much smaller, and it</text>
+  <text x="360" y="260" class="s">hides who they are.</text>
+
+  <!-- Card 3: hide and predict -->
+  <rect x="628" y="116" width="234" height="168" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="650" y="150" class="t">3. Hide + guess</text>
+  <text x="650" y="180" class="b">Cover some joints,</text>
+  <text x="650" y="202" class="b">predict the hidden.</text>
+  <text x="650" y="236" class="s">This is how the model</text>
+  <text x="650" y="260" class="s">learns, with no labels.</text>
+
+  <!-- Card 4: fingerprint -->
+  <rect x="918" y="116" width="234" height="168" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="940" y="150" class="t">4. Fingerprint</text>
+  <text x="940" y="180" class="b">It writes 96</text>
+  <text x="940" y="202" class="b">numbers per token.</text>
+  <text x="940" y="236" class="s">Today they are a</text>
+  <text x="940" y="260" class="s">jumble of meanings.</text>
+
+  <!-- arrows between top cards (straight horizontal, in the 56px gaps, >=16px clearance each side) -->
+  <line x1="298" y1="200" x2="322" y2="200" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="588" y1="200" x2="612" y2="200" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="878" y1="200" x2="902" y2="200" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===================== MIDDLE: fingerprint strip split into named blocks ===================== -->
+  <!-- card spans x 48..1152, y 340..460 (56px below the top-row cards which bottom at y=284) -->
+  <rect x="48" y="340" width="1104" height="120" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="374" class="t">5. Split the fingerprint into named blocks (this is the retrain)</text>
+
+  <!-- named blocks drawn as wide labeled cells, tops at y=398, height 44 -->
+  <rect x="70" y="398" width="230" height="44" rx="8" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="185" y="426" class="b" text-anchor="middle" font-weight="700">z_asym</text>
+
+  <rect x="316" y="398" width="230" height="44" rx="8" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="431" y="426" class="b" text-anchor="middle" font-weight="700">z_rhythm</text>
+
+  <rect x="562" y="398" width="230" height="44" rx="8" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="677" y="426" class="b" text-anchor="middle" font-weight="700">z_posture</text>
+
+  <rect x="808" y="398" width="322" height="44" rx="8" fill="#ffffff" stroke="#c4cdd8" stroke-width="1.75"/>
+  <text x="969" y="426" class="b" text-anchor="middle" font-weight="700">z_free (unnamed leftover)</text>
+
+  <!-- arrow from fingerprint card (bottom y=284) down into the split card (top y=340) -->
+  <line x1="1035" y1="300" x2="1035" y2="324" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===================== BOTTOM: three switches wired to three bulbs ===================== -->
+  <text x="48" y="482" class="t">6. Each named block is a light switch for one doctor-trusted reading</text>
+
+  <!-- three connectors from the three named blocks down to the switch cards.
+       Cards: x=48 (center 209), x=435 (center 596), x=822 (center 983).
+       Card 1 sits under z_asym: straight vertical. Cards 2 and 3 use a single
+       right-angle bend so the connector lands inside its card without crossing any box. -->
+
+  <!-- z_asym block center 185 -> card 1 (48..370): straight vertical, arrowhead 16px above card top -->
+  <line x1="185" y1="496" x2="185" y2="514" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- z_rhythm block center 431 -> card 2 (435..757): single right-angle bend to x=500 landing -->
+  <path d="M431,496 L431,505 L500,505 L500,514" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- z_posture block center 677 -> card 3 (822..1144): single right-angle bend to x=887 landing -->
+  <path d="M677,496 L677,505 L887,505 L887,514" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- switch/bulb card 1: z_asym -> one-sidedness. x 48..370, y 530..648 -->
+  <rect x="48" y="530" width="322" height="118" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="70" y="562" class="t">z_asym switch</text>
+  <text x="70" y="590" class="b">lights the one-sidedness bulb</text>
+  <text x="70" y="618" class="s">(the Symmetry Ratio: how left-</text>
+  <text x="70" y="640" class="s">right uneven the walk is)</text>
+  <circle cx="322" cy="592" r="24" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+
+  <!-- switch/bulb card 2: z_rhythm -> rhythm wobble. x 435..757, y 530..648 -->
+  <rect x="435" y="530" width="322" height="118" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="457" y="562" class="t">z_rhythm switch</text>
+  <text x="457" y="590" class="b">lights the rhythm-wobble bulb</text>
+  <text x="457" y="618" class="s">(stride-time CV: 8.8% for fallers</text>
+  <text x="457" y="640" class="s">vs 4.2% for non-fallers)</text>
+  <circle cx="709" cy="592" r="24" fill="#8a6fb3" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- switch/bulb card 3: z_posture -> posture lean. x 822..1144, y 530..648 -->
+  <rect x="822" y="530" width="322" height="118" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="844" y="562" class="t">z_posture switch</text>
+  <text x="844" y="590" class="b">lights the posture-lean bulb</text>
+  <text x="844" y="618" class="s">(anterior pelvic tilt:</text>
+  <text x="844" y="640" class="s">16.4 vs 11.6 degrees)</text>
+  <circle cx="1096" cy="592" r="24" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- footer note: baseline y=672, 24px below card bottom (648), 48px above bottom edge (720) -->
+  <text x="1144" y="672" class="s" text-anchor="end">The test: flip one switch and only its own bulb should light. Numbers are shared facts; labels are dataset annotations.</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img">
+  <title>From latent infilling to a causal gait world model</title>
+  <desc>Infilling uses context from both sides of a hidden token; a world model predicts future latent states from the past only, then the predicted latents are probed and tested out of distribution.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="640" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">Two prediction games on the same skeleton stream</text>
+<rect x="40" y="90" width="520" height="250" rx="14" fill="#fff" class="box"/>
+<text x="60" y="124" class="t">Infilling (S-JEPA, notebooks 00-06)</text>
+<text x="60" y="148" class="b">hidden body-part tokens, context on both sides</text>
+<rect x="70" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="128" y="190" width="46" height="58" rx="8" fill="#18324c"/>
+<rect x="186" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="244" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="302" y="190" width="46" height="58" rx="8" fill="#18324c"/>
+<rect x="360" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="418" y="190" width="46" height="58" rx="8" fill="#18324c"/>
+<rect x="476" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<text x="70" y="280" class="b">past and future both visible</text>
+<rect x="70" y="296" width="230" height="34" rx="14" fill="#f9e5cf" class="box"/>
+<text x="90" y="318" class="s">predict hidden body tokens</text>
+<rect x="640" y="90" width="520" height="250" rx="14" fill="#fff" class="box"/>
+<text x="660" y="124" class="t">Causal future prediction (world model)</text>
+<text x="660" y="148" class="b">future segments hidden, past only as context</text>
+<rect x="670" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="728" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="786" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="844" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="902" y="190" width="46" height="58" rx="8" fill="#9ac7bf"/>
+<rect x="960" y="190" width="46" height="58" rx="8" fill="#18324c"/>
+<rect x="1018" y="190" width="46" height="58" rx="8" fill="#18324c"/>
+<rect x="1076" y="190" width="46" height="58" rx="8" fill="#18324c"/>
+<text x="670" y="280" class="b">only the past is visible</text>
+<rect x="670" y="296" width="240" height="34" rx="14" fill="#e5f4ed" class="box"/>
+<text x="690" y="318" class="s">predict future latent states</text>
+<rect x="40" y="390" width="350" height="120" rx="14" fill="#e8f1f8" class="box"/>
+<text x="60" y="422" class="t">Latent rollout</text>
+<text x="60" y="448" class="b">predicted future latents are</text>
+<text x="60" y="468" class="b">probed for gait phase,</text>
+<text x="60" y="488" class="b">cadence, and symmetry</text>
+<rect x="430" y="390" width="350" height="120" rx="14" fill="#e9e3f5" class="box"/>
+<text x="450" y="422" class="t">Baseline</text>
+<text x="450" y="448" class="b">phase-bin mean teacher latent,</text>
+<text x="450" y="468" class="b">leave-one-out over the</text>
+<text x="450" y="488" class="b">12 normal sequences</text>
+<rect x="820" y="390" width="340" height="120" rx="14" fill="#f9e5cf" class="box"/>
+<text x="840" y="422" class="t">Out-of-distribution check</text>
+<text x="840" y="448" class="b">prediction error on abnormal</text>
+<text x="840" y="468" class="b">clips should rise above the</text>
+<text x="840" y="488" class="b">normal-training error</text>
+<text x="600" y="574" class="s" text-anchor="middle">a first step toward a model that can imagine the next step before it happens</text>
+</svg>

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img">
+  <title>Transductive versus source-grouped evaluation</title>
+  <desc>A sequence split lets clips of the same video appear on both sides. A source-grouped split keeps each video whole on one side, and the gap between the two scores is the generalization gap.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="600" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">The same model, two ways of splitting the data</text>
+<rect x="40" y="90" width="520" height="380" rx="14" fill="#fff" class="box"/>
+<text x="60" y="128" class="t">Sequence split (transductive)</text>
+<text x="60" y="152" class="b">clips from one video can appear on both sides</text>
+<rect x="80" y="180" width="200" height="36" rx="9" fill="#f9e5cf" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="106" cy="198" r="7" fill="#c98d5e"/>
+<text x="124" y="203" class="b">clip 1 of video 1</text>
+<rect x="310" y="180" width="200" height="36" rx="9" fill="#e8f1f8" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="336" cy="198" r="7" fill="#5c93b8"/>
+<text x="354" y="203" class="b">clip 2 of video 2</text>
+<rect x="80" y="232" width="200" height="36" rx="9" fill="#f9e5cf" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="106" cy="250" r="7" fill="#c98d5e"/>
+<text x="124" y="255" class="b">clip 3 of video 1</text>
+<rect x="310" y="232" width="200" height="36" rx="9" fill="#e8f1f8" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="336" cy="250" r="7" fill="#5c93b8"/>
+<text x="354" y="255" class="b">clip 4 of video 2</text>
+<rect x="80" y="284" width="200" height="36" rx="9" fill="#f9e5cf" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="106" cy="302" r="7" fill="#c98d5e"/>
+<text x="124" y="307" class="b">clip 5 of video 1</text>
+<rect x="310" y="284" width="200" height="36" rx="9" fill="#e8f1f8" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="336" cy="302" r="7" fill="#5c93b8"/>
+<text x="354" y="307" class="b">clip 6 of video 2</text>
+<rect x="80" y="336" width="200" height="36" rx="9" fill="#f9e5cf" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="106" cy="354" r="7" fill="#c98d5e"/>
+<text x="124" y="359" class="b">clip 7 of video 1</text>
+<rect x="310" y="336" width="200" height="36" rx="9" fill="#e8f1f8" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="336" cy="354" r="7" fill="#5c93b8"/>
+<text x="354" y="359" class="b">clip 8 of video 2</text>
+<rect x="80" y="388" width="200" height="36" rx="9" fill="#f9e5cf" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="106" cy="406" r="7" fill="#c98d5e"/>
+<text x="124" y="411" class="b">clip 9 of video 1</text>
+<rect x="310" y="388" width="200" height="36" rx="9" fill="#e8f1f8" stroke="#c9a25e" stroke-width="1.2"/>
+<circle cx="336" cy="406" r="7" fill="#5c93b8"/>
+<text x="354" y="411" class="b">clip 10 of video 2</text>
+<path d="M300 452V478" class="arr"/>
+<rect x="230" y="480" width="140" height="52" rx="14" fill="#f9e5cf" class="box"/>
+<text x="300" y="502" class="s">classifier</text>
+<text x="300" y="520" class="s" text-anchor="middle">score: high</text>
+<rect x="420" y="480" width="150" height="52" rx="14" fill="#dde2e6" class="box"/>
+<text x="495" y="502" class="s" text-anchor="middle">but every test video</text>
+<text x="495" y="520" class="s" text-anchor="middle">was seen in training</text>
+<text x="60" y="564" class="b">The 96-clip corpus: all 16 test videos also appear in training.</text>
+<rect x="640" y="90" width="520" height="380" rx="14" fill="#fff" class="box"/>
+<text x="660" y="128" class="t">Source-grouped split (inductive)</text>
+<text x="660" y="152" class="b">each source video stays whole on one side</text>
+<rect x="670" y="180" width="460" height="40" rx="10" fill="#f9e5cf" stroke="#b9a86b" stroke-width="1.2"/>
+<text x="684" y="205" class="b">video A: 4 clips (train)</text>
+<rect x="670" y="232" width="460" height="40" rx="10" fill="#e8f1f8" stroke="#b9a86b" stroke-width="1.2"/>
+<text x="684" y="257" class="b">video B: 3 clips (train)</text>
+<rect x="670" y="284" width="460" height="40" rx="10" fill="#e9e3f5" stroke="#b9a86b" stroke-width="1.2"/>
+<text x="684" y="309" class="b">video C: 5 clips (train)</text>
+<rect x="670" y="352" width="460" height="40" rx="10" fill="#e5f4ed" stroke="#b9a86b" stroke-width="1.2"/>
+<text x="684" y="377" class="b">video D: 4 clips (test only)</text>
+<rect x="670" y="404" width="460" height="40" rx="10" fill="#f6d5c9" stroke="#b9a86b" stroke-width="1.2"/>
+<text x="684" y="429" class="b">video E: 2 clips (test only)</text>
+<path d="M900 452V478" class="arr"/>
+<rect x="830" y="480" width="140" height="52" rx="14" fill="#e5f4ed" class="box"/>
+<text x="900" y="502" class="s" text-anchor="middle">classifier</text>
+<text x="900" y="520" class="s" text-anchor="middle">score: honest</text>
+<rect x="1000" y="480" width="160" height="52" rx="14" fill="#dde2e6" class="box"/>
+<text x="1080" y="502" class="s" text-anchor="middle">test videos are new</text>
+<text x="1080" y="520" class="s" text-anchor="middle">to the model</text>
+<text x="660" y="564" class="b">GroupKFold or leave-one-video-out: no video leaks across sides.</text>
+<text x="620" y="594" class="s" text-anchor="middle">generalization gap = sequence score minus grouped score</text>
+</svg>

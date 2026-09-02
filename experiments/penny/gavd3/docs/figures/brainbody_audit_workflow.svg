@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img">
+  <title>Four audits of a movement encoder</title>
+  <desc>A frozen gait encoder feeds four audits: a video-identity probe, source-grouped evaluation, a pretraining-overlap counter, and leave-one-video-out condition checks.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18324c"/></marker>
+    <style>.h{font:700 30px Arial;fill:#10233f}.t{font:700 19px Arial;fill:#10233f}.b{font:15px Arial;fill:#344b62}.s{font:700 13px Arial;fill:#10233f}.box{stroke:#18324c;stroke-width:2}.arr{stroke:#18324c;stroke-width:3;fill:none;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1200" height="640" fill="#f6f3ec"/>
+<text x="600" y="46" class="h" text-anchor="middle">Auditing a frozen movement encoder</text>
+<rect x="60" y="70" width="240" height="100" rx="14" fill="#e8f1f8" class="box"/>
+<text x="80" y="105" class="t">Frozen S-JEPA</text>
+<text x="80" y="131" class="b">pooled latents</text>
+<text x="80" y="153" class="b">384 values per clip</text>
+<path d="M300 120H420" class="arr"/>
+<rect x="420" y="70" width="260" height="100" rx="14" fill="#fff" class="box"/>
+<text x="440" y="105" class="t">96 clips, 18 videos</text>
+<text x="440" y="131" class="b">labels + source ids</text>
+<text x="440" y="153" class="b">kept side by side</text>
+<rect x="60" y="210" width="700" height="84" rx="14" fill="#f9e5cf" class="box"/>
+<text x="84" y="238" class="t">1. Video-ID probe</text>
+<text x="84" y="260" class="b">Can the latents predict which upload a clip came from?</text>
+<text x="84" y="280" class="b">Compare pretrained, raw-coordinate, and missingness baselines.</text>
+<path d="M760 252H840" class="arr"/>
+<rect x="840" y="210" width="300" height="84" rx="14" fill="#fff" class="box"/>
+<text x="864" y="240" class="s">delivers</text>
+<text x="990" y="266" class="t" text-anchor="middle">identity accuracy vs chance</text>
+<rect x="60" y="310" width="700" height="84" rx="14" fill="#e5f4ed" class="box"/>
+<text x="84" y="338" class="t">2. Source-grouped evaluation</text>
+<text x="84" y="360" class="b">Sequence split vs GroupKFold by video.</text>
+<text x="84" y="380" class="b">Same classifier and seed; only the split changes.</text>
+<path d="M760 352H840" class="arr"/>
+<rect x="840" y="310" width="300" height="84" rx="14" fill="#fff" class="box"/>
+<text x="864" y="340" class="s">delivers</text>
+<text x="990" y="366" class="t" text-anchor="middle">the generalization gap</text>
+<rect x="60" y="410" width="700" height="84" rx="14" fill="#e9e3f5" class="box"/>
+<text x="84" y="438" class="t">3. Pretraining-overlap counter</text>
+<text x="84" y="460" class="b">How many test clips come from the one video</text>
+<text x="84" y="480" class="b">used for normal-only pretraining?</text>
+<path d="M760 452H840" class="arr"/>
+<rect x="840" y="410" width="300" height="84" rx="14" fill="#fff" class="box"/>
+<text x="864" y="440" class="s">delivers</text>
+<text x="990" y="466" class="t" text-anchor="middle">transductive-clip count</text>
+<rect x="60" y="510" width="700" height="84" rx="14" fill="#e8f1f8" class="box"/>
+<text x="84" y="538" class="t">4. Leave-one-video-out (condition vs normal)</text>
+<text x="84" y="560" class="b">Hold out one condition video at a time.</text>
+<text x="84" y="580" class="b">Small n, but video-disjoint on the condition side.</text>
+<path d="M760 552H840" class="arr"/>
+<rect x="840" y="510" width="300" height="84" rx="14" fill="#fff" class="box"/>
+<text x="864" y="540" class="s">delivers</text>
+<text x="990" y="566" class="t" text-anchor="middle">per-video scores</text>
+<text x="600" y="626" class="s" text-anchor="middle">one honesty report card per encoder</text>
+</svg>

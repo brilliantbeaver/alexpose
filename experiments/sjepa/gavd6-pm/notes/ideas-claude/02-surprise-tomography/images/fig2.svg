@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Structure versus scalar: source-level ROC-AUC by readout</title>
+  <desc id="d2">Illustrative expected shape. Grouped bar chart of source-level ROC-AUC for three readouts of the same frozen error tensor: pooled surprise scalar, full 192-cell surprise map, and joint plus segment marginals. Bars show bootstrap confidence intervals over sources with one dot per held-out source. Missingness-only and majority-class floors are drawn as horizontal reference lines. The map is judged to carry structure only if it beats the scalar and the missingness-only floor each by at least 0.05.</desc>
+
+  <style>
+    .h  { font: 700 32px Arial, Helvetica, sans-serif; fill:#0f2440; }
+    .t  { font: 700 20px Arial, Helvetica, sans-serif; fill:#0f2440; }
+    .b  { font: 16px Arial, Helvetica, sans-serif; fill:#33475e; }
+    .s  { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+    .axis { font: 14px Arial, Helvetica, sans-serif; fill:#5c6f84; }
+    .lg { font: 14px Arial, Helvetica, sans-serif; fill:#33475e; }
+  </style>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text class="h" x="48" y="60">Does the surprise map beat the pooled scalar?</text>
+  <text class="s" x="48" y="86">Illustrative expected shape. Source-level ROC-AUC, held-out abnormal vs normal, leave-one-source-out for PD, stroke, CP. All numbers transductive; frozen checkpoint ea59fea0.</text>
+
+  <!-- ================= PLOT AREA ================= -->
+  <!-- x axis from x=120 to x=720 ; y axis AUC 0.40 (y=600) to 1.00 (y=150) -->
+  <!-- y scale: AUC a -> y = 600 - (a-0.40)/0.60*450 -->
+
+  <!-- gridlines + y labels -->
+  <!-- 0.4 -> 600 ; 0.5 -> 525 ; 0.6 -> 450 ; 0.7 -> 375 ; 0.8 -> 300 ; 0.9 -> 225 ; 1.0 -> 150 -->
+  <g>
+    <line x1="120" y1="150" x2="720" y2="150" stroke="#c4cdd8" stroke-width="1"/>
+    <line x1="120" y1="225" x2="720" y2="225" stroke="#c4cdd8" stroke-width="1"/>
+    <line x1="120" y1="300" x2="720" y2="300" stroke="#c4cdd8" stroke-width="1"/>
+    <line x1="120" y1="375" x2="720" y2="375" stroke="#c4cdd8" stroke-width="1"/>
+    <line x1="120" y1="450" x2="720" y2="450" stroke="#c4cdd8" stroke-width="1"/>
+    <line x1="120" y1="525" x2="720" y2="525" stroke="#c4cdd8" stroke-width="1"/>
+    <line x1="120" y1="600" x2="720" y2="600" stroke="#20364e" stroke-width="2"/>
+    <text class="axis" x="112" y="155" text-anchor="end">1.00</text>
+    <text class="axis" x="112" y="230" text-anchor="end">0.90</text>
+    <text class="axis" x="112" y="305" text-anchor="end">0.80</text>
+    <text class="axis" x="112" y="380" text-anchor="end">0.70</text>
+    <text class="axis" x="112" y="455" text-anchor="end">0.60</text>
+    <text class="axis" x="112" y="530" text-anchor="end">0.50</text>
+    <text class="axis" x="112" y="605" text-anchor="end">0.40</text>
+  </g>
+  <!-- y axis title -->
+  <text class="s" x="58" y="375" text-anchor="middle" transform="rotate(-90 58 375)">source-level ROC-AUC</text>
+
+  <!-- ===== reference floor lines (labels live in the right column) ===== -->
+  <!-- missingness-only floor: balanced 0.466 -> treat AUC ~0.47 -> y = 600 - (0.47-0.40)/0.6*450 = 600-52.5=547.5 -->
+  <line x1="120" y1="547" x2="720" y2="547" stroke="#2f6f99" stroke-width="2" stroke-dasharray="7 6"/>
+  <!-- majority-class / chance floor: 0.50 -> y=525 -->
+  <line x1="120" y1="525" x2="720" y2="525" stroke="#5c6f84" stroke-width="2" stroke-dasharray="3 5"/>
+
+  <!--
+    Three condition groups: stroke (3 sources), Parkinson's (2), cerebral palsy (2).
+    Within each group, 3 bars: pooled scalar (blue), full map (orange), marginals (violet).
+    Bar width 34, gap 6 within trio, group centres at x=240, 480, 720.
+    Illustrative values (AUC):
+      stroke:   scalar 0.72, map 0.83, marg 0.78
+      PD:       scalar 0.66, map 0.74, marg 0.70
+      CP:       scalar 0.70, map 0.76, marg 0.73
+    y(a) = 600 - (a-0.40)/0.60*450
+  -->
+
+  <!-- ============ GROUP: STROKE (centre 220) ============ -->
+  <!-- bar x positions: scalar 169, map 203, marg 243 (width34, gap6) -->
+  <!-- scalar 0.72 -> y=360, h=240 ; map 0.83 -> y=277.5, h=322.5 ; marg 0.78 -> y=315, h=285 -->
+  <rect x="169" y="360"   width="34" height="240"   fill="#2f6f99"/>
+  <rect x="203" y="277.5" width="34" height="322.5" fill="#e07a4b"/>
+  <rect x="243" y="315"   width="34" height="285"   fill="#8a6fb3"/>
+  <!-- CI whiskers -->
+  <line x1="186" y1="330" x2="186" y2="390" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="179" y1="330" x2="193" y2="330" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="179" y1="390" x2="193" y2="390" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="220" y1="252" x2="220" y2="303" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="213" y1="252" x2="227" y2="252" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="213" y1="303" x2="227" y2="303" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="260" y1="288" x2="260" y2="342" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="253" y1="288" x2="267" y2="288" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="253" y1="342" x2="267" y2="342" stroke="#20364e" stroke-width="1.75"/>
+  <!-- per-source dots (3 stroke sources) on the map bar -->
+  <circle cx="220" cy="285" r="3.5" fill="#20364e"/>
+  <circle cx="220" cy="293" r="3.5" fill="#20364e"/>
+  <circle cx="220" cy="300" r="3.5" fill="#20364e"/>
+  <text class="s" x="220" y="622" text-anchor="middle">Stroke (3 src)</text>
+
+  <!-- ============ GROUP: PARKINSON'S (centre 420) ============ -->
+  <!-- scalar 369, map 403, marg 443 -->
+  <!-- scalar 0.66 -> y=405, h=195 ; map 0.74 -> y=345, h=255 ; marg 0.70 -> y=375, h=225 -->
+  <rect x="369" y="405" width="34" height="195" fill="#2f6f99"/>
+  <rect x="403" y="345" width="34" height="255" fill="#e07a4b"/>
+  <rect x="443" y="375" width="34" height="225" fill="#8a6fb3"/>
+  <line x1="386" y1="378" x2="386" y2="432" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="379" y1="378" x2="393" y2="378" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="379" y1="432" x2="393" y2="432" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="420" y1="315" x2="420" y2="375" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="413" y1="315" x2="427" y2="315" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="413" y1="375" x2="427" y2="375" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="466" y1="348" x2="466" y2="402" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="459" y1="348" x2="473" y2="348" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="459" y1="402" x2="473" y2="402" stroke="#20364e" stroke-width="1.75"/>
+  <!-- 2 PD sources -->
+  <circle cx="420" cy="352" r="3.5" fill="#20364e"/>
+  <circle cx="420" cy="366" r="3.5" fill="#20364e"/>
+  <text class="s" x="420" y="622" text-anchor="middle">Parkinson's (2 src)</text>
+
+  <!-- ============ GROUP: CEREBRAL PALSY (centre 620) ============ -->
+  <!-- scalar 569, map 603, marg 643 -->
+  <!-- scalar 0.70 -> y=375, h=225 ; map 0.76 -> y=330, h=270 ; marg 0.73 -> y=352.5, h=247.5 -->
+  <rect x="569" y="375"   width="34" height="225"   fill="#2f6f99"/>
+  <rect x="603" y="330"   width="34" height="270"   fill="#e07a4b"/>
+  <rect x="643" y="352.5" width="34" height="247.5" fill="#8a6fb3"/>
+  <line x1="586" y1="348" x2="586" y2="402" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="579" y1="348" x2="593" y2="348" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="579" y1="402" x2="593" y2="402" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="626" y1="303" x2="626" y2="357" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="619" y1="303" x2="633" y2="303" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="619" y1="357" x2="633" y2="357" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="666" y1="327" x2="666" y2="378" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="659" y1="327" x2="673" y2="327" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="659" y1="378" x2="673" y2="378" stroke="#20364e" stroke-width="1.75"/>
+  <!-- 2 CP sources -->
+  <circle cx="626" cy="338" r="3.5" fill="#20364e"/>
+  <circle cx="626" cy="352" r="3.5" fill="#20364e"/>
+  <text class="s" x="626" y="622" text-anchor="middle">Cerebral palsy (2 src)</text>
+
+  <!-- x axis baseline label -->
+  <text class="s" x="420" y="654" text-anchor="middle">held-out abnormal condition (leave-one-source-out); black dots = one per held-out source</text>
+
+  <!-- ================= LEGEND + FLOORS (right column) ================= -->
+  <!-- card: x 760..1152 (width 392); text inset left 782, top baseline >=30px below top -->
+  <g>
+    <rect x="760" y="150" width="392" height="300" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+    <text class="t" x="782" y="186">Readouts (same tensor)</text>
+    <rect x="782" y="204" width="18" height="18" fill="#2f6f99"/>
+    <text class="lg" x="810" y="218">pooled scalar (incumbent)</text>
+    <rect x="782" y="236" width="18" height="18" fill="#e07a4b"/>
+    <text class="lg" x="810" y="250">full 192-cell map (primary)</text>
+    <rect x="782" y="268" width="18" height="18" fill="#8a6fb3"/>
+    <text class="lg" x="810" y="282">joint plus segment marginals</text>
+    <text class="s" x="782" y="312">whiskers: bootstrap CI over sources</text>
+
+    <line x1="782" y1="330" x2="1130" y2="330" stroke="#c4cdd8" stroke-width="1.5"/>
+
+    <text class="t" x="782" y="360" font-size="16">Reference floors</text>
+    <line x1="782" y1="382" x2="810" y2="382" stroke="#2f6f99" stroke-width="2" stroke-dasharray="7 6"/>
+    <text class="lg" x="820" y="387" fill="#2f6f99">missingness-only floor (bal. 0.466)</text>
+    <line x1="782" y1="414" x2="810" y2="414" stroke="#5c6f84" stroke-width="2" stroke-dasharray="3 5"/>
+    <text class="lg" x="820" y="419" fill="#5c6f84">chance / majority floor (0.50)</text>
+  </g>
+
+  <!-- pre-registered margin callout: y 506..646, gap 450->506 = 56 -->
+  <g>
+    <rect x="760" y="506" width="392" height="140" rx="16" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+    <text class="t" x="782" y="542" fill="#0f2440">Win condition</text>
+    <text class="s" x="782" y="572">Map counts as structure only if it beats</text>
+    <text class="s" x="782" y="596">the scalar by +0.05 AND beats the</text>
+    <text class="s" x="782" y="620">missingness-only floor by +0.05.</text>
+  </g>
+
+  <!-- footer: baseline y=672 (48px above bottom), >=24px below the last cards (646, 622) -->
+  <text class="s" x="48" y="672">Folder labels (stroke, parkinsons, cerebral palsy, myopathic) are dataset annotations, not diagnoses. No number here is a validated biomarker.</text>
+</svg>

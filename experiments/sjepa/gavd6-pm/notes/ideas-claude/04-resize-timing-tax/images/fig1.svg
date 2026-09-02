@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="fig1title fig1desc">
+  <title id="fig1title">The 64-frame resize collapses different real durations onto one identical token time-grid</title>
+  <desc id="fig1desc">A 2 second clip and a 4 second clip, walked at different real cadences, are each duration-warped onto the same fixed 64-frame normalized grid of 16 time positions. After the resize both clips share an identical normalized shape, so absolute cadence in real steps per minute is erased and any per-clip cadence readout is the same constant for both.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">The 64-frame resize erases absolute cadence</text>
+  <text x="48" y="90" class="s">Illustrative expected shape. Two clips of different real duration warped onto one shared normalized grid. Real-time rate cannot survive.</text>
+
+  <!-- ============ TOP: SLOW CLIP ============ -->
+  <!-- card: y 100..264 (height 164) -->
+  <rect x="48" y="100" width="470" height="164" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="132" class="t">Clip A: slow gait</text>
+  <text x="70" y="160" class="b">Real duration 4.0 s at 30 fps</text>
+  <text x="70" y="184" class="b">Absolute cadence 55 steps / min</text>
+
+  <!-- slow waveform: 2 cycles, kept in clear space below the caption -->
+  <line x1="70" y1="216" x2="496" y2="216" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M70 216 Q123 196 176 216 Q229 236 282 216 Q335 196 388 216 Q441 236 494 216"
+        fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+
+  <!-- ============ BOTTOM: FAST CLIP ============ -->
+  <!-- card: y 320..484 (height 164), gap from 264 = 56 -->
+  <rect x="48" y="320" width="470" height="164" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="352" class="t">Clip B: fast gait</text>
+  <text x="70" y="380" class="b">Real duration 2.0 s at 30 fps</text>
+  <text x="70" y="404" class="b">Absolute cadence 140 steps / min</text>
+
+  <!-- fast waveform: SAME 2 cycles over the width but shorter real duration -->
+  <line x1="70" y1="436" x2="496" y2="436" stroke="#c4cdd8" stroke-width="1.5"/>
+  <path d="M70 436 Q123 416 176 436 Q229 456 282 436 Q335 416 388 436 Q441 456 494 436"
+        fill="none" stroke="#e07a4b" stroke-width="2.5"/>
+
+  <!-- ============ ARROWS INTO RESIZE (single right-angle bend each) ============ -->
+  <!-- Clip A: horizontal out, one bend, down onto resize box top edge (y=232) -->
+  <path d="M518 182 L688 182 L688 231" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <!-- Clip B: horizontal out, one bend, up onto resize box bottom edge (y=352) -->
+  <path d="M518 402 L688 402 L688 353" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ============ RESIZE OPERATOR ============ -->
+  <!-- card: x 618..794, y 232..352 (height 120) -->
+  <rect x="618" y="232" width="176" height="120" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="706" y="276" text-anchor="middle" class="w">temporal_resize</text>
+  <text x="706" y="302" text-anchor="middle" class="ws">warp to 64 frames</text>
+  <text x="706" y="324" text-anchor="middle" class="ws">= 16 time positions</text>
+
+  <!-- resize -> grid: straight horizontal, arrowhead lands on grid card left edge (x=918) -->
+  <path d="M794 292 L917 292" fill="none" stroke="#20364e" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ============ SHARED NORMALIZED GRID (RESULT) ============ -->
+  <!-- card: x 918..1152, y 100..416 (height 316) -->
+  <rect x="918" y="100" width="234" height="316" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="940" y="132" class="t">One identical</text>
+  <text x="940" y="160" class="t">normalized grid</text>
+
+  <!-- normalized axis 0 to 1 with 16 tick marks (baseline y=232) -->
+  <line x1="940" y1="232" x2="1130" y2="232" stroke="#c4cdd8" stroke-width="1.5"/>
+  <g stroke="#c4cdd8" stroke-width="1.5">
+    <line x1="940" y1="228" x2="940" y2="236"/>
+    <line x1="963.75" y1="228" x2="963.75" y2="236"/>
+    <line x1="987.5" y1="228" x2="987.5" y2="236"/>
+    <line x1="1011.25" y1="228" x2="1011.25" y2="236"/>
+    <line x1="1035" y1="228" x2="1035" y2="236"/>
+    <line x1="1058.75" y1="228" x2="1058.75" y2="236"/>
+    <line x1="1082.5" y1="228" x2="1082.5" y2="236"/>
+    <line x1="1106.25" y1="228" x2="1106.25" y2="236"/>
+    <line x1="1130" y1="228" x2="1130" y2="236"/>
+  </g>
+
+  <!-- both waveforms now overlap: 2 cycles across the same normalized span -->
+  <path d="M940 232 Q963.75 212 987.5 232 Q1011.25 252 1035 232 Q1058.75 212 1082.5 232 Q1106.25 252 1130 232"
+        fill="none" stroke="#2f6f99" stroke-width="2.5"/>
+  <path d="M940 232 Q963.75 212 987.5 232 Q1011.25 252 1035 232 Q1058.75 212 1082.5 232 Q1106.25 252 1130 232"
+        fill="none" stroke="#e07a4b" stroke-width="2.5" stroke-dasharray="7 6"/>
+
+  <!-- position labels sit below the waveform trough (y max 252), clear of the curve -->
+  <text x="940" y="284" class="s">position 0</text>
+  <text x="1130" y="284" text-anchor="end" class="s">position 1</text>
+
+  <text x="940" y="322" class="b">Clip A (solid) and Clip B</text>
+  <text x="940" y="346" class="b">(dashed) now coincide.</text>
+  <text x="940" y="384" class="s">real seconds no longer exist</text>
+
+  <!-- ============ READOUT / CONCLUSION BOX ============ -->
+  <!-- card: y 540..648 (height 108), gap from 484 = 56; footer 24px below -->
+  <rect x="48" y="540" width="1104" height="108" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="574" class="t">Cadence readout after resize is one constant for both clips</text>
+  <text x="70" y="602" class="b">Per-normalized-clip cadence is 2 cycles per clip for both A and B. The real-time gap of 55 vs 140 steps / min is erased.</text>
+  <text x="70" y="626" class="b">Absolute cadence is invariant under duration-warped resizing by construction, gone before the encoder sees any token.</text>
+
+  <text x="48" y="672" class="s">Illustrative expected shape. Cadence and duration values are illustrative. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

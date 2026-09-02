@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="fig08title fig08desc" font-family="Arial, sans-serif">
+  <title id="fig08title">Three gait knobs on a mixing board, each moving only its own sign</title>
+  <desc id="fig08desc">Three labeled dials like a music mixing board. z asym controls left minus right asymmetry, z rhythm controls stride time wobble, z posture controls pelvic tilt. In the good disentangled case, turning one knob moves only its own gait picture and leaves the other two still. A note explains that if turning one knob also moves the others, the knobs are tangled, which is a NO result.</desc>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1200" height="760" fill="#f7f5ef"/>
+
+  <!-- header -->
+  <text x="60" y="58" font-size="34" font-weight="bold" fill="#0f2440">Three knobs for gait: turn one, move one</text>
+  <text x="60" y="92" font-size="19" fill="#33475e">The idea (item 08): give the model three tidy knobs, so each one controls just one part of how a person walks.</text>
+  <text x="60" y="118" font-size="19" fill="#5c6f84">Think of a music mixing board, where the bass slider changes only the bass and leaves the drums alone.</text>
+
+  <!-- mixing board panel -->
+  <rect x="60" y="150" width="1080" height="368" rx="16" fill="#e7f0f8" stroke="#2f6f99" stroke-width="2"/>
+  <text x="84" y="184" font-size="17" fill="#5c6f84">The mixing board (each column is one knob, plus the little picture it should move)</text>
+
+  <!-- ===================== KNOB 1: z_asym ===================== -->
+  <g>
+    <!-- knob card -->
+    <rect x="96" y="206" width="300" height="150" rx="16" fill="#ffffff" stroke="#2f6f99" stroke-width="2"/>
+    <text x="246" y="238" font-size="22" font-weight="bold" fill="#20364e" text-anchor="middle">z_asym</text>
+    <text x="246" y="262" font-size="15" fill="#5c6f84" text-anchor="middle">left minus right lopsidedness</text>
+
+    <!-- slider track -->
+    <rect x="138" y="300" width="216" height="10" rx="5" fill="#dce7f0" stroke="#2f6f99" stroke-width="1"/>
+    <!-- slider handle -->
+    <rect x="298" y="286" width="20" height="38" rx="5" fill="#e07a4b" stroke="#20364e" stroke-width="1.5"/>
+    <text x="138" y="336" font-size="12" fill="#5c6f84">even</text>
+    <text x="354" y="336" font-size="12" fill="#5c6f84" text-anchor="end">lopsided</text>
+
+    <!-- arrow down to icon -->
+    <line x1="246" y1="360" x2="246" y2="404" stroke="#e07a4b" stroke-width="3"/>
+    <polygon points="246,414 240,402 252,402" fill="#e07a4b"/>
+
+    <!-- icon: two footsteps, one shifted (asymmetry) -->
+    <rect x="96" y="420" width="300" height="84" rx="16" fill="#fbe9df" stroke="#e07a4b" stroke-width="2"/>
+    <ellipse cx="206" cy="462" rx="15" ry="24" fill="#20364e"/>
+    <ellipse cx="272" cy="474" rx="15" ry="24" fill="#20364e"/>
+    <text x="246" y="497" font-size="13" fill="#33475e" text-anchor="middle">one side steps different from the other</text>
+  </g>
+
+  <!-- ===================== KNOB 2: z_rhythm ===================== -->
+  <g>
+    <rect x="450" y="206" width="300" height="150" rx="16" fill="#ffffff" stroke="#2f6f99" stroke-width="2"/>
+    <text x="600" y="238" font-size="22" font-weight="bold" fill="#20364e" text-anchor="middle">z_rhythm</text>
+    <text x="600" y="262" font-size="15" fill="#5c6f84" text-anchor="middle">stride-time wobble (jittery timing)</text>
+
+    <rect x="492" y="300" width="216" height="10" rx="5" fill="#dce7f0" stroke="#2f6f99" stroke-width="1"/>
+    <rect x="592" y="286" width="20" height="38" rx="5" fill="#e07a4b" stroke="#20364e" stroke-width="1.5"/>
+    <text x="492" y="336" font-size="12" fill="#5c6f84">steady</text>
+    <text x="708" y="336" font-size="12" fill="#5c6f84" text-anchor="end">shaky</text>
+
+    <line x1="600" y1="360" x2="600" y2="404" stroke="#e07a4b" stroke-width="3"/>
+    <polygon points="600,414 594,402 606,402" fill="#e07a4b"/>
+
+    <!-- icon: wobbly metronome / heartbeat line -->
+    <rect x="450" y="420" width="300" height="84" rx="16" fill="#fbe9df" stroke="#e07a4b" stroke-width="2"/>
+    <polyline points="472,462 500,462 512,444 528,482 544,462 566,462 578,448 596,478 612,462 640,462 652,446 668,480 684,462 728,462" fill="none" stroke="#20364e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="600" y="497" font-size="13" fill="#33475e" text-anchor="middle">the beat between steps speeds up and slows down</text>
+  </g>
+
+  <!-- ===================== KNOB 3: z_posture ===================== -->
+  <g>
+    <rect x="804" y="206" width="300" height="150" rx="16" fill="#ffffff" stroke="#2f6f99" stroke-width="2"/>
+    <text x="954" y="238" font-size="22" font-weight="bold" fill="#20364e" text-anchor="middle">z_posture</text>
+    <text x="954" y="262" font-size="15" fill="#5c6f84" text-anchor="middle">pelvic tilt (hip angle when standing)</text>
+
+    <rect x="846" y="300" width="216" height="10" rx="5" fill="#dce7f0" stroke="#2f6f99" stroke-width="1"/>
+    <rect x="946" y="286" width="20" height="38" rx="5" fill="#e07a4b" stroke="#20364e" stroke-width="1.5"/>
+    <text x="846" y="336" font-size="12" fill="#5c6f84">upright</text>
+    <text x="1062" y="336" font-size="12" fill="#5c6f84" text-anchor="end">tilted</text>
+
+    <line x1="954" y1="360" x2="954" y2="404" stroke="#e07a4b" stroke-width="3"/>
+    <polygon points="954,414 948,402 960,402" fill="#e07a4b"/>
+
+    <!-- icon: tilted pelvis / stick figure -->
+    <rect x="804" y="420" width="300" height="84" rx="16" fill="#fbe9df" stroke="#e07a4b" stroke-width="2"/>
+    <!-- simple tilted torso stick figure -->
+    <circle cx="932" cy="440" r="8" fill="#20364e"/>
+    <line x1="932" y1="448" x2="944" y2="474" stroke="#20364e" stroke-width="3" stroke-linecap="round"/>
+    <line x1="944" y1="474" x2="924" y2="474" stroke="#20364e" stroke-width="3" stroke-linecap="round"/>
+    <line x1="944" y1="474" x2="964" y2="474" stroke="#20364e" stroke-width="3" stroke-linecap="round"/>
+    <line x1="924" y1="474" x2="920" y2="490" stroke="#20364e" stroke-width="3" stroke-linecap="round"/>
+    <line x1="964" y1="474" x2="968" y2="490" stroke="#20364e" stroke-width="3" stroke-linecap="round"/>
+    <text x="954" y="497" font-size="13" fill="#33475e" text-anchor="middle">the hips tip forward or back</text>
+  </g>
+
+  <!-- ===================== GOOD CASE (disentangled) ===================== -->
+  <rect x="60" y="540" width="700" height="180" rx="16" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="2"/>
+  <text x="84" y="574" font-size="21" font-weight="bold" fill="#20364e">The good case: knobs are untangled</text>
+  <text x="84" y="602" font-size="16" fill="#33475e">Turn the z_asym knob and ONLY the lopsidedness picture moves.</text>
+  <text x="84" y="626" font-size="16" fill="#33475e">The rhythm and posture pictures stay perfectly still.</text>
+  <text x="84" y="650" font-size="16" fill="#33475e">That clean one-knob, one-effect behavior is called steerability</text>
+  <text x="84" y="674" font-size="16" fill="#5c6f84">(you can steer one trait on purpose without dragging the others along).</text>
+
+  <!-- three mini-lights showing one on, two off -->
+  <g>
+    <circle cx="620" cy="596" r="12" fill="#5f9e7e" stroke="#20364e" stroke-width="1.5"/>
+    <text x="640" y="601" font-size="14" fill="#33475e">moved</text>
+    <circle cx="620" cy="628" r="12" fill="#ffffff" stroke="#8aa0b0" stroke-width="1.5"/>
+    <text x="640" y="633" font-size="14" fill="#5c6f84">still</text>
+    <circle cx="620" cy="660" r="12" fill="#ffffff" stroke="#8aa0b0" stroke-width="1.5"/>
+    <text x="640" y="665" font-size="14" fill="#5c6f84">still</text>
+  </g>
+
+  <!-- ===================== BAD CASE note (tangled = NO) ===================== -->
+  <rect x="784" y="540" width="356" height="180" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="2"/>
+  <text x="808" y="574" font-size="19" font-weight="bold" fill="#20364e">If the knobs are tangled</text>
+  <text x="808" y="602" font-size="15" fill="#33475e">If turning one knob also moves the</text>
+  <text x="808" y="623" font-size="15" fill="#33475e">others, the traits are tangled, and</text>
+  <text x="808" y="644" font-size="15" fill="#33475e">the idea fails its test.</text>
+  <text x="808" y="674" font-size="14" fill="#5c6f84">That is a NO result (a no that still</text>
+  <text x="808" y="694" font-size="14" fill="#5c6f84">teaches us something real).</text>
+
+  <!-- footer / honest scope note -->
+  <text x="60" y="746" font-size="13" fill="#5c6f84">Note: this is a design idea being tested, not a medical tool. It reads movement from short video clips only, and does not diagnose real patients.</text>
+</svg>

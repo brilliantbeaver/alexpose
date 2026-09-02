@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">How the all-96 stratified sequence split works</title>
+  <desc id="desc">A tutorial diagram showing the five canonical classes, the 67 training and 29 test sequence rows, and the two forms of exposure that limit interpretation.</desc>
+  <defs>
+    <style>
+      .title{font:700 42px Arial,sans-serif;fill:#17324d}.sub{font:24px Arial,sans-serif;fill:#40566c}
+      .head{font:700 27px Arial,sans-serif;fill:#17324d}.body{font:22px Arial,sans-serif;fill:#25384a}
+      .small{font:19px Arial,sans-serif;fill:#40566c}.num{font:700 30px Arial,sans-serif;fill:white}
+      .warn{font:700 22px Arial,sans-serif;fill:#9d3833}.box{stroke:#17324d;stroke-width:2.5;rx:22}
+      .stem{fill:none;stroke:#17324d;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .connector{fill:none;stroke:#17324d;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 12 12" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#17324d"/></marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#fbfaf7"/>
+  <text x="70" y="74" class="title">“All-96 stratified” preserves class proportions in a sequence split</text>
+  <text x="70" y="116" class="sub">It is useful for a descriptive readout. It is not an unseen-video test.</text>
+
+  <rect x="70" y="170" width="380" height="555" class="box" fill="#eef3f6"/>
+  <text x="105" y="220" class="head">1. Full cohort: 96</text>
+  <text x="105" y="255" class="small">Each row is one 64-frame sequence.</text>
+  <g>
+    <rect x="110" y="300" width="88" height="64" rx="12" fill="#72a66a"/><text x="154" y="342" text-anchor="middle" class="num">12</text><text x="220" y="339" class="body">Normal</text>
+    <rect x="110" y="382" width="88" height="64" rx="12" fill="#7562a8"/><text x="154" y="424" text-anchor="middle" class="num">9</text><text x="220" y="421" class="body">Parkinson's</text>
+    <rect x="110" y="464" width="88" height="64" rx="12" fill="#3977a8"/><text x="154" y="506" text-anchor="middle" class="num">12</text><text x="220" y="503" class="body">Stroke</text>
+    <rect x="110" y="546" width="88" height="64" rx="12" fill="#d97745"/><text x="154" y="588" text-anchor="middle" class="num">47</text><text x="220" y="585" class="body">Myopathic</text>
+    <rect x="110" y="628" width="88" height="64" rx="12" fill="#d9a441"/><text x="154" y="670" text-anchor="middle" class="num">16</text><text x="220" y="667" class="body">Cerebral palsy</text>
+  </g>
+
+  <!-- One quiet fork makes the train/test split explicit. -->
+  <path d="M450 447 H515" class="stem"/>
+  <path d="M515 447 V325 H580" class="connector"/>
+  <path d="M515 447 V665 H580" class="connector"/>
+
+  <rect x="600" y="170" width="400" height="310" class="box" fill="#e7f0f7"/>
+  <text x="635" y="220" class="head">2. Train split: 67</text>
+  <text x="635" y="262" class="body">Normal</text><text x="930" y="262" text-anchor="end" class="head">8</text>
+  <text x="635" y="302" class="body">Parkinson's</text><text x="930" y="302" text-anchor="end" class="head">6</text>
+  <text x="635" y="342" class="body">Stroke</text><text x="930" y="342" text-anchor="end" class="head">9</text>
+  <text x="635" y="382" class="body">Myopathic</text><text x="930" y="382" text-anchor="end" class="head">33</text>
+  <text x="635" y="422" class="body">Cerebral palsy</text><text x="930" y="422" text-anchor="end" class="head">11</text>
+
+  <rect x="600" y="510" width="400" height="310" class="box" fill="#fff0d6"/>
+  <text x="635" y="560" class="head">3. Test split: 29</text>
+  <text x="635" y="602" class="body">Normal</text><text x="930" y="602" text-anchor="end" class="head">4</text>
+  <text x="635" y="642" class="body">Parkinson's</text><text x="930" y="642" text-anchor="end" class="head">3</text>
+  <text x="635" y="682" class="body">Stroke</text><text x="930" y="682" text-anchor="end" class="head">3</text>
+  <text x="635" y="722" class="body">Myopathic</text><text x="930" y="722" text-anchor="end" class="head">14</text>
+  <text x="635" y="762" class="body">Cerebral palsy</text><text x="930" y="762" text-anchor="end" class="head">5</text>
+
+  <rect x="1060" y="170" width="470" height="650" class="box" fill="#fff7f4"/>
+  <text x="1100" y="225" class="head">4. Interpret with care</text>
+  <rect x="1100" y="270" width="390" height="145" rx="18" fill="#fff" stroke="#b94e48" stroke-width="3"/>
+  <text x="1130" y="315" class="warn">Source-video overlap</text>
+  <text x="1130" y="353" class="body">All 16 test videos also appear</text>
+  <text x="1130" y="385" class="body">in classifier training.</text>
+  <rect x="1100" y="445" width="390" height="160" rx="18" fill="#fff" stroke="#b94e48" stroke-width="3"/>
+  <text x="1130" y="490" class="warn">Representation exposure</text>
+  <text x="1130" y="528" class="body">The encoder trained on all 96 rows</text>
+  <text x="1130" y="560" class="body">before the readout split was made.</text>
+  <rect x="1100" y="635" width="390" height="160" rx="18" fill="#fff" stroke="#17324d" stroke-width="3"/>
+  <text x="1130" y="676" class="head">What the result can say</text>
+  <text x="1130" y="714" class="body">The vector contains class-related</text>
+  <text x="1130" y="744" class="body">structure inside this known corpus.</text>
+  <text x="1130" y="779" class="warn">Not unseen-video accuracy.</text>
+
+  <text x="70" y="860" class="small">Stratification preserves class proportions. It does not create independent people, videos, cameras, or representation training.</text>
+</svg>

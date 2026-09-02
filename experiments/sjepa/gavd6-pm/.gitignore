@@ -1,0 +1,14 @@
+.venv/
+work/
+.work_scratch/
+__pycache__/
+.ipynb_checkpoints/
+cache/matplotlib/
+*.blg
+
+# Local pose sequences and all derived experimental outputs. These artifacts
+# remain available locally for reproduction but are not published in Git.
+cache/artifacts
+
+# Temporary Pandoc support files generated while building local PDFs.
+notes/ideas-claude/.pandoc/

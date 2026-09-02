@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Difficulty audit: masked-count distribution and visible-neighbor fraction across mask arms</title>
+  <desc id="desc">Illustrative expected shape. Left panel: per-sample masked-token count distributions for the uniform mask, the structured mask, and the marginal-matched scrambled control, expected to sit at the same controlled count. Right panel: fraction of masked tokens that still have a visible same-side or temporal neighbor, expected to be high for the uniform mask and low for the structured mask, with the scrambled control matching the structured mask on marginals but not on coherence.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #20364e; }
+    .h { font-size: 32px; font-weight: 700; fill: #0f2440; }
+    .t { font-size: 20px; font-weight: 700; fill: #0f2440; }
+    .b { font-size: 16px; fill: #33475e; }
+    .s { font-size: 14px; fill: #5c6f84; }
+    .w { font-size: 16px; font-weight: 700; fill: #ffffff; }
+    .axis { stroke: #20364e; stroke-width: 2; }
+    .grid { stroke: #c4cdd8; stroke-width: 1.5; }
+  </style>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="56" class="h" text-anchor="start">Difficulty audit: measure the gap between masks, do not assume it away</text>
+  <text x="48" y="84" class="s" text-anchor="start">Illustrative expected shape. Not measured results. The controlled variable is per-sample masked-token count; the coherence gap is what we then measure.</text>
+
+  <!-- ============ LEFT PANEL: masked-count distribution ============ -->
+  <rect x="48" y="112" width="540" height="480" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="146" class="t" text-anchor="start">A. Per-sample masked-token count</text>
+  <text x="72" y="170" class="s" text-anchor="start">controlled to be equal across arms (same target count per sample)</text>
+
+  <!-- axes -->
+  <line x1="150" y1="210" x2="150" y2="540" class="axis"/>
+  <line x1="150" y1="540" x2="560" y2="540" class="axis"/>
+  <text x="112" y="380" class="s" text-anchor="middle" transform="rotate(-90 112 380)">sample count</text>
+  <text x="355" y="574" class="s" text-anchor="middle">masked tokens per sample</text>
+
+  <!-- controlled target line -->
+  <line x1="355" y1="210" x2="355" y2="540" stroke="#8a6fb3" stroke-dasharray="7 6" stroke-width="2"/>
+  <text x="365" y="228" class="s" text-anchor="start">controlled target count</text>
+
+  <!-- three overlapping narrow distributions all centered on the target line -->
+  <!-- Uniform (orange) -->
+  <path d="M300,540 C330,470 380,470 410,540 Z" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75" opacity="0.85"/>
+  <!-- Structured (green) -->
+  <path d="M310,540 C335,485 375,485 400,540 Z" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75" opacity="0.7"/>
+  <!-- Scrambled (blue) -->
+  <path d="M318,540 C338,495 372,495 392,540 Z" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75" opacity="0.6"/>
+
+  <text x="150" y="490" class="s" text-anchor="start">All three arms</text>
+  <text x="150" y="510" class="s" text-anchor="start">overlap here:</text>
+  <text x="150" y="530" class="s" text-anchor="start">count matched</text>
+
+  <!-- ============ RIGHT PANEL: visible-neighbor fraction ============ -->
+  <rect x="644" y="112" width="508" height="480" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="668" y="146" class="t" text-anchor="start">B. Visible-neighbor fraction</text>
+  <text x="668" y="170" class="s" text-anchor="start">share of masked tokens keeping a visible same-side or temporal neighbor</text>
+
+  <line x1="740" y1="210" x2="740" y2="540" class="axis"/>
+  <line x1="740" y1="540" x2="1120" y2="540" class="axis"/>
+  <text x="702" y="380" class="s" text-anchor="middle" transform="rotate(-90 702 380)">fraction with visible neighbor</text>
+  <line x1="740" y1="252" x2="1120" y2="252" class="grid"/>
+  <line x1="740" y1="324" x2="1120" y2="324" class="grid"/>
+  <line x1="740" y1="396" x2="1120" y2="396" class="grid"/>
+  <line x1="740" y1="468" x2="1120" y2="468" class="grid"/>
+  <text x="730" y="257" class="s" text-anchor="end">high</text>
+  <text x="730" y="545" class="s" text-anchor="end">low</text>
+
+  <!-- Uniform: high neighbor fraction (scattered dots leave neighbors visible) -->
+  <rect x="784" y="264" width="72" height="276" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="820" y="566" class="b" text-anchor="middle">U</text>
+  <text x="820" y="586" class="s" text-anchor="middle">uniform</text>
+
+  <!-- Structured: low neighbor fraction (coherent blocks remove neighbors) -->
+  <rect x="898" y="456" width="72" height="84" fill="#e6f2ea" stroke="#5f9e7e" stroke-width="1.75"/>
+  <text x="934" y="566" class="b" text-anchor="middle">S</text>
+  <text x="934" y="586" class="s" text-anchor="middle">structured</text>
+
+  <!-- Scrambled: matches marginals but coherence destroyed -> back near uniform -->
+  <rect x="1012" y="288" width="72" height="252" fill="#e7f0f8" stroke="#2f6f99" stroke-width="1.75"/>
+  <text x="1048" y="566" class="b" text-anchor="middle">S-scram</text>
+
+  <!-- the meaningful gap annotation, placed in clear space above the S bar -->
+  <text x="862" y="372" class="s" text-anchor="start">coherence gap:</text>
+  <text x="862" y="394" class="s" text-anchor="start">S removes neighbors</text>
+  <!-- straight vertical arrow pointing down to the top of the low S bar -->
+  <path d="M934,406 L934,440" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Footer -->
+  <text x="48" y="620" class="s" text-anchor="start">S-scram shares S's joint and time marginal histograms and its masked count, yet keeps neighbors visible like U: so any S advantage that survives against S-scram is due to structure,</text>
+  <text x="48" y="644" class="s" text-anchor="start">not to which joints or times were hidden. Reconstruction-difficulty proxies (masked-position loss, teacher-target entropy) are reported per arm alongside these panels.</text>
+  <text x="48" y="668" class="s" text-anchor="start">Folder labels are dataset annotations, not diagnoses. Bars, curves, and dots are placeholders for expected ordering only.</text>
+</svg>
