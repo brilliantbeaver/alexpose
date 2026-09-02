@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Integrated stack for the seven research directions</title>
+  <desc>A central pipeline from gauge-aware perception through counterfactual data and feasibility calibration to Wrench-JEPA, with optional transfer, generation, and agent layers.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,sans-serif;fill:#0f2440}.t{font:700 20px Arial,sans-serif;fill:#0f2440}.b{font:16px Arial,sans-serif;fill:#33475e}.s{font:14px Arial,sans-serif;fill:#5c6f84}.w{font:700 16px Arial,sans-serif;fill:#fff}.card{stroke:#20364e;stroke-width:1.75}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.d{stroke:#5f9e7e;stroke-width:2.5;fill:none;stroke-dasharray:7 6;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">A staged stack, not one monolithic model</text>
+  <text class="s" x="48" y="104">The core world-model claim can be tested before generation, transfer, or agent routing.</text>
+
+  <rect class="card" x="60" y="265" width="200" height="170" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="307">4D posterior</text>
+  <text class="b" x="84" y="353">Gauge and metric state</text>
+  <text class="b" x="84" y="383">with uncertainty</text>
+
+  <path class="a" d="M276 350 H314"/>
+  <rect class="card" x="330" y="265" width="210" height="170" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="354" y="307">Counterfactuals</text>
+  <text class="b" x="354" y="353">One changed cause</text>
+  <text class="b" x="354" y="383">per paired world</text>
+
+  <path class="a" d="M556 350 H594"/>
+  <rect class="card" x="610" y="265" width="210" height="170" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="634" y="307">Feasibility</text>
+  <text class="b" x="634" y="353">Force-calibrated</text>
+  <text class="b" x="634" y="383">physical critic</text>
+
+  <path class="a" d="M836 350 H874"/>
+  <rect class="card" x="890" y="245" width="250" height="210" rx="16" fill="#ece6f6"/>
+  <text class="t" x="914" y="287">Wrench-JEPA</text>
+  <text class="b" x="914" y="333">Forward and inverse</text>
+  <text class="b" x="914" y="363">contact mechanics</text>
+  <text class="s" x="914" y="413">Core paper ends here</text>
+
+  <rect class="card" x="330" y="155" width="490" height="70" rx="16" fill="#fff"/>
+  <text class="t" x="354" y="198">Value-of-information agent routes optional tools</text>
+  <path class="d" d="M575 241 V249"/>
+
+  <rect class="card" x="185" y="535" width="350" height="110" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="209" y="577">Contact-mode generator</text>
+  <text class="b" x="209" y="613">Multiple executable inverse solutions</text>
+
+  <rect class="card" x="665" y="535" width="350" height="110" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="689" y="577">Cross-embodiment alphabet</text>
+  <text class="b" x="689" y="613">Few-shot transfer to a new body</text>
+
+  <path class="a" d="M930 471 V495 H360 V519"/>
+  <path class="a" d="M1010 471 V495 H840 V519"/>
+</svg>

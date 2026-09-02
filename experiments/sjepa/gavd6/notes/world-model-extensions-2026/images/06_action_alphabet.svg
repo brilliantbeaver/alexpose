@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Cross-embodiment biomechanical action alphabet</title>
+  <desc>Human and robot observations map into a shared contact phase and impulse representation that predicts the same object-centered effect.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,sans-serif;fill:#0f2440}.t{font:700 20px Arial,sans-serif;fill:#0f2440}.b{font:16px Arial,sans-serif;fill:#33475e}.s{font:14px Arial,sans-serif;fill:#5c6f84}.w{font:700 16px Arial,sans-serif;fill:#fff}.card{stroke:#20364e;stroke-width:1.75}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Define an action by its contact effect</text>
+  <text class="s" x="48" y="104">Embodiment-specific joint commands differ. Object-centered contact mechanics can be shared.</text>
+
+  <rect class="card" x="60" y="180" width="240" height="170" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="222">Human stream</text>
+  <text class="b" x="84" y="268">Body motion</text>
+  <text class="b" x="84" y="298">Ground force</text>
+  <text class="s" x="84" y="330">Hand, foot, or tool</text>
+
+  <rect class="card" x="60" y="410" width="240" height="170" rx="16" fill="#ece6f6"/>
+  <text class="t" x="84" y="452">Robot stream</text>
+  <text class="b" x="84" y="498">Joint state</text>
+  <text class="b" x="84" y="528">Control and torque</text>
+  <text class="s" x="84" y="560">Gripper or end effector</text>
+
+  <path class="a" d="M316 265 H374"/>
+  <path class="a" d="M316 495 H340 V380 H374"/>
+
+  <rect class="card" x="390" y="185" width="360" height="390" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="414" y="227">Shared action alphabet</text>
+  <rect x="414" y="258" width="312" height="58" rx="10" fill="#fff"/><text class="b" x="434" y="293">Contact sites</text>
+  <rect x="414" y="334" width="312" height="58" rx="10" fill="#fff"/><text class="b" x="434" y="369">Approach, stick, slide, release</text>
+  <rect x="414" y="410" width="312" height="58" rx="10" fill="#fff"/><text class="b" x="434" y="445">Object-frame point flow</text>
+  <rect x="414" y="486" width="312" height="58" rx="10" fill="#fff"/><text class="b" x="434" y="521">Impulse or 6D wrench</text>
+
+  <path class="a" d="M766 380 H824"/>
+
+  <rect class="card" x="840" y="245" width="300" height="270" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="864" y="287">Held-out embodiment</text>
+  <text class="b" x="864" y="333">Few labels map the token</text>
+  <text class="b" x="864" y="363">to new joint controls</text>
+  <text class="b" x="864" y="411">Test object effect</text>
+  <text class="b" x="864" y="441">and execution success</text>
+  <text class="s" x="864" y="487">Camera and identity probes</text>
+
+  <rect x="250" y="620" width="700" height="48" rx="16" fill="#20364e"/>
+  <text class="w" x="600" y="650" text-anchor="middle">Transfer succeeds only if the same effect needs fewer new labels.</text>
+</svg>

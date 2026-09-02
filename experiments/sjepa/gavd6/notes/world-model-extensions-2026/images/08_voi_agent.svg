@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Value-of-information biomechanics agent</title>
+  <desc>A policy compares expected physical uncertainty reduction with tool cost, calls a tool only when useful, and updates its belief.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,sans-serif;fill:#0f2440}.t{font:700 20px Arial,sans-serif;fill:#0f2440}.b{font:16px Arial,sans-serif;fill:#33475e}.s{font:14px Arial,sans-serif;fill:#5c6f84}.w{font:700 16px Arial,sans-serif;fill:#fff}.card{stroke:#20364e;stroke-width:1.75}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.loop{stroke:#5f9e7e;stroke-width:2.5;fill:none;stroke-dasharray:7 6;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Call a tool only when information is worth its cost</text>
+  <text class="s" x="48" y="104">Compare the learned frontier with fixed routers and the no-tool and always-call-all endpoints.</text>
+
+  <rect class="card" x="60" y="250" width="240" height="200" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="292">Current belief</text>
+  <text class="b" x="84" y="338">4D state posterior</text>
+  <text class="b" x="84" y="368">Task and provenance</text>
+  <text class="b" x="84" y="398">Physical uncertainty</text>
+
+  <path class="a" d="M316 350 H374"/>
+
+  <path class="card" d="M520 220 L665 350 L520 480 L375 350 Z" fill="#f7e7d8"/>
+  <text class="t" x="520" y="318" text-anchor="middle">Expected uncertainty</text>
+  <text class="t" x="520" y="348" text-anchor="middle">drop greater than</text>
+  <text class="t" x="520" y="378" text-anchor="middle">tool cost?</text>
+
+  <text class="s" x="688" y="268">Yes</text>
+  <path class="a" d="M665 350 H686 V285 H704"/>
+  <rect class="card" x="720" y="170" width="420" height="230" rx="16" fill="#ece6f6"/>
+  <text class="t" x="744" y="212">Call one tool</text>
+  <text class="b" x="744" y="258">SAM 2 or metric depth</text>
+  <text class="b" x="744" y="288">WHAM or force estimator</text>
+  <text class="b" x="744" y="318">OpenSim or MuJoCo</text>
+  <text class="s" x="744" y="366">Return value, uncertainty, cost</text>
+
+  <text class="s" x="688" y="508">No</text>
+  <path class="a" d="M665 350 H686 V525 H704"/>
+  <rect class="card" x="720" y="450" width="420" height="150" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="744" y="492">Answer or abstain</text>
+  <text class="b" x="744" y="538">Report evidence and uncertainty</text>
+  <text class="s" x="744" y="574">No diagnosis and no invented confidence</text>
+
+  <path class="loop" d="M930 154 V135 H180 V234"/>
+  <text class="s" x="400" y="160">Update belief with acquired output</text>
+
+  <rect x="250" y="620" width="700" height="48" rx="16" fill="#20364e"/>
+  <text class="w" x="600" y="650" text-anchor="middle">At fixed budgets, accuracy and calibration must improve.</text>
+</svg>

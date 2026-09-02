@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Gauge-aware metric 4D lifting</title>
+  <desc>Segmentation, depth, camera, and body estimates update a posterior that separates observation gauge from physical latent state.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,sans-serif;fill:#0f2440}.t{font:700 20px Arial,sans-serif;fill:#0f2440}.b{font:16px Arial,sans-serif;fill:#33475e}.s{font:14px Arial,sans-serif;fill:#5c6f84}.w{font:700 16px Arial,sans-serif;fill:#fff}.card{stroke:#20364e;stroke-width:1.75}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Metric 4D separates camera gauge from physical state</text>
+  <text class="s" x="48" y="104">Tool disagreement is evidence. It should not be averaged away before calibration.</text>
+
+  <rect class="card" x="60" y="170" width="220" height="130" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="212">SAM 2</text>
+  <text class="b" x="84" y="254">Human and object masks</text>
+  <text class="s" x="84" y="280">Identity confidence</text>
+
+  <rect class="card" x="60" y="350" width="220" height="130" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="392">Video depth</text>
+  <text class="b" x="84" y="434">Depth and focal cues</text>
+  <text class="s" x="84" y="460">Scale confidence</text>
+
+  <rect class="card" x="320" y="170" width="220" height="130" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="344" y="212">WHAM</text>
+  <text class="b" x="344" y="254">Body and root motion</text>
+  <text class="s" x="344" y="280">Contact confidence</text>
+
+  <rect class="card" x="320" y="350" width="220" height="130" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="344" y="392">VGGT or anchors</text>
+  <text class="b" x="344" y="434">Camera and scene</text>
+  <text class="s" x="344" y="460">Background geometry</text>
+
+  <path class="a" d="M296 235 H304"/>
+  <path class="a" d="M296 415 H304"/>
+  <path class="a" d="M556 235 H604"/>
+  <path class="a" d="M556 415 H580 V365 H604"/>
+
+  <rect class="card" x="620" y="180" width="280" height="300" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="644" y="222">Structured posterior</text>
+  <text class="b" x="644" y="264">Camera gauge</text>
+  <text class="s" x="644" y="290">Intrinsics, crop, trajectory</text>
+  <text class="b" x="644" y="332">Physical state</text>
+  <text class="s" x="644" y="358">Scale, gravity, morphology</text>
+  <text class="s" x="644" y="384">Object size and support</text>
+  <text class="s" x="644" y="426">Mean, uncertainty, source</text>
+  <text class="s" x="644" y="450">and tool disagreement</text>
+
+  <path class="a" d="M916 330 H964"/>
+
+  <rect class="card" x="980" y="205" width="160" height="250" rx="16" fill="#ece6f6"/>
+  <text class="t" x="1004" y="247">Downstream</text>
+  <text class="b" x="1004" y="293">Contact</text>
+  <text class="b" x="1004" y="323">Force</text>
+  <text class="b" x="1004" y="353">Prediction</text>
+  <text class="b" x="1004" y="383">Feasibility</text>
+  <text class="s" x="1004" y="429">Uncertainty flows on</text>
+
+  <rect x="235" y="575" width="730" height="70" rx="16" fill="#20364e"/>
+  <text class="w" x="600" y="617" text-anchor="middle">Raw metric error and downstream dynamics decide whether the posterior helps.</text>
+</svg>
