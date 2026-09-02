@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gait-JEPA iteration 2: the pipeline, notebook by notebook</title>
+
+<!-- reveal.js vendored locally so this deck renders fully offline. -->
+<link rel="stylesheet" href="reveal/dist/reset.css" />
+<link rel="stylesheet" href="reveal/dist/reveal.css" />
+<link rel="stylesheet" href="reveal/dist/theme/white.css" id="theme" />
+<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css" />
+
+<style>
+  :root {
+    --ink: #0f172a; --body: #334155; --muted: #64748b;
+    --blue: #1d4ed8; --blue-fill: #eff6ff;
+    --green: #15803d; --amber: #d97706; --violet: #7c3aed; --red: #b91c1c;
+    --rule: #e2e8f0;
+  }
+  .reveal { font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; color: var(--body); }
+  .reveal h1, .reveal h2, .reveal h3 { color: var(--ink); font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
+  .reveal h1 { font-size: 2.0em; } .reveal h2 { font-size: 1.45em; }
+  .reveal section { text-align: left; } .reveal .center { text-align: center; }
+  .reveal .kicker { font-family: "SF Mono", "IBM Plex Mono", Menlo, monospace; font-size: 0.5em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3em; }
+  .reveal .kicker.blue { color: var(--blue); } .reveal .kicker.green { color: var(--green); }
+  .reveal .kicker.amber { color: var(--amber); } .reveal .kicker.violet { color: var(--violet); } .reveal .kicker.red { color: var(--red); }
+  .reveal .lede { color: var(--muted); font-size: 0.72em; line-height: 1.5; }
+  .reveal ul { font-size: 0.72em; line-height: 1.45; }
+  .reveal img.fig { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 8px; max-height: 58vh; }
+  .reveal .cap { color: var(--muted); font-size: 0.5em; font-style: italic; margin-top: 0.4em; }
+  .reveal .step { display:inline-block; width: 1.6em; height: 1.6em; line-height:1.6em; text-align:center; border-radius:50%; background: var(--blue-fill); color: var(--blue); font-weight:700; font-size:0.7em; margin-right:0.4em; }
+  .reveal .small { font-size: 0.6em; color: var(--muted); }
+  .reveal code { color: var(--blue); font-family: "SF Mono", Menlo, monospace; }
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- Title -->
+  <section class="center">
+    <p class="kicker blue">Gait-JEPA iteration 2, teaching walkthrough</p>
+    <h1>From a folder of videos to a gait encoder</h1>
+    <p class="lede center">Six notebooks, no machine-learning background needed. Every notebook runs on a laptop CPU in seconds in its default smoke mode.</p>
+    <img class="fig" src="../images/walk-skeleton.gif" alt="walking skeleton" style="max-height:34vh; margin-top:0.6em;" />
+    <aside class="notes">This is the newcomer path. We walk the whole pipeline, one notebook at a time. Every notebook is self-contained and runs with synthetic data by default, so you can follow along with nothing installed.</aside>
+  </section>
+
+  <!-- The whole flow -->
+  <section>
+    <p class="kicker">The map</p>
+    <h2>The six-notebook flow</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/pipeline-overview.svg" alt="pipeline overview" /></div>
+    <p class="cap">Scan, download, extract, build the corpus, pretrain, probe. Each notebook writes a small cache file the next one reads.</p>
+    <aside class="notes">Keep this map in mind. Each of the next slides is one box in this diagram. The through-line: turn a big pile of unlabelled walking video into a strong encoder, then spend the scarce labels only at the very end.</aside>
+  </section>
+
+  <!-- nb00 -->
+  <section>
+    <p class="kicker blue">Notebook 00</p>
+    <h2><span class="step">0</span>Scan every sequence, lock the labelled 68</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <ul style="flex:1;">
+        <li>Walk every condition folder, reduce each sequence CSV to one manifest row.</li>
+        <li>Mark the labelled subset as the <b>exact 68</b> the prior Random Forest used, by sequence id.</li>
+        <li>Write the manifest, the 68-row labelled manifest, and exp5's exact split.</li>
+      </ul>
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/exact-68-lock.svg" alt="exact 68 lock" style="max-height:40vh;" /></div>
+    </div>
+    <aside class="notes">The manifest is the backbone of the series. The one new idea here versus a naive scan is the exact-68 lock: we do not eyeball the labelled set, we resolve exactly the sequences the baseline used.</aside>
+  </section>
+
+  <!-- nb01 -->
+  <section>
+    <p class="kicker blue">Notebook 01</p>
+    <h2><span class="step">1</span>Download the unique videos once</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/bulk-download.svg" alt="bulk download" style="max-height:42vh;" /></div>
+      <ul style="flex:1;">
+        <li>Many sequences share a video, so we dedup by video id and download each once.</li>
+        <li>The 68-subset videos are fetched first, and every file is validated with ffprobe.</li>
+        <li>Resumable: already-cached videos are skipped.</li>
+      </ul>
+    </div>
+    <aside class="notes">Being polite to YouTube and resumable matters at scale. The labelled videos are prioritized so even a capped trial run can evaluate the probe.</aside>
+  </section>
+
+  <!-- nb02 -->
+  <section>
+    <p class="kicker blue">Notebook 02</p>
+    <h2><span class="step">2</span>Extract skeletons with MediaPipe</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <ul style="flex:1;">
+        <li>Run MediaPipe BlazePose over every downloaded sequence: 33 joints per frame.</li>
+        <li>Coordinates normalized to [0,1], whole frame, matching the prior study's contract.</li>
+        <li>Report coverage of the 68 with a reason for any that fail.</li>
+      </ul>
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/crop-and-pose.svg" alt="crop and pose" style="max-height:42vh;" /></div>
+    </div>
+    <aside class="notes">This mirrors the prior study's pose extraction exactly, so the only difference downstream is what we do with the skeletons, not how we get them.</aside>
+  </section>
+
+  <!-- nb03 -->
+  <section>
+    <p class="kicker blue">Notebook 03</p>
+    <h2><span class="step">3</span>Build the unlabelled corpus</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/corpus-build.svg" alt="corpus build" style="max-height:42vh;" /></div>
+      <ul style="flex:1;">
+        <li>Normalize each sequence (pelvis-center, torso-scale) and slice into overlapping windows.</li>
+        <li>Hold out the 68 labelled sequences for the probe only.</li>
+        <li>Exclude any window whose source video also backs a held-out labelled sequence.</li>
+      </ul>
+    </div>
+    <aside class="notes">Windowing multiplies a few long sequences into many training clips. The co-occurring-video exclusion is the subtle bit: it keeps the pretraining pool clean of the held-out clips' own footage.</aside>
+  </section>
+
+  <!-- nb04 -->
+  <section>
+    <p class="kicker blue">Notebook 04</p>
+    <h2><span class="step">4</span>Pretrain the JEPA, watch for collapse</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <ul style="flex:1;">
+        <li>Wire the four pieces: context encoder, EMA target, predictor, VICReg loss.</li>
+        <li>Train with block masking on the unlabelled corpus, no labels at all.</li>
+        <li>Watch the loss fall and the embedding spread stay healthy (no collapse).</li>
+      </ul>
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/jepa-training.svg" alt="jepa training" style="max-height:42vh;" /></div>
+    </div>
+    <aside class="notes">Collapse is the trap: a constant embedding trivially satisfies the prediction loss. The EMA target plus the light VICReg variance guard prevent it. We monitor the embedding standard deviation to confirm.</aside>
+  </section>
+
+  <!-- nb05 -->
+  <section>
+    <p class="kicker blue">Notebook 05</p>
+    <h2><span class="step">5</span>Freeze the encoder, spend the labels</h2>
+    <div style="display:flex; gap:1.2em; align-items:center;">
+      <div style="flex:1; text-align:center;"><img class="fig" src="../images/per-sequence-pooling.svg" alt="per sequence pooling" style="max-height:40vh;" /></div>
+      <ul style="flex:1;">
+        <li>Freeze the encoder, embed each labelled clip, mean-pool to one vector per sequence.</li>
+        <li>Train a small probe and compare to the 0.76 Random Forest, honestly, per sequence.</li>
+        <li>Trace the label-efficiency curve and check the encoder learned clinical axes.</li>
+      </ul>
+    </div>
+    <aside class="notes">This is the only notebook that touches labels. Per sequence, matched probe, exp5's exact split for a like-for-like point. The per-clip number is shown only as a labelled leaky diagnostic.</aside>
+  </section>
+
+  <!-- The honest result -->
+  <section>
+    <p class="kicker red">The honest result</p>
+    <h2>Per sequence, 0.49 to 0.63 versus 0.76</h2>
+    <div style="text-align:center;"><img class="fig" src="../images/controlled-comparison.svg" alt="controlled comparison" /></div>
+    <p class="cap">Per-sequence probe 0.49 (linear) to 0.63 (MLP), well above chance (0.20), below the tuned Random Forest (0.76), on the same 68.</p>
+    <aside class="notes">We report the honest per-sequence number, not the inflated per-clip one. The lesson for a newcomer: how you split and what unit you score decide whether a comparison means anything.</aside>
+  </section>
+
+  <!-- How to run -->
+  <section class="center">
+    <p class="kicker green">Try it</p>
+    <h2>Runs anywhere, in seconds</h2>
+    <p class="lede center">Every notebook has a <code>SMOKE_TEST</code> switch. Set it to <code>True</code> for synthetic data, no network, no pose model, top-to-bottom on any laptop CPU; the committed notebooks ship at <code>False</code> (the real run behind these numbers) and read a <code>.env</code> pointing at your data.</p>
+    <p class="small">Open any notebook's Colab badge, or run locally with uv. Iteration 1 is preserved in gavd/ as a checkpoint. For the plain-language story of the whole journey, see docs/learning/learning-journey.md.</p>
+    <aside class="notes">Smoke mode is how you learn the ideas; real mode is how you produce the numbers. The same code scales from a synthetic laptop run to the full dataset on a GPU.</aside>
+  </section>
+
+</div></div>
+
+<script src="reveal/dist/reveal.js"></script>
+<script src="reveal/plugin/notes/notes.js"></script>
+<script src="reveal/plugin/highlight/highlight.js"></script>
+<script src="reveal/plugin/zoom/zoom.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: "c/t", transition: "slide",
+    width: 1180, height: 720, margin: 0.06,
+    plugins: [ RevealNotes, RevealHighlight, RevealZoom ],
+  });
+</script>
+</body>
+</html>

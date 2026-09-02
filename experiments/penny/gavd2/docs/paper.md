@@ -1,0 +1,136 @@
+# Gait-JEPA (iteration 2): A Controlled Comparison of a Frozen Pose-Sequence JEPA Against a Hand-Feature Random Forest on GAVD
+
+**Alex Mui, Penny Inouye, Theodore Mui** (equal contribution), and **Phil Mui** (Research Advisor)
+
+---
+
+## Abstract
+
+Clinical gait analysis is limited less by video than by labels: unannotated walking clips are plentiful, but clinician-graded clips are scarce. We ask whether a frozen, self-supervised pose encoder can learn a useful gait representation from unlabelled video and be probed with only a handful of labels, and we ask it as a genuinely controlled comparison against the prior supervised baseline. Our method, Gait-JEPA, is a skeleton Joint-Embedding Predictive Architecture over BlazePose 33-joint sequences: a small transformer (71,360 parameters) pretrained to predict masked motion in latent space with a LayerNorm-normalized exponential-moving-average target and a light online-only VICReg regularizer, then frozen and probed. This iteration is a rigor pass over iteration 1. It changes nothing about the method and everything about the comparison: it locks the labelled probe set to the exact 68 sequences the baseline used (by sequence id), evaluates one vector per sequence rather than per overlapping window, excludes co-occurring videos from pretraining, and matches the probe classifier family to the baseline. The prior Random Forest on 82 hand features scores 0.762 test accuracy on a single seed-42 70/30 split of the 68 sequences; chance is 0.20. On all 68 sequences, the honest per-sequence frozen probe is well above chance but below that baseline: 0.486 +/- 0.102 (linear), 0.626 +/- 0.083 (MLP), and 0.579 +/- 0.114 (Random Forest) over 20 repeated 70/30 splits, with high variance driven by the small labelled set. On the baseline's own exact seed-42 47/21 partition, the matched Random Forest on the learned embedding reaches 0.619 against the baseline's 0.762. The contribution is the controlled harness and the honest reading it produces: the only intended difference from the baseline is the representation, a learned embedding versus 82 hand features.
+
+**Index Terms** - self-supervised learning, joint-embedding predictive architecture, human pose estimation, gait analysis, controlled evaluation, representation learning.
+
+> The iteration-2 numbers in this document are from the full real run of the pipeline (notebooks 00 through 05, SMOKE_TEST off) on the exact exp5 68 sequences, with the labelled set chased to full 68-of-68 coverage. Where an iteration-1 number is quoted as a reference (for example the approximately 0.49 per-sequence figure it originally reported), it is labelled as such.
+
+---
+
+## I. Introduction
+
+Gait carries clinical information: a stroke can leave one knee stiff, Parkinson's disease often produces an asymmetric stride, a myopathy changes how the legs bear load. The recurring obstacle to reading these patterns automatically is labels. Recording a walking video is easy; obtaining one a clinician has annotated with a diagnosis is slow and expensive.
+
+On the Gait Abnormality in Video Dataset (GAVD), the prior supervised baseline is a Random Forest with 100 trees on 82 hand-engineered gait features, evaluated per sequence on a single seed-42 70/30 split, reaching 0.762 test accuracy across five gait classes [4]. Chance on five classes is 0.20, so 0.762 is a real, hard-won result and our reference point.
+
+Self-supervised learning offers a different route: an encoder can learn the structure of walking from unlabelled video, and the few labels that exist then only need to name what the encoder already represents. This is the promise of the Joint-Embedding Predictive Architecture (JEPA) family [1], [2], [6]: predict missing content in a learned latent space rather than in pixels.
+
+Iteration 1 of this project built the full pipeline and reported an honest dual result, but its comparison against the baseline was not controlled: the labelled set was chosen by a heuristic rather than matched to the baseline's exact sequences, evaluation was per overlapping window with a leaky split, coverage shrank silently, and the probe classifier differed from the baseline. This paper, iteration 2, keeps the method fixed and makes the comparison controlled. Our contributions are:
+
+- An exact-set lock: the labelled probe set is resolved to the exact 68 sequences the baseline trained on, by sequence id, with a fail-stop if the lock cannot be established.
+- A per-sequence evaluation matched to the baseline's unit, with the baseline's exact seed-42 split reproduced for a like-for-like point, and the leaky per-clip number retained only as an explicitly labelled diagnostic.
+- A video-level leakage control: windows whose source video also backs a held-out labelled sequence are excluded from pretraining.
+- A probe classifier matched to the baseline's Random Forest family, and artifact fingerprinting so a stale-artifact mix cannot masquerade as a controlled comparison.
+
+## II. Related Work
+
+**I-JEPA** [1] introduced joint-embedding predictive architectures for images. **V-JEPA** [2] extended the idea to video and contributed normalizing the target with a LayerNorm before the prediction loss, which we adopt. **VICReg** [3] regularizes representations with variance, invariance, and covariance terms to prevent collapse without negative pairs; we use a light online-only version. **GAVD** [4] is the dataset and supervised baseline we compare against. **BlazePose** [5] produces the 33-joint skeletons we operate on. LeCun's world-model position paper [6] frames JEPAs as a path toward predictive world models.
+
+## III. Dataset and the Controlled Comparison
+
+GAVD is an open pool of annotated walking clips sourced from YouTube [4]. Each CSV is one sequence, a run of frames from a single YouTube video. The dataset holds 374 sequence CSVs across 11 condition folders.
+
+**The exp5 68.** The prior study curated a 5-class subset of exactly 68 sequences: normal 12, parkinsons 9, stroke 12, cerebralpalsy 15, myopathic 20. Their sequence ids are the CSV stems of the curated tree and equal the sample ids in the study's 82-feature file; we verified that all 68 are present in the full GAVD tree. Iteration 2 locks its labelled probe set to exactly these 68 by sequence id (Section IV), so the comparison is controlled. One spelling detail matters: the full GAVD tree names the class folder `cerebral palsy` (with a space) while the curated tree uses `cerebralpalsy`; the label is canonicalized to `cerebralpalsy` everywhere, and a separate map recovers the on-disk folder spelling for file reads, so the class is never silently dropped.
+
+**Coverage.** A video can back more than one sequence, so the 68 sequences come from only 12 unique YouTube videos. iteration 2 prioritizes those videos for download and reports coverage as "N of 68", chasing all 68 through download and extraction and reporting any genuinely unrecoverable sequence explicitly rather than shrinking silently. On the real run this chase reached full 68-of-68 coverage. Two sequences needed targeted recovery: one cerebral-palsy clip whose video was downloaded at a smaller resolution than its recorded bounding box (so whole-frame pose detection found nothing until the walker was cropped to the scaled box), and one stroke clip that yielded only 15 usable frames (admitted by relaxing the minimum-length floor to 12, since the baseline imposes no such floor and pads short sequences to the window length). Both fixes address a genuine cause; neither drops or fabricates a sequence.
+
+## IV. Method
+
+Gait-JEPA has four pieces (Fig. 1): a context encoder, an EMA target encoder, a predictor, and a masking scheme. A pose clip is a tensor of shape (T = 32, J = 33, 3), tokenized into T times J = 1,056 tokens in row-major (t, j) order (token n = t times 33 + j).
+
+![The four pieces of a JEPA](../images/four-pieces.svg)
+
+*Fig. 1. The four pieces of Gait-JEPA: a context encoder sees the visible tokens, an EMA target encoder produces the prediction targets under stop-gradient, a shallow predictor maps context to target space, and a masking scheme decides which tokens are hidden.*
+
+**Encoder.** A Linear(3, 64) projection, a learned factored positional embedding pos[t, j] = time_embed[t] + joint_embed[j] (shapes (32, 64) and (33, 64), init std 0.1), and a 2-layer transformer (4 heads, feed-forward 128, GELU, dropout 0), 71,360 parameters. The positional embedding gives each token a temporal identity (which frame) and a spatial identity (which joint); without it the transformer sees an unordered bag of coordinates.
+
+**Target, predictor, masking.** The target encoder is an EMA copy (m = 0.996, stop-gradient) [1], [2]. The predictor is a shallow MLP (hidden width 2D). Masking hides a spatiotemporal block (ratio 0.4), in two styles: limb-over-time and time-window.
+
+**Loss.** L2 between the predictor output and the LayerNorm-normalized EMA target [2], plus a light VICReg [3] variance and covariance term on the online context embedding only. Weights: SIM 25.0, VAR 0.5, COV 0.04, variance target 0.5. Normalizing the target prevents scale drift; online-only VICReg prevents collapse without touching the frozen target. Training is 400 steps, batch 16, learning rate 1e-3, Adam, seed 42.
+
+**The exact-68 lock (iteration-2 mechanism).** Notebook 00 resolves the 68 with a three-tier resolver (Fig. 2): unpickle the study's feature file and read each object's sequence id, label, and list ORDER; else glob the five curated class folders; else a checked-in constant for a bare Colab. A real locked run fail-stops if all three fail rather than falling back to a heuristic. Every cache artifact is stamped with a fingerprint of the sorted 68 ids so downstream notebooks catch a stale mix.
+
+![The exact-68 lock](../images/exact-68-lock.svg)
+
+*Fig. 2. The three-tier resolver locks the labelled set to the exact 68 sequences the baseline used, with a fail-stop and canonical spelling so no class is silently dropped.*
+
+## V. Experimental Setup
+
+After pretraining we freeze the context encoder and use it as a fixed feature extractor. For each labelled clip we mean-pool the token embeddings into a single D = 64 vector, then pool those window vectors by sequence into one vector per sequence, the baseline's unit (Fig. 3).
+
+![Per-sequence pooling](../images/per-sequence-pooling.svg)
+
+*Fig. 3. Window embeddings are mean-pooled within a sequence into one vector per sequence, matching the baseline's one-vector-per-sequence unit.*
+
+**Per-sequence versus per-clip (the crux).** iteration 1 classified per window with a stratified split; because the windows are overlapping crops of a few sequences, windows of the same sequence landed in both train and test, and the encoder could match a test window to a near-duplicate training window. This is window leakage (Fig. 4). iteration 1 measured its size directly: the per-clip linear probe read approximately 0.88 while a leakage-free per-sequence split gave approximately 0.494 +/- 0.172, an inflation of about 39 points. Because the baseline is per sequence, per sequence is the only comparable unit. iteration 2 headlines the per-sequence number and keeps the per-clip number only as an explicitly labelled leaky diagnostic.
+
+![Window leakage](../images/window-leakage.svg)
+
+*Fig. 4. Per-clip splits let windows from one sequence sit in both train and test (inflated). Pooling to one vector per sequence and splitting by sequence removes the leak (honest).*
+
+**Video-level leakage.** iteration 2 additionally excludes from the pretraining bank every window whose source video also backs a held-out labelled sequence (Fig. 5), so the encoder cannot have pretrained on a near-identical frame from a held-out clip's own video.
+
+![Co-occurring video exclusion](../images/cooccurring-video-exclusion.svg)
+
+*Fig. 5. A video can back both a held-out labelled sequence and an unlabelled one. iteration 2 drops the unlabelled windows of any such co-occurring video from pretraining, making the separation video-level.*
+
+**Probes and splits.** We fit a linear (logistic-regression) probe, an MLP probe, and a Random Forest matched to the baseline family (100 trees, max_depth 5, class_weight balanced, seed 42), each with a StandardScaler refit per split, over 20 repeated per-sequence 70/30 splits. We also report a like-for-like point on the baseline's exact seed-42 partition, reproduced from the study's native feature-list order (restricted to the sequences that survive coverage when N is below 68). We study RQ1 probe accuracy, RQ2 label efficiency, RQ3 recoverability of clinical scalars, and RQ4 the VICReg anti-collapse ablation.
+
+## VI. Results
+
+All iteration-2 numbers below are from the full real run on the 68-of-68 covered set; the approximately 0.49 per-sequence figure is the iteration-1 leakage-free measurement, carried only as the historical reference.
+
+**RQ1: the controlled comparison (Fig. 6).** The honest headline is the per-sequence frozen probe versus the baseline, on the same 68. Over 20 repeated per-sequence 70/30 splits the frozen probes reach 0.486 +/- 0.102 (linear), 0.626 +/- 0.083 (MLP), and 0.579 +/- 0.114 (Random Forest, matched to the baseline family) - all well above the 0.20 chance level and below the 0.762 baseline, with high variance because only about 20 sequences fall in each test fold. On the baseline's own exact seed-42 47/21 partition (all 21 test sequences available), the matched Random Forest on the learned embedding scores 0.619, directly beside the baseline's 0.762 on that same partition. The reading is that the frozen encoder learns real, transferable gait structure (it more than doubles chance, and the MLP probe reaches 0.63, on unseen sequences) while the tuned 82-feature Random Forest remains ahead on this small labelled set. For contrast, the leaky per-clip diagnostic reads 0.87 to 0.92 across the three probes; that gap of roughly 30 to 40 points is exactly the window-leakage inflation the per-sequence headline corrects.
+
+![The controlled comparison](../images/controlled-comparison.svg)
+
+*Fig. 6. The controlled comparison: per-sequence frozen probe (0.49 linear to 0.63 MLP) and the exact-split matched Random Forest (0.619) versus the 0.762 Random Forest, on the same 68 sequences, with the 0.20 chance line. Only the representation differs.*
+
+**RQ2: label efficiency (Fig. 7).** We trace per-sequence linear-probe accuracy as the labelled fraction shrinks: 0.393 at 25 percent of training sequences, 0.417 at 50 percent, 0.457 at 75 percent, and 0.486 at 100 percent. The curve degrades gracefully and stays roughly double chance even at a quarter of the labels, which is the payoff pretraining is meant to provide on a scarce-label task.
+
+![Label-efficiency curve](../images/label-efficiency.svg)
+
+*Fig. 7. Label-efficiency curve. The shape, how gracefully accuracy holds as labels shrink, is the payoff of pretraining.*
+
+**RQ3: clinical structure.** A Ridge probe from the frozen latent to two linearly decodable scalars recovers step amplitude strongly (R-squared 0.682) and gait asymmetry weakly (R-squared 0.081), consistent with iteration 1 (approximately 0.72 and 0.15). Because we probe only linearly decodable scalars, the strong step-amplitude R-squared is meaningful: the frozen encoder captured a clinically interpretable gait axis with no labels at all.
+
+**RQ4: VICReg ablation.** Toggling the online-only variance and covariance terms in a faithful mini training loop, the ON run's embedding spread sits above the OFF run (final embedding standard deviation 0.904 with VICReg versus 0.743 without), so the terms do real anti-collapse work on top of the EMA target; the OFF run does not collapse to zero on this data.
+
+## VII. Discussion
+
+The per-sequence number is the honest signal: the frozen encoder more than doubles chance on unseen sequences, so it has learned gait structure that transfers across walks, not just across windows of one walk. It sits below the hand-feature baseline and carries a large standard deviation, both direct consequences of a small labelled set. The binding constraint is sample size, not representation quality.
+
+In plain terms: the frozen skeleton JEPA approach looks promising, but this is a controlled comparison of representations, not a clinical validation, and it does not beat the tuned baseline on this small set. The ceiling here is the 68 labelled walks, not the quality of what the encoder learned.
+
+Making the comparison controlled is the point of this iteration. Locking to the exact 68, matching the unit and the split, matching the classifier family, and excluding co-occurring videos together hold everything constant except the representation, so the result is interpretable whichever way the number lands. The exact-split like-for-like point sits beside the baseline's own 0.762 on the same partition, so the two are directly comparable.
+
+**Limitations.** The labelled set is small (68, and imbalanced: parkinsons has only 9 sequences). The encoder is small (71,360 parameters, 2 layers) and training is short (400 steps). The like-for-like exact-split point has a tiny 21-sequence test fold and is high-variance; we report bands over 20 splits alongside it. Two of the 68 sequences reached full coverage only after targeted extraction fixes (a resolution-scaled bbox crop and a relaxed minimum-length floor), documented in Section III.
+
+## VIII. Conclusion and Future Work
+
+Iteration 2 delivers a controlled comparison between a frozen skeleton JEPA and a hand-feature Random Forest on the exact same 68 clinical sequences. The honest per-sequence probe is well above chance and, on this small labelled set, below the tuned baseline; the only intended difference is the representation. For the plain-language story of the whole journey, from iteration 1's four bugs to this controlled result, see the learning paper at learning/learning-journey.md. Future work (a separate iteration, on this harness): grow the labelled set from the large unlabelled pools, scale the encoder beyond 2 layers and train longer, add graph-aware attention over the skeleton, and run the full clinical probes when the expanded cerebral-palsy and myopathic gradings arrive.
+
+## Acknowledgment
+
+The authors thank Phil Mui, Research Advisor, for guidance throughout this work.
+
+## References
+
+[1] M. Assran et al., "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture" (I-JEPA), in Proc. IEEE/CVF CVPR, 2023.
+
+[2] A. Bardes et al., "V-JEPA: Latent Video Prediction for Self-Supervised Video Representation Learning," Meta AI, 2024.
+
+[3] A. Bardes, J. Ponce, and Y. LeCun, "VICReg: Variance-Invariance-Covariance Regularization for Self-Supervised Learning," in Proc. ICLR, 2022.
+
+[4] Ranjan et al., "Gait Abnormality in Video Dataset (GAVD)," 2025.
+
+[5] V. Bazarevsky et al., "BlazePose: On-device Real-time Body Pose Tracking," 2020.
+
+[6] Y. LeCun, "A Path Towards Autonomous Machine Intelligence," 2022.

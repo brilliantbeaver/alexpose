@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="360" fill="#ffffff"/>
+
+  <!-- title + subtitle -->
+  <text x="450" y="34" font-size="20" font-weight="bold" text-anchor="middle" fill="#0f172a">Cheap and plentiful vs precious and scarce</text>
+  <text x="450" y="57" font-size="13" text-anchor="middle" fill="#475569">Unlabeled walking video is everywhere; clinical labels are rare, so the supervision budget is tiny.</text>
+
+  <!-- ================= LEFT: big unlabeled pool ================= -->
+  <!-- section heading -->
+  <text x="220" y="90" font-size="13" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Cheap and plentiful</text>
+
+  <!-- big count above the stack, in clear space -->
+  <text x="220" y="128" font-size="34" font-weight="bold" text-anchor="middle" fill="#1e3a8a">374</text>
+
+  <!-- tall stack of blue slabs (pure visual mass, no text inside) -->
+  <rect x="102" y="142" width="236" height="20" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="102" y="167" width="236" height="20" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="102" y="192" width="236" height="20" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="102" y="217" width="236" height="20" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="102" y="242" width="236" height="20" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+
+  <!-- labels below the stack, in clear space -->
+  <text x="220" y="283" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#1e3a8a">unlabeled GAVD sequences</text>
+  <text x="220" y="301" font-size="11.5" text-anchor="middle" fill="#475569">all 11 conditions, no labels needed</text>
+
+  <!-- ================= RIGHT: tiny labeled set ================= -->
+  <!-- section heading -->
+  <text x="710" y="90" font-size="13" font-weight="bold" text-anchor="middle" fill="#7f1d1d">Precious and scarce</text>
+
+  <!-- big count above the small stack, in clear space -->
+  <text x="710" y="160" font-size="34" font-weight="bold" text-anchor="middle" fill="#7f1d1d">68</text>
+
+  <!-- very small red stack, deliberately short -->
+  <rect x="642" y="174" width="136" height="20" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <rect x="642" y="199" width="136" height="20" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+
+  <!-- labels below the small stack, in clear space -->
+  <text x="710" y="283" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#7f1d1d">labeled clips</text>
+  <text x="710" y="301" font-size="11.5" text-anchor="middle" fill="#7f1d1d">5 clinical classes</text>
+
+  <!-- "vs" divider between the two piles -->
+  <text x="480" y="205" font-size="16" font-weight="bold" text-anchor="middle" fill="#64748b">vs</text>
+
+  <!-- arrow showing the 68 come out of the pool at the very end -->
+  <line x1="345" y1="235" x2="636" y2="207" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="490" y="234" font-size="10.5" text-anchor="middle" fill="#64748b">spent only at the end</text>
+
+  <!-- ================= bottom caption band ================= -->
+  <rect x="40" y="312" width="820" height="34" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+  <text x="450" y="334" font-size="12.5" text-anchor="middle" fill="#14532d">Pretrain on everything with no labels. Spend the 68 labels only at the very end, on a frozen-encoder probe.</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc" font-family="Inter, Arial, sans-serif">
+  <title id="title">One enhanced Skeleton-JEPA-style training step</title>
+  <desc id="desc">The context path receives a zero-masked token grid, the target path receives the complete grid, a predictor estimates target embeddings, and an EMA updates the target encoder.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+    <marker id="bluearrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker>
+  </defs>
+  <rect width="1200" height="560" fill="#ffffff"/>
+  <text x="600" y="42" text-anchor="middle" font-size="27" font-weight="700" fill="#0f172a">One enhanced Skeleton-JEPA-style training step</text>
+  <text x="600" y="70" text-anchor="middle" font-size="16" fill="#475569">Two views of the same clip create a prediction puzzle in embedding space.</text>
+
+  <rect x="40" y="195" width="180" height="130" rx="16" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="130" y="228" text-anchor="middle" font-size="18" font-weight="700" fill="#334155">Skeleton tokens</text>
+  <text x="130" y="258" text-anchor="middle" font-size="15" fill="#475569">[B, 1,056, 3]</text>
+  <text x="130" y="288" text-anchor="middle" font-size="13" fill="#64748b">one source clip</text>
+
+  <rect x="300" y="112" width="245" height="118" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="422" y="145" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">Context encoder</text>
+  <text x="422" y="175" text-anchor="middle" font-size="14" fill="#334155">hidden coordinates are zeroed</text>
+  <text x="422" y="199" text-anchor="middle" font-size="14" fill="#334155">position tags remain present</text>
+
+  <rect x="300" y="320" width="245" height="118" rx="16" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="422" y="353" text-anchor="middle" font-size="18" font-weight="700" fill="#5b21b6">EMA target encoder</text>
+  <text x="422" y="383" text-anchor="middle" font-size="14" fill="#334155">reads the complete token grid</text>
+  <text x="422" y="407" text-anchor="middle" font-size="14" fill="#334155">no gradients</text>
+
+  <rect x="632" y="112" width="220" height="118" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="742" y="145" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">Predictor</text>
+  <text x="742" y="175" text-anchor="middle" font-size="14" fill="#334155">token context +</text>
+  <text x="742" y="199" text-anchor="middle" font-size="14" fill="#334155">global mean context</text>
+
+  <rect x="938" y="195" width="220" height="150" rx="16" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="1048" y="228" text-anchor="middle" font-size="18" font-weight="700" fill="#9a3412">Project loss</text>
+  <text x="1048" y="260" text-anchor="middle" font-size="14" fill="#334155">MSE to normalized target</text>
+  <text x="1048" y="286" text-anchor="middle" font-size="14" fill="#334155">+ online variance guard</text>
+  <text x="1048" y="312" text-anchor="middle" font-size="14" fill="#334155">+ online covariance guard</text>
+
+  <g fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)">
+    <line x1="220" y1="235" x2="290" y2="180"/>
+    <line x1="220" y1="290" x2="290" y2="370"/>
+    <line x1="545" y1="171" x2="622" y2="171"/>
+    <line x1="852" y1="171" x2="928" y2="235"/>
+  </g>
+  <line x1="545" y1="379" x2="928" y2="302" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#bluearrow)"/>
+  <rect x="618" y="333" width="255" height="28" rx="7" fill="#ffffff"/>
+  <text x="744" y="353" text-anchor="middle" font-size="14" font-weight="700" fill="#4f46e5">target embeddings: answer key</text>
+
+  <path d="M370 230 C335 268 335 282 370 320" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+  <text x="302" y="280" text-anchor="middle" font-size="13" fill="#64748b">slow EMA</text>
+
+  <rect x="120" y="474" width="960" height="66" rx="12" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="600" y="501" text-anchor="middle" font-size="15" fill="#166534">Gradients update the context encoder and predictor.</text>
+  <text x="600" y="524" text-anchor="middle" font-size="15" fill="#166534">The EMA and variance/covariance terms are guards; the graphs must verify health.</text>
+</svg>

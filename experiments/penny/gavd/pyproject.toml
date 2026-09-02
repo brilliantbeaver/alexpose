@@ -1,0 +1,35 @@
+[project]
+name = "skeleton-jepa-gavd"
+version = "0.1.0"
+description = "Full-dataset, hands-on tutorial series that scales the Skeleton-JEPA pipeline to every GAVD sequence: scan all CSVs, bulk-download the YouTube videos, batch-extract skeletons, build an unlabeled pretraining corpus, pretrain the JEPA, and run the frozen probe against the 76 percent baseline."
+readme = "README.md"
+requires-python = ">=3.10"
+
+# Core dependencies. These are all you need to run every notebook in
+# SMOKE_TEST mode (synthetic skeletons, no video download, no pose model).
+# Every notebook runs top to bottom on a plain laptop CPU in seconds.
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+    "matplotlib>=3.7",
+    "torch>=2.2",
+    "python-dotenv>=1.0",
+    "ipykernel>=6.29",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+# The "real" extra adds the heavier pieces needed only for the REAL data
+# path: downloading every GAVD YouTube clip and running the MediaPipe pose
+# model over every sequence. Install it with:  uv sync --extra real
+real = [
+    "opencv-python>=4.9",
+    "mediapipe>=0.10",
+    "yt-dlp[default]>=2026.7.4",
+]
+
+[tool.uv]
+# We intentionally do not commit a uv.lock here so the tutorials stay light
+# and easy to re-resolve. uv will resolve fresh from pyproject.toml.
+package = false
