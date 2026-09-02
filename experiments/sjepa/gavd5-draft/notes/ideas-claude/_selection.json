@@ -1,0 +1,293 @@
+{
+  "selected": [
+    {
+      "rank": 1,
+      "slug": "05-signed-laterality-decodability",
+      "title": "Signed laterality decodability: is left-right asymmetry linearly encoded, and does an anatomical mirror flip the decoded sign?",
+      "one_line_question": "On source-video-disjoint folds, is a signed left-minus-right laterality axis linearly decodable from the frozen token tensor above the raw-coordinate null by a pre-registered margin, and does the LEFT_RIGHT_PAIRS anatomical mirror negate the decoded scalar (a test of learned reflection-equivariance, not an assumed anatomy property)?",
+      "why_it_wins": "Targets asymmetry, the single mechanism SHARED by PD and stroke and the WEAKEST-encoded scalar (R2 0.154 vs 0.719 for step amplitude), which no existing proposal makes the object. The signed-decodability probe against the raw-coordinate null is clean, cheap as a test-time pass on a reused fold-local encoder, and directly explains the documented 0.154 result.",
+      "incorporated_repairs": "DROP the rotation-invariance arm as a falsifiable finding: y-axis rotation (max_degrees=8) was a training augmentation, so invariance is expected by construction; present it at most as a manipulation check. Reframe the mirror test honestly as does the encoder exhibit learned reflection-equivariance, not does it represent anatomy, and pre-register that a decodable-but-non-flipping outcome licenses only non-antisymmetric encoding, not automatically a camera/source artifact. Establish distinctness from plan-07 (selective-invariance stress test) and plan-05 (signed ankle phase-lag target) by keeping the clean Panel-1 signed-decodability-vs-raw-null probe as the primary targeted extension and avoiding re-derivation of plan-05's signed ankle targets. Do not report per-class LOSO R2 margins on n=1 held-out sources; pool signed laterality across conditions, report every source as a dot, use source-level permutation only where meaningful. Reuse an existing fold-local encoder checkpoint as a test-time-only pass and state the transductive caveat. Run the primary comparison on a provenance-matched subset. Include a mean/std-pooled negative control that must NOT recover a signed axis.",
+      "augmentation": {
+        "neuro_chain": "The signed left-minus-right axis is the literature-validated discriminant that separates lateralized from symmetric conditions: stroke (corticospinal pyramidal decussation, contralateral hemiparesis, PMID 30571044), early Parkinson's (contralateral nigrostriatal onset, PMID 22367437), and hemiplegic cerebral palsy (unilateral periventricular injury, PMID 19081519) raise the signed Symmetry Ratio (Patterson 2010 PMID 19932621), while myopathy shows NO significant spatiotemporal left-right asymmetry (Xiong 2023 PMID 37525241) and is the built-in negative class.",
+        "generalizable_claim": "A signed, reflection-aware laterality axis is a reusable diagnostic instrument for whether a skeleton encoder has learned directional asymmetry, and the mirror-slope test measures learned reflection-equivariance rather than an assumed anatomy property.",
+        "external_cohort": "No participant-disjoint public skeleton cohort pairs left-right clinical asymmetry with pose; the axis is validated within-cohort against the raw-coordinate null and the myopathy negative class. Any clinical-accuracy statement is external-cohort reach-tier only.",
+        "feasibility_tier": "3 core weeks / +0 reach; zero-retrain; test-time pass on a reused fold-local encoder over cached 528-token tensors."
+      },
+      "scorecard": {
+        "band": "Strong main-track candidate",
+        "composite": 4.6,
+        "axes": { "novelty": 3, "mechanism": 5, "generalizability": 5, "rigor": 5, "feasibility": 5 },
+        "effort": "3 / +0 weeks; zero-retrain; reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "Decoded signed-laterality scalar vs ground-truth signed target scatter, R2 with the raw-coordinate ceiling and untrained-encoder floor overlaid, per held-out source.",
+        "Mirror-equivariance scatter: original vs mirrored decoded scalar against the y = -x reflection line, with the mean/std-pooled negative-control cloud as reference."
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "09-reflection-equivariant-symmetry-axis",
+      "title": "Reflection-equivariant representation: separating lateralized from symmetric gait by construction",
+      "one_line_question": "On source-video-disjoint folds, does building the signed left-minus-right axis to be antisymmetric BY CONSTRUCTION (an encoder whose readout the anatomical mirror is guaranteed to negate) separate lateralized gait (stroke, hemiplegic cerebral palsy, early Parkinson's) from symmetric gait (myopathy) better than the standard d0acc262 encoder that was only allowed to learn that behavior, measured by item 05's frozen signed-decodability and mirror-slope instrument at a pre-registered margin?",
+      "why_it_wins": "Converts item 05's diagnostic into an architectural claim: reflection-equivariance is the correct inductive bias for lateralized-vs-symmetric pathology, aligned exactly to corticospinal decussation. Joint-highest novelty and mechanism, and it reuses item 05 as its evaluation instrument so the endpoint is pre-committed rather than invented after the retrain.",
+      "incorporated_repairs": "Keep the no-flip rule (flip_probability stays 0.0) as the whole point, since flipping would erase the lateralized signed axis. Use item 05's frozen signed-decodability and mirror-slope bounds as the pre-registered instrument, so the by-construction encoder is compared on a fixed ruler. State the clinical side stays transductive with no external CP or myopathy skeleton cohort, capping the clinical claim at reach-tier. Add a by-construction manipulation check (mirroring the input must negate the readout to machine precision). Pool across conditions and report per-source dots; do not claim per-class margins on n=1 held-out sources.",
+      "augmentation": {
+        "neuro_chain": "Lateralized conditions arise from one-sided lesions of a decussating pathway (stroke corticospinal decussation PMID 30571044; hemiplegic CP unilateral PVL PMID 19081519; early PD contralateral nigrostriatal onset PMID 22367437), so a signed left-minus-right readout is the mechanism that should be antisymmetric; myopathy (symmetric proximal weakness, Barohn 2014 PMID 25037080; low L-R asymmetry, Xiong 2023 PMID 37525241) is the symmetric negative class. Biomarker: Symmetry Ratio (Patterson 2010 PMID 19932621).",
+        "generalizable_claim": "Reflection-equivariance built into the encoder is the correct inductive bias for lateralized-versus-symmetric pathology, and wiring the signed axis to be antisymmetric by construction should beat letting a standard encoder learn it.",
+        "external_cohort": "No external CP or myopathy skeleton cohort exists; the non-clinical multi-view reach arm can check that the by-construction axis is stable under viewpoint, but the clinical separation stays transductive and reach-tier.",
+        "feasibility_tier": "3-4 core weeks / +2-3 reach; full five-stage curriculum retrain (600 epochs) matching the d0acc262 lineage; reuses cached 528-token tensors for the core."
+      },
+      "scorecard": {
+        "band": "Strong main-track candidate",
+        "composite": 4.55,
+        "axes": { "novelty": 5, "mechanism": 5, "generalizability": 4, "rigor": 5, "feasibility": 3 },
+        "effort": "3-4 / +2-3 weeks; full curriculum retrain; reuses cached 528-token tensors (core)"
+      },
+      "figure_specs": [
+        "Held-out-source signed-decodability R2 for the by-construction encoder vs d0acc262 on item 05's instrument, per-source paired dots, with the pre-registered margin annotated.",
+        "Mirror-slope panel: readout of mirrored vs original input against the y = -x line for the by-construction encoder (guaranteed negation) vs the learned encoder (measured slope)."
+      ]
+    },
+    {
+      "rank": 3,
+      "slug": "12-cross-view-invariance",
+      "title": "Cross-view gait invariance with a no-flip rule that protects lateralized asymmetry",
+      "one_line_question": "On leave-one-view-out folds of public multi-view pose cohorts, does a viewpoint-conditioned predictor that treats view change as an action, trained with a strict no-left-right-flip rule, produce more view-stable gait features than a flip-augmented baseline by a pre-registered margin, while a signed-asymmetry probe confirms that a mirror flip inverts the sign of the lateralized biomarker?",
+      "why_it_wins": "The only item with a real external footing (identity-disjoint leave-one-view-out on public multi-view pose cohorts), so Generalizability reaches 5. The view-as-action framing follows V-JEPA 2, and the no-flip rule turns a standard gait-recognition augmentation into a mechanism-preserving constraint that protects the lateralized asymmetry axis.",
+      "incorporated_repairs": "Load-bearing honest scope: gavd5-draft is monocular YouTube with no controlled multi-view data, so the CORE invariance arm runs on public multi-view POSE cohorts (CASIA-B, OU-MVLP-Pose, GREW, Gait3D), all NON-clinical, with gavd5-draft view-labels only as a secondary probe; the clinical claim stays reach-tier. Two endpoints (view-drift reduction and mirror-inversion of the biomarker) with two non-neural ceilings and an explicit identity-control fallback. State that no multi-view clinical cohort exists, so the clinical transfer is out of scope for this iteration.",
+      "augmentation": {
+        "neuro_chain": "The no-flip rule protects the lateralized signed axis whose mechanism is one-sided corticospinal or nigrostriatal lesion (Patterson 2010 PMID 19932621; stroke PMID 30571044; hemiplegic CP PMID 19081519; early PD PMID 22367437); a left-right flip would invert that biomarker, which is why flip augmentation is forbidden for lateralized pathology.",
+        "generalizable_claim": "Viewpoint is an action a gait world model can condition on (V-JEPA 2, arXiv:2506.09985), and invariance must be direction-preserving (no left-right flip) for lateralized pathology.",
+        "external_cohort": "Real external multi-view pose cohorts give the strongest footing in the portfolio: CASIA-B (Yu 2006), OU-MVLP-Pose (Takemura 2018), GREW (arXiv:2205.02692), Gait3D (arXiv:2204.02569), all non-clinical, with identity-disjoint leave-one-view-out. No multi-view clinical cohort exists, so the clinical arm is reach-tier only.",
+        "feasibility_tier": "3 core weeks / +unbounded reach; viewpoint-conditioned predictor-head retrain; needs external multi-view cohort downloads and pose normalization."
+      },
+      "scorecard": {
+        "band": "Strong main-track candidate",
+        "composite": 4.35,
+        "axes": { "novelty": 5, "mechanism": 4, "generalizability": 5, "rigor": 4, "feasibility": 3 },
+        "effort": "3 / +unbounded weeks; view-conditioned predictor retrain; needs external cohort"
+      },
+      "figure_specs": [
+        "Leave-one-view-out feature-drift for view-as-action + no-flip vs flip-augmented baseline on public multi-view cohorts, per-view dots, with the pre-registered drift-reduction margin.",
+        "Mirror probe: signed lateralized biomarker under original vs left-right-flipped input, showing flip augmentation inverts the sign while the no-flip predictor preserves it."
+      ]
+    },
+    {
+      "rank": 4,
+      "slug": "04-resize-timing-tax",
+      "title": "The 64-frame resize tax: quantifying how much cadence and speed the mandatory temporal_resize erases",
+      "one_line_question": "By how much does the mandatory fixed-64-frame temporal_resize destroy recoverable absolute cadence and walking-speed information, quantified as the fraction of clinically relevant timing variance lost, using only handcrafted kinematics on raw coordinates with an algebraic invariance proof?",
+      "why_it_wins": "Feas 4 and it fills the explicitly flagged temporal-resolution / clip-length gap no existing proposal touches (plan-04 restores dt only to build targets; plan-05 varies the readout). Framed honestly as a preprocessing-validity measurement study it is cheap, 3-week feasible, and yields a reusable cautionary lesson: absolute cadence (stroke 50-65 vs PD festinating 125-160 steps/min) cannot survive duration warping.",
+      "incorporated_repairs": "Reframe as an honest preprocessing-validity measurement study and DROP the JEPA/representation framing, because the frozen encoder is hard-wired to 64 frames and any native-rate arm is confounded by encoder-input distribution shift. Deliverable is an algebraic proof (a duration-warped 64-frame grid maps two clips of different real duration onto identical token time-grids, so absolute cadence is invariant by construction) plus an empirical demonstration on handcrafted cadence/speed/double-support from raw coordinates, quantifying the fraction of timing variance lost. Fix the reuse plan: add a Week-1 task to regenerate the NPZ cache WITH fps from source videos (CSVs do NOT store fps; nb02 reads cv2.CAP_PROP_FPS with a hard-coded 29.97 fallback), verify per-video fps is non-degenerate and varies before committing, abort if the fallback path contaminates the sample. Replace seed-only CIs with source-level paired analysis enumerating every feasible held-out source; add a control separating any injected dt/fps scalar from the tokenization; keep a shuffled-time control under which targets must become unrecoverable.",
+      "augmentation": {
+        "neuro_chain": "Absolute cadence and speed are clinically decisive and mechanism-specific: post-stroke slowing and reduced cadence (Patterson 2008 PMID 18226655) versus Parkinson's reduced stride length with compensatory cadence (Morris 1994 PMID 7953597; Morris 1996 PMID 8800948). The 64-frame duration warp erases exactly these absolute-time biomarkers.",
+        "generalizable_claim": "Duration-warping to a fixed frame grid is a cadence-erasing group action, so absolute temporal biomarkers are non-identifiable by construction; the lesson transfers to any fixed-frame skeleton pipeline including V-JEPA tube-length normalization (arXiv:2404.08471).",
+        "external_cohort": "This is an algebraic and within-cohort measurement study; no external cohort is required. The PD variability biomarker relates to PhysioNet gaitpdb (DOI 10.13026/C24H3N) only at the label level and is out of scope for the absolute-cadence proof.",
+        "feasibility_tier": "1-2 core weeks / +1 reach; zero-retrain; needs an NPZ plus fps regeneration to recover the true time base."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 4.25,
+        "axes": { "novelty": 4, "mechanism": 4, "generalizability": 4, "rigor": 5, "feasibility": 4 },
+        "effort": "1-2 / +1 weeks; zero-retrain; needs NPZ+fps regen"
+      },
+      "figure_specs": [
+        "Algebraic schematic: two clips of different real duration collapsing onto the same 64-frame token time-grid, with the resulting identical cadence readout annotated.",
+        "Grouped bar chart: handcrafted cadence/speed/double-support recovery error under resized vs native-rate coordinates, per-source dots, with the shuffled-time null overlaid."
+      ]
+    },
+    {
+      "rank": 5,
+      "slug": "11-target-isolation-substrate",
+      "title": "What should a gait world model predict? A matched-substrate target-isolation study",
+      "one_line_question": "Holding the encoder, the compute budget, the number of updates, and the mask fixed, and varying ONLY the prediction target across four families (raw coordinates, one-frame motion, S-JEPA centered-sharpened latent, normalized latent regression), does any target family recover the three validated gait mechanisms (left-right symmetry ratio, stride-time CV, anterior pelvic tilt) above a raw-input probe ceiling on source-video-disjoint folds by a pre-registered margin?",
+      "why_it_wins": "The purest generalizable-principle proposal (what to predict for gait) and the cleanest attribution design (everything held fixed but the target), engaging the JEPA target-design frontier. Rigor 5 because the matched substrate isolates the single factor and the raw-input ceiling prevents crediting a target for information already in the coordinates.",
+      "incorporated_repairs": "State sharp distinctness from plan-04 (a 2-way position-vs-motion ablation): this is a 4-way target-family study with a mechanism-probe endpoint and a raw-input ceiling. Hold encoder, compute, steps, and mask identical across the four retrains. Report per-source dots and source-video-disjoint folds; do not claim per-class margins on tiny held-out source counts. Credit a target only when it beats the raw-coordinate probe by the pre-registered margin, and note that a null would confirm rather than contradict the known stride-time-CV and asymmetry decodability limits.",
+      "augmentation": {
+        "neuro_chain": "The mechanism-probe endpoint is defined by three validated biomarkers: lateralized Symmetry Ratio (Patterson 2010 PMID 19932621; stroke PMID 30571044, hemiplegic CP PMID 19081519, early PD PMID 22367437), PD stride-time CV (Schaafsma 2003 8.8 vs 4.2 percent PMID 12809998; Hausdorff 1998 PMID 9613733), and myopathy anterior pelvic tilt 16.4 vs 11.6 deg (Vandekerckhove 2022 PMID 35721358; symmetric proximal, Barohn 2014 PMID 25037080). Skeleton validity: Stenum 2021 PMID 33891585.",
+        "generalizable_claim": "Holding everything but the prediction target fixed, the target family that best recovers validated gait mechanisms above a raw-input ceiling answers the transferable question of what to predict for gait in a JEPA (V-JEPA arXiv:2404.08471; V-JEPA 2 arXiv:2506.09985).",
+        "external_cohort": "No external skeleton cohort validates the target-design choice itself; the stride-time-CV probe has a cross-modal label-level anchor in PhysioNet gaitpdb (DOI 10.13026/C24H3N), and pose validity rests on Human3.6M (DOI 10.1109/tpami.2013.248) and Stenum 2021. CP and myopathy skeleton cohorts do not exist publicly (honest limitation).",
+        "feasibility_tier": "3-4 core weeks / +several reach; four matched full-curriculum retrains (encoder, compute, steps, mask held fixed); reuses cached 528-token tensors."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 4.05,
+        "axes": { "novelty": 4, "mechanism": 4, "generalizability": 4, "rigor": 5, "feasibility": 2 },
+        "effort": "3-4 / +several weeks; full curriculum retrain (x4 matched); reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "Mechanism-probe recovery (symmetry ratio, stride-time CV, anterior pelvic tilt) for each of the four target families vs the raw-input ceiling, per-source dots, pre-registered margin annotated.",
+        "Matched-substrate audit panel confirming encoder, compute, steps, and mask are identical across the four target arms."
+      ]
+    },
+    {
+      "rank": 6,
+      "slug": "01-provenance-pathway-attribution",
+      "title": "Extraction-pathway attribution: how much normal-vs-abnormal signal is acquisition provenance, not gait?",
+      "one_line_question": "After re-embedding all clips under a single checkpoint, how much of the 0.966 normal-vs-abnormal separability is explained by augmented-vs-canonical extraction pathway rather than gait, measured by within-normal provenance decodability against the source-identity upper bound?",
+      "why_it_wins": "Highest feasibility (feas 4, largely zero-retrain) and it interrogates the single most at-risk headline number in the project. It converts a documented hard-constraint confound into a reusable evaluation lesson for small grouped skeleton cohorts, which reviewers reward as originality-through-evaluation. Distinct from plan-06, which studies within-pathway missingness and lists provenance only as a nuisance control; here provenance IS the predicted target.",
+      "incorporated_repairs": "Re-embed BOTH cohorts (96 canonical + 63 augmented) under ONE checkpoint (d0acc262 curriculum-final) before any probe, eliminating the dba24a-vs-d0acc262 lineage confound and stating the single fingerprint. Reframe the primary measurement as provenance decodability WITHIN the normal label (12 canonical vs 63 augmented) reported against the source-identity upper bound and untrained-encoder input-level bound, acknowledging that with 1 canonical-normal source the probe cannot beat source-identity by design. DROP the pathway-matched normal-vs-abnormal AUC-drop as a discrimination claim; if kept, present only as a leave-the-single-normal-video-out diagnostic with augmented-normal subsampled to 12, never calling the delta provenance inflation without the source-count caveat. State all source counts up front, label every number transductive, and verify the canonical parquet carries a provenance column before presuming the join.",
+      "augmentation": {
+        "neuro_chain": "Provenance is an acquisition confound, not a neuro mechanism, but it gates the mechanism axis every other item depends on: myopathy is the only near-symmetric class (Xiong 2023 PMID 37525241) and dominates the canonical extraction path (10 of 18 sources), so a provenance leak disproportionately corrupts the symmetric-vs-lateralized axis.",
+        "generalizable_claim": "A Provenance-Decodability Index (fraction of a headline separability recovered by a same-label acquisition-pathway probe against the source-identity upper bound) is a transferable leakage subtype for grouped self-supervised skeleton pipelines, under the Kapoor and Narayanan leakage taxonomy (arXiv:2207.07048).",
+        "external_cohort": "None required; this is a within-cohort leakage audit on cached tensors. The lesson generalizes as a diagnostic to any grouped small-cohort skeleton SSL pipeline.",
+        "feasibility_tier": "3 core weeks / +0 reach; near-zero-retrain read on the frozen d0acc262 checkpoint over cached tensors; no external cohort."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.95,
+        "axes": { "novelty": 3, "mechanism": 3, "generalizability": 4, "rigor": 5, "feasibility": 5 },
+        "effort": "3 / +0 weeks; zero-retrain; reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "Grouped bar chart: provenance-decodability balanced accuracy (embedding vs 97-d missingness vs untrained-encoder vs chance) with a source-permutation null band, all under one checkpoint fingerprint.",
+        "Two-panel dot plot: within-normal 12-canonical-vs-63-augmented provenance separability against the source-identity upper bound and the leave-one-normal-video-out diagnostic bound with augmented subsampled to 12."
+      ]
+    },
+    {
+      "rank": 7,
+      "slug": "07-group-loss-supervision-isolation",
+      "title": "Does the label-aware curriculum buy generalization or memorization? Isolating the group loss under source-video-disjoint folds",
+      "one_line_question": "On a small feasible set of source-video holdouts, does the explicit Stage-1..4 group-loss term improve held-out-source condition separation over a matched arm with the group term zeroed, or does it only improve transductive separation while leaving inductive separation unchanged (with per-stage V-information and normal-forgetting as secondary panels)?",
+      "why_it_wins": "Highest novelty on the original shortlist (nov 4) and it fills the explicitly flagged gap that NO proposal isolates the label-aware group loss as the experimental factor, despite it being the reason Stages 1-4 are supervised fine-tuning and the suspected cause of the 0.954->0.594 normal-anchor drift. A transductive-vs-inductive contrast is the direct diagnosis of memorization vs transferable structure, reframing how the whole project reports its 0.821 transductive macro-F1.",
+      "incorporated_repairs": "Make the treatment genuinely single-factor and name it precisely as the EXPLICIT group-loss term, not all label information: the balanced sampler and VICReg's >=2-per-condition precondition leak labels into the group-weight=0 arm, so either match the sampler across arms and document how VICReg is satisfied without labels, OR add a third random-sampling arm to bound sampler leakage; reframe the null as scoped to the explicit term. Regenerate the transductive reference checkpoints and missingness features INSIDE gavd5-draft during Week 1. Harmonize extraction to one pathway before training (adopt plan-01's Day-3 provenance gate) or make the primary held-out task binary with provenance regressed out, demoting 5-class centroid geometry to secondary. Scope compute honestly: a small fixed feasible holdout set, compact matched-step fold-local finetune, per-source dots plus LOSO for every <4-source class plus bootstrap CI, and a pre-registered practical A-B margin. Add a collapse gate (feature_std, effective rank) as a hard reject for BOTH arms.",
+      "augmentation": {
+        "neuro_chain": "The mechanism question is whether the forgotten axis behind the normal-anchor drift 0.954->0.594 is the clinically load-bearing symmetric baseline (normal and myopathy) geometry, since myopathy reads as symmetric at the skeleton (Xiong 2023 PMID 37525241) and normal is its neighbor centroid.",
+        "generalizable_claim": "Label-aware centroid supervision inside a JEPA curriculum is supervised fine-tuning-inside-SSL; whether it yields transferable structure or transductive memorization is measured by the transductive-minus-inductive gap and per-stage V-usable information (Xu 2020, arXiv:2002.10689), a live methods question against V-JEPA-style frozen-probe orthodoxy (arXiv:2404.08471).",
+        "external_cohort": "None required; the transductive-versus-inductive contrast is internal to gavd5-draft (159 sequences, 35 sources). The lesson transfers as a supervision-isolation protocol for any label-aware SSL curriculum.",
+        "feasibility_tier": "3 core weeks / +2-3 reach; fold-local finetune at gavd5-draft scale with no fresh pretraining; reuses cached 528-token tensors."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.95,
+        "axes": { "novelty": 4, "mechanism": 3, "generalizability": 4, "rigor": 5, "feasibility": 3 },
+        "effort": "3 / +2-3 weeks; fold-local finetune; reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "Two-panel bar chart: held-out-source macro-F1 and min-centroid-cosine-distance for group-loss-ON vs OFF, split into a transductive panel and an inductive panel, each with per-source dots and bootstrap CIs.",
+        "Secondary line panel: per-stage held-out-source V-usable condition information and residual normal predictive competence (fixed stage-0 reference) vs curriculum stage, with the held-out-abnormal control line."
+      ]
+    },
+    {
+      "rank": 8,
+      "slug": "02-surprise-tomography",
+      "title": "Prediction-error tomography: is the spatial-temporal pattern of masked-token surprise, not its pooled magnitude, what carries condition structure?",
+      "one_line_question": "Within the SAME frozen normal-only error tensor, does the [12 joints x 16 segments] surprise-image structure separate held-out abnormal from normal by a pre-registered margin over the pooled surprise scalar, without merely matching the missingness-only and provenance-only error maps?",
+      "why_it_wins": "Highest composite on the original shortlist and cleanly extends plan-01 rather than duplicating it: plan-01 pools masked-prediction error into one number and only checks coverage shortcuts, whereas this makes the 2-D error structure the object and adds a structure-vs-scalar comparison plus a mechanism-alignment test. The predictor is unsaturated so error structure is informative, and the within-tensor framing sidesteps the one-normal-source ceiling.",
+      "incorporated_repairs": "Reframe the headline as a within-tensor readout comparison (structure vs pooled magnitude of the same error tensor, encoder/loss/mask fixed), not an absolute detector AUC. Pre-register a numeric margin mirroring plan-01 (+0.05 over the scalar AND not beating missingness-only by the same margin). Add a provenance-only error-map control alongside missingness-only and restrict the primary comparison to a single extraction pathway where possible. Replace the binomial sign test with a protocol that equalizes masked-token count per [joint x segment] cell and FREEZE the joint-to-condition prior list BEFORE results. Cite the masked-token cosine honestly as 0.572 +/- 0.116 from a 4-sequence spot check. Report per-source dots, leave-one-source-out for PD/stroke/CP, source-level permutation, and encoder-exposure labels next to every number.",
+      "augmentation": {
+        "neuro_chain": "The surprise topography is pre-registered from mechanism: stroke and hemiplegic CP load asymmetric knee and ankle cells (Patterson 2010 PMID 19932621; stiff-knee Chen 2005 PMID 15996592), PD loads a temporally dispersed variability signature (Schaafsma 2003 PMID 12809998), and myopathy loads symmetric proximal hip and pelvis cells with preserved temporal regularity (Xiong 2023 PMID 37525241; Vandekerckhove 2022 PMID 35721358).",
+        "generalizable_claim": "Masked-prediction error is spatially organized by lesion mechanism, and the topography (not the pooled magnitude) is the discriminative object; a synthetic-injection sanity check must move error mass to the matching cells.",
+        "external_cohort": "PD variability relates to PhysioNet gaitpdb (DOI 10.13026/C24H3N) at the label level only (cross-modal reach). The spatial topography itself is validated within-cohort via the injection sanity check; asymmetry and posture cells have no external skeleton cohort.",
+        "feasibility_tier": "2-3 core weeks / +2 reach; test-time pass on the existing d0acc262 checkpoint; no retrain."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.9,
+        "axes": { "novelty": 3, "mechanism": 4, "generalizability": 4, "rigor": 4, "feasibility": 5 },
+        "effort": "2-3 / +2 weeks; test-time pass; reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "Per-condition [12 joints x 16 segments] source-averaged surprise heatmap with encoder-exposure labels.",
+        "Bar chart of source-level ROC-AUC for pooled-scalar vs full-map vs marginals with bootstrap CIs over sources, missingness-only and majority floors as reference lines."
+      ]
+    },
+    {
+      "rank": 9,
+      "slug": "03-inference-time-motion-energy",
+      "title": "Position-vs-motion prediction energy at inference: does the frozen S-JEPA already know motion, or only pose?",
+      "one_line_question": "Using a dense readout of the frozen encoder+predictor over all 16 time slots (zero retraining), is latent-velocity structure linearly recoverable from prediction residuals, and does motion-scored energy separate held-out sources better than position-scored energy after a shuffled-motion scale control?",
+      "why_it_wins": "Zero-retrain, feas 4, and the cheap upstream complement to plan-04: plan-04 changes the TRAINING target and retrains 8 encoders, whereas this changes only the inference SCORING target on the existing frozen encoder and asks whether motion is already latent-recoverable. It exploits the confirmed per-source fps to compute dt and gives a fast, decisive descriptive answer.",
+      "incorporated_repairs": "Replace the contradictory hold-mask-fixed-plus-finite-difference-both-sides pair with ONE estimator: run the predictor densely over all 16 time slots for the masked joints and compute both position and motion energies from that same dense output against the same dense target operator, stating this is a new dense-readout estimator, not the trained masked scoring. Drop the causal bridge that this screens whether plan-04 is worth running; reframe as the descriptive question whether velocity structure is linearly recoverable from frozen predictor residuals. Match acquisition path in the primary contrast; report the normal contrast only as secondary with the confound flagged. Add an orthogonality test regressing each energy vector on (fps, raw clip length, provenance) and report residual AUC. Replace pooled source-level AUC with a pre-registered per-source-holdout sensitivity table; keep the shuffled-motion control that must stay at chance.",
+      "augmentation": {
+        "neuro_chain": "Motion-energy recoverability is tied to the PD rhythm mechanism (basal-ganglia loss of automaticity, variability is the hallmark: Hausdorff 1998 PMID 9613733; Wu 2015 PMID 26102020) versus the symmetric myopathy baseline (Xiong 2023 PMID 37525241). The endpoint is relative within-window rhythm regularity, not absolute cadence.",
+        "generalizable_claim": "Frozen-predictor residual velocity structure recovers the relative within-window rhythm regularity axis that distinguishes PD from the symmetric myopathy baseline, above a raw-coordinate velocity ceiling, at zero retraining.",
+        "external_cohort": "PD variability relates to PhysioNet gaitpdb (DOI 10.13026/C24H3N) at the label level only. Honest boundary: this item cannot recover absolute cadence (that is erased by the 64-frame resize, item 04); its rhythm claim is restricted to within-window relative regularity.",
+        "feasibility_tier": "3 core weeks / +2 reach; zero-retrain dense readout of the frozen encoder over cached tensors."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.9,
+        "axes": { "novelty": 3, "mechanism": 4, "generalizability": 4, "rigor": 4, "feasibility": 5 },
+        "effort": "3 / +2 weeks; zero-retrain; reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "3 (target: position/motion/mix) x 4 (condition-vs-normal) grid of source-level AUC with bootstrap CIs and a shuffled-motion control lane that must not beat motion.",
+        "Scatter of raw residual-velocity recoverability R2 vs orthogonalized residual after regressing out fps/length/provenance, per held-out source."
+      ]
+    },
+    {
+      "rank": 10,
+      "slug": "08-concept-bottleneck-disentangled",
+      "title": "Concept-bottleneck disentangled S-JEPA: named z_asym / z_rhythm / z_posture subspaces tied to validated biomarkers",
+      "one_line_question": "After a full curriculum retrain with three biomarker-supervised latent subspaces, does intervening on one named subspace move only its mechanism-linked biomarker (symmetry ratio, stride-time CV, or anterior pelvic tilt) and leave the other two biomarkers unmoved, by a pre-registered margin, and only where that steerability beats a raw-coordinate probe ceiling?",
+      "why_it_wins": "Joint-highest novelty (nov 5): named, causally steerable subspaces are the most ambitious new object in the portfolio. Each subspace is tied to a validated biomarker with a raw-input probe ceiling, and the steerability test is a concrete falsifier of disentanglement rather than a correlational read.",
+      "incorporated_repairs": "Cite Locatello 2019 ICML honestly as the reason biomarker heads are required (unsupervised disentanglement needs inductive bias or supervision). Credit steerability only above a raw-coordinate probe ceiling (steerability ratio at least 3, leak at most 0.2). Flag z_rhythm as the highest-risk subspace since stride-time CV is not linearly decodable from roughly 2-second windows. Cap Generalizability at 3 because z_posture cannot be externally confirmed (no CP or myopathy skeleton cohort). Report source-video-disjoint folds and per-source dots; state the retrain is a full five-stage curriculum.",
+      "augmentation": {
+        "neuro_chain": "Three subspaces each map to a validated biomarker: z_asym to the Symmetry Ratio (Patterson 2010 PMID 19932621; lateralized stroke PMID 30571044, hemiplegic CP PMID 19081519, early PD PMID 22367437), z_rhythm to stride-time CV (Schaafsma 2003 8.8 vs 4.2 percent PMID 12809998; Hausdorff 1998 PMID 9613733; PD automaticity loss PMID 20944662), and z_posture to anterior pelvic tilt and trunk lean (Vandekerckhove 2022 16.4 vs 11.6 deg PMID 35721358; myopathy symmetric proximal PMID 25037080; CP crouch >=30 deg PMID 20300011).",
+        "generalizable_claim": "Biomarker-supervised auxiliary heads plus VICReg (arXiv:2105.04906) plus biased masking produce named, causally steerable subspaces, testable by a steerability intervention that must move only the target biomarker and beat a raw-coordinate ceiling (Locatello 2019 ICML names why supervision is required).",
+        "external_cohort": "z_rhythm relates to PhysioNet gaitpdb (DOI 10.13026/C24H3N) cross-modal label level; z_asym and z_posture have no participant-disjoint public skeleton cohort (honest limitation), so Generalizability is capped at 3.",
+        "feasibility_tier": "6-8 weeks (reach included); full five-stage curriculum retrain plus three auxiliary heads and a decorrelation term; reuses cached 528-token tensors for the core."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.75,
+        "axes": { "novelty": 5, "mechanism": 4, "generalizability": 3, "rigor": 4, "feasibility": 2 },
+        "effort": "6-8 / +0 (reach included) weeks; full curriculum retrain; reuses cached 528-token tensors (core)"
+      },
+      "figure_specs": [
+        "Steerability matrix: intervening on each subspace (rows) vs change in each biomarker (columns), with off-diagonal leak below the pre-registered bound and diagonal above the raw-coordinate ceiling.",
+        "Per-subspace biomarker-recovery R2 vs the raw-coordinate probe ceiling, per held-out source, with z_rhythm flagged as highest-risk."
+      ]
+    },
+    {
+      "rank": 11,
+      "slug": "10-prediction-error-severity",
+      "title": "Prediction-error-as-severity: a normal-only gait world model with mechanism-grouped error decomposition",
+      "one_line_question": "When a JEPA world model is trained ONLY on normal gait and its relative masked-prediction error is read as a continuous severity score, does a controlled one-sided knee-flexion injection raise error specifically in the asymmetry channel (and track its magnitude), while a symmetric proximal-deficit injection raises error specifically in the posture channel, each by a pre-registered margin over a random-encoder control?",
+      "why_it_wins": "Elegantly side-steps the label-versus-source collinearity that limits every supervised readout, because the model never trains on abnormal labels. The synthetic-injection direction test is a concrete falsifier, and the framing follows the V-JEPA 2 and violation-of-expectation world-model line.",
+      "incorporated_repairs": "Scope to NOT overlap item 02: item 02 is a frozen-encoder readout comparison on the existing d0acc262 checkpoint, whereas this trains a normal-only model from scratch as a severity world model. Add a random-encoder control the injection must beat. Acknowledge the near-tautology risk (an injection that echoes the perturbed coordinate) and require the error to be spatially structured beyond the injected coordinate. State that normal comes from a single video (3KnFt8bH3tE), so the model is transductive to one source and Generalizability is capped at 3.",
+      "augmentation": {
+        "neuro_chain": "The error field is decomposed into three mechanism channels: an asymmetry channel for lateralized deficits (one-sided knee-flexion injection; stroke PMID 30571044, hemiplegic CP PMID 19081519, early PD PMID 22367437; Symmetry Ratio PMID 19932621), a rhythm channel for PD variability (PMID 20944662; stride-time CV PMID 12809998), and a posture channel for symmetric proximal deficit (myopathy PMID 25037080; anterior pelvic tilt PMID 35721358; low L-R asymmetry PMID 37525241).",
+        "generalizable_claim": "A world model trained only on normal gait yields a mechanism-decomposable prediction-error field whose channel-specific rises track injected deficit direction and magnitude, giving a label-free, biomarker-aligned severity axis (V-JEPA 2 arXiv:2506.09985; Garrido violation-of-expectation arXiv:2502.11831).",
+        "external_cohort": "PhysioNet gaitpdb (DOI 10.13026/C24H3N) is a label-level cross-modal check of the rhythm channel only. Severe data bound: normal is a single source video, so the normal-only model is transductive to that one source; the asymmetry and posture channels rest on the internal injection test plus the biomarker literature, not external validation.",
+        "feasibility_tier": "3 core weeks / +several reach; from-scratch normal-only Stage-0-budget train (roughly 300 epochs) on normal rows only; reuses cached 528-token tensors."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.65,
+        "axes": { "novelty": 4, "mechanism": 4, "generalizability": 3, "rigor": 4, "feasibility": 3 },
+        "effort": "3 / +several weeks; from-scratch normal-only; reuses cached 528-token tensors"
+      },
+      "figure_specs": [
+        "Injection direction test: asymmetry-channel vs posture-channel error as a function of one-sided-knee-flexion vs symmetric-proximal injection magnitude, with the random-encoder control lane.",
+        "Mechanism-grouped error decomposition of a normal-only world model on held-out abnormal sources, per-channel, with the near-tautology control (error beyond the injected coordinate)."
+      ]
+    },
+    {
+      "rank": 12,
+      "slug": "06-mask-geometry-as-object",
+      "title": "Mask geometry as the object: does anatomically structured masking make timing and asymmetry more recoverable than the uniform 12-joint mask?",
+      "one_line_question": "Holding the encoder architecture, the compute budget, and the number of optimizer steps fixed, does replacing the uniform-over-12-joints Stage-0 mask with a single best-motivated anatomically structured mask increase held-out-source decodability of pre-registered timing and asymmetry targets, with the reconstruction-difficulty gap between the two masks measured rather than assumed away, and without raising extraction-provenance decodability?",
+      "why_it_wins": "The only design making mask GEOMETRY the primary treatment, filling an explicitly flagged gap (plan-01 sweeps masks only as a robustness knob; plan-04 fixes masks and varies targets; plan-05 fixes the encoder and varies the readout). The sampler is known-degraded (eligible fraction drifted 0.551->0.423), so whether gait-specific mask structure shapes tokens at this scale is a crisp, reusable design question.",
+      "incorporated_repairs": "Drop the impossible match-eligible-fraction-AND-n_mask requirement. Pre-register a SINGLE controlled coverage variable and MEASURE the difficulty gap explicitly (per-sample masked-count distributions, count of masked tokens with a visible same-side/temporal neighbor, reconstruction-difficulty proxies per arm). Add an in-space matched-difficulty control: for the structured mask, generate a random mask with identical per-sample masked-token count AND identical joint/time marginal histogram but scrambled structure. RESTRICT the primary confirmation to the uniform vs single best-motivated structured mask contrast per family; treat extras as exploratory. Run Stage-0 on a provenance-harmonized subset and treat the provenance probe as a HARD KILL GATE. Add a permutation sanity check that the readout depends on the infilled structure. Budget building the fold-local Stage-0 retrain harness (only its README was found).",
+      "augmentation": {
+        "neuro_chain": "Three mechanism-defined mask families each force infill of a validated biomarker axis: contralateral-pair masking forces asymmetry infill for lateralized conditions (Patterson 2010 PMID 19932621; stroke PMID 30571044, early PD PMID 22367437, hemiplegic CP PMID 19081519), half-cycle or future-phase masking forces rhythm infill for PD (Redgrave 2010 PMID 20944662; Wu 2015 PMID 26102020; stride-time CV Schaafsma 2003 PMID 12809998, Hausdorff 1998 PMID 9613733), and proximal-segment masking forces symmetric proximal infill for myopathy (Barohn 2014 PMID 25037080; anterior pelvic tilt Vandekerckhove 2022 PMID 35721358; low L-R asymmetry Xiong 2023 PMID 37525241).",
+        "generalizable_claim": "Gait-specific mask geometry, at matched reconstruction difficulty, shapes which clinical axis becomes linearly recoverable from a skeleton-JEPA, transferable to any skeleton-JEPA (mask-family-at-equal-coverage principle).",
+        "external_cohort": "Only the PD-rhythm family has a cross-modal label-level anchor (PhysioNet gaitpdb, DOI 10.13026/C24H3N); the asymmetry and symmetric-proximal families have no participant-disjoint public skeleton cohort (honest limitation), so Generalizability is capped at 3.",
+        "feasibility_tier": "4-6 core weeks / +0 reach; fold-local Stage-0 retrain per family (build the harness once, then run three families); reuses cached 528-token tensors, no external cohort."
+      },
+      "scorecard": {
+        "band": "Competitive with revision",
+        "composite": 3.65,
+        "axes": { "novelty": 4, "mechanism": 4, "generalizability": 3, "rigor": 4, "feasibility": 3 },
+        "effort": "4-6 core weeks / +0 reach; fold-local Stage-0 retrain per family; reuses cached 528-token tensors, no external cohort, retrain-compute-bound"
+      },
+      "figure_specs": [
+        "Grouped bar chart: held-out-source normalized MAE on timing and laterality targets for uniform vs structured mask, per-source paired dots, with a twin panel of provenance balanced-accuracy that must not rise.",
+        "Difficulty-audit panel: per-sample masked-count distribution and fraction of masked tokens with a visible same-side/temporal neighbor, for uniform vs structured vs the marginal-matched scrambled control."
+      ]
+    }
+  ],
+  "portfolio_rationale": "Twelve items on one graded scale (see SCORECARD.md): the seven original proposals, augmented in place with a neuroscience-grounded, generalizable-claim reframing, plus five new higher-ceiling neuro-grounded world-model proposals. The unifying scientific thesis is the discriminative SYMMETRY AXIS: gait conditions separate by HOW they break walking, and each way ties to a validated, skeleton-recoverable biomarker. LATERALIZED conditions (stroke via corticospinal decussation, hemiplegic cerebral palsy via unilateral periventricular injury, early Parkinson's via contralateral nigrostriatal onset) raise a signed left-minus-right Symmetry Ratio (Patterson 2010 PMID 19932621). Parkinson's adds a RHYTHM signature, elevated stride-time CV (8.8 percent fallers vs 4.2 percent non-fallers, Schaafsma 2003 PMID 12809998; Hausdorff 1998 PMID 9613733). Myopathy is SYMMETRIC, a proximal muscle disease with low left-right asymmetry (Xiong 2023 PMID 37525241), preserved cadence, and raised anterior pelvic tilt (16.4 vs 11.6 degrees, Vandekerckhove 2022 PMID 35721358). The neuroscience DEFINES each target and each falsifiable prediction; it never upgrades the n=18-source, single-normal-source, transductive cohort into a clinical-accuracy claim, so every clinical-accuracy statement is external-cohort reach-tier only. Generalizability reaches 5 only where a real external cohort backs the claim (PD variability via PhysioNet gaitpdb cross-modal label level; cross-view invariance via CASIA-B, OU-MVLP-Pose, GREW, Gait3D non-clinical multi-view pose) and stays capped near 3 for cerebral-palsy-specific and myopathy-specific claims, because no participant-disjoint public skeleton cohort exists for either. Four themes: EVALUATION VALIDITY (01 provenance as the object; 04 the 64-frame resize tax), WORLD-MODEL / PREDICTIVE (02 surprise topography; 03 inference-time motion energy), MECHANISM (05 signed laterality; 09 reflection-equivariance by construction), and NEURO-GROUNDED WORLD MODEL (08 concept-bottleneck disentanglement; 10 prediction-error severity; 11 target-isolation substrate; 12 cross-view invariance), with 06 (mask geometry as the object) and 07 (group-loss supervision isolation) as the mechanism/design pair. Feasibility is deliberately front-loaded: the near-zero-retrain reads (01, 02, 03, 04, 05) can produce a decisive figure by Day 14 even if the heavier retrains (06, 07, 08, 09, 10, 11, 12) slip, guaranteeing at least one publishable evaluation-validity or mechanism result regardless of compute outcomes. Every idea honors the hard constraints: source-video is the unit before all fitting, transductive exposure is labeled next to every number, the provenance confound is either the object (01) or a hard gate (05, 06, 07), folder labels are dataset annotations not diagnoses, and each has a simple non-neural or nuisance baseline with an informative null."
+}
