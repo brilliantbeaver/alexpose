@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Paired counterfactual mechanics</title>
+  <desc>One common seed branches into two simulations that differ in only one physical parameter and are compared outside the training range.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,sans-serif;fill:#0f2440}.t{font:700 20px Arial,sans-serif;fill:#0f2440}.b{font:16px Arial,sans-serif;fill:#33475e}.s{font:14px Arial,sans-serif;fill:#5c6f84}.w{font:700 16px Arial,sans-serif;fill:#fff}.card{stroke:#20364e;stroke-width:1.75}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Paired counterfactuals isolate one cause</text>
+  <text class="s" x="48" y="104">Appearance, camera, action, body, and random seed stay fixed. One physical variable changes.</text>
+
+  <rect class="card" x="60" y="250" width="250" height="190" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="292">Common seed</text>
+  <text class="b" x="84" y="338">Same initial state</text>
+  <text class="b" x="84" y="368">Same command</text>
+  <text class="b" x="84" y="398">Same rendering</text>
+
+  <path class="a" d="M326 320 H394"/>
+  <path class="a" d="M326 370 H350 V496 H394"/>
+
+  <rect class="card" x="410" y="190" width="300" height="180" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="434" y="232">World A</text>
+  <text class="b" x="434" y="278">Parameter θ</text>
+  <text class="b" x="434" y="308">Trajectory τ</text>
+  <text class="s" x="434" y="340">Reference mechanics</text>
+
+  <rect class="card" x="410" y="430" width="300" height="180" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="434" y="472">World B</text>
+  <text class="b" x="434" y="518">Only θ + Δk changes</text>
+  <text class="b" x="434" y="548">Trajectory τ′</text>
+  <text class="s" x="434" y="580">Mass, friction, or strength</text>
+
+  <path class="a" d="M726 280 H794"/>
+  <path class="a" d="M726 520 H760 V370 H794"/>
+
+  <rect class="card" x="810" y="250" width="330" height="240" rx="16" fill="#ece6f6"/>
+  <text class="t" x="834" y="292">Paired learning test</text>
+  <text class="b" x="834" y="338">Invariant to appearance</text>
+  <text class="b" x="834" y="368">Equivariant to Δk</text>
+  <text class="b" x="834" y="398">Correct changed future</text>
+  <text class="s" x="834" y="444">Test out of range and</text>
+  <text class="s" x="834" y="470">on unseen compositions</text>
+
+  <rect x="265" y="624" width="670" height="48" rx="16" fill="#20364e"/>
+  <text class="w" x="600" y="654" text-anchor="middle">If paired training cannot extrapolate, the causal curriculum claim fails.</text>
+</svg>

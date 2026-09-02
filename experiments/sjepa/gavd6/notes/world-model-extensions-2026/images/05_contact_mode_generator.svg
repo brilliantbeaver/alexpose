@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Contact-mode generative S-JEPA</title>
+  <desc>An object goal branches into discrete contact modes and continuous human, object, and wrench trajectories that are tested for execution.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker>
+    <style>
+      .h{font:700 32px Arial,sans-serif;fill:#0f2440}.t{font:700 20px Arial,sans-serif;fill:#0f2440}.b{font:16px Arial,sans-serif;fill:#33475e}.s{font:14px Arial,sans-serif;fill:#5c6f84}.w{font:700 16px Arial,sans-serif;fill:#fff}.card{stroke:#20364e;stroke-width:1.75}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Generate the contact plan before the detailed motion</text>
+  <text class="s" x="48" y="104">Different valid contact strategies should remain distinct instead of being averaged into one pose.</text>
+
+  <rect class="card" x="60" y="250" width="220" height="190" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="84" y="292">Object goal</text>
+  <text class="b" x="84" y="338">Initial 4D state</text>
+  <text class="b" x="84" y="368">Desired path</text>
+  <text class="s" x="84" y="410">Goal is fixed</text>
+
+  <path class="a" d="M296 345 H354"/>
+
+  <rect class="card" x="370" y="155" width="270" height="380" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="394" y="197">Sample contact mode</text>
+  <rect x="394" y="226" width="222" height="58" rx="10" fill="#fff"/><text class="b" x="414" y="261">Push and release</text>
+  <rect x="394" y="302" width="222" height="58" rx="10" fill="#fff"/><text class="b" x="414" y="337">Grasp and carry</text>
+  <rect x="394" y="378" width="222" height="58" rx="10" fill="#fff"/><text class="b" x="414" y="413">Brace and slide</text>
+  <rect x="394" y="454" width="222" height="58" rx="10" fill="#fff"/><text class="b" x="414" y="489">Tool-mediated</text>
+
+  <path class="a" d="M656 345 H714"/>
+
+  <rect class="card" x="730" y="220" width="230" height="250" rx="16" fill="#ece6f6"/>
+  <text class="t" x="754" y="262">Generate motion</text>
+  <text class="b" x="754" y="308">SMPL or joints</text>
+  <text class="b" x="754" y="338">Object keypoints</text>
+  <text class="b" x="754" y="368">Wrench trajectory</text>
+  <text class="s" x="754" y="418">Conditional flow</text>
+  <text class="s" x="754" y="444">preserves diversity</text>
+
+  <path class="a" d="M976 345 H1014"/>
+
+  <rect class="card" x="1030" y="220" width="110" height="250" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="1054" y="262">Test</text>
+  <text class="b" x="1054" y="308">Goal</text>
+  <text class="b" x="1054" y="338">Contact</text>
+  <text class="b" x="1054" y="368">Force</text>
+  <text class="b" x="1054" y="398">Diversity</text>
+
+  <rect x="225" y="600" width="750" height="64" rx="16" fill="#20364e"/>
+  <text class="w" x="600" y="639" text-anchor="middle">Success requires more distinct executable modes, not just a lower best-of-K error.</text>
+</svg>
