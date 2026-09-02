@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 385" role="img" aria-labelledby="title desc">
+  <title id="title">Gaps are not clues</title>
+  <desc id="desc">A two-lane timeline shows label changes and missing-data gaps at distinct locations, making clear that a gap alone cannot reveal a change.</desc>
+  <defs>
+    <style>
+      .title { font: 700 27px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #102a43; }
+      .label { font: 700 19px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #243b53; }
+      .note { font: 400 17px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #627d98; }
+      .outcome { font: 700 22px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #102a43; }
+    </style>
+  </defs>
+  <rect width="560" height="385" fill="#f7fbff"/>
+  <text x="36" y="44" class="title">Gaps are not clues</text>
+
+  <text x="50" y="96" class="label">hidden names</text>
+  <rect x="50" y="114" width="70" height="32" rx="7" fill="#c9f1eb"/>
+  <rect x="124" y="114" width="70" height="32" rx="7" fill="#c9f1eb"/>
+  <rect x="198" y="114" width="70" height="32" rx="7" fill="#fde0cf"/>
+  <rect x="272" y="114" width="70" height="32" rx="7" fill="#fde0cf"/>
+  <rect x="346" y="114" width="70" height="32" rx="7" fill="#c9f1eb"/>
+  <rect x="420" y="114" width="70" height="32" rx="7" fill="#c9f1eb"/>
+  <path d="M196 108 L196 82 M344 108 L344 82" stroke="#1f9d8b" stroke-width="3"/>
+  <text x="196" y="75" text-anchor="middle" class="note">change</text>
+  <text x="344" y="75" text-anchor="middle" class="note">change</text>
+
+  <text x="50" y="207" class="label">missing frames</text>
+  <line x1="54" y1="235" x2="486" y2="235" stroke="#9fb3c8" stroke-width="8" stroke-linecap="round"/>
+  <rect x="110" y="222" width="25" height="26" rx="4" fill="#ffffff" stroke="#e07a3f" stroke-width="3"/>
+  <rect x="281" y="222" width="25" height="26" rx="4" fill="#ffffff" stroke="#e07a3f" stroke-width="3"/>
+  <rect x="434" y="222" width="25" height="26" rx="4" fill="#ffffff" stroke="#e07a3f" stroke-width="3"/>
+  <text x="280" y="278" text-anchor="middle" class="note">placed independently</text>
+  <line x1="50" y1="309" x2="510" y2="309" stroke="#d9e2ec" stroke-width="2"/>
+  <text x="280" y="349" text-anchor="middle" class="outcome">A gap alone cannot reveal a change.</text>
+</svg>
