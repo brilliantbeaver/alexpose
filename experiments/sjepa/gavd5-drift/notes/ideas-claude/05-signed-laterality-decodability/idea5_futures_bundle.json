@@ -1,0 +1,97 @@
+{
+  "notebook": "nb_05b_reflection_reach_and_futures",
+  "margins": {
+    "floor_margin": 0.05,
+    "null_fraction": 0.8,
+    "sign_consistency": 0.75,
+    "mirror_band": [
+      -1.25,
+      -0.8
+    ]
+  },
+  "futures": [
+    {
+      "future": "F1 clean-flip positive",
+      "A_r2": 0.44,
+      "B_r2": 0.5,
+      "C_r2": 0.06,
+      "D_r2": -0.02,
+      "sign_frac": 0.83,
+      "mirror_slope": -1.02,
+      "primary": "SIGNED AXIS PRESENT ABOVE RAW",
+      "mirror": "FLIPS (encoding is antisymmetric under the mirror)",
+      "D_control_ok": true
+    },
+    {
+      "future": "F2 decodable but non-flipping",
+      "A_r2": 0.41,
+      "B_r2": 0.5,
+      "C_r2": 0.05,
+      "D_r2": 0.01,
+      "sign_frac": 0.8,
+      "mirror_slope": -0.25,
+      "primary": "SIGNED AXIS PRESENT ABOVE RAW",
+      "mirror": "DOES NOT FLIP (encoding is non-antisymmetric)",
+      "D_control_ok": true
+    },
+    {
+      "future": "F3 informative null",
+      "A_r2": 0.12,
+      "B_r2": 0.48,
+      "C_r2": 0.08,
+      "D_r2": 0.0,
+      "sign_frac": 0.55,
+      "mirror_slope": -0.6,
+      "primary": "INFORMATIVE NULL (signed axis not linearly present above raw)",
+      "mirror": "DOES NOT FLIP (encoding is non-antisymmetric)",
+      "D_control_ok": true
+    },
+    {
+      "future": "F4 artifact (nuisance control fires)",
+      "A_r2": 0.47,
+      "B_r2": 0.5,
+      "C_r2": 0.06,
+      "D_r2": 0.46,
+      "sign_frac": 0.82,
+      "mirror_slope": -0.9,
+      "primary": "SIGNED AXIS PRESENT ABOVE RAW",
+      "mirror": "FLIPS (encoding is antisymmetric under the mirror)",
+      "D_control_ok": false
+    }
+  ],
+  "decision": {
+    "F1 clean-flip positive": {
+      "primary": "SIGNED AXIS PRESENT ABOVE RAW",
+      "mirror": "FLIPS (encoding is antisymmetric under the mirror)",
+      "D_control_ok": true,
+      "claim": "LICENSED: the frozen encoder linearly carries the signed laterality axis competitively with raw coordinates AND the encoding is antisymmetric under the anatomical mirror. Supports the reflection-equivariant symmetry-axis reading (Idea 9 substrate confirmed)."
+    },
+    "F2 decodable but non-flipping": {
+      "primary": "SIGNED AXIS PRESENT ABOVE RAW",
+      "mirror": "DOES NOT FLIP (encoding is non-antisymmetric)",
+      "D_control_ok": true,
+      "claim": "LICENSED: signed axis is linearly present above raw coordinates. WITHHELD: reflection equivariance; the encoding decodes side without respecting the mirror symmetry."
+    },
+    "F3 informative null": {
+      "primary": "INFORMATIVE NULL (signed axis not linearly present above raw)",
+      "mirror": "DOES NOT FLIP (encoding is non-antisymmetric)",
+      "D_control_ok": true,
+      "claim": "LICENSED (negative): the frozen S-JEPA tokens do NOT add the signed axis above raw coordinates. Overturns the hypothesis that the checkpoint organized a laterality axis; a clean publishable negative for the representation audit."
+    },
+    "F4 artifact (nuisance control fires)": {
+      "primary": "SIGNED AXIS PRESENT ABOVE RAW",
+      "mirror": "FLIPS (encoding is antisymmetric under the mirror)",
+      "D_control_ok": false,
+      "claim": "WITHHELD: the signed claim is withdrawn. The side-agnostic mean/std control recovered the 'axis', so Lane A reflects a magnitude/acquisition artifact, not a signed quantity."
+    }
+  },
+  "external_reach": {
+    "cohorts": [
+      "CASIA-B (Yu 2006)",
+      "OU-MVLP-Pose (Takemura 2018)"
+    ],
+    "status": "scaffold only; real loaders are marked TODO",
+    "tier": "non-clinical reach; tests reflection stability + genuine-mirror flip, not diagnosis"
+  },
+  "notes": "Simulated expected shapes, NOT data. gavd5-drift clinical claim is internal-validity only."
+}
