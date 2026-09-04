@@ -111,7 +111,7 @@ A standalone full-corpus pose extractor and source-video split builder is
 still required to generate `GAVD_POSE_MANIFEST`. Do not point
 `GAVD_POSE_MANIFEST` at `gavd_full_sequences.csv`: the schemas are different.
 The current foundation notebooks are locked to 96 sequences, and
-`scripts/data_preparation/extract_augmented_poses.py` handles only the separate
+`uv run gavd6 gavd extract-augmented` handles only the separate
 augmented-normal cohort.
 
 For the deferred GAVD/source-route screen, also verify:

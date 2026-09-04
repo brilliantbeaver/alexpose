@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Simulator-teacher residual forecasting</title>
+  <desc id="desc">PP-Motion, MotionCritic, jerk, and shuffled teachers rank controlled AMASS variants. A zero-initialized route must predict the clean-target correction of a frozen S-JEPA, so teacher ranking cannot be satisfied by a detached score. GAVD uses the route without a three-dimensional teacher.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="50" y="56" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Simulator-teacher residual forecasting</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#111827">
+    <rect x="50" y="105" width="245" height="125" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="172" y="145" text-anchor="middle" font-weight="700">AMASS families</text>
+    <text x="172" y="175" text-anchor="middle">clean continuation +</text>
+    <text x="172" y="203" text-anchor="middle">controlled variants</text>
+
+    <rect x="50" y="400" width="245" height="125" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="172" y="440" text-anchor="middle" font-weight="700">GAVD video</text>
+    <text x="172" y="470" text-anchor="middle">source-held poses,</text>
+    <text x="172" y="498" text-anchor="middle">no 3D teacher</text>
+
+    <rect x="345" y="70" width="250" height="190" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-dasharray="9 6"/>
+    <text x="470" y="108" text-anchor="middle" font-weight="700">Four teacher arms</text>
+    <text x="470" y="140" text-anchor="middle">PP-Motion rank,</text>
+    <text x="470" y="170" text-anchor="middle">MotionCritic rank,</text>
+    <text x="470" y="200" text-anchor="middle">jerk-matched rank,</text>
+    <text x="470" y="230" text-anchor="middle">shuffled rank</text>
+
+    <rect x="345" y="300" width="250" height="135" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="470" y="340" text-anchor="middle" font-weight="700">Core11 bridge</text>
+    <text x="470" y="372" text-anchor="middle">projected variant +</text>
+    <text x="470" y="402" text-anchor="middle">clean target latent</text>
+
+    <rect x="645" y="275" width="250" height="150" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="770" y="315" text-anchor="middle" font-weight="700">Frozen S-JEPA</text>
+    <text x="770" y="347" text-anchor="middle">masked future</text>
+    <text x="770" y="377" text-anchor="middle">prediction stays</text>
+    <text x="770" y="407" text-anchor="middle">unchanged</text>
+
+    <rect x="645" y="85" width="250" height="145" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="770" y="125" text-anchor="middle" font-weight="700">Zero-init route</text>
+    <text x="770" y="157" text-anchor="middle">predicts clean-target</text>
+    <text x="770" y="187" text-anchor="middle">latent correction;</text>
+    <text x="770" y="217" text-anchor="middle">residual energy ranked</text>
+
+    <rect x="945" y="145" width="210" height="120" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1050" y="185" text-anchor="middle" font-weight="700">Correction field</text>
+    <text x="1050" y="217" text-anchor="middle">by joint and</text>
+    <text x="1050" y="247" text-anchor="middle">gait phase</text>
+
+    <rect x="945" y="380" width="210" height="120" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="1050" y="420" text-anchor="middle" font-weight="700">Base residual</text>
+    <text x="1050" y="452" text-anchor="middle">healthy typicality</text>
+    <text x="1050" y="482" text-anchor="middle">kept separate</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 295 155 L 345 155"/>
+    <path d="M 295 205 C 320 230, 320 340, 345 340"/>
+    <path d="M 295 462 C 320 462, 320 400, 345 400"/>
+    <path d="M 595 165 L 645 165"/>
+    <path d="M 595 350 L 645 350"/>
+    <path d="M 770 275 L 770 230"/>
+    <path d="M 895 175 C 920 175, 920 205, 945 205"/>
+    <path d="M 895 390 C 920 390, 920 440, 945 440"/>
+  </g>
+
+  <line x1="50" y1="600" x2="1150" y2="600" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="50" y="640" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">The route must change the frozen forecast toward the known clean latent. A detached score cannot satisfy the objective.</text>
+  <text x="50" y="672" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">At test time, GAVD yields separate model-typicality and teacher-derived correction residuals without PP-Motion input.</text>
+</svg>

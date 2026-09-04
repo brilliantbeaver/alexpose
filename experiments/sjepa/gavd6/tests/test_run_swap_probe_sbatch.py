@@ -14,6 +14,10 @@ class RunSwapProbeSbatchTests(unittest.TestCase):
 
         self.assertIn('CHECKPOINT="$SWAP_PROBE_CHECKPOINT"', script)
         self.assertIn('OUTPUT_DIR="$SWAP_PROBE_OUTPUT_DIR"', script)
+        self.assertIn(
+            "python -m gavd6_sjepa.command_line_interface swap-probe run",
+            script,
+        )
         self.assertNotIn('CHECKPOINT_SHA256=', script)
         self.assertNotIn('--expected-checkpoint-sha256', script)
 

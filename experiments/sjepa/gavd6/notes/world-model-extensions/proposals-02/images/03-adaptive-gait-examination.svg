@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Adaptive gait examination</title>
+  <desc id="desc">A cheap pose track is divided into sixteen four-frame blocks. A utility-ranking policy chooses a block, a stronger full-body pose route reprocesses it, and the system recomputes its conclusion before choosing again or stopping.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.k{font:700 13px Arial,Helvetica,sans-serif;fill:#5c6f84;letter-spacing:.8px}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}.ws{font:14px Arial,Helvetica,sans-serif;fill:#dce5ee}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Adaptive Gait Examination</text>
+  <text class="sub" x="48" y="104">Spend a stronger pose pass only where its realized downstream value is likely to be high.</text>
+
+  <rect class="card" x="60" y="190" width="300" height="280" rx="16" fill="#e7f0f8"/>
+  <text class="k" x="84" y="225">CHEAP MEASUREMENT</text>
+  <text class="t" x="84" y="263">64-frame pose track</text>
+  <text class="b" x="84" y="303">16 full-body actions</text>
+  <text class="b" x="84" y="329">one action = four frames</text>
+  <g fill="#b9cfe0" stroke="#477ea8" stroke-width="1">
+    <rect x="84" y="372" width="12" height="34"/><rect x="100" y="372" width="12" height="34"/><rect x="116" y="372" width="12" height="34"/><rect x="132" y="372" width="12" height="34"/>
+    <rect x="148" y="372" width="12" height="34"/><rect x="164" y="372" width="12" height="34"/><rect x="180" y="372" width="12" height="34"/><rect x="196" y="372" width="12" height="34"/>
+    <rect x="212" y="372" width="12" height="34"/><rect x="228" y="372" width="12" height="34"/><rect x="244" y="372" width="12" height="34"/><rect x="260" y="372" width="12" height="34"/>
+    <rect x="276" y="372" width="12" height="34"/><rect x="292" y="372" width="12" height="34"/><rect x="308" y="372" width="12" height="34"/><rect x="324" y="372" width="12" height="34"/>
+  </g>
+
+  <rect class="card" x="450" y="190" width="300" height="280" rx="16" fill="#ece6f6"/>
+  <text class="k" x="474" y="225">VALUE MODEL</text>
+  <text class="t" x="474" y="263">Utility-ranking policy</text>
+  <text class="b" x="474" y="303">S-JEPA residual + confidence</text>
+  <text class="b" x="474" y="333">predict gain for every block</text>
+  <text class="b" x="474" y="363">choose the best block or STOP</text>
+  <text class="b" x="474" y="407">judge by realized loss reduction</text>
+
+  <rect class="card" x="840" y="190" width="300" height="280" rx="16" fill="#e6f2ea"/>
+  <text class="k" x="864" y="225">ACTION</text>
+  <text class="t" x="864" y="263">Reprocess up to 4 blocks</text>
+  <text class="b" x="864" y="303">stronger full-body pose pass</text>
+  <text class="b" x="864" y="333">replace all joints in those frames</text>
+  <text class="b" x="864" y="363">recompute, then rerank or STOP</text>
+  <text class="b" x="864" y="407">return frame indices + gain</text>
+
+  <path class="arrow" d="M360 330H434"/>
+  <path class="arrow" d="M750 330H824"/>
+  <path class="arrow" d="M990 470V524"/>
+  <rect class="card" x="180" y="540" width="960" height="90" rx="16" fill="#20364e"/>
+  <text class="w" x="210" y="578">A measurement policy, not an attention map</text>
+  <text class="ws" x="210" y="608">Gate: recover ≥ 80% of the cheap-to-all-strong AP gap with ≤ 4 actions and ≥ 30% fewer queries.</text>
+</svg>

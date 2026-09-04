@@ -33,7 +33,7 @@ OUTPUT_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/gauge-seed7-v2-chart-
 }
 
 cd "$GAVD6_ROOT"
-exec uv run --no-sync python scripts/build_sequence_gauge_manifest.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality build-manifest \
   --source-manifest "$SOURCE_MANIFEST" \
   --tensor-root "$TENSOR_ROOT" \
   --output-manifest "$OUTPUT_MANIFEST" \

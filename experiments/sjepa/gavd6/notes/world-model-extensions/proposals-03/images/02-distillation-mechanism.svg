@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Future-innovation distillation mechanism</title>
+  <desc>Current RGB and nuisance variables explain the easy future; skeleton history predicts only the remaining V-JEPA future innovation.</desc>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker></defs>
+  <style>.h{font:700 32px Arial;fill:#0f2440}.t{font:700 20px Arial;fill:#0f2440}.b{font:16px Arial;fill:#33475e}.s{font:14px Arial;fill:#5c6f84}.w{font:700 16px Arial;fill:#fff}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  <text class="h" x="48" y="64">Distill what the skeleton can actually know</text><text class="b" x="48" y="98">Appearance and recording clues are removed before the skeleton gets credit</text>
+  <rect x="60" y="164" width="280" height="180" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text class="t" x="84" y="204">Current RGB context</text><text class="b" x="84" y="244">V-JEPA 2.1 tokens</text><text class="b" x="84" y="272">Crop • camera • source</text><text class="s" x="84" y="312">Strong baseline</text>
+  <rect x="60" y="406" width="280" height="180" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text class="t" x="84" y="446">Skeleton history</text><text class="b" x="84" y="486">Whole-body motion</text><text class="b" x="84" y="514">Past frames only</text><text class="s" x="84" y="554">Candidate extra signal</text>
+  <rect x="460" y="164" width="280" height="180" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text class="t" x="484" y="204">Easy future</text><text class="b" x="484" y="244">Predict from current RGB</text><text class="b" x="484" y="272">plus nuisance features</text><text class="s" x="484" y="312">Subtract this first</text>
+  <rect x="460" y="406" width="280" height="180" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text class="t" x="484" y="446">Skeleton bridge</text><text class="b" x="484" y="486">Frozen S-JEPA</text><text class="b" x="484" y="514">Small temporal head</text><text class="s" x="484" y="554">No video fine-tuning</text>
+  <rect x="860" y="252" width="280" height="246" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text class="t" x="884" y="292">Future innovation</text><text class="b" x="884" y="334">Future V-JEPA target</text><text class="b" x="884" y="362">minus easy future</text><text class="b" x="884" y="410">Measure explained fraction</text><text class="s" x="884" y="456">Then test retrieval</text>
+  <path class="a" d="M340 254 H442"/><path class="a" d="M340 496 H442"/><path class="a" d="M740 254 H790 V332 H842"/><path class="a" d="M740 496 H790 V418 H842"/>
+  <rect x="60" y="628" width="1080" height="48" rx="16" fill="#20364e"/><text class="w" x="84" y="658">Primary quantity: the conditional fraction of future video innovation explained by skeleton history.</text>
+</svg>

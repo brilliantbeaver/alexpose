@@ -35,7 +35,7 @@ if [[ -e "$OUTPUT_DIR" ]] && { [[ ! -d "$OUTPUT_DIR" ]] || [[ -n "$(find "$OUTPU
 fi
 
 cd "$GAVD6_ROOT"
-exec uv run --no-sync python scripts/run_sequence_benchmark.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality benchmark \
   --gauge-manifest "$SELECTED_GAUGE_MANIFEST" \
   --tensor-root "$SELECTED_TENSOR_ROOT" \
   --seed 7 \

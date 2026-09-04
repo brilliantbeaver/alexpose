@@ -38,7 +38,7 @@ fi
 
 echo "Swap probe: train_windows=${SWAP_PROBE_TRAIN_WINDOWS:-20000}, validation_windows=${SWAP_PROBE_VALIDATION_WINDOWS:-2800}, output=$OUTPUT_DIR"
 
-exec uv run --no-sync python scripts/run_swap_probe.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface swap-probe run \
   --manifest "$AMASS_RUN_ROOT/manifests/amass_core11_conversion.csv" \
   --tensor-root "$AMASS_RUN_ROOT/core11" \
   --checkpoint "$CHECKPOINT" \

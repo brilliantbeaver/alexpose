@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Intervention response fingerprint pipeline</title>
+  <desc id="desc">AMASS calibrates the observation bridge, GAVD supplies lifted gait, a standard perturbation bank queries frozen GaitDynamics, and validity gates determine whether to report a response fingerprint or abstain.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="60" y="56" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Intervention response fingerprint</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111827">
+    <rect x="60" y="120" width="220" height="90" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="170" y="155" text-anchor="middle" font-weight="700">AMASS 3D</text>
+    <text x="170" y="184" text-anchor="middle">bridge calibration</text>
+
+    <rect x="60" y="280" width="220" height="90" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="170" y="315" text-anchor="middle" font-weight="700">GAVD RGB</text>
+    <text x="170" y="344" text-anchor="middle">source-held video</text>
+
+    <rect x="340" y="200" width="220" height="110" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="450" y="238" text-anchor="middle" font-weight="700">Observed gait x</text>
+    <text x="450" y="268" text-anchor="middle">multiple 3D lifts</text>
+    <text x="450" y="296" text-anchor="middle">with confidence</text>
+
+    <rect x="620" y="100" width="220" height="110" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="730" y="138" text-anchor="middle" font-weight="700">Fixed perturbations</text>
+    <text x="730" y="168" text-anchor="middle">joint, phase, sign,</text>
+    <text x="730" y="196" text-anchor="middle">and magnitude</text>
+
+    <rect x="610" y="270" width="240" height="130" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="730" y="306" text-anchor="middle" font-weight="700">Frozen</text>
+    <text x="730" y="334" text-anchor="middle" font-weight="700">GaitDynamics</text>
+    <text x="730" y="365" text-anchor="middle">paired conditional</text>
+    <text x="730" y="392" text-anchor="middle">completions</text>
+
+    <rect x="900" y="200" width="240" height="110" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1020" y="238" text-anchor="middle" font-weight="700">Local response field</text>
+    <text x="1020" y="268" text-anchor="middle">propagation, sign,</text>
+    <text x="1020" y="296" text-anchor="middle">phase, and decay</text>
+
+    <rect x="900" y="390" width="240" height="110" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="1020" y="425" text-anchor="middle" font-weight="700">Validity gate</text>
+    <text x="1020" y="455" text-anchor="middle">lift agreement + C04</text>
+    <text x="1020" y="483" text-anchor="middle">physics + shortcuts</text>
+
+    <rect x="900" y="550" width="240" height="70" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1020" y="580" text-anchor="middle" font-weight="700">Report fingerprint</text>
+    <text x="1020" y="607" text-anchor="middle">or abstain</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 280 165 C 315 165, 315 225, 340 225"/>
+    <path d="M 280 325 C 315 325, 315 285, 340 285"/>
+    <path d="M 560 255 C 585 255, 585 335, 610 335"/>
+    <path d="M 730 210 L 730 270"/>
+    <path d="M 850 335 C 875 335, 875 255, 900 255"/>
+    <path d="M 1020 310 L 1020 390"/>
+    <path d="M 1020 500 L 1020 550"/>
+  </g>
+
+  <line x1="60" y1="650" x2="1140" y2="650" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="60" y="688" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">The measurement is the model's local response around an observed gait, accepted only when lift and physics checks agree.</text>
+</svg>

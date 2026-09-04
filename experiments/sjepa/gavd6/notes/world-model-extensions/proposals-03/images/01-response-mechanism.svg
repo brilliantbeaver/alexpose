@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Cross-protocol perturbation response mechanism</title>
+  <desc>Pre-perturbation motion and a known intervention enter a small predictor, which outputs a calibrated envelope of recovery outcomes.</desc>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker></defs>
+  <style>.h{font:700 32px Arial;fill:#0f2440}.t{font:700 20px Arial;fill:#0f2440}.b{font:16px Arial;fill:#33475e}.s{font:14px Arial;fill:#5c6f84}.w{font:700 16px Arial;fill:#fff}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  <text class="h" x="48" y="64">From a known disturbance to a recovery envelope</text>
+  <text class="b" x="48" y="98">The model gets only information available before the perturbation</text>
+  <rect x="60" y="170" width="270" height="230" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text class="t" x="84" y="208">Pre-state</text><text class="b" x="84" y="246">Pelvis and feet</text><text class="b" x="84" y="274">Speed and phase</text><text class="b" x="84" y="302">One second of history</text><text class="s" x="84" y="352">No future frames</text>
+  <rect x="60" y="438" width="270" height="130" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text class="t" x="84" y="476">Known intervention</text><text class="b" x="84" y="514">Direction • size • phase</text><text class="s" x="84" y="544">Measured, not inferred</text>
+  <rect x="456" y="250" width="288" height="230" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text class="t" x="480" y="288">Small conditional head</text><text class="b" x="480" y="328">Frozen gait features</text><text class="b" x="480" y="356">Intervention token</text><text class="b" x="480" y="384">Residual from mean response</text><text class="s" x="480" y="432">Predict a distribution</text>
+  <rect x="870" y="170" width="270" height="398" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text class="t" x="894" y="208">Recovery envelope</text><text class="b" x="894" y="250">Foot placement</text><text class="b" x="894" y="282">Pelvis speed recovery</text><text class="b" x="894" y="314">Side excursion</text><text class="b" x="894" y="346">Uncertainty interval</text>
+  <line x1="914" y1="422" x2="1094" y2="422" stroke="#c4cdd8" stroke-width="1.5"/><path d="M914 486 C948 452, 978 520, 1010 470 S1062 446,1094 476" fill="none" stroke="#5f9e7e" stroke-width="5"/><path d="M914 510 C948 476, 978 544, 1010 494 S1062 470,1094 500" fill="none" stroke="#5f9e7e" stroke-width="2" opacity=".55"/><path d="M914 462 C948 428, 978 496, 1010 446 S1062 422,1094 452" fill="none" stroke="#5f9e7e" stroke-width="2" opacity=".55"/>
+  <path class="a" d="M330 285 H438"/><path class="a" d="M330 503 H398 V432 H438"/><path class="a" d="M744 365 H852"/>
+  <rect x="60" y="618" width="1080" height="48" rx="16" fill="#20364e"/>
+  <text class="w" x="84" y="648">Credit only for person-specific recovery beyond the phase × direction × magnitude conditional mean.</text>
+</svg>

@@ -32,7 +32,7 @@ cd "$GAVD6_ROOT"
 # Exit status 2 is an intentional scientific stop: inspect the complete
 # diagnostics written before the program exits.  Do not submit training unless
 # gate_decision.json says ready_for_sg_jepa=true.
-exec uv run --no-sync python scripts/run_sequence_benchmark.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality benchmark \
   --gauge-manifest "$GAUGE_MANIFEST" \
   --tensor-root "$TENSOR_ROOT" \
   --seed 7 \

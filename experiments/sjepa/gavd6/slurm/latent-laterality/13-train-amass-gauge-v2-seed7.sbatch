@@ -43,7 +43,7 @@ fi
 
 cd "$GAVD6_ROOT"
 echo "AMASS v2 seed-7 task $SLURM_ARRAY_TASK_ID: arm=$arm"
-exec uv run --no-sync python scripts/train_gauge_jepa.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality train \
   --arm "$arm" \
   --gate-decision "$GATE_DECISION" \
   --gauge-manifest "$GAUGE_MANIFEST" \

@@ -32,8 +32,8 @@ common in real pose systems, or that pose alone measures clinical balance.
 
 | File | Purpose |
 | --- | --- |
-| `src/gavd6_sjepa/swap_probe.py` | Typed corruptions, invariant boundary features, structured path inference, frozen encoding, metrics, and artifact writing |
-| `scripts/run_swap_probe.py` | Local/HAIC command-line entry point |
+| `src/gavd6_sjepa/research_directions/reflection_equivariance/swap_probe_evaluation_pipeline.py` | Typed corruptions, invariant boundary features, structured path inference, frozen encoding, metrics, and artifact writing |
+| `uv run gavd6 swap-probe run` | Local/HAIC command-line entry point |
 | `slurm/run-swap-probe.sbatch` | Four-hour H100 validation job |
 | `tests/test_swap_probe.py` | Algebra, corruption, parity, inference, leakage, and end-to-end smoke tests |
 
@@ -183,7 +183,7 @@ before submitting the H100 job.
 Run the entire CPU pipeline without AMASS tensors or a checkpoint:
 
 ```bash
-.venv/bin/python scripts/run_swap_probe.py \
+.venv/bin/gavd6 swap-probe run \
   --synthetic-smoke \
   --device cpu \
   --num-workers 0 \
@@ -203,7 +203,7 @@ for every run.
 An interactive allocation can run the same command directly:
 
 ```bash
-uv run --no-sync python scripts/run_swap_probe.py \
+uv run --no-sync gavd6 swap-probe run \
   --manifest "$AMASS_RUN_ROOT/manifests/amass_core11_conversion.csv" \
   --tensor-root "$AMASS_RUN_ROOT/core11" \
   --checkpoint outputs/repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt \

@@ -10,7 +10,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from gavd6_sjepa.gavd_core11_probe import (
+from gavd6_sjepa.research_directions.reflection_equivariance.gavd_core11_probe_evaluation import (
     AdapterConfig,
     adapt_mediapipe_sequence,
     build_probe_windows,
@@ -20,8 +20,8 @@ from gavd6_sjepa.gavd_core11_probe import (
     raw_coordinate_features,
     validity_only_features,
 )
-from gavd6_sjepa.amass_core11_jepa import MIRROR_PAIRS
-from gavd6_sjepa.gait_parity_jepa import (
+from gavd6_sjepa.research_directions.reflection_equivariance.amass_core11_training_pipeline import MIRROR_PAIRS
+from gavd6_sjepa.research_directions.reflection_equivariance.jepa_model_architecture import (
     OrbitJEPA,
     PROFILES,
     VICRegProjector,

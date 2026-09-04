@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Gait structure ladder</title>
+  <desc id="desc">Five verified surrogate rungs restore observation, individual-coordinate spectra, within-leg relations, cross-leg linear relations, and original motion. The first three flow left to right, then the ladder drops and returns right to left.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.n{font:700 13px Arial,Helvetica,sans-serif;fill:#5c6f84;letter-spacing:.8px}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}.ws{font:14px Arial,Helvetica,sans-serif;fill:#dce5ee}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="62">Gait Structure Ladder</text>
+  <text class="sub" x="48" y="94">Restore richer motion relations one verified rung at a time, then ask where evidence first appears.</text>
+
+  <rect class="card" x="60" y="145" width="300" height="170" rx="16" fill="#e7f0f8"/>
+  <text class="n" x="84" y="180">RUNG 0</text><text class="t" x="84" y="218">Observation</text>
+  <text class="b" x="84" y="258">length, validity, confidence</text><text class="b" x="84" y="286">original motion removed</text>
+  <rect class="card" x="450" y="145" width="300" height="170" rx="16" fill="#e1eaf5"/>
+  <text class="n" x="474" y="180">RUNG 1</text><text class="t" x="474" y="218">Unary spectrum</text>
+  <text class="b" x="474" y="258">marginal + power spectrum</text><text class="b" x="474" y="286">cross-coordinate phase removed</text>
+  <rect class="card" x="840" y="145" width="300" height="170" rx="16" fill="#ece6f6"/>
+  <text class="n" x="864" y="180">RUNG 2</text><text class="t" x="864" y="218">Within-leg</text>
+  <text class="b" x="864" y="258">within-leg marginals + cross-spectra</text><text class="b" x="864" y="286">cross-leg relation removed</text>
+
+  <path class="arrow" d="M360 230H430"/><path class="arrow" d="M750 230H820"/>
+  <path class="arrow" d="M990 315V365"/>
+
+  <rect class="card" x="840" y="385" width="300" height="150" rx="16" fill="#f7e7d8"/>
+  <text class="n" x="864" y="420">RUNG 3</text><text class="t" x="864" y="458">Cross-leg linear</text>
+  <text class="b" x="864" y="498">bilateral spectra + cross-spectra</text><text class="b" x="864" y="524">exact event order removed</text>
+  <rect class="card" x="450" y="385" width="300" height="150" rx="16" fill="#e6f2ea"/>
+  <text class="n" x="474" y="420">RUNG 4</text><text class="t" x="474" y="458">Original motion</text>
+  <text class="b" x="474" y="498">every observed relation restored</text><text class="b" x="474" y="524">nothing removed</text>
+  <path class="arrow" d="M840 460H770"/>
+
+  <rect class="card" x="180" y="590" width="960" height="80" rx="16" fill="#20364e"/>
+  <text class="w" x="210" y="625">Verify preserved statistics, then compare every rung</text>
+  <text class="ws" x="210" y="653">Gate: ≥ 4/5 signals at the correct rung, with AP jump ≥ 0.15 under two solvers.</text>
+</svg>

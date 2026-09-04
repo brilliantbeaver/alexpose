@@ -70,4 +70,4 @@ esac
 
 cd "$GAVD6_ROOT"
 echo "Source screen task $SLURM_ARRAY_TASK_ID: route=$route variant=$variant output=$OUTPUT_DIR"
-exec uv run --no-sync python scripts/train_latent_laterality.py "${args[@]}"
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality train-source-transfer "${args[@]}"

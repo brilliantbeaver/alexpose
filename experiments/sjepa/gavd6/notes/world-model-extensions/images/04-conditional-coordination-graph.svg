@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Conditional coordination graph</title>
+  <desc id="desc">Two token-balanced queries differ only in whether source region A comes from the observed walk or a matched donor. Their normalized prediction-error contrast for hidden target region B defines one directed edge. Known AMASS edits, null graphs, repeatability, and mirror tests decide whether the full graph is accepted.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="45" y="54" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Conditional coordination graph</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#111827">
+    <rect x="45" y="145" width="210" height="110" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="150" y="185" text-anchor="middle" font-weight="700">Core11 walk</text>
+    <text x="150" y="215" text-anchor="middle">AMASS or GAVD</text>
+    <text x="150" y="243" text-anchor="middle">validity included</text>
+
+    <rect x="310" y="85" width="220" height="105" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="420" y="124" text-anchor="middle" font-weight="700">Query +A</text>
+    <text x="420" y="154" text-anchor="middle">observed region A,</text>
+    <text x="420" y="182" text-anchor="middle">target B hidden</text>
+
+    <rect x="310" y="230" width="220" height="105" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="420" y="269" text-anchor="middle" font-weight="700">Matched query -A</text>
+    <text x="420" y="299" text-anchor="middle">matched donor A,</text>
+    <text x="420" y="327" text-anchor="middle">target B hidden</text>
+
+    <rect x="585" y="125" width="235" height="150" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="702" y="166" text-anchor="middle" font-weight="700">Frozen S-JEPA</text>
+    <text x="702" y="198" text-anchor="middle">same predictor and</text>
+    <text x="702" y="228" text-anchor="middle">target latent for B</text>
+    <text x="702" y="258" text-anchor="middle">in both queries</text>
+
+    <rect x="875" y="145" width="270" height="110" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1010" y="184" text-anchor="middle" font-weight="700">Directed edge A to B</text>
+    <text x="1010" y="216" text-anchor="middle">normalized error drop</text>
+    <text x="1010" y="244" text-anchor="middle">with uncertainty</text>
+
+    <rect x="875" y="305" width="270" height="105" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1010" y="344" text-anchor="middle" font-weight="700">42-edge graph</text>
+    <text x="1010" y="374" text-anchor="middle">lower-body relations</text>
+    <text x="1010" y="402" text-anchor="middle">for one walk</text>
+
+    <rect x="45" y="480" width="250" height="105" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="170" y="519" text-anchor="middle" font-weight="700">Identification test</text>
+    <text x="170" y="549" text-anchor="middle">known AMASS edits</text>
+    <text x="170" y="577" text-anchor="middle">must localize</text>
+
+    <rect x="340" y="480" width="250" height="105" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="465" y="519" text-anchor="middle" font-weight="700">Null graphs</text>
+    <text x="465" y="549" text-anchor="middle">visibility and raw</text>
+    <text x="465" y="577" text-anchor="middle">partial correlation</text>
+
+    <rect x="635" y="480" width="230" height="105" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="750" y="519" text-anchor="middle" font-weight="700">Stability tests</text>
+    <text x="750" y="549" text-anchor="middle">source repeatability</text>
+    <text x="750" y="577" text-anchor="middle">and mirror transpose</text>
+
+    <rect x="910" y="480" width="235" height="105" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1027" y="519" text-anchor="middle" font-weight="700">Accept or reject</text>
+    <text x="1027" y="549" text-anchor="middle">graph as per-walk</text>
+    <text x="1027" y="577" text-anchor="middle">measurement</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 255 185 C 280 185, 280 138, 310 138"/>
+    <path d="M 255 215 C 280 215, 280 282, 310 282"/>
+    <path d="M 530 138 C 555 138, 555 170, 585 170"/>
+    <path d="M 530 282 C 555 282, 555 230, 585 230"/>
+    <path d="M 820 200 L 875 200"/>
+    <path d="M 1010 255 L 1010 305"/>
+    <path d="M 1010 410 L 1010 480"/>
+    <path d="M 295 532 L 340 532"/>
+    <path d="M 590 532 L 635 532"/>
+    <path d="M 865 532 L 910 532"/>
+  </g>
+
+  <line x1="45" y1="630" x2="1150" y2="630" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="45" y="668" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">Only source-region content changes between paired queries. The error contrast becomes an edge only if it beats</text>
+  <text x="45" y="696" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">visibility and covariance controls, recovers known edits, repeats within source, and transposes under mirroring.</text>
+</svg>

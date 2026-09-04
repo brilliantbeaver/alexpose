@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Counterfactual dose axes</title>
+  <desc id="desc">Known motion-dose ladders train one monotone head per named axis. The locked head measures an unseen gait only inside its calibrated range and otherwise reports out of range or unmeasurable, never an invented GAVD severity.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.s{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}.transfer{fill:none;stroke:#5f9e7e;stroke-width:2.5;stroke-dasharray:7 6;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Counterfactual Dose Axes</text>
+  <text class="sub" x="48" y="104">A camera-supported projected expression axis, not a GAVD severity label.</text>
+
+  <rect class="card" x="60" y="150" width="228" height="160" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="82" y="190">Base gait</text><text class="b" x="82" y="227">held motion identity</text>
+  <rect class="card" x="344" y="150" width="228" height="160" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="366" y="190">Named dose ladder</text><text class="b" x="366" y="227">α: 0 • .25 • .50</text><text class="b" x="366" y="253">.75 • 1</text>
+  <rect class="card" x="628" y="150" width="228" height="160" rx="16" fill="#ece6f6"/>
+  <text class="t" x="650" y="190">Frozen S-JEPA</text><text class="b" x="650" y="227">predictive response</text><text class="b" x="650" y="253">at every dose</text>
+  <rect class="card" x="912" y="150" width="228" height="160" rx="16" fill="#ece6f6"/>
+  <text class="t" x="934" y="190">Fit monotone head</text><text class="b" x="934" y="227">one per named axis</text>
+  <path class="arrow" d="M288 230H328"/><path class="arrow" d="M572 230H612"/><path class="arrow" d="M856 230H896"/>
+
+  <path class="transfer" d="M1026 310V400H742V444"/><text class="s" x="800" y="386">frozen axis head</text>
+  <rect class="card" x="60" y="460" width="228" height="150" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="82" y="500">Unseen gait</text><text class="b" x="82" y="537">new source</text>
+  <rect class="card" x="344" y="460" width="228" height="150" rx="16" fill="#ece6f6"/>
+  <text class="t" x="366" y="500">Same frozen S-JEPA</text><text class="b" x="366" y="537">same frozen weights</text>
+  <rect class="card" x="628" y="460" width="228" height="150" rx="16" fill="#fff"/>
+  <text class="t" x="650" y="500">Query axis head</text><text class="b" x="650" y="537">expression amount</text>
+  <rect class="card" x="912" y="460" width="228" height="150" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="934" y="500">Calibrated output</text><text class="b" x="934" y="530">apparent value</text><text class="b" x="934" y="554">out of range • out of view</text><text class="b" x="934" y="578">unmeasurable</text>
+  <path class="arrow" d="M288 535H328"/><path class="arrow" d="M572 535H612"/><path class="arrow" d="M856 535H896"/>
+  <text class="s" x="60" y="660">Gate: supported-view Spearman ≥ 0.80 and ≥ 0.05 above raw, with cross-axis specificity.</text>
+</svg>

@@ -37,7 +37,7 @@ echo "  cache:    $GAVD_FULL_ROOT/youtube/all"
 echo "  shard:    $shard_index/$shard_count"
 echo "  report:   $report"
 
-exec uv run --no-sync python scripts/download_gavd_full.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface gavd download \
   --manifest "$GAVD_FULL_ROOT/manifests/gavd_full_sequences.csv" \
   --youtube-dir "$GAVD_FULL_ROOT/youtube" \
   --report "$report" \

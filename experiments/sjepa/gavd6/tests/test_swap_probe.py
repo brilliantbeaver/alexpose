@@ -10,14 +10,14 @@ import numpy as np
 import pandas as pd
 import torch
 
-from gavd6_sjepa.amass_core11_jepa import (
+from gavd6_sjepa.research_directions.reflection_equivariance.amass_core11_training_pipeline import (
     MIRROR_CHANNEL,
     MIRROR_PAIRS,
     SyntheticCore11Dataset,
     core11_train_config,
 )
-from gavd6_sjepa.gait_parity_jepa import build_model
-from gavd6_sjepa.swap_probe import (
+from gavd6_sjepa.research_directions.reflection_equivariance.jepa_model_architecture import build_model
+from gavd6_sjepa.research_directions.reflection_equivariance.swap_probe_evaluation_pipeline import (
     CorruptionConfig,
     _fit_path_temperature,
     _structured_path_nll_numpy,

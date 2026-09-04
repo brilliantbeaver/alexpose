@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Physical feasibility versus healthy typicality</title>
+  <desc id="desc">One lifted gait is scored by frozen GaitDynamics and PP-Motion. AMASS corruption calibration determines whether to report two independent axes or an uncertainty region.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="60" y="56" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Two axes, two meanings</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111827">
+    <rect x="60" y="190" width="230" height="100" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="175" y="228" text-anchor="middle" font-weight="700">Lifted gait</text>
+    <text x="175" y="258" text-anchor="middle">motion + confidence</text>
+    <text x="175" y="284" text-anchor="middle">from one video</text>
+
+    <rect x="360" y="105" width="240" height="100" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="480" y="143" text-anchor="middle" font-weight="700">GaitDynamics</text>
+    <text x="480" y="173" text-anchor="middle">healthy typicality</text>
+
+    <rect x="360" y="280" width="240" height="100" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="480" y="318" text-anchor="middle" font-weight="700">PP-Motion</text>
+    <text x="480" y="348" text-anchor="middle">physical feasibility</text>
+
+    <rect x="60" y="420" width="270" height="90" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="195" y="455" text-anchor="middle" font-weight="700">AMASS corruptions</text>
+    <text x="195" y="485" text-anchor="middle">lock the score envelope</text>
+
+    <rect x="690" y="100" width="450" height="390" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="915" y="135" text-anchor="middle" font-weight="700">Corruption-calibrated plane</text>
+    <line x1="770" y1="430" x2="1080" y2="430" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="770" y1="430" x2="770" y2="175" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="925" y1="175" x2="925" y2="430" stroke="#cbd5e1" stroke-width="2"/>
+    <line x1="770" y1="302" x2="1080" y2="302" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="925" y="468" text-anchor="middle">physical feasibility →</text>
+    <text x="735" y="315" text-anchor="middle" transform="rotate(-90 735 315)">healthy typicality →</text>
+    <text x="845" y="225" text-anchor="middle">typical but</text>
+    <text x="845" y="253" text-anchor="middle">physically suspect</text>
+    <text x="1002" y="225" text-anchor="middle" fill="#16a34a">reliable typical</text>
+    <text x="845" y="355" text-anchor="middle">uncertain lift</text>
+    <text x="1002" y="348" text-anchor="middle" fill="#2563eb">feasible but</text>
+    <text x="1002" y="376" text-anchor="middle" fill="#2563eb">atypical</text>
+    <ellipse cx="835" cy="385" rx="48" ry="28" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8 7"/>
+
+    <rect x="800" y="535" width="290" height="75" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="945" y="566" text-anchor="middle" font-weight="700">Report both axes</text>
+    <text x="945" y="594" text-anchor="middle">or abstain in envelope</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 290 230 C 325 230, 325 155, 360 155"/>
+    <path d="M 290 250 C 325 250, 325 330, 360 330"/>
+    <path d="M 600 155 C 645 155, 645 205, 690 205"/>
+    <path d="M 600 330 C 645 330, 645 385, 690 385"/>
+    <path d="M 330 465 C 520 465, 520 455, 690 455"/>
+    <path d="M 945 490 L 945 535"/>
+  </g>
+
+  <line x1="60" y1="650" x2="1140" y2="650" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="60" y="688" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">Atypical motion is interpretable only when physical feasibility is not explained by the AMASS corruption envelope.</text>
+</svg>

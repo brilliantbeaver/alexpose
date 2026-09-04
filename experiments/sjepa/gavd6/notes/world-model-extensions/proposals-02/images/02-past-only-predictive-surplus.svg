@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Past-only predictive surplus</title>
+  <desc id="desc">Past skeleton tokens feed a small causal S-JEPA predictor. Its future error is compared with a strong periodic and raw-motion baseline. Only the error reduction beyond that baseline counts as predictive surplus.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.k{font:700 13px Arial,Helvetica,sans-serif;fill:#5c6f84;letter-spacing:.8px}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}.ws{font:14px Arial,Helvetica,sans-serif;fill:#dce5ee}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Past-Only Predictive Surplus</text>
+  <text class="sub" x="48" y="104">Credit the model only for future information beyond the strongest simple gait predictor.</text>
+
+  <rect class="card" x="60" y="190" width="300" height="280" rx="16" fill="#e7f0f8"/>
+  <text class="k" x="84" y="225">INPUT</text>
+  <text class="t" x="84" y="263">Past tokens only</text>
+  <text class="b" x="84" y="304">student features through time t</text>
+  <text class="b" x="84" y="334">no future pose or validity bits</text>
+  <line x1="84" y1="380" x2="328" y2="380" stroke="#8ea9c1" stroke-width="3"/>
+  <circle cx="100" cy="380" r="7" fill="#477ea8"/><circle cx="145" cy="380" r="7" fill="#477ea8"/><circle cx="190" cy="380" r="7" fill="#477ea8"/><circle cx="235" cy="380" r="7" fill="#477ea8"/>
+  <circle cx="280" cy="380" r="7" fill="#f7f5ef" stroke="#8ea9c1" stroke-width="2"/><circle cx="325" cy="380" r="7" fill="#f7f5ef" stroke="#8ea9c1" stroke-width="2"/>
+  <text class="k" x="84" y="420">TIME FLOWS RIGHT</text>
+
+  <rect class="card" x="450" y="190" width="300" height="280" rx="16" fill="#ece6f6"/>
+  <text class="k" x="474" y="225">MODEL</text>
+  <text class="t" x="474" y="263">Causal S-JEPA head</text>
+  <text class="b" x="474" y="304">frozen encoder</text>
+  <text class="b" x="474" y="334">target region + horizon query</text>
+  <text class="b" x="474" y="364">predict teacher latent at</text>
+  <text class="b" x="474" y="390">0.27, 0.53, and 1.07 seconds</text>
+
+  <rect class="card" x="840" y="190" width="300" height="280" rx="16" fill="#f7e7d8"/>
+  <text class="k" x="864" y="225">ERROR CONTEST</text>
+  <text class="t" x="864" y="263">Compare future errors</text>
+  <text class="b" x="864" y="304">same past + teacher target</text>
+  <text class="b" x="864" y="334">S-JEPA versus best validated</text>
+  <text class="b" x="864" y="364">periodic or raw predictor</text>
+  <text class="b" x="864" y="408">lowest validation error wins</text>
+
+  <path class="arrow" d="M360 330H434"/>
+  <path class="arrow" d="M750 330H824"/>
+  <path class="arrow" d="M990 470V524"/>
+  <rect class="card" x="180" y="540" width="960" height="90" rx="16" fill="#20364e"/>
+  <text class="w" x="210" y="578">Advance only if the learned error is lower</text>
+  <text class="ws" x="210" y="608">Gate: surplus at 0.53 seconds ≥ 10%, with a positive held-identity bootstrap interval.</text>
+</svg>
