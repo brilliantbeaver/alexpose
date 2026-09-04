@@ -27,7 +27,8 @@ dependencies = [
 ]
 
 [project.scripts]
-train-amass-core11 = "gavd6_sjepa.train_amass:main"
+gavd6 = "gavd6_sjepa.command_line_interface:main"
+train-amass-core11 = "gavd6_sjepa.research_directions.reflection_equivariance.amass_training_entrypoint:main"
 
 [build-system]
 requires = ["setuptools>=68"]

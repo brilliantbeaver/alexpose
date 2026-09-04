@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">SourceSwap tests invariance and gait sensitivity together</title>
+  <desc id="desc">A base AMASS motion and a named gait edit pass through two source profiles and the same frozen S-JEPA adapter. The representation must agree for the same motion across profiles and separate the true gait edit.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.wt{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}.ws{font:14px Arial,Helvetica,sans-serif;fill:#cdd8e4}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">SourceSwap S-JEPA</text>
+  <text class="sub" x="48" y="104">Same motion should survive a source swap; a matched gait edit should not.</text>
+
+  <rect class="card" x="60" y="245" width="220" height="180" rx="16" fill="#e7f0f8"/>
+  <text class="t" x="82" y="285">Matched motion pair</text><text class="b" x="82" y="322">base AMASS motion</text><text class="b" x="82" y="348">named gait edit</text>
+  <rect class="card" x="350" y="155" width="220" height="145" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="372" y="195">Source profile A</text><text class="b" x="372" y="232">view • crop • dropout</text>
+  <rect class="card" x="350" y="370" width="220" height="145" rx="16" fill="#f7e7d8"/>
+  <text class="t" x="372" y="410">Source profile B</text><text class="b" x="372" y="447">view • crop • dropout</text>
+  <rect class="card" x="650" y="245" width="220" height="180" rx="16" fill="#ece6f6"/>
+  <text class="t" x="672" y="285">Frozen S-JEPA</text><text class="b" x="672" y="322">rank-8 adapter</text><text class="b" x="672" y="348">shared weights</text>
+  <rect class="card" x="940" y="245" width="200" height="180" rx="16" fill="#e6f2ea"/>
+  <text class="t" x="962" y="285">Two-axis gate</text><text class="b" x="962" y="322">same motion: agree</text><text class="b" x="962" y="348">gait edit: separate</text>
+
+  <path class="arrow" d="M280 305H310V227H334"/><path class="arrow" d="M280 365H310V442H334"/>
+  <path class="arrow" d="M570 227H610V305H634"/><path class="arrow" d="M570 442H610V365H634"/>
+  <path class="arrow" d="M870 335H924"/>
+
+  <rect class="card" x="350" y="570" width="790" height="90" rx="16" fill="#20364e"/>
+  <text class="wt" x="380" y="608">Motion-evidence certificate</text>
+  <text class="ws" x="380" y="638">normalized profile-ID excess ≤ 0.10 • edit AUROC ≥ 0.75</text>
+  <path class="arrow" d="M1040 425V554"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Predictive pose-tracker auditor mechanism</title>
+  <desc>Video and skeleton innovations are compared; disagreement that appears only in the skeleton stream identifies a likely tracking failure.</desc>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker></defs>
+  <style>.h{font:700 32px Arial;fill:#0f2440}.t{font:700 20px Arial;fill:#0f2440}.b{font:16px Arial;fill:#33475e}.s{font:14px Arial;fill:#5c6f84}.w{font:700 16px Arial;fill:#fff}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  <text class="h" x="48" y="64">A real motion surprises both streams</text><text class="b" x="48" y="98">A tracker failure surprises the skeleton stream without matching video evidence</text>
+  <rect x="60" y="154" width="280" height="190" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/><text class="t" x="84" y="194">RGB video</text><text class="b" x="84" y="234">Past-to-current change</text><text class="b" x="84" y="262">Person-region tokens</text><text class="s" x="84" y="306">V-JEPA innovation</text>
+  <rect x="60" y="414" width="280" height="190" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/><text class="t" x="84" y="454">Pose track</text><text class="b" x="84" y="494">Past-to-current change</text><text class="b" x="84" y="522">Joint-time tokens</text><text class="s" x="84" y="566">S-JEPA innovation</text>
+  <rect x="460" y="254" width="280" height="240" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/><text class="t" x="484" y="294">Clean-motion bridge</text><text class="b" x="484" y="336">Align innovations</text><text class="b" x="484" y="364">Compare local residuals</text><text class="b" x="484" y="392">Calibrate on clean people</text><text class="s" x="484" y="450">No error label required</text>
+  <rect x="860" y="190" width="280" height="328" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/><text class="t" x="884" y="230">Audit result</text><text class="b" x="884" y="274">Error probability</text><text class="b" x="884" y="306">Joint and time block</text><text class="b" x="884" y="338">Severity</text><text class="b" x="884" y="370">Abstain recommendation</text><line x1="884" y1="404" x2="1116" y2="404" stroke="#c4cdd8"/><text class="s" x="884" y="442">Not a gait label</text><text class="s" x="884" y="470">Not automatic correction</text>
+  <path class="a" d="M340 250 H400 V320 H442"/><path class="a" d="M340 510 H400 V430 H442"/><path class="a" d="M740 374 H842"/>
+  <rect x="60" y="634" width="1080" height="42" rx="16" fill="#20364e"/><text class="w" x="84" y="661">High disagreement is useful only when simple confidence, jerk, and dual-tracker checks fail.</text>
+</svg>

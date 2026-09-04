@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Body-device relational dynamics gate</title>
+  <desc id="desc">A census and track audit establish which GAVD devices are usable. Synthetic AMASS motion initializes a low-rank route on a frozen skeleton predictor. Real device history must forecast body motion better than presence-only and phase-matched trajectory controls.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="50" y="56" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Body-device relational dynamics</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111827">
+    <rect x="50" y="110" width="250" height="110" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="175" y="148" text-anchor="middle" font-weight="700">AMASS 3D motion</text>
+    <text x="175" y="178" text-anchor="middle">plus synthetic</text>
+    <text x="175" y="206" text-anchor="middle">device constraints</text>
+
+    <rect x="50" y="255" width="250" height="110" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="175" y="293" text-anchor="middle" font-weight="700">GAVD census</text>
+    <text x="175" y="323" text-anchor="middle">external aids + 39</text>
+    <text x="175" y="351" text-anchor="middle">prosthetic sequences</text>
+
+    <rect x="50" y="400" width="250" height="110" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="175" y="438" text-anchor="middle" font-weight="700">ProGait</text>
+    <text x="175" y="468" text-anchor="middle">4 users, held out</text>
+    <text x="175" y="496" text-anchor="middle">device stress test</text>
+
+    <rect x="350" y="250" width="240" height="120" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="470" y="290" text-anchor="middle" font-weight="700">Track audit</text>
+    <text x="470" y="320" text-anchor="middle">SAM 2.1 endpoints</text>
+    <text x="470" y="348" text-anchor="middle">must be 80% credible</text>
+
+    <rect x="640" y="90" width="260" height="110" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="770" y="128" text-anchor="middle" font-weight="700">Control 1</text>
+    <text x="770" y="158" text-anchor="middle">presence flag only,</text>
+    <text x="770" y="186" text-anchor="middle">no trajectory</text>
+
+    <rect x="640" y="240" width="260" height="150" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="770" y="278" text-anchor="middle" font-weight="700">Frozen S-JEPA</text>
+    <text x="770" y="308" text-anchor="middle">plus device tokens</text>
+    <text x="770" y="338" text-anchor="middle">forecast relative</text>
+    <text x="770" y="368" text-anchor="middle">body-device motion</text>
+
+    <rect x="640" y="430" width="260" height="110" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="770" y="468" text-anchor="middle" font-weight="700">Control 2</text>
+    <text x="770" y="498" text-anchor="middle">phase-matched</text>
+    <text x="770" y="526" text-anchor="middle">trajectory swap</text>
+
+    <rect x="940" y="225" width="230" height="150" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1055" y="263" text-anchor="middle" font-weight="700">Device-72 gate</text>
+    <text x="1055" y="293" text-anchor="middle">held-source body</text>
+    <text x="1055" y="323" text-anchor="middle">forecast likelihood,</text>
+    <text x="1055" y="353" text-anchor="middle">separate by device</text>
+
+    <rect x="940" y="440" width="230" height="120" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1055" y="480" text-anchor="middle" font-weight="700">Real beats both:</text>
+    <text x="1055" y="510" text-anchor="middle">continue. Tie:</text>
+    <text x="1055" y="538" text-anchor="middle">stop on day 4</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 300 165 C 325 165, 325 272, 350 272"/>
+    <path d="M 300 310 L 350 310"/>
+    <path d="M 300 455 C 325 455, 325 348, 350 348"/>
+    <path d="M 590 282 C 615 282, 615 145, 640 145"/>
+    <path d="M 590 312 L 640 315"/>
+    <path d="M 590 342 C 615 342, 615 485, 640 485"/>
+    <path d="M 900 145 C 920 145, 920 255, 940 255"/>
+    <path d="M 900 315 L 940 302"/>
+    <path d="M 900 485 C 920 485, 920 348, 940 348"/>
+    <path d="M 1055 375 L 1055 440"/>
+  </g>
+
+  <line x1="50" y1="620" x2="1150" y2="620" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="50" y="658" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">Real device history must beat presence and phase-matched controls. Otherwise the model measured visibility or gait phase,</text>
+  <text x="50" y="688" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">not body-device coupling. External-aid claims also require at least 12 independent, trackable GAVD sources.</text>
+</svg>

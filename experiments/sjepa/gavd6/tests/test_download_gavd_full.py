@@ -2,19 +2,13 @@
 
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
 
 import pandas as pd
 
-
-SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "download_gavd_full.py"
-SPEC = importlib.util.spec_from_file_location("download_gavd_full", SCRIPT)
-assert SPEC and SPEC.loader
-download_gavd_full = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(download_gavd_full)
+from gavd6_sjepa.data_foundations import gavd_video_download_pipeline as download_gavd_full
 
 
 class DownloadGavdFullTests(unittest.TestCase):

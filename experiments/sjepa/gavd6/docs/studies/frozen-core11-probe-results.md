@@ -1,8 +1,8 @@
 # Frozen Core11 GAVD probe — current evidence boundary
 
 **Artifact:** `work/artifacts/gavd_core11_frozen_probe/`
-**Code:** `scripts/evaluate_gavd_core11_probe.py` and
-`src/gavd6_sjepa/gavd_core11_probe.py`
+**Code:** `uv run gavd6 gavd evaluate-core11` and
+`src/gavd6_sjepa/research_directions/reflection_equivariance/gavd_core11_probe_evaluation.py`
 
 The saved probe evaluates frozen 256-dimensional representations on the 96-row
 GAVD cohort. Its only available split is sequence-stratified and shares a mean

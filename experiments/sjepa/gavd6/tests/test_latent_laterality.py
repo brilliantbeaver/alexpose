@@ -12,24 +12,24 @@ import numpy as np
 import pandas as pd
 import torch
 
-from gavd6_sjepa.amass_core11_jepa import (
+from gavd6_sjepa.research_directions.reflection_equivariance.amass_core11_training_pipeline import (
     BalancedGroupBatchPlan,
     MIRROR_CHANNEL,
     MIRROR_PAIRS,
     checkpoint_payload,
     core11_train_config,
 )
-from gavd6_sjepa.gauge_training import semantic_gauge_objective
-from gavd6_sjepa.gauge_evaluation import GaugeWindows, _encoder_features, evaluate
-from gavd6_sjepa.gait_parity_jepa import (
+from gavd6_sjepa.research_directions.latent_laterality.laterality_gauge_training_pipeline import semantic_gauge_objective
+from gavd6_sjepa.research_directions.latent_laterality.laterality_gauge_evaluation_pipeline import GaugeWindows, _encoder_features, evaluate
+from gavd6_sjepa.research_directions.reflection_equivariance.jepa_model_architecture import (
     VICRegProjector,
     build_model,
     lift_orbit,
     orbit_closed_target_masks,
     permute_bilateral_tokens,
 )
-from gavd6_sjepa.gavd_core11_probe import AdapterConfig, _body_frame
-from gavd6_sjepa.latent_laterality import (
+from gavd6_sjepa.research_directions.reflection_equivariance.gavd_core11_probe_evaluation import AdapterConfig, _body_frame
+from gavd6_sjepa.research_directions.latent_laterality.laterality_corruption_inference import (
     SequenceGaugeConfig,
     TwoStateDurationModel,
     apply_sequence_draw,
@@ -42,15 +42,15 @@ from gavd6_sjepa.latent_laterality import (
     slice_corrupted_windows,
     structured_parity_prediction_loss,
 )
-from gavd6_sjepa.sequence_benchmark import (
+from gavd6_sjepa.research_directions.latent_laterality.laterality_sequence_benchmarking import (
     load_manifest_sequence_config,
     make_manifest_examples,
     one_example_per_chart_pair,
     run_sequence_benchmark,
 )
-from gavd6_sjepa.study_protocol import ARM_SPECS, require_benchmark_gate, source_screen_jobs
-from scripts.build_amass_gauge_manifest import build as build_amass_gauge_manifest
-from scripts.convert_amass_core11 import (
+from gavd6_sjepa.research_directions.latent_laterality.laterality_study_protocol import ARM_SPECS, require_benchmark_gate, source_screen_jobs
+from gavd6_sjepa.research_directions.latent_laterality.laterality_manifest_construction import build as build_amass_gauge_manifest
+from gavd6_sjepa.data_foundations.amass_core11_conversion_pipeline import (
     ConversionConfig,
     convert_sequence_arrays,
     estimate_forward_frame,

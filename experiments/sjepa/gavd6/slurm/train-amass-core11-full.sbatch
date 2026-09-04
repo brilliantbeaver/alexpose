@@ -57,4 +57,4 @@ echo "  tensors:  $AMASS_TENSOR_ROOT"
 echo "  output:   $AMASS_OUTPUT_DIR"
 echo "  test evaluation: disabled"
 
-exec uv run --no-sync train-amass-core11
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface amass train

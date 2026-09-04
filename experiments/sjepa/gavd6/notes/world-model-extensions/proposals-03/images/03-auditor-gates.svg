@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Predictive pose auditor evaluation gates</title>
+  <desc>Known errors, hard clean motions, baseline comparisons, and useful abstention form four gates for the pose auditor.</desc>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20364e"/></marker></defs>
+  <style>.h{font:700 32px Arial;fill:#0f2440}.t{font:700 20px Arial;fill:#0f2440}.b{font:16px Arial;fill:#33475e}.s{font:14px Arial;fill:#5c6f84}.w{font:700 16px Arial;fill:#fff}.a{stroke:#20364e;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  <text class="h" x="48" y="64">The auditor earns trust on known errors first</text><text class="b" x="48" y="98">GAVD review happens only after controlled localization passes</text>
+  <g stroke="#20364e" stroke-width="1.75"><rect x="48" y="170" width="240" height="320" rx="16" fill="#f7e7d8"/><rect x="336" y="170" width="240" height="320" rx="16" fill="#e7f0f8"/><rect x="624" y="170" width="240" height="320" rx="16" fill="#ece6f6"/><rect x="912" y="170" width="240" height="320" rx="16" fill="#e6f2ea"/></g>
+  <text class="t" x="72" y="210">Known errors</text><text class="b" x="72" y="252">Swap • drift • freeze</text><text class="b" x="72" y="280">Dropout • jitter • switch</text><text class="s" x="72" y="336">Joint-block truth</text><text class="s" x="72" y="374">AUROC ≥ 0.80</text>
+  <text class="t" x="360" y="210">Hard clean motion</text><text class="b" x="360" y="252">Run • turn • sit</text><text class="b" x="360" y="280">Fast arms • occlusion</text><text class="s" x="360" y="336">False alarms &lt; 10%</text><text class="s" x="360" y="374">Pixels and pose agree</text>
+  <text class="t" x="648" y="210">Strong baselines</text><text class="b" x="648" y="252">Confidence • jerk</text><text class="b" x="648" y="280">Flow • dual tracker</text><text class="s" x="648" y="336">Gain ≥ 0.10 AUROC</text><text class="s" x="648" y="374">Future beats current</text>
+  <text class="t" x="936" y="210">Useful abstention</text><text class="b" x="936" y="252">Keep 80% of blocks</text><text class="b" x="936" y="280">Improve measurement</text><text class="s" x="936" y="336">25% lower foot error</text><text class="s" x="936" y="374">Then inspect GAVD</text>
+  <path class="a" d="M288 330 H318"/><path class="a" d="M576 330 H606"/><path class="a" d="M864 330 H894"/>
+  <rect x="48" y="550" width="1104" height="88" rx="16" fill="#20364e"/><text class="w" x="72" y="586">Stop the world-model claim if only gross corruption is detectable.</text><text x="72" y="614" style="font:14px Arial;fill:#cdd8e4">A simple quality-control tool can still be released under a narrower claim.</text>
+</svg>

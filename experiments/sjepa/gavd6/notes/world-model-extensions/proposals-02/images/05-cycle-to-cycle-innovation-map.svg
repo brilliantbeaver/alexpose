@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Cycle-to-cycle innovation map</title>
+  <desc id="desc">One phase-aligned gait cycle predicts the next. An observation-profile error floor is removed, leaving a joint-by-phase map of motion changes that were not expected from the preceding cycle.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.k{font:700 13px Arial,Helvetica,sans-serif;fill:#5c6f84;letter-spacing:.8px}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}.ws{font:14px Arial,Helvetica,sans-serif;fill:#dce5ee}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Cycle-to-Cycle Innovation Map</text>
+  <text class="sub" x="48" y="104">Show what changed in one visible cycle after subtracting the expected observation error.</text>
+
+  <rect class="card" x="60" y="190" width="300" height="280" rx="16" fill="#e7f0f8"/>
+  <text class="k" x="84" y="225">PAIRED INPUT</text>
+  <text class="t" x="84" y="263">Align adjacent cycles</text>
+  <text class="b" x="84" y="303">cycle c supplies the past</text>
+  <text class="b" x="84" y="329">cycle c + 1 supplies the target</text>
+  <path d="M86 390C116 338 146 442 176 390S236 338 266 390S326 442 336 390" fill="none" stroke="#477ea8" stroke-width="3"/>
+  <line x1="211" y1="350" x2="211" y2="430" stroke="#8ea9c1" stroke-width="2" stroke-dasharray="5 5"/>
+
+  <rect class="card" x="450" y="190" width="300" height="280" rx="16" fill="#ece6f6"/>
+  <text class="k" x="474" y="225">PREDICT + CALIBRATE</text>
+  <text class="t" x="474" y="263">Cross-cycle S-JEPA head</text>
+  <text class="b" x="474" y="303">predict next-cycle target latents</text>
+  <text class="b" x="474" y="333">measure residual by region + phase</text>
+  <text class="b" x="474" y="375">subtract the paired source-profile</text>
+  <text class="b" x="474" y="401">error floor</text>
+
+  <rect class="card" x="840" y="190" width="300" height="280" rx="16" fill="#e6f2ea"/>
+  <text class="k" x="864" y="225">READABLE OUTPUT</text>
+  <text class="t" x="864" y="263">Joint × phase innovation</text>
+  <text class="k" x="864" y="294">PHASE →</text>
+  <g stroke="#6d8e79" stroke-width="1">
+    <rect x="864" y="305" width="38" height="32" fill="#d7e9dd"/><rect x="904" y="305" width="38" height="32" fill="#a9cfb6"/><rect x="944" y="305" width="38" height="32" fill="#e6f2ea"/><rect x="984" y="305" width="38" height="32" fill="#d7e9dd"/><rect x="1024" y="305" width="38" height="32" fill="#8fbd9f"/><rect x="1064" y="305" width="38" height="32" fill="#e6f2ea"/>
+    <rect x="864" y="339" width="38" height="32" fill="#e6f2ea"/><rect x="904" y="339" width="38" height="32" fill="#d7e9dd"/><rect x="944" y="339" width="38" height="32" fill="#72a887"/><rect x="984" y="339" width="38" height="32" fill="#8fbd9f"/><rect x="1024" y="339" width="38" height="32" fill="#d7e9dd"/><rect x="1064" y="339" width="38" height="32" fill="#e6f2ea"/>
+    <rect x="864" y="373" width="38" height="32" fill="#d7e9dd"/><rect x="904" y="373" width="38" height="32" fill="#e6f2ea"/><rect x="944" y="373" width="38" height="32" fill="#d7e9dd"/><rect x="984" y="373" width="38" height="32" fill="#e6f2ea"/><rect x="1024" y="373" width="38" height="32" fill="#a9cfb6"/><rect x="1064" y="373" width="38" height="32" fill="#72a887"/>
+  </g>
+  <text class="b" x="864" y="439">darker cells mark unexpected change</text>
+
+  <path class="arrow" d="M360 330H434"/>
+  <path class="arrow" d="M750 330H824"/>
+  <path class="arrow" d="M990 470V524"/>
+  <rect class="card" x="180" y="540" width="960" height="90" rx="16" fill="#20364e"/>
+  <text class="w" x="210" y="578">Local change must survive source-only nulls</text>
+  <text class="ws" x="210" y="608">Gate: localization AUPRC ≥ 0.70 and ≥ 0.15 above raw; source-only FPR &lt; 5%.</text>
+</svg>

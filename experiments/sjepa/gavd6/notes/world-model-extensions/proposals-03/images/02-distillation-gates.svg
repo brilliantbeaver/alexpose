@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Future-innovation sufficiency gates</title>
+  <desc>A horizon curve must show positive skeleton information, reject shuffled skeletons, beat raw features, and retrieve the correct future.</desc>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <style>.h{font:700 32px Arial;fill:#0f2440}.t{font:700 20px Arial;fill:#0f2440}.b{font:16px Arial;fill:#33475e}.s{font:14px Arial;fill:#5c6f84}.w{font:700 16px Arial;fill:#fff}</style>
+  <text class="h" x="48" y="64">A sufficiency curve, not one distillation loss</text><text class="b" x="48" y="98">Every gain must survive a matched placebo</text>
+  <rect x="60" y="154" width="650" height="390" rx="16" fill="#fff" stroke="#20364e" stroke-width="1.75"/>
+  <text class="t" x="88" y="194">Skeleton-explainable fraction by horizon</text>
+  <line x1="120" y1="474" x2="660" y2="474" stroke="#20364e" stroke-width="2"/><line x1="120" y1="236" x2="120" y2="474" stroke="#20364e" stroke-width="2"/><line x1="120" y1="392" x2="660" y2="392" stroke="#c4cdd8" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <text class="s" x="76" y="242">0.15</text><text class="s" x="76" y="398">0.05</text><text class="s" x="88" y="480">0</text><text class="s" x="190" y="510">8 frames</text><text class="s" x="358" y="510">16 frames</text><text class="s" x="532" y="510">32 frames</text>
+  <polyline points="220,332 390,366 560,418" fill="none" stroke="#2f6f99" stroke-width="5"/><circle cx="220" cy="332" r="7" fill="#2f6f99"/><circle cx="390" cy="366" r="7" fill="#2f6f99"/><circle cx="560" cy="418" r="7" fill="#2f6f99"/>
+  <polyline points="220,456 390,458 560,462" fill="none" stroke="#e07a4b" stroke-width="3" stroke-dasharray="8 6"/><circle cx="220" cy="456" r="6" fill="#e07a4b"/><circle cx="390" cy="458" r="6" fill="#e07a4b"/><circle cx="560" cy="462" r="6" fill="#e07a4b"/>
+  <text class="b" x="500" y="316">Real skeleton</text><text class="b" x="470" y="450">Time-shuffled</text>
+  <g stroke="#20364e" stroke-width="1.75">
+    <rect x="770" y="154" width="370" height="108" rx="16" fill="#e7f0f8"/><rect x="770" y="284" width="370" height="108" rx="16" fill="#ece6f6"/><rect x="770" y="414" width="370" height="130" rx="16" fill="#e6f2ea"/>
+  </g>
+  <text class="t" x="794" y="190">Information gate</text><text class="b" x="794" y="226">ΔR² ≥ 0.05 beyond current RGB</text>
+  <text class="t" x="794" y="320">Placebo gate</text><text class="b" x="794" y="356">At least 2× shuffled gain</text>
+  <text class="t" x="794" y="450">Usefulness gate</text><text class="b" x="794" y="486">Retrieve correct future</text><text class="s" x="794" y="516">among phase-matched distractors</text>
+  <rect x="60" y="598" width="1080" height="72" rx="16" fill="#20364e"/><text class="w" x="84" y="628">Stop if current RGB already explains the target, or if a mismatched person's skeleton works.</text><text x="84" y="654" style="font:14px Arial;fill:#cdd8e4">A low ceiling is a useful result: direct skeleton distillation is then poorly posed.</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img">
+  <title>Recoverability horizon evaluation</title>
+  <desc>A conceptual gain curve shows a predictive representation moving the reliable horizon earlier than a strong baseline, followed by three validity checks.</desc>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <style>.h{font:700 32px Arial;fill:#0f2440}.t{font:700 20px Arial;fill:#0f2440}.b{font:16px Arial;fill:#33475e}.s{font:14px Arial;fill:#5c6f84}.w{font:700 16px Arial;fill:#fff}</style>
+  <text class="h" x="48" y="64">A useful model moves the reliable horizon earlier</text><text class="b" x="48" y="98">Conceptual curve: exact values come only from held-person tests</text>
+  <rect x="60" y="154" width="640" height="400" rx="16" fill="#fff" stroke="#20364e" stroke-width="1.75"/><text class="t" x="88" y="194">Conditional log-loss gain</text>
+  <line x1="120" y1="480" x2="650" y2="480" stroke="#20364e" stroke-width="2"/><line x1="120" y1="230" x2="120" y2="480" stroke="#20364e" stroke-width="2"/><line x1="120" y1="390" x2="650" y2="390" stroke="#c4cdd8" stroke-width="1.5" stroke-dasharray="7 6"/><text class="s" x="78" y="396">0</text>
+  <text class="s" x="148" y="514">2.0 s</text><text class="s" x="262" y="514">1.5 s</text><text class="s" x="378" y="514">1.0 s</text><text class="s" x="492" y="514">0.5 s</text><text class="s" x="610" y="514">onset</text>
+  <polyline points="170,380 285,350 400,302 515,264 625,242" fill="none" stroke="#2f6f99" stroke-width="5"/><polyline points="170,410 285,404 400,382 515,320 625,278" fill="none" stroke="#e07a4b" stroke-width="4" stroke-dasharray="9 7"/><text class="b" x="468" y="236">S-JEPA + baseline</text><text class="b" x="490" y="350">Strong baseline</text>
+  <g stroke="#20364e" stroke-width="1.75"><rect x="760" y="154" width="380" height="112" rx="16" fill="#f7e7d8"/><rect x="760" y="288" width="380" height="112" rx="16" fill="#e7f0f8"/><rect x="760" y="422" width="380" height="132" rx="16" fill="#e6f2ea"/></g>
+  <text class="t" x="784" y="190">No obvious descent</text><text class="b" x="784" y="226">Trivial AUROC &lt; 0.65</text>
+  <text class="t" x="784" y="324">Two adjacent times</text><text class="b" x="784" y="360">Bootstrap interval above zero</text>
+  <text class="t" x="784" y="458">Domain honesty</text><text class="b" x="784" y="494">View • wheelchair • non-lab</text><text class="s" x="784" y="524">Never pool one flattering score</text>
+  <rect x="60" y="604" width="1080" height="62" rx="16" fill="#20364e"/><text class="w" x="84" y="642">Stop if duration, box geometry, pose quality, or future-frame leakage explains the gain.</text>
+</svg>

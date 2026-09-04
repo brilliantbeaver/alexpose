@@ -89,18 +89,18 @@ answer the questions we want to ask.
 | --- | --- | --- |
 | `manifests/amass_core11_conversion.csv` | Available | Current 8,854-sequence Core11 conversion manifest |
 | `manifests/amass_subject_splits.csv` | Available | Corpus-qualified identity split source |
-| `scripts/convert_amass_core11.py` | Available | Converts AMASS to 30 Hz, 11-joint tensors with provenance |
-| `src/gavd6_sjepa/gait_parity_jepa.py` | Available | Standard and paired fixed-reflection model components |
-| `src/gavd6_sjepa/amass_core11_jepa.py` | Available | Streaming dataset, losses, checkpointing, evaluation |
-| `src/gavd6_sjepa/train_amass.py` | Available | `train-amass-core11` entry point |
-| `src/gavd6_sjepa/swap_probe.py` | Available | E0: typed corruption, path inference, frozen encoding, metrics |
-| `scripts/run_swap_probe.py` | Available | E0 command-line entry point |
+| `uv run gavd6 amass convert` | Available | Converts AMASS to 30 Hz, 11-joint tensors with provenance |
+| `src/gavd6_sjepa/research_directions/reflection_equivariance/jepa_model_architecture.py` | Available | Standard and paired fixed-reflection model components |
+| `src/gavd6_sjepa/research_directions/reflection_equivariance/amass_core11_training_pipeline.py` | Available | Streaming dataset, losses, checkpointing, evaluation |
+| `uv run gavd6 amass train` | Available | AMASS training entry point |
+| `src/gavd6_sjepa/research_directions/reflection_equivariance/swap_probe_evaluation_pipeline.py` | Available | E0: typed corruption, path inference, frozen encoding, metrics |
+| `uv run gavd6 swap-probe run` | Available | E0 command-line entry point |
 | `slurm/run-swap-probe.sbatch` | Available | E0 four-hour H100 job |
 | `slurm/train-amass-core11-full.sbatch` | Available, not matrix-safe | Selects seed 7 and standard S-JEPA only; it does **not** launch all arms |
 | `outputs/repaired-jepa-seed7-v2/` | Available, diagnostic only | Four pre-orbit-mask seed-7 artifacts; config and summary reflect only the last arm |
-| `scripts/download_gavd_full.py` | Available | Resumable unique-source downloader; expects a sequence manifest no standalone script builds yet |
+| `uv run gavd6 gavd download` | Available | Resumable unique-source downloader; expects a sequence manifest no standalone script builds yet |
 | `work/artifacts/real/poses/` | Available, small | 96 sequences from 18 source videos, one pose extractor |
-| `scripts/evaluate_gavd_core11_probe.py` | Available | Existing frozen GAVD probe; not a latent-laterality evaluator |
+| `uv run gavd6 gavd evaluate-core11` | Available | Existing frozen GAVD probe; not a latent-laterality evaluator |
 
 **Not yet implemented:** the SG-JEPA model, the sequence-level gauge generator,
 the gauge evaluator, the paired GAVD extractor, and the human-audit tool.
@@ -575,7 +575,7 @@ These paths are design placeholders. Implement small composable commands with
 these responsibilities:
 
 ```text
-scripts/build_amass_gauge_manifest.py   # neutral conversion plus sequence paths
+gavd6 laterality build-manifest        # neutral conversion plus sequence paths
 src/gavd6_sjepa/train_amass_gauge.py    # learned arms; validation only by default
 scripts/evaluate_amass_gauge.py         # sealed shared-draw test evaluation
 scripts/extract_gavd_pose_pair.py       # two extractor outputs in the raw image frame
@@ -585,7 +585,7 @@ scripts/audit_gavd_laterality.py        # probability and enriched samples plus 
 Intended usage after implementation:
 
 ```bash
-uv run --no-sync python scripts/build_amass_gauge_manifest.py \
+uv run --no-sync gavd6 laterality build-manifest \
   --source-manifest manifests/amass_core11_conversion.csv \
   --source-tensor-root "$GAVD6_ROOT/outputs/core11" \
   --subject-splits manifests/amass_subject_splits.csv \

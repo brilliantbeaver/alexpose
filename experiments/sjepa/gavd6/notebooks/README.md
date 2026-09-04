@@ -33,16 +33,16 @@ there is no checked-in generic notebook-07 launcher.
 
 | Experiment | Order | Notebook | Authoritative builder |
 |---|---:|---|---|
-| Signed laterality | 01 | [Probe](experiments/idea05_signed_laterality/01_probe.ipynb) | [`build_probe.py`](../scripts/notebook_builders/idea05/build_probe.py) |
-| Signed laterality | 02 | [Futures and reach](experiments/idea05_signed_laterality/02_futures_and_reach.ipynb) | [`build_futures_and_reach.py`](../scripts/notebook_builders/idea05/build_futures_and_reach.py) |
-| Reflection equivariance | 01 | [Encoder contract](experiments/idea09_reflection_equivariance/01_encoder_contract.ipynb) | [`build_encoder_contract.py`](../scripts/notebook_builders/idea09/build_encoder_contract.py) |
-| Reflection equivariance | 02 | [Futures and reach](experiments/idea09_reflection_equivariance/02_futures_and_reach.ipynb) | [`build_futures_and_reach.py`](../scripts/notebook_builders/idea09/build_futures_and_reach.py) |
-| Reflection equivariance | 03 | [GAVD contract](experiments/idea09_reflection_equivariance/03_gavd_contract.ipynb) | [`build_gavd_sequence.py`](../scripts/notebook_builders/idea09/build_gavd_sequence.py) |
-| Reflection equivariance | 04 | [GAVD training](experiments/idea09_reflection_equivariance/04_gavd_training.ipynb) | [`build_gavd_sequence.py`](../scripts/notebook_builders/idea09/build_gavd_sequence.py) |
-| Reflection equivariance | 05 | [GAVD audit](experiments/idea09_reflection_equivariance/05_gavd_audit.ipynb) | [`build_gavd_sequence.py`](../scripts/notebook_builders/idea09/build_gavd_sequence.py) |
-| Reflection equivariance | 06 | [CPU replication](experiments/idea09_reflection_equivariance/06_cpu_replication.ipynb) | [`build_replications.py`](../scripts/notebook_builders/idea09/build_replications.py) |
-| Reflection equivariance | 07 | [GPU replication](experiments/idea09_reflection_equivariance/07_gpu_replication.ipynb) | [`build_replications.py`](../scripts/notebook_builders/idea09/build_replications.py) |
-| Reflection equivariance | 08 | [AMASS Core11 training](experiments/idea09_reflection_equivariance/08_amass_core11_training.ipynb) | [`build_amass_training.py`](../scripts/notebook_builders/idea09/build_amass_training.py) |
+| Signed laterality | 01 | [Probe](experiments/idea05_signed_laterality/01_probe.ipynb) | [`build_signed_laterality_probe_notebook.py`](../scripts/research_directions/signed_laterality/build_signed_laterality_probe_notebook.py) |
+| Signed laterality | 02 | [Futures and reach](experiments/idea05_signed_laterality/02_futures_and_reach.ipynb) | [`build_signed_laterality_futures_notebook.py`](../scripts/research_directions/signed_laterality/build_signed_laterality_futures_notebook.py) |
+| Reflection equivariance | 01 | [Encoder contract](experiments/idea09_reflection_equivariance/01_encoder_contract.ipynb) | [`build_reflection_encoder_contract_notebook.py`](../scripts/research_directions/reflection_equivariance/build_reflection_encoder_contract_notebook.py) |
+| Reflection equivariance | 02 | [Futures and reach](experiments/idea09_reflection_equivariance/02_futures_and_reach.ipynb) | [`build_reflection_futures_notebook.py`](../scripts/research_directions/reflection_equivariance/build_reflection_futures_notebook.py) |
+| Reflection equivariance | 03 | [GAVD contract](experiments/idea09_reflection_equivariance/03_gavd_contract.ipynb) | [`build_reflection_gavd_notebooks.py`](../scripts/research_directions/reflection_equivariance/build_reflection_gavd_notebooks.py) |
+| Reflection equivariance | 04 | [GAVD training](experiments/idea09_reflection_equivariance/04_gavd_training.ipynb) | [`build_reflection_gavd_notebooks.py`](../scripts/research_directions/reflection_equivariance/build_reflection_gavd_notebooks.py) |
+| Reflection equivariance | 05 | [GAVD audit](experiments/idea09_reflection_equivariance/05_gavd_audit.ipynb) | [`build_reflection_gavd_notebooks.py`](../scripts/research_directions/reflection_equivariance/build_reflection_gavd_notebooks.py) |
+| Reflection equivariance | 06 | [CPU replication](experiments/idea09_reflection_equivariance/06_cpu_replication.ipynb) | [`build_reflection_replication_notebooks.py`](../scripts/research_directions/reflection_equivariance/build_reflection_replication_notebooks.py) |
+| Reflection equivariance | 07 | [GPU replication](experiments/idea09_reflection_equivariance/07_gpu_replication.ipynb) | [`build_reflection_replication_notebooks.py`](../scripts/research_directions/reflection_equivariance/build_reflection_replication_notebooks.py) |
+| Reflection equivariance | 08 | [AMASS Core11 training](experiments/idea09_reflection_equivariance/08_amass_core11_training.ipynb) | [`build_reflection_amass_training_notebook.py`](../scripts/research_directions/reflection_equivariance/build_reflection_amass_training_notebook.py) |
 
 Edit the builder for a generated experiment notebook, then regenerate it. Do
 not hand-edit generated cell source because the next build will overwrite it.

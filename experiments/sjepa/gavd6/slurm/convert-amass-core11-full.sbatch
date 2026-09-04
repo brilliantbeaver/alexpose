@@ -12,7 +12,7 @@ set -eu
 
 cd "$GAVD6_ROOT"
 
-exec uv run --no-sync python scripts/convert_amass_core11.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface amass convert \
   --amass-root "$AMASS_EXTRACTED_ROOT" \
   --inventory "$AMASS_RUN_ROOT/manifests/amass_raw_inventory_eligible.csv" \
   --subject-splits "$AMASS_RUN_ROOT/manifests/amass_subject_splits.csv" \

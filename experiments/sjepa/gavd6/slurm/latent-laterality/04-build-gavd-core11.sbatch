@@ -35,7 +35,7 @@ REJECTS="$LATENT_LATERALITY_RUN_ROOT/gavd-core11/rejects.csv"
 }
 
 cd "$GAVD6_ROOT"
-exec uv run --no-sync python scripts/build_gavd_core11.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface gavd convert-core11 \
   --pose-manifest "$GAVD_POSE_MANIFEST" \
   --output-root "$OUTPUT_ROOT" \
   --output-manifest "$OUTPUT_MANIFEST" \

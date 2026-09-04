@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-lift minimum normalizing edit</title>
+  <desc id="desc">Multiple 3D hypotheses from one GAVD video are independently repaired by frozen GaitDynamics. AMASS known edits calibrate recovery, and only a consensus edit is reported.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="60" y="56" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Report only the edit shared across lifts</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111827">
+    <rect x="60" y="145" width="200" height="90" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="160" y="180" text-anchor="middle" font-weight="700">GAVD RGB</text>
+    <text x="160" y="210" text-anchor="middle">one gait video</text>
+
+    <rect x="320" y="130" width="230" height="120" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="435" y="165" text-anchor="middle" font-weight="700">3D hypotheses</text>
+    <text x="435" y="195" text-anchor="middle">WHAM, GVHMR,</text>
+    <text x="435" y="224" text-anchor="middle">camera variants</text>
+
+    <rect x="620" y="120" width="250" height="140" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="745" y="157" text-anchor="middle" font-weight="700">Independent repairs</text>
+    <text x="745" y="190" text-anchor="middle">retarget + constraints</text>
+    <text x="745" y="220" text-anchor="middle">+ frozen GaitDynamics</text>
+    <text x="745" y="248" text-anchor="middle">edit A, B, C</text>
+
+    <rect x="930" y="135" width="210" height="110" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="1035" y="173" text-anchor="middle" font-weight="700">Consensus gate</text>
+    <text x="1035" y="203" text-anchor="middle">direction, phase,</text>
+    <text x="1035" y="231" text-anchor="middle">and magnitude</text>
+
+    <rect x="915" y="315" width="225" height="85" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1028" y="348" text-anchor="middle" font-weight="700">Stable shared edit</text>
+    <text x="1028" y="378" text-anchor="middle">joint-time overlay</text>
+
+    <rect x="915" y="445" width="225" height="75" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="1028" y="477" text-anchor="middle" font-weight="700">Low agreement</text>
+    <text x="1028" y="505" text-anchor="middle">abstain</text>
+
+    <rect x="60" y="430" width="220" height="95" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="170" y="465" text-anchor="middle" font-weight="700">AMASS 3D</text>
+    <text x="170" y="495" text-anchor="middle">known injected edits</text>
+
+    <rect x="350" y="420" width="260" height="115" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="480" y="456" text-anchor="middle" font-weight="700">Lock before GAVD</text>
+    <text x="480" y="486" text-anchor="middle">constraints, thresholds,</text>
+    <text x="480" y="516" text-anchor="middle">and recovery gate</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 260 190 L 320 190"/>
+    <path d="M 550 190 L 620 190"/>
+    <path d="M 870 190 L 930 190"/>
+    <path d="M 1035 245 L 1035 315"/>
+    <path d="M 1080 245 C 1155 270, 1155 445, 1110 465"/>
+    <path d="M 280 477 L 350 477"/>
+    <path d="M 610 477 C 750 477, 800 285, 930 225"/>
+  </g>
+
+  <text x="1070" y="290" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#16a34a">agree</text>
+  <text x="1060" y="430" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">disagree</text>
+  <line x1="60" y1="650" x2="1140" y2="650" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="60" y="688" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">Each lift is repaired independently; the system reports a correction only when the anatomical edit is stable.</text>
+</svg>

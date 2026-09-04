@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Motion-conditioned depth residual</title>
+  <desc id="desc">AMASS renders provide exact view-specific joint depth. Frozen Depth Anything supplies framewise relative depth and frozen S-JEPA supplies motion context. A trained residual head emits relative joint-depth intervals. AMASS establishes coverage; GAVD receives only witness checks.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text x="45" y="54" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Can motion correct monocular joint depth?</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#111827">
+    <rect x="45" y="95" width="235" height="120" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="162" y="135" text-anchor="middle" font-weight="700">AMASS renders</text>
+    <text x="162" y="167" text-anchor="middle">exact depth for</text>
+    <text x="162" y="197" text-anchor="middle">each held camera</text>
+
+    <rect x="45" y="315" width="235" height="120" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="162" y="355" text-anchor="middle" font-weight="700">GAVD RGB + poses</text>
+    <text x="162" y="387" text-anchor="middle">same frozen inputs,</text>
+    <text x="162" y="417" text-anchor="middle">no depth truth</text>
+
+    <rect x="330" y="120" width="245" height="190" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="452" y="160" text-anchor="middle" font-weight="700">Frozen feature stack</text>
+    <text x="452" y="194" text-anchor="middle">DA-V2 framewise</text>
+    <text x="452" y="224" text-anchor="middle">relative joint depth</text>
+    <text x="452" y="258" text-anchor="middle">S-JEPA temporal</text>
+    <text x="452" y="288" text-anchor="middle">motion latents</text>
+
+    <rect x="630" y="150" width="250" height="145" rx="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="755" y="190" text-anchor="middle" font-weight="700">Residual head</text>
+    <text x="755" y="222" text-anchor="middle">motion-conditioned</text>
+    <text x="755" y="252" text-anchor="middle">depth correction +</text>
+    <text x="755" y="282" text-anchor="middle">mixture uncertainty</text>
+
+    <rect x="935" y="150" width="220" height="120" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1045" y="190" text-anchor="middle" font-weight="700">Relative depth</text>
+    <text x="1045" y="222" text-anchor="middle">joint intervals</text>
+    <text x="1045" y="252" text-anchor="middle">and ordering</text>
+
+    <rect x="330" y="405" width="245" height="120" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="452" y="445" text-anchor="middle" font-weight="700">WHAM witness</text>
+    <text x="452" y="477" text-anchor="middle">agreement is not</text>
+    <text x="452" y="507" text-anchor="middle">ground truth</text>
+
+    <rect x="630" y="405" width="250" height="120" rx="14" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+    <text x="755" y="445" text-anchor="middle" font-weight="700">Evidence boundary</text>
+    <text x="755" y="477" text-anchor="middle">coverage on AMASS;</text>
+    <text x="755" y="507" text-anchor="middle">stress tests on GAVD</text>
+
+    <rect x="935" y="405" width="220" height="120" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="1045" y="445" text-anchor="middle" font-weight="700">Portfolio verdict</text>
+    <text x="1045" y="477" text-anchor="middle">use gated relative</text>
+    <text x="1045" y="507" text-anchor="middle">depth or stay in 2D</text>
+  </g>
+
+  <g fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M 280 155 C 305 155, 305 175, 330 175"/>
+    <path d="M 575 215 L 630 215"/>
+    <path d="M 880 220 L 935 220"/>
+    <path d="M 280 355 C 305 355, 305 270, 330 270"/>
+    <path d="M 280 415 C 305 415, 305 465, 330 465"/>
+    <path d="M 575 465 L 630 465"/>
+    <path d="M 1045 270 C 1045 335, 850 350, 820 405"/>
+    <path d="M 880 465 L 935 465"/>
+  </g>
+
+  <line x1="45" y1="600" x2="1155" y2="600" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="45" y="640" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">Each AMASS camera has its own exact target, so cross-view evaluation tests error and coverage, not raw-depth invariance.</text>
+  <text x="45" y="672" font-family="Arial, Helvetica, sans-serif" font-size="21" fill="#334155">GAVD can test consistency and witness agreement, but it cannot establish calibrated coverage without depth labels.</text>
+</svg>

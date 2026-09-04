@@ -52,7 +52,7 @@ fi
 
 cd "$GAVD6_ROOT"
 echo "Confirmation task $SLURM_ARRAY_TASK_ID: route=$SELECTED_ROUTE_NAME arm=$arm seed=$seed"
-exec uv run --no-sync python scripts/train_gauge_jepa.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality train \
   --arm "$arm" \
   --gate-decision "$SELECTED_GATE_DECISION" \
   --gauge-manifest "$SELECTED_GAUGE_MANIFEST" \

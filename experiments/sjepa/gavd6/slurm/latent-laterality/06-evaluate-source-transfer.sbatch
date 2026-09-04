@@ -55,4 +55,4 @@ for item in "${checkpoints[@]}"; do
 done
 
 cd "$GAVD6_ROOT"
-exec uv run --no-sync python scripts/evaluate_source_transfer.py "${args[@]}"
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality evaluate-source-transfer "${args[@]}"

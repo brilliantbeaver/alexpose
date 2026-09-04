@@ -47,7 +47,7 @@ echo "  manifest:  $OUTPUT_MANIFEST"
 # The converter validates compatible existing tensors, so an interrupted job
 # can be resubmitted. It never overwrites incompatible output without the
 # deliberately omitted --overwrite flag.
-exec uv run --no-sync python scripts/convert_amass_core11.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface amass convert \
   --amass-root "$AMASS_EXTRACTED_ROOT" \
   --inventory "$AMASS_INVENTORY" \
   --subject-splits "$AMASS_SUBJECT_SPLITS" \

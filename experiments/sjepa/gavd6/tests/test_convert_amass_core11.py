@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from scripts.convert_amass_core11 import (
+from gavd6_sjepa.data_foundations.amass_core11_conversion_pipeline import (
     CHANNEL_NAMES,
     COORDINATE_FRAME,
     CORE11_NAMES,

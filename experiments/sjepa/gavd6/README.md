@@ -200,13 +200,15 @@ uv run python -m ipykernel install --user --name python3 --display-name "GAVD6 S
 uv run jupyter lab
 ```
 
-The shared training implementation uses a conventional `src` package:
+The shared implementation uses a conventional `src` package and one command:
 
-- `src/gavd6_sjepa/gait_parity_jepa.py` contains the model and GAVD training components;
-- `src/gavd6_sjepa/amass_core11_jepa.py` contains Core11 loading and streaming training;
-- `src/gavd6_sjepa/train_amass.py` provides the `train-amass-core11` command.
+- [`scripts/navigation_guide.md`](scripts/navigation_guide.md) maps user goals to commands;
+- [`source_module_guide.md`](src/gavd6_sjepa/source_module_guide.md) maps scientific responsibilities to modules;
+- `uv run gavd6 --help` lists every supported data, training, evaluation, and maintenance command.
 
-The script and AMASS notebook launch that command instead of duplicating training logic.
+Legacy launchers and import adapters now live under explicit `archive/`
+directories. They remain available for reproducing completed experiments but do
+not duplicate scientific logic or define active import paths.
 
 Copy `.env.example` to `.env`. The completed augmented real path uses:
 
@@ -234,7 +236,7 @@ and `GAVD_MODE` settings as notebooks 02–06. If you have a legacy cohort under
 `cache/artifacts/real` from an earlier checkout, validate and migrate it once:
 
 ```bash
-uv run python scripts/data_preparation/migrate_augmented_pose_artifacts.py
+uv run gavd6 gavd migrate-augmented
 ```
 
 Then restart the notebook kernel and rerun notebook 04 from the configuration

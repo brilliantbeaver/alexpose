@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Side-anonymous predictive asymmetry</title>
+  <desc id="desc">A side-by-region-by-phase S-JEPA residual field is split under the glide action G, which combines left-right swap and half-cycle shift. Absolute odd error is collapsed across counterpart orbits, producing an unsigned asymmetry map without naming an affected side.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#20364e"/></marker>
+    <style>.h{font:700 32px Arial,Helvetica,sans-serif;fill:#0f2440}.sub{font:14px Arial,Helvetica,sans-serif;fill:#5c6f84}.k{font:700 13px Arial,Helvetica,sans-serif;fill:#5c6f84;letter-spacing:.8px}.t{font:700 20px Arial,Helvetica,sans-serif;fill:#0f2440}.b{font:16px Arial,Helvetica,sans-serif;fill:#33475e}.eq{font:18px Georgia,serif;fill:#0f2440}.w{font:700 16px Arial,Helvetica,sans-serif;fill:#fff}.ws{font:14px Arial,Helvetica,sans-serif;fill:#dce5ee}.card{stroke:#20364e;stroke-width:1.75}.arrow{fill:none;stroke:#20364e;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="720" fill="#f7f5ef"/>
+  <text class="h" x="48" y="70">Side-Anonymous Predictive Asymmetry</text>
+  <text class="sub" x="48" y="104">Measure unequal counterpart prediction error without claiming which anatomical side is affected.</text>
+
+  <rect class="card" x="60" y="190" width="300" height="280" rx="16" fill="#e7f0f8"/>
+  <text class="k" x="84" y="225">PREDICTIVE EVIDENCE</text>
+  <text class="t" x="84" y="263">S-JEPA residual field</text>
+  <text class="b" x="84" y="303">side × region × gait phase</text>
+  <text class="b" x="84" y="333">fixed bilateral mask bank</text>
+  <text class="b" x="84" y="375">ordinary frozen checkpoint</text>
+
+  <rect class="card" x="450" y="190" width="300" height="280" rx="16" fill="#ece6f6"/>
+  <text class="k" x="474" y="225">LAWFUL GLIDE SPLIT</text>
+  <text class="t" x="474" y="263">Swap side + half-cycle</text>
+  <text class="eq" x="474" y="315">e+ = (e + Ge) / 2</text>
+  <text class="eq" x="474" y="355">e- = (e - Ge) / 2</text>
+  <text class="b" x="474" y="405">verify G² = I numerically</text>
+
+  <rect class="card" x="840" y="190" width="300" height="280" rx="16" fill="#e6f2ea"/>
+  <text class="k" x="864" y="225">SIDE-ANONYMOUS OUTPUT</text>
+  <text class="t" x="864" y="263">Standardized odd map</text>
+  <text class="b" x="864" y="303">collapse |e-| by G-orbit</text>
+  <text class="b" x="864" y="333">subtract source-only null</text>
+  <text class="b" x="864" y="375">report region + phase</text>
+  <text class="b" x="864" y="401">without naming a side</text>
+
+  <path class="arrow" d="M360 330H434"/>
+  <path class="arrow" d="M750 330H824"/>
+  <path class="arrow" d="M990 470V524"/>
+  <rect class="card" x="180" y="540" width="960" height="90" rx="16" fill="#20364e"/>
+  <text class="w" x="210" y="578">A high-risk salvage assay after laterality correspondence failed</text>
+  <text class="ws" x="210" y="608">Gate: orbit AUPRC ≥ 0.70 and ≥ 0.15 above baselines; bilateral false positives &lt; 5%.</text>
+</svg>

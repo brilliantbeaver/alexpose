@@ -12,7 +12,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Subset
 
-from gavd6_sjepa.amass_core11_jepa import (
+from gavd6_sjepa.research_directions.reflection_equivariance.amass_core11_training_pipeline import (
     CHANNEL_NAMES,
     JOINT_NAMES,
     MIRROR_CHANNEL,
@@ -31,7 +31,7 @@ from gavd6_sjepa.amass_core11_jepa import (
     validate_archives,
     window_starts,
 )
-from gavd6_sjepa.gait_parity_jepa import (
+from gavd6_sjepa.research_directions.reflection_equivariance.jepa_model_architecture import (
     AMASS_VARIANTS,
     PAIRED_MASK_CONTRACT,
     PROFILES,
@@ -48,7 +48,7 @@ from gavd6_sjepa.gait_parity_jepa import (
     train_variant,
     trainable_parameter_count,
 )
-from gavd6_sjepa.train_amass import (
+from gavd6_sjepa.research_directions.reflection_equivariance.amass_training_entrypoint import (
     main as train_amass_main,
     selected_variants_from_env,
 )
@@ -576,7 +576,7 @@ class AmassCore11JepaTests(unittest.TestCase):
                 Path(temporary) / "seed-7_paired_unconstrained_history.csv"
             )
             with patch(
-                "gavd6_sjepa.amass_core11_jepa.evaluate_variant",
+                "gavd6_sjepa.research_directions.reflection_equivariance.amass_core11_training_pipeline.evaluate_variant",
                 side_effect=interrupt_second_evaluation,
             ):
                 with self.assertRaisesRegex(RuntimeError, "scheduler interruption"):

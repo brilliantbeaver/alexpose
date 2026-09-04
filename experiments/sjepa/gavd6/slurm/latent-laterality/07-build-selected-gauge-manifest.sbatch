@@ -35,7 +35,7 @@ SELECTED_GAUGE_MANIFEST="$SELECTED_ROUTE_ROOT/gauge-seed7.csv"
 }
 
 cd "$GAVD6_ROOT"
-exec uv run --no-sync python scripts/build_sequence_gauge_manifest.py \
+exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality build-manifest \
   --source-manifest "$SELECTED_SOURCE_MANIFEST" \
   --tensor-root "$SELECTED_TENSOR_ROOT" \
   --output-manifest "$SELECTED_GAUGE_MANIFEST" \
