@@ -58,7 +58,7 @@ The prototype did its job because it made the hidden assumptions measurable. Fir
 ![Stage 0 grew from one normal video to 18, while the final curriculum reached 159 sequences from 35 videos.](../docs/figures/evolution_data_scale.svg){width=94%}
 
 ::: notes
-The canonical GAVD cohort remains locked at 96 sequences from 18 videos. The project added normal walking windows through a separate extraction path. That path proposed 64 candidates from 17 additional videos. Sixty-three passed the authorized-landmark coverage threshold of 0.45. One candidate had coverage 0.027 and was rejected. Stage 0 therefore contains 12 canonical normal sequences plus 63 added-normal sequences, or 75 sequences from 18 videos. This is a real gain in source breadth. It also creates a new risk: 63 of 75 normal rows use the added extraction path, while every abnormal row uses the canonical path. A classifier can learn camera, crop, detector, or bounding-box differences. The scientific unit of diversity is 17 added videos, not 63 independent people.
+The full GAVD corpus contains 642 sequences from 94 videos. This follows from filtering the raw 666 sequences / 103 videos in data-gavd for source validity: 9 YouTube sources were dropped (2 private, 5 removed, 2 undownloadable) by an authoritative yt-dlp sweep on 2026-09-02, giving 642/94. The project added normal walking windows through a separate extraction path. That path proposed 64 candidates from 17 additional videos. Sixty-three passed the authorized-landmark coverage threshold of 0.45. One candidate had coverage 0.027 and was rejected. Stage 0 therefore contains 12 canonical normal sequences plus 63 added-normal sequences, or 75 sequences from 18 videos. This is a real gain in source breadth. It also creates a new risk: 63 of 75 normal rows use the added extraction path, while every abnormal row uses the canonical path. A classifier can learn camera, crop, detector, or bounding-box differences. The scientific unit of diversity is 17 added videos, not 63 independent people.
 :::
 
 # A fixed target rule turns joints into a learnable question
@@ -190,12 +190,12 @@ The manifest does not point to an already clipped video. Its frame numbers belon
 
 |Canonical folder label|Sequences|Videos|
 |---|---:|---:|
-|Normal|12|1|
-|Parkinson's|9|2|
-|Stroke|12|3|
-|Myopathic|47|10|
-|Cerebral palsy|16|2|
-|**Total**|**96**|**18**|
+|Normal|284|30|
+|Parkinson's|42|9|
+|Stroke|75|18|
+|Myopathic|183|28|
+|Cerebral palsy|58|9|
+|**Total**|**642**|**94**|
 
 :::
 ::: {.column width="46%"}
@@ -269,6 +269,8 @@ The current results support a limited but useful conclusion: the movement featur
 :::
 
 # Appendix: current five-condition result ledger
+
+*(All curriculum sizes, split sizes, and metrics below are pending regeneration against the full 642/94 corpus.)*
 
 |Evaluation approach|Accuracy|Balanced accuracy|F1 score|Meaning|
 |---|---:|---:|---:|---|

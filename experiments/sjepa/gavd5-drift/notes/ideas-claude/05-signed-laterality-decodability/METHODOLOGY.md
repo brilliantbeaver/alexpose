@@ -369,14 +369,14 @@ data.
 ## 9. How to make it reproducible
 
 - Two notebooks carry the work.
-  [`../../../nb_05a_signed_laterality_probe.ipynb`](../../../nb_05a_signed_laterality_probe.ipynb) is the decisive probe: it
+  [`../../../neurips-brain-body/nb_05a_signed_laterality_probe.ipynb`](../../../neurips-brain-body/nb_05a_signed_laterality_probe.ipynb) is the decisive probe: it
   copies the S-JEPA model classes verbatim so `load_state_dict` matches key for key, loads the `d0acc262` checkpoint under
   the notebook-05 guards, caches the frozen target-encoder features, fits Lanes A through D with source-video-disjoint
   ridge probes, runs the mirror pass, applies the pre-registered margins, and writes
   `idea5_signed_laterality_result.json`. It runs in `GAVD_MODE=real` (reads the real checkpoint and pose cache) and
   degrades gracefully to `GAVD_MODE=smoke`, which reuses synthetic fixtures plus one clearly-labelled signed lean overlay
   so the plumbing runs end to end; smoke numbers are illustrative only.
-- [`../../../nb_05b_reflection_reach_and_futures.ipynb`](../../../nb_05b_reflection_reach_and_futures.ipynb) is the
+- [`../../../neurips-brain-body/nb_05b_reflection_reach_and_futures.ipynb`](../../../neurips-brain-body/nb_05b_reflection_reach_and_futures.ipynb) is the
   possible-futures simulator (writes `idea5_futures_bundle.json` and the futures figure) and the honestly-stubbed external
   multi-view reach scaffold.
 - Determinism. Fix the seeds. The smoke lean overlay is deterministic. Save the frozen target function, the

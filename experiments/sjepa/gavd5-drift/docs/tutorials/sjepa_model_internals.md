@@ -6,6 +6,8 @@ The goal is to make every tensor transformation and state update inspectable. By
 
 > **Research boundary:** This implementation is a project-specific S-JEPA adaptation for gait research. It is not the official S-JEPA implementation, a clinical model, or a diagnostic system. Smoke-mode sequences test code paths only. They are not physiological simulations of health conditions.
 
+> **Current data boundary:** The primary run uses 626 coverage-valid GAVD sequences from 93 source videos. The optional added-normal dataset is off. In this tutorial, “augmentation” refers to geometric pose transformations used during training, not to that retired dataset.
+
 ## Reading paths
 
 - **First pass:** [mental model](#1-the-one-minute-mental-model), [notation](#2-notation-and-standard-configuration), [forward pass](#7-sjepagait), and [worked shapes](#14-worked-shape-examples).
@@ -17,10 +19,10 @@ The goal is to make every tensor transformation and state update inspectable. By
 
 The core class cell is currently duplicated byte-for-byte in four notebooks:
 
-- [00_sjepa_from_first_principles.ipynb](../../00_sjepa_from_first_principles.ipynb), the smallest teaching path;
-- [04_pretrain_sjepa_on_normal.ipynb](../../04_pretrain_sjepa_on_normal.ipynb), the full training path and the main source for this guide;
-- [05_inspect_latent_motion.ipynb](../../05_inspect_latent_motion.ipynb), the representation inspection path;
-- [06_capstone_health_condition_classifiers.ipynb](../../06_capstone_health_condition_classifiers.ipynb), the downstream readout path.
+- [00_sjepa_from_first_principles.ipynb](../../neurips-brain-body/00_sjepa_from_first_principles.ipynb), the smallest teaching path;
+- [04_pretrain_sjepa_on_normal.ipynb](../../neurips-brain-body/04_pretrain_sjepa_on_normal.ipynb), the full training path and the main source for this guide;
+- [05_inspect_latent_motion.ipynb](../../neurips-brain-body/05_inspect_latent_motion.ipynb), the representation inspection path;
+- [06_capstone_health_condition_classifiers.ipynb](../../neurips-brain-body/06_capstone_health_condition_classifiers.ipynb), the downstream readout path.
 
 The duplication is convenient for standalone notebooks, but it creates a maintenance risk. A class change must be synchronized across all four copies and tested in every consumer.
 
@@ -886,7 +888,11 @@ Nonzero feature spread is evidence against total collapse. It does not identify 
 
 Later-stage group separation is trained with condition labels. The final encoder has already processed these curriculum rows, so they are **encoder-exposed**. A downstream classifier over those same rows is **transductive**, meaning its representation was learned using the evaluation corpus even if classifier labels are split later. It is a descriptive probe, not an unseen-subject or unseen-video generalization estimate.
 
-The current project reports weak geometry on the **canonical** cohort, meaning the fixed 96-sequence GAVD set, despite completed training. That evidence is compatible with stable features that respond to **nuisance variables**, such as camera, acquisition path, or source video, rather than the intended gait properties. Model architecture, optimization completion, representation geometry, and clinical validity are separate claims and should remain separate in documentation.
+The current frozen-feature audit uses the 626 sequences from 93 videos that pass the 0.50 target-landmark coverage rule. It reports cosine silhouette 0.3617, minimum between-condition centroid distance 0.0863, and mean within-condition distance 0.0783. These values show in-corpus, label-informed structure. They are not an independent validation result because the same folder labels shaped the later group loss and all rows were encoder-exposed.
+
+The normal anchor also needs precise wording. It averages 270 matched per-sequence cosines, $|N|^{-1}\sum_x\cos(z_t(x),z_0(x))$; it is not a cosine between cohort centroids. Its fall from 0.7002 after Stage 1 to 0.2966 after Stage 4 establishes raw coordinate drift for seed 42, not functional forgetting.
+
+The cached poses have mixed extraction-version labels even though the recorded pose-model hash agrees. Camera, acquisition path, source video, pose missingness, and extraction history may therefore act as nuisance variables. Model architecture, optimization completion, representation geometry, retention, and clinical validity are separate claims and should remain separate in documentation.
 
 ## 20. Maintenance checklist
 

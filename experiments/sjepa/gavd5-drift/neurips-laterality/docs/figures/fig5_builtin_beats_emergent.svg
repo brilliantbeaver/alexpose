@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t5 d5">
+  <title id="t5">Built-in geometry beats hoping it emerges: exact mirror equivariance and higher held-out decodability</title>
+  <desc id="d5">Two-panel measured-result figure for a skeleton world model. Panel a, "Exactness of the mirror", plots the decoded scalar on the mirrored input against the original input relative to the ideal reflection line y = -x. A standard free readout scatters near a shallower fitted line with slope -0.703 (approximate); the frame-averaged antisymmetric readout Phi lands exactly on y = -x with slope -1.0000 for any weights. A callout states the frame-averaged encoder E3a has token-level reflection-equivariance error = 0.0, exact and with zero retraining. Panel b, "Decodability", shows held-out R-squared with 95 percent confidence intervals for three readouts: a free readout at 0.198 [0.175, 0.221], Phi frame-averaged learned at 0.273 [0.253, 0.294], and Phi frame-averaged untrained floor at 0.219 [0.175, 0.264]; the learned Phi and the free readout have non-overlapping intervals. Controls: the symmetric half Psi gives R-squared 0.015 at slope +1.0 and a free MLP with at least matched capacity but no shared-weight tie gives 0.047 at slope -0.43, so the gain is the constraint, not capacity. An honest boundary notes results remain far below the raw ceiling near 1.0 and sign consistency is 0.57, below 0.75. Cohort 626 modeled, repeated source-disjoint cross-validation over 10 seeds. Results are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+      .num{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#0f2440;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Built-in geometry beats hoping it emerges</text>
+  <text x="48" y="88" class="s">Imposing the antisymmetric constraint by construction vs hoping a free readout learns it. Measured; transductive.</text>
+
+  <!-- ============================================================ -->
+  <!-- PANEL (a): Exactness of the mirror                           -->
+  <!-- card x 48..572, y 112..470                                   -->
+  <!-- ============================================================ -->
+  <rect x="48" y="112" width="524" height="358" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="146" class="t">(a) Exactness of the mirror</text>
+  <text x="78" y="170" class="s">Decoded scalar: mirrored vs original prediction, against y = -x.</text>
+
+  <!-- plot frame: cx0=240, cy0=264, scale=76 ; data [-1,1] -->
+  <!-- x = 240 + val*76 ; y = 264 - val*76 -->
+  <!-- horizontal axis -->
+  <line x1="164" y1="264" x2="316" y2="264" stroke="#20364e" stroke-width="2.5"/>
+  <!-- vertical axis -->
+  <line x1="240" y1="188" x2="240" y2="340" stroke="#20364e" stroke-width="2.5"/>
+  <!-- axis end ticks -->
+  <text x="164" y="282" class="s" text-anchor="middle">-1</text>
+  <text x="316" y="282" class="s" text-anchor="middle">+1</text>
+  <text x="226" y="282" class="s" text-anchor="middle">0</text>
+  <text x="232" y="192" class="s" text-anchor="end">+1</text>
+  <text x="232" y="344" class="s" text-anchor="end">-1</text>
+
+  <!-- ideal reflection line y = -x (green dashed): val -0.92..0.92 -->
+  <line x1="170" y1="194" x2="310" y2="334" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="175" y="322" class="s" fill="#5f9e7e">y = -x</text>
+
+  <!-- Free readout fitted line, slope -0.703 (screen slope 0.703) -->
+  <line x1="170" y1="215" x2="310" y2="313" stroke="#2f6f99" stroke-width="2.5"/>
+
+  <!-- Free readout dots (blue), scattered near the shallower line -->
+  <g fill="#2f6f99" stroke="#20364e" stroke-width="1.25">
+    <circle cx="191" cy="223" r="7"/>
+    <circle cx="210" cy="250" r="7"/>
+    <circle cx="234" cy="255" r="7"/>
+    <circle cx="249" cy="280" r="7"/>
+    <circle cx="272" cy="282" r="7"/>
+    <circle cx="287" cy="306" r="7"/>
+  </g>
+
+  <!-- Phi frame-averaged dots (warm), exactly on y = -x -->
+  <g fill="#e07a4b" stroke="#a44c26" stroke-width="1.25">
+    <circle cx="187" cy="211" r="8"/>
+    <circle cx="210" cy="234" r="8"/>
+    <circle cx="229" cy="253" r="8"/>
+    <circle cx="255" cy="279" r="8"/>
+    <circle cx="278" cy="302" r="8"/>
+    <circle cx="293" cy="317" r="8"/>
+  </g>
+
+  <!-- axis labels -->
+  <text x="240" y="364" class="s" text-anchor="middle">prediction on ORIGINAL input</text>
+  <text x="126" y="264" class="s" text-anchor="middle" transform="rotate(-90 126 264)">on MIRRORED input</text>
+
+  <!-- right-column legend / slope facts (x 344..552) -->
+  <circle cx="356" cy="208" r="8" fill="#e07a4b" stroke="#a44c26" stroke-width="1.25"/>
+  <text x="374" y="205" class="b">&#934; frame-averaged</text>
+  <text x="374" y="226" class="s" fill="#a44c26">EXACT slope = -1.0000</text>
+  <text x="374" y="245" class="s">for any weights</text>
+
+  <circle cx="356" cy="280" r="7" fill="#2f6f99" stroke="#20364e" stroke-width="1.25"/>
+  <text x="374" y="277" class="b">A free readout</text>
+  <text x="374" y="298" class="s" fill="#2f6f99">approx. slope = -0.703</text>
+
+  <line x1="348" y1="330" x2="366" y2="330" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="374" y="335" class="b">y = -x ideal line</text>
+
+  <!-- E3a encoder callout pill (green tint), full interior width -->
+  <rect x="70" y="380" width="480" height="78" rx="12" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="92" y="403" class="b">Frame-averaged ENCODER (E3a):</text>
+  <text x="92" y="425" class="s">token-level reflection-equivariance error = 0.0</text>
+  <text x="92" y="447" class="s">(exact, zero retraining).</text>
+
+  <!-- ============================================================ -->
+  <!-- PANEL (b): Decodability                                      -->
+  <!-- card x 628..1152, y 112..470                                 -->
+  <!-- ============================================================ -->
+  <rect x="628" y="112" width="524" height="358" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="658" y="146" class="t">(b) Decodability (held-out R&#178;, 95% CI)</text>
+  <text x="658" y="170" class="s">626 modeled; repeated source-disjoint CV (10 seeds).</text>
+
+  <!-- plot frame: x 712..1012, y 196..372 ; R2 0..0.32 ; y = 372 - r2*550 -->
+  <!-- gridlines -->
+  <line x1="712" y1="317" x2="1012" y2="317" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="712" y1="262" x2="1012" y2="262" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="712" y1="207" x2="1012" y2="207" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- axes -->
+  <line x1="712" y1="196" x2="712" y2="372" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="712" y1="372" x2="1012" y2="372" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- y ticks -->
+  <text x="706" y="377" class="s" text-anchor="end">0.0</text>
+  <text x="706" y="322" class="s" text-anchor="end">0.1</text>
+  <text x="706" y="267" class="s" text-anchor="end">0.2</text>
+  <text x="706" y="212" class="s" text-anchor="end">0.3</text>
+  <text x="676" y="284" class="s" text-anchor="middle" transform="rotate(-90 676 284)">held-out R&#178;</text>
+
+  <!-- Bar A: free readout (blue), 0.198 [0.175,0.221], center 758 -->
+  <rect x="728" y="263" width="60" height="109" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="758" y1="250" x2="758" y2="276" stroke="#20364e" stroke-width="2"/>
+  <line x1="751" y1="250" x2="765" y2="250" stroke="#20364e" stroke-width="2"/>
+  <line x1="751" y1="276" x2="765" y2="276" stroke="#20364e" stroke-width="2"/>
+  <text x="758" y="242" class="num" text-anchor="middle">0.198</text>
+
+  <!-- Bar Phi learned (warm), 0.273 [0.253,0.294], center 862 -->
+  <rect x="832" y="222" width="60" height="150" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <line x1="862" y1="210" x2="862" y2="233" stroke="#20364e" stroke-width="2"/>
+  <line x1="855" y1="210" x2="869" y2="210" stroke="#20364e" stroke-width="2"/>
+  <line x1="855" y1="233" x2="869" y2="233" stroke="#20364e" stroke-width="2"/>
+  <text x="862" y="204" class="num" text-anchor="middle">0.273</text>
+
+  <!-- Bar Phi floor (warm tint), 0.219 [0.175,0.264], center 966 -->
+  <rect x="936" y="252" width="60" height="120" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <line x1="966" y1="227" x2="966" y2="276" stroke="#20364e" stroke-width="2"/>
+  <line x1="959" y1="227" x2="973" y2="227" stroke="#20364e" stroke-width="2"/>
+  <line x1="959" y1="276" x2="973" y2="276" stroke="#20364e" stroke-width="2"/>
+  <text x="966" y="219" class="num" text-anchor="middle">0.219</text>
+
+  <!-- category + CI labels under bars -->
+  <text x="758" y="390" class="s" text-anchor="middle">A free</text>
+  <text x="758" y="408" class="s" text-anchor="middle">[0.175, 0.221]</text>
+  <text x="862" y="390" class="s" text-anchor="middle">&#934; learned</text>
+  <text x="862" y="408" class="s" text-anchor="middle">[0.253, 0.294]</text>
+  <text x="966" y="390" class="s" text-anchor="middle">&#934; floor</text>
+  <text x="966" y="408" class="s" text-anchor="middle">[0.175, 0.264]</text>
+
+  <!-- hero annotation -->
+  <text x="658" y="432" class="b">&#934; (learned) vs A: non-overlapping CIs &#8594; the antisymmetric</text>
+  <text x="658" y="454" class="b">constraint <tspan font-weight="700" fill="#a44c26">UNLOCKS</tspan> decodability the free readout misses.</text>
+
+  <!-- ============================================================ -->
+  <!-- ROW 2: controls + honest boundary                            -->
+  <!-- y 526..632                                                   -->
+  <!-- ============================================================ -->
+
+  <!-- C1: control Psi (symmetric half) -->
+  <rect x="48" y="526" width="330" height="106" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="556" class="t" font-size="18">Control: &#936; (symmetric half)</text>
+  <text x="70" y="582" class="s">R&#178; = 0.015, slope +1.0.</text>
+  <text x="70" y="604" class="s">Cannot predict the antisymmetric</text>
+  <text x="70" y="624" class="s">target.</text>
+
+  <!-- C2: control free MLP -->
+  <rect x="434" y="526" width="330" height="106" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="456" y="556" class="t" font-size="18">Control: free MLP (&#8805; capacity)</text>
+  <text x="456" y="582" class="s">R&#178; = 0.047, slope -0.43.</text>
+  <text x="456" y="604" class="s">No shared-weight tie &#8594; the gain is</text>
+  <text x="456" y="624" class="s">the CONSTRAINT, not capacity.</text>
+
+  <!-- C3: honest boundary -->
+  <rect x="820" y="526" width="330" height="106" rx="16" fill="#f6e2df" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="842" y="556" class="t" font-size="18">Honest boundary</text>
+  <text x="842" y="582" class="s">Still far below raw ceiling &#8776; 1.0;</text>
+  <text x="842" y="604" class="s">sign consistency 0.57 (&lt; 0.75) &#8594;</text>
+  <text x="842" y="624" class="s">recovered axis is partial.</text>
+
+  <!-- ============================================================ -->
+  <!-- Footer (mandatory, RESULT figure)                            -->
+  <!-- ============================================================ -->
+  <text x="48" y="668" class="s">All results are transductive (internal validity only; the encoder was trained on the evaluated sequences).</text>
+  <text x="48" y="690" class="s">Source video is the independent unit; folder labels are dataset annotations, not diagnoses.</text>
+</svg>

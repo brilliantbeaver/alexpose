@@ -1,0 +1,168 @@
+{
+  "schema": "neurips_laterality_protocol/v2",
+  "protocol_version": "2.1.0",
+  "title": "Inductive reflection-symmetry audit of a skeleton world model",
+  "claim_boundary": {
+    "primary": "post-development within-GAVD cross-validated performance on held-out source videos",
+    "not_supported": [
+      "generalization to unseen individuals",
+      "diagnosis or clinical validity",
+      "population prevalence or treatment effects",
+      "symmetry discovered without the supplied pose schema, preprocessing, or architecture"
+    ],
+    "independent_unit": "source_video"
+  },
+  "data": {
+    "conditions": [
+      "normal",
+      "parkinsons",
+      "stroke",
+      "myopathic",
+      "cerebralpalsy"
+    ],
+    "frames": 64,
+    "joints": 33,
+    "coordinate_dim": 3,
+    "segment_length": 4,
+    "visibility_threshold": 0.45,
+    "max_interpolation_gap": 4,
+    "minimum_authorized_coverage": 0.5,
+    "minimum_authorized_patches": 2,
+    "pose_root": "../work/artifacts/real/poses",
+    "annotation_root": "../data-gavd",
+    "inventory_contract": {
+      "annotation_count": 666,
+      "annotation_inventory_sha256": "6770ac61a3eb7c23c382694dececf24d312e411d05cb0473d84e71ec2619f4fe",
+      "annotation_source_mapping_sha256": "3dcb362fda0eaae07e894706bcfe923898ef70958abd1641eb5008526edd6eff",
+      "pose_archive_count": 642,
+      "pose_inventory_sha256": "765851b9ddbc7f4534010cf5dfbd415c94c2824cc43f45b2e68b54893743654b",
+      "inventory_digest_recipe": "sha256_of_newline_terminated_sorted_condition_slash_filename_or_stem"
+    },
+    "extraction_provenance": {
+      "pose_model": "pose_landmarker_lite.task",
+      "pose_model_sha256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a",
+      "visibility_threshold": 0.45,
+      "extraction_version_counts": {
+        "gavd3_pose_v2_video_mode": 95,
+        "gavd4_pose_v2_video_mode": 1,
+        "gavd5_pose_v2_video_mode": 546
+      }
+    }
+  },
+  "target": {
+    "name": "paired_valid_normalized_motion_contrast",
+    "pairs": [
+      [11, 12],
+      [25, 26],
+      [27, 28],
+      [29, 30],
+      [31, 32]
+    ],
+    "minimum_common_transitions_per_pair": 8,
+    "minimum_usable_pairs": 5,
+    "epsilon": 1e-08,
+    "aggregation": "median_velocity_then_mean_normalized_pair_contrast",
+    "uses_invalid_coordinate_sentinels": false
+  },
+  "splits": {
+    "outer_folds": 5,
+    "inner_folds": 4,
+    "seed": 20260904,
+    "stratify_source_table_by": "dataset_annotation",
+    "mirror_and_augmentations_inherit_source_fold": true
+  },
+  "model": {
+    "embed_dim": 96,
+    "encoder_depth": 4,
+    "predictor_depth": 2,
+    "heads": 4,
+    "mask_fraction": 0.6,
+    "authorized_target_joints": [11, 12, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+  },
+  "training": {
+    "labels_enter_objective": false,
+    "source_balanced_sampling": true,
+    "optimizer": "AdamW",
+    "optimizer_betas": [0.9, 0.95],
+    "ema_end": 1.0,
+    "target_center_beta": 0.9,
+    "predictor_temperature": 0.1,
+    "target_temperature": 0.06,
+    "gradient_clip_norm": 1.0,
+    "view_max_rotation_degrees": 8.0,
+    "view_max_translation": 0.03,
+    "epoch_semantics": "one_sequence_per_source_then_source_uniform_padding_to_fixed_update_count",
+    "variants": {
+      "vanilla": {"reflection_probability": 0.0},
+      "reflection_augmented": {"reflection_probability": 0.5}
+    },
+    "paper": {
+      "seeds": [42, 43, 44, 45, 46],
+      "epochs": 300,
+      "batch_size": 20,
+      "learning_rate": 0.001,
+      "weight_decay": 0.05,
+      "ema_start": 0.999,
+      "vicreg_weight": 0.05
+    },
+    "smoke": {
+      "seeds": [7],
+      "epochs": 1,
+      "batch_size": 10,
+      "learning_rate": 0.001,
+      "weight_decay": 0.01,
+      "ema_start": 0.99,
+      "vicreg_weight": 0.01,
+      "model_override": {
+        "frames": 16,
+        "embed_dim": 16,
+        "encoder_depth": 1,
+        "predictor_depth": 1,
+        "heads": 2
+      }
+    }
+  },
+  "evaluation": {
+    "ridge_alphas": [0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0],
+    "source_balanced_metrics": true,
+    "primary_metric": "source_balanced_r2",
+    "primary_variant": "vanilla",
+    "primary_lane": "learned_single_free",
+    "constructed_repair_lane": "learned_two_pass_odd_zero",
+    "primary_seed_estimand": "mean_registered_seed_single_checkpoint_performance",
+    "secondary_ensemble_estimand": "registered_seed_mean_prediction_ensemble",
+    "secondary_metrics": [
+      "source_balanced_mae",
+      "source_median_r2",
+      "source_level_sign_accuracy",
+      "normalized_antisymmetry_error"
+    ],
+    "neutral_band_iqr_fraction": 0.1,
+    "high_coverage_sensitivity_threshold": 0.9,
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 20260905,
+    "representation_equivariance": {
+      "action": "full_anatomical_joint_swap_with_identity_channel_action",
+      "joint_scope": "all_33_model_joints",
+      "minimum_common_tokens": 8,
+      "minimum_representation_energy": 1e-12,
+      "error_definition": "common_valid_squared_residual_energy_divided_by_total_representation_energy",
+      "maximum_error_margin": 0.1
+    },
+    "decision_rules": {
+      "maximum_normalized_antisymmetry_error": 1e-06,
+      "native_symmetry_normalized_error_margin": 0.1,
+      "minimum_primary_source_balanced_r2": 0.0,
+      "minimum_constructed_source_balanced_r2": 0.0,
+      "native_probe_behavior": "per_seed_before_aggregation: absolute_primary_r2_lower_bound_above_minimum_and_native_output_error_upper_bound_below_margin_and_learned_single_free_minus_random_single_free_r2_lower_bound_above_zero",
+      "strict_representation_training_effect": "learned_minus_initial_strict_representation_error_upper_bound_below_zero",
+      "strict_representation_equivariance": "absolute_learned_strict_representation_error_upper_bound_below_registered_margin_and_training_effect_passes",
+      "constructed_learned_content": "per_seed_exact_oddness_and_absolute_constructed_r2_lower_bound_above_minimum_and_learned_two_pass_odd_zero_minus_random_two_pass_odd_zero_r2_lower_bound_above_zero",
+      "null_result_policy": "report_without_retuning_or_protocol_changes"
+    },
+    "constrained_readout": {
+      "center_features": false,
+      "fit_intercept": false
+    }
+  }
+}

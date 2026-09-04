@@ -1,150 +1,100 @@
-# MIT URTC 2026 paper package
+# Documentation and paper package
 
-This folder now reflects the completed augmented-normal real run. The paper, long tutorial, generated figures, and PDFs use the same final checkpoint and the same leakage-aware interpretation.
+This folder documents the current **GAVD-only, non-augmented-normal** run. The optional project-labeled normal-video cohort is disabled and is not used in any current result.
 
-> **Current workspace rerun:** the newer `gavd5-drift/work` checkpoint with file SHA-256
-> `6e67fc5c4a02...` produces different probe scores from this historical paper
-> package. See [downstream_probe_reproduction.md](downstream_probe_reproduction.md)
-> for the verified current accuracy and macro-F1. Do not mix the two result sets.
+## Current evidence boundary
 
-## Loss and logging terminology
+The raw GAVD inventory contains 666 sequences from 103 source videos. A video availability check retained 642 sequences from 94 videos. Pose-quality checks then removed 16 low-coverage sequences, so the trained and analyzed cohort is **626 sequences from 93 source videos**.
 
-All maintained documents use the following meanings:
+|Condition|Sequences|Source videos|
+|---|---:|---:|
+|Normal|270|29|
+|Parkinson's|41|9|
+|Stroke|74|18|
+|Myopathic|183|28|
+|Cerebral palsy|58|9|
+|**Total**|**626**|**93**|
 
-- **VICReg** is only the label-free invariance, variance-hinge, and covariance regularizer computed on projected student features.
-- **Group loss** is a separate label-aware term equal to within-condition compactness plus a centroid-margin penalty in Stages 1 through 4.
-- The notebook's abbreviated `group` log field is only the centroid-margin penalty, not the complete group loss.
-- The abbreviated `std` field is the mean feature standard deviation of unprojected EMA-teacher embeddings over the active corpus. It is a diagnostic, not a VICReg component and not a loss.
+The current final checkpoint is `sjepa_curriculum_final.pt`.
 
-The plain-language derivation and numerical examples are in the root `README.md`, `progressive_training.md`, Section 8 of `staged_details.md`, Section 8 of `staged_evolution.md`, and Section 10 of `tutorials/sjepa_model_internals.md`.
+- Experiment fingerprint: `7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2`
+- Checkpoint SHA-256: `64008d77689cefa4beb51a0dcf5ed6cae743454134c163e9087f66510af4e7ad`
+- Training seed: 42
+- Optional augmented-normal cohort: off
+- Total training: 600 curriculum epochs and 40,800 optimizer updates
 
-Final checkpoint: `sjepa_curriculum_final_augmented.pt`
+## Results that are verified for the current run
 
-Experiment fingerprint:
+Across the 270 matched normal sequences, the mean cosine between each current representation and its own Stage-0 representation is **0.7002, 0.5021, 0.3962, and 0.2966** after the four later stages. This is not a cosine between cohort centroids. Reloading the saved checkpoints reproduces these values within `4.51e-7`.
 
-```text
-d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1
-```
+This is verified **coordinate drift**, not yet verified forgetting. A cosine between raw latent coordinates can fall because the whole representation basis rotated. The current run does not include an alignment-invariant comparison or a held-out normal-function test.
 
-## Current files
+The anchor is sequence-weighted. The two largest normal videos supply 105 of 270 anchor rows, and the three largest supply 137. Report equal-video-weighted and per-video results before making a population-level drift claim.
 
-- `staged_sjepa_gait.tex`: canonical IEEE-style staged manuscript
-- `staged_sjepa_gait.pdf`: current 5-page compiled paper
-- `staged_sjepa_gait.md`: readable paper with the same claims and results
-- `staged_details.md`: illustrated step-by-step tutorial
-- `staged_details.pdf`: compiled tutorial
-- `staged_evolution.md`: extensive legacy-to-current methodology and result tutorial
-- `tutorials/sjepa_model_internals.md`: illustrated class and tensor-flow reference for the S-JEPA implementation
-- `progressive_training.md`: detailed training and checkpoint contract
-- `downstream_probe_reproduction.md`: exact rerun command and current accuracy/macro-F1 results
-- `result_history.csv`: machine-readable previous and current result ledger
-- `references.bib`: authoritative primary and methods references
-- `figures/`: current PDF, SVG, and PNG figures
-- `make_figures.py`: artifact-bound figure generator
-- `make_downstream_probe_figure.py`: artifact-bound accuracy/macro-F1 probe scorecard
-- `make_evolution_figures.py`: artifact-bound generator for 12 evolution figure sets
-- `urtc_pdf_layout.lua`: table layout rules for the tutorial PDF
+Across the 642 availability-filtered pose caches, 546 carry extraction label `gavd5`, 95 carry `gavd3`, and one carries `gavd4`. After coverage filtering, the 626 modeled rows contain 530, 95, and 1, respectively. Their recorded pose-model hash agrees, but extraction provenance remains a potential shortcut until it is controlled.
 
-The official 2026 URTC submission page states a maximum of five manuscript pages and a ten-minute presentation slot including questions: <https://urtc.mit.edu/submission>.
+The final in-corpus, label-informed geometry has cosine silhouette 0.3617, minimum between-centroid distance 0.0863, and mean within-condition distance 0.0783. These are descriptive training-corpus measurements.
 
-## Latest-change ledger
+The sequence-split Random Forest reaches 0.920 accuracy and 0.899 macro-F1 on all 626 rows. That score is not a generalization estimate: all 188 classifier test rows were used to train the encoder, and 64 source videos occur on both sides of the classifier split. The missingness-only control reaches 0.441 accuracy and 0.355 macro-F1 on the same split.
 
-This table preserves the earlier results and explains what each revision changed.
+## Results that must not be reported as current
 
-|Revision|What changed|Impact on the S-JEPA model|Previous result|Current result|
-|---|---|---|---|---|
-|Legacy to completed curriculum|The normal-only experiment with 10 eligible landmark identities was replaced by the five-stage model with 12 eligible landmark identities, augmented normal data, VICReg, balanced replay, and post-Stage-0 group loss.|This is a different trained model. The current checkpoint has a new architecture contract, training corpus, objective, and fingerprint.|Exact exp5: 0.619 accuracy and 0.613 macro-F1.|Exact exp5: 0.714 accuracy, 0.730 balanced accuracy, and 0.742 macro-F1. The split remains video-confounded and encoder-exposed.|
-|First Lane C to corrected Lane C|The five-class grouped readout changed from five ordinary group folds to two stratified group folds with all five labels on both sides and a fixed macro-F1 label list.|No model change. The final checkpoint and all 384-dimensional embeddings are identical. Only the downstream evaluation changed.|Five-fold mean: 0.604 accuracy, 0.595 balanced accuracy, and 0.407 macro-F1. One training fold had no cerebral-palsy example.|Two-fold mean: 0.653 accuracy, 0.603 balanced accuracy, and 0.625 macro-F1. Pooled OOF: 0.654, 0.600, and 0.619.|
-|Augmented-normal selection contract|Notebooks 04 and 06 now accept candidates from the extraction report when neurologic-landmark coverage is at least 0.45.|No change to the saved checkpoint. The completed run already used the same 63 accepted rows. Future reruns are now reproducible instead of depending on files present in a folder.|64 candidates were recorded, but the reason for using 63 was not consistently enforced by every consumer.|64 candidates are audited, 63 are accepted, and one 0.027-coverage candidate is rejected by an explicit shared rule.|
-|Mask explanation correction|Documentation now states that 0.60 is applied to the smallest eligible-token count in each batch.|No code or weight change. This documents the rule the trained model already used.|Earlier prose could be read as exactly 60% per sample.|Realized mean eligible fractions are reported as 0.551 at Stage 0 and 0.423 at Stage 4.|
-|Interpretation update|The paper now separates non-collapse evidence from class-separation evidence.|No model change.|Earlier surfaces treated a successful run or classifier score as the main outcome.|The current conclusion records nonzero feature spread, normal-anchor drift to 0.594, and weak canonical silhouette 0.009 together.|
+Several files are historical or mixed-lineage artifacts:
 
-The corrected Lane C pooled macro-F1 is also 0.619 when rounded. It is not the legacy 0.619 accuracy. They are different metrics from different evaluations.
+- `*_augmented.*` belongs to the discontinued 159-sequence augmented-normal run.
+- `lane_c_video_disjoint_metrics.csv` still belongs to that augmented run.
+- `anchor_guard_results.json`, `anchor_drift_margin_ablation.csv`, and `sjepa_anchor_guard.pt` do not carry a valid current-run lineage. Notebook 08 still loads an augmented Stage-0 checkpoint in its ablation path and contains stale hard-coded fingerprints.
+- `predictive_surprise_results.json` was produced with the old augmented checkpoint while evaluating the current canonical rows. Notebook 09 still hard-codes that old checkpoint and fingerprint.
 
-![Previous and current results, separated by model and evaluation changes](figures/result_changes.svg)
+The paper and maintained documents exclude all claims based on those files. They may be used only after the notebooks are fixed and rerun.
 
-## What the package says
+## Document map
 
-The completed run used 159 sequences from 35 videos, trained for 600 epochs and 11,400 updates, and retained nonzero feature spread. Normal-anchor cosine fell to 0.594. The canonical 96-sequence cosine silhouette was 0.009, so the paper does not claim clean five-condition geometry.
-
-All classifier results are labeled as descriptive. The all-96 and exact-exp5 lanes split sequences while sharing videos and prior encoder exposure. Lane C separates videos only at the Random Forest. Its corrected five-class audit uses two stratified group folds because Parkinson's disease and cerebral palsy each have two source videos. The encoder still saw all 159 rows.
-
-## Core result figures
-
-### Training health
-
-Feature spread remained nonzero, while the normal reference moved substantially during later stages.
-
-![Training losses, feature spread, normal-anchor drift, and training geometry](figures/training_health.svg)
-
-### Canonical representation geometry
-
-The canonical five-condition silhouette is 0.009, and the closest centroids are only 0.037 apart.
-
-![Cosine distances between canonical condition centroids](figures/representation_geometry.svg)
-
-### Classifier readouts
-
-The chart summarizes sequence-split readouts and grouped Random Forest stress tests. The black interval applies only to the five-fold binary task. The corrected two-fold five-class task intentionally has no interval.
-
-![Current descriptive classifier readouts](figures/readout_results.svg)
-
-### Claim boundary
-
-The final diagram records which overlap remains in each evaluation lane.
-
-![Evaluation lanes and exposure limits](figures/evidence_ladder.svg)
+- [bbfm2026_paper_draft.md](../neurips-brain-body/docs/bbfm2026_paper_draft.md): workshop paper draft; verified evidence only.
+- [bbfm2026_paper_draft.tex](../neurips-brain-body/docs/bbfm2026_paper_draft.tex): anonymous workshop-style LaTeX build of the paper.
+- `neurips_2026.sty`: official modified style downloaded from the workshop's [format link](https://brainbodyfm-workshop.github.io/assets/styles/brainbodyfm-neurips-2026-style.zip).
+- [neurips-brain-body.md](../neurips-brain-body/docs/neurips-brain-body.md): plain-language research and submission-readiness guide.
+- [progressive_training.md](progressive_training.md): exact current training contract and stage diagnostics.
+- [staged_details.md](staged_details.md): step-by-step method and evaluation tutorial.
+- [staged_evolution.md](staged_evolution.md): history of the project, including why the augmented-normal branch was retired.
+- [staged_sjepa_gait.md](staged_sjepa_gait.md): current technical-report version of the older staged paper.
+- [downstream_probe_reproduction.md](downstream_probe_reproduction.md): exact probe rerun and exposure audit.
+- [tutorials/sjepa_model_internals.md](tutorials/sjepa_model_internals.md): model, masking, loss, and tensor-flow reference.
 
 ## Rebuild figures
 
-From the repository root:
+From the `experiments/sjepa/gavd5-drift` experiment root:
 
 ```sh
 MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_figures.py
+MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_brainbody_figures.py
 MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_downstream_probe_figure.py
-MPLCONFIGDIR=cache/matplotlib .venv/bin/python docs/make_evolution_figures.py
 ```
 
-The generators read `classifier_contract.json`, resolve the matching checkpoint variant, and refuse an incomplete or mixed-fingerprint curriculum. They write each figure as PDF, SVG, and PNG. The evolution generator also validates the five checkpoint stages, class reports, result ledger, and saved geometry.
+Figure generators must reject a mismatched checkpoint, fingerprint, cohort, or stale secondary artifact. A failed generator is a data-lineage failure, not a cosmetic problem.
 
-## Build the paper
+Only the four figure families listed in [figures/README.md](figures/README.md) are maintained for the current report. Other top-level figure exports are historical and must not be copied into the paper.
 
-From `docs/`:
+Build the workshop-format draft from `neurips-brain-body/docs/`:
 
 ```sh
-tectonic staged_sjepa_gait.tex
+cd neurips-brain-body/docs
+tectonic bbfm2026_paper_draft.tex
 ```
 
-The current result is five US-letter pages. The source uses the IEEE conference class and current vector figures.
+The current anonymous build has four main-text pages. Appendices and references begin on page 5, and the PDF has six pages total.
 
-## Build the tutorial PDF
+## Workshop status
 
-From `docs/`:
+BrainBodyFM 2026 accepts at most five pages, excluding references and appendices, in its modified NeurIPS 2026 style. The deadline is September 5, 2026 AoE. Submissions are double-blind and non-archival. See the [official call for papers](https://brainbodyfm-workshop.github.io/call-for-papers).
 
-```sh
-pandoc staged_details.md --from=markdown --standalone --toc \
-  --resource-path=.:.. \
-  --lua-filter=urtc_pdf_layout.lua --pdf-engine=tectonic \
-  -V papersize=letter -V geometry:margin=0.65in -V fontsize=10pt \
-  -M title="Detailed tutorial: normal-first S-JEPA for gait" \
-  -M author="URTC S-JEPA Gait Project" \
-  -o staged_details.pdf
-```
+The research direction fits the workshop, especially its topics on behavioral signals, continual learning, interpretability, evaluation, and reproducibility. The paper now builds in the official anonymous style and fits the page limit, but it is **not submission-ready as a strong empirical paper**. It still needs, at minimum, a valid multi-seed and alignment-aware drift study. A carefully labeled work-in-progress submission is possible after the ethics, anonymization, citation, and artifact checks listed in [neurips-brain-body.md](../neurips-brain-body/docs/neurips-brain-body.md).
 
-## Checks completed
+## Author checks before submission
 
-- paper compiles to 5 pages, at the five-page maximum;
-- tutorial compiles to 17 pages with vector illustrations and the expanded VICReg, group-loss, and feature-spread explanation;
-- citations resolve in the TeX paper;
-- the paper and tutorial contain the corrected Lane C values;
-- the legacy 10-keypoint and first Lane C values are preserved only in the change ledger and are not presented as current results;
-- all current S-JEPA readouts disclose source overlap and encoder exposure;
-- no em dash characters remain in the maintained documentation and notebook sources.
-
-## Checks still requiring the authors
-
-1. Confirm author names, order, affiliation, email, student eligibility, and mentor role.
-2. Confirm funding, acknowledgments, and data-use statements.
-3. Inspect the final PDF at print size.
-4. Confirm the current URTC template and submission rules before uploading.
-5. Do not describe any current classifier score as clinical validation or unseen-video performance.
+1. Rebuild the included official-style LaTeX source and confirm that the main text remains within five pages.
+2. Do not modify `neurips_2026.sty`; it is the workshop-provided file.
+3. Remove author names, affiliations, repository-identifying links, and PDF metadata for double-blind review.
+4. Confirm data-use, consent, licensing, funding, and acknowledgment language.
+5. Do not describe the current classifier scores as unseen-video, unseen-person, clinical, or diagnostic performance.
+6. Do not describe raw anchor cosine decline as catastrophic forgetting until the alignment and functional-retention controls are complete.
