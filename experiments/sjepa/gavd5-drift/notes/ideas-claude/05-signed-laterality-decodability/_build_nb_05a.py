@@ -1,7 +1,7 @@
 """Builder for nb_05a_signed_laterality_probe.ipynb.
 
 Run:  python3 _build_nb_05a.py
-Emits the notebook one directory up (the gavd5-drift root) so it sits beside 00-06.
+Emits the notebook into the gavd5-drift `neurips-brain-body` workshop folder.
 This builder holds each cell as a plain string so the code stays readable and
 the JSON is guaranteed valid. It is committed alongside the notebook so the
 notebook can be regenerated deterministically.
@@ -9,7 +9,11 @@ notebook can be regenerated deterministically.
 import json
 from pathlib import Path
 
-NB_PATH = Path(__file__).resolve().parents[3] / "nb_05a_signed_laterality_probe.ipynb"
+NB_PATH = (
+    Path(__file__).resolve().parents[3]
+    / "neurips-brain-body"
+    / "nb_05a_signed_laterality_probe.ipynb"
+)
 
 
 _CELL_N = [0]
@@ -38,7 +42,7 @@ CELLS.append(md(r"""
 # Notebook 05a: Signed-laterality decodability probe (Idea 5, core arm)
 
 This notebook reifies the core, zero-retrain arm of research idea 5,
-[signed-laterality-decodability](notes/ideas-claude/05-signed-laterality-decodability/README.md).
+[signed-laterality-decodability](../notes/ideas-claude/05-signed-laterality-decodability/README.md).
 It asks one falsifiable question on the frozen `d0acc262` Skeleton-JEPA (S-JEPA) checkpoint:
 
 > On source-video-disjoint folds, is a signed left-minus-right laterality axis linearly decodable
@@ -56,7 +60,7 @@ target-encoder tokens. The notebook is written to run in two modes:
 
 All results are TRANSDUCTIVE: the encoder saw the evaluation rows during training. The source video
 is the independent unit, and folder labels (stroke, parkinsons) are dataset annotations, not
-diagnoses. See `notes/ideas-claude/_shared_facts.md` for the single source of truth on every number.
+diagnoses. See `../notes/ideas-claude/_shared_facts.md` for the single source of truth on every number.
 """))
 
 # ------------------------------------------------------------------ 0. Environment
@@ -92,20 +96,21 @@ def find_project_root(start=None):
 
 
 PROJECT_ROOT = find_project_root()
-TUTORIAL_DIR = PROJECT_ROOT / "penny" / "gavd3"
+EXPERIMENT_DIR = PROJECT_ROOT / "experiments" / "sjepa" / "gavd5-drift"
+NOTEBOOK_DIR = EXPERIMENT_DIR / "neurips-brain-body"
 try:
     from dotenv import load_dotenv
-    load_dotenv(TUTORIAL_DIR / ".env", override=False)
+    load_dotenv(EXPERIMENT_DIR / ".env", override=False)
     load_dotenv(PROJECT_ROOT / ".env", override=False)
 except Exception:
     pass
 
 # Artifact locations follow the SAME env resolution as notebook 05 exactly:
-#   ARTIFACT_ROOT = GAVD_ARTIFACT_DIR or TUTORIAL_DIR/work/artifacts
+#   ARTIFACT_ROOT = GAVD_ARTIFACT_DIR or EXPERIMENT_DIR/work/artifacts
 #   ARTIFACT_DIR  = ARTIFACT_ROOT / MODE   (checkpoints live directly here)
 #   POSE_DIR      = ARTIFACT_DIR / "poses"
 ARTIFACT_ROOT = Path(
-    os.getenv("GAVD_ARTIFACT_DIR", TUTORIAL_DIR / "work" / "artifacts")
+    os.getenv("GAVD_ARTIFACT_DIR", EXPERIMENT_DIR / "work" / "artifacts")
 ).expanduser()
 
 REQUESTED_MODE = os.getenv("GAVD_MODE", "smoke").strip().lower()

@@ -1,221 +1,113 @@
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
+\documentclass[10pt,twocolumn]{article}
 
+\usepackage[margin=0.72in]{geometry}
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{microtype}
 \usepackage{url}
 
-% IEEEtran normally inserts an em dash after these labels. Use a plain colon
-% so the paper follows the project's no-em-dash style rule.
-\makeatletter
-\def\abstract{\normalfont
-    \if@twocolumn
-      \@IEEEabskeysecsize\bfseries\textit{\abstractname:}\ \relax
-    \else
-      \bgroup\par\addvspace{0.5\baselineskip}\centering\vspace{-1.78ex}\@IEEEabskeysecsize\textbf{\abstractname}\par\addvspace{0.5\baselineskip}\egroup\quotation\@IEEEabskeysecsize
-    \fi\@IEEEgobbleleadPARNLSP}
-\def\IEEEkeywords{\normalfont
-    \if@twocolumn
-      \@IEEEabskeysecsize\bfseries\textit{\IEEEkeywordsname:}\ \relax
-    \else
-      \bgroup\par\addvspace{0.5\baselineskip}\centering\@IEEEabskeysecsize\textbf{\IEEEkeywordsname}\par\addvspace{0.5\baselineskip}\egroup\quotation\@IEEEabskeysecsize
-    \fi\@IEEEgobbleleadPARNLSP}
-\makeatother
-
-\title{Auditing a Normal-First Skeleton JEPA for Monocular Gait Representations}
-
-\author{
-\IEEEauthorblockN{Theodore Mui, Alex Mui, Penny Inouye, and Phil Mui}
-\IEEEauthorblockA{\textit{Aspiring Scholars Directed Research Program (ASDRP)}\\
-\texttt{tedmui@stanford.edu} \quad \texttt{alexander.mui@students.asdrp.org}\\
-\texttt{pennypenelopesf@gmail.com} \quad \texttt{phil.mui@asdrp.org}}
-}
+\title{Auditing Normal-Reference Coordinate Drift in a Staged Skeleton JEPA}
+\author{Anonymous authors}
+\date{}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We trained and audited a skeletal Joint-Embedding Predictive Architecture, or S-JEPA, for monocular gait video. The completed normal-first curriculum used 159 pose sequences from 35 source videos. Final feature spread remained nonzero, but the normal reference representation drifted as four gait groups entered. On the canonical 96-sequence GAVD cohort, minimum cosine distance between condition centroids was 0.037, mean within-condition distance was 0.120, and cosine silhouette was 0.009. These values do not show clean five-group geometry. A stratified sequence split produced 0.793 five-class accuracy, but every test video also appeared in classifier training and every test row had already been seen by the label-aware encoder. Classifier-video-grouped folds produced mean accuracy of 0.849 for normal versus abnormal and 0.653 for five classes, but the encoder still saw all evaluation rows. The run completed without total representation collapse. It does not establish generalization to unseen videos, patients, or clinics.
+We audit a project-specific, S-JEPA-inspired skeleton model trained first on normal-labeled gait and then on four condition-labeled GAVD groups. The current experiment uses no added-normal dataset. After availability and pose-quality checks, it contains 626 sequences from 93 source videos. Across 270 matched normal sequences, the mean cosine between each later representation and its own Stage-0 representation falls from 0.700 after Stage 1 to 0.297 after Stage 4. Checkpoint reload reproduces the curve within $4.51\times10^{-7}$. This establishes raw coordinate drift for one seed, not catastrophic forgetting. A sequence-split classifier reaches 0.899 macro-F1, but every test row was encoder-exposed and 64 source videos cross the classifier split. We present the result as an auditable representation study and state the controls needed for functional-retention and generalization claims.
 \end{abstract}
 
-\begin{IEEEkeywords}
-gait analysis, joint-embedding predictive architecture, S-JEPA, VICReg, pose estimation, curriculum learning
-\end{IEEEkeywords}
-
 \section{Introduction}
-Walking depends on the nervous system, muscles, joints, balance, and the surrounding environment. Parkinson's disease, stroke, and cerebral palsy can change gait \cite{zanardi2021parkinsons,lauziere2014stroke,pandey2023crouch}. Late-onset Pompe disease, one type of myopathy, can reduce motor function \cite{maulet2023myopathy}. A gait video alone cannot establish a diagnosis.
+Joint-Embedding Predictive Architectures learn by predicting target-encoder features rather than reconstructing every input value \cite{assran2023ijepa,bardes2024vjepa,abdelfattah2024sjepa}. In a normal-first model, later training can move the internal normal reference. A raw cosine audit can detect this movement, but it cannot by itself distinguish lost information from a shared rotation of the feature basis.
 
-A Joint-Embedding Predictive Architecture, or JEPA, predicts hidden content in representation space rather than reconstructing every input value. This principle has been studied in images, video, and skeleton sequences \cite{assran2023ijepa,bardes2024vjepa,abdelfattah2024sjepa}. A second problem is representation collapse, where many inputs map to nearly the same vector. VICReg discourages this failure by preserving variation and reducing redundant feature dimensions \cite{bardes2022vicreg}.
+We make that distinction explicit for a gait skeleton JEPA variant. It is not a reproduction of the published S-JEPA: it uses a fixed 12-landmark target sampler, VICReg, and a later label-aware group term. Our verified contribution is a fingerprint-bound raw anchor curve that is recomputable from the saved checkpoints, plus a claim audit that separates coordinate drift, functional retention, in-corpus label readability, and unseen-source generalization.
 
-We ask whether one model can first learn normal gait, continue through four broader gait groups, and retain a useful, nonconstant representation. We answer with a completed five-stage run, geometry measurements, a detector-missingness control, and exposure audits. Our contributions are a reproducible 12-landmark target rule, a continuing 159-sequence curriculum, separate measurements of collapse and normal-reference drift, and downstream scores reported with their source-video overlap.
-
-\section{Related Work}
-S-JEPA uses an exponential-moving-average teacher and a predictor for skeleton action recognition \cite{abdelfattah2024sjepa}. MAMP predicts motion and uses motion-aware target selection \cite{mao2023mamp}, while Skeleton2vec uses contextualized targets \cite{xu2024skeleton2vec}. This project uses neither target selector. It samples only from a fixed anatomical whitelist. GaitForeMer uses self-supervised forecasting for gait impairment estimation \cite{endo2022gaitforemer}. Our narrower aim is to audit a small representation-learning workflow, not to predict diagnosis or severity.
-
-\section{Materials and Methods}
-\subsection{Data and pose processing}
-The canonical cohort contains 96 sequences from 18 GAVD source videos \cite{ranjan2025gavd}. The completed run also uses 63 normal sequences from 17 user-supplied videos. These added clips were selected and labeled as normal within this project. Automatic MediaPipe detections supplied their person boxes. They are not part of GAVD and did not receive independent clinical label review.
+\section{Method}
+\subsection{Data and preprocessing}
+The raw local GAVD inventory has 666 sequences from 103 source videos \cite{ranjan2025gavd}. Availability checks retain 642 sequences from 94 videos. Requiring at least 0.50 observed coverage over 12 gait-focused landmarks leaves the cohort in Table~\ref{tab:data}. These are dataset folder annotations, not diagnoses made by this project.
 
 \begin{table}[t]
-\caption{Representation-training corpus}
-\label{tab:cohort}
 \centering
-\scriptsize
+\small
+\caption{Current GAVD-only cohort.}
+\label{tab:data}
 \begin{tabular}{lrr}
 \toprule
-Group & Sequences & Videos \\
+Annotation & Sequences & Videos \\
 \midrule
-Canonical normal & 12 & 1 \\
-Added normal & 63 & 17 \\
-Parkinson's disease & 9 & 2 \\
-Stroke & 12 & 3 \\
-Myopathic & 47 & 10 \\
-Cerebral palsy & 16 & 2 \\
+Normal & 270 & 29 \\
+Parkinson's & 41 & 9 \\
+Stroke & 74 & 18 \\
+Myopathic & 183 & 28 \\
+Cerebral palsy & 58 & 9 \\
 \midrule
-Total & 159 & 35 \\
+Total & 626 & 93 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-GAVD boxes isolate the intended walker. MediaPipe estimates 33 landmarks and visibility \cite{grishchenko2022blazepose,mediapipePoseLandmarker}. The pipeline uses image-relative pose estimates. Monocular depth is not calibrated clinical motion capture. Internal low-visibility gaps of at most four frames are interpolated; longer gaps stay missing. Each sequence is pelvis-centered, body-scale normalized, and resized to 64 frames. Missing coordinates cannot become prediction targets.
+MediaPipe supplies 33 landmarks per frame \cite{grishchenko2022blazepose,mediapipePoseLandmarker}. The pipeline interpolates short internal gaps, centers on the pelvis, scales by body width, and resizes every sequence to 64 frames. Resizing removes native duration unless timing is supplied separately. Across the 642 availability-filtered pose caches, extraction labels are mixed, a potential provenance shortcut, although their recorded pose-model hash agrees.
 
-\subsection{Targets, model, and loss}
-The sole target-rule source is \path{experiments/multiple-sclerosis/mapping-data/ms-pd-mapping.md}. It expands ranges and removes duplicates to produce
+\subsection{Model and curriculum}
+A token contains one landmark over four frames. Only the shoulders, hips, knees, ankles, heels, and foot tips can be prediction targets. The model uses a view encoder, an exponential-moving-average target encoder, and a predictor. The loss is
 \begin{equation}
-\{11,12,23,24,25,26,27,28,29,30,31,32\}.
+\mathcal L=\mathcal L_{\mathrm{JEPA}}+0.05\mathcal L_{\mathrm{VICReg}}+0.25\mathcal L_{\mathrm{group}},
 \end{equation}
-These are the left and right shoulders, hips, knees, ankles, heels, and foot indices. Reusing this whitelist across five folders is a project rule, not a diagnostic claim.
+where VICReg discourages collapse \cite{bardes2022vicreg}. The group term is off during normal-only Stage 0 and later uses folder labels to encourage compactness and centroid separation.
 
-A token holds one landmark over four frames, so a sequence contains 528 tokens. The configured 0.60 fraction is applied to the smallest valid eligible-token count in each batch, and that common number is sampled uniformly without replacement in every sample. Samples with more valid tokens therefore realize a lower fraction. The sampler never reads motion. Invalid allowed tokens are skipped and forbidden landmarks are never substituted. The target encoder can still use all 33 landmarks as context.
+One model trains for 300 epochs on 270 normal rows. Four 75-epoch stages add Parkinson's, stroke, myopathic, and cerebral-palsy rows with balanced replay. Model, target, center, and projector state continue, while AdamW restarts at each stage. AdamW uses betas $(0.9,0.95)$, weight decay 0.05, learning rate $10^{-3}$ at Stage 0 and $3\times10^{-4}$ later, with four rows per active condition in each batch. The run has 600 epochs, 40,800 optimizer updates, seed 42, and the MPS backend. Exact hardware and deterministic settings were not recorded.
 
-The view encoder reads a masked pose. The target encoder reads the complete pose and follows the view encoder by exponential moving average. The predictor estimates target latents at hidden locations. The full loss is
+\subsection{Anchor and claim levels}
+For the same 270 normal sequences at each stage, we report
 \begin{equation}
-\mathcal L=\mathcal L_{\mathrm{JEPA}}+0.05\mathcal L_{\mathrm{VICReg}}+0.25\mathcal L_{\mathrm{group}}.
+a_t=\frac{1}{|N|}\sum_{x\in N}\frac{z_t(x)^\top z_0(x)}{\lVert z_t(x)\rVert_2\lVert z_0(x)\rVert_2}.
 \end{equation}
-VICReg uses projected student features from two views. Its invariance term is paired mean squared error, its variance hinge penalizes dimensions with batch standard deviation below one, and its covariance term penalizes off-diagonal feature covariance \cite{bardes2022vicreg}. The logged inner value is $25L_{inv}+25L_{var}+L_{cov}$ before the outer weight 0.05. VICReg does not read folder labels.
-
-The separate group term normalizes unprojected pooled vectors, forms one normalized centroid per condition, and combines within-condition compactness with $[\max(0,1-d)]^2$ for centroid distances $d<1$. The log's abbreviated ``group'' field reports only this separation penalty, not the complete group loss. Its ``std'' field is a post-epoch mean feature standard deviation of whole-corpus EMA-target embeddings, not a loss or VICReg term. Both are training-health signals, not evidence of clinical clustering. The group term is zero in Stage 0.
-
-\subsection{Continuing curriculum and audit design}
-One model continues through all stages. The view encoder, predictor, target encoder, target center, and VICReg projector are never reinitialized. Later batches balance all active groups, so earlier groups remain in training.
-
-\begin{table}[t]
-\caption{Five-stage continuing curriculum}
-\label{tab:curriculum}
-\centering
-\small
-\begin{tabular}{clrr}
-\toprule
-Stage & Added data & Epochs & Updates \\
-\midrule
-0 & 75 normal & 300 & 5,700 \\
-1 & 9 Parkinson's & 75 & 1,425 \\
-2 & 12 stroke & 75 & 1,425 \\
-3 & 47 myopathic & 75 & 1,425 \\
-4 & 16 cerebral palsy & 75 & 1,425 \\
-\midrule
-Total & & 600 & 11,400 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The final checkpoint is \path{sjepa_curriculum_final_augmented.pt}; its fingerprint begins \texttt{d0acc2628d134959}. The contract records sequence and video identifiers, stage lineage, loss settings, target-mask hash, and optimizer counts.
-
-Figure~\ref{fig:design} summarizes the corpus and the claim boundary. We audit training health, canonical five-group geometry, and downstream Random Forest readouts \cite{breiman2001randomforests,pedregosa2011scikit}. The all-96 lane is stratified by row: normal is split 8/4, Parkinson's 6/3, stroke 9/3, myopathic 33/14, and cerebral palsy 11/5. Stratification preserves proportions but does not separate source videos. Balanced accuracy averages recall over classes \cite{brodersen2010balanced}.
-
-The exact-47/21 lane reproduces a historical split. Lane C uses five GroupKFold splits for the binary task and two StratifiedGroupKFold splits for the five-class task. Two is the largest fold count that keeps every label on both sides because Parkinson's disease and cerebral palsy each have only two videos. A source video cannot appear in both Random Forest portions of one fold. Grouping matters when rows share a source \cite{roberts2017crossvalidation}. In all lanes, however, the encoder was trained first on the full corpus. Lane C separates videos only for the Random Forest, not for representation learning.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.495\textwidth]{figures/cohort_curriculum.pdf}\hfill
-\includegraphics[width=0.495\textwidth]{figures/evidence_ladder.pdf}
-\caption{Left: the 159-sequence corpus and five continuing stages. Right: each downstream lane supports a limited claim because the encoder saw its evaluation rows.}
-\label{fig:design}
-\end{figure*}
+This is the average of matched per-sequence cosines, not a cosine between cohort centroids. All anchor rows were used in training. The mean is sequence-weighted: the top two normal videos supply 105 of 270 rows and the top three supply 137. Population-level language therefore needs equal-video weighting and source-cluster uncertainty.
 
 \section{Results}
-\subsection{Training health}
-The recommended run completed 600 epochs and 11,400 updates. Table~\ref{tab:health} and the left side of Fig.~\ref{fig:health_geometry} show the stage endpoints. Final feature standard deviation was 0.414 and mean pairwise cosine was 0.609. These values argue against the extreme case where every sequence has one identical representation. They do not prove that each feature is useful.
+The anchor values after the four later stages are 0.7002, 0.5021, 0.3962, and 0.2966. Reloading the checkpoints reproduces the saved summary to within $4.51\times10^{-7}$. Feature standard deviation remains 0.229 at Stage 4, arguing against total constant collapse.
 
-Normal-anchor cosine fell from 0.954 after Stage 1 to 0.594 after Stage 4. The model kept nonzero spread, but its normal reference changed substantially. The nonzero final margin penalty also shows that the requested training-corpus margin was not fully satisfied.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/bbfm_drift_curve.pdf}
+\caption{Raw matched-sequence anchor cosine. Stage 0 defines the reference. Alignment and functional controls are still required.}
+\label{fig:drift}
+\end{figure}
 
-\begin{table*}[t]
-\caption{Stage-end training diagnostics. The centroid values are active-corpus training diagnostics, not the separate canonical audit.}
-\label{tab:health}
+The final 384-dimensional training-corpus summaries have cosine silhouette 0.3617, minimum between-centroid distance 0.0863, and mean within-condition distance 0.0783. This structure is label-informed because the same folder labels shaped the later encoder objective.
+
+\begin{table}[t]
 \centering
 \small
-\begin{tabular}{crrrrrr}
+\caption{Descriptive five-class probes.}
+\label{tab:readout}
+\begin{tabular}{lrrr}
 \toprule
-Stage & JEPA loss & VICReg loss & Feature std. & Pair cosine & Min. centroid distance & Normal-anchor cosine \\
+Probe & Acc. & Bal. acc. & Macro-F1 \\
 \midrule
-0 & 0.569 & 16.997 & 0.466 & 0.359 & not defined & not defined \\
-1 & 0.449 & 12.989 & 0.430 & 0.492 & 0.740 & 0.954 \\
-2 & 0.613 & 10.474 & 0.399 & 0.624 & 0.527 & 0.839 \\
-3 & 0.611 & 9.368 & 0.406 & 0.628 & 0.336 & 0.707 \\
-4 & 0.478 & 8.418 & 0.414 & 0.609 & 0.364 & 0.594 \\
+All 626 rows & 0.920 & 0.900 & 0.899 \\
+Exact 47/21 & 0.857 & 0.880 & 0.861 \\
+Missingness only & 0.441 & 0.427 & 0.355 \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
-\subsection{Canonical geometry}
-The frozen target encoder produced a $96\times384$ matrix for the canonical GAVD rows. Mean within-condition cosine distance was 0.120. Mean distance between centroids was 0.292, but the minimum was 0.037, between myopathic and cerebral-palsy rows. Cosine silhouette was 0.009. The weak pair is closer than the average spread within a condition, so the rows do not form five clean clusters.
+In the all-row probe, all 188 test rows were used by the encoder and 64 source videos cross the classifier split. In the exact probe, all 21 test rows were encoder-exposed and all nine test videos overlap classifier training. These scores are in-corpus readouts, not generalization estimates.
 
-The Stage 4 minimum centroid value of 0.364 in Table~\ref{tab:health} is not contradictory. It is an active-corpus training measurement over 159 rows. The right side of Fig.~\ref{fig:health_geometry} is a separate frozen target-encoder audit over the canonical 96 rows.
+\section{Validity audit and required experiments}
+We exclude the saved margin-ablation, AnchorGuard, grouped Lane C, and predictive-surprise result families. They load an old augmented checkpoint, lack complete current lineage, or combine old checkpoints with current rows. They cannot support mechanism, repair, or forecasting claims.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.655\textwidth]{figures/training_health.pdf}\hfill
-\includegraphics[width=0.325\textwidth]{figures/representation_geometry.pdf}
-\caption{Left: loss and representation health across the completed curriculum. Spread stays nonzero while the normal reference drifts. Right: canonical centroid distances. Myopathic and cerebral-palsy centroids are only 0.037 apart.}
-\label{fig:health_geometry}
-\end{figure*}
+A strong drift or forgetting claim needs three to five full seeds, orthogonal-Procrustes alignment plus linear CKA or SVCCA, a same-update continued-normal control, held-out normal-function measurements at every checkpoint, and an order control. An unseen-source performance claim requires preprocessing, encoder training, and readout fitting inside every outer source-video fold \cite{roberts2017crossvalidation}.
 
-\subsection{Downstream readouts}
-Table~\ref{tab:readouts} reports descriptive readouts. The all-96 S-JEPA result exceeded the missingness-only control, but both used the same confounded split. All 16 test videos also appeared in classifier training, and all 29 test rows participated in label-aware representation training.
+\section{Discussion and conclusion}
+The experiment establishes a substantial raw-coordinate change in matched normal sequences for one audited run: the mean cosine reaches 0.297. It does not establish that useful normal-gait information was lost. It also does not establish clinical or unseen-source performance. Source video is not a person identifier, folder labels are not independently adjudicated diagnoses, and camera, pose missingness, and extraction history may correlate with labels.
 
-For Lane C normal versus abnormal, mean ROC AUC was 0.966. A percentile bootstrap over the five fold scores gave an accuracy interval of 0.800 to 0.906. This is a descriptive summary of five dependent folds, not a strong population confidence interval. The corrected five-class lane uses only two folds and reports no interval. Its pooled out-of-fold accuracy was 0.654 and pooled macro-F1 was 0.619. Ordinary K-fold cross-validation has no generally unbiased variance estimator \cite{bengio2004variance}.
+GAVD distributes annotations and public video URLs rather than raw files; independent retrieval must comply with YouTube terms, institutional ethics requirements, and applicable copyright, privacy, and data-protection rules \cite{gavdRepo2026}. This analysis uses derived poses and does not infer identity. A public artifact should not redistribute raw videos or identity-bearing frames. The institutional ethics determination and data-use review must be recorded before submission.
 
-\begin{table*}[t]
-\caption{Descriptive downstream results. BA is balanced accuracy. Every S-JEPA evaluation row was seen during representation training.}
-\label{tab:readouts}
-\centering
-\scriptsize
-\begin{tabular}{lrrrl}
-\toprule
-Lane and task & Accuracy & BA & Macro F1 & Main exposure \\
-\midrule
-All-96 missingness control & 0.448 & 0.466 & 0.429 & 16 shared test videos \\
-All-96 S-JEPA & 0.793 & 0.889 & 0.821 & 16 shared videos; 29/29 test rows seen by encoder \\
-Exact-47/21 S-JEPA & 0.714 & 0.730 & 0.742 & 9 shared videos; 21/21 test rows seen by encoder \\
-Historical 82-feature reference & 0.762 & not recorded & 0.728 & same confounded 47/21 split \\
-Lane C normal vs. abnormal & 0.849 & 0.874 & 0.826 & grouped RF; all 159 rows seen by encoder \\
-Lane C five class & 0.653 & 0.603 & 0.625 & two grouped RF folds; all 159 rows seen by encoder \\
-\bottomrule
-\end{tabular}
-\end{table*}
+The methodological conclusion is direct: raw drift, functional retention, and downstream generalization are different endpoints. Reporting them separately prevents a checkpoint-recomputable telemetry signal from becoming an unsupported clinical or continual-learning claim.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.86\textwidth]{figures/readout_results.pdf}
-\caption{Accuracy across the current readout lanes. The black interval belongs only to the five-fold binary Lane C task. The corrected two-fold five-class task intentionally has no interval. Every score remains descriptive because the encoder saw its evaluation rows.}
-\label{fig:readout_results}
-\end{figure*}
-
-\section{Discussion}
-The run answers the implementation question. One model continued through all five stages, checkpoints preserved lineage, the target whitelist stayed intact, and feature spread did not vanish. It also reveals two weaknesses. First, a final normal-anchor cosine of 0.594 shows substantial drift despite balanced replay. Second, a canonical silhouette of 0.009 and minimum centroid distance below within-condition spread do not support a claim of five separated gait groups.
-
-A Random Forest can still draw nonlinear boundaries, especially when video identity, pose-detector behavior, or label-aware representation training supplies extra signals. The missingness control reaching 0.448 accuracy shows that detector behavior contains condition-related information, although it does not explain the full S-JEPA score.
-
-The data structure prevents stronger conclusions. All 12 canonical normal rows come from one video. Parkinson's disease and cerebral palsy each have only two videos. This limits the corrected five-class grouped audit to two folds, which is too little support for a stable performance claim. The 63 added normal rows improve video variety, but their labels were produced inside this project and were not independently reviewed.
-
-An independent estimate needs a nested experiment. Each outer source-video fold must choose and freeze preprocessing rules, train all five representation stages, and fit the Random Forest using only training videos. Held-out videos must remain unseen until final scoring. More independent people, sites, camera setups, and clinical label review are also needed.
-
-\section{Conclusion}
-The full normal-first S-JEPA curriculum trained on 159 sequences without complete representation collapse. It did not preserve the normal reference well, and the canonical rows did not form clean five-condition geometry. Current classifier results are descriptive because source videos, representation-training rows, or both overlap evaluation. The workflow is auditable and its weaknesses are measurable, but it is not yet evidence of clinical usefulness or unseen-video generalization.
-
-\IEEEtriggeratref{16}
-\bibliographystyle{IEEEtran}
+\bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}

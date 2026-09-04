@@ -2,7 +2,7 @@
 
 This folder is an executable course on learning motion features from gait video. It starts with a source video, extracts a 33-landmark skeleton, hides selected joint-time tokens, and asks a Skeleton Joint-Embedding Predictive Architecture, or S-JEPA, to predict their latent features. Training begins with normal gait and then continues through four cumulative condition stages.
 
-The completed real run used 159 sequences from 35 source videos. It stayed numerically stable and did not totally collapse. It did not produce clean five-condition clusters. The classifier results are useful engineering diagnostics inside this known corpus. They are not estimates for a new patient, video, camera, or clinic.
+The completed real run used 159 sequences from 35 source videos (reflects the prior 159/35 run; pending regeneration against the full 642/94 corpus). It stayed numerically stable and did not totally collapse. It did not produce clean five-condition clusters. The classifier results are useful engineering diagnostics inside this known corpus. They are not estimates for a new patient, video, camera, or clinic.
 
 ![Seven notebook learning path](images/09_notebook_roadmap.svg)
 
@@ -28,13 +28,15 @@ The project keeps two data layers separate.
 
 |Layer|Sequences|Videos|Purpose|
 |---|---:|---:|---|
-|Canonical GAVD experiment|96|18|The fixed five-condition inspection and comparison cohort|
+|Canonical GAVD experiment|642|94|The full five-condition valid corpus, after dropping nine unusable source videos|
 |Added normal candidates|64|17|Self-annotated windows from additional YouTube videos|
 |Accepted added normal|63|17|Candidates with neurologic-landmark coverage at least 0.45|
 |Stage 0 normal total|75|18|12 canonical plus 63 accepted added normal sequences|
 |Full curriculum|159|35|75 normal plus 84 canonical non-normal sequences|
 
-The canonical class counts are 12 normal, 9 Parkinson's, 12 stroke, 47 myopathic, and 16 cerebral palsy sequences. The added normal windows use self-annotated time spans and automatic MediaPipe bounding boxes. They are not canonical GAVD annotations and were not independently clinically verified. One of 64 candidate windows had neurologic-landmark coverage of 0.027 and was rejected. Notebook 04 now reads the extraction report as an explicit selection contract, so the accepted cohort does not depend on which pose files happen to be present.
+The added-normal candidate, accepted, Stage 0 total, and full-curriculum rows above are derived from the pipeline run (reflects the prior 159/35 run; pending regeneration against the full 642/94 corpus). The canonical class counts are 284 normal, 44 Parkinson's, 75 stroke, 184 myopathic, and 58 cerebral palsy sequences. The added normal windows use self-annotated time spans and automatic MediaPipe bounding boxes. They are not canonical GAVD annotations and were not independently clinically verified. One of 64 candidate windows had neurologic-landmark coverage of 0.027 and was rejected. Notebook 04 now reads the extraction report as an explicit selection contract, so the accepted cohort does not depend on which pose files happen to be present.
+
+Nine YouTube sources (2 private, 5 removed, 2 undownloadable) were dropped from the raw 666-sequence / 103-video corpus, verified via yt-dlp on 2026-09-02, leaving 642 sequences from 94 source videos.
 
 This provenance difference matters. Most normal rows use the added extraction path, while every abnormal row uses the canonical path. A normal-versus-abnormal classifier could learn acquisition or extraction differences as well as gait differences.
 
@@ -200,15 +202,17 @@ The outer source-video split must happen first. Pose preprocessing rules, all fi
 
 ## Notebook order
 
+The workshop notebooks now live together in [`neurips-brain-body/`](neurips-brain-body/README.md). They continue to use this experiment folder for configuration, data, and generated artifacts.
+
 |Notebook|Main output|
 |---|---|
-|`00_sjepa_from_first_principles.ipynb`|A small S-JEPA learning graph built from first principles|
-|`01_gavd_manifest_and_youtube.ipynb`|A traceable manifest and one cached copy of each source video|
-|`02_extract_and_watch_skeletons.ipynb`|Versioned 33-landmark pose sequences and alignment checks|
-|`03_neurologic_keypoint_masking.ipynb`|The whitelist parser, uniform sampler, and forbidden-target assertions|
-|`04_pretrain_sjepa_on_normal.ipynb`|The complete five-stage checkpoint lineage and training history|
-|`05_inspect_latent_motion.ipynb`|Prediction, collapse, drift, retrieval, and condition-geometry audits|
-|`06_capstone_health_condition_classifiers.ipynb`|Three leakage-aware readout lanes and missingness controls|
+|[`00_sjepa_from_first_principles.ipynb`](neurips-brain-body/00_sjepa_from_first_principles.ipynb)|A small S-JEPA learning graph built from first principles|
+|[`01_gavd_manifest_and_youtube.ipynb`](neurips-brain-body/01_gavd_manifest_and_youtube.ipynb)|A traceable manifest and one cached copy of each source video|
+|[`02_extract_and_watch_skeletons.ipynb`](neurips-brain-body/02_extract_and_watch_skeletons.ipynb)|Versioned 33-landmark pose sequences and alignment checks|
+|[`03_neurologic_keypoint_masking.ipynb`](neurips-brain-body/03_neurologic_keypoint_masking.ipynb)|The whitelist parser, uniform sampler, and forbidden-target assertions|
+|[`04_pretrain_sjepa_on_normal.ipynb`](neurips-brain-body/04_pretrain_sjepa_on_normal.ipynb)|The complete five-stage checkpoint lineage and training history|
+|[`05_inspect_latent_motion.ipynb`](neurips-brain-body/05_inspect_latent_motion.ipynb)|Prediction, collapse, drift, retrieval, and condition-geometry audits|
+|[`06_capstone_health_condition_classifiers.ipynb`](neurips-brain-body/06_capstone_health_condition_classifiers.ipynb)|Three leakage-aware readout lanes and missingness controls|
 
 Each notebook repeats the code it needs. Later notebooks reject missing, incomplete, wrong-mode, or wrong-cohort artifacts instead of silently falling back.
 
@@ -219,7 +223,7 @@ Run from this folder:
 ```bash
 uv sync
 uv run python -m ipykernel install --user --name gavd5-sjepa --display-name "GAVD5 S-JEPA"
-uv run jupyter lab
+uv run jupyter lab neurips-brain-body
 ```
 
 Copy `.env.example` to `.env`. The completed augmented real path uses:

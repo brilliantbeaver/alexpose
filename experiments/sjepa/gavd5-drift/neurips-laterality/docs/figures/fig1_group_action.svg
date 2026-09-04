@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t1 d1">
+  <title id="t1">The mirror test: a two-element (Z/2) group action on the skeleton</title>
+  <desc id="d1">A beginner concept figure. Bilateral reflection is a two-element group G = {I, M}. The left card shows a raw skeleton x and its mirror image Mx across a mirror axis; the anatomical mirror M negates the x-coordinate and swaps each left landmark with its right partner. The right card lists the group facts: I is the identity, M is the anatomical mirror, M applied twice returns the input (an involution), and M swaps six left/right landmark pairs (shoulder, hip, knee, ankle, heel, foot-index). The bottom card defines a signed laterality readout y as the sum over the six pairs of left temporal-excursion minus right; it is antisymmetric, so y(Mx) = -y(x). Three walkers on a number line show a left-leaning walker reading positive, its mirror reading negative of equal size, and a symmetric walker reading zero, giving the ideal reflection-equivariance rule mirrored output = - original output at slope -1. Illustrative schematic; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">The mirror test: a Z/2 group action on the skeleton</text>
+  <text x="48" y="88" class="s">Bilateral reflection is a two-element group acting on the skeleton. Read left to right.</text>
+
+  <!-- ============ CARD A: the anatomical mirror M (x -> Mx) ============ -->
+  <!-- x 48..688, y 112..368 -->
+  <rect x="48" y="112" width="640" height="256" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="144" class="t">The anatomical mirror M acts on the skeleton</text>
+  <text x="70" y="170" class="b">M negates x and swaps left/right, sending x to Mx.</text>
+
+  <!-- mirror axis (green dashed) with label -->
+  <text x="368" y="208" class="s" fill="#5f9e7e" text-anchor="middle">mirror axis</text>
+  <line x1="368" y1="214" x2="368" y2="226" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="368" y="248" class="t" text-anchor="middle">M</text>
+  <line x1="368" y1="256" x2="368" y2="322" stroke="#5f9e7e" stroke-width="2" stroke-dasharray="7 6"/>
+  <!-- M arrow: input x -> mirror image Mx -->
+  <line x1="248" y1="262" x2="488" y2="262" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- input skeleton x (centered cx=200), asymmetric pose -->
+  <!-- neutral structure -->
+  <circle cx="200" cy="206" r="13" fill="#ffffff" stroke="#20364e" stroke-width="2"/>
+  <line x1="200" y1="219" x2="200" y2="272" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="178" y1="228" x2="222" y2="228" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="184" y1="272" x2="216" y2="272" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- LEFT limbs (orange): raised arm + wide stride, on viewer right -->
+  <line x1="200" y1="230" x2="236" y2="216" stroke="#e07a4b" stroke-width="3" stroke-linecap="round"/>
+  <line x1="200" y1="272" x2="232" y2="316" stroke="#e07a4b" stroke-width="3" stroke-linecap="round"/>
+  <line x1="232" y1="316" x2="248" y2="314" stroke="#e07a4b" stroke-width="3" stroke-linecap="round"/>
+  <!-- RIGHT limbs (blue): lowered arm + planted leg, on viewer left -->
+  <line x1="200" y1="230" x2="168" y2="256" stroke="#2f6f99" stroke-width="3" stroke-linecap="round"/>
+  <line x1="200" y1="272" x2="182" y2="316" stroke="#2f6f99" stroke-width="3" stroke-linecap="round"/>
+  <line x1="182" y1="316" x2="168" y2="316" stroke="#2f6f99" stroke-width="3" stroke-linecap="round"/>
+  <text x="246" y="210" class="s" fill="#e07a4b">L</text>
+  <text x="156" y="262" class="s" fill="#2f6f99">R</text>
+  <text x="200" y="342" class="s" text-anchor="middle">input skeleton  x</text>
+
+  <!-- mirror image Mx (centered cx=536) = reflection of x about 368 -->
+  <circle cx="536" cy="206" r="13" fill="#ffffff" stroke="#20364e" stroke-width="2"/>
+  <line x1="536" y1="219" x2="536" y2="272" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="514" y1="228" x2="558" y2="228" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="520" y1="272" x2="552" y2="272" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- LEFT limbs (orange) now on viewer left -->
+  <line x1="536" y1="230" x2="500" y2="216" stroke="#e07a4b" stroke-width="3" stroke-linecap="round"/>
+  <line x1="536" y1="272" x2="504" y2="316" stroke="#e07a4b" stroke-width="3" stroke-linecap="round"/>
+  <line x1="504" y1="316" x2="488" y2="314" stroke="#e07a4b" stroke-width="3" stroke-linecap="round"/>
+  <!-- RIGHT limbs (blue) now on viewer right -->
+  <line x1="536" y1="230" x2="568" y2="256" stroke="#2f6f99" stroke-width="3" stroke-linecap="round"/>
+  <line x1="536" y1="272" x2="554" y2="316" stroke="#2f6f99" stroke-width="3" stroke-linecap="round"/>
+  <line x1="554" y1="316" x2="568" y2="316" stroke="#2f6f99" stroke-width="3" stroke-linecap="round"/>
+  <text x="490" y="210" class="s" fill="#e07a4b" text-anchor="end">L</text>
+  <text x="580" y="262" class="s" fill="#2f6f99">R</text>
+  <text x="536" y="342" class="s" text-anchor="middle">mirror image  Mx</text>
+
+  <!-- ============ CARD B: the Z/2 group ============ -->
+  <!-- x 744..1152, y 112..368 -->
+  <rect x="744" y="112" width="408" height="256" rx="16" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text x="766" y="144" class="t">A Z/2 group:  G = {I, M}</text>
+  <text x="766" y="170" class="b">I  = identity (do nothing)</text>
+  <text x="766" y="196" class="b">M = the anatomical mirror</text>
+  <text x="766" y="222" class="b">M(Mx) = x   (involution: twice = identity)</text>
+  <line x1="766" y1="240" x2="1130" y2="240" stroke="#c4cdd8" stroke-width="1.5"/>
+  <text x="766" y="264" class="b">M swaps 6 left/right landmark pairs:</text>
+  <text x="766" y="292" class="s">shoulder &#183; hip &#183; knee</text>
+  <text x="766" y="318" class="s">ankle &#183; heel &#183; foot-index</text>
+
+  <!-- ============ CARD C: the signed readout y is antisymmetric ============ -->
+  <!-- x 48..1152, y 424..648 -->
+  <rect x="48" y="424" width="1104" height="224" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="454" class="t">The signed laterality readout y is antisymmetric under the mirror</text>
+  <text x="70" y="480" class="b">y = &#931; over the 6 left/right pairs ( left temporal-excursion - right ).    Under M the sign flips:  y(Mx) = -y(x).</text>
+
+  <!-- number line -->
+  <line x1="200" y1="562" x2="1000" y2="562" stroke="#20364e" stroke-width="2.5"/>
+  <polygon points="200,562 216,554 216,570" fill="#20364e"/>
+  <polygon points="1000,562 984,554 984,570" fill="#20364e"/>
+  <line x1="350" y1="555" x2="350" y2="569" stroke="#20364e" stroke-width="2"/>
+  <line x1="600" y1="555" x2="600" y2="569" stroke="#20364e" stroke-width="2"/>
+  <line x1="850" y1="555" x2="850" y2="569" stroke="#20364e" stroke-width="2"/>
+  <text x="180" y="568" class="t" text-anchor="middle">&#8722;</text>
+  <text x="1020" y="568" class="t" text-anchor="middle">+</text>
+
+  <!-- walker 1: mirror image -> reads negative (left position) -->
+  <circle cx="350" cy="512" r="9" fill="#ffffff" stroke="#20364e" stroke-width="2"/>
+  <line x1="350" y1="521" x2="350" y2="544" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="350" y1="527" x2="334" y2="536" stroke="#e07a4b" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="350" y1="527" x2="366" y2="536" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="350" y1="544" x2="332" y2="560" stroke="#e07a4b" stroke-width="5" stroke-linecap="round"/>
+  <line x1="350" y1="544" x2="366" y2="560" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- walker 2: symmetric -> reads zero (center) -->
+  <circle cx="600" cy="512" r="9" fill="#ffffff" stroke="#20364e" stroke-width="2"/>
+  <line x1="600" y1="521" x2="600" y2="544" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="600" y1="527" x2="584" y2="536" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="600" y1="527" x2="616" y2="536" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="600" y1="544" x2="584" y2="560" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="600" y1="544" x2="616" y2="560" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- walker 3: left-leaning -> reads positive (right position) -->
+  <circle cx="850" cy="512" r="9" fill="#ffffff" stroke="#20364e" stroke-width="2"/>
+  <line x1="850" y1="521" x2="850" y2="544" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="850" y1="527" x2="866" y2="536" stroke="#e07a4b" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="850" y1="527" x2="834" y2="536" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="850" y1="544" x2="868" y2="560" stroke="#e07a4b" stroke-width="5" stroke-linecap="round"/>
+  <line x1="850" y1="544" x2="834" y2="560" stroke="#20364e" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- value labels under the line -->
+  <text x="350" y="592" class="s" text-anchor="middle">mirror image:  y &lt; 0</text>
+  <text x="600" y="592" class="s" text-anchor="middle">symmetric:  y = 0</text>
+  <text x="850" y="592" class="s" text-anchor="middle">left-leaning:  y &gt; 0</text>
+
+  <!-- ideal equivariance statement -->
+  <text x="600" y="622" class="b" text-anchor="middle" style="font-weight:700;fill:#0f2440;">Ideal reflection-equivariance:   mirrored output = - original output   (slope -1).</text>
+
+  <!-- MANDATORY footer -->
+  <text x="48" y="684" class="s">Illustrative schematic. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

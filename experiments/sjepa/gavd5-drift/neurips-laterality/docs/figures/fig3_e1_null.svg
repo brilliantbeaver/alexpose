@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="figtitle figdesc">
+  <title id="figtitle">Bilateral symmetry does not emerge: an informative null. Held-out signed-laterality decodability R-squared with 95 percent confidence intervals.</title>
+  <desc id="figdesc">A bar chart of held-out signed-laterality decodability R-squared with 95 percent confidence-interval whiskers, over a cohort of 626 modeled sequences from 93 source videos, using repeated source-disjoint cross-validation across ten seeds and an SVD ridge decoder. Four bars are shown: a frozen learned probe A at 0.198, a missingness-only control E at 0.202, an untrained-encoder floor C at 0.245, and a mean-and-standard-deviation pooled control D at 0.101. A green reference line marks the raw-coordinate ceiling B at R-squared equal to 1.00; the axis is capped at 0.35 with a break. The learned probe A does not beat the untrained floor C: their confidence intervals overlap and the floor point estimate is higher. All three pre-registered gates fail, the anatomical-mirror slope is minus 0.70 with no sign flip, and the missingness-only control matches the learned probe. The verdict is an informative null. All results are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .v{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#0f2440;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Bilateral symmetry does not emerge: an informative null</text>
+  <text x="48" y="88" class="s">Bars = mean held-out R&#178; with 95% CI whiskers &#183; 626 modeled sequences / 93 source videos &#183; source-disjoint CV (10 seeds) &#183; SVD ridge</text>
+
+  <!-- ============ LEFT: bar-chart card ============ -->
+  <!-- card: x 48..708, y 112..622 -->
+  <rect x="48" y="112" width="660" height="510" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="148" class="t">Held-out signed-laterality decodability (R&#178;)</text>
+
+  <!-- green raw-coordinate ceiling reference (B), floating above the broken axis -->
+  <text x="205" y="182" class="b" fill="#5f9e7e">B raw-coordinate ceiling &#8212; R&#178; = 1.00</text>
+  <line x1="200" y1="190" x2="690" y2="190" stroke="#5f9e7e" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <text x="205" y="207" class="s">y-axis break &#183; axis capped at 0.35 &#183; B ceiling &#8776; 1.00</text>
+
+  <!-- axis-break slashes on the y-axis -->
+  <line x1="183" y1="222" x2="197" y2="212" stroke="#20364e" stroke-width="1.75"/>
+  <line x1="183" y1="216" x2="197" y2="206" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- gridlines (light rule) -->
+  <line x1="190" y1="215" x2="690" y2="215" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="190" y1="262" x2="690" y2="262" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="190" y1="356" x2="690" y2="356" stroke="#c4cdd8" stroke-width="1.5"/>
+  <line x1="190" y1="451" x2="690" y2="451" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- y tick labels -->
+  <text x="180" y="219" class="s" text-anchor="end">0.35</text>
+  <text x="180" y="266" class="s" text-anchor="end">0.30</text>
+  <text x="180" y="360" class="s" text-anchor="end">0.20</text>
+  <text x="180" y="455" class="s" text-anchor="end">0.10</text>
+  <text x="180" y="549" class="s" text-anchor="end">0.0</text>
+
+  <!-- axes -->
+  <line x1="190" y1="215" x2="190" y2="545" stroke="#20364e" stroke-width="2.5"/>
+  <line x1="190" y1="545" x2="690" y2="545" stroke="#20364e" stroke-width="2.5"/>
+
+  <!-- y-axis title -->
+  <text x="112" y="380" class="b" text-anchor="middle" transform="rotate(-90 112 380)">Held-out R&#178; (signed laterality)</text>
+
+  <!-- callout 1 (the headline finding), in the empty upper plot region -->
+  <text x="214" y="236" class="b">Learned (A) does NOT beat the untrained floor (C) -</text>
+  <text x="214" y="260" class="b">CIs overlap and the floor point estimate is higher.</text>
+
+  <!-- warm floor-level line projecting C's estimate over the learned probe A -->
+  <line x1="235" y1="314" x2="350" y2="314" stroke="#e07a4b" stroke-width="2.25" stroke-dasharray="7 6"/>
+  <text x="235" y="308" class="s" fill="#a44c26">floor level (C) &#8594;</text>
+
+  <!-- ===== bars ===== -->
+  <!-- A learned probe (warm highlight: sits below the floor) -->
+  <rect x="235" y="358" width="62" height="187" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <!-- E missingness-only -->
+  <rect x="357" y="355" width="62" height="190" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <!-- C untrained floor -->
+  <rect x="479" y="314" width="62" height="231" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <!-- D mean/std pooled -->
+  <rect x="601" y="450" width="62" height="95" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+
+  <!-- ===== 95% CI whiskers ===== -->
+  <!-- A: [0.175, 0.221] -->
+  <line x1="266" y1="337" x2="266" y2="380" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="258" y1="337" x2="274" y2="337" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="258" y1="380" x2="274" y2="380" stroke="#20364e" stroke-width="2.25"/>
+  <!-- E: [0.173, 0.231] -->
+  <line x1="388" y1="327" x2="388" y2="382" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="380" y1="327" x2="396" y2="327" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="380" y1="382" x2="396" y2="382" stroke="#20364e" stroke-width="2.25"/>
+  <!-- C: [0.214, 0.275] -->
+  <line x1="510" y1="286" x2="510" y2="343" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="502" y1="286" x2="518" y2="286" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="502" y1="343" x2="518" y2="343" stroke="#20364e" stroke-width="2.25"/>
+  <!-- D: [0.089, 0.114] -->
+  <line x1="632" y1="438" x2="632" y2="461" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="624" y1="438" x2="640" y2="438" stroke="#20364e" stroke-width="2.25"/>
+  <line x1="624" y1="461" x2="640" y2="461" stroke="#20364e" stroke-width="2.25"/>
+
+  <!-- ===== point-estimate value labels above whiskers ===== -->
+  <text x="266" y="330" class="v" text-anchor="middle">0.198</text>
+  <text x="388" y="320" class="v" text-anchor="middle">0.202</text>
+  <text x="510" y="279" class="v" text-anchor="middle">0.245</text>
+  <text x="632" y="431" class="v" text-anchor="middle">0.101</text>
+
+  <!-- ===== CI text below baseline ===== -->
+  <text x="266" y="565" class="s" text-anchor="middle">[0.175, 0.221]</text>
+  <text x="388" y="565" class="s" text-anchor="middle">[0.173, 0.231]</text>
+  <text x="510" y="565" class="s" text-anchor="middle">[0.214, 0.275]</text>
+  <text x="632" y="565" class="s" text-anchor="middle">[0.089, 0.114]</text>
+
+  <!-- ===== bar name labels ===== -->
+  <text x="266" y="588" class="v" text-anchor="middle">A learned</text>
+  <text x="388" y="588" class="v" text-anchor="middle">E miss-only</text>
+  <text x="510" y="588" class="v" text-anchor="middle">C untrained</text>
+  <text x="632" y="588" class="v" text-anchor="middle">D pooled</text>
+
+  <!-- ============ RIGHT COLUMN ============ -->
+
+  <!-- Verdict badge card: x 764..1152, y 112..204 -->
+  <rect x="764" y="112" width="388" height="92" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="786" y="145" class="w">Verdict</text>
+  <rect x="786" y="156" width="300" height="38" rx="19" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="936" y="181" class="w" font-size="22" text-anchor="middle">INFORMATIVE NULL</text>
+
+  <!-- Gates card: x 764..1152, y 260..398 (gap 56) -->
+  <rect x="764" y="260" width="388" height="138" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="786" y="292" class="t">Pre-registered gates: all FAIL</text>
+  <text x="786" y="322" class="b">A-C &lt; 0.05      (margin gate)</text>
+  <text x="786" y="348" class="b">A &lt; 80% of B      (ceiling gate)</text>
+  <text x="786" y="374" class="b">sign 0.55 &lt; 0.75      (sign gate)</text>
+
+  <!-- Corroborating-checks card: x 764..1152, y 454..622 (gap 56) -->
+  <rect x="764" y="454" width="388" height="168" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="786" y="488" class="t">Two corroborating checks</text>
+  <text x="786" y="514" class="s">Anatomical-mirror slope = -0.70 (no sign flip).</text>
+  <text x="786" y="546" class="s">Missingness-only (E) matches learned (A) -</text>
+  <text x="786" y="570" class="s">apparent signal is partly a left/right</text>
+  <text x="786" y="594" class="s">visibility artifact.</text>
+
+  <!-- ============ FOOTER (mandatory, RESULT figure) ============ -->
+  <text x="48" y="646" class="s">All results are transductive (internal validity only; the encoder was trained on the evaluated sequences).</text>
+  <text x="48" y="672" class="s">Source video is the independent unit; folder labels are dataset annotations, not diagnoses.</text>
+</svg>

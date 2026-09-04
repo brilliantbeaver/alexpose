@@ -1,7 +1,7 @@
 """Builder for nb_05b_reflection_reach_and_futures.ipynb.
 
 Run:  python3 _build_nb_05b.py
-Emits the notebook in the gavd5-drift root beside nb_05a. Pure numpy/sklearn/matplotlib: no torch,
+Emits the notebook into the gavd5-drift `neurips-brain-body` folder beside nb_05a. Pure numpy/sklearn/matplotlib: no torch,
 no checkpoint, no pose cache. It (1) simulates the four canonical possible futures of Idea 5 against
 the pre-registered margins and draws their expected-shape panels, (2) renders one decision table that
 maps each future to the exact verdict language the proposal pre-registers, and (3) lays down an
@@ -11,7 +11,11 @@ OU-MVLP-Pose), clearly marked as non-clinical and not yet wired to real download
 import json
 from pathlib import Path
 
-NB_PATH = Path(__file__).resolve().parents[3] / "nb_05b_reflection_reach_and_futures.ipynb"
+NB_PATH = (
+    Path(__file__).resolve().parents[3]
+    / "neurips-brain-body"
+    / "nb_05b_reflection_reach_and_futures.ipynb"
+)
 
 _CELL_N = [0]
 
@@ -55,7 +59,7 @@ This notebook does the two things 05a cannot:
 Every margin here is copied verbatim from the proposal: beat the untrained floor by at least 0.05
 R-squared, reach at least 80 percent of the raw-coordinate-null R-squared, decoded sign correct on at
 least 75 percent of held-out sources, and a mirror slope inside the band [-1.25, -0.8] to count as a
-flip. See `notes/ideas-claude/_shared_facts.md` for the single source of truth. Folder labels are
+flip. See `../notes/ideas-claude/_shared_facts.md` for the single source of truth. Folder labels are
 dataset annotations, not diagnoses; all gavd5-drift readouts are transductive.
 """))
 

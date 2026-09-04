@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t6 d6">
+  <title id="t6">Build the geometry in; don't hope it emerges: four experiments on reflection symmetry</title>
+  <desc id="d6">A two-column synthesis. The left column, EMERGENT, holds two experiments that hope reflection symmetry arises from self-supervised training: standard SSL pretraining (E1) and reflection-augmented SSL pretraining (E3b, a single-seed Stage-0 normal-only prototype). Both are marked FAILS. E1 shows a mirror slope of -0.70 with no flip, and learned decodability 0.198 with interval 0.175 to 0.221 that is no better than an untrained floor of 0.245 with interval 0.214 to 0.275. E3b shows a free-readout mirror slope that moved to -0.51 from -0.70 under augmentation, but the untrained floor is -0.82, so the slope is confounded rather than learned; its signed axis 0.062 with interval 0.011 to 0.114 fails to clear the untrained floor 0.078 with interval 0.013 to 0.144. The right column, BUILT-IN, holds two experiments that impose the symmetry by construction: an equivariant readout head (E2) and an equivariant encoder using frame averaging (E3a). Both are marked SUCCEEDS. E2 gives a mirror slope of exactly -1.0000 for any weights, with decodability 0.273 interval 0.253 to 0.294 that beats the free readout 0.198 interval 0.175 to 0.221. E3a gives a token-equivariance error of exactly 0.0 with zero retraining. The closing banner states that the geometry must be imposed by construction; it does not emerge from self-supervision, with or without reflection augmentation. All results are transductive; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="58" class="h">Build the geometry in; don't hope it emerges</text>
+  <text x="48" y="86" class="s">Reflection symmetry is either hoped for (left) or imposed by construction (right). Four experiments, real measured numbers.</text>
+
+  <!-- ============ LEFT COLUMN: EMERGENT (hope) ============ -->
+  <!-- card: x 48..572 (w 524), y 112..492 (h 380) -->
+  <rect x="48" y="112" width="524" height="380" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="143" class="t">EMERGENT</text>
+  <text x="70" y="169" class="s">Hope it emerges from self-supervised training</text>
+  <line x1="70" y1="177" x2="550" y2="177" stroke="#e07a4b" stroke-width="2.5"/>
+
+  <!-- E1 (top-left) -->
+  <rect x="484" y="182" width="66" height="28" rx="14" fill="#e07a4b" stroke="#a44c26" stroke-width="1.5"/>
+  <text x="517" y="201" class="w" font-size="14" text-anchor="middle">FAILS</text>
+  <text x="70" y="201" class="s" fill="#20364e">E1 &#8212; standard SSL pretraining</text>
+  <text x="70" y="225" class="s" fill="#a44c26">Symmetry does not emerge</text>
+  <text x="70" y="251" class="b">Mirror slope -0.70  (no flip; -1 = ideal)</text>
+  <text x="70" y="277" class="b">Decodability 0.198 [0.175,0.221]</text>
+  <text x="70" y="303" class="b">no better than floor 0.245 [0.214,0.275]</text>
+
+  <!-- divider between E1 and E3b -->
+  <line x1="70" y1="322" x2="550" y2="322" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- E3b (bottom-left) -->
+  <rect x="484" y="327" width="66" height="28" rx="14" fill="#e07a4b" stroke="#a44c26" stroke-width="1.5"/>
+  <text x="517" y="346" class="w" font-size="14" text-anchor="middle">FAILS</text>
+  <text x="70" y="346" class="s" fill="#20364e">E3b &#8212; reflection-augmented SSL</text>
+  <text x="70" y="370" class="s" fill="#a44c26">Augmentation buys no equivariance</text>
+  <text x="70" y="396" class="b">Free-readout slope -0.51 (was -0.70), but the</text>
+  <text x="70" y="420" class="b">untrained floor is -0.82  &#8594;  confounded</text>
+  <text x="70" y="444" class="b">Signed axis 0.062 [0.011,0.114] fails to clear</text>
+  <text x="70" y="468" class="b">untrained floor 0.078 [0.013,0.144]</text>
+
+  <!-- ============ RIGHT COLUMN: BUILT-IN (guarantee) ============ -->
+  <!-- card: x 628..1152 (w 524), y 112..492 ; gap 572->628 = 56 -->
+  <rect x="628" y="112" width="524" height="380" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="650" y="143" class="t">BUILT-IN</text>
+  <text x="650" y="169" class="s">Guaranteed by construction</text>
+  <line x1="650" y1="177" x2="1130" y2="177" stroke="#5f9e7e" stroke-width="2.5"/>
+
+  <!-- E2 (top-right) -->
+  <rect x="1026" y="182" width="104" height="28" rx="14" fill="#5f9e7e" stroke="#20364e" stroke-width="1.5"/>
+  <text x="1078" y="201" class="w" font-size="14" text-anchor="middle">SUCCEEDS</text>
+  <text x="650" y="201" class="s" fill="#20364e">E2 &#8212; equivariant readout head</text>
+  <text x="650" y="225" class="s" fill="#5f9e7e">Succeeds &#8212; exact and better</text>
+  <text x="650" y="251" class="b">Mirror slope -1.0000 exact (any weights)</text>
+  <text x="650" y="277" class="b">Decodability 0.273 [0.253,0.294]</text>
+  <text x="650" y="303" class="b">beats free readout 0.198 [0.175,0.221]</text>
+
+  <!-- divider between E2 and E3a -->
+  <line x1="650" y1="322" x2="1130" y2="322" stroke="#c4cdd8" stroke-width="1.5"/>
+
+  <!-- E3a (bottom-right) -->
+  <rect x="1026" y="327" width="104" height="28" rx="14" fill="#5f9e7e" stroke="#20364e" stroke-width="1.5"/>
+  <text x="1078" y="346" class="w" font-size="14" text-anchor="middle">SUCCEEDS</text>
+  <text x="650" y="346" class="s" fill="#20364e">E3a &#8212; equivariant encoder (frame avg)</text>
+  <text x="650" y="370" class="s" fill="#5f9e7e">Succeeds &#8212; exact by construction</text>
+  <text x="650" y="396" class="b">Token-equivariance error = 0.0</text>
+  <text x="650" y="420" class="b">exact, with zero retraining</text>
+
+  <!-- ============ BOTTOM SUMMARY BANNER (dark) ============ -->
+  <!-- x 48..1152, y 548..640 (h 92); gap 492->548 = 56 -->
+  <rect x="48" y="548" width="1104" height="92" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="72" y="580" class="w">The geometry must be imposed by construction - it does not emerge from self-supervision,</text>
+  <text x="72" y="604" class="w">with or without reflection augmentation.</text>
+  <text x="72" y="630" class="ws">E3b is a single-seed, Stage-0 normal-only prototype - treat as indicative, not confirmatory.</text>
+
+  <!-- ============ MANDATORY FOOTER (two lines) ============ -->
+  <text x="48" y="668" class="s">All results are transductive (internal validity only; the encoder was trained on the evaluated sequences).</text>
+  <text x="48" y="690" class="s">Source video is the independent unit; folder labels are dataset annotations, not diagnoses.</text>
+</svg>

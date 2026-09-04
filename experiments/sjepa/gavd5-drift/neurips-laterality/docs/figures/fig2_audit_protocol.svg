@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t2 d2">
+  <title id="t2">A geometry-audit protocol for a frozen world model</title>
+  <desc id="d2">A method schematic. A frozen S-JEPA skeleton encoder produces per-pair laterality features, the signed difference and summed energy [left-minus-right, left-plus-right] concatenated over six anatomical pairs. Five probe lanes all read the same frozen tokens: Lane A is the learned probe on side-structured trained-encoder features, the measurement of interest; Lane B is a raw-coordinate ceiling from handcrafted signed left-minus-right with no network, about 1.0 by construction; Lane C is an untrained-encoder floor of identical shape from a random-init encoder; Lane D is a mean and standard-deviation pooled side-blind nuisance control that must not recover a signed axis; Lane E is a missingness-only control using per-joint left and right valid-fraction features. Evaluation uses source-video-disjoint GroupKFold with inner alpha chosen on training sources only, an SVD-solver ridge, per-fold StandardScaler, and repeated shuffled grouped cross-validation over ten seeds reported as mean plus or minus 95 percent confidence interval. Three pre-registered primary gates must all hold to claim decodability: A beats C by at least 0.05 R-squared, A reaches at least 80 percent of B, and the decoded sign is correct on at least 75 percent of held-out sources. A secondary mirror test requires the slope of mirrored versus original prediction to be negative and inside minus 1.25 to minus 0.8. Illustrative schematic; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .bb{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#0f2440;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">A geometry-audit protocol for a frozen world model</text>
+  <text x="48" y="88" class="s">Five probe lanes read the same frozen tokens; three pre-registered gates decide decodability.</text>
+
+  <!-- ============ LEFT COLUMN: input pipeline + secondary test ============ -->
+
+  <!-- L1 encoder (blue) x48..344 y116..248 -->
+  <rect x="48" y="116" width="296" height="132" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="146" class="t">Frozen S-JEPA encoder</text>
+  <text x="70" y="174" class="b">Pretrained skeleton model.</text>
+  <text x="70" y="200" class="b">Weights frozen: read only,</text>
+  <text x="70" y="226" class="b">never trained.</text>
+
+  <!-- arrow L1 -> L2 -->
+  <line x1="196" y1="250" x2="196" y2="288" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- L2 laterality feature (violet) x48..344 y304..436 -->
+  <rect x="48" y="304" width="296" height="132" rx="16" fill="#ece6f6" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="334" class="t">Laterality feature</text>
+  <text x="70" y="362" class="b">Per L/R joint pair: signed</text>
+  <text x="70" y="388" class="b">difference &#38; sum [L&#8722;R, L+R].</text>
+  <text x="70" y="414" class="b">Concatenated over 6 pairs.</text>
+
+  <!-- arrow L2 -> Center (feeds all lanes) -->
+  <line x1="346" y1="370" x2="384" y2="370" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- dashed secondary branch L2 -> L3 -->
+  <line x1="196" y1="438" x2="196" y2="476" stroke="#5f9e7e" stroke-width="2.5" fill="none" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+  <text x="210" y="468" class="s" fill="#5f9e7e">secondary</text>
+
+  <!-- L3 secondary mirror test (warm) x48..344 y492..624 -->
+  <rect x="48" y="492" width="296" height="132" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="70" y="522" class="t">Secondary mirror test</text>
+  <text x="70" y="550" class="b">Mirror, re-embed, re-decode.</text>
+  <text x="70" y="576" class="b">Slope(mirror vs original) must</text>
+  <text x="70" y="602" class="b">be negative, in [&#8722;1.25, &#8722;0.8].</text>
+
+  <!-- ============ CENTER COLUMN: five probe lanes ============ -->
+  <!-- C lanes (neutral) x400..760 y116..628 -->
+  <rect x="400" y="116" width="360" height="512" rx="16" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="422" y="146" class="t">Five probe lanes</text>
+  <text x="422" y="172" class="s">all read the SAME frozen tokens</text>
+
+  <!-- Lane A  T=194 (orange) -->
+  <rect x="422" y="190" width="26" height="26" rx="6" fill="#e07a4b" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="435" y="208" class="w" text-anchor="middle">A</text>
+  <text x="458" y="209" class="bb">Learned probe &#8212; primary</text>
+  <text x="422" y="233" class="s">Side-structured trained-encoder</text>
+  <text x="422" y="255" class="s">features &#8212; the measurement of interest.</text>
+
+  <!-- Lane B  T=281 (green) -->
+  <rect x="422" y="277" width="26" height="26" rx="6" fill="#5f9e7e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="435" y="295" class="w" text-anchor="middle">B</text>
+  <text x="458" y="296" class="bb">Raw-coordinate ceiling</text>
+  <text x="422" y="320" class="s">Handcrafted signed L&#8722;R, no network</text>
+  <text x="422" y="342" class="s">(&#8776; 1.0 by construction).</text>
+
+  <!-- Lane C  T=368 (grey) -->
+  <rect x="422" y="364" width="26" height="26" rx="6" fill="#c4cdd8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="435" y="382" class="w" text-anchor="middle" fill="#20364e">C</text>
+  <text x="458" y="383" class="bb">Untrained-encoder floor</text>
+  <text x="422" y="407" class="s">Identical shape, random-init encoder.</text>
+
+  <!-- Lane D  T=455 (blue) -->
+  <rect x="422" y="451" width="26" height="26" rx="6" fill="#2f6f99" stroke="#20364e" stroke-width="1.75"/>
+  <text x="435" y="469" class="w" text-anchor="middle">D</text>
+  <text x="458" y="470" class="bb">Mean/std pooled</text>
+  <text x="422" y="494" class="s">Side-blind nuisance control: a signed</text>
+  <text x="422" y="516" class="s">axis must NOT be recoverable here.</text>
+
+  <!-- Lane E  T=542 (violet) -->
+  <rect x="422" y="538" width="26" height="26" rx="6" fill="#8a6fb3" stroke="#20364e" stroke-width="1.75"/>
+  <text x="435" y="556" class="w" text-anchor="middle">E</text>
+  <text x="458" y="557" class="bb">Missingness-only</text>
+  <text x="422" y="581" class="s">Per-joint L/R valid-fraction; controls</text>
+  <text x="422" y="603" class="s">for left/right visibility asymmetry.</text>
+
+  <!-- arrow Center -> R1 eval -->
+  <line x1="762" y1="224" x2="800" y2="224" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ============ RIGHT COLUMN: evaluation + gates ============ -->
+
+  <!-- R1 evaluation (blue) x816..1152 y116..332 -->
+  <rect x="816" y="116" width="336" height="216" rx="16" fill="#e7f0f8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="838" y="146" class="t">Evaluation protocol</text>
+  <text x="838" y="176" class="b">Source-video-disjoint GroupKFold</text>
+  <text x="838" y="202" class="b">whole videos held out, not clips</text>
+  <text x="838" y="228" class="b">inner &#945; on training sources only</text>
+  <text x="838" y="254" class="b">SVD-solver ridge, scaler per fold</text>
+  <text x="838" y="280" class="b">repeated shuffled grouped CV</text>
+  <text x="838" y="306" class="b">10 seeds &#8594; mean &#177; 95% CI</text>
+
+  <!-- arrow R1 -> R2 -->
+  <line x1="984" y1="334" x2="984" y2="372" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- R2 pre-registered gates (dark) x816..1152 y388..628 -->
+  <rect x="816" y="388" width="336" height="240" rx="16" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="838" y="420" class="w" font-size="20">Primary gates</text>
+  <text x="838" y="446" class="ws">pre-registered &#8212; all three must hold</text>
+  <line x1="838" y1="462" x2="1130" y2="462" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="838" y="496" class="w">1&#160;&#160;A beats C by &#8805; 0.05 R&#178;</text>
+  <text x="838" y="534" class="w">2&#160;&#160;A reaches &#8805; 80% of B</text>
+  <text x="838" y="572" class="w">3&#160;&#160;sign correct &#8805; 75% of sources</text>
+  <text x="838" y="606" class="ws">Short of any gate &#8594; informative null.</text>
+
+  <!-- Footer -->
+  <text x="48" y="668" class="s">Illustrative schematic. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

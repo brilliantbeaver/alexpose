@@ -1,67 +1,73 @@
-# Reproducing the latest downstream probes
+# Reproducing the current downstream probes
 
-The latest completed training checkpoint among `gavd4-vicreg`, `gavd5-drift`, and
-`gavd5-drift-tm` is the augmented five-stage checkpoint under `gavd5-drift/work`. Its file
-SHA-256 is:
+This page covers the **non-augmented-normal, GAVD-only** checkpoint. It does not cover any file whose name contains `_augmented`.
+
+## Required checkpoint
 
 ```text
-6e67fc5c4a025375de24b46230ea0ec420a0ba360462d4b440c19e139577fbf0
+file:        work/artifacts/real/sjepa_curriculum_final.pt
+fingerprint: 7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2
+SHA-256:     64008d77689cefa4beb51a0dcf5ed6cae743454134c163e9087f66510af4e7ad
 ```
 
-Do not report a pre-existing classifier CSV without rerunning notebook 06.
-The checkpoint, pose archives, notebook outputs, and CSVs have existed with
-different timestamps in this workspace. A fresh run is the reproducible source
-of truth.
+The checkpoint contains 626 coverage-valid sequence IDs and records that the augmented-normal cohort was not used.
 
-## One-command probe rerun
+## Rerun
 
-From `experiments/sjepa/gavd5-drift`:
+From the `experiments/sjepa/gavd5-drift` experiment root, with the project environment active:
 
 ```sh
-GAVD_MODE=real \
-GAVD_CACHE_DIR="$PWD/cache" \
-GAVD_ARTIFACT_DIR="$PWD/work/artifacts" \
-SJEPA_INCLUDE_AUGMENTED_NORMAL=1 \
-MPLCONFIGDIR="$PWD/cache/matplotlib" \
-.venv/bin/jupyter nbconvert \
-  --execute \
+SJEPA_INCLUDE_AUGMENTED_NORMAL=0 \
+  jupyter nbconvert \
   --to notebook \
-  --output /tmp/gavd5-drift-downstream-probe-reproduced.ipynb \
-  --ExecutePreprocessor.timeout=1200 \
-  06_capstone_health_condition_classifiers.ipynb
+  --execute neurips-brain-body/06_capstone_health_condition_classifiers.ipynb \
+  --output-dir work/nb_executed \
+  --ExecutePreprocessor.timeout=-1
 ```
 
-This freezes the saved EMA target encoder, rebuilds 384-dimensional pooled
-embeddings, fits the seeded Random Forest readouts, and rewrites the probe CSVs
-and contract under `work/artifacts/real`.
-
-## Verified results
-
-Two fresh processes produced the same canonical embedding-corpus SHA-256,
-`0eff77b03ce19f38ec1209603b13301e09aecddc41f33b2c386b42d649c9a1e6`, and
-the same metrics:
-
-| Five-class probe | Accuracy | Macro-F1 |
-|---|---:|---:|
-| All 96 examples, random sequence split | 0.724 | 0.750 |
-| Matched comparison, 47 training and 21 test examples | 0.762 | 0.765 |
-| Videos kept separate, average across two splits | 0.564 | 0.495 |
-| Videos kept separate, all held-out predictions combined | 0.566 | 0.496 |
-
-The first two comparisons can share source videos between classifier training
-and testing. The final two keep source videos separate during classification,
-but the feature-learning stage had already used all 159 examples.
-These are descriptive frozen-representation probes, not estimates of unseen
-patient, unseen-video, or clinical performance.
-
-## Rebuild the scorecard
+Then verify the final checkpoint hash and regenerate the downstream figure:
 
 ```sh
+shasum -a 256 work/artifacts/real/sjepa_curriculum_final.pt
 MPLCONFIGDIR=cache/matplotlib \
-.venv/bin/python docs/make_downstream_probe_figure.py
+  .venv/bin/python docs/make_downstream_probe_figure.py
 ```
 
-The generator uses the same DejaVu Sans typography, navy/blue/teal palette,
-grid treatment, dimensions, and PDF/SVG/PNG export settings as
-`docs/make_figures.py`. It rejects mixed-run artifacts, mismatched embedding
-hashes, incomplete curricula, and non-real runs.
+## Verified current results
+
+The stored split label `all_96_stratified_video_confounded` is a legacy name. In the current artifact it contains **all 626 coverage-valid rows**, split 438 for classifier fitting and 188 for classifier testing.
+
+|Probe|Accuracy|Balanced accuracy|Macro-F1|Scope|
+|---|---:|---:|---:|---|
+|Five class, all 626 rows|0.9202|0.9001|0.8985|Sequence split; video-confounded; encoder-transductive|
+|Five class, exact legacy 47/21 rows|0.8571|0.8800|0.8607|Sequence split; all 9 test videos overlap training|
+|Missingness only, all 626 rows|0.4415|0.4269|0.3547|Same sequence split; no pose coordinates|
+|Missingness only, exact 47/21 rows|0.3333|0.3638|0.3361|Same exact split|
+
+One-versus-normal results on the all-row sequence split are 1.000 macro-F1 for Parkinson's, 1.000 for stroke, 0.985 for myopathic, and 0.850 for cerebral palsy. These are also transductive and video-confounded.
+
+## Exposure audit
+
+|Split|Train rows|Test rows|Train videos|Test videos|Shared videos|Test rows seen by encoder|
+|---|---:|---:|---:|---:|---:|---:|
+|All-row legacy-named split|438|188|88|69|64|188|
+|Exact 47/21 split|47|21|12|9|9|21|
+
+In the all-row split, 181 of 188 test sequences come from the 64 video IDs shared with classifier training. The encoder was trained with condition labels after Stage 0. Splitting only the Random Forest cannot remove that representation exposure.
+
+## Stale grouped artifact
+
+`lane_c_video_disjoint_metrics.csv` currently names `sjepa_curriculum_final_augmented.pt` and 159 rows. It is not a result for the current checkpoint. Do not use it in figures or tables.
+
+A current classifier-video-grouped probe can be rerun after notebook 06 is updated to write a new lineage-checked artifact. Even then, it would remain encoder-transductive. A generalization estimate requires retraining the entire encoder inside each outer source-video fold.
+
+The saved outputs inside the source `neurips-brain-body/06_capstone_health_condition_classifiers.ipynb` still display the retired augmented checkpoint and 159-row Lane C result. Its selection code is flag-guarded, but the embedded outputs are stale. Until the source notebook is cleared and rerun, use the current executed notebook under `work/nb_executed/` together with the hash-checked artifacts as the evidence record. The 82-feature handcrafted baseline in `exp5_comparison.csv` is also hard-coded by notebook 06 rather than recomputed, so do not claim a verified improvement over that baseline yet.
+
+## Minimum audit after rerunning
+
+1. Confirm `include_augmented_normal` is `false` in `classifier_contract.json`.
+2. Confirm the embedding table has 626 rows and 384 latent columns.
+3. Confirm every embedding has fingerprint `7d13841a...`.
+4. Confirm the checkpoint file SHA-256 is `64008d77...`.
+5. Run `make_brainbody_figures.py` and `make_downstream_probe_figure.py`; their exact artifact hashes, checkpoint hash, cohort checks, and split checks must all pass.
+6. Treat changed numbers as a new run; do not copy old captions forward.

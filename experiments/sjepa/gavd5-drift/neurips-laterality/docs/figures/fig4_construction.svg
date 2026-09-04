@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="t4c d4c">
+  <title id="t4c">Emergent versus built-in: two ways a skeleton world model can satisfy the reflection mirror rule</title>
+  <desc id="d4c">A concept schematic with two stacked paths. The top green path is the built-in guarantee: for each left/right pair the left token and the right token pass through the same shared map f, and only their difference is kept, so s equals the sum over pairs of f(left) minus f(right). Because f is shared, the mirror M swaps left and right and every term negates, giving s(Mx) = -s(x) exactly for every input, even unseen ones. Its guarantee is a mirror slope of -1.000 for any weights, obtained by frame averaging over the group G={I,M}. The bottom warm path is the hope: all joint tokens are dumped into one flat vector and a free ridge or decoder built on the standard frozen encoder is only nudged toward the mirror rule by training, so the flip is approximate and holds only as far as training taught it. A center note states that reflection augmentation is off in canonical training with flip probability 0.0, so the property is a genuine test, not something taught. Illustrative schematic; folder labels are dataset annotations, not diagnoses.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 z" fill="#20364e"/>
+    </marker>
+    <style>
+      .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:32px;fill:#0f2440;}
+      .t{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:20px;fill:#0f2440;}
+      .b{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#33475e;}
+      .s{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#5c6f84;}
+      .w{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:16px;fill:#ffffff;}
+      .ws{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#cdd8e4;}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#f7f5ef"/>
+
+  <text x="48" y="60" class="h">Emergent vs built-in: two ways to get the mirror rule</text>
+  <text x="48" y="88" class="s">Two ways a model could satisfy the mirror rule s(Mx) = -s(x): build it in by wiring (top), or hope training teaches it (bottom).</text>
+
+  <!-- ============ TOP PATH A: built-in guarantee (green band) ============ -->
+  <!-- band y 104..384 -->
+  <rect x="48" y="104" width="1104" height="280" rx="16" fill="#e6f2ea" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="138" class="t">Built-in: shared map, keep only the difference</text>
+  <text x="1122" y="138" class="s" fill="#5f9e7e" text-anchor="end">exact: every input, even unseen</text>
+
+  <!-- A1: input pair (white) -->
+  <rect x="78" y="166" width="196" height="140" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="176" y="197" class="b" text-anchor="middle">Left token L</text>
+  <text x="176" y="223" class="b" text-anchor="middle">Right token R</text>
+  <text x="176" y="249" class="s" text-anchor="middle">one L/R pair</text>
+  <text x="176" y="275" class="s" text-anchor="middle">(e.g. the knees)</text>
+
+  <!-- arrow A1 -> A2 -->
+  <line x1="274" y1="236" x2="320" y2="236" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- A2: shared map f (violet) -->
+  <rect x="336" y="180" width="206" height="112" rx="12" fill="#ece6f6" stroke="#8a6fb3" stroke-width="1.75"/>
+  <text x="439" y="210" class="b" text-anchor="middle">One shared map f</text>
+  <text x="439" y="236" class="b" text-anchor="middle">f(L),  f(R)</text>
+  <text x="439" y="262" class="s" text-anchor="middle">same on both sides</text>
+
+  <!-- arrow A2 -> A3 -->
+  <line x1="542" y1="236" x2="588" y2="236" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- A3: difference summed over pairs (white) -->
+  <rect x="604" y="180" width="248" height="112" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="728" y="210" class="b" text-anchor="middle">Keep the difference,</text>
+  <text x="728" y="236" class="b" text-anchor="middle">summed over pairs:</text>
+  <text x="728" y="264" class="b" text-anchor="middle">s = &#931; ( f(L<tspan dy="4" font-size="11">k</tspan><tspan dy="-4" font-size="16">) &#8722; f(R</tspan><tspan dy="4" font-size="11">k</tspan><tspan dy="-4" font-size="16">) )</tspan></text>
+
+  <!-- arrow A3 -> A4 -->
+  <line x1="852" y1="236" x2="898" y2="236" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- A4: guarantee (dark) -->
+  <rect x="914" y="166" width="208" height="140" rx="12" fill="#20364e" stroke="#20364e" stroke-width="1.75"/>
+  <text x="1018" y="197" class="w" text-anchor="middle">Mirror M swaps L&#8596;R</text>
+  <text x="1018" y="223" class="ws" text-anchor="middle">so every term negates</text>
+  <text x="1018" y="249" class="w" text-anchor="middle">s(Mx) = -s(x)</text>
+  <text x="1018" y="275" class="ws" text-anchor="middle">any input, even unseen</text>
+
+  <!-- guarantee strip -->
+  <line x1="78" y1="332" x2="1122" y2="332" stroke="#5f9e7e" stroke-width="1.5"/>
+  <text x="600" y="358" class="b" text-anchor="middle">mirror slope <tspan font-weight="700" fill="#0f2440">= -1.000</tspan> for ANY weights (frame averaging over G={I,M})</text>
+
+  <!-- ============ BOTTOM PATH B: emergent hope (warm band) ============ -->
+  <!-- band y 440..616 (gap from 384 = 56) -->
+  <rect x="48" y="440" width="1104" height="176" rx="16" fill="#f7e7d8" stroke="#20364e" stroke-width="1.75"/>
+  <text x="78" y="474" class="t">Emergent hope: one flat vector, nudged by training</text>
+  <text x="1122" y="474" class="s" fill="#a44c26" text-anchor="end">approximate: only what training saw</text>
+
+  <!-- B1: all tokens dumped (white) -->
+  <rect x="78" y="490" width="236" height="104" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="196" y="529" class="b" text-anchor="middle">All joint tokens</text>
+  <text x="196" y="555" class="b" text-anchor="middle">in one flat vector</text>
+
+  <!-- arrow B1 -> B2 -->
+  <line x1="314" y1="542" x2="366" y2="542" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- B2: standard frozen encoder + free head (warm, orange stroke) -->
+  <rect x="382" y="490" width="336" height="104" rx="12" fill="#f7e7d8" stroke="#a44c26" stroke-width="1.75"/>
+  <text x="550" y="520" class="b" text-anchor="middle">The standard frozen encoder</text>
+  <text x="550" y="546" class="b" text-anchor="middle">with a free ridge decoder on top</text>
+  <text x="550" y="572" class="s" text-anchor="middle">only nudged toward the rule</text>
+
+  <!-- arrow B2 -> B3 -->
+  <line x1="718" y1="542" x2="770" y2="542" stroke="#20364e" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- B3: approximate flip (white) -->
+  <rect x="786" y="490" width="336" height="104" rx="12" fill="#ffffff" stroke="#20364e" stroke-width="1.75"/>
+  <text x="954" y="520" class="b" text-anchor="middle">The flip is only approximate</text>
+  <text x="954" y="546" class="b" text-anchor="middle">it holds only as far as</text>
+  <text x="954" y="572" class="b" text-anchor="middle">training taught it</text>
+
+  <!-- center note -->
+  <text x="600" y="644" class="s" text-anchor="middle" fill="#33475e">Reflection augmentation is OFF in canonical training (flip probability 0.0): this is a genuine test of the property, not something taught.</text>
+
+  <!-- MANDATORY footer -->
+  <text x="48" y="668" class="s">Illustrative schematic. Folder labels are dataset annotations, not diagnoses.</text>
+</svg>

@@ -26,6 +26,22 @@ The LaTeX source is canonical for submission. The Markdown copy mirrors its
 content for browser and repository review, but it does not reproduce IEEE
 two-column pagination.
 
+## Poster
+
+`urtc2026_sjepa_gait_poster.pptx` is the 48-by-36-inch landscape conference
+poster. Its charts, tables, skeleton, token grid, and pipeline are native
+PowerPoint shapes so they remain editable after opening in Google Slides.
+Regenerate it with:
+
+```sh
+uv run --with python-pptx python docs/make_urtc_poster.py
+```
+
+The poster incorporates the source-video audit, gait-parameter probes,
+mask-geometry ablation, and causal forecast results from notebooks 07 through
+10. Treat the 61.9% exact-split accuracy as transductive. The source-video
+grouped result is 24.0%, below its 49.0% majority control.
+
 Regenerate figures from the real-run artifacts with:
 
 ```sh
