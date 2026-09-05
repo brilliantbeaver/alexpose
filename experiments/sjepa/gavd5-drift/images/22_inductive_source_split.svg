@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Leakage-resistant GAVD source-video evaluation protocol</title>
+  <desc id="desc">A dated eligibility ladder leads to a five-fold split by YouTube source video. Within each outer fold, train, validation, and test sources are disjoint. Model fitting and selection use train and validation only; the test fold is opened once after the checkpoint is frozen.</desc>
+  <defs>
+    <style>
+      .title{font:700 32px Arial,Helvetica,sans-serif;fill:#12263f}
+      .head{font:700 20px Arial,Helvetica,sans-serif;fill:#12263f}
+      .body{font:16px Arial,Helvetica,sans-serif;fill:#30465f}
+      .small{font:14px Arial,Helvetica,sans-serif;fill:#536a82}
+      .white{font:700 17px Arial,Helvetica,sans-serif;fill:#fff}
+      .mono{font:700 15px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#12263f}
+      .arrow{stroke:#35566f;stroke-width:2.4;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#35566f"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#19324c" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="760" fill="#f7f8f5"/>
+  <text x="48" y="58" class="title">One source video, one role, zero cross-fold leakage</text>
+  <text x="48" y="88" class="body">The split is frozen before model fitting. Sequence clips inherit the role of their YouTube upload.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="48" y="126" width="245" height="176" rx="18" fill="#fff" stroke="#b8c7d4"/>
+    <rect x="319" y="126" width="245" height="176" rx="18" fill="#fff" stroke="#b8c7d4"/>
+    <rect x="590" y="126" width="245" height="176" rx="18" fill="#fff" stroke="#b8c7d4"/>
+    <rect x="861" y="126" width="291" height="176" rx="18" fill="#fff" stroke="#b8c7d4"/>
+  </g>
+  <text x="70" y="164" class="head">1 · Raw annotations</text>
+  <text x="70" y="198" class="mono">666 sequences</text>
+  <text x="70" y="225" class="mono">103 source URLs</text>
+  <text x="70" y="264" class="small">Inventory only; no availability claim</text>
+
+  <text x="341" y="164" class="head">2 · Metadata-public</text>
+  <text x="341" y="198" class="mono">657 sequences</text>
+  <text x="341" y="225" class="mono">100 source URLs</text>
+  <text x="341" y="252" class="small">Dated 2026-09-04 snapshot</text>
+  <text x="341" y="276" class="small">Registry freezes here</text>
+
+  <text x="612" y="164" class="head">3 · Decoded frames</text>
+  <text x="612" y="202" class="body">Download opens and reaches</text>
+  <text x="612" y="228" class="body">every annotated frame</text>
+  <rect x="612" y="252" width="128" height="31" rx="15" fill="#e8edf1"/>
+  <text x="676" y="273" class="small" text-anchor="middle">measured later</text>
+
+  <text x="883" y="164" class="head">4 · Pose-QC eligible</text>
+  <text x="883" y="202" class="body">Timeline, provenance, and</text>
+  <text x="883" y="228" class="body">landmark coverage pass</text>
+  <rect x="883" y="252" width="128" height="31" rx="15" fill="#e8edf1"/>
+  <text x="947" y="273" class="small" text-anchor="middle">measured later</text>
+
+  <path d="M293 214 H316" class="arrow"/>
+  <path d="M564 214 H587" class="arrow"/>
+  <path d="M835 214 H858" class="arrow"/>
+
+  <rect x="48" y="338" width="1104" height="68" rx="16" fill="#173a57"/>
+  <text x="600" y="366" class="white" text-anchor="middle">Five outer folds · grouped by video_id · stratified by condition</text>
+  <text x="600" y="391" class="small" text-anchor="middle" style="fill:#d8e6ef">Every source is the test source exactly once; no upload is split across roles.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="48" y="448" width="320" height="184" rx="18" fill="#e6f1e9" stroke="#74a983"/>
+    <rect x="440" y="448" width="320" height="184" rx="18" fill="#fff1d7" stroke="#d4a74d"/>
+    <rect x="832" y="448" width="320" height="184" rx="18" fill="#f9e4e1" stroke="#c97870"/>
+  </g>
+  <text x="72" y="489" class="head">TRAIN sources</text>
+  <text x="72" y="524" class="body">Fit encoder, predictor, and readout</text>
+  <text x="72" y="551" class="body">Fit any learned preprocessing</text>
+  <rect x="72" y="582" width="142" height="32" rx="16" fill="#3c8054"/>
+  <text x="143" y="604" class="white" text-anchor="middle">gradient updates</text>
+
+  <text x="464" y="489" class="head">VALIDATION sources</text>
+  <text x="464" y="524" class="body">Choose hyperparameters and epoch</text>
+  <text x="464" y="551" class="body">Inspect collapse and calibration</text>
+  <rect x="464" y="582" width="142" height="32" rx="16" fill="#b57b18"/>
+  <text x="535" y="604" class="white" text-anchor="middle">selection only</text>
+
+  <text x="856" y="489" class="head">TEST sources</text>
+  <text x="856" y="524" class="body">Hidden during training and selection</text>
+  <text x="856" y="551" class="body">Opened once after checkpoint freeze</text>
+  <rect x="856" y="582" width="142" height="32" rx="16" fill="#ad4f47"/>
+  <text x="927" y="604" class="white" text-anchor="middle">report once</text>
+
+  <path d="M368 540 H436" class="arrow"/>
+  <path d="M760 540 H828" class="arrow"/>
+  <line x1="798" y1="456" x2="798" y2="624" stroke="#ad4f47" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="798" y="652" class="small" text-anchor="middle" style="fill:#8f3e38">checkpoint freeze</text>
+
+  <rect x="48" y="688" width="1104" height="43" rx="12" fill="#e8edf1"/>
+  <text x="600" y="715" class="body" text-anchor="middle">Later decoding or pose-QC failures are recorded against the frozen registry; they never trigger a favorable re-split.</text>
+</svg>

@@ -1,0 +1,1385 @@
+
+=== CELL 0 [markdown] execution=None ===
+
+# 08. Fold-local normal-anchor drift and consolidation selection
+
+This notebook measures representation drift only from hash-bound checkpoints produced inside
+one source-disjoint outer fold. It contains no canonical drift constants. Development curves use
+train and held-out validation normal sources; outer-test normal sources are opened once for the
+validation-selected candidate.
+
+The default JEPA+VICReg objective is label-free, although the condition-ordered curriculum is an
+explicit inductive choice. Any objective with a condition/group loss is labeled a **SUPERVISED
+group-loss ablation** throughout; it is never silently folded into the label-free headline.
+
+**Research use only.** Anchor retention is a representation audit, not a clinical endpoint.
+
+
+=== CELL 1 [code] execution=1 ===
+
+from pathlib import Path
+import hashlib
+import json
+import os
+import sys
+
+import numpy as np
+import pandas as pd
+import torch
+from IPython.display import Markdown, SVG, display
+
+
+def find_experiment_dir(start=None):
+    start = Path(start or Path.cwd()).resolve()
+    candidates = []
+    if os.getenv("ALEXPOSE_ROOT"):
+        root = Path(os.environ["ALEXPOSE_ROOT"]).expanduser().resolve()
+        candidates += [root, root / "experiments" / "sjepa" / "gavd5-drift"]
+    for base in [start, *start.parents]:
+        candidates += [base, base / "experiments" / "sjepa" / "gavd5-drift"]
+    for candidate in candidates:
+        if (candidate / "pyproject.toml").is_file() and (candidate / "neurips-brain-body").is_dir():
+            return candidate
+    raise FileNotFoundError("Set ALEXPOSE_ROOT or start Jupyter in gavd5-drift.")
+
+
+EXPERIMENT_DIR = find_experiment_dir()
+NOTEBOOK_DIR = EXPERIMENT_DIR / "neurips-brain-body"
+
+
+# Use the same experiment-level configuration contract as notebooks 01-02.
+# Existing process variables win, so CI and explicit shell overrides remain
+# authoritative while an interactive Jupyter kernel still sees `.env`.
+try:
+    from dotenv import load_dotenv
+    load_dotenv(EXPERIMENT_DIR / ".env", override=False)
+except ImportError:
+    pass
+MODE = os.getenv("GAVD_MODE", "real").strip().lower()
+if MODE not in {"smoke", "real"}:
+    raise ValueError("GAVD_MODE must be 'smoke' or 'real'.")
+ARTIFACT_ROOT = Path(os.getenv("GAVD_ARTIFACT_DIR", EXPERIMENT_DIR / "work" / "artifacts")).expanduser()
+ARTIFACT_DIR = ARTIFACT_ROOT / MODE
+POSE_DIR = ARTIFACT_DIR / "poses"
+AUGMENTED_POSE_DIR = ARTIFACT_DIR / "poses_augmented"
+AUGMENTED_REPORT = ARTIFACT_DIR / "augmented_pose_extraction_report.csv"
+PROTOCOL_DIR = ARTIFACT_DIR / "evaluation_protocol"
+OUTER_FOLD = int(os.getenv("SJEPA_OUTER_FOLD", "0"))
+MODEL_SEED = int(os.getenv("SJEPA_MODEL_SEED", "20260904"))
+CONTRACT_VERSION = "sjepa_fold_contract_v2"
+INCLUDE_AUGMENTED_NORMAL = False
+
+sys.path.insert(0, str(NOTEBOOK_DIR))
+from evaluation_protocol import (
+    attach_pose_qc_eligibility,
+    SPLIT_VERSION,
+    expand_split,
+    manifest_fingerprint,
+    split_fingerprint,
+    validate_split_registry,
+)
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def show_protocol_figure():
+    path = EXPERIMENT_DIR / "images" / "22_inductive_source_split.svg"
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing protocol figure: {path}")
+    display(SVG(filename=str(path)))
+
+
+print(f"mode={MODE}; outer_fold={OUTER_FOLD}; seed={MODEL_SEED}")
+print(f"artifact root: {ARTIFACT_DIR}")
+
+
+OUTPUT:
+mode=real; outer_fold=0; seed=42
+artifact root: C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\artifacts\real
+
+
+=== CELL 2 [code] execution=2 ===
+
+BLAZEPOSE_33 = [
+    "NOSE", "LEFT_EYE_INNER", "LEFT_EYE", "LEFT_EYE_OUTER",
+    "RIGHT_EYE_INNER", "RIGHT_EYE", "RIGHT_EYE_OUTER", "LEFT_EAR",
+    "RIGHT_EAR", "MOUTH_LEFT", "MOUTH_RIGHT", "LEFT_SHOULDER",
+    "RIGHT_SHOULDER", "LEFT_ELBOW", "RIGHT_ELBOW", "LEFT_WRIST",
+    "RIGHT_WRIST", "LEFT_PINKY", "RIGHT_PINKY", "LEFT_INDEX",
+    "RIGHT_INDEX", "LEFT_THUMB", "RIGHT_THUMB", "LEFT_HIP",
+    "RIGHT_HIP", "LEFT_KNEE", "RIGHT_KNEE", "LEFT_ANKLE",
+    "RIGHT_ANKLE", "LEFT_HEEL", "RIGHT_HEEL", "LEFT_FOOT_INDEX",
+    "RIGHT_FOOT_INDEX",
+]
+MASK_KEYPOINTS = [11, 12, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+CONDITIONS = ["normal", "parkinsons", "stroke", "myopathic", "cerebralpalsy"]
+CURRICULUM = [
+    {"stage": 0, "name": "normal_only", "add": "normal",
+     "conditions": ["normal"]},
+    {"stage": 1, "name": "add_parkinsons", "add": "parkinsons",
+     "conditions": ["normal", "parkinsons"]},
+    {"stage": 2, "name": "add_stroke", "add": "stroke",
+     "conditions": ["normal", "parkinsons", "stroke"]},
+    {"stage": 3, "name": "add_myopathic", "add": "myopathic",
+     "conditions": ["normal", "parkinsons", "stroke", "myopathic"]},
+    {"stage": 4, "name": "add_cerebralpalsy", "add": "cerebralpalsy",
+     "conditions": ["normal", "parkinsons", "stroke", "myopathic",
+                    "cerebralpalsy"]},
+]
+EXPECTED_SEQUENCE_COUNTS = {
+    "normal": 284, "parkinsons": 42, "stroke": 75,
+    "myopathic": 183, "cerebralpalsy": 58,
+}
+
+
+=== CELL 3 [code] execution=3 ===
+
+import copy
+import torch
+from torch import nn
+
+
+class SkeletonPatchEncoder(nn.Module):
+    def __init__(
+        self,
+        frames=64,
+        joints=33,
+        coordinate_dim=3,
+        segment_length=4,
+        embed_dim=64,
+        depth=2,
+        heads=4,
+        dropout=0.0,
+    ):
+        super().__init__()
+        if frames % segment_length:
+            raise ValueError("frames must be divisible by segment_length")
+        self.frames = frames
+        self.joints = joints
+        self.coordinate_dim = coordinate_dim
+        self.segment_length = segment_length
+        self.segments = frames // segment_length
+        self.embed_dim = embed_dim
+        self.patch_embed = nn.Linear(segment_length * coordinate_dim, embed_dim)
+        self.time_pos = nn.Parameter(torch.randn(self.segments, embed_dim) * 0.02)
+        self.joint_pos = nn.Parameter(torch.randn(joints, embed_dim) * 0.02)
+        layer = nn.TransformerEncoderLayer(
+            d_model=embed_dim,
+            nhead=heads,
+            dim_feedforward=embed_dim * 4,
+            dropout=dropout,
+            activation="gelu",
+            batch_first=True,
+            norm_first=True,
+        )
+        self.blocks = nn.TransformerEncoder(layer, num_layers=depth)
+        self.norm = nn.LayerNorm(embed_dim)
+
+    def patchify(self, x):
+        batch, frames, joints, channels = x.shape
+        expected = (self.frames, self.joints, self.coordinate_dim)
+        if (frames, joints, channels) != expected:
+            raise ValueError(f"Expected [B, {expected}], received {x.shape}")
+        patches = x.reshape(
+            batch, self.segments, self.segment_length, joints, channels
+        )
+        patches = patches.permute(0, 1, 3, 2, 4).contiguous()
+        return patches.flatten(3)
+
+    def positioned_tokens(self, x):
+        tokens = self.patch_embed(self.patchify(x))
+        return (
+            tokens
+            + self.time_pos[None, :, None, :]
+            + self.joint_pos[None, None, :, :]
+        )
+
+    def forward(self, x, keep_mask=None):
+        tokens = self.positioned_tokens(x)
+        batch = len(tokens)
+        flat = tokens.reshape(batch, self.segments * self.joints, self.embed_dim)
+        if keep_mask is not None:
+            keep_mask = keep_mask.reshape(batch, -1)
+            kept_per_sample = keep_mask.sum(dim=1)
+            if not torch.equal(
+                kept_per_sample, kept_per_sample[:1].expand_as(kept_per_sample)
+            ):
+                raise ValueError("Each sample must keep the same number of tokens")
+            flat = flat[keep_mask].reshape(
+                batch, int(kept_per_sample[0]), self.embed_dim
+            )
+        return self.norm(self.blocks(flat))
+
+
+class SkeletonPredictor(nn.Module):
+    def __init__(
+        self,
+        segments,
+        joints,
+        encoder_dim=64,
+        predictor_dim=64,
+        depth=2,
+        heads=4,
+        dropout=0.0,
+    ):
+        super().__init__()
+        self.segments = segments
+        self.joints = joints
+        self.encoder_to_predictor = nn.Linear(encoder_dim, predictor_dim)
+        self.mask_token = nn.Parameter(torch.zeros(1, 1, predictor_dim))
+        nn.init.normal_(self.mask_token, std=0.02)
+        self.time_pos = nn.Parameter(torch.randn(segments, predictor_dim) * 0.02)
+        self.joint_pos = nn.Parameter(torch.randn(joints, predictor_dim) * 0.02)
+        layer = nn.TransformerEncoderLayer(
+            d_model=predictor_dim,
+            nhead=heads,
+            dim_feedforward=predictor_dim * 4,
+            dropout=dropout,
+            activation="gelu",
+            batch_first=True,
+            norm_first=True,
+        )
+        self.blocks = nn.TransformerEncoder(layer, num_layers=depth)
+        self.norm = nn.LayerNorm(predictor_dim)
+        self.output = nn.Linear(predictor_dim, encoder_dim)
+
+    def forward(self, visible_features, target_mask):
+        batch = len(visible_features)
+        target_mask = target_mask.reshape(batch, self.segments * self.joints)
+        visible_mask = ~target_mask
+        visible = self.encoder_to_predictor(visible_features)
+        full = self.mask_token.expand(
+            batch, self.segments * self.joints, -1
+        ).clone()
+        full[visible_mask] = visible.reshape(-1, visible.shape[-1])
+        positions = (
+            self.time_pos[:, None, :] + self.joint_pos[None, :, :]
+        ).reshape(1, self.segments * self.joints, -1)
+        full = full + positions
+        predicted = self.output(self.norm(self.blocks(full)))
+        return predicted[target_mask].reshape(batch, -1, predicted.shape[-1])
+
+
+class SJEPAGait(nn.Module):
+    def __init__(
+        self,
+        frames=64,
+        joints=33,
+        coordinate_dim=3,
+        segment_length=4,
+        embed_dim=64,
+        encoder_depth=2,
+        predictor_depth=2,
+        heads=4,
+    ):
+        super().__init__()
+        self.view_encoder = SkeletonPatchEncoder(
+            frames, joints, coordinate_dim, segment_length,
+            embed_dim, encoder_depth, heads,
+        )
+        self.target_encoder = copy.deepcopy(self.view_encoder)
+        for parameter in self.target_encoder.parameters():
+            parameter.requires_grad_(False)
+        self.predictor = SkeletonPredictor(
+            self.view_encoder.segments,
+            joints,
+            embed_dim,
+            embed_dim,
+            predictor_depth,
+            heads,
+        )
+        self.register_buffer("target_center", torch.zeros(embed_dim))
+
+    def forward(self, view, target, target_mask):
+        visible_features = self.view_encoder(view, keep_mask=~target_mask)
+        predicted = self.predictor(visible_features, target_mask)
+        with torch.no_grad():
+            all_targets = self.target_encoder(target)
+            flat_mask = target_mask.reshape(len(target), -1)
+            selected = all_targets[flat_mask].reshape(
+                len(target), -1, all_targets.shape[-1]
+            )
+        return predicted, selected
+
+    @torch.no_grad()
+    def update_target(self, momentum):
+        for target_parameter, view_parameter in zip(
+            self.target_encoder.parameters(), self.view_encoder.parameters()
+        ):
+            target_parameter.mul_(momentum).add_(
+                view_parameter, alpha=1.0 - momentum
+            )
+
+    @torch.no_grad()
+    def update_center(self, targets, beta=0.9):
+        batch_center = targets.mean(dim=(0, 1))
+        self.target_center.mul_(beta).add_(batch_center, alpha=1.0 - beta)
+
+
+def sjepa_cross_entropy(
+    predicted,
+    targets,
+    center,
+    predictor_temperature=0.10,
+    target_temperature=0.06,
+):
+    target_prob = torch.softmax(
+        (targets - center[None, None, :]) / target_temperature,
+        dim=-1,
+    ).detach()
+    prediction_log_prob = torch.log_softmax(
+        predicted / predictor_temperature,
+        dim=-1,
+    )
+    return -(target_prob * prediction_log_prob).sum(dim=-1).mean()
+
+
+def cosine_ema(step, total_steps, start=0.996, end=1.0):
+    progress = min(max(step / max(total_steps - 1, 1), 0.0), 1.0)
+    return end - (end - start) * (math.cos(math.pi * progress) + 1.0) / 2.0
+
+
+def geometric_view(x, max_degrees=8.0, translate=0.03, flip_probability=0.0):
+    view = x.clone()
+    present = view.abs().sum(dim=-1) > 1e-8
+    batch = len(view)
+    angles = (
+        torch.rand(batch, device=x.device) * 2.0 - 1.0
+    ) * math.radians(max_degrees)
+    cosine, sine = torch.cos(angles), torch.sin(angles)
+    original_x = view[..., 0].clone()
+    original_z = view[..., 2].clone()
+    rotated_x = cosine[:, None, None] * original_x - sine[:, None, None] * original_z
+    rotated_z = sine[:, None, None] * original_x + cosine[:, None, None] * original_z
+    view[..., 0] = torch.where(present, rotated_x, view[..., 0])
+    view[..., 2] = torch.where(present, rotated_z, view[..., 2])
+    translation = (
+        (torch.rand(batch, device=x.device) * 2.0 - 1.0) * translate
+    )[:, None, None, None]
+    view[..., :3] = view[..., :3] + translation
+    if flip_probability > 0.0:
+        raise NotImplementedError(
+            "flip_probability must stay 0.0 in this notebook (laterality safety)"
+        )
+    return view
+
+
+=== CELL 4 [code] execution=4 ===
+
+def interpolate_low_visibility(sequence, threshold=0.45, max_gap=4):
+    # Fill only short internal gaps and preserve the original validity mask.
+    sequence = np.asarray(sequence, dtype=np.float32).copy()
+    if sequence.ndim != 3 or sequence.shape[1:] != (33, 4):
+        raise ValueError(f"Expected [T, 33, 4], received {sequence.shape}")
+    visibility = np.nan_to_num(sequence[..., 3], nan=0.0)
+    finite = np.isfinite(sequence[..., :3]).all(axis=-1)
+    valid = (visibility >= threshold) & finite
+    filled = valid.copy()
+    for joint in range(33):
+        observed = np.flatnonzero(valid[:, joint])
+        for left, right in zip(observed[:-1], observed[1:]):
+            gap = int(right - left - 1)
+            if not 0 < gap <= max_gap:
+                continue
+            fraction = (
+                np.arange(1, gap + 1, dtype=np.float32) / (gap + 1)
+            )[:, None]
+            sequence[left + 1:right, joint, :3] = (
+                sequence[left, joint, :3][None, :] * (1.0 - fraction)
+                + sequence[right, joint, :3][None, :] * fraction
+            )
+            filled[left + 1:right, joint] = True
+        sequence[~filled[:, joint], joint, :3] = np.nan
+    sequence[..., 3] = visibility
+    return sequence, valid
+
+
+def center_and_scale(sequence, eps=1e-6):
+    sequence = np.asarray(sequence, dtype=np.float32).copy()
+    xyz = sequence[..., :3]
+    left_hip, right_hip = xyz[:, 23], xyz[:, 24]
+    left_ok = np.isfinite(left_hip).all(axis=1)
+    right_ok = np.isfinite(right_hip).all(axis=1)
+    pelvis = np.full((len(xyz), 3), np.nan, dtype=np.float32)
+    pelvis[left_ok & right_ok] = 0.5 * (
+        left_hip[left_ok & right_ok] + right_hip[left_ok & right_ok]
+    )
+    pelvis[left_ok & ~right_ok] = left_hip[left_ok & ~right_ok]
+    pelvis[right_ok & ~left_ok] = right_hip[right_ok & ~left_ok]
+    pelvis_ok = np.isfinite(pelvis).all(axis=1)
+    fallback = np.median(pelvis[pelvis_ok], axis=0) if pelvis_ok.any() else np.zeros(3)
+    pelvis[~np.isfinite(pelvis).all(axis=1)] = fallback
+    xyz = xyz - pelvis[:, None, :]
+    shoulder_width = np.linalg.norm(xyz[:, 11, :2] - xyz[:, 12, :2], axis=-1)
+    hip_width = np.linalg.norm(xyz[:, 23, :2] - xyz[:, 24, :2], axis=-1)
+    body_scale = np.nanmedian(np.maximum(shoulder_width, hip_width))
+    if not np.isfinite(body_scale) or body_scale < eps:
+        body_scale = 1.0
+    sequence[..., :3] = np.nan_to_num(
+        xyz / body_scale, nan=0.0, posinf=0.0, neginf=0.0
+    )
+    return np.nan_to_num(sequence, nan=0.0, posinf=0.0, neginf=0.0)
+
+
+def temporal_resize(array, frames):
+    array = np.asarray(array)
+    if len(array) == frames:
+        return array.copy()
+    if len(array) < 2:
+        return np.repeat(array, frames, axis=0)
+    old_t = np.linspace(0.0, 1.0, len(array))
+    new_t = np.linspace(0.0, 1.0, frames)
+    flat = array.reshape(len(array), -1)
+    resized = np.stack(
+        [np.interp(new_t, old_t, flat[:, i]) for i in range(flat.shape[1])],
+        axis=1,
+    )
+    return resized.reshape(frames, *array.shape[1:]).astype(array.dtype)
+
+
+def prepare_sequence(sequence, frames=64, visibility_threshold=0.45, max_gap=4):
+    cleaned, valid = interpolate_low_visibility(
+        sequence, visibility_threshold, max_gap=max_gap
+    )
+    cleaned = center_and_scale(cleaned)
+    cleaned = temporal_resize(cleaned, frames)
+    valid = temporal_resize(valid.astype(np.float32), frames) >= 0.5
+    return cleaned[..., :3].astype(np.float32), valid.astype(bool)
+
+
+=== CELL 5 [code] execution=5 ===
+
+def pose_records_from_cache(pose_dir=POSE_DIR, conditions=CONDITIONS):
+    records = []
+    for condition in conditions:
+        folder = Path(pose_dir) / condition
+        for path in sorted(folder.glob("*.npz")):
+            data = np.load(path, allow_pickle=False)
+            required = {
+                "sequence", "sequence_id", "video_id", "condition",
+                "frame_numbers", "crop_bounds", "fps", "source_csv",
+                "source_video", "pose_model", "pose_model_sha256",
+                "extraction_version",
+            }
+            missing = required.difference(data.files)
+            if missing:
+                raise ValueError(
+                    f"Stale pose cache {path} is missing {sorted(missing)}. "
+                    "Re-extract it with notebook 02."
+                )
+            sequence = data["sequence"].astype(np.float32)
+            if sequence.ndim != 3 or sequence.shape[1:] != (33, 4):
+                raise ValueError(f"Bad pose shape in {path}: {sequence.shape}")
+            stored = str(data["condition"].item())
+            if stored != condition:
+                raise ValueError(
+                    f"Pose condition {stored} does not match folder {condition}"
+                )
+            records.append({
+                "condition": condition,
+                "sequence_id": str(data["sequence_id"].item()),
+                "video_id": str(data["video_id"].item()),
+                "source_video": str(data["source_video"].item()),
+                "fps": float(data["fps"].item()),
+                "sequence": sequence,
+                "path": str(path),
+            })
+    return records
+
+
+def load_records_for_mode(conditions=CONDITIONS, frames=64):
+    if MODE == "smoke":
+        raise NotImplementedError("This notebook is designed for the real corpus.")
+    records = pose_records_from_cache(conditions=conditions)
+    counts = pd.Series([r["condition"] for r in records]).value_counts()
+    missing = [c for c in conditions if counts.get(c, 0) == 0]
+    if missing:
+        raise FileNotFoundError(
+            f"Real mode requires cached pose sequences for {missing}. Run notebook 02 first."
+        )
+    print(f"Real pose corpus: {len(records)} sequences")
+    return records
+
+
+def augmented_normal_records(pose_dir=AUGMENTED_POSE_DIR):
+    if not INCLUDE_AUGMENTED_NORMAL or MODE != "real":
+        return []
+    folder = Path(pose_dir) / "normal"
+    if not folder.exists():
+        raise FileNotFoundError(
+            f"SJEPA_INCLUDE_AUGMENTED_NORMAL is set but {folder} is missing."
+        )
+    report = pd.read_csv(AUGMENTED_REPORT)
+    candidates = report[
+        ~report["status"].astype(str).str.startswith("error")
+    ].copy()
+    candidates["accepted"] = (
+        pd.to_numeric(candidates["neuro_observed"], errors="coerce") >= 0.45
+    )
+    selected_ids = set(
+        candidates.loc[candidates["accepted"], "sequence_id"].astype(str)
+    )
+    available = {path.stem: path for path in folder.glob("*.npz")}
+    missing_selected = sorted(selected_ids.difference(available))
+    if missing_selected:
+        raise FileNotFoundError(
+            f"Accepted augmented pose files are missing: {missing_selected}"
+        )
+    records = []
+    for sequence_id in sorted(selected_ids):
+        path = available[sequence_id]
+        data = np.load(path, allow_pickle=False)
+        records.append({
+            "condition": "normal",
+            "sequence_id": str(data["sequence_id"].item()),
+            "video_id": str(data["video_id"].item()),
+            "source_video": str(data["source_video"].item()),
+            "fps": float(data["fps"].item()),
+            "cohort": "augmented_normal",
+            "sequence": data["sequence"].astype(np.float32),
+            "path": str(path),
+        })
+    return records
+
+
+=== CELL 6 [markdown] execution=None ===
+
+## Frozen source-disjoint evaluation map
+
+The vector diagram below is the governing contract, not decoration: every YouTube source is assigned
+to exactly one role within a fold. Encoder fitting uses **train** only; model and probe choices use
+**validation** only; **test** is opened once after every choice is frozen. Sequence rows from the same
+upload can never straddle roles.
+
+
+=== CELL 7 [code] execution=6 ===
+
+show_protocol_figure()
+
+
+OUTPUT:
+<IPython.core.display.SVG object>
+
+=== CELL 8 [markdown] execution=None ===
+
+## Contract and stage-checkpoint gate
+
+Every stage checkpoint must carry the same manifest, split, fold, seed, role, and access-log
+evidence as the final checkpoint. A path existing on disk is insufficient: its SHA-256 and all
+protocol hashes must agree. Missing stages yield `BLOCKED` rather than resurrecting saved output.
+
+The fold-local pose-QC ledger is attached through the same hash-bound contract used by notebooks 04-06. Inventory extras and decoded-ineligible manifest placeholders are excluded before role sets are compared with checkpoint evidence.
+
+
+=== CELL 9 [markdown] execution=None ===
+
+## How to read the progress display
+
+Five stages validate the protocol, verify every stage checkpoint, compute the
+development-only drift curve, select consolidation on validation-normal sources
+and open test-normal once, then write the report. Missing or incompatible
+artifacts account for remaining work as blocked/not run. A full green bar means
+the workflow executed; the retention values determine the scientific result.
+
+
+=== CELL 10 [code] execution=7 ===
+
+if str(NOTEBOOK_DIR) not in sys.path:
+    sys.path.insert(0, str(NOTEBOOK_DIR))
+from notebook_progress import NotebookTaskProgress
+
+drift_progress = NotebookTaskProgress(
+    'Normal-anchor drift and consolidation progress',
+    "stage",
+    refresh_seconds=0.5,
+)
+drift_progress.start(5, profile=MODE)
+
+with drift_progress.unit(1, "Validate the protocol-v2 bundle"):
+    MANIFEST_PATH = PROTOCOL_DIR / "eligible_sequence_manifest.csv"
+    REGISTRY_PATH = PROTOCOL_DIR / "source_split_registry.csv"
+    CONTRACT_PATH = PROTOCOL_DIR / "source_split_contract.json"
+    POSE_QC_PATH = PROTOCOL_DIR / f"pose_qc_eligibility_outer_fold_{OUTER_FOLD}.csv"
+    BLOCKED_REASON = None
+
+    missing_protocol = [p for p in [MANIFEST_PATH, REGISTRY_PATH, CONTRACT_PATH] if not p.is_file()]
+    if missing_protocol:
+        BLOCKED_REASON = (
+            "protocol-v2 bundle is absent: " + ", ".join(str(p) for p in missing_protocol)
+            + ". Run notebooks 01–02 before this diagnostic."
+        )
+    else:
+        protocol_manifest = pd.read_csv(MANIFEST_PATH)
+        source_registry = pd.read_csv(REGISTRY_PATH)
+        split_contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+        validate_split_registry(source_registry, protocol_manifest)
+        MANIFEST_SHA256 = manifest_fingerprint(protocol_manifest)
+        SPLIT_SHA256 = split_fingerprint(source_registry)
+        if split_contract.get("split_version") != SPLIT_VERSION:
+            raise ValueError("Protocol bundle is not source-constrained split v2.")
+        if split_contract.get("manifest_sha256") != MANIFEST_SHA256:
+            raise ValueError("Manifest hash does not match source_split_contract.json.")
+        if split_contract.get("split_sha256") != SPLIT_SHA256:
+            raise ValueError("Split hash does not match source_split_contract.json.")
+        if OUTER_FOLD not in set(source_registry["outer_fold"].astype(int)):
+            raise ValueError(f"Unknown outer fold {OUTER_FOLD}.")
+        fold_manifest = expand_split(protocol_manifest, source_registry, OUTER_FOLD)
+        role_video_ids = {
+            role: set(fold_manifest.loc[fold_manifest["role"].eq(role), "video_id"].astype(str))
+            for role in ("train", "validation", "test")
+        }
+        role_sequence_ids = {
+            role: set(fold_manifest.loc[fold_manifest["role"].eq(role), "sequence_id"].astype(str))
+            for role in ("train", "validation", "test")
+        }
+        if any(role_video_ids[a] & role_video_ids[b] for a, b in [
+            ("train", "validation"), ("train", "test"), ("validation", "test")
+        ]):
+            raise AssertionError("Source leakage in the frozen protocol bundle.")
+
+    if BLOCKED_REASON:
+        display(Markdown(f"> **BLOCKED — no results computed.** {BLOCKED_REASON}"))
+    else:
+        display(pd.DataFrame({
+            role: {
+                "sources": len(role_video_ids[role]),
+                "sequences": len(role_sequence_ids[role]),
+            }
+            for role in ("train", "validation", "test")
+        }).T)
+
+
+OUTPUT:
+<IPython.core.display.HTML object>
+
+OUTPUT:
+            sources  sequences
+train            60        392
+validation       20        134
+test             20        131
+
+=== CELL 11 [code] execution=8 ===
+
+REQUIRED_ACCESS_KEYS = {
+    "contract_version", "mode", "outer_fold", "model_seed", "objective",
+    "manifest_sha256", "split_sha256", "split_version", "role_video_ids",
+    "role_sequence_ids", "model_config", "model_state", "mask_keypoints",
+    "encoder_fit_video_ids", "encoder_fit_sequence_ids",
+    "checkpoint_selection_video_ids", "checkpoint_selection_sequence_ids",
+    "test_tensors_loaded", "tensor_access_log",
+}
+
+
+def checkpoint_paths(objective_name):
+    stem = f"sjepa_outer_fold_{OUTER_FOLD}_seed_{MODEL_SEED}_{objective_name}"
+    folder = ARTIFACT_DIR / "checkpoints"
+    return folder / f"{stem}.pt", folder / f"{stem}.json"
+
+
+def _as_role_sets(value):
+    return {role: set(map(str, value[role])) for role in ("train", "validation", "test")}
+
+
+def load_verified_checkpoint(objective_name, *, require_future_mask=False):
+    checkpoint_path, sidecar_path = checkpoint_paths(objective_name)
+    if not checkpoint_path.is_file() or not sidecar_path.is_file():
+        return None, None, (
+            f"missing fold-local checkpoint bundle {checkpoint_path.name} / {sidecar_path.name}; "
+            "run notebook 04 for this fold, seed, and objective"
+        )
+    sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
+    actual_sha = sha256_file(checkpoint_path)
+    if sidecar.get("checkpoint_sha256") != actual_sha:
+        raise ValueError(f"Checkpoint SHA mismatch: {checkpoint_path}")
+    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    missing = REQUIRED_ACCESS_KEYS.difference(checkpoint)
+    if missing:
+        raise ValueError(f"Checkpoint lacks protocol-v2 access evidence: {sorted(missing)}")
+    for key in [
+        "contract_version", "mode", "outer_fold", "model_seed", "manifest_sha256",
+        "split_sha256", "split_version", "role_video_ids", "role_sequence_ids",
+        "encoder_fit_video_ids", "encoder_fit_sequence_ids",
+        "checkpoint_selection_video_ids", "checkpoint_selection_sequence_ids",
+        "test_tensors_loaded",
+    ]:
+        if sidecar.get(key) != checkpoint.get(key):
+            raise ValueError(f"Sidecar/checkpoint disagreement for {key}")
+    expected = {
+        "contract_version": CONTRACT_VERSION,
+        "mode": MODE,
+        "outer_fold": OUTER_FOLD,
+        "model_seed": MODEL_SEED,
+        "manifest_sha256": MANIFEST_SHA256,
+        "split_sha256": SPLIT_SHA256,
+        "split_version": SPLIT_VERSION,
+    }
+    for key, value in expected.items():
+        if checkpoint.get(key) != value:
+            raise ValueError(f"Checkpoint {key}={checkpoint.get(key)!r}; expected {value!r}")
+    if not POSE_QC_PATH.is_file():
+        return None, None, f"missing fold pose-QC ledger: {POSE_QC_PATH}"
+    pose_qc = pd.read_csv(POSE_QC_PATH)
+    qc_rows = attach_pose_qc_eligibility(
+        fold_manifest,
+        pose_qc,
+        outer_fold=OUTER_FOLD,
+        manifest_sha256=MANIFEST_SHA256,
+        split_sha256=SPLIT_SHA256,
+    )
+    eligible = qc_rows.loc[qc_rows["pose_qc_eligible"]].copy()
+    qc_video_ids = {
+        role: set(eligible.loc[eligible["role"].eq(role), "video_id"].astype(str))
+        for role in ("train", "validation", "test")
+    }
+    qc_sequence_ids = {
+        role: set(eligible.loc[eligible["role"].eq(role), "sequence_id"].astype(str))
+        for role in ("train", "validation", "test")
+    }
+    checkpoint_videos = _as_role_sets(checkpoint["role_video_ids"])
+    checkpoint_sequences = _as_role_sets(checkpoint["role_sequence_ids"])
+    if checkpoint_videos != qc_video_ids or checkpoint_sequences != qc_sequence_ids:
+        raise ValueError("Checkpoint roles differ from the hash-bound pose-QC ledger.")
+    if any(not checkpoint_videos[role] <= role_video_ids[role] for role in checkpoint_videos):
+        raise ValueError("Pose-QC video roles are not subsets of the frozen registry.")
+    if any(not checkpoint_sequences[role] <= role_sequence_ids[role] for role in checkpoint_sequences):
+        raise ValueError("Pose-QC sequence roles are not subsets of the frozen registry.")
+    fit_videos = set(map(str, checkpoint["encoder_fit_video_ids"]))
+    fit_sequences = set(map(str, checkpoint["encoder_fit_sequence_ids"]))
+    selection_videos = set(map(str, checkpoint["checkpoint_selection_video_ids"]))
+    selection_sequences = set(map(str, checkpoint["checkpoint_selection_sequence_ids"]))
+    # A recorded test exposure is a hard failure, never a warning or BLOCKED result.
+    if fit_videos & role_video_ids["test"] or fit_sequences & role_sequence_ids["test"]:
+        raise AssertionError("LEAKAGE: encoder fitting saw outer-test IDs.")
+    if checkpoint["test_tensors_loaded"] is not False:
+        raise AssertionError("LEAKAGE: notebook 04 reports loading test tensors.")
+    if not fit_videos <= role_video_ids["train"] or not fit_sequences <= role_sequence_ids["train"]:
+        raise AssertionError("Encoder-fit IDs are not a subset of the training role.")
+    if not selection_videos <= role_video_ids["validation"]:
+        raise AssertionError("Checkpoint selection used sources outside validation.")
+    if not selection_sequences <= role_sequence_ids["validation"]:
+        raise AssertionError("Checkpoint selection used sequences outside validation.")
+    objective = checkpoint["objective"]
+    if objective.get("name") != objective_name:
+        raise ValueError("Objective name does not match the requested artifact.")
+    if require_future_mask:
+        geometry = objective.get("mask_geometry", checkpoint.get("training_mask_geometry"))
+        if geometry not in {"future", "future_suffix", "causal_future"}:
+            raise ValueError(
+                "Positive world-model evaluation requires a predictor trained with a future mask."
+            )
+    checkpoint["_path"] = str(checkpoint_path)
+    checkpoint["_sha256"] = actual_sha
+    checkpoint["_sidecar"] = sidecar
+    return checkpoint, sidecar, None
+
+
+class _FoldSkeletonEncoder(nn.Module):
+    """Exact architecture serialized by protocol-v2 notebook 04.
+
+    Diagnostic notebooks must instantiate the producer's architecture rather
+    than reinterpret ``model_config`` through an older wrapper. Strict state
+    loading below makes future architecture drift fail at the checkpoint gate.
+    """
+
+    def __init__(self, frames=32, segment_length=4, embed_dim=32, depth=1, heads=4):
+        super().__init__()
+        if frames % segment_length:
+            raise ValueError("frames must be divisible by segment_length")
+        self.frames, self.segment_length = frames, segment_length
+        self.segments, self.embed_dim = frames // segment_length, embed_dim
+        self.patch = nn.Linear(3, embed_dim)
+        self.time_pos = nn.Parameter(torch.randn(self.segments, embed_dim) * 0.02)
+        self.joint_pos = nn.Parameter(torch.randn(33, embed_dim) * 0.02)
+        self.mask_token = nn.Parameter(torch.zeros(embed_dim))
+        layer = nn.TransformerEncoderLayer(
+            embed_dim, heads, embed_dim * 2, dropout=0.0,
+            activation="gelu", batch_first=True, norm_first=True,
+        )
+        self.blocks = nn.TransformerEncoder(layer, depth)
+        self.norm = nn.LayerNorm(embed_dim)
+
+    def patchify(self, x):
+        batch = len(x)
+        return x.reshape(batch, self.segments, self.segment_length, 33, 3).mean(dim=2)
+
+    def patch_valid(self, valid):
+        batch = len(valid)
+        return valid.reshape(batch, self.segments, self.segment_length, 33).all(dim=2)
+
+    def forward(self, x, hidden=None):
+        tokens = self.patch(self.patchify(x))
+        if hidden is not None:
+            tokens = torch.where(hidden[..., None], self.mask_token, tokens)
+        tokens = tokens + self.time_pos[None, :, None, :] + self.joint_pos[None, None, :, :]
+        shape = tokens.shape
+        tokens = self.blocks(tokens.reshape(shape[0], shape[1] * shape[2], shape[3]))
+        return self.norm(tokens).reshape(shape)
+
+
+class _FoldSJEPAPredictor(nn.Module):
+    def __init__(self, segments, embed_dim=32):
+        super().__init__()
+        self.position = nn.Parameter(torch.randn(segments, 33, embed_dim) * 0.02)
+        self.net = nn.Sequential(
+            nn.Linear(embed_dim, embed_dim * 2),
+            nn.GELU(),
+            nn.Linear(embed_dim * 2, embed_dim),
+        )
+
+    def forward(self, context_tokens, visible):
+        weight = visible[..., None].float()
+        context = (context_tokens * weight).sum((1, 2)) / weight.sum((1, 2)).clamp_min(1.0)
+        return self.net(context[:, None, None, :] + self.position[None])
+
+
+class _FoldSJEPA(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.view_encoder = _FoldSkeletonEncoder(**config)
+        self.target_encoder = copy.deepcopy(self.view_encoder)
+        self.predictor = _FoldSJEPAPredictor(
+            self.view_encoder.segments, config["embed_dim"]
+        )
+
+    def forward(self, view, target, target_mask):
+        # The diagnostics pass only a target mask, so every non-target token is
+        # visible here. Pose-validity masks are applied again when metrics are
+        # aggregated; this mirrors notebook 04's checkpointed predictor API.
+        online = self.view_encoder(view, hidden=target_mask)
+        predicted_all = self.predictor(online, ~target_mask)
+        with torch.no_grad():
+            target_all = self.target_encoder(target)
+        batch, _, _, width = predicted_all.shape
+        predicted = predicted_all[target_mask].reshape(batch, -1, width)
+        targets = target_all[target_mask].reshape(batch, -1, width)
+        return predicted, targets
+
+
+def model_from_checkpoint(checkpoint):
+    model = _FoldSJEPA(checkpoint["model_config"])
+    states = checkpoint["model_state"]
+    # Strict=True is intentional: checkpoint/consumer architecture mismatch is
+    # a provenance failure, not a warning that should be partially loaded.
+    model.view_encoder.load_state_dict(states["online_encoder"], strict=True)
+    model.target_encoder.load_state_dict(states["target_encoder"], strict=True)
+    model.predictor.load_state_dict(states["predictor"], strict=True)
+    model.eval()
+    return model
+
+
+=== CELL 12 [code] execution=9 ===
+
+with drift_progress.unit(2, "Verify the complete stage-checkpoint lineage"):
+    OBJECTIVE_NAME = os.getenv("SJEPA_OBJECTIVE", "jepa_vicreg")
+    READY = False
+    if not BLOCKED_REASON:
+        final_checkpoint, final_sidecar, checkpoint_block = load_verified_checkpoint(OBJECTIVE_NAME)
+        if checkpoint_block:
+            BLOCKED_REASON = checkpoint_block
+        elif not final_sidecar.get("stage_checkpoints"):
+            BLOCKED_REASON = (
+                "the fold sidecar has no hash-bound stage_checkpoints; rerun notebook 04 under "
+                "sjepa_fold_contract_v2"
+            )
+        else:
+            stage_checkpoints = []
+            for entry in final_sidecar["stage_checkpoints"]:
+                path = Path(entry["path"])
+                if not path.is_absolute():
+                    path = ARTIFACT_DIR / "checkpoints" / path
+                if not path.is_file():
+                    BLOCKED_REASON = f"missing fold-local stage checkpoint: {path}"
+                    break
+                actual_sha = sha256_file(path)
+                if actual_sha != entry["sha256"]:
+                    raise ValueError(f"Stage checkpoint hash mismatch: {path}")
+                stage = torch.load(path, map_location="cpu", weights_only=False)
+                for key, value in {
+                    "contract_version": CONTRACT_VERSION,
+                    "outer_fold": OUTER_FOLD,
+                    "model_seed": MODEL_SEED,
+                    "manifest_sha256": MANIFEST_SHA256,
+                    "split_sha256": SPLIT_SHA256,
+                    "split_version": SPLIT_VERSION,
+                }.items():
+                    if stage.get(key) != value:
+                        raise ValueError(f"Stage checkpoint {key} mismatch: {path}")
+                fit_ids = set(map(str, stage.get("encoder_fit_video_ids", [])))
+                if fit_ids & role_video_ids["test"] or stage.get("test_tensors_loaded") is not False:
+                    raise AssertionError(f"LEAKAGE in stage checkpoint {path.name}")
+                stage["_sha256"] = actual_sha
+                stage["_stage_entry"] = entry
+                stage_checkpoints.append(stage)
+            if not BLOCKED_REASON:
+                if len(stage_checkpoints) < 2 or stage_checkpoints[0]["_stage_entry"].get("stage") != 0:
+                    BLOCKED_REASON = "stage checkpoint bundle must begin with a normal-only Stage 0"
+                else:
+                    READY = True
+
+    if BLOCKED_REASON:
+        display(Markdown(f"> **BLOCKED — no drift or consolidation result exists.** {BLOCKED_REASON}"))
+    else:
+        print(f"verified {len(stage_checkpoints)} fold-local, hash-bound stage checkpoints")
+        print("No checkpoint reports test tensors or test IDs during encoder fitting.")
+if not READY:
+    drift_progress.finish_skipped(
+        BLOCKED_REASON, status="Preflight complete — prerequisites unavailable"
+    )
+
+
+OUTPUT:
+verified 5 fold-local, hash-bound stage checkpoints
+No checkpoint reports test tensors or test IDs during encoder fitting.
+
+
+=== CELL 13 [code] execution=10 ===
+
+def load_fold_records(checkpoint, allowed_roles=("train", "validation", "test")):
+    allowed_roles = tuple(allowed_roles)
+    if not set(allowed_roles) <= {"train", "validation", "test"}:
+        raise ValueError(f"Unknown role request: {allowed_roles}")
+    checkpoint_roles = _as_role_sets(checkpoint["role_sequence_ids"])
+    wanted_by_role = {role: checkpoint_roles[role] for role in allowed_roles}
+    wanted = set().union(*wanted_by_role.values())
+    manifest_rows = protocol_manifest.set_index("sequence_id", drop=False)
+    records = []
+    for sequence_id in sorted(wanted):
+        if sequence_id not in manifest_rows.index:
+            raise ValueError(f"Checkpoint sequence is not in the frozen manifest: {sequence_id}")
+        row = manifest_rows.loc[sequence_id]
+        path = POSE_DIR / str(row["condition"]) / f"{sequence_id}.npz"
+        if not path.is_file():
+            raise FileNotFoundError(f"Missing pose-QC-eligible cache: {path}")
+        data = np.load(path, allow_pickle=False)
+        required = {"sequence", "sequence_id", "video_id", "condition", "fps", "frame_numbers"}
+        missing = required.difference(data.files)
+        if missing:
+            raise ValueError(f"Pose cache {path} lacks {sorted(missing)}")
+        observed = {
+            "sequence_id": str(data["sequence_id"].item()),
+            "video_id": str(data["video_id"].item()),
+            "condition": str(data["condition"].item()),
+        }
+        expected = {
+            "sequence_id": sequence_id,
+            "video_id": str(row["video_id"]),
+            "condition": str(row["condition"]),
+        }
+        if observed != expected:
+            raise ValueError(f"Pose provenance mismatch in {path}: {observed} != {expected}")
+        role = next(role for role, ids in wanted_by_role.items() if sequence_id in ids)
+        records.append({
+            **observed,
+            "role": role,
+            "fps": float(data["fps"].item()),
+            "frame_numbers": data["frame_numbers"].astype(np.int64),
+            "sequence": data["sequence"].astype(np.float32),
+            "path": str(path),
+        })
+    return records
+
+
+=== CELL 14 [markdown] execution=None ===
+
+## Development-only drift curve
+
+The Stage-0 normal representation is the fold-local reference. Cosines are first averaged over
+sequences from the same video and then across videos, giving every source equal weight. Cache
+reuse requires exact agreement on split hash, manifest hash, checkpoint hash, role, and ordered
+sequence IDs; otherwise embeddings are recomputed.
+
+
+=== CELL 15 [code] execution=11 ===
+
+from torch.nn import functional as F
+
+
+def target_embeddings(checkpoint, records, batch_size=16):
+    model = model_from_checkpoint(checkpoint)
+    frames = int(checkpoint["model_config"]["frames"])
+    embed_dim = int(checkpoint["model_config"]["embed_dim"])
+    segments = frames // int(checkpoint["model_config"]["segment_length"])
+    prepared = [prepare_sequence(record["sequence"], frames=frames) for record in records]
+    arrays = np.stack([item[0] for item in prepared]).astype(np.float32)
+    validity = np.stack([item[1] for item in prepared])
+    vectors = []
+    for start in range(0, len(arrays), batch_size):
+        batch = torch.tensor(arrays[start:start + batch_size], dtype=torch.float32)
+        valid_batch = validity[start:start + batch_size]
+        with torch.no_grad():
+            tokens = model.target_encoder(batch).reshape(len(batch), segments, 33, embed_dim)
+        valid_patch = valid_batch.reshape(len(batch), segments, frames // segments, 33).all(axis=2)
+        weights = torch.tensor(valid_patch[:, :, MASK_KEYPOINTS], dtype=tokens.dtype).unsqueeze(-1)
+        selected = tokens[:, :, MASK_KEYPOINTS]
+        pooled = (selected * weights).sum((1, 2)) / weights.sum((1, 2)).clamp_min(1.0)
+        vectors.append(pooled.cpu().numpy())
+    return np.concatenate(vectors)
+
+
+def verified_embedding_cache(checkpoint, records, role):
+    output_dir = ARTIFACT_DIR / "fold_evaluation" / f"outer_fold_{OUTER_FOLD}" / "embedding_cache"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stage = int(checkpoint["_stage_entry"]["stage"])
+    path = output_dir / f"normal_{role}_stage_{stage:02d}_{checkpoint['_sha256'][:12]}.npz"
+    expected = {
+        "contract_version": CONTRACT_VERSION,
+        "outer_fold": OUTER_FOLD,
+        "role": role,
+        "manifest_sha256": MANIFEST_SHA256,
+        "split_sha256": SPLIT_SHA256,
+        "checkpoint_sha256": checkpoint["_sha256"],
+        "sequence_ids": [record["sequence_id"] for record in records],
+    }
+    if path.is_file():
+        cached = np.load(path, allow_pickle=False)
+        observed = json.loads(str(cached["metadata_json"].item())) if "metadata_json" in cached.files else None
+        if observed == expected:
+            print(f"verified cache hit: {path.name}")
+            return cached["embeddings"]
+        print(f"cache rejected (contract mismatch): {path.name}")
+    embeddings = target_embeddings(checkpoint, records)
+    np.savez_compressed(path, embeddings=embeddings, metadata_json=json.dumps(expected, sort_keys=True))
+    return embeddings
+
+
+def source_equal_cosine(reference, current, records):
+    cosine = F.cosine_similarity(
+        torch.tensor(reference), torch.tensor(current), dim=1
+    ).numpy()
+    frame = pd.DataFrame({
+        "video_id": [record["video_id"] for record in records],
+        "cosine": cosine,
+    }).groupby("video_id", as_index=False)["cosine"].mean()
+    return float(frame["cosine"].mean()), frame
+
+
+if not READY:
+    print("SKIPPED: no stage drift was computed.")
+else:
+    with drift_progress.unit(3, "Compute development-only normal-anchor drift"):
+        development_records = load_fold_records(
+            final_checkpoint, allowed_roles=("train", "validation")
+        )
+        normal_by_role = {
+            role: [record for record in development_records if record["condition"] == "normal" and record["role"] == role]
+            for role in ("train", "validation")
+        }
+        # Development curves never touch test-normal records.
+        development_rows = []
+        stage_zero = stage_checkpoints[0]
+        reference_by_role = {
+            role: verified_embedding_cache(stage_zero, normal_by_role[role], role)
+            for role in ("train", "validation")
+        }
+        for stage in stage_checkpoints:
+            for role in ("train", "validation"):
+                current = verified_embedding_cache(stage, normal_by_role[role], role)
+                value, _ = source_equal_cosine(reference_by_role[role], current, normal_by_role[role])
+                development_rows.append({
+                    "stage": int(stage["_stage_entry"]["stage"]),
+                    "stage_name": stage["_stage_entry"]["name"],
+                    "role": role,
+                    "source_equal_anchor_cosine": value,
+                    "sources": len({record["video_id"] for record in normal_by_role[role]}),
+                })
+        development_drift = pd.DataFrame(development_rows)
+        display(development_drift)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+verified cache hit: normal_train_stage_00_03c4414cd990.npz
+verified cache hit: normal_validation_stage_00_03c4414cd990.npz
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+   stage         stage_name        role  source_equal_anchor_cosine  sources
+0      0        normal_only       train                    1.000000       18
+1      0        normal_only  validation                    1.000000        5
+2      1     add_parkinsons       train                    0.995692       18
+3      1     add_parkinsons  validation                    0.992833        5
+4      2         add_stroke       train                    0.984225       18
+5      2         add_stroke  validation                    0.969039        5
+6      3      add_myopathic       train                    0.892483       18
+7      3      add_myopathic  validation                    0.737187        5
+8      4  add_cerebralpalsy       train                    0.867689       18
+9      4  add_cerebralpalsy  validation                    0.701058        5
+
+=== CELL 16 [markdown] execution=None ===
+
+## Validation selection, then test-normal once
+
+Candidate objectives are declared in `SJEPA_CONSOLIDATION_CANDIDATES`. Retention on validation-
+normal sources selects the candidate, with validation loss as a deterministic tie-break. Only the
+selected candidate is evaluated on test-normal sources.
+
+### Archived method: single-centroid AnchorGuard
+
+The former single-centroid penalty can reward collapse toward one normal vector and had no honest
+fold-local retraining evidence. It is **archived/blocked**, not the headline repair. It may re-enter
+only as a separately trained candidate with anti-collapse checks and the same validation-only
+selection contract.
+
+
+=== CELL 17 [code] execution=12 ===
+
+def objective_is_supervised(checkpoint):
+    objective = checkpoint["objective"]
+    return bool(objective.get("group_loss", False) or not objective.get("label_free", True))
+
+
+if not READY:
+    print("SKIPPED: candidate selection and final test were not run.")
+else:
+    with drift_progress.unit(4, "Select on validation-normal and open test-normal once"):
+        requested = [name.strip() for name in os.getenv(
+            "SJEPA_CONSOLIDATION_CANDIDATES", OBJECTIVE_NAME
+        ).split(",") if name.strip()]
+        candidates = []
+        candidate_block = None
+        for name in requested:
+            candidate, sidecar, reason = load_verified_checkpoint(name)
+            if reason:
+                candidate_block = f"requested candidate {name!r} is unavailable: {reason}"
+                break
+            stages = sidecar.get("stage_checkpoints", [])
+            if not stages:
+                candidate_block = f"candidate {name!r} has no Stage-0 reference checkpoint"
+                break
+            stage0_path = Path(stages[0]["path"])
+            if not stage0_path.is_absolute():
+                stage0_path = ARTIFACT_DIR / "checkpoints" / stage0_path
+            stage0 = torch.load(stage0_path, map_location="cpu", weights_only=False)
+            stage0["_sha256"] = sha256_file(stage0_path)
+            stage0["_stage_entry"] = stages[0]
+            candidate["_stage_entry"] = {"stage": 99, "name": f"final_{name}"}
+            validation_reference = verified_embedding_cache(stage0, normal_by_role["validation"], "validation")
+            validation_current = verified_embedding_cache(candidate, normal_by_role["validation"], "validation")
+            validation_retention, _ = source_equal_cosine(
+                validation_reference, validation_current, normal_by_role["validation"]
+            )
+            candidates.append({
+                "name": name,
+                "checkpoint": candidate,
+                "stage0": stage0,
+                "validation_retention": validation_retention,
+                "validation_loss": float(candidate["best_validation_loss"]),
+                "supervised": objective_is_supervised(candidate),
+            })
+        if candidate_block:
+            display(Markdown(f"> **BLOCKED — no consolidation test result exists.** {candidate_block}"))
+        else:
+            # Selection is validation-only; test-normal embeddings have not been loaded yet.
+            selected = sorted(
+                candidates,
+                key=lambda row: (-row["validation_retention"], row["validation_loss"], row["name"]),
+            )[0]
+            print("selected on held-out validation-normal sources:", selected["name"])
+            # Test-normal pose tensors are loaded only after candidate selection is frozen.
+            selected_test_records = load_fold_records(
+                selected["checkpoint"], allowed_roles=("test",)
+            )
+            test_normal_records = [
+                record for record in selected_test_records if record["condition"] == "normal"
+            ]
+            test_reference = verified_embedding_cache(selected["stage0"], test_normal_records, "test")
+            test_current = verified_embedding_cache(selected["checkpoint"], test_normal_records, "test")
+            test_retention, test_sources = source_equal_cosine(
+                test_reference, test_current, test_normal_records
+            )
+            final_test = {
+                "selected_objective": selected["name"],
+                "objective_label": "SUPERVISED group-loss ablation" if selected["supervised"] else "label-free JEPA+VICReg",
+                "validation_source_equal_anchor_cosine": selected["validation_retention"],
+                "test_source_equal_anchor_cosine": test_retention,
+                "test_normal_sources": int(len(test_sources)),
+            }
+            display(pd.DataFrame([final_test]))
+    if candidate_block:
+        drift_progress.block(candidate_block, account_for_remaining=True)
+
+
+OUTPUT:
+verified cache hit: normal_validation_stage_00_03c4414cd990.npz
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+selected on held-out validation-normal sources: jepa_vicreg
+
+
+OUTPUT:
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.blocks = nn.TransformerEncoder(layer, depth)
+
+
+OUTPUT:
+  selected_objective         objective_label  \
+0        jepa_vicreg  label-free JEPA+VICReg   
+
+   validation_source_equal_anchor_cosine  test_source_equal_anchor_cosine  \
+0                               0.701058                         0.849632   
+
+   test_normal_sources  
+0                    7  
+
+=== CELL 18 [code] execution=13 ===
+
+if not READY or "final_test" not in globals():
+    print("BLOCKED: no drift/consolidation report was written.")
+else:
+    with drift_progress.unit(5, "Persist drift and consolidation provenance"):
+        output_dir = ARTIFACT_DIR / "fold_evaluation" / f"outer_fold_{OUTER_FOLD}"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        report_path = output_dir / f"normal_anchor_drift_seed_{MODEL_SEED}.json"
+        report = {
+            "notebook": "08_normal_anchor_drift_and_consolidation",
+            "contract_version": CONTRACT_VERSION,
+            "split_version": SPLIT_VERSION,
+            "outer_fold": OUTER_FOLD,
+            "manifest_sha256": MANIFEST_SHA256,
+            "split_sha256": SPLIT_SHA256,
+            "selection": "normal validation sources only",
+            "test": "selected candidate on normal test sources once; sequences averaged within source",
+            "development_drift": development_drift.to_dict(orient="records"),
+            "final_test": final_test,
+            "archived_method": (
+                "Single-centroid AnchorGuard is collapse-prone and is not a headline result. "
+                "It remains blocked unless retrained as a distinct fold-local candidate."
+            ),
+        }
+        report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+        print(f"wrote {report_path}")
+    drift_progress.complete(status="Normal-anchor workflow complete")
+
+
+OUTPUT:
+wrote C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\artifacts\real\fold_evaluation\outer_fold_0\normal_anchor_drift_seed_42.json
+
+
+=== CELL 19 [markdown] execution=None ===
+
+## Visual retention and consolidation result
+
+The development curve uses train and validation normal sources only. Candidate selection is frozen on validation retention before the selected checkpoint is applied once to test-normal sources.
+
+
+=== CELL 20 [code] execution=1 ===
+
+# Paper and notebook rendering share this single source of truth.
+from pathlib import Path as _VisualPath
+import os as _visual_os
+import sys as _visual_sys
+
+
+def _find_visual_experiment(start=None):
+    start = _VisualPath(start or _VisualPath.cwd()).resolve()
+    for candidate in [start, *start.parents]:
+        if (candidate / "neurips-brain-body").is_dir() and (candidate / "data-gavd").is_dir():
+            return candidate
+        nested = candidate / "experiments" / "sjepa" / "gavd5-drift"
+        if (nested / "neurips-brain-body").is_dir() and (nested / "data-gavd").is_dir():
+            return nested
+    raise FileNotFoundError("Could not locate experiments/sjepa/gavd5-drift")
+
+
+_visual_experiment = _VisualPath(globals().get("EXPERIMENT_DIR", _find_visual_experiment())).resolve()
+_visual_notebook_dir = _visual_experiment / "neurips-brain-body"
+if str(_visual_notebook_dir) not in _visual_sys.path:
+    _visual_sys.path.insert(0, str(_visual_notebook_dir))
+try:
+    from dotenv import load_dotenv as _visual_load_dotenv
+    _visual_load_dotenv(_visual_experiment / ".env", override=False)
+except ImportError:
+    pass
+_visual_mode = str(globals().get("MODE", _visual_os.getenv("GAVD_MODE", "real"))).strip().lower()
+_visual_artifact_root = _VisualPath(
+    _visual_os.getenv("GAVD_ARTIFACT_DIR", _visual_experiment / "work" / "artifacts")
+).expanduser()
+_visual_artifact_dir = _VisualPath(globals().get("ARTIFACT_DIR", _visual_artifact_root / _visual_mode))
+_visual_outer_fold = int(globals().get("OUTER_FOLD", _visual_os.getenv("SJEPA_OUTER_FOLD", "0")))
+_visual_seed = int(globals().get("MODEL_SEED", _visual_os.getenv("SJEPA_MODEL_SEED", "42")))
+_visual_objective = str(globals().get("OBJECTIVE_NAME", _visual_os.getenv("SJEPA_OBJECTIVE", "jepa_vicreg")))
+
+from scientific_visuals import render_notebook_summary
+
+visual_summary = render_notebook_summary(
+    "08",
+    experiment_dir=_visual_experiment,
+    artifact_dir=_visual_artifact_dir,
+    outer_fold=_visual_outer_fold,
+    model_seed=_visual_seed,
+    objective=_visual_objective,
+)
+print("Notebook SVG:", visual_summary.notebook_svg)
+print("Paper assets:", visual_summary.paper_svg, visual_summary.paper_png, visual_summary.paper_pdf)
+
+
+OUTPUT:
+findfont: Failed to find font weight semibold, now using 700.
+
+
+OUTPUT:
+findfont: Failed to find font weight semibold, now using 700.
+
+
+OUTPUT:
+<IPython.core.display.SVG object>
+
+OUTPUT:
+Notebook SVG: C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\artifacts\real\figures\bbfm_anchor_drift_v2.svg
+Paper assets: C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\docs\figures\bbfm_anchor_drift_v2.svg C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\docs\figures\bbfm_anchor_drift_v2.png C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\docs\figures\bbfm_anchor_drift_v2.pdf

@@ -1,77 +1,69 @@
-# Evidence ledger for notebooks 00 to 06
+# Evidence ledger for the BrainBodyFM pipeline
 
-This ledger records the facts used to select the seven proposals. A saved output is evidence about this run. It is not automatically evidence about a new person, camera, or clinic.
+This ledger separates verified corpus/protocol facts from pending model evidence. A saved output describes only the population, split, code, and lineage that produced it.
 
-## Data and independence
+## Current data evidence
 
-| Quantity | Saved value | Consequence |
-|---|---:|---|
-| Canonical sequences | 96 | Useful for pipeline development, not 96 independent people |
-| Canonical source videos | 18 | Primary independent unit for available evaluation |
-| Canonical normal sources | 1 | Broad normal-gait generalization cannot be estimated |
-| Parkinson's sources | 2 | Enumerate both possible single-source holdouts |
-| Stroke sources | 3 | Report every source-level result |
-| Myopathic sources | 10 | Largest source support, still small |
-| Cerebral palsy sources | 2 | Enumerate both possible single-source holdouts |
-| Added-normal sequences | 63 accepted of 64 candidates | Secondary data with a different annotation and extraction pathway |
-| Full curriculum | 159 sequences from 35 videos | Larger clip count does not remove source and provenance dependence |
-
-Source: project `README.md`, notebook 01 outputs, and notebook 06 leakage tables.
-
-## Model and training
-
-- Every 64-frame sequence is divided into 16 four-frame positions.
-- Thirty-three joints times 16 positions gives 528 possible joint-time tokens.
-- Only 12 shoulder, hip, knee, ankle, heel, and foot-index landmarks may be masked as targets.
-- The nominal eligible-mask target is 0.60, but the batch-safe sampler uses the least-visible sample. The saved mean eligible fraction fell from 0.551 at the end of Stage 0 to 0.423 at the end of Stage 4.
-- The completed curriculum used 600 epochs and 11,400 optimizer updates.
-- Stage 0 uses normal sequences. Stages 1 to 4 add a condition-aware group loss, so they are label-informed.
-- Final JEPA loss was 0.477845 and final VICReg loss was 8.418068.
-- Final feature standard deviation was 0.413745 and mean pairwise cosine was 0.609342.
-- Normal-anchor cosine fell from 0.954 after Stage 1 to 0.594197 after Stage 4, evidence of substantial drift.
-
-Source: notebook 04 saved outputs and project `README.md`.
-
-## Representation geometry
-
-Notebook 05 pooled each canonical sequence into a 384-dimensional vector using means and standard deviations. Saved values:
-
-| Diagnostic | Value | Interpretation |
-|---|---:|---|
-| Cosine silhouette | 0.008975 | Does not show clean five-group separation |
-| Minimum centroid distance | 0.036718 | Smaller than mean within-condition distance |
-| Mean centroid distance | 0.292119 | Descriptive only |
-| Mean within-condition distance | 0.119521 | Conditions overlap materially |
-| Closest centroids | Myopathic and cerebral palsy | Descriptive, not clinical similarity |
-
-The 0.036718 pooled-space cosine distance is not comparable to notebook 04's 0.364318 Euclidean group-loss centroid distance. They use different representations and metrics.
-
-## Readouts and leakage
-
-| Lane | Accuracy | Balanced accuracy | Macro F1 | Exposure boundary |
+|Gate|Sequences|Source videos|Annotated frames|Evidence status|
 |---|---:|---:|---:|---|
-| All-96 stratified S-JEPA | 0.793 | 0.889 | 0.821 | All 16 test videos overlap classifier training; all 29 test rows trained the encoder |
-| All-96 missingness only | 0.448 | 0.466 | 0.429 | Same sequence-level split |
-| Exact earlier 68-row S-JEPA | 0.714 | 0.730 | 0.742 | All test videos overlap; encoder saw all rows |
-| Video-grouped binary readout | 0.849 | 0.874 | 0.826 | Probe split is grouped, but encoder saw all 159 rows |
-| Video-grouped five-class readout | 0.653 | 0.603 | 0.625 | Two folds; encoder saw all 159 rows |
+|Raw annotations|666|103|140,641|Counted from the five manifest folders|
+|Metadata-public|657|100|137,690|Dated live-metadata snapshot, local date 2026-09-04|
+|Decoded-span candidate upper bound|656|99|137,232|Theoretical maximum if the one retryable acquisition failure is recovered|
+|Decoded-frame eligible, current audit|655|98|135,804|Measured after all public sources were attempted|
+|Pose-QC eligible, fold 0|639|97|134,259|Measured at neurologic-joint observed fraction >= 0.50|
 
-These values establish in-corpus decodability. They do not estimate unseen-source performance.
+Metadata-public counts by manifest condition:
 
-## Artifact lineage warning
+|Condition|Sequences|Source videos|Annotated frames|
+|---|---:|---:|---:|
+|Normal|291|32|41,340|
+|Parkinson's|47|11|10,426|
+|Stroke|75|18|32,930|
+|Myopathic|184|29|33,992|
+|Cerebral palsy|60|10|19,002|
+|**Total**|**657**|**100**|**137,690**|
 
-The augmented experiment is documented with fingerprint prefix `d0acc262`, while the locally available artifact set has also been observed with a canonical fingerprint prefix `dba24a`. Some documented augmented checkpoint filenames are absent from the current local cache. Before comparing checkpoints, bind every result to one manifest, experiment fingerprint, file hash, config, and cohort. Do not combine metrics across lineages.
+At the dated check, `sf5X4YYkWUA` and `YjRoLtP1di0` were private, while `yULxvDc9e8c` was unavailable. This accounts for nine annotated sequences across three sources. `n93bgWhLZk4` downloaded but had only 228 frames for annotations through frame 458 and is terminal attrition. `hGNKzkCF4J8` remained a retryable acquisition failure after four bounded client/format strategies. The measured decoded-frame cohort is 655 sequences / 98 sources / 135,804 annotated frames; 656 / 99 / 137,232 remains only the candidate upper bound if the retryable source is recovered. Notebook 02's fold-0 audit found all 655 locked caches valid and retained 639 sequences / 97 sources / 134,259 frames after pose QC.
+
+## Current independence contract
+
+Protocol v2 freezes five source-grouped outer folds from the 100 metadata-public sources. Each fold contains 60 training, 20 validation, and 20 test sources. Every source is test exactly once and no source crosses roles within a fold.
+
+|Artifact identity|SHA-256|
+|---|---|
+|Metadata-public input manifest|`7fd559e5105b11011a3e5c194b7ccc29729c56491c424745834df39884123b5a`|
+|Protocol-v2 split registry|`ff3518b87b1d1fa7d95efb1aea1711773137a21699967cb8015edb8d845ccbe1`|
+
+These are deterministic hashes from the dated snapshot and current split module. The fold-0 pose-QC bundle has been generated; fold-local checkpoint and model-result hashes remain pending.
+
+## Model and training facts
+
+- A 64-frame sequence is divided into 16 four-frame positions.
+- Thirty-three joints across 16 positions produce 528 possible joint-time tokens.
+- Only the 12 shoulder, hip, knee, ankle, heel, and foot-index landmarks may become prediction targets.
+- The primary representation objective is label-free JEPA plus VICReg.
+- The condition-label group term is a supervised ablation, not part of the primary self-supervised claim.
+- The full encoder and predictor, preprocessing, selection, and readout must be refitted independently inside every outer fold and seed.
+
+These are implementation or protocol facts, not evidence that the model generalizes.
+
+## Model-result status
+
+No protocol-v2 model metric is currently supported by a fold-local run bundle. Earlier anchor, geometry, classifier, temporal, laterality, forecasting, and repair results are archived because they came from older cohorts, mixed lineages, or encoders exposed to evaluation inputs. They are not comparable with future protocol-v2 results and must not be reused as baselines without a complete fold-local rerun.
+
+Required result artifacts include per-fold manifests, decoded-media and pose-QC attrition, parent and checkpoint hashes, seeds, configurations, per-source predictions, uncertainty inputs, and a claim ledger mapping every reported value to its file.
 
 ## Evidence levels
 
-| Level | Supported statement |
+|Level|Currently supported statement|
 |---|---|
-| Direct implementation fact | The model, masking, preprocessing, and readout code paths exist and saved checks ran |
-| Direct run fact | The recorded run stayed numerically finite, did not reach total constant collapse, and drifted across stages |
-| Corpus-specific descriptive fact | Labels and two scalars are decodable inside the exposed corpus |
-| Open question | Whether temporal order remains in tokens after current pooling |
-| Open question | Whether any method generalizes to unseen source videos when the encoder is trained strictly inside the outer fold |
-| Unsupported | New-patient, cross-clinic, causal, diagnostic, disentangled, or full world-model claims |
+|Direct corpus fact|The raw and dated metadata-public counts above|
+|Direct protocol fact|The deterministic five-fold 60/20/20 source-role registry and hashes above|
+|Measured decode cohort|655 sequences from 98 sources pass the current container/FPS/last-annotated-frame gate|
+|Candidate upper bound|At most 656 sequences from 99 sources if the retryable acquisition failure is recovered|
+|Pending run fact|Pose-QC cohort, training stability, retention, and readout values|
+|Unsupported|Unseen-source model performance before fold-local rerun|
+|Unsupported|Unseen-person, cross-clinic, causal, diagnostic, surveillance, or deployment claims|
 
 ## Primary literature anchors
 
@@ -80,5 +72,5 @@ The augmented experiment is documented with fingerprint prefix `d0acc262`, while
 - Bardes et al., [Revisiting Feature Prediction for Learning Visual Representations from Video](https://arxiv.org/abs/2404.08471), 2024.
 - Bardes, Ponce, and LeCun, [VICReg](https://arxiv.org/abs/2105.04906), ICLR 2022.
 - Ranjan et al., [GAVD](https://arxiv.org/abs/2407.04190), IEEE Access 2025.
-- Kapoor and Narayanan, [Leakage and the Reproducibility Crisis in Machine-Learning-Based Science](https://arxiv.org/abs/2207.07048), Patterns 2023.
-- Varoquaux, [Cross-validation failure: Small sample sizes lead to large error bars](https://pubmed.ncbi.nlm.nih.gov/28655633/), NeuroImage 2018.
+- Kapoor and Narayanan, [Leakage and the Reproducibility Crisis in Machine-Learning-Based Science](https://arxiv.org/abs/2207.07048), *Patterns* 2023.
+- Varoquaux, [Cross-validation failure: Small sample sizes lead to large error bars](https://pubmed.ncbi.nlm.nih.gov/28655633/), *NeuroImage* 2018.

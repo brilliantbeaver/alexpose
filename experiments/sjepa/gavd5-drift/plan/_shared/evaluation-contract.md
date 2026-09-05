@@ -1,44 +1,71 @@
 # Shared evaluation contract
 
-Every proposal in this `plan/` folder must follow this contract instead of inventing its own evaluation rules. The point is simple: this project's own history shows that when each study designs its own split and its own baseline, small measurement mistakes get mistaken for real findings. Following one shared contract means a reader can compare across the seven proposals and trust that a claimed effect is not just an artifact of a looser evaluation.
+Every proposal in `plan/` follows this contract. It fixes the population, source-level split, fitting boundary, controls, and claim language before model results are inspected.
 
-## Why this contract exists (the evidence behind it)
+## Data gates
 
-GAVD5's canonical labeled cohort is 96 sequences, but those 96 sequences come from only 18 source videos: 12 normal sequences from 1 video, 9 Parkinson's from 2 videos, 12 stroke from 3 videos, 47 myopathic from 10 videos, and 16 cerebral palsy from 2 videos. The full curriculum (159 sequences, 35 videos) adds more normal sequences but does not fix this: normal gait still traces back to very few underlying people and cameras.
+Never use one unqualified "dataset size." Report sequences, unique source videos, and annotated manifest frames at the relevant gate.
 
-Because of this, every accuracy or AUC number produced so far in this project and its predecessor lineage (a related, separate codebase called `skeleton-jepa/gavd` through `gavd4`) has had some form of leakage: either the same video appears on both sides of a train/test split, or the self-supervised encoder was trained on the very sequences later used to "test" a downstream probe. A registered, multi-seed ablation study in that predecessor lineage found that once evaluation was tightened, a promising-looking architecture change shrank to a statistically indistinguishable null result (+0.0083 accuracy, 95% confidence interval crossing zero). The lesson: an evaluation must be strict enough that a fake finding cannot survive it, or the proposal is not worth running.
+|Gate|Sequences|Source videos|Annotated frames|Status|
+|---|---:|---:|---:|---|
+|Raw annotations|666|103|140,641|All five GAVD manifest folders|
+|Metadata-public|657|100|137,690|Live platform metadata on local date 2026-09-04|
+|Decoded-span candidate upper bound|656|99|137,232|Theoretical maximum if the one retryable acquisition failure is recovered|
+|Decoded-frame eligible, current audit|655|98|135,804|Last annotated frame decodes; one terminal-short and one retryable acquisition failure|
+|Pose-QC eligible, fold 0|639|97|134,259|Neurologic-joint observed fraction >= the predeclared 0.50 threshold|
 
-## The rule: split by source video, first
+The metadata-public population is normal 291 sequences/32 sources/41,340 annotated frames, Parkinson's 47/11/10,426, stroke 75/18/32,930, myopathic 184/29/33,992, and cerebral palsy 60/10/19,002. At the dated metadata check, `sf5X4YYkWUA` and `YjRoLtP1di0` were private and `yULxvDc9e8c` was unavailable.
 
-A "source video" is the original YouTube video a sequence was cut from. Before any preprocessing, any representation training, any checkpoint selection, or any probe fitting happens, decide which source videos go into an outer-training group and which go into an outer-held-out group. Nothing downstream is allowed to touch the held-out group's data until the very last evaluation step.
+"Metadata-public" means that the platform returned public metadata without authentication. It does not establish download success, valid FPS, sufficient decoded frames, or acceptable pose coverage. The current decode audit measures 655 eligible sequences from 98 sources: `n93bgWhLZk4` is terminal-short and `hGNKzkCF4J8` is retryable. The 656/99 row remains a **candidate upper bound** if the latter source is recovered. Notebook 02 validated all 655 locked pose caches, then retained 639 sequences from 97 sources at the separate pose-QC gate. Failures are recorded against the frozen split; they do not trigger a convenient re-split.
 
-This is necessary but not sufficient. Two classes (Parkinson's and cerebral palsy) have only 2 source videos each in the canonical cohort, and normal gait traces to very few source videos overall. A single video-disjoint split for these classes is unstable: swapping which one video is "held out" can flip the result. So in addition to one primary split, every proposal must report:
+## Frozen protocol-v2 split
 
-- the exact list of which source videos were assigned to training versus held-out, so the split is auditable;
-- a leave-one-source-out sensitivity check for any class with fewer than 4 source videos, showing the result under every possible choice of held-out video, not just one lucky (or unlucky) choice;
-- whether each held-out test row's source video, and its underlying data-collection pathway (canonical GAVD extraction versus the separately-collected "added normal" pathway), was ever seen during self-supervised pretraining. If the encoder was pretrained on the same videos later used for testing, that must be stated plainly next to the reported number, not hidden in a footnote.
+The independent unit is the canonical YouTube source-video ID. Protocol v2 deterministically assigns the 100 metadata-public sources to five outer folds. In every fold:
 
-## Baselines every proposal should compare against, where relevant
+- 60 sources are training sources and may receive gradient updates;
+- 20 sources are validation sources and may select preprocessing, hyperparameters, stopping, and checkpoints; and
+- 20 sources are test sources and remain sealed until the pipeline is frozen.
 
-- A missingness-only control: a model trained only on the fraction of frames/joints that MediaPipe detected, with zero gait geometry. If a proposed method does not clearly beat this, it may be picking up which joints the pose detector tends to lose, not gait itself.
-- A provenance-only control where relevant: since canonical and "added normal" sequences use different extraction pipelines, check whether a result changes when provenance is controlled for.
-- The existing frozen S-JEPA checkpoint's current numbers (documented in `notes/02_paper_draft.md` and `docs/staged_sjepa_gait.md`), clearly labeled as coming from an evaluation with encoder-side exposure to the test data, not as a fair external baseline.
+Each source is outer-test exactly once, and every sequence inherits its source's role. Folder labels balance the folds but never allow a source to cross roles.
 
-## Statistics
+- Input-manifest SHA-256: `7fd559e5105b11011a3e5c194b7ccc29729c56491c424745834df39884123b5a`
+- Split SHA-256: `ff3518b87b1d1fa7d95efb1aea1711773137a21699967cb8015edb8d845ccbe1`
 
-- Use at least 3 seeds to screen an idea, and at least 5 seeds before treating any result as a finding worth writing up.
-- Treat checkpoints or evaluation folds coming from the same training run as correlated, not independent.
-- Report an effect size and a confidence interval, not just a point estimate and not just a p-value.
-- State the primary metric in advance, before looking at results, and do not silently substitute a friendlier metric after the fact.
+These are deterministic hashes from the 2026-09-04 metadata-public snapshot and protocol-v2 module. Fold-0 pose-QC artifacts are current; the corresponding fold-local checkpoints and model-result artifacts are pending.
 
-## Claim hygiene (say this, do not say that)
+## Fit boundary
 
-- A prediction-error spike is evidence of surprise to the model, not evidence of danger, pathology, or physical impossibility.
-- An embedding being compact does not make it private by default.
-- A folder condition label (e.g. "stroke") is a dataset annotation carried over from GAVD, not a clinical diagnosis produced by this project.
-- A result computed on a video-disjoint probe split is still not a fair test of generalization if the self-supervised encoder itself was trained on the held-out videos.
-- Unusual-but-real gait (for example, genuine cerebral palsy or myopathic gait) is not the same thing as an invalid or impossible motion. A method that cannot tell these apart is not measuring what it claims to measure.
+For each outer fold, training and validation sources are the only sources allowed to influence:
 
-## What each proposal should cite from this contract
+- decode and pose-QC policy decisions that are data-dependent;
+- imputation, normalization, scaling, augmentation, or feature selection;
+- the complete encoder/predictor curriculum and checkpoint selection;
+- all readout fitting, threshold choice, calibration, and model selection; and
+- exploratory decisions promoted into the confirmatory analysis.
 
-Each `plan/<NN>-<slug>/README.md` should reference this file by name in its evaluation section (for example: "This study follows the shared evaluation contract in `plan/_shared/evaluation-contract.md`: source-video-disjoint splits, leave-one-source-out sensitivity for small classes, and the missingness-only baseline.") rather than re-explaining the leakage problem from scratch. Idea 1 (`01-honest-video-disjoint-anomaly-screening`) is the proposal that actually builds the corrected split as reusable code; ideas 2 through 7 should specify that they reuse that split rather than each building their own.
+Open test sources once after the analysis is frozen. A source-grouped readout over embeddings from an encoder trained on all sources is encoder-transductive and is not held-out generalization.
+
+## Primary and supervised-ablation models
+
+The primary representation objective is label-free JEPA plus VICReg. Any condition-label group objective is a supervised ablation and is trained, selected, and reported separately. Label readability in that ablation cannot be described as structure independently discovered by self-supervision.
+
+## Required controls and reporting
+
+Where relevant, compare against raw pose, an untrained encoder, pose missingness/coverage, continued-normal training with matched updates, joint training, and the label-aware ablation. Test curriculum-order sensitivity and use multiple training seeds.
+
+Report sequence-level and equal-source-weighted endpoints, per-source predictions, fold and seed dispersion, source-cluster uncertainty, every exclusion, and all deviations from the frozen registry. Treat folds and checkpoints from the same training run as correlated. Predeclare the primary endpoint and report effect sizes with uncertainty rather than selecting the friendliest metric after inspection.
+
+## Evidence and claim hygiene
+
+All model metrics from the earlier 96/18, 159/35, 642/94, and 626/93 cohorts or encoder-exposed probe lanes are archived. They are not current baselines and are not comparable with protocol-v2 results until regenerated with fold-local preprocessing, representation learning, selection, and readout fitting.
+
+- Say "source-held-out," not "subject-held-out": GAVD does not supply a verified person identifier.
+- A folder label is a dataset annotation, not a diagnosis produced or adjudicated by this project.
+- Prediction error indicates model surprise, not danger, pathology, or physical impossibility.
+- Compact embeddings are not private by default; gait trajectories can remain identifying.
+- Unusual but real gait is not the same as invalid motion.
+- No result establishes new-patient, cross-clinic, diagnostic, causal, surveillance, or deployment performance without an appropriate external study.
+
+## How proposals reference this contract
+
+Each `plan/<NN>-<slug>/README.md` should cite `plan/_shared/evaluation-contract.md` and reuse the frozen protocol-v2 registry rather than construct its own favorable split. If a proposal needs a different population or grouping unit, it must version that contract, justify the change before results are inspected, and report the new manifest and split hashes.
