@@ -62,3 +62,13 @@ Submission requires a complete paper run, exact artifact lineage, and a resolved
 ## Optional external subject gate
 
 Notebook 06 validates prerequisites for a separately reviewed, custodian-indexed dataset with persistent subject IDs. It does not run an external model evaluation. An unseen-person claim remains blocked until that evaluation is implemented, trained without test-subject access, executed, and reported under external-dataset-specific governance.
+
+The fresh-checkout status is intentionally `not configured / not run`, and the
+preflight progress should end at 100%; the optional external study does not
+block the internal GAVD workflow. To reach the narrower
+`manifest contract validated; evaluation not run` state, follow
+`docs/EXTERNAL_EVALUATION_GATE.md`: obtain the external dataset's own three
+resolved review records, obtain custodian-supplied pseudonymous subject IDs,
+create a subject-disjoint `BlazePose33` manifest with non-empty train and test
+partitions, and configure its local paths. Do not substitute GAVD identifiers,
+infer identity, or copy placeholder references into a completed record.

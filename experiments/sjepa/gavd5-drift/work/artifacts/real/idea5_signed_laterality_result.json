@@ -1,0 +1,55 @@
+{
+  "notebook": "nb_05a_signed_laterality_probe",
+  "mode": "real",
+  "fingerprint": "7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2",
+  "n_sequences": 642,
+  "n_sources": 94,
+  "n_splits": 5,
+  "condition_counts": {
+    "cerebralpalsy": 58,
+    "myopathic": 183,
+    "normal": 284,
+    "parkinsons": 42,
+    "stroke": 75
+  },
+  "lanes": {
+    "B_raw_null": {
+      "r2": 0.9999999999952853,
+      "mae": 4.407426287066237e-06
+    },
+    "A_learned": {
+      "r2": 0.2409007160347677,
+      "mae": 2.110522344948079
+    },
+    "C_floor": {
+      "r2": 0.189971934799391,
+      "mae": 2.106580621617917
+    },
+    "D_pooled": {
+      "r2": 0.10262000795860782,
+      "mae": 2.238405683845013
+    }
+  },
+  "mirror": {
+    "slope": -0.6273636177458536,
+    "flips": false
+  },
+  "verdict": {
+    "mode": "real",
+    "fingerprint": "7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2",
+    "A_r2": 0.2409007160347677,
+    "B_r2": 0.9999999999952853,
+    "C_r2": 0.189971934799391,
+    "D_r2": 0.10262000795860782,
+    "sign_consistency": 0.5531914893617021,
+    "beats_floor_by_0.05": true,
+    "reaches_80pct_of_null": false,
+    "sign_consistent_75pct": false,
+    "mirror_slope": -0.6273636177458536,
+    "mirror_flips": false,
+    "PRIMARY_VERDICT": "INFORMATIVE NULL",
+    "D_control_ok": true
+  },
+  "transductive": true,
+  "notes": "All results transductive; source video is the independent unit; folder labels are dataset annotations, not diagnoses."
+}

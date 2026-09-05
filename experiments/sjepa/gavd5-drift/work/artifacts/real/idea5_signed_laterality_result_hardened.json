@@ -1,0 +1,150 @@
+{
+  "notebook": "e1_laterality_hardened",
+  "mode": "real",
+  "fingerprint": "7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2",
+  "checkpoint": "sjepa_curriculum_final.pt",
+  "primary_cohort": {
+    "label": "626_modeled",
+    "n_sequences": 626,
+    "n_sources": 93,
+    "n_splits": 5,
+    "lanes": {
+      "A_learned": {
+        "r2": 0.26839426283742185,
+        "mae": 2.037501857331948
+      },
+      "B_raw_null": {
+        "r2": 0.9999999999968954,
+        "mae": 3.545913241042281e-06
+      },
+      "C_floor": {
+        "r2": 0.22868171459099496,
+        "mae": 2.032425014890784
+      },
+      "D_pooled": {
+        "r2": 0.10666202348535614,
+        "mae": 2.1664077394548613
+      },
+      "E_missingness": {
+        "r2": 0.16229457719012086,
+        "mae": 2.0024851705548676
+      }
+    },
+    "mirror": {
+      "slope": -0.7034917702207186,
+      "flips": false
+    },
+    "sign_consistency": 0.5483870967741935,
+    "beats_floor_by_0.05": false,
+    "reaches_80pct_of_null": false,
+    "sign_consistent_75pct": false,
+    "missingness_r2": 0.16229457719012086,
+    "missingness_control_ok": true,
+    "D_control_ok": true,
+    "PRIMARY_VERDICT": "INFORMATIVE NULL",
+    "repeated_cv_ci95": {
+      "A_learned": {
+        "mean": 0.19819008937932053,
+        "sd": 0.03177643485970323,
+        "ci95_lo": 0.17546017651998563,
+        "ci95_hi": 0.22092000223865543,
+        "min": 0.17152018279468428,
+        "max": 0.27213972505890993,
+        "n": 10
+      },
+      "A_sign_consistency": {
+        "mean": 0.5763440860215052,
+        "sd": 0.03932865010564934,
+        "ci95_lo": 0.5482120191699682,
+        "ci95_hi": 0.6044761528730422,
+        "min": 0.5161290322580645,
+        "max": 0.6451612903225806,
+        "n": 10
+      },
+      "C_floor": {
+        "mean": 0.2447854997704733,
+        "sd": 0.042623238585307546,
+        "ci95_lo": 0.2142967900362269,
+        "ci95_hi": 0.27527420950471976,
+        "min": 0.1539781982620404,
+        "max": 0.3102299772979181,
+        "n": 10
+      },
+      "D_pooled": {
+        "mean": 0.1011901227717864,
+        "sd": 0.017650532740014498,
+        "ci95_lo": 0.08856456950022867,
+        "ci95_hi": 0.11381567604334414,
+        "min": 0.0731717897130384,
+        "max": 0.1252750211355692,
+        "n": 10
+      },
+      "E_missingness": {
+        "mean": 0.20219123719084883,
+        "sd": 0.040910152374260746,
+        "ci95_lo": 0.17292791036911412,
+        "ci95_hi": 0.23145456401258355,
+        "min": 0.10611939527377312,
+        "max": 0.24226922951798502,
+        "n": 10
+      }
+    },
+    "alpha_sweep_A": {
+      "0.001": -2.0358625261917025,
+      "0.003162": -2.016917743235062,
+      "0.01": -1.9598100040903628,
+      "0.03162": -1.8027555652458114,
+      "0.1": -1.4574649385527043,
+      "0.3162": -0.9532102199380419,
+      "1": -0.4953384126214273,
+      "3.162": -0.17721374251674105,
+      "10": 0.029237536678528686,
+      "31.62": 0.15233298376573023,
+      "100": 0.22768139861394665,
+      "316.2": 0.26810941838534397,
+      "1000": 0.26839469988020004
+    }
+  },
+  "robustness_cohort": {
+    "label": "642_availability",
+    "n_sequences": 642,
+    "n_sources": 94,
+    "n_splits": 5,
+    "lanes": {
+      "A_learned": {
+        "r2": 0.2409007160347677,
+        "mae": 2.110522344948079
+      },
+      "B_raw_null": {
+        "r2": 0.9999999999952853,
+        "mae": 4.407426287066237e-06
+      },
+      "C_floor": {
+        "r2": 0.189971934799391,
+        "mae": 2.106580621617917
+      },
+      "D_pooled": {
+        "r2": 0.10262000795860782,
+        "mae": 2.238405683845013
+      },
+      "E_missingness": {
+        "r2": 0.046562336235168256,
+        "mae": 2.1393618820029334
+      }
+    },
+    "mirror": {
+      "slope": -0.6273636177458536,
+      "flips": false
+    },
+    "sign_consistency": 0.5531914893617021,
+    "beats_floor_by_0.05": true,
+    "reaches_80pct_of_null": false,
+    "sign_consistent_75pct": false,
+    "missingness_r2": 0.046562336235168256,
+    "missingness_control_ok": true,
+    "D_control_ok": true,
+    "PRIMARY_VERDICT": "INFORMATIVE NULL"
+  },
+  "transductive": true,
+  "notes": "PRIMARY = 626 sequences the encoder trained on (fully transductive); ROBUSTNESS = 642 pose-available superset (adds 16 coverage-QC-dropped rows the encoder never saw). Source video is the independent unit; folder labels are dataset annotations, not diagnoses."
+}

@@ -1,0 +1,65 @@
+{
+  "lens": "Literature & novelty sweep (2023–2026) across (a) skeleton/motion JEPA variants, (b) pose-based gait/movement foundation models, (c) brain–body foundation models and pose-as-biosignal, (d) continual learning for biosignal representations, and (e) JEPA world models for motor control.",
+  "title": "Normative Anchor Drift: Auditing and Halting What a Continual Skeleton-JEPA Forgets When It Meets Pathology",
+  "one_sentence_question": "Does a label-free skeleton-JEPA that sequentially ingests four gait pathologies catastrophically forget its normal-gait reference — the measured 'normative anchor' drift of 0.954→0.594 cosine — and can a frozen Stage-0 anchor-replay term halt that drift without sacrificing source-video-disjoint pathology discriminability?",
+  "why_novel": "The sweep shows every neighboring region is occupied, but the exact intersection this project already measured is empty. (1) Skeleton/motion JEPA is single-shot SSL with no continual phase and no clinical signal: S-JEPA (ECCV 2024) and MAMP (ICCV 2023) target action recognition; Skeleton2vec (2024) is contextualized-target SSL — none measures forgetting of a learned reference, none touches pathology. (2) Pose/gait foundation models (MotionBERT CVPR 2023, PoseC3D) pretrain for action retrieval/recognition, not clinical gait, and are evaluated on unseen-subject action splits, not on representation drift under a curriculum. (3) The closest clinical-gait continual competitors stop one step short of this gap: MOSAIC (arXiv 2606.13258, 2026) does incremental CONTINUAL classification of Parkinson's gait but is supervised/accuracy-centric — it never asks what a self-supervised world model forgets about 'normal'; GenGait (arXiv 2604.01997, 2026) builds a 'normative twin' but as a one-shot anomaly generator, not a quantity that drifts during continual training. (4) TOPO-JEPA (Zenodo, July 2026) is a 'continual world model' JEPA, but in a topological/agent setting with no body biosignal and no normative-anchor metric. (5) JEPA-for-motor-control (UniJEPA ICML 2026, V-JEPA 2) targets robot policy/planning, not retention of a clinical reference. The novel claim is therefore the measured, fingerprint-audited phenomenon itself — a self-supervised pose world model loses its healthy reference as it ingests pathology — plus one cheap, principled intervention (anchor replay) and a pre-registered endpoint (signed laterality) to test whether retention actually recovers lost semantics. No competitor reports a normal-anchor drift curve, binds it to a SHA-256 fingerprint chain, or couples it to a pre-registered informative null.",
+  "workshop_fit": "Direct multi-topic fit with BrainBodyFM 2026's stated emphasis (https://brainbodyfm-workshop.github.io/call-for-papers.html): the 2nd edition explicitly pushes the MOTOR side of the loop (movement, motor control, closed-loop interaction) and explicitly lists 'continual learning in biosignals', 'self-supervised learning for biosignals', and 'evaluation protocols' / 'measuring whether pretraining helps'. This project is pose-from-video (biosignal as behavioral signal), is a JEPA world model (the workshop's headline architecture family), and its unique asset is exactly a continual-learning failure mode (normal-anchor drift) measured under an honest-evaluation protocol (source-video-disjoint, transductive-vs-inductive explicit, pre-registered null). It also answers the CFP's 'does my foundation model retain what pretraining learned?' question with an auditable, reusable protocol rather than another SOTA accuracy table.",
+  "decisive_experiments": [
+    {
+      "id": "E1_reproduce_drift",
+      "name": "Reproduce and fingerprint the drift",
+      "method": "Reload the five frozen checkpoints (sjepa_normal_augmented.pt → sjepa_curriculum_final_augmented.pt), recompute the normal-anchor cosine against the Stage-0 normal-target centroid, and verify the SHA-256 chain (…d0acc2628d13…) before any claim.",
+      "metric": "Normal-anchor cosine curve 0.954→0.594; fingerprint match; embedding-corpus SHA (0eff77b0 fresh rerun) consistency.",
+      "gate": "KILL gate: if 0.954→0.594 does not reproduce from the frozen artifacts, switch to the D2 backup (temporal readout).",
+      "feasibility": "Seconds; frozen-embedding probes.",
+      "controls": "Compute the same curve for the 4 pathology centroids to show the drift is anchor-specific, not global."
+    },
+    {
+      "id": "E2_attribute_mechanism",
+      "name": "Attribute drift to the label-aware group loss",
+      "method": "Two short controlled retrains of Stage-1 (Parkinson's) only: (a) with the 0.25 group term (current), (b) with group term zeroed (pure SSL after Stage 0). Compare normal-anchor displacement.",
+      "metric": "Anchor cosine vs group-loss weight; VICReg/JEPA health retained (std ≠ 0).",
+      "gate": "Mechanism gate: drift must track the group term to claim supervised separation pulls the anchor.",
+      "feasibility": "Two single-stage retrains, a few minutes each (~1425 updates/stage).",
+      "controls": "Match batch/replay/optimizer; report training-health scalars so the intervention is not confounded with collapse."
+    },
+    {
+      "id": "E3_intervention",
+      "name": "AnchorGuard replay intervention",
+      "method": "Freeze the Stage-0 EMA target as an 'anchor teacher'; during Stages 1–4 add a small cosine-attraction/latent-replay term pulling the running normal-anchor centroid back toward its frozen Stage-0 value (label-free — only normal sequences, consistent with Stage-0's zero group loss). Retrain the full 5-stage curriculum.",
+      "metric": "Anchor retention (target ≥0.85) and Stage-4 pathology centroids' separation retained.",
+      "gate": "If the anchor is held but 5-group geometry (silhouette 0.009) does not improve, report it as an honest null — retention is necessary but not sufficient.",
+      "feasibility": "Full 600-epoch curriculum ~20 min on this machine (artifact timestamps show 2–7 min/stage).",
+      "controls": "Identity replay (no anchor term, identical seeds/optimizer) as the matched comparison; report fingerprints for the new lineage."
+    },
+    {
+      "id": "E4_honest_downstream",
+      "name": "Source-video-disjoint downstream probes",
+      "method": "Run the reusable GroupKFold ridge probes with source-video as the split unit, comparing (a) original final checkpoint, (b) AnchorGuard checkpoint, (c) frozen Stage-0 encoder, (d) raw-kinematic, missingness-only, provenance-only, and untrained baselines.",
+      "metric": "Balanced acc / macroF1 per source and pooled; explicit transductive (0.724/0.750) vs inductive gap made visible.",
+      "gate": "Headline claim must rest only on encoders retrained with held-out videos excluded; any reused checkpoint is labeled transductive.",
+      "feasibility": "Seconds–minutes; the harness already exists.",
+      "controls": "Report per-source rows because classes have 1–2 videos; never pool before per-source."
+    },
+    {
+      "id": "E5_informative_null_retest",
+      "name": "Re-run the pre-registered signed-laterality probe",
+      "method": "Run nb_05a's pre-registered left-minus-right ridge probe on the AnchorGuard checkpoint and compare to the recorded informative null (learned R2=-0.187 vs raw-null R2≈1.0, untrained floor R2=+0.147, mirror slope -0.343).",
+      "metric": "R2, sign_consistency, mirror slope.",
+      "gate": "Decisive semantic test: if anchor retention recovers signed laterality that the drifting model lost, the drift is proven lossy, not just cosmetic; if not, the paper becomes a clean measurement + protocol contribution.",
+      "feasibility": "Seconds; probe builders already exist.",
+      "controls": "Raw-coordinate lane (trivially solves it) and side-agnostic lane as internal controls."
+    }
+  ],
+  "effort_and_feasibility": "Highly feasible within 3 days. All infrastructure exists: five loadable checkpoints, 96+63 pose caches, reusable masked_mean_std/pooled_embeddings/source_disjoint_probe/laterality builders, and a pre-registered gate (score_future). E1/E4/E5 are seconds of frozen-embedding compute; E2 is two few-minute single-stage retrains; E3 is one ~20-minute full-curriculum retrain. Total compute is under an hour even with a confirmation seed, leaving the remaining time for the decisive figure, the limitation table, and the 5-page write-up. The only new code is the ~10-line anchor-attraction term plus its replay data path.",
+  "main_risks": [
+    "The drift may not cleanly attribute to one cause (group loss vs replay vs optimizer), so the paper must fall back to 'measured phenomenon + protocol' rather than a claimed mechanism.",
+    "Anchor replay may trade pathology discriminability for anchor retention (no free lunch); a null here is only publishable if the source-video-disjoint probes and the laterality retest make it informative.",
+    "The 'normal anchor' is anchored to a single canonical normal video (plus 63 added-normal from a different extraction path), so drift attribution must carry the provenance caveat rather than a population claim.",
+    "Tiny classes (1–2 videos) cap stratified folds at two and forbid unbiased CV variance; per-source reporting is mandatory and a reviewer may still call it underpowered.",
+    "Any reused checkpoint that saw held-out sources is transductive; the novelty must live in the retrained (inductive) encoder, and the strong historical in-corpus numbers must be explicitly downgraded.",
+    "Three days leave no room for architectural novelty — the intervention must be the minimal anchor-replay term, not a new module."
+  ],
+  "paper_outline_5p": "P1 (Intro/problem). World models for the body must keep a healthy reference while ingesting pathology. Define 'normative anchor drift' and lead with the measured fact (normal-anchor cosine 0.954→0.594 across the 5-condition curriculum). Position against single-shot skeleton SSL (S-JEPA ECCV 2024, MAMP ICCV 2023, Skeleton2vec) and against the nearest continual work (MOSAIC 2606.13258 supervised incremental Parkinson's classification; TOPO-JEPA continual-but-agentic JEPA; GenGait one-shot normative twin) to show the intersection is unclaimed. P2 (Method). Compact S-JEPA recap (528 tokens, EMA target, JEPA+VICReg+label-aware group term), the 5-stage curriculum, a formal definition of the normative anchor in EMA-target space, the SHA-256 fingerprint protocol, and the AnchorGuard replay intervention (frozen Stage-0 anchor teacher + cosine-attraction on normal sequences only). P3 (Results I — drift is real and attributable). Reproduced anchor curve vs pathology centroids, fingerprint verification, and the group-loss ablation showing supervised separation is what pulls the anchor; link to the weak 5-group geometry (silhouette 0.009). P4 (Results II — intervention and honest downstream). AnchorGuard retention curve, source-video-disjoint ridge probes with the transductive-vs-inductive gap made explicit, per-source tables, and the re-run pre-registered signed-laterality probe (does retention recover the asymmetry the drift lost?). P5 (Discussion). Limitations (one normal video, provenance, two folds), and the reusable contribution: a fingerprint-audited protocol for asking 'does my body foundation model retain a healthy reference as it learns pathology?' — with the release checklist (split manifest, hashes, seeds, per-source rows).",
+  "recommendation": "Adopt D5 (Normative Anchor Drift) as the primary 5-page paper. Of the four canonical candidate directions — D1 honest video-disjoint generalization/anomaly screening, D2 temporal-readout recovery, D3 motion-vs-position target ablation, D4 continual curriculum forgetting/normal-anchor drift — D4 has the weakest competitor landscape at the exact intersection of (JEPA world model × clinical pose × measured forgetting × honest evaluation). D1 is crowded (GenGait, GaitMed benchmark, Frontiers 2026 pediatric cross-cohort transfer, LODO gait studies); D2 and D3 sit inside method spaces already claimed by MAMP/S-JEPA/Skeleton2vec motion masking and MotionBERT temporal modeling. D4's nearest neighbors (MOSAIC, TOPO-JEPA, GenGait) each miss one or two of the four terms, and none reports an auditable normal-anchor drift curve with a pre-registered informative null — which this project already has in-hand. Go/no-go is gated by E1: if the 0.954→0.594 drift reproduces from the frozen, fingerprint-verified checkpoints, proceed through E2–E5; if it does not reproduce, pivot to D2 (temporal readout) as the fallback. Keep the honest-evaluation harness (source-video-disjoint, transductive labels, per-source reporting) in every scenario."
+}

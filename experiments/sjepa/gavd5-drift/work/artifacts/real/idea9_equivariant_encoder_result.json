@@ -1,0 +1,320 @@
+{
+  "notebook": "e3a_frame_averaging_wrapper",
+  "mode": "real",
+  "fingerprint": "7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2",
+  "checkpoint": "sjepa_curriculum_final.pt",
+  "construction": "frame-averaged encoder E'(x)=1/2(E(x)+sigma.E(Mx)) over G={I,anatomical_mirror}; sigma = L/R joint permutation; exact token-level reflection equivariance, zero retrain",
+  "primary_cohort": {
+    "label": "626_modeled",
+    "n_sequences": 626,
+    "n_sources": 93,
+    "n_splits": 5,
+    "exactness": {
+      "token_equivariance_max_abs_err": 0.0,
+      "diff_block_antisymmetry_max_abs_err": 0.0,
+      "sum_block_symmetry_max_abs_err": 0.0
+    },
+    "lanes": {
+      "Aprime_free": {
+        "r2": 0.27609425541823396,
+        "mae": 1.9914854114150713,
+        "sign_consistency": 0.5161290322580645
+      },
+      "Aprime_diff_learned": {
+        "r2": 0.2880836772599953,
+        "mae": 1.9548007698430676,
+        "sign_consistency": 0.5483870967741935
+      },
+      "Aprime_diff_floor": {
+        "r2": 0.18687885322023934,
+        "mae": 2.0572870388460225,
+        "sign_consistency": 0.5698924731182796
+      },
+      "B_raw": {
+        "r2": 0.9999999999968954,
+        "mae": 3.545913241042281e-06,
+        "sign_consistency": 1.0
+      }
+    },
+    "mirror_slopes": {
+      "Aprime_free": -0.7673317737173804,
+      "Aprime_diff_learned": -1.0000001617508036,
+      "Aprime_diff_floor": -1.0000000654222931
+    },
+    "repeated_cv_ci95": {
+      "Aprime_diff_learned": {
+        "mean": 0.2533487057980201,
+        "sd": 0.03766289715788901,
+        "ci95_lo": 0.22640816403464797,
+        "ci95_hi": 0.28028924756139223,
+        "min": 0.17848611573769624,
+        "max": 0.32257310699205344,
+        "n": 10
+      },
+      "Aprime_diff_learned_sign_consistency": {
+        "mean": 0.5580645161290322,
+        "sd": 0.037403284152529234,
+        "ci95_lo": 0.5313096774193548,
+        "ci95_hi": 0.5848193548387096,
+        "min": 0.4946236559139785,
+        "max": 0.6021505376344086,
+        "n": 10
+      },
+      "Aprime_diff_floor": {
+        "mean": 0.2495584094237137,
+        "sd": 0.0680942694741725,
+        "ci95_lo": 0.2008500877318175,
+        "ci95_hi": 0.2982667311156099,
+        "min": 0.10968532330525826,
+        "max": 0.34521932749202777,
+        "n": 10
+      }
+    }
+  },
+  "robustness_cohort": {
+    "label": "642_availability",
+    "n_sequences": 642,
+    "n_sources": 94,
+    "n_splits": 5,
+    "exactness": {
+      "token_equivariance_max_abs_err": 0.0,
+      "diff_block_antisymmetry_max_abs_err": 0.0,
+      "sum_block_symmetry_max_abs_err": 0.0
+    },
+    "lanes": {
+      "Aprime_free": {
+        "r2": 0.23229817912732598,
+        "mae": 2.0949093824551435,
+        "sign_consistency": 0.5638297872340425
+      },
+      "Aprime_diff_learned": {
+        "r2": 0.25183359425109475,
+        "mae": 2.0435985102344607,
+        "sign_consistency": 0.5638297872340425
+      },
+      "Aprime_diff_floor": {
+        "r2": 0.22089807523374028,
+        "mae": 2.1556519751732126,
+        "sign_consistency": 0.574468085106383
+      },
+      "B_raw": {
+        "r2": 0.9999999999952853,
+        "mae": 4.407426287066237e-06,
+        "sign_consistency": 1.0
+      }
+    },
+    "mirror_slopes": {
+      "Aprime_free": -0.7102024899252897,
+      "Aprime_diff_learned": -1.0000000662597566,
+      "Aprime_diff_floor": -1.0000000667347537
+    }
+  },
+  "transductive": true,
+  "notes": "E3(a): lifts the E2 group action from the readout to the encoder. E'(Mx)=sigma.E'(x) to machine precision (no retraining). The laterality feature on E' splits EXACTLY into an antisymmetric block (L-R channels; slope -1.000 for any linear readout) and a symmetric block (L+R). Probing the antisymmetric block reproduces E2's Phi_learned -- E2's Phi is the antisymmetric projection of the frame-averaged encoder. A free ridge on the full feature does NOT give slope -1 (encoder equivariance alone does not force an antisymmetric decoder), which motivates E3(b) training reflection into the encoder. PRIMARY = 626 transductive cohort. Source video is the independent unit; folder labels are dataset annotations, not diagnoses.",
+  "retrain": {
+    "construction": "Stage-0 normal-only retrain with sample-level consistent reflection augmentation; arm_off (FLIP_PROB=0.0) vs arm_on (FLIP_PROB=0.5), identical trainer/seed/hardware; canonical = original nb04 Stage-0 (sjepa_normal.pt) cross-check",
+    "checkpoints": {
+      "canonical": "sjepa_normal.pt",
+      "arm_off": "sjepa_normal_e3b_flip0p00.pt",
+      "arm_on": "sjepa_normal_e3b_flip0p50.pt"
+    },
+    "training": {
+      "arm_off": {
+        "flip_prob": 0.0,
+        "epochs": 300,
+        "wall_seconds": 871.6694188117981,
+        "final_jepa": 0.7203095892772955
+      },
+      "arm_on": {
+        "flip_prob": 0.5,
+        "epochs": 300,
+        "wall_seconds": 875.3637082576752,
+        "final_jepa": 0.8068597338655416
+      }
+    },
+    "primary_cohort": {
+      "label": "270_normal_transductive",
+      "n_sequences": 270,
+      "n_sources": 29,
+      "n_splits": 5,
+      "encoders": {
+        "canonical": {
+          "A_free_r2": 0.051028781187335226,
+          "A_free_sign_consistency": 0.5172413793103449,
+          "A_free_mirror_slope": -0.5534138258470375,
+          "Phi_r2": 0.2634341296574163,
+          "Phi_mirror_slope": -0.9999999779412571,
+          "A_free_r2_ci95": {
+            "mean": -0.02200695064415873,
+            "sd": 0.07399261368676577,
+            "ci95_lo": -0.07493440045909758,
+            "ci95_hi": 0.030920499170780123,
+            "min": -0.13405242050876187,
+            "max": 0.09667365868369837,
+            "n": 10
+          },
+          "A_free_sign_ci95": {
+            "mean": 0.5379310344827587,
+            "sd": 0.06125477054930678,
+            "ci95_lo": 0.4941150556622416,
+            "ci95_hi": 0.5817470133032757,
+            "min": 0.4482758620689655,
+            "max": 0.6551724137931034,
+            "n": 10
+          },
+          "Phi_r2_ci95": {
+            "mean": 0.16298900405511219,
+            "sd": 0.07391569623786323,
+            "ci95_lo": 0.1101165738456966,
+            "ci95_hi": 0.21586143426452775,
+            "min": 0.007443242645697512,
+            "max": 0.26010131237644485,
+            "n": 10
+          }
+        },
+        "arm_off": {
+          "A_free_r2": 0.0691389726334618,
+          "A_free_sign_consistency": 0.4482758620689655,
+          "A_free_mirror_slope": -0.7533662674984101,
+          "Phi_r2": 0.17357021859245703,
+          "Phi_mirror_slope": -0.999999959153046,
+          "A_free_r2_ci95": {
+            "mean": -0.048665141690551306,
+            "sd": 0.089866377299511,
+            "ci95_lo": -0.11294720901561665,
+            "ci95_hi": 0.015616925634514042,
+            "min": -0.17802056933546995,
+            "max": 0.10815307489733805,
+            "n": 10
+          },
+          "A_free_sign_ci95": {
+            "mean": 0.41034482758620694,
+            "sd": 0.04997026464203255,
+            "ci95_lo": 0.37460073716555137,
+            "ci95_hi": 0.4460889180068625,
+            "min": 0.3103448275862069,
+            "max": 0.4827586206896552,
+            "n": 10
+          },
+          "Phi_r2_ci95": {
+            "mean": 0.07258509015367029,
+            "sd": 0.07967625510579354,
+            "ci95_lo": 0.015592090671231247,
+            "ci95_hi": 0.12957808963610934,
+            "min": -0.07015243771102675,
+            "max": 0.2042070573713991,
+            "n": 10
+          }
+        },
+        "arm_on": {
+          "A_free_r2": 0.1506561870010864,
+          "A_free_sign_consistency": 0.5172413793103449,
+          "A_free_mirror_slope": -0.5096361421106671,
+          "Phi_r2": 0.22886525729275886,
+          "Phi_mirror_slope": -1.0000000377247118,
+          "A_free_r2_ci95": {
+            "mean": 0.06234261621800519,
+            "sd": 0.07152288601965864,
+            "ci95_lo": 0.011181780402008741,
+            "ci95_hi": 0.11350345203400164,
+            "min": -0.04213760529424282,
+            "max": 0.17846817321606478,
+            "n": 10
+          },
+          "A_free_sign_ci95": {
+            "mean": 0.5379310344827587,
+            "sd": 0.03706785171631513,
+            "ci95_lo": 0.5114161330120762,
+            "ci95_hi": 0.5644459359534412,
+            "min": 0.4827586206896552,
+            "max": 0.5862068965517241,
+            "n": 10
+          },
+          "Phi_r2_ci95": {
+            "mean": 0.13846755326641275,
+            "sd": 0.057190816002721065,
+            "ci95_lo": 0.09755855042089195,
+            "ci95_hi": 0.17937655611193354,
+            "min": 0.010568958407219387,
+            "max": 0.21412080059589034,
+            "n": 10
+          }
+        },
+        "floor_untrained": {
+          "A_free_r2": 0.18904202902741152,
+          "A_free_sign_consistency": 0.6206896551724138,
+          "A_free_mirror_slope": -0.8180230942635055,
+          "Phi_r2": 0.25858283331033705,
+          "Phi_mirror_slope": -1.0000000174873878,
+          "A_free_r2_ci95": {
+            "mean": 0.07825995312178417,
+            "sd": 0.09163341876044015,
+            "ci95_lo": 0.012713908305125352,
+            "ci95_hi": 0.143805997938443,
+            "min": -0.06940863789638274,
+            "max": 0.22561214417241104,
+            "n": 10
+          },
+          "A_free_sign_ci95": {
+            "mean": 0.5586206896551725,
+            "sd": 0.07048142398508456,
+            "ci95_lo": 0.5082048191380427,
+            "ci95_hi": 0.6090365601723023,
+            "min": 0.4482758620689655,
+            "max": 0.6896551724137931,
+            "n": 10
+          },
+          "Phi_r2_ci95": {
+            "mean": 0.20031869911114333,
+            "sd": 0.0630497002769755,
+            "ci95_lo": 0.15521879412085077,
+            "ci95_hi": 0.2454186041014359,
+            "min": 0.09258127619550349,
+            "max": 0.31056487315653514,
+            "n": 10
+          }
+        }
+      },
+      "B_raw_r2": 0.999999999965954
+    },
+    "robustness_cohort": {
+      "label": "626_extrapolation",
+      "n_sequences": 626,
+      "n_sources": 93,
+      "n_splits": 5,
+      "encoders": {
+        "canonical": {
+          "A_free_r2": 0.2645306657207461,
+          "A_free_sign_consistency": 0.6881720430107527,
+          "A_free_mirror_slope": -0.6459919427344923,
+          "Phi_r2": 0.2619384906840152,
+          "Phi_mirror_slope": -1.0000000279262493
+        },
+        "arm_off": {
+          "A_free_r2": 0.183078550704036,
+          "A_free_sign_consistency": 0.6236559139784946,
+          "A_free_mirror_slope": -0.7606964276656878,
+          "Phi_r2": 0.14067840615762406,
+          "Phi_mirror_slope": -1.0000000437632592
+        },
+        "arm_on": {
+          "A_free_r2": 0.21729679726575168,
+          "A_free_sign_consistency": 0.6774193548387096,
+          "A_free_mirror_slope": -0.6264905750996091,
+          "Phi_r2": 0.3366962844989472,
+          "Phi_mirror_slope": -1.0000000070139163
+        },
+        "floor_untrained": {
+          "A_free_r2": 0.22868140052347552,
+          "A_free_sign_consistency": 0.5698924731182796,
+          "A_free_mirror_slope": -0.7874728048831386,
+          "Phi_r2": 0.12080115503036826,
+          "Phi_mirror_slope": -0.9999999575922326
+        }
+      },
+      "B_raw_r2": 0.999999999998742
+    },
+    "transductive": true,
+    "notes": "PRIMARY metric = A_free_mirror_slope (free-readout emergent equivariance). E1/E2 curriculum encoder ~= -0.70. arm_off vs arm_on isolates reflection augmentation (Benton et al. 2020). Phi_r2 is the frame-averaged antisymmetric readout (E2 construction; slope = -1 exactly). Eval = 270 normal transductive; 626 = normal-only encoder extrapolated to unseen conditions. Single-seed proof-of-concept prototype. Source video is the independent unit; folder labels are dataset annotations, not diagnoses."
+  }
+}

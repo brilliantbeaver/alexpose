@@ -1,0 +1,139 @@
+{
+  "notebook": "e2_equivariant_readout",
+  "mode": "real",
+  "fingerprint": "7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2",
+  "checkpoint": "sjepa_curriculum_final.pt",
+  "construction": "frame_averaging over G={I, anatomical_mirror}; Phi=A-A_mir (antisym), Psi=A+A_mir (sym)",
+  "primary_cohort": {
+    "label": "626_modeled",
+    "n_sequences": 626,
+    "n_sources": 93,
+    "n_splits": 5,
+    "lanes": {
+      "A_free": {
+        "r2": 0.26839426283742185,
+        "mae": 2.037501857331948,
+        "sign_consistency": 0.5483870967741935
+      },
+      "Phi_learned": {
+        "r2": 0.31407621628307536,
+        "mae": 2.0087864718954767,
+        "sign_consistency": 0.5698924731182796
+      },
+      "Phi_floor": {
+        "r2": 0.12079805884860373,
+        "mae": 2.1273193413185787,
+        "sign_consistency": 0.6666666666666666
+      },
+      "Psi_learned": {
+        "r2": 0.014856559268894176,
+        "mae": 2.326829716096456,
+        "sign_consistency": 0.5698924731182796
+      },
+      "B_raw": {
+        "r2": 0.9999999999968954,
+        "mae": 3.545913241042281e-06,
+        "sign_consistency": 1.0
+      }
+    },
+    "mirror_slopes": {
+      "A_free": -0.7034917702207186,
+      "Phi_learned": -1.0000000697423164,
+      "Phi_floor": -0.9999999575922326,
+      "Psi_learned": 1.0
+    },
+    "repeated_cv_ci95": {
+      "A_free": {
+        "mean": 0.19819008937932053,
+        "sd": 0.03177643485970323,
+        "ci95_lo": 0.17546017651998563,
+        "ci95_hi": 0.22092000223865543,
+        "min": 0.17152018279468428,
+        "max": 0.27213972505890993,
+        "n": 10
+      },
+      "Phi_learned": {
+        "mean": 0.27336782981155805,
+        "sd": 0.028914534032114404,
+        "ci95_lo": 0.25268505523914425,
+        "ci95_hi": 0.29405060438397185,
+        "min": 0.2166046709629118,
+        "max": 0.3239407081521082,
+        "n": 10
+      },
+      "Phi_learned_sign_consistency": {
+        "mean": 0.567741935483871,
+        "sd": 0.0201483431147745,
+        "ci95_lo": 0.5533296804502023,
+        "ci95_hi": 0.5821541905175397,
+        "min": 0.5268817204301075,
+        "max": 0.6021505376344086,
+        "n": 10
+      },
+      "Phi_floor": {
+        "mean": 0.21932238322767156,
+        "sd": 0.06191243313251794,
+        "ci95_lo": 0.17503597362178683,
+        "ci95_hi": 0.26360879283355626,
+        "min": 0.12179264722251526,
+        "max": 0.3033101231306248,
+        "n": 10
+      }
+    },
+    "learnable_heads": {
+      "eq_mlp": {
+        "r2": 0.24331121739313444,
+        "mae": 2.1202921030509656,
+        "mirror_slope": -1.0000000000000004,
+        "sign_consistency": 0.5483870967741935
+      },
+      "free_mlp": {
+        "r2": 0.047274954716110984,
+        "mae": 2.2580617145937567,
+        "mirror_slope": -0.4303574843920872,
+        "sign_consistency": 0.5053763440860215
+      }
+    }
+  },
+  "robustness_cohort": {
+    "label": "642_availability",
+    "n_sequences": 642,
+    "n_sources": 94,
+    "n_splits": 5,
+    "lanes": {
+      "A_free": {
+        "r2": 0.2409007160347677,
+        "mae": 2.110522344948079,
+        "sign_consistency": 0.5531914893617021
+      },
+      "Phi_learned": {
+        "r2": 0.2747239260105604,
+        "mae": 2.102225004262622,
+        "sign_consistency": 0.5
+      },
+      "Phi_floor": {
+        "r2": 0.16097424211134237,
+        "mae": 2.1389433150032664,
+        "sign_consistency": 0.6702127659574468
+      },
+      "Psi_learned": {
+        "r2": 0.019275941149257125,
+        "mae": 2.371596507397432,
+        "sign_consistency": 0.5106382978723404
+      },
+      "B_raw": {
+        "r2": 0.9999999999952853,
+        "mae": 4.407426287066237e-06,
+        "sign_consistency": 1.0
+      }
+    },
+    "mirror_slopes": {
+      "A_free": -0.6273636177458536,
+      "Phi_learned": -0.9999999435705769,
+      "Phi_floor": -0.9999999515407716,
+      "Psi_learned": 1.0
+    }
+  },
+  "transductive": true,
+  "notes": "Reflection-equivariant readout by construction. Phi (frame-averaged antisymmetric) linear readout has mirror slope = -1.000 to machine precision for ANY weights; Psi (symmetric) = +1.000 and cannot predict the antisymmetric target. Phi_floor uses the UNTRAINED encoder to separate a learning benefit from an architecture/frame-averaging benefit. eq_mlp (shared m, s=m(A)-m(A_mir)) is exactly antisymmetric for any m; free_mlp is a >=capacity unconstrained control. PRIMARY = 626 transductive cohort. Source video is the independent unit; folder labels are dataset annotations, not diagnoses."
+}

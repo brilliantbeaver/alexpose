@@ -73,6 +73,9 @@ def execute_smoke_notebooks() -> None:
             os.environ["LATERALITY_PROFILE"] = "smoke"
             os.environ["LATERALITY_ARTIFACT_ROOT"] = temporary
             os.environ.pop("LATERALITY_EXTERNAL_MANIFEST", None)
+            os.environ.pop("LATERALITY_EXTERNAL_GOVERNANCE", None)
+            os.environ.pop("LATERALITY_EXTERNAL_POSE_ROOT", None)
+            os.environ["LATERALITY_DISABLE_EXTERNAL_DOTENV"] = "1"
             os.environ["PATH"] = (
                 str(Path(sys.executable).resolve().parent)
                 + os.pathsep
