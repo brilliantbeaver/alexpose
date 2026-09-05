@@ -19,3 +19,9 @@ You must verify and check your claims, facts, and inferences to ensure that your
 Use adversarial review to review your thinking, inference, results, and writing carefully.  Fix all issues systematically and thoroughly.
 
 Fan out subagents and use dynamic workflows.
+
+
+---
+
+
+Make sure to update the train/test split and the methodology in the documents in "docs" folder systematically and thoughtfully with fluent and natural language.  Be careful to connect ideas and paragraphs and do not pre-sume the user knows any of the ideas or concepts.

@@ -1,50 +1,47 @@
 # Build the Geometry In, Don't Hope It Emerges: A Reflection-Symmetry Audit of a Skeleton World Model
 
-**Extended abstract — Anonymous submission, NeurIPS 2026 Workshop on Physical World AI. Under double-blind review.**
+**Anonymous submission draft — NeurIPS 2026 Workshop on Physical World AI: Geometry, Characteristics, and Multimodal Sensing.**
 
-## Summary
+> **Evidence status.** This extended abstract describes the registered laterality v2.1 protocol. The previous transductive estimates are superseded and are not results from this design. The complete paper run and governance reviews are still pending, so no v2.1 performance conclusion is reported.
 
-Does a self-supervised skeleton world model learn that the human body is bilaterally symmetric? We make the question exact by treating left–right reflection as a group action, audit a frozen S-JEPA against it, and find a **robust informative null** — the symmetry does not emerge — that we then repair **by construction**. The design principle: *build the geometry in; don't hope it emerges.* All results are transductive (internal validity only); the source video is the independent unit; dataset folder labels are annotations, not diagnoses.
+## Motivation
 
-## 1. Bilateral symmetry as a $\mathbb{Z}/2$ group action
+A human pose representation has a natural left–right structure. If a skeleton is reflected horizontally and its anatomical left and right landmarks are exchanged, a signed left-versus-right motion quantity should reverse sign. We use that simple geometric fact to test a self-supervised Skeleton Joint-Embedding Predictive Architecture (S-JEPA). The model learns by predicting hidden latent content in pose sequences; it does not receive the laterality target or dataset annotation during representation training.
 
-Reflecting a skeleton across the sagittal plane and swapping left/right landmarks yields a valid skeleton, so the mirror $M$ (negate $x$; swap all sixteen bilateral landmark pairs) satisfies $M^2=I$ and generates $G=\{I,M\}\cong\mathbb{Z}/2$. Define a **signed laterality** target $y(x)=\sum_k(\ell_k-r_k)$ over the six bilateral pairs, where $\ell_k,r_k$ are per-joint temporal motion magnitudes. By construction it is antisymmetric:
-$$ y(Mx)=-y(x), \qquad\text{i.e.}\qquad y(T_g\,x)=\rho(g)\,y(x),\ \ \rho(M)=-1. $$
-A world model "encodes bilateral symmetry" iff a read-out of its features reproduces this antisymmetry — a **mirror slope of $-1$** — while remaining decodable. This is a *geometry-aware* probe of an *articulated, deformable* body whose target is a *proprioceptive* quantity (which side moves more) — the workshop's themes made concrete (Fig. 1).
+The target is derived from coordinates and is not a diagnosis or validated clinical gait measurement. For the left and right shoulders, knees, ankles, heels, and foot-index points, it compares median motion speed only on frame transitions where both sides are observed at both endpoints. The five normalized pair contrasts are averaged. Mirroring must negate this target, changing invalid coordinate placeholders must leave it unchanged, and mirroring twice must restore the input.
 
-## 2. An audit protocol with ceiling, floor, and controls
+## Cohort and split
 
-We probe a frozen S-JEPA (33-joint BlazePose, masked latent infilling, curriculum-trained; checkpoint fingerprint `7d13841a…`) on five lanes (Fig. 2): **A** learned per-pair token statistics; **B** raw-coordinate ceiling ($R^2\approx1$); **C** untrained-encoder floor; **D** side-blind pooled control; **E** landmark-missingness control. Estimation uses source-video-disjoint `GroupKFold` with an SVD-solver ridge and **repeated** shuffled CV over the *fixed* cohort (10 reshuffles, mean $\pm$ a $t$-based across-reshuffle *stability* interval, $\mathrm{df}=9$); the interval reflects partition sensitivity, not population sampling, and overlap is a stability heuristic, not a significance test [bengio2004variance]. Pre-registered gates: A beats C by $\ge0.05$; A reaches $\ge80\%$ of B; sign correct on $\ge75\%$ of held-out sources. The primary cohort is the **626** sequences / **93** videos the encoder trained on (transductive); a 642 superset is a robustness view.
+The Gait Abnormality in Video Dataset (GAVD) inventory contains 666 annotation files for 103 source videos. A matching pose archive is available for 642 annotations. Pre-specified quality-control rules retain 625 pose sequences from 93 source videos and exclude 17 sequences. Inclusion depends on target computability and pose coverage, never on the sign or size of the target.
 
-## 3. E1: the symmetry does not emerge
+The split is created at the source-video level because one video can yield several related sequences. Every sequence, mirror, and augmentation from a source inherits that source's fold. This prevents an excerpt from a test video from entering the corresponding training set.
 
-| Lane | Repeated-CV $R^2$ (stability interval) |
-|------|---------------------------:|
-| A — learned | **0.198 [0.175, 0.221]** |
-| C — untrained floor | **0.245 [0.214, 0.275]** |
-| D — pooled | 0.101 [0.089, 0.114] |
-| E — missingness | 0.202 [0.173, 0.231] |
-| B — raw ceiling (single-partition sanity check) | ≈1.000 |
+Five outer cross-validation folds rotate the held-out test sources:
 
-Mirror slope $-0.70$ (no flip); sign consistency $0.58$. **All three gates fail** — under repeated CV the learned feature sits below the untrained floor in mean, with overlapping stability intervals (a partition-stability heuristic, not a significance test). The single-partition ordering $A>C$ *reverses* under repetition; an alpha sweep (score rising monotonically from $-2.04$ to $+0.27$ only under heavy regularization) is consistent with a weak, collinear feature (Fig. 3). The missingness control $E$ ($0.202$) has a mean close to $A$ ($0.198$), flagging possible visibility confounding and corroborating the null. A **robust informative null**.
+| Outer fold | Training sources | Test sources | Training sequences | Test sequences |
+|---:|---:|---:|---:|---:|
+| 0 | 74 | 19 | 436 | 189 |
+| 1 | 74 | 19 | 443 | 182 |
+| 2 | 74 | 19 | 553 | 72 |
+| 3 | 75 | 18 | 548 | 77 |
+| 4 | 75 | 18 | 520 | 105 |
 
-## 4. E2/E3: recover the geometry by construction
+Sequence counts vary because source videos contribute different numbers of sequences. Every source video is tested exactly once. Because GAVD does not supply persistent person identifiers, this is held-out-video evaluation, not held-out-person evaluation.
 
-**Frame-averaged read-out (E2).** With $\Phi(x)=A(x)-A(Mx)$, a linear read-out on $\Phi$ has mirror slope **exactly $-1$ for any nonzero weights** (Fig. 4). It reaches $R^2=0.273$ $[0.253,0.294]$, above the free read-out $0.198$ $[0.175,0.221]$ in repeated-CV mean (disjoint stability intervals — a partition-stability heuristic, not a formal test). The controls are consistent with the antisymmetric *constraint* as the source of the gain (they do not establish a causal decomposition): the symmetric part $\Psi$ scores $0.015$ (slope $+1$, single-partition); an unconstrained $\ge$-capacity MLP that sees both mirror passes but is untied collapses to $0.047$ (slope $-0.43$, single-partition); the exactly-tied nonlinear head adds nothing over linear $\Phi$. The benefit over *learning* is only suggestive, though: frame-averaging the *untrained* encoder already reaches $0.219$ $[0.175,0.264]$ (overlapping interval). Point-estimate, $\Phi$ exceeds free $A$ by $0.075$; the architecture and learned-encoder contrasts ($\Phi_\text{floor}-A$, $\Phi-\Phi_\text{floor}$) are $0.021$ and $0.054$ with overlapping intervals — so the *learning* benefit is suggestive, not decisive.
+## Training, validation, and evaluation
 
-**Frame-averaged encoder (E3.1).** Averaging the encoder, $E'(x)=\tfrac12(E(x)+\sigma\!\cdot\!E(Mx))$, is **exactly token-equivariant with zero retraining** (equivariance error $0.0$); the feature splits exactly into antisymmetric ($\ell-r$) and symmetric ($\ell+r$) blocks. The antisymmetric block *corresponds to* E2's $\Phi$ — it is one half of $\Phi$'s $\ell-r$ sub-block (up to standardization), while $\Phi$ additionally antisymmetrizes the $\ell+r$ block.
+A fresh encoder is trained for every outer fold, seed, and variant. The registered paper design contains five folds, five optimization seeds, and two variants—vanilla and reflection-augmented—for 50 encoders in total. Each encoder follows the fixed 300-epoch schedule and uses all of its outer-training sources. It has no early-stopping validation set.
 
-**Augmentation does not induce it (E3.2, single-seed).** Retraining Stage-0 with reflection augmentation ($p{=}0.5$ vs $0.0$, one switch) changes the loss but not the geometry: the augmented and untrained axes have similar repeated-CV means ($0.062$ $[0.011,0.114]$ vs $0.078$ $[0.013,0.144]$; overlapping stability intervals), so the negative rests on the mirror slope, which moves no closer to $-1$ (the *untrained* encoder is closest, $-0.82$; the augmented arm furthest, $-0.51$ — in this single-seed arm, slope proximity is not evidence of learned equivariance, consistent with sensitivity to feature geometry). A single-seed negative.
+Validation is reserved for the linear ridge read-out. Four inner folds are built entirely inside each outer-training set. In each inner round, 55–57 sources fit a candidate read-out and 18–19 sources validate its ridge penalty. After selection, the read-out is refitted on all 74–75 outer-training sources and evaluated once on the untouched 18–19 outer-test sources. Feature scaling, target scaling, and other fitted preprocessing use outer-training data only.
 
-## 5. Synthesis and takeaway
+The inner fitting partitions contain 266–450 sequences and the rotating inner validation partitions contain 80–197 sequences. The variation occurs because source videos contribute different numbers of sequences. None of these inner partitions includes an outer-test source.
 
-|              | Emergent (hope) | Built-in (construct) |
-|--------------|-----------------|----------------------|
-| **Read-out** | E1: slope −0.70, learned ≈ floor (intervals overlap) | E2: slope **−1.0000**, 0.273 > 0.198 |
-| **Encoder**  | E3.2: slope not toward −1, ≤ floor | E3.1: token error **0.0**, exact |
+The primary measure is source-balanced $R^2$, which gives every source video equal total weight. Comparison lanes include a paired untrained encoder, a target-component self-consistency oracle, measured nuisance features, analytically antisymmetric read-outs, and direct encoder-token reflection tests. The oracle verifies target reconstruction and is not a learned baseline. Exact sign change from a constructed wrapper proves a mathematical property of the wrapper; evidence that training learned useful symmetry additionally requires positive held-out prediction and improvement over the paired initialization.
 
-In the audited system (single checkpoint; single-seed augmentation arm), standard and reflection-augmented self-supervision leave bilateral symmetry un-learned; frame averaging recovers it to machine precision at the read-out or encoder (Figs. 5–6). The constructive claim is general; the negative is scoped to what we tested. For geometry-aware world models of articulated bodies, symmetry is cheap to *impose* and — at least here — not reliably obtained by *hoping* it emerges: **build the geometry in; don't hope it emerges.**
+Five seeds describe optimization variation. Separately, 2,000 source-video bootstrap resamples describe uncertainty associated with the observed source collection while keeping each video's sequences together. These intervals are conditional on the fitted cross-validation pipeline and do not imply population or unseen-person generalization.
 
-## Ethics and limitations
+## Claim boundary, ethics, and status
 
-Results are transductive (internal validity only; no generalization claim). The dataset (GAVD [ranjan2025gavd]) provides annotations and public YouTube URLs, not raw video; users retrieve media independently under YouTube's terms; we use derived pose sequences, infer no identity, and redistribute no raw or identity-bearing frames. **No institutional ethics determination or completed data-use review is yet on record; both must be resolved before submission.** Condition folder labels are dataset annotations, not diagnoses; the independent unit is the source video, not the individual; no clinical claim is made.
+The strongest possible claim is post-development, within-GAVD cross-validated performance on held-out source videos. The protocol does not support diagnosis, clinical validity, prevalence, treatment effects, or generalization to unidentified people in new videos. Folder names are dataset annotations, not diagnoses.
+
+No v2.1 empirical conclusion will be reported until all registered folds, seeds, variants, evaluations, and lineage checks are complete. Submission and artifact release also remain blocked until the institutional ethics determination, data-use review, and derived-pose release review contain genuine dated internal references. The project redistributes no raw video or identity-bearing frames, and derived artifacts remain non-public unless completed reviews permit release.
