@@ -174,19 +174,159 @@ NOTEBOOKS = {
             """
             # 01 — Cohort and paired-valid target audit
 
-            Cohort eligibility is determined by the locked, outcome-independent pose-QC
-            rules. The signed target is computed on observed bilateral transitions only;
-            invalid-coordinate sentinels and model-input interpolation do not define it.
-            Mirroring swaps anatomical sides and must negate both every usable pair
-            contrast and the aggregate target. Mirrored samples remain paired checks,
-            never additional independent observations.
+            This notebook decides which pose sequences are suitable for the later
+            analysis and checks that the left-versus-right motion measurement behaves
+            as intended. A **pose sequence** is a series of video frames represented by
+            estimated body-landmark coordinates instead of by the original images. A
+            **cohort** is simply the collection of sequences retained for analysis.
 
-            In `smoke` profile the cohort is synthetic. Passing these assertions shows
-            only that the implementation obeys its contract, not empirical performance
-            on GAVD.
+            The data come from the Gait Abnormality in Video Dataset (GAVD). Although
+            that is the dataset's published name, this project treats its folder labels
+            only as dataset annotations. This notebook does not diagnose anyone and
+            does not validate a clinical measurement.
+
+            In the `smoke` profile, the poses are generated test data. Smoke mode checks
+            that the software works from beginning to end; its output is not scientific
+            evidence. In the `paper` profile, the same checks run on the empirical data.
+            """
+        ),
+        markdown(
+            """
+            ## What this notebook is checking
+
+            This notebook turns the available pose files into the **locked analysis
+            cohort** used by later notebooks. "Locked" means that the acceptance rules
+            were written down before examining the later model results. Keeping those
+            rules fixed helps prevent a result from being improved by quietly changing
+            which sequences are included.
+
+            Read the notebook as a sequence of six questions:
+
+            1. Which protocol and data profile are active?
+            2. Which pose sequences pass the pre-specified quality-control (QC) rules?
+            3. Can the left-versus-right motion target be computed from observed
+               coordinates alone?
+            4. Does anatomical mirroring reverse the target exactly and undo itself
+               when applied twice?
+            5. Were the audited cohort and its history saved for the later stages?
+            6. What do the final chart and audit numbers mean?
+
+            This is a **data and implementation audit**, not a model-performance result.
+            No machine-learning model is trained and no diagnosis is predicted here.
+            """
+        ),
+        markdown(
+            """
+            ## Plain-language glossary
+
+            Here are the main terms used below:
+
+            - **Quality control (QC)** means applying the pre-written checks that decide
+              whether a pose sequence contains enough usable information.
+            - A **body landmark** is an estimated point such as a shoulder, knee, ankle,
+              heel, or foot point. Each point has three coordinates, called `x`, `y`,
+              and `z`.
+            - A **frame transition** is the movement from one video frame to the next
+              available frame.
+            - **Paired-valid** means that a left landmark and its matching right
+              landmark are both visible at the start and end of the same transition.
+              Comparing the two sides on exactly the same transitions avoids giving one
+              side an unfair advantage because it was visible more often.
+            - The **target** is the single number that later models will try to predict.
+              Here it summarizes relative left-versus-right motion. It is derived from
+              coordinates and is not a clinical outcome.
+            - **Interpolation** means filling a short gap by estimating values between
+              two observed points. Interpolation may make model input easier to use, but
+              interpolated values are not allowed to define the target.
+            - A **sentinel** is a placeholder stored where a coordinate is invalid. The
+              validity mask tells the program to ignore it, whatever its numeric value.
+            - In this notebook, **authorized landmarks** are simply the body landmarks
+              selected in the frozen protocol for model input. "Authorized" here does
+              not mean that an ethics or data-release review has been approved.
+            - A **patch** is one four-frame block used by the model. A complete patch has
+              valid information throughout that block.
+            - A **finite** target is an ordinary usable number, rather than a missing or
+              undefined value.
+            - **Provenance** means the recorded history of the data, including which
+              files, pose model, and extraction version produced them.
+            - A **digest** is a long content fingerprint. This project uses the Secure
+              Hash Algorithm 256-bit form, abbreviated **SHA-256**. If relevant content
+              changes, its digest changes, allowing later notebooks to detect a mismatch.
+            """
+        ),
+        markdown(
+            """
+            ## Step 1 — Confirm the run context
+
+            The next cell locates the experiment suite, loads the frozen protocol, and
+            prints four useful identifiers:
+
+            - `suite` is the folder containing this experiment;
+            - `profile` says whether this is synthetic `smoke` data or the empirical
+              `paper` run;
+            - `artifacts` is the folder where this notebook writes its derived files;
+            - `protocol` shows the first characters of the protocol digest. The full
+              digest is a fingerprint of the rules and settings. Later files must carry
+              the same fingerprint, which prevents different protocol versions from
+              being mixed accidentally.
+
+            Check this line before interpreting anything below. A smoke-profile figure
+            tests the plumbing only and is not scientific evidence.
             """
         ),
         bootstrap_cell(),
+        markdown(
+            """
+            ## Steps 2–5 — Build and verify the cohort
+
+            The next cell performs the substantive audit in a fixed order:
+
+            **Step 2: inventory and prepare the pose files.** The program first checks
+            that the file counts and fingerprints match the frozen inventory. It then
+            converts each sequence into 64 time steps with 33 body landmarks. Short gaps
+            may be interpolated for model input, and a separate validity mask records
+            which coordinates the model may use. The untouched observed-coordinate path
+            is kept separate for calculating the target.
+
+            **Step 3: apply locked quality control.** The `prepare_cohort` function
+            checks whether a sequence contains enough usable landmark coverage, enough
+            complete four-frame blocks, and enough information to calculate the target.
+            A sequence either enters the cohort or receives an explicit exclusion
+            reason. Importantly, acceptance does not depend on whether the target is
+            positive, negative, large, or small.
+
+            **Step 4: calculate and independently reconstruct the target.** Five matching
+            left/right landmark pairs are used: shoulders, knees, ankles, heels, and
+            foot-index points. For each pair, the program:
+
+            1. keeps only transitions where both landmarks are observed at both ends;
+            2. calculates how fast each side moved;
+            3. takes the median, or middle, speed for each side; and
+            4. computes `(left speed - right speed) / (left speed + right speed)`.
+
+            The five pair values are averaged to make one target. A simple example is a
+            left speed of 3 and right speed of 2, which gives `(3 - 2) / (3 + 2) = 0.2`.
+            Positive values indicate more left-side motion under this definition;
+            negative values indicate more right-side motion. The code recalculates this
+            value from the saved pair contrasts and checks that the answer matches to
+            within a tiny floating-point tolerance. "Floating point" is the computer's
+            approximate way of storing decimal numbers.
+
+            **Step 5: test the mirror rules.** An anatomical mirror flips the horizontal
+            coordinate and swaps each named left landmark with its right partner. That
+            operation must reverse the sign of the target. Applying it twice must return
+            the original coordinates and validity mask. This mirror-twice property is
+            sometimes called an **involution**. The program also replaces invalid
+            coordinates with enormous sentinel numbers and confirms that the target does
+            not change. If any assertion fails, execution stops because later results
+            would not have a trustworthy left-versus-right interpretation.
+
+            Finally, the accepted arrays, manifest, and metadata are saved with a cohort
+            digest. A **manifest** is a table listing the retained sequences. **Metadata**
+            is information describing the data rather than the pose values themselves.
+            Later notebooks use the digest to prove that they loaded this exact handoff.
+            """
+        ),
         code(
             """
             from collections import Counter
@@ -248,6 +388,76 @@ NOTEBOOKS = {
                 "checked_model_lane_mirror_involutions": checked_involutions,
                 "artifacts": {key: str(value) for key, value in artifact_paths.items()},
             }
+            """
+        ),
+        markdown(
+            """
+            ## Step 6 — Read the figure and audit record
+
+            **Start with the left panel.** "Attrition" means the reduction from the
+            starting set to the usable set. `Input poses` is the number of available pose
+            sequences presented to quality control. `QC eligible` is the subset retained
+            for analysis, and `Excluded` is the remainder. In the displayed paper-profile
+            run, 625 of 642 sequences are retained and 17 are excluded. Thus about 97.4%
+            are retained and 2.6% are excluded. The excluded bar is not a model error
+            rate and does not label people as good or bad data. It records sequences that
+            could not satisfy the fixed coverage or target-computability rules.
+
+            **Then read the right panel.** This is a histogram, which groups numeric
+            values into ranges and uses bar height to show how many sequences fall in
+            each range. The horizontal axis is the coordinate-derived motion contrast,
+            and the vertical axis is the number of retained sequences. The black line
+            marks zero. Values to its right indicate relatively more left-side motion;
+            values to its left indicate relatively more right-side motion. Values near
+            zero indicate similar motion on the two sides under this specific formula.
+            The presence of values on both sides confirms that the target keeps a sign.
+            It does not establish that the sample is clinically symmetric, unbiased, or
+            representative of a population. This chart is not a diagnosis, clinical
+            scale, class label, or model-performance score.
+
+            **Finally, read the printed audit record below the plot.** The main fields
+            mean the following:
+
+            - `input_sequences`, `accepted_sequences`, and `excluded_sequences` repeat
+              the counts shown in the left panel;
+            - `accepted_sources` counts source videos rather than pose sequences. One
+              source video can produce more than one sequence, so this number is smaller;
+            - `inventory` contains the frozen file counts and provenance fingerprints;
+            - `exclusion_reason_counts` explains why sequences failed quality control.
+              A semicolon means that a sequence failed more than one check;
+            - `target_contract` reports the mirror and invalid-sentinel test errors.
+              Zero is ideal, and extremely small values can arise from decimal rounding;
+            - `checked_model_lane_mirror_involutions` counts how many processed model
+              inputs passed the mirror-twice check;
+            - `cohort_digest` is the content fingerprint used for later history checks;
+            - `artifacts` lists the saved handoff files. The compressed NumPy file
+              (`.npz`) stores arrays, the comma-separated values file (`.csv`) stores the
+              manifest table, and the JavaScript Object Notation file (`.json`) stores
+              metadata.
+
+            The inventory gives useful context for the first bar. The run began with
+            666 annotation files. Of these, 642 had a matching pose archive, meaning a
+            saved bundle of extracted body coordinates; 24 did not. That is why the
+            chart begins at 642 rather than 666. The annotations refer to 103 source
+            videos, and the final cohort contains usable sequences from 93 of them.
+            `extraction_version_counts` shows which software version produced each pose
+            archive, while `pose_model` names the body-landmark detector. These values
+            are provenance checks, not measures of scientific performance.
+
+            The exclusion labels can contain `target_not_computable`, meaning the five
+            left/right pairs did not all have enough shared visible transitions;
+            `insufficient_authorized_coverage`, meaning too little of the selected model
+            input was valid; or `insufficient_authorized_patches`, meaning too few
+            complete four-frame blocks remained.
+
+            In this run, `checked_finite_targets` can be larger than the 625 accepted
+            sequences. That is expected: the target checks run before all coverage rules,
+            so a sequence can have a valid target and still be excluded for insufficient
+            model-input coverage.
+
+            The key takeaway is modest: the cohort is internally consistent with the
+            frozen quality-control and mirror rules. This figure alone says nothing about whether a
+            model learns laterality or generalizes to new videos or people.
             """
         ),
     ],
