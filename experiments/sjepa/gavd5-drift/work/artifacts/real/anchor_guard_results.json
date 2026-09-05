@@ -1,0 +1,95 @@
+{
+  "notebook": "08_normal_anchor_drift_and_consolidation",
+  "mode": "real",
+  "baseline_fingerprint": "d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1",
+  "drift_reproduction": {
+    "canonical_curve": [
+      null,
+      0.700151,
+      0.502113,
+      0.396213,
+      0.296638
+    ],
+    "reproduced_curve": [
+      null,
+      0.7001505494117737,
+      0.5021127462387085,
+      0.3962131142616272,
+      0.29663795232772827
+    ],
+    "max_abs_gap": 4.50588226286186e-07
+  },
+  "margin_ablation": [
+    {
+      "tag": "G1_group_on",
+      "group_weight": 0.25,
+      "normal_anchor_cosine": 0.3220818042755127,
+      "minimum_centroid_distance": 0.9014849662780762,
+      "feature_std": 0.3407486379146576,
+      "jepa_loss": 0.8754154294729233,
+      "vicreg_loss": 13.255236289080452
+    },
+    {
+      "tag": "G0_group_off",
+      "group_weight": 0.0,
+      "normal_anchor_cosine": 0.32685235142707825,
+      "minimum_centroid_distance": 0.9406980276107788,
+      "feature_std": 0.46687841415405273,
+      "jepa_loss": 0.6714664631906677,
+      "vicreg_loss": 13.111445398891673
+    }
+  ],
+  "anchor_guard": {
+    "ran": true,
+    "anchor_weight": 0.5,
+    "stage_end_anchor_cosines": [
+      null,
+      0.5416333079338074,
+      0.4932880401611328,
+      0.4828549325466156,
+      0.47862905263900757
+    ],
+    "stage_end_feature_std": [
+      0.28393158316612244,
+      0.18350635468959808,
+      0.21787238121032715,
+      0.23088586330413818,
+      0.25164714455604553
+    ],
+    "gates": {
+      "anchor_retained_ge_0.85": false,
+      "no_collapse_std_ge_0.35": false,
+      "five_class_noninferior": false,
+      "binary_noninferior": false
+    },
+    "verdict": "ANCHORGUARD PARTIAL: retention and plasticity trade off; report honestly"
+  },
+  "downstream": {
+    "baseline": {
+      "binary": {
+        "accuracy": 0.6853035143769968,
+        "balanced_accuracy": 0.6700790678318769,
+        "macro_f1": 0.6717951174593544
+      },
+      "five_class": {
+        "accuracy": 0.44089456869009586,
+        "balanced_accuracy": 0.3905345155438222,
+        "macro_f1": 0.3765591526610751
+      }
+    },
+    "anchor_guard": {
+      "binary": {
+        "accuracy": 0.9712460063897763,
+        "balanced_accuracy": 0.9724823137744486,
+        "macro_f1": 0.9707925514266755
+      },
+      "five_class": {
+        "accuracy": 0.865814696485623,
+        "balanced_accuracy": 0.8193735736867449,
+        "macro_f1": 0.8171623848567668
+      }
+    }
+  },
+  "transductive": true,
+  "notes": "In-corpus mechanistic study; the source video is the independent unit for probes; folder labels are dataset annotations, not diagnoses; the AnchorGuard checkpoint has its own fingerprint and never overwrites canonical artifacts."
+}

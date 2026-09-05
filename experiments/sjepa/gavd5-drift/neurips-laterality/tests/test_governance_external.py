@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 
 SUITE_ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +18,14 @@ from laterality.external import (  # noqa: E402
     validate_external_manifest,
 )
 from laterality.governance import load_governance, submission_readiness  # noqa: E402
+from notebook_external_config import (  # noqa: E402
+    DISABLE_EXTERNAL_DOTENV_ENV,
+    EXTERNAL_GOVERNANCE_ENV,
+    EXTERNAL_MANIFEST_ENV,
+    EXTERNAL_POSE_ROOT_ENV,
+    external_gate_figure,
+    load_external_gate_settings,
+)
 
 
 REPOSITORY_GOVERNANCE = SUITE_ROOT / "governance" / "status.json"
@@ -62,6 +71,131 @@ def write_manifest(path: Path, rows: list[dict[str, str]], fieldnames=None) -> N
         writer = csv.DictWriter(handle, fieldnames=columns, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+
+
+class ExternalSettingsTests(unittest.TestCase):
+    def test_dotenv_discovery_can_be_disabled_for_isolated_smoke_execution(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            dotenv_path = root / "external.env"
+            dotenv_path.write_text(
+                f"{EXTERNAL_MANIFEST_ENV}=should-not-be-read.csv\n",
+                encoding="utf-8",
+            )
+
+            settings = load_external_gate_settings(
+                environ={DISABLE_EXTERNAL_DOTENV_ENV: "1"},
+                dotenv_paths=[dotenv_path],
+            )
+
+            self.assertIsNone(settings.manifest)
+            self.assertEqual(settings.dotenv_files_checked, ())
+            self.assertEqual(settings.configuration_state, "not_configured")
+
+    def test_dotenv_paths_are_resolved_relative_to_the_dotenv_file(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            dotenv_path = root / "external.env"
+            dotenv_path.write_text(
+                "\n".join(
+                    [
+                        f"{EXTERNAL_MANIFEST_ENV}=records/manifest.csv",
+                        f"{EXTERNAL_GOVERNANCE_ENV}=records/governance.json",
+                        f"{EXTERNAL_POSE_ROOT_ENV}=poses",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            settings = load_external_gate_settings(
+                environ={},
+                dotenv_paths=[dotenv_path],
+                working_directory=root / "unrelated-launch-directory",
+            )
+
+            self.assertTrue(settings.ready_for_validation)
+            self.assertEqual(settings.configuration_state, "ready_for_validation")
+            self.assertEqual(settings.manifest, (root / "records/manifest.csv").resolve())
+            self.assertEqual(
+                settings.governance,
+                (root / "records/governance.json").resolve(),
+            )
+            self.assertEqual(settings.pose_root, (root / "poses").resolve())
+
+    def test_process_environment_takes_precedence_over_dotenv(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            dotenv_path = root / "external.env"
+            dotenv_path.write_text(
+                f"{EXTERNAL_MANIFEST_ENV}=from-dotenv.csv\n",
+                encoding="utf-8",
+            )
+
+            settings = load_external_gate_settings(
+                environ={EXTERNAL_MANIFEST_ENV: "from-process.csv"},
+                dotenv_paths=[dotenv_path],
+                working_directory=root,
+            )
+
+            self.assertEqual(settings.manifest, (root / "from-process.csv").resolve())
+            self.assertEqual(dict(settings.sources)[EXTERNAL_MANIFEST_ENV], "process environment")
+            self.assertEqual(settings.configuration_state, "incomplete")
+
+    def test_summary_reports_missing_keys_without_disclosing_paths(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            sensitive_name = "do-not-display-manifest.csv"
+            settings = load_external_gate_settings(
+                environ={EXTERNAL_MANIFEST_ENV: sensitive_name},
+                working_directory=root,
+            )
+
+            summary = settings.redacted_summary()
+
+            self.assertEqual(
+                summary["missing_required"],
+                [EXTERNAL_GOVERNANCE_ENV],
+            )
+            self.assertTrue(summary["paths_redacted"])
+            self.assertEqual(summary["configuration_state"], "incomplete")
+            self.assertNotIn(sensitive_name, json.dumps(summary))
+
+    def test_gate_figure_distinguishes_optional_absence_from_a_block(self):
+        context = SimpleNamespace(is_paper=True)
+        optional = external_gate_figure(
+            context,
+            {"gate_state": "not_configured"},
+        )
+        blocked = external_gate_figure(
+            context,
+            {"gate_state": "configuration_blocked"},
+        )
+        validated = external_gate_figure(
+            context,
+            {"gate_state": "contract_validated"},
+        )
+        try:
+            optional_text = {text.get_text() for text in optional.axes[0].texts}
+            blocked_text = {text.get_text() for text in blocked.axes[0].texts}
+            validated_text = {text.get_text() for text in validated.axes[0].texts}
+            self.assertIn(
+                "OPTIONAL EXTERNAL STUDY NOT CONFIGURED — NOT RUN",
+                optional_text,
+            )
+            self.assertIn(
+                "EXTERNAL CONTRACT BLOCKED — EVALUATION NOT RUN",
+                blocked_text,
+            )
+            self.assertIn(
+                "MANIFEST PREREQUISITES VALIDATED — EVALUATION NOT RUN",
+                validated_text,
+            )
+        finally:
+            import matplotlib.pyplot as plt
+
+            plt.close(optional)
+            plt.close(blocked)
+            plt.close(validated)
 
 
 class GovernanceGateTests(unittest.TestCase):

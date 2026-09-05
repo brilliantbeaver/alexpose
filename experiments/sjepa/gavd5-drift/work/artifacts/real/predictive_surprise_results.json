@@ -1,0 +1,106 @@
+{
+  "notebook": "09_predictive_surprise_world_model",
+  "mode": "real",
+  "checkpoint_file_sha256": "2aa20dd4ac925698ee801687992cd998d24efa9bc38f9a9939e983e70f0cc398",
+  "experiment_fingerprint": "d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1",
+  "corpus": {
+    "total_sequences": 626,
+    "source_videos": 93
+  },
+  "headline_metric": "per-token cosine at future positions (h in {2,4,8}); surprise = 1 - cosine",
+  "horizon_summary": {
+    "canonical_mean_future_cosine_by_condition": {
+      "cerebralpalsy": {
+        "2": 0.29331148614914254,
+        "4": 0.2918424850393986,
+        "8": 0.26708864998714676
+      },
+      "myopathic": {
+        "2": 0.3047463898776007,
+        "4": 0.30323378582958316,
+        "8": 0.2658434559189068
+      },
+      "normal": {
+        "2": 0.36497762730380273,
+        "4": 0.3468269839354638,
+        "8": 0.29609573997332955
+      },
+      "parkinsons": {
+        "2": 0.40247318911843183,
+        "4": 0.3736051326481307,
+        "8": 0.3064796532072672
+      },
+      "stroke": {
+        "2": 0.37653888107554334,
+        "4": 0.3663239120128187,
+        "8": 0.32882382620025324
+      }
+    },
+    "canonical_mean_copy_last_by_condition": {
+      "cerebralpalsy": 0.9299,
+      "myopathic": 0.9111,
+      "normal": 0.9007,
+      "parkinsons": 0.9442,
+      "stroke": 0.9265
+    },
+    "canonical_mean_spatial_ceiling": 0.5152071717257698
+  },
+  "video_level": {
+    "kruskal_wallis": {
+      "H": 1.98565673828125,
+      "p": 0.7383971810340881
+    },
+    "auroc_normal_vs_condition": [
+      {
+        "comparison": "normal_vs_parkinsons",
+        "auroc_video_level": 0.5019157088122606,
+        "ci_low": 0.30268199233716475,
+        "ci_high": 0.7049808429118773,
+        "n_normal_videos": 29,
+        "n_condition_videos": 9
+      },
+      {
+        "comparison": "normal_vs_stroke",
+        "auroc_video_level": 0.4080459770114943,
+        "ci_low": 0.2470785440613027,
+        "ci_high": 0.5670498084291188,
+        "n_normal_videos": 29,
+        "n_condition_videos": 18
+      },
+      {
+        "comparison": "normal_vs_myopathic",
+        "auroc_video_level": 0.46059113300492605,
+        "ci_low": 0.311576354679803,
+        "ci_high": 0.6207204433497534,
+        "n_normal_videos": 29,
+        "n_condition_videos": 28
+      },
+      {
+        "comparison": "normal_vs_cerebralpalsy",
+        "auroc_video_level": 0.5478927203065134,
+        "ci_low": 0.3448275862068965,
+        "ci_high": 0.7509578544061303,
+        "n_normal_videos": 29,
+        "n_condition_videos": 9
+      }
+    ],
+    "missingness_corr": {
+      "rho": 0.08020468896672242,
+      "p": 0.045207070730016806
+    },
+    "provenance_control": [
+      {
+        "path": "canonical",
+        "count": 29,
+        "median": 0.6609400510787964
+      }
+    ]
+  },
+  "rollout_demo": {
+    "cos_direct_patch14": 0.6086934208869934,
+    "cos_direct_patch15": 0.5711087584495544,
+    "cos_rollout_patch15": 0.6079496145248413
+  },
+  "transductive": true,
+  "notes": "Frozen-checkpoint world-model probe; the source video is the independent unit for condition inference; folder labels are dataset annotations, not diagnoses."
+}

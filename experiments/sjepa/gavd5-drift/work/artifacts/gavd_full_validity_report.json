@@ -1,0 +1,89 @@
+{
+  "generated": "2026-09-02",
+  "method": "yt-dlp --simulate existence sweep + full download validation (nb 01)",
+  "dead_videos": [
+    {
+      "video_id": "sf5X4YYkWUA",
+      "condition": "cerebralpalsy",
+      "reason": "private (yt-dlp)"
+    },
+    {
+      "video_id": "WWS-iOlLsoo",
+      "condition": "cerebralpalsy",
+      "reason": "removed (yt-dlp)"
+    },
+    {
+      "video_id": "yULxvDc9e8c",
+      "condition": "myopathic",
+      "reason": "removed (yt-dlp)"
+    },
+    {
+      "video_id": "OoCDFmCm1DE",
+      "condition": "normal",
+      "reason": "removed (yt-dlp)"
+    },
+    {
+      "video_id": "yFBy0X0D-w8",
+      "condition": "normal",
+      "reason": "removed (yt-dlp)"
+    },
+    {
+      "video_id": "dxRMtNtjwCc",
+      "condition": "parkinsons",
+      "reason": "removed (yt-dlp)"
+    },
+    {
+      "video_id": "YjRoLtP1di0",
+      "condition": "stroke",
+      "reason": "private (yt-dlp)"
+    },
+    {
+      "video_id": "JUMhhwFANKE",
+      "condition": "parkinsons",
+      "reason": "download-invalid: video unavailable"
+    },
+    {
+      "video_id": "n93bgWhLZk4",
+      "condition": "myopathic",
+      "reason": "download-invalid: no format reaches annotated frame"
+    }
+  ],
+  "per_condition": {
+    "cerebralpalsy": {
+      "seq_all": 64,
+      "seq_valid": 58,
+      "videos_all": 11,
+      "videos_valid": 9
+    },
+    "myopathic": {
+      "seq_all": 188,
+      "seq_valid": 183,
+      "videos_all": 30,
+      "videos_valid": 28
+    },
+    "normal": {
+      "seq_all": 291,
+      "seq_valid": 284,
+      "videos_all": 32,
+      "videos_valid": 30
+    },
+    "parkinsons": {
+      "seq_all": 47,
+      "seq_valid": 42,
+      "videos_all": 11,
+      "videos_valid": 9
+    },
+    "stroke": {
+      "seq_all": 76,
+      "seq_valid": 75,
+      "videos_all": 19,
+      "videos_valid": 18
+    }
+  },
+  "totals": {
+    "seq_all": 666,
+    "seq_valid": 642,
+    "videos_all": 103,
+    "videos_valid": 94
+  }
+}

@@ -1,0 +1,381 @@
+{
+  "notebook": "07_temporal_readout_diagnostic",
+  "mode": "real",
+  "checkpoint_file_sha256": "64008d77689cefa4beb51a0dcf5ed6cae743454134c163e9087f66510af4e7ad",
+  "experiment_fingerprint": "7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2",
+  "corpus": {
+    "canonical_sequences": 626,
+    "augmented_sequences": 0,
+    "total_sequences": 626,
+    "source_videos": 93
+  },
+  "targets": [
+    "cadence",
+    "stride_time",
+    "peak_phase",
+    "phase_lag",
+    "energy_ratio"
+  ],
+  "target_notes": {
+    "cadence": "canary: native-rate information discarded by the 64-frame pipeline",
+    "stride_time": "canary: rate-dependent",
+    "peak_phase": "order-sensitive, normalized-time",
+    "phase_lag": "order-sensitive, signed seconds",
+    "energy_ratio": "order-sensitive, early/late log ratio"
+  },
+  "results": [
+    {
+      "target": "cadence",
+      "lane": "A_pooled_384",
+      "r2": 0.10624307884938511,
+      "mae": 22.261750331639153,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "B_moment_384",
+      "r2": 0.11506151958544186,
+      "mae": 22.171278559912107,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "C_bins_384",
+      "r2": 0.14130571346714382,
+      "mae": 21.818573767317183,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "D_attn_384",
+      "r2": -0.09346548591356485,
+      "mae": 24.370975690265062,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "A_untrained",
+      "r2": 0.065170864323977,
+      "mae": 22.88680444210591,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "B_untrained",
+      "r2": 0.05248723871241401,
+      "mae": 22.97745458916007,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "raw_kinematic",
+      "r2": 0.05697103328291886,
+      "mae": 23.007388028236072,
+      "n": 578
+    },
+    {
+      "target": "cadence",
+      "lane": "missingness_only",
+      "r2": 0.08978709022455345,
+      "mae": 22.57645603250622,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "A_pooled_384",
+      "r2": 0.1661791927752082,
+      "mae": 0.16164760866156114,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "B_moment_384",
+      "r2": 0.16619032743730078,
+      "mae": 0.16139235801782004,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "C_bins_384",
+      "r2": 0.16699478621817732,
+      "mae": 0.16057517307384944,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "D_attn_384",
+      "r2": 0.11500882264838141,
+      "mae": 0.16032899059278943,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "A_untrained",
+      "r2": 0.10729146677574175,
+      "mae": 0.16698813854950406,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "B_untrained",
+      "r2": 0.07635588382007996,
+      "mae": 0.1706705580411768,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "raw_kinematic",
+      "r2": 0.07209748758412937,
+      "mae": 0.17237409960578298,
+      "n": 578
+    },
+    {
+      "target": "stride_time",
+      "lane": "missingness_only",
+      "r2": 0.07338942963569417,
+      "mae": 0.16928408332162223,
+      "n": 578
+    },
+    {
+      "target": "peak_phase",
+      "lane": "A_pooled_384",
+      "r2": 0.3729236443058537,
+      "mae": 0.22137827598121002,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "B_moment_384",
+      "r2": 0.4166353854558972,
+      "mae": 0.21255247964671797,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "C_bins_384",
+      "r2": 0.38614362711641315,
+      "mae": 0.21769141323355337,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "D_attn_384",
+      "r2": 0.392464301429986,
+      "mae": 0.21669542631044847,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "A_untrained",
+      "r2": 0.3957119584518496,
+      "mae": 0.21376803148353757,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "B_untrained",
+      "r2": 0.4672733962733565,
+      "mae": 0.1960484773142397,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "raw_kinematic",
+      "r2": 0.263291404450573,
+      "mae": 0.24415714953200082,
+      "n": 626
+    },
+    {
+      "target": "peak_phase",
+      "lane": "missingness_only",
+      "r2": 0.08224993067094344,
+      "mae": 0.2800917565884556,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "A_pooled_384",
+      "r2": -0.0399863425600413,
+      "mae": 0.22722423438950007,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "B_moment_384",
+      "r2": -0.06140769511360733,
+      "mae": 0.2316058964789325,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "C_bins_384",
+      "r2": -0.031202869735819316,
+      "mae": 0.2285030051046681,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "D_attn_384",
+      "r2": -0.04189809994844551,
+      "mae": 0.2273271131806088,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "A_untrained",
+      "r2": -0.04255966408985712,
+      "mae": 0.22762443878421834,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "B_untrained",
+      "r2": -0.04554045961533304,
+      "mae": 0.22836842953917127,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "raw_kinematic",
+      "r2": -0.04061284471170934,
+      "mae": 0.21978352472027848,
+      "n": 626
+    },
+    {
+      "target": "phase_lag",
+      "lane": "missingness_only",
+      "r2": -0.020678940691830183,
+      "mae": 0.2193052112788312,
+      "n": 626
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "A_pooled_384",
+      "r2": 0.4007782019280237,
+      "mae": 0.2694848707809398,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "B_moment_384",
+      "r2": 0.5273303089683274,
+      "mae": 0.2446098283939401,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "C_bins_384",
+      "r2": 0.5263603357034787,
+      "mae": 0.24430489385408105,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "D_attn_384",
+      "r2": 0.3623321262784712,
+      "mae": 0.27581911293604766,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "A_untrained",
+      "r2": 0.4587669452171209,
+      "mae": 0.25462328821071933,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "B_untrained",
+      "r2": 0.618146997749486,
+      "mae": 0.21949983175563997,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "raw_kinematic",
+      "r2": 0.25561282743281954,
+      "mae": 0.2971463635551545,
+      "n": 539
+    },
+    {
+      "target": "energy_ratio",
+      "lane": "missingness_only",
+      "r2": 0.19726753379226847,
+      "mae": 0.3083077429464096,
+      "n": 539
+    }
+  ],
+  "decision_rule": "Lane B must beat Lane A by >=10% relative pooled MAE and >=75% sign-consistent sources on at least one order-sensitive target",
+  "decision": {
+    "peak_phase": {
+      "pooled_mae_A": 0.22137827598121002,
+      "pooled_mae_B": 0.21255247964671797,
+      "relative_pooled_improvement": 0.03986749058991295,
+      "sign_consistent_source_fraction": 0.5483870967741935,
+      "passes_10pct_and_75pct": false
+    },
+    "phase_lag": {
+      "pooled_mae_A": 0.22722423438950007,
+      "pooled_mae_B": 0.2316058964789325,
+      "relative_pooled_improvement": -0.01928342767313079,
+      "sign_consistent_source_fraction": 0.45161290322580644,
+      "passes_10pct_and_75pct": false
+    },
+    "energy_ratio": {
+      "pooled_mae_A": 0.2694848707809398,
+      "pooled_mae_B": 0.2446098283939401,
+      "relative_pooled_improvement": 0.09230589574440431,
+      "sign_consistent_source_fraction": 0.5730337078651685,
+      "passes_10pct_and_75pct": false
+    }
+  },
+  "verdict": "NO EVIDENCE: pooled readout and encoder cannot be separated on these targets",
+  "spectral_audit": {
+    "rankme_mean": {
+      "learned": 2.86274148766606,
+      "untrained": 2.759625130948929
+    },
+    "stable_rank_mean": {
+      "learned": 6.083099922052207,
+      "untrained": 5.750758971649999
+    },
+    "patch_autocorr": {
+      "learned": [
+        0.9668554067611694,
+        0.9602622389793396,
+        0.9574627876281738,
+        0.9548279643058777,
+        0.9521054625511169,
+        0.9481322765350342,
+        0.9428970217704773,
+        0.9386247396469116,
+        0.9338378310203552,
+        0.928399920463562,
+        0.9208875298500061,
+        0.9118428230285645,
+        0.898502767086029,
+        0.8834808468818665,
+        0.8552756309509277
+      ],
+      "untrained": [
+        0.9490455985069275,
+        0.9403071403503418,
+        0.9369210600852966,
+        0.9340161085128784,
+        0.9305732846260071,
+        0.9259698390960693,
+        0.9186429977416992,
+        0.9134972095489502,
+        0.9081513285636902,
+        0.9003009796142578,
+        0.8912926316261292,
+        0.8823118209838867,
+        0.8656108975410461,
+        0.8468149900436401,
+        0.8139196038246155
+      ]
+    }
+  },
+  "transductive": true,
+  "notes": "Frozen-encoder readout study; the source video is the independent unit; folder labels are dataset annotations, not diagnoses."
+}

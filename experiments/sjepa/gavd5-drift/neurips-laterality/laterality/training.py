@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import os
 import platform
 import random
 import tempfile
 import time
+import warnings
 from collections import Counter
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Callable, Iterator
 
 import numpy as np
 import sklearn
@@ -33,6 +35,13 @@ from .model import (
 from .splitting import get_fold
 
 
+ProgressCallback = Callable[[dict[str, Any]], None]
+
+_IMPLEMENTATION_COMPATIBILITY_PATH = (
+    Path(__file__).resolve().parent / "checkpoint_compatibility.json"
+)
+
+
 def implementation_digest() -> str:
     digest = hashlib.sha256()
     module_root = Path(__file__).resolve().parent
@@ -40,6 +49,36 @@ def implementation_digest() -> str:
         digest.update(path.name.encode("utf-8"))
         digest.update(path.read_bytes())
     return digest.hexdigest()
+
+
+def _approved_implementation_compatibility() -> set[tuple[str, str]]:
+    """Return narrowly reviewed (checkpoint, current-code) digest pairs."""
+    try:
+        payload = json.loads(_IMPLEMENTATION_COMPATIBILITY_PATH.read_text())
+    except FileNotFoundError:
+        return set()
+    if payload.get("schema") != "neurips_laterality_checkpoint_compatibility/v1":
+        raise RuntimeError("Unsupported checkpoint compatibility manifest")
+    pairs = payload.get("compatible_pairs")
+    if not isinstance(pairs, list):
+        raise RuntimeError("Checkpoint compatibility manifest has no pair list")
+    approved: set[tuple[str, str]] = set()
+    for pair in pairs:
+        if not isinstance(pair, dict) or set(pair) != {
+            "checkpoint_implementation_digest",
+            "current_implementation_digest",
+            "reason",
+        }:
+            raise RuntimeError("Malformed checkpoint compatibility pair")
+        checkpoint_digest = pair["checkpoint_implementation_digest"]
+        current_digest = pair["current_implementation_digest"]
+        if not all(
+            isinstance(value, str) and len(value) == 64
+            for value in (checkpoint_digest, current_digest)
+        ):
+            raise RuntimeError("Malformed implementation digest in compatibility pair")
+        approved.add((checkpoint_digest, current_digest))
+    return approved
 
 
 def resolve_device() -> torch.device:
@@ -59,6 +98,32 @@ def set_reproducible_seed(seed: int) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def _emit_epoch_progress_without_rng_side_effects(
+    callback: ProgressCallback,
+    event: dict[str, Any],
+    device: torch.device,
+) -> None:
+    """Call reporting code without allowing it to perturb later training views."""
+    python_state = random.getstate()
+    numpy_state = np.random.get_state()
+    cpu_state = torch.random.get_rng_state()
+    accelerator_state = None
+    if device.type == "cuda":
+        accelerator_state = torch.cuda.get_rng_state(device)
+    elif device.type == "mps":
+        accelerator_state = torch.mps.get_rng_state()
+    try:
+        callback(event)
+    finally:
+        random.setstate(python_state)
+        np.random.set_state(numpy_state)
+        torch.random.set_rng_state(cpu_state)
+        if device.type == "cuda" and accelerator_state is not None:
+            torch.cuda.set_rng_state(accelerator_state, device)
+        elif device.type == "mps" and accelerator_state is not None:
+            torch.mps.set_rng_state(accelerator_state)
 
 
 def make_rng_streams(seed: int, fold: int) -> dict[str, np.random.Generator]:
@@ -125,6 +190,8 @@ def _expected_lineage(
     fold: int,
     seed: int,
     variant: str,
+    *,
+    training_implementation_digest: str | None = None,
 ) -> dict[str, Any]:
     fold_payload = get_fold(splits, fold)
     return {
@@ -133,7 +200,9 @@ def _expected_lineage(
         "context_digest": context.context_digest,
         "cohort_digest": cohort.cohort_digest,
         "split_digest": splits["split_digest"],
-        "implementation_digest": implementation_digest(),
+        "implementation_digest": (
+            training_implementation_digest or implementation_digest()
+        ),
         "runtime_versions": {
             "python": platform.python_version(),
             "numpy": np.__version__,
@@ -190,9 +259,16 @@ def load_checkpoint(
     variant: str,
 ) -> dict[str, Any]:
     checkpoint = torch.load(path, map_location="cpu", weights_only=False)
-    validate_checkpoint_lineage(
-        checkpoint, _expected_lineage(context, cohort, splits, fold, seed, variant)
-    )
+    expected = _expected_lineage(context, cohort, splits, fold, seed, variant)
+    observed_implementation = checkpoint.get("implementation_digest")
+    current_implementation = expected["implementation_digest"]
+    if (
+        observed_implementation != current_implementation
+        and (observed_implementation, current_implementation)
+        in _approved_implementation_compatibility()
+    ):
+        expected = {**expected, "implementation_digest": observed_implementation}
+    validate_checkpoint_lineage(checkpoint, expected)
     return checkpoint
 
 
@@ -213,10 +289,15 @@ def train_fold(
     variant: str,
     *,
     reuse_valid: bool = True,
+    progress_callback: ProgressCallback | None = None,
 ) -> dict[str, Any]:
     output_path = checkpoint_path(context.artifact_root, variant, fold, seed)
     if output_path.exists() and reuse_valid:
         return load_checkpoint(output_path, context, cohort, splits, fold, seed, variant)
+
+    # Freeze this before any expensive work. If source files are edited while a job
+    # is running, the checkpoint continues to identify the code that began the job.
+    training_implementation_digest = implementation_digest()
 
     if variant not in context.protocol["training"]["variants"]:
         raise ValueError(f"Unknown variant {variant}")
@@ -244,8 +325,26 @@ def train_fold(
     segment_length = int(model_config(context)["segment_length"])
     mask_fraction = float(context.protocol["model"]["mask_fraction"])
 
-    set_reproducible_seed(seed)
     device = resolve_device()
+    if progress_callback is not None:
+        progress_callback(
+            {
+                "event": "job_started",
+                "variant": str(variant),
+                "fold": int(fold),
+                "seed": int(seed),
+                "epochs": epochs,
+                "updates_per_epoch": updates_per_epoch,
+                "total_optimizer_updates": total_updates,
+                "train_sources": len(train_sources),
+                "train_sequences": len(train_rows),
+                "device": str(device),
+            }
+        )
+
+    # Reset random state after the progress callback so display code cannot alter
+    # initialization. The notebook callback itself performs no random operations.
+    set_reproducible_seed(seed)
     model = SJEPAGait(**model_config(context)).to(device)
     projector = VICRegProjector(int(model_config(context)["embed_dim"])).to(device)
     initial_target_state = {
@@ -280,6 +379,7 @@ def train_fold(
     model.train()
     projector.train()
     for epoch in range(epochs):
+        epoch_started = time.monotonic()
         epoch_losses: list[float] = []
         for row_indices, drawn_sources in source_balanced_epoch_batches(
             cohort.table,
@@ -375,15 +475,41 @@ def train_fold(
             )
             epoch_losses.append(float(loss.detach().cpu()))
             global_step += 1
-        history.append(
-            {
-                "epoch": epoch + 1,
-                "mean_total_loss": float(np.mean(epoch_losses)),
-                "optimizer_updates": len(epoch_losses),
-            }
-        )
+        epoch_summary: dict[str, float | int] = {
+            "epoch": epoch + 1,
+            "mean_total_loss": float(np.mean(epoch_losses)),
+            "optimizer_updates": len(epoch_losses),
+        }
+        history.append(epoch_summary)
+        if progress_callback is not None:
+            _emit_epoch_progress_without_rng_side_effects(
+                progress_callback,
+                {
+                    "event": "epoch_completed",
+                    "variant": str(variant),
+                    "fold": int(fold),
+                    "seed": int(seed),
+                    "epoch": epoch + 1,
+                    "epochs": epochs,
+                    "optimizer_updates": global_step,
+                    "total_optimizer_updates": total_updates,
+                    "mean_total_loss": epoch_summary["mean_total_loss"],
+                    "epoch_seconds": float(time.monotonic() - epoch_started),
+                    "job_elapsed_seconds": float(time.time() - started),
+                    "device": str(device),
+                },
+                device,
+            )
 
-    lineage = _expected_lineage(context, cohort, splits, fold, seed, variant)
+    lineage = _expected_lineage(
+        context,
+        cohort,
+        splits,
+        fold,
+        seed,
+        variant,
+        training_implementation_digest=training_implementation_digest,
+    )
     model_state = {
         key: value.detach().cpu() for key, value in model.state_dict().items()
     }
@@ -410,33 +536,177 @@ def train_fold(
         "device": str(device),
     }
     validate_checkpoint_lineage(checkpoint, lineage)
+    if progress_callback is not None:
+        progress_callback(
+            {
+                "event": "checkpoint_saving",
+                "variant": str(variant),
+                "fold": int(fold),
+                "seed": int(seed),
+                "epoch": epochs,
+                "epochs": epochs,
+                "job_elapsed_seconds": checkpoint["wall_seconds"],
+                "device": str(device),
+            }
+        )
     _atomic_torch_save(output_path, checkpoint)
     return checkpoint
 
 
-def train_selected(context: ExperimentContext, cohort: PreparedCohort, splits: dict[str, Any]) -> list[dict[str, Any]]:
+def train_selected(
+    context: ExperimentContext,
+    cohort: PreparedCohort,
+    splits: dict[str, Any],
+    *,
+    progress_callback: ProgressCallback | None = None,
+) -> list[dict[str, Any]]:
+    """Train or reuse all selected jobs while emitting behavior-neutral progress events.
+
+    The callback receives dictionaries whose ``event`` field is one of
+    ``run_started``, ``job_started``, ``epoch_completed``, ``checkpoint_saving``,
+    ``job_completed``, ``job_failed``, or ``run_completed``. A failing display
+    callback is disabled after one warning so it cannot discard an expensive run.
+    """
+
+    jobs = [
+        (str(variant), int(fold), int(seed))
+        for variant in context.variants
+        for fold in context.folds
+        for seed in context.seeds
+    ]
+    callback_enabled = progress_callback is not None
+
+    def emit(event: dict[str, Any]) -> None:
+        nonlocal callback_enabled
+        if not callback_enabled or progress_callback is None:
+            return
+        try:
+            progress_callback(dict(event))
+        except Exception as error:  # Progress must never waste a valid training run.
+            callback_enabled = False
+            warnings.warn(
+                f"Training progress display failed and was disabled: {error}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+
+    profile = context.profile_config
+    max_train_sources = max(len(item["train_sources"]) for item in splits["folds"])
+    updates_per_epoch = int(math.ceil(max_train_sources / int(profile["batch_size"])))
+    epochs = int(profile["epochs"])
+    cached_candidates = sum(
+        checkpoint_path(context.artifact_root, variant, fold, seed).exists()
+        for variant, fold, seed in jobs
+    )
+    run_started = time.monotonic()
+    emit(
+        {
+            "event": "run_started",
+            "profile": context.profile,
+            "total_jobs": len(jobs),
+            "cached_candidate_jobs": int(cached_candidates),
+            "new_candidate_jobs": int(len(jobs) - cached_candidates),
+            "epochs_per_job": epochs,
+            "updates_per_epoch": updates_per_epoch,
+            "total_optimizer_updates_per_job": epochs * updates_per_epoch,
+            "device": str(resolve_device()),
+        }
+    )
+
     summaries: list[dict[str, Any]] = []
-    for variant in context.variants:
-        for fold in context.folds:
-            for seed in context.seeds:
-                checkpoint = train_fold(context, cohort, splits, fold, seed, variant)
-                summaries.append(
-                    {
-                        "variant": variant,
-                        "fold": fold,
-                        "seed": seed,
-                        "optimizer_updates": checkpoint["optimizer_updates"],
-                        "final_loss": checkpoint["history"][-1]["mean_total_loss"],
-                        "history": checkpoint["history"],
-                        "minimum_source_draws": min(
-                            checkpoint["source_draw_counts"].values()
-                        ),
-                        "maximum_source_draws": max(
-                            checkpoint["source_draw_counts"].values()
-                        ),
-                        "checkpoint": str(
-                            checkpoint_path(context.artifact_root, variant, fold, seed)
-                        ),
-                    }
-                )
+    reused_jobs = 0
+    trained_jobs = 0
+    for job_index, (variant, fold, seed) in enumerate(jobs, start=1):
+        output_path = checkpoint_path(context.artifact_root, variant, fold, seed)
+        checkpoint_existed = output_path.exists()
+        job_started = time.monotonic()
+
+        def job_progress(event: dict[str, Any]) -> None:
+            emit(
+                {
+                    **event,
+                    "job_index": job_index,
+                    "total_jobs": len(jobs),
+                }
+            )
+
+        try:
+            checkpoint = train_fold(
+                context,
+                cohort,
+                splits,
+                fold,
+                seed,
+                variant,
+                progress_callback=job_progress,
+            )
+        except BaseException as error:
+            emit(
+                {
+                    "event": "job_failed",
+                    "job_index": job_index,
+                    "total_jobs": len(jobs),
+                    "variant": variant,
+                    "fold": fold,
+                    "seed": seed,
+                    "error_type": type(error).__name__,
+                    "error": str(error),
+                    "run_elapsed_seconds": float(time.monotonic() - run_started),
+                }
+            )
+            raise
+
+        if checkpoint_existed:
+            reused_jobs += 1
+        else:
+            trained_jobs += 1
+        summaries.append(
+            {
+                "variant": variant,
+                "fold": fold,
+                "seed": seed,
+                "checkpoint_reused": checkpoint_existed,
+                "optimizer_updates": checkpoint["optimizer_updates"],
+                "final_loss": checkpoint["history"][-1]["mean_total_loss"],
+                "history": checkpoint["history"],
+                "minimum_source_draws": min(
+                    checkpoint["source_draw_counts"].values()
+                ),
+                "maximum_source_draws": max(
+                    checkpoint["source_draw_counts"].values()
+                ),
+                "checkpoint": str(output_path),
+            }
+        )
+        emit(
+            {
+                "event": "job_completed",
+                "job_index": job_index,
+                "total_jobs": len(jobs),
+                "completed_jobs": len(summaries),
+                "variant": variant,
+                "fold": fold,
+                "seed": seed,
+                "checkpoint_reused": checkpoint_existed,
+                "epochs": int(checkpoint["epochs"]),
+                "optimizer_updates": int(checkpoint["optimizer_updates"]),
+                "final_loss": float(checkpoint["history"][-1]["mean_total_loss"]),
+                "historical_training_seconds": float(checkpoint["wall_seconds"]),
+                "job_elapsed_seconds": float(time.monotonic() - job_started),
+                "run_elapsed_seconds": float(time.monotonic() - run_started),
+                "device": str(checkpoint["device"]),
+                "reused_jobs": reused_jobs,
+                "trained_jobs": trained_jobs,
+            }
+        )
+    emit(
+        {
+            "event": "run_completed",
+            "total_jobs": len(jobs),
+            "completed_jobs": len(summaries),
+            "reused_jobs": reused_jobs,
+            "trained_jobs": trained_jobs,
+            "run_elapsed_seconds": float(time.monotonic() - run_started),
+        }
+    )
     return summaries

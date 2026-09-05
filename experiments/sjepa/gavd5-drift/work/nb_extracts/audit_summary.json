@@ -1,0 +1,50 @@
+{
+  "purpose": "Consolidated, verified audit of the S-JEPA gait project (repo: /Users/pmui/dev/alexpose/experiments/sjepa/gavd5), compiled from four notebook-audit agents and direct artifact reads. Used by direction-ideation agents.",
+  "project_essentials": {
+    "question": "Can one compact Skeleton JEPA model first learn normal gait (label-free), then continue through four clinical-condition stages while retaining a useful, non-collapsed representation?",
+    "data": "159 sequences from 35 videos: 96 canonical GAVD sequences from 18 videos (normal 12/1 video, parkinsons 9/2, stroke 12/3, myopathic 47/10, cerebralpalsy 16/2) + 63 self-annotated added-normal windows from 17 extra videos (64 candidates, 1 rejected at neurologic coverage 0.027 < 0.45).",
+    "pose_pipeline": "MediaPipe BlazePose 33 landmarks + visibility; visibility>=0.45 valid; internal gaps <=4 frames interpolated (validity mask kept); pelvis-centered; shoulder/hip-width scaled; resized to 64 frames; 4-frame patches -> 16 time patches x 33 joints = 528 tokens.",
+    "masking": "Uniform sampling WITHOUT replacement over whitelist MASK_KEYPOINTS=[11,12,23,24,25,26,27,28,29,30,31,32] (shoulders, hips, knees, ankles, heels, foot indexes); 0.60 applied to batch-minimum eligible count (realized mean eligible fraction 0.551 end of Stage 0, 0.423 end of Stage 4); no motion-aware masking (deliberate); max possible global mask fraction = 12/33 = 0.364.",
+    "architecture": "embed_dim 96, encoder_depth 4, predictor_depth 2, heads 4, ff 384; SkeletonPatchEncoder + EMA target encoder (cosine_ema 0.999->1.0 per stage) + SkeletonPredictor + target center EMA beta=0.9; VICRegProjector 96->96->96.",
+    "objective": "L = L_JEPA (centered sharpened latent CE, tau_p=0.10, tau_t=0.06) + 0.05 * VICReg(25 inv + 25 var + 1 cov) + 0.25 * group(compactness + squared centroid-margin separation, margin 1.0, unit-normalized, label-aware, ZERO during Stage 0).",
+    "curriculum": "Stage0 normal-only 75 seq/18 videos/300 epochs/5700 updates/lr 0.001; Stages 1-4 add parkinsons(84/20), stroke(96/23), myopathic(143/33), cerebralpalsy(159/35), each 75 epochs/1425 updates/lr 0.0003; total 600 epochs / 11,400 updates; balanced replay 4 samples/condition, batch sizes 4/8/12/16/20; AdamW betas (0.9,0.95) wd 0.05 grad clip 1.0; one continuing model, fresh optimizer per stage.",
+    "reproducibility": "SHA-256 fingerprint chain per stage (0a14fe12c6f5, 563b9227a065, b367796d186f, e81d529a7373, d0acc2628d13...); final fingerprint d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1; classifier_contract.json binds downstream artifacts; embedding_corpus_sha256 ed20c430ed41... (historical) vs 0eff77b03c... (fresh 2026-08-17 rerun on checkpoint file SHA 6e67fc5c4a02...).",
+    "checkpoints": "work/artifacts/real/sjepa_normal_augmented.pt, sjepa_stage_01_parkinsons_augmented.pt, sjepa_stage_02_stroke_augmented.pt, sjepa_stage_03_myopathic_augmented.pt, sjepa_stage_04_cerebralpalsy_augmented.pt, sjepa_curriculum_final_augmented.pt"
+  },
+  "measured_results": {
+    "training_health": "Stage-end JEPA/VICReg/std/pair-cosine/min-centroid/normal-anchor: S0 0.569/16.997/0.466/0.359/na/na; S1 0.449/12.989/0.430/0.492/0.740/0.954; S2 0.613/10.474/0.399/0.624/0.527/0.839; S3 0.611/9.368/0.406/0.628/0.336/0.707; S4 0.478/8.418/0.414/0.609/0.364/0.594. Nonzero std = no total collapse; normal anchor drifted 0.954->0.594 (substantial forgetting of the normal reference).",
+    "canonical_geometry": "96-sequence frozen-encoder audit: cosine silhouette 0.008975, min between-centroid distance 0.036718 (myopathic vs cerebralpalsy), mean between-centroid 0.292119, mean within-condition 0.119521. Min centroid distance < mean within-condition spread => no clean 5-group geometry.",
+    "spot_check": "4-sequence hidden-token prediction: mean cosine 0.574 (not headline-worthy; 114 tokens/sequence).",
+    "classifier_lanes_historical_ledger": "A1 all-96: S-JEPA 0.793 acc / 0.889 bacc / 0.821 macroF1; missingness-only 0.448/0.466/0.429. A2 exact exp5: S-JEPA 0.714/0.730/0.742; historical 82-feature RF 0.762 acc/0.728 macroF1; missingness-only 0.333/0.364/0.336. Lane C binary (5 group folds): 0.849/0.874/0.826, ROC AUC 0.966. Lane C five-class corrected 2 stratified group folds: mean 0.653/0.603/0.625; pooled OOF 0.654/0.600/0.619. ALL LANES TRANSDUCTIVE (encoder saw every evaluation row; A1/A2 share source videos across classifier train/test).",
+    "classifier_lanes_fresh_rerun_2026_08_17": "Same checkpoints, fresh execution: all-96 0.724 acc/0.750 macroF1; exp5 0.762/0.765; video-disjoint 2-fold mean 0.564/0.495; pooled 0.566/0.496. The fresh rerun is the reproducible source of truth per docs/downstream_probe_reproduction.md.",
+    "laterality_probe": "nb_05a pre-registered signed left-minus-right probe, 5 GroupKFold source-disjoint ridge probes: learned Lane A R2=-0.187 vs raw-null Lane B R2=0.9999999992 (raw coords trivially solve it), untrained floor Lane C R2=+0.147 (beats learned), side-agnostic Lane D R2=-0.014 (control OK). sign_consistency 0.5, mirror slope -0.343 (does not flip). VERDICT: INFORMATIVE NULL - the learned representation does not linearly expose signed left-right asymmetry that raw coordinates contain.",
+    "effective_rank": "never computed (missed opportunity).",
+    "temporal_readout": "never computed: the 384-d vector = global mean/std + 12-joint mean/std over all tokens; temporal order discarded by construction (missed opportunity)."
+  },
+  "known_weaknesses": [
+    "All classifier lanes transductive; no fold-local (source-video-disjoint) encoder retraining was ever run; sequence-level splits share source videos.",
+    "Normal-anchor drift 0.954->0.594 unmitigated; balanced replay insufficient.",
+    "Weak 5-group geometry (silhouette 0.009) despite high in-corpus RF scores; RF exploits nonlinear/localsource confounds.",
+    "Provenance confound: 63/75 normal training rows come from the added extraction path; all abnormal rows come from canonical path (bounding-box/camera/detector style correlates with label). Missingness-only control already hits 0.448 acc on all-96.",
+    "Single training run, single seed; no seed replication.",
+    "Small classes: 1 canonical normal video, 2 Parkinson's videos, 2 CP videos -> at most 2 stratified group folds; no unbiased CV variance.",
+    "Laterality semantics lost in learned representation (INFORMATIVE NULL).",
+    "Two result sets exist (historical ed20c430 embedding SHA vs fresh 0eff77b0); docs forbid mixing.",
+    "Notebooks 05/nb_05a embedded outputs belong to an older ea59fea0 run; canonical d0acc262 numbers live only in the artifact CSV/JSON files."
+  ],
+  "assets_for_new_work": [
+    "Frozen checkpoints for all 5 stages + final (loadable with the self-contained classes in notebooks 05/06: SkeletonPatchEncoder, SkeletonPredictor, SJEPAGait, prepare_sequence, uniform_neurologic_mask).",
+    "sequence_embeddings.parquet (96 x 384 pooled vectors), augmented_normal_embeddings.parquet (63 x 384), token-level tensors computable from checkpoint + pose caches (poses/ and poses_augmented/ in work/artifacts/real).",
+    "pose caches for all 96 canonical + 63 augmented sequences; manifest.csv; augmented_pose_extraction_report.csv; pose_missingness_features.csv.",
+    "Reusable: masked_mean_std, pooled_embeddings, source_disjoint_probe (GroupKFold ridge with inner alpha selection), laterality feature builders, score_future pre-registered gates, geometric_view, vicreg_terms, condition_group_terms.",
+    "Retraining cost: full 600-epoch curriculum ~20 min on this machine (artifact timestamps show stage checkpoints 2-7 min apart); a single stage retrain is a few minutes; frozen-embedding probes are seconds."
+  ],
+  "venue_facts": {
+    "workshop": "NeurIPS 2026 Workshop on Foundation Models for the Brain and Body (BrainBodyFM 2026), 2nd edition, non-archival.",
+    "deadline": "September 5, 2026 AoE (submissions opened Aug 3, 2026); notification Sep 29; camera-ready Nov 6; workshop Dec 11-12, 2026.",
+    "format": "5 pages max excluding references and appendices; modified NeurIPS 2026 style; double-blind; novelty required.",
+    "fit": "Biosignals explicitly include behavioral signals (pose extracted from video); topics include foundation models for movement/motor control, embodied intelligence and sensorimotor representation learning, self-supervised learning for biosignals, continual learning in biosignals, interpretability of biosignal representations, evaluation protocols and standardized benchmarks, measuring whether pretraining helps: probing and downstream evaluation.",
+    "emphasis": "This edition emphasizes the motor side of the loop - movement, motor control, closed-loop interaction; welcomes scaling/generalization techniques from robotics and embodied AI into biosignal modeling.",
+    "cfp_url": "https://brainbodyfm-workshop.github.io/call-for-papers.html"
+  }
+}

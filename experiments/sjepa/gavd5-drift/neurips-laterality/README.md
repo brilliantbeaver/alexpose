@@ -55,7 +55,23 @@ Generated artifacts are excluded from git. Every checkpoint and result records t
 
 Artifacts contain linkable source-video identifiers and derived pose representations. Git exclusion is not a release determination: do not redistribute manifests, poses, embeddings, predictions, or checkpoints until the reviews in `governance/status.json` explicitly permit it.
 
-The optional external gate additionally requires `LATERALITY_EXTERNAL_MANIFEST` and `LATERALITY_EXTERNAL_GOVERNANCE`. The latter must be scoped to that external dataset; the GAVD governance file is deliberately rejected.
+The optional external gate additionally requires `LATERALITY_EXTERNAL_MANIFEST`
+and `LATERALITY_EXTERNAL_GOVERNANCE`. The latter must be scoped to that exact
+external dataset; the GAVD governance file is deliberately rejected. The
+optional `LATERALITY_EXTERNAL_POSE_ROOT` confines accepted pose paths to one
+directory. Notebook 06 checks the process environment and then local `.env`
+files for only these three names, without displaying their values.
+
+With neither required setting present, Notebook 06 finishes its preflight at
+100% and reports the optional study as `not configured / not run`; this is not
+an error and does not block notebooks 00–05. A partial configuration or an
+invalid supplied contract remains red and fail-closed.
+
+See [`docs/EXTERNAL_EVALUATION_GATE.md`](docs/EXTERNAL_EVALUATION_GATE.md) for
+the complete preparation checklist. The files under `governance/` are
+structure-only templates; filling them with invented approvals or subject IDs
+would not authorize an evaluation. A green Notebook 06 validates the manifest
+contract but still does not run a model or create external evidence.
 
 ## What this fixes
 

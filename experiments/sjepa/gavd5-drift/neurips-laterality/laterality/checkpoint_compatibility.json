@@ -1,0 +1,20 @@
+{
+  "schema": "neurips_laterality_checkpoint_compatibility/v1",
+  "compatible_pairs": [
+    {
+      "checkpoint_implementation_digest": "5fd4492da01dbf01bca7e1f79f3f4c3c0009287352f0b53b20299715111ee6b7",
+      "current_implementation_digest": "ca3393f3af5552b7bca648e1e4bd60463b400b8839c7dd8d8e4dd5a16b46deb2",
+      "reason": "Progress events and notebook ETA reporting only; verified identical initialization, history, and model-state digests."
+    },
+    {
+      "checkpoint_implementation_digest": "8db585368a424942c78f852f17b82436c8745eb398dcf6c2bd06defb8b340a45",
+      "current_implementation_digest": "ca3393f3af5552b7bca648e1e4bd60463b400b8839c7dd8d8e4dd5a16b46deb2",
+      "reason": "Transition-time checkpoint from the already-running pre-progress process; only progress reporting source had changed when its lineage digest was recorded."
+    },
+    {
+      "checkpoint_implementation_digest": "4e6108a04e486e587e807d3660763fd254b46cf446bf5bbba9eec899eb062a04",
+      "current_implementation_digest": "ca3393f3af5552b7bca648e1e4bd60463b400b8839c7dd8d8e4dd5a16b46deb2",
+      "reason": "Progress-only transition checkpoint preceding job-start digest freezing; model initialization, optimization, and saved tensors are unchanged."
+    }
+  ]
+}

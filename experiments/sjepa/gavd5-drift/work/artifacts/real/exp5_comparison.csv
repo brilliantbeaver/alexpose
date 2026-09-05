@@ -1,0 +1,4 @@
+system,mode,split,accuracy,macro_f1,independent_video_test
+exp5 handcrafted 82-feature RF,real saved result,"exact 47/21, video-confounded",0.7619047619047619,0.7283333333333333,False
+frozen S-JEPA pooled latent RF,real,exp5_exact_video_confounded,0.8571428571428571,0.8607142857142858,False
+"frozen S-JEPA pooled latent RF, all rows",real,all_96_stratified_video_confounded,0.9202127659574468,0.8985120869742677,False
