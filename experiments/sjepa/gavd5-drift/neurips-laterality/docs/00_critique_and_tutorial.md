@@ -2,7 +2,7 @@
 
 ## A plain-language guide to the laterality v2.1 study
 
-> **Read this first.** This guide explains the current experimental design. Earlier notebooks used a transductive design in which the encoder had already seen the evaluated sequences. Those old numbers are useful only as historical motivation and are not results from this study. The current protocol trains a fresh model without each test fold. Its paper run and governance reviews are not complete, so this guide explains what will be measured rather than announcing an outcome.
+> **Read this first.** This guide explains the current experimental design and its results. Earlier notebooks used a transductive design in which the encoder had already seen the evaluated sequences. Those old numbers are useful only as historical motivation and are not results from this study. The current protocol trains a fresh model without each test fold, and the registered run is now complete on real derived-pose data. The short version of the outcome: self-supervised training did not learn the left–right structure, and the only way to get correct mirror behavior was to build it into the read-out by hand. Section 11 gives the numbers. Governance reviews are still open, so the results live in internal drafts and nothing is released yet.
 
 ## 1. What question are we asking?
 
@@ -117,17 +117,27 @@ The five seeds measure variation due to randomized model training. The source bo
 
 These two sources of variation answer different questions and are not blended. Metrics are first computed for each checkpoint. Registered seeds are then summarized. Source-bootstrap intervals remain conditional on the trained cross-validation pipeline; they do not prove that the 93 videos represent every person or every real-world recording condition.
 
-## 11. What can the completed study claim?
+## 11. What did the completed study find?
 
-If all empirical gates pass, the strongest supported statement concerns post-development, within-GAVD performance on held-out source videos. A useful probe-level symmetry claim requires positive predictive utility, sufficiently small mirror error, and improvement over the paired untrained initialization. A direct encoder-equivariance claim additionally requires a low token-level reflection error and improvement over initialization.
+The registered gates were set before any result was seen, and the run cleared none of the empirical ones. Every number below is a source-balanced $R^2$ or a normalized error with a 95% interval from the source-video bootstrap, and the pattern repeats for the reflection-augmented variant and for a high-coverage subset (600 sequences from 91 sources).
 
-Even a successful result would not establish unseen-person generalization, diagnosis, clinical validity, disease prevalence, or treatment effects. It would also remain conditional on the BlazePose landmark schema, pose preprocessing, architecture, seeds, and measured controls.
+First, the learned features do not predict the target well. The free read-out reaches $R^2 = 0.06$ (interval $[-0.03, 0.13]$), so its lower end sits below the required floor of zero. The sharper test compares the trained encoder with an untrained one of the same shape: training moves held-out $R^2$ by $-0.02$ (interval $[-0.04, 0.00]$), which is no gain at all. A self-consistency check that reads the target back from its own pair contrasts scores about $1.00$, so the target is recoverable in principle — the learned features are what fall short.
+
+Second, mirroring the input does not flip the native prediction the way it should. The unconstrained read-out has a normalized output antisymmetry error of $0.22$ (interval $[0.19, 0.24]$), far above the $0.10$ margin, and about the same as the untrained encoder's.
+
+Third, the encoder tokens are not reflection-equivariant, and training made this worse. The learned token error is $q = 0.11$ (interval $[0.10, 0.14]$), while the untrained initialization sits closer to equivariant at $q = 0.08$ (interval $[0.07, 0.09]$). The difference, $+0.03$ (interval $[0.02, 0.05]$), means self-supervised training nudged the representation away from the approximate symmetry it started with.
+
+Fourth, reflection augmentation — the training recipe meant to teach the symmetry directly — changed the primary result by $0.00$ (interval $[-0.01, 0.01]$) and only slightly reduced the equivariance damage.
+
+The one thing that worked is a construction, not a discovery. When the read-out is built from the odd part of the mirror decomposition, its output is exactly antisymmetric for every seed, which passes that gate at the $10^{-6}$ tolerance. But the predictive value stays weak ($R^2 = 0.04$, interval $[-0.04, 0.11]$), and the identical construction on an untrained encoder does at least as well (a learned-minus-untrained gap of $-0.06$, interval $[-0.10, -0.02]$). The exact mirror behavior comes from the wrapper on the anatomical pairs, not from anything the encoder learned. That is the study's main lesson: if you need a skeleton model to respect this symmetry, install it rather than hoping training supplies it.
+
+Even this null does not establish unseen-person generalization, diagnosis, clinical validity, disease prevalence, or treatment effects, and it remains conditional on the BlazePose landmark schema, pose preprocessing, architecture, seeds, and measured controls. A larger model, a different objective, or a denser target could behave differently.
 
 ## 12. Current status and governance
 
-The cohort and split have been audited. The full paper computation and held-out evaluation are not complete, so the current protocol has no reportable v2.1 performance conclusion. Synthetic smoke runs only check that the software works and are never scientific evidence.
+The cohort and split have been audited, and the full paper computation and held-out evaluation are complete on real derived-pose data. All five folds, five seeds, and both variants finished, and the two hard integrity checks — every registered fold and seed present, and exact output oddness for the constructed read-out — pass. The results in Section 11 are the study's findings, reported without any post-hoc change to the frozen protocol. Synthetic smoke runs only check that the software works and are never scientific evidence; the reported numbers do not come from them.
 
-Submission is also blocked by unresolved governance. The institutional ethics determination, data-use review, and derived-pose release review must each have a genuine dated internal reference. Public availability of source links does not replace these reviews. Derived poses, identifiers, embeddings, predictions, and checkpoints must not be redistributed until the completed reviews permit it.
+Even with results in hand, submission and release stay blocked by unresolved governance. The institutional ethics determination, data-use review, and derived-pose release review must each have a genuine dated internal reference. Public availability of source links does not replace these reviews. Derived poses, identifiers, embeddings, predictions, and checkpoints must not be redistributed until the completed reviews permit it.
 
 ## 13. Reading the notebooks in order
 
