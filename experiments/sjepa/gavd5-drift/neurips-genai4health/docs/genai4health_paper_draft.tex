@@ -1,0 +1,227 @@
+\documentclass{article}
+\PassOptionsToPackage{numbers,compress}{natbib}
+\usepackage{neurips_2026}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,array,booktabs,graphicx,microtype,url,hyperref}
+\hypersetup{hidelinks,pdfauthor={},pdftitle={Before Gait Models Inform Care: Evidence Boundaries for Predictive Health AI}}
+\graphicspath{{figures/}}
+\title{Before Gait Models Inform Care:\\Evidence Boundaries for Predictive Health AI}
+\author{Anonymous authors}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Predictive movement representations are plausible inputs to future ambient health assistants, but evidence for a representation does not automatically support decisions about a person. We argue that source transfer, functional retention, future prediction, and clinical utility require distinct evaluations. A retrospective audit of a skeleton joint-embedding predictive architecture illustrates why. A local five-category GAVD subset contracts from 666 annotated sequences in 103 source videos to 639 pose-eligible sequences in 97 videos. In one source-held-out split, a raw-kinematic readout achieves macro-F1 0.441, compared with 0.292 for the learned representation and 0.251 for missingness alone. Separately, the same 64 normal-validation clips yield cross-checkpoint embedding cosine 0.889 under equal clip weighting but 0.701 under equal source weighting; one upload contributes 60 clips. These observations support an evaluation position, not a clinical or architecture-wide performance claim. We specify the additional evidence needed before masked representation prediction can support longitudinal monitoring, forecasting, or agentic care.
+\end{abstract}
+
+\section{Position: evidence must follow the claim}
+
+A future ambient health assistant might use movement observations to help a clinician review changes in a person's mobility. Its perception component would need to distinguish changes in movement from changes in camera, visibility, and the model itself. A representation that predicts masked joints or separates dataset annotations has not yet demonstrated that distinction. If a downstream language model turns such features into a confident clinical narrative, the uncertainty in the sensing pipeline remains unresolved.
+
+Our position is that evaluations of predictive health representations should make four claims separately: transfer across data sources, retention of useful function after model updates, prediction beyond the observed time interval, and utility in a defined clinical workflow. Each concerns a different target and requires different evidence. When movement features enter a larger health system, their evidence scope should travel with them: the source population, model version, measured task, and unresolved failure modes.
+
+Joint-embedding predictive architectures (JEPAs) make this distinction especially relevant. I-JEPA and S-JEPA learn by predicting target representations, rather than reconstructing every input value \citep{assran2023ijepa,abdelfattah2024sjepa}. This is not by itself a generative clinical system. Video work such as V-JEPA~2 studies additional prediction and action-conditioned planning capabilities \citep{assran2025vjepa2}; those capabilities cannot be inferred from the name of a training objective. Our connection to generative and agentic health AI is the evidence required of a possible perception component. We do not evaluate a language model, agent, or care intervention.
+
+Grouped validation and leakage prevention are established practice \citep{roberts2017crossvalidation,kapoor2023leakage}. Acquisition-related shortcuts have also been demonstrated in medical imaging \citep{zech2018generalization}, although their particular mechanisms are not established in our gait data. Our contribution is a concrete audit showing where apparently relevant movement evidence stops: a matched readout comparison does not favor the learned representation; changing only the aggregation weights substantially changes a retention summary; and neither experiment establishes a forecasting or clinical capability. We turn these findings into claim-specific evaluation requirements, with explicit counterarguments and a reproducible numerical trail.
+
+\section{An auditable, bounded gait case study}
+
+\paragraph{Population and evaluation unit.}
+We audit a project-specific five-category subset of the Gait Abnormality Video Dataset (GAVD) \citep{ranjan2025gavd}. Its annotations are normal, Parkinson's, stroke, myopathic, and cerebral palsy. These are the dataset's movement/condition annotations; this project does not independently verify diagnoses. The local inventory, not the full GAVD dataset, contains 666 sequences from 103 source videos. A September 4, 2026 metadata snapshot retains 657/100 (sequences/videos); the measured decoding audit retains 655/98; and a fixed 0.50 coverage gate over 12 selected landmarks retains 639/97. Metadata availability, successful decoding, and pose eligibility are separate conditions. Appendix~\ref{app:cohort} reports category counts and acquisition limitations.
+
+A local registry defines five source-grouped outer folds, but only fold~0 and model seed~42 have the current traced training and evaluation artifacts. Source roles are assigned at the metadata-public gate and retained through later attrition. The resulting fold has 377 sequences from 59 training sources, 131 from 18 validation sources, and 131 from 20 test sources. No source ID overlaps these roles. A source ID is a grouping key, not a verified person identifier: the same person could appear in different uploads.
+
+\paragraph{Actual representation learner.}
+The executed model is a small skeleton JEPA adaptation, not a reproduction of S-JEPA. It uses 33 MediaPipe landmarks \citep{grishchenko2022blazepose}, pelvis centering, within-clip body scaling, and resizing to 64 frames. Each joint's four-frame coordinate mean becomes a token. A two-layer transformer with 64-dimensional tokens contextualizes the resulting $16\times33$ tokens. A pooled-context MLP predicts masked target features from an exponential-moving-average (EMA) encoder. Prediction targets are sampled from valid shoulder, hip, knee, ankle, heel, and foot-tip tokens. The implemented objective is
+\begin{equation}
+\mathcal L=\mathcal L_{\mathrm{SmoothL1\text{-}JEPA}}+0.10\,\mathcal L_{\mathrm{var}}+0.01\,\mathcal L_{\mathrm{cov}}.
+\label{eq:loss}
+\end{equation}
+The latter terms use the variance and covariance penalties motivated by VICReg \citep{bardes2022vicreg}; there is no separate two-view invariance term. Condition labels do not enter this loss, but do determine the cumulative training order: normal, then Parkinson's, stroke, myopathic, and cerebral palsy. Previously introduced groups remain available. This is an annotation-informed schedule, not a simulation of disease progression. No current supervised-loss ablation is reported.
+
+\paragraph{What the audit can establish.}
+The checkpoint hashes, role lists, and training access log agree and record no test tensors in encoder fitting. They establish consistency of the inspected artifacts, not complete historical secrecy of test results. Notebook~04 selects each stage using validation loss; later diagnostics also access test data, and no global mechanism prevents repeated inspection. We therefore present a retrospective case study of the saved run. Training history records 20 epochs per stage. Some runtime settings were not serialized, and all inspected pose caches use legacy crop geometry. These limits, along with precise methods, are retained in Appendix~\ref{app:methods}.
+
+\section{Two observations that constrain interpretation}
+
+\paragraph{A learned representation needs a sensor-derived comparison.}
+Three feature sets share the same test sources: 256-dimensional frozen EMA features, 144-dimensional raw kinematic summaries, and 97-dimensional validity/missingness summaries. ``Raw kinematics'' names normalized pose-coordinate summaries, not calibrated physical velocities. For each, a standardized, class-weighted logistic regression selects regularization by validation macro-F1 and then refits on training plus validation sources. The encoder remains fixed. Selection uses mean features per source; testing averages clip probabilities per source. Those operations need not agree. This aggregation mismatch is a limitation of the saved experiment, disclosed rather than silently corrected after observing test scores.
+
+On the 20 test sources, raw kinematics yield macro-F1 0.441 and balanced accuracy 0.443; the learned representation yields 0.292 and 0.257; missingness yields 0.251 and 0.248 (Figure~\ref{fig:findings}A). We independently reproduce these metrics from the saved source predictions. The observed raw-minus-latent macro-F1 difference is 0.148 from unrounded values. This is not a significance claim or an estimate across training seeds. Test support is only 7 normal, 2 Parkinson's, 3 stroke, 6 myopathic, and 2 cerebral-palsy sources. All three readouts miss all three stroke sources. Missingness performance does not prove a shortcut in the learned representation, and the result does not establish that JEPAs generally underperform raw features.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{audited_findings.pdf}
+\caption{Two distinct audit findings. (A) Saved source-level readout scores for one fold and seed, evaluated on the same 20 sources. Points are descriptive estimates; uncertainty across folds and seeds is unavailable. (B) Final versus normal-only EMA embedding cosine for the same 64 validation-normal clips. Only aggregation weights change: equal clip weight gives 0.889; averaging within source and then equally over five sources gives 0.701. Cosine is coordinate similarity, not retained clinical function. Panel B has a restricted axis.}
+\label{fig:findings}
+\end{figure}
+
+\paragraph{A retention summary depends on who receives weight.}
+For each normal-annotated clip $i$ from source $v$, let $c_{vi}$ be cosine similarity between its 64-dimensional pooled EMA embeddings at the selected normal-only and final checkpoints. Two legitimate but different summaries are
+\begin{equation}
+R_{\mathrm{clip}}=\frac{\sum_v\sum_{i=1}^{n_v}c_{vi}}{\sum_v n_v},\qquad
+R_{\mathrm{source}}=\frac{1}{V}\sum_{v=1}^V\frac{1}{n_v}\sum_{i=1}^{n_v}c_{vi}.
+\end{equation}
+Recomputing both on the same stored validation embeddings gives $R_{\mathrm{clip}}=0.889$ and $R_{\mathrm{source}}=0.701$ (Figure~\ref{fig:findings}B). One source contributes 60 of 64 clips, or 93.75\% of clip weight, but 20\% of source weight. Its mean cosine is 0.905; the other four sources each supply one clip. Thus the higher clip-weighted summary mainly describes one upload. On seven different normal test sources, source-weighted cosine is 0.850; that difference from validation is not a consolidation gain.
+
+This comparison isolates an aggregation effect, not a leakage effect. More fundamentally, neither cosine measures preservation of a clinically meaningful function. A rotation of embedding coordinates can change cosine while an adapted readout preserves the same task. Conversely, an almost constant embedding can look stable but contain little useful information. Alignment-aware analyses and held-out functional tasks are needed before interpreting coordinate drift as forgetting or retention.
+
+\section{Evidence requirements for an ambient health component}
+
+The case suggests a practical rule: state the intended claim, its unit of evaluation, and the observation that could refute it. The following requirements are proposals motivated by the audit, not experiments completed here.
+
+\paragraph{Transfer beyond an upload.}
+An assertion of useful movement representation should survive raw-kinematic, missingness, and untrained-encoder comparisons on the same groups, with consistent validation and test aggregation. Full fold-local retraining across prespecified seeds and source-cluster uncertainty would characterize variability. These requirements address source transfer only. Person-level or cross-setting claims need reliable identity grouping or an external cohort; source-ID separation cannot substitute for either.
+
+\paragraph{Retention after an update.}
+A system intended to compare a person's mobility over time should hold the observed data fixed while auditing changes in the representation model. It should also evaluate a fixed clinical or movement task across model versions. Matched continued-normal and joint-training controls, alternate condition orders, and alignment-aware comparisons would help separate general optimization effects from curriculum effects. The present experiment has no longitudinal patient observations and does not measure patient deterioration.
+
+\paragraph{Prediction beyond observations.}
+The current objective performs masked representation prediction using context throughout a clip. No verified future-trained checkpoint or current surprise result exists. Moreover, the exploratory suffix-mask code hides only the 12 selected future joints and leaves other future joints visible; its copy-last baseline obtains past tokens from a noncausal full-clip encoder. Such access would prevent a past-only forecasting interpretation even if the missing checkpoint were supplied. A forecasting study must restrict every context input and baseline to the observed prefix, make preprocessing prefix-causal, retain meaningful time horizons, and compare against persistence and simple motion predictors. Future targets may be encoded for scoring; their information must not enter the predictor's context. Action-conditioned planning and intervention effects require further evidence beyond observational forecasting.
+
+\paragraph{Use in care.}
+A proposed assistant should carry acquisition quality, model version, and the scope of validated claims alongside a movement summary. A future evaluation could test whether these records help clinicians distinguish a sensor failure, model update, and genuine mobility change. That is a testable human-AI collaboration proposal, not an implemented interface. Clinical utility would require adjudicated endpoints, subgroup evaluation, calibrated uncertainty or abstention, workflow-specific error costs, and prospective evaluation. None is measured here. A fluent explanation cannot supply a missing validation study.
+
+\section{Counterarguments, limitations, and responsible use}
+
+\paragraph{This may be a weak model, not a weakness of predictive learning.}
+We agree. The model is small, the sample is opportunistic, and the current experiment omits untrained-encoder, joint-training, continued-normal, order, and multi-seed controls. The readout aggregation mismatch also limits interpretation. The negative comparison cannot adjudicate the value of an architecture family. It does show why an applied claim needs a matched simpler baseline before representation learning receives credit. Our position does not depend on assuming that larger JEPAs would fail.
+
+\paragraph{Source weighting is not always the right estimand.}
+Also true: a random-clip target and a random-source target answer different questions. Equal source weighting is appropriate for our stated upload-transfer audit; it is not an approximation to equal patient weighting without verified identity. The contribution is making the difference visible. Similarly, missingness can reflect true movement difficulty as well as occlusion or detector failure. Its association with labels warrants investigation, not automatic removal or a causal claim about shortcut use.
+
+\paragraph{Is this relevant to generative health AI?}
+The evaluated model is non-generative and no health agent is demonstrated. The relevance is upstream: a care-oriented generative system that consumes movement features would inherit their evidence limits. We advocate proportionate requirements. An exploratory representation study need not conduct a clinical trial, but it should not use clinical language to claim evidence that its exploratory endpoints cannot provide.
+
+\paragraph{Data use and scope.}
+Public-video retrieval produces a changing convenience sample. Viewpoint, compression, demonstrators, mobility aids, and visibility may correlate with annotations; demographic balance and cross-upload identity are unresolved. Legacy crop geometry further limits conclusions about physical kinematics. GAVD distributes annotations and identifiers, not unrestricted rights to videos \citep{gavdRepo2026}. Public accessibility does not establish consent for every reuse. We do not report a project-specific institutional ethics determination because none is documented in the reviewed materials. No new participants or clinical interventions were studied. This manuscript contains aggregate results; decisions about releasing videos or individual trajectories need a documented data-use review, access and retention rules, and a takedown process. Removing faces does not guarantee that trajectories are non-identifying. Diagnosis, treatment selection, and deployment are outside the evidence presented.
+
+\begin{table}[h]
+\centering\small
+\caption{Claim-specific evidence available in this case study.}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.31\linewidth}}
+\toprule
+Claim & Evidence available & Remaining boundary\\
+\midrule
+Dated local cohort & Metadata, decoding, QC ledgers & Dynamic availability; legacy geometry\\
+Source-held-out readout & One fold, three readouts & One seed; aggregation mismatch; no person key\\
+Weighting changes cosine & Same vectors, two averaging rules & Coordinate statistic, not function\\
+Functional retention or repair & No matched current controls & Alignment and fixed task required\\
+Past-only forecasting & No qualifying trained result & Causal input and baseline audit required\\
+Clinical or agentic utility & Not studied & External endpoints and workflow evaluation required\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conclusion}
+
+An auditable movement representation is a useful starting point for ambient health AI, but its claims must remain tied to the task and evaluation unit actually studied. In this case, a simpler sensor-derived readout has the higher observed score, while one upload dominates a clip-weighted retention summary. These findings motivate explicit boundaries between source transfer, functional retention, future prediction, and clinical utility. Progress toward health agents should test those boundaries rather than assume that one predictive objective crosses them.
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\clearpage
+\appendix
+\section{Cohort and fold composition}
+\label{app:cohort}
+
+Table~\ref{tab:cohort} reports the local subset. ``Metadata-public'' means metadata was obtainable without authentication in the dated audit; it does not establish current media availability, decoding completeness, consent, or reuse rights. Nine sequences from three sources fail that gate. Two further sources, each contributing one sequence, are absent from the measured decoded cohort: one has media shorter than its annotated span, and one has a retryable acquisition failure. The latter is not evidence of permanent deletion. Pose QC then removes 16 sequences and one additional source. The same source roles are retained throughout.
+
+\begin{table}[h]
+\centering\small
+\caption{Local inventory and measured attrition. Each entry is sequences / source videos. Metadata snapshot: September 4, 2026.}
+\label{tab:cohort}
+\begin{tabular}{lrrrr}
+\toprule
+Annotation & Raw & Metadata-public & Decoded & Pose QC \\
+\midrule
+Normal &291/32&291/32&290/31&276/30\\
+Parkinson's &47/11&47/11&47/11&46/11\\
+Stroke &76/19&75/18&75/18&74/18\\
+Myopathic &188/30&184/29&183/28&183/28\\
+Cerebral palsy &64/11&60/10&60/10&60/10\\
+\midrule
+Total &666/103&657/100&655/98&639/97\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering\small
+\caption{Post-QC fold 0. Each entry is sequences / sources. Only this fold and seed 42 have the current complete encoder/readout chain.}
+\begin{tabular}{lrrr}
+\toprule
+Annotation & Training & Validation & Test \\
+\midrule
+Normal &156/18&64/5&56/7\\
+Parkinson's &28/7&9/2&9/2\\
+Stroke &44/11&15/4&15/3\\
+Myopathic &111/17&35/5&37/6\\
+Cerebral palsy &38/6&8/2&14/2\\
+\midrule
+Total &377/59&131/18&131/20\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Executed method and reproducibility limits}
+\label{app:methods}
+
+\paragraph{Preprocessing and architecture.}
+The training/readout path marks a landmark valid when visibility is at least 0.45 and its three coordinates are finite. It subtracts the per-frame mean hip position, with a within-clip median fallback, and divides by the within-clip median of the larger shoulder/hip width in the image plane. Nonfinite coordinates are zero-filled and trajectories are linearly resized to 64 frames. The normal-anchor and temporal diagnostics instead interpolate short internal gaps of at most four frames before centering and scaling, while retaining the original validity mask. This differs from training/readout preprocessing, but does not affect the same-vector weighting comparison. These full-clip operations should not be reused unchanged for online forecasting.
+
+Each four-frame mean of one joint is projected from three coordinates to 64 dimensions. Learned joint and segment positions are added. Two pre-normalized transformer blocks use four attention heads, feed-forward width 128, GELU, and zero dropout. Hidden positions remain as learned mask tokens. Invalid tokens are excluded from target selection and pooling, but there is no key-padding mask preventing their contextual influence in attention. The encoder has 70,528 parameters. The predictor pools visible valid contextual tokens, adds a learned target position, and applies an MLP $64\rightarrow128\rightarrow64$ (50,368 parameters). The regularization projector is $64\rightarrow64\rightarrow64$ (8,320 parameters). The optimized primary components total 129,216 parameters; the EMA encoder is an additional non-gradient copy.
+
+Target eligibility is restricted to landmark IDs 11, 12, 23--32. A target patch must be valid in all four frames. The nominal mask fraction is 0.60, but the common target count in a batch is computed from its minimum eligible-token count, with at least one eligible token left visible. It is therefore not 60\% of all 528 tokens or necessarily 60\% of each sample's eligible set. Prediction uses smooth-L1 distance to detached EMA features. For projected batch features $q$, the variance penalty averages $\max(0,1-\sqrt{\operatorname{Var}(q_j)+10^{-4}})$ over dimensions; the covariance penalty sums squared off-diagonal sample covariances and divides by dimension. With batch size $B$, variance uses denominator $B$ and covariance uses $B-1$. The optional group head would add $0.10$ times condition-classification cross-entropy, but is disabled in the reported checkpoint. Neither the tutorial's centered cross-entropy JEPA nor the older within-label compactness loss describes this run.
+
+\paragraph{Training and recorded settings.}
+The sampler draws a source uniformly and then a sequence uniformly within that source. Each cumulative stage retains all previously introduced annotations. The 100-row history confirms 20 epochs at each of five stages. The notebook defaults specify 100 updates per epoch, batch size 32, AdamW learning rate $10^{-3}$, weight decay $10^{-4}$, gradient clipping at 1.0, and EMA decay 0.996. These settings are not all serialized in the checkpoint; environment overrides cannot be reconstructed independently from the retained contract. They are reported as code defaults, not certified runtime values. The saved output identifies CPU execution.
+
+Validation selects the smallest average of per-batch objective values, not an equal-source validation loss. Masks change with the epoch-specific validation seed. Zero-based selected epochs are 7, 0, 0, 4, and 0, with validation objectives 0.15101, 0.12981, 0.12237, 0.11426, and 0.12551. These values are not directly comparable task scores because the evaluated annotation set changes by stage. After stage selection, model parameters rewind to the selected epoch but optimizer moments do not. These details should be corrected or frozen explicitly in a subsequent confirmatory run.
+
+\paragraph{Feature and readout definitions.}
+The latent readout concatenates means and standard deviations of EMA tokens over all valid joints and over the 12-joint subset, giving $4\times64=256$ features. The normal-anchor audit instead uses a 64-dimensional validity-weighted EMA vector pooled over the 12-joint subset. Raw kinematics concatenate per-coordinate temporal means, standard deviations, mean absolute frame differences, and standard deviations of differences over 12 joints, giving $4\times12\times3=144$ features. They are normalized-coordinate summaries, not calibrated physical velocities. Missingness concatenates mean validity per joint and per resized frame, giving $33+64=97$ features.
+
+For each readout, StandardScaler and balanced-class logistic regression fit on one mean feature vector per training source. Validation chooses $C\in\{0.1,1,10\}$ by macro-F1, breaking ties toward smaller $C$. Chosen values are 1, 1, and 10 for latent, missingness, and raw features, respectively. Each scaler and classifier is then refit on 77 training-plus-validation sources. At test, clip probabilities are averaged within each source, followed by argmax. Because $\operatorname{softmax}(W\bar{x})$ and the mean of $\operatorname{softmax}(Wx_i)$ differ, validation and test use inconsistent aggregation. A future experiment should select with the same prediction rule used for testing and record both rules in the contract.
+
+\begin{table}[h]
+\centering\small
+\caption{Recomputed source-level test metrics, fold 0 / seed 42. No confidence interval or significance test is claimed.}
+\begin{tabular}{lrrr}
+\toprule
+Features & Accuracy & Balanced accuracy & Macro-F1\\
+\midrule
+Skeleton JEPA &0.300&0.257&0.292\\
+Missingness &0.300&0.248&0.251\\
+Raw kinematics &0.500&0.443&0.441\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Provenance and limits of reconstruction.}
+The manifest digest begins \texttt{7fd559e5105b}; the split digest begins \texttt{ff3518b87b1d}; the final checkpoint digest begins \texttt{f510be2a0453}. The numerical supplement supplies full hashes, 20 consistently aliased test-source predictions per readout, five validation-source counts and mean cosines, and a standard-library Python verifier. It reproduces the main metrics and weighting comparison without the original videos, but does not reproduce model training. Local recalculation also verifies the final checkpoint and five stage hashes, source-role disjointness, and cached normal-anchor similarities. Hash agreement detects inconsistent artifacts; it does not establish an immutable preregistration or reveal all prior analyst decisions. The caches lack complete frame-size/crop geometry records and do not bind all source-video bytes and crop annotations. No retraining was performed for this manuscript audit.
+
+\section{Supplementary diagnostics and excluded evidence}
+
+\paragraph{Source concentration and coordinate drift.}
+Figure~\ref{fig:weighting} expands the weighting observation. Final validation source cosines are approximately 0.905, 0.755, 0.698, 0.603, and 0.543; only the first source has 60 clips. The means in the text are calculated from unrounded values. Training and validation normal-source cosine follows the same reference checkpoint across cumulative stages. No clinical threshold is attached to either trajectory.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{source_weighting_and_drift.pdf}
+\caption{(A) Normal-validation clip counts using local source aliases. (B) Equal-source coordinate cosine relative to the normal-only stage. P, S, M, and CP denote cumulative introduction of the corresponding dataset annotation, not stages of disease. No repair method is compared.}
+\label{fig:weighting}
+\end{figure}
+
+\paragraph{Temporal probes are descriptive.}
+The current temporal notebook reports source-level ridge probes named peak phase, energy ratio, and phase lag. These are heuristic clip statistics, not validated biomechanical phases or physical energy: peak phase is the normalized time of maximum ankle separation, and energy ratio is a log ratio of mean lower-joint displacement between clip halves. For mean/std, signed-moment, and time-bin readouts, respectively, peak-phase $R^2$ is 0.173, 0.052, and 0.318; energy-ratio $R^2$ is 0.105, 0.054, and 0.176; phase-lag $R^2$ is $-0.071$, $-0.054$, and $-0.052$. All use 20 test sources. These targets come from observed poses, not clinician-annotated outcomes. All three phase-lag scores are negative. We do not select only favorable targets or infer that a negative linear-probe score proves information is absent from the encoder.
+
+The temporal notebook materializes and encodes test records before its validation-based ridge selection, although the inspected fit code does not use test labels for selection. It also uses different preprocessing from the training/readout notebooks. These issues prevent a claim of a uniformly sealed end-to-end test path and motivate keeping this diagnostic outside the main evidence argument. It is not a forecasting evaluation.
+
+\paragraph{Historical and absent results.}
+Earlier sequence-split classifiers, signed-laterality and reflection experiments, single-centroid AnchorGuard, and predictive-surprise artifacts have different training/evaluation provenance or are explicitly archived. The reflection exploration also contains simulated examples. None is used as current empirical evidence. No current fold-local consolidation comparison or future-trained checkpoint is available. The final normal test cosine compares the sole available candidate with its initial checkpoint; it does not measure a benefit of repair or selection among methods. The five-fold registry must not be mistaken for five completed evaluations.
+
+\end{document}

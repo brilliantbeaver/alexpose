@@ -18,183 +18,155 @@
 \usepackage{microtype}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{placeins}
 \graphicspath{{../../docs/figures/}}
 \hypersetup{hidelinks}
 
-\title{Auditing Normal-Reference Coordinate Drift in a Staged Skeleton JEPA}
+\title{From Public URLs to Honest Generalization: A Leakage-Aware Protocol for Continual Gait Representation Learning}
 \author{Anonymous authors}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Continual representation learning can change how a model encodes normal-labeled reference rows. We audit this change in a project-specific, S-JEPA-inspired skeleton model trained first on normal-labeled gait and then on four condition-labeled groups with balanced replay. The optional added-normal cohort is off. After availability and pose-quality checks, the experiment contains 626 sequences from 93 source videos. For each of 270 normal training sequences, we compare its current representation with its own Stage-0 representation and average the cosines. This raw normal-anchor cosine falls from 0.700 after the first later stage to 0.297 after the fourth; checkpoint reload reproduces the curve within $4.51\times10^{-7}$. This is coordinate drift, not proof of forgetting: raw cosine is basis-dependent, the reference rows were used in training, the anchor is source-imbalanced, and the run has one seed. Sequence-split probes reach 0.899 macro-F1, but all test rows were encoder-exposed and 64 source videos cross the classifier split. We present an auditable measurement protocol and the controls needed for functional-retention and generalization claims. This is not a diagnostic or clinical-validation study.
+Public-video datasets make movement representation learning accessible, but they also create an evaluation problem: many annotated sequences can come from one upload, source availability changes, the same person may cross uploads, and pose-estimation failures can correlate with dataset labels. We use a project-specific, S-JEPA-inspired gait pipeline as a case study and specify a leakage-aware protocol for continual movement representation learning. A September 4, 2026 audit retained 657 of 666 annotated sequences at the metadata gate, 655 at the decoded-span gate, and 639 from 97 source videos after pose QC. The protocol partitions sources before fitting, trains the encoder only on outer-training sources, reserves grouped validation sources for selection, and opens grouped test sources only for final evaluation. Label-free JEPA plus VICReg is primary; a label-aware condition loss is a supervised ablation. One fully traced fold-and-seed execution verifies the mechanics and exposes an important negative result: a raw-kinematic readout outperformed the learned latent readout on 20 held-out sources. We report this as a worked execution, not a cross-fold or clinical estimate. The contribution is an auditable evaluation design and evidence discipline for behavioral foundation-model research.
 \end{abstract}
 
 \section{Introduction}
 
-Models of movement often learn a reference and then adapt to new tasks or populations. If that reference moves, later comparisons to ``normal'' also change. A simple audit saves the representation of every normal sequence after initial training and compares the matched representations after each later stage.
+Pose extracted from video is a behavioral signal at the interface of body dynamics, environment, and sensing. It is therefore a useful modality for studying self-supervised and continually adapted representations. It is also unusually vulnerable to false generalization: excerpts from the same upload share camera, compression, demonstrator, background, and pose-estimator behavior. A random sequence split can place these signatures on both sides of evaluation.
 
-That audit needs careful interpretation. Neural features do not have a fixed coordinate system. Two encoders can retain the same relationships in rotated bases while their raw matched-vector cosine falls. Raw drift therefore does not establish functional forgetting. Forgetting needs aligned representation comparisons and worse performance on held-out normal data.
+We study these issues through a normal-first skeleton JEPA case study. The implementation is inspired by S-JEPA but is not a reproduction of it: it uses a fixed 12-landmark target whitelist and auxiliary VICReg, with an optional label-aware group objective. Rather than promote a stale score, we ask what evidence would justify three distinct claims: that a representation retains normal-gait information during adaptation, that its features support a downstream readout, and that performance transfers to unseen sources.
 
-We study this distinction in a normal-first gait model. The model is inspired by S-JEPA, but it is not a reproduction of the published method: it uses a fixed 12-landmark target sampler, VICReg, and a label-aware group term after Stage 0. The experiment exposes common evaluation risks: source-video overlap, encoder exposure to evaluation rows, pose-detector shortcuts, stale artifact lineage, and one-seed conclusions.
-
-Our contributions are: (1) a checkpoint-recomputed raw normal-anchor curve; (2) a claim audit that separates coordinate drift, functional retention, in-corpus label readability, and out-of-source generalization; and (3) a minimum experiment set for a stronger continual-learning claim.
+Our contributions are: (1) a dated, status-defined census of a changing public-video corpus; (2) a source-grouped train/validation/test protocol that encloses preprocessing, encoder training, and readout fitting; (3) a separation between label-free representation learning and label-informed ablation; and (4) a claim and ethics ledger for public gait video. The case study directly connects BrainBodyFM themes of pose and movement, self-supervised and continual learning, evaluation, generalization, and reproducibility. It does not claim that this small model or corpus is itself foundation-scale.
 
 \section{Related work}
 
-JEPAs predict target-encoder features rather than reconstructing every input value. I-JEPA applies this idea to images \citep{assran2023ijepa}, V-JEPA to video \citep{bardes2024vjepa}, and S-JEPA to skeleton sequences \citep{abdelfattah2024sjepa}. VICReg discourages collapse through invariance, variance, and covariance terms \citep{bardes2022vicreg}. Our study is not an action-recognition benchmark or clinical classifier. It audits a continually updated representation and asks which conclusions its artifacts support.
+JEPAs predict target-encoder features rather than reconstructing each input value. I-JEPA applies the idea to images \citep{assran2023ijepa}, V-JEPA to video \citep{bardes2024vjepa}, and S-JEPA to skeleton sequences \citep{abdelfattah2024sjepa}. VICReg supplies invariance, variance, and covariance regularization \citep{bardes2022vicreg}. Markerless pose makes gait analysis scalable, but it also introduces viewpoint, visibility, and detector-dependent errors \citep{grishchenko2022blazepose,mediapipePoseLandmarker}. When observations share a source, validation must respect that grouping \citep{roberts2017crossvalidation}. Our focus is the complete evaluation boundary around a continually updated representation, rather than a new clinical classifier.
 
-\section{Method}
+\section{Case-study data boundary}
 
-\subsection{Data and pose processing}
+\subsection{Annotations and live metadata census}
 
-GAVD supplies video-linked rows with one of five folder annotations: normal, Parkinson's, stroke, myopathic, or cerebral palsy \citep{ranjan2025gavd}. These are dataset annotations, not diagnoses made by this project. The raw local inventory contains 666 sequences from 103 source videos. Availability checks retain 642 sequences from 94 videos. Requiring at least 0.50 observed fraction over the 12 gait-focused target landmarks removes 16 rows and leaves Table~\ref{tab:cohort}.
+GAVD provides annotations and public video identifiers for five folder categories: normal, Parkinson's, stroke, myopathic, and cerebral palsy \citep{ranjan2025gavd}. These are dataset annotations, not diagnoses made by this project. The local five-part inventory contains 666 sequence files from 103 source videos.
+
+We performed a fresh public-metadata check on September 4, 2026. Three sources did not expose public metadata: \texttt{sf5X4YYkWUA} and \texttt{YjRoLtP1di0} were private, and \texttt{yULxvDc9e8c} was unavailable. Table~\ref{tab:census} reports the resulting snapshot.
 
 \begin{table}[htbp]
-\caption{Current GAVD-only modeled cohort.}
-\label{tab:cohort}
+\caption{Annotated inventory and September 4, 2026 public-metadata census. Counts are sequences / source videos.}
+\label{tab:census}
 \centering
 \small
 \begin{tabular}{lrr}
 \toprule
-Annotation & Sequences & Source videos \\
+Folder annotation & Raw inventory & Metadata-public \\
 \midrule
-Normal & 270 & 29 \\
-Parkinson's & 41 & 9 \\
-Stroke & 74 & 18 \\
-Myopathic & 183 & 28 \\
-Cerebral palsy & 58 & 9 \\
+Normal & 291 / 32 & 291 / 32 \\
+Parkinson's & 47 / 11 & 47 / 11 \\
+Stroke & 76 / 19 & 75 / 18 \\
+Myopathic & 188 / 30 & 184 / 29 \\
+Cerebral palsy & 64 / 11 & 60 / 10 \\
 \midrule
-Total & 626 & 93 \\
+Total & 666 / 103 & 657 / 100 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The availability-filtered pose caches have mixed extraction labels: 546 \texttt{gavd5}, 95 \texttt{gavd3}, and one \texttt{gavd4}; the modeled cohort has 530, 95, and one. The recorded pose-model hash agrees, but extraction history may still correlate with source or label. GAVD has no reliable person identifier for this analysis, so source-video grouping cannot guarantee person separation.
-
-MediaPipe BlazePose produces 33 landmarks and visibility values per frame \citep{mediapipePoseLandmarker,grishchenko2022blazepose}. We interpolate short internal gaps, center each frame on the pelvis, normalize by body scale, and resize time to 64 frames. A token represents one landmark over four frames. Missing or low-visibility tokens cannot become prediction targets. Targets are sampled uniformly from shoulders, hips, knees, ankles, heels, and foot tips. The configured 0.60 mask fraction is applied to the smallest eligible-token count in the batch.
-
-\subsection{Model and curriculum}
-
-The model has a view encoder, an exponential-moving-average target encoder, and a predictor. Encoder width is 96, with four encoder blocks and two predictor blocks. The objective is
-\begin{equation}
-\mathcal L=\mathcal L_{\mathrm{JEPA}}+0.05\mathcal L_{\mathrm{VICReg}}+0.25\mathcal L_{\mathrm{group}}.
-\end{equation}
-The group term is zero during normal-only Stage 0. Later it uses folder labels to encourage within-condition compactness and a margin between condition centroids. Later training is therefore label-informed, not purely self-supervised.
-
-One model continues across all stages. Stage 0 trains for 300 epochs on 270 normal rows. Four 75-epoch stages add the other annotations in the order shown in Table~\ref{tab:cohort}, with four rows per active condition in each balanced-replay batch. Model, EMA target, center, and projector state continue; AdamW restarts at every stage. AdamW uses betas $(0.9,0.95)$, weight decay 0.05, learning rate $10^{-3}$ at Stage 0, and $3\times10^{-4}$ later. The run has 600 epochs, 40,800 optimizer updates, seed 42, and the MPS backend. Exact hardware and full deterministic settings were not recorded.
-
-\subsection{Normal anchor and claim levels}
-
-Let $z_0(x)\in\mathbb R^{96}$ be the Stage-0 validity-weighted mean of target-encoder tokens at the 12 authorized landmarks for normal sequence $x$. After stage $t$, we report
-\begin{equation}
-a_t=\frac{1}{|N|}\sum_{x\in N}\frac{z_t(x)^\top z_0(x)}{\lVert z_t(x)\rVert_2\lVert z_0(x)\rVert_2}.
-\end{equation}
-This is an average of matched per-sequence cosines, not a cosine between cohort centroids. It uses known normal labels and encoder-exposed training rows. It also weights sequences, not videos, equally: the top two normal videos supply 105 of 270 rows and the top three supply 137. We therefore treat it as training-corpus telemetry.
-
-\section{Results}
-
-\subsection{Raw coordinates change across the curriculum}
-
-The anchor cosines after the four later stages are 0.7002, 0.5021, 0.3962, and 0.2966 (Figure~\ref{fig:drift}). Reloading the five checkpoints gives a maximum absolute difference of $4.51\times10^{-7}$ from the saved summary. This rules out a simple logging error. It does not establish catastrophic forgetting because the run lacks basis alignment, a continued-normal control, alternate condition order, held-out normal function, and multiple seeds.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.88\linewidth]{bbfm_drift_curve.pdf}
-\caption{Mean matched-sequence normal-anchor cosine. Stage 0 defines the reference at 1.0. This is a raw coordinate measure for one seed, not a forgetting score.}
-\label{fig:drift}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.98\linewidth]{bbfm_data_funnel.pdf}
+  \caption{Dated corpus attrition at both sequence and source-video scales. The split is frozen before decode and pose-QC attrition, so later failures remove observations without changing any source's role.}
+  \label{fig:data-funnel}
 \end{figure}
 
-\subsection{The final representation is structured in-corpus}
+``Metadata-public'' has a deliberately narrow meaning: the service returned current metadata without authentication during this audit. It does not prove that an appropriate media format can be downloaded, that the file reaches every annotated frame, that decoding succeeds, or that pose coverage is adequate. Those are later gates and must be reported separately. Availability also varies with time, region, account state, and platform behavior; every paper census therefore needs a timestamp, status vocabulary, tool version, and immutable audit artifact.
 
-At Stage 4, the 96-D authorized target-token means have feature standard deviation 0.229 and mean pair cosine similarity 0.440. Their smallest condition-centroid distance is 0.534, measured as Euclidean distance between normalized centroids. A separate frozen analysis concatenates global mean, global standard deviation, authorized-landmark mean, and authorized-landmark standard deviation into a 384-D vector. In that space, cosine silhouette is 0.3617, mean within-condition cosine distance is 0.0783, and minimum between-centroid cosine distance is 0.0863. These values rule out total constant collapse and show label-informed in-corpus structure; they do not validate an invariant clinical representation.
+\subsection{Pose and model case study}
 
-\subsection{Classifier scores are descriptive readouts}
+The pipeline extracts 33 MediaPipe landmarks and visibility values, interpolates short internal gaps, pelvis-centers and body-scale normalizes coordinates, and resizes each segment to 64 frames. A token represents one landmark over four frames. Only valid tokens from shoulders, hips, knees, ankles, heels, and foot tips may become prediction targets.
 
-We fit Random Forest readouts to the frozen 384-D summaries. Table~\ref{tab:readout} reports the two current sequence splits and a missingness-only control.
+The case-study model contains a view encoder, an exponential-moving-average target encoder, and a predictor. The proposed primary objective is label-free:
+\begin{equation}
+\mathcal L_{\mathrm{primary}}=\mathcal L_{\mathrm{JEPA}}+0.05\mathcal L_{\mathrm{VICReg}}.
+\end{equation}
+The historical pipeline also used a condition-label group term after normal-only training. Because that term directly encourages within-label compactness and between-label separation, it belongs in a supervised ablation,
+\begin{equation}
+\mathcal L_{\mathrm{ablation}}=\mathcal L_{\mathrm{primary}}+0.25\mathcal L_{\mathrm{group}},
+\end{equation}
+not in the primary self-supervised claim. This distinction prevents downstream label readability from being presented as independently discovered structure.
 
-\begin{table}[htbp]
-\caption{Five-class frozen-feature probes.}
-\label{tab:readout}
-\centering
-\small
-\begin{tabular}{lrrr}
-\toprule
-Probe & Accuracy & Bal. acc. & Macro-F1 \\
-\midrule
-All 626 rows, sequence split & 0.9202 & 0.9001 & 0.8985 \\
-Exact historical 47/21 split & 0.8571 & 0.8800 & 0.8607 \\
-Missingness only, all rows & 0.4415 & 0.4269 & 0.3547 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\section{Leakage-aware evaluation protocol}
 
-In the all-row split, all 188 classifier test rows were already used by the encoder, 64 source videos appear on both sides, and 181 of 188 test rows come from shared videos. In the exact split, all 9 test videos overlap classifier training. These scores show that fitted features encode in-corpus folder labels; they do not estimate new-video or new-person performance. Grouped validation is required when rows share a source \citep{roberts2017crossvalidation}. Detector visibility alone also contains label signal, although its macro-F1 is lower than the model readout.
+\subsection{Split before fitting}
 
-\section{Discussion}
+The independent unit is the source-video ID, not a sequence row. We first canonicalize video identifiers, attach the dated availability status, and assign every source to exactly one outer fold. Splits are approximately stratified by folder annotation while balancing both source and sequence counts; the complete source lists and a split-manifest digest are frozen before model fitting. Because the smallest categories contain only ten or eleven metadata-public sources, a single holdout is unstable. The primary estimate should use repeated, source-grouped outer splits or stratified grouped cross-validation and expose that sensitivity rather than hide it.
 
-The current run establishes a substantial raw-coordinate change: mean matched-sequence cosine reaches 0.297. That observation is useful telemetry. It does not establish lost function. The representation may rotate, continued optimization alone may move it, or the curve may depend on seed 42 and the fixed condition order.
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.98\linewidth]{inductive_source_split.png}
+  \caption{The split freezes at the metadata-public gate. Every clip inherits its source video's role; later decode or pose-QC attrition is recorded without redrawing folds. Within an outer fold, only training sources receive gradient updates, validation sources select the checkpoint, and test sources remain sealed.}
+  \label{fig:source-split}
+\end{figure}
 
-An adversarial artifact audit excluded stale or mixed-lineage margin-ablation, AnchorGuard, grouped-classifier, and forecasting results. We therefore make no mechanism, repair, forecasting, or generalization claim. The executed temporal and signed-laterality ridge probes also emit many numerical ill-conditioning warnings and lack repeated-split intervals; neither clears its pre-specified success gates (Appendix~\ref{app:probes}).
+Inside each outer split, only training-source data may determine data-dependent preprocessing, quality thresholds, augmentation choices, model weights, or readout parameters. Grouped validation sources select hyperparameters, stopping rules, and checkpoints. The test sources remain sealed until the analysis is frozen. The full normal-first curriculum is retrained inside every outer training fold and for every seed. A source-grouped classifier on embeddings from an encoder trained on all sources is still transductive and is not a generalization estimate.
 
-The work has broader data limits. A source video is not a person. Folder labels are not independently adjudicated diagnoses. Camera, compression, framing, pose missingness, and extraction history may correlate with labels. Multiple training seeds would not solve the anchor's source pseudoreplication. No result supports clinical use.
+\subsection{Four endpoints, four claims}
 
-\paragraph{Data use and ethics.}
-GAVD distributes annotations and public video URLs rather than raw video files; users retrieve media independently and must comply with YouTube terms, institutional ethics requirements, and applicable copyright, privacy, and data-protection rules \citep{gavdRepo2026}. This analysis uses derived pose sequences and does not infer identity. A public artifact should not redistribute raw videos or identity-bearing frames. The institutional ethics determination and data-use review must be recorded before submission.
+We pre-specify four endpoints. First, training-source anchor curves are optimization telemetry. Second, retention is measured on held-out normal sources at each checkpoint using equal-source weighting, source-cluster uncertainty, alignment-aware comparisons such as orthogonal Procrustes and linear CKA, and a functional JEPA or perturbation-ranking task. Third, downstream readability fits a readout only on outer-training embeddings and reports balanced accuracy and macro-F1 on outer-test sources. Fourth, source transfer aggregates predictions by source and summarizes variability across outer splits and training seeds. None of these endpoints establishes person-level or clinical generalization.
 
-\section{Experiments required for strong claims}
+The minimum comparison set is an untrained encoder, raw pose features, pose-validity or missingness features, continued-normal training with matched updates, and joint training. The label-aware group-loss arm is reported separately. Condition order is varied across seeds or included as a sensitivity analysis. All exclusions and failed runs remain in the ledger.
 
-The minimum P0 set is three to five full-curriculum seeds; per-video and equal-video-weighted anchors with source-cluster uncertainty; Procrustes plus CKA or SVCCA; a same-update continued-normal control; and retraining with a source-grouped normal holdout. A condition-order control is also needed. Mechanism claims need matched group-loss ablations; generalization needs preprocessing, encoder training, and readout fitting inside every outer source-video fold. Appendix~\ref{app:experiments} gives the complete map.
+\FloatBarrier
+\section{Worked protocol execution}
+
+We executed outer fold 0 with seed 42 to test the complete artifact and isolation contract. Pose QC left 377 sequences from 59 training sources, 131 from 18 validation sources, and 131 from 20 test sources. Encoder fitting loaded only training tensors; checkpoint selection used validation loss; the serialized checkpoint records that test tensors were not opened. The five curriculum stages used 20 epochs each and saved a hash-bound checkpoint plus stage lineage.
+
+After selection was frozen, source-level readouts were evaluated once on the 20 test sources (Fig.~\ref{fig:execution}). Macro-F1 was 0.292 for the S-JEPA latent, 0.251 for a missingness-only control, and 0.441 for raw kinematics. Thus this small learned representation did not beat the direct sensor-derived baseline in the worked fold. Normal-anchor cosine fell to 0.701 on five validation-normal sources after the full curriculum and was 0.850 on seven test-normal sources. Temporal probes retained some peak-phase and energy-ratio information but produced negative $R^2$ for phase lag. These results validate the protocol implementation and comparison set; with one fold and seed they do not estimate expected generalization.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.98\linewidth]{bbfm_protocol_execution.pdf}
+  \caption{Worked protocol-v2 execution (outer fold 0, seed 42). (A) Validation selects within each curriculum stage. (B) The raw-kinematic control exceeds the latent and missingness readouts on held-out sources. (C) Normal-anchor retention is selected on validation sources before one test-normal evaluation. (D) Temporal-probe results retain negative values. This is an execution audit, not a cross-fold estimate.}
+  \label{fig:execution}
+\end{figure}
+
+Historical artifacts from the earlier sequence-level pipeline remain archived, not pooled with these values: those splits allowed source overlap, exposed evaluation rows to representation learning, and sometimes used folder labels during encoder training. A primary performance claim still requires all outer folds, multiple seeds, source-cluster uncertainty, and condition-order sensitivity.
+
+\section{Limitations, data use, and ethics}
+
+Source-video grouping is only the strongest available grouping key. GAVD does not provide a reliable person identifier for this analysis, so the same person may still cross folds through different uploads. Folder labels are not independently adjudicated here. Camera, compression, framing, clothing, mobility aids, demographic representation, editing, and pose-estimator visibility may correlate with labels. A source-held-out result must therefore be named as such, never subject-held-out or clinical performance.
+
+Public availability is not equivalent to research consent or unrestricted reuse. GAVD distributes annotations and URLs rather than raw video, and places independent retrieval, platform compliance, institutional ethics approval, copyright, privacy, and data-protection obligations on users \citep{gavdRepo2026}. Gait and derived skeleton trajectories can be identifying even when faces are absent. Public artifacts should contain neither raw videos nor identity-bearing frames, and access to derived trajectories should be risk assessed. The project should record an ethics determination, data retention and access controls, and a takedown procedure before release. Language and analyses must avoid stigmatizing disability or presenting observational folder labels as diagnoses. No result in this case study supports diagnosis, treatment, surveillance, or deployment.
 
 \section{Conclusion}
 
-Raw coordinate drift, functional retention, and clinical performance are distinct. This one-seed GAVD-only run supports only the first and shows that high in-corpus decoding can coexist with drift; it does not support forgetting, generalization, or clinical use.
+Behavioral foundation-model evaluation begins before training: with a dated source census, an explicit unit of independence, and a sealed evaluation path. In this public-video gait case study, nine annotated sequences lost public metadata when three of 103 source videos became private or unavailable. More importantly, metadata visibility is only the first of several data-validity gates. The proposed protocol keeps source videos disjoint throughout preprocessing, encoder learning, model selection, and downstream evaluation; separates label-free training from supervised ablation; and distinguishes retention, readability, source transfer, and clinical validity. One traced fold demonstrates that this discipline changes the scientific conclusion: the raw-kinematic baseline, not the learned latent, was strongest. Multi-fold performance remains pending.
 
 \clearpage
 \appendix
 
-\section{Reproducibility ledger}
+\section{Required run manifest}
 
-\begin{itemize}
-\item Cohort: 626 sequences, 93 videos; counts 270 / 41 / 74 / 183 / 58.
-\item Dataset fingerprint:\\[-2pt]
-\mbox{\scriptsize\texttt{7d13841aceac9eda843d43ca8434193e294d2fa10a48b6c6d21f6413a6e457e2}}.
-\item Checkpoint SHA-256:\\[-2pt]
-\mbox{\scriptsize\texttt{64008d77689cefa4beb51a0dcf5ed6cae743454134c163e9087f66510af4e7ad}}.
-\item Anchor curve: 0.700151 / 0.502113 / 0.396213 / 0.296638; reload gap at most $4.51\times10^{-7}$.
-\item 384-D geometry: silhouette 0.361717; minimum between 0.086261; within 0.078339.
-\item All-row readout: accuracy 0.920213; macro-F1 0.898512. Missingness control: accuracy 0.441489; macro-F1 0.354682.
-\end{itemize}
+Each reported run should record: source-manifest and availability-audit hashes; audit time, status definitions, and tool versions; decoded-frame and pose-quality decisions; source-level outer and validation split IDs; preprocessing configuration; label-use declaration; model and optimizer configuration; seed, condition order, hardware, and deterministic settings; parent and checkpoint hashes; exclusion reasons; and source-level predictions. Paper tables and figures should be generated from this manifest rather than copied manually.
 
-\section{Excluded artifact families}
+\section{Claim ledger}
 
-The Stage-1 margin ablation loads an old augmented Stage-0 checkpoint and fails to reproduce the current Stage-1 endpoint. The cached AnchorGuard result lacks complete current parent and cohort lineage. The grouped ``Lane C'' file names the old augmented encoder and 159-row cohort. The forecasting notebook combines that old checkpoint with current rows. The AnchorGuard non-inferiority gate also uses an absolute difference where a one-sided rule is required. None of these results supports the present claims.
-
-\section{Experiment-to-claim map}
-\label{app:experiments}
-
-\begin{itemize}
-\item \textbf{Repeatability:} three to five full seeds and alternate or randomized order.
-\item \textbf{Independent unit:} per-video anchors, equal-video weighting, source-cluster uncertainty, and source-balanced replay.
-\item \textbf{Basis invariance:} orthogonal Procrustes plus linear CKA or SVCCA.
-\item \textbf{Optimization control:} continued-normal and joint-training controls with matched updates.
-\item \textbf{Function:} source-grouped normal holdout, retraining, and checkpoint-wise JEPA loss and perturbation ranking.
-\item \textbf{Mechanism and repair:} current-lineage group-loss and AnchorGuard studies with identical random streams and one-sided gates.
-\item \textbf{Probe stability:} stable SVD-based solvers, regularization sensitivity, label permutation, and repeated grouped splits.
-\item \textbf{Generalization:} fold-local preprocessing, encoder training, and readout fitting.
-\end{itemize}
-
-\section{Secondary probe details}
-\label{app:probes}
-
-The pre-specified temporal-moment lane requires at least 10\% lower pooled error and improvement in at least 75\% of source videos. Relative pooled improvements are 4.0\%, $-1.9$\%, and 9.2\%; no target clears both gates. Target counts range from 539 to 626. For signed laterality, learned tokens reach $R^2=0.241$ versus 0.190 for an untrained encoder, but sign consistency is 55.3\% and mirror slope is $-0.627$, outside the required $[-1.25,-0.80]$. The raw-feature score near 1 is a target-construction sanity ceiling, not validation. The laterality probe uses the broader 642-row cohort. Both studies need stable solvers and repeated grouped splits.
-
-\begin{figure}[h]
+\begin{table}[h]
 \centering
-\includegraphics[width=0.88\linewidth]{bbfm_readout_sweep.pdf}
-\caption{The pre-specified temporal-moment readout does not clear either decision gate.}
-\end{figure}
+\small
+\begin{tabular}{p{0.30\linewidth}p{0.29\linewidth}p{0.31\linewidth}}
+\toprule
+Claim & Required evidence & Current status \\
+\midrule
+Current metadata census & Dated per-source audit & Supported \\
+Decoded/pose-usable cohort & Frame and pose gates & Supported by dated audit \\
+Normal-function retention & Held-out normal sources & One fold/seed; exploratory \\
+Unseen-source performance & Fold-local full retraining & One fold/seed; incomplete \\
+Unseen-person performance & Reliable person groups & Not identifiable \\
+Clinical validity & External adjudicated cohort & Not studied \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \bibliographystyle{plainnat}
 \bibliography{../../docs/references}

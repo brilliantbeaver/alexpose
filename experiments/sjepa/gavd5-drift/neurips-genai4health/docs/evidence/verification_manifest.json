@@ -1,0 +1,71 @@
+{
+  "audit_date": "2026-09-05",
+  "python": "3.12.10",
+  "checkpoint_sha256": "f510be2a0453dda0d6698780fcd998835db213e39d94e345b227a5ed8ec648ac",
+  "manifest_sha256": "7fd559e5105b11011a3e5c194b7ccc29729c56491c424745834df39884123b5a",
+  "split_sha256": "ff3518b87b1d1fa7d95efb1aea1711773137a21699967cb8015edb8d845ccbe1",
+  "checks": {
+    "readout_metrics_recomputed": true,
+    "checkpoint_hash": true,
+    "source_id_roles_disjoint": true,
+    "cohort_counts_recomputed": true,
+    "weighting_recomputed_from_checked_source_details": true
+  },
+  "derived_values": {
+    "validation_clip_cosine": 0.8890614295378327,
+    "validation_source_cosine": 0.7010576725006104,
+    "raw_minus_latent_macro_f1": 0.14808857808857817,
+    "dominant_validation_source_clip_share": 0.9375
+  },
+  "inputs": [
+    {
+      "path": "work/artifacts/real/readout_outer_fold_0_seed_42_jepa_vicreg_contract.json",
+      "sha256": "c58ab2343d247f95e2d02a0a19c320add269abe367bd9c2d362ffa0a53f361d6"
+    },
+    {
+      "path": "work/artifacts/real/readout_outer_fold_0_seed_42_jepa_vicreg_metrics.csv",
+      "sha256": "2bd102f1d3e9fd2d785951a8dc586cd2ba7fe85758a5eff4d2b80d7269276de1"
+    },
+    {
+      "path": "work/artifacts/real/readout_outer_fold_0_seed_42_jepa_vicreg_source_predictions.csv",
+      "sha256": "1266da317602e4254699ad61e534dccddd3ed470a9b2f78a58499ff9b685b14c"
+    },
+    {
+      "path": "work/artifacts/real/checkpoints/sjepa_outer_fold_0_seed_42_jepa_vicreg.json",
+      "sha256": "b337a1537556299ad8f772a8b2f456ae19ccd98bef5d2d13200d94d43c3b2f84"
+    },
+    {
+      "path": "work/artifacts/real/checkpoints/sjepa_outer_fold_0_seed_42_jepa_vicreg.pt",
+      "sha256": "f510be2a0453dda0d6698780fcd998835db213e39d94e345b227a5ed8ec648ac"
+    },
+    {
+      "path": "work/artifacts/real/evaluation_protocol/source_video_census.csv",
+      "sha256": "eaf324cbdc4fbc45fdebc58db24104da9266bc8ae66fd4b06a52c44c92e51b39"
+    },
+    {
+      "path": "work/artifacts/real/evaluation_protocol/decoded_frame_census.csv",
+      "sha256": "565960b5a1a8bbbd28b971e12a5d6bf4ad6006c8ec3f85eeba3d79be2f83b36f"
+    },
+    {
+      "path": "work/artifacts/real/evaluation_protocol/pose_qc_eligibility_outer_fold_0.csv",
+      "sha256": "43e4725fe022f36609ab51dc4f6ecd12a3dc987f8a13042b9e98781ba05b9f60"
+    },
+    {
+      "path": "neurips-genai4health/docs/review/advanced_artifact_checks.json",
+      "sha256": "5d58450426800358f2845487c29bb3aa11a9b50efccb336b406bb1da72c9fdf5"
+    },
+    {
+      "path": "work/artifacts/real/fold_evaluation/outer_fold_0/normal_anchor_drift_seed_42.json",
+      "sha256": "0cd76e386c6abe457026be70d54c44606226415748b57994089a9735691b9dea"
+    },
+    {
+      "path": "work/artifacts/real/fold_evaluation/outer_fold_0/temporal_readout_seed_42.csv",
+      "sha256": "2031fe9b303ad6e67e0ebda830d098eadb8a4369740f7133bec769826bec37b3"
+    }
+  ],
+  "limitations": [
+    "Recomputes saved evidence; does not rerun training.",
+    "Hashes cannot prove historical test secrecy or person independence.",
+    "One fold and seed; no statistical superiority claim."
+  ]
+}

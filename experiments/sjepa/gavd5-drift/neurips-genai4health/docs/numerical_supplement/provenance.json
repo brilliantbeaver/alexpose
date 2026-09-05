@@ -1,0 +1,77 @@
+{
+  "audit_date": "2026-09-05",
+  "fold": 0,
+  "seed": 42,
+  "manifest_sha256": "7fd559e5105b11011a3e5c194b7ccc29729c56491c424745834df39884123b5a",
+  "split_sha256": "ff3518b87b1d1fa7d95efb1aea1711773137a21699967cb8015edb8d845ccbe1",
+  "checkpoint_sha256": "f510be2a0453dda0d6698780fcd998835db213e39d94e345b227a5ed8ec648ac",
+  "stage_checkpoints": [
+    {
+      "stage": 0,
+      "sha256": "03c4414cd99009f198bcf421e30c11301df14f8b976fabef994e588f7020c4c2"
+    },
+    {
+      "stage": 1,
+      "sha256": "6789e430b9b27852ce778d541c8e4e81c83a8869dab27a1e458751496e8ddbf9"
+    },
+    {
+      "stage": 2,
+      "sha256": "d8c1d9e1ff2c51f1918ce80684458689a80c3ffb37bfcd18647f3afd5a2f677a"
+    },
+    {
+      "stage": 3,
+      "sha256": "731f8b8395a725bda8c3a3832ac1057c59e618e74bdc34655fe98b75533d941f"
+    },
+    {
+      "stage": 4,
+      "sha256": "61a909b6eef8b7f1782ac3140597f2a1d7f6de2e111a8235658a7f82d364ce23"
+    }
+  ],
+  "objective": {
+    "name": "jepa_vicreg",
+    "label_free": true,
+    "jepa_weight": 1.0,
+    "vicreg_variance_weight": 0.1,
+    "vicreg_covariance_weight": 0.01,
+    "group_loss_enabled": false,
+    "group_loss_weight": 0.0
+  },
+  "model_config": {
+    "frames": 64,
+    "segment_length": 4,
+    "embed_dim": 64,
+    "depth": 2,
+    "heads": 4
+  },
+  "test_source_count": 20,
+  "normal_validation_source_count": 5,
+  "normal_validation_sequence_count": 64,
+  "expected_metrics": [
+    {
+      "lane": "sjepa_latent",
+      "test_source_accuracy": 0.3,
+      "test_source_balanced_accuracy": 0.2571428571428571,
+      "test_source_macro_f1": 0.29242424242424236,
+      "test_source_sources": 20
+    },
+    {
+      "lane": "missingness_only",
+      "test_source_accuracy": 0.3,
+      "test_source_balanced_accuracy": 0.24761904761904763,
+      "test_source_macro_f1": 0.2511111111111111,
+      "test_source_sources": 20
+    },
+    {
+      "lane": "raw_kinematics",
+      "test_source_accuracy": 0.5,
+      "test_source_balanced_accuracy": 0.4428571428571429,
+      "test_source_macro_f1": 0.44051282051282054,
+      "test_source_sources": 20
+    }
+  ],
+  "input_csv_sha256": {
+    "normal_validation_weighting.csv": "a7e2ef0e60739a299b5311a4e97a9cacdd35c0135c82c84f4152f2b0a88a8368",
+    "test_source_predictions.csv": "9c6218af5cdd0c7f95f42b2392fc7cfc7c184ee08887d0aad8e54e748b66c359"
+  },
+  "scope": "Reproduces main reported metrics and weighting, not model training. Source aliases remove direct video IDs from these tables but do not establish person anonymity."
+}

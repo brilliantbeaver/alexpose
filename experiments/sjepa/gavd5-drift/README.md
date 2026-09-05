@@ -1,8 +1,8 @@
-# GAVD3 S-JEPA gait tutorials
+# GAVD5 S-JEPA gait tutorials
 
 This folder is an executable course on learning motion features from gait video. It starts with a source video, extracts a 33-landmark skeleton, hides selected joint-time tokens, and asks a Skeleton Joint-Embedding Predictive Architecture, or S-JEPA, to predict their latent features. Training begins with normal gait and then continues through four cumulative condition stages.
 
-The completed real run used 159 sequences from 35 source videos (reflects the prior 159/35 run; pending regeneration against the full 642/94 corpus). It stayed numerically stable and did not totally collapse. It did not produce clean five-condition clusters. The classifier results are useful engineering diagnostics inside this known corpus. They are not estimates for a new patient, video, camera, or clinic.
+The current evaluation contract is source-inductive: source videos are assigned to train, validation, and test roles before preprocessing or representation learning. Earlier model scores came from different cohorts or encoder-exposed evaluations. They are archived and are not comparable with the current protocol until the entire pipeline is rerun inside each source-grouped fold.
 
 ![Seven notebook learning path](images/09_notebook_roadmap.svg)
 
@@ -22,25 +22,38 @@ The implementation follows the main learning graph in S-JEPA, but it is a paper-
 
 ![End-to-end method](docs/figures/pipeline.svg)
 
-## Data layers
+## Data gates and dated census
 
-The project keeps two data layers separate.
+Counts are reported at three non-interchangeable gates. Frames are annotated manifest rows, not decoded video frames.
 
-|Layer|Sequences|Videos|Purpose|
-|---|---:|---:|---|
-|Canonical GAVD experiment|642|94|The full five-condition valid corpus, after dropping nine unusable source videos|
-|Added normal candidates|64|17|Self-annotated windows from additional YouTube videos|
-|Accepted added normal|63|17|Candidates with neurologic-landmark coverage at least 0.45|
-|Stage 0 normal total|75|18|12 canonical plus 63 accepted added normal sequences|
-|Full curriculum|159|35|75 normal plus 84 canonical non-normal sequences|
+|Gate|Sequences|Source videos|Annotated frames|Meaning|
+|---|---:|---:|---:|---|
+|Raw annotations|666|103|140,641|All five GAVD manifest folders in this checkout|
+|Metadata-public, 2026-09-04 local date|657|100|137,690|The platform returned public metadata without authentication|
+|Decoded-span candidate upper bound|656|99|137,232|Metadata-public minus `n93bgWhLZk4`, whose 15-second media is too short for annotations through frame 458|
+|Decoded-frame eligible, current audit|655|98|135,804|All public sources attempted; `n93bgWhLZk4` is terminal-short and `hGNKzkCF4J8` remains a retryable acquisition failure|
+|Pose-QC eligible, fold 0|639|97|134,259|Neurologic-joint observed fraction is at least the predeclared 0.50 threshold|
 
-The added-normal candidate, accepted, Stage 0 total, and full-curriculum rows above are derived from the pipeline run (reflects the prior 159/35 run; pending regeneration against the full 642/94 corpus). The canonical class counts are 284 normal, 44 Parkinson's, 75 stroke, 184 myopathic, and 58 cerebral palsy sequences. The added normal windows use self-annotated time spans and automatic MediaPipe bounding boxes. They are not canonical GAVD annotations and were not independently clinically verified. One of 64 candidate windows had neurologic-landmark coverage of 0.027 and was rejected. Notebook 04 now reads the extraction report as an explicit selection contract, so the accepted cohort does not depend on which pose files happen to be present.
+The candidate row remains the theoretical maximum if the retryable `hGNKzkCF4J8` acquisition succeeds. The measured decoded-frame row requires a valid container, positive FPS/frame count, and successful decoding through the last annotated frame. Notebook 02 verified all 655 locked pose caches before applying the separate coverage gate; 639 sequences from 97 sources passed pose QC.
 
-Nine YouTube sources (2 private, 5 removed, 2 undownloadable) were dropped from the raw 666-sequence / 103-video corpus, verified via yt-dlp on 2026-09-02, leaving 642 sequences from 94 source videos.
+An initial targeted unauthenticated retry on 2026-09-04 recovered six of seven transient candidates. The subsequent full run populated 99 media files. The current audit records `n93bgWhLZk4` as terminal attrition (228 decoded frames versus frame 458 required) and `hGNKzkCF4J8` as retryable after embedded, TV, HLS, and permissive-format clients all failed. Residual acquisition failures no longer abort the notebook by default or trigger a split redraw.
 
-This provenance difference matters. Most normal rows use the added extraction path, while every abnormal row uses the canonical path. A normal-versus-abnormal classifier could learn acquisition or extraction differences as well as gait differences.
+The metadata-public condition counts are:
 
-![Cohort and curriculum](docs/figures/cohort_curriculum.svg)
+|Condition|Sequences|Source videos|Annotated frames|
+|---|---:|---:|---:|
+|Normal|291|32|41,340|
+|Parkinson's|47|11|10,426|
+|Stroke|75|18|32,930|
+|Myopathic|184|29|33,992|
+|Cerebral palsy|60|10|19,002|
+|**Total**|**657**|**100**|**137,690**|
+
+Two sources were private (`sf5X4YYkWUA`, `YjRoLtP1di0`) and one was unavailable (`yULxvDc9e8c`) at the dated check. `n93bgWhLZk4` remained metadata-public but failed the known duration/frame-span precheck; it is not a fourth unavailable source.
+
+Protocol v2 freezes a deterministic five-fold source registry from the dated metadata-public population. Before later availability/QC attrition, each outer fold assigns 60 sources to training, 20 to validation, and 20 to testing, with no source crossing roles. Its split SHA-256 is `ff3518b87b1d1fa7d95efb1aea1711773137a21699967cb8015edb8d845ccbe1`; the input-manifest SHA-256 is `7fd559e5105b11011a3e5c194b7ccc29729c56491c424745834df39884123b5a`. These are deterministic protocol hashes; fold-0 pose-QC artifacts are current and model regeneration remains pending.
+
+![Protocol-v2 source split](images/22_inductive_source_split.svg)
 
 ## Model in plain language
 
@@ -48,24 +61,23 @@ Each sequence is resized to 64 frames. Four adjacent frames form one time patch,
 
 The view encoder sees a partly hidden sequence. The target encoder sees the complete sequence. The predictor uses the visible view features to predict the hidden target features. The target encoder is not updated by backpropagation. It follows the view encoder through an exponential moving average, or EMA.
 
-The loss has three jobs:
+The primary representation objective is label-free:
 
 \[
-L = L_{\mathrm{JEPA}} + 0.05L_{\mathrm{VICReg}} + 0.25L_{\mathrm{group}}.
+L_{\mathrm{primary}} = L_{\mathrm{JEPA}} + 0.05L_{\mathrm{VICReg}}.
 \]
 
 - JEPA trains latent prediction.
 - VICReg keeps dimensions variable and reduces redundant covariance, which helps resist collapse.
-- The group term encourages same-label compactness and a centroid margin after Stage 0.
 
-The group term uses condition labels. Stages 1 through 4 are therefore label-informed representation fine-tuning, not purely self-supervised learning.
+The supervised ablation adds `0.25 * L_group`, which encourages same-label compactness and a centroid margin after Stage 0. Because it uses condition labels, that arm is label-informed representation fine-tuning and must be reported separately from the primary self-supervised model.
 
 ### What VICReg, `group`, and `std` mean in the training log
 
-A line such as
+A training line has the form
 
 ```text
-JEPA 0.4585  VICReg 12.8508  group 0.0005  std 0.4297
+JEPA <epoch mean>  VICReg <epoch mean>  group <epoch mean>  std <corpus diagnostic>
 ```
 
 mixes losses with one diagnostic, so its short labels need care:
@@ -89,7 +101,7 @@ The separate group objective uses condition labels and the **unprojected** poole
 \left[\max(0,1-d)\right]^2.
 \]
 
-A distance of 1.2 contributes 0; 0.9 contributes 0.01; and 0.5 contributes 0.25. Because unit vectors have distances from 0 to 2, margin 1.0 is equivalent to requiring at least a 60-degree angle, or cosine similarity at most 0.5, between centroid directions. The reported value is averaged across condition pairs and balanced batches, so `group 0.0005` cannot be converted into one exact centroid distance.
+A distance of 1.2 contributes 0; 0.9 contributes 0.01; and 0.5 contributes 0.25. Because unit vectors have distances from 0 to 2, margin 1.0 is equivalent to requiring at least a 60-degree angle, or cosine similarity at most 0.5, between centroid directions. The reported value is averaged across condition pairs and balanced batches, so one logged group value cannot be converted into one exact centroid distance.
 
 The optimized group loss is actually `compactness + separation`: compactness pulls examples toward their own condition centroid, while separation pushes different centroids apart. With the default weights, optimization uses
 
@@ -114,89 +126,27 @@ The whitelist is expanded and de-duplicated from `experiments/multiple-sclerosis
 
 This is a project whitelist, not a validated neurologic biomarker. All 33 joints may provide context. Only the 12 listed joints may become hidden prediction targets.
 
-The configured mask target is 0.60, but the code uses a batch-safe rule. It takes 60% of the smallest valid eligible-token count in the batch, rounds down, and masks that same count in every sample. It always leaves at least one eligible token visible. The realized mean eligible-token fraction was 0.551 at the end of Stage 0 and 0.423 at the end of Stage 4. The sampler never reads coordinate size, displacement, velocity, acceleration, or a learned motion score.
+The configured mask target is 0.60, but the code uses a batch-safe rule. It takes 60% of the smallest valid eligible-token count in the batch, rounds down, and masks that same count in every sample. It always leaves at least one eligible token visible. The sampler never reads coordinate size, displacement, velocity, acceleration, or a learned motion score.
 
 ![Eligible masking region](images/03_neurologic_mask.svg)
 
 ## Training curriculum
 
-One model continued through all five stages. Earlier groups remained available through condition-balanced replay.
+The intended curriculum begins with normal gait and then introduces Parkinson's, stroke, myopathic, and cerebral-palsy manifest groups while replaying earlier groups. Under protocol v2, this full curriculum is trained independently inside the 60-source training role of every outer fold. Validation sources select checkpoints and hyperparameters; the 20 test sources remain unseen until the fold is frozen.
 
-|Stage|New group|Active sequences|Epochs|Final normal-anchor cosine|
-|---:|---|---:|---:|---:|
-|0|Normal|75|300|reference|
-|1|Parkinson's|84|75|0.954|
-|2|Stroke|96|75|0.839|
-|3|Myopathic|143|75|0.707|
-|4|Cerebral palsy|159|75|0.594|
+The primary objective is label-free JEPA plus VICReg. The label-aware group loss is a supervised ablation and must not be mixed into the primary self-supervised claim. Epoch counts, optimizer choices, preprocessing, and early stopping are selected without test data and recorded in the fold-local run manifest.
 
-The completed run used 600 curriculum epochs and 11,400 optimizer updates. Its final checkpoint is:
+## Current evidence status
 
-```text
-cache/artifacts/real/sjepa_curriculum_final_augmented.pt
-experiment fingerprint:
-d0acc2628d134959d8b91e96d5112fc3bed560fe8feb9569e5b13b11a8b614d1
-```
+The dated census and deterministic split contract are current. The model, geometry, classifier, temporal, laterality, and repair numbers previously shown here were produced under older cohorts or evaluation boundaries. They are archived, not current findings, and must not be compared with protocol-v2 results.
 
-The fingerprint identifies the stored experiment and data payload. It is not the byte-level checksum of the checkpoint file.
+No source-held-out performance is claimed until preprocessing, the encoder and predictor, checkpoint selection, and each downstream readout are rerun using only the fold's training and validation sources. A classifier evaluated on grouped sources is still encoder-transductive if the encoder previously saw its test inputs.
 
-## What the completed run found
-
-### Training health
-
-The final feature standard deviation was 0.414, so the representation did not shrink to one constant vector. The mean pairwise cosine similarity was 0.609. However, the normal-anchor cosine fell to 0.594. This is substantial drift, so the run does not show strong retention of the original normal representation.
-
-![Training health](docs/figures/training_health.svg)
-
-### Canonical five-condition geometry
-
-Notebook 05 pooled each canonical sequence into a 384-dimensional vector. On the 96 canonical rows:
-
-- cosine silhouette: 0.009;
-- minimum centroid distance: 0.0367;
-- mean centroid distance: 0.2921;
-- mean within-condition distance: 0.1195;
-- closest centroids: myopathic and cerebral palsy.
-
-A silhouette near zero means that many samples sit near class boundaries. The minimum centroid distance is also smaller than the mean within-condition spread. These values do not support a claim of clean five-class clustering.
-
-![Canonical representation geometry](docs/figures/representation_geometry.svg)
-
-### Descriptive classifier readouts
-
-|Readout|Accuracy|Balanced accuracy|Macro-F1|Main limitation|
-|---|---:|---:|---:|---|
-|All-96 stratified S-JEPA|0.793|0.889|0.821|All 16 test videos overlap training; all 29 test rows trained the encoder|
-|All-96 missingness-only|0.448|0.466|0.429|Uses visibility only, with no gait coordinates|
-|Exact exp5 S-JEPA|0.714|0.730|0.742|All 9 test videos overlap; all 21 test rows trained the encoder|
-|Historical 82-feature exp5|0.762|not saved|0.728|Different pose and feature system; same video-confounded split|
-|Lane C binary fold mean|0.849|0.874|0.826|Random Forest folds group videos, but the encoder saw all 159 rows|
-|Lane C five-class fold mean|0.653|0.603|0.625|Two stratified video-group folds; encoder saw all 159 rows|
-
-The binary Lane C intervals are percentile bootstrap ranges over only five fold scores. They are not population confidence intervals. The corrected five-class lane uses two stratified video-group folds because Parkinson's and cerebral palsy have only two videos each. Every training and test fold now contains all five labels, and macro-F1 always uses the same label list. Its pooled out-of-fold accuracy is 0.654 and pooled macro-F1 is 0.619. Two folds are still too few for a stable performance claim, and the encoder exposure remains complete.
-
-![Readout results](docs/figures/readout_results.svg)
-
-## What “all-96 stratified” means
-
-The split starts with all 96 canonical sequence rows. It keeps about 70% of each class for Random Forest training and 30% for testing. The exact counts are:
-
-|Condition|All|Train|Test|
-|---|---:|---:|---:|
-|Normal|12|8|4|
-|Parkinson's|9|6|3|
-|Stroke|12|9|3|
-|Myopathic|47|33|14|
-|Cerebral palsy|16|11|5|
-|Total|96|67|29|
-
-Stratification keeps rare groups on both sides and makes the class mix more stable. It does not make the rows independent. Sequences from the same source video can appear on both sides, and the encoder learned from all 96 rows before this classifier split was made. This lane asks whether a shallow classifier can recover labels from frozen features inside a known corpus. It cannot estimate unseen-video or unseen-patient performance.
-
-![All-96 stratification tutorial](images/10_all96_stratification.svg)
+Required reporting includes per-fold and per-seed results, source-level aggregation, equal-source weighting, source-cluster uncertainty, and raw-pose, untrained-encoder, missingness/coverage, continued-normal, joint-training, and label-aware controls.
 
 ## What a valid generalization test requires
 
-The outer source-video split must happen first. Pose preprocessing rules, all five representation-learning stages, and the Random Forest must then be fitted using only the outer-training videos. The held-out videos can be opened only after the complete pipeline is frozen. Grouping only the Random Forest is not enough.
+Use the frozen protocol-v2 source registry. For each of five outer folds, fit all data-dependent pose processing, all representation-learning stages, and the downstream readout on 60 training sources; use 20 validation sources for selection; and open the 20 test sources only after the pipeline is frozen. Do not re-split after a decode or pose-QC failure: record attrition against the original role assignment.
 
 ![Required fold-local evaluation](images/11_nested_evaluation.svg)
 
@@ -226,19 +176,23 @@ uv run python -m ipykernel install --user --name gavd5-sjepa --display-name "GAV
 uv run jupyter lab neurips-brain-body
 ```
 
-Copy `.env.example` to `.env`. The completed augmented real path uses:
+Copy `.env.example` to `.env`. A real-data run uses project-local cache and artifact roots:
 
 ```dotenv
 GAVD_MODE=real
-GAVD_CACHE_DIR=/absolute/path/to/gavd5-drift/cache
-GAVD_ARTIFACT_DIR=/absolute/path/to/gavd5-drift/work/artifacts
-SJEPA_INCLUDE_AUGMENTED_NORMAL=1
+GAVD_CACHE_DIR=cache
+GAVD_ARTIFACT_DIR=work/artifacts
+GAVD_DOWNLOAD=1
+GAVD_RETRY_COOLDOWN_SECONDS=5
+GAVD_STRICT_DOWNLOADS=0
 SJEPA_RUN_PROFILE=recommended
 ```
 
-Leave `SJEPA_INSPECT_CHECKPOINT` and `SJEPA_CLASSIFIER_CHECKPOINT` unset unless you intend to select a specific artifact. With augmentation enabled, notebooks 05 and 06 select `sjepa_curriculum_final_augmented.pt`. Restart the kernel after changing `.env`.
+Notebook 01 retries only acquisition failures that can plausibly improve. It does not redownload terminal-short media, and it resumes from valid cache entries. Residual source attrition is recorded and does not abort an ordinary research run; set `GAVD_STRICT_DOWNLOADS=1` only for CI or a release gate that intentionally requires zero residual failures.
 
-The recommended profile uses 300 Stage 0 epochs, four 75-epoch continuation stages, a 0.999 starting target-encoder EMA, AdamW, gradient clipping, VICReg weight 0.05, group weight 0.25, and group margin 1.0. The quick profile only checks that the data and checkpoint path work.
+Leave `SJEPA_INSPECT_CHECKPOINT` and `SJEPA_CLASSIFIER_CHECKPOINT` unset unless you intend to select a specific, lineage-verified artifact. Restart the kernel after changing `.env`.
+
+The recommended profile uses 300 Stage 0 epochs, four 75-epoch continuation stages, a 0.999 starting target-encoder EMA, AdamW, gradient clipping, and VICReg weight 0.05. The supervised-ablation configuration additionally uses group weight 0.25 and group margin 1.0. The quick profile only checks that the data and checkpoint path work.
 
 All artifact-producing code resolves paths from the same settings: `GAVD_CACHE_DIR` holds runtime
 cache such as the MediaPipe model, while `GAVD_ARTIFACT_DIR` is the sole root for generated
@@ -246,58 +200,14 @@ experiment artifacts. Real artifacts therefore live under `GAVD_ARTIFACT_DIR/rea
 live under `GAVD_ARTIFACT_DIR/smoke` and have no clinical meaning. Restart the kernel after changing
 these settings.
 
-### Augmented-normal pose workflow and legacy migration
-
-With `SJEPA_INCLUDE_AUGMENTED_NORMAL=1`, notebook 04 requires both of these files below the **same**
-active real artifact root:
-
-```text
-$GAVD_ARTIFACT_DIR/real/poses_augmented/normal/*.npz
-$GAVD_ARTIFACT_DIR/real/augmented_pose_extraction_report.csv
-```
-
-For a new extraction, first create the matching augmentation CSV/video pair with
-`notes/annotate_normal_clips.py`, then run:
-
-```bash
-uv run python notes/extract_augmented_poses.py
-```
-
-The extractor loads `gavd5-drift/.env` and honours `GAVD_MODE`, `GAVD_CACHE_DIR`, and
-`GAVD_ARTIFACT_DIR`. It runs only in `GAVD_MODE=real` and performs all input checks before writing a
-report or pose archive. In particular, the augmentation videos must be the exact clips used to create
-the CSVs; renaming a full YouTube video to a clip ID is invalid because its frame numbers and crops do
-not match the CSV contract.
-
-Older versions wrote valid augmentation artifacts under the hard-coded legacy root
-`gavd5-drift/cache/artifacts/real`. If that completed legacy cohort is available, migrate it without
-re-extracting poses:
-
-```bash
-# Inspection only: validates the report, all 63 eligible archives, and destination compatibility.
-uv run python notes/migrate_augmented_pose_artifacts.py
-
-# Copies only after the dry run succeeds. It never overwrites different files or deletes anything.
-uv run python notes/migrate_augmented_pose_artifacts.py --apply
-```
-
-The migration utility requires `GAVD_MODE=real`, expects exactly 63 report-eligible archives by
-default, validates every archive against notebook 04's input contract, and compares SHA-256 hashes
-after copying. Use `--source-root`, `--destination-root`, or `--expected-count` only when deliberately
-migrating a different known cohort. After a successful migration, restart the kernel and rerun notebook
-04 from its first cell.
-
 ## Main saved artifacts
 
-- `manifest.csv`, `source_video_census.csv`, and download audits
+- dated raw and metadata-public manifests, source census, and download/decode audits
+- protocol-v2 split registry and hash contract
 - `poses/<condition>/<sequence_id>.npz` and pose-coverage reports
-- `augmented_pose_extraction_report.csv` and `poses_augmented/normal/*.npz`
-- five `_augmented.pt` stage checkpoints and the final alias
-- `curriculum_training_history_augmented.csv` and stage summary
-- canonical and augmented frozen sequence embeddings
-- geometry tables, confusion matrices, error tables, and missingness controls
-- `classifier_contract.json`, which binds downstream results to the final fingerprint
-- `lane_c_video_disjoint_metrics.csv`, which records representation exposure
+- fold-local checkpoints, histories, embeddings, and readout outputs
+- per-source predictions, uncertainty inputs, exclusion reasons, and missingness controls
+- a run manifest and claim ledger binding every result to census, split, code, config, seed, and hashes
 
 ## Papers, tutorial, figures, and slides
 

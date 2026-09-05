@@ -1,0 +1,50 @@
+# Before Gait Models Inform Care: Evidence Boundaries for Predictive Health AI
+
+*Companion extended abstract. The workshop does not list a separate extended-abstract track.*
+
+## Abstract
+
+We argue that predictive movement representations proposed for ambient health AI require separate evidence for source transfer, functional retention, future prediction, and clinical utility. An audit of one skeleton JEPA run makes these boundaries concrete. On 20 source-held-out videos, raw kinematics achieve macro-F1 0.441, compared with 0.292 for learned features and 0.251 for missingness alone. The same stored normal-validation embeddings yield cross-checkpoint embedding cosine 0.889 under equal clip weighting and 0.701 under equal source weighting: one upload contributes 60 of 64 clips. These are bounded empirical observations, not clinical validation or evidence against an architecture family. They motivate an explicit account of what a perception component can support before its outputs inform a generative health assistant.
+
+## Position and relevance
+
+A future health assistant could combine movement summaries with other observations to help a clinician review mobility. Its conclusions would still depend on whether those summaries reflect transferable movement, acquisition effects, or a model update. A fluent clinical narrative cannot resolve that ambiguity. We argue that source transfer, useful function after adaptation, past-only forecasting, and benefit in care must be tested separately.
+
+JEPAs predict target representations rather than reconstructing every observed value (Assran et al. 2023; Abdelfattah and Alahi 2024). The small skeleton model audited here is non-generative and does not implement an agent or clinical workflow. Its relevance to GenAI4Health is the evidence boundary of a possible perception input. Grouped evaluation and leakage auditing are prior practice (Kapoor and Narayanan 2023); our contribution is an auditable case showing how baseline choice and aggregation change the claims the evidence can sustain.
+
+## Case study and verified observations
+
+We examine a local five-category subset of GAVD (Ranjan et al. 2025), whose annotations are normal, Parkinson’s, stroke, myopathic, and cerebral palsy. These are not diagnoses independently established by this project. The local inventory contains 666 sequences from 103 source videos. A September 4, 2026 metadata audit retains 657/100, measured decoding retains 655/98, and pose-quality filtering retains 639/97. Source roles are assigned at the metadata-public gate and maintained through attrition. Fold 0/seed 42 contains 377 sequences from 59 training sources, 131 from 18 validation sources, and 131 from 20 test sources. Other folds in the local registry lack the current completed evaluation. Source separation does not establish separation of people across uploads.
+
+The executed model resizes 33-landmark poses to 64 frames and embeds each joint’s four-frame coordinate mean. A two-layer transformer produces 64-dimensional contextual tokens; a pooled-context predictor learns masked targets from an EMA encoder. Its loss is smooth-L1 feature prediction plus variance and covariance penalties weighted 0.10 and 0.01, respectively. There is no separate two-view invariance term. The loss omits condition labels, but annotations determine a cumulative normal-first curriculum. The checkpoint access log excludes test tensors from encoder training; it does not prove that test-derived information was never inspected elsewhere.
+
+Three standardized logistic readouts use frozen learned features, raw kinematic summaries, or missingness summaries. Validation selects regularization; the final readout refits on training plus validation sources. Source-level test metrics, independently recomputed from saved predictions, are:
+
+| Features       | Macro-F1 | Balanced accuracy |
+|:---------------|---------:|------------------:|
+| Skeleton JEPA  |    0.292 |             0.257 |
+| Missingness    |    0.251 |             0.248 |
+| Raw kinematics |    0.441 |             0.443 |
+
+One fold and seed, the same 20 test sources. No statistical superiority is claimed.
+
+The observed raw-minus-latent macro-F1 gap is 0.148 from unrounded values. Test support is only 7 normal, 2 Parkinson’s, 3 stroke, 6 myopathic, and 2 cerebral-palsy sources. Validation classifies source-mean features, whereas testing averages clip probabilities; these are not equivalent rules. This mismatch, the small cohort, legacy pose geometry, and incomplete runtime metadata limit the inference. Missingness is a useful control, but its score does not establish that the encoder exploits a shortcut.
+
+We also compare each normal-validation clip’s EMA embedding, pooled over 12 selected joints, at the selected normal-only and final checkpoints. This diagnostic interpolates short gaps, unlike the training/readout path. Equal clip weighting gives mean cosine 0.889; averaging clips within sources and then equally over five sources gives 0.701. The calculation uses the same vectors and changes only weights. One source supplies 60 of 64 clips (93.75% of clip weight, 20% of source weight) and has mean cosine 0.905. This is a change of estimand, not measured patient decline. Neither average establishes retained function: representations can rotate without losing task information or remain stable while uninformative.
+
+## Implications and counterarguments
+
+The findings support three practical requirements. First, specify the evaluation unit and compare learned features with raw, missingness, and untrained controls using the same aggregation for selection and testing. Second, assess model updates with alignment-aware comparisons and fixed functional endpoints, not cosine alone. Third, require genuinely prefix-only inputs, preprocessing, and baselines before calling masked prediction forecasting. The exploratory future-mask path leaves unmasked future joints visible and its copy-last latent uses full-clip context; no qualifying current forecasting result is reported.
+
+A larger or better-tuned JEPA might outperform our baseline. Equal source weighting also answers a different question from equal patient weighting, and missingness may partly reflect real movement difficulty. These counterarguments narrow our claims rather than remove the need to disclose them. The position concerns evidence proportional to an intended use, not a demand that every exploratory model complete clinical validation.
+
+No longitudinal patient outcomes, calibrated clinical uncertainty, action-conditioned planning, or clinician-trust study is available. Future care-facing evaluation needs a specified workflow, adjudicated outcomes, external validation, and subgroup and error-cost analyses. Public video access does not settle consent or reuse rights; no project-specific institutional ethics determination is documented in the reviewed materials. This abstract reports aggregate retrospective evidence. It supports careful evaluation of future ambient health components, not diagnosis, treatment, or deployment.
+
+Abdelfattah, Mohamed, and Alexandre Alahi. 2024. “S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition.” *Computer Vision – ECCV 2024*, 367–84. <https://doi.org/10.1007/978-3-031-73411-3_21>.
+
+Assran, Mahmoud, Quentin Duval, Ishan Misra, et al. 2023. “Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture.” *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition*, 15619–29. <https://doi.org/10.1109/CVPR52729.2023.01499>.
+
+Kapoor, Sayash, and Arvind Narayanan. 2023. “Leakage and the Reproducibility Crisis in Machine-Learning-Based Science.” *Patterns* 4 (9): 100804. <https://doi.org/10.1016/j.patter.2023.100804>.
+
+Ranjan, Rahm, David Ahmedt-Aristizabal, Mohammad Ali Armin, and Juno Kim. 2025. “Computer Vision for Clinical Gait Analysis: A Gait Abnormality Video Dataset.” *IEEE Access* 13: 45321–39. <https://doi.org/10.1109/ACCESS.2025.3545787>.
+
