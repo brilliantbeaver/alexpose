@@ -11,6 +11,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{microtype}
+\usepackage{graphicx}
 
 \title{Build the Geometry In, Don't Hope It Emerges:\\ A Reflection-Symmetry Audit of a Skeleton World Model}
 
@@ -26,29 +27,27 @@
 \maketitle
 
 \begin{abstract}
-We describe a registered protocol for testing whether a self-supervised skeleton model learns useful left--right structure. The target is a coordinate-derived comparison of motion on the two sides, not a diagnosis or clinical gait measure. The quality-controlled cohort contains 625 pose sequences from 93 source videos. Five outer folds hold source videos out of both representation training and read-out fitting, while four inner folds select the read-out penalty using outer-training sources only. The design supports a narrow held-out-video claim and cannot establish unseen-person or clinical generalization. The complete paper run and governance reviews are pending, so no v2.1 empirical conclusion is reported.
+The human body has an approximate left--right structure: reflect a pose horizontally and swap anatomical left and right landmarks, and any signed left-versus-right motion quantity should reverse sign. We use this group action to audit what a self-supervised skeleton model represents. The target is a coordinate-derived comparison of motion on the two sides, not a diagnosis or clinical gait measure. The quality-controlled cohort holds 625 pose sequences from 93 source videos, split at the source-video level so no clip or mirror from a test video reaches the matching training set, with a fresh encoder trained for each of fifty registered fold-and-seed combinations. Across every checkpoint the trained representation does not predict the laterality contrast better than an untrained encoder (learned minus untrained source-balanced $R^2 = -0.02$, 95\% CI $[-0.04, 0.00]$), it is not reflection-equivariant, and training moves it slightly \emph{away} from the approximate equivariance at initialization ($q$ rises by $0.03$). Reflection augmentation does not repair this. Only an analytic odd/even read-out gives exact antisymmetry, and it adds no learned content, since the same construction on a random encoder does at least as well. For a skeleton world model, bilateral symmetry is something you install, not something you get for free from prediction.
 \end{abstract}
 
 \section{Motivation and target}
 
-A human pose representation has a natural left--right structure. If a skeleton is reflected horizontally and its anatomical left and right landmarks are exchanged, a signed left-versus-right motion quantity should reverse sign. We use this fact to test a self-supervised Skeleton Joint-Embedding Predictive Architecture (S-JEPA). The model learns by predicting hidden latent content; it does not receive the laterality target or dataset annotation during representation training.
+A human pose representation has an approximate left--right structure. Reflect a skeleton horizontally and exchange its anatomical left and right landmarks, and a signed left-versus-right motion quantity should reverse sign. This group action gives a direct handle on what a geometry-aware world model has captured about the articulated body. We use it to audit a self-supervised Skeleton Joint-Embedding Predictive Architecture (S-JEPA) trained on the Gait Abnormality in Video Dataset (GAVD). The model predicts hidden latent content and never sees the laterality target or a dataset annotation during representation training.
 
 For the left and right shoulders, knees, ankles, heels, and foot-index points, the target compares median speeds only on frame transitions where both sides are observed at both endpoints. For pair $k$,
 \[
 c_k=\frac{m_{L,k}-m_{R,k}}{m_{L,k}+m_{R,k}+\epsilon},
 \qquad y=\operatorname{mean}_k c_k.
 \]
-All five pairs must each provide at least eight shared valid transitions. Mirroring must negate $y$, changing invalid coordinate placeholders must leave it unchanged, and mirroring twice must restore the input. Interpolated values may enter encoder input but never define the target.
+All five pairs must each provide at least eight shared valid transitions. Mirroring negates $y$, changing invalid-coordinate placeholders leaves it unchanged, and mirroring twice restores the input; interpolated values may enter encoder input but never define the target. We keep three questions apart: a wrapper that forces sign change proves only the wrapper is correct; a trained encoder with a probe showing sign-reversing behavior needs empirical support; and a direct token equivariance test is stronger still. The audit measures all three.
 
 \section{Cohort and source-level split}
 
-The Gait Abnormality in Video Dataset (GAVD) inventory contains 666 annotation files for 103 source videos \citep{ranjan2025gavd,gavdRepo2026}. A matching pose archive is available for 642 annotations. Pre-specified quality-control rules retain 625 pose sequences from 93 source videos and exclude 17 sequences. Inclusion depends on target computability and pose coverage, never on the sign or magnitude of the target.
-
-The split is created at the source-video level because one source can yield several related sequences. Every sequence, mirror, and augmentation inherits its source's fold, preventing material from a test video from entering the corresponding training set.
+The GAVD inventory contains 666 annotation files for 103 source videos \citep{ranjan2025gavd,gavdRepo2026}. A matching pose archive is available for 642 annotations. Pre-specified quality-control rules retain 625 pose sequences from 93 source videos and exclude 17; inclusion depends on target computability and pose coverage, never on the sign or magnitude of the target. The split is created at the source-video level because one source can yield several related sequences, and every sequence, mirror, and augmentation inherits its source's fold. GAVD supplies no persistent person identifier, so this is held-out-video evaluation, not held-out-person evaluation.
 
 \begin{table}[h]
   \centering
-  \caption{Five registered outer folds.}
+  \caption{Five registered outer folds. Splitting and balancing operate on source videos.}
   \label{tab:splits}
   \begin{tabular}{rrrrr}
     \toprule
@@ -63,25 +62,33 @@ The split is created at the source-video level because one source can yield seve
   \end{tabular}
 \end{table}
 
-Sequence counts vary because videos contribute different numbers of sequences. Every source video is tested exactly once. GAVD does not supply persistent person identifiers, so this is held-out-video evaluation, not held-out-person evaluation.
-
 \section{Training, validation, and evaluation}
 
-A fresh encoder is trained for every outer fold, seed, and variant. The registered paper design contains five folds, five optimization seeds, and two variants---vanilla and reflection-augmented---for 50 encoders. Each encoder uses all of its outer-training sources and follows a fixed 300-epoch schedule. It has no early-stopping validation set. Sampling chooses a source uniformly before choosing one of its sequences, preventing videos with many sequences from dominating.
+A fresh encoder is trained for every outer fold, seed, and variant: five folds, five optimization seeds (42--46), and two variants---vanilla and reflection-augmented---for 50 fold-local encoders, each following a fixed 300-epoch schedule on its outer-training sources with no early-stopping validation set. Within a seed the variants share initialization, source draws, masks, views, and optimizer schedule, with reflection on a separate random stream. Validation is reserved for the linear ridge read-out: four inner folds inside each outer-training set select the ridge penalty and nothing else, after which the read-out is refitted on all outer-training sources and applied once to the untouched outer-test sources, with fitted preprocessing estimated from outer-training data only.
 
-Validation is reserved for the linear ridge read-out. Four inner folds are built entirely inside each outer-training set. In one inner round, 55--57 sources fit a candidate read-out and 18--19 sources validate its ridge penalty. After selection, the read-out is refitted on all 74--75 outer-training sources and evaluated once on the untouched 18--19 outer-test sources. Fitted preprocessing uses outer-training data only.
+The primary measure is source-balanced $R^2$. Comparison lanes include a paired untrained encoder, a target-component self-consistency oracle (a verification, not a learned baseline), measured nuisance features, analytically antisymmetric odd/even read-outs, and a direct encoder-token reflection test that compares tokens under the full anatomical permutation with no channel fitting, rotation, sign search, or read-out; zero is exact equivariance. Five seeds describe optimization variation, and 2,000 source-video bootstrap resamples---keeping each video's sequences and seeds together---describe uncertainty over the observed collection, conditional on the fitted pipeline.
 
-The inner fitting partitions contain 266--450 sequences, and the rotating validation partitions contain 80--197 sequences. Their sizes vary because sources contribute different numbers of sequences. None includes an outer-test source.
+\section{Results}
 
-The primary measure is source-balanced $R^2$, which gives every source video equal total weight. Comparison lanes include a paired untrained encoder, a target-component self-consistency oracle, measured nuisance features, analytically antisymmetric read-outs, and direct encoder-token reflection tests. The oracle verifies target reconstruction and is not a learned baseline. Exact sign change from a constructed wrapper proves a mathematical property of the wrapper; evidence that training learned useful symmetry additionally requires positive held-out prediction and improvement over paired initialization.
+The registered run supports none of the emergence claims and passes only the construction's own integrity check. The pattern holds for the reflection-augmented variant and for a high-coverage sensitivity subset (600 sequences from 91 sources at $\geq0.9$ coverage), where the primary $R^2$ is again near $0.06$.
 
-Five seeds describe optimization variation. Separately, 2,000 source-video bootstrap resamples describe uncertainty associated with the observed source collection while keeping a video's sequences together. These intervals are conditional on the fitted cross-validation pipeline and do not imply population or unseen-person generalization.
+\begin{itemize}
+  \item \textbf{Predictive utility does not clear the floor.} The learned free read-out reaches $R^2 = 0.06$ (95\% CI $[-0.03, 0.13]$); against the untrained encoder, training changes held-out $R^2$ by $-0.02$ (95\% CI $[-0.04, 0.00]$). The oracle recovers the target almost perfectly ($R^2 \approx 1.00$), so the failure is in the learned features. Measured nuisances add nothing.
+  \item \textbf{Reflection augmentation does not help}: the augmented encoder differs from vanilla by $0.00$ (95\% CI $[-0.01, 0.01]$) on the primary lane.
+  \item \textbf{The construction works, but the encoder is not why.} The odd/zero-origin read-out is exactly antisymmetric for every seed, yet weak ($R^2 = 0.04$, 95\% CI $[-0.04, 0.11]$), and the same construction on an untrained encoder does at least as well (learned minus untrained $-0.06$, 95\% CI $[-0.10, -0.02]$). Training nudges only the even part ($+0.02$, 95\% CI $[0.01, 0.04]$).
+  \item \textbf{Training degrades reflection equivariance.} The learned token error is $q = 0.11$ (95\% CI $[0.10, 0.14]$), above the $0.10$ margin, while the untrained initialization is closer at $q = 0.08$ (95\% CI $[0.07, 0.09]$); learned minus initial is $+0.03$ (95\% CI $[0.02, 0.05]$). The native free read-out is far from antisymmetric (output error $0.22$, 95\% CI $[0.19, 0.24]$).
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figures/v21_learning_effect.pdf}
+  \caption{Learned minus untrained differences with 95\% source-cluster bootstrap intervals. (a)~No read-out shows a predictive gain from training. (b)~The strict token error rises after training for both variants, so training moves the representation away from the equivariance present at initialization.}
+  \label{fig:effect}
+\end{figure}
 
 \section{Claim boundary, ethics, and status}
 
-The strongest possible claim is post-development, within-GAVD cross-validated performance on held-out source videos. The protocol does not support diagnosis, clinical validity, prevalence, treatment effects, or generalization to unidentified people in new videos. Folder names are dataset annotations, not diagnoses.
-
-This document describes laterality v2.1. Earlier transductive estimates are superseded and are not results from this design. No v2.1 empirical conclusion will be reported until all registered folds, seeds, variants, evaluations, and lineage checks are complete. Submission and artifact release also remain blocked until the institutional ethics determination, data-use review, and derived-pose release review contain genuine dated internal references. No raw video or identity-bearing frame is redistributed, and derived artifacts remain non-public unless completed reviews permit release.
+The strongest supported claim is post-development, within-GAVD cross-validated performance on held-out source videos. The protocol does not support diagnosis, clinical validity, prevalence, treatment effects, or generalization to unidentified people in new videos, and the null is specific to the registered architecture, seeds, target, and controls. Folder names are dataset annotations, not diagnoses. Earlier transductive estimates are superseded. Submission and artifact release stay blocked until the institutional ethics determination, the data-use review, and the derived-pose release review each carry a genuine dated internal reference. No raw video or identity-bearing frame is redistributed, and derived artifacts remain non-public unless completed reviews permit release.
 
 {\small
 \bibliographystyle{plainnat}
