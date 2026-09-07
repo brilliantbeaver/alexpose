@@ -20,7 +20,13 @@ decision gates before launching a training study.
 
 ## Reference and future work
 
-- [Literature and domain facts](reference/literature/)
+- [Cross-protocol perturbation-response study](cross-protocol-perturbation-response/):
+  prospective protocol and availability-and-harmonization gate for testing
+  predictive recovery responses across independent perturbation datasets.
+- [Future-innovation distillation guide](future-innovation-distillation/experiment-0-guide.md):
+  prospective feasibility gate for testing whether skeleton history adds
+  predictive information beyond video context.
+- [Literature and domain facts](reference/)
 - [Model-history reports](../docs/history/)
 
 ## Archive
