@@ -1,0 +1,43 @@
+\documentclass{article}
+% V3-only template. V2 and its shared build inputs are left unchanged.
+\makeatletter
+\def\input@path{{../../docs/}}
+\makeatother
+\PassOptionsToPackage{numbers,compress}{natbib}
+\usepackage[dblblindworkshop]{neurips_2026}
+\workshoptitle{Foundation Models for the Brain and Body}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{newunicodechar}
+\newunicodechar{−}{\ensuremath{-}}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs,longtable,array,calc}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage{needspace}
+\hypersetup{hidelinks,pdfauthor={},pdftitle={$title$}}
+\setlength{\emergencystretch}{2em}
+\setcounter{secnumdepth}{0}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+% Optional display-only line breaks; PDF metadata retains the plain title.
+\title{$if(title-lines)$$for(title-lines)$$title-lines$$sep$\\$endfor$$else$$title$$endif$}
+\author{Anonymous Author(s)}
+\begin{document}
+\maketitle
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+$body$
+\clearpage
+{\small
+\bibliographystyle{plainnat}
+\bibliography{../../docs/references,bbfm2026_paper_V3_references}
+}
+\end{document}

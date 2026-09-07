@@ -1,14 +1,18 @@
 # Numerical supplement
 
-This supplement reproduces the two headline calculations in *Before Gait Models Inform Care: Evidence Boundaries for Predictive Health AI*. It contains no video, pose trajectory, direct video identifier, author information, or local filesystem path.
+This supplement reproduces the paper's two main calculations: classification scores for 20 held-out source videos and the effect of giving clips or source videos equal weight when summarizing feature changes. It contains no video, pose trajectory, direct video identifier, author information, or local filesystem path.
 
 Run `python verify.py` with Python 3.9 or later. Only the standard library is used, no network is accessed, and no files are written.
 
 - `test_source_predictions.csv`: one true dataset annotation and saved predicted annotation per test source for each of three readouts; 20 consistent source aliases and 60 rows.
 - `normal_validation_weighting.csv`: five source aliases, their clip counts, and mean per-clip cross-checkpoint cosine. These aliases are separate from the test aliases.
-- `provenance.json`: input checksums, original manifest/split/checkpoint digests, recorded model configuration and loss, and expected scores.
+- `provenance.json`: portable input checksums, historical run metadata, the scope of the current verification, and expected scores.
 - `verify.py`: independently computes accuracy, balanced accuracy, macro-F1, equal-source and equal-clip cosine, and the unrounded macro-F1 difference.
 
 The five source means reproduce cosine to float32 numerical tolerance. Clip weighting and source weighting change only aggregation of the same stored embeddings. The model remains fixed, and no model is retrained here.
+
+Checksums use UTF-8 file bytes after replacing Windows CRLF line endings with LF in memory; no other bytes are normalized. Historical raw checksums are retained separately. The original checksum mismatch between Windows and Unix copies was reproduced as a line-ending difference, with no change to the numerical values.
+
+The current repository crosscheck compared all 60 prediction rows with notebook 06's saved output and all five weighting rows with the retained source summary. It also reconstructed the scores independently. The original fold checkpoint and full split registry are absent from this checkout, so this refresh does not claim to have loaded or reverified them. Their recorded identifiers and model settings remain historical metadata.
 
 These are one-fold descriptive results. They do not supply patient identity, uncertainty across training runs, complete training configuration, clinical validation, or future-prediction results. Source aliases do not establish person anonymity. Dataset annotations are not diagnoses established by this project. Consult the manuscript for the validation/test aggregation mismatch, different diagnostic preprocessing, and legacy pose geometry.

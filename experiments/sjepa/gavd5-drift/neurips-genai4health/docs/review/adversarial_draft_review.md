@@ -1,165 +1,117 @@
-# Adversarial review of the GenAI4Health drafts
+# Adversarial review of the rewritten GenAI4Health drafts
 
-Reviewed 2026-09-05: the complete sources `genai4health_paper_draft.tex` and `genai4health_extended_abstract.tex`, including the full paper's appendices, plus `references.bib`. The review checks scientific/editorial reasoning against the earlier draft/literature audit and the core/advanced notebook audits. Notebook 08's interpolation and pooling code was also inspected directly. PDF layout/build review is handled separately. Neither manuscript was modified by this reviewer.
+Reviewed September 6, 2026. This pass covers the complete canonical paper and extended-abstract LaTeX sources titled *Before Health Agents Interpret Movement: Lessons from a Gait Representation Study*, including the paper's appendices and bibliography. It supersedes the earlier review of the broader “Evidence Boundaries” drafts. This reviewer did not edit either manuscript, regenerate figures, rerun experiments, or certify PDF layout.
 
 ## Overall judgment
 
-Both drafts are substantially more accurate than the source BrainBodyFM paper. The position framing is coherent: a small non-generative representation learner is a case study of evidence requirements for possible future ambient health components. The manuscripts explicitly avoid claiming an agent, clinical benefit, an architecture-wide ranking, causal leakage correction, functional retention from cosine, or valid forecasting. The same-vector weighting analysis is especially useful because it isolates a real analytic choice without conflating training runs.
+The rewritten paper is a defensible evidence-grounded position paper. Its main empirical example is now understandable without learning the project's local terminology: changing only the weights assigned to fixed feature similarities changes the summary from 0.89 to 0.70 because one video supplies 60 of 64 clips. The accompanying classifier comparison supplies an actual task check, with its modest scope and procedural weakness visible.
 
-The main remaining scientific correction is the normal-anchor preprocessing path: the draft discloses that the temporal diagnostic interpolates gaps, but omits that the normal-anchor diagnostic also does so. Several smaller wording and reproducibility points should be resolved before treating the sources as final. The available evidence is adequate for the stated empirical observations and a position argument; it is not sufficient for a method-performance paper or a clinical-system claim. Acceptance remains uncertain because the methods themselves are established and the proposed downstream application is hypothetical.
+The proposed evidence record is concrete enough to discuss and clearly identified as unimplemented. The text acknowledges Model Cards and clinical-validation guidance, so it does not present familiar reporting principles as a newly invented framework. No evaluated health agent, forecasting model, clinical effect, improved trust, or patient outcome is claimed.
 
-## Priority 1: correct before freezing
+Novelty remains limited, and the direct connection to generative AI is prospective. Those are material acceptance risks, but the manuscript now addresses them honestly rather than disguising the component as an agent. Its position is more coherent than the earlier four-capability argument, and none of the separate laterality results is used to inflate the present evidence.
 
-### 1. Normal-anchor preprocessing and pooling must be specified correctly
+## Correction to make before freezing
 
-**Evidence.** In `08_normal_anchor_drift_and_consolidation.ipynb`, `target_embeddings` calls `prepare_sequence`, which calls `interpolate_low_visibility(..., max_gap=4)` before centering/scaling and resizing. It then pools only `MASK_KEYPOINTS`, with valid four-frame patches, into one 64-dimensional vector. This differs from both the no-gap-interpolation training/readout preparation and the readout's four-block 256-dimensional summary.
+The explanation of cosine should refer consistently to vector directions. The current sentence says a larger cosine means closer agreement “in their coordinates.” Cosine is invariant to positive rescaling and therefore does not measure coordinate distance or magnitude agreement.
 
-**Where.** Full-paper Appendix B, “Preprocessing and architecture,” currently says only “The temporal diagnostic has a different interpolation path.” “Feature and readout definitions” leaves the anchor joint subset unspecified. The main results and companion describe the normal-anchor embedding without acknowledging this diagnostic preprocessing variant.
+Recommended wording:
 
-**Exact replacement in Appendix B:**
+> Cosine similarity measures how closely the directions of two nonzero feature vectors align and ranges from −1 to 1. A larger value means closer directional agreement; it is not a percentage of retained information.
 
-> The normal-anchor and temporal diagnostics interpolate short internal gaps of up to four frames before centering, scaling, and resizing; the training/readout path does not. These full-clip operations should not be reused unchanged for online forecasting.
+The existing conclusions about coordinate changes, task-level retention, and unchanged recordings are otherwise sound. This wording correction does not affect any calculation.
 
-**Exact replacement in feature definitions:**
+## Optional wording improvements
 
-> The normal-anchor audit instead uses a 64-dimensional EMA vector pooled over valid patches of the 12-joint subset, with the diagnostic interpolation path described above.
+The abstract's phrase “simple pose summaries classify more dataset annotations correctly than learned features” is awkward because the counts refer to videos. A clearer version is “simple pose summaries predict the dataset annotations correctly for more videos than learned features.”
 
-**Short main/companion addition, if space permits:**
+The reanalysis paragraph could replace “retained video-level predictions and counts with mean feature similarities” with “retained video-level predictions, clip counts, and mean feature similarities.” This identifies the numerical inputs without making the reader parse an ambiguous attachment.
 
-> This diagnostic uses short-gap interpolation; the weighting comparison holds its resulting vectors fixed.
+Neither improvement changes the scientific scope. Further compression should preserve the distinctions between a measured negative result and an untested clinical use.
 
-The weighting result remains valid: its comparison changes only aggregation of the same stored vectors. This correction does not require changing its numerical values or rerunning the model.
+## Claims challenged and disposition
 
-### 2. Make reviewer-accessible reproducibility match the claim
+| Potential concern | Assessment of the rewritten sources |
+|---|---|
+| The 0.89-to-0.70 change is presented as a loss of retained function | Resolved. Both documents explicitly say only weights change and neither average measures retained ability or patient health. |
+| Equal-video weighting is presented as universally superior | Resolved. The main text, counterargument, and companion acknowledge different purposes and unknown person identities. |
+| Sixty related clips are dismissed as useless duplicates | Resolved. The paper explicitly recognizes repeated clips as useful observations while identifying their effect on the average. |
+| The classifier proves that JEPA or pretraining is ineffective | Resolved. Both sources limit the result to one split and initialization, acknowledge the missing random-encoder control, and disclose mismatched validation/test aggregation. |
+| Landmark availability proves a learned shortcut | Resolved. The text separates an observation-only control from evidence about what the encoder uses. |
+| The model's annotation-guided training is called wholly label-free | Resolved. The cumulative category order and absence of label targets in the encoder loss are both stated. |
+| A generic documentation idea is claimed as a novel validation framework | Resolved. Model Cards and V3 are acknowledged; the proposed record is a result-specific application. |
+| A health-agent or clinician-trust benefit has been measured | Resolved. The documents describe a prospective comparison and explicitly state that its benefit is untested. |
+| Forecasting or intervention planning is inferred from masked prediction | Resolved. These capabilities remain untested and are given separate input/evaluation requirements. |
+| Laterality results, repeated folds, or different models are pooled into the case | Resolved. Neither manuscript includes laterality performance or imports its five-fold/five-initialization evidence. |
+| The curated data is treated as an arbitrary set of web videos | Resolved. GAVD's clinical-gait curation is credited while independent diagnostic verification is not invented. |
+| MIT licensing is equated with institutional approval or video redistribution rights | Resolved. Repository licensing is acknowledged separately from video-use conditions and unresolved project review. |
 
-**Where.** The introduction promises a “reproducible numerical trail,” while Appendix B refers to an “accompanying local verification manifest” containing full hashes and input paths. A PDF reviewer cannot use a local manifest unless it is actually supplied, and absolute paths can identify authors.
+## Does the proposed contribution withstand its strongest objections?
 
-**Resolve using the actual submission package.** If an anonymized numerical supplement accompanies the PDF, name it and include enough aggregate inputs to reproduce the two central observations: true/predicted class labels for 20 consistently aliased sources for all three readouts; the five normal-validation source counts and mean cosines; the metric/reaggregation script; full artifact hashes. Aggregate predictions and statistics suffice for reproducing the reported summaries without distributing individual pose trajectories. Remove identifying absolute paths from a public supplement.
+### “This is basic statistics with an underperforming model.”
 
-If those inputs are not included, replace the first phrase with “a locally verified numerical trail” and the appendix sentence with:
+The case does illustrate established principles, and no claim of a new weighting method is made. Its strongest contribution is a readily inspectable example of how a movement result's meaning changes with its recording weights and model reference. The proposed per-summary record follows from that example. This can support a workshop position, although a reviewer may still judge the contribution too incremental.
 
-> Local audit records retain the full SHA-256 values and artifact paths; the submitted tables report the verified aggregate results.
+The weighting argument does not depend on whether a better model would beat the baseline, because it holds the actual recorded similarities fixed. The classifier is useful supporting context rather than proof of an architecture-level limitation. This separation is maintained in the rewritten text.
 
-Do not claim complete training reproducibility: runtime configuration and optimizer trajectory remain incompletely recorded, and the manuscript correctly states no retraining was performed.
+### “Clinical users would never treat embedding cosine as patient stability.”
 
-### 3. Avoid implying preregistration
+The paper does not report such a clinical mistake or claim it is prevalent. It presents the ambiguity as a possible downstream risk and proposes a way to test whether more explicit evidence improves interpretation. That is appropriate for a position paper. Avoid replacing conditional statements with claims of observed harm, false reassurance, or measured mistrust.
 
-**Where.** Main: “Five source-grouped outer folds are registered.” Companion: “Other registered folds…”
+### “A model card already contains this information.”
 
-**Replace main sentence opening:**
+Model Cards can include model versions, metrics, evaluation conditions, and caveats. The manuscript acknowledges that prior art and explains the limited application: a particular result may use its own weights or reference encoder even when generated by a documented model. The evidence record is a worked reporting recommendation, not a replacement for model cards or a new general taxonomy.
 
-> A local split registry defines five source-grouped outer folds, but only fold 0 and model seed 42 have the current traced training and evaluation artifacts.
+### “Documentation may make the workflow worse.”
 
-**Replace companion phrase:**
+The proposed record can be ignored, misread, or add burden. Both drafts acknowledge this. The full paper includes clinician review time among prospective outcomes, so the argument does not assume that more information automatically improves care. The record's benefit remains a hypothesis.
 
-> Other folds defined in the local registry lack the current completed evaluation.
+### “Positive pretraining studies contradict the negative classifier result.”
 
-This is consistent with the appendix's explicit statement that hash agreement does not establish immutable preregistration. It avoids giving an accidental stronger interpretation before the reader reaches that qualification.
+The full paper cites GaitForeMer as a positive example and correctly identifies its mixture of motion forecasting and activity classification during pretraining. Its clinical severity task differs from the present condition-annotation task. No cross-paper numerical comparison is made. The paragraph avoids treating the present small run as a rebuttal of prior clinical gait research.
 
-### 4. Name the abstract's cosine statistic without suggesting function
+### “This is outside a generative-health workshop.”
 
-**Where.** Both abstracts currently call the value “retention cosine.” The body later explains the distinction carefully, but many readers see the abstract alone.
+This remains the largest fit risk. The implemented model is a non-generative perception component, and no health agent is evaluated. The connection is a position about how such components' evidence should be communicated to a generative system. The title, abstract, and proposal identify that purpose without implying that the future integration exists. This is stronger fit to the trust/evaluation topic and position-paper track than to frontier-model research or system demonstration.
 
-**Replace in both:**
+## Reference checks
 
-> cross-checkpoint embedding cosine
+The new citations are used within their verified scope:
 
-For example:
+- **Model Cards:** intended uses, evaluation conditions, performance reporting, and caveats. It is correctly credited as existing practice.
+- **V3:** established distinctions among sensor verification, analytical validation, and clinical validation. The text does not claim that the present system has completed these processes.
+- **DECIDE-AI:** early clinical evaluation and human factors. It is not treated as clinical certification or as a checklist that can establish safety on its own.
+- **GaitForeMer:** a positive gait-severity pretraining study whose pretraining combines activity-label supervision and forecasting. No claim of wholly label-free learning or shared evaluation populations is made.
+- **I-JEPA and S-JEPA:** support hidden-representation prediction; the manuscript identifies its own model as a compact adaptation rather than a reproduction of published benchmark results.
+- **VICReg:** motivates variance/covariance regularization. The absence of a separate two-view invariance term is explicitly stated.
+- **GAVD:** supports curated clinical-gait videos and annotations. The selected subset is kept distinct from the full dataset.
+- **GAVD MIT License:** the primary license page states MIT and a 2024 copyright notice. The manuscript accurately distinguishes this repository license from rights and obligations attached to separately hosted videos. [License](https://github.com/Rahmyyy/GAVD/blob/main/LICENSE).
 
-> Separately, the same 64 validation-normal clips yield cross-checkpoint embedding cosine 0.889 under equal clip weighting and 0.701 under equal source weighting; one upload contributes 60 clips.
+The extended abstract can omit the GaitForeMer discussion for space without making an unfair architecture-wide claim: it explicitly leaves open a better result from a larger or better-evaluated model.
 
-This preserves the numerical finding while avoiding a premature functional-retention interpretation. Add “normal” to identify which validation subset is being summarized.
+## Numerical and interpretive checks
 
-## Priority 2: precision and clarity
+The reported counts are internally consistent: 59 + 18 + 20 = 97 videos, and 377 + 131 + 131 = 639 clips. Test category counts sum to 20. One video contributes 60/64 = 93.75% of clip weight, correctly displayed as about 94%, and one of five videos contributes 20% of video weight.
 
-### 5. Explain the apparently inconsistent rounded difference
+The cosine equations aggregate per-video means with and without clip-count weights. Their denominator of five refers to normal-validation videos, not condition classes; the appendix states this. Rounded per-video values can yield slightly different displayed arithmetic, so the explicit statement that calculations use unrounded records is appropriate.
 
-The raw and latent macro-F1 values are approximately 0.440513 and 0.292424. Their difference is 0.148088578089, so the reported 0.148 is numerically correct. However, subtracting the displayed three-decimal scores, 0.441 and 0.292, gives 0.149.
+Two decimal places are sufficient for the reported scores. The observed classifier counts are clearer than a six-decimal macro-F1 ranking; balanced accuracy makes the category imbalance visible without implying clinical validity. The supplementary macro-F1 remains useful because it was the classifier-selection metric.
 
-**Replace in both results sections:**
+The diagnostic uses fixed recordings at two trained stages, with the first stage limited to normal annotations. It does not compare a random encoder against a trained model or two patient visits. The paper's description preserves that reference correctly.
 
-> The raw-minus-latent macro-F1 difference is 0.148, calculated before rounding.
+The underlying experiment still has weaknesses: inconsistent classifier aggregation, incomplete execution metadata, different missing-data preparation in the similarity diagnostic, uncalibrated pose geometry, one split/initialization, and unknown cross-upload person identity. These are disclosed and do not undermine the arithmetic demonstration that holds the recorded similarities fixed.
 
-Alternatively use “about 0.15” if the precision is not important to the argument. No significance, confidence, or causal claim should be added.
+## Writing and presentation assessment
 
-### 6. “Raw kinematics” should be introduced as a feature label
+The new sources remove local identifiers, archive history, excessive decimals, and unexplained study labels. The main figure has one job, the classifier table has a direct interpretation, and the evidence-record table uses the actual example rather than an invented patient. The writing is generally connected and clear, without anthropomorphic model descriptions or repeated rhetorical reversals.
 
-The baseline summarizes normalized, resampled monocular detector coordinates, including finite differences on a resized frame index. The draft correctly discloses this in the appendix, but a health reader may interpret “raw kinematics” as measured physical joint motion.
+Some negative boundary statements are necessary to prevent clinical overinterpretation. They are now attached to the relevant result or proposal, rather than repeated as an unrelated checklist. Avoid further additions that turn the abstract or conclusion back into a catalogue of absent capabilities.
 
-**Add once in the main feature paragraph:**
+Final page limits, anonymous metadata, figure legibility, references, and overflow are the responsibility of the separate production check. This source review does not certify those properties.
 
-> The “raw-kinematic” baseline consists of normalized pose-coordinate summaries, not calibrated physical velocities.
+## Recommendation
 
-The established artifact/plot label can remain if this definition is visible. An alternative is “pose-summary baseline” throughout, but a global rename is not required for correctness.
+Apply the cosine-direction correction and retain the present scientific scope. The paper makes a credible, limited position argument with verifiable evidence and meaningful counterarguments. A stronger acceptance case would ultimately require the proposed interpretation experiment or independent clinical measurement validation, but these cannot be claimed on the basis of manuscript refinement. No acceptance probability or submission authorization follows from this review.
 
-### 7. Specify the variance estimator in the detailed loss definition
+## Final resolution, September 6
 
-The core audit reports that the variance penalty uses the biased batch variance, while the covariance penalty uses denominator B−1. Appendix B's `Var(q_j)` does not currently distinguish these.
-
-**Add:**
-
-> The variance term uses denominator B; the covariance estimate uses B−1.
-
-The leading loss weights 0.10 and 0.01, absence of a separate invariance term, detached EMA targets, and disabled condition-loss term are correctly reported. Do not revert to the historical 0.05 VICReg/0.25 group-loss formulation.
-
-### 8. Prefer the publication's author spelling for V-JEPA 2
-
-The [primary V-JEPA 2 record](https://arxiv.org/abs/2506.09985) lists “Mido Assran.” The bibliography currently uses `Assran, Mahmoud and others`. These names refer to the same researcher, but the published form is the precise choice for this entry.
-
-**Use:** `author={Assran, Mido and others}`.
-
-The S-JEPA and GAVD references remain correct. The GAVD compound surname is now correctly represented as `Ali Armin, Mohammad`. The manuscript uses the JEPA, leakage, and medical-imaging citations within their verified scope and does not import the cited papers' empirical results as gait evidence.
-
-## Contribution, counterarguments, and flow
-
-The strongest contribution is not a new grouping rule. It is the combination of two reproducible observations with a clear limit on what they establish: the learned representation receives no demonstrated benefit over a sensor-derived control in this run, and a development summary is dominated by one upload under clip weighting. The paper correctly acknowledges grouped evaluation as prior art. Preserve that sentence.
-
-To sharpen the position further, one compact sentence could follow the stated four claims:
-
-> When a movement representation enters a larger health system, its evidence boundary should travel with it: the data source, model version, measured task, and unresolved failure modes should remain visible downstream.
-
-This is a proposal, not an evaluated interface. The current care-use paragraph already develops it; introducing it earlier would make the position feel less like a list of methodological cautions and more like an actionable design principle. No acronym or invented framework name is needed.
-
-The counterarguments are appropriate and substantive. In particular, acknowledging that source weighting is not patient weighting and that missingness can carry genuine movement signal prevents the paper from treating every nuisance-correlated feature as automatically invalid. Keep both. The small-model objection is answered honestly without implying that the baseline ranking would persist at scale.
-
-The paper need not force a quantitative temporal-probe result into the main argument. Those probes use different preprocessing and pose-derived targets, and their one-fold values do not advance the central position as directly as the source-weighting result. The appendix appropriately retains negative scores and avoids information-absence claims.
-
-The forecasting paragraph contains an important static code finding: visible suffix joints and contextualized full-clip baseline tokens violate the claimed past-only boundary. This supports the distinction between masking and forecasting even without a trained future model. Keep it as a code audit, not a measured forecasting failure. The current wording largely achieves this.
-
-The companion is coherent on its own and carries the principal limitations. Its title need not include “Extended Abstract” in the anonymous submission-style PDF if an external package README clearly labels it a companion. There is no official abstract track in the current call, so the handoff must not instruct authors to submit both as independent submissions.
-
-## Checks that passed
-
-- The attrition and fold-composition totals are internally consistent: 377+131+131=639 sequences and 59+18+20=97 sources; class test support sums to 20.
-- The 64-dimensional token architecture, four-frame coordinate means, pooled MLP predictor, parameter counts, and masked-target eligibility agree with the core audit.
-- The 256/144/97 readout dimensions agree with their definitions; the 64-dimensional normal-anchor vector is a distinct representation summary.
-- The readout's train-plus-validation refit and validation/test aggregation mismatch are disclosed in both documents.
-- The two weighting equations are correct. Sixty of 64 clips means 93.75% clip weight, and one of five sources means 20% source weight. The reported source means support both rounded aggregate values.
-- The manuscript correctly distinguishes per-clip cosine averaged within source from cosine between source-mean embeddings.
-- Test normal cosine 0.850 is not presented as a repair benefit, validation-to-test improvement, or clinical retention rate.
-- The documents avoid a causal comparison between retired and current runs.
-- Proposals for missing controls are clearly separated from completed experiments.
-- Ethics and identity limitations are explicit; no approval, clinical cohort, consent, or agent deployment is invented.
-- The correct no-options NeurIPS style is selected. Final main-text page count, figure legibility, overflow, anonymity, and PDF metadata still require the separate build review.
-
-## Final recommendation to the drafting agent
-
-Apply Priority 1 and the small numerical/citation corrections, then keep the scientific scope fixed. The drafts do not need further speculative claims or new experiments to complete a bounded position paper. The principal acceptance risks are relevance to a generative-health audience and modest novelty over established evaluation practice; the best response is a clear downstream evidence-carrying principle and a compact, verifiable empirical case, not stronger performance language.
-
-## Final resolution check
-
-Rechecked the revised full-paper and companion sources, bibliography, and the numerical supplement's README, provenance record, verification source, and weighting table on 2026-09-05. No experiments or verification scripts were rerun in this final review.
-
-The material findings above are resolved:
-
-- The full paper now distinguishes normal-anchor/temporal gap interpolation from training/readout preprocessing and identifies the anchor's 12-joint pooling. The companion explicitly states the same diagnostic difference. The comparison correctly holds cached vectors fixed and uses the selected trained normal-only reference.
-- Both abstracts identify cross-checkpoint embedding cosine on normal-validation data; neither presents it as preserved clinical function.
-- The folds are described as a local registry, without implying external preregistration.
-- Both documents qualify the 0.148 macro-F1 difference as calculated from unrounded values. The main paper defines the raw-kinematic feature label as normalized pose-coordinate summaries and specifies the variance/covariance denominators.
-- The V-JEPA 2 bibliography now uses the published first-author spelling, Mido Assran.
-- The numerical supplement supplies consistently aliased per-source classification outcomes, five validation-source counts/mean cosines, full digests, and a standard-library metric/reaggregation verifier. The manuscript and README correctly limit reconstruction to the reported numerical summaries, not model training. The inspected README/provenance contain no author names, direct video IDs, or identifying absolute filesystem paths. The README explicitly avoids claiming person anonymity from aliases.
-- The strengthened position states that source population, model version, measured task, and unresolved failure modes should accompany movement features into a larger health system. This remains a proposed evaluation principle, not an implemented clinical interface.
-
-No remaining scientific or editorial blocker was identified within the agreed position-paper scope. The acknowledged one-fold evidence, readout aggregation mismatch, incomplete runtime record, legacy crop geometry, and absent clinical/agentic evaluation remain study limitations rather than concealed claims. The authors' actual institutional/data-use determination is still not established by this document review; the manuscript accurately discloses that absence.
-
-Final PDF rendering, page counts, exact upload packaging, and any submission actions remain outside this source-resolution check and are handled by the drafting agent. This review does not certify acceptance or expand the paper's empirical claims.
+The canonical paper now defines cosine as directional agreement. The abstract also uses the clearer video-level annotation-prediction wording. The optional reanalysis sentence was retained without changing its scientific scope. Independent numerical checks and production checks passed within the limits stated in `final_verification.md`; original checkpoints were not available for a fresh training-artifact check. The paper's novelty and prospective GenAI connection remain substantive limitations rather than unresolved wording corrections.

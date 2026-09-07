@@ -1,0 +1,152 @@
+{
+  "schema": "brainbody_aggregate_laterality_figure/v1",
+  "generator": "submission_laterality_generate.py",
+  "generator_sha256": "0bf8610c1d80536241651d80160fec8bf2bcfe38b8edea803f063ddcb87a0c12",
+  "report_directory": "neurips-laterality/artifacts/paper/protocol_6f7baefbda07",
+  "profile": "paper",
+  "protocol_digest": "6f7baefbda07c8e6899bc5fbb82b4651995b4b0089e0a1d1b36ae04480657088",
+  "context_digest": "abc7a3d26a60fd479641b2ca76f7caab16bba127aeb05f5ef2be6eb56fd9d143",
+  "cohort_digest": "28c164fae903b474eebc42b672cb4ace3a6073ddede630c47519309a310662a0",
+  "selected_folds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "selected_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "selected_variants": [
+    "vanilla",
+    "reflection_augmented"
+  ],
+  "source_sha256": {
+    "report/checkpoint_source_bootstrap.csv": "0a0f7e1ed439f95a2f76c01aeb6c7e9691548f484647c5cfe775f1fa93e9acd1",
+    "report/strict_representation_equivariance_source_bootstrap.csv": "9e02963be9f9259c11af1ea2d93f1f26d1d79d6b45406a8b447506f9a43859ef",
+    "report/summary.json": "b864f35d6da52660a49ecd25811ce739788b33e61203912c063e8e1b02bb6bd6",
+    "protocol_snapshot.json": "92f12fe7210cd2f3d1a4ff84d0e3adb472e78af35adb722b3cd9cd594e78ec6a"
+  },
+  "producer_code_sha256": {
+    "neurips-laterality/laterality/reporting.py": "77a1b5393ae48beb3ad36ff27b8ad771282ab873a4c3a06d3586708c89a83b6d",
+    "neurips-laterality/laterality/evaluation.py": "b0375be27ea79340d7e6d5150c326ed19334efe943905e95f6a1c348d7ac9078"
+  },
+  "panel_a": {
+    "source": "report/checkpoint_source_bootstrap.csv",
+    "rows": [
+      {
+        "comparison_type": "primary_training_content",
+        "variant_a": "vanilla",
+        "lane_a": "learned_single_free",
+        "variant_b": "vanilla",
+        "lane_b": "random_single_free",
+        "estimand": "mean_registered_seed_source_balanced_r2_a_minus_b",
+        "estimate": "-0.017983928580114723",
+        "ci95_low": "-0.038513529861257965",
+        "ci95_high": "0.002481630927645069",
+        "bootstrap_repetitions": "2000",
+        "finite_r2_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_metrics_computed_per_seed_before_averaging"
+      },
+      {
+        "comparison_type": "constructed_training_content",
+        "variant_a": "vanilla",
+        "lane_a": "learned_two_pass_odd_zero",
+        "variant_b": "vanilla",
+        "lane_b": "random_two_pass_odd_zero",
+        "estimand": "mean_registered_seed_source_balanced_r2_a_minus_b",
+        "estimate": "-0.058743975750874755",
+        "ci95_low": "-0.09549126061617483",
+        "ci95_high": "-0.017398157750384884",
+        "bootstrap_repetitions": "2000",
+        "finite_r2_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_metrics_computed_per_seed_before_averaging"
+      },
+      {
+        "comparison_type": "reflection_minus_vanilla_primary",
+        "variant_a": "reflection_augmented",
+        "lane_a": "learned_single_free",
+        "variant_b": "vanilla",
+        "lane_b": "learned_single_free",
+        "estimand": "mean_registered_seed_source_balanced_r2_a_minus_b",
+        "estimate": "0.004082790379340208",
+        "ci95_low": "-0.0055599426818007825",
+        "ci95_high": "0.012772985390520403",
+        "bootstrap_repetitions": "2000",
+        "finite_r2_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_metrics_computed_per_seed_before_averaging"
+      }
+    ]
+  },
+  "panel_b": {
+    "source": "report/strict_representation_equivariance_source_bootstrap.csv",
+    "rows": [
+      {
+        "comparison_type": "learned_minus_initial_strict_equivariance",
+        "variant_a": "vanilla",
+        "state_a": "learned",
+        "variant_b": "vanilla",
+        "state_b": "initial",
+        "estimand": "source_balanced_strict_representation_error_a_minus_b",
+        "estimate": "0.03055140816298557",
+        "ci95_low": "0.015764135487161903",
+        "ci95_high": "0.04762529731917507",
+        "bootstrap_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_per_seed_representation_errors_retained"
+      },
+      {
+        "comparison_type": "learned_minus_initial_strict_equivariance",
+        "variant_a": "reflection_augmented",
+        "state_a": "learned",
+        "variant_b": "reflection_augmented",
+        "state_b": "initial",
+        "estimand": "source_balanced_strict_representation_error_a_minus_b",
+        "estimate": "0.022125287174293115",
+        "ci95_low": "0.008439162619211868",
+        "ci95_high": "0.039342331014064445",
+        "bootstrap_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_per_seed_representation_errors_retained"
+      },
+      {
+        "comparison_type": "reflection_minus_vanilla_strict_equivariance",
+        "variant_a": "reflection_augmented",
+        "state_a": "learned",
+        "variant_b": "vanilla",
+        "state_b": "learned",
+        "estimand": "source_balanced_strict_representation_error_a_minus_b",
+        "estimate": "-0.008426120988692457",
+        "ci95_low": "-0.010195763057535874",
+        "ci95_high": "-0.006871700241680472",
+        "bootstrap_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_per_seed_representation_errors_retained"
+      }
+    ]
+  },
+  "uncertainty": "95% pointwise source-bootstrap intervals from 2000 draws, conditional on fixed cross-fitted models; no refitting or multiplicity adjustment.",
+  "publication_geometry": {
+    "intended_print_width_inches": 5.5,
+    "source_figure_width_inches": 5.5,
+    "source_figure_height_inches": 2.43,
+    "exported_width_inches": 5.5,
+    "exported_height_inches": 2.3,
+    "minimum_source_label_size_points": 9.7,
+    "minimum_source_evidence_note_size_points": 9.3,
+    "note": "PDF/SVG dimensions are fixed at 5.5 \u00d7 2.3 inches without scaling text; rendering fails if the complete content exceeds that box."
+  },
+  "scope": "Aggregate results only. No clinical, person-held-out, or population-level guarantee is established.",
+  "privacy": "No individual poses, sequence identifiers, or source identifiers are exported.",
+  "assets": {
+    "submission_laterality_effects.svg": "ff54514a525bb25abf5f9eaa7cf983495ec2fedec8c34aa423abed164d168285",
+    "submission_laterality_effects.pdf": "d5cf6341ca90dd965a99acd52cdebe70ea7532c9c9839b140e614edce9b8df7c"
+  }
+}

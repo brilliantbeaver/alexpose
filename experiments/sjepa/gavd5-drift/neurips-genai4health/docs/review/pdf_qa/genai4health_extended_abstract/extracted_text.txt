@@ -1,207 +1,141 @@
-Before Gait Models Inform Care:
-Evidence Boundaries for Predictive Health AI
-Anonymous Author(s)
-Afﬁliation
-Address
-email
-Abstract
-We argue that predictive movement representations proposed for ambient health
-1
-AI require separate evidence for source transfer, functional retention, future pre-
-2
-diction, and clinical utility. An audit of one skeleton JEPA run makes these bound-
-3
-aries concrete. On 20 source-held-out videos, raw kinematics achieve macro-F1
-4
-0.441, compared with 0.292 for learned features and 0.251 for missingness alone.
-5
-The same stored normal-validation embeddings yield cross-checkpoint embedding
-6
-cosine 0.889 under equal clip weighting and 0.701 under equal source weighting:
-7
-one upload contributes 60 of 64 clips. These are bounded empirical observations,
-8
-not clinical validation or evidence against an architecture family. They motivate
-9
-an explicit account of what a perception component can support before its outputs
-10
-inform a generative health assistant.
-11
-1
-Position and relevance
-12
-A future health assistant could combine movement summaries with other observations to help a
-13
-clinician review mobility. Its conclusions would still depend on whether those summaries reﬂect
-14
-transferable movement, acquisition effects, or a model update. A ﬂuent clinical narrative cannot
-15
-resolve that ambiguity. We argue that source transfer, useful function after adaptation, past-only
-16
-forecasting, and beneﬁt in care must be tested separately.
-17
-JEPAs predict target representations rather than reconstructing every observed value [2, 1]. The
-18
-small skeleton model audited here is non-generative and does not implement an agent or clinical
-19
-workﬂow. Its relevance to GenAI4Health is the evidence boundary of a possible perception input.
-20
-Grouped evaluation and leakage auditing are prior practice [3]; our contribution is an auditable case
-21
-showing how baseline choice and aggregation change the claims the evidence can sustain.
-22
-2
-Case study and veriﬁed observations
-23
-We examine a local ﬁve-category subset of GAVD [4], whose annotations are normal, Parkinson’s,
-24
-stroke, myopathic, and cerebral palsy. These are not diagnoses independently established by this
-25
-project. The local inventory contains 666 sequences from 103 source videos. A September 4, 2026
-26
-metadata audit retains 657/100, measured decoding retains 655/98, and pose-quality ﬁltering retains
-27
-639/97. Source roles are assigned at the metadata-public gate and maintained through attrition. Fold
-28
-0/seed 42 contains 377 sequences from 59 training sources, 131 from 18 validation sources, and 131
-29
-from 20 test sources. Other folds in the local registry lack the current completed evaluation. Source
-30
-separation does not establish separation of people across uploads.
-31
-The executed model resizes 33-landmark poses to 64 frames and embeds each joint’s four-frame
-32
-coordinate mean. A two-layer transformer produces 64-dimensional contextual tokens; a pooled-
-33
-Submitted to 40th Conference on Neural Information Processing Systems (NeurIPS 2026). Do not distribute.
+                 Before Health Agents Interpret Movement:
+                 Lessons from a Gait Representation Study
 
-context predictor learns masked targets from an EMA encoder. Its loss is smooth-L1 feature pre-
-34
-diction plus variance and covariance penalties weighted 0.10 and 0.01, respectively. There is no
-35
-separate two-view invariance term. The loss omits condition labels, but annotations determine a
-36
-cumulative normal-ﬁrst curriculum. The checkpoint access log excludes test tensors from encoder
-37
-training; it does not prove that test-derived information was never inspected elsewhere.
-38
-Three standardized logistic readouts use frozen learned features, raw kinematic summaries, or miss-
-39
-ingness summaries. Validation selects regularization; the ﬁnal readout reﬁts on training plus valida-
-40
-tion sources. Source-level test metrics, independently recomputed from saved predictions, are:
-41
-Table 1: One fold and seed, the same 20 test sources. No statistical superiority is claimed.
-Features
-Macro-F1
-Balanced accuracy
-Skeleton JEPA
-0.292
-0.257
-Missingness
-0.251
-0.248
-Raw kinematics
-0.441
-0.443
-The observed raw-minus-latent macro-F1 gap is 0.148 from unrounded values. Test support is only
-42
-7 normal, 2 Parkinson’s, 3 stroke, 6 myopathic, and 2 cerebral-palsy sources. Validation classiﬁes
-43
-source-mean features, whereas testing averages clip probabilities; these are not equivalent rules.
-44
-This mismatch, the small cohort, legacy pose geometry, and incomplete runtime metadata limit the
-45
-inference. Missingness is a useful control, but its score does not establish that the encoder exploits
-46
-a shortcut.
-47
-We also compare each normal-validation clip’s EMA embedding, pooled over 12 selected joints, at
-48
-the selected normal-only and ﬁnal checkpoints. This diagnostic interpolates short gaps, unlike the
-49
-training/readout path. Equal clip weighting gives mean cosine 0.889; averaging clips within sources
-50
-and then equally over ﬁve sources gives 0.701. The calculation uses the same vectors and changes
-51
-only weights. One source supplies 60 of 64 clips (93.75% of clip weight, 20% of source weight) and
-52
-has mean cosine 0.905. This is a change of estimand, not measured patient decline. Neither average
-53
-establishes retained function: representations can rotate without losing task information or remain
-54
-stable while uninformative.
-55
-3
-Implications and counterarguments
-56
-The ﬁndings support three practical requirements. First, specify the evaluation unit and compare
-57
-learned features with raw, missingness, and untrained controls using the same aggregation for se-
-58
-lection and testing. Second, assess model updates with alignment-aware comparisons and ﬁxed
-59
-functional endpoints, not cosine alone. Third, require genuinely preﬁx-only inputs, preprocessing,
-60
-and baselines before calling masked prediction forecasting. The exploratory future-mask path leaves
-61
-unmasked future joints visible and its copy-last latent uses full-clip context; no qualifying current
-62
-forecasting result is reported.
-63
-A larger or better-tuned JEPA might outperform our baseline. Equal source weighting also answers
-64
-a different question from equal patient weighting, and missingness may partly reﬂect real movement
-65
-difﬁculty. These counterarguments narrow our claims rather than remove the need to disclose them.
-66
-The position concerns evidence proportional to an intended use, not a demand that every exploratory
-67
-model complete clinical validation.
-68
-No longitudinal patient outcomes, calibrated clinical uncertainty, action-conditioned planning, or
-69
-clinician-trust study is available. Future care-facing evaluation needs a speciﬁed workﬂow, adjudi-
-70
-cated outcomes, external validation, and subgroup and error-cost analyses. Public video access does
-71
-not settle consent or reuse rights; no project-speciﬁc institutional ethics determination is documented
-72
-in the reviewed materials. This abstract reports aggregate retrospective evidence. It supports careful
-73
-evaluation of future ambient health components, not diagnosis, treatment, or deployment.
-74
-2
 
-References
-75
-[1] Mohamed Abdelfattah and Alexandre Alahi. S-JEPA: A joint embedding predictive architecture
-76
-for skeletal action recognition. In Computer Vision – ECCV 2024, pages 367–384, 2024. doi: 10.
-77
-1007/978-3-031-73411-3_21. URL https://www.ecva.net/papers/eccv_2024/papers_
-78
-ECCV/papers/04755.pdf.
-79
-[2] Mahmoud Assran, Quentin Duval, Ishan Misra, Piotr Bojanowski, Pascal Vincent, Michael
-80
-Rabbat, Yann LeCun, and Nicolas Ballas. Self-supervised learning from images with a joint-
-81
-embedding predictive architecture. In Proceedings of the IEEE/CVF Conference on Computer
-82
-Vision and Pattern Recognition, pages 15619–15629, 2023. doi: 10.1109/CVPR52729.2023.
-83
-01499. URL https://arxiv.org/abs/2301.08243.
-84
-[3] Sayash Kapoor and Arvind Narayanan.
-Leakage and the reproducibility crisis in machine-
-85
-learning-based science. Patterns, 4(9):100804, 2023. doi: 10.1016/j.patter.2023.100804.
-86
-[4] Rahm Ranjan, David Ahmedt-Aristizabal, Mohammad Ali Armin, and Juno Kim. Computer
-87
-vision for clinical gait analysis: A gait abnormality video dataset. IEEE Access, 13:45321–
-88
-45339, 2025. doi: 10.1109/ACCESS.2025.3545787.
-89
-3
+                                                  Anonymous Author(s)
+                                                      Afﬁliation
+                                                       Address
+                                                        email
+
+
+
+                                                         Abstract
+1              We argue that movement summaries supplied to future health assistants should
+2              preserve what was measured, how recordings were weighted, and which uses
+3              were tested. A JEPA-style gait case illustrates why. For the same 64 normal-
+4              annotated validation clips, feature similarity across training stages averages to
+5              0.89 with equal clip weights and 0.70 with equal video weights; one video sup-
+6              plies 60 clips. Neither value establishes retained predictive ability or a change
+7              in patient health. An exploratory comparison also favors simple pose summaries
+8              over learned features on 20 held-out videos. These observations motivate an evi-
+9              dence record accompanying movement summaries and a proposed test of its value
+10             for interpretation. No generative assistant or clinical intervention was evaluated.
+
+
+11   1 Position and clinical relevance
+12   A health assistant could eventually combine video-derived movement summaries with other patient
+13   information to support mobility review. A similarity score can compare a ﬁxed recording across two
+14   model versions, rather than a person’s movement across two visits. Repeated clips can also make
+15   one recording dominate an apparently broad evaluation.
+16   Our position is that the measurement and evaluation conditions should remain attached to movement
+17   results when they are passed downstream. Model Cards already address intended uses and evaluation
+18   limits [5], and the V3 framework distinguishes stages of validation for digital measurements [4]. We
+19   apply those principles to a concrete gait representation case, concentrating on recording weights and
+20   the distinction between model coordinates and useful function. The encoder uses a joint-embedding
+21   predictive architecture inspired by S-JEPA [1]; it does not implement a clinical agent.
+
+22   2 Case study and observations
+23   The study uses 639 quality-screened clips from 97 YouTube videos drawn from GAVD, a manually
+24   curated resource for clinical gait analysis [6]. Its selected annotations cover normal gait and Parkin-
+25   son’s, stroke, myopathic, and cerebral-palsy categories, without independent diagnostic veriﬁcation
+26   here. All clips from a video share its role: 59 videos for training, 18 for validation, and 20 for
+27   testing. The evidence comes from one split and one training initialization. Video separation does
+28   not guarantee person separation across uploads.
+29   A compact encoder receives 33-landmark poses resized to 64 frames and predicts hidden features
+30   at selected body landmarks. Training begins with normal-annotated clips, then cumulatively adds
+31   the other categories. Category labels guide that order but are not targets in the encoder loss. We
+32   reanalyze retained predictions and similarity summaries, without rerunning encoder training; some
+33   runtime settings were not fully recorded.
+
+     Submitted to 40th Conference on Neural Information Processing Systems (NeurIPS 2026). Do not distribute.
+34   Holding similarities ﬁxed, changing the weights. For each normal-annotated validation clip, co-
+35   sine compares its features after normal-only training with its features after ﬁnal training. There are
+36   64 clips from ﬁve videos, with one video contributing 60 clips. Equal clip weighting assigns that
+37   video about 94% of the total weight and gives mean cosine 0.89. Averaging ﬁrst within videos and
+38   then equally across videos assigns it 20% and gives 0.70. The same recorded similarities enter both
+39   calculations.
+40   These are different summaries of the recordings, not competing estimates of patient stability. Equal
+41   video weights are not universally preferable and do not imply equal patient weights. Moreover, either
+42   average can change as model coordinates change without establishing whether useful movement
+43   information was lost. Functional retention needs an actual prediction task assessed across model
+44   versions.
+
+45   Testing a simpler input baseline. Three separately ﬁtted logistic-regression classiﬁers predict the
+46   dataset annotations using pose summaries, frozen learned features, or landmark availability without
+47   coordinates. Validation selects regularization, after which classiﬁers are reﬁtted on the 77 training
+48   and validation videos. The same 20 test videos give:
+
+     Table 1: Descriptive results from one split and initialization. Balanced accuracy averages within-
+     category recall over the ﬁve annotations.
+
+                   Input                               Correct videos    Balanced accuracy
+                   Pose and movement summaries             10/20                0.44
+                   Learned pose features                    6/20                0.26
+                   Landmark availability only               6/20                0.25
+
+49   All three classiﬁers misclassify the three stroke-annotated test videos. Two categories have only
+50   two test videos each. Selection also uses averaged features per video, whereas testing averages the
+51   category probabilities predicted for its clips; these procedures need not agree. Without repeated runs
+52   and a matched untrained encoder, the result supports retaining a pose baseline but cannot isolate the
+53   effect of pretraining or establish a general ranking.
+
+54   3 Proposal, counterarguments, and next evaluation
+55   We propose that each movement summary include its measured quantity, reference model, record-
+56   ing unit and weights, observed result, and interpretation limits. For the weighting example, that
+57   record would state: ﬁxed clips compared across training stages; ﬁve equally weighted videos; mean
+58   cosine 0.70; predictive retention and patient mobility change untested. This specializes established
+59   reporting guidance to the result being interpreted, rather than proposing a new general validation
+60   framework.
+61   A follow-up could compare the same assistant’s interpretations with a bare score against interpre-
+62   tations with this record, using blinded review of unsupported mobility claims and recognition of
+63   insufﬁcient evidence. Tests should distinguish changes in recordings from model updates and inde-
+64   pendently measured movement changes. The record’s beneﬁt remains a hypothesis; documentation
+65   may be ignored or add burden. Clinical usefulness requires a deﬁned workﬂow and evaluation of
+66   safety and human factors [7].
+67   A larger model or better evaluation could favor learned representations without eliminating the need
+68   to state what a summary measures. Forecasting remains untested and would require inputs and
+69   preprocessing restricted to the observed past.
+70   The public-video sample, uncertain cross-upload identities, estimated pose geometry, and incom-
+71   plete training records limit generalization. GAVD’s annotation repository uses the MIT License;
+72   separately hosted videos have additional access and use conditions [3, 2]. Project-speciﬁc ethics
+73   and data-use reviews remain unresolved, and no approval or exemption is claimed. The evidence
+74   supports a focused position about interpreting movement inputs, with agent behavior and patient
+75   beneﬁt left for subsequent evaluation.
+
+
+
+
+                                                       2
+76    References
+77    [1] Mohamed Abdelfattah and Alexandre Alahi. S-JEPA: A joint embedding predictive architecture
+78        for skeletal action recognition. In Computer Vision – ECCV 2024, pages 367–384, 2024. doi: 10.
+79        1007/978-3-031-73411-3_21. URL https://www.ecva.net/papers/eccv_2024/papers_
+80        ECCV/papers/04755.pdf.
+81    [2] GAVD project. GAVD: MIT license. GitHub repository, 2024. URL https://github.com/
+82        Rahmyyy/GAVD/blob/main/LICENSE. Accessed September 6, 2026.
+83    [3] GAVD project. Gait abnormality video dataset: Repository and data-use statement. GitHub
+84        repository, 2026. URL https://github.com/Rahmyyy/GAVD. Accessed September 6, 2026.
+85    [4] Jennifer C. Goldsack, Andrea Coravos, Jessie P. Bakker, Brinnae Bent, Ariel V. Dowling, Cheryl
+86        Fitzer-Attas, Alan Godfrey, Job G. Godino, Ninad Gujar, Elena Izmailova, Christine Manta,
+87        Barry Peterson, Benjamin Vandendriessche, William A. Wood, Ke Will Wang, and Jessilyn
+88        Dunn. Veriﬁcation, analytical validation, and clinical validation (V3): the foundation of deter-
+89        mining ﬁt-for-purpose for biometric monitoring technologies (BioMeTs). npj Digital Medicine,
+90        3:55, 2020. doi: 10.1038/s41746-020-0260-4. URL https://www.nature.com/articles/
+91        s41746-020-0260-4.
+92    [5] Margaret Mitchell, Simone Wu, Andrew Zaldivar, Parker Barnes, Lucy Vasserman, Ben
+93        Hutchinson, Elena Spitzer, Inioluwa Deborah Raji, and Timnit Gebru. Model cards for model
+94        reporting. In Proceedings of the Conference on Fairness, Accountability, and Transparency,
+95        2019. doi: 10.1145/3287560.3287596. URL https://arxiv.org/abs/1810.03993.
+96    [6] Rahm Ranjan, David Ahmedt-Aristizabal, Mohammad Ali Armin, and Juno Kim. Computer
+97        vision for clinical gait analysis: A gait abnormality video dataset. IEEE Access, 13:45321–
+98        45339, 2025. doi: 10.1109/ACCESS.2025.3545787.
+99    [7] Baptiste Vasey, Myura Nagendran, Bruce Campbell, et al. Reporting guideline for the early-
+100       stage clinical evaluation of decision support systems driven by artiﬁcial intelligence: DECIDE-
+101       AI. Nature Medicine, 28:924–933, 2022. doi: 10.1038/s41591-022-01772-9. URL https:
+102       //www.nature.com/articles/s41591-022-01772-9.
+
+
+
+
+                                                       3
+

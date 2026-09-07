@@ -1,0 +1,232 @@
+{
+  "schema": "brainbody_aggregate_laterality_figure/v3",
+  "generator": "submission_laterality_v3_generate.py",
+  "generator_sha256": "bd5a09df145d15be258d3e6863710928d350e6654d83435acd420cb6a5803090",
+  "read_only_input_verifier": "submission_laterality_generate.py",
+  "read_only_input_verifier_sha256": "0bf8610c1d80536241651d80160fec8bf2bcfe38b8edea803f063ddcb87a0c12",
+  "report_directory": "neurips-laterality/artifacts/paper/protocol_6f7baefbda07",
+  "protocol_digest": "6f7baefbda07c8e6899bc5fbb82b4651995b4b0089e0a1d1b36ae04480657088",
+  "context_digest": "abc7a3d26a60fd479641b2ca76f7caab16bba127aeb05f5ef2be6eb56fd9d143",
+  "cohort_digest": "28c164fae903b474eebc42b672cb4ace3a6073ddede630c47519309a310662a0",
+  "source_sha256": {
+    "report/checkpoint_source_bootstrap.csv": "0a0f7e1ed439f95a2f76c01aeb6c7e9691548f484647c5cfe775f1fa93e9acd1",
+    "report/strict_representation_equivariance_source_bootstrap.csv": "9e02963be9f9259c11af1ea2d93f1f26d1d79d6b45406a8b447506f9a43859ef",
+    "report/summary.json": "b864f35d6da52660a49ecd25811ce739788b33e61203912c063e8e1b02bb6bd6",
+    "protocol_snapshot.json": "92f12fe7210cd2f3d1a4ff84d0e3adb472e78af35adb722b3cd9cd594e78ec6a"
+  },
+  "selected_folds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "selected_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "selected_variants": [
+    "vanilla",
+    "reflection_augmented"
+  ],
+  "producer_code_sha256": {
+    "neurips-laterality/laterality/reporting.py": "77a1b5393ae48beb3ad36ff27b8ad771282ab873a4c3a06d3586708c89a83b6d",
+    "neurips-laterality/laterality/evaluation.py": "b0375be27ea79340d7e6d5150c326ed19334efe943905e95f6a1c348d7ac9078"
+  },
+  "panel_a": {
+    "title": "Laterality prediction",
+    "source": "report/checkpoint_source_bootstrap.csv",
+    "rows": [
+      {
+        "comparison_type": "primary_training_content",
+        "variant_a": "vanilla",
+        "lane_a": "learned_single_free",
+        "variant_b": "vanilla",
+        "lane_b": "random_single_free",
+        "estimand": "mean_registered_seed_source_balanced_r2_a_minus_b",
+        "estimate": "-0.017983928580114723",
+        "ci95_low": "-0.038513529861257965",
+        "ci95_high": "0.002481630927645069",
+        "bootstrap_repetitions": "2000",
+        "finite_r2_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_metrics_computed_per_seed_before_averaging"
+      },
+      {
+        "comparison_type": "constructed_training_content",
+        "variant_a": "vanilla",
+        "lane_a": "learned_two_pass_odd_zero",
+        "variant_b": "vanilla",
+        "lane_b": "random_two_pass_odd_zero",
+        "estimand": "mean_registered_seed_source_balanced_r2_a_minus_b",
+        "estimate": "-0.058743975750874755",
+        "ci95_low": "-0.09549126061617483",
+        "ci95_high": "-0.017398157750384884",
+        "bootstrap_repetitions": "2000",
+        "finite_r2_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_metrics_computed_per_seed_before_averaging"
+      },
+      {
+        "comparison_type": "reflection_minus_vanilla_primary",
+        "variant_a": "reflection_augmented",
+        "lane_a": "learned_single_free",
+        "variant_b": "vanilla",
+        "lane_b": "learned_single_free",
+        "estimand": "mean_registered_seed_source_balanced_r2_a_minus_b",
+        "estimate": "0.004082790379340208",
+        "ci95_low": "-0.0055599426818007825",
+        "ci95_high": "0.012772985390520403",
+        "bootstrap_repetitions": "2000",
+        "finite_r2_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_metrics_computed_per_seed_before_averaging"
+      }
+    ]
+  },
+  "panel_b": {
+    "title": "Feature agreement between original and mirrored clips",
+    "source": "report/strict_representation_equivariance_source_bootstrap.csv",
+    "source_rows": [
+      {
+        "comparison_type": "learned_minus_initial_strict_equivariance",
+        "variant_a": "vanilla",
+        "state_a": "learned",
+        "variant_b": "vanilla",
+        "state_b": "initial",
+        "estimand": "source_balanced_strict_representation_error_a_minus_b",
+        "estimate": "0.03055140816298557",
+        "ci95_low": "0.015764135487161903",
+        "ci95_high": "0.04762529731917507",
+        "bootstrap_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_per_seed_representation_errors_retained"
+      },
+      {
+        "comparison_type": "learned_minus_initial_strict_equivariance",
+        "variant_a": "reflection_augmented",
+        "state_a": "learned",
+        "variant_b": "reflection_augmented",
+        "state_b": "initial",
+        "estimand": "source_balanced_strict_representation_error_a_minus_b",
+        "estimate": "0.022125287174293115",
+        "ci95_low": "0.008439162619211868",
+        "ci95_high": "0.039342331014064445",
+        "bootstrap_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_per_seed_representation_errors_retained"
+      },
+      {
+        "comparison_type": "reflection_minus_vanilla_strict_equivariance",
+        "variant_a": "reflection_augmented",
+        "state_a": "learned",
+        "variant_b": "vanilla",
+        "state_b": "learned",
+        "estimand": "source_balanced_strict_representation_error_a_minus_b",
+        "estimate": "-0.008426120988692457",
+        "ci95_low": "-0.010195763057535874",
+        "ci95_high": "-0.006871700241680472",
+        "bootstrap_repetitions": "2000",
+        "registered_seed_count": "5",
+        "uncertainty_scope": "source_resampling_conditional_on_fixed_cross_fitted_checkpoints_with_per_seed_representation_errors_retained"
+      }
+    ],
+    "displayed_rows": [
+      {
+        "source_row_index": 0,
+        "quantity": "Reduction in normalized feature disagreement",
+        "estimate": -0.03055140816298557,
+        "ci95_low": -0.04762529731917507,
+        "ci95_high": -0.015764135487161903
+      },
+      {
+        "source_row_index": 1,
+        "quantity": "Reduction in normalized feature disagreement",
+        "estimate": -0.022125287174293115,
+        "ci95_low": -0.039342331014064445,
+        "ci95_high": -0.008439162619211868
+      },
+      {
+        "source_row_index": 2,
+        "quantity": "Reduction in normalized feature disagreement",
+        "estimate": 0.008426120988692457,
+        "ci95_low": 0.006871700241680472,
+        "ci95_high": 0.010195763057535874
+      }
+    ],
+    "display_transformation": {
+      "estimate": "negative of the source estimate",
+      "ci95_low": "negative of the source upper confidence bound",
+      "ci95_high": "negative of the source lower confidence bound",
+      "reason": "Display reduction in disagreement, so a positive value favors the tested condition relative to its labeled reference in both panels.",
+      "source_rows_immutable": true,
+      "exact_round_trip_check": "passed",
+      "interval_order_width_and_zero_inclusion_checks": "passed"
+    }
+  },
+  "uncertainty": "95% pointwise source-bootstrap intervals from 2000 draws, conditional on fixed cross-fitted models; no refitting or multiplicity adjustment.",
+  "point_estimates": "Per-seed metrics pooled across five source-held-out folds, then averaged over five seeds; not metrics of seed-averaged predictions.",
+  "publication_geometry": {
+    "exported_width_inches": 5.5,
+    "exported_height_inches": 6.3,
+    "minimum_text_size_points": 9.7,
+    "title_size_points": 11.0,
+    "fixed_size_without_text_scaling": true
+  },
+  "style": {
+    "pretraining_contrasts": "Neutral circles; effect of encoder training, referenced to the same encoder at its random starting weights.",
+    "mirroring_contrasts": "Teal diamonds; effect of adding mirrored training clips, referenced to an encoder trained without mirrored clips.",
+    "displayed_group_headings": [
+      "Effect of encoder training",
+      "Effect of adding mirrored training clips"
+    ],
+    "displayed_group_references": [
+      "Reference: encoder at its random starting weights",
+      "Reference: encoder trained without mirrored clips"
+    ],
+    "panel_a_shared_training_condition": "Training excludes mirrored clips; applies to the first two rows only.",
+    "panel_a_row_contexts": [
+      "Sign reversal not enforced",
+      "Sign reversal enforced for both encoders",
+      "Sign reversal not enforced"
+    ],
+    "panel_b_row_contexts": [
+      "Training without mirrored clips",
+      "Training with mirrored clips",
+      "Both encoders trained"
+    ],
+    "difference_definition": {
+      "panel_a": "Prediction R\u00b2 for the tested condition minus R\u00b2 for the labeled reference; unchanged from the source report. The sign rule is held fixed within each comparison.",
+      "panel_b": "Normalized disagreement for the labeled reference minus disagreement for the tested condition; a displayed error reduction with the original source values retained above. Features are compared directly without a prediction rule."
+    },
+    "favorable_directions": {
+      "panel_a": "Positive = better prediction",
+      "panel_b": "Positive = closer agreement"
+    },
+    "displayed_estimate_decimals": 3
+  },
+  "validation": {
+    "visible_text_items": 36,
+    "bounds_check": "passed",
+    "text_collision_check": "passed",
+    "row_label_plot_separation_check": "passed",
+    "svg_editable_text_check": "passed",
+    "svg_no_raster_check": "passed",
+    "panel_b_sign_conversion_and_source_immutability_checks": "passed"
+  },
+  "shared_files_verified_unchanged": {
+    "submission_laterality_generate.py": "0bf8610c1d80536241651d80160fec8bf2bcfe38b8edea803f063ddcb87a0c12",
+    "submission_laterality_effects.svg": "ff54514a525bb25abf5f9eaa7cf983495ec2fedec8c34aa423abed164d168285",
+    "submission_laterality_effects.pdf": "d5cf6341ca90dd965a99acd52cdebe70ea7532c9c9839b140e614edce9b8df7c",
+    "submission_laterality_provenance.json": "c9bac6a2603b19399ae4e0c1d80093309d70ccaf0de96685d394f2dd88ffd016"
+  },
+  "scope": "Aggregate results only; same six source contrasts as the shared figure. Panel B reverses the displayed sign to express error reduction. No new model fits or clinical claims.",
+  "privacy": "No individual poses, sequence identifiers, or source identifiers are exported.",
+  "assets": {
+    "submission_laterality_effects_v3.svg": "72a906277dff190ba4bca671380e98b0fadb041cf77b0a757885940672a14dfc",
+    "submission_laterality_effects_v3.pdf": "bee57c6c35bef0941c762733bcd26498493bbe4c4729d57811ee5c298f9819a0"
+  }
+}

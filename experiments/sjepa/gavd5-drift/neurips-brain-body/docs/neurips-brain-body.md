@@ -1,120 +1,87 @@
-# BrainBodyFM 2026: submission-readiness guide
+---
+title: "BrainBodyFM 2026: submission-readiness guide"
+subtitle: "Current two-study manuscript and remaining decisions"
+date: "Updated September 5, 2026"
+---
 
-**Status date:** September 5, 2026
+## Current position
 
-**Target:** NeurIPS 2026 Workshop on Foundation Models for the Brain and Body
+The revised short paper combines a source-held-out classification pilot with a completed laterality study. Its central contribution is an empirical evaluation of what learned gait features preserve, how reflection augmentation changes token consistency, and what an explicitly imposed sign constraint can guarantee. The laterality study supplies the stronger controlled evidence; the classification pilot provides supporting context.
 
-**Deadline:** September 5, 2026 AoE
+The editable submission source is [bbfm2026_paper_draft.md](bbfm2026_paper_draft.md), with generated [LaTeX](bbfm2026_paper_draft.tex) and [PDF](bbfm2026_paper_draft.pdf). The [explanatory paper](explanatory_paper.pdf) provides the longer methods tutorial and evidence assessment. It is an author resource rather than the main submission file.
 
-**Canonical manuscript:** `bbfm2026_paper_draft.tex`
+Submission and release remain blocked by the laterality project's recorded governance gate. Ethics determination, data-use review, and derived-pose release review are all unresolved in [governance/status.json](../../neurips-laterality/governance/status.json). The implemented rule requires each review to be resolved with an internal reference and date. This is a documented project condition, not a claim about an automatic rejection rule of the workshop. A weighted readiness score cannot override it.
 
-## Current submission position
+## Two studies, with different evidence
 
-The defensible paper is a **leakage-aware evaluation protocol and GAVD case study with one fully traced worked fold**, not a report of established S-JEPA performance. Outer fold 0, seed 42 now has hash-bound training, readout, temporal, and normal-retention artifacts. The raw-kinematic control exceeded the S-JEPA latent readout in that fold. This is useful negative evidence and an implementation audit, but it is not a cross-fold estimate. Earlier sequence-split, laterality, AnchorGuard, and forecasting artifacts remain archived rather than mixed with protocol-v2 results.
+| Property | Study A: classification pilot | Study B: laterality |
+|---|---|---|
+| Accepted cohort | 639 sequences / 97 sources | 625 sequences / 93 sources |
+| Evaluation | Outer fold 0, seed 42 | Five outer folds, five seeds, two training variants |
+| Source counts | 59 train, 18 validation, 20 test | 74–75 outer train, 18–19 outer test per fold |
+| Main comparison | Learned features, raw pose statistics, missingness | Trained versus recorded initial features, reflection augmentation, odd/even readouts |
+| Current artifacts | Saved notebook outputs; current checkpoint/evaluation bundles absent | Cohort, splits, 50 trained checkpoints, and 100,000 prediction rows across 16 lanes inspected |
 
-This framing fits the [BrainBodyFM 2026 call for papers](https://brainbodyfm-workshop.github.io/call-for-papers.html): pose and movement, self-supervised and continual learning, evaluation protocols, generalization, and reproducibility are all in scope. The submission venue is the [BrainBodyFM 2026 OpenReview group](https://openreview.net/group?id=NeurIPS.cc/2026/Workshop/BrainBodyFM).
+The cohorts overlap and use different eligibility rules and models. Their counts should not be added, and Study B does not replicate Study A's classifier experiment. In both studies, source-video separation is weaker than person separation because one individual may appear in multiple uploads.
 
-## Dated data census
+Study A's dated census begins with 666 annotated sequences from 103 uploads. Its September 4 metadata gate retains 657 sequences/100 sources, the media-span gate 655/98, and pose quality control 639/97. Source roles are frozen before the later exclusions. These figures describe the saved acquisition snapshot, not current video availability.
 
-The five raw GAVD manifests contain **666 sequences from 103 unique YouTube videos**. A live metadata check on **September 4, 2026** found **657 sequences from 100 videos metadata-public**:
+Study B starts with a frozen inventory of 642 pose archives and retains 625/93 after quality and target-computability checks. The local verification loaded its recorded lineage and predictions. Independent in-memory recomputation of the primary predictive and token-equivariance bootstrap tables reproduced the saved results within $10^{-16}$. That checks the stored evidence and report calculations; no independent retraining was performed.
 
-|Manifest group|Raw sequences / videos|Metadata-public sequences / videos|
+## The results to emphasize
+
+Study A's source-level macro-F1 is 0.440513 for raw pose statistics, 0.292424 for learned features, and 0.251111 for missingness. All three lanes miss all three stroke-annotated test sources. The comparison concerns 20 test sources in one fold and has no matched untrained encoder, so it does not isolate a general effect of pretraining.
+
+Study B provides the following paired contrasts. Intervals are pointwise 95% source-bootstrap intervals, conditional on the fitted models and fixed split.
+
+| Contrast | Estimate [95% interval] | Supported reading |
+|---|---|---|
+| Vanilla trained minus initial token error | +0.03055 [0.01576, 0.04763] | Training increases error under the specified token action |
+| Reflection-augmented minus vanilla token error | −0.00843 [−0.01020, −0.00687] | Augmentation improves this geometric consistency measure |
+| Native learned minus initial predictive $R^2$ | −0.01798 [−0.03851, 0.00248] | A predictive benefit is unestablished; equivalence is also unestablished |
+| Constructed odd learned minus initial $R^2$ | −0.05874 [−0.09549, −0.01740] | Trained features perform worse through this constrained readout |
+| Reflection-augmented minus vanilla native $R^2$ | +0.00408 [−0.00556, 0.01277] | Predictive improvement remains uncertain |
+
+An odd feature construction and origin-preserving linear readout enforce output sign reversal for any encoder, including its initialization. The saved study verifies that property for every seed. Its value is as a controlled transformation rule; useful learned information still requires a predictive comparison. The novelty is the specific empirical separation of these outcomes, with matched controls, rather than new symmetry algebra or a discovery of anatomical laterality.
+
+Study B's primary predictive score uses sequence rows weighted by inverse source size. For each seed, it pools out-of-fold predictions before calculating $R^2$, then averages the five seed scores. It does not average source targets first or score a prediction ensemble. Study A's temporal diagnostic does average targets and predictions within source before computing its separate $R^2$.
+
+## Method descriptions that must remain accurate
+
+Study A uses four-frame coordinate averages, a pooled-context MLP predictor, and SmoothL1 latent prediction plus variance and covariance penalties weighted 0.10 and 0.01. Its optional 0.10 condition cross-entropy term is disabled. Labels still determine the cumulative normal-first curriculum. Classifier selection uses validation sources, followed by a scaler/classifier refit on all 77 development sources. The encoder receives gradient updates from the 59 training sources only.
+
+Study B flattens four-frame coordinate patches into 96-dimensional tokens, uses a Transformer predictor, and trains with centered latent cross-entropy plus a 0.05-weighted VICReg-style objective. Five folds, five seeds, and two variants give 50 trained fits. These implementations should not share one undifferentiated loss equation or configuration description.
+
+Study A's temporal and drift notebooks interpolate short gaps, unlike its training preparation. Its classifier also averages probabilities at test time while validation uses source-mean features. Those limitations remain even after their descriptions are corrected. Normal-anchor cosine measures same-clip geometric change; functional forgetting and a successful consolidation repair remain untested. The forecasting branch lacks a separately trained checkpoint and requires a prefix-only context and baseline implementation before a causal forecasting claim is possible.
+
+## Internal readiness assessment
+
+Scores run from 1 to 5, with 3 representing an adequate limited contribution and 4 a strong one. The revised index assesses the integrated paper with the factual corrections applied and the evidence limitations retained. It is an author-side heuristic, not a workshop rubric or acceptance probability.
+
+| Dimension | Weight | Revised score / 5 |
 |---|---:|---:|
-|Normal|291 / 32|291 / 32|
-|Parkinson's|47 / 11|47 / 11|
-|Stroke|76 / 19|75 / 18|
-|Myopathic|188 / 30|184 / 29|
-|Cerebral palsy|64 / 11|60 / 10|
-|**Total**|**666 / 103**|**657 / 100**|
+| Workshop fit | 15% | 4.0 |
+| Contribution and novelty | 15% | 3.0 |
+| Methods correctness | 20% | 4.0 |
+| Empirical strength | 20% | 3.5 |
+| Reproducibility and traceability | 15% | 3.5 |
+| Claim discipline | 5% | 4.5 |
+| Clarity and presentation | 5% | 4.0 |
+| Data-use reporting and submission readiness | 5% | 2.0 |
 
-![Dated sequence and source-video attrition.](../../docs/figures/bbfm_data_funnel.png)
+Movement-representation evaluation gives the paper a direct workshop connection, while its methods remain established. The repeated laterality study and matched controls support the methods score; empirical strength remains limited by one observational dataset and no external person-level test. Reproducibility is scored for the whole paper, including the missing pilot bundles. The claim and clarity scores assume the revised two-study framing is retained. Unresolved governance keeps the final dimension low.
 
-The three failed sources are:
+With percentage weights $w_j$, the index is $\sum_j w_j s_j/5=72/100$. The historical uncorrected pilot-only draft scored 48/100; a hypothetical corrected pilot without additional evidence scored approximately 57/100. The increase to 72 reflects the integrated existing laterality evidence and verification. It does not mean the pilot gained additional folds or that acceptance odds are 72%.
 
-- `sf5X4YYkWUA`: private
-- `YjRoLtP1di0`: private
-- `yULxvDc9e8c`: unavailable
+The scientific case is now more credible as a bounded methodological workshop contribution. Its novelty remains incremental, and no neural measurements, broad foundation-model transfer, clinical validation, or interactive control results are available. Independently of this assessment, the governance gate remains blocked.
 
-"Metadata-public" means that the platform returned public video metadata without authentication at that check. It does **not** establish that every annotated time span can be downloaded, decoded, sampled at the requested frames, or converted into an acceptable pose trajectory. Download/decode checks and pose-quality control therefore define later, separately reported attrition stages. Availability is time-, region-, account-, and platform-policy-dependent.
+## Remaining priorities
 
-## Claim boundary and model comparison
+1. Resolve the three recorded governance reviews through the responsible authors or institution and record the required references and dates. Do not mark them resolved on the basis of manuscript edits.
+2. Preserve the verified short-paper format in any final revision. The September 5 build has five main-text pages, two appendix pages, and one reference page in the shared NeurIPS 2026 double-blind workshop style. All eight pages were visually inspected; author identity is absent from the PDF metadata, and the vector figure uses labels of at least 9.3 pt at the official 5.5-inch text width. Recheck the PDF after any further edit.
+3. Check that every abstract, table, and caption distinguishes the two cohorts and estimands. Preserve the token-error benefit of augmentation, the inconclusive native predictive contrast, and the negative constructed learned-minus-initial result.
+4. Confirm that any linked reviewer-facing artifact extract complies with the recorded release determination. The local evidence contains source-linked records and is not automatically authorized for public redistribution.
+5. Recover Study A's original bundles if available. If they remain unavailable, retain the explicit saved-output limitation and avoid upgrading the pilot's evidence status.
+6. Verify the live submission portal and required author declarations before upload. The published deadline is September 5, 2026 AoE; the [call for papers](https://brainbodyfm-workshop.github.io/call-for-papers.html) and [OpenReview venue](https://openreview.net/group?id=NeurIPS.cc/2026/Workshop/BrainBodyFM) are the relevant submission references.
 
-The primary representation-learning condition must remain label-free:
-
-\[
-\mathcal{L}_{\mathrm{primary}}
-=\mathcal{L}_{\mathrm{JEPA}}+0.05\,\mathcal{L}_{\mathrm{VICReg}}.
-\]
-
-The condition-label term belongs only in a clearly named supervised ablation:
-
-\[
-\mathcal{L}_{\mathrm{ablation}}
-=\mathcal{L}_{\mathrm{primary}}+0.25\,\mathcal{L}_{\mathrm{group}}.
-\]
-
-This separation prevents label-informed geometry from being described as purely self-supervised. Only the current fold-0 values bound to protocol-v2 hashes enter the submission; earlier anchor-cosine, classifier, temporal, laterality, AnchorGuard, forecasting, and repair values remain archived. No model-performance number should enter the submission without its supporting artifact and claim-ledger entry.
-
-## Required source-grouped protocol
-
-1. Canonicalize YouTube IDs before splitting. Treat the source video as the minimum independent unit; no source may cross outer train, validation, and test partitions.
-2. Build a versioned split registry once. Approximately stratify by manifest group while balancing source and sequence counts. Because the smallest groups contain only 10--11 metadata-public sources, prefer repeated grouped outer splits or stratified group cross-validation to a single favorable split.
-3. Fit normalization, imputation, quality thresholds, augmentation choices, the full encoder curriculum, and every downstream readout using outer-training data only. Use grouped validation data for all selection. Keep outer test labels sealed until the pipeline is frozen.
-4. Retrain the complete pipeline for every outer fold and random seed. A probe split applied after the encoder saw all sources is descriptive in-corpus readability, not held-out generalization.
-5. Report source-level as well as sequence-level results, equal-source weighting, source-cluster uncertainty, fold/seed dispersion, attrition, and all deviations from the registered split.
-
-The minimum evidence package should cover:
-
-|Question|Required endpoint or control|
-|---|---|
-|Did continual training preserve normal-gait function?|Held-out-normal JEPA/perturbation task, equal-source weighting, cluster uncertainty|
-|Did the representation change beyond a coordinate rotation?|Orthogonal Procrustes plus linear CKA or another alignment-aware comparison|
-|Is any change specific to the curriculum?|Continued-normal, joint-training, order, and multi-seed controls|
-|Do features transfer to unseen sources?|Fold-local encoder retraining and source-held-out readouts|
-|Is apparent signal a pose artifact?|Raw-pose, untrained-encoder, missingness/coverage, and extraction-version controls|
-|Did labels shape the embedding?|Label-free primary versus label-aware ablation, reported separately|
-
-## Execution status and provenance requirements
-
-The current fold-0 execution is reproducible from local protocol-v2 artifacts; folds 1--4 and additional seeds remain incomplete. Predictive surprise is correctly blocked because no separately future-mask-trained checkpoint exists. Every additional run must emit a machine-readable manifest containing:
-
-- manifest hashes and the dated availability snapshot;
-- raw, metadata-public, decode-valid, and pose-QC counts;
-- exact source-grouped split assignments and seed;
-- code revision, environment, pose-model version, and configuration;
-- parent-checkpoint lineage and feature hashes;
-- per-source predictions, uncertainty inputs, checkpoints, and logs; and
-- a claim ledger mapping each manuscript value to its artifact.
-
-![Worked fold-0 protocol execution; not a cross-fold estimate.](../../docs/figures/bbfm_protocol_execution.png)
-
-## Limitations and ethics that must remain visible
-
-- Source-video grouping is not person grouping. GAVD does not provide a verified identity key, so the same individual could appear in multiple videos.
-- Manifest folder labels are dataset annotations, not diagnoses made or validated by this project.
-- YouTube footage is opportunistic and may confound condition labels with camera, clothing, mobility aids, demographics, editing, or pose-estimation failures.
-- Public accessibility does not by itself establish consent for every downstream use. Video availability and reuse permissions can change.
-- Pose trajectories can remain identifying even when RGB frames are not redistributed. Release decisions need a documented ethics/data-use review, retention and takedown procedures, and a re-identification risk assessment.
-- The work is methodological and exploratory. It must not be presented as a diagnostic, treatment, surveillance, or deployment-ready system.
-
-## Readiness assessment
-
-|Area|Status|
-|---|---|
-|Workshop fit|Strong: movement representation, continual learning, evaluation, and reproducibility|
-|Dated metadata census|Ready, with the narrow "metadata-public" definition|
-|Leakage-aware protocol|Specified in the manuscript|
-|Held-out model evidence|One fold/seed complete; multi-fold estimate pending|
-|Clinical claims|Out of scope and unsupported|
-|Ethics/data-use review|Must be completed and documented before release|
-|Page-limit/build verification|Verified: five main-text pages plus appendix/references|
-
-## Pre-submission checklist
-
-1. Keep the worked fold explicitly labeled as an execution audit; do not imply a cross-fold estimate.
-2. Keep the primary model label-free; identify the group-loss condition as a supervised ablation everywhere.
-3. Recheck live metadata immediately before freezing the submission and date the snapshot.
-4. Rebuild with the provided BrainBodyFM/NeurIPS 2026 style and confirm no more than five main-text pages, excluding references and appendices.
-5. Confirm double-blind anonymization in both visible content and PDF metadata.
-6. Inspect every PDF page at actual size and verify that tables, equations, references, and links render correctly.
-7. Record the institutional ethics/data-use determination and retain the limitations above.
+New architecture changes, pilot preprocessing fixes, or forecasting experiments would create new evidence. They should not inherit the current scores without rerunning the affected pipeline. The completed laterality results can support the present paper while these broader experiments remain follow-up work.

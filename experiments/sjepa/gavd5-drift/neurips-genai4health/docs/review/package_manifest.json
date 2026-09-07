@@ -1,78 +1,91 @@
 [
   {
-    "bundle": "genai4health_numerical_supplement.zip",
-    "sha256": "784f942a1ebbbd3370dddea6fc21bc2ba6727a5b159691a01c48eb3cc33d4496",
-    "files": [
-      {
-        "path": "numerical_supplement/README.md",
-        "sha256": "5a7e107c05c1ff18dc2036473eabda4260406af5dd402105e37254a7eb9fbd78"
-      },
-      {
-        "path": "numerical_supplement/verify.py",
-        "sha256": "d6642df9a79012facdeeb83cf962f36b3b0781df21dc0c8a1541fe88d199c60d"
-      },
-      {
-        "path": "numerical_supplement/test_source_predictions.csv",
-        "sha256": "9c6218af5cdd0c7f95f42b2392fc7cfc7c184ee08887d0aad8e54e748b66c359"
-      },
-      {
-        "path": "numerical_supplement/normal_validation_weighting.csv",
-        "sha256": "a7e2ef0e60739a299b5311a4e97a9cacdd35c0135c82c84f4152f2b0a88a8368"
-      },
-      {
-        "path": "numerical_supplement/provenance.json",
-        "sha256": "436e942600646a35e33c0a9d09e6778e6a6f1b8314c5b8b546ef85dc3e9c66c1"
-      }
-    ]
-  },
-  {
     "bundle": "genai4health_position_source.zip",
-    "sha256": "abc927377476df1fd0c14cededeba54589e2710317e90fe7c7bb37862ca06b2d",
+    "sha256": "34c6328d6299247e91a3a21ab56bae25866a75c9ddc4ff2dd90349fe4fa8ef78",
     "files": [
       {
         "path": "genai4health_paper_draft.tex",
-        "sha256": "bef76667f7fe310e760e031ba892ed474ac05e88b8b1a4c2bf020e642679f36a"
+        "sha256": "86ae62ceea44c01d1a732a606a1b4d3390b6b3f88ec4511d7eb3a8e7cae75dba"
       },
       {
         "path": "genai4health_paper_draft.pdf",
-        "sha256": "d582dcbb58ef74e6e605408162d852b1ba3d42d00b935bc2ec79efe4aaab3a17"
+        "sha256": "5eec189079ee67c7478153b1df1ab22ccd2d361907b41e0f11a872bc8ec9abbe"
       },
       {
         "path": "references.bib",
-        "sha256": "6f738d92f2952da0ad139695fb4db95c9a1cd90bb4e017621a889f8170254eb6"
+        "sha256": "333bbeb60c312be1b0f45eff32a5b5302d6a57d208e0c2e04c08210f5dce8fb6"
       },
       {
         "path": "neurips_2026.sty",
-        "sha256": "c5287da23f9bd6b76c74f70360d977b4ea63c880297cadbe1d805f8a49d7bf86"
+        "sha256": "c3fc2894e83d2517ca18b66741d6c595986d97957dc08ec08bb2125a7ec4555a"
       },
       {
-        "path": "figures/audited_findings.pdf",
-        "sha256": "a96b06ce52f884ea1a859d26609e6cf8d7a7379da28417695932a1e133817533"
+        "path": "figures/weighting_comparison.pdf",
+        "sha256": "f5693016bf0d3b2da8bda72b79bfe6df21a41158bd8e9c4648ac32699163e6d1"
+      }
+    ],
+    "generated_notice": "LOCAL_REVIEW_STATUS.txt",
+    "status": "Local review artifact; not submitted and not approved for public release.",
+    "permission_sensitive_source_records": false,
+    "source_record_release_approved": false,
+    "companion_not_an_independent_submission": false
+  },
+  {
+    "bundle": "genai4health_companion_source.zip",
+    "sha256": "a9601f7df1f6b6a7016641633574ca02b7d58d51489c3a12a66714b66f56085a",
+    "files": [
+      {
+        "path": "genai4health_extended_abstract.tex",
+        "sha256": "023ee98b2a95e4605c021cd3885a443f0b0310a13ec6e54e5b6e384c1a43f3c5"
       },
       {
-        "path": "figures/source_weighting_and_drift.pdf",
-        "sha256": "045fdecca2c0729fa99d314351c436babe4d2e198ba7caace083cf0ef1375de8"
+        "path": "genai4health_extended_abstract.pdf",
+        "sha256": "6c01a62573c19cf8b93fa6723ff24a480c3317a756c5950076eecb3543cbe665"
       },
+      {
+        "path": "references.bib",
+        "sha256": "333bbeb60c312be1b0f45eff32a5b5302d6a57d208e0c2e04c08210f5dce8fb6"
+      },
+      {
+        "path": "neurips_2026.sty",
+        "sha256": "c3fc2894e83d2517ca18b66741d6c595986d97957dc08ec08bb2125a7ec4555a"
+      }
+    ],
+    "generated_notice": "LOCAL_REVIEW_STATUS.txt",
+    "status": "Local review artifact; not submitted and not approved for public release.",
+    "permission_sensitive_source_records": false,
+    "source_record_release_approved": false,
+    "companion_not_an_independent_submission": true
+  },
+  {
+    "bundle": "genai4health_numerical_supplement.zip",
+    "sha256": "2130773c2eb1458f81cafb01d4c194ee1d030624415c1701d85b667d51c3cca5",
+    "files": [
       {
         "path": "numerical_supplement/README.md",
-        "sha256": "5a7e107c05c1ff18dc2036473eabda4260406af5dd402105e37254a7eb9fbd78"
+        "sha256": "b45bff1cbed1c1950e65972222ba80f83a509e7af7efb87a86306d0247bd07a6"
       },
       {
         "path": "numerical_supplement/verify.py",
-        "sha256": "d6642df9a79012facdeeb83cf962f36b3b0781df21dc0c8a1541fe88d199c60d"
+        "sha256": "5562e7826afab6f82c13149973907cb25af47de0e1a739e3bf0c90718fb10132"
       },
       {
         "path": "numerical_supplement/test_source_predictions.csv",
-        "sha256": "9c6218af5cdd0c7f95f42b2392fc7cfc7c184ee08887d0aad8e54e748b66c359"
+        "sha256": "4cb2de67c3bf479b0cc403f499a5d788f86a5c47157289ffdb9b15e8e1160334"
       },
       {
         "path": "numerical_supplement/normal_validation_weighting.csv",
-        "sha256": "a7e2ef0e60739a299b5311a4e97a9cacdd35c0135c82c84f4152f2b0a88a8368"
+        "sha256": "b8798c2e59c894ddab1ccab60406f526bf66a4455fa6768c2d440d140e8c7c3c"
       },
       {
         "path": "numerical_supplement/provenance.json",
-        "sha256": "436e942600646a35e33c0a9d09e6778e6a6f1b8314c5b8b546ef85dc3e9c66c1"
+        "sha256": "ea737a9c86d8b81ac27bd72f33df6bd6e6007a35e752ff7765409d89355fabf2"
       }
-    ]
+    ],
+    "generated_notice": "LOCAL_REVIEW_STATUS.txt",
+    "status": "Local review artifact; not submitted and not approved for public release.",
+    "permission_sensitive_source_records": true,
+    "source_record_release_approved": false,
+    "companion_not_an_independent_submission": false
   }
 ]
