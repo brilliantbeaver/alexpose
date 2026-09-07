@@ -42,6 +42,36 @@ def code(source: str):
     return new_code_cell(dedent(source).strip(), execution_count=None, outputs=[])
 
 
+def expand_inline_svg_cells(cells: list) -> list:
+    """Render inline SVG through the notebook MIME renderer, not Markdown HTML."""
+    expanded = []
+    for cell in cells:
+        source = str(cell.source)
+        if cell.cell_type != "markdown" or "<svg" not in source:
+            expanded.append(cell)
+            continue
+        if source.count("<svg") != 1 or source.count("</svg>") != 1:
+            raise ValueError("Each illustrated Markdown cell must contain exactly one SVG")
+        start = source.index("<svg")
+        end = source.index("</svg>", start) + len("</svg>")
+        before = source[:start].rstrip()
+        svg = source[start:end]
+        after = source[end:].lstrip()
+        if '\"\"\"' in svg:
+            raise ValueError("Inline SVG cannot contain a Python triple-quoted delimiter")
+        if before:
+            expanded.append(new_markdown_cell(before))
+        expanded.append(
+            code(
+                f'from IPython.display import SVG, display\n\n'
+                f'display(SVG(r\"\"\"{svg}\"\"\"))'
+            )
+        )
+        if after:
+            expanded.append(new_markdown_cell(after))
+    return expanded
+
+
 def bootstrap_cell():
     """Fresh-kernel bootstrap that works from the repo, suite, or a descendant."""
     return code(
@@ -950,6 +980,10 @@ NOTEBOOKS = {
             | 2 | 74 | 19 | 553 | 72 | 2 / 6 / 6 / 1 / 4 |
             | 3 | 75 | 18 | 548 | 77 | 1 / 6 / 6 / 2 / 3 |
             | 4 | 75 | 18 | 520 | 105 | 2 / 6 / 5 / 2 / 3 |
+
+            The canonical numeric reference, including the full annotation census,
+            inner-fold ranges, and machine-readable artifact links, is
+            `docs/TRAIN_TEST_SPLIT.md`.
 
             Here CP abbreviates `cerebralpalsy`, M `myopathic`, N `normal`, P
             `parkinsons`, and S `stroke`. The abbreviations are only table space-savers.
@@ -2326,7 +2360,9 @@ NOTEBOOKS = {
 
 
 def build_notebook(filename: str, cells: list) -> Path:
-    notebook = new_notebook(cells=cells, metadata=KERNEL_METADATA.copy())
+    notebook = new_notebook(
+        cells=expand_inline_svg_cells(cells), metadata=KERNEL_METADATA.copy()
+    )
     stem = filename.removesuffix(".ipynb").replace("_", "-")
     for index, cell in enumerate(notebook.cells):
         cell["id"] = f"{stem[:48]}-{index:02d}"

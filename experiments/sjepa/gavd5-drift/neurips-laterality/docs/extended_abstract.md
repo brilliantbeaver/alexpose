@@ -24,7 +24,7 @@ The GAVD inventory contains 666 annotation files for 103 source videos. A matchi
 | 3 | 75 | 18 | 548 | 77 |
 | 4 | 75 | 18 | 520 | 105 |
 
-Sequence counts vary because videos contribute different numbers of sequences, and every source video is tested exactly once.
+Sequence counts vary because videos contribute different numbers of sequences, and every source video is tested exactly once. The annotation census, inner-fold ranges, and persisted-artifact links are maintained in the [canonical split reference](TRAIN_TEST_SPLIT.md).
 
 ## Training, validation, and evaluation
 

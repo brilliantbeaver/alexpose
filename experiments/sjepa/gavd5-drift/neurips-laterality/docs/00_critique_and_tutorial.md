@@ -73,6 +73,10 @@ In each outer fold, about 80% of the source videos train the encoder and fit the
 | 3 | 75 | 18 | 548 | 77 |
 | 4 | 75 | 18 | 520 | 105 |
 
+The annotation-by-annotation cohort census, extraction-generation provenance,
+inner-fold ranges, and artifact links are collected in the
+[canonical split reference](TRAIN_TEST_SPLIT.md).
+
 The source counts are almost equal, while the sequence counts vary. This is expected because some videos produce many more sequences than others. Equalizing sequences would require breaking or distorting the source-level split, so the design prioritizes leakage prevention and balances source videos instead.
 
 There is no permanent test set. Fold 0 is tested while folds 1–4 train, then fold 1 is tested while the others train, and so on. Every source video is tested exactly once. The final out-of-fold prediction table therefore contains one held-out prediction for every eligible sequence.

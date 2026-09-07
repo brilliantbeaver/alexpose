@@ -2,6 +2,12 @@
 
 This directory contains the new held-out-source-video workflow. The top-level legacy notebooks remain historical evidence and are not imported.
 
+The registered GAVD cohort contains **93 source videos and 625 accepted pose
+sequences**. Five source-level outer folds use 74–75 sources (436–553 sequences)
+for training and 18–19 sources (72–189 sequences) for testing. See the
+[canonical split reference](docs/TRAIN_TEST_SPLIT.md) for every fold, the
+annotation census, inner-validation counts, and leakage controls.
+
 ## Run order
 
 1. `00_protocol_and_governance.ipynb` — freeze the claim and check submission governance.
@@ -49,7 +55,7 @@ Run notebooks in numeric order. A complete paper profile trains 5 folds × 5 see
 
 Default artifacts are nested under a protocol-digest directory, so a methodology revision cannot overwrite or silently reuse an older run. Existing pre-v2.1 paper artifacts remain untouched but are not valid evidence for the strengthened estimands.
 
-See `RUNBOOK.md` for the staged execution plan, current verification status, real-data dry-audit command, and the exact boundaries between compute, evidence, and submission readiness.
+See `RUNBOOK.md` for the staged execution plan, current verification status, real-data dry-audit command, and the exact boundaries between compute, evidence, and submission readiness. Split counts and semantics are maintained in [`docs/TRAIN_TEST_SPLIT.md`](docs/TRAIN_TEST_SPLIT.md).
 
 Generated artifacts are excluded from git. Every checkpoint and result records the protocol digest, cohort digest, source IDs, fold, seed, and variant. Run `uv run python neurips-laterality/scripts/verify_suite.py` for the lightweight test and notebook-structure checks.
 

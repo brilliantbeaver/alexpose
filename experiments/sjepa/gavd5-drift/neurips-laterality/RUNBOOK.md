@@ -23,6 +23,20 @@ The command validates the locked annotation/pose inventories, extraction provena
 
 Verified on 2026-09-04: 666 annotation files, 642 derived-pose archives, 625 eligible sequences, 93 eligible source videos, five source-disjoint outer folds, and four source-disjoint inner readout folds per outer fold. Re-run it after any authorized data change; an inventory change should fail until the protocol is deliberately revised and versioned.
 
+The registered outer-fold counts are:
+
+| Fold | Training sources | Training sequences | Test sources | Test sequences |
+|---:|---:|---:|---:|---:|
+| 0 | 74 | 436 | 19 | 189 |
+| 1 | 74 | 443 | 19 | 182 |
+| 2 | 74 | 553 | 19 | 72 |
+| 3 | 75 | 548 | 18 | 77 |
+| 4 | 75 | 520 | 18 | 105 |
+
+See [`docs/TRAIN_TEST_SPLIT.md`](docs/TRAIN_TEST_SPLIT.md) for the annotation
+census, inner-fold ranges, exact interpretation, and machine-readable artifact
+links.
+
 ## Gate 3 — Software and notebook integration
 
 Run:
