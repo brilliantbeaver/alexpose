@@ -499,6 +499,21 @@ class NotebookTaskProgress:
         self.active = None
         self._publish(force=True)
 
+    def skip_unit(self, reason: str) -> None:
+        """Account for one optional unit without claiming it was computed."""
+
+        active = dict(self.active or {})
+        self.completed_units = min(self.completed_units + 1, self.total_units)
+        self.skipped_units += 1
+        self.status = "Optional stage not run"
+        self.skipped_reason = str(reason)
+        active["skipped"] = True
+        active["skip_reason"] = str(reason)
+        active["duration_seconds"] = 0.0
+        self.last_completed = active
+        self.active = None
+        self._publish(force=True)
+
     def complete(self, *, status: str = "Complete") -> None:
         self.completed_units = self.total_units
         self.status = str(status)
@@ -641,11 +656,22 @@ class NotebookTaskProgress:
 
         last_html = ""
         if self.last_completed and not self.active:
-            action = "validated and reused" if self.last_completed.get("reused") else "completed"
+            action = (
+                "skipped"
+                if self.last_completed.get("skipped")
+                else "validated and reused"
+                if self.last_completed.get("reused")
+                else "completed"
+            )
             last_html = (
                 "<div style='margin-top:8px;color:#475569'>Last "
                 f"{escape(self.unit_name)}: {escape(str(self.last_completed.get('label', '')))} "
-                f"— {action} in {_duration(self.last_completed.get('duration_seconds'))}.</div>"
+                f"— {action}"
+                + (
+                    ".</div>"
+                    if self.last_completed.get("skipped")
+                    else f" in {_duration(self.last_completed.get('duration_seconds'))}.</div>"
+                )
             )
 
         message_html = ""

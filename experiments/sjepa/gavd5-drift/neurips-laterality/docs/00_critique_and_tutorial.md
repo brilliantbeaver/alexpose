@@ -107,6 +107,14 @@ $$
 
 The two variants use matched initialization and training randomness wherever possible so their difference isolates the reflection-augmentation recipe more cleanly. Each checkpoint records the sources it was allowed to see and the test sources it was forbidden to see. A mismatch stops the pipeline rather than reusing an incompatible model.
 
+Each registered encoder runs for 300 epochs. With 74 or 75 outer-training
+sources and a batch size of 20, the fixed source-balanced epoch contains four
+optimizer updates. The per-encoder budget is therefore 300 × 4 = 1,200 updates,
+or 24,000 sampled sequence positions. Notebook 08 reuses that update count for
+its optional masking comparison to control optimizer exposure, while documenting
+the training-schedule differences in the
+[matched-budget parameter reference](MATCHED_BUDGET_MASKING.md).
+
 ## 9. How is testing performed?
 
 Notebook 04 loads one fold-local encoder at a time. It extracts features for the outer-training and outer-test sequences, but it fits the read-out only with outer-training targets. The four inner folds select the ridge penalty. The fitted read-out then produces predictions for the untouched outer-test sources.
