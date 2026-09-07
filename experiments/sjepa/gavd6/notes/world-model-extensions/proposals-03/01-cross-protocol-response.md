@@ -1,5 +1,7 @@
 # Proposal 1: Cross-Protocol Perturbation Response Prediction
 
+See the [expanded study protocol](../../cross-protocol-perturbation-response/README.md) for the complete abstract, introduction, methodology, and experimental plan.
+
 ## The idea in one sentence
 
 Give a predictive gait model the person's motion just before a known disturbance, plus the disturbance direction, size, and gait phase, and ask it to forecast the range of recovery motions that follows.
