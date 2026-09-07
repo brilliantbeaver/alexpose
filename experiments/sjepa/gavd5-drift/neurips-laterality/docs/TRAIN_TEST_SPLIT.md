@@ -31,6 +31,14 @@ provenance categories, not separate train/test strata. Some source-video IDs
 occur in more than one generation, so generation-specific distinct-source
 counts must not be added to obtain the 93-source cohort total.
 
+This extraction-generation label is distinct from the archive metadata schema.
+A cache carrying the `gavd5_pose_v3_split_provenance` schema was refreshed to
+attach split provenance without recomputing its pose coordinates; its required
+`cache_origin_version` records which of the three generations actually produced
+the tensor. Absolute `source_csv` strings likewise record the extraction host
+and may use Windows or POSIX separators. Validation compares only the terminal
+condition directory and annotation filename, not the host-specific path prefix.
+
 ## Five outer train/test folds
 
 The 93 sources are assigned to five stratified outer folds. For a given fold,

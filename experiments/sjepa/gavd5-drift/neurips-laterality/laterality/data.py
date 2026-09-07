@@ -5,7 +5,7 @@ import os
 import tempfile
 from collections import Counter
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 
 import numpy as np
@@ -14,6 +14,9 @@ import pandas as pd
 from .artifacts import atomic_write_json, initialize_artifact_root, sha256_file
 from .config import ExperimentContext, model_config
 from .geometry import anatomical_mirror, missingness_feature, paired_valid_target, prepare_pose
+
+
+SPLIT_PROVENANCE_SCHEMA_VERSION = "gavd5_pose_v3_split_provenance"
 
 
 @dataclass(frozen=True)
@@ -42,6 +45,24 @@ class PreparedCohort:
     def targets(self) -> np.ndarray:
         return self.table["target"].to_numpy(dtype=np.float64)
 
+    @property
+    def scientific_content_digest(self) -> str:
+        """Fingerprint every cohort input used by training or evaluation.
+
+        Unlike ``cohort_digest``, this deliberately excludes the container-file
+        SHA-256.  It is used only to review an explicit compatibility exception
+        when a metadata-only NPZ rewrite changed archive bytes while preserving
+        all scientific inputs.
+        """
+
+        return _scientific_cohort_digest(
+            self.table,
+            self.model_xyz,
+            self.model_valid,
+            self.pair_contrasts,
+            self.missingness,
+        )
+
 
 def _scalar(archive: Any, key: str) -> Any:
     if key not in archive.files:
@@ -50,6 +71,57 @@ def _scalar(archive: Any, key: str) -> Any:
     if value.ndim != 0:
         raise ValueError(f"Pose archive field {key!r} must be scalar")
     return value.item()
+
+
+def _portable_provenance_path(value: str, *, archive_path: Path) -> PurePosixPath:
+    """Parse a stored path independently of the operating system reading it.
+
+    Pose caches are transferable artifacts, so an absolute path recorded by the
+    extraction host is provenance text rather than a path to dereference on the
+    current host.  ``pathlib.Path`` only recognizes the current OS separator;
+    normalize Windows separators before inspecting the filename and parent.
+    """
+
+    normalized = value.replace("\\", "/")
+    parsed = PurePosixPath(normalized)
+    if not value or parsed.name in {"", ".", ".."} or parsed.parent == parsed:
+        raise ValueError(f"Malformed source_csv provenance in {archive_path}")
+    return parsed
+
+
+def _extraction_provenance_versions(
+    archive: Any,
+    *,
+    archive_path: Path,
+) -> tuple[str, str]:
+    """Return (archive schema, scientific extraction generation).
+
+    The split-provenance refresh rewrites metadata without recomputing pose
+    coordinates.  Its schema label therefore must not replace the extraction
+    generation preserved in ``cache_origin_version``.
+    """
+
+    schema_version = str(_scalar(archive, "extraction_version"))
+    has_origin = "cache_origin_version" in archive.files
+    if schema_version == SPLIT_PROVENANCE_SCHEMA_VERSION:
+        if not has_origin:
+            raise ValueError(
+                f"Pose archive {archive_path} uses {schema_version!r} but is missing "
+                "'cache_origin_version'"
+            )
+        origin_version = str(_scalar(archive, "cache_origin_version"))
+        if not origin_version or origin_version == SPLIT_PROVENANCE_SCHEMA_VERSION:
+            raise ValueError(
+                f"Pose archive {archive_path} has invalid cache_origin_version "
+                f"{origin_version!r}"
+            )
+        return schema_version, origin_version
+    if has_origin:
+        raise ValueError(
+            f"Pose archive {archive_path} stores 'cache_origin_version' under "
+            f"unexpected schema {schema_version!r}"
+        )
+    return schema_version, schema_version
 
 
 def load_real_pose_records(
@@ -125,6 +197,7 @@ def load_real_pose_records(
     records: list[PoseRecord] = []
     seen_sequences: set[str] = set()
     extraction_versions: Counter[str] = Counter()
+    archive_schema_versions: Counter[str] = Counter()
     provenance = data_config["extraction_provenance"]
     for condition in condition_order:
         if not (pose_root / condition).is_dir():
@@ -140,7 +213,9 @@ def load_real_pose_records(
                 stored_condition = str(_scalar(archive, "condition"))
                 fps = float(_scalar(archive, "fps"))
                 source_csv = str(_scalar(archive, "source_csv"))
-                extraction_version = str(_scalar(archive, "extraction_version"))
+                archive_schema_version, extraction_version = (
+                    _extraction_provenance_versions(archive, archive_path=path)
+                )
                 pose_model = str(_scalar(archive, "pose_model"))
                 pose_model_sha256 = str(_scalar(archive, "pose_model_sha256"))
                 stored_visibility_threshold = float(
@@ -157,9 +232,15 @@ def load_real_pose_records(
                 raise ValueError(
                     f"Archive video_id disagrees with official annotation id in {path}"
                 )
-            if sequence_id != path.stem or Path(source_csv).name != f"{path.stem}.csv":
-                raise ValueError(f"Archive/annotation sequence provenance mismatch in {path}")
-            if Path(source_csv).parent.name != condition:
+            source_csv_path = _portable_provenance_path(source_csv, archive_path=path)
+            if sequence_id != path.stem:
+                raise ValueError(f"Archive sequence_id/filename mismatch in {path}")
+            if source_csv_path.name != f"{path.stem}.csv":
+                raise ValueError(
+                    f"Archive source_csv/annotation filename mismatch in {path}: "
+                    f"stored {source_csv_path.name!r}"
+                )
+            if source_csv_path.parent.name != condition:
                 raise ValueError(f"Archive source_csv condition mismatch in {path}")
             if pose_model != provenance["pose_model"]:
                 raise ValueError(f"Unexpected pose model in {path}")
@@ -176,6 +257,7 @@ def load_real_pose_records(
                 raise ValueError(f"Duplicate sequence_id {sequence_id}")
             seen_sequences.add(sequence_id)
             extraction_versions[extraction_version] += 1
+            archive_schema_versions[archive_schema_version] += 1
             records.append(
                 PoseRecord(
                     sequence_id=sequence_id,
@@ -196,7 +278,9 @@ def load_real_pose_records(
     }
     if dict(sorted(extraction_versions.items())) != dict(sorted(expected_versions.items())):
         raise RuntimeError(
-            "Pose extraction-version census differs from the locked provenance contract"
+            "Pose extraction-generation census differs from the locked provenance "
+            f"contract: observed {dict(sorted(extraction_versions.items()))!r}; "
+            f"expected {dict(sorted(expected_versions.items()))!r}"
         )
     audit = {
         **observed_contract,
@@ -204,6 +288,9 @@ def load_real_pose_records(
         "official_source_videos": len(set(annotation_sources.values())),
         "unexpected_pose_archives": len(unexpected),
         "extraction_version_counts": dict(sorted(extraction_versions.items())),
+        "archive_schema_version_counts": dict(
+            sorted(archive_schema_versions.items())
+        ),
         "pose_model": provenance["pose_model"],
         "pose_model_sha256": provenance["pose_model_sha256"],
     }
@@ -301,6 +388,44 @@ def _cohort_digest(
     order = table["sequence_id"].argsort(kind="stable").to_numpy()
     for values in (model_xyz[order], model_valid[order], pair_contrasts[order]):
         digest.update(np.ascontiguousarray(values).tobytes())
+    return digest.hexdigest()
+
+
+def _scientific_cohort_digest(
+    table: pd.DataFrame,
+    model_xyz: np.ndarray,
+    model_valid: np.ndarray,
+    pair_contrasts: np.ndarray,
+    missingness: np.ndarray,
+) -> str:
+    """Hash scientific cohort content independently of NPZ container metadata."""
+
+    digest = hashlib.sha256()
+    order = table["sequence_id"].argsort(kind="stable").to_numpy()
+    stable = table.iloc[order].reset_index(drop=True)
+    identity_and_counts = [
+        "sequence_id",
+        "video_id",
+        "condition",
+        "usable_pair_count",
+        "authorized_patch_count",
+        "raw_frame_count",
+        "extraction_version",
+    ]
+    digest.update(
+        stable[identity_and_counts].to_csv(index=False).encode("utf-8")
+    )
+    for values in (
+        stable[["target", "authorized_coverage"]].to_numpy(dtype=np.float64),
+        model_xyz[order],
+        model_valid[order],
+        pair_contrasts[order],
+        missingness[order],
+    ):
+        array = np.asarray(values)
+        digest.update(str(array.dtype).encode("ascii"))
+        digest.update(np.asarray(array.shape, dtype=np.int64).tobytes())
+        digest.update(np.ascontiguousarray(array).tobytes())
     return digest.hexdigest()
 
 

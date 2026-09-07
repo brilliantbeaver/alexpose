@@ -24,7 +24,12 @@ from .symmetry import (
     swap_token_joints,
     swap_token_validity,
 )
-from .training import implementation_digest, load_checkpoint, resolve_device
+from .training import (
+    apply_approved_lineage_compatibility,
+    implementation_digest,
+    load_checkpoint,
+    resolve_device,
+)
 
 
 EXPECTED_LANES: tuple[str, ...] = (
@@ -723,6 +728,7 @@ def evaluate_fold(
             "checkpoint_sha256": checkpoint_sha256,
             "model_state_digest": checkpoint["model_state_digest"],
         }
+        expected = apply_approved_lineage_compatibility(metadata, expected, cohort)
         if all(metadata.get(key) == value for key, value in expected.items()):
             if metadata.get("csv_sha256") != sha256_file(csv_path):
                 raise RuntimeError("Cached evaluation CSV is corrupt")

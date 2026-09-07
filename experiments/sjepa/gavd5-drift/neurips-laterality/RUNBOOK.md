@@ -19,9 +19,11 @@ Run:
 .venv/bin/python neurips-laterality/scripts/audit_real_data.py
 ```
 
-The command validates the locked annotation/pose inventories, extraction provenance, source mapping, paired-valid target invariants, QC attrition, and source-level outer/inner split feasibility. It writes no artifacts and creates no empirical result.
+The command validates the locked annotation/pose inventories, scientific extraction-generation provenance, archive-schema provenance, source mapping, paired-valid target invariants, QC attrition, and source-level outer/inner split feasibility. Stored `source_csv` values may come from Windows or POSIX extraction hosts; only their condition and annotation filename are identity claims. It writes no artifacts and creates no empirical result.
 
 Verified on 2026-09-04: 666 annotation files, 642 derived-pose archives, 625 eligible sequences, 93 eligible source videos, five source-disjoint outer folds, and four source-disjoint inner readout folds per outer fold. Re-run it after any authorized data change; an inventory change should fail until the protocol is deliberately revised and versioned.
+
+If a reviewed metadata-only cache migration changes `archive_sha256` values, existing checkpoints still fail closed unless `laterality/cohort_compatibility.json` contains an exact protocol-, split-, and cohort-specific alias whose scientific-content digest matches the loaded cohort. Never add a compatibility pair merely to bypass an error: first verify equality of accepted rows, coordinates, validity, targets, missingness, and source splits. Evaluation caches use the same gate, so an approved migration does not move the mismatch into the next notebook.
 
 The registered outer-fold counts are:
 

@@ -1,0 +1,13 @@
+{
+  "schema": "neurips_laterality_cohort_compatibility/v1",
+  "compatible_pairs": [
+    {
+      "checkpoint_cohort_digest": "28c164fae903b474eebc42b672cb4ace3a6073ddede630c47519309a310662a0",
+      "current_cohort_digest": "03f0c3bb9f0930ea2f2d7ada56e28a165464c869d583bf7a2146c10adf250a3f",
+      "protocol_digest": "6f7baefbda07c8e6899bc5fbb82b4651995b4b0089e0a1d1b36ae04480657088",
+      "split_digest": "0dd230e67d5eb583013ef6e4e295713d30e30799eea160adc8cb51b4db58eb1b",
+      "scientific_content_digest": "eb98b07164a974f5e7babda855aca06226047710ad5afc85ca63d7fa3d984bf1",
+      "reason": "Reviewed metadata-only pose-cache refresh: all 625 accepted rows, model coordinates, validity masks, pair contrasts, missingness features, sequence order, and source splits are byte-identical. Only 624 archive_sha256 values changed when NPZ containers were repacked to attach split provenance."
+    }
+  ]
+}
