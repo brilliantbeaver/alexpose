@@ -74,6 +74,9 @@ The 93 eligible source videos are divided into five stratified outer folds. In e
 | 3 | 75 | 18 | 548 | 77 |
 | 4 | 75 | 18 | 520 | 105 |
 
+The complete annotation census, inner-fold ranges, and links to the persisted
+split artifact are provided in the [canonical split reference](TRAIN_TEST_SPLIT.md).
+
 This is not one fixed 80/20 split. Each source is an outer-test source exactly once and an outer-training source in the other four folds, so combining the out-of-fold predictions yields one held-out prediction for every eligible sequence.
 
 ### 5.3 Four inner validation folds

@@ -47,6 +47,14 @@ Paper mode reconciles the official annotation inventory to the local derived-pos
 
 The split builder first collapses the cohort to one row per `video_id`, verifies that each source has one dataset annotation, and applies stratified K-fold to that source table. This avoids the sequence-balanced failure mode where one long video can stand in for an entire condition within a fold.
 
+The locked cohort contains 93 sources and 625 sequences. The five outer folds
+contain 74/436, 74/443, 74/553, 75/548, and 75/520 training
+sources/sequences for folds 0–4, respectively; their corresponding test counts
+are 19/189, 19/182, 19/72, 18/77, and 18/105. Every source and sequence is in
+exactly one outer test fold and in the other four outer training folds. The
+complete census and table are maintained in
+[`docs/TRAIN_TEST_SPLIT.md`](docs/TRAIN_TEST_SPLIT.md).
+
 Inner source folds are used only to select read-out regularization. The encoder uses a fixed, predeclared update budget on every outer-training source; neither laterality labels nor outer-test performance selects its stopping point.
 
 ## Training contract
@@ -72,10 +80,10 @@ Primary predictive inference computes source-balanced R² separately for every r
 
 For every held-out sequence and checkpoint, let (Z(x)) and (Z(Mx)) be target-encoder tokens. Let (S) apply the full 33-joint anatomical permutation while leaving latent channels unchanged. On exactly the tokens valid in both aligned views, the strict error is
 
-\[
+$$
 q=\frac{\lVert Z(Mx)-S Z(x)\rVert_C^2}
         {\lVert Z(Mx)\rVert_C^2+\lVert S Z(x)\rVert_C^2}.
-\]
+$$
 
 No channel fitting, Procrustes rotation, sign search, centering, or read-out is allowed. Zero is exact strict equivariance, unrelated equal-energy representations are near one, and a zero-energy collapse is rejected. Errors are formed per sequence and seed before source-balanced aggregation. The learned checkpoint is paired with its exact initial target encoder; vanilla and reflection-augmented variants must share that initialization for each fold and seed.
 

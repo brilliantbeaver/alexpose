@@ -121,9 +121,12 @@ Think deeply to propose a few other titles for this paper -- with a strong prefe
 
 Please consider alternative titles for me that is either more provocative, or more inspirational.
 
+For the title, ultrathink if the question can include "Self-Supervised Pose Representations" in addition to Pretraining?
+
 ---
 
-Carefully consider if we need to add a small Appendix section on our overall data processing pipeline and details of our S-JEPA setup.
+Carefully consider if we need to add a small Appendix section on our overall data processing pipeline and details of our S-JEPA setup, or some charts or graphics from our notebooks.  Only add if it would enhance our acceptance chance meaningfully to this NeurIPS workshop.
+
 
 ---
 
@@ -131,4 +134,4 @@ For a final pre-submission review of the entire paper, ultrathink on final edits
 
 ---
 
-For a final pre-submission review of the entire paper, ultrathink on final edits to make this paper more fluent, clearer and more grounded for the reader.  Carefully consider removing unnecessary details that obscures understanding for the workshop reviewer or participants, especially any reference to our local setup, our different versions of experiments, or any such details.  For decimals, make sure that we are referring to significant digits that are justifiable.
+For a final pre-submission review of the entire paper, ultrathink on what final edits to make this paper more fluent, clearer and more grounded for the reader.  Carefully consider removing unnecessary details that obscure understanding for this workshop's reviewers or participants, especially any reference to our local setup, our different versions of experiments, or any such details.  For decimals, make sure that we are referring to significant digits that are justifiable.

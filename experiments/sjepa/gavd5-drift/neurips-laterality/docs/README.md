@@ -8,6 +8,8 @@ The current title is *Auditing Reflection Symmetry in Self-Supervised Skeleton R
 - [extended_abstract.md](extended_abstract.md) and [extended_abstract.pdf](extended_abstract.pdf): the shorter workshop version.
 - [one_pager.md](one_pager.md): a concise explanation for workshop discussion.
 - [00_critique_and_tutorial.md](00_critique_and_tutorial.md): the detailed guide to the target, split, probes, and interpretation.
+- [TRAIN_TEST_SPLIT.md](TRAIN_TEST_SPLIT.md): the canonical numeric GAVD cohort,
+  outer train/test folds, inner validation ranges, and leakage guarantees.
 - [figures/README.md](figures/README.md): figure provenance and regeneration instructions.
 
 The two Markdown manuscripts are now the editable sources. Their YAML headers supply the title and abstract, and citations resolve against the existing shared bibliography at `../../docs/references.bib`. Generate the corresponding TeX and PDFs with:
