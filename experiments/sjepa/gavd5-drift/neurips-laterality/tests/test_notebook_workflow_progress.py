@@ -74,6 +74,28 @@ class NotebookTaskProgressTests(unittest.TestCase):
         self.assertIn("optional study was not configured", rendered)
         self.assertIn("#b7791f", rendered)
 
+    def test_optional_unit_can_be_skipped_before_later_work(self):
+        progress = NotebookTaskProgress("Tutorial", "stage")
+        progress._publish = Mock()  # type: ignore[method-assign]
+        progress.start(3)
+        progress.start_unit(1, "default demonstration")
+        progress.complete_unit(duration_seconds=1.0)
+        progress.start_unit(2, "optional control")
+        progress.skip_unit("control switch is disabled")
+
+        self.assertEqual(progress.completed_units, 2)
+        self.assertEqual(progress.computed_units, 1)
+        self.assertEqual(progress.skipped_units, 1)
+        self.assertFalse(progress.finished)
+        self.assertAlmostEqual(progress._progress_fraction(), 2 / 3)
+        self.assertIn("Optional stage not run", progress.as_html())
+        self.assertIn("— skipped", progress.as_html())
+
+        progress.start_unit(3, "summary")
+        progress.complete_unit(duration_seconds=1.0)
+        progress.complete(status="Tutorial complete")
+        self.assertEqual(progress._progress_fraction(), 1.0)
+
     def test_terminal_block_can_account_for_an_unrunnable_check(self):
         progress = NotebookTaskProgress("External gate", "check")
         progress._publish = Mock()  # type: ignore[method-assign]

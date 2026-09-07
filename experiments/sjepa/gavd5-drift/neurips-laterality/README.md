@@ -18,6 +18,40 @@ annotation census, inner-validation counts, and leakage controls.
 6. `05_aggregate_statistics.ipynb` — compute per-checkpoint gates, matched controls, and source bootstraps.
 7. `06_external_subject_gate.ipynb` — validate—but do not execute—an optional subject-indexed external cohort contract.
 
+## Research continuation: notebooks 07–10
+
+The [research directions and rationale](RESEARCH_DIRECTIONS.md) connect the
+completed results to four new step-by-step tutorials:
+
+8. [07 — Research questions and diagnostics](07_research_questions_and_diagnostics.ipynb): review the actual findings, examine temporal pooling, and optionally compare the processed inputs with the original target.
+9. [08 — Matched-budget masking](08_matched_budget_masking.ipynb): compare gait-informed and uniform prediction targets while hiding the same number of valid tokens. The real grid uses available MPS/CUDA acceleration and validates exact cached results before reuse. Its [parameter reference](docs/MATCHED_BUDGET_MASKING.md) explains the 1,200-update budget, full and pilot scopes, runtime design, and every visible setting.
+10. [09 — Symmetry-aware JEPA](09_symmetry_aware_jepa.ipynb): compare augmentation with an explicit reflection loss, retaining prediction and feature-variation checks.
+11. [10 — Past-only movement prediction](10_past_only_movement_prediction.ipynb): build timestamp-aware forecasting with leakage tests and simple motion baselines.
+
+Their default training uses synthetic examples only. Real-data training requires
+an explicit opt-in, and all new results are exploratory. Notebook 07 can read
+available saved aggregate results without training. These additions do not
+change the completed protocol, existing notebooks, or checkpoint implementation.
+Their helper code is isolated under `laterality_extensions/`.
+
+```bash
+.venv/bin/python neurips-laterality/scripts/verify_research_notebooks.py --execute-smoke --save-executed
+```
+
+This separate checker runs the extension tests and fresh-kernel demonstrations.
+It can save executed review copies and vector graphics under
+`executed/research_extensions/`; canonical notebooks stay output-free. Editable
+tutorial sources live in `tutorials/`, and `scripts/build_research_notebooks.py`
+regenerates only 07–10. The original builder and execution workflow below still
+cover 00–06.
+
+For whether to extend Notebook 06, see the [external evaluation assessment](docs/external_evaluation_assessment.md).
+It recommends choosing a useful independent outcome and compatible dataset
+before building an actual subject-held-out evaluation, while preserving the
+current readiness check.
+
+## Running the registered workflow (00–06)
+
 The notebooks default to `LATERALITY_PROFILE=smoke`. Paper runs must be requested explicitly:
 
 ```bash
