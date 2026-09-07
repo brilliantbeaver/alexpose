@@ -40,6 +40,9 @@ ProgressCallback = Callable[[dict[str, Any]], None]
 _IMPLEMENTATION_COMPATIBILITY_PATH = (
     Path(__file__).resolve().parent / "checkpoint_compatibility.json"
 )
+_COHORT_COMPATIBILITY_PATH = (
+    Path(__file__).resolve().parent / "cohort_compatibility.json"
+)
 
 
 def implementation_digest() -> str:
@@ -79,6 +82,84 @@ def _approved_implementation_compatibility() -> set[tuple[str, str]]:
             raise RuntimeError("Malformed implementation digest in compatibility pair")
         approved.add((checkpoint_digest, current_digest))
     return approved
+
+
+def _approved_cohort_compatibility() -> dict[tuple[str, str, str, str], str]:
+    """Return narrowly reviewed lineage aliases and their scientific digest."""
+
+    try:
+        payload = json.loads(_COHORT_COMPATIBILITY_PATH.read_text())
+    except FileNotFoundError:
+        return {}
+    if payload.get("schema") != "neurips_laterality_cohort_compatibility/v1":
+        raise RuntimeError("Unsupported cohort compatibility manifest")
+    pairs = payload.get("compatible_pairs")
+    if not isinstance(pairs, list):
+        raise RuntimeError("Cohort compatibility manifest has no pair list")
+    approved: dict[tuple[str, str, str, str], str] = {}
+    required = {
+        "checkpoint_cohort_digest",
+        "current_cohort_digest",
+        "protocol_digest",
+        "split_digest",
+        "scientific_content_digest",
+        "reason",
+    }
+    for pair in pairs:
+        if not isinstance(pair, dict) or set(pair) != required:
+            raise RuntimeError("Malformed cohort compatibility pair")
+        values = [pair[key] for key in required if key != "reason"]
+        if not all(isinstance(value, str) and len(value) == 64 for value in values):
+            raise RuntimeError("Malformed digest in cohort compatibility pair")
+        reason = pair["reason"]
+        if not isinstance(reason, str) or not reason.strip():
+            raise RuntimeError("Cohort compatibility pair requires a review reason")
+        key = (
+            pair["checkpoint_cohort_digest"],
+            pair["current_cohort_digest"],
+            pair["protocol_digest"],
+            pair["split_digest"],
+        )
+        if key in approved:
+            raise RuntimeError("Duplicate cohort compatibility pair")
+        approved[key] = pair["scientific_content_digest"]
+    return approved
+
+
+def apply_approved_lineage_compatibility(
+    observed: dict[str, Any],
+    expected: dict[str, Any],
+    cohort: PreparedCohort,
+) -> dict[str, Any]:
+    """Return expected lineage adjusted only by explicit reviewed aliases."""
+
+    adjusted = dict(expected)
+    observed_cohort = observed.get("cohort_digest")
+    current_cohort = expected.get("cohort_digest")
+    if observed_cohort != current_cohort:
+        cohort_key = (
+            observed_cohort,
+            current_cohort,
+            expected.get("protocol_digest"),
+            expected.get("split_digest"),
+        )
+        approved_scientific_digest = _approved_cohort_compatibility().get(cohort_key)
+        if approved_scientific_digest is not None:
+            if cohort.scientific_content_digest != approved_scientific_digest:
+                raise RuntimeError(
+                    "Approved cohort lineage alias failed scientific-content validation"
+                )
+            adjusted["cohort_digest"] = observed_cohort
+
+    observed_implementation = observed.get("implementation_digest")
+    current_implementation = expected.get("implementation_digest")
+    if (
+        observed_implementation != current_implementation
+        and (observed_implementation, current_implementation)
+        in _approved_implementation_compatibility()
+    ):
+        adjusted["implementation_digest"] = observed_implementation
+    return adjusted
 
 
 def resolve_device() -> torch.device:
@@ -260,14 +341,7 @@ def load_checkpoint(
 ) -> dict[str, Any]:
     checkpoint = torch.load(path, map_location="cpu", weights_only=False)
     expected = _expected_lineage(context, cohort, splits, fold, seed, variant)
-    observed_implementation = checkpoint.get("implementation_digest")
-    current_implementation = expected["implementation_digest"]
-    if (
-        observed_implementation != current_implementation
-        and (observed_implementation, current_implementation)
-        in _approved_implementation_compatibility()
-    ):
-        expected = {**expected, "implementation_digest": observed_implementation}
+    expected = apply_approved_lineage_compatibility(checkpoint, expected, cohort)
     validate_checkpoint_lineage(checkpoint, expected)
     return checkpoint
 

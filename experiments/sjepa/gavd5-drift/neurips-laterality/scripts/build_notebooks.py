@@ -716,9 +716,13 @@ NOTEBOOKS = {
             saved bundle of extracted body coordinates; 24 did not. That is why the
             chart begins at 642 rather than 666. The annotations refer to 103 source
             videos, and the final cohort contains usable sequences from 93 of them.
-            `extraction_version_counts` shows which software version produced each pose
-            archive, while `pose_model` names the body-landmark detector. These values
-            are provenance checks, not measures of scientific performance.
+            `extraction_version_counts` shows which extraction generation produced each
+            pose tensor. `archive_schema_version_counts` is a separate census of the
+            archive metadata layout: the `gavd5_pose_v3_split_provenance` label means
+            split provenance was attached without recomputing coordinates, so its
+            `cache_origin_version` supplies the extraction generation. `pose_model`
+            names the body-landmark detector. These values are provenance checks, not
+            measures of scientific performance.
 
             The exclusion labels can contain `target_not_computable`, meaning the five
             left/right pairs did not all have enough shared visible transitions;
@@ -1206,6 +1210,14 @@ NOTEBOOKS = {
             valid completed checkpoint. Training is checkpointed after a whole job, not
             after every epoch. If execution is interrupted in the middle of a job, earlier
             completed jobs remain reusable, but the interrupted job starts again.
+
+            A checkpoint file is only a reuse candidate. Before it counts as reused, its
+            protocol, split, cohort, implementation, source lists, initialization, and
+            learned state are validated. A reviewed metadata-only cache migration can use
+            the exact alias in `laterality/cohort_compatibility.json`, but only when the
+            loaded cohort matches its scientific-content digest. Changed coordinates,
+            validity, targets, missingness, accepted rows, or split assignments still fail
+            closed.
 
             Training loss describes the self-supervised optimization objective. It is not
             validation accuracy or held-out performance. Those quantities are calculated
@@ -2060,7 +2072,7 @@ NOTEBOOKS = {
             at least one subject. These rules trust the custodian-supplied `subject_id`; they
             do not perform face recognition or guess identity.
 
-            <svg viewBox="0 0 1080 325" width="100%" role="img"
+            <svg viewBox="0 55 1080 270" width="100%" role="img"
                  aria-labelledby="external-flow-title external-flow-description"
                  xmlns="http://www.w3.org/2000/svg">
               <title id="external-flow-title">Fail-closed external manifest validation workflow</title>
@@ -2070,56 +2082,80 @@ NOTEBOOKS = {
               setting produces a neutral optional-not-configured result. A partial or invalid
               supplied contract is blocked. Passing produces a validated contract but no
               evaluation result.</desc>
-              <defs><marker id="arrow06" markerWidth="8" markerHeight="8" refX="7"
-                refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#475569"/></marker></defs>
+              <defs>
+                <marker id="arrow06" viewBox="0 0 8 8" markerWidth="8" markerHeight="8"
+                  refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#475569"/>
+                </marker>
+                <marker id="arrow06-pass" viewBox="0 0 8 8" markerWidth="8" markerHeight="8"
+                  refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#047857"/>
+                </marker>
+                <marker id="arrow06-skip" viewBox="0 0 8 8" markerWidth="8" markerHeight="8"
+                  refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#b7791f"/>
+                </marker>
+                <marker id="arrow06-block" viewBox="0 0 8 8" markerWidth="8" markerHeight="8"
+                  refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#be123c"/>
+                </marker>
+              </defs>
               <style>
                 .box06{fill:#f8fafc;stroke:#334155;stroke-width:1.5}
                 .check06{fill:#eff6ff;stroke:#2563eb;stroke-width:1.5}
                 .pass06{fill:#ecfdf5;stroke:#047857;stroke-width:1.6}
                 .block06{fill:#fff1f2;stroke:#be123c;stroke-width:1.6}
                 .skip06{fill:#fffbeb;stroke:#b7791f;stroke-width:1.6}
-                .line06{stroke:#475569;stroke-width:1.8;fill:none;marker-end:url(#arrow06)}
+                .line06,.passline06,.skipline06,.blockline06{fill:none;stroke-width:1.8;
+                  stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+                .line06{stroke:#475569;marker-end:url(#arrow06)}
+                .passline06{stroke:#047857;marker-end:url(#arrow06-pass)}
+                .skipline06{stroke:#b7791f;marker-end:url(#arrow06-skip)}
+                .blockline06{stroke:#be123c;marker-end:url(#arrow06-block)}
                 .h06{font:600 14px system-ui,sans-serif;fill:#0f172a}
                 .s06{font:12px system-ui,sans-serif;fill:#475569}
+                .outcome06{font:600 11px system-ui,sans-serif;letter-spacing:.04em}
               </style>
-              <rect class="box06" x="15" y="105" width="180" height="100" rx="9"/>
-              <text class="h06" x="105" y="135" text-anchor="middle">Environment settings</text>
-              <text class="s06" x="105" y="158" text-anchor="middle">manifest + governance</text>
-              <text class="s06" x="105" y="178" text-anchor="middle">optional pose root</text>
-              <text class="s06" x="105" y="195" text-anchor="middle">settings are not approval</text>
-              <rect class="check06" x="245" y="105" width="185" height="100" rx="9"/>
-              <text class="h06" x="337" y="135" text-anchor="middle">Governance first</text>
-              <text class="s06" x="337" y="158" text-anchor="middle">external dataset named</text>
-              <text class="s06" x="337" y="178" text-anchor="middle">three dated reviews</text>
-              <text class="s06" x="337" y="195" text-anchor="middle">evaluation scope explicit</text>
-              <path class="line06" d="M195 155 L245 155"/>
-              <rect class="check06" x="480" y="105" width="185" height="100" rx="9"/>
-              <text class="h06" x="572" y="135" text-anchor="middle">Manifest + files</text>
-              <text class="s06" x="572" y="158" text-anchor="middle">required fields unique</text>
-              <text class="s06" x="572" y="178" text-anchor="middle">paths exist inside root</text>
-              <text class="s06" x="572" y="195" text-anchor="middle">BlazePose33 only</text>
-              <path class="line06" d="M430 155 L480 155"/>
-              <rect class="check06" x="715" y="105" width="185" height="100" rx="9"/>
-              <text class="h06" x="807" y="135" text-anchor="middle">Subject partitions</text>
-              <text class="s06" x="807" y="158" text-anchor="middle">one subject → one split</text>
-              <text class="s06" x="807" y="178" text-anchor="middle">train and test nonempty</text>
-              <text class="s06" x="807" y="195" text-anchor="middle">identity never inferred</text>
-              <path class="line06" d="M665 155 L715 155"/>
-              <rect class="pass06" x="940" y="45" width="125" height="95" rx="9"/>
-              <text class="h06" x="1002" y="75" text-anchor="middle">Validated</text>
-              <text class="s06" x="1002" y="98" text-anchor="middle">contract only</text>
-              <text class="s06" x="1002" y="118" text-anchor="middle">no evidence yet</text>
-              <path class="line06" d="M900 135 L940 105"/>
-              <rect class="skip06" x="15" y="245" width="275" height="60" rx="9"/>
-              <text class="h06" x="152" y="271" text-anchor="middle">Neither required setting supplied</text>
-              <text class="s06" x="152" y="291" text-anchor="middle">OPTIONAL STUDY NOT CONFIGURED / NOT RUN</text>
-              <path class="line06" d="M105 205 L105 245"/>
-              <rect class="block06" x="420" y="250" width="300" height="60" rx="9"/>
-              <text class="h06" x="570" y="276" text-anchor="middle">Partial configuration or invalid contract</text>
-              <text class="s06" x="570" y="296" text-anchor="middle">BLOCKED / NOT RUN with a reason</text>
-              <path class="line06" d="M337 205 C337 235 480 235 480 250"/>
-              <path class="line06" d="M572 205 L572 250"/>
-              <path class="line06" d="M807 205 C807 235 660 235 660 250"/>
+              <rect class="box06" x="15" y="85" width="180" height="110" rx="10"/>
+              <text class="h06" x="105" y="116" text-anchor="middle">Environment settings</text>
+              <text class="s06" x="105" y="141" text-anchor="middle">manifest + governance</text>
+              <text class="s06" x="105" y="163" text-anchor="middle">optional pose root</text>
+              <text class="s06" x="105" y="184" text-anchor="middle">settings are not approval</text>
+              <rect class="check06" x="235" y="85" width="185" height="110" rx="10"/>
+              <text class="h06" x="327" y="116" text-anchor="middle">Governance first</text>
+              <text class="s06" x="327" y="141" text-anchor="middle">external dataset named</text>
+              <text class="s06" x="327" y="163" text-anchor="middle">three dated reviews</text>
+              <text class="s06" x="327" y="184" text-anchor="middle">evaluation scope explicit</text>
+              <path class="line06" d="M195 140 H235"/>
+              <rect class="check06" x="460" y="85" width="185" height="110" rx="10"/>
+              <text class="h06" x="552" y="116" text-anchor="middle">Manifest + files</text>
+              <text class="s06" x="552" y="141" text-anchor="middle">required fields unique</text>
+              <text class="s06" x="552" y="163" text-anchor="middle">paths exist inside root</text>
+              <text class="s06" x="552" y="184" text-anchor="middle">BlazePose33 only</text>
+              <path class="line06" d="M420 140 H460"/>
+              <rect class="check06" x="685" y="85" width="185" height="110" rx="10"/>
+              <text class="h06" x="777" y="116" text-anchor="middle">Subject partitions</text>
+              <text class="s06" x="777" y="141" text-anchor="middle">one subject → one split</text>
+              <text class="s06" x="777" y="163" text-anchor="middle">train and test nonempty</text>
+              <text class="s06" x="777" y="184" text-anchor="middle">identity never inferred</text>
+              <path class="line06" d="M645 140 H685"/>
+              <rect class="pass06" x="910" y="85" width="155" height="110" rx="10"/>
+              <text class="h06" x="987" y="116" text-anchor="middle">Validated</text>
+              <text class="s06" x="987" y="141" text-anchor="middle">contract only</text>
+              <text class="s06" x="987" y="163" text-anchor="middle">no evidence yet</text>
+              <text class="outcome06" x="987" y="184" text-anchor="middle" fill="#047857">READY TO RUN</text>
+              <path class="passline06" d="M870 140 H910"/>
+              <rect class="skip06" x="15" y="245" width="180" height="65" rx="10"/>
+              <text class="h06" x="105" y="272" text-anchor="middle">Not configured</text>
+              <text class="s06" x="105" y="293" text-anchor="middle">optional study not run</text>
+              <path class="skipline06" d="M105 195 V245"/>
+              <text class="outcome06" x="116" y="224" fill="#8a5a12">NEITHER SET</text>
+              <rect class="block06" x="235" y="245" width="635" height="65" rx="10"/>
+              <text class="h06" x="552" y="272" text-anchor="middle">Any supplied contract is incomplete or invalid</text>
+              <text class="s06" x="552" y="293" text-anchor="middle">BLOCKED / NOT RUN · report the exact governance, manifest, file, or partition reason</text>
+              <path class="blockline06" d="M327 195 V245"/>
+              <path class="blockline06" d="M552 195 V245"/>
+              <path class="blockline06" d="M777 195 V245"/>
             </svg>
             """
         ),

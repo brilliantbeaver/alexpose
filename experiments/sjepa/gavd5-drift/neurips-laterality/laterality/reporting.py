@@ -13,8 +13,11 @@ from .data import PreparedCohort
 from .evaluation import evaluation_result_digest, validate_evaluation_frame
 from .governance import load_governance, submission_readiness
 from .metrics import metric_bundle, source_weights, weighted_r2
-from .training import implementation_digest
-from .training import load_checkpoint
+from .training import (
+    apply_approved_lineage_compatibility,
+    implementation_digest,
+    load_checkpoint,
+)
 from .splitting import get_fold
 
 
@@ -57,6 +60,9 @@ def load_selected_evaluations(
                     "checkpoint_sha256": sha256_file(checkpoint_file),
                     "model_state_digest": checkpoint["model_state_digest"],
                 }
+                expected = apply_approved_lineage_compatibility(
+                    metadata, expected, cohort
+                )
                 mismatches = [
                     key for key, value in expected.items() if metadata.get(key) != value
                 ]
