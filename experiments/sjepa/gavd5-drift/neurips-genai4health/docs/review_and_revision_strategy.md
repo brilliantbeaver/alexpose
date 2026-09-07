@@ -1,127 +1,129 @@
-# GenAI4Health: research assessment and revision strategy
+# GenAI4Health: submission strategy and critical assessment
 
-Reviewed September 5, 2026. This is an internal author-facing analysis; the anonymous manuscript is `genai4health_paper_draft.tex`. The source notebooks and BrainBodyFM drafts were preserved. No model training or external submission was performed.
+Reviewed September 6, 2026. This is an author-facing document, not part of the anonymous submission. The recommended manuscript is **Before Health Agents Interpret Movement: Lessons from a Gait Representation Study**.
 
-Final consistency note: five notebook files received concurrent updates during the review. Comparing their cell source text found no code/prose changes, and all manuscript evidence-input hashes remained identical. The initial snapshot and the update check are retained in the audit records; this work did not overwrite those updates.
+## Recommended route
 
-## Recommended paper and why
+Use the position-paper track, with trustworthy evaluation as the primary topic and future ambient health systems as the secondary motivation. The paper presents a specific, evidence-grounded position: movement results passed to a health assistant should retain their measured quantity, recording weights, model reference, and tested scope. The empirical case shows why these details can change interpretation.
 
-The strongest defensible submission is a **position paper with a concrete empirical audit**: *Before Gait Models Inform Care: Evidence Boundaries for Predictive Health AI*. Its position is that evidence for a movement representation must remain attached to its population, model version, measured task, and unresolved failures when that representation is used downstream. Source transfer, functional retention, forecasting, and clinical utility require different evaluations.
+This is a stronger fit than claiming a new clinical world model or a working health agent. Neither has been evaluated. The [current workshop call](https://genai4health.github.io/2026-NeurIPS/) accepts position papers up to five main-text pages and research papers up to nine. Its deadline is **September 9, 2026, 11:59 PM AoE**, an extension from the earlier date. It lists no separate extended-abstract track. The two-page companion is therefore a shorter alternative or synopsis, not a second independent contribution to submit alongside the paper.
 
-The current work does not support a strong claim of a new clinical world model, an effective agent, superior JEPA performance, or successful consolidation. It does support a specific and useful argument about evaluation. The best results are two observations that can be independently reconstructed from existing artifacts:
+The revised paper makes no laterality contribution. Its question concerns interpretation of movement evidence, using recording-level weighting and an exploratory classifier comparison. The existing BrainBodyFM paper remains unchanged.
 
-| Observation | Verified evidence | Defensible interpretation |
+## What the current evidence supports
+
+The requested alternative on neurologically guided masking is assessed separately in [the masking candidate review](masking_candidate_assessment.md). It is a plausible future research paper, but the notebooks currently supply sampler checks rather than a trained mask-policy comparison. Established body-part and motion-aware masking literature also narrows its novelty. The current submission has therefore not been silently reframed around an untested masking benefit.
+
+| Finding | Numerical evidence | What can be concluded |
 |---|---|---|
-| A simpler feature baseline has the higher observed readout score | Raw-kinematic macro-F1 0.440513, skeleton-JEPA 0.292424, missingness 0.251111 on the same 20 test sources | This run provides no demonstrated advantage for the learned representation; it does not rank architecture families |
-| Aggregation changes a representation-similarity summary | Identical 64 normal-validation embeddings give clip-weighted cosine 0.889061 and source-weighted cosine 0.701058 | A clip average mostly describes the dominant upload; the result changes the estimand, not the model |
-| The dominant upload explains the weighting contrast | 60 of 64 clips; source mean cosine 0.904994; other four sources supply one clip each | 93.75% clip weight versus 20% source weight is an explicit, testable analytic choice |
-| The evaluated population is smaller than the annotation inventory | 666/103 raw → 657/100 metadata-public → 655/98 decoded → 639/97 pose-eligible | Report distinct validity gates and the actual evaluated sample |
+| Averaging changes which recordings a summary represents | The same 64 normal-validation clips give mean cosine 0.89 with equal clip weights and 0.70 with equal video weights | Changing only the weights changes the summary; this does not measure deterioration or loss of predictive function |
+| One upload explains much of that difference | One video contributes 60 clips; four other videos contribute one each. Its weight is about 94% or 20%, respectively | A clip average is dominated by one recording. Neither weighting rule establishes equal patient weighting |
+| Simple inputs are a necessary comparison | Pose summaries correctly classify 10/20 test videos; learned features and availability-only inputs each classify 6/20. Balanced accuracy is 0.44, 0.26, and 0.25 | This particular learned-feature pipeline has not demonstrated an advantage over the simpler input; a general pretraining effect is not identified |
+| An annotation score can hide category failures | Every classifier misclassifies all three stroke-annotated test videos | Aggregate performance cannot support diagnosis or reliable category-specific claims in this sample |
 
-These observations are more convincing than a broad claim built from appealing historical plots. The weighting analysis is especially valuable: it changes only the averaging rule, so the inference does not depend on comparing incompatible runs. The raw-minus-latent macro-F1 difference is 0.148089 **before rounding**. Neither observation is a significance test, a patient-level estimate, or a measured clinical effect.
+The weighting example is the cleanest comparison because recordings and recorded similarities stay fixed. It is an exact reaggregation of a finite set of records, not an intervention on training. The classifier result is supporting evidence, with one split, one initialization, and a mismatch between validation and test aggregation. No significance claim, broad architecture ranking, or clinical threshold is attached to either result.
 
-## Workshop fit and submission choice
+The numerical supplement retains full-precision values for calculation. The manuscript uses two decimals for similarity and classification scores, whole percentages for illustrative weights, and exact counts. A cosine is not a retained-information percentage. No interpretation relies on rounding a value across a decision threshold.
 
-The official [GenAI4Health 2026 call](https://genai4health.github.io/2026-NeurIPS/) emphasizes trustworthy evaluation and ambient/embodied health alongside frontier models. Our best fit is evaluation and trust, motivated by a possible ambient perception component. The mixed ML/health audience needs clear separation of algorithmic proxies and clinical endpoints.
+## How the experiment works
 
-The current call permits research papers up to nine pages and position papers up to five; it lists no separate extended-abstract track. The companion abstract is therefore an alternative synopsis, not a second submission. The deadline is September 5, 2026, 23:59 AoE (September 6, 04:59 Los Angeles). Use the specified anonymous style and confirm the live requirements before uploading. The supplied main draft fits the position limit.
+1. Select a five-category subset from GAVD's curated gait annotations, then apply recorded acquisition and pose-quality checks. The usable cohort contains 639 clips from 97 videos. These are subset counts, not the size of GAVD.
+2. Keep every clip from a video in the same role. The recorded evaluation uses 59 training, 18 validation, and 20 test videos. Person separation across uploads remains unverified.
+3. Prepare video-estimated pose for the encoder. Four-frame coordinate means at 33 landmarks enter a compact two-layer Transformer. The estimates are not calibrated physical measurements.
+4. Train by predicting hidden features from a slowly updated target encoder, with variance and covariance regularization. Category annotations determine a normal-first, cumulative exposure order but do not appear as prediction labels in this loss.
+5. Compare fixed normal clips across two training stages. Recalculate the feature-similarity average using clip weights and then video weights.
+6. Fit separate classifiers to learned features, pose summaries, and landmark availability. Use held-out videos for the reported annotation predictions, while acknowledging the differing aggregation used in selection and testing.
+7. State what these results do and do not establish, then propose an explicit way to test their interpretation by a future health assistant. That assistant evaluation has not been performed.
 
-A research-track case study would be possible if its central claim remains the audit itself. I recommend the position track because the empirical coverage is one fold/seed, the model and raw feature comparison have unresolved procedural weaknesses, and no new architecture or clinical endpoint is established. A demonstration submission would be a poor fit: the notebook collection is not evidence of a functioning care-facing agent.
+Full preparation and readout details are in the paper appendix. Low-level run identifiers and notebook numbering are confined to internal verification records.
 
-The central acceptance risk is modest novelty over standard evaluation practice. The response is specificity: foreground what the audit exposed and why those boundaries matter when a downstream system turns movement features into explanations. Do not claim that source grouping, raw baselines, or provenance hashes are individually novel. No acceptance probability can be inferred from this review.
+## What is distinctive, and what is established practice?
 
-## What the notebook collection actually establishes
+The contribution is a concrete application with a reproducible numerical example, not a new foundation-model architecture or general theory of clinical trust.
 
-All 14 notebooks were inspected through their code, markdown, and retained outputs. Embedded media and historical artifacts were distinguished from current real-mode results. Detailed audits are linked below; this table is the editorial selection map.
-
-| Notebook | Scientific purpose and current status | Use in this submission |
+| Element | Assessment of novelty | Workshop relevance |
 |---|---|---|
-| 00, first principles | Tutorial and synthetic execution; architecture and objective differ from the current trained model | Conceptual distinction between masked prediction and forecasting; no performance result or reused architecture diagram |
-| 01, manifest/video | Dated availability, decoding gates, fixed source-role registry | Cohort and provenance methods; compact appendix counts |
-| 02, skeleton extraction | Audits 655 available legacy caches; 639 sequences pass the selected-landmark coverage gate | QC and geometry limitation; no claim that geometry-complete caches were regenerated |
-| 03, target masking | Tests the valid 12-joint whitelist and nominal mask fraction | Exact masking description; not clinical validation of the whitelist |
-| 04, training | Current fold-0/seed-42 cumulative training and hash-bound checkpoints | Canonical model/loss description and training provenance |
-| 05, latent inspection | Descriptive geometry, training-only retrieval gallery, role-specific diagnostics | Exclude from headline results; negative silhouette is not a diagnosis of collapse or information absence |
-| 06, classifiers | Three feature lanes on the same 20 held-out source groups | Main negative comparison; disclose readout refit and inconsistent selection/test aggregation |
-| 07, temporal readout | Ridge probes of pose-derived clip statistics; one fold, different preprocessing, early test materialization | Appendix only; retain all nine values, including negative phase-lag R² |
-| 08, normal anchors | Current coordinate drift and a single available final candidate; source-equal summaries | Main weighting reanalysis and a supplementary trajectory; no repair/forgetting/health claim |
-| 09, predictive surprise | No current future-trained checkpoint; exploratory code also permits future information | Static code-audit finding and future evidence requirement; no surprise score or forecast result |
-| 05a, signed laterality | Archived transductive experiment; fold-local gate blocked | Exclude empirical scores |
-| 05b, reflection/futures exploration | Includes simulations and illustrative values; some labeled R² values do not match the generated statistic | Exclude numerical evidence entirely |
-| 05c, equivariant readout | Archived construction and transductive results | Exclude; oddness constraints do not establish useful signed prediction |
-| 05d, equivariant encoder | Archived encoder/augmentation experiments; current gate blocked | Exclude; do not mix with the protocol-v2 checkpoint |
+| Same-records weighting demonstration | Specific empirical observation from this gait representation study; weighted averages themselves are established | Shows how repeated observations can dominate evidence that a health system might summarize |
+| Simpler-feature and availability comparisons | Useful negative case, but incremental and underpowered for broad conclusions | Encourages checking whether a proposed movement input adds predictive value |
+| Evidence record accompanying a movement summary | A worked specialization of existing reporting practice, not a replacement for Model Cards or clinical validation | Makes model reference, recording unit, and untested uses available where an assistant or clinician interprets a result |
+| Proposed interpretation experiment | A testable future study, not a demonstrated safety method | Directly connects the position to human–AI collaboration and unsupported clinical interpretations |
 
-Two distinctions are essential. First, a notebook that executes successfully can still produce only a status message or a simulated example. Second, a current figure exporter can display historical data. File modification time, a polished plot, and a zero-error execution are not sufficient provenance.
+[Model Cards](https://arxiv.org/abs/1810.03993) already address intended uses and evaluation limitations. The [V3 digital-measurement framework](https://www.nature.com/articles/s41746-020-0260-4) distinguishes sensor, analytical, and clinical evidence. [DECIDE-AI](https://www.nature.com/articles/s41591-022-01772-9) provides clinical-evaluation context, including human factors. These are acknowledged in the manuscript so that ordinary validation principles are not presented as inventions.
 
-## Required corrections to the BrainBodyFM drafts
+A positive comparison from the literature is also retained. [GaitForeMer](https://arxiv.org/abs/2207.00106) reports improved gait-severity estimation after pretraining that combines motion forecasting with activity classification. Our small, different experiment does not refute that result or the broader promise of self-supervised movement learning.
 
-The new drafts implement the corrections below. They have not been written back into the original source package.
+## What was revised
 
-| Existing claim or presentation | Why it is inaccurate or risky | Correction in the GenAI4Health draft |
+The main paper and companion now share one title, position, and numerical interpretation. The rewrite makes the weighting observation primary and the annotation classifier secondary. A new vector figure shows the weights separately from the mean cosines, avoiding a truncated similarity axis or a visual suggestion of improved retention. A simple table reports correct-video counts and balanced accuracy.
+
+A second table gives a worked evidence record for the actual weighting analysis. It is explicitly proposed, not a screenshot of a deployed system or a validated safety intervention. The paper describes how to evaluate it against a bare-score condition with the same assistant and cases, including blinded review of unsupported mobility claims.
+
+The previous manuscript's many local processing gates, artifact hashes, notebook references, repeated caveats, and supplementary exploratory plots have been removed from submission-facing prose. Necessary limitations remain near the relevant results and in the methods appendix. The abstract identifies the normal-validation subset and distinguishes coordinate similarity from useful prediction and health change.
+
+Method corrections separate visibility-based clip eligibility from finite-coordinate encoder validity; specify that test aggregation averages category probabilities; remove an unrecorded masking fraction; and define cosine as directional agreement. Current verification is described as reconstruction from retained records, without claiming renewed verification of absent checkpoints.
+
+## Notebook-by-notebook selection
+
+All 14 notebooks were reviewed through code and saved outputs; no notebook was executed wholesale. The source files were preserved.
+
+| Notebook | Evidence and decision |
+|---|---|
+| 00: first principles | Teaching model and synthetic examples. Useful for concepts; its architecture is not substituted for the trained model |
+| 01: manifest and video acquisition | Supports the recorded cohort and fixed video-role assignments; current availability is not inferred |
+| 02: pose extraction and inspection | Supports pose eligibility and measurement limitations; no new extraction was performed |
+| 03: landmark masking | Explains valid target selection. Synthetic mask checks are not evidence of clinical validity or the executed run's exact masking setting |
+| 04: pretraining | Determines the compact learner, loss, staged exposure, and recorded training history |
+| 05: latent inspection | Descriptive clusters and retrieval examples do not establish generalization or clinical usefulness; no headline figure reused |
+| 06: annotation classifiers | Retained predictions support the secondary result and all three input comparisons |
+| 07: temporal readout | Heuristic pose targets, changing readouts, and no matched untrained or pose baseline. Excluded from the submission's evidence |
+| 08: normal-reference comparisons | Supplies the recorded similarities and source counts for the main reaggregation; no forgetting or repair claim |
+| 09: predictive surprise | No qualifying forecast result. Prospective code also permits future context; the paper retains only a general requirement for genuinely past-only forecasting |
+| 05a: signed laterality | Excluded because of subject overlap and archived experimental status |
+| 05b: reflection and futures | Simulated illustrations and incomplete real-data paths; excluded |
+| 05c: equivariant readout | Laterality-focused archived evidence; excluded |
+| 05d: equivariant encoder | Laterality-focused archived evidence; excluded |
+
+The separate laterality experiment's five folds, five seeds, and matched initializations are not imported. The classification result already appears as supporting material in the BrainBodyFM paper, so the two manuscripts are not wholly disjoint in data or findings. Authors should disclose relevant overlap through the venues' prescribed anonymous process and confirm concurrent-submission policies. A different title or position does not make reused observations independent.
+
+## Current verification, including its limits
+
+The portable verifier recalculates all three classifier scores and both weighting averages. A separate read-only check matches all 60 prediction rows to the current classifier notebook, reproduces cohort totals from available annotations and ledgers, and confirms recording-role consistency. Both weighting CSV copies agree.
+
+Original fold checkpoints, cached embeddings, and the full split registry are absent from this checkout. Historical records describe an earlier checkpoint-backed review; they are preserved but are not labeled as checks rerun now. The current report is [evidence/current_verification.json](evidence/current_verification.json). The earlier [verification manifest](evidence/verification_manifest.json) is historical. Matching records does not reproduce training, prove historical test secrecy, or establish clinical validity.
+
+The original numerical verifier failed because its recorded file checksums used Windows line endings while this checkout uses Unix line endings. The values were identical. Verification now explicitly normalizes line endings in memory, preserves the historical checksums, and checks the unchanged numerical content. This fixes portability without changing any result.
+
+## Honest assessment of submission strength
+
+| Criterion | Current assessment | Main residual risk |
 |---|---|---|
-| Primary loss `JEPA + 0.05 VICReg`; group term `0.25` | Describes an older model | Smooth-L1 JEPA + 0.10 variance + 0.01 covariance; no separate two-view invariance term |
-| Group loss means within-label compactness/separation | Current optional head uses classification cross-entropy | State it is disabled; do not report a current ablation that was not run |
-| Fully label-free learning pipeline | Condition annotations select the normal-first cumulative stages and source stratification | Loss has no condition-label term; scheduling is annotation-informed |
-| First-principles tutorial describes the executed model | Tutorial flattens coordinate patches and uses other masking/prediction mechanics | Specify the checkpoint's four-frame means, 64-D tokens, 2-layer transformer and pooled MLP predictor |
-| Shared short-gap interpolation in all notebooks | Training/readout zero-fill nonfinite values; normal-anchor/temporal diagnostics interpolate short gaps | State the distinct preprocessing paths and why the same-vector weighting comparison remains valid |
-| Readout fits only training sources | Final scaler/classifier refit uses train plus validation | Explain tuning followed by 77-source refit; encoder remains frozen |
-| One identical source aggregation throughout | Selection classifies mean source features; test averages per-clip probabilities | Disclose the mismatch as an unresolved limitation of the saved result |
-| Globally unopened test set until final evaluation | Training excludes test, but later notebooks inspect it; notebook 07 loads it before ridge selection | Report inspected training access and role separation; do not certify historical test secrecy |
-| Independent or subject-held-out videos | Upload IDs are not reliable person identities | Source-held-out evaluation; cross-upload people and correlated sources unresolved |
-| Cosine measures retained normal function | Coordinate changes, scale/basis effects and collapse can make that inference wrong | Cross-checkpoint embedding cosine; functional retention needs an actual fixed task |
-| Test cosine 0.850 shows repair from 0.701 validation | Different sources; only one candidate exists | Distinct descriptive samples, no intervention or repair gain |
-| Predictive surprise demonstrates a world model | No qualifying current checkpoint; visible future joints and full-context baseline compromise the proposed test | No current forecasting result; require prefix-causal context, preprocessing, and baselines |
-| Revised evaluation caused a large performance reduction | Old and current runs differ in data, objective, model, and protocol | No causal “leakage penalty”; compare only the contemporaneous three lanes |
-| Full GAVD has 666 clips and five categories | These describe the local subset | Explicitly label the subset and preserve the verified original dataset citation |
-| Current ready-to-submit guide PDF | `neurips-brain-body.pdf` is a stale guide with old results | Use current source documents and the newly verified package |
+| Position clarity | Stronger: a concrete recommendation, a worked example, and a proposed test | The recommendation may still be judged familiar |
+| Empirical grounding | Good for a descriptive weighting example; limited for classifier claims | Five videos in the weighting subset; one classifier split and initialization |
+| Technical correctness | Retained-output arithmetic and relevant implementation details checked | Full encoder reproduction remains unavailable |
+| Health relevance | Plausible for future movement interpretation; clinically grounded prior work | No independently measured mobility outcome or demonstrated care workflow |
+| GenAI relevance | Explicit perception-to-assistant motivation | No generative model or agent experiment; this is the main track-fit objection |
+| Presentation | Focused findings, readable tables, one new vector graphic | Authors should still review the rendered submission as a reader |
+| Submission and data-use readiness | Draft artifacts prepared locally | Ethics/data-use determination, authorship, overlap review, and release decisions require authors |
 
-The canonical old manuscript PDF matches its current `.tex`; the separate readiness-guide PDF does not match its September 5 Markdown counterpart. The latter contains the older 626/93 cohort and transductive values, including macro-F1 0.899. Those are not alternate estimates of the present experiment.
+This is a defensible position-paper submission, not a demonstrated high-performing health AI system. No acceptance probability is justified. Strong prose can clarify the contribution but cannot replace missing empirical breadth or a direct GenAI experiment.
 
-## Argument and result selection
+## Improvements to prioritize before September 9
 
-The paper begins with a narrowly specified proposed use: movement summaries could become inputs to an ambient health assistant. This motivates an evidence problem without pretending such a system was implemented. The introduction then states the four independent claim types and acknowledges prior work.
+**Required before upload.** Confirm the actual institutional ethics and data-use determination, author list, concurrent-submission obligations, and supplement release decision. The user has confirmed GAVD's MIT licensing for research use; the manuscript states that clearly while distinguishing the source videos. Review the final PDF, choose one manuscript and track, and verify portal declarations. No external submission has been made.
 
-The methods identify the actual sample, evaluation units, executed model, and annotation use before presenting any scores. The results give both contemporaneous controls and the direct weighting comparison. The proposed evaluation requirements follow from these findings. Counterarguments acknowledge that a larger model could fare better, different weights target different populations, and missingness can reflect actual movement difficulty.
+**Highest-value empirical extension, if feasible without rushing.** Test the evidence-record proposal with a fixed assistant and a small prespecified set of cases whose interpretations can be independently judged. Vary recording composition and encoder reference without changing the claimed patient state, and include genuinely measured movement-change cases if such data exist. Compare bare scores with the record under matched prompts and blinded assessment. Do not fabricate clinical cases or call an unvalidated synthetic scenario a patient outcome. This would address the strongest current objection: the GenAI connection is proposed, not evaluated.
 
-Figure 1 carries the empirical argument. Its first panel shows all three readouts and both macro-F1 and balanced accuracy. Its second compares weights on identical normal-validation vectors. It does not display error bars that were never estimated. The cohort table, role composition, model details, all temporal metrics, and coordinate trajectory appear in the appendix. An aliased numerical supplement reproduces the main scores using only standard Python.
+**Next representation experiment.** Recover the original run artifacts, then specify a fresh comparison that uses the same aggregation during classifier selection and testing, includes an untrained encoder, and repeats across video groups and seeds. Standardize missing-data handling and serialize all runtime settings. Any reanalysis on the already inspected test videos is exploratory; it cannot be relabeled as a new untouched confirmation.
 
-Do not add a speculative agent architecture diagram, diagnostic pipeline, generated patient example, or illustrated clinical benefit. They would make the implemented scope less clear. Likewise, an attractive latent visualization adds little to the central position unless its specific hypothesis, comparison, and caveat are stated.
+**Longer-term clinical work.** Use identity-aware external data and independently measured mobility endpoints. Evaluate task performance across model updates before calling coordinate similarity retention. Forecasting and action-conditioned planning need separate designs and evidence. These are research priorities, not prerequisites that have been silently completed for this position paper.
 
-## What remains experimentally unresolved
+## Review record
 
-The following changes are needed for stronger empirical claims. They are not completed experiments and do not need to be pretended complete for this bounded position paper.
-
-1. **Make a new experiment version before repairing the evaluation.** Standardize validation and test source aggregation; centralize preprocessing; settle invalid-token treatment; fully serialize runtime configuration and the optimizer state. Preserve the existing run as historical evidence. Do not quietly regenerate a better score and call it the original test result.
-2. **Strengthen sensing provenance.** Re-extract with resolution/crop-aware geometry where feasible, bind actual video and annotation content, and report attrition by source. Assess missingness and acquisition strata. Current cache contracts do not independently establish every scientific input byte.
-3. **Finish comparative evaluation.** Include an untrained encoder, raw pose summaries, missingness, and matched learning controls. Retrain within each fold and multiple predetermined seeds. Do not describe a five-fold registry as five-fold results.
-4. **Separate curriculum effects.** Compare continued-normal training with matched updates, cumulative/joint training, and alternative condition orders. Rewinding selected model weights while retaining later optimizer moments also needs an explicit, consistent policy.
-5. **Use uncertainty appropriate to the claim.** Paired source resampling can characterize the fixed predictions, but cannot recover seed or split variability. Report both when available. Do not use sequence bootstrapping as if 131 clips were 131 independent people.
-6. **Test retained function.** Add fixed movement tasks and alignment-aware analyses. A stable latent and a drifting latent can each be compatible with either useful or poor behavior. Avoid clinical “normality” thresholds derived from a small annotation subset.
-7. **Redesign forecasting before training it.** Hide every future input to context and persistence baselines, audit preprocessing for future dependence, preserve physical time, and define prefix/horizon splits. Train a dedicated temporal objective and compare simple causal predictors. Action-conditioned planning would be a further study.
-8. **Study clinical claims in an appropriate cohort.** External, adjudicated, identity-aware data and a specified workflow are necessary for person-level or clinical assertions. A public-video convenience sample cannot provide those by renaming a metric.
-
-An inexpensive matched aggregation reanalysis would be informative, but it would be a post hoc follow-up, not a new untouched confirmatory test. The current task prioritized an accurate manuscript and an audit over additional model development.
-
-## Adversarial review and disposition
-
-Three parallel reviews covered core training/data/readouts, laterality/retention/forecasting, and literature/venue/narrative. A second pass reviewed both new drafts against the evidence. Reviewers independently confirmed the headline scores, counts, objective, parameter dimensions, and weighting equations.
-
-The second pass led to explicit normal-anchor interpolation and 12-joint pooling descriptions, a trained normal-only reference checkpoint, clearer local-registry language, unrounded-gap disclosure, the correct V-JEPA 2 author spelling, and a portable numerical supplement. Figure sizing and labels were also revised during PDF inspection. No new experimental success was invented to resolve a criticism.
-
-Remaining scientific weaknesses are visible in the manuscript: one fold/seed, inconsistent readout aggregation, legacy geometry, incomplete runtime metadata, no person key, no calibrated clinical outcome, no functional retention control, and no current forecasting result. The final claim is intentionally narrower than these unresolved issues.
-
-## Author decisions before upload
-
-Review the final PDF and its cited scope. Establish the actual project-specific institutional ethics/data-use determination; none was supplied in the inspected record, and the manuscript explicitly says so. Do not substitute public availability for that determination. Confirm authorship and any concurrent-submission obligations associated with the BrainBodyFM package. Choose one submission track and one manuscript; the extended abstract is a companion, not a second empirical work.
-
-The drafting, numerical reconstruction, and adversarial review are complete. Submission, institutional determinations, and any new experiments are separate actions that have not been performed.
-
-## Supporting audits
-
-- [Core notebooks 00–07](review/core_notebook_audit.md)
-- [Advanced notebooks 08–09 and 05a–05d](review/advanced_notebook_audit.md)
-- [Original drafts, workshop, and verified literature](review/draft_and_literature_audit.md)
-- [Adversarial review of both new drafts](review/adversarial_draft_review.md)
-- [Core manuscript crosscheck](review/core_draft_crosscheck.md)
-- [Advanced manuscript crosscheck](review/advanced_draft_crosscheck.md)
-- [Recomputed values and input hashes](evidence/verification_manifest.json)
-- [Portable reviewer numerical verification](numerical_supplement/README.md)
+- [Core notebook review](review/core_notebook_audit.md)
+- [Advanced notebook review](review/advanced_notebook_audit.md)
+- [Workshop, prior literature, and novelty assessment](review/draft_and_literature_audit.md)
+- [Adversarial manuscript review](review/adversarial_draft_review.md)
+- [Final core claim crosscheck](review/core_draft_crosscheck.md)
+- [Advanced evidence boundaries](review/advanced_draft_crosscheck.md)
+- [Numerical supplement](numerical_supplement/README.md)
+- [Final verification and unresolved author decisions](review/final_verification.md)

@@ -1,44 +1,55 @@
-# GenAI4Health draft package
+# GenAI4Health submission drafts
 
-Start with [the review and revision strategy](review_and_revision_strategy.md). The recommended submission is a position paper with an empirical audit, titled **Before Gait Models Inform Care: Evidence Boundaries for Predictive Health AI**.
+The recommended draft is **Before Health Agents Interpret Movement: Lessons from a Gait Representation Study**, a position paper with a numerical case study. Start with the [critical assessment and revision strategy](review_and_revision_strategy.md) for the argument, evidence selection, workshop fit, and remaining author decisions.
 
-## Drafts
+## Current documents
 
-- Paper: [PDF](genai4health_paper_draft.pdf), [editable LaTeX](genai4health_paper_draft.tex), [Markdown reader copy](genai4health_paper_draft.md).
-- Companion extended abstract: [PDF](genai4health_extended_abstract.pdf), [editable LaTeX](genai4health_extended_abstract.tex), [Markdown reader copy](genai4health_extended_abstract.md).
-- [Numerical supplement](numerical_supplement/README.md): reproduces the headline scores and source-weighting comparison without video data or third-party packages.
-- Download bundles: [paper source and numerical files](genai4health_position_source.zip), [numerical supplement alone](genai4health_numerical_supplement.zip). The companion abstract is intentionally separate.
-- [Figure assets](figures/) and [verified data tables](evidence/).
+- Paper: [PDF](genai4health_paper_draft.pdf), [canonical LaTeX](genai4health_paper_draft.tex), [Markdown reader copy](genai4health_paper_draft.md).
+- Companion extended abstract: [PDF](genai4health_extended_abstract.pdf), [canonical LaTeX](genai4health_extended_abstract.tex), [Markdown reader copy](genai4health_extended_abstract.md).
+- [Submission metadata](submission_metadata.md): title, proposed keywords, TL;DR, and track.
+- [Masking-paper assessment](masking_candidate_assessment.md): whether gait-informed masking can support a separate research paper and which experiments are missing.
+- [New weighting figure](figures/weighting_comparison.svg): editable SVG, with vector PDF and PNG preview alongside.
+- [Numerical supplement](numerical_supplement/README.md): recalculates classifier metrics and weighting averages from retained records.
+- [Final verification](review/final_verification.md) and [current evidence checks](evidence/current_verification.json).
 
-LaTeX is canonical; Markdown is generated from it. The final paper has five main-text pages, one reference page, and three appendix pages. The companion has two main-text pages and one reference page. See the [PDF verification record](review/pdf_qa/qa_summary.json).
+LaTeX is the editable source of truth; Markdown and PDF are generated from it. The paper has five main-text pages, one reference page, and two appendix pages. The companion has two main-text pages and one reference page. Both use the official anonymous NeurIPS 2026 style without options.
 
-The [workshop call](https://genai4health.github.io/2026-NeurIPS/) lists no separate extended-abstract track. Submit one chosen manuscript, not both variants. The package uses `\usepackage{neurips_2026}` without options. No external submission has been made.
+The [current workshop call](https://genai4health.github.io/2026-NeurIPS/) lists position, research, and demonstration tracks, with no separate extended-abstract track. The deadline is September 9, 2026, 11:59 PM AoE. The companion is a shorter alternative or synopsis; do not treat it as a second independent submission of the same work.
 
-## What changed
+## What the paper says
 
-The drafts replace the previous performance/world-model emphasis with two verified observations: raw pose summaries have the higher observed readout score in one split, and a dominant upload changes the interpretation of clip-weighted coordinate similarity. They correct the implemented loss, annotation use, architecture, refitting and aggregation, diagnostic preprocessing, and boundaries of forecasting and clinical claims.
+The same recorded feature similarities average to 0.89 per clip and 0.70 per video because one video supplies 60 of the 64 clips. Neither value measures patient stability or retained predictive ability. Separately, simple pose summaries correctly classify 10 of 20 test videos, compared with six for learned features and six for landmark availability alone. That exploratory result has important procedural and sample-size limits.
 
-The source notebooks and BrainBodyFM files remain untouched. Historical classifier/laterality/consolidation/surprise values are excluded from current claims. Full methods limitations remain visible. Actual ethics/data-use determination and authorship must be settled by the authors; neither is invented here.
+The proposed contribution is to keep a movement summary's measurement, recording weights, model reference, and tested scope visible when a future health assistant interprets it. The evidence record and its proposed evaluation are not a deployed system or a demonstrated clinical benefit. Laterality findings, unexecuted forecasting, and historical repair claims are excluded.
 
-## Rebuild and verify
+## Rebuild
 
-From this folder with Tectonic installed:
+From the experiment root:
 
-```powershell
-tectonic genai4health_paper_draft.tex
-tectonic genai4health_extended_abstract.tex
-python numerical_supplement/verify.py
+```sh
+bash neurips-genai4health/docs/build_submission.sh
 ```
 
-For the full local audit, from the experiment root using its existing environment:
+The build uses the existing Python environment with NumPy, Matplotlib, and Pillow, plus Pandoc, Tectonic, and Poppler tools. Set `GENAI4HEALTH_PYTHON` to another suitable Python executable if necessary. It verifies retained outputs, generates the vector figure, builds both PDFs, refreshes Markdown, checks page counts and rendering, and packages the local review files. It does not run notebook cells, train models, download videos, or submit anything.
 
-```powershell
-.venv/Scripts/python.exe neurips-genai4health/docs/reproducibility/verify_core_artifacts.py
-.venv/Scripts/python.exe neurips-genai4health/docs/review/audit_advanced_artifacts.py --output neurips-genai4health/docs/review/advanced_artifact_checks.json
-.venv/Scripts/python.exe neurips-genai4health/docs/reproducibility/build_evidence.py
-.venv/Scripts/python.exe neurips-genai4health/docs/reproducibility/make_numerical_supplement.py
-.venv/Scripts/python.exe neurips-genai4health/docs/reproducibility/render_and_check.py
-uv run --no-project --with pypandoc-binary python neurips-genai4health/docs/reproducibility/make_reader_copies.py
+The standalone numerical check needs only standard Python:
+
+```sh
+python3 neurips-genai4health/docs/numerical_supplement/verify.py
 ```
 
-`review/` and `reproducibility/notebook_text/` are internal working records and contain local provenance details; do not upload them as an anonymous supplement. The numerical supplement is prepared separately with source aliases and no local paths. Its aliases support anonymous author review, not a guarantee of patient anonymity. The source bundle is built from an explicit allowlist.
+The full local evidence check also compares notebook predictions, annotation inventories, and quality-control ledgers:
+
+```sh
+.venv/bin/python -B neurips-genai4health/docs/reproducibility/build_evidence.py
+```
+
+Original fold checkpoints and cached embeddings are absent from this checkout. Current verification is therefore distinct from the earlier checkpoint-backed review. The historical builder is preserved as `reproducibility/build_evidence_from_training_artifacts.py`; it requires the original inputs and is not part of the default build. The earlier `evidence/verification_manifest.json`, advanced-artifact report, and unused figures are historical records, not current verification or submission graphics.
+
+## Local review bundles and author decisions
+
+[Paper source](genai4health_position_source.zip), [companion source](genai4health_companion_source.zip), and [numerical records](genai4health_numerical_supplement.zip) are packaged separately. The paper bundle includes only the new weighting figure. Internal reviews, notebook exports, and local provenance paths are excluded.
+
+GAVD's MIT licensing for research reuse is acknowledged. The annotation license and the separately hosted videos' access conditions have different scopes. The user has not supplied a project-specific institutional determination; approval or exemption is not invented. Authors must settle ethics/data-use wording, authorship, related-submission overlap, and any release of the aliased numerical records before uploading. Alias replacement alone does not guarantee anonymity. Packaging is preparation for local review, not release authorization.
+
+The BrainBodyFM paper and source notebooks are preserved. Its classification appendix overlaps this case study, even though the new argument and primary weighting analysis are distinct from its laterality contribution. No external submission has been made.

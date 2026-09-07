@@ -1,0 +1,77 @@
+{
+  "purpose": "Visualize how two averaging rules weight the same observed clips.",
+  "scope": "Arithmetic from stored source-level summaries only; no model or checkpoint execution.",
+  "inputs": {
+    "numerical_supplement/normal_validation_weighting.csv": "b8798c2e59c894ddab1ccab60406f526bf66a4455fa6768c2d440d140e8c7c3c",
+    "evidence/validation_normal_source_weighting.csv": "b8798c2e59c894ddab1ccab60406f526bf66a4455fa6768c2d440d140e8c7c3c"
+  },
+  "source_summaries": [
+    {
+      "source": "A",
+      "sequences": "60",
+      "mean_cosine": "0.9049939513206482"
+    },
+    {
+      "source": "B",
+      "sequences": "1",
+      "mean_cosine": "0.7553919553756714"
+    },
+    {
+      "source": "C",
+      "sequences": "1",
+      "mean_cosine": "0.6981571912765503"
+    },
+    {
+      "source": "D",
+      "sequences": "1",
+      "mean_cosine": "0.6033803224563599"
+    },
+    {
+      "source": "E",
+      "sequences": "1",
+      "mean_cosine": "0.543364942073822"
+    }
+  ],
+  "total_clips": 64,
+  "total_videos": 5,
+  "equal_clip_average": "0.88906142953783274375",
+  "equal_video_average": "0.70105767250061036",
+  "equal_clip_formula": "sum(clips_in_video * video_mean_cosine) / total_clips",
+  "equal_video_formula": "sum(video_mean_cosine) / total_videos",
+  "display_rounding": "Cosines: two decimal places. Weights: whole percentages; bar lengths use exact weights.",
+  "dominant_video_weight_equal_clip": "0.9375",
+  "dominant_video_weight_equal_video": "0.2",
+  "interpretation_boundary": "Cosine is feature similarity; this figure does not measure retained clinical function or clinical prediction quality.",
+  "design_checks": {
+    "size_inches": [
+      5.5,
+      2.75
+    ],
+    "minimum_font_points": 10.0,
+    "visible_word_count": 40,
+    "visible_text": [
+      "Same clips, different averages",
+      "One video \u00b7 60 clips",
+      "Other four \u00b7 1 clip each",
+      "Contribution to average",
+      "Average\ncosine",
+      "Equal clip\nweight",
+      "94%",
+      "6%",
+      "0.89",
+      "Equal video\nweight",
+      "20%",
+      "80%",
+      "0.70",
+      "Cosine measures feature similarity between two encoder states."
+    ],
+    "vector_svg": true,
+    "labels_in_canvas": true,
+    "no_text_overlap": true
+  },
+  "outputs": {
+    "figures/weighting_comparison.svg": "63aeb5d22e801ed068aa0b04ffb8c28e7e919afd53203477b1dd2820a6eb1a11",
+    "figures/weighting_comparison.pdf": "f5693016bf0d3b2da8bda72b79bfe6df21a41158bd8e9c4648ac32699163e6d1",
+    "figures/weighting_comparison.png": "1b1f5d642ae119872968f7bdc4262641915339f7b10cec6b5a182985f7a55592"
+  }
+}

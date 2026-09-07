@@ -1,6 +1,23 @@
 # Advanced notebook evidence audit
 
-Audit date: 2026-09-05. Scope: complete saved source, markdown, and text outputs of notebooks `08`, `09`, and `nb_05a`–`nb_05d`; their current and historical numerical artifacts; the shared split/QC and scientific-visualization helpers; and relevant replacement laterality geometry/evaluation code. No training, source-notebook edits, or upstream artifact writes were performed.
+Current review: 2026-09-06. This review covers every source cell and saved result in notebooks `07`, `08`, `09`, and `nb_05a`–`nb_05d`, their retained numerical summaries, and the GenAI4Health drafts. No training, source-notebook edits, or upstream artifact writes were performed. The earlier checkpoint-level verification record, dated 2026-09-05, is preserved below; its claims about files being available refer to that earlier inspection, not to their availability in the current workspace.
+
+## Current verification and submission decision
+
+The scientific findings have not changed. All code cells in these notebooks match the previously extracted source. Differences in the saved notebook text concern cache-hit messages, process-specific warning paths, negligible solver-warning rounding, and figure-cell execution counts. They do not supply another model, fold, seed, consolidation comparison, or forecasting experiment.
+
+The strongest result from this subset remains the same-records weighting comparison. From the five retained source rows, independent arithmetic gives clip-weighted cosine **0.8890614295** and source-weighted cosine **0.7010576725**. Both agree with the earlier cache-level calculation within `1e-7`; the tiny differences arise from floating-point aggregation. One upload supplies 60 of 64 clips, so it receives 93.75% of clip weight and 20% of source weight. The paper should report **0.89 versus 0.70**, with **60/64 clips (about 94%) versus 20%**. Additional decimal places are useful in this internal reproducibility record but are unnecessary in the paper.
+
+Two reproducibility qualifications now matter:
+
+1. The configured artifact root is the expected `work/artifacts` directory, but its `real/checkpoints`, `real/fold_evaluation`, and `real/evaluation_protocol` directories are absent in this workspace. Running `review/audit_advanced_artifacts.py` therefore stops at the missing final checkpoint sidecar. The source means, earlier checked JSON, numerical supplement, and notebook outputs remain mutually consistent. This review independently verifies retained-output arithmetic, not checkpoint bytes, raw cached embeddings, or a fresh model forward pass. Do not say those latter checks were rerun successfully today.
+2. The unmodified numerical-supplement verifier initially fails a raw CSV checksum assertion. For both CSVs, converting the current LF line endings to CRLF in memory exactly reproduces the stored checksum; their numerical content has not changed. The packaging owner has been notified to repair portable provenance and rerun the verifier. The failed initial run must not be recorded as a passing check.
+
+For the new submission, retain the weighting comparison as the main case study and the independently reviewed source-held-out classification counts as supporting evidence. Exclude temporal-probe tables and the cumulative drift trajectory from submission-facing appendices: neither resolves the main trust argument, and their additional methodological qualifications distract from the verified arithmetic comparison. Preserve them here as a complete research record. All synthetic, archived transductive, reflection, and laterality results remain outside the new submission. Causal forecasting belongs in a proposed evaluation requirement, not a reported result or a narrative about local missing files.
+
+## Earlier checkpoint-level record (2026-09-05)
+
+The following sections preserve the original inspection of notebooks `08`, `09`, and `nb_05a`–`nb_05d`, their then-available numerical artifacts, the shared split/QC and visualization helpers, and relevant replacement geometry/evaluation code. Section 9 adds the current complete review of notebook 07 and clarifies what temporal pooling can establish.
 
 The strongest usable observation in this subset is a **descriptive, source-disjoint normal-reference representation audit**. In the one completed fold and seed, final validation cosine is 0.7011 when uploads receive equal weight, compared with 0.8891 when clips receive equal weight. One upload contributes 60 of the 64 validation clips. The same unchanged embeddings produce both numbers. This illustrates why the unit of analysis matters. It does not establish clinical deterioration, catastrophic forgetting, or a successful consolidation intervention.
 
@@ -249,3 +266,41 @@ Before a future empirical extension, strengthen notebook 08's report to include 
 The stage gate checks fewer fields than its explanatory prose suggests, although the audit independently verified the actual current stage role contracts. The candidate-stage-0 path is loaded without explicitly checking its recorded sidecar SHA at that point; this matters if multiple future objectives are introduced. The supervised-objective helper checks `group_loss`, whereas current producer metadata uses `group_loss_enabled`; `label_free` currently disambiguates the single objective, but prospective ablation labeling should use the producer schema directly. The notebook's “test once” sequencing describes the code path; immutable experiment logs would be needed to demonstrate a single use across arbitrary reruns.
 
 These are implementation-hardening recommendations for later experiments. They do not require withholding the verified descriptive reaggregation, provided the paper states its source, scope, and limitations as above.
+
+## 9. Temporal readout: complete current code review
+
+Notebook 07 has 24 cells. The selected checkpoint's frozen EMA encoder supplies identical positioned, contextualized tokens to three deterministic 256-dimensional readouts: global/subset mean and standard deviation, a signed temporal moment replacing one block, or four ordered bins over the selected landmarks. Ridge regression chooses regularization using validation-source mean absolute error, refits its scaler and coefficients on training plus validation clips, and reports error after averaging predictions and targets within each test source. There is no learned encoder update during this diagnostic. Clip-level fitting still gives clip-rich sources more training rows even though selection and test errors give sources equal weight.
+
+The nine retained summary rows agree with the latest saved notebook output:
+
+| Heuristic target | Mean/std R² | Signed-moment R² | Four-bin R² |
+|---|---:|---:|---:|
+| Relative clip position of maximum ankle separation | 0.173 | 0.052 | 0.318 |
+| Log ratio of later-half to earlier-half frame displacement | 0.105 | 0.054 | 0.176 |
+| Circular-shift ankle-coordinate lag estimate | −0.071 | −0.054 | −0.052 |
+
+All nine rows report 20 test sources. Time bins give higher observed R² than mean/std for the first two targets, but the signed-moment version does not. There is no matched untrained encoder, direct-pose baseline, missingness control, repeated model seed, or repeated outer-fold evidence for this comparison. The ordering therefore concerns these readouts of this one saved representation; it does not isolate a benefit from pretraining or establish a more general model of motion.
+
+### Temporal information and pooling
+
+The sanity check permutes already-encoded tokens and their masks together. Mean/std pooling changes by at most approximately `4.8e-7`, whereas the signed moment changes by about `0.16`. This correctly verifies the readout's symmetry to token reordering. It does not show that the original temporal order has disappeared from the features: time embeddings and full-clip attention have already entered each token before pooling. Nor does the check permute raw frame order and re-encode it. A statement that mean pooling necessarily removes all temporal information would overstate the algebra.
+
+### Targets and timestamp use
+
+The targets are computed from complete observed pose arrays, so this is retrospective recovery of clip statistics, not prediction of an unseen future. Their notebook names overstate their physical interpretation:
+
+- `peak_phase` uses the array index of maximum two-dimensional ankle separation, divided by clip length minus one. It does not detect a gait cycle or use a clinical gait-phase annotation, and it does not apply the landmark-visibility mask before finding the maximum.
+- `energy_ratio` takes a log ratio of mean coordinate displacement between successive stored rows in the second and first halves. It is neither kinetic energy nor a velocity measured in physical units. It does not divide by elapsed time or exclude invalid transitions explicitly.
+- `phase_lag` maximizes a dot product between ankle vertical-coordinate series under `np.roll`, which is a circular shift. It converts the winning row lag to seconds using the video's nominal frame rate. The stored `frame_numbers` are loaded but not used by this target computation, so irregular or missing sampled frames would weaken the timing interpretation. This review does not assume such irregularity occurs in every clip; the code simply does not enforce uniform physical-time spacing.
+
+Pose quality, camera effects, and temporal resizing can affect these summaries. None is an independently adjudicated neurological or clinical endpoint. Negative lag R² means the fitted predictor has larger squared error than the held-out source-mean reference; it does not prove that every representation or nonlinear decoder lacks timing information.
+
+### Access boundaries
+
+The notebook prepares and encodes test clips before selecting ridge regularization, but the inspected scaler/probe fitting and selection code uses training or validation rows only. Early feature materialization alone is not proof of test-label leakage. The accurate conclusion is that the procedural promise to leave test tensors unopened until selection is not implemented end to end. The retrospective target itself uses the same clip as the features, which is permissible for a representation probe when disclosed but cannot establish causal forecasting.
+
+Notebook 09 adds genuine future-information concerns: its candidate mask leaves 21 future joints visible, its persistence baseline extracts its previous token from full-clip noncausal attention, and its preprocessing can use future values. A target encoder may see future data solely to define a scoring target; allowing that information into the predictor or baseline is the relevant violation. No future-trained result is present in its saved execution, so these are prospective design corrections rather than explanations for an observed forecast score.
+
+### Clinical and causal interpretation
+
+The normal-reference cosine holds the input clips fixed while model weights change. It consequently measures representation-coordinate change across checkpoints, not a person's change over time. Equal source weighting answers an upload-level question; it does not recover patient weighting without an identity key or correct unspecified population sampling. Neither the cosine contrast nor the temporal probes measures calibration, clinician trust, safe abstention, treatment response, or agentic decision quality. Their relevance to the workshop is the need to carry these evidence boundaries into a health-facing system, with the additional decision-level evaluations stated as proposed work.

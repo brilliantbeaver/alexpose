@@ -587,7 +587,7 @@ OUTPUT:
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\694196087.py:54: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\694196087.py:54: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
   self.blocks = nn.TransformerEncoder(layer, depth)
 
 
@@ -658,21 +658,21 @@ with classifier_progress.unit(2, "Materialize development features"):
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\694196087.py:24: RuntimeWarning: Mean of empty slice
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\694196087.py:24: RuntimeWarning: Mean of empty slice
   hips = np.nanmean(xyz[:, [23, 24]], axis=1)
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\694196087.py:24: RuntimeWarning: Mean of empty slice
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\694196087.py:24: RuntimeWarning: Mean of empty slice
   hips = np.nanmean(xyz[:, [23, 24]], axis=1)
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\4010548136.py:26: RuntimeWarning: Mean of empty slice
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\4010548136.py:26: RuntimeWarning: Mean of empty slice
   np.nanmean(masked, axis=0).ravel(),
 C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\.venv\Lib\site-packages\numpy\lib\_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\4010548136.py:28: RuntimeWarning: Mean of empty slice
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\4010548136.py:28: RuntimeWarning: Mean of empty slice
   np.nanmean(np.abs(velocity), axis=0).ravel(),
 
 
@@ -809,12 +809,12 @@ with classifier_progress.unit(4, "Evaluate each frozen lane on outer-test source
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\694196087.py:24: RuntimeWarning: Mean of empty slice
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\694196087.py:24: RuntimeWarning: Mean of empty slice
   hips = np.nanmean(xyz[:, [23, 24]], axis=1)
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_3416\4010548136.py:28: RuntimeWarning: Mean of empty slice
+C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_11500\4010548136.py:28: RuntimeWarning: Mean of empty slice
   np.nanmean(np.abs(velocity), axis=0).ravel(),
 C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\.venv\Lib\site-packages\numpy\lib\_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
@@ -956,7 +956,7 @@ These are YouTube-source generalization estimates under the available annotation
 Validation selects regularization independently for the S-JEPA, raw-kinematic, and missingness lanes. The chart then displays the source-equal outer-test scores once, making sensor and missingness shortcuts visible beside the learned representation.
 
 
-=== CELL 17 [code] execution=1 ===
+=== CELL 17 [code] execution=10 ===
 
 # Paper and notebook rendering share this single source of truth.
 from pathlib import Path as _VisualPath

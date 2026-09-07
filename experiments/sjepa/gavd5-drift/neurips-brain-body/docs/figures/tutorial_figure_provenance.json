@@ -1,0 +1,551 @@
+{
+  "evidence_status": "Saved notebook output and inspected code; not locally rerun.",
+  "scope": "Protocol-v2 fold 0 seed 42; no interval or cross-fold estimates.",
+  "audit_date": "2026-09-05",
+  "limitation": "The corresponding current fold-v2 checkpoint and JSON report bundles were absent locally at the time of writing.",
+  "extractor": "generate_brain_body_tutorial_figures.py",
+  "notebook_sha256": {
+    "01_gavd_manifest_and_youtube.ipynb": "4dbda1d1c28a20a341bb96515b7a9e893bbb434304877931a554b44dbecff038",
+    "02_extract_and_watch_skeletons.ipynb": "7408cd21490c65040f6c177a73fbe17cb28b723ebd5d1d25b78238ec08004f89",
+    "04_pretrain_sjepa_on_normal.ipynb": "919d77e4f93f3146b71e4c3d0b8f1868d5bb1064c0d40d0f7ef90479b847e1c1",
+    "06_capstone_health_condition_classifiers.ipynb": "a9c3abf9d2759952e3fc6137b6982bbd53693ed8d421dea35bf84ec3570fc610",
+    "07_temporal_readout_diagnostic.ipynb": "80b6152a0f7a2792d5abf1f690ac396655d3b7338c3d430f85305d7f1bed6524",
+    "08_normal_anchor_drift_and_consolidation.ipynb": "84f0dffd34e9f74a66a32aec80090b45f0dfdb86eaa434940bb861d950f01b29",
+    "09_predictive_surprise_world_model.ipynb": "0172e1f3c203f1431d241915843b3481ac501ed304d066a07c19f08772b8b955"
+  },
+  "cells": [
+    {
+      "notebook": "../../01_gavd_manifest_and_youtube.ipynb",
+      "cell_index_zero_based": 10,
+      "execution_count": 6,
+      "source_sha256": "278a6106c427a539d5effc096bf9859addc85b4cec77ebf95c0a43ade878e264",
+      "text_output_sha256": "0938560b05751b3f3deb4068cee253ce4840cc9d52cb5e790cb48cbccf8b1aae",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T05:24:53.804051Z",
+        "iopub.status.busy": "2026-09-05T05:24:53.804051Z",
+        "iopub.status.idle": "2026-09-05T05:24:53.828693Z",
+        "shell.execute_reply": "2026-09-05T05:24:53.828693Z"
+      }
+    },
+    {
+      "notebook": "../../01_gavd_manifest_and_youtube.ipynb",
+      "cell_index_zero_based": 14,
+      "execution_count": 8,
+      "source_sha256": "20345ac7c25b3bd96f627d20a5e436ce9abefe6dd59944ce02def844ca3a5f48",
+      "text_output_sha256": "49cb25fa66d49120ddf2a05f4bdbf7b5a86bc1d45df1049ea73b0848dca684c1",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T05:24:53.852111Z",
+        "iopub.status.busy": "2026-09-05T05:24:53.852111Z",
+        "iopub.status.idle": "2026-09-05T05:25:14.558242Z",
+        "shell.execute_reply": "2026-09-05T05:25:14.558242Z"
+      }
+    },
+    {
+      "notebook": "../../02_extract_and_watch_skeletons.ipynb",
+      "cell_index_zero_based": 12,
+      "execution_count": 8,
+      "source_sha256": "e66a1813021ea00448a29c06126714af671338bae30545b83aa6c9ffc03ccaf7",
+      "text_output_sha256": "8b738ee85cf2cd9177092b15271489630007210191317d06f91451bde9fe8dc8",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T06:28:16.746505Z",
+        "iopub.status.busy": "2026-09-05T06:28:16.746505Z",
+        "iopub.status.idle": "2026-09-05T06:28:23.160517Z",
+        "shell.execute_reply": "2026-09-05T06:28:23.160517Z"
+      }
+    },
+    {
+      "notebook": "../../04_pretrain_sjepa_on_normal.ipynb",
+      "cell_index_zero_based": 4,
+      "execution_count": 3,
+      "source_sha256": "df04970ea7df9e5f1ea583e4ff5ba81523e3eaf85c572a18f954b0bdfd63e940",
+      "text_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T04:43:19.002758Z",
+        "iopub.status.busy": "2026-09-05T04:43:19.001758Z",
+        "iopub.status.idle": "2026-09-05T04:43:19.018381Z",
+        "shell.execute_reply": "2026-09-05T04:43:19.017366Z"
+      }
+    },
+    {
+      "notebook": "../../04_pretrain_sjepa_on_normal.ipynb",
+      "cell_index_zero_based": 5,
+      "execution_count": 4,
+      "source_sha256": "ecbc4d9ff6fbd61fd160d6bfcc811dc0b8c1e95190f49f04a79f99f63bbbd2ed",
+      "text_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T04:43:19.021377Z",
+        "iopub.status.busy": "2026-09-05T04:43:19.020380Z",
+        "iopub.status.idle": "2026-09-05T04:43:19.037923Z",
+        "shell.execute_reply": "2026-09-05T04:43:19.036751Z"
+      }
+    },
+    {
+      "notebook": "../../04_pretrain_sjepa_on_normal.ipynb",
+      "cell_index_zero_based": 8,
+      "execution_count": 5,
+      "source_sha256": "7ce492302af63979f92d7ab5927905b04b33fa00a8f73693c39e42c7a8bc037b",
+      "text_output_sha256": "2e60f079994e760cf3ebda4bdf58cf663ac546e7aea71b24c5420978ee587a35",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T04:43:19.039920Z",
+        "iopub.status.busy": "2026-09-05T04:43:19.039920Z",
+        "iopub.status.idle": "2026-09-05T04:43:19.073125Z",
+        "shell.execute_reply": "2026-09-05T04:43:19.072615Z"
+      }
+    },
+    {
+      "notebook": "../../04_pretrain_sjepa_on_normal.ipynb",
+      "cell_index_zero_based": 10,
+      "execution_count": 6,
+      "source_sha256": "601feb8c674401b97423a41bb086e228d730a5bcf8df30c907467adfcb384114",
+      "text_output_sha256": "f59ac7f01202b4cf48b64a69d62aec7c719a211265c1ff7b930a751d9fba6aed",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T04:43:19.075137Z",
+        "iopub.status.busy": "2026-09-05T04:43:19.075137Z",
+        "iopub.status.idle": "2026-09-05T04:43:19.127947Z",
+        "shell.execute_reply": "2026-09-05T04:43:19.127947Z"
+      }
+    },
+    {
+      "notebook": "../../04_pretrain_sjepa_on_normal.ipynb",
+      "cell_index_zero_based": 11,
+      "execution_count": 7,
+      "source_sha256": "8d72b0196f9f5b4e14dbfecb89e216f1a704d4b0286e806c3ec28e07592783aa",
+      "text_output_sha256": "22ddf49ab9c9ca8699b2e134bc2aaa13db3820104e45d34f768a2c908a664ffe",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T04:43:19.130105Z",
+        "iopub.status.busy": "2026-09-05T04:43:19.130105Z",
+        "iopub.status.idle": "2026-09-05T04:43:20.105928Z",
+        "shell.execute_reply": "2026-09-05T04:43:20.105928Z"
+      }
+    },
+    {
+      "notebook": "../../06_capstone_health_condition_classifiers.ipynb",
+      "cell_index_zero_based": 7,
+      "execution_count": 5,
+      "source_sha256": "2159248d4aa685c33bb39e1760194d52ebe97eda1f82ede0a9e22cc1d9b756ca",
+      "text_output_sha256": "e4aca450802a956333ea22c5967210a22f99f2d74ef6192d3572f275725eae2d",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:42:38.956110Z",
+        "iopub.status.busy": "2026-09-05T07:42:38.953742Z",
+        "iopub.status.idle": "2026-09-05T07:42:39.596764Z",
+        "shell.execute_reply": "2026-09-05T07:42:39.596210Z"
+      }
+    },
+    {
+      "notebook": "../../06_capstone_health_condition_classifiers.ipynb",
+      "cell_index_zero_based": 13,
+      "execution_count": 8,
+      "source_sha256": "f8df737d645244b28f75d13f8f1aa71c8342350cd2cc3d498a176a5b9eb19025",
+      "text_output_sha256": "e172d86f8abb8f7d9e21863e91056924e1d195c10e25a58bb04a0589ce72ae7c",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:42:45.405800Z",
+        "iopub.status.busy": "2026-09-05T07:42:45.405800Z",
+        "iopub.status.idle": "2026-09-05T07:42:46.443167Z",
+        "shell.execute_reply": "2026-09-05T07:42:46.443167Z"
+      }
+    },
+    {
+      "notebook": "../../07_temporal_readout_diagnostic.ipynb",
+      "cell_index_zero_based": 10,
+      "execution_count": 7,
+      "source_sha256": "9dbf629e958c82ab7acc2c994ad4950996a0fb7e7a074675f33533a2add8ca74",
+      "text_output_sha256": "3db964cca1f58f40776d71b2cb6b087f32932015890b29d72e56ef495f5e383a",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:42:52.750298Z",
+        "iopub.status.busy": "2026-09-05T07:42:52.750298Z",
+        "iopub.status.idle": "2026-09-05T07:42:52.878046Z",
+        "shell.execute_reply": "2026-09-05T07:42:52.878046Z"
+      }
+    },
+    {
+      "notebook": "../../07_temporal_readout_diagnostic.ipynb",
+      "cell_index_zero_based": 14,
+      "execution_count": 10,
+      "source_sha256": "abb704055e855daf04ec5fb8daa36abb1e4b7c708229ee87b104dbb30dd0b6ff",
+      "text_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:42:52.972236Z",
+        "iopub.status.busy": "2026-09-05T07:42:52.971333Z",
+        "iopub.status.idle": "2026-09-05T07:42:52.979473Z",
+        "shell.execute_reply": "2026-09-05T07:42:52.979473Z"
+      }
+    },
+    {
+      "notebook": "../../07_temporal_readout_diagnostic.ipynb",
+      "cell_index_zero_based": 17,
+      "execution_count": 12,
+      "source_sha256": "f394f066c45cfb5d38e5bc1612e62ef65518d1be5cc5a488882622fd9e50ee11",
+      "text_output_sha256": "2444f166754b0de005b84b4a812b564e405f3c33c37e9525aaf4682ed1474784",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:42:55.615138Z",
+        "iopub.status.busy": "2026-09-05T07:42:55.615138Z",
+        "iopub.status.idle": "2026-09-05T07:42:57.175604Z",
+        "shell.execute_reply": "2026-09-05T07:42:57.174597Z"
+      }
+    },
+    {
+      "notebook": "../../07_temporal_readout_diagnostic.ipynb",
+      "cell_index_zero_based": 19,
+      "execution_count": 13,
+      "source_sha256": "66295ca0022360fbe6de98d9ec66d5f2516b7748d5d3219421604c2a74c3f300",
+      "text_output_sha256": "cb6daae049ebd9b2c621e0c67723d523da97b71c4b353cd582fba2ba3166800e",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:42:57.178502Z",
+        "iopub.status.busy": "2026-09-05T07:42:57.177604Z",
+        "iopub.status.idle": "2026-09-05T07:43:00.791897Z",
+        "shell.execute_reply": "2026-09-05T07:43:00.791897Z"
+      }
+    },
+    {
+      "notebook": "../../08_normal_anchor_drift_and_consolidation.ipynb",
+      "cell_index_zero_based": 15,
+      "execution_count": 11,
+      "source_sha256": "d740280919dc8dbf0a1fed60dc2646fdc7de61d341d1199eede3f8d61b358064",
+      "text_output_sha256": "0835888b9e3febfce36979ed86eb0c0935f9c7b2b28f5b2384b6f0d05b9f1102",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:43:09.015540Z",
+        "iopub.status.busy": "2026-09-05T07:43:09.015540Z",
+        "iopub.status.idle": "2026-09-05T07:43:10.392782Z",
+        "shell.execute_reply": "2026-09-05T07:43:10.392782Z"
+      }
+    },
+    {
+      "notebook": "../../08_normal_anchor_drift_and_consolidation.ipynb",
+      "cell_index_zero_based": 17,
+      "execution_count": 12,
+      "source_sha256": "63aa5ec3c71679e88cbe3b82b7e9040bb65e6e54eae0f89ccbf3c75a2932b402",
+      "text_output_sha256": "795315e34bed2bd795bd030a707f852b3aa3c52e817cc1a60edcd1568067d639",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:43:10.397210Z",
+        "iopub.status.busy": "2026-09-05T07:43:10.397210Z",
+        "iopub.status.idle": "2026-09-05T07:43:10.956039Z",
+        "shell.execute_reply": "2026-09-05T07:43:10.956039Z"
+      }
+    },
+    {
+      "notebook": "../../09_predictive_surprise_world_model.ipynb",
+      "cell_index_zero_based": 11,
+      "execution_count": 8,
+      "source_sha256": "14074304cb969924208e7897858667a0f085943b084fea0513807b7a3313451e",
+      "text_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:43:19.932176Z",
+        "iopub.status.busy": "2026-09-05T07:43:19.932176Z",
+        "iopub.status.idle": "2026-09-05T07:43:19.959078Z",
+        "shell.execute_reply": "2026-09-05T07:43:19.959078Z"
+      }
+    },
+    {
+      "notebook": "../../09_predictive_surprise_world_model.ipynb",
+      "cell_index_zero_based": 12,
+      "execution_count": 9,
+      "source_sha256": "95f8791e6043c4560fba32dbd5bef668f68b512afbbd832f95f370f892e6e4c8",
+      "text_output_sha256": "f857eae11fe643ebb944e3eb1abbadaabcc25f73846309e6f6948ee094dddf50",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:43:19.963101Z",
+        "iopub.status.busy": "2026-09-05T07:43:19.959078Z",
+        "iopub.status.idle": "2026-09-05T07:43:19.972078Z",
+        "shell.execute_reply": "2026-09-05T07:43:19.972078Z"
+      }
+    },
+    {
+      "notebook": "../../09_predictive_surprise_world_model.ipynb",
+      "cell_index_zero_based": 15,
+      "execution_count": 11,
+      "source_sha256": "54a9720ca5c0e4805779ab9c2072751c34ef5e8d857d6330e01d2d3176ad33f8",
+      "text_output_sha256": "a93d1ff06c756fd1e0872b0060f90f6cb44b7bce359632cb808e19549ee85d49",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:43:19.984959Z",
+        "iopub.status.busy": "2026-09-05T07:43:19.984959Z",
+        "iopub.status.idle": "2026-09-05T07:43:19.997627Z",
+        "shell.execute_reply": "2026-09-05T07:43:19.997627Z"
+      }
+    },
+    {
+      "notebook": "../../09_predictive_surprise_world_model.ipynb",
+      "cell_index_zero_based": 17,
+      "execution_count": 12,
+      "source_sha256": "bee623d99bc55119299c0a85c41de8f6c152df0906abd4971169df33e7fa9549",
+      "text_output_sha256": "af16ca2153266dd6507f2652ab2c3101aef629f821cf6ee4c38e2935b422b9dc",
+      "execution_metadata": {
+        "iopub.execute_input": "2026-09-05T07:43:19.997627Z",
+        "iopub.status.busy": "2026-09-05T07:43:19.997627Z",
+        "iopub.status.idle": "2026-09-05T07:43:21.003694Z",
+        "shell.execute_reply": "2026-09-05T07:43:21.003694Z"
+      }
+    }
+  ],
+  "selected_data": {
+    "attrition_sequences_sources": [
+      [
+        666,
+        103
+      ],
+      [
+        657,
+        100
+      ],
+      [
+        655,
+        98
+      ],
+      [
+        639,
+        97
+      ]
+    ],
+    "metadata_split_sources_sequences": [
+      [
+        60,
+        392
+      ],
+      [
+        20,
+        134
+      ],
+      [
+        20,
+        131
+      ]
+    ],
+    "post_qc_split_sequences_sources": {
+      "test": [
+        131,
+        20
+      ],
+      "train": [
+        377,
+        59
+      ],
+      "validation": [
+        131,
+        18
+      ]
+    },
+    "readout_lanes": [
+      "sjepa_latent",
+      "missingness_only",
+      "raw_kinematics"
+    ],
+    "readout_columns": [
+      "balanced_accuracy",
+      "macro_f1",
+      "test_sources"
+    ],
+    "readout": [
+      [
+        0.257143,
+        0.292424,
+        20.0
+      ],
+      [
+        0.247619,
+        0.251111,
+        20.0
+      ],
+      [
+        0.442857,
+        0.440513,
+        20.0
+      ]
+    ],
+    "temporal_target_order": [
+      "peak_phase",
+      "energy_ratio",
+      "phase_lag"
+    ],
+    "temporal_lane_order": [
+      "A_mean_std",
+      "B_signed_moment",
+      "C_time_bins"
+    ],
+    "temporal_columns": [
+      "source_equal_mae",
+      "source_level_r2",
+      "test_sources"
+    ],
+    "temporal": [
+      [
+        0.092086,
+        0.173011,
+        20.0
+      ],
+      [
+        0.091527,
+        0.052344,
+        20.0
+      ],
+      [
+        0.075263,
+        0.317745,
+        20.0
+      ],
+      [
+        0.141453,
+        0.105126,
+        20.0
+      ],
+      [
+        0.148818,
+        0.053575,
+        20.0
+      ],
+      [
+        0.13722,
+        0.176175,
+        20.0
+      ],
+      [
+        0.109191,
+        -0.070535,
+        20.0
+      ],
+      [
+        0.107476,
+        -0.053989,
+        20.0
+      ],
+      [
+        0.10724,
+        -0.052171,
+        20.0
+      ]
+    ],
+    "drift_columns": [
+      "stage",
+      "source_equal_anchor_cosine",
+      "normal_sources"
+    ],
+    "drift": {
+      "train": [
+        [
+          0,
+          1.0,
+          18
+        ],
+        [
+          1,
+          0.995692,
+          18
+        ],
+        [
+          2,
+          0.984225,
+          18
+        ],
+        [
+          3,
+          0.892483,
+          18
+        ],
+        [
+          4,
+          0.867689,
+          18
+        ]
+      ],
+      "validation": [
+        [
+          0,
+          1.0,
+          5
+        ],
+        [
+          1,
+          0.992833,
+          5
+        ],
+        [
+          2,
+          0.969039,
+          5
+        ],
+        [
+          3,
+          0.737187,
+          5
+        ],
+        [
+          4,
+          0.701058,
+          5
+        ]
+      ]
+    },
+    "final_test_anchor_cosine": 0.849632,
+    "final_test_normal_sources": 7,
+    "model_schematic": {
+      "frames": 64,
+      "joints": 33,
+      "frames_per_patch": 4,
+      "segments": 16,
+      "all_tokens": 528,
+      "max_eligible_tokens": 192,
+      "mask_fraction_of_batch_minimum_valid_eligible": 0.6,
+      "fully_valid_target_count": 115,
+      "fully_valid_fraction_of_all_tokens": 0.2178030303030303,
+      "ema_decay": 0.996,
+      "variance_weight": 0.1,
+      "covariance_weight": 0.01
+    },
+    "forecast_schematic": {
+      "illustrative_horizon_segments": 4,
+      "current_suffix_target_joints": 12,
+      "current_visible_suffix_joints": 21,
+      "prefix_only_future_context": "required change; not executed",
+      "numerical_result_available": false
+    }
+  },
+  "privacy": "No individual trajectories, frames, sequence identifiers, or video identifiers are copied into these figure assets.",
+  "generator_sha256": "91938c048ef7440335e2768c353d441804632efcbc23137085b2d090cf2b3bea",
+  "figures": [
+    {
+      "filename": "tutorial_01_data_and_source_split.pdf",
+      "sha256": "044da25f369334843f2c2f8dd8ad66bc3d09f61758214769c94270d8ae3fa984"
+    },
+    {
+      "filename": "tutorial_01_data_and_source_split.svg",
+      "sha256": "8ff4e097fce0e97fe13c032d30cedfab12bfb821c81bee3bcdad2dbf6521ab2f"
+    },
+    {
+      "filename": "tutorial_02_model_and_masking.pdf",
+      "sha256": "99874bb603b7d881505a2338d22fb9be96a15106d534d7b8f6a83db273dda033"
+    },
+    {
+      "filename": "tutorial_02_model_and_masking.svg",
+      "sha256": "571389a5dd64cbb12db828ae52795e278378bbf22e4dec45a9937693f1b59e13"
+    },
+    {
+      "filename": "tutorial_03_source_readouts.pdf",
+      "sha256": "5875d17d02c0608a66a88787d281a84a34271bc6b6d3a6eb158caee0700b864c"
+    },
+    {
+      "filename": "tutorial_03_source_readouts.svg",
+      "sha256": "869096377703ebbf07969abc90062f37a44444481a7dce0b60e45abd831220a9"
+    },
+    {
+      "filename": "tutorial_04_temporal_probes.pdf",
+      "sha256": "0e6159a13cdb8fea8793efcd0557fda97359914b374e43937e49361afb5af88c"
+    },
+    {
+      "filename": "tutorial_04_temporal_probes.svg",
+      "sha256": "18732364113522672caed6e3b1746150d3bd0b3516d4ff4a507397a6b53f7003"
+    },
+    {
+      "filename": "tutorial_05_normal_anchor_drift.pdf",
+      "sha256": "cb00e484bc0cfb325232048d3812d91f22d812395a2db5c9ee4737290c81557d"
+    },
+    {
+      "filename": "tutorial_05_normal_anchor_drift.svg",
+      "sha256": "249c0388c42cc54ae3260f9e026988ae86c2d18a914d32d3f0f7cc7873ba58d4"
+    },
+    {
+      "filename": "tutorial_06_forecast_context_audit.pdf",
+      "sha256": "7f0c2bc61448c453b71eae59839078181e058c59b6031db348b7e520443489d8"
+    },
+    {
+      "filename": "tutorial_06_forecast_context_audit.svg",
+      "sha256": "80e8803db6f93d903c4ceb8a379ff55748488f2ac9cc75debbe88ce13470cbd5"
+    }
+  ]
+}

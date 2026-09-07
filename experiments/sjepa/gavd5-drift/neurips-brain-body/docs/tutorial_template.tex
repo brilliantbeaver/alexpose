@@ -1,0 +1,39 @@
+\documentclass[11pt,letterpaper]{article}
+% Explanatory companion, not the workshop's five-page submission template.
+\usepackage[margin=0.9in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{newunicodechar}
+\newunicodechar{−}{\ensuremath{-}}
+\usepackage{graphicx}
+\usepackage{booktabs,longtable,array,calc}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{linkblue}{HTML}{145A7A}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=linkblue,urlcolor=linkblue,
+  pdftitle={$title$},pdfauthor={},pdfsubject={BrainBodyFM tutorial and evidence review}}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+% Pandoc 3.10 uses LTcaptype=none for uncaptioned longtables.
+% The older ltcaption bundled with Tectonic still expects a counter.
+\newcounter{none}
+\usepackage{float}
+\usepackage{needspace}
+\floatplacement{figure}{H}
+\usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{\small}
+\setlength{\emergencystretch}{3em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setcounter{secnumdepth}{0}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\title{\LARGE $title$\\[0.45em]\large $subtitle$}
+\author{}
+\date{\small $date$}
+\begin{document}
+\maketitle
+$body$
+\end{document}

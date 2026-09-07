@@ -1,0 +1,273 @@
+{
+  "reviewed_utc": "2026-09-06T09:25:39+00:00",
+  "scope": "Reanalysis of retained predictions, similarity summaries, notebook outputs, and cohort ledgers.",
+  "numerical_verification": {
+    "numerical_checks": "PASS",
+    "hash_convention": "canonical LF bytes",
+    "readouts": [
+      {
+        "lane": "missingness_only",
+        "correct_sources": 6,
+        "total_sources": 20,
+        "accuracy": 0.3,
+        "balanced_accuracy": 0.24761904761904763,
+        "macro_f1": 0.2511111111111111,
+        "class_source_counts": {
+          "normal": 7,
+          "cerebralpalsy": 2,
+          "stroke": 3,
+          "myopathic": 6,
+          "parkinsons": 2
+        }
+      },
+      {
+        "lane": "raw_kinematics",
+        "correct_sources": 10,
+        "total_sources": 20,
+        "accuracy": 0.5,
+        "balanced_accuracy": 0.4428571428571429,
+        "macro_f1": 0.44051282051282054,
+        "class_source_counts": {
+          "normal": 7,
+          "cerebralpalsy": 2,
+          "stroke": 3,
+          "myopathic": 6,
+          "parkinsons": 2
+        }
+      },
+      {
+        "lane": "sjepa_latent",
+        "correct_sources": 6,
+        "total_sources": 20,
+        "accuracy": 0.3,
+        "balanced_accuracy": 0.2571428571428571,
+        "macro_f1": 0.29242424242424236,
+        "class_source_counts": {
+          "normal": 7,
+          "cerebralpalsy": 2,
+          "stroke": 3,
+          "myopathic": 6,
+          "parkinsons": 2
+        }
+      }
+    ],
+    "weighting": {
+      "equal_clip": 0.8890614295378327,
+      "equal_source": 0.7010576725006104,
+      "dominant_clip_share": 0.9375
+    },
+    "raw_minus_latent_macro_f1": 0.14808857808857817,
+    "scope": "Numerical reconstruction only; no checkpoint loading, training, or clinical validation."
+  },
+  "notebook_and_cohort_verification": {
+    "status": "notebook rows and portable numerical values agree",
+    "cohort": {
+      "raw_annotations": {
+        "sequences": 666,
+        "sources": 103,
+        "annotated_frame_rows": 140641
+      },
+      "metadata_public": {
+        "sequences": 657,
+        "sources": 100,
+        "annotated_frame_rows": 137690
+      },
+      "decoded_locked_qc_rows": {
+        "sequences": 655,
+        "sources": 98,
+        "annotated_frame_rows": 135804
+      },
+      "pose_eligible": {
+        "sequences": 639,
+        "sources": 97,
+        "annotated_frame_rows": 134259
+      }
+    },
+    "pose_eligible_roles": {
+      "train": {
+        "sequences": 377,
+        "sources": 59,
+        "annotated_frame_rows": 89167
+      },
+      "validation": {
+        "sequences": 131,
+        "sources": 18,
+        "annotated_frame_rows": 22285
+      },
+      "test": {
+        "sequences": 131,
+        "sources": 20,
+        "annotated_frame_rows": 22807
+      }
+    },
+    "readouts": {
+      "missingness_only": {
+        "correct_sources": 6,
+        "sources": 20,
+        "accuracy": 0.3,
+        "balanced_accuracy": 0.24761904761904763,
+        "macro_f1": 0.2511111111111111,
+        "class_source_counts": {
+          "normal": 7,
+          "cerebralpalsy": 2,
+          "stroke": 3,
+          "myopathic": 6,
+          "parkinsons": 2
+        },
+        "stroke_correct": 0
+      },
+      "raw_kinematics": {
+        "correct_sources": 10,
+        "sources": 20,
+        "accuracy": 0.5,
+        "balanced_accuracy": 0.4428571428571429,
+        "macro_f1": 0.44051282051282054,
+        "class_source_counts": {
+          "normal": 7,
+          "cerebralpalsy": 2,
+          "stroke": 3,
+          "myopathic": 6,
+          "parkinsons": 2
+        },
+        "stroke_correct": 0
+      },
+      "sjepa_latent": {
+        "correct_sources": 6,
+        "sources": 20,
+        "accuracy": 0.3,
+        "balanced_accuracy": 0.2571428571428571,
+        "macro_f1": 0.29242424242424236,
+        "class_source_counts": {
+          "normal": 7,
+          "cerebralpalsy": 2,
+          "stroke": 3,
+          "myopathic": 6,
+          "parkinsons": 2
+        },
+        "stroke_correct": 0
+      }
+    },
+    "locked_legacy_geometry_rows": 655,
+    "original_fold_checkpoint_present": false,
+    "supplement_byte_digest_portability": {
+      "normal_validation_weighting.csv": {
+        "current_bytes_match_historical_digest": false,
+        "crlf_form_matches_historical_digest": true,
+        "canonical_lf_matches_current_digest": true
+      },
+      "test_source_predictions.csv": {
+        "current_bytes_match_historical_digest": false,
+        "crlf_form_matches_historical_digest": true,
+        "canonical_lf_matches_current_digest": true
+      }
+    },
+    "verification_limits": [
+      "No training, pose extraction, model inference, or notebook execution was performed.",
+      "The decoded count is reconstructed from the locked QC ledger, not fresh media decoding.",
+      "Matching saved outputs and predictions does not reproduce training or certify clinical validity.",
+      "Missing fold checkpoint/registry prevent renewed full checkpoint-lineage verification."
+    ]
+  },
+  "current_checks": {
+    "all_60_notebook_predictions_match_export": true,
+    "classification_metrics_recomputed": true,
+    "cohort_counts_match_recorded_tables": true,
+    "role_counts_match_recorded_tables": true,
+    "weighting_arithmetic_recomputed": true,
+    "original_checkpoint_lineage_reverified": false,
+    "pose_extraction_repeated": false,
+    "training_or_model_inference_repeated": false
+  },
+  "prior_artifact_review": {
+    "record": "evidence/verification_manifest.json",
+    "status": "Historical review; original checkpoint/cache checks were not rerun by this command."
+  },
+  "inputs": [
+    {
+      "path": "neurips-genai4health/docs/numerical_supplement/test_source_predictions.csv",
+      "sha256": "4cb2de67c3bf479b0cc403f499a5d788f86a5c47157289ffdb9b15e8e1160334"
+    },
+    {
+      "path": "neurips-genai4health/docs/numerical_supplement/normal_validation_weighting.csv",
+      "sha256": "b8798c2e59c894ddab1ccab60406f526bf66a4455fa6768c2d440d140e8c7c3c"
+    },
+    {
+      "path": "neurips-genai4health/docs/numerical_supplement/provenance.json",
+      "sha256": "ea737a9c86d8b81ac27bd72f33df6bd6e6007a35e752ff7765409d89355fabf2"
+    },
+    {
+      "path": "neurips-genai4health/docs/review/verify_current_core_exports.py",
+      "sha256": "3bd97a7afb8f6c1292bd824f21ffa896fd9ee390ac5fd27c21bbbd69752f8efb"
+    },
+    {
+      "path": "work/artifacts/real/manifest.csv",
+      "sha256": "b85aad246dad215ce439c0cdda37a627f45faea8580d0f7f98a1c45a3a4fbf99"
+    },
+    {
+      "path": "work/artifacts/real/pose_cache_inventory.csv",
+      "sha256": "fc92d8e49b544d722091ddea5e89432e867473997d3977a33a661009366369fb"
+    },
+    {
+      "path": "neurips-brain-body/00_sjepa_from_first_principles.ipynb",
+      "sha256": "3a49eb9b376deee039d9bd0f1bafdf247d901f5463d0f78e4148578da858e488"
+    },
+    {
+      "path": "neurips-brain-body/01_gavd_manifest_and_youtube.ipynb",
+      "sha256": "4dbda1d1c28a20a341bb96515b7a9e893bbb434304877931a554b44dbecff038"
+    },
+    {
+      "path": "neurips-brain-body/02_extract_and_watch_skeletons.ipynb",
+      "sha256": "7408cd21490c65040f6c177a73fbe17cb28b723ebd5d1d25b78238ec08004f89"
+    },
+    {
+      "path": "neurips-brain-body/03_neurologic_keypoint_masking.ipynb",
+      "sha256": "babff2772348670742d6dc431eacc0bd6fe15726821b2530040cbb2ab2749d40"
+    },
+    {
+      "path": "neurips-brain-body/04_pretrain_sjepa_on_normal.ipynb",
+      "sha256": "919d77e4f93f3146b71e4c3d0b8f1868d5bb1064c0d40d0f7ef90479b847e1c1"
+    },
+    {
+      "path": "neurips-brain-body/05_inspect_latent_motion.ipynb",
+      "sha256": "47c72385e26df12f5565462dd76e166632999e79aa42f524a18b915db58151f8"
+    },
+    {
+      "path": "neurips-brain-body/06_capstone_health_condition_classifiers.ipynb",
+      "sha256": "a9c3abf9d2759952e3fc6137b6982bbd53693ed8d421dea35bf84ec3570fc610"
+    },
+    {
+      "path": "neurips-brain-body/07_temporal_readout_diagnostic.ipynb",
+      "sha256": "80b6152a0f7a2792d5abf1f690ac396655d3b7338c3d430f85305d7f1bed6524"
+    },
+    {
+      "path": "neurips-brain-body/08_normal_anchor_drift_and_consolidation.ipynb",
+      "sha256": "84f0dffd34e9f74a66a32aec80090b45f0dfdb86eaa434940bb861d950f01b29"
+    },
+    {
+      "path": "neurips-brain-body/09_predictive_surprise_world_model.ipynb",
+      "sha256": "0172e1f3c203f1431d241915843b3481ac501ed304d066a07c19f08772b8b955"
+    },
+    {
+      "path": "neurips-brain-body/nb_05a_signed_laterality_probe.ipynb",
+      "sha256": "81cc5cc1ab92367d717ce1c227ad003df7e5555570812432f0669d52f70cfbee"
+    },
+    {
+      "path": "neurips-brain-body/nb_05b_reflection_reach_and_futures.ipynb",
+      "sha256": "760bed4242f6482f7de4740ca7c1ea198da65cba11590dd545ee3a66648d2e1b"
+    },
+    {
+      "path": "neurips-brain-body/nb_05c_reflection_equivariant_readout.ipynb",
+      "sha256": "1268cc5b72a35ee238b18ed029693222a1757be3daeba7ddccea655fe506ebf9"
+    },
+    {
+      "path": "neurips-brain-body/nb_05d_reflection_equivariant_encoder.ipynb",
+      "sha256": "12e76744b6040007abe91792edebd549da157a3ee7e16b5c035ffd3ed4b5634d"
+    }
+  ],
+  "limitations": [
+    "No training, pose extraction, model inference, or notebook execution was performed.",
+    "The decoded count is reconstructed from the locked QC ledger, not fresh media decoding.",
+    "Matching saved outputs and predictions does not reproduce training or certify clinical validity.",
+    "Missing fold checkpoint/registry prevent renewed full checkpoint-lineage verification."
+  ]
+}

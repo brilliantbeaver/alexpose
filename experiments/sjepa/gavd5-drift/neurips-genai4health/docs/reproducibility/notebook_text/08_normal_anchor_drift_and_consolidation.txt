@@ -1093,53 +1093,18 @@ else:
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
 verified cache hit: normal_train_stage_00_03c4414cd990.npz
 verified cache hit: normal_validation_stage_00_03c4414cd990.npz
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
+verified cache hit: normal_train_stage_00_03c4414cd990.npz
+verified cache hit: normal_validation_stage_00_03c4414cd990.npz
+verified cache hit: normal_train_stage_01_6789e430b9b2.npz
+verified cache hit: normal_validation_stage_01_6789e430b9b2.npz
+verified cache hit: normal_train_stage_02_d8c1d9e1ff2c.npz
+verified cache hit: normal_validation_stage_02_d8c1d9e1ff2c.npz
+verified cache hit: normal_train_stage_03_731f8b8395a7.npz
+verified cache hit: normal_validation_stage_03_731f8b8395a7.npz
+verified cache hit: normal_train_stage_04_61a909b6eef8.npz
+verified cache hit: normal_validation_stage_04_61a909b6eef8.npz
 
 
 OUTPUT:
@@ -1251,20 +1216,13 @@ else:
 
 OUTPUT:
 verified cache hit: normal_validation_stage_00_03c4414cd990.npz
-
-
-OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
-
-
-OUTPUT:
+verified cache hit: normal_validation_stage_99_f510be2a0453.npz
 selected on held-out validation-normal sources: jepa_vicreg
 
 
 OUTPUT:
-C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\cache\tmp\ipykernel_36120\460140797.py:136: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
-  self.blocks = nn.TransformerEncoder(layer, depth)
+verified cache hit: normal_test_stage_00_03c4414cd990.npz
+verified cache hit: normal_test_stage_99_f510be2a0453.npz
 
 
 OUTPUT:
@@ -1318,7 +1276,7 @@ wrote C:\Users\alexm\dev\alexpose\experiments\sjepa\gavd5-drift\work\artifacts\r
 The development curve uses train and validation normal sources only. Candidate selection is frozen on validation retention before the selected checkpoint is applied once to test-normal sources.
 
 
-=== CELL 20 [code] execution=1 ===
+=== CELL 20 [code] execution=14 ===
 
 # Paper and notebook rendering share this single source of truth.
 from pathlib import Path as _VisualPath

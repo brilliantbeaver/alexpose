@@ -1,155 +1,161 @@
-# From Public URLs to Honest Generalization: A Leakage-Aware Protocol for Continual Gait Representation Learning
-
-*Markdown mirror of the anonymous BrainBodyFM 2026 LaTeX draft. The LaTeX file is canonical. Status: September 4, 2026.*
-
-## Abstract
-
-Public-video datasets make movement representation learning accessible, but they also create an evaluation problem: many annotated sequences can come from one upload, source availability changes, the same person may cross uploads, and pose-estimation failures can correlate with dataset labels. We use a project-specific, S-JEPA-inspired gait pipeline as a case study and specify a leakage-aware protocol for continual movement representation learning.
-
-A September 4, 2026 audit retained 657 of 666 annotated sequences at the metadata gate, 655 at the decoded-span gate, and 639 from 97 source videos after pose QC. The protocol partitions sources before fitting, trains the encoder only on outer-training sources, reserves grouped validation sources for selection, and opens grouped test sources only for final evaluation. Label-free JEPA plus VICReg is primary; a label-aware condition loss is a supervised ablation.
-
-One fully traced fold-and-seed execution verifies the mechanics and exposes an important negative result: a raw-kinematic readout outperformed the learned latent readout on 20 held-out sources. We report this as a worked execution, not a cross-fold or clinical estimate. The contribution is an auditable evaluation design and evidence discipline for behavioral foundation-model research.
+---
+title: "Evaluating What Gait Representations Learn: Source-Held-Out Prediction and Explicit Laterality Constraints"
+abstract: |
+  Video-derived pose can support behavioral representation learning, but downstream prediction and geometric consistency require separate evidence. We examine two source-disjoint evaluation studies on overlapping GAVD-derived cohorts. A classification pilot contains 639 sequences from 97 sources; on its 20 test sources, raw pose features achieve macro-F1 0.441 versus 0.292 for learned features. A separate laterality study evaluates 625 sequences from 93 sources across five outer folds, five seeds, and two training variants. It defines a paired-valid motion contrast whose sign reverses under anatomical reflection, then compares learned features with their recorded initialization and explicit odd readouts. Reflection augmentation reduces strict token-equivariance error by 0.00843 (95% source-bootstrap interval [0.00687, 0.01020]), while its predictive improvement remains uncertain. An odd readout enforces output sign reversal for any encoder, yet its learned features underperform the corresponding initialization by 0.05874 in predictive R-squared. These controls distinguish useful learned information from a supplied geometric constraint. The findings support a bounded evaluation contribution for movement representations, without establishing a pretraining advantage or clinical validity.
+---
 
 ## 1. Introduction
 
-Pose extracted from video is a behavioral signal at the interface of body dynamics, environment, and sensing. It is useful for studying self-supervised and continually adapted representations, but it is vulnerable to false generalization. Excerpts from the same upload share camera, compression, demonstrator, background, and pose-estimator behavior. A random sequence split can place those signatures on both sides of evaluation.
+Movement representations should preserve information that supports useful readouts and respond appropriately to changes in anatomical coordinates. An annotation classifier alone tests neither property completely. In video-derived pose, multiple excerpts also share a recording, so evaluation must separate source uploads throughout encoder fitting and downstream testing.
 
-We study these issues through a normal-first skeleton JEPA case study. The implementation is inspired by S-JEPA but is not a reproduction: it uses a fixed 12-landmark target whitelist and auxiliary VICReg, with an optional label-aware group objective.
+We study compact models inspired by skeleton joint-embedding predictive architectures [@abdelfattah2024sjepa], using GAVD-derived pose [@ranjan2025gavd]. Study A is a source-held-out classification pilot with temporal and drift diagnostics. Study B adds a completed controlled evaluation of explicit laterality: can learned features predict a signed movement quantity, does reflection augmentation improve the representation's transformation behavior, and what does an imposed sign rule contribute?
 
-The contributions are:
+Here, explicit laterality enters the target, anatomical pooling, reflection operation, and constrained readout. Encoder pretraining receives no laterality labels. Readout weights are learned from pose-derived targets, while the sign law is imposed analytically. Group-equivariant modeling and symmetry projection are established methods [@cohen2016gcnn; @bronstein2021gdl]; our contribution is their controlled use to test whether pretraining adds information beyond initialization and supplied anatomy. The resulting distinction between geometric consistency and predictive benefit is relevant to evaluating behavioral foundation models, although these experiments are neither foundation-scale nor measurements of neural activity.
 
-1. a dated, status-defined census of a changing public-video corpus;
-2. a source-grouped train/validation/test protocol enclosing preprocessing, encoder training, and readout fitting;
-3. a separation between label-free representation learning and label-informed ablation; and
-4. a claim and ethics ledger for public gait video.
+## 2. Two studies with separate evidence
 
-The case study directly connects BrainBodyFM themes of pose and movement, self-supervised and continual learning, evaluation, generalization, and reproducibility. It does not claim that this small model or corpus is itself foundation-scale.
+Both studies originate from 666 annotated sequences spanning 103 uploads, with normal, Parkinson's, stroke, myopathic, and cerebral-palsy folder annotations. These labels are not diagnoses validated by this project. Study A's September 4, 2026 audit retains 657 sequences/100 sources with public metadata, 655/98 after media-span checks, and 639/97 after pose quality control. Source roles freeze before downstream attrition. Study B freezes 642 available pose archives and retains 625/93 after its own quality and target-computability gates.
 
-## 2. Related work
-
-JEPAs predict target-encoder features rather than reconstructing each input value. I-JEPA applies the idea to images [1], V-JEPA to video [2], and S-JEPA to skeleton sequences [3]. VICReg supplies invariance, variance, and covariance regularization [4]. Markerless pose makes gait analysis scalable but introduces viewpoint, visibility, and detector-dependent errors. When observations share a source, validation must respect that grouping [6].
-
-## 3. Case-study data boundary
-
-### 3.1 Annotations and live metadata census
-
-GAVD provides annotations and public video identifiers for five folder categories: normal, Parkinson's, stroke, myopathic, and cerebral palsy [5]. These are dataset annotations, not diagnoses made by this project.
-
-A fresh public-metadata check on September 4, 2026 found three sources without public metadata:
-
-- `sf5X4YYkWUA`: private;
-- `YjRoLtP1di0`: private; and
-- `yULxvDc9e8c`: unavailable.
-
-|Folder annotation|Raw sequences / videos|Metadata-public sequences / videos|
-|---|---:|---:|
-|Normal|291 / 32|291 / 32|
-|Parkinson's|47 / 11|47 / 11|
-|Stroke|76 / 19|75 / 18|
-|Myopathic|188 / 30|184 / 29|
-|Cerebral palsy|64 / 11|60 / 10|
-|**Total**|**666 / 103**|**657 / 100**|
-
-![Dated corpus attrition at sequence and independent source-video scales.](../../docs/figures/bbfm_data_funnel.png)
-
-**Figure 1.** Dated corpus attrition at both sequence and source-video scales. The split is frozen before decode and pose-QC attrition, so later failures remove observations without changing any source's role.
-
-"Metadata-public" means only that the service returned current metadata without authentication during this audit. It does not prove that a suitable media format can be downloaded, that the file reaches every annotated frame, that decoding succeeds, or that pose coverage is adequate. Those are later gates and must be reported separately. Availability also varies with time, region, account state, and platform behavior.
-
-### 3.2 Pose and model case study
-
-The pipeline extracts 33 MediaPipe landmarks and visibility values, interpolates short internal gaps, pelvis-centers and body-scale normalizes coordinates, and resizes each segment to 64 frames. A token represents one landmark over four frames. Only valid tokens from shoulders, hips, knees, ankles, heels, and foot tips may become prediction targets.
-
-The primary objective is label-free:
-
-$$
-\mathcal L_{\mathrm{primary}}=\mathcal L_{\mathrm{JEPA}}+0.05\mathcal L_{\mathrm{VICReg}}.
-$$
-
-The historical condition-label group term directly encourages within-label compactness and between-label separation. It therefore belongs in a supervised ablation:
-
-$$
-\mathcal L_{\mathrm{ablation}}=\mathcal L_{\mathrm{primary}}+0.25\mathcal L_{\mathrm{group}}.
-$$
-
-This prevents downstream label readability from being presented as independently discovered structure.
-
-## 4. Leakage-aware evaluation protocol
-
-### 4.1 Split before fitting
-
-The independent unit is the source-video ID, not a sequence row. Canonicalize video identifiers, attach the dated availability status, and assign every source to exactly one outer fold. Splits should be approximately stratified by folder annotation while balancing both source and sequence counts. Freeze the complete source lists and a split-manifest digest before model fitting.
-
-Because the smallest categories contain only ten or eleven metadata-public sources, a single holdout is unstable. The primary estimate should use repeated source-grouped outer splits or stratified grouped cross-validation and expose split sensitivity.
-
-![The source-video split freezes at the metadata-public gate. Later decode or pose-QC attrition is recorded without redrawing folds.](../../docs/figures/inductive_source_split.png)
-
-**Figure 2.** Every clip inherits its source video's role. Only training sources receive gradient updates, validation sources select checkpoints, and test sources remain sealed until final evaluation.
-
-Inside each outer split:
-
-1. only training-source data may determine data-dependent preprocessing, quality thresholds, augmentations, model weights, or readout parameters;
-2. grouped validation sources select hyperparameters, stopping rules, and checkpoints;
-3. grouped test sources remain sealed until the analysis is frozen;
-4. the full normal-first curriculum is retrained for every outer training fold and seed; and
-5. the downstream readout is fitted only on outer-training embeddings.
-
-A grouped classifier over embeddings from an encoder trained on all sources remains transductive.
-
-### 4.2 Four endpoints, four claims
-
-- **Optimization telemetry:** training-source anchor curves.
-- **Functional retention:** equal-source-weighted held-out normal loss or perturbation ranking, plus source-cluster uncertainty, Procrustes alignment, and linear CKA.
-- **Downstream readability:** balanced accuracy and macro-F1 from a readout fitted only on outer-training embeddings.
-- **Source transfer:** source-aggregated predictions summarized across outer splits and training seeds.
-
-None establishes person-level or clinical generalization. Minimum controls are an untrained encoder, raw pose features, pose-validity or missingness features, continued-normal training with matched updates, and joint training. The label-aware arm is separate. Condition order must vary across seeds or appear as a sensitivity analysis.
-
-## 5. Worked protocol execution
-
-We executed outer fold 0 with seed 42 to test the complete artifact and isolation contract. Pose QC left 377 sequences from 59 training sources, 131 from 18 validation sources, and 131 from 20 test sources. Encoder fitting loaded only training tensors; checkpoint selection used validation loss; the serialized checkpoint records that test tensors were not opened. The five curriculum stages used 20 epochs each and saved a hash-bound checkpoint plus stage lineage.
-
-After selection was frozen, source-level readouts were evaluated once on the 20 test sources. Macro-F1 was 0.292 for the S-JEPA latent, 0.251 for a missingness-only control, and 0.441 for raw kinematics. Thus this small learned representation did not beat the direct sensor-derived baseline in the worked fold. Normal-anchor cosine fell to 0.701 on five validation-normal sources after the full curriculum and was 0.850 on seven test-normal sources. Temporal probes retained some peak-phase and energy-ratio information but produced negative R-squared for phase lag. These results validate the protocol implementation and comparison set; with one fold and seed they do not estimate expected generalization.
-
-![Worked protocol-v2 execution for outer fold 0 and seed 42.](../../docs/figures/bbfm_protocol_execution.png)
-
-**Figure 3.** Worked protocol-v2 execution. Validation selects within each curriculum stage; the raw-kinematic control exceeds the latent and missingness readouts; normal-anchor retention is selected before one test-normal evaluation; and temporal-probe results retain negative values. This is an execution audit, not a cross-fold estimate.
-
-Historical artifacts from the earlier sequence-level pipeline remain archived, not pooled with these values: those splits allowed source overlap, exposed evaluation rows to representation learning, and sometimes used folder labels during encoder training. A primary performance claim still requires all outer folds, multiple seeds, source-cluster uncertainty, and condition-order sensitivity.
-
-## 6. Limitations, data use, and ethics
-
-Source video is only the strongest available grouping key. GAVD does not provide a reliable person identifier here, so the same person may cross folds through different uploads. Folder labels are not independently adjudicated by this project. Camera, compression, framing, clothing, mobility aids, demographic representation, editing, and pose-estimator visibility may correlate with labels. Report "source-held-out," never "subject-held-out" or clinical performance.
-
-Public availability is not equivalent to research consent or unrestricted reuse. GAVD distributes annotations and URLs rather than raw video and places retrieval, platform compliance, institutional ethics approval, copyright, privacy, and data-protection obligations on users [7]. Gait and derived skeleton trajectories can be identifying even without faces. Public artifacts should contain neither raw videos nor identity-bearing frames, and access to derived trajectories should be risk assessed. Record an ethics determination, retention and access controls, and a takedown procedure before release. Avoid stigmatizing language and never present observational folder labels as diagnoses. Nothing here supports diagnosis, treatment, surveillance, or deployment.
-
-## 7. Conclusion
-
-Behavioral foundation-model evaluation begins before training: with a dated source census, an explicit unit of independence, and a sealed evaluation path. In this case study, nine annotated sequences lost public metadata when three of 103 source videos became private or unavailable. Metadata visibility is only the first data-validity gate.
-
-The proposed protocol keeps source videos disjoint throughout preprocessing, encoder learning, model selection, and downstream evaluation; separates label-free training from supervised ablation; and distinguishes retention, readability, source transfer, and clinical validity. One traced fold demonstrates that this discipline changes the scientific conclusion: the raw-kinematic baseline, not the learned latent, was strongest. Multi-fold performance remains pending.
-
-## Appendix A. Required run manifest
-
-Record source-manifest and availability-audit hashes; audit time, status definitions, and tool versions; decoded-frame and pose-quality decisions; source-level outer and validation split IDs; preprocessing configuration; label-use declaration; model and optimizer configuration; seed, condition order, hardware, and deterministic settings; parent and checkpoint hashes; exclusion reasons; and source-level predictions. Generate paper tables and figures from this manifest.
-
-## Appendix B. Claim ledger
-
-|Claim|Required evidence|Current status|
+| Design | Study A: classification pilot | Study B: laterality |
 |---|---|---|
-|Current metadata census|Dated per-source audit|Supported|
-|Decoded/pose-usable cohort|Frame and pose gates|Supported by dated audit|
-|Normal-function retention|Held-out normal sources|One fold/seed; exploratory|
-|Unseen-source performance|Fold-local full retraining|One fold/seed; incomplete|
-|Unseen-person performance|Reliable person groups|Not identifiable|
-|Clinical validity|External adjudicated cohort|Not studied|
+| Evaluation | Fold 0, seed 42; 59/18/20 train/validation/test sources | Five outer source folds; five seeds; two training variants |
+| Encoder exposure | Cumulative annotation-defined stages | All outer-training categories together |
+| Four-frame patch | Coordinate average; default width 64 | Flattened coordinates; verified width 96 |
+| Local evidence | Saved notebook execution; current bundles absent | 50 trained checkpoints and held-out predictions verified |
 
-## References
+The cohorts overlap, so Study B is neither an independent replication nor an extension of Study A's classifier experiment. Their sample counts and scores must not be pooled. Source grouping controls shared-upload dependence [@roberts2017crossvalidation], but the same person may occur in several uploads.
 
-1. M. Assran et al. "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture." *CVPR*, 2023.
-2. A. Bardes et al. "Revisiting Feature Prediction for Learning Visual Representations from Video." *TMLR*, 2024.
-3. M. Abdelfattah and A. Alahi. "S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition." *ECCV*, 2024.
-4. A. Bardes, J. Ponce, and Y. LeCun. "VICReg: Variance-Invariance-Covariance Regularization for Self-Supervised Learning." *ICLR*, 2022.
-5. R. Ranjan et al. "Computer Vision for Clinical Gait Analysis: A Gait Abnormality Video Dataset." *IEEE Access* 13, 2025.
-6. D. R. Roberts et al. "Cross-Validation Strategies for Data with Temporal, Spatial, Hierarchical, or Phylogenetic Structure." *Ecography* 40(8), 2017.
-7. GAVD project. "Gait Abnormality Video Dataset: Data Access and Responsible-Use Notes." GitHub repository, accessed September 4, 2026. https://github.com/Rahmyyy/GAVD.
+For Study B, the local audit loaded the cohort, splits, all 50 trained checkpoints, and 100,000 prediction rows spanning 16 evaluation lanes. Recomputing the two primary bootstrap tables from saved predictions reproduced them to numerical precision. This verifies the retained artifacts and report calculations; it is not independent retraining. The protocol was internally frozen after development, without external preregistration.
+
+## 3. Methods
+
+### 3.1 Representation learning and the classification pilot
+
+Both implementations use 33 landmarks, pelvis centering, scale normalization, four-frame patches, and an exponential-moving-average target encoder. They define 64-frame inputs, verified for Study B and a documented default for Study A. Twelve anatomically specified landmarks are eligible masked targets. Preprocessing, predictor architecture, and objectives differ between studies.
+
+Study A uses coordinate-averaged patches and a pooled-context MLP predictor, with the implemented loss
+$$
+L_A=L_{\mathrm{SmoothL1}}+0.10L_{\mathrm{variance}}+0.01L_{\mathrm{covariance}}.
+$$
+The optional condition cross-entropy term is disabled. Annotation labels nevertheless determine the cumulative normal-first exposure order. Training uses 59 sources; 18 validation sources select stage checkpoints. A balanced logistic classifier selects regularization on validation sources and is then refitted, including its scaler, on all 77 development sources. Test probabilities are averaged within each upload before scoring. Appendix A records preprocessing limitations and secondary results.
+
+Study B uses four encoder layers, a two-layer Transformer predictor, four attention heads, and 96-dimensional tokens. Each patch flattens four XYZ observations. Invalid patches are excluded from attention, and up to 60% of eligible valid target positions are masked, limited by the batch minimum. Its centered latent cross-entropy uses student/teacher temperatures 0.10/0.06, with
+$$
+L_B=L_{\mathrm{latent\,CE}}+0.05(25L_{\mathrm{invariance}}+
+25L_{\mathrm{variance}}+L_{\mathrm{covariance}}),
+$$
+using two-view VICReg-style regularization [@bardes2022vicreg]. Each of 300 epochs draws one clip per training source, then source-uniform padding produces four batches of 20: 1,200 updates per encoder. Vanilla and reflection-augmented training share initialization for each fold/seed; the augmented variant reflects each sample with probability 0.5. Checkpoints follow a fixed schedule, without early stopping.
+
+### 3.2 Define a signed target before fitting a readout
+
+Let $M$ negate the horizontal coordinate and swap the full anatomical left/right landmark map, including validity. Then $M^2=I$. For each of five pairs—shoulders, knees, ankles, heels, and foot tips—we calculate median left/right speeds $m_{L,k},m_{R,k}$ on common observed transitions. Both sides must be valid at both endpoints, with at least eight transitions per pair. Speeds use the original frame timestamps, and targets use uninterpolated normalized coordinates:
+$$
+y(X)=\frac{1}{5}\sum_{k=1}^{5}
+\frac{m_{L,k}-m_{R,k}}{m_{L,k}+m_{R,k}+10^{-8}}.
+$$
+Hips define pelvis centering but are excluded from this contrast because their centered speed magnitudes coincide. The target satisfies $y(MX)=-y(X)$, including for an asymmetric observed gait. It is a dimensionless coordinate-derived index; clinical asymmetry and neural dominance are unmeasured.
+
+For each pair, the native feature $A(X)$ concatenates the difference and sum of left/right mean tokens on common valid temporal support. Five pairs produce 960 features. This anatomical structure is supplied equally to trained and initial encoders.
+
+### 3.3 Separate learned prediction from the sign constraint
+
+Alongside the native readout, define equal-width odd and even features:
+$$
+\Phi^-(X)=\frac{A(X)-A(MX)}{\sqrt{2}},\qquad
+\Phi^+(X)=\frac{A(X)+A(MX)}{\sqrt{2}}.
+$$
+The constructed odd readout $h(X)=w^\top\Phi^-(X)$ disables feature centering and the regression intercept. Origin-preserving scaling retains $h(MX)=-h(X)$ for any encoder and any fitted $w$. Its parameters learn to predict $y$; its sign behavior follows from construction. Native/free-intercept, odd/free-intercept, odd/zero-origin, and even/free-intercept lanes are evaluated for both learned and recorded initial features.
+
+A separate test compares target-encoder tokens directly:
+$$
+q(X)=\frac{\|Z(MX)-SZ(X)\|_C^2}
+{\|Z(MX)\|_C^2+\|SZ(X)\|_C^2}.
+$$
+Here $S$ swaps all anatomical token positions while leaving latent channels unchanged; $C$ selects common-valid positions. No alignment or fitted channel action is allowed. Lower $q$ indicates greater consistency under this particular action. Because the metric is uncentered, shared or input-insensitive features can lower it; a small initial value does not establish useful anatomical understanding.
+
+### 3.4 Source-held-out fitting and uncertainty
+
+Study B uses five stratified outer source folds, with 74–75 training and 18–19 test sources per fold. Four inner source folds select ridge regularization on outer-training embeddings. These inner folds tune the readout; encoder training may include their inputs. Scaling, fitting, and predictive scoring give each clip weight inverse to its source's clip count.
+
+For each seed, all five outer folds' held-out predictions are pooled to compute source-balanced sequence-level $R^2$; the primary estimate averages the five seed scores. It is neither a source-mean-target score nor a seed-ensemble prediction score. The 2,000 paired bootstrap draws resample 93 source clusters, retaining each source's clips and all seeds together. Intervals are pointwise and conditional on the fitted models and fixed split; they do not include full-retraining or split-selection uncertainty. Fifty trained fits are not fifty independent datasets.
+
+## 4. Results
+
+### 4.1 The pilot does not establish a learned-feature advantage
+
+| Study A readout | Macro-F1 | Balanced accuracy |
+|---|---:|---:|
+| Learned representation | 0.292 | 0.257 |
+| Missingness control | 0.251 | 0.248 |
+| Raw pose statistics | 0.441 | 0.443 |
+
+On 20 held-out sources, raw pose exceeds learned features by 0.148 macro-F1. All three readouts miss all three stroke-annotated sources. With one fold/seed and no matched initialization control, this is a limited pipeline comparison; Study B's initialization controls do not retroactively isolate the cause of this result.
+
+### 4.2 Laterality reveals different geometric and predictive outcomes
+
+The vanilla native learned readout has $R^2=0.05979$, with interval $[-0.02527,0.12571]$. Its difference from paired initialization is $-0.01798$, $[-0.03851,0.00248]$. Thus a predictive gain from this pretraining recipe is unestablished; the interval does not demonstrate equivalence.
+
+![Laterality controls across five source folds and five seeds. Panel A's first two contrasts use vanilla training; the constructed readout uses odd features and zero intercept. Panel B measures strict token error. Intervals are pointwise source-bootstrap intervals conditional on fitted models. Higher predictive differences and lower token-error differences favor the first condition.](figures/submission_laterality_effects.svg){width=100%}
+
+Reflection augmentation improves strict token consistency relative to vanilla by $\Delta q=-0.00843$, $[-0.01020,-0.00687]$, a reduction of approximately 7.4%. Its predictive difference is only $+0.00408$ in $R^2$, $[-0.00556,0.01277]$. A measurable geometric improvement therefore coexists with uncertain predictive benefit.
+
+Absolute token errors are 0.08322 for initialization, 0.11377 for vanilla training, and 0.10534 for augmented training. Relative to initialization, both trained variants increase $q$: vanilla by 0.03055 $[0.01576,0.04763]$, augmented by 0.02213 $[0.00844,0.03934]$. Both trained absolute intervals cross the protocol's operational threshold of 0.10. They fail its upper-bound criterion, without establishing that the population error exceeds 0.10 or excluding other latent symmetry actions.
+
+The constructed odd readout passes the numerical output sign check for every seed, with recorded original-plus-mirrored predictions equal to zero. Under vanilla training, its learned-feature $R^2$ is 0.04302 $[-0.04356,0.11283]$, and the difference from its matched initial-feature lane is $-0.05874$ $[-0.09549,-0.01740]$. Guaranteed output antisymmetry consequently provides no demonstrated pretraining benefit in this experiment.
+
+## 5. Interpretation, limitations, and data use
+
+The contribution of explicit laterality is an experimentally grounded separation of a supplied anatomical constraint from information acquired during pretraining. Reflection augmentation improves one measured representation property, while the constrained readout shows that correct sign behavior can coexist with poor predictive utility. This is useful for BrainBodyFM's movement and pretraining-evaluation themes: a physically interpretable output should be checked against initialization and downstream error before its behavior is attributed to representation learning.
+
+The study does not introduce symmetry projection, demonstrate successful laterality-supervised encoder training, or establish a universal limitation of JEPA. The two cohorts share underlying recordings; external replication, reliable person grouping, and calibrated clinical targets remain absent. Reflection acts on extracted coordinates rather than independently acquired camera views. Uncentered $q$ tests a specified channel action, and small-sample linear readouts cannot identify all information in a representation.
+
+Public accessibility does not establish research consent or unrestricted reuse [@gavdRepo2026]. Gait trajectories can be identifying without RGB imagery. The laterality project's ethics determination, data-use review, and derived-pose release review are all recorded as unresolved; its explicit submission/release gate remains closed. This document is an internal draft pending those reviews and author approval. No clinical, surveillance, or deployment claim is supported.
+
+## 6. Conclusion
+
+Source-held-out controls make the laterality result more informative than a single accuracy score: reflection augmentation improves token consistency, its predictive gain remains unresolved, and enforced output antisymmetry does not establish useful pretraining. Together with the clearly scoped classification pilot, these findings motivate evaluating movement representations against both simple baselines and explicit transformation laws.
+
+## Appendix A. Study A: implementation and exploratory diagnostics
+
+The current evidence consists of retained fold-0/seed-42 notebook outputs. Post-QC roles contain 377/131/131 sequences from 59/18/20 training/validation/test sources. Reported manifest, split, and final-checkpoint SHA-256 identifiers begin with 7fd559e5105b, ff3518b87b1d, and f510be2a0453. The corresponding current checkpoint and evaluation bundles are absent from this checkout, so their bytes and derived embeddings have not been independently reverified.
+
+Notebook 04 uses finite coordinates and visibility at least 0.45 for validity, pelvis centering, and a scale based on the median per-frame maximum of two-dimensional shoulder and hip widths. It performs no short-gap interpolation. Finite low-visibility coordinates remain present, and invalid positions are not removed through an attention-padding mask, even when excluded from pooling and target selection. Later diagnostic preparation interpolates internal gaps up to four frames and handles invalid coordinates differently. These limitations apply to Study A, not Study B's distinct preparation.
+
+The implemented defaults are width 64, two encoder layers, four heads, batch size 32, 20 epochs of 100 steps per stage, learning rate 0.001, and EMA coefficient 0.996. Without the resolved run bundle, these are code defaults rather than independently confirmed execution settings. The cumulative schedule is normal, then plus Parkinson's, stroke, myopathic, and cerebral-palsy sequences; earlier categories remain available. An optional 0.10-weighted condition cross-entropy term is disabled in the primary record. No controlled condition-order or functional-retention experiment is complete.
+
+Learned classifier features pool means and standard deviations across all landmarks and the 12-landmark subset, producing $4d$ features (256 at default width). Raw pose supplies 144 features: coordinate means/stds, mean absolute first differences, and first-difference stds across 12 landmarks and three coordinates. Missingness supplies 97 features at the defaults. Standardization and balanced logistic regression fit source-mean features; validation selects $C\in\{0.1,1,10\}$, then fitting repeats on all 77 development sources. At test time, sequence probabilities are averaged within each source. Exact macro-F1 values are 0.292424, 0.251111, and 0.440513 for learned, missingness, and raw features; accuracies are 0.30, 0.30, and 0.50.
+
+Temporal probes freeze the encoder and compare equal-width global mean/standard-deviation, signed temporal-moment, and four-bin summaries. Four-bin pooling increases peak-position $R^2$ from 0.173011 to 0.317745 and reduces MAE from 0.092086 to 0.075263 in normalized clip time. A late/early motion ratio improves from $R^2=0.105126$ to 0.176175. All bilateral ankle-height-lag readouts have negative $R^2$. Their unvalidated pose-derived targets and changed preprocessing prevent a physiological interpretation.
+
+Normal-anchor cosine compares each clip's final representation with its normal-only-checkpoint representation, averaging within and then across sources. Final values are 0.701058 on five validation-normal sources and 0.849632 on seven test-normal sources. They measure geometric drift; functional forgetting, Procrustes/CKA comparisons, and improved consolidation remain untested. Forecasting is blocked: its separately trained checkpoint is absent, the producer lacks the required future objective, and the proposed mask leaves 21 future landmarks visible. No forecasting result enters this paper.
+
+## Appendix B. Study B: reproducible target and fitting details
+
+The retained cohort contains 270 normal, 39 Parkinson's, 75 stroke, 183 myopathic, and 58 cerebral-palsy sequences, respectively from 29, 9, 18, 28, and 9 sources. Each source is outer test once per seed. The five test folds contain 189, 182, 72, 77, and 105 clips, illustrating why source-balanced weighting matters. Seeds are 42–46. The five seed-specific initializations are reused across fold-local training runs and paired between variants.
+
+Target preparation uses finite coordinates and visibility at least 0.45, requires both hips for centering, and uses the median of pooled three-dimensional shoulder/hip distances for scale. The speed contrast uses uninterpolated, common-valid transitions and original timestamp differences. Its mean is -0.00607, standard deviation 0.05915, and observed range [-0.19482, 0.21468]. Input preparation separately interpolates internal gaps of at most four frames, resizes to 64 frames, applies a resized-validity threshold of 0.999, and zeroes invalid coordinates. The 0.50 coverage gate uses this prepared validity mask and can include filled gaps.
+
+Sixteen temporal patches across 33 landmarks yield 528 token positions. The target mask samples 60% of eligible valid positions, with the count limited by the batch minimum. Input embeddings at targets are hidden; invalid patches are padded out of attention. The EMA teacher sees the complete valid input. Two views use small rotations (up to eight degrees) and XY translations (up to 0.03 normalized units). Sample-consistent reflection, when enabled, precedes view generation.
+
+AdamW uses learning rate 0.001, betas (0.9, 0.95), weight decay 0.05, cosine learning-rate decay, and gradient-norm clipping at 1. EMA increases from 0.999 toward 1, and target centering uses coefficient 0.9. Each model receives 1,200 updates. The fixed schedule removes validation-based checkpoint selection in this study.
+
+Ridge penalties are selected from $10^{-3},10^{-2},10^{-1},1,10,100,1000$. Outer-test rows enter neither encoder fitting nor readout selection. Weighted fitting, scaling, and scoring give each source total weight one. The constructed odd/zero-origin lane uses no feature centering and no intercept; it needs both original and reflected encoder evaluations. The initialization control receives the same anatomical pooling and readout search.
+
+Strict token scoring requires at least eight common-valid tokens and rejects negligible representation energy. It uses the full 33-landmark permutation, an identity latent-channel action, and no Procrustes alignment. The native, odd/free, odd/zero-origin, and even/free lanes separate parity projection from intercept removal. Additional measured-nuisance and target-component controls are secondary; the target-component oracle is an algebraic self-consistency check, not an independent learned baseline.
+
+Absolute strict-error intervals are 0.08322 [0.07458, 0.09404] for initialization, 0.11377 [0.09513, 0.13843] for vanilla, and 0.10534 [0.08783, 0.12778] for augmented training. The protocol requires an upper interval bound below 0.10 together with improvement over initialization; 0.10 is an operational, uncalibrated threshold. Output antisymmetry uses numerical tolerance $10^{-6}$, separately from token error. Secondary high-coverage and seed-ensemble reports use different estimands and are excluded from the primary comparisons.
+
+## Appendix C. Evidence and release ledger
+
+Study B's protocol SHA-256 begins 6f7baefbda07, cohort 28c164fae903, and split 0dd230e67d5eb. Its artifact root is the protocol-keyed paper run in the laterality project. The primary numerical sources are the checkpoint source-bootstrap report and strict representation-equivariance source-bootstrap report; the figure generator records their exact filenames, full hashes, and plotted values. The local audit checked cohort/split compatibility, checkpoint state and lineage, source weights, saved token-error energy ratios and common-token counts, and prediction coverage. Recalculation of both bootstrap reports differed from saved values by less than $10^{-16}$, without rerunning encoder inference, retraining, or altering artifacts.
+
+| Claim | Evidence boundary |
+|---|---|
+| Raw features lead the classifier pilot | Retained Study A notebook outputs; one fold/seed |
+| Augmentation improves strict token consistency | Verified Study B predictions; paired conditional source-bootstrap interval |
+| Pretraining improves laterality prediction | Not established against paired initialization |
+| Constructed output reverses sign | Algebra plus saved numerical checks; not evidence of learned encoder equivariance |
+| External or clinical generalization | Not evaluated |
+| Submission/release authorization | Blocked by three unresolved project reviews |
+
+The Study A temporal, drift, and forecasting analyses remain distinct from Study B. Older transductive laterality narratives and simulated outcomes in Study A notebooks 05a–05d are excluded. No laterality performance is imported from those archived branches.

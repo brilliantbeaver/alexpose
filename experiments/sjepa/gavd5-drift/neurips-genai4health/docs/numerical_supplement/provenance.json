@@ -70,8 +70,22 @@
     }
   ],
   "input_csv_sha256": {
+    "test_source_predictions.csv": "4cb2de67c3bf479b0cc403f499a5d788f86a5c47157289ffdb9b15e8e1160334",
+    "normal_validation_weighting.csv": "b8798c2e59c894ddab1ccab60406f526bf66a4455fa6768c2d440d140e8c7c3c"
+  },
+  "scope": "Reproduces reported scores and weighting from retained numerical records. Model, objective, manifest, split, and checkpoint metadata describe the original recorded run; default refresh does not reverify its checkpoint. Source aliases remove direct video IDs without establishing person anonymity. No training, clinical validity, or patient independence is certified.",
+  "historical_raw_input_csv_sha256": {
     "normal_validation_weighting.csv": "a7e2ef0e60739a299b5311a4e97a9cacdd35c0135c82c84f4152f2b0a88a8368",
     "test_source_predictions.csv": "9c6218af5cdd0c7f95f42b2392fc7cfc7c184ee08887d0aad8e54e748b66c359"
   },
-  "scope": "Reproduces main reported metrics and weighting, not model training. Source aliases remove direct video IDs from these tables but do not establish person anonymity."
+  "historical_input_hash_note": "Original September 5 hashes used CRLF line endings. The retained LF files reproduce those historical hashes when converted to CRLF in memory; numerical values are unchanged.",
+  "input_csv_hash_convention": "SHA-256 of UTF-8 file bytes with CRLF replaced by LF; no other normalization",
+  "numerical_verification": {
+    "date": "2026-09-06",
+    "mode": "retained_outputs",
+    "notebook_prediction_rows_compared": 60,
+    "weighting_rows_compared": 5,
+    "original_fold_checkpoint_reverified": false,
+    "scope": "Saved-output consistency and numerical reconstruction; no retraining or inference."
+  }
 }

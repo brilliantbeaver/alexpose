@@ -1,6 +1,49 @@
 # Adversarial crosscheck of the GenAI4Health drafts
 
-Reviewed on 2026-09-05: `genai4health_paper_draft.tex` and `genai4health_extended_abstract.tex`, with emphasis on normal-reference cosine, source weighting, forecasting, temporal probes, consolidation, and clinical interpretation. Source files were read without editing. This review supplements `advanced_notebook_audit.md` and its independently checked numerical JSON. PDF layout and external citations were outside this crosscheck.
+## Current review: 2026-09-06
+
+Both TeX drafts were read against all source cells and saved outputs in notebooks 07–09 and 05a–05d. This review also recomputed the weighting comparison from the retained per-source numerical supplement and compared it with the earlier cache-level verification. Manuscript, notebook, figure, and upstream artifact files were not edited by this reviewer. PDF layout and external citations remain outside this review's scope.
+
+### Decision and rationale
+
+The same-records weighting comparison is defensible and is the clearest advanced-notebook result for a submission distinct from laterality. Its contribution is a concrete example of how an evaluation summary can conceal concentration in one source. The mathematical distinction between clip and source means is established statistical practice; this experiment should not claim to invent grouped evaluation or discover a new universal bias correction. Its workshop relevance is the practical consequence for interpreting a movement representation that might later supply a health assistant.
+
+The lead writer's revised hierarchy is supported: use **0.89 versus 0.70** as the primary example, retain **60/64 clips (about 94%) versus 20% of weight** to explain it, and use the source-held-out classification comparison as supporting evidence. Remove the temporal-probe table and cumulative drift curve from submission-facing appendices. They are fully retained in the research review, but introduce weakly grounded physiological targets and additional causal qualifications without improving the central argument.
+
+### Required evidence corrections before release
+
+| Issue in the inspected draft/package | Evidence from this review | Required handling |
+|---|---|---|
+| Present-tense claim that local recalculation verifies all checkpoints and cached embeddings | The expected checkpoint, evaluation, and split directories are absent here; the full artifact script fails at its first required sidecar. | Describe preserved run records and independently reproducible summary arithmetic. Do not claim a fresh checkpoint-level verification today. |
+| Numerical-supplement verifier fails its checksum gate | Both CSV values are unchanged; current LF versus recorded CRLF bytes exactly explain the mismatch. | Packaging owner must make provenance portable and rerun the actual verifier. |
+| "Initial checkpoint" can imply random weights | Cosines compare the validation-selected, trained normal-only checkpoint with the final trained checkpoint. | Use "normal-only reference" and "final model" consistently. |
+| Multiple notebook names, local digests, and code-gate details distract from the paper | These identify local implementation states rather than scientific contributions. | Keep them in review/reproducibility records; describe the method and remaining evidence requirements directly in the manuscript. |
+
+The first two issues change what this review can certify, but do not alter the numerical comparison. From the retained source rows, equal-clip cosine is **0.8890614295**, equal-source cosine is **0.7010576725**, and the difference is **0.1880037570**. These agree with the previously checked float32 cache aggregation within `1e-7`. Three or more decimal places add no substantive interpretation for a five-source illustration.
+
+### Adversarial interpretation checks
+
+- The comparison changes only weights on the same per-clip similarities. It does not change the model, data, reference checkpoint, preprocessing, or scoring target. It identifies an aggregation effect, not an effect of removing leakage.
+- Cosine summarizes similarity of model-coordinate vectors across checkpoints. It is not accuracy, a percentage of retained clinical function, disease severity, or a person's longitudinal decline. A rotation can change the coordinate comparison while preserving information, and uninformative constant vectors can remain stable.
+- Equal source weighting and equal clip weighting answer different questions. Neither is established as equal patient weighting. The five observed uploads cannot supply a population truth against which a bias magnitude is estimated.
+- The larger source-versus-clip difference is specific to the five-source validation example. In the earlier checked test output, source and clip means are 0.849632 and 0.853572, respectively. Do not imply a universal inflation factor.
+- The records contain one completed fold and seed. A five-fold registry is a plan for assignment, not five completed model evaluations. There is no evaluated repair intervention or matched consolidation comparison.
+- No valid future-prediction result is available. The forecasting section should state a proposed past-only evaluation requirement without presenting the notebook's blocked gate as an experimental failure. Latent discrepancy is not calibrated uncertainty, and observational forecasting would still not establish action-conditioned planning or treatment response.
+- The method does not evaluate a health agent or clinician trust. Relevance to those workshop themes must be argued as an upstream evidence requirement and a future testable use, not as an implemented healthcare capability.
+
+### Why temporal results remain outside the submission
+
+The four-bin readout yields peak-position R² 0.318 versus 0.173 for mean/std pooling, but lacks an untrained encoder or direct-pose comparison. The target is the normalized array position of maximum ankle separation, without a visibility filter; the displacement-ratio target is not energy; the circular-shift lag ignores stored frame indices and is not a validated gait phase. All three lag R² values are negative. None tests an unseen future.
+
+The pooling sanity check permutes tokens after they have been encoded with time positions and full-clip context. It correctly verifies a symmetry of the averaging operation, but does not show that mean/std features have lost all temporal information. Test features are prepared before ridge selection; the fitting code does not use test labels for that selection. Calling early materialization itself label leakage would be inaccurate. These distinctions are important for method development and are now recorded in `advanced_notebook_audit.md`, rather than imposed on a short-paper reader.
+
+### Handoff
+
+No new experiment changes the earlier scientific conclusions. The lead writer has accepted the simplified evidence hierarchy and owns manuscript revisions. The core-evidence reviewer owns the portable supplement/provenance repair. This is a review of the drafts inspected before those revisions; final layout, the regenerated package, and any new manuscript language require the lead agent's final verification. The review below is preserved as the earlier checkpoint-backed assessment, not a claim that those unavailable inputs were rechecked today.
+
+## Earlier draft review: 2026-09-05
+
+The original review of `genai4health_paper_draft.tex` and `genai4health_extended_abstract.tex` follows. It emphasized normal-reference cosine, source weighting, forecasting, temporal probes, consolidation, and clinical interpretation. Its references to then-current artifact directories and suggested wording describe the state inspected on that date; the current review above supersedes them where availability or presentation has changed.
 
 ## Verdict
 

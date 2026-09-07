@@ -1,0 +1,33 @@
+\documentclass{article}
+% Generated from Markdown with build_manuscripts.sh; retain the official style.
+\usepackage[dblblindworkshop]{neurips_2026}
+\workshoptitle{Physical World AI: Geometry, Characteristics, and Multimodal Sensing}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{newunicodechar}
+\newunicodechar{−}{\ensuremath{-}}
+\usepackage{graphicx}
+\usepackage{booktabs,longtable,array,calc}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\title{$title$}
+\author{Anonymous Author(s)}
+\begin{document}
+\maketitle
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+$body$
+\clearpage
+{\small
+\bibliographystyle{plainnat}
+\bibliography{../../docs/references}
+}
+\end{document}

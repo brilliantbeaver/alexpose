@@ -1,0 +1,68 @@
+{
+  "schema": "brainbody_current_laterality_pipeline/v3",
+  "generator": "submission_pipeline_v3_generate.py",
+  "generator_sha256": "cb9b856629677a79a5c490bf40ee438a4c252a2f5d08fa2f27430923d9b4900b",
+  "method": {
+    "snapshot": "neurips-laterality/artifacts/paper/protocol_6f7baefbda07/protocol_snapshot.json",
+    "snapshot_sha256": "92f12fe7210cd2f3d1a4ff84d0e3adb472e78af35adb722b3cd9cd594e78ec6a",
+    "protocol_digest": "6f7baefbda07c8e6899bc5fbb82b4651995b4b0089e0a1d1b36ae04480657088",
+    "source_sha256": {
+      "neurips-laterality/laterality/model.py": "2568284072ddd66c25a9726836e7195af5f4b05047c7a08128a048d9b4e52c99",
+      "neurips-laterality/laterality/training.py": "988780c747038b0534dc4e06c0c70cf58496fa1e372a3023412ce08fb9244d88",
+      "neurips-laterality/laterality/evaluation.py": "b0375be27ea79340d7e6d5150c326ed19334efe943905e95f6a1c348d7ac9078",
+      "neurips-laterality/laterality/geometry.py": "c9da31994dba3a7bb92a69c419b827d5cbd63c4ac9d8dd3aa065e216d7bb978c"
+    },
+    "configuration": {
+      "frames": 64,
+      "landmarks": 33,
+      "frames_per_patch": 4,
+      "mask_eligible_landmarks": 12,
+      "eligible_mask_fraction": 0.6,
+      "encoder_layers": 4,
+      "feature_dimension": 96,
+      "predictor_layers": 2
+    },
+    "scope": "Adapted laterality model only; not the exploratory classifier or an exact reproduction of the original S-JEPA architecture.",
+    "checks": "Frozen protocol verified; source markers for masking, target update, view construction, target preparation, and evaluation encoder passed."
+  },
+  "publication_geometry": {
+    "width_inches": 5.5,
+    "height_inches": 4.8,
+    "minimum_font_points": 10.2,
+    "title_font_points": 10.2
+  },
+  "validation": {
+    "visible_text_items": 26,
+    "text_bounds": "passed",
+    "text_collisions": "passed",
+    "box_padding": "passed",
+    "connector_text_collisions": "passed",
+    "displayed_word_count": 46,
+    "maximum_displayed_words": 80,
+    "svg_editable_text": "passed",
+    "svg_no_raster_images": "passed"
+  },
+  "protected_files_unchanged": {
+    "submission_laterality_generate.py": "0bf8610c1d80536241651d80160fec8bf2bcfe38b8edea803f063ddcb87a0c12",
+    "submission_laterality_v3_generate.py": "bd5a09df145d15be258d3e6863710928d350e6654d83435acd420cb6a5803090",
+    "submission_laterality_effects.svg": "ff54514a525bb25abf5f9eaa7cf983495ec2fedec8c34aa423abed164d168285",
+    "submission_laterality_effects.pdf": "d5cf6341ca90dd965a99acd52cdebe70ea7532c9c9839b140e614edce9b8df7c",
+    "submission_laterality_effects_v3.svg": "72a906277dff190ba4bca671380e98b0fadb041cf77b0a757885940672a14dfc",
+    "submission_laterality_effects_v3.pdf": "bee57c6c35bef0941c762733bcd26498493bbe4c4729d57811ee5c298f9819a0"
+  },
+  "interpretation": {
+    "gold_connector": "Laterality target goes only to regression evaluation, never into the pretraining loss.",
+    "slow_weight_update": "Exponential moving average of the trainable encoder; target encoder receives no gradients.",
+    "feature_regularization": "Separate two-view unmasked trainable-encoder passes; not predicted hidden features or a mirrored feature pair.",
+    "evaluation": "Frozen trained target encoder compared with its own saved random starting weights; readouts refitted independently using training videos.",
+    "omissions": "Architecture settings, mask/context rules, reflection conditions, and separate unmasked-view regularization remain in Appendix C and its cross-references. No classifier, full autodiff wiring, or tuning graph is drawn.",
+    "visual_symbols": "Hand-drawn pose, patch, encoder, and feature-vector glyphs are schematic, with no person-level pose data or empirical magnitude encoding. Hollow patch cells retain positions. Lock symbols mark frozen encoder states.",
+    "evaluation_grouping": "The two displayed encoder states are evaluated separately, not combined into an ensemble. The two regression operator glyphs denote independently fitted readouts.",
+    "agreement_glyph_colors": "Both feature-agreement columns use the same neutral color: they depict original and mirrored clips within each encoder, not a comparison across encoder states."
+  },
+  "privacy": "No participant images, individual pose traces, or source identifiers.",
+  "assets": {
+    "submission_pipeline_v3.svg": "c2bbbb9477e7434838af39b505dceef34d6272cbd8a6e99707b8c769e7e8b5f3",
+    "submission_pipeline_v3.pdf": "d61a5860e7ea1bb6d6ce6e45f32afd739799f0ff8583022c799f7795a88acb89"
+  }
+}

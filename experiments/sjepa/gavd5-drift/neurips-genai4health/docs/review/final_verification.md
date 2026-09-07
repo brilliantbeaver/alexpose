@@ -1,56 +1,71 @@
 # Final verification and review disposition
 
-Completed September 5, 2026. This record describes completed checks; it does not certify clinical validity or acceptance.
+Completed September 6, 2026 for *Before Health Agents Interpret Movement: Lessons from a Gait Representation Study*. This record supersedes the September 5 production summary. It records completed checks, not clinical validation, submission approval, or an acceptance prediction.
 
 ## Delivered artifacts
 
-| Artifact | Verified status |
+| Artifact | Current status |
 |---|---|
-| Main position paper | 9 PDF pages: 5 main text, 1 references, 3 appendix |
-| Companion extended abstract | 3 PDF pages: 2 main text, 1 references |
-| Anonymous style | `\usepackage{neurips_2026}` with no options; blank PDF author metadata |
-| Main-source bundle | Explicit allowlist of 11 manuscript, style, figure, and numerical files; excludes companion and internal audits |
-| Numerical bundle | Five files; 20 aliased test sources for each readout, five normal-validation source summaries, hashes, verifier |
-| Reader copies | Generated Markdown from canonical LaTeX with the same claims and numbers |
-| Original research package | No source notebooks or original drafts edited by this work |
+| Main position paper | 8 PDF pages: 5 main text, 1 references, 2 appendix |
+| Companion extended abstract | 3 PDF pages: 2 main text, 1 references; no separate workshop abstract track is advertised |
+| Manuscript formats | Canonical LaTeX, generated Markdown, and compiled PDF for both documents |
+| Anonymous style | Official NeurIPS 2026 style without options; blank PDF author metadata |
+| Figure | New editable vector comparison of recording weights, with PDF and PNG copies and a reproducible generator |
+| Supporting material | Revision strategy, submission metadata, masking-candidate assessment, notebook reviews, numerical supplement, and build instructions |
+| Source bundles | Separate main-paper and companion bundles; numerical records in a separate bundle |
 
-A final byte-level comparison detected concurrent updates to notebooks 00, 06, 07, 08, and 09. Their normalized cell source text is unchanged from the initial extraction; differences are in other notebook content or serialization. Every input hash in the manuscript evidence manifest remains identical. The initial hashes and later comparison are retained in `reproducibility/notebook_inventory.json` and `review/concurrent_source_updates.json`. This resolves the consistency alert without overwriting another process's work or claiming that all notebook bytes stayed frozen.
+All 74 source files in the protected BrainBody snapshot match their contents at the start of this revision, including the notebooks and selected manuscript, figure, and build sources. Pre-existing worktree changes outside the GenAI4Health output were preserved. No numerical CSV values were edited.
 
-Every page of both final PDFs was visually inspected, including figures, equations, tables, references, and page boundaries. The figure labels were enlarged, overlapping annotations were separated, and a floating appendix table was moved into the main evidence summary to remove an orphan heading and isolated final page. The final PDFs have no observed clipping, overlapping content, broken citations, or replacement glyphs. Automated checks found no text outside page bounds, no author-specific path strings, no unresolved citation markers, and blank author metadata.
+## Evidence checks and their scope
 
-Tectonic 0.17.0 built the required LaTeX style. PyMuPDF rendered page images because Poppler was not available on PATH. Tectonic reports benign font-configuration/lineno dependency warnings and one underfull vertical box; the produced PDFs were checked directly and contain no corresponding visible missing glyph or overflow. No template margin or body-font reductions were used.
+The current checks reconstruct retained outputs and cohort records. They do not rerun model training, inference, pose extraction, or video decoding. In particular, the original fold checkpoints, embedding caches, and complete split registry are not available in this checkout. The older checkpoint-backed verification remains historical; it must not be cited as a newly repeated check. The current machine-readable result is `evidence/current_verification.json`.
 
-## Numerical checks
+Completed checks establish that:
 
-- The core verifier recomputes the source-manifest and split-registry digests, checks final/stage checkpoint bytes, verifies role separation, and counts trained tensor parameters.
-- Saved source predictions exactly reproduce all three methods' accuracy, balanced accuracy, and macro-F1.
-- All six current checkpoint hashes and the normal-anchor embedding caches agree with their recorded lineage.
-- The source-weighting contrast is recomputed from the same stored normal-validation vectors; the mean of five source means and the clip-weighted mean reproduce 0.701058 and 0.889061 to float32 tolerance.
-- Cohort and split sums agree with the manuscript tables.
-- The standalone numerical supplement reproduces the headline calculations using only Python's standard library.
-- Both ZIP archives pass integrity checks and contain only allowed files. Public-facing text files were screened for local paths and author-specific identifiers. This is an author-anonymity check, not a guarantee of person anonymity.
+- All 60 saved test prediction rows—three classifiers on the same 20 videos—agree with the aliased numerical supplement.
+- Predictions reproduce 10/20 correct videos for pose summaries, 6/20 for learned features, and 6/20 for landmark availability. Balanced accuracies round to 0.44, 0.26, and 0.25, respectively.
+- The five retained normal-validation records agree across their available copies and reproduce mean cosine 0.89 with equal clip weights and 0.70 with equal video weights. The same values and clip counts enter both calculations.
+- The acquisition and quality ledgers reconstruct 666 clips from 103 videos initially and 639 clips from 97 videos after exclusions. Retained video roles reconstruct 377/131/131 clips and 59/18/20 videos for training/validation/test, with one role per upload.
+- The portable numerical verifier passes using only Python's standard library. It explicitly normalizes line endings in memory because the historical byte records used CRLF and the current checkout uses LF. This resolves a portability difference without changing numerical records.
 
-## Adversarial findings resolved
+The full artifact-dependent verification is preserved separately and is not the default build. Requesting it without its required inputs fails explicitly rather than treating absent files as verified.
 
-| Finding | Disposition |
+## Production and consistency checks
+
+The build uses Tectonic, Pandoc, Poppler, and the existing Python environment. Both PDFs satisfy their chosen main-text page budgets without changing template margins or shrinking body text. Automated checks report embedded fonts, blank author metadata, no local author identifiers, no out-of-page text, no overfull or underfull boxes, no missing glyphs, and resolved citations and references. A dependency-source warning does not appear as a replacement character in either PDF.
+
+Rendered previews of every page were reviewed, with additional full-size inspection of the main figure, main results/proposal pages, and companion results page. No visible clipping or overlap was found. The figure is vector-based and uses readable labels rather than a dense multi-panel diagnostic.
+
+Markdown copies are generated from canonical LaTeX. Cell-by-cell comparison confirms agreement for all 42 main-paper table cells and 12 companion table cells. A conversion defect that dropped the leading “64” in one cell was corrected; the recording-unit example now contains the complete count in every format.
+
+All three ZIP files pass integrity and allowlist checks. The main and companion source bundles exclude internal review documents and numerical source records. The numerical bundle remains a local review artifact pending the authors' release decision. Bundle status notices do not imply upload or approval.
+
+The automated renderer removed one stale generated preview, `page_09.png`, after the main paper became eight pages. The old preview is recoverable from version control; no research data was removed.
+
+## Adversarial review and corrections
+
+Independent notebook and literature reviews challenged the central claims, prior-art treatment, numerical scope, and workshop fit. Resolved issues include:
+
+| Issue | Final treatment |
 |---|---|
-| Draft loss/architecture described an earlier implementation | Corrected to current checkpoint and notebook 04 |
-| “Label-free” omitted annotation-informed scheduling | Narrowed to the loss and disclosed curriculum |
-| Readout refit and aggregation mismatch omitted | Both stated in main paper and companion; source procedure preserved |
-| Normal-anchor diagnostic preprocessing and pooling unclear | Disclosed short-gap interpolation, 12-joint pooling, and trained normal-only reference |
-| Cosine could imply functional or clinical retention | Named embedding cosine and separated from function throughout |
-| Local split registry could imply external preregistration | Wording corrected; limits of historical test secrecy disclosed |
-| Rounded difference appeared inconsistent | Stated 0.148 is calculated from unrounded scores |
-| Variance estimator unspecified | Denominators B and B−1 stated |
-| V-JEPA 2 first-author spelling | Corrected to the publication's Mido Assran |
-| Reviewers could not access local numerical evidence | Added aliased, self-contained numerical supplement |
-| Manuscript figures too small / isolated appendix table | Re-rendered and visually corrected |
-| Historical, simulated, or absent results risked promotion | Excluded from current empirical claims; statuses retained in audits |
+| Weighting contrast could imply patient deterioration or lost predictive function | The same clips and recorded similarities are held fixed; only their weights change. Neither average measures a health outcome. |
+| Cosine described as coordinate agreement | Defined as directional agreement, without a magnitude or retained-information interpretation. |
+| Classifier result could imply JEPA is generally inferior | Limited to one recorded split and initialization, with missing untrained control and selection/test aggregation mismatch disclosed. |
+| Quality gate confused with encoder validity | Visibility-based clip eligibility separated from the additional finite-coordinate validity requirement. |
+| Synthetic masking setting treated as trained-run metadata | Unrecorded nominal masking setting removed as a verified runtime fact. |
+| Generic documentation proposal presented as novel validation framework | Model Cards, V3, and DECIDE-AI credited; the evidence record is a specific proposed application. |
+| Health agent, forecasting, or clinical benefit implied | These remain explicitly untested; a prospective interpretation evaluation is described. |
+| Laterality or incomplete later experiments could inflate the result | Excluded from both manuscripts. |
+| License treated as institutional authorization | MIT annotation licensing acknowledged separately from source-video conditions and unresolved institutional determination. |
 
-The final independent editorial review records that all material issues it identified are resolved within the chosen position-paper scope. Its original comments remain as an audit trail, followed by the final resolution section.
+The masking-candidate assessment also passed an independent prior-art review. It identifies a promising hypothesis but no completed trained comparison of masking policies. No masking benefit, neurological latent-space validity, or new masking experiment is claimed.
 
-## Limitations deliberately not “fixed” by wording
+## Remaining author decisions and scientific limits
 
-The study still has one fold/seed, no verified person identity, inconsistent validation/test readout aggregation, legacy crop geometry, partial runtime metadata, different diagnostic preprocessing, and no current clinical, causal-forecasting, or effective-consolidation evaluation. These are visible limitations, not completed repairs. Remedying them requires a separately versioned experiment or new data. The provided papers do not claim otherwise.
+The evidence still comes from one split and initialization, with unknown cross-upload person identity, incomplete execution metadata, uncalibrated pose geometry, different diagnostic preprocessing, and inconsistent classifier aggregation. These require new experiments or additional records to resolve. They cannot be repaired through wording.
 
-No institutional ethics determination, consent, clinical collaborators, author list, deployment, or workshop submission was fabricated. The authors must settle the actual data-use/ethics status, authorship, and any concurrent-submission obligations before upload. The companion abstract is not a separately advertised workshop track.
+The main acceptance risks are incremental novelty and the prospective connection to generative health systems. The proposed evidence record has not been implemented or evaluated. A matched interpretation experiment would strengthen that contribution; a masking paper would require a separate controlled training comparison.
+
+Before upload, the authors must confirm authorship, institutional and data-use requirements, source-record release decisions, and overlap with the BrainBody submission. The shared classification result is not independent evidence or a new dataset. The current workshop call and both venues' overlap policies should be checked at submission.
+
+No clinical approval, consent, external release, deployment, new training run, or workshop submission was performed or fabricated during this revision.
