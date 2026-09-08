@@ -16,7 +16,11 @@ from nbclient import NotebookClient
 
 SUITE_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_research_notebooks import NOTEBOOKS, render
+from build_research_notebooks import NOTEBOOKS as ALL_RESEARCH_NOTEBOOKS, render
+
+# Preserve this verifier's original progress/execution contracts. The separate
+# comparative verifier handles tutorials 11–14 and their synthetic defaults.
+NOTEBOOKS = {number: ALL_RESEARCH_NOTEBOOKS[number] for number in ("07", "08", "09", "10")}
 
 
 def main():

@@ -461,7 +461,8 @@ def predictor_diagnostics(
                     other = int(rng.choice(same_source))
                     other_tokens = model.target_encoder(xyz[other:other + 1], validity[other:other + 1])
                     different = other_tokens[0, hidden.reshape(-1)].cpu().numpy()
-                    mismatched_errors.append((source, float(np.mean((p - different) ** 2))))
+                    mismatched_errors.append((source, float(np.mean((p - different) ** 2)),
+                                              float(np.mean((p - t) ** 2))))
                 else:
                     mismatch_unavailable += 1
             base = {"condition": condition, "evaluation_mask": name,
@@ -484,11 +485,16 @@ def predictor_diagnostics(
             row = {**base, "status": "evaluated", "feature_mse": mse,
                    "target_mean_square": energy, "normalized_error": normalized,
                    "normalized_error_denominator": "source-balanced mean squared teacher channel value",
-                   "mismatched_target_mse": float("nan")}
+                   "mismatched_target_mse": float("nan"),
+                   "matched_target_mse_on_control_clips": float("nan"),
+                   "mismatch_control_clips": len(mismatched_errors)}
             if mismatched_errors:
-                mismatch_sources, mismatch_values = zip(*mismatched_errors)
+                mismatch_sources, mismatch_values, correct_values = zip(*mismatched_errors)
+                control_weights = source_weights(np.asarray(mismatch_sources))
                 row["mismatched_target_mse"] = float(np.average(
-                    mismatch_values, weights=source_weights(np.asarray(mismatch_sources))))
+                    mismatch_values, weights=control_weights))
+                row["matched_target_mse_on_control_clips"] = float(np.average(
+                    correct_values, weights=control_weights))
             for prefix, features, sources in (
                 ("target_clip", targets, clip_sources), ("prediction_clip", predictions, clip_sources),
                 ("target_token", token_targets, token_sources), ("prediction_token", token_predictions, token_sources),
