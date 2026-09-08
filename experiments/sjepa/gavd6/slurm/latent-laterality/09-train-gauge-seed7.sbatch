@@ -15,22 +15,18 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
-: "${SELECTED_ROUTE_NAME:?Set SELECTED_ROUTE_NAME to amass-only or gavd-only}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
+ll_require_selected_route
 : "${SELECTED_TENSOR_ROOT:?Point SELECTED_TENSOR_ROOT at the selected tensor root}"
-: "${SLURM_ARRAY_TASK_ID:?Submit this file as its declared job array}"
+ll_require_array_task 2
 
-[[ "$SELECTED_ROUTE_NAME" =~ ^[A-Za-z0-9_-]+$ ]] || {
-  echo "Invalid SELECTED_ROUTE_NAME: $SELECTED_ROUTE_NAME" >&2
-  exit 1
-}
 if [[ -n "${GAUGE_INITIAL_CHECKPOINT:-}" ]]; then
   echo "GAUGE_INITIAL_CHECKPOINT is intentionally unsupported by this array." >&2
   echo "The current SG/uniform implementation rebuilds its model after loading an initial checkpoint." >&2
   exit 1
 fi
 
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 SELECTED_ROUTE_ROOT="$LATENT_LATERALITY_RUN_ROOT/selected-route/$SELECTED_ROUTE_NAME"
 SELECTED_GAUGE_MANIFEST="$SELECTED_ROUTE_ROOT/gauge-seed7.csv"
 SELECTED_GATE_DECISION="$SELECTED_ROUTE_ROOT/gate-seed7/gate_decision.json"
@@ -40,16 +36,11 @@ arm="${arms[$SLURM_ARRAY_TASK_ID]}"
 label="${labels[$SLURM_ARRAY_TASK_ID]}"
 OUTPUT_DIR="$LATENT_LATERALITY_RUN_ROOT/decisive/$SELECTED_ROUTE_NAME/$label-seed7"
 
-[[ -d "$GAVD6_ROOT" ]] || { echo "Missing checkout: $GAVD6_ROOT" >&2; exit 1; }
-[[ -f "$SELECTED_GAUGE_MANIFEST" ]] || { echo "Missing selected gauge manifest: $SELECTED_GAUGE_MANIFEST" >&2; exit 1; }
-[[ -f "$SELECTED_GATE_DECISION" ]] || { echo "Missing selected gate decision: $SELECTED_GATE_DECISION" >&2; exit 1; }
-[[ -d "$SELECTED_TENSOR_ROOT" ]] || { echo "Missing selected tensor root: $SELECTED_TENSOR_ROOT" >&2; exit 1; }
-if [[ -e "$OUTPUT_DIR" ]] && { [[ ! -d "$OUTPUT_DIR" ]] || [[ -n "$(find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; }; then
-  echo "Output already exists and is not an empty directory: $OUTPUT_DIR" >&2
-  exit 1
-fi
+ll_require_file "$SELECTED_GAUGE_MANIFEST" "selected gauge manifest"
+ll_require_file "$SELECTED_GATE_DECISION" "selected gate decision"
+ll_require_dir "$SELECTED_TENSOR_ROOT" "selected tensor root"
+ll_require_empty_output "$OUTPUT_DIR"
 
-cd "$GAVD6_ROOT"
 echo "Decisive seed-7 task $SLURM_ARRAY_TASK_ID: route=$SELECTED_ROUTE_NAME arm=$arm"
 exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality train \
   --arm "$arm" \

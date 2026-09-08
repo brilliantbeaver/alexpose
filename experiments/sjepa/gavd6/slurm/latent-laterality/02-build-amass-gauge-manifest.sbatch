@@ -13,22 +13,17 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
 
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 SOURCE_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/manifest.csv"
 TENSOR_ROOT="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/core11"
 OUTPUT_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/gauge-seed7.csv"
 
-[[ -d "$GAVD6_ROOT" ]] || { echo "Missing checkout: $GAVD6_ROOT" >&2; exit 1; }
-[[ -f "$SOURCE_MANIFEST" ]] || { echo "Missing source manifest: $SOURCE_MANIFEST" >&2; exit 1; }
-[[ -d "$TENSOR_ROOT" ]] || { echo "Missing tensor root: $TENSOR_ROOT" >&2; exit 1; }
-[[ ! -e "$OUTPUT_MANIFEST" ]] || {
-  echo "Refusing to replace existing gauge manifest: $OUTPUT_MANIFEST" >&2
-  exit 1
-}
+ll_require_file "$SOURCE_MANIFEST" "source manifest"
+ll_require_dir "$TENSOR_ROOT" "tensor root"
+ll_require_absent "$OUTPUT_MANIFEST"
 
-cd "$GAVD6_ROOT"
 exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality build-manifest \
   --source-manifest "$SOURCE_MANIFEST" \
   --tensor-root "$TENSOR_ROOT" \

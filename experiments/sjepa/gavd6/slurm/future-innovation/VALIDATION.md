@@ -1,0 +1,17 @@
+# Implementation validation — 2026-09-07
+
+The real Experiment 0 has not been executed. Validation here establishes implementation behavior, not evidence for the scientific hypothesis.
+
+- **Repository regression suite:** 138 tests passed, including both official-source adapter tests; no skips in the final run.
+- **Focused experiment suite:** 35 tests passed. These cover source selection/caps/folds, one-based annotation conversion, actual indexed video decoding, pixel/box geometry, past-only skeleton normalization, token masks/order, fixed projection, partition-local controls, weighted metrics/bootstrap multiplicity, checkpoint reload, complete predictions, and gate failure/stability cases.
+- **Official V-JEPA integration:** used source commit `204698b45b3712590f06245fbfba32d3be539812`. Constructed the actual Hub ViT-B encoder/predictor without downloading weights. A small instance of the official V-JEPA 2.1 encoder verified pre-attention masking, exact future-pixel invariance, the actual patch-embedding flatten order, final-layer output, and official preprocessing equivalence.
+- **Data flow:** synthetic CSVs and encoded video files exercised candidate construction, exact decode, an injected lightweight detector, pose normalization, 50-window cohort freeze, overlay generation, teacher-cache schema/checksums, resumption, and the complete ten-window pixel-edit audit. A constant fake teacher correctly failed the validity gate before fitting.
+- **Model/report flow:** the CLI smoke run fit five outer folds × five arms × three seeds, selected from inner folds, saved and reloaded all 75 residual checkpoints and ten ridge/preprocessing objects, scored all predictions, bootstrapped sources, and wrote the decision/report. Synthetic results always forbid scientific advancement and adapter training.
+- **HAIC scripts:** all shell/Slurm files passed `bash -n`. Mock submissions verified `afterok`/`afterany` dependencies, the five-fold array interface, failure cancellation, absolute log paths, and command argument forwarding. All 11 command help routes passed.
+- **Static/configuration checks:** Python compilation, Ruff, `git diff --check`, and `uv lock --check` passed.
+
+The final review checked source/inner-fold isolation, training-only preprocessing, separate background baselines, matched head capacity and seed schedules, target/reference units, bootstrap source multiplicity, missing-control failures, immutable configuration/artifact lineage, partial-stage recovery, and duplicate-writer protection. Shared MediaPipe primitives were extracted from the historical implementation so active research does not import archive modules.
+
+Local execution used the existing macOS development environment (PyTorch 2.13.0); teacher integration dependencies were installed in a temporary directory. The HAIC environment remains explicitly pinned to PyTorch 2.6.0+cu124, torchvision 0.21.0+cu124, timm 1.0.15, and einops 0.8.1 in the updated lockfile. Full 384-pixel trained-checkpoint inference, real MediaPipe extraction/alignment, real target sensitivity, GPU resource usage, and actual Slurm scheduling still require HAIC and its full-GAVD inputs. The pipeline enforces its real-data audits before fitting.
+
+Use [README.md](README.md) for the reproducible launch and validation commands. The local synthetic demonstration is under the ignored `outputs/future-innovation-implementation-smoke-v1/` directory; it is not a scientific result or a committed dataset.

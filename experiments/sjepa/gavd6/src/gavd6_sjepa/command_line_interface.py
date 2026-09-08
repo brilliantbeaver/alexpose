@@ -104,6 +104,25 @@ COMMANDS: dict[tuple[str, str], CommandSpec] = {
     ),
 }
 
+# Resolve experiment modules only when the selected command runs. Global and
+# command-specific help stay usable without loading teacher/pose dependencies.
+for _command, _handler, _description in (
+    ("init-run", "init_main", "Freeze the Future Innovation Experiment 0 protocol and input hashes."),
+    ("build-cohort", "cohort_main", "Build label-blind full-GAVD window candidates."),
+    ("extract-poses", "poses_main", "Extract aligned whole-body histories and freeze the 50-window cohort."),
+    ("review-alignment", "alignment_main", "Record actual overlay inspection covering all source folds."),
+    ("cache-teacher", "cache_main", "Cache frozen, causally isolated V-JEPA 2.1 features and targets."),
+    ("audit-teacher", "audits_main", "Run repeated-input, causal-leakage, and pixel-edit validity audits."),
+    ("run-gate", "fit_main", "Fit nested source-fold baselines and all residual/control heads."),
+    ("score-gate", "score_main", "Score complete OOF predictions and paired source bootstraps."),
+    ("assess-capacity", "capacity_main", "Record an evidence-backed no-skeleton capacity interpretation."),
+    ("build-report", "report_main", "Write the immutable Experiment 0 decision and report."),
+    ("smoke", "smoke_main", "Exercise all model folds and reports with explicitly synthetic cached data."),
+):
+    COMMANDS[("future-innovation", _command)] = CommandSpec(
+        f"gavd6_sjepa.research_directions.future_innovation.fi_entrypoint:{_handler}", _description
+    )
+
 
 def _package_version() -> str:
     try:

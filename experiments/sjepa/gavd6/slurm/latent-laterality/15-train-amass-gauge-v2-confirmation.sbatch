@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Submit only if the sealed seed-7 test readout favours SG-JEPA over
-# correction-first without an even-channel penalty.  This repeats just that
-# prespecified contrast at seeds 19 and 31.
+# Submit only after reviewing the seed-7 validation readout from script 14:
+# SG-JEPA must improve on correction-first without an even-channel penalty,
+# and the uniform control must not reproduce the gain. Repeat the prespecified
+# contrast at seeds 19 and 31; keep test sealed until script 16.
 
 #SBATCH --job-name=ll-amass-confirm-v2
 #SBATCH --account=mind
@@ -19,10 +20,10 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
-: "${SLURM_ARRAY_TASK_ID:?Submit this file as its declared job array}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
+ll_require_array_task 3
 
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 GAUGE_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/gauge-seed7-v2-chart-paired.csv"
 GATE_DECISION="$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/gate_decision.json"
 TENSOR_ROOT="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/core11"
@@ -35,16 +36,11 @@ label="${labels[$((SLURM_ARRAY_TASK_ID % 2))]}"
 seed="${seeds[$((SLURM_ARRAY_TASK_ID / 2))]}"
 OUTPUT_DIR="$OUTPUT_ROOT/$label-seed$seed"
 
-[[ -d "$GAVD6_ROOT" ]] || { echo "Missing checkout: $GAVD6_ROOT" >&2; exit 1; }
-[[ -f "$GAUGE_MANIFEST" ]] || { echo "Missing v2 gauge manifest: $GAUGE_MANIFEST" >&2; exit 1; }
-[[ -f "$GATE_DECISION" ]] || { echo "Missing v2 gate decision: $GATE_DECISION" >&2; exit 1; }
-[[ -d "$TENSOR_ROOT" ]] || { echo "Missing AMASS tensors: $TENSOR_ROOT" >&2; exit 1; }
-if [[ -e "$OUTPUT_DIR" ]] && { [[ ! -d "$OUTPUT_DIR" ]] || [[ -n "$(find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; }; then
-  echo "Output already exists and is not empty: $OUTPUT_DIR" >&2
-  exit 1
-fi
+ll_require_file "$GAUGE_MANIFEST" "v2 gauge manifest"
+ll_require_file "$GATE_DECISION" "v2 gate decision"
+ll_require_dir "$TENSOR_ROOT" "AMASS tensors"
+ll_require_empty_output "$OUTPUT_DIR"
 
-cd "$GAVD6_ROOT"
 echo "AMASS v2 confirmation task $SLURM_ARRAY_TASK_ID: arm=$arm seed=$seed"
 exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality train \
   --arm "$arm" \
