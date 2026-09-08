@@ -5,6 +5,8 @@
 > contract. Start with the [current documentation](docs/), especially the
 > [Latent Laterality study](docs/studies/latent-laterality/) and its
 > [validation-only swap probe](docs/studies/latent-laterality/swap-probe.md).
+> The [Future Innovation Experiment 0 implementation and HAIC run guide](slurm/future-innovation/README.md)
+> covers the 50-window frozen-V-JEPA feasibility gate; real experimental results are not yet available.
 > The prior manuscript, figures, and result ledger now live in
 > [docs/history/urtc-2026/](docs/history/urtc-2026/).
 

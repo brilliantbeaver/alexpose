@@ -25,6 +25,7 @@ uv run gavd6 laterality --help
 | Train SG-JEPA | `uv run gavd6 laterality train --help` |
 | Evaluate SG-JEPA | `uv run gavd6 laterality evaluate --help` |
 | Run the swap probe | `uv run gavd6 swap-probe run --help` |
+| Run the Future Innovation feasibility gate | `uv run gavd6 future-innovation --help` ([HAIC workflow](../slurm/future-innovation/README.md)) |
 | Validate generated notebooks | `uv run gavd6 notebooks validate` |
 
 ## Directory ownership

@@ -1,6 +1,6 @@
 # Experiment 0: does skeleton history help predict the future?
 
-**Status:** proposed 48-hour feasibility experiment. It has not been run, and the experiment-specific code still needs to be built.
+**Status:** implemented 48-hour feasibility protocol; the real experiment has not been run. See the [HAIC implementation and run guide](../../slurm/future-innovation/README.md) for executable commands, frozen implementation choices, and validation instructions.
 
 Before training a skeleton model to learn from a large video model, we need to know whether the skeleton contains a useful part of what we want it to learn. This guide turns the [48-hour gate in Proposal 2](../world-model-extensions/proposals-03/02-future-innovation-distillation.md#the-48-hour-decision-gate) into that first test:
 
@@ -143,7 +143,7 @@ The repository already contains:
 - historical MediaPipe pose files for a much smaller 96-sequence cohort; and
 - frozen local S-JEPA checkpoints.
 
-The repository does **not** yet contain:
+At the time this protocol was drafted, the repository did **not** yet contain:
 
 - a maintained full-GAVD pose-extraction command;
 - a V-JEPA dependency or checkpoint;
@@ -152,7 +152,7 @@ The repository does **not** yet contain:
 - the gate metrics and decision code; or
 - `gavd6 future-innovation ...` CLI routes.
 
-Therefore, every `future-innovation` module and command shown below is a proposed implementation interface. Do not paste a command into a Slurm job and assume it already exists.
+These components are now implemented under `research_directions/future_innovation/`, with lazy `gavd6 future-innovation` commands and jobs under `slurm/future-innovation/`. The sketches below describe the scientific contract; use the linked run guide and command-specific `--help` for the implemented interfaces.
 
 The 96-sequence local pose cache is useful for testing array schemas, but it must not be described as the full GAVD cohort. The 48-hour gate should use the full-GAVD source manifest and the videos cached on HAIC.
 
