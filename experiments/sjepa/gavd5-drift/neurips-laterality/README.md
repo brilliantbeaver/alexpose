@@ -42,8 +42,29 @@ This separate checker runs the extension tests and fresh-kernel demonstrations.
 It can save executed review copies and vector graphics under
 `executed/research_extensions/`; canonical notebooks stay output-free. Editable
 tutorial sources live in `tutorials/`, and `scripts/build_research_notebooks.py`
-regenerates only 07–10. The original builder and execution workflow below still
+can regenerate selected notebooks with `--only`. The original builder and execution workflow below still
 cover 00–06.
+
+## Comparative masking and future prediction: notebooks 11–14
+
+The [experiment specification](docs/COMPARATIVE_MASKING_PLAN.md) explains which
+question each comparison addresses. The tutorials run independently in fresh
+kernels, using short synthetic examples by default:
+
+- [11 — Masking patterns and coverage](11_masking_patterns_and_coverage.ipynb) compares eight policies, their actual hidden counts, and the information left visible.
+- [12 — Controlled masking pretraining](12_controlled_masking_pretraining.ipynb) pairs training conditions and displays the saved real-data recipe and planned workload.
+- [13 — Encoder and predictor evaluation](13_masking_encoder_and_predictor_evaluation.ipynb) tests feature prediction, frozen movement readouts, missing observations, and source-level uncertainty.
+- [14 — Future features and movement prediction](14_future_features_and_movement_prediction.ipynb) decodes predicted future features and compares them with observed-future diagnostics and past-only references.
+
+```bash
+.venv/bin/python neurips-laterality/scripts/build_research_notebooks.py --only 11 12 13 14
+.venv/bin/python neurips-laterality/scripts/verify_comparative_notebooks.py --execute
+```
+
+The verifier saves executed teaching copies and vector figures in a new directory
+under `executed/comparative_masking/`. Real-data training is explicitly enabled
+inside the relevant notebooks after the workload is displayed. New empirical
+results remain pending; successful synthetic execution verifies the software.
 
 For whether to extend Notebook 06, see the [external evaluation assessment](docs/external_evaluation_assessment.md).
 It recommends choosing a useful independent outcome and compatible dataset
