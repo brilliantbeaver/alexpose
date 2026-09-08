@@ -1,0 +1,260 @@
+{
+  "schema": "neurips_laterality_tutorial_masking_summary/v1",
+  "evidence": "Completed exploratory real-data grid; distinct from the registered study",
+  "coverage": {
+    "folds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "comparisons": 25,
+    "trained_encoders": 50,
+    "clips": 625,
+    "source_videos": 93
+  },
+  "evaluation": "Frozen EMA teacher; training-source-only preprocessing and fixed ridge alpha=1",
+  "aggregation": "Pool held-out folds per seed, weight each source video equally, then average seed metrics",
+  "baseline_note": "Direct pose and training-mean predictions repeat identically across training seeds",
+  "shared_training_settings": {
+    "steps": 1200,
+    "batch_size": 20,
+    "embed_dim": 96,
+    "encoder_depth": 4,
+    "predictor_depth": 2,
+    "heads": 4,
+    "segment_length": 4,
+    "learning_rate": 0.001,
+    "weight_decay": 0.05,
+    "mask_fraction": 0.5,
+    "random_subset_seed": 31,
+    "ridge_alpha": 1.0,
+    "reflection_probability": 0.0,
+    "symmetry_weight": 0.0,
+    "vicreg_weight": 0.05,
+    "ema_momentum": 0.999
+  },
+  "conditions": {
+    "gait_pretraining": {
+      "mean_r2": -0.5401360154369608,
+      "mean_mae": 0.0563565133004176,
+      "seed_sd_r2": 0.26604563378645535,
+      "seed_sd_mae": 0.002693803796270763,
+      "per_seed": [
+        {
+          "seed": 42,
+          "r2": -0.3463165052621828,
+          "mae": 0.05302511972344371
+        },
+        {
+          "seed": 43,
+          "r2": -0.32570587378983795,
+          "mae": 0.054299729241867004
+        },
+        {
+          "seed": 44,
+          "r2": -0.9721696490509681,
+          "mae": 0.05893673020812771
+        },
+        {
+          "seed": 45,
+          "r2": -0.6077390853544098,
+          "mae": 0.05900506803488151
+        },
+        {
+          "seed": 46,
+          "r2": -0.44874896372740514,
+          "mae": 0.05651591929376808
+        }
+      ]
+    },
+    "uniform_pretraining": {
+      "mean_r2": -0.4227572937721963,
+      "mean_mae": 0.0561518496535767,
+      "seed_sd_r2": 0.08907042538056696,
+      "seed_sd_mae": 0.0015532263788000159,
+      "per_seed": [
+        {
+          "seed": 42,
+          "r2": -0.32476828204038366,
+          "mae": 0.05435869747460869
+        },
+        {
+          "seed": 43,
+          "r2": -0.3824074063444598,
+          "mae": 0.05684782164537775
+        },
+        {
+          "seed": 44,
+          "r2": -0.5101976231923009,
+          "mae": 0.057587777797828595
+        },
+        {
+          "seed": 45,
+          "r2": -0.37217020752771,
+          "mae": 0.05459845756456345
+        },
+        {
+          "seed": 46,
+          "r2": -0.5242429497561272,
+          "mae": 0.05736649378550504
+        }
+      ]
+    },
+    "no_pretraining": {
+      "mean_r2": -0.3513888714110858,
+      "mean_mae": 0.05258258791875105,
+      "seed_sd_r2": 0.08598334584573528,
+      "seed_sd_mae": 0.0019026708533170546,
+      "per_seed": [
+        {
+          "seed": 42,
+          "r2": -0.34998732941262345,
+          "mae": 0.051653320230034154
+        },
+        {
+          "seed": 43,
+          "r2": -0.25797322069938167,
+          "mae": 0.050103917466316775
+        },
+        {
+          "seed": 44,
+          "r2": -0.473573330344115,
+          "mae": 0.055067592937780366
+        },
+        {
+          "seed": 45,
+          "r2": -0.3903387319060603,
+          "mae": 0.053704405574544666
+        },
+        {
+          "seed": 46,
+          "r2": -0.2850717446932487,
+          "mae": 0.052383703385079264
+        }
+      ]
+    },
+    "direct_pose": {
+      "mean_r2": -0.0038430031652095576,
+      "mean_mae": 0.04490816569870104,
+      "seed_sd_r2": 1.216188775513439e-16,
+      "seed_sd_mae": 0.0,
+      "per_seed": [
+        {
+          "seed": 42,
+          "r2": -0.0038430031652096908,
+          "mae": 0.04490816569870104
+        },
+        {
+          "seed": 43,
+          "r2": -0.0038430031652094687,
+          "mae": 0.04490816569870104
+        },
+        {
+          "seed": 44,
+          "r2": -0.0038430031652094687,
+          "mae": 0.04490816569870104
+        },
+        {
+          "seed": 45,
+          "r2": -0.0038430031652094687,
+          "mae": 0.04490816569870104
+        },
+        {
+          "seed": 46,
+          "r2": -0.0038430031652096908,
+          "mae": 0.04490816569870104
+        }
+      ]
+    },
+    "training_mean": {
+      "mean_r2": -0.010609304069806091,
+      "mean_mae": 0.046172320388849775,
+      "seed_sd_r2": 0.0,
+      "seed_sd_mae": 6.009258394948637e-18,
+      "per_seed": [
+        {
+          "seed": 42,
+          "r2": -0.010609304069806091,
+          "mae": 0.04617232038884977
+        },
+        {
+          "seed": 43,
+          "r2": -0.010609304069806091,
+          "mae": 0.046172320388849775
+        },
+        {
+          "seed": 44,
+          "r2": -0.010609304069806091,
+          "mae": 0.04617232038884977
+        },
+        {
+          "seed": 45,
+          "r2": -0.010609304069806091,
+          "mae": 0.046172320388849775
+        },
+        {
+          "seed": 46,
+          "r2": -0.010609304069806091,
+          "mae": 0.04617232038884977
+        }
+      ]
+    }
+  },
+  "gait_minus_uniform": {
+    "mean_r2": -0.11737872166476448,
+    "mean_mae": 0.0002046636468408941,
+    "per_seed": [
+      {
+        "seed": 42,
+        "r2": -0.021548223221799168,
+        "mae": -0.00133357775116498
+      },
+      {
+        "seed": 43,
+        "r2": 0.05670153255462185,
+        "mae": -0.0025480924035107475
+      },
+      {
+        "seed": 44,
+        "r2": -0.46197202585866726,
+        "mae": 0.0013489524102991146
+      },
+      {
+        "seed": 45,
+        "r2": -0.23556887782669977,
+        "mae": 0.004406610470318061
+      },
+      {
+        "seed": 46,
+        "r2": 0.07549398602872204,
+        "mae": -0.0008505744917369634
+      }
+    ],
+    "source_bootstrap": {
+      "status": "Exploratory paired percentile bootstrap of saved held-out predictions",
+      "replicates": 20000,
+      "random_seed": 20260907,
+      "resampling_unit": "Source video; all its clips, arms, and training seeds move together",
+      "estimand": "Mean per-seed pooled metric for gait targets minus uniform targets",
+      "conditioning": "Five fitted training seeds and the existing source split; no refitting",
+      "excluded_uncertainty": "New training runs, new source splits, and analysis selection",
+      "r2_ci95": [
+        -0.28957161932017284,
+        0.01558675547714408
+      ],
+      "mae_ci95": [
+        -0.0021760773896296976,
+        0.0026792679113797364
+      ]
+    }
+  }
+}

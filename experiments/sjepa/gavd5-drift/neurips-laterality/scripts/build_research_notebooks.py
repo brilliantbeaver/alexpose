@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate only the new 07–10 tutorials; never rewrite notebooks 00–06."""
+"""Generate selected research tutorials; use --only to preserve earlier notebooks."""
 from __future__ import annotations
 
 import argparse
@@ -17,6 +17,10 @@ NOTEBOOKS = {
     "08": "08_matched_budget_masking.ipynb",
     "09": "09_symmetry_aware_jepa.ipynb",
     "10": "10_past_only_movement_prediction.ipynb",
+    "11": "11_masking_patterns_and_coverage.ipynb",
+    "12": "12_controlled_masking_pretraining.ipynb",
+    "13": "13_masking_encoder_and_predictor_evaluation.ipynb",
+    "14": "14_future_features_and_movement_prediction.ipynb",
 }
 
 
