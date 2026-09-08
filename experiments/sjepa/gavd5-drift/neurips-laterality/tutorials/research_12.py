@@ -65,8 +65,8 @@ def build_notebook():
         data = load_learning_dataset()
         settings = LearningSettings(steps=3, batch_size=5)
         print("Synthetic demonstration: generated movement, three updates per encoder.")
-        display(pd.DataFrame([{"training_videos": len(data.train_sources),
-            "test_videos": len(data.test_sources), "clips": len(data.xyz)}]))
+        display(pd.DataFrame([{"training sources": len(data.train_sources),
+            "test sources": len(data.test_sources), "generated clips": len(data.xyz)}]))
         """),
         md("""
         ## 2. Inspect actual hidden counts before training

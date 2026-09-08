@@ -15,7 +15,6 @@ from pathlib import Path
 import platform
 import tempfile
 import time
-from types import SimpleNamespace
 from typing import Mapping
 
 import numpy as np
@@ -397,13 +396,6 @@ def load_comparison(destination, expected_identity):
     schedule_sources = np.asarray(expected_identity["source_ids"])[schedule.ravel()]
     if not set(schedule_sources) <= set(expected_identity["train_sources"]):
         raise ValueError("Saved source schedule contains a test video")
-    schedule_data = SimpleNamespace(source_ids=np.asarray(expected_identity["source_ids"]),
-        train_sources=tuple(expected_identity["train_sources"]))
-    expected_schedule = source_schedule(schedule_data, settings)
-    expected_reflections = np.random.default_rng(np.random.SeedSequence(
-        [settings.seed, settings.fold, 103])).random(shape) < settings.reflection_probability
-    if not np.array_equal(schedule, expected_schedule) or not np.array_equal(reflections, expected_reflections):
-        raise ValueError("Saved random schedules disagree with the declared seeds")
     if not np.array_equal(schedule, declared_source_schedule(
             expected_identity["source_ids"], expected_identity["train_sources"], settings)):
         raise ValueError("Saved source schedule disagrees with its declared sampling seed")
@@ -434,10 +426,6 @@ def load_comparison(destination, expected_identity):
             raise ValueError("Saved projector is incomplete or nonfinite")
         if any(not torch.equal(v, saved["checkpoints"][settings.steps][k]) for k, v in saved["model"].items()):
             raise ValueError("Final model and final declared checkpoint disagree")
-        if set(saved["projector"]) != set(projector.state_dict()) or any(
-                v.shape != projector.state_dict()[k].shape or not torch.isfinite(v).all()
-                for k, v in saved["projector"].items()):
-            raise ValueError("Saved regularizer projector is incomplete or nonfinite")
         model.load_state_dict(saved["model"]); initial_model.load_state_dict(saved["initial_model"])
         projector.load_state_dict(saved["projector"])
         history = pd.read_csv(destination / f"{name}_training.csv")
@@ -631,6 +619,8 @@ def evaluate_comparison(result, dataset, settings, *, output_dir=None):
     # The comparison definition is shared across folds and seeds; each training
     # cache identity separately identifies its particular fitted models.
     design = {k: result["identity"][k] for k in ("conditions", "budgets", "matched_to", "implementation")}
+    design["training_settings"] = {k: v for k, v in result["identity"]["settings"].items()
+                                   if k not in {"seed", "fold", "confirm_real_run"}}
     comparison_id = canonical_json_digest(design)
     prediction_tables, diagnostics, validation, feature_checks = [], [], [], []
     for name, run in result["runs"].items():

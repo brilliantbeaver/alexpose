@@ -160,6 +160,10 @@ class FutureComparisonTests(unittest.TestCase):
             source_roles(self.data, self.train_sources, self.train_sources)
         with self.assertRaises(ValueError):
             prepare_future_examples(self.records + self.records[:1], self.spec, status="SYNTHETIC TEST")
+        changed = copy.deepcopy(self.data)
+        changed.horizon[0] = 0.91
+        with self.assertRaisesRegex(ValueError, "at least two sources"):
+            source_roles(changed, **self.roles)
 
     def test_all_joint_tiny_training_executes(self):
         spec = replace(self.spec, input_joints=ALL_JOINTS, updates=1)
@@ -242,6 +246,21 @@ class FutureComparisonTests(unittest.TestCase):
         self.assertEqual(interval["source_videos"], 2)
         self.assertTrue(np.isfinite(interval["rmse_difference"]))
         self.assertIn("conditional on fitted models", interval["scope"])
+
+    def test_enabled_real_runner_saves_and_aggregates_a_mocked_tiny_dataset(self):
+        # Exercise the real dispatch path with generated records, never local data.
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch("laterality_extensions.future_comparison.load_future_records", return_value=(self.records, {0: self.roles})), \
+             patch("builtins.print"):
+            result = run_real_future_comparison(enabled=True, spec=replace(self.spec, updates=1),
+                folds=(0,), seeds=(17,), output_root=Path(temporary) / "future")
+            self.assertEqual(len(result["aggregate"]["summary"]), 33)
+            self.assertTrue(result["aggregate"]["summary"].scope.str.contains("Pilot").all())
+            with patch("laterality_extensions.future_comparison.fit_forecast_model") as trainer:
+                reused = run_real_future_comparison(enabled=True, spec=replace(self.spec, updates=1),
+                    folds=(0,), seeds=(17,), output_root=Path(temporary) / "future")
+            trainer.assert_not_called()
+            self.assertIn("reused", reused["outputs"][0]["status"])
 
 
 if __name__ == "__main__":

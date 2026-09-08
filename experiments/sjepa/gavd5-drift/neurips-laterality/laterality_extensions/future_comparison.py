@@ -203,6 +203,9 @@ def source_roles(data: FutureExamples, train_sources, test_sources) -> tuple[np.
     test = np.flatnonzero(np.isin(data.sources, list(testing)))
     if len(set(data.sources[train])) < 3 or len(set(data.sources[test])) < 1:
         raise ValueError("Need at least three training sources and one test source")
+    for horizon in np.unique(data.horizon[train]):
+        if len(set(data.sources[train[data.horizon[train] == horizon]])) < 2:
+            raise ValueError("Every training horizon needs at least two sources for its mismatched-future control")
     identity = list(zip(data.sequence_ids, data.horizon))
     if len(set(identity)) != len(identity):
         raise ValueError("Duplicate clip-horizon examples")
@@ -231,9 +234,6 @@ def fit_forecast_model(data: FutureExamples, spec: ComparisonForecastSpec, *,
     mismatch_rng = np.random.default_rng(np.random.SeedSequence([spec.seed, 202]))
     sources = np.unique(data.sources[train])
     members = {source: train[data.sources[train] == source] for source in sources}
-    for horizon in np.unique(data.horizon[train]):
-        if len(set(data.sources[train[data.horizon[train] == horizon]])) < 2:
-            raise ValueError("Every training horizon needs at least two sources for its mismatched-future control")
     history, schedule, target_schedule = [], [], []
     started = time.perf_counter()
     for update in range(spec.updates):
@@ -808,6 +808,19 @@ def run_real_future_comparison(*, enabled=False, validate_inputs=False,
     records, splits = load_future_records(visibility_threshold=spec.visibility_threshold)
     prepared = {len(joints): prepare_future_examples(records, replace(spec, input_joints=joints),
                  status="REAL DATA — separate forecasting comparison") for joints in input_sets}
+    reference_data = prepared[len(input_sets[0])]
+    source_fold = {}
+    for fold in folds:
+        for source in splits[fold]["test_sources"]:
+            if str(source) in source_fold:
+                raise ValueError("A source occurs in multiple requested outer test folds")
+            source_fold[str(source)] = fold
+    if set(folds) == set(range(5)) and not set(reference_data.sources) <= set(source_fold):
+        raise ValueError("The full outer-fold declaration leaves some forecasting sources without test coverage")
+    for data in prepared.values():
+        for field in ("endpoint", "endpoint_valid", "endpoint_times", "sequence_ids", "sources", "horizon"):
+            if not np.array_equal(getattr(reference_data, field), getattr(data, field)):
+                raise ValueError("Input landmark choices changed the common endpoint examples")
     validation = []
     for row in plan["runs"]:
         data, split = prepared[row["input_landmarks"]], splits[row["fold"]]
@@ -833,8 +846,6 @@ def run_real_future_comparison(*, enabled=False, validate_inputs=False,
         retained = load_future_result(destination, reference)
         error_tables.append(saved_forecast_error_rows(retained))
         outputs.append({"output": str(destination), "status": "Completed new forecasting comparison"})
-    reference_data = prepared[len(input_sets[0])]
-    source_fold = {str(source): fold for fold in folds for source in splits[fold]["test_sources"]}
     declared = np.flatnonzero(np.isin(reference_data.sources, list(source_fold)))
     expected = pd.DataFrame({"sequence_id": reference_data.sequence_ids[declared],
                              "source_id": reference_data.sources[declared],
