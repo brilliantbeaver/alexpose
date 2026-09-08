@@ -14,9 +14,9 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
 
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 GAUGE_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/gauge-seed7-v2-chart-paired.csv"
 GATE_DECISION="$LATENT_LATERALITY_RUN_ROOT/amass-benchmark-seed7-v2-chart-paired/gate_decision.json"
 TENSOR_ROOT="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/core11"
@@ -31,17 +31,13 @@ run_dirs=(
   "sg-jepa-seed31=$RUN_ROOT/sg-jepa-seed31"
 )
 
-[[ -d "$GAVD6_ROOT" ]] || { echo "Missing checkout: $GAVD6_ROOT" >&2; exit 1; }
-[[ -f "$GAUGE_MANIFEST" ]] || { echo "Missing v2 gauge manifest: $GAUGE_MANIFEST" >&2; exit 1; }
-[[ -f "$GATE_DECISION" ]] || { echo "Missing v2 gate decision: $GATE_DECISION" >&2; exit 1; }
-[[ -d "$TENSOR_ROOT" ]] || { echo "Missing AMASS tensors: $TENSOR_ROOT" >&2; exit 1; }
+ll_require_file "$GAUGE_MANIFEST" "v2 gauge manifest"
+ll_require_file "$GATE_DECISION" "v2 gate decision"
+ll_require_dir "$TENSOR_ROOT" "AMASS tensors"
 for item in "${run_dirs[@]}"; do
-  [[ -f "${item#*=}/run_result.json" ]] || { echo "Missing completed run: ${item#*=}" >&2; exit 1; }
+  ll_require_file "${item#*=}/run_result.json" "completed run"
 done
-if [[ -e "$OUTPUT_DIR" ]] && { [[ ! -d "$OUTPUT_DIR" ]] || [[ -n "$(find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; }; then
-  echo "Output already exists and is not empty: $OUTPUT_DIR" >&2
-  exit 1
-fi
+ll_require_empty_output "$OUTPUT_DIR"
 
 args=(
   --gate-decision "$GATE_DECISION"
@@ -56,5 +52,4 @@ args=(
 for item in "${run_dirs[@]}"; do
   args+=(--run-dir "$item")
 done
-cd "$GAVD6_ROOT"
 exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality evaluate "${args[@]}"

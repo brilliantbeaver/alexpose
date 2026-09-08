@@ -14,9 +14,9 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
 
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 GAVD_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/gavd-core11/manifest.csv"
 GAVD_TENSOR_ROOT="$LATENT_LATERALITY_RUN_ROOT/gavd-core11/tensors"
 OUTPUT_DIR="$LATENT_LATERALITY_RUN_ROOT/source-transfer-readout-seed7"
@@ -30,17 +30,13 @@ checkpoints=(
   "staged-equivariant=$LATENT_LATERALITY_RUN_ROOT/source-screen/amass-to-gavd-reflection_equivariant-seed7/stage-gavd/seed-7_reflection_equivariant_best.pt"
 )
 
-[[ -d "$GAVD6_ROOT" ]] || { echo "Missing checkout: $GAVD6_ROOT" >&2; exit 1; }
-[[ -f "$GAVD_MANIFEST" ]] || { echo "Missing GAVD manifest: $GAVD_MANIFEST" >&2; exit 1; }
-[[ -d "$GAVD_TENSOR_ROOT" ]] || { echo "Missing GAVD tensors: $GAVD_TENSOR_ROOT" >&2; exit 1; }
+ll_require_file "$GAVD_MANIFEST" "GAVD manifest"
+ll_require_dir "$GAVD_TENSOR_ROOT" "GAVD tensors"
 for item in "${checkpoints[@]}"; do
   path="${item#*=}"
-  [[ -f "$path" ]] || { echo "Missing source-screen checkpoint: $path" >&2; exit 1; }
+  ll_require_file "$path" "source-screen checkpoint"
 done
-if [[ -e "$OUTPUT_DIR" ]] && { [[ ! -d "$OUTPUT_DIR" ]] || [[ -n "$(find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; }; then
-  echo "Output already exists and is not an empty directory: $OUTPUT_DIR" >&2
-  exit 1
-fi
+ll_require_empty_output "$OUTPUT_DIR"
 
 args=(
   --gavd-manifest "$GAVD_MANIFEST"
@@ -54,5 +50,4 @@ for item in "${checkpoints[@]}"; do
   args+=(--checkpoint "$item")
 done
 
-cd "$GAVD6_ROOT"
 exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality evaluate-source-transfer "${args[@]}"

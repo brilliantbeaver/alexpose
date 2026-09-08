@@ -14,19 +14,19 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
 : "${AMASS_EXTRACTED_ROOT:?Export AMASS_EXTRACTED_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
 : "${AMASS_BODY_MODEL_ROOT:?Export AMASS_BODY_MODEL_ROOT before submitting}"
 : "${AMASS_SUBJECT_SPLITS:?Export AMASS_SUBJECT_SPLITS before submitting}"
 
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 AMASS_INVENTORY="${AMASS_INVENTORY:-$AMASS_RUN_ROOT/manifests/amass_raw_inventory_eligible.csv}"
 OUTPUT_ROOT="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/core11"
 OUTPUT_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/manifest.csv"
 REJECTS="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/rejects.csv"
 
-for path in "$GAVD6_ROOT" "$AMASS_EXTRACTED_ROOT" "$AMASS_BODY_MODEL_ROOT"; do
-  [[ -d "$path" ]] || { echo "Missing directory: $path" >&2; exit 1; }
+for path in "$AMASS_EXTRACTED_ROOT" "$AMASS_BODY_MODEL_ROOT"; do
+  ll_require_dir "$path" "directory"
 done
 for path in \
   "$AMASS_INVENTORY" \
@@ -35,10 +35,9 @@ for path in \
   "$AMASS_BODY_MODEL_ROOT/smplh/female/model.npz" \
   "$AMASS_BODY_MODEL_ROOT/dmpls/male/model.npz" \
   "$AMASS_BODY_MODEL_ROOT/dmpls/female/model.npz"; do
-  [[ -f "$path" ]] || { echo "Missing file: $path" >&2; exit 1; }
+  ll_require_file "$path" "file"
 done
 
-cd "$GAVD6_ROOT"
 echo "Converting eligible AMASS sequences to gauge-neutral Core11 tensors"
 echo "  inventory: $AMASS_INVENTORY"
 echo "  tensors:   $OUTPUT_ROOT"

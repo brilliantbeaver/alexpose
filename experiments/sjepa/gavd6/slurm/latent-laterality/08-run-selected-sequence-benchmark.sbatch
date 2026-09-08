@@ -13,28 +13,19 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT before submitting}"
-: "${AMASS_RUN_ROOT:?Export AMASS_RUN_ROOT before submitting}"
-: "${SELECTED_ROUTE_NAME:?Set SELECTED_ROUTE_NAME to amass-only or gavd-only}"
+# shellcheck source=slurm/latent-laterality/ll-common.sh
+source "$GAVD6_ROOT/slurm/latent-laterality/ll-common.sh"
+ll_require_selected_route
 : "${SELECTED_TENSOR_ROOT:?Point SELECTED_TENSOR_ROOT at the selected tensor root}"
 
-[[ "$SELECTED_ROUTE_NAME" =~ ^[A-Za-z0-9_-]+$ ]] || {
-  echo "Invalid SELECTED_ROUTE_NAME: $SELECTED_ROUTE_NAME" >&2
-  exit 1
-}
-LATENT_LATERALITY_RUN_ROOT="${LATENT_LATERALITY_RUN_ROOT:-$AMASS_RUN_ROOT/latent-laterality}"
 SELECTED_ROUTE_ROOT="$LATENT_LATERALITY_RUN_ROOT/selected-route/$SELECTED_ROUTE_NAME"
 SELECTED_GAUGE_MANIFEST="$SELECTED_ROUTE_ROOT/gauge-seed7.csv"
 OUTPUT_DIR="$SELECTED_ROUTE_ROOT/gate-seed7"
 
-[[ -d "$GAVD6_ROOT" ]] || { echo "Missing checkout: $GAVD6_ROOT" >&2; exit 1; }
-[[ -f "$SELECTED_GAUGE_MANIFEST" ]] || { echo "Missing selected gauge manifest: $SELECTED_GAUGE_MANIFEST" >&2; exit 1; }
-[[ -d "$SELECTED_TENSOR_ROOT" ]] || { echo "Missing selected tensor root: $SELECTED_TENSOR_ROOT" >&2; exit 1; }
-if [[ -e "$OUTPUT_DIR" ]] && { [[ ! -d "$OUTPUT_DIR" ]] || [[ -n "$(find "$OUTPUT_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; }; then
-  echo "Output already exists and is not an empty directory: $OUTPUT_DIR" >&2
-  exit 1
-fi
+ll_require_file "$SELECTED_GAUGE_MANIFEST" "selected gauge manifest"
+ll_require_dir "$SELECTED_TENSOR_ROOT" "selected tensor root"
+ll_require_empty_output "$OUTPUT_DIR"
 
-cd "$GAVD6_ROOT"
 exec uv run --no-sync python -m gavd6_sjepa.command_line_interface laterality benchmark \
   --gauge-manifest "$SELECTED_GAUGE_MANIFEST" \
   --tensor-root "$SELECTED_TENSOR_ROOT" \
