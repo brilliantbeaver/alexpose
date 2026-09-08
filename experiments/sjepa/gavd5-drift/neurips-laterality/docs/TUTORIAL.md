@@ -8,7 +8,8 @@ A guide to our research questions, findings, and next experiments. Evidence and 
 - [Data and research trajectory](#2-the-data-and-the-research-trajectory)
 - [What the completed and proposed notebooks test](#3-what-the-updated-notebooks-help-us-answer)
 - [Comparative masking techniques and priorities](#4-is-our-fixed-landmark-selection-too-restrictive)
-- [Novelty, literature, and next research directions](#5-what-recent-research-changes-about-the-broader-novelty-claim)
+- [Novelty and related literature](#5-what-recent-research-changes-about-the-broader-novelty-claim)
+- [Next research directions](#6-the-most-productive-research-directions)
 - [Workshop fit and readiness assessment](#7-how-close-is-this-to-a-strong-workshop-paper)
 - [Practical sequence toward the next paper](#8-a-practical-sequence-toward-the-next-paper)
 - [Implementation prompt for the next notebook suite](#9-copy-ready-implementation-prompt-for-the-next-notebook-suite)
@@ -357,7 +358,29 @@ The project has progressed from a sensible anatomical training choice to a more 
 
 ## 9. Copy-ready implementation prompt for the next notebook suite
 
-The following prompt specifies a future implementation task. The notebook names below are proposed deliverables, not notebooks created by this document update. Copy the text from “Role and objective” through “Definition of done” when ready to implement the extension.
+The specification below has now been implemented in notebooks 11–14. Their default executions use generated movement to check the software. Real-data feasibility checks have passed, while the expanded training comparisons remain unrun. The completed GAVD findings described earlier in this tutorial therefore remain the empirical starting point.
+
+### Implemented notebooks and how to use them
+
+| Notebook | What the reader can examine |
+|:--|:--|
+| [11 — Masking patterns and coverage](../11_masking_patterns_and_coverage.ipynb) | Eight policies, illustrated target patterns, natural missingness, and feasible versus impossible hidden counts |
+| [12 — Controlled masking pretraining](../12_controlled_masking_pretraining.ipynb) | Paired training, a loss that preserves each clip's targets, retained reference settings, and a real-data workload preview |
+| [13 — Encoder and predictor evaluation](../13_masking_encoder_and_predictor_evaluation.ipynb) | Feature prediction, separate online and teacher readouts, initial and direct-pose controls, missing-observation tests, and source-level uncertainty |
+| [14 — Future features and movement prediction](../14_future_features_and_movement_prediction.ipynb) | A training-only decoder applied to observed and predicted future features, past-only baselines, and a separate twelve- versus 33-landmark input option |
+
+Run these notebooks in order for the explanation, or independently for their synthetic examples. For example, Notebook 12 can hide two whole ankle trajectories and match a scattered reference to the same actual count; Notebook 13 then asks whether the resulting features help predict movement, while checking whether the teacher features have become nearly constant. These examples demonstrate the questions and their implementation. Their short synthetic training runs cannot establish a preferred masking method for gait.
+
+The [experiment specification](COMPARATIVE_MASKING_PLAN.md) gives the comparison stages. To rebuild and execute only the new tutorials from the repository root:
+
+```bash
+.venv/bin/python neurips-laterality/scripts/build_research_notebooks.py --only 11 12 13 14
+.venv/bin/python neurips-laterality/scripts/verify_comparative_notebooks.py --execute
+```
+
+The verifier saves executed copies and vector figures in a new directory under `executed/comparative_masking/`. Real-data training remains an explicit notebook choice after the requested workload is displayed. Completed compatible results can be reused; interrupted runs remain incomplete and automatic resume is not implemented.
+
+The following prompt is retained as the implementation specification. It can also guide a review or a further extension; its proposed filenames now refer to the implemented notebooks linked above.
 
 ### Role and objective
 
@@ -498,4 +521,4 @@ This overview combines the completed results in notebooks 00–05, the diagnosti
 
 The masking table and figure use one pooled held-out score per seed, followed by averaging those scores. The exploratory uncertainty calculation resamples the 93 source videos 20,000 times, keeping each video's clips and all paired predictions together; it conditions on the already fitted models. It is a new analysis of retained predictions, not a confidence interval previously stored by the notebook or an estimate of full retraining uncertainty.
 
-The [result-figure and summary generator](figures/make_tutorial_figures.py) reproduces the empirical masking summary and Figure 1 from saved predictions. Its [numerical summary](figures/tutorial_masking_summary.json) retains the unrounded values; prose, tables, and figure labels use precision appropriate for interpretation. The separate [mask-pattern illustration generator](figures/make_tutorial_masking_patterns.py) draws Figure 2 and verifies that its four hypothetical panels hide equal numbers of cells; it does not run an experiment. Run the [PDF build script](build_tutorial.sh) after editing this Markdown source to regenerate [TUTORIAL.pdf](TUTORIAL.pdf). Existing notebooks, training code, and empirical artifacts were left unchanged by this document update.
+The [result-figure and summary generator](figures/make_tutorial_figures.py) reproduces the empirical masking summary and Figure 1 from saved predictions. Its [numerical summary](figures/tutorial_masking_summary.json) retains the unrounded values; prose, tables, and figure labels use precision appropriate for interpretation. The separate [mask-pattern illustration generator](figures/make_tutorial_masking_patterns.py) draws Figure 2 and verifies that its four hypothetical panels hide equal numbers of cells; it does not run an experiment. Run the [PDF build script](build_tutorial.sh) after editing this Markdown source to regenerate [TUTORIAL.pdf](TUTORIAL.pdf). The comparative extension adds new notebooks and helpers while preserving notebooks 00–10, their source tutorials, the existing training implementation, and the retained empirical artifacts.
