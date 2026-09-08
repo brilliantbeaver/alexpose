@@ -77,6 +77,12 @@ def build_notebook():
         batch, leaving visible context. A smaller common budget also applies to
         its reference conditions.
 
+        The automatic scattered budget retains Notebook 08's fraction of the
+        available gait pool, even when both policies can hide any landmark.
+        This preserves the reference exposure while keeping an anatomical
+        influence on the budget. An explicit shared hidden count can test
+        other exposures as a separately declared comparison.
+
         The following example checks several fixed random pools as well as the
         two original target choices. It only constructs masks. The deliberately
         small training example below uses the two original choices.

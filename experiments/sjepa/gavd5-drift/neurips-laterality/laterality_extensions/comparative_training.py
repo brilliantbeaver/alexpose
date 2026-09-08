@@ -30,7 +30,7 @@ from laterality_extensions.masked_learning import (
     GAIT_JOINTS, LearningDataset, LearningSettings, load_learning_dataset,
     masking_implementation_digest, resolve_learning_device,
 )
-from laterality_extensions.comparative_masks import MaskBudget, MaskPolicy, eligible_landmarks, sample_mask
+from laterality_extensions.comparative_masks import MaskBudget, MaskPolicy, coverage_summary, eligible_landmarks, sample_mask
 
 SCHEMA = "comparative_masking/v1"
 STRUCTURED = {"whole_trajectory", "connected_region", "temporal_gap"}
@@ -126,6 +126,10 @@ def _policy_rng(settings, name, step, row):
 def masks_for_batch(dataset, rows, settings, conditions, *, budgets=None, matched_to=None, step=0):
     """Construct paired masks before training; infeasibility never drops a clip."""
     budgets = dict(budgets or {})
+    for name, budget in budgets.items():
+        if name not in conditions:
+            raise ValueError("A budget names an unknown condition")
+        budget.validate(conditions[name])
     valid = dataset.valid[rows].reshape(len(rows), -1, settings.segment_length, 33).all(2)
     masks = {name: [] for name in conditions}
     coverage = {name: [] for name in conditions}
@@ -154,6 +158,8 @@ def masks_for_batch(dataset, rows, settings, conditions, *, budgets=None, matche
             else:
                 if conditions[name].name in STRUCTURED:
                     raise ValueError("Compare one intact structure with scattered references per experiment")
+                if name in budgets and budgets[name].hidden_count != counts:
+                    raise ValueError("An explicit reference budget differs from the paired realized count")
                 budget = MaskBudget(hidden_count=int(counts))
             result = sample_mask(dataset.xyz[dataset_row], valid[batch_row], conditions[name], budget,
                 _policy_rng(settings, name, step, batch_row), segment_length=settings.segment_length,
@@ -241,10 +247,11 @@ def train_comparison(dataset: LearningDataset, settings: LearningSettings,
         model, projector = _new_model(settings, dataset.xyz.shape[1], device)
         initial_model = copy.deepcopy(model).eval()
         initial_digest = state_digest(model)
+        initial_projector_digest = state_digest(projector)
         trainable = [*model.view_encoder.parameters(), *model.predictor.parameters(), *projector.parameters()]
         optimizer = torch.optim.AdamW(trainable, lr=settings.learning_rate,
             weight_decay=settings.weight_decay, betas=(0.9, 0.95))
-        history, count_history, snapshots = [], [], {}
+        history, count_history, actual_coverage, snapshots = [], [], [], {}
         started = time.monotonic()
         model.train(); projector.train()
         view_hash = hashlib.sha256()
@@ -260,6 +267,20 @@ def train_comparison(dataset: LearningDataset, settings: LearningSettings,
                     changed[:, :, [left, right]] = changed[:, :, [right, left]]
                 mask = mask.clone(); mask[reflected] = changed
             patches = valid_patches(valid, settings.segment_length)
+            step_coverage = []
+            mirror = np.arange(33)
+            for left, right in FULL_MIRROR_PAIRS:
+                mirror[[left, right]] = mirror[[right, left]]
+            for index, (hidden, observed) in enumerate(zip(mask.cpu().numpy(), patches.cpu().numpy())):
+                details = {**coverage[step][name][index],
+                    **coverage_summary(hidden, observed, segment_length=settings.segment_length),
+                    "reflected": bool(reflections[step, index]), "coordinate_frame": "training view after anatomical reflection"}
+                if reflections[step, index]:
+                    for key in ("selected_landmarks", "eligible_landmarks"):
+                        if key in details:
+                            details[key] = sorted(map(int, mirror[details[key]]))
+                step_coverage.append(details)
+            actual_coverage.append(step_coverage)
             cuda_devices = [device.index or 0] if device.type == "cuda" else []
             with torch.random.fork_rng(devices=cuda_devices):
                 torch.manual_seed(settings.seed + 100_003 * (settings.fold + 1) + step)
@@ -297,18 +318,21 @@ def train_comparison(dataset: LearningDataset, settings: LearningSettings,
                     "condition_count": len(conditions), "loss": history[-1]["loss"]})
         runs[name] = {"model": model.eval(), "initial_model": initial_model, "projector": projector.eval(),
             "settings": asdict(settings), "policy": asdict(policy), "history": pd.DataFrame(history),
-            "initial_state_digest": initial_digest, "source_draw_digest": _digest_array(schedule),
+            "initial_state_digest": initial_digest, "initial_projector_digest": initial_projector_digest,
+            "source_draw_digest": _digest_array(schedule),
             "view_digest": view_hash.hexdigest(), "hidden_token_counts": count_history,
-            "coverage": [c[name] for c in coverage], "checkpoints": snapshots,
+            "coverage": actual_coverage, "checkpoints": snapshots,
             "elapsed_training_seconds": time.monotonic() - started}
     pairing = {"same_initialization": len({r["initial_state_digest"] for r in runs.values()}) == 1,
+        "same_projector_initialization": len({r["initial_projector_digest"] for r in runs.values()}) == 1,
         "same_source_draws": len({r["source_draw_digest"] for r in runs.values()}) == 1,
         "same_geometric_views": len({r["view_digest"] for r in runs.values()}) == 1,
         "same_hidden_counts": len({json.dumps(r["hidden_token_counts"]) for r in runs.values()}) == 1}
     if not all(pairing.values()):
         raise AssertionError(f"Comparison controls failed: {pairing}")
     result = {"runs": runs, "pairing": pairing, "identity": identity,
-        "source_schedule": schedule, "synthetic": dataset.synthetic, "reused": False}
+        "source_schedule": schedule, "reflection_schedule": reflections,
+        "synthetic": dataset.synthetic, "reused": False}
     if destination is not None:
         save_comparison(result, destination)
     return result
@@ -327,9 +351,10 @@ def save_comparison(result, destination):
         torch.save({"model": run["model"].state_dict(), "initial_model": run["initial_model"].state_dict(),
             "projector": run["projector"].state_dict(), "checkpoints": run["checkpoints"]}, staging / f"{name}.pt")
         run["history"].to_csv(staging / f"{name}_training.csv", index=False)
-        manifest["runs"][name] = {k: run[k] for k in ("settings", "policy", "initial_state_digest",
+        manifest["runs"][name] = {k: run[k] for k in ("settings", "policy", "initial_state_digest", "initial_projector_digest",
             "source_draw_digest", "view_digest", "hidden_token_counts", "coverage", "elapsed_training_seconds")}
     np.save(staging / "source_schedule.npy", result["source_schedule"], allow_pickle=False)
+    np.save(staging / "reflection_schedule.npy", result["reflection_schedule"], allow_pickle=False)
     for path in staging.iterdir():
         manifest["files"][path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
     (staging / "manifest.json").write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n")
@@ -347,7 +372,7 @@ def load_comparison(destination, expected_identity):
     if canonical_json_digest(manifest.get("identity")) != canonical_json_digest(expected_identity):
         raise ValueError("Saved comparison is incompatible with the requested experiment")
     names = set(expected_identity["conditions"])
-    expected_files = {"source_schedule.npy", *[f"{n}.pt" for n in names], *[f"{n}_training.csv" for n in names]}
+    expected_files = {"source_schedule.npy", "reflection_schedule.npy", *[f"{n}.pt" for n in names], *[f"{n}_training.csv" for n in names]}
     if set(manifest.get("runs", {})) != names or set(manifest.get("files", {})) != expected_files:
         raise ValueError("Saved comparison is missing or duplicating declared artifacts")
     for name, digest in manifest["files"].items():
@@ -356,23 +381,68 @@ def load_comparison(destination, expected_identity):
             raise ValueError(f"Saved comparison artifact failed verification: {name}")
     runs = {}
     settings = LearningSettings(**expected_identity["settings"])
+    schedule = np.load(destination / "source_schedule.npy", allow_pickle=False)
+    reflections = np.load(destination / "reflection_schedule.npy", allow_pickle=False)
+    shape = (settings.steps, settings.batch_size)
+    if (schedule.shape != shape or not np.issubdtype(schedule.dtype, np.integer)
+            or schedule.min() < 0 or schedule.max() >= len(expected_identity["source_ids"])
+            or reflections.shape != shape or reflections.dtype != bool):
+        raise ValueError("Saved source or reflection schedule has an invalid shape or value")
+    schedule_sources = np.asarray(expected_identity["source_ids"])[schedule.ravel()]
+    if not set(schedule_sources) <= set(expected_identity["train_sources"]):
+        raise ValueError("Saved source schedule contains a test video")
     for name, metadata in manifest["runs"].items():
         model, projector = _new_model(settings, expected_identity["frames"], settings.device)
         initial_model = copy.deepcopy(model)
+        if (metadata["settings"] != expected_identity["settings"]
+                or metadata["policy"] != expected_identity["conditions"][name]
+                or metadata["source_draw_digest"] != _digest_array(schedule)
+                or metadata["initial_state_digest"] != state_digest(initial_model)
+                or metadata["initial_projector_digest"] != state_digest(projector)):
+            raise ValueError("Saved run metadata disagree with the experiment or its controls")
         saved = torch.load(destination / f"{name}.pt", map_location=settings.device, weights_only=True)
+        if set(saved["checkpoints"]) != set(expected_identity["checkpoint_steps"]):
+            raise ValueError("Saved checkpoints do not match the declared update positions")
+        for state in (saved["model"], saved["initial_model"], *saved["checkpoints"].values()):
+            if set(state) != set(model.state_dict()) or any(
+                    v.shape != model.state_dict()[k].shape or not torch.isfinite(v).all()
+                    for k, v in state.items()):
+                raise ValueError("Saved model or checkpoint is incomplete or nonfinite")
+        if any(not torch.equal(v, saved["checkpoints"][settings.steps][k]) for k, v in saved["model"].items()):
+            raise ValueError("Final model and final declared checkpoint disagree")
         model.load_state_dict(saved["model"]); initial_model.load_state_dict(saved["initial_model"])
         projector.load_state_dict(saved["projector"])
         history = pd.read_csv(destination / f"{name}_training.csv")
-        if history.step.tolist() != list(range(1, settings.steps + 1)):
+        if (history.step.tolist() != list(range(1, settings.steps + 1))
+                or not np.isfinite(history.select_dtypes(include=np.number)).all().all()):
             raise ValueError("Training history does not cover the complete run")
+        counts = np.asarray(metadata["hidden_token_counts"])
+        if counts.shape != shape or not np.issubdtype(counts.dtype, np.integer) or counts.min() < 1:
+            raise ValueError("Saved hidden counts have invalid coverage")
+        if len(metadata["coverage"]) != settings.steps:
+            raise ValueError("Saved mask coverage omits training updates")
+        for step, coverage in enumerate(metadata["coverage"]):
+            if len(coverage) != settings.batch_size:
+                raise ValueError("Saved mask coverage omits clips")
+            for row, c in enumerate(coverage):
+                if (c["hidden_tokens"] != counts[step, row] or c["context_tokens"] < 1
+                        or c["valid_tokens"] != c["hidden_tokens"] + c["context_tokens"]
+                        or c["reflected"] != bool(reflections[step, row])
+                        or sum(c[k] for k in ("left_hidden_tokens", "right_hidden_tokens", "midline_hidden_tokens")) != c["hidden_tokens"]):
+                    raise ValueError("Saved mask coverage and target counts disagree")
         if state_digest(initial_model) != metadata["initial_state_digest"]:
             raise ValueError("Initial checkpoint does not match the retained controls")
         runs[name] = {**metadata, "model": model.eval(), "initial_model": initial_model.eval(),
             "projector": projector.eval(), "history": history, "checkpoints": saved["checkpoints"]}
-    if not manifest["pairing"] or not all(manifest["pairing"].values()):
+    recomputed = {"same_initialization": len({r["initial_state_digest"] for r in runs.values()}) == 1,
+        "same_projector_initialization": len({r["initial_projector_digest"] for r in runs.values()}) == 1,
+        "same_source_draws": len({r["source_draw_digest"] for r in runs.values()}) == 1,
+        "same_geometric_views": len({r["view_digest"] for r in runs.values()}) == 1,
+        "same_hidden_counts": len({json.dumps(r["hidden_token_counts"]) for r in runs.values()}) == 1}
+    if manifest["pairing"] != recomputed or not all(recomputed.values()):
         raise ValueError("Saved comparison controls did not pass")
     return {"runs": runs, "pairing": manifest["pairing"], "identity": expected_identity,
-        "source_schedule": np.load(destination / "source_schedule.npy", allow_pickle=False),
+        "source_schedule": schedule, "reflection_schedule": reflections,
         "synthetic": expected_identity["synthetic"], "reused": True}
 
 

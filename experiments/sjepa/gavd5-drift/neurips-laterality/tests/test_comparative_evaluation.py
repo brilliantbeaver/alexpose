@@ -136,6 +136,10 @@ class CoverageTests(unittest.TestCase):
         changed.loc[0, "comparison_id"] = "different_exposure"
         with self.assertRaisesRegex(ValueError, "Incompatible"):
             validate_prediction_coverage(changed, expected, **DECLARATION)
+        changed = table.copy()
+        changed.loc[0, "checkpoint"] = "update_1"
+        with self.assertRaisesRegex(ValueError, "Mixed checkpoints"):
+            validate_prediction_coverage(changed, expected, **DECLARATION)
 
     def test_unavailable_predictions_are_reported_and_cannot_enter_bootstrap(self):
         table, expected = prediction_fixture()
@@ -190,11 +194,11 @@ class MissingObservationTests(unittest.TestCase):
         again = make_evaluation_mask_bank(valid)
         for name, mask in bank.items():
             np.testing.assert_array_equal(mask, again[name])
-            self.assertFalse((mask & ~valid).any())
             self.assertFalse(mask.flags.writeable)
             corrupted = prepared_observation_sensitivity(dataset, mask)
             np.testing.assert_array_equal(corrupted.targets, dataset.targets)
             self.assertTrue(np.all(corrupted.valid <= dataset.valid))
+            np.testing.assert_array_equal(corrupted.removed_valid_tokens, (mask & valid).sum((1, 2)))
         self.assertTrue(bank["left_leg_gap"][:, :, [25, 27, 29, 31]].any())
         self.assertTrue(bank["right_leg_gap"][:, :, [26, 28, 30, 32]].any())
 
@@ -264,6 +268,26 @@ class ModelEvaluationTests(unittest.TestCase):
         features, available = encode_laterality_features(self.model.view_encoder, altered)
         self.assertFalse(available[0])
         self.assertTrue(np.isnan(features[0]).all())
+
+    def test_infeasible_missing_region_is_never_scored_as_unchanged_input(self):
+        valid = self.dataset.valid.copy()
+        row = self.dataset.test_rows[0]
+        valid[row, :, [25, 27, 29, 31]] = False
+        dataset = replace(self.dataset, valid=valid)
+        patches = valid.reshape(len(valid), -1, 4, 33).all(axis=2)
+        bank = make_evaluation_mask_bank(patches)
+        altered = prepared_observation_sensitivity(dataset, bank["left_leg_gap"])
+        self.assertGreater(altered.requested_hidden_tokens[row], 0)
+        self.assertEqual(altered.removed_valid_tokens[row], 0)
+        self.assertFalse(altered.corruption_feasible[row])
+        result = evaluate_frozen_representations(self.model, self.model, dataset, self.settings,
+                                                 condition="synthetic", alphas=(1,),
+                                                 observation_datasets={"left_gap": altered})
+        selected = result["predictions"].query("observation == 'left_gap'")
+        selected = selected[selected.sequence_id == dataset.sequence_ids[row]]
+        self.assertTrue((selected.status == "no_observed_token_removed").all())
+        self.assertTrue(selected.prediction.isna().all())
+        self.assertFalse(selected.available.any())
 
 
 if __name__ == "__main__":

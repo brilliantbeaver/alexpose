@@ -207,7 +207,10 @@ def build_notebook():
         The masks are generated once from validity and a separate evaluation
         seed, then reused for every model. A deliberately hidden observation
         remains a valid teacher target during the feature-prediction diagnostic.
-        Naturally missing observations cannot supply such a target.
+        Naturally missing observations cannot supply such a target. Requested
+        leg regions keep their complete pattern even when some measurements
+        were already missing. We count valid hidden targets separately; a
+        corruption that removes no observed token is recorded as infeasible.
         """),
         code("""
         patch_valid = dataset.valid.reshape(len(dataset.xyz), -1, 4, 33).all(axis=2)
@@ -217,9 +220,11 @@ def build_notebook():
             for row in dataset.test_rows:
                 coverage_rows.append({
                     "Gap": name.replace("_", " "),
-                    "Hidden valid tokens": int(mask[row].sum()),
+                    "Requested missing positions": int(mask[row].sum()),
+                    "Hidden valid tokens": int((mask[row] & patch_valid[row]).sum()),
                     "Remaining valid tokens": int((patch_valid[row] & ~mask[row]).sum()),
-                    "Feasible target": bool(mask[row].any()),
+                    "Feasible target": bool((mask[row] & patch_valid[row]).any()
+                                            and (patch_valid[row] & ~mask[row]).any()),
                 })
         display(pd.DataFrame(coverage_rows).groupby("Gap", as_index=False).agg(
             smallest_hidden_count=("Hidden valid tokens", "min"),

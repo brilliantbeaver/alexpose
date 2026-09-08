@@ -427,6 +427,156 @@ def score_future_predictions(predictions: dict[str, np.ndarray], data: FutureExa
     return pd.DataFrame(scores), pd.DataFrame(coverage)
 
 
+def forecast_error_rows(predictions: dict[str, np.ndarray], *, sources, sequence_ids,
+                        horizon, target, valid, seed: int, fold: int,
+                        input_landmarks: int) -> pd.DataFrame:
+    """One retained error per clip, horizon, and method, including unavailable rows.
+
+    The common endpoint mask is retained as a reference so later aggregation can
+    reject input/model comparisons measured on different landmark observations.
+    """
+    common = np.asarray(valid).copy()
+    for predicted in predictions.values():
+        if np.shape(predicted) != np.shape(target):
+            raise ValueError("Forecast arrays use different coordinate endpoints")
+        common &= np.isfinite(predicted).all(-1)
+    rows = []
+    for index in range(len(sources)):
+        endpoint_reference = hashlib.sha256(np.asarray(target[index]).tobytes() + np.asarray(valid[index]).tobytes()).hexdigest()
+        coverage_reference = "".join("1" if item else "0" for item in common[index])
+        for method, predicted in predictions.items():
+            available = bool(common[index].any())
+            error = float(np.square(predicted[index, common[index]] - target[index, common[index]]).mean()) if available else float("nan")
+            rows.append({"source_id": str(sources[index]), "sequence_id": str(sequence_ids[index]),
+                         "horizon_seconds": float(horizon[index]), "seed": int(seed), "fold": int(fold),
+                         "input_landmarks": int(input_landmarks), "method": method,
+                         "clip_mse": error, "available": available,
+                         "observed_endpoints": int(valid[index].sum()),
+                         "common_endpoints": int(common[index].sum()),
+                         "target_reference": endpoint_reference, "coverage_reference": coverage_reference})
+    return pd.DataFrame(rows)
+
+
+def saved_forecast_error_rows(saved: dict) -> pd.DataFrame:
+    arrays = saved["arrays"]
+    configuration = saved["reference"]["configuration"]
+    return forecast_error_rows(
+        {name: arrays[f"prediction_{index}"] for index, name in enumerate(saved["prediction_methods"])},
+        sources=arrays["sources"], sequence_ids=arrays["sequence_ids"], horizon=arrays["horizon"],
+        target=arrays["target"], valid=arrays["valid"], seed=configuration["seed"],
+        fold=saved["reference"].get("outer_fold", -1), input_landmarks=len(configuration["input_joints"]),
+    )
+
+
+def validate_future_error_rows(rows: pd.DataFrame, expected: pd.DataFrame, *,
+                               seeds, input_sizes, methods, allow_partial=False) -> pd.DataFrame:
+    identity = ["sequence_id", "horizon_seconds"]
+    keys = ["input_landmarks", "method", "seed", *identity]
+    required = {*keys, "source_id", "fold", "clip_mse", "available", "common_endpoints",
+                "observed_endpoints", "target_reference", "coverage_reference"}
+    if rows.empty or not required <= set(rows) or rows.duplicated(keys).any():
+        raise ValueError("Missing columns, empty data, or duplicate forecast predictions")
+    if (not {*identity, "source_id", "fold"} <= set(expected)
+            or expected.empty or expected.duplicated(identity).any()):
+        raise ValueError("Declare one expected source/fold identity for every clip-horizon")
+    if expected.groupby("source_id").fold.nunique().max() != 1 or rows.groupby("source_id").fold.nunique().max() != 1:
+        raise ValueError("A source occurs in more than one outer test fold")
+    joined = rows.merge(expected[[*identity, "source_id", "fold"]], on=identity,
+                        how="left", suffixes=("", "_expected"), validate="many_to_one")
+    if ((joined.source_id != joined.source_id_expected).any()
+            or (joined.fold != joined.fold_expected).any()):
+        raise ValueError("Forecast identities differ from declared evaluation coverage")
+    for field, declaration in (("seed", seeds), ("input_landmarks", input_sizes), ("method", methods)):
+        if not declaration or len(set(declaration)) != len(declaration) or not set(rows[field]) <= set(declaration):
+            raise ValueError("Declare unique nonempty seeds, input choices, and methods before aggregation")
+    if rows.groupby(identity).target_reference.nunique().max() != 1:
+        raise ValueError("Compared predictions use different coordinate targets")
+    if rows.groupby(identity).coverage_reference.nunique().max() != 1:
+        raise ValueError("Compared predictions use different endpoint coverage; declare a shared comparison first")
+    available = rows.available.to_numpy()
+    if available.dtype != bool or not np.isfinite(rows.loc[available, "clip_mse"]).all():
+        raise ValueError("Available forecasts need finite errors and boolean availability")
+    if ((rows.loc[available, "clip_mse"] < 0).any()
+            or rows.loc[~available, "clip_mse"].notna().any()):
+        raise ValueError("Invalid forecast errors or unavailable predictions represented as successes")
+    expected_keys = set(map(tuple, expected[identity].to_numpy()))
+    complete = True
+    for inputs in input_sizes:
+        for method in methods:
+            for seed in seeds:
+                group = rows[(rows.input_landmarks == inputs) & (rows.method == method) & (rows.seed == seed)]
+                if set(map(tuple, group[identity].to_numpy())) != expected_keys:
+                    complete = False
+                    if not allow_partial:
+                        raise ValueError("Incomplete declared forecasting coverage; explicitly request a partial summary")
+    output = rows.copy()
+    output.attrs["scope"] = "Complete declared comparison" if complete else "Partial declared comparison"
+    return output
+
+
+def aggregate_future_error_rows(rows: pd.DataFrame, expected: pd.DataFrame, **declarations) -> dict:
+    """Pool every outer fold within each seed, then summarize seed-specific RMSE."""
+    checked = validate_future_error_rows(rows, expected, **declarations)
+    summaries = []
+    grouping = ["input_landmarks", "method", "horizon_seconds", "seed"]
+    for names, group in checked.groupby(grouping):
+        available = group[group.available]
+        mse = float(np.average(available.clip_mse, weights=source_weights(available.source_id))) if len(available) else float("nan")
+        summaries.append({**dict(zip(grouping, names)), "source_balanced_rmse": float(np.sqrt(mse)),
+                          "evaluated_sources": available.source_id.nunique(),
+                          "evaluated_clips": available.sequence_id.nunique(), "retained_examples": len(group),
+                          "unavailable_examples": int((~group.available).sum()),
+                          "common_endpoints": int(group.common_endpoints.sum()), "scope": checked.attrs["scope"]})
+    per_seed = pd.DataFrame(summaries)
+    summary = per_seed.groupby(grouping[:-1], as_index=False).agg(
+        mean_rmse=("source_balanced_rmse", "mean"), seed_sd_rmse=("source_balanced_rmse", "std"),
+        evaluated_seeds=("seed", "nunique"), evaluated_sources_min=("evaluated_sources", "min"),
+        evaluated_clips_min=("evaluated_clips", "min"), unavailable_examples_max=("unavailable_examples", "max"),
+        scope=("scope", "first"))
+    return {"per_seed": per_seed, "summary": summary}
+
+
+def paired_future_source_interval(rows: pd.DataFrame, expected: pd.DataFrame, *,
+                                   first: str, reference: str, input_landmarks: int,
+                                   horizon_seconds: float, seeds, repetitions=2000,
+                                   random_seed=918) -> dict:
+    """Resample entire videos jointly across each method and all training seeds."""
+    if repetitions < 2 or first == reference:
+        raise ValueError("Specify two methods and at least two source resamples")
+    selected = rows[(rows.input_landmarks == input_landmarks) & (rows.horizon_seconds == horizon_seconds)
+                    & rows.method.isin([first, reference])].copy()
+    expected_horizon = expected[expected.horizon_seconds == horizon_seconds]
+    checked = validate_future_error_rows(selected, expected_horizon, seeds=seeds,
+                                         input_sizes=(input_landmarks,), methods=(first, reference))
+    if not checked.available.all():
+        raise ValueError("Paired source intervals require complete finite shared coverage")
+    sources = np.array(sorted(checked.source_id.unique()))
+    if len(sources) < 2:
+        raise ValueError("Need at least two videos for paired source resampling")
+
+    def difference(multiplicity):
+        changes = []
+        for seed in seeds:
+            errors = []
+            for method in (first, reference):
+                group = checked[(checked.seed == seed) & (checked.method == method)]
+                weight = source_weights(group.source_id) * group.source_id.map(multiplicity).fillna(0).to_numpy()
+                errors.append(np.sqrt(np.average(group.clip_mse, weights=weight)))
+            changes.append(errors[0] - errors[1])
+        return float(np.mean(changes))
+
+    rng = np.random.default_rng(random_seed)
+    draws = []
+    for _ in range(repetitions):
+        sample, counts = np.unique(rng.choice(sources, len(sources), replace=True), return_counts=True)
+        draws.append(difference(dict(zip(sample, counts))))
+    low, high = np.quantile(draws, [0.025, 0.975])
+    return {"rmse_difference": difference(dict.fromkeys(sources, 1)), "lower_95": float(low), "upper_95": float(high),
+            "subtraction": f"{first} minus {reference}", "source_videos": len(sources), "training_seeds": len(seeds),
+            "resamples": repetitions,
+            "scope": "Source-resampling interval conditional on fitted models; retraining uncertainty excluded"}
+
+
 def run_future_comparison(data: FutureExamples, spec: ComparisonForecastSpec, *,
                           train_sources, test_sources) -> dict:
     train, test = source_roles(data, train_sources, test_sources)

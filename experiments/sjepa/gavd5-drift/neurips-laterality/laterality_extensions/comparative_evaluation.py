@@ -8,7 +8,7 @@ All functions are independent of the completed research artifact writers.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, fields
 from typing import Any, Mapping, Sequence
 
 import numpy as np
@@ -36,6 +36,15 @@ class SourceReadout:
 
     def predict(self, features: np.ndarray) -> np.ndarray:
         return self.regression.predict(self.scaler.transform(features))
+
+
+@dataclass(frozen=True)
+class ObservationDataset(LearningDataset):
+    """Prepared sensitivity inputs with each requested corruption's feasibility."""
+
+    requested_hidden_tokens: np.ndarray | None = None
+    removed_valid_tokens: np.ndarray | None = None
+    corruption_feasible: np.ndarray | None = None
 
 
 def feature_diagnostics(features: np.ndarray, source_ids: np.ndarray,
@@ -200,6 +209,8 @@ def evaluate_frozen_representations(
     Corruption changes only held-out inputs at evaluation. Every row retains
     its unaltered-recording target, including rows whose prediction is unavailable.
     """
+    if "unaltered" in (observation_datasets or {}):
+        raise ValueError("The unaltered observation name is reserved for the original dataset")
     observations = {"unaltered": dataset, **dict(observation_datasets or {})}
     for name, other in observations.items():
         if not (np.array_equal(other.sequence_ids, dataset.sequence_ids)
@@ -234,6 +245,16 @@ def evaluate_frozen_representations(
     for observation, altered in observations.items():
         patch_valid = altered.valid.reshape(len(altered.xyz), -1, settings.segment_length, 33).all(axis=2)
         available = patch_valid.any(axis=(1, 2))
+        requested = np.zeros(len(altered.xyz), dtype=int)
+        removed = np.zeros(len(altered.xyz), dtype=int)
+        corruption_feasible = np.ones(len(altered.xyz), dtype=bool)
+        if isinstance(altered, ObservationDataset):
+            requested = np.asarray(altered.requested_hidden_tokens)
+            removed = np.asarray(altered.removed_valid_tokens)
+            corruption_feasible = np.asarray(altered.corruption_feasible)
+            if any(values.shape != available.shape for values in (requested, removed, corruption_feasible)):
+                raise ValueError("Corruption coverage must contain one value per clip")
+            available &= corruption_feasible
         for representation in (*encoders, "direct_pose", "training_mean"):
             if representation in encoders:
                 x, _ = encode_laterality_features(encoders[representation], altered)
@@ -258,8 +279,13 @@ def evaluate_frozen_representations(
                     "observation": observation, "target": float(dataset.targets[index]),
                     "prediction": float(prediction[offset]),
                     "available": bool(available[index]),
-                    "status": "available" if available[index] else "no_valid_input_token",
+                    "status": ("available" if available[index] else
+                               "no_observed_token_removed" if removed[index] == 0 and observation != "unaltered"
+                               else "no_valid_input_token"),
                     "valid_input_tokens": int(patch_valid[index].sum()),
+                    "requested_hidden_tokens": int(requested[index]),
+                    "removed_valid_tokens": int(removed[index]),
+                    "corruption_feasible": bool(corruption_feasible[index]),
                     "selected_alpha": float(selected_alpha), "synthetic": dataset.synthetic,
                     "cohort_digest": dataset.cohort_digest, "split_digest": dataset.split_digest,
                     "comparison_id": comparison_id,
@@ -271,6 +297,8 @@ def make_evaluation_mask_bank(valid_patch: np.ndarray, *, seed: int = 813,
                               interval_length: int = 1) -> dict[str, np.ndarray]:
     """Prespecify scattered and connected leg gaps on both anatomical sides.
 
+    Entries contain requested missing positions, including naturally missing
+    ones. Intersect with validity when constructing supervised JEPA targets.
     Each region contains knee, ankle, heel, and foot tip. Its edges are
     knee--ankle, ankle--heel, ankle--foot tip, and heel--foot tip. A missing
     region occupies consecutive interior time blocks. Scattered masks match
@@ -287,20 +315,17 @@ def make_evaluation_mask_bank(valid_patch: np.ndarray, *, seed: int = 813,
     for name, joints in (("left_leg_gap", (25, 27, 29, 31)), ("right_leg_gap", (26, 28, 30, 32))):
         mask = np.zeros_like(valid)
         mask[:, begin:begin + interval_length, list(joints)] = True
-        bank[name] = mask & valid
+        bank[name] = mask
     rng = np.random.default_rng(seed)
     scattered = np.zeros_like(valid)
     for row in range(len(valid)):
-        count = int(bank["left_leg_gap"][row].sum())
+        count = int((bank["left_leg_gap"][row] & valid[row]).sum())
         if count:
             chosen = rng.choice(np.flatnonzero(valid[row]), size=count, replace=False)
             scattered[row].flat[chosen] = True
     bank["scattered_gap"] = scattered
-    for name, mask in bank.items():
-        invalid_rows = (mask.sum(axis=(1, 2)) == 0) | ((valid & ~mask).sum(axis=(1, 2)) == 0)
-        # An all-false row is explicitly infeasible, handled by the evaluation.
-        bank[name][invalid_rows] = False
-        bank[name].setflags(write=False)
+    for mask in bank.values():
+        mask.setflags(write=False)
     return bank
 
 
@@ -313,8 +338,16 @@ def prepared_observation_sensitivity(dataset: LearningDataset, hidden: np.ndarra
         raise ValueError("Hidden mask must be boolean with one value per prepared token")
     withheld = np.repeat(mask, segment_length, axis=1)
     valid = dataset.valid & ~withheld
-    return replace(dataset, xyz=np.where(valid[..., None], dataset.xyz, 0), valid=valid,
-                   dataset_note="Prepared-coordinate representation sensitivity; original target retained")
+    original_tokens = dataset.valid.reshape(len(dataset.xyz), -1, segment_length, 33).all(axis=2)
+    requested = mask.sum(axis=(1, 2))
+    removed = (mask & original_tokens).sum(axis=(1, 2))
+    remaining = (original_tokens & ~mask).sum(axis=(1, 2))
+    values = {field.name: getattr(dataset, field.name) for field in fields(LearningDataset)}
+    values.update(xyz=np.where(valid[..., None], dataset.xyz, 0), valid=valid,
+                  dataset_note="Prepared-coordinate representation sensitivity; original target retained")
+    return ObservationDataset(**values, requested_hidden_tokens=requested,
+                              removed_valid_tokens=removed,
+                              corruption_feasible=(removed > 0) & (remaining > 0))
 
 
 def prepare_raw_missing_observations(
@@ -392,9 +425,12 @@ def predictor_diagnostics(
     outputs = []
     with torch.no_grad():
         for name, values in mask_bank.items():
-            mask = np.asarray(values)
-            if mask.dtype != bool or mask.shape != patches.shape or (mask & ~patches).any():
-                raise ValueError("Every evaluation target must be a valid token in the declared bank")
+            requested_mask = np.asarray(values)
+            if requested_mask.dtype != bool or requested_mask.shape != patches.shape:
+                raise ValueError("Every requested evaluation mask must match boolean token validity")
+            # A requested missing region can overlap natural missingness. Only
+            # observed positions become supervised targets, and coverage is retained.
+            mask = requested_mask & patches
             rng = np.random.default_rng(mismatch_seed)
             predictions, targets, clip_sources = [], [], []
             token_predictions, token_targets, token_sources = [], [], []
@@ -432,6 +468,10 @@ def predictor_diagnostics(
                     "requested_clips": len(selected_rows), "evaluated_clips": len(errors),
                     "evaluated_sources": len(set(row_sources)), "unavailable_clips": unavailable,
                     "mismatched_target_unavailable_clips": mismatch_unavailable,
+                    "requested_hidden_count_min": int(requested_mask[selected_rows].sum((1, 2)).min()),
+                    "requested_hidden_count_max": int(requested_mask[selected_rows].sum((1, 2)).max()),
+                    "valid_hidden_count_min": int(mask[selected_rows].sum((1, 2)).min()),
+                    "valid_hidden_count_max": int(mask[selected_rows].sum((1, 2)).max()),
                     "error_scope": "own teacher; errors do not rank usefulness across teachers"}
             if not errors:
                 outputs.append({**base, "status": "no_feasible_target_with_context"})
@@ -486,6 +526,8 @@ def validate_prediction_coverage(
         raise ValueError("Expected outer folds overlap source videos")
     if predictions.groupby("source_id").fold.nunique().max() != 1:
         raise ValueError("Prediction outer folds overlap source videos")
+    if "checkpoint" in predictions and predictions.groupby(["condition", "representation"]).checkpoint.nunique(dropna=False).max() != 1:
+        raise ValueError("Mixed checkpoints within a condition and representation; declare a separate analysis")
     expected_identity = expected[identity].copy()
     bound = predictions.merge(expected_identity, on="sequence_id", how="left", suffixes=("", "_expected"), validate="many_to_one")
     if (bound.source_id != bound.source_id_expected).any() or (bound.fold != bound.fold_expected).any():
