@@ -81,6 +81,7 @@ def build_notebook():
         from laterality_extensions.forecasting import JOINTS, TimedPose, synthetic_records
         from laterality_extensions.future_comparison import (
             ALL_JOINTS, ComparisonForecastSpec, ForecastComparisonModel,
+            aggregate_future_error_rows, forecast_error_rows,
             plan_future_comparison, prepare_future_examples, prepare_prefix,
             real_forecast_spec, run_future_comparison, run_real_future_comparison,
         )
@@ -319,6 +320,42 @@ def build_notebook():
         display(comparison["prediction_coverage"])
         timing = scores[["horizon_seconds", "actual_time_min", "actual_time_max", "test_sources", "test_clips", "common_endpoints"]].drop_duplicates()
         display(timing.style.format({"horizon_seconds": "{:.2f}", "actual_time_min": "{:.3f}", "actual_time_max": "{:.3f}"}))
+        """),
+        md("""
+        The retained error rows also support an explicitly declared collection
+        of outer folds. Aggregation first pools each seed's clip predictions at
+        a given horizon and then computes its source-balanced error. It rejects
+        duplicate predictions, overlapping test-video groups, missing declared
+        examples, changed coordinate targets, and mismatched endpoint coverage.
+        A partial summary must be requested explicitly and carries that label.
+
+        The following check uses this tutorial's single synthetic split. It
+        confirms that pooled scoring reproduces the previously displayed errors;
+        it does not manufacture additional folds or training seeds. Saved real
+        runs can be converted with `saved_forecast_error_rows` and combined against
+        the expected clip, video, fold, and horizon manifest. The
+        `paired_future_source_interval` helper then keeps every video's clip and
+        seed predictions together when resampling source videos.
+        """),
+        code("""
+        test_rows = comparison["test_indices"]
+        error_rows = forecast_error_rows(
+            {method: values[test_rows] for method, values in comparison["predictions"].items()},
+            sources=examples.sources[test_rows], sequence_ids=examples.sequence_ids[test_rows],
+            horizon=examples.horizon[test_rows], target=examples.endpoint[test_rows],
+            valid=examples.endpoint_valid[test_rows], seed=synthetic_spec.seed, fold=0, input_landmarks=12,
+        )
+        expected = error_rows[["sequence_id", "source_id", "fold", "horizon_seconds"]].drop_duplicates()
+        aggregated = aggregate_future_error_rows(
+            error_rows, expected, seeds=(synthetic_spec.seed,), input_sizes=(12,),
+            methods=tuple(comparison["predictions"]),
+        )
+        order = ["method", "horizon_seconds"]
+        np.testing.assert_allclose(
+            aggregated["per_seed"].sort_values(order).source_balanced_rmse,
+            scores.sort_values(order).source_balanced_rmse,
+        )
+        print("Pooling preserves the measured errors for this one declared synthetic split and seed.")
         """),
         md("""
         Every compared method is scored on the same available endpoints. The

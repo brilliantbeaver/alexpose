@@ -248,7 +248,9 @@ def build_notebook():
         fixed-seed diagnostic breaks the clip correspondence without fitting
         any new parameters. A similar error for correct and mismatched targets
         would weaken the case that predictions retain clip-specific content.
-        The initial model supplies another reference.
+        We compare the correct and mismatched errors on the same clips when
+        missing observations limit this control's availability. The initial
+        model supplies another reference.
         """),
         code("""
         diagnostic_tables = [predictor_diagnostics(
@@ -262,7 +264,8 @@ def build_notebook():
         feature_results = pd.concat(diagnostic_tables, ignore_index=True)
         display(feature_results[[
             "condition", "evaluation_mask", "evaluated_clips", "evaluated_sources",
-            "feature_mse", "mismatched_target_mse", "normalized_error",
+            "matched_target_mse_on_control_clips", "mismatched_target_mse",
+            "mismatch_control_clips", "normalized_error",
             "target_clip_mean_channel_sd", "prediction_clip_mean_channel_sd",
         ]].round(3))
         """),

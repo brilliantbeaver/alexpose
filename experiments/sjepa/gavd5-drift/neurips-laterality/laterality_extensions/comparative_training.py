@@ -15,6 +15,7 @@ from pathlib import Path
 import platform
 import tempfile
 import time
+from types import SimpleNamespace
 from typing import Mapping
 
 import numpy as np
@@ -105,13 +106,18 @@ def _new_model(settings, frames, device):
 
 
 def source_schedule(dataset, settings):
-    table = pd.DataFrame({"video_id": dataset.source_ids.astype(str)})
+    return declared_source_schedule(dataset.source_ids, dataset.train_sources, settings)
+
+
+def declared_source_schedule(source_ids, train_sources, settings):
+    """Recreate the deterministic training-row schedule from its declaration."""
+    table = pd.DataFrame({"video_id": np.asarray(source_ids).astype(str)})
     rng = np.random.default_rng(np.random.SeedSequence([settings.seed, settings.fold, 101]))
     schedule = []
     while len(schedule) < settings.steps:
-        for rows, _ in source_balanced_epoch_batches(table, list(dataset.train_sources),
+        for rows, _ in source_balanced_epoch_batches(table, list(train_sources),
                 batch_size=settings.batch_size,
-                updates_per_epoch=math.ceil(len(dataset.train_sources) / settings.batch_size), rng=rng):
+                updates_per_epoch=math.ceil(len(train_sources) / settings.batch_size), rng=rng):
             schedule.append(rows)
             if len(schedule) == settings.steps:
                 break
@@ -391,6 +397,20 @@ def load_comparison(destination, expected_identity):
     schedule_sources = np.asarray(expected_identity["source_ids"])[schedule.ravel()]
     if not set(schedule_sources) <= set(expected_identity["train_sources"]):
         raise ValueError("Saved source schedule contains a test video")
+    schedule_data = SimpleNamespace(source_ids=np.asarray(expected_identity["source_ids"]),
+        train_sources=tuple(expected_identity["train_sources"]))
+    expected_schedule = source_schedule(schedule_data, settings)
+    expected_reflections = np.random.default_rng(np.random.SeedSequence(
+        [settings.seed, settings.fold, 103])).random(shape) < settings.reflection_probability
+    if not np.array_equal(schedule, expected_schedule) or not np.array_equal(reflections, expected_reflections):
+        raise ValueError("Saved random schedules disagree with the declared seeds")
+    if not np.array_equal(schedule, declared_source_schedule(
+            expected_identity["source_ids"], expected_identity["train_sources"], settings)):
+        raise ValueError("Saved source schedule disagrees with its declared sampling seed")
+    reflection_rng = np.random.default_rng(np.random.SeedSequence([settings.seed, settings.fold, 103]))
+    expected_reflections = reflection_rng.random(shape) < settings.reflection_probability
+    if not np.array_equal(reflections, expected_reflections):
+        raise ValueError("Saved reflection schedule disagrees with its declared sampling seed")
     for name, metadata in manifest["runs"].items():
         model, projector = _new_model(settings, expected_identity["frames"], settings.device)
         initial_model = copy.deepcopy(model)
@@ -408,8 +428,16 @@ def load_comparison(destination, expected_identity):
                     v.shape != model.state_dict()[k].shape or not torch.isfinite(v).all()
                     for k, v in state.items()):
                 raise ValueError("Saved model or checkpoint is incomplete or nonfinite")
+        if (set(saved["projector"]) != set(projector.state_dict()) or any(
+                value.shape != projector.state_dict()[key].shape or not torch.isfinite(value).all()
+                for key, value in saved["projector"].items())):
+            raise ValueError("Saved projector is incomplete or nonfinite")
         if any(not torch.equal(v, saved["checkpoints"][settings.steps][k]) for k, v in saved["model"].items()):
             raise ValueError("Final model and final declared checkpoint disagree")
+        if set(saved["projector"]) != set(projector.state_dict()) or any(
+                v.shape != projector.state_dict()[k].shape or not torch.isfinite(v).all()
+                for k, v in saved["projector"].items()):
+            raise ValueError("Saved regularizer projector is incomplete or nonfinite")
         model.load_state_dict(saved["model"]); initial_model.load_state_dict(saved["initial_model"])
         projector.load_state_dict(saved["projector"])
         history = pd.read_csv(destination / f"{name}_training.csv")

@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from laterality_extensions.forecasting import JOINTS, TimedPose, synthetic_records
 from laterality_extensions.future_comparison import (
     ALL_JOINTS, ComparisonForecastSpec, ForecastComparisonModel,
+    aggregate_future_error_rows, forecast_error_rows, paired_future_source_interval,
     compatibility_reference, feature_diagnostics, fit_coordinate_decoder,
     fit_forecast_model, future_motion_baselines, load_future_result,
     plan_future_comparison, prepare_future_examples, prepare_prefix,
@@ -206,6 +207,41 @@ class FutureComparisonTests(unittest.TestCase):
                                                 spec=self.spec, folds=(0,), seeds=(42,))
         trainer.assert_not_called()
         self.assertEqual(result["status"], "Inputs validated; training disabled")
+
+    def test_forecasting_aggregation_validates_coverage_and_pools_predictions(self):
+        test = self.result["test_indices"]
+        rows = forecast_error_rows(
+            {name: value[test] for name, value in self.result["predictions"].items()},
+            sources=self.data.sources[test], sequence_ids=self.data.sequence_ids[test],
+            horizon=self.data.horizon[test], target=self.data.endpoint[test], valid=self.data.endpoint_valid[test],
+            seed=self.spec.seed, fold=0, input_landmarks=12,
+        )
+        expected = rows[["sequence_id", "source_id", "fold", "horizon_seconds"]].drop_duplicates()
+        declaration = {"seeds": (self.spec.seed,), "input_sizes": (12,), "methods": tuple(self.result["predictions"])}
+        summary = aggregate_future_error_rows(rows, expected, **declaration)
+        actual = summary["per_seed"].sort_values(["method", "horizon_seconds"]).source_balanced_rmse.to_numpy()
+        original = self.result["scores"].sort_values(["method", "horizon_seconds"]).source_balanced_rmse.to_numpy()
+        np.testing.assert_allclose(actual, original)
+        with self.assertRaises(ValueError):
+            aggregate_future_error_rows(rows.iloc[1:], expected, **declaration)
+        with self.assertRaises(ValueError):
+            aggregate_future_error_rows(__import__("pandas").concat([rows, rows.iloc[:1]]), expected, **declaration)
+        inconsistent = rows.copy()
+        inconsistent.loc[0, "fold"] = 1
+        with self.assertRaises(ValueError):
+            aggregate_future_error_rows(inconsistent, expected, **declaration)
+        inconsistent = rows.copy()
+        inconsistent.loc[0, "coverage_reference"] = "different endpoint set"
+        with self.assertRaises(ValueError):
+            aggregate_future_error_rows(inconsistent, expected, **declaration)
+        interval = paired_future_source_interval(
+            rows, expected, first="Matched: predicted future features decoded",
+            reference="Last observed position", input_landmarks=12,
+            horizon_seconds=0.25, seeds=(self.spec.seed,), repetitions=20,
+        )
+        self.assertEqual(interval["source_videos"], 2)
+        self.assertTrue(np.isfinite(interval["rmse_difference"]))
+        self.assertIn("conditional on fitted models", interval["scope"])
 
 
 if __name__ == "__main__":
