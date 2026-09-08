@@ -20,8 +20,14 @@ end
 -- Explicit widths prevent prose columns from overflowing the handout margins.
 function Table(tbl)
   local widths
-  if #tbl.colspecs == 3 then
-    widths = {0.65, 0.12, 0.23}
+  if #tbl.colspecs == 2 then
+    widths = {0.37, 0.63}
+  elseif #tbl.colspecs == 3 then
+    if pandoc.utils.stringify(tbl.head):match('Horizon') then
+      widths = {0.24, 0.38, 0.38}
+    else
+      widths = {0.65, 0.12, 0.23}
+    end
   elseif #tbl.colspecs == 5 then
     widths = {0.38, 0.16, 0.14, 0.14, 0.18}
   else

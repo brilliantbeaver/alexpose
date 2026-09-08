@@ -39,12 +39,12 @@ def build_notebook():
         """),
         code("""
         from pathlib import Path
+        import os
         import sys
         from dataclasses import asdict, replace
         import tempfile
         import numpy as np
         import pandas as pd
-        import torch
         import matplotlib.pyplot as plt
         from IPython.display import display
         from matplotlib_inline.backend_inline import set_matplotlib_formats
@@ -61,7 +61,9 @@ def build_notebook():
             train_comparison, default_conditions, anatomical_conditions, masks_for_batch,
             saved_reference_recipe, plan_real_comparison, run_real_comparison,
         )
-        torch.set_num_threads(1)
+        from notebook_progress import (
+            NotebookTaskProgress, run_real_masking_comparison_with_progress,
+        )
         data = load_learning_dataset()
         settings = LearningSettings(steps=3, batch_size=5)
         print("Synthetic demonstration: generated movement, three updates per encoder.")
@@ -138,7 +140,9 @@ def build_notebook():
         A complete trajectory stays hidden throughout the window. Missing
         measurements may lower its count without shortening its temporal span.
         The scattered reference below matches that actual count separately in
-        every clip. Both models receive the same clip weight in the loss.
+        every clip. Both models receive the same clip weight in the loss. The two
+        arms are interleaved, so the displayed wall time describes their paired
+        job and should not be added across condition rows.
 
         A temporal gap cannot always share that count. With 16 time blocks and
         33 visible landmarks, trajectories add 16 tokens at a time and complete
@@ -153,7 +157,7 @@ def build_notebook():
             budgets=shape_budgets, matched_to="whole_trajectories")
         display(pd.DataFrame([shape_example["pairing"]]))
         display(pd.DataFrame([{"condition": name, "updates": len(run["history"]),
-            "training_seconds": run["elapsed_training_seconds"]}
+            "paired_job_wall_seconds": run["elapsed_training_seconds"]}
             for name, run in shape_example["runs"].items()]).round(2))
         """),
         md("""
@@ -161,8 +165,10 @@ def build_notebook():
 
         A saved comparison includes configuration, data and source partitions,
         mask coverage, source schedules, losses, and declared encoder checkpoints.
-        Reuse verifies both compatibility and file contents. Interrupted runs
-        remain incomplete; this implementation does not resume them.
+        Reuse verifies both compatibility and file contents. During a long
+        real-data job, both arms are checkpointed at the same update boundary.
+        If the kernel stops, the next identical request resumes from the last
+        verified boundary instead of discarding all work for that job.
 
         This short temporary-directory example demonstrates reuse. Real runs use
         a dedicated output directory, and their readout predictions are retained
@@ -175,7 +181,7 @@ def build_notebook():
             print("Completed compatible comparison reused:", repeated["reused"])
         """),
         md("""
-        ## 6. Inspect the real-data recipe and workload
+        ## 6. Inspect and optionally run the real-data grid
 
         The settings below are read from all 25 retained Notebook 08 comparisons.
         Their agreement is checked before the reference is returned. The recipe
@@ -187,24 +193,99 @@ def build_notebook():
         The full two-condition plan contains 50 encoders and 60,000 optimizer
         updates across five outer video groups and five seeds. Input validation
         reads the local prepared data and checks mask feasibility without training.
-        The switch controlling real training remains false by default.
+
+        The runner uses PyTorch's native CUDA backend on an NVIDIA GPU or its MPS
+        backend on an Apple GPU. It keeps each fold's poses, validity masks, and
+        presampled target masks on that device; generates one pair of augmented
+        views for both masking arms; and reduces feature tensors before copying
+        summaries back to the CPU. On a single GPU, fold/seed jobs run one at a
+        time so that concurrent models do not compete for accelerator memory.
+        Tensor operations within each job are already batched and parallel.
+
+        MLX is not selected automatically. It is not a drop-in execution backend
+        for this PyTorch model, optimizer, and checkpoint format; a native MLX
+        port would be a separate numerical implementation that needs its own
+        equivalence study. MPS therefore provides the valid Metal-accelerated path
+        for this comparison today.
+
+        Set `LATERALITY_RESEARCH_RUN_REAL=1` to enable training and optionally set
+        `LATERALITY_DEVICE` to `mps`, `cuda`, or `cpu` (otherwise `auto` is used). The log
+        first explains the total work, hardware, memory strategy, and recovery
+        policy. A single updating `notebook_progress.py` display then shows the
+        active fold, seed, masking arm, optimizer position, latest sampled loss,
+        elapsed time, and adaptive ETA. The ordinary text log still reports only
+        one start and one plain-language result per fold/seed job instead of
+        printing the 50-row workload or every optimizer update. Complete jobs are
+        reused. Interrupted jobs save both arms together
+        every 300 updates per arm. Because each recovery file contains both models
+        and both optimizer states, this interval cuts checkpoint traffic by two
+        thirds relative to saving every 100 updates while limiting repeated work
+        after an interruption to at most 300 updates per arm.
+
+        The working notebook retains its previously inspected outputs. Those
+        historical lines can still show the older verbose runner and its
+        interruption; rerun the next cell to replace them with the concise log
+        produced by the current source. They are not used as current results.
         """),
         code("""
         recipe = saved_reference_recipe()
-        display(pd.DataFrame([{"setting": name, "value": str(value)} for name, value in recipe.items()]))
-        VALIDATE_REAL_INPUTS = False
-        RUN_REAL_TRAINING = False
+        display(pd.DataFrame([
+            {
+                "part of the run": "Exposure",
+                "chosen setting": f"{recipe['steps']:,} updates × batch {recipe['batch_size']} per encoder",
+                "reason": "Matches the retained Notebook 08 training budget",
+            },
+            {
+                "part of the run": "Encoder",
+                "chosen setting": (
+                    f"{recipe['embed_dim']}-D; encoder depth {recipe['encoder_depth']}; "
+                    f"predictor depth {recipe['predictor_depth']}; {recipe['heads']} heads"
+                ),
+                "reason": "Keeps architecture fixed so only the masking policy changes",
+            },
+            {
+                "part of the run": "Optimization",
+                "chosen setting": (
+                    f"{recipe['optimizer']}; learning rate {recipe['learning_rate']}; "
+                    f"weight decay {recipe['weight_decay']}; teacher momentum {recipe['ema_momentum']}"
+                ),
+                "reason": "Uses the same optimizer recipe for both independent arms",
+            },
+        ]))
+        VALIDATE_REAL_INPUTS = os.getenv("LATERALITY_RESEARCH_VALIDATE_REAL", "1") == "1"
+        RUN_REAL_TRAINING = os.getenv("LATERALITY_RESEARCH_RUN_REAL", "0") == "1"
+        REAL_DEVICE = os.getenv("LATERALITY_DEVICE", "auto")
         real_plan = plan_real_comparison(conditions=default_conditions(),
-            validate_inputs=VALIDATE_REAL_INPUTS, device="cpu")
-        display(real_plan["workload"])
-        print(real_plan["scope"], real_plan["training_runs"], "encoders,",
-              real_plan["optimizer_updates"], "updates,", real_plan["sample_presentations"], "clip presentations")
-        print(real_plan["runtime_estimate"])
-        print("New output directory:", real_plan["output_dir"])
+            validate_inputs=VALIDATE_REAL_INPUTS, device=REAL_DEVICE)
+        display(pd.DataFrame([{
+            "scope": real_plan["scope"],
+            "fold/seed comparisons": len(real_plan["folds"]) * len(real_plan["seeds"]),
+            "encoder arms": real_plan["training_runs"],
+            "updates": real_plan["optimizer_updates"],
+            "clip presentations": real_plan["sample_presentations"],
+            "requested device": REAL_DEVICE,
+            "real training enabled": RUN_REAL_TRAINING,
+        }]))
+        if len(real_plan["input_checks"]):
+            display(real_plan["input_checks"])
         if RUN_REAL_TRAINING:
-            real_result = run_real_comparison(real_plan, enabled=True)
+            real_training_progress = NotebookTaskProgress(
+                "Real controlled-masking experiment",
+                "stage",
+                refresh_seconds=0.5,
+            )
+            real_result = run_real_masking_comparison_with_progress(
+                real_plan,
+                progress=real_training_progress,
+                progress_interval=100,
+                resume_interval=300,
+            )
         else:
-            print("Real-data training is disabled; no new real masking result is available.")
+            real_result = run_real_comparison(
+                real_plan,
+                enabled=False,
+                resume_interval=300,
+            )
         """),
         md("""
         ## 7. Decide what the comparison would establish

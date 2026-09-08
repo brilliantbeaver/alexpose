@@ -16,7 +16,7 @@ import pandas as pd
 import torch
 from sklearn.linear_model import Ridge
 
-from laterality.evaluation import WeightedScaler, laterality_features
+from laterality.evaluation import WeightedScaler
 from laterality.geometry import observed_mask, prepare_pose
 from laterality.metrics import source_weights, weighted_mae, weighted_r2
 from laterality.model import valid_patches
@@ -162,8 +162,34 @@ def fit_source_readout(
     return SourceReadout(scaler, regression, tuple(sorted(train)), selected, validation, diagnostics)
 
 
-def encode_laterality_features(encoder: torch.nn.Module, dataset: LearningDataset,
-                               *, batch_size: int = 16) -> tuple[np.ndarray, np.ndarray]:
+def _encode_prevalidated(encoder, coordinates, valid_patch):
+    """Encode a CPU-validated batch without accelerator-to-host branches."""
+    tokens = encoder.patch_embed(encoder.patchify(coordinates))
+    tokens = (
+        tokens
+        + encoder.time_pos[None, :, None, :]
+        + encoder.joint_pos[None, None, :, :]
+    )
+    batch = len(tokens)
+    padding = ~valid_patch.reshape(batch, -1)
+    encoded = encoder.norm(
+        encoder.blocks(
+            tokens.reshape(batch, encoder.segments * encoder.joints,
+                           encoder.embed_dim),
+            src_key_padding_mask=padding,
+        )
+    )
+    return encoded.masked_fill(padding[..., None], 0.0)
+
+
+def encode_laterality_features(
+    encoder: torch.nn.Module,
+    dataset: LearningDataset,
+    *,
+    batch_size: int = 32,
+    rows: np.ndarray | None = None,
+    input_cache: dict | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
     """Keep the established five paired, common-time landmark summaries.
 
     Rows lacking any valid four-step token remain unavailable. A placeholder
@@ -176,17 +202,78 @@ def encode_laterality_features(encoder: torch.nn.Module, dataset: LearningDatase
                                     encoder.segment_length, 33).all(axis=2)
     available = patches.any(axis=(1, 2))
     output = np.full((len(dataset.xyz), 2 * len(PROBE_PAIRS) * encoder.embed_dim), np.nan)
-    rows = np.flatnonzero(available)
+    if rows is None:
+        requested = np.arange(len(dataset.xyz), dtype=int)
+    else:
+        raw_rows = np.asarray(rows)
+        if not np.issubdtype(raw_rows.dtype, np.integer):
+            raise ValueError("Feature rows must use integer indices")
+        requested = raw_rows.astype(int, copy=False)
+    if (
+        requested.ndim != 1
+        or len(np.unique(requested)) != len(requested)
+        or np.any(requested < 0)
+        or np.any(requested >= len(dataset.xyz))
+    ):
+        raise ValueError("Feature rows must be unique, one-dimensional, and in range")
+    selected = requested[available[requested]]
     encoder.eval()
     with torch.no_grad():
-        for start in range(0, len(rows), batch_size):
-            selected = rows[start:start + batch_size]
-            xyz = torch.as_tensor(np.where(dataset.valid[selected, ..., None],
-                                            dataset.xyz[selected], 0),
-                                  dtype=torch.float32, device=device)
-            valid = torch.as_tensor(patches[selected], dtype=torch.bool, device=device)
-            tokens = encoder(xyz, valid).reshape(len(selected), encoder.segments, 33, encoder.embed_dim)
-            output[selected] = laterality_features(tokens.cpu().numpy(), patches[selected], PROBE_PAIRS)
+        cache = input_cache if input_cache is not None else {}
+        input_key = (
+            "prepared_encoder_input",
+            str(device),
+            id(dataset),
+            encoder.segments,
+            encoder.segment_length,
+            encoder.embed_dim,
+            tuple(map(int, requested)),
+        )
+        if input_key not in cache:
+            cache[input_key] = (
+                selected,
+                torch.as_tensor(
+                    np.where(
+                        dataset.valid[selected, ..., None],
+                        dataset.xyz[selected],
+                        0,
+                    ),
+                    dtype=torch.float32,
+                    device=device,
+                ).contiguous(),
+                torch.as_tensor(
+                    patches[selected], dtype=torch.bool, device=device
+                ).contiguous(),
+            )
+        cached_rows, xyz, valid = cache[input_key]
+        if not np.array_equal(cached_rows, selected):
+            raise RuntimeError("Cached encoder rows disagree with the requested data")
+        feature_batches = []
+        for start in range(0, len(selected), batch_size):
+            stop = start + batch_size
+            batch_valid = valid[start:stop]
+            tokens = _encode_prevalidated(
+                encoder, xyz[start:stop], batch_valid
+            ).reshape(-1, encoder.segments, 33, encoder.embed_dim)
+            # Reduce the large token tensor on the accelerator.  Only the five
+            # bilateral summaries cross back to host memory.
+            pieces = []
+            for left, right in PROBE_PAIRS:
+                common = batch_valid[:, :, left] & batch_valid[:, :, right]
+                weight = common[..., None].to(tokens.dtype)
+                count = weight.sum(dim=1)
+                left_mean = (tokens[:, :, left] * weight).sum(dim=1)
+                right_mean = (tokens[:, :, right] * weight).sum(dim=1)
+                denominator = count.clamp_min(1)
+                left_mean = left_mean / denominator
+                right_mean = right_mean / denominator
+                has_common = count > 0
+                left_mean = torch.where(has_common, left_mean, 0)
+                right_mean = torch.where(has_common, right_mean, 0)
+                pieces.extend((left_mean - right_mean, left_mean + right_mean))
+            feature_batches.append(torch.cat(pieces, dim=1))
+        if feature_batches:
+            output[selected] = torch.cat(feature_batches, dim=0).cpu().numpy()
     return output, available
 
 
@@ -203,6 +290,8 @@ def evaluate_frozen_representations(
     inner_folds: int = 3,
     observation_datasets: Mapping[str, LearningDataset] | None = None,
     comparison_id: str = "declared_masking_comparison",
+    feature_cache: dict[Any, Any] | None = None,
+    feature_cache_names: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
     """Fit clean-training readouts once and evaluate a common observation bank.
 
@@ -224,12 +313,39 @@ def evaluate_frozen_representations(
         "pretrained_teacher": model.target_encoder,
         "initial_online": initial_model.view_encoder,
     }
+    shared_features = feature_cache if feature_cache is not None else {}
+    cache_names = dict(feature_cache_names or {})
+
+    def encoder_features(representation, encoder, altered, observation, rows=None):
+        namespace = cache_names.get(
+            representation, f"{condition}:{representation}"
+        )
+        row_key = None if rows is None else tuple(map(int, rows))
+        key = (namespace, observation, id(altered), row_key)
+        if key not in shared_features:
+            shared_features[key] = encode_laterality_features(
+                encoder,
+                altered,
+                rows=rows,
+                input_cache=shared_features,
+            )
+        return shared_features[key]
+
+    def pose_features(altered, observation):
+        namespace = cache_names.get("direct_pose", f"{condition}:direct_pose")
+        key = (namespace, observation, id(altered))
+        if key not in shared_features:
+            shared_features[key] = raw_pose_features(altered)
+        return shared_features[key]
+
     features: dict[str, np.ndarray] = {}
     for name, encoder in encoders.items():
-        features[name], available = encode_laterality_features(encoder, dataset)
+        features[name], available = encoder_features(
+            name, encoder, dataset, "unaltered"
+        )
         if not available[dataset.train_rows].all():
             raise ValueError("Unaltered training data contain inputs unavailable to the encoder")
-    features["direct_pose"] = raw_pose_features(dataset)
+    features["direct_pose"] = pose_features(dataset, "unaltered")
     readouts = {
         name: fit_source_readout(
             values, dataset.targets, dataset.source_ids,
@@ -257,9 +373,16 @@ def evaluate_frozen_representations(
             available &= corruption_feasible
         for representation in (*encoders, "direct_pose", "training_mean"):
             if representation in encoders:
-                x, _ = encode_laterality_features(encoders[representation], altered)
+                feature_rows = None if observation == "unaltered" else test
+                x, _ = encoder_features(
+                    representation,
+                    encoders[representation],
+                    altered,
+                    observation,
+                    rows=feature_rows,
+                )
             elif representation == "direct_pose":
-                x = raw_pose_features(altered)
+                x = pose_features(altered, observation)
             prediction = np.full(len(test), np.nan)
             valid_test = available[test]
             if representation == "training_mean":
@@ -402,19 +525,24 @@ def predictor_diagnostics(
     condition: str,
     rows: np.ndarray | None = None,
     mismatch_seed: int = 991,
+    batch_size: int = 32,
 ) -> pd.DataFrame:
     """Inspect the normal online→predictor→own-teacher pathway at fixed masks.
 
-    Clips are evaluated individually so unequal hidden counts cannot be mixed
-    by the original predictor's batch reshape. Mismatched targets come from a
-    different evaluation source with valid measurements at the same positions;
-    this is a diagnostic permutation, never a fitted training condition.
+    Clips with equal hidden counts are batched together; count groups remain
+    separate because the predictor's packed output requires a common target
+    count. Teacher tokens are encoded once and reused across masks. Mismatched
+    targets come from a different evaluation source with valid measurements at
+    the same positions; this is a diagnostic permutation, never a fitted
+    training condition.
     """
     selected_rows = dataset.test_rows if rows is None else np.asarray(rows, dtype=int)
     if len(np.unique(selected_rows)) != len(selected_rows) or not len(selected_rows):
         raise ValueError("Diagnostic rows must be nonempty and unique")
     if np.any(selected_rows < 0) or np.any(selected_rows >= len(dataset.xyz)):
         raise ValueError("Diagnostic row index is out of range")
+    if not isinstance(batch_size, int) or batch_size < 1:
+        raise ValueError("Diagnostic batch size must be a positive integer")
     device = next(model.parameters()).device
     segment_length = model.view_encoder.segment_length
     patches = dataset.valid.reshape(len(dataset.xyz), -1, segment_length, 33).all(axis=2)
@@ -424,6 +552,36 @@ def predictor_diagnostics(
     model.eval()
     outputs = []
     with torch.no_grad():
+        teacher_rows = selected_rows[
+            patches[selected_rows].any(axis=(1, 2))
+        ]
+        teacher_batches = []
+        for start in range(0, len(teacher_rows), batch_size):
+            batch_rows = torch.as_tensor(
+                teacher_rows[start:start + batch_size],
+                dtype=torch.long,
+                device=device,
+            )
+            teacher_batches.append(
+                model.target_encoder(
+                    xyz.index_select(0, batch_rows),
+                    validity.index_select(0, batch_rows),
+                )
+            )
+        teacher_tokens = (
+            torch.cat(teacher_batches, dim=0)
+            if teacher_batches
+            else torch.empty(
+                (0, model.view_encoder.segments * 33,
+                 model.view_encoder.embed_dim),
+                dtype=xyz.dtype,
+                device=device,
+            )
+        )
+        teacher_position = {
+            int(row): position for position, row in enumerate(teacher_rows)
+        }
+
         for name, values in mask_bank.items():
             requested_mask = np.asarray(values)
             if requested_mask.dtype != bool or requested_mask.shape != patches.shape:
@@ -436,35 +594,126 @@ def predictor_diagnostics(
             token_predictions, token_targets, token_sources = [], [], []
             mismatched_errors, errors, energies, row_sources = [], [], [], []
             unavailable, mismatch_unavailable = 0, 0
+            records = []
             for row in selected_rows:
                 hidden = mask[row]
                 if not hidden.any() or not (patches[row] & ~hidden).any():
                     unavailable += 1
                     continue
-                hidden_tensor = torch.as_tensor(hidden[None].copy(), dtype=torch.bool, device=device)
-                predicted, target = model(xyz[row:row + 1], xyz[row:row + 1],
-                                          validity[row:row + 1], hidden_tensor)
-                p, t = predicted[0].cpu().numpy(), target[0].cpu().numpy()
                 source = str(dataset.source_ids[row])
-                predictions.append(p.mean(axis=0)); targets.append(t.mean(axis=0)); clip_sources.append(source)
-                token_predictions.extend(p); token_targets.extend(t); token_sources.extend([source] * len(t))
-                errors.append(float(np.mean((p - t) ** 2)))
-                energies.append(float(np.mean(t ** 2)))
-                row_sources.append(source)
                 candidates = [int(other) for other in selected_rows
                               if dataset.source_ids[other] != source
                               and patches[other][hidden].all()]
+                other = None
                 if candidates:
                     other_sources = sorted(set(map(str, dataset.source_ids[candidates])))
                     other_source = str(rng.choice(other_sources))
                     same_source = [other for other in candidates if str(dataset.source_ids[other]) == other_source]
                     other = int(rng.choice(same_source))
-                    other_tokens = model.target_encoder(xyz[other:other + 1], validity[other:other + 1])
-                    different = other_tokens[0, hidden.reshape(-1)].cpu().numpy()
-                    mismatched_errors.append((source, float(np.mean((p - different) ** 2)),
-                                              float(np.mean((p - t) ** 2))))
                 else:
                     mismatch_unavailable += 1
+                records.append({
+                    "row": int(row),
+                    "source": source,
+                    "hidden": hidden,
+                    "other": other,
+                })
+
+            predicted_values = [None] * len(records)
+            target_values = [None] * len(records)
+            mismatch_values = [None] * len(records)
+            count_groups = {}
+            for record_index, record in enumerate(records):
+                count_groups.setdefault(
+                    int(record["hidden"].sum()), []
+                ).append(record_index)
+            for group in count_groups.values():
+                for start in range(0, len(group), batch_size):
+                    indices = group[start:start + batch_size]
+                    row_tensor = torch.as_tensor(
+                        [records[index]["row"] for index in indices],
+                        dtype=torch.long,
+                        device=device,
+                    )
+                    hidden_tensor = torch.as_tensor(
+                        np.stack([records[index]["hidden"] for index in indices]),
+                        dtype=torch.bool,
+                        device=device,
+                    )
+                    patch_tensor = validity.index_select(0, row_tensor)
+                    context = model.view_encoder(
+                        xyz.index_select(0, row_tensor),
+                        patch_tensor,
+                        hide_mask=hidden_tensor,
+                    )
+                    predicted = model.predictor(
+                        context, hidden_tensor, patch_tensor
+                    )
+                    positions = torch.as_tensor(
+                        [teacher_position[records[index]["row"]] for index in indices],
+                        dtype=torch.long,
+                        device=device,
+                    )
+                    full_targets = teacher_tokens.index_select(0, positions)
+                    target = full_targets[
+                        hidden_tensor.reshape(len(indices), -1)
+                    ].reshape(len(indices), -1, full_targets.shape[-1])
+                    predicted_cpu = predicted.cpu().numpy()
+                    target_cpu = target.cpu().numpy()
+                    for offset, record_index in enumerate(indices):
+                        predicted_values[record_index] = predicted_cpu[offset]
+                        target_values[record_index] = target_cpu[offset]
+
+                    mismatch_offsets = [
+                        offset
+                        for offset, record_index in enumerate(indices)
+                        if records[record_index]["other"] is not None
+                    ]
+                    if mismatch_offsets:
+                        other_positions = torch.as_tensor(
+                            [
+                                teacher_position[records[indices[offset]]["other"]]
+                                for offset in mismatch_offsets
+                            ],
+                            dtype=torch.long,
+                            device=device,
+                        )
+                        other_masks = hidden_tensor[mismatch_offsets]
+                        other_targets = teacher_tokens.index_select(
+                            0, other_positions
+                        )
+                        different = other_targets[
+                            other_masks.reshape(len(mismatch_offsets), -1)
+                        ].reshape(
+                            len(mismatch_offsets),
+                            -1,
+                            other_targets.shape[-1],
+                        ).cpu().numpy()
+                        for mismatch_offset, values in zip(
+                            mismatch_offsets, different
+                        ):
+                            mismatch_values[indices[mismatch_offset]] = values
+
+            for record, p, t, different in zip(
+                records, predicted_values, target_values, mismatch_values
+            ):
+                source = record["source"]
+                predictions.append(p.mean(axis=0))
+                targets.append(t.mean(axis=0))
+                clip_sources.append(source)
+                token_predictions.extend(p)
+                token_targets.extend(t)
+                token_sources.extend([source] * len(t))
+                correct_error = float(np.mean((p - t) ** 2))
+                errors.append(correct_error)
+                energies.append(float(np.mean(t ** 2)))
+                row_sources.append(source)
+                if different is not None:
+                    mismatched_errors.append((
+                        source,
+                        float(np.mean((p - different) ** 2)),
+                        correct_error,
+                    ))
             base = {"condition": condition, "evaluation_mask": name,
                     "requested_clips": len(selected_rows), "evaluated_clips": len(errors),
                     "evaluated_sources": len(set(row_sources)), "unavailable_clips": unavailable,

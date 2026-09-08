@@ -21,6 +21,8 @@ from notebook_progress import (  # noqa: E402
     NotebookTaskProgress,
     aggregate_and_save_with_progress,
     evaluate_selected_with_progress,
+    run_real_future_comparison_with_progress,
+    run_real_masking_comparison_with_progress,
 )
 
 
@@ -125,6 +127,128 @@ class NotebookTaskProgressTests(unittest.TestCase):
 
 
 class NotebookWorkflowWrapperTests(unittest.TestCase):
+    def test_masking_wrapper_reports_nested_work_and_restores_functions(self):
+        from laterality_extensions import comparative_training as training
+        from laterality_extensions.masked_learning import LearningSettings
+
+        settings = LearningSettings(steps=2, fold=0, seed=42, device="cpu")
+        policies = {"gait_targets": object(), "all_landmark_targets": object()}
+        original_train = Mock(name="train_comparison")
+        original_evaluate = Mock(name="evaluate_comparison")
+        observed_completed_steps = []
+
+        def fake_train(dataset, run_settings, conditions, **kwargs):
+            names = tuple(conditions)
+            for step in range(1, run_settings.steps + 1):
+                for condition_index, name in enumerate(names):
+                    kwargs["progress_callback"]({
+                        "condition": name,
+                        "condition_index": condition_index,
+                        "step": step,
+                        "total_steps": run_settings.steps,
+                        "comparison_completed_steps": (
+                            (step - 1) * len(names) + condition_index + 1
+                        ),
+                        "loss": 1 / step,
+                    })
+                    observed_completed_steps.append(
+                        progress.active["completed_steps"]
+                    )
+            return {"reused": False, "payload": "unchanged"}
+
+        original_train.side_effect = fake_train
+        original_evaluate.return_value = {"predictions": "unchanged"}
+
+        def fake_real_run(plan, *, enabled, **kwargs):
+            self.assertTrue(enabled)
+            self.assertEqual(kwargs["progress_interval"], 100)
+            self.assertEqual(kwargs["resume_interval"], 300)
+            result = training.train_comparison(
+                object(), settings, policies, output_dir=None
+            )
+            evaluation = training.evaluate_comparison(
+                result, object(), settings
+            )
+            return {"result": result, "evaluation": evaluation}
+
+        plan = {
+            "conditions": {name: {} for name in policies},
+            "folds": (0,),
+            "seeds": (42,),
+            "settings": {"device": "cpu"},
+            "scope": "pilot",
+        }
+        progress = NotebookTaskProgress("Masking", "stage")
+        progress._publish = Mock()  # type: ignore[method-assign]
+        with (
+            patch.object(training, "train_comparison", original_train),
+            patch.object(training, "evaluate_comparison", original_evaluate),
+            patch.object(training, "run_real_comparison", side_effect=fake_real_run),
+        ):
+            result = run_real_masking_comparison_with_progress(
+                plan, progress=progress
+            )
+            self.assertIs(training.train_comparison, original_train)
+            self.assertIs(training.evaluate_comparison, original_evaluate)
+
+        self.assertEqual(result["result"]["payload"], "unchanged")
+        self.assertEqual(observed_completed_steps, [1, 2, 3, 4])
+        self.assertEqual(progress.completed_units, 2)
+        self.assertEqual(progress.status, "Real masking comparison complete")
+
+    def test_future_wrapper_reports_model_arms_and_restores_functions(self):
+        from laterality_extensions import future_comparison as future
+
+        original_fit = Mock(name="fit_forecast_model", return_value="fitted")
+        original_load = Mock(name="load_future_result", return_value="retained")
+
+        def fake_comparison(data, spec, **kwargs):
+            future.fit_forecast_model(data, spec, mismatched=False)
+            future.fit_forecast_model(data, spec, mismatched=True)
+            return {"comparison": "unchanged"}
+
+        original_run = Mock(name="run_future_comparison", side_effect=fake_comparison)
+
+        def fake_real_run(**request):
+            comparison = future.run_future_comparison(object(), request["spec"])
+            retained = future.load_future_result("result", "reference")
+            return {"comparison": comparison, "retained": retained}
+
+        plan = {
+            "runs": [{"fold": 0, "seed": 42, "input_landmarks": 12}],
+            "scope": "pilot",
+        }
+        progress = NotebookTaskProgress("Forecasting", "job")
+        progress._publish = Mock()  # type: ignore[method-assign]
+        with (
+            patch.object(future, "plan_future_comparison", return_value=plan),
+            patch.object(future, "fit_forecast_model", original_fit),
+            patch.object(future, "run_future_comparison", original_run),
+            patch.object(future, "load_future_result", original_load),
+            patch.object(
+                future,
+                "run_real_future_comparison",
+                side_effect=fake_real_run,
+            ),
+        ):
+            result = run_real_future_comparison_with_progress(
+                progress=progress,
+                enabled=True,
+                spec=object(),
+                folds=(0,),
+                seeds=(42,),
+                input_sets=(tuple(),),
+                output_root="unused",
+            )
+            self.assertIs(future.fit_forecast_model, original_fit)
+            self.assertIs(future.run_future_comparison, original_run)
+            self.assertIs(future.load_future_result, original_load)
+
+        self.assertEqual(result["comparison"]["comparison"], "unchanged")
+        self.assertEqual(result["retained"], "retained")
+        self.assertEqual(progress.completed_units, 3)
+        self.assertEqual(progress.status, "Real future-feature comparison complete")
+
     def test_evaluation_wrapper_preserves_job_order_and_output(self):
         with tempfile.TemporaryDirectory() as directory:
             context = SimpleNamespace(

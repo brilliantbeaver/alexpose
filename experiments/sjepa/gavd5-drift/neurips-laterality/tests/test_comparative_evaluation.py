@@ -14,6 +14,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from laterality.model import SJEPAGait, valid_patches
+from laterality.evaluation import laterality_features
 from laterality_extensions.masked_learning import LearningSettings, load_learning_dataset
 from laterality_extensions.comparative_evaluation import (
     aggregate_predictions, encode_laterality_features, evaluate_frozen_representations,
@@ -238,7 +239,26 @@ class ModelEvaluationTests(unittest.TestCase):
         mask = np.zeros_like(valid)
         for row in range(len(valid)):
             mask[row].flat[np.flatnonzero(valid[row])[:row % 3 + 1]] = True
-        result = predictor_diagnostics(self.model, self.dataset, {"unequal_counts": mask}, condition="initial")
+        result = predictor_diagnostics(
+            self.model,
+            self.dataset,
+            {"unequal_counts": mask},
+            condition="initial",
+        )
+        one_clip_batches = predictor_diagnostics(
+            self.model,
+            self.dataset,
+            {"unequal_counts": mask},
+            condition="initial",
+            batch_size=1,
+        )
+        pd.testing.assert_frame_equal(
+            result,
+            one_clip_batches,
+            check_exact=False,
+            rtol=2e-5,
+            atol=2e-6,
+        )
         self.assertEqual(result.iloc[0].evaluated_clips, len(self.dataset.test_rows))
         self.assertTrue(np.isfinite(result.iloc[0].normalized_error))
         self.assertIn("target_clip_effective_rank", result)
@@ -268,6 +288,155 @@ class ModelEvaluationTests(unittest.TestCase):
         features, available = encode_laterality_features(self.model.view_encoder, altered)
         self.assertFalse(available[0])
         self.assertTrue(np.isnan(features[0]).all())
+
+    def test_accelerator_side_feature_reduction_matches_reference(self):
+        features, available = encode_laterality_features(
+            self.model.view_encoder, self.dataset, batch_size=7
+        )
+        selected = np.flatnonzero(available)
+        patches = self.dataset.valid.reshape(
+            len(self.dataset.xyz), -1, 4, 33
+        ).all(axis=2)
+        xyz = torch.as_tensor(
+            np.where(
+                self.dataset.valid[selected, ..., None],
+                self.dataset.xyz[selected],
+                0,
+            ),
+            dtype=torch.float32,
+        )
+        valid = torch.as_tensor(patches[selected], dtype=torch.bool)
+        with torch.no_grad():
+            tokens = self.model.view_encoder(xyz, valid).reshape(
+                len(selected), -1, 33, self.model.view_encoder.embed_dim
+            )
+        reference = laterality_features(
+            tokens.numpy(), patches[selected], ((11, 12), (25, 26),
+                                                (27, 28), (29, 30), (31, 32))
+        )
+        np.testing.assert_allclose(features[selected], reference, rtol=2e-6, atol=2e-6)
+
+    def test_row_selected_features_match_full_pass_and_reuse_device_input(self):
+        full, full_available = encode_laterality_features(
+            self.model.view_encoder, self.dataset, batch_size=7
+        )
+        requested = np.array([
+            self.dataset.test_rows[-1],
+            self.dataset.train_rows[0],
+            self.dataset.test_rows[0],
+        ])
+        input_cache = {}
+        selected, selected_available = encode_laterality_features(
+            self.model.view_encoder,
+            self.dataset,
+            batch_size=2,
+            rows=requested,
+            input_cache=input_cache,
+        )
+        np.testing.assert_array_equal(selected_available, full_available)
+        np.testing.assert_allclose(
+            selected[requested], full[requested], rtol=2e-6, atol=2e-6
+        )
+        omitted = np.setdiff1d(np.arange(len(self.dataset.xyz)), requested)
+        self.assertTrue(np.isnan(selected[omitted]).all())
+
+        prepared = [
+            value
+            for key, value in input_cache.items()
+            if key[0] == "prepared_encoder_input"
+        ]
+        self.assertEqual(len(prepared), 1)
+        cached_xyz, cached_valid = prepared[0][1:]
+        repeated, _ = encode_laterality_features(
+            self.model.target_encoder,
+            self.dataset,
+            batch_size=1,
+            rows=requested,
+            input_cache=input_cache,
+        )
+        np.testing.assert_allclose(
+            repeated[requested], full[requested], rtol=2e-6, atol=2e-6
+        )
+        prepared_again = [
+            value
+            for key, value in input_cache.items()
+            if key[0] == "prepared_encoder_input"
+        ]
+        self.assertEqual(len(prepared_again), 1)
+        self.assertIs(prepared_again[0][1], cached_xyz)
+        self.assertIs(prepared_again[0][2], cached_valid)
+
+        with self.assertRaisesRegex(ValueError, "unique"):
+            encode_laterality_features(
+                self.model.view_encoder, self.dataset, rows=np.array([0, 0])
+            )
+        with self.assertRaisesRegex(ValueError, "in range"):
+            encode_laterality_features(
+                self.model.view_encoder,
+                self.dataset,
+                rows=np.array([len(self.dataset.xyz)]),
+            )
+        with self.assertRaisesRegex(ValueError, "integer"):
+            encode_laterality_features(
+                self.model.view_encoder,
+                self.dataset,
+                rows=np.array([0.5]),
+            )
+
+    def test_corrupted_feature_cache_contains_only_held_out_rows(self):
+        valid = self.dataset.valid.reshape(
+            len(self.dataset.xyz), -1, 4, 33
+        ).all(axis=2)
+        bank = make_evaluation_mask_bank(valid)
+        altered = prepared_observation_sensitivity(
+            self.dataset, bank["left_leg_gap"]
+        )
+        feature_cache = {}
+        result = evaluate_frozen_representations(
+            self.model,
+            self.model,
+            self.dataset,
+            self.settings,
+            condition="row_selection",
+            alphas=(1,),
+            observation_datasets={"left_gap": altered},
+            feature_cache=feature_cache,
+        )
+
+        altered_encoder_features = [
+            value
+            for key, value in feature_cache.items()
+            if (
+                len(key) == 4
+                and key[0] != "prepared_encoder_input"
+                and key[1] == "left_gap"
+                and key[2] == id(altered)
+            )
+        ]
+        self.assertEqual(len(altered_encoder_features), 3)
+        for features, available in altered_encoder_features:
+            self.assertTrue(np.isnan(features[self.dataset.train_rows]).all())
+            evaluated = self.dataset.test_rows[available[self.dataset.test_rows]]
+            self.assertTrue(np.isfinite(features[evaluated]).all())
+
+        prepared_inputs = [
+            key
+            for key in feature_cache
+            if key[0] == "prepared_encoder_input"
+        ]
+        self.assertEqual(len(prepared_inputs), 2)
+        self.assertEqual(
+            {key[-1] for key in prepared_inputs},
+            {
+                tuple(range(len(self.dataset.xyz))),
+                tuple(map(int, self.dataset.test_rows)),
+            },
+        )
+        selected = result["predictions"].query("observation == 'left_gap'")
+        self.assertEqual(
+            set(selected.sequence_id),
+            set(self.dataset.sequence_ids[self.dataset.test_rows]),
+        )
 
     def test_infeasible_missing_region_is_never_scored_as_unchanged_input(self):
         valid = self.dataset.valid.copy()
