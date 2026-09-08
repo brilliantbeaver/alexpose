@@ -29,8 +29,11 @@ class FutureInnovationFrameTests(unittest.TestCase):
             frames, fps = decode_exact_window(path, 4)
             self.assertEqual(frames.shape, (64, 32, 48, 3))
             self.assertEqual(fps, 25)
+            # MJPEG's YUV round trip shifts this uniform-color fixture by up
+            # to 4/3 intensity units on HAIC's OpenCV/FFmpeg build. A 1.5
+            # tolerance still rejects a one-frame shift: tags are 3 apart.
             np.testing.assert_allclose(
-                frames.mean(axis=(1, 2, 3)), np.arange(4, 68) * 3, atol=1
+                frames.mean(axis=(1, 2, 3)), np.arange(4, 68) * 3, atol=1.5
             )
             with self.assertRaises(ValueError):
                 decode_exact_window(path, 20)
