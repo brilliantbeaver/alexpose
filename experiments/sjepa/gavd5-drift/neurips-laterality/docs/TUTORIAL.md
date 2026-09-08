@@ -8,10 +8,13 @@ and [18](../18_motion_information_and_readout.ipynb). They examine the MAMP code
 motion weighting, structured target geometry, paired JEPA training and
 motion-sensitive frozen readouts. The [source review and experiment specification](MOTION_STRUCTURED_MASKING.md)
 records the literature checked on 8 September 2026 and the precise adaptations.
-Their examples are synthetic software checks; the empirical findings below are
-unchanged. The new real-data comparisons and reanalysis of retained encoders
-remain unrun. This implementation follows Direction A before expanding the
-forecasting work.
+All four now default to real GAVD, displaying five source folds and seeds
+42–46. The [GAVD run guide](MOTION_GAVD_WORKFLOW.md) explains preparation,
+training enablement and loading the same complete grid in Notebook 18.
+Real-input and masking audits reproduce the 625-clip, 93-video cohort; the
+full new pretraining comparison remains unrun. Generated software checks are
+explicitly separate. The empirical findings below are unchanged. This
+implementation follows Direction A before expanding the forecasting work.
 
 ## Contents
 

@@ -1,82 +1,162 @@
 # Verification of notebooks 15–18
 
 Verified on 8 September 2026 with Python 3.12.10 and PyTorch 2.13.0+cpu on
-Windows. The extension's 13 tests pass. All four source notebooks validate,
-match their editable tutorial builders and execute in separate fresh kernels.
-Seventeen code cells execute successfully, producing four SVG figures and
-four PNG previews. All four figures were visually inspected for readable
-labels, legends and axes.
+Windows. The revised notebooks default to real GAVD, and their explicit
+synthetic mode remains a separate software check. The full 1,200-update real
+training grid has not been launched.
 
-The final teaching execution is retained locally at
-`executed/motion_structured/synthetic_nayf51or/`, including `verification.json`.
-Source notebooks remain output-free. Execution disables real-data validation,
-real training and retained-encoder reanalysis, regardless of inherited flags.
-The verifier confirms that 57 protected notebook, tutorial, model, protocol and
-configuration files remain unchanged. Git also shows no modifications to
-notebooks 00–14 or their training implementations.
+## Progress-wrapper follow-up
 
-## Checks that passed
+Notebooks 15–18 now use the existing `notebook_progress.py` display for input
+preparation, fold loading, mask audits, checkpoint inspection, paired training,
+frozen readouts, reporting and optional controls. Mask audits expose fold/seed
+passes and clip batches; training exposes mask-schedule checks and optimizer
+updates. Readout stages identify encoding, ridge selection and predictor
+diagnostics. Cache hits, disabled training, missing jobs, skipped optional work
+and interruptions remain distinct terminal states.
 
-- MAMP log weights agree with a direct translation of the official PyTorch
-  implementation on fully observed inputs. Repeated sampling preferentially
-  hides moving tokens; stationary fallback, missing-transition isolation,
-  reflection and infeasible budgets are checked.
-- Structured masks retain their declared intervals or full trajectories,
-  and their scattered references match realized per-clip target counts.
-- Training preserves paired initial states, source draws, geometric views and
-  target counts. Changing labels and outer-test coordinates leaves trained
-  weights unchanged. Teachers receive no gradient. Fixed hidden values cannot
-  enter the dense predictor pathway.
-- Completed runs are reused exactly, and corrupted artifacts are rejected.
-  The enabled real-run orchestration is exercised with a mocked synthetic
-  dataset, including evaluation, persistence and repeat execution. Its output
-  remains explicitly synthetic. A misreported workload is rejected.
-- A known amplitude contrast is recovered by motion-sensitive summaries on
-  generated held-out sources. The mean summary agrees numerically with the
-  previous implementation. Test-source changes cannot alter ridge selection.
-- Aggregation rejects duplicate and incomplete predictions. Retained Notebook
-  12 comparisons can be reanalysed without encoder training, preserving every
-  original artifact byte in the test fixture.
-- The real plan displays 125 encoders and 150,000 optimizer updates using the
-  tracked 1,200-update recipe. Its disabled path does not train. The notebook
-  builder now writes explicit UTF-8, avoiding Windows locale corruption of
-  notebook JSON containing mathematical text.
+Seven new tests in `test_motion_notebook_progress.py` and ten existing tests in
+`test_notebook_workflow_progress.py` pass. The new tests compare wrapped and
+unwrapped mask tables and trained/evaluated results, exercise cache reuse,
+check nested progress, and verify restoration after errors and keyboard
+interrupts. Completed cache hits are removed from ETA's remaining-computation
+count. The scientific source files, training/readout identities and notebooks
+00–14 match the recorded pre-wrapper hashes.
 
-Commands used from the repository root:
+All 29 code cells execute in fresh kernels with progress enabled, retained at
+`executed/motion_structured/synthetic_tw34buwj/`. Real-input execution of 17–18
+is retained at `executed/motion_structured/gavd_wly3264r/`, with real training
+disabled. Their rendered HTML contains the updating progress displays and
+correct disabled/missing-grid/optional-skip states. No full real grid or new
+scientific masking comparison was launched for this display change.
 
 ```text
-.venv/Scripts/python.exe -m unittest discover -s neurips-laterality/tests -p test_motion_structured.py -v
-.venv/Scripts/python.exe neurips-laterality/scripts/build_research_notebooks.py --check --only 15 16 17 18
-.venv/Scripts/python.exe neurips-laterality/scripts/verify_motion_notebooks.py --execute
-git diff --check
+python -m unittest discover -s neurips-laterality/tests -p test_motion_notebook_progress.py -v
+python -m unittest discover -s neurips-laterality/tests -p test_notebook_workflow_progress.py -v
+python neurips-laterality/scripts/verify_motion_notebooks.py --execute
+python neurips-laterality/scripts/verify_motion_notebooks.py --execute --data-mode gavd --only 17 18
 ```
 
-## Broader suite and local prerequisites
+## Real GAVD inputs and masking audits
 
-The full suite runs 221 tests: 219 pass, with two existing environment-dependent
-failures in untouched files:
+The available source cache contains 656 pose archives. Extraction provenance
+recovers exactly the protocol's original 642-archive inventory, including its
+registered SHA-256. Verified copies were made without modifying the source
+cache. The original Notebook 01 preparation rules produce **625 accepted clips
+from 93 source videos**. Notebook 02's source splitter reproduces all five
+reference train/test counts: 436/189, 443/182, 553/72, 548/77 and 520/105.
 
-1. `test_real_training_requires_enablement` in `test_comparative_training.py`
-   cannot load the expected complete reference grid. Its real-setting helper
-   requires local artifacts absent from this checkout. The new planner reads
-   the tracked numerical recipe and does not have this prerequisite merely to
-   display a workload.
-2. `test_only_reviewed_progress_only_digest_is_accepted` in
-   `test_training_progress.py` compares raw source-byte hashes with a retained
-   compatibility manifest. The Windows checkout has CRLF line endings in
-   core files. Its current digest begins `0f497023`; computing the same digest
-   with LF bytes gives `bc186e81`, exactly the manifest's reviewed value.
-   No protected source or compatibility manifest was changed to suppress this
-   failure.
+All four notebooks display the real 25-row census for folds 0–4 and seeds
+42–46. Fresh-kernel execution completed the real-data code paths: 15 and 16
+perform full training-mask audits; 17 displays the complete training workload
+with training disabled; 18 reports the missing real training jobs without
+substituting a synthetic model or an incomplete aggregate.
 
-A separate read-only real-input preflight fails because
-`artifacts/paper/protocol_6f7baefbda07/cohort/metadata.json` is absent. No cohort
-was rebuilt and no real-data grid was launched. Local model artifacts are also
-required to reanalyse the retained encoders. GPU execution and real-data
-performance remain unverified. The generated runs support implementation and
-evaluation checks, with no new empirical or clinical conclusion.
+The audits inspect 37,500 motion draws and 75,000 structured/reference draws,
+for **112,500 real training-clip mask draws**. Realized hidden counts match
+within each comparison. Descriptive video-weighted means across the fold/seed
+audits show:
 
-The tutorial's empirical results and PDF remain the previous evidence version;
-its Markdown adds navigation to this extension. The
-[source review and research specification](MOTION_STRUCTURED_MASKING.md)
-explains what to run once compatible local artifacts are available.
+| Comparison | Mean realized targets | Temporal brackets, structure / reference | Visible neighbors, structure / reference |
+|---|---:|---:|---:|
+| Connected region / its uniform reference | 47.30 | 0.000 / 0.699 | 0.512 / 0.988 |
+| Full trajectories / their uniform reference | 45.49 | 0.000 / 0.706 | 0.995 / 0.989 |
+| Interior completion / its uniform reference | 120.97 | 0.000 / 0.482 | 0.000 / 0.941 |
+
+These findings establish which specific cues the masks remove. In particular,
+full trajectories remove same-landmark temporal brackets but leave graph
+neighbors almost always visible. They do not demonstrate a learned masking
+benefit. Motion-weighted draws show positive enrichment under the common robust
+motion diagnostic; uniform draws remain close to zero enrichment. This also
+concerns selection behavior, not downstream performance.
+
+The real executed notebooks and vector/PNG figures are retained locally at:
+
+- `executed/motion_structured/gavd_5yc3ve5h/`: notebooks 15 and 16. Both finished;
+  the initial verification command subsequently stopped because builder metadata
+  was updated during that command. Their cell sources were checked against the
+  final builders separately.
+- `executed/motion_structured/gavd_wag7vh63/`: notebooks 17 and 18, with the
+  completed verifier's `verification.json`.
+
+All seven real-mode figure outputs were checked for readable axes and labels.
+Notebook 18's generated amplitude figure is explicitly labeled as a separate
+teaching control. Source notebooks remain output-free.
+
+## Actual real-data training/evaluation check
+
+A separate bounded GAVD check trained the three motion arms and two region
+arms on **fold 0, seed 42**, for **one update at width 16**. It used 436 real
+training clips from 74 videos and evaluated 189 held-out clips from 19 videos.
+The readouts produced 7,560 per-clip prediction rows across the five arms and
+eight representations. Every prediction is marked `synthetic=False`.
+
+Both paired jobs completed, persisted their checkpoints and readout tables,
+and reopened successfully without encoder training. The check and its scope
+are retained at `executed/motion_structured/gavd_training_check_nq9klam6/`,
+including `verification.json`. This verifies optimization, missingness handling,
+readout fitting and held-out prediction on actual GAVD arrays. One update with
+a small model is not the planned 1,200-update experiment and supplies no
+scientific ranking of masking policies.
+
+## Automated software checks
+
+**All 19 extension tests pass** (`test_motion_structured.py` and
+`test_motion_gavd.py`). The six new workflow tests cover:
+
+- Exact-inventory recovery from an expanded cache, byte-preserving source
+  handling, rejection of a wrong inventory and refusal to overwrite partial
+  cohort artifacts.
+- Real mode as the default and failure without synthetic fallback when its
+  inputs cannot be prepared.
+- Complete training-clip coverage, exclusion of outer-test sources from each
+  fold's mask audit, matched budgets and label-blind masks.
+- Actual tiny optimization of **125 encoders in 50 paired jobs over every fold
+  and seed** on generated fixtures. Saved schedules contain training videos
+  only, and predictions contain exactly the correct held-out videos.
+- Complete pooled prediction coverage, reopening all jobs without encoder
+  training or repeated readout fitting, and corruption rejection even when
+  compatible evaluation tables exist.
+- The full real recipe (1,200 updates, width 96, 125 encoders, 150,000 updates)
+  and rejection of a modified/misreported workload.
+
+The existing 13 tests continue to check official MAMP log-weight agreement,
+motion bias, stationary fallback, missingness isolation, mask geometry,
+label/test-content isolation during training, gradient-free teachers, fixed
+hidden-content isolation, paired exposure, checkpoint reuse, source-only ridge
+selection, amplitude recovery, strict aggregation and retained-encoder reuse.
+
+All four notebooks also executed in separate fresh kernels in explicit
+synthetic mode. The main execution is retained at
+`executed/motion_structured/synthetic_1azgyh3g/`; the final optional retained-job
+cell in Notebook 18 was additionally executed in
+`executed/motion_structured/synthetic_8hu7f9bi/`. The current four notebooks
+contain **29 code cells**. Source/builder checks and `git diff --check` pass.
+The completed verifier reports 57 protected files unchanged; notebooks 00–14,
+core model code and protocol configuration remain untouched.
+
+The user's previously executed Notebook 16 was preserved before rewriting:
+`executed/motion_structured/before_gavd_revision_cx2cx_ty/16_structured_masking_and_context.ipynb`,
+SHA-256 `eca6bd2419c6b987faa8dfecab796c85fe27c7c3c546dd35fc2d836dfe3f086f`.
+
+## Commands and remaining scope
+
+```text
+python -m unittest discover -s neurips-laterality/tests -p test_motion*.py -v
+python neurips-laterality/scripts/build_research_notebooks.py --check --only 15 16 17 18
+python neurips-laterality/scripts/verify_motion_notebooks.py --execute
+python neurips-laterality/scripts/verify_motion_notebooks.py --execute --data-mode gavd
+```
+
+The previous full-suite run, before this GAVD revision, passed 219 of 221 tests.
+Its two existing environment-dependent failures were the missing old Notebook
+08 reference grid and the CRLF-versus-LF raw implementation hash checked by
+`test_training_progress.py`. That entire older suite was not repeated for this
+revision; its compatibility rules were not relaxed. The 19 affected extension
+tests were run together and passed.
+
+GPU execution and the full new real-data model comparison remain unverified.
+The tutorial's previous empirical conclusions and PDF are unchanged; its
+Markdown navigation now points to the real workflow. The
+[GAVD run guide](MOTION_GAVD_WORKFLOW.md) explains how to launch Notebook 17's
+full grid and evaluate those same saved jobs in Notebook 18.

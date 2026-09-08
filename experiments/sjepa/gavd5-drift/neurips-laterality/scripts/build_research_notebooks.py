@@ -33,7 +33,9 @@ def render(number: str) -> str:
     notebook.metadata.update({
         "kernelspec": {"display_name": "Python 3 (ipykernel)", "language": "python", "name": "python3"},
         "language_info": {"name": "python", "version": "3.11"},
-        "research_status": "Exploratory extension; synthetic examples are non-evidentiary.",
+        "research_status": ("GAVD development workflow; synthetic mode is an explicit software check."
+                            if int(number) >= 15 else
+                            "Exploratory extension; synthetic examples are non-evidentiary."),
     })
     for index, cell in enumerate(notebook.cells):
         cell["id"] = hashlib.sha256(f"{number}:{index}:{cell.source}".encode()).hexdigest()[:12]

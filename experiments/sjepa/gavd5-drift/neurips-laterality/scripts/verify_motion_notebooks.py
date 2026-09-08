@@ -1,4 +1,4 @@
-"""Verify and optionally execute notebooks 15–18 with real-data flags disabled."""
+"""Verify notebooks 15--18 in explicit synthetic or real-GAVD mode; never train the real grid."""
 from __future__ import annotations
 
 import argparse
@@ -33,6 +33,7 @@ def protected_files():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--data-mode", choices=("synthetic", "gavd"), default="synthetic")
     parser.add_argument("--only", nargs="+", choices=("15", "16", "17", "18"), default=["15", "16", "17", "18"])
     args = parser.parse_args()
     before = protected_files()
@@ -40,12 +41,16 @@ def main():
     if args.execute:
         parent = SUITE_ROOT / "executed/motion_structured"
         parent.mkdir(parents=True, exist_ok=True)
-        destination = Path(tempfile.mkdtemp(prefix="synthetic_", dir=parent))
+        destination = Path(tempfile.mkdtemp(prefix=f"{args.data_mode}_", dir=parent))
     environment = dict(os.environ)
     for name in ("LATERALITY_MOTION_VALIDATE_REAL", "LATERALITY_MOTION_RUN_REAL",
                  "LATERALITY_RESEARCH_RUN_REAL", "LATERALITY_RESEARCH_VALIDATE_REAL"):
         environment[name] = "0"
     environment["LATERALITY_DEVICE"] = "cpu"
+    environment["LATERALITY_MOTION_DATA_MODE"] = args.data_mode
+    # Isolate generated checkpoints; real verification uses the normal real grid.
+    if destination and args.data_mode == "synthetic":
+        environment["LATERALITY_MOTION_OUTPUT_ROOT"] = str(destination / "artifacts")
     environment.pop("LATERALITY_RETAINED_COMPARISON", None)
     environment["LATERALITY_MOTION_EXPERIMENTS"] = "motion,regions"
     environment["LATERALITY_RESEARCH_CPU_THREADS"] = "1"
@@ -60,11 +65,11 @@ def main():
             raise AssertionError("Source notebooks must remain output-free")
         record = {"notebook": path.name, "source_valid": True, "executed": False}
         if args.execute:
-            print(f"Executing synthetic notebook {number} with {sys.executable}", flush=True)
+            print(f"Executing {args.data_mode} notebook {number} with {sys.executable}", flush=True)
             manager = KernelManager(kernel_name="python3")
             manager.kernel_spec.argv = [sys.executable, "-m", "ipykernel_launcher", "-f", "{connection_file}"]
             try:
-                NotebookClient(notebook, timeout=300, allow_errors=False, km=manager,
+                NotebookClient(notebook, timeout=1200, allow_errors=False, km=manager,
                     resources={"metadata": {"path": str(SUITE_ROOT)}}).execute(env=environment)
             finally:
                 if manager.has_kernel:
@@ -95,7 +100,8 @@ def main():
     if before != after:
         raise AssertionError("Protected research files changed")
     report = {"notebooks": records, "protected_files_unchanged": len(before),
-              "real_training_executed": False, "real_validation_executed": False,
+              "data_mode": args.data_mode,
+              "real_training_executed": False, "real_validation_executed": args.execute and args.data_mode == "gavd",
               "executed_directory": str(destination) if destination else None}
     if destination:
         (destination / "verification.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

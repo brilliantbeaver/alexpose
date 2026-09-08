@@ -1,163 +1,221 @@
-"""Editable tutorial: recover movement information before expanding training."""
+"""Editable GAVD tutorial: reopen the full trained grid and interpret held-out readouts."""
 from nbformat.v4 import new_notebook
-from .masking_shared import md, code, setup_cell
+from .masking_shared import (md, code, setup_cell, data_instructions, configuration_cell, inputs_cell, plan_cell)
 
 
 def build_notebook():
     return new_notebook(cells=[
         md('''
-        # 18 — Does the readout retain movement information?
+        # 18 — Evaluate motion information from the saved GAVD grid
 
-        The [tutorial's Direction A](docs/TUTORIAL.md#direction-a-explain-and-recover-access-to-movement-information)
-        has the clearest near-term question: why can the JEPA predictor learn
-        clip-related information without improving the movement endpoint?
-        Whole-window means can discard oscillation amplitude. We test that
-        explanation with a known synthetic signal, then apply two declared
-        summaries equally to trained and matched initial encoders.
+        This notebook loads the **same five-fold, five-seed grid trained in
+        Notebook 17**, including real train/test source membership. It never
+        starts encoder training. In a fresh kernel, it reconstructs expected
+        data/model identities, locates every saved job, and reuses or recomputes
+        its frozen readouts. A missing job produces an explicit status table;
+        a partial grid cannot become a full-grid result.
 
-        This notebook executes independently using small generated examples.
-        It does not establish a new GAVD result. Notebook 17's explicitly enabled
-        real runner uses the same readout helpers and saves the full predictions.
-        ''') ,
-        setup_cell(),
-        code('''
-        from laterality_extensions.motion_readout import (
-            pooling_positive_control, evaluate_motion_readouts, aggregate_motion_study,
-        )
-        control_scores, fixture = pooling_positive_control()
-        display(control_scores)
-        fig, axes = plt.subplots(1, 2, figsize=(10, 3.3), constrained_layout=True)
-        for row in (0, 1, 2):
-            axes[0].plot(fixture["tokens"][row, :, 27, 0], label=f"Generated example {row + 1}")
-        axes[0].set(xlabel="Prepared time block", ylabel="Toy feature value", title="Different amplitudes, zero means")
-        axes[0].legend(fontsize=8)
-        axes[1].bar(control_scores.summary, control_scores.r2, color=["#9fb0bc", "#21679b"])
-        axes[1].set(ylabel="Held-out source R²", title="Known synthetic amplitude contrast")
-        display(fig); plt.close(fig)
-        assert control_scores.set_index("summary").loc["mean_motion", "r2"] > 0.99
-        ''') ,
+        The central question from [TUTORIAL.md](docs/TUTORIAL.md) is whether
+        training learns useful movement information that simple averaging hides.
+        We compare temporal summaries against the same summaries of initial
+        features, then inspect predictor correspondence separately. This makes
+        favorable and unfavorable results equally interpretable.
+        '''),
+        setup_cell(), data_instructions(), configuration_cell(), inputs_cell(),
         md('''
-        ## 1. An evaluation positive control
+        ## 2. Reconstruct the exact training grid before loading results
 
-        Both sides follow a complete sinusoidal cycle. Their mean is zero, while
-        their amplitudes differ. The target is the known amplitude difference,
-        so a summary containing temporal variation can express it. Source-separated
-        ridge selection must recover that signal on generated test sources.
-        This verifies a recoverable example; it does not promise improvement on
-        natural gait or show that real JEPA tokens encode amplitude similarly.
+        Keep `DATA_MODE`, `FOLDS`, `SEEDS`, `EXPERIMENTS`, `DEVICE` and
+        `OUTPUT_ROOT` identical to Notebook 17. The `RUN_TRAINING` variable has
+        no effect in this notebook. Model initialization settings and the resolved
+        backend are part of compatibility; changing them identifies a different
+        job. A saved manifest is not its own proof of compatibility.
 
-        The `mean` representation keeps the existing five left/right sums and
-        differences of mean features. `mean_motion` appends the corresponding
-        standard deviations, mean absolute consecutive feature changes, and
-        valid-support fractions. Only common bilateral support and adjacent
-        observed transitions contribute. These statistics describe prepared
-        tokens and do not restore the original physical timing.
-
-        ## 2. Apply the same summaries to every control
-
-        We widen the ridge grid through 10,000 and select the penalty on inner
-        training-source folds. Boundary choices are reported. Both summaries
-        remain declared outputs: outer-test scores never choose a winning
-        summary or checkpoint. Pretraining can use all outer-training sources,
-        so this inner validation selects the readout only. Selecting an entire
-        pretraining recipe would also require excluding inner validation sources
-        from candidate encoder training.
-        ''') ,
+        The primary declaration expects 50 paired jobs containing 125 encoders.
+        The census verifies test coverage independently of the prediction files.
+        With all five folds, every accepted sequence must appear in a test set
+        exactly once per seed. Changing the scope to a subset creates a pilot.
+        '''),
+        plan_cell(),
         code('''
-        from laterality_extensions.masked_learning import LearningSettings, load_learning_dataset
-        from laterality_extensions.motion_structured_training import train_mask_study
-        data = load_learning_dataset()
-        settings = LearningSettings(steps=2)
-        comparison = train_mask_study(data, settings, experiment="motion")
-        evaluation = evaluate_motion_readouts(comparison, data, settings)
-        expected = pd.DataFrame({"sequence_id": data.sequence_ids[data.test_rows],
-            "source_id": data.source_ids[data.test_rows], "fold": data.fold})
-        predictions = evaluation["predictions"].assign(experiment="motion")
-        demonstration_plan = {"experiments": ("motion",), "seeds": (settings.seed,),
-                              "arms": {"motion": comparison["runs"]}}
-        scored = aggregate_motion_study(predictions, expected, demonstration_plan)
-        display(scored["per_seed"][["condition", "representation", "r2", "mae",
-                                     "evaluated_clips", "evaluated_sources"]])
-        chosen = evaluation["selection"].query("selected")
-        display(chosen[["condition", "representation", "alpha", "at_grid_boundary"]])
-        display(evaluation["diagnostics"][["condition", "representation", "effective_rank", "near_constant"]])
-        ''') ,
+        checkpoint_progress = NotebookTaskProgress("Saved GAVD checkpoint inspection", "stage")
+        status = grid_status_with_progress(plan, inputs, progress=checkpoint_progress)
+        display(status)
+        availability = status.groupby(["experiment", "training_status"]).size().unstack(fill_value=0)
+        ax = availability.plot.bar(stacked=True, figsize=(8, 3.5), title=f"{DATA_MODE.upper()}: saved paired jobs")
+        ax.set(xlabel="Experiment", ylabel="Fold/seed jobs")
+        ax.figure.tight_layout(); display(ax.figure); plt.close(ax.figure)
+        '''),
         md('''
-        Two updates and the small generated cohort are sufficient for software
-        checks. Rankings in this table are not empirical evidence for one mask.
-        Initial online features, direct-pose statistics and the training mean
-        remain visible alongside both trained encoders. Added feature dimensions
-        change the readout's capacity; compare mean-motion summaries against
-        equally summarized initial features before attributing a gain to learning.
+        ## 3. Separate representation learning from readout design
 
-        ## 3. Ask what the JEPA predictor has learned separately
+        | Representation | What is frozen? | Inference it supports |
+        |---|---|---|
+        | `pretrained_online__mean` / `__mean_motion` | Trained online encoder | Content available without the JEPA predictor |
+        | `pretrained_teacher__mean` / `__mean_motion` | Final EMA teacher | Teacher representation quality |
+        | `initial_online__mean` / `__mean_motion` | Same job's initial encoder | Architecture and readout control |
+        | `direct_pose` | Prepared coordinates | Information already accessible from pose summaries |
+        | `training_mean` | Training-source target mean | No-feature prediction baseline |
 
-        Use the same prespecified scattered and bilateral leg-gap masks for
-        every model. The normal pathway remains online encoder to predictor,
-        with the full-input teacher providing targets. Cross-source mismatched
-        targets test clip correspondence, while feature variation and norms
-        diagnose uninformative representations. Each model supplies its own
-        teacher, so raw or normalized loss does not define a common semantic scale.
-        ''') ,
+        `mean` retains the existing five bilateral sums and differences of
+        average features. `mean_motion` also includes temporal standard
+        deviation, mean absolute consecutive feature changes and valid-support
+        fractions. Only common bilateral support and adjacent valid transitions
+        contribute. The summaries describe prepared tokens; they cannot restore
+        physical timing lost during input resizing.
+
+        The ridge grid is 0.01, 0.1, 1, 10, 100, 1,000 and 10,000. Preprocessing
+        and alpha selection use outer-training sources only. This extension uses
+        the comparative readout helper's **three source-separated inner groups**;
+        these are not the registered protocol's four inner model-selection
+        folds. Pretraining sees all outer-training sources, so this inner step
+        selects the readout only. Tuning an entire encoder recipe would require
+        excluding inner-validation sources from candidate pretraining too.
+
+        Both summaries are declared outputs. Outer-test scores cannot choose a
+        summary, checkpoint or alpha. A boundary alpha is reported for inspection;
+        a wide grid alone does not guarantee adequate regularization.
+        '''),
         code('''
-        from laterality_extensions.comparative_evaluation import (
-            make_evaluation_mask_bank, predictor_diagnostics,
-        )
-        valid = data.valid.reshape(len(data.xyz), -1, 4, 33).all(2)
-        bank = make_evaluation_mask_bank(valid, seed=1801)
-        diagnostic_rows = [predictor_diagnostics(run["model"], data, bank, condition=name)
-                           for name, run in comparison["runs"].items()]
-        diagnostic_rows.append(predictor_diagnostics(next(iter(comparison["runs"].values()))["initial_model"],
-                                                     data, bank, condition="initial"))
-        predictor_table = pd.concat(diagnostic_rows, ignore_index=True)
-        display(predictor_table[["condition", "evaluation_mask", "evaluated_clips", "evaluated_sources",
-                                 "feature_mse", "mismatched_target_mse", "normalized_error"]])
-        ''') ,
-        md('''
-        The normalized error divides feature MSE by the source-balanced mean
-        squared teacher-channel value. It is not a centered variance ratio and
-        does not remove all effects of changing teacher scale. The complete table
-        retains mismatch availability and target/prediction variation diagnostics.
-
-        ## 4. Continue from retained encoders before spending more compute
-
-        The optional cell below reanalyses one retained Notebook 12 job without
-        encoder training. Set `LATERALITY_RETAINED_COMPARISON` to its result
-        directory to enable it. The loader checks compatibility against current
-        data, code and runtime before extracting features. New readout artifacts
-        have a separate output directory. Local models are required; tracked
-        numerical summaries alone cannot supply token features. One job's output
-        is a fold/seed diagnostic, not the full declared evaluation grid.
-        ''') ,
-        code('''
-        from laterality_extensions.motion_readout import evaluate_retained_comparison
-        retained_directory = os.getenv("LATERALITY_RETAINED_COMPARISON", "")
-        if retained_directory:
-            retained = evaluate_retained_comparison(retained_directory)
-            display(retained["selection"].query("selected")[[
-                "condition", "representation", "selected_alpha", "at_grid_boundary", "fold", "seed"]])
-            print("Retained job reanalysed; no encoder training. Per-clip predictions saved separately.")
+        evaluation_progress = NotebookTaskProgress("Saved-grid readouts and source-level reporting", "stage")
+        results = collect_gavd_grid_with_progress(plan, inputs, progress=evaluation_progress)
+        print(results["status"])
+        COMPLETE = results["status"] == "Complete"
+        if COMPLETE:
+            print("Verified grid report:", results["directory"])
+            display(results["jobs"])
+            display(results["per_seed"][["experiment", "condition", "representation", "seed",
+                "r2", "mae", "evaluated_clips", "evaluated_sources"]])
         else:
-            print("Retained-encoder reanalysis not requested; no empirical results substituted.")
-        ''') ,
+            display(results["jobs"].query("training_status == 'missing'"))
+            print("Complete these jobs in Notebook 17, then rerun this cell. No substitute model was trained.")
+        '''),
         md('''
+        ## 4. Pool predictions correctly and inspect paired differences
 
-        A gain shared by initial and trained encoders points toward readout design.
-        A learned-over-initial gain confined to temporal summaries would support
-        the hypothesis that averaging obscured useful content. If neither gains,
-        inspect preparation timing and the objective before adding mask mixtures.
-        Report unfavorable results and any near-constant feature diagnostics.
+        R² and MAE are calculated after pooling all declared outer-test folds
+        for each seed, with equal total weight per source video. With the full
+        GAVD grid, each arm/summary/seed has 625 predictions from 93 videos.
+        Fold-specific R² has a different denominator and must not be averaged.
+        A negative pooled R² means worse squared error than the pooled weighted
+        test-target mean; the deployable training-mean control is shown separately.
 
-        Missing-observation prediction remains a separate evaluation. Removing
-        already prepared tokens tests representation sensitivity. A claim about
-        genuinely missing measurements requires removing raw observations before
-        interpolation and normalization, as in Notebook 13. Future-feature
-        decoding remains Notebook 14's past-only task, with its observed-future
-        decoder check, persistence, velocity, direct-past and mismatched-future
-        controls. None of the completion masks here establishes forecasting.
+        For the tables below, positive `delta_r2` and negative `delta_mae` favor
+        the first representation in the contrast. Compare trained against initial
+        within the **same** summary before attributing gains to learning.
+        The saved `paired_intervals` additionally compares each mask arm with its
+        own uniform control using teacher mean-motion features and 2,000 paired
+        source-video bootstrap resamples. Whole videos, clips and paired seed
+        predictions stay together. Those intervals condition on fitted models;
+        they do not measure full retraining uncertainty. Seed variation is separate.
+        '''),
+        code('''
+        if COMPLETE:
+            display(results["summary"])
+            contrasts = readout_contrasts(results["per_seed"])
+            display(contrasts)
+            display(contrasts.groupby(["experiment", "condition", "contrast"], sort=False).agg(
+                mean_delta_r2=("delta_r2", "mean"), seed_sd_delta_r2=("delta_r2", "std"),
+                mean_delta_mae=("delta_mae", "mean")))
+            display(results["paired_intervals"])
+            selected = results["selection"].query("selected")
+            display(selected[["experiment", "condition", "representation", "fold", "seed",
+                              "selected_alpha", "at_grid_boundary"]])
+            display(results["diagnostics"][["experiment", "condition", "representation", "fold", "seed",
+                                            "effective_rank", "near_constant"]])
+        else:
+            print("No complete declared grid: performance and learned-over-initial inference remain pending.")
+        '''),
+        md('''
+        ## 5. Ask whether the predictor preserves clip correspondence
 
-        The [research specification](docs/MOTION_STRUCTURED_MASKING.md) records
-        the proposed real comparisons and distinguishes implemented software,
-        completed synthetic checks and unrun empirical analyses.
-        ''')
+        Frozen encoder readout and JEPA prediction answer different questions.
+        Every saved job also uses the same prespecified evaluation masks (bank
+        seed 1801), including scattered targets and bilateral leg gaps. The normal
+        pathway is online encoder → predictor, with full-input teacher targets.
+        Initial-model controls undergo the same diagnostics.
+
+        Compare `mismatched_target_mse` against
+        `matched_target_mse_on_control_clips`: these use the same subset where a
+        cross-source mismatch exists. A larger mismatch error supports sensitivity
+        to clip correspondence. A smaller raw own-teacher MSE across two trained
+        arms cannot rank semantics, because their teacher spaces and scales differ.
+        `normalized_error` divides by mean squared teacher-channel value, not
+        centered variance. Inspect feature variation and effective rank as well.
+        '''),
+        code('''
+        if COMPLETE:
+            predictor = results["predictor_diagnostics"].copy()
+            predictor["correspondence_gap"] = (
+                predictor.mismatched_target_mse - predictor.matched_target_mse_on_control_clips)
+            display(predictor[["experiment", "condition", "fold", "seed", "evaluation_mask",
+                "evaluated_clips", "evaluated_sources", "feature_mse", "normalized_error",
+                "matched_target_mse_on_control_clips", "mismatched_target_mse", "correspondence_gap"]])
+        else:
+            print("Predictor diagnostics await the same saved GAVD grid; no synthetic scores substituted.")
+        '''),
+        md('''
+        ## 6. Turn the evidence into the next experiment
+
+        | Observed pattern | Supported interpretation | Next investigation |
+        |---|---|---|
+        | Temporal summaries help initial and trained features similarly | Readout design explains much of the gain | Keep the matched initial control; avoid crediting JEPA alone |
+        | Trained-over-initial gain appears under temporal summaries | Averaging may hide learned movement content | Check seeds, source contrasts and regularization diagnostics |
+        | A mask beats its uniform control but not initial features | Relative masking improvement without demonstrated learning benefit | Inspect the objective and preparation before broader mixtures |
+        | Low predictor error accompanies near-constant features | Error reduction may reflect an uninformative target space | Inspect teacher variation and mismatch controls |
+        | Neither readout nor predictor gives useful contrasts | Current representation/task may miss the endpoint | Revisit timing preparation or a focused objective change |
+
+        These are conditional interpretations, not conclusions manufactured from
+        absent results. Report unfavorable outcomes, boundary penalties and
+        unstable seeds. GAVD has informed these hypotheses; even a full new grid
+        remains development evidence for a coordinate-derived endpoint.
+
+        Missing raw measurements require the before-preparation tests in Notebook
+        13. Future prediction requires Notebook 14's past-only inputs and
+        persistence, velocity, mismatched-future and observed-future controls.
+        Completion masks do not establish forecasting or clinical validity.
+        '''),
+        md('''
+        ## 7. Optional teaching check: a signal that temporal averaging destroys
+
+        This last cell is explicitly generated data, separate from the GAVD grid.
+        Two sinusoidal limbs have different amplitudes but zero temporal means.
+        A temporal summary should recover their known amplitude contrast while a
+        mean cannot. This validates a recoverable construction; it does not prove
+        that real JEPA tokens encode amplitude in the same way.
+        '''),
+        code('''
+        from laterality_extensions.motion_readout import pooling_positive_control
+        teaching_progress = NotebookTaskProgress("Generated amplitude control", "stage")
+        teaching_scores, generated = run_notebook_task(pooling_positive_control,
+            progress=teaching_progress, label="Fit and evaluate the two generated-data summaries")
+        display(teaching_scores.assign(evidence="generated amplitude control, not GAVD"))
+        fig, ax = plt.subplots(figsize=(7, 2.8), constrained_layout=True)
+        ax.plot(generated["wave"], label="Unit oscillation (mean zero)")
+        ax.axhline(0, color="gray", linewidth=0.7)
+        ax.set(title="Generated teaching control only", xlabel="Prepared step", ylabel="Amplitude")
+        ax.legend(); display(fig); plt.close(fig)
+        '''),
+        md('''
+        ## 8. Optional: reuse a retained Notebook 12 encoder first
+
+        If compatible older checkpoints are available, this is the cheaper
+        readout test recommended in the tutorial. Set
+        `LATERALITY_RETAINED_COMPARISON` to one Notebook 12 job directory.
+        The loader checks current data, code and runtime, then saves separate
+        readouts without changing the original checkpoint. This optional
+        single-job diagnostic cannot substitute for Notebook 17's full grid.
+        '''),
+        code('''
+        retained_directory = os.getenv("LATERALITY_RETAINED_COMPARISON", "")
+        retained_progress = NotebookTaskProgress("Optional Notebook 12 readout reanalysis", "stage")
+        retained = evaluate_retained_motion_with_progress(retained_directory,
+            progress=retained_progress, enabled=bool(retained_directory))
+        if retained_directory:
+            display(retained["selection"].query("selected")[[
+                "condition", "representation", "fold", "seed", "selected_alpha", "at_grid_boundary"]])
+            print("One retained Notebook 12 job reanalysed without encoder training; separate from the full grid.")
+        else:
+            print("Optional older-checkpoint reanalysis not configured.")
+        '''),
     ])

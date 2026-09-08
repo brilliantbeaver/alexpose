@@ -1223,3 +1223,303 @@ def aggregate_and_save_with_progress(
         raise error
     progress.complete(status="Statistical report complete")
     return report
+
+
+@contextmanager
+def _observe_notebook_calls(module, replacements):
+    """Scope observers to one synchronous notebook task, restoring on interruption.
+
+    Like the older workflow wrappers in this module, these observers decorate
+    module aliases. Do not run wrapped tasks concurrently in the same kernel.
+    Scientific implementations and their source-based cache identities stay intact.
+    """
+    originals = {name: getattr(module, name) for name in replacements}
+    try:
+        for name, replacement in replacements.items():
+            setattr(module, name, replacement)
+        yield
+    finally:
+        for name, original in originals.items():
+            setattr(module, name, original)
+
+
+def run_notebook_task(function, *args, progress: NotebookTaskProgress, label: str,
+                      enabled: bool = True, **kwargs):
+    """Time a single long call, returning its result and propagating exceptions."""
+    progress.start(1)
+    if not enabled:
+        progress.finish_skipped(f"{label} was not configured")
+        return None
+    with progress.unit(1, label):
+        result = function(*args, **kwargs)
+    progress.complete()
+    return result
+
+
+def study_inputs_with_progress(*, progress: NotebookTaskProgress, **kwargs):
+    """Show real preparation, individual fold loads and the final source audit."""
+    from laterality_extensions import motion_gavd as workflow
+
+    mode = kwargs.get("mode", "gavd")
+    folds = tuple(kwargs.get("folds", workflow.FOLDS))
+    kwargs["folds"] = folds
+    progress.start(len(folds) + (mode == "gavd") + 1, profile=mode,
+                   note="Preparation and fold loads differ in cost; ETA adjusts as stages finish.")
+    original_prepare = workflow.prepare_gavd_inputs
+    original_load = workflow.load_learning_dataset
+    log = kwargs.pop("log", None)
+    loaded = 0
+
+    def report(message):
+        progress.update_unit(detail=str(message))
+        if log:
+            log(message)
+
+    def prepare(**request):
+        with progress.unit(1, "Prepare or verify the locked GAVD cohort and splits",
+                           detail="Checking local inventories, QC artifacts and source partitions"):
+            return original_prepare(**request)
+
+    def load(**request):
+        nonlocal loaded
+        with progress.unit(progress.completed_units + 1, f"Load outer fold {request['fold']}",
+                           detail="Load coordinates and validity; verify training and test source roles"):
+            result = original_load(**request)
+        loaded += 1
+        if loaded == len(folds):
+            progress.start_unit(progress.total_units, "Validate the complete fold/seed census",
+                                detail="Check common cohort identity and once-only outer-test coverage")
+        return result
+
+    try:
+        with _observe_notebook_calls(workflow, {"prepare_gavd_inputs": prepare, "load_learning_dataset": load}):
+            result = workflow.study_inputs(**kwargs, log=report)
+        progress.complete_unit()
+        progress.complete(status="Cohort, source folds and seed census ready")
+        return result
+    except BaseException as error:
+        progress.fail(error)
+        raise
+
+
+def audit_training_masks_with_progress(inputs, *, progress: NotebookTaskProgress,
+                                        experiments=("motion",), batch_size=20, log=None):
+    """Observe each fold/seed/experiment and its sampled training-clip batches."""
+    from laterality_extensions import motion_gavd as workflow
+
+    experiments = tuple(experiments)
+    jobs = [(fold, seed, experiment) for fold in inputs["datasets"]
+            for seed in inputs["seeds"] for experiment in experiments]
+    reference = next(iter(inputs["datasets"].values()))
+    progress.start(1 + len(jobs), profile=inputs["mode"],
+                   note="One score-preparation stage, then each fold/seed/experiment; steps count sampled clips.")
+    progress.start_unit(1, "Prepare per-clip motion diagnostics", total_steps=len(reference.xyz))
+    original_scores, original_masks = workflow.motion_scores, workflow.paired_study_masks
+    scored = job_index = 0
+
+    def scores(*args, **kwargs):
+        nonlocal scored
+        result = original_scores(*args, **kwargs)
+        scored += 1
+        progress.update_unit(completed_steps=scored, detail=f"Motion scores: clip {scored}/{len(reference.xyz)}")
+        return result
+
+    def masks(dataset, rows, settings, arms, **kwargs):
+        nonlocal job_index
+        start = int(kwargs.get("step", 0))
+        if start == 0:
+            progress.complete_unit()
+            fold, seed, experiment = jobs[job_index]
+            job_index += 1
+            progress.start_unit(job_index + 1, f"{experiment} · outer fold {fold} · seed {seed}",
+                                detail="Sample masks and audit target counts and context cues",
+                                total_steps=len(dataset.train_rows))
+        result = original_masks(dataset, rows, settings, arms, **kwargs)
+        progress.update_unit(completed_steps=start + len(rows),
+                             detail=f"Sampled training clips {start + 1}–{start + len(rows)}; auditing context cues")
+        return result
+
+    try:
+        with _observe_notebook_calls(workflow, {"motion_scores": scores, "paired_study_masks": masks}):
+            result = workflow.audit_training_masks(inputs, experiments=experiments, batch_size=batch_size, log=log)
+        progress.complete_unit()
+        progress.complete(status="Training-mask coverage and context audit complete")
+        return result
+    except BaseException as error:
+        progress.fail(error)
+        raise
+
+
+@contextmanager
+def _motion_readout_progress(progress):
+    """Expose expensive encoder passes, ridge fits and predictor diagnostics."""
+    from laterality_extensions import motion_readout as readout
+    from laterality_extensions import comparative_evaluation as evaluation
+
+    original_encode, original_fit = readout.encode_motion_summaries, readout.fit_source_readout
+    original_predictor = evaluation.predictor_diagnostics
+    passes = fits = 0
+
+    def encode(encoder, dataset, **kwargs):
+        nonlocal passes
+        passes += 1
+        progress.update_unit(detail=f"Frozen encoder pass {passes}: {len(dataset.xyz)} clips")
+        return original_encode(encoder, dataset, **kwargs)
+
+    def fit(*args, **kwargs):
+        nonlocal fits
+        fits += 1
+        progress.update_unit(detail=f"Readout {fits}: select ridge penalty using training sources only")
+        return original_fit(*args, **kwargs)
+
+    def predictor(*args, **kwargs):
+        progress.update_unit(detail=f"Predictor correspondence diagnostics: {kwargs.get('condition', 'encoder')}")
+        return original_predictor(*args, **kwargs)
+
+    with _observe_notebook_calls(readout, {"encode_motion_summaries": encode, "fit_source_readout": fit}), \
+         _observe_notebook_calls(evaluation, {"predictor_diagnostics": predictor}):
+        yield
+
+
+def grid_status_with_progress(plan, inputs, *, progress: NotebookTaskProgress):
+    """Validate checkpoint availability with a step for each paired job."""
+    from laterality_extensions import motion_gavd as workflow
+
+    total = len(plan["folds"]) * len(plan["seeds"]) * len(plan["experiments"])
+    progress.start(1, profile=inputs["mode"])
+    try:
+        with progress.unit(1, "Verify saved training jobs", total_steps=total):
+            result = _motion_grid_status(workflow, plan, inputs, progress)
+        missing = int(result.training_status.eq("missing").sum())
+        progress.complete(status=f"Checkpoint inspection complete · {missing}/{total} jobs missing")
+        return result
+    except BaseException as error:
+        progress.fail(error)
+        raise
+
+
+def _motion_grid_status(workflow, plan, inputs, progress, *, call=None):
+    original_jobs = workflow._jobs
+    original_status = call or workflow.grid_status
+
+    def jobs(*args, **kwargs):
+        for index, job in enumerate(original_jobs(*args, **kwargs), start=1):
+            progress.update_unit(detail=f"Check {job['experiment']} · fold {job['fold']} · seed {job['seed']}")
+            yield job
+            progress.update_unit(completed_steps=index)
+
+    with _observe_notebook_calls(workflow, {"_jobs": jobs}):
+        return original_status(plan, inputs)
+
+
+def _motion_grid_with_progress(plan, inputs, *, progress, training, enabled, log):
+    from pathlib import Path
+    from laterality_extensions import motion_gavd as workflow
+    from laterality_extensions import motion_structured_training as training_module
+
+    count = len(plan["folds"]) * len(plan["seeds"]) * len(plan["experiments"])
+    # The unchanged runner evaluates each trained job, then reloads those tables
+    # when collecting the complete grid. Count both actual passes explicitly.
+    total = 3 * count + 2 if training and enabled else count + 2
+    progress.start(total, profile=f"{inputs['mode']} · {plan['scope']}",
+                   note="Stages include training, readouts, cache checks and pooled reporting. Their costs differ.")
+    original_train, original_evaluation = workflow.train_mask_study, workflow._evaluation
+    original_status, original_aggregate = workflow.grid_status, workflow.aggregate_motion_study
+
+    def complete_cached_stage(reused):
+        # Cache availability is discovered stage by stage. Remove validated hits
+        # from the remaining-computation estimate without calling them candidates
+        # that were known at the start of the entire workflow.
+        if reused:
+            progress.new_candidate_units = max(progress.new_candidate_units - 1, 0)
+        progress.complete_unit(reused=reused)
+
+    def train(dataset, settings, **kwargs):
+        identity = workflow.mask_study_identity(dataset, settings, kwargs["experiment"], kwargs["arms"],
+                                               kwargs.get("checkpoint_steps", ()))
+        cached = (Path(kwargs["output_dir"]) / workflow.canonical_json_digest(identity)).exists()
+        progress.start_unit(progress.completed_units + 1,
+            f"Train {kwargs['experiment']} · outer fold {settings.fold} · seed {settings.seed}",
+            candidate_cached=cached, total_steps=0 if cached else settings.steps,
+            detail="Validate cached encoders" if cached else "Validate the complete mask schedule, then optimize paired encoders")
+        original_callback = kwargs.get("progress")
+        original_masks = training_module.paired_study_masks
+        mask_calls = 0
+
+        def masks(*args, **request):
+            nonlocal mask_calls
+            result = original_masks(*args, **request)
+            mask_calls += 1
+            progress.update_unit(detail=("Checking mask feasibility" if mask_calls == 1 else
+                f"Validate training mask schedule: {mask_calls - 1}/{settings.steps} batches"))
+            return result
+
+        def update(event):
+            progress.update_unit(completed_steps=event["step"],
+                detail=f"Paired optimizer update {event['step']}/{event['total_steps']} · {event['encoders']} encoders")
+            if original_callback:
+                original_callback(event)
+
+        kwargs["progress"] = update
+        with _observe_notebook_calls(training_module, {"paired_study_masks": masks}):
+            result = original_train(dataset, settings, **kwargs)
+        complete_cached_stage(bool(result.get("reused", False)))
+        return result
+
+    def evaluate(job, request):
+        identity = workflow.motion_readout_identity(job["identity"], include_predictor=True)
+        cached = (Path(request["output_dir"]) / "evaluations" / workflow.canonical_json_digest(identity)).exists()
+        progress.start_unit(progress.completed_units + 1,
+            f"Readouts {job['experiment']} · outer fold {job['fold']} · seed {job['seed']}",
+            candidate_cached=cached, detail="Validate cached tables" if cached else "Load frozen encoders and fit training-source readouts")
+        with _motion_readout_progress(progress):
+            result = original_evaluation(job, request)
+        complete_cached_stage(cached)
+        return result
+
+    def status(request, data):
+        progress.start_unit(progress.completed_units + 1, "Verify the complete saved training grid", total_steps=count)
+        result = _motion_grid_status(workflow, request, data, progress, call=original_status)
+        progress.complete_unit()
+        return result
+
+    def aggregate(*args, **kwargs):
+        progress.start_unit(progress.completed_units + 1, "Pool held-out predictions and save the grid report",
+            detail="Verify coverage, pool folds within each seed and bootstrap paired source-video contrasts")
+        return original_aggregate(*args, **kwargs)
+
+    try:
+        with _observe_notebook_calls(workflow, {"train_mask_study": train, "_evaluation": evaluate,
+                                              "grid_status": status, "aggregate_motion_study": aggregate}):
+            result = (workflow.run_gavd_grid(plan, inputs, enabled=enabled, log=log) if training
+                      else workflow.collect_gavd_grid(plan, inputs, log=log))
+        if result["status"] == "Complete":
+            progress.complete_unit()
+            progress.complete(status="Training and held-out evaluation complete" if training else "Saved-grid evaluation complete")
+        elif training and not enabled:
+            progress.finish_skipped(result["status"], status="Checkpoint inspection complete · training disabled")
+        else:
+            progress.block(f"{result.get('missing_jobs', 0)} saved jobs missing. Run them in Notebook 17.")
+        return result
+    except BaseException as error:
+        progress.fail(error)
+        raise
+
+
+def run_gavd_grid_with_progress(plan, inputs, *, progress: NotebookTaskProgress, enabled=False, log=None):
+    """Notebook 17: observe training/evaluation while preserving the enable flag."""
+    return _motion_grid_with_progress(plan, inputs, progress=progress, training=True, enabled=enabled, log=log)
+
+
+def collect_gavd_grid_with_progress(plan, inputs, *, progress: NotebookTaskProgress, log=None):
+    """Notebook 18: inspect/reanalyse saved jobs without invoking training."""
+    return _motion_grid_with_progress(plan, inputs, progress=progress, training=False, enabled=False, log=log)
+
+
+def evaluate_retained_motion_with_progress(directory, *, progress: NotebookTaskProgress, enabled=True, **kwargs):
+    """Observe the optional older-encoder readout without starting pretraining."""
+    from laterality_extensions.motion_readout import evaluate_retained_comparison
+
+    with _motion_readout_progress(progress):
+        return run_notebook_task(evaluate_retained_comparison, directory, progress=progress,
+            label="Validate retained encoders and evaluate frozen readouts", enabled=enabled, **kwargs)
