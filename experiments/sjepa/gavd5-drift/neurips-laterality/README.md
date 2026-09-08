@@ -10,6 +10,17 @@ annotation census, inner-validation counts, and leakage controls.
 
 ## Run order
 
+The next masking investigation is implemented in notebooks
+[15 — Motion weighting](15_motion_weighted_masking.ipynb),
+[16 — Structured masks and context](16_structured_masking_and_context.ipynb),
+[17 — Controlled pretraining](17_motion_and_structure_pretraining.ipynb), and
+[18 — Movement information and readouts](18_motion_information_and_readout.ipynb).
+Their [source review and experiment specification](docs/MOTION_STRUCTURED_MASKING.md)
+connect MAMP, S-JEPA and structured-masking research to the tutorial's Direction A.
+Defaults use generated data. The real plan preserves the 1,200-update reference
+recipe and requires explicit enablement plus the existing local data artifacts.
+Verify with `python scripts/verify_motion_notebooks.py --execute` from this directory.
+
 1. `00_protocol_and_governance.ipynb` — freeze the claim and check submission governance.
 2. `01_cohort_and_target_audit.ipynb` — build a QC-only cohort and validate the paired-valid target.
 3. `02_source_level_splits.ipynb` — create source-balanced outer and inner folds.

@@ -21,6 +21,10 @@ NOTEBOOKS = {
     "12": "12_controlled_masking_pretraining.ipynb",
     "13": "13_masking_encoder_and_predictor_evaluation.ipynb",
     "14": "14_future_features_and_movement_prediction.ipynb",
+    "15": "15_motion_weighted_masking.ipynb",
+    "16": "16_structured_masking_and_context.ipynb",
+    "17": "17_motion_and_structure_pretraining.ipynb",
+    "18": "18_motion_information_and_readout.ipynb",
 }
 
 
@@ -72,10 +76,10 @@ def main() -> None:
                     f"Cell sources in {path.name} differ from its builder."
                 )
         elif args.check:
-            if not path.is_file() or path.read_text() != rendered:
+            if not path.is_file() or path.read_text(encoding="utf-8") != rendered:
                 raise SystemExit(f"Regenerate {path.name} with this builder.")
         else:
-            path.write_text(rendered)
+            path.write_text(rendered, encoding="utf-8")
         action = "Checked sources in" if args.check_sources else (
             "Checked" if args.check else "Built"
         )

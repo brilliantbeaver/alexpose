@@ -2,6 +2,17 @@
 
 A guide to our research questions, findings, and next experiments. Notebook evidence reviewed on 8 September 2026; related literature and workshop information were last checked on 7 September 2026.
 
+The next implementation is available in notebooks [15](../15_motion_weighted_masking.ipynb),
+[16](../16_structured_masking_and_context.ipynb), [17](../17_motion_and_structure_pretraining.ipynb)
+and [18](../18_motion_information_and_readout.ipynb). They examine the MAMP code's
+motion weighting, structured target geometry, paired JEPA training and
+motion-sensitive frozen readouts. The [source review and experiment specification](MOTION_STRUCTURED_MASKING.md)
+records the literature checked on 8 September 2026 and the precise adaptations.
+Their examples are synthetic software checks; the empirical findings below are
+unchanged. The new real-data comparisons and reanalysis of retained encoders
+remain unrun. This implementation follows Direction A before expanding the
+forecasting work.
+
 ## Contents
 
 - [Research question and current finding](#1-the-question-connecting-the-work)
