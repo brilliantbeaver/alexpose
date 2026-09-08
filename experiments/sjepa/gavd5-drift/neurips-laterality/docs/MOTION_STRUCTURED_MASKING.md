@@ -25,11 +25,13 @@ Neither explanation follows automatically from the observed result. The new
 suite measures available context cues, tests a recoverable movement signal,
 and applies the same summaries to initial and trained encoders.
 
-The raw cohort, split artifacts and trained model directories are not present
-in this checkout. The tracked numerical summaries support reading the old
+The raw pose cache is available locally; the revised GAVD workflow has prepared
+the 625-clip cohort and five source folds using the original protocol. New full
+training-grid checkpoints remain absent. The tracked numerical summaries support reading the old
 results and recovering their configuration, but cannot supply model features.
-Real-data validation therefore requires the existing local artifacts. The
-notebooks never create replacement empirical results from generated data.
+The [GAVD workflow guide](MOTION_GAVD_WORKFLOW.md) explains exact-inventory
+recovery, input preparation and the shared five-fold/five-seed execution path.
+The notebooks never create replacement empirical results from generated data.
 
 ## What the primary sources establish
 
@@ -211,23 +213,30 @@ From the repository root, using its Python environment:
 
 ```text
 python neurips-laterality/scripts/build_research_notebooks.py --only 15 16 17 18
-python -m unittest discover -s neurips-laterality/tests -p test_motion_structured.py -v
+python -m unittest discover -s neurips-laterality/tests -p test_motion*.py -v
 python neurips-laterality/scripts/verify_motion_notebooks.py --execute
+python neurips-laterality/scripts/verify_motion_notebooks.py --execute --data-mode gavd
 ```
 
 Open notebooks 15, 16, 17 and 18 in order. Source notebooks remain output-free;
-verification retains executed teaching copies and vector figures separately
-under `executed/motion_structured`. It forces all real-data flags off in the
-child kernels, regardless of inherited environment values.
+verification retains executed copies and vector figures separately under
+`executed/motion_structured`. The verifier forces real training off. Its default
+mode explicitly selects generated software checks; `--data-mode gavd` exercises
+real cohort/split loading and the full training-mask audits without launching
+the real training grid.
 
-Notebook 17 supports `LATERALITY_MOTION_VALIDATE_REAL=1` for read-only cohort
-and mask-feasibility checks and `LATERALITY_MOTION_RUN_REAL=1` to explicitly run
-the displayed plan. `LATERALITY_MOTION_EXPERIMENTS` defaults to `motion,regions`;
-`LATERALITY_DEVICE` selects the model device. To declare a smaller pilot, call
-`plan_mask_study(folds=(0,), seeds=(42,), experiments=("motion",))` and inspect
-its settings, aggregate counts and `workload` before enabling `run_mask_study`.
+All four notebooks default to `DATA_MODE="gavd"` and prepare/reuse the real
+cohort and splits. In Notebook 17, set `RUN_TRAINING=True` in the configuration
+cell, or use `LATERALITY_RESEARCH_RUN_REAL=1` (study alias:
+`LATERALITY_MOTION_RUN_REAL=1`). `LATERALITY_MOTION_EXPERIMENTS` defaults to
+`motion,regions`; `LATERALITY_DEVICE` selects the device. Change the visible
+`FOLDS`/`SEEDS` declaration for a pilot and keep the same configuration in 18.
+Inspect the workload before enabling `run_gavd_grid`. Notebook 18 uses
+`collect_gavd_grid`, which cannot start encoder training.
 
-Real artifacts are isolated under `artifacts/motion_structured`. The plan is
-available without the local raw-data artifacts, using the tracked reference
-recipe. Input validation and training require those artifacts and fail clearly
-when they are missing. No old notebook, protocol, result or checkpoint is rewritten.
+Real study artifacts are isolated under `artifacts/motion_structured`, with
+content-checked training/evaluation jobs and complete grid indexes. The
+low-level `plan_mask_study` remains available without raw data for workload
+inspection. The notebooks' default path validates real inputs first and fails
+clearly if the registered inventory cannot be recovered. No old notebook,
+protocol, result or checkpoint is rewritten.

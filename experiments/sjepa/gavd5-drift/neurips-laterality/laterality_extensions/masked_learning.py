@@ -14,6 +14,8 @@ import json
 import math
 import os
 import platform
+import shutil
+import subprocess
 import time
 from dataclasses import asdict, dataclass, replace
 from pathlib import Path
@@ -126,6 +128,97 @@ def resolve_learning_device(requested: str = "auto") -> torch.device:
     if device.type == "mps" and not torch.backends.mps.is_available():
         raise RuntimeError("MPS was requested for masking training but is unavailable")
     return device
+
+
+def learning_hardware_report(requested: str = "auto") -> dict[str, Any]:
+    """Describe the effective backend and expose a CPU-only CUDA install.
+
+    Device auto-selection can only see accelerators compiled into PyTorch.  On
+    Windows it is therefore possible for ``nvidia-smi`` to see a capable GPU
+    while a PyPI CPU wheel makes ``torch.cuda.is_available()`` false.  The
+    notebook needs to make that expensive failure mode visible *before* a
+    150,000-update grid starts.
+    """
+    nvidia = []
+    executable = shutil.which("nvidia-smi")
+    if executable:
+        try:
+            completed = subprocess.run(
+                [
+                    executable,
+                    "--query-gpu=name,memory.total,driver_version,compute_cap",
+                    "--format=csv,noheader,nounits",
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=5,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            )
+            for index, line in enumerate(completed.stdout.splitlines()):
+                values = [value.strip() for value in line.split(",")]
+                if len(values) == 4:
+                    name, memory_mib, driver, capability = values
+                    nvidia.append({
+                        "index": index,
+                        "name": name,
+                        "memory_mib": int(memory_mib),
+                        "driver": driver,
+                        "compute_capability": capability,
+                    })
+        except (OSError, subprocess.SubprocessError, ValueError):
+            # PyTorch remains the authority for execution.  A failed optional
+            # hardware inventory must not make CPU or MPS notebooks unusable.
+            nvidia = []
+
+    error = None
+    try:
+        resolved = resolve_learning_device(requested)
+    except (RuntimeError, ValueError) as caught:
+        resolved = None
+        error = str(caught)
+    report: dict[str, Any] = {
+        "requested_device": str(requested),
+        "resolved_device": str(resolved) if resolved is not None else None,
+        "torch_version": str(torch.__version__),
+        "torch_cuda_build": str(torch.version.cuda) if torch.version.cuda else None,
+        "cuda_available": bool(torch.cuda.is_available()),
+        "cudnn_version": torch.backends.cudnn.version(),
+        "mps_available": bool(
+            hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
+        ),
+        "nvidia_gpus": nvidia,
+        "resolution_error": error,
+        "precision": "float32",
+        "compile": False,
+    }
+    if nvidia and not torch.cuda.is_available():
+        report["status"] = "NVIDIA GPU detected, but this PyTorch build cannot use CUDA"
+        report["action"] = (
+            "Install a CUDA-enabled PyTorch wheel in this exact notebook environment "
+            "using https://pytorch.org/get-started/locally/, restart the kernel, and "
+            "verify torch.cuda.is_available() before real training."
+        )
+    elif error:
+        report["status"] = "Requested accelerator is unavailable"
+        report["action"] = error
+    elif resolved is not None and resolved.type == "cuda":
+        index = resolved.index if resolved.index is not None else torch.cuda.current_device()
+        report["status"] = "CUDA ready"
+        report["active_accelerator"] = {
+            "index": int(index),
+            "name": torch.cuda.get_device_name(index),
+            "memory_mib": int(torch.cuda.get_device_properties(index).total_memory // 2**20),
+            "compute_capability": ".".join(map(str, torch.cuda.get_device_capability(index))),
+        }
+    elif resolved is not None and resolved.type == "mps":
+        report["status"] = "Apple MPS ready"
+    else:
+        report["status"] = "CPU execution"
+        report["action"] = (
+            "Real training will be slow on CPU; use an explicit accelerator when available."
+        )
+    return report
 
 
 def configure_learning_runtime(

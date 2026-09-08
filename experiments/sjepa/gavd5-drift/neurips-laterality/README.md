@@ -17,9 +17,15 @@ The next masking investigation is implemented in notebooks
 [18 — Movement information and readouts](18_motion_information_and_readout.ipynb).
 Their [source review and experiment specification](docs/MOTION_STRUCTURED_MASKING.md)
 connect MAMP, S-JEPA and structured-masking research to the tutorial's Direction A.
-Defaults use generated data. The real plan preserves the 1,200-update reference
-recipe and requires explicit enablement plus the existing local data artifacts.
-Verify with `python scripts/verify_motion_notebooks.py --execute` from this directory.
+All four default to real GAVD and display the five-fold, five-seed train/test
+census. Missing cohort/split artifacts can be prepared using the same rules as
+01–02. Notebook 17 preserves the 1,200-update recipe; set `RUN_TRAINING=True`
+in its configuration cell to run 50 paired jobs (125 encoders). Notebook 18
+reopens that complete saved grid without encoder training. See the
+[step-by-step GAVD run guide](docs/MOTION_GAVD_WORKFLOW.md).
+Verify with `python scripts/verify_motion_notebooks.py --execute --data-mode gavd`
+for real-input audits with training disabled, or omit `--data-mode` for explicit
+generated-data software checks.
 
 1. `00_protocol_and_governance.ipynb` — freeze the claim and check submission governance.
 2. `01_cohort_and_target_audit.ipynb` — build a QC-only cohort and validate the paired-valid target.
