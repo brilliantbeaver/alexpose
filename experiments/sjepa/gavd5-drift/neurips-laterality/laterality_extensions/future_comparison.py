@@ -379,15 +379,19 @@ def future_motion_baselines(data: FutureExamples) -> tuple[np.ndarray, np.ndarra
     return persistent, velocity
 
 
-def feature_diagnostics(features: np.ndarray) -> dict:
-    centered = features - features.mean(0)
-    energy = np.linalg.svd(centered, compute_uv=False) ** 2
+def feature_diagnostics(features: np.ndarray, sources: np.ndarray | None = None) -> dict:
+    weights = np.ones(len(features)) if sources is None else source_weights(sources)
+    weights = weights / weights.sum()
+    mean = np.average(features, axis=0, weights=weights)
+    centered = features - mean
+    energy = np.linalg.svd(centered * np.sqrt(weights[:, None]), compute_uv=False) ** 2
     probabilities = energy / energy.sum() if energy.sum() > 1e-16 else np.zeros_like(energy)
     positive = probabilities[probabilities > 0]
     rank = float(np.exp(-np.sum(positive * np.log(positive)))) if len(positive) else 0.0
-    variation = float(features.std(0).mean())
+    variation = float(np.sqrt(np.average(centered ** 2, axis=0, weights=weights)).mean())
     return {"mean_feature_std": variation, "effective_rank": rank,
-            "mean_feature_norm": float(np.linalg.norm(features, axis=1).mean()),
+            "mean_feature_norm": float(np.average(np.linalg.norm(features, axis=1), weights=weights)),
+            "weighting": "Equal total weight per video, across its clip-horizon examples" if sources is not None else "Equal example weight",
             "status": "Nearly constant features: usefulness is unresolved" if variation < 1e-6 else "Variation present; movement usefulness needs its own score"}
 
 
@@ -611,12 +615,15 @@ def run_future_comparison(data: FutureExamples, spec: ComparisonForecastSpec, *,
     diagnostic_rows = []
     for arm, arm_features in (("Matched", features), ("Mismatched", wrong_features)):
         for field in ("past_online", "past_teacher", "future_teacher", "predicted_future"):
-            diagnostic_rows.append({"arm": arm, "feature": field, **feature_diagnostics(arm_features[field][test])})
+            diagnostic_rows.append({"arm": arm, "feature": field,
+                                    **feature_diagnostics(arm_features[field][test], data.sources[test])})
     latent = []
     for arm, arm_features in (("Matched", features), ("Mismatched", wrong_features)):
         target, predicted = arm_features["future_teacher"][test], arm_features["predicted_future"][test]
-        denominator = float(np.square(target - target.mean(0)).mean())
-        error = float(np.square(predicted - target).mean())
+        weights = source_weights(data.sources[test])
+        target_mean = np.average(target, axis=0, weights=weights)
+        denominator = float(np.average(np.square(target - target_mean).mean(-1), weights=weights))
+        error = float(np.average(np.square(predicted - target).mean(-1), weights=weights))
         latent.append({"arm": arm, "feature_mse": error, "target_variance_denominator": denominator,
                        "normalized_error": error / denominator if denominator > 1e-12 else None,
                        "scope": "Own-teacher diagnostic; teachers do not provide a common latent measurement scale"})
@@ -809,7 +816,7 @@ def run_real_future_comparison(*, enabled=False, validate_inputs=False,
                            "train_examples": len(train), "test_examples": len(test), "coverage": data.coverage})
     if not enabled:
         return {"plan": plan, "input_validation": validation, "status": "Inputs validated; training disabled"}
-    outputs = []
+    outputs, error_tables = [], []
     for row in plan["runs"]:
         data, split = prepared[row["input_landmarks"]], splits[row["fold"]]
         run_spec = replace(spec, input_joints=data.input_joints, seed=row["seed"])
@@ -817,10 +824,28 @@ def run_real_future_comparison(*, enabled=False, validate_inputs=False,
         reference["outer_fold"] = row["fold"]
         destination = Path(row["output"])
         if destination.exists():
-            load_future_result(destination, reference)
+            retained = load_future_result(destination, reference)
+            error_tables.append(saved_forecast_error_rows(retained))
             outputs.append({"output": str(destination), "status": "Compatible completed result reused"})
             continue
         result = run_future_comparison(data, run_spec, train_sources=split["train_sources"], test_sources=split["test_sources"])
         save_future_result(destination, result, data, reference)
+        retained = load_future_result(destination, reference)
+        error_tables.append(saved_forecast_error_rows(retained))
         outputs.append({"output": str(destination), "status": "Completed new forecasting comparison"})
-    return {"plan": plan, "input_validation": validation, "outputs": outputs, "status": "Requested runs complete"}
+    reference_data = prepared[len(input_sets[0])]
+    source_fold = {str(source): fold for fold in folds for source in splits[fold]["test_sources"]}
+    declared = np.flatnonzero(np.isin(reference_data.sources, list(source_fold)))
+    expected = pd.DataFrame({"sequence_id": reference_data.sequence_ids[declared],
+                             "source_id": reference_data.sources[declared],
+                             "horizon_seconds": reference_data.horizon[declared],
+                             "fold": [source_fold[str(source)] for source in reference_data.sources[declared]]})
+    errors = pd.concat(error_tables, ignore_index=True)
+    aggregate = aggregate_future_error_rows(errors, expected, seeds=seeds,
+        input_sizes=tuple(len(joints) for joints in input_sets), methods=tuple(retained["prediction_methods"]))
+    # The declared pilot may be complete within its requested subset of folds.
+    aggregate["per_seed"]["scope"] = plan["scope"]
+    aggregate["summary"]["scope"] = plan["scope"]
+    return {"plan": plan, "input_validation": validation, "outputs": outputs,
+            "aggregate": aggregate, "expected_coverage": expected, "error_rows": errors,
+            "status": "Requested runs complete; out-of-fold predictions aggregated within each seed"}
