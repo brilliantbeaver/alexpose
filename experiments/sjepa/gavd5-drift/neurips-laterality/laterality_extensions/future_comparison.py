@@ -55,6 +55,11 @@ class ComparisonForecastSpec(ForecastSpec):
             raise ValueError("Invalid validation or optimizer settings")
 
 
+def forecast_configuration(spec: ComparisonForecastSpec) -> dict:
+    """Report actual settings; the inherited fixed ridge penalty is unused."""
+    return {name: value for name, value in asdict(spec).items() if name != "ridge_alpha"}
+
+
 @dataclass
 class FutureExamples:
     past: np.ndarray
@@ -432,14 +437,17 @@ def score_future_predictions(predictions: dict[str, np.ndarray], data: FutureExa
 
 
 def forecast_error_rows(predictions: dict[str, np.ndarray], *, sources, sequence_ids,
-                        horizon, target, valid, seed: int, fold: int,
-                        input_landmarks: int) -> pd.DataFrame:
+                        horizon, target, valid, actual_times, seed: int, fold: int,
+                        input_landmarks: int, checkpoint: str, updates: int,
+                        comparison_reference="declared_synthetic_comparison") -> pd.DataFrame:
     """One retained error per clip, horizon, and method, including unavailable rows.
 
     The common endpoint mask is retained as a reference so later aggregation can
     reject input/model comparisons measured on different landmark observations.
     """
     common = np.asarray(valid).copy()
+    if np.shape(actual_times) != np.shape(valid) or not checkpoint or updates < 1:
+        raise ValueError("Declare actual endpoint times, checkpoint identity, and training updates")
     for predicted in predictions.values():
         if np.shape(predicted) != np.shape(target):
             raise ValueError("Forecast arrays use different coordinate endpoints")
@@ -447,28 +455,40 @@ def forecast_error_rows(predictions: dict[str, np.ndarray], *, sources, sequence
     rows = []
     for index in range(len(sources)):
         endpoint_reference = hashlib.sha256(np.asarray(target[index]).tobytes() + np.asarray(valid[index]).tobytes()).hexdigest()
+        time_reference = hashlib.sha256(np.asarray(actual_times[index]).tobytes()).hexdigest()
         coverage_reference = "".join("1" if item else "0" for item in common[index])
         for method, predicted in predictions.items():
             available = bool(common[index].any())
+            method_available = valid[index] & np.isfinite(predicted[index]).all(-1)
             error = float(np.square(predicted[index, common[index]] - target[index, common[index]]).mean()) if available else float("nan")
             rows.append({"source_id": str(sources[index]), "sequence_id": str(sequence_ids[index]),
                          "horizon_seconds": float(horizon[index]), "seed": int(seed), "fold": int(fold),
                          "input_landmarks": int(input_landmarks), "method": method,
+                         "comparison_reference": comparison_reference,
+                         "checkpoint": checkpoint, "training_updates": int(updates),
                          "clip_mse": error, "available": available,
                          "observed_endpoints": int(valid[index].sum()),
+                         "method_unavailable_endpoints": int((valid[index] & ~method_available).sum()),
                          "common_endpoints": int(common[index].sum()),
-                         "target_reference": endpoint_reference, "coverage_reference": coverage_reference})
+                         "target_reference": endpoint_reference, "time_reference": time_reference,
+                         "coverage_reference": coverage_reference})
     return pd.DataFrame(rows)
 
 
 def saved_forecast_error_rows(saved: dict) -> pd.DataFrame:
     arrays = saved["arrays"]
     configuration = saved["reference"]["configuration"]
+    paired_configuration = {name: value for name, value in configuration.items() if name not in {"seed", "input_joints"}}
+    comparison_reference = hashlib.sha256(json.dumps(
+        {"configuration": paired_configuration, "implementation": saved["reference"]["implementation"],
+         "libraries": saved["reference"]["libraries"]}, sort_keys=True).encode()).hexdigest()
     return forecast_error_rows(
         {name: arrays[f"prediction_{index}"] for index, name in enumerate(saved["prediction_methods"])},
         sources=arrays["sources"], sequence_ids=arrays["sequence_ids"], horizon=arrays["horizon"],
         target=arrays["target"], valid=arrays["valid"], seed=configuration["seed"],
         fold=saved["reference"].get("outer_fold", -1), input_landmarks=len(configuration["input_joints"]),
+        actual_times=arrays["actual_times"], checkpoint="final", updates=configuration["updates"],
+        comparison_reference=comparison_reference,
     )
 
 
@@ -477,7 +497,8 @@ def validate_future_error_rows(rows: pd.DataFrame, expected: pd.DataFrame, *,
     identity = ["sequence_id", "horizon_seconds"]
     keys = ["input_landmarks", "method", "seed", *identity]
     required = {*keys, "source_id", "fold", "clip_mse", "available", "common_endpoints",
-                "observed_endpoints", "target_reference", "coverage_reference"}
+                "observed_endpoints", "target_reference", "coverage_reference", "comparison_reference",
+                "time_reference", "checkpoint", "training_updates", "method_unavailable_endpoints"}
     if rows.empty or not required <= set(rows) or rows.duplicated(keys).any():
         raise ValueError("Missing columns, empty data, or duplicate forecast predictions")
     if (not {*identity, "source_id", "fold"} <= set(expected)
@@ -495,6 +516,12 @@ def validate_future_error_rows(rows: pd.DataFrame, expected: pd.DataFrame, *,
             raise ValueError("Declare unique nonempty seeds, input choices, and methods before aggregation")
     if rows.groupby(identity).target_reference.nunique().max() != 1:
         raise ValueError("Compared predictions use different coordinate targets")
+    if rows.comparison_reference.nunique(dropna=False) != 1:
+        raise ValueError("Compared forecasting runs use incompatible training recipes or implementations")
+    if rows.checkpoint.nunique(dropna=False) != 1 or rows.training_updates.nunique(dropna=False) != 1:
+        raise ValueError("Compared forecasting runs use different checkpoints or training exposure")
+    if rows.groupby(identity).time_reference.nunique(dropna=False).max() != 1:
+        raise ValueError("Compared forecasting runs measure endpoints at different actual times")
     if rows.groupby(identity).coverage_reference.nunique().max() != 1:
         raise ValueError("Compared predictions use different endpoint coverage; declare a shared comparison first")
     available = rows.available.to_numpy()
@@ -530,12 +557,17 @@ def aggregate_future_error_rows(rows: pd.DataFrame, expected: pd.DataFrame, **de
                           "evaluated_sources": available.source_id.nunique(),
                           "evaluated_clips": available.sequence_id.nunique(), "retained_examples": len(group),
                           "unavailable_examples": int((~group.available).sum()),
-                          "common_endpoints": int(group.common_endpoints.sum()), "scope": checked.attrs["scope"]})
+                          "common_endpoints": int(group.common_endpoints.sum()),
+                          "observed_endpoints": int(group.observed_endpoints.sum()),
+                          "method_unavailable_endpoints": int(group.method_unavailable_endpoints.sum()),
+                          "scope": checked.attrs["scope"]})
     per_seed = pd.DataFrame(summaries)
     summary = per_seed.groupby(grouping[:-1], as_index=False).agg(
         mean_rmse=("source_balanced_rmse", "mean"), seed_sd_rmse=("source_balanced_rmse", "std"),
         evaluated_seeds=("seed", "nunique"), evaluated_sources_min=("evaluated_sources", "min"),
         evaluated_clips_min=("evaluated_clips", "min"), unavailable_examples_max=("unavailable_examples", "max"),
+        observed_endpoints_min=("observed_endpoints", "min"), common_endpoints_min=("common_endpoints", "min"),
+        method_unavailable_endpoints_max=("method_unavailable_endpoints", "max"),
         scope=("scope", "first"))
     return {"per_seed": per_seed, "summary": summary}
 
@@ -627,7 +659,7 @@ def run_future_comparison(data: FutureExamples, spec: ComparisonForecastSpec, *,
         latent.append({"arm": arm, "feature_mse": error, "target_variance_denominator": denominator,
                        "normalized_error": error / denominator if denominator > 1e-12 else None,
                        "scope": "Own-teacher diagnostic; teachers do not provide a common latent measurement scale"})
-    return {"configuration": asdict(spec), "status": data.status, "scores": scores,
+    return {"configuration": forecast_configuration(spec), "status": data.status, "scores": scores,
             "prediction_coverage": coverage, "feature_diagnostics": pd.DataFrame(diagnostic_rows),
             "latent_diagnostics": latent, "predictions": predictions, "decoders": decoders,
             "matched": fitted, "mismatched": mismatched, "train_indices": train, "test_indices": test,
@@ -658,7 +690,7 @@ def plan_future_comparison(spec: ComparisonForecastSpec | None = None, *,
     return {"scope": "Complete declared comparison" if full else "Pilot or partial declared comparison",
             "runs": rows, "model_fits": len(rows) * 2, "optimizer_updates": len(rows) * 2 * spec.updates,
             "source_example_draws": len(rows) * 2 * spec.updates * spec.batch_size,
-            "recipe": {**asdict(spec), "optimizer": "AdamW", "learning_rate_schedule": "Constant",
+            "recipe": {**forecast_configuration(spec), "optimizer": "AdamW", "learning_rate_schedule": "Constant",
                        "optimizer_betas": [0.9, 0.999], "optimizer_epsilon": 1e-8,
                        "encoder_layers": 1, "attention_heads": 2, "encoder_dropout": 0.0,
                        "encoder_feedforward_width": 2 * spec.embed_dim,
@@ -706,7 +738,7 @@ def compatibility_reference(data: FutureExamples, spec: ComparisonForecastSpec, 
     from laterality_extensions import forecasting
     import sklearn
     implementation = hashlib.sha256(Path(__file__).read_bytes() + Path(forecasting.__file__).read_bytes()).hexdigest()
-    return _jsonable({"configuration": asdict(spec), "data": digest.hexdigest(), "implementation": implementation,
+    return _jsonable({"configuration": forecast_configuration(spec), "data": digest.hexdigest(), "implementation": implementation,
                       "train_sources": sorted(set(train_sources)), "test_sources": sorted(set(test_sources)),
                       "libraries": {"torch": torch.__version__, "numpy": np.__version__, "sklearn": sklearn.__version__}})
 

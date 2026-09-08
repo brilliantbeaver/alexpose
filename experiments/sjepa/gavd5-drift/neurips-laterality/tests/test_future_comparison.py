@@ -219,6 +219,7 @@ class FutureComparisonTests(unittest.TestCase):
             sources=self.data.sources[test], sequence_ids=self.data.sequence_ids[test],
             horizon=self.data.horizon[test], target=self.data.endpoint[test], valid=self.data.endpoint_valid[test],
             seed=self.spec.seed, fold=0, input_landmarks=12,
+            actual_times=self.data.endpoint_times[test], checkpoint="final", updates=self.spec.updates,
         )
         expected = rows[["sequence_id", "source_id", "fold", "horizon_seconds"]].drop_duplicates()
         declaration = {"seeds": (self.spec.seed,), "input_sizes": (12,), "methods": tuple(self.result["predictions"])}
@@ -234,6 +235,15 @@ class FutureComparisonTests(unittest.TestCase):
         inconsistent.loc[0, "fold"] = 1
         with self.assertRaises(ValueError):
             aggregate_future_error_rows(inconsistent, expected, **declaration)
+        for field, altered in (("comparison_reference", "different recipe"),
+                               ("training_updates", 1200), ("checkpoint", "another checkpoint"),
+                               ("time_reference", "different actual measurement times")):
+            changed = rows.copy()
+            changed.loc[0, field] = altered
+            with self.assertRaises(ValueError):
+                aggregate_future_error_rows(changed, expected, **declaration)
+        self.assertEqual(int(summary["per_seed"].method_unavailable_endpoints.sum()), 0)
+        self.assertTrue((summary["per_seed"].observed_endpoints == summary["per_seed"].common_endpoints).all())
         inconsistent = rows.copy()
         inconsistent.loc[0, "coverage_reference"] = "different endpoint set"
         with self.assertRaises(ValueError):

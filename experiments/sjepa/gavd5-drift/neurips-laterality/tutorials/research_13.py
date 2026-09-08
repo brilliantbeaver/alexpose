@@ -262,15 +262,21 @@ def build_notebook():
                 condition=name.replace("_", " "),
             ))
         feature_results = pd.concat(diagnostic_tables, ignore_index=True)
-        display(feature_results[[
-            "condition", "evaluation_mask", "evaluated_clips", "evaluated_sources",
-            "matched_target_mse_on_control_clips", "mismatched_target_mse",
-            "mismatch_control_clips", "normalized_error",
-            "target_clip_mean_channel_sd", "prediction_clip_mean_channel_sd",
-        ]].round(3))
+        diagnostic_labels = {
+            "condition": "Training condition", "evaluation_mask": "Evaluation gap",
+            "evaluated_sources": "Sources", "mismatch_control_clips": "Control clips",
+            "matched_target_mse_on_control_clips": "Correct target error",
+            "mismatched_target_mse": "Mismatched target error",
+            "target_clip_mean_channel_sd": "Teacher feature spread",
+            "prediction_clip_mean_channel_sd": "Predicted feature spread",
+        }
+        display(feature_results[list(diagnostic_labels)].rename(columns=diagnostic_labels).round(3))
         """),
         md("""
-        The full table also retains feature norms, covariance effective rank,
+        The displayed errors use the same control clips. Feature spread is the
+        mean standard deviation across feature channels, with equal total
+        weight per source. The full table also retains normalized errors,
+        feature norms, covariance effective rank,
         unavailable clips, and near-constant-feature flags. Effective rank
         describes how many feature directions carry appreciable variation.
         It is computed from covariance eigenvalues and has no clinical scale.
@@ -461,8 +467,9 @@ def build_notebook():
         md("""
         ## 9. Apply the evaluation when real experiments have been enabled
 
-        Notebook 12 displays the real experiment's entire workload before
-        training can start, beginning with the retained 1,200-update recipe.
+        Notebook 12 displays the real experiment's aggregate counts before
+        training can start, beginning with the retained 1,200-update recipe;
+        its plan object also retains the complete fold/seed/condition table.
         Its real runner saves compatible trained states in a separate location.
         The same `evaluate_frozen_representations` call used above evaluates
         each declared fold, training seed, and checkpoint. Per-clip prediction

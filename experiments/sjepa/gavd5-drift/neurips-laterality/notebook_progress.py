@@ -765,6 +765,299 @@ class NotebookTaskProgress:
             )
 
 
+def run_real_masking_comparison_with_progress(
+    plan,
+    *,
+    progress: NotebookTaskProgress,
+    progress_interval: int = 100,
+    resume_interval: int = 300,
+    log=print,
+):
+    """Run tutorial 12's unchanged real comparison with nested progress.
+
+    The scientific runner exposes optimizer updates, but the display also needs
+    cache validation and held-out evaluation boundaries. This wrapper observes
+    the module-level training and evaluation calls, restores them in ``finally``,
+    and returns the scientific result unchanged.
+    """
+    from dataclasses import replace
+    from pathlib import Path
+
+    from laterality_extensions import comparative_training as training
+
+    condition_names = tuple(plan["conditions"])
+    comparison_jobs = len(plan["folds"]) * len(plan["seeds"])
+    resolved_device = training.resolve_learning_device(
+        plan["settings"]["device"]
+    )
+    # A reader cares most about completed fold/seed comparisons. Treat training
+    # plus its held-out evaluation as one job, with the current optimizer
+    # position shown inside that job. Aggregation is the final unit.
+    total_units = comparison_jobs + 1
+    progress.start(
+        total_units,
+        profile=f"{plan['scope']} · {resolved_device}",
+        note=(
+            " Each fold/seed job trains or reuses "
+            f"{len(condition_names)} masking encoders, then evaluates their "
+            "frozen representations before the next job."
+        ),
+    )
+
+    original_train = training.train_comparison
+    original_evaluate = training.evaluate_comparison
+    job_index = 0
+    active_reused = False
+
+    def decorated_train(dataset, settings, conditions=None, **kwargs):
+        nonlocal job_index, active_reused
+        job_index += 1
+        policies = dict(conditions or training.default_conditions())
+        names = tuple(policies)
+        steps = int(settings.steps)
+        candidate_cached = False
+        output_dir = kwargs.get("output_dir")
+        if output_dir is not None:
+            resolved = replace(
+                settings,
+                device=str(training.resolve_learning_device(settings.device)),
+            )
+            checkpoint_steps = tuple(
+                sorted(set([*kwargs.get("checkpoint_steps", ()), steps]))
+            )
+            identity = training.comparison_identity(
+                dataset,
+                resolved,
+                policies,
+                kwargs.get("budgets"),
+                kwargs.get("matched_to"),
+                checkpoint_steps,
+            )
+            candidate_cached = (
+                Path(output_dir) / training.canonical_json_digest(identity)
+            ).exists()
+
+        resume_candidate = False
+        if output_dir is not None and not candidate_cached:
+            resume_candidate = training._resume_path(
+                Path(output_dir) / training.canonical_json_digest(identity)
+            ).exists()
+
+        progress.start_unit(
+            job_index,
+            f"Outer fold {settings.fold}, seed {settings.seed}",
+            detail=(
+                "Checking and reusing the completed training cache"
+                if candidate_cached
+                else "Checking the recovery checkpoint, then resuming all encoder arms"
+                if resume_candidate
+                else f"Training {len(names)} encoder arms from their shared initialization"
+            ),
+            candidate_cached=candidate_cached,
+            total_steps=0 if candidate_cached else len(names) * steps,
+        )
+
+        def report(update):
+            condition = str(update["condition"])
+            condition_index = names.index(condition)
+            completed = int(update.get(
+                "comparison_completed_steps",
+                condition_index * steps + int(update["step"]),
+            ))
+            progress.update_unit(
+                completed_steps=completed,
+                detail=(
+                    f"Training {condition.replace('_', ' ')}: update "
+                    f"{int(update['step']):,}/{steps:,}; latest loss "
+                    f"{float(update['loss']):.4f}"
+                ),
+            )
+
+        kwargs["progress_callback"] = report
+        result = original_train(dataset, settings, policies, **kwargs)
+        active_reused = bool(result.get("reused", False))
+        return result
+
+    def decorated_evaluate(result, dataset, settings, **kwargs):
+        if progress.active is not None:
+            progress.update_unit(
+                completed_steps=int(settings.steps) * len(condition_names),
+                detail=(
+                    "Training complete; fitting training-only read-outs and "
+                    "scoring held-out source videos"
+                ),
+            )
+        evaluated = original_evaluate(result, dataset, settings, **kwargs)
+        progress.complete_unit(
+            reused=active_reused and bool(evaluated.get("evaluation_reused", False))
+        )
+        if job_index == comparison_jobs:
+            progress.start_unit(
+                total_units,
+                "Aggregate all out-of-fold predictions",
+                detail="Pool folds within seeds and calculate paired source intervals",
+            )
+        return evaluated
+
+    training.train_comparison = decorated_train
+    training.evaluate_comparison = decorated_evaluate
+    try:
+        result = training.run_real_comparison(
+            plan,
+            enabled=True,
+            progress_interval=progress_interval,
+            resume_interval=resume_interval,
+            log=log,
+        )
+        if progress.active is not None:
+            progress.complete_unit()
+        progress.complete(status="Real masking comparison complete")
+        return result
+    except BaseException as error:
+        progress.fail(error)
+        raise
+    finally:
+        training.train_comparison = original_train
+        training.evaluate_comparison = original_evaluate
+
+
+def run_real_future_comparison_with_progress(
+    *,
+    progress: NotebookTaskProgress,
+    **request,
+):
+    """Run tutorial 14's unchanged future comparison with job progress.
+
+    One planned job contains matched- and mismatched-future model fits followed
+    by decoding and result validation. The wrapper observes those existing
+    calls without changing their arguments, random streams, or return values.
+    """
+    from laterality_extensions import future_comparison as future
+
+    spec = request.get("spec") or future.real_forecast_spec()
+    folds = request.get("folds", (0, 1, 2, 3, 4))
+    seeds = request.get("seeds", (42, 43, 44, 45, 46))
+    input_sets = request.get("input_sets", (future.JOINTS,))
+    output_root = request.get(
+        "output_root", "outputs/masking_extensions/future"
+    )
+    plan = future.plan_future_comparison(
+        spec,
+        folds=folds,
+        seeds=seeds,
+        input_sets=input_sets,
+        output_root=output_root,
+    )
+    jobs = list(plan["runs"])
+    total_units = len(jobs) + 2
+    progress.start(
+        total_units,
+        profile=plan["scope"],
+        note=(
+            " Each new forecasting job fits matched- and mismatched-future "
+            "models, then fits training-only coordinate decoders."
+        ),
+    )
+    progress.start_unit(
+        1,
+        "Load and validate forecasting inputs",
+        detail="Prepare past-only prefixes and common future endpoints",
+    )
+
+    original_run = future.run_future_comparison
+    original_fit = future.fit_forecast_model
+    original_load = future.load_future_result
+    preflight_open = True
+    active_new_job = False
+    accounted_jobs = 0
+    completed_arms = 0
+
+    def finish_preflight():
+        nonlocal preflight_open
+        if preflight_open:
+            progress.complete_unit()
+            preflight_open = False
+
+    def decorated_fit(data, run_spec, **kwargs):
+        nonlocal completed_arms
+        fitted = original_fit(data, run_spec, **kwargs)
+        completed_arms += 1
+        arm = "mismatched future" if kwargs.get("mismatched") else "matched future"
+        progress.update_unit(
+            completed_steps=completed_arms,
+            detail=f"Completed {arm} model; fitting remaining decoders and diagnostics",
+        )
+        return fitted
+
+    def decorated_run(data, run_spec, **kwargs):
+        nonlocal active_new_job, completed_arms
+        finish_preflight()
+        row = jobs[accounted_jobs]
+        active_new_job = True
+        completed_arms = 0
+        progress.start_unit(
+            accounted_jobs + 2,
+            (
+                f"Outer fold {row['fold']}, seed {row['seed']}, "
+                f"{row['input_landmarks']} input landmarks"
+            ),
+            detail="Training matched-future model",
+            total_steps=2,
+        )
+        return original_run(data, run_spec, **kwargs)
+
+    def decorated_load(path, reference):
+        nonlocal active_new_job, accounted_jobs
+        cached = not active_new_job
+        if cached:
+            finish_preflight()
+            row = jobs[accounted_jobs]
+            progress.start_unit(
+                accounted_jobs + 2,
+                (
+                    f"Outer fold {row['fold']}, seed {row['seed']}, "
+                    f"{row['input_landmarks']} input landmarks"
+                ),
+                detail="Validate saved files, configuration, and prediction coverage",
+                candidate_cached=True,
+            )
+        retained = original_load(path, reference)
+        progress.complete_unit(reused=cached)
+        accounted_jobs += 1
+        active_new_job = False
+        if accounted_jobs == len(jobs):
+            progress.start_unit(
+                total_units,
+                "Aggregate all out-of-fold forecasts",
+                detail="Pool folds within seeds and verify common endpoint coverage",
+            )
+        return retained
+
+    future.fit_forecast_model = decorated_fit
+    future.run_future_comparison = decorated_run
+    future.load_future_result = decorated_load
+    try:
+        result = future.run_real_future_comparison(**request)
+        finish_preflight()
+        if request.get("enabled", False):
+            if progress.active is not None:
+                progress.complete_unit()
+            progress.complete(status="Real future-feature comparison complete")
+        else:
+            progress.finish_skipped(
+                "Inputs were validated, but real forecasting training is disabled",
+                status="Input validation complete · training not run",
+            )
+        return result
+    except BaseException as error:
+        progress.fail(error)
+        raise
+    finally:
+        future.fit_forecast_model = original_fit
+        future.run_future_comparison = original_run
+        future.load_future_result = original_load
+
+
 def evaluate_selected_with_progress(
     context,
     cohort,

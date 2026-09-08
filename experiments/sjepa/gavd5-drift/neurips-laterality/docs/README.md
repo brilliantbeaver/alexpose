@@ -7,6 +7,8 @@ The current title is *Auditing Reflection Symmetry in Self-Supervised Skeleton R
 - [paper.md](paper.md) and [paper.pdf](paper.pdf): the full scientific account.
 - [extended_abstract.md](extended_abstract.md) and [extended_abstract.pdf](extended_abstract.pdf): the shorter workshop version.
 - [TUTORIAL.md](TUTORIAL.md) and [TUTORIAL.pdf](TUTORIAL.pdf): a concise explanation of the research trajectory and new notebook suite for workshop discussion.
+- [COMPARATIVE_MASKING_PLAN.md](COMPARATIVE_MASKING_PLAN.md): the questions, controls, and execution stages for notebooks 11–14.
+- [COMPARATIVE_MASKING_VERIFICATION.md](COMPARATIVE_MASKING_VERIFICATION.md): software verification, real-data feasibility checks, and the remaining empirical evaluation scope.
 - [00_critique_and_tutorial.md](00_critique_and_tutorial.md): the detailed guide to the target, split, probes, and interpretation.
 - [TRAIN_TEST_SPLIT.md](TRAIN_TEST_SPLIT.md): the canonical numeric GAVD cohort,
   outer train/test folds, inner validation ranges, and leakage guarantees.

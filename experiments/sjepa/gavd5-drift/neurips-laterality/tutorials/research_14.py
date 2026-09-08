@@ -57,7 +57,7 @@ def build_notebook():
         """),
         code("""
         from pathlib import Path
-        from dataclasses import asdict, replace
+        from dataclasses import replace
         import sys
         import numpy as np
         import pandas as pd
@@ -81,7 +81,7 @@ def build_notebook():
         from laterality_extensions.forecasting import JOINTS, TimedPose, synthetic_records
         from laterality_extensions.future_comparison import (
             ALL_JOINTS, ComparisonForecastSpec, ForecastComparisonModel,
-            aggregate_future_error_rows, forecast_error_rows,
+            aggregate_future_error_rows, forecast_configuration, forecast_error_rows,
             plan_future_comparison, prepare_future_examples, prepare_prefix,
             real_forecast_spec, run_future_comparison, run_real_future_comparison,
         )
@@ -89,7 +89,7 @@ def build_notebook():
         torch.set_num_threads(1)
         synthetic_spec = ComparisonForecastSpec(updates=4)
         print("SYNTHETIC SOFTWARE DEMONSTRATION — no empirical gait result")
-        display(pd.Series(asdict(synthetic_spec), name="Demonstration settings").to_frame())
+        display(pd.Series(forecast_configuration(synthetic_spec), name="Demonstration settings").to_frame())
         """),
         md("""
         ## 2. Follow the two evaluation routes
@@ -163,7 +163,7 @@ def build_notebook():
             np.testing.assert_array_equal(getattr(examples, field), getattr(all_input_examples, field))
         display(pd.DataFrame([
             {"Input landmarks": len(data.input_joints), "Future endpoints": data.endpoint.shape[1],
-             "Clips": data.coverage["accepted_clips"], "Videos": data.coverage["sources"],
+             "Clips": data.coverage["accepted_clips"], "Sources": data.coverage["sources"],
              "Clip–horizon examples": data.coverage["examples"]}
             for data in (examples, all_input_examples)
         ]))
@@ -239,9 +239,9 @@ def build_notebook():
         assert comparison["matched"]["source_schedule"] == comparison["mismatched"]["source_schedule"]
         display(pd.DataFrame([
             {"Training target": label, "Updates": len(comparison[key]["history"]),
-             "Training videos": len(comparison[key]["train_sources"]),
+             "Training sources": len(comparison[key]["train_sources"]),
              "Training time (seconds)": comparison[key]["runtime_seconds"]}
-            for key, label in (("matched", "Matching future"), ("mismatched", "Another video's future"))
+            for key, label in (("matched", "Matching future"), ("mismatched", "Another source's future"))
         ]).style.format({"Training time (seconds)": "{:.2f}"}))
         """),
         md("""
@@ -273,7 +273,9 @@ def build_notebook():
         assert set(decoder.fitted_sources) == set(training_sources)
         assert not set(decoder.fitted_sources) & set(testing_sources)
         display(pd.DataFrame({
-            "Landmark index": JOINTS,
+            "Landmark": ["Left shoulder", "Right shoulder", "Left hip", "Right hip",
+                         "Left knee", "Right knee", "Left ankle", "Right ankle",
+                         "Left heel", "Right heel", "Left foot tip", "Right foot tip"],
             "Ridge penalty selected within training videos": decoder.selected_alphas,
         }))
         """),
@@ -344,6 +346,7 @@ def build_notebook():
             sources=examples.sources[test_rows], sequence_ids=examples.sequence_ids[test_rows],
             horizon=examples.horizon[test_rows], target=examples.endpoint[test_rows],
             valid=examples.endpoint_valid[test_rows], seed=synthetic_spec.seed, fold=0, input_landmarks=12,
+            actual_times=examples.endpoint_times[test_rows], checkpoint="final", updates=synthetic_spec.updates,
         )
         expected = error_rows[["sequence_id", "source_id", "fold", "horizon_seconds"]].drop_duplicates()
         aggregated = aggregate_future_error_rows(
