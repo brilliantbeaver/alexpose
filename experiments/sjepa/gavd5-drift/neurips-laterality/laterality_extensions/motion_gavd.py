@@ -25,10 +25,13 @@ from laterality.data import (
 from laterality.splitting import build_source_splits, load_splits, save_splits, split_path
 from .comparative_masks import motion_scores
 from .comparative_training import _load_tables, _save_tables, load_comparison
-from .masked_learning import LearningSettings, configure_learning_runtime, load_learning_dataset
+from .masked_learning import (LearningSettings, configure_learning_runtime, load_learning_dataset,
+                              learning_hardware_report)
 from .motion_structured_masks import StudyArm, context_cue_audit, paired_study_masks, study_arms
 from .motion_structured_training import mask_study_identity, plan_mask_study, study_digest, train_mask_study
 from .motion_readout import aggregate_motion_study, evaluate_motion_readouts, motion_readout_identity
+from .motion_readout import prepare_motion_evaluation_inputs
+from .motion_runtime import motion_numerical_context
 
 FOLDS = tuple(range(5))
 SEEDS = tuple(range(42, 47))
@@ -240,15 +243,22 @@ def audit_training_masks(inputs, *, experiments=("motion",), batch_size=20, log=
     return {"per_clip": table, "summary": pd.DataFrame(summary), "examples": examples}
 
 
-def gavd_plan(inputs, *, experiments=("motion", "regions"), device="auto", output_dir=None):
+def gavd_plan(inputs, *, experiments=("motion", "regions"), device="auto", output_dir=None,
+              precision="fp32", resume_interval=100):
     """Use the tracked real recipe; tiny models require explicit synthetic mode."""
     plan = plan_mask_study(experiments=experiments, folds=inputs["folds"], seeds=inputs["seeds"],
                            device=device, output_dir=output_dir)
     plan["data_mode"] = inputs["mode"]
     plan["cohort_digest"] = next(iter(inputs["datasets"].values())).cohort_digest
     plan["split_digest"] = next(iter(inputs["datasets"].values())).split_digest
+    if precision not in {"fp32", "bf16"}:
+        raise ValueError("Motion precision must be fp32 or bf16")
+    if isinstance(resume_interval, bool) or not isinstance(resume_interval, int) or resume_interval < 0:
+        raise ValueError("resume_interval must be a nonnegative integer")
+    plan["execution"] = {"precision": precision, "resume_interval": resume_interval}
     if inputs["mode"] == "synthetic":
         plan["settings"] = asdict(LearningSettings(steps=1, device="cpu"))
+        plan["execution"] = {"precision": "fp32", "resume_interval": 0}
         plan["scope"] = "synthetic software check; no GAVD evidence"
         if output_dir is None:
             plan["output_dir"] = str(SUITE_ROOT / "artifacts/motion_structured_synthetic")
@@ -279,7 +289,8 @@ def _jobs(plan, inputs):
             settings = replace(base, fold=fold, seed=seed, device=runtime["device"], confirm_real_run=True)
             for experiment in plan["experiments"]:
                 arms = {n: StudyArm(**a) for n, a in plan["arms"][experiment].items()}
-                identity = mask_study_identity(data, settings, experiment, arms)
+                identity = mask_study_identity(data, settings, experiment, arms,
+                    precision=plan.get("execution", {}).get("precision", "fp32"))
                 path = Path(plan["output_dir"]) / experiment / canonical_json_digest(identity)
                 yield {"experiment": experiment, "fold": fold, "seed": seed, "data": data,
                        "settings": settings, "arms": arms, "identity": identity, "path": path}
@@ -308,13 +319,25 @@ def grid_status(plan, inputs):
     return pd.DataFrame(rows)
 
 
-def _evaluation(job, plan):
+def _evaluation(job, plan, *, result=None, input_cache=None):
     identity = motion_readout_identity(job["identity"], include_predictor=True)
     parent = Path(plan["output_dir"]) / "evaluations"
     cached = _load_tables(identity, parent, EVALUATION_TABLES)
     if cached is None:
-        result = load_comparison(job["path"], job["identity"])
-        evaluation = evaluate_motion_readouts(result, job["data"], job["settings"], include_predictor=True)
+        if result is None:
+            result = load_comparison(job["path"], job["identity"])
+        if canonical_json_digest(result["identity"]) != canonical_json_digest(job["identity"]):
+            raise ValueError("In-memory encoders do not match this evaluation job")
+        prepared = None if input_cache is None else input_cache.get("evaluation")
+        if prepared is None:
+            prepared = prepare_motion_evaluation_inputs(job["data"],
+                segment_length=job["settings"].segment_length,
+                device=next(next(iter(result["runs"].values()))["model"].parameters()).device)
+            if input_cache is not None:
+                input_cache["evaluation"] = prepared
+        with motion_numerical_context():
+            evaluation = evaluate_motion_readouts(result, job["data"], job["settings"],
+                include_predictor=True, prepared_inputs=prepared)
         tables = {name: evaluation[name].assign(experiment=job["experiment"], fold=job["fold"], seed=job["seed"])
                   for name in EVALUATION_TABLES}
         _save_tables(tables, identity, parent)
@@ -334,10 +357,14 @@ def collect_gavd_grid(plan, inputs, *, log=print):
                 "missing_jobs": int(status.training_status.eq("missing").sum()), "plan": plan}
     tables = {name: [] for name in EVALUATION_TABLES}
     index, identities = [], []
+    input_cache, active_fold = {}, None
     for job in _jobs(plan, inputs):
+        if active_fold != job["fold"]:
+            input_cache.clear()
+            active_fold = job["fold"]
         if log:
             log(f"Readouts: {job['experiment']}, fold {job['fold']}, seed {job['seed']}")
-        evaluated, directory, identity = _evaluation(job, plan)
+        evaluated, directory, identity = _evaluation(job, plan, input_cache=input_cache)
         for name in EVALUATION_TABLES:
             tables[name].append(evaluated[name])
         identities.append(identity)
@@ -346,10 +373,15 @@ def collect_gavd_grid(plan, inputs, *, log=print):
             "training_digest": canonical_json_digest(job["identity"]),
             "evaluation_digest": canonical_json_digest(identity)})
     combined = {name: pd.concat(values, ignore_index=True) for name, values in tables.items()}
-    scored = aggregate_motion_study(combined["predictions"], inputs["expected"], plan)
     identity = {"schema": "motion_gavd_grid/v1", "evaluations": identities, "scope": plan["scope"],
                 "workflow_implementation": sha256_file(__file__),
                 "folds": list(plan["folds"]), "seeds": list(plan["seeds"]), "mode": inputs["mode"]}
+    report_names = (*EVALUATION_TABLES, "per_seed", "summary", "paired_intervals", "jobs", "census", "memberships")
+    cached = _load_tables(identity, Path(plan["output_dir"]) / "grids", report_names)
+    if cached is not None:
+        return {"status": "Complete", **cached[0], "directory": str(cached[1]), "plan": plan,
+                "grid_cache_reused": True}
+    scored = aggregate_motion_study(combined["predictions"], inputs["expected"], plan)
     report = {**combined, **scored, "jobs": pd.DataFrame(index), "census": inputs["census"],
               "memberships": inputs["memberships"]}
     destination = _save_tables(report, identity, Path(plan["output_dir"]) / "grids")
@@ -361,17 +393,31 @@ def run_gavd_grid(plan, inputs, *, enabled=False, log=print):
     if not enabled:
         return {"status": "Training disabled; GAVD inputs and full workload are ready",
                 "jobs": grid_status(plan, inputs), "plan": plan}
+    if inputs["mode"] == "gavd" and plan["settings"]["device"] == "auto":
+        hardware = learning_hardware_report("auto")
+        if hardware["nvidia_gpus"] and not hardware["cuda_available"]:
+            raise RuntimeError("NVIDIA hardware is present but this kernel cannot use CUDA. "
+                "Select the GAVD5 CUDA kernel, or explicitly set DEVICE='cpu' for an intentional CPU run.")
+    train_cache, evaluation_cache, active_fold = {}, {}, None
+    execution = plan.get("execution", {})
     for job in _jobs(plan, inputs):
+        if active_fold != job["fold"]:
+            train_cache.clear()
+            evaluation_cache.clear()
+            active_fold = job["fold"]
         if log:
             log(f"Train {job['experiment']}: fold {job['fold']}, seed {job['seed']} ({job['settings'].steps} updates)")
         def progress(update):
             if log and (update["step"] == 1 or update["step"] % 100 == 0 or update["step"] == update["total_steps"]):
                 log(f"  paired update {update['step']}/{update['total_steps']}")
-        train_mask_study(job["data"], job["settings"], experiment=job["experiment"], arms=job["arms"],
-                         output_dir=job["path"].parent, progress=progress)
+        trained = train_mask_study(job["data"], job["settings"], experiment=job["experiment"], arms=job["arms"],
+                         output_dir=job["path"].parent, progress=progress, input_cache=train_cache,
+                         resume_interval=execution.get("resume_interval", 100),
+                         precision=execution.get("precision", "fp32"))
         if log:
             log("  Frozen readouts and predictor diagnostics (training-source ridge selection)...")
-        _evaluation(job, plan)
+        _evaluation(job, plan, result=trained, input_cache=evaluation_cache)
+        del trained
     return collect_gavd_grid(plan, inputs, log=log)
 
 

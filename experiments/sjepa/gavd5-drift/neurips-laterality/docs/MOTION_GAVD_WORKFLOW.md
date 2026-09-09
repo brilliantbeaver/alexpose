@@ -16,8 +16,8 @@ training, absent checkpoints, optional skips and interruptions have distinct
 statuses. A missing evaluation grid is never shown as a successful evaluation.
 
 The wrappers observe the existing computations and restore their function
-aliases on success, error or kernel interruption. Training/readout code and
-artifact identities are unchanged. Use one wrapped task at a time within a
+aliases on success, error or kernel interruption. Progress reporting itself
+does not change training/readout computations or their identities. Use one wrapped task at a time within a
 kernel, as with the existing workflow wrappers in the suite. Re-running a cell
 starts a fresh progress display and reuses scientifically compatible artifacts.
 
@@ -40,6 +40,12 @@ resume is enabled, it can continue from a checksum-validated shared-arm optimize
 boundary; otherwise an interrupted job restarts from its seed. It does not claim
 identical wall-clock performance across backends. Old protocol settings and
 empirical results are preserved.
+
+For Notebook 17's CUDA kernel setup, measured speedups, optional BF16 mode,
+content-checked score/tensor reuse and the now-connected 100-update recovery
+interval, follow [the performance review](MOTION_PRETRAINING_PERFORMANCE.md).
+Keep `PRECISION` identical in Notebooks 17 and 18. BF16 and FP32 are separate
+numerical modes and use different training/evaluation identities.
 
 ## 2. Prepare the real inputs
 
@@ -146,16 +152,23 @@ inventory from the capabilities of the active Python kernel. An NVIDIA adapter
 visible to Task Manager or `nvidia-smi` cannot be used when that environment has
 a CPU-only PyTorch wheel: `torch.version.cuda` is then absent and
 `torch.cuda.is_available()` is false, so `auto` resolves to CPU. Install a
-CUDA-enabled PyTorch build into the environment backing the notebook kernel,
-restart the kernel, and rerun the configuration and preflight cells. Set
-`LATERALITY_DEVICE=cuda` when a silent CPU fallback would be unacceptable; an
-explicit unavailable accelerator stops with an error.
+CUDA-enabled PyTorch build or select the installed **GAVD5 CUDA (PyTorch 2.13)**
+kernel, then rerun the configuration and preflight cells. Real auto-device
+training now stops if NVIDIA hardware is visible but CUDA is unavailable.
+An explicit unavailable accelerator also stops with an error.
 
-The workflow retains FP32 input/model tensors and does not enable automatic
-mixed precision or `torch.compile`. Do not change mixed-precision, TensorFloat-32,
-compilation, or deterministic-kernel policy midway through a grid: such a mode
-requires an explicit runtime identity and numerical validation. Synthetic mode
-always uses one CPU update in its separate artifact root, even on a CUDA machine.
+The default `PRECISION="fp32"` retains FP32 computation. Optional `"bf16"` enables
+native CUDA autocast for transformer/projector operations, with FP32 weights,
+loss reductions and evaluation. The numerical mode has a distinct artifact
+identity and must match between 17 and 18. `torch.compile` remains disabled.
+`RESUME_INTERVAL=100` enables checked paired optimizer recovery by default.
+The configuration deliberately does not accept FP8, INT8, or an 8-bit optimizer.
+FP8 is reserved for a separate measured numerical experiment; 8-bit Adam would
+save only about 12 MiB across the three motion arms, and INT8 belongs to a
+separate inference/deployment evaluation. See the
+[precision decision](MOTION_PRETRAINING_PERFORMANCE.md#fp8-and-8-bit-quantization-decision).
+Synthetic mode always uses one CPU update in its separate artifact root, even
+on a CUDA machine.
 
 The motion experiment trains three encoders in each of 25 paired jobs. Regions
 train two encoders in each of 25 paired jobs. Total: **125 encoders**, each for

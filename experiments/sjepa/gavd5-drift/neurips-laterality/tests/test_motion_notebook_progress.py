@@ -131,7 +131,7 @@ class MotionNotebookProgressTests(unittest.TestCase):
                 progress = display_recorder()
                 cached = collect_gavd_grid_with_progress(wrapped_plan, inputs, progress=progress)
             pd.testing.assert_frame_equal(wrapped["predictions"], cached["predictions"])
-            self.assertEqual(progress.reused_units, 2)
+            self.assertEqual(progress.reused_units, 3)
             self.assertEqual(progress.completed_units, 4)
             self.assertEqual(progress.new_candidate_units, progress.computed_units)
 

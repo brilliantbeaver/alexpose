@@ -1,10 +1,11 @@
 """Editable GAVD tutorial: paired pretraining over five source folds and seeds."""
 from nbformat.v4 import new_notebook
+from .motion_results_20260908 import add_saved_result_interpretation
 from .masking_shared import (md, code, setup_cell, data_instructions, configuration_cell, inputs_cell, plan_cell)
 
 
 def build_notebook():
-    return new_notebook(cells=[
+    notebook = new_notebook(cells=[
         md('''
         # 17 — Train the motion and structure JEPA grid on real GAVD
 
@@ -57,26 +58,80 @@ def build_notebook():
         rerun from the configuration cell. An explicit `DEVICE="cuda"` fails
         instead of silently falling back.
 
+        **Windows setup for this workspace:** the review found an RTX 4090
+        Laptop GPU (16 GiB) behind a CPU-only PyTorch kernel. A separate kernel,
+        **GAVD5 CUDA (PyTorch 2.13)**, was installed and verified with an actual
+        CUDA matrix multiplication. Select it in the notebook's kernel picker,
+        then run from the top. To recreate it from the repository root:
+
+        ```powershell
+        .\\neurips-laterality\\scripts\\setup_cuda_kernel.ps1
+        ```
+
+        The script uses the official PyTorch CUDA 13.0 wheel and preserves the
+        existing environment's other package versions. It does not restart your
+        running kernels. Real training with `DEVICE="auto"` now stops when it
+        detects NVIDIA hardware but cannot use CUDA; an intentional CPU pilot
+        must use `DEVICE="cpu"` explicitly.
+
         Real training keeps only the current outer-training fold, its validated
         target masks, and its sampling schedule resident on the selected device;
         outer-test tensors remain sealed. Shared geometric views are generated
         on that device, and CUDA uses fused AdamW. Jobs run serially on one GPU
         so independent fold/seed models do not contend for memory.
 
-        The declared numerical policy retains FP32 model/input tensors without
-        automatic mixed precision or `torch.compile`. This is a reproducible
-        baseline, not a claim of bitwise equality between CPU, CUDA, and MPS.
-        Mixed precision, TensorFloat-32 policy changes, or compilation require a
-        separately identified and validated experiment; do not toggle them in a
-        running grid and then treat its checkpoints as the same computation.
+        Content-keyed motion scores are reused across clip draws and seeds.
+        These deterministic scores never include target labels. Every stochastic
+        mask still uses its original seed, step and clip-offset stream. Fixed-size
+        target gathers avoid CUDA synchronization from boolean indexing, and
+        multi-tensor teacher EMA updates reduce small kernel launches. The grid
+        reuses the training tensor bank until the outer fold changes.
+
+        `PRECISION="fp32"` retains the reference numerical mode. For faster CUDA
+        training, set **`PRECISION="bf16"`** in the configuration cell and use
+        the same value in Notebook 18. Native BF16 support is checked before
+        training. Transformer/projector matrix operations use autocast while
+        model weights, AdamW states, teacher EMA, centers, sharpened softmax,
+        variance/covariance losses and frozen evaluation remain FP32. BF16 has
+        a **different training/cache identity**; its results must be reported as
+        a separate numerical mode. A finite pilot does not establish identical
+        long-run convergence.
+
+        FP32 matrix reductions explicitly use the highest-precision policy;
+        the caller's previous setting is restored afterward. `torch.compile`
+        stays disabled: the native Windows environment and this small model
+        need a separate compilation benchmark before paying compilation costs.
+        PyTorch selects a compatible attention backend with the validity masks
+        intact. The measured BF16 run used memory-efficient CUDA attention and
+        Tensor Core GEMMs. Do not remove missing-token masks to force FlashAttention.
+
+        FP8, INT8 and 8-bit AdamW are deliberately absent from the configuration.
+        This Ada GPU has FP8-capable Tensor Cores, but the native-Windows CUDA
+        environment has no FP8 training package, and FP8 needs explicit scaling
+        state, compatible layers, resume support and a separate validation grid.
+        Eight-bit Adam would save only about 12 MiB across the three motion arms
+        against roughly 684 MiB measured BF16 peak allocation. INT8 is relevant
+        to a later deployment benchmark, not this gradient-based pretraining or
+        FP32 frozen-feature evaluation. See the performance review's
+        [precision decision](docs/MOTION_PRETRAINING_PERFORMANCE.md#fp8-and-8-bit-quantization-decision).
 
         There are three distinct kinds of reuse:
 
         | Layer | What it saves | When it may count |
         |---|---|---|
         | Complete training cache | All encoder arms, histories, schedules, and controls | Only after identity, inventory, hashes, shapes, and finite values validate |
+        | Fold tensors and clip scores | Host-to-device copies and repeated motion medians | In memory, within the current training fold; content changes invalidate scores |
         | Paired resume candidate | Model, projector, optimizer, and history at one shared update boundary | Only when periodic resume is enabled and its checksum and full state validate; never by itself a completed result |
         | Evaluation/grid cache | Frozen features, readouts, diagnostics, and pooled tables | Only after its training identity and table contents validate |
+
+        `RESUME_INTERVAL=100` is connected to every real training job by default.
+        A shared boundary stores every arm's model, projector, optimizer and
+        history, with a checksum. At most the updates after the last saved
+        boundary need repeating. Final checkpoints remain separate. Set zero
+        to disable periodic recovery; it does not change the numerical identity.
+        Per-job readout caches store reduced tables; resident evaluation inputs
+        and features are transient. Identical initial/direct-pose readouts are
+        fitted once per job, and a validated pooled report reuses its bootstrap.
 
         The inventory below prints the exact expected paths. A cache candidate's
         mere existence is never evidence. Changing data, folds, seeds, model or
@@ -90,6 +145,7 @@ def build_notebook():
         import subprocess
         import torch
         from laterality_extensions.masked_learning import configure_learning_runtime
+        from laterality_extensions.motion_runtime import motion_numerical_policy
 
         def visible_nvidia_adapters():
             """Report NVIDIA hardware independently of PyTorch, without a shell."""
@@ -145,7 +201,9 @@ def build_notebook():
             {"check": "PyTorch CUDA runtime", "value": torch.version.cuda or "none (CPU-only build)"},
             {"check": "cuDNN", "value": torch.backends.cudnn.version() or "unavailable"},
             {"check": "FP32 matmul policy", "value": torch.get_float32_matmul_precision()},
-            {"check": "automatic mixed precision", "value": "disabled by this workflow"},
+            {"check": "training precision", "value": plan["execution"]["precision"]},
+            {"check": "periodic paired resume", "value": plan["execution"]["resume_interval"]},
+            {"check": "kernel executable", "value": sys.executable},
             {"check": "torch.compile", "value": "disabled by this workflow"},
             {"check": "real training enabled", "value": RUN_TRAINING},
             {"check": "readiness", "value": accelerator_note},
@@ -156,8 +214,52 @@ def build_notebook():
                 "NVIDIA adapters visible to the operating system"))
         if runtime_error is not None:
             raise RuntimeError(
-                f"Requested training device {effective_request!r} is unavailable: {runtime_error}"
+                "CUDA preflight failed before training. "
+                f"Requested device: {effective_request!r}. {runtime_error} "
+                "A running notebook cannot change its Python environment: select "
+                "'GAVD5 CUDA (PyTorch 2.13)' in the kernel picker, restart the kernel, "
+                "and Run All from the top."
             ) from runtime_error
+        print("Effective numerical contract:", motion_numerical_policy(
+            resolved_runtime["device"], plan["execution"]["precision"]))
+        '''),
+        md('''
+        ### Measure a bounded pilot before the complete grid
+
+        The optional cell runs **12 paired motion updates on real fold 0** using
+        batch 20, width 96 and the declared four/two-layer model. It excludes
+        warmup and the final weight-copy boundary from the steady-state timing.
+        It writes a timing report, not a scientific checkpoint. Keep it disabled
+        during routine Run All, or set `RUN_BENCHMARK=True` to inspect throughput
+        and peak allocated GPU memory through the same progress wrapper.
+
+        On this laptop, short measurements gave about 3.85 seconds per paired
+        CPU update, 0.177 seconds with optimized CUDA FP32 and 0.096 seconds with
+        CUDA BF16. These are throughput checks, not full-grid runtime promises;
+        preparation, checkpoint writes, frozen readouts and CPU ridge fitting
+        add time. The full mask schedule also occupies memory beyond this short
+        pilot. See [the performance review](docs/MOTION_PRETRAINING_PERFORMANCE.md)
+        for the measurements, profiler evidence and reproduction commands.
+
+        Keep the scientific batch size at 20. A larger batch changes the number
+        of clips seen and the VICReg covariance estimate. GPU memory occupancy
+        alone does not measure speed. For this resident dataset, adding a
+        DataLoader, pinned-memory workers or a second transfer stream would add
+        machinery to an optimization loop that already needs no input transfer.
+        '''),
+        code('''
+        from notebook_progress import run_notebook_task
+        from scripts.benchmark_motion_pretraining import benchmark
+        RUN_BENCHMARK = os.getenv("LATERALITY_MOTION_BENCHMARK", "0") == "1"
+        benchmark_progress = NotebookTaskProgress("Real GAVD throughput pilot", "stage")
+        timing_report = run_notebook_task(benchmark, progress=benchmark_progress,
+            label="Twelve paired motion updates; warmup excluded from throughput",
+            enabled=RUN_BENCHMARK and DATA_MODE == "gavd",
+            device=resolved_runtime["device"], precision=plan["execution"]["precision"],
+            steps=12, output=OUTPUT_ROOT / "performance" / f"{plan['execution']['precision']}.json")
+        if timing_report is not None:
+            display(pd.Series({key: value for key, value in timing_report.items()
+                               if key not in ("identity", "history")}))
         '''),
         code('''
         workload = plan["workload"].groupby(["experiment", "fold"], sort=False).size().unstack(0)
@@ -315,3 +417,4 @@ def build_notebook():
         same mode, experiment list, fold/seed scope, device and output root.
         '''),
     ])
+    return add_saved_result_interpretation(notebook, 17)

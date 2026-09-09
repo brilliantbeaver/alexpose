@@ -9,6 +9,7 @@ optimizer boundary when periodic resume checkpoints are enabled.
 from __future__ import annotations
 
 import copy
+from functools import wraps
 from dataclasses import asdict, dataclass, replace
 import hashlib
 import json
@@ -31,22 +32,25 @@ from .comparative_training import (
 )
 from .masked_learning import LearningSettings, configure_learning_runtime, load_learning_dataset
 from .motion_structured_masks import StudyArm, paired_study_masks, study_arms
+from .motion_runtime import (motion_numerical_context, motion_numerical_policy,
+                             prediction_resident, update_teacher_foreach)
 
 
 def study_digest():
     digest = hashlib.sha256(training_implementation_digest().encode())
-    for name in ("motion_structured_masks.py", "motion_structured_training.py"):
+    for name in ("motion_structured_masks.py", "motion_structured_training.py", "motion_runtime.py"):
         digest.update(Path(__file__).with_name(name).read_bytes())
     return digest.hexdigest()
 
 
-def mask_study_identity(dataset, settings, experiment, arms, checkpoint_steps=()):
+def mask_study_identity(dataset, settings, experiment, arms, checkpoint_steps=(), *, precision="fp32"):
     """One compatibility contract for training and read-only checkpoint loading."""
     checkpoints = tuple(sorted(set((*checkpoint_steps, settings.steps))))
     identity = comparison_identity(dataset, settings, arms, {}, None, checkpoints)
     identity.update(study_schema="motion_structured/v1", study_implementation=study_digest(),
                     experiment=experiment, objective_reduction="mean targets per clip, then mean clips",
                     interruption_policy="resume exact shared-arm boundaries; reuse complete compatible jobs")
+    identity["numerical_policy"] = motion_numerical_policy(settings.device, precision)
     return identity
 
 
@@ -70,6 +74,7 @@ class _PreparedMaskStudyInputs:
     schedule_rows: torch.Tensor
     tensors: _ResidentTrainTensors
     target_masks: dict[str, torch.Tensor]
+    target_indices: dict[str, list]
     target_counts: dict[str, list[list[int]]]
     equal_counts: dict[str, list[bool]]
     coverage: dict[str, list[list[dict]]]
@@ -131,9 +136,10 @@ def _prepare_mask_study_inputs(dataset, settings, arms, device, *, input_cache=N
         raise AssertionError("Outer-test videos reached the training schedule")
 
     mask_steps, coverage_steps = [], []
+    score_cache = {} if input_cache is None else input_cache.setdefault("motion_scores", {})
     for step, rows in enumerate(schedule):
         masks, coverage = paired_study_masks(
-            dataset, rows, settings, arms, step=step
+            dataset, rows, settings, arms, step=step, score_cache=score_cache
         )
         mask_steps.append(masks)
         coverage_steps.append(coverage)
@@ -147,7 +153,7 @@ def _prepare_mask_study_inputs(dataset, settings, arms, device, *, input_cache=N
     schedule_rows = torch.as_tensor(
         local_schedule, dtype=torch.long, device=device
     ).contiguous()
-    target_masks, target_counts, equal_counts, coverage = {}, {}, {}, {}
+    target_masks, target_indices, target_counts, equal_counts, coverage = {}, {}, {}, {}, {}
     for name in arms:
         values = np.ascontiguousarray(
             np.stack([step_masks[name] for step_masks in mask_steps])
@@ -160,9 +166,19 @@ def _prepare_mask_study_inputs(dataset, settings, arms, device, *, input_cache=N
         equal_counts[name] = [
             bool(np.all(step_counts == step_counts[0])) for step_counts in counts
         ]
+        # Known output shapes avoid nonzero/boolean-indexing synchronization in
+        # both predictor and teacher on every CUDA update.
+        target_indices[name] = [
+            torch.as_tensor(np.nonzero(value.reshape(settings.batch_size, -1))[1]
+                .reshape(settings.batch_size, -1).copy(), dtype=torch.long, device=device)
+            if equal else None
+            for value, equal in zip(values, equal_counts[name])
+        ]
         coverage[name] = [step_coverage[name] for step_coverage in coverage_steps]
     resident = tensors.resident_bytes + schedule_rows.numel() * schedule_rows.element_size()
     resident += sum(mask.numel() * mask.element_size() for mask in target_masks.values())
+    resident += sum(index.numel() * index.element_size()
+                    for indices in target_indices.values() for index in indices if index is not None)
     view_digest = canonical_json_digest({
         "schema": "motion_structured_geometric_views/v2",
         "source_schedule": _digest_array(schedule),
@@ -179,6 +195,7 @@ def _prepare_mask_study_inputs(dataset, settings, arms, device, *, input_cache=N
         schedule_rows=schedule_rows,
         tensors=tensors,
         target_masks=target_masks,
+        target_indices=target_indices,
         target_counts=target_counts,
         equal_counts=equal_counts,
         coverage=coverage,
@@ -188,9 +205,18 @@ def _prepare_mask_study_inputs(dataset, settings, arms, device, *, input_cache=N
     )
 
 
+def _numerical_scope(function):
+    @wraps(function)
+    def scoped(*args, **kwargs):
+        with motion_numerical_context():
+            return function(*args, **kwargs)
+    return scoped
+
+
+@_numerical_scope
 def train_mask_study(dataset, settings, *, experiment="motion", arms=None,
                      output_dir=None, checkpoint_steps=(), progress=None,
-                     resume_interval=0, input_cache=None):
+                     resume_interval=0, input_cache=None, precision="fp32"):
     """Train paired arms with resident inputs and optional atomic job resume."""
     settings.validate()
     dataset.validate(settings.segment_length)
@@ -211,7 +237,7 @@ def train_mask_study(dataset, settings, *, experiment="motion", arms=None,
     checkpoints = tuple(sorted(set((*checkpoint_steps, settings.steps))))
     if any(not isinstance(s, int) or isinstance(s, bool) or not 1 <= s <= settings.steps for s in checkpoints):
         raise ValueError("Checkpoint steps must lie within training exposure")
-    identity = mask_study_identity(dataset, settings, experiment, arms, checkpoints)
+    identity = mask_study_identity(dataset, settings, experiment, arms, checkpoints, precision=precision)
     destination = Path(output_dir) / canonical_json_digest(identity) if output_dir else None
     if destination is not None and destination.exists():
         reused = load_comparison(destination, identity)
@@ -221,9 +247,11 @@ def train_mask_study(dataset, settings, *, experiment="motion", arms=None,
         return reused
 
     device = torch.device(settings.device)
+    preparation_started = time.monotonic()
     prepared = _prepare_mask_study_inputs(
         dataset, settings, arms, device, input_cache=input_cache
     )
+    preparation_seconds = time.monotonic() - preparation_started
     template_model, template_projector = _new_model(
         settings, dataset.xyz.shape[1], device
     )
@@ -315,20 +343,22 @@ def train_mask_study(dataset, settings, *, experiment="motion", arms=None,
         for name, arm in runtime_arms.items():
             net, proj = arm["model"], arm["projector"]
             mask = prepared.target_masks[name][step]
-            predictive, target, counts = _prediction_prevalidated(
+            predictive, target, counts = prediction_resident(
                 net,
                 view_a,
                 xyz,
                 patches,
                 mask,
-                equal_target_counts=prepared.equal_counts[name][step],
+                prepared.target_indices[name][step],
+                precision=precision,
             )
-            tokens = _encode_prevalidated(net.view_encoder, both, both_valid).reshape(
-                2 * settings.batch_size, blocks, 33, settings.embed_dim
-            )
-            regularizer = vicreg_loss(
-                *proj(authorized_pool(tokens, both_valid, GAIT_JOINTS)).chunk(2)
-            )
+            with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=precision == "bf16"):
+                tokens = _encode_prevalidated(net.view_encoder, both, both_valid).reshape(
+                    2 * settings.batch_size, blocks, 33, settings.embed_dim
+                )
+                projected = proj(authorized_pool(tokens.float(), both_valid, GAIT_JOINTS))
+            # Covariance and variance reductions stay FP32, including their matmuls.
+            regularizer = vicreg_loss(*projected.float().chunk(2))
             loss = predictive + settings.vicreg_weight * regularizer
             if device.type == "cpu" and not bool(torch.isfinite(loss).all()):
                 raise FloatingPointError(f"Non-finite JEPA loss for {name}")
@@ -338,7 +368,10 @@ def train_mask_study(dataset, settings, *, experiment="motion", arms=None,
                 raise AssertionError("Teacher received gradients")
             torch.nn.utils.clip_grad_norm_(arm["trainable"], 1.0)
             arm["optimizer"].step()
-            net.update_target(settings.ema_momentum)
+            if device.type == "cuda":
+                update_teacher_foreach(net, settings.ema_momentum)
+            else:
+                net.update_target(settings.ema_momentum)
             with torch.no_grad():
                 if prepared.equal_counts[name][step]:
                     mean = target.mean(dim=(0, 1))
@@ -404,10 +437,11 @@ def train_mask_study(dataset, settings, *, experiment="motion", arms=None,
             "coverage": prepared.coverage[name],
             "view_digest": prepared.view_digest,
             "elapsed_training_seconds": elapsed,
+            "preparation_seconds": preparation_seconds,
             "resident_input_bytes": prepared.resident_bytes,
             "execution_layout": (
                 "training-only resident fold tensors and masks; device-side shared views; "
-                "fused AdamW on CUDA; buffered diagnostics"
+                "fixed-shape target gathers; fused AdamW and foreach EMA on CUDA; buffered diagnostics"
             ),
         }
     pairing = {"same_initialization": len({r["initial_state_digest"] for r in runs.values()}) == 1,

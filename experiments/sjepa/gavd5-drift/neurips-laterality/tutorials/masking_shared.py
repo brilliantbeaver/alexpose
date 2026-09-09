@@ -11,8 +11,8 @@ def code(text):
     return new_code_cell(dedent(text).strip())
 
 
-def setup_cell():
-    return code('''
+def setup_cell(*, load_environment=False):
+    cell = code('''
         from pathlib import Path
         from dataclasses import asdict, replace
         import os
@@ -47,6 +47,14 @@ def setup_cell():
         set_matplotlib_formats("svg", "png")
         pd.set_option("display.precision", 3)
     ''')
+    if load_environment:
+        cell.source = cell.source.replace(
+            "from matplotlib_inline.backend_inline import set_matplotlib_formats\n",
+            "from matplotlib_inline.backend_inline import set_matplotlib_formats\n"
+            "from dotenv import load_dotenv, find_dotenv\n"
+            "load_dotenv(find_dotenv())\n",
+        )
+    return cell
 
 
 def data_instructions():
@@ -105,6 +113,9 @@ def configuration_cell():
         EXPERIMENTS = tuple(os.getenv("LATERALITY_MOTION_EXPERIMENTS", "motion,regions").split(","))
         CREATE_MISSING_INPUTS = True
         DEVICE = os.getenv("LATERALITY_DEVICE", "auto")
+        # Keep the numerical mode identical in Notebooks 17 and 18.
+        PRECISION = os.getenv("LATERALITY_MOTION_PRECISION", "fp32")  # or "bf16" on native CUDA BF16 hardware
+        RESUME_INTERVAL = int(os.getenv("LATERALITY_MOTION_RESUME_INTERVAL", "100"))
         # Same explicit training switch as Notebook 12; also accept the study-specific alias.
         RUN_TRAINING = os.getenv("LATERALITY_MOTION_RUN_REAL",
                                 os.getenv("LATERALITY_RESEARCH_RUN_REAL", "0")) == "1"
@@ -140,10 +151,12 @@ def inputs_cell():
 
 def plan_cell():
     return code('''
-        plan = gavd_plan(inputs, experiments=EXPERIMENTS, device=DEVICE, output_dir=OUTPUT_ROOT)
+        plan = gavd_plan(inputs, experiments=EXPERIMENTS, device=DEVICE, output_dir=OUTPUT_ROOT,
+                         precision=PRECISION, resume_interval=RESUME_INTERVAL)
         display(pd.Series({key: plan[key] for key in
             ("scope", "training_runs", "optimizer_updates", "recipe_source", "output_dir")}))
         display(pd.Series(plan["settings"], name="Declared training settings"))
+        display(pd.Series(plan["execution"], name="Execution and recovery settings"))
         display(plan["workload"].groupby(["experiment", "fold", "seed"], sort=False).agg(
             encoders=("condition", "size"), optimizer_updates=("updates", "sum")))
         display(pd.DataFrame([{"experiment": e, **arm} for e, arms in plan["arms"].items()

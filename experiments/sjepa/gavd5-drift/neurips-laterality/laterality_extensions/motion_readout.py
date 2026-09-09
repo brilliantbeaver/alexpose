@@ -41,6 +41,16 @@ class MotionEvaluationInputs:
     source_valid: np.ndarray
     segment_length: int
     device: torch.device
+    source_digest: str
+
+
+def _evaluation_input_digest(dataset):
+    digest = hashlib.sha256()
+    for values in (dataset.xyz, dataset.valid):
+        array = np.ascontiguousarray(values)
+        digest.update(str((array.shape, array.dtype)).encode())
+        digest.update(array.tobytes())
+    return digest.hexdigest()
 
 
 def prepare_motion_evaluation_inputs(dataset, *, segment_length, device):
@@ -48,6 +58,8 @@ def prepare_motion_evaluation_inputs(dataset, *, segment_length, device):
     if not isinstance(segment_length, int) or isinstance(segment_length, bool) or segment_length < 1:
         raise ValueError("Evaluation segment length must be a positive integer")
     resolved = torch.device(device)
+    if resolved.type == "cuda" and resolved.index is None:
+        resolved = torch.device("cuda", torch.cuda.current_device())
     xyz_source = np.asarray(dataset.xyz)
     valid_source = np.asarray(dataset.valid)
     if (xyz_source.ndim != 4 or xyz_source.shape[2:] != (33, 3)
@@ -62,6 +74,8 @@ def prepare_motion_evaluation_inputs(dataset, *, segment_length, device):
     # The registered protocol is FP32. Do not silently engage autocast or retain
     # the input's incidental floating dtype on an accelerator.
     clean = np.where(valid_source[..., None], xyz_source, 0).astype(np.float32, copy=False)
+    if not np.isfinite(clean).all():
+        raise ValueError("Observed coordinates must be finite")
     return MotionEvaluationInputs(
         xyz=torch.as_tensor(clean, dtype=torch.float32, device=resolved).contiguous(),
         valid_patch=torch.as_tensor(patches, dtype=torch.bool, device=resolved).contiguous(),
@@ -69,6 +83,7 @@ def prepare_motion_evaluation_inputs(dataset, *, segment_length, device):
         source_valid=dataset.valid,
         segment_length=segment_length,
         device=resolved,
+        source_digest=_evaluation_input_digest(dataset),
     )
 
 
@@ -148,6 +163,8 @@ def _validate_motion_evaluation_inputs(prepared, encoder, dataset, device):
         raise TypeError("prepared_inputs must come from prepare_motion_evaluation_inputs")
     if prepared.source_xyz is not dataset.xyz or prepared.source_valid is not dataset.valid:
         raise ValueError("Prepared evaluation inputs belong to different dataset arrays")
+    if prepared.source_digest != _evaluation_input_digest(dataset):
+        raise ValueError("Prepared evaluation inputs are stale after an in-place data change")
     if prepared.segment_length != encoder.segment_length:
         raise ValueError("Prepared evaluation inputs use a different segment length")
     if prepared.device != device or prepared.xyz.device != device or prepared.valid_patch.device != device:
@@ -163,6 +180,7 @@ def encode_motion_summaries(encoder, dataset, *, batch_size=32, prepared_inputs=
     """Encode FP32 summaries, optionally reusing device-resident input tensors."""
     if not isinstance(batch_size, int) or isinstance(batch_size, bool) or batch_size < 1:
         raise ValueError("Evaluation batch size must be a positive integer")
+    from .comparative_evaluation import _encode_prevalidated
     encoder.eval()
     device = next(encoder.parameters()).device
     prepared = prepared_inputs
@@ -177,12 +195,14 @@ def encode_motion_summaries(encoder, dataset, *, batch_size=32, prepared_inputs=
         for start in range(0, len(dataset.xyz), batch_size):
             xyz = prepared.xyz[start:start + batch_size]
             patches = prepared.valid_patch[start:start + batch_size]
-            z = encoder(xyz, patches).reshape(
+            z = _encode_prevalidated(encoder, xyz, patches).reshape(
                 len(xyz), encoder.segments, 33, encoder.embed_dim
             )
             if z.dtype != torch.float32:
                 raise RuntimeError("Motion evaluation requires FP32 encoder outputs")
-            all_finite.logical_and_(torch.isfinite(z.masked_select(patches[..., None])).all())
+            # Invalid outputs are already zeroed by the encoder. Avoid dynamic
+            # masked_select allocation and repeated device-to-host validation.
+            all_finite.logical_and_(torch.isfinite(z).all())
             for name, values in _bilateral_summaries_fp32(z, patches).items():
                 outputs[name].append(values)
         reduced = {name: torch.cat(values, dim=0) for name, values in outputs.items()}
@@ -230,6 +250,9 @@ mask, encoder checkpoint, regularizer or training budget.
     )
     direct = raw_pose_features(dataset)
     mean_target = float(np.average(dataset.targets[train], weights=source_weights(dataset.source_ids[train])))
+    # Identical initial/direct-pose controls are fitted once, then reported for
+    # every arm. Train/test sources and alpha candidates are unchanged.
+    control_readouts = {}
     for condition, run in result["runs"].items():
         features = {f"initial_online__{k}": v for k, v in initial_features.items()}
         for name, encoder in (("pretrained_online", run["model"].view_encoder),
@@ -244,8 +267,13 @@ mask, encoder checkpoint, regularizer or training budget.
             if representation == "training_mean":
                 predicted = np.full(len(test), mean_target)
             else:
-                readout = fit_source_readout(features[representation], dataset.targets, dataset.source_ids,
-                    train_sources=dataset.train_sources, test_sources=dataset.test_sources, alphas=alphas)
+                shared_control = representation.startswith("initial_online__") or representation == "direct_pose"
+                readout = control_readouts.get(representation) if shared_control else None
+                if readout is None:
+                    readout = fit_source_readout(features[representation], dataset.targets, dataset.source_ids,
+                        train_sources=dataset.train_sources, test_sources=dataset.test_sources, alphas=alphas)
+                    if shared_control:
+                        control_readouts[representation] = readout
                 predicted = readout.predict(features[representation][test])
                 alpha = readout.selected_alpha
                 for record in readout.validation.to_dict("records"):
