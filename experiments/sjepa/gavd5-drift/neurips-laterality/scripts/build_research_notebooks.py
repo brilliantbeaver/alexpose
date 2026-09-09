@@ -27,11 +27,27 @@ NOTEBOOKS = {
     "18": "18_motion_information_and_readout.ipynb",
 }
 
+# Notebooks 17--18 operate on the real GAVD pretraining grid.  Their local
+# setup script registers this kernel from .venv-cuda.  Keeping the preference
+# in the generator matters: regenerating a notebook must not silently put the
+# user back onto the CPU-only project ``python3`` kernel.
+CUDA_NOTEBOOKS = frozenset({"17", "18"})
+CUDA_KERNELSPEC = {
+    "display_name": "GAVD5 CUDA (PyTorch 2.13)",
+    "language": "python",
+    "name": "gavd5-cuda",
+}
+DEFAULT_KERNELSPEC = {
+    "display_name": "Python 3 (ipykernel)",
+    "language": "python",
+    "name": "python3",
+}
+
 
 def render(number: str) -> str:
     notebook = importlib.import_module(f"tutorials.research_{number}").build_notebook()
     notebook.metadata.update({
-        "kernelspec": {"display_name": "Python 3 (ipykernel)", "language": "python", "name": "python3"},
+        "kernelspec": CUDA_KERNELSPEC if number in CUDA_NOTEBOOKS else DEFAULT_KERNELSPEC,
         "language_info": {"name": "python", "version": "3.11"},
         "research_status": ("GAVD development workflow; synthetic mode is an explicit software check."
                             if int(number) >= 15 else

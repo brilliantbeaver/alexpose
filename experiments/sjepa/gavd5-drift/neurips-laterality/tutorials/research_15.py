@@ -1,10 +1,11 @@
 """Editable GAVD tutorial: motion-weighted masks across five folds and seeds."""
 from nbformat.v4 import new_notebook
+from .motion_results_20260908 import add_saved_result_interpretation
 from .masking_shared import md, code, setup_cell, data_instructions, configuration_cell, inputs_cell
 
 
 def build_notebook():
-    return new_notebook(cells=[
+    notebook = new_notebook(cells=[
         md(r'''
         # 15 — Motion weighting on the real GAVD training partitions
 
@@ -141,3 +142,4 @@ def build_notebook():
         and remaining anatomical assumptions.
         '''),
     ])
+    return add_saved_result_interpretation(notebook, 15)

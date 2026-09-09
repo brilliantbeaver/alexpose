@@ -1436,7 +1436,8 @@ def _motion_grid_with_progress(plan, inputs, *, progress, training, enabled, log
 
     def train(dataset, settings, **kwargs):
         identity = workflow.mask_study_identity(dataset, settings, kwargs["experiment"], kwargs["arms"],
-                                               kwargs.get("checkpoint_steps", ()))
+                                               kwargs.get("checkpoint_steps", ()),
+                                               precision=kwargs.get("precision", "fp32"))
         cached = (Path(kwargs["output_dir"]) / workflow.canonical_json_digest(identity)).exists()
         progress.start_unit(progress.completed_units + 1,
             f"Train {kwargs['experiment']} · outer fold {settings.fold} · seed {settings.seed}",
@@ -1466,14 +1467,14 @@ def _motion_grid_with_progress(plan, inputs, *, progress, training, enabled, log
         complete_cached_stage(bool(result.get("reused", False)))
         return result
 
-    def evaluate(job, request):
+    def evaluate(job, request, **kwargs):
         identity = workflow.motion_readout_identity(job["identity"], include_predictor=True)
         cached = (Path(request["output_dir"]) / "evaluations" / workflow.canonical_json_digest(identity)).exists()
         progress.start_unit(progress.completed_units + 1,
             f"Readouts {job['experiment']} · outer fold {job['fold']} · seed {job['seed']}",
             candidate_cached=cached, detail="Validate cached tables" if cached else "Load frozen encoders and fit training-source readouts")
         with _motion_readout_progress(progress):
-            result = original_evaluation(job, request)
+            result = original_evaluation(job, request, **kwargs)
         complete_cached_stage(cached)
         return result
 
@@ -1494,7 +1495,10 @@ def _motion_grid_with_progress(plan, inputs, *, progress, training, enabled, log
             result = (workflow.run_gavd_grid(plan, inputs, enabled=enabled, log=log) if training
                       else workflow.collect_gavd_grid(plan, inputs, log=log))
         if result["status"] == "Complete":
-            progress.complete_unit()
+            if result.get("grid_cache_reused"):
+                progress.start_unit(progress.completed_units + 1, "Validated cached pooled report",
+                    candidate_cached=True, detail="Source bootstrap and summary tables reused after content checks")
+            complete_cached_stage(bool(result.get("grid_cache_reused")))
             progress.complete(status="Training and held-out evaluation complete" if training else "Saved-grid evaluation complete")
         elif training and not enabled:
             progress.finish_skipped(result["status"], status="Checkpoint inspection complete · training disabled")

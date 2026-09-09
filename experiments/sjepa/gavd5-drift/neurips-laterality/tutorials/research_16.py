@@ -1,10 +1,11 @@
 """Editable GAVD tutorial: structured masks, missingness and contextual cues."""
 from nbformat.v4 import new_notebook
+from .motion_results_20260908 import add_saved_result_interpretation
 from .masking_shared import md, code, setup_cell, data_instructions, configuration_cell, inputs_cell
 
 
 def build_notebook():
-    return new_notebook(cells=[
+    notebook = new_notebook(cells=[
         md('''
         # 16 — Structured masking on the real GAVD training partitions
 
@@ -139,3 +140,4 @@ def build_notebook():
         [18](18_motion_information_and_readout.ipynb).
         '''),
     ])
+    return add_saved_result_interpretation(notebook, 16)

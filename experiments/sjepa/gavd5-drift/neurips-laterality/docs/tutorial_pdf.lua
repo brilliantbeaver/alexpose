@@ -29,7 +29,11 @@ function Table(tbl)
       widths = {0.65, 0.12, 0.23}
     end
   elseif #tbl.colspecs == 5 then
-    widths = {0.38, 0.16, 0.14, 0.14, 0.18}
+    if pandoc.utils.stringify(tbl.head):match('Workshop or track') then
+      widths = {0.20, 0.08, 0.10, 0.20, 0.42}
+    else
+      widths = {0.38, 0.16, 0.14, 0.14, 0.18}
+    end
   else
     return tbl
   end

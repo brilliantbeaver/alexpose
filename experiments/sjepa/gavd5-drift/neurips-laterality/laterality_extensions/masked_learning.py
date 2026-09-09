@@ -16,6 +16,7 @@ import os
 import platform
 import shutil
 import subprocess
+import sys
 import time
 from dataclasses import asdict, dataclass, replace
 from pathlib import Path
@@ -122,7 +123,31 @@ def resolve_learning_device(requested: str = "auto") -> torch.device:
         raise ValueError("Learning device must resolve to cpu, cuda, or mps")
     if device.type == "cuda":
         if not torch.cuda.is_available():
-            raise RuntimeError("CUDA was requested for masking training but is unavailable")
+            cuda_build = torch.version.cuda
+            visible_devices = os.getenv("CUDA_VISIBLE_DEVICES")
+            runtime = (
+                f"Active interpreter: {sys.executable}. "
+                f"PyTorch: {torch.__version__}; compiled CUDA: {cuda_build or 'none (CPU-only build)'}."
+            )
+            if cuda_build is None:
+                remedy = (
+                    " This kernel imported a CPU-only PyTorch build. Select the "
+                    "'GAVD5 CUDA (PyTorch 2.13)' kernel (or install a CUDA-enabled "
+                    "PyTorch build into this exact interpreter), restart the kernel, and rerun."
+                )
+            else:
+                visibility = (
+                    f" CUDA_VISIBLE_DEVICES={visible_devices!r}."
+                    if visible_devices is not None else ""
+                )
+                remedy = (
+                    " This CUDA-enabled PyTorch build could not initialize a GPU."
+                    f"{visibility} Check that the NVIDIA driver is available to this process, "
+                    "that CUDA_VISIBLE_DEVICES has not hidden every GPU, then restart the kernel."
+                )
+            raise RuntimeError(
+                "CUDA was requested for masking training but is unavailable. " + runtime + remedy
+            )
         if device.index is not None and device.index >= torch.cuda.device_count():
             raise RuntimeError(f"CUDA device index {device.index} is unavailable")
     if device.type == "mps" and not torch.backends.mps.is_available():

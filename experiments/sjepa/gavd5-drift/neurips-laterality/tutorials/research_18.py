@@ -1,10 +1,11 @@
 """Editable GAVD tutorial: reopen the full trained grid and interpret held-out readouts."""
 from nbformat.v4 import new_notebook
+from .motion_results_20260908 import add_saved_result_interpretation
 from .masking_shared import (md, code, setup_cell, data_instructions, configuration_cell, inputs_cell, plan_cell)
 
 
 def build_notebook():
-    return new_notebook(cells=[
+    notebook = new_notebook(cells=[
         md('''
         # 18 — Evaluate motion information from the saved GAVD grid
 
@@ -21,7 +22,7 @@ def build_notebook():
         features, then inspect predictor correspondence separately. This makes
         favorable and unfavorable results equally interpretable.
         '''),
-        setup_cell(), data_instructions(), configuration_cell(), inputs_cell(),
+        setup_cell(load_environment=True), data_instructions(), configuration_cell(), inputs_cell(),
         md('''
         ## 2. Reconstruct the exact training grid before loading results
 
@@ -219,3 +220,4 @@ def build_notebook():
             print("Optional older-checkpoint reanalysis not configured.")
         '''),
     ])
+    return add_saved_result_interpretation(notebook, 18)

@@ -23,6 +23,10 @@ census. Missing cohort/split artifacts can be prepared using the same rules as
 in its configuration cell to run 50 paired jobs (125 encoders). Notebook 18
 reopens that complete saved grid without encoder training. See the
 [step-by-step GAVD run guide](docs/MOTION_GAVD_WORKFLOW.md).
+The [CUDA performance and precision review](docs/MOTION_PRETRAINING_PERFORMANCE.md)
+documents the installed kernel, measured FP32/BF16 throughput and the decision
+to reserve FP8 for a separate benchmark, omit 8-bit Adam at this model size,
+and treat INT8 as a deployment study.
 Verify with `python scripts/verify_motion_notebooks.py --execute --data-mode gavd`
 for real-input audits with training disabled, or omit `--data-mode` for explicit
 generated-data software checks.

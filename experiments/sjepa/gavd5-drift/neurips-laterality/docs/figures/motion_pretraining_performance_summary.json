@@ -1,0 +1,213 @@
+{
+  "review_date": "2026-09-08",
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 4090 Laptop GPU",
+    "gpu_memory_mib": 16376,
+    "driver": "596.08",
+    "cpu": "Intel Core i9-13980HX",
+    "system_ram_gib_approx": 64
+  },
+  "runtime": {
+    "python": "3.12.10",
+    "cpu_torch": "2.13.0+cpu",
+    "cuda_torch": "2.13.0+cu130",
+    "kernel": "gavd5-cuda"
+  },
+  "training_shape": {
+    "batch_size": 20,
+    "frames": 64,
+    "joints": 33,
+    "segment_length": 4,
+    "embed_dim": 96,
+    "encoder_depth": 4,
+    "predictor_depth": 2,
+    "heads": 4,
+    "motion_arms": 3
+  },
+  "benchmarks": [
+    {
+      "name": "baseline-cpu",
+      "report": "work/pretraining-performance/baseline-cpu.json",
+      "sha256": "6bfb7b74ef96eff3f8bf918e027b578fedd8a7c2e7d33972e5d97adb295b0a25",
+      "median_paired_step_seconds": 3.8529341998510063,
+      "paired_step_seconds": [
+        3.8529341998510063,
+        3.776227300055325,
+        4.006751100067049
+      ],
+      "peak_vram_mib": null
+    },
+    {
+      "name": "baseline-cuda",
+      "report": "work/pretraining-performance/baseline-cuda.json",
+      "sha256": "5db45d31de643d7d6ea16e923f2018a48a248d46402b4154e34797f027863b2a",
+      "median_paired_step_seconds": 0.20755330007523298,
+      "paired_step_seconds": [
+        0.20755330007523298,
+        0.19132519979029894,
+        0.22654260019771755
+      ],
+      "peak_vram_mib": 1080.96240234375
+    },
+    {
+      "name": "optimized-fp32",
+      "report": "work/pretraining-performance/optimized-fp32.json",
+      "sha256": "19a4de996bbfffa4c235864535c959f97da634e7ca78e0baffe408536e093ceb",
+      "median_paired_step_seconds": 0.17741300002671778,
+      "paired_step_seconds": [
+        0.17438530013896525,
+        0.17448169994167984,
+        0.17715199990198016,
+        0.1750292000360787,
+        0.17741300002671778,
+        0.1799222999252379,
+        0.1775913001038134,
+        0.18042919994331896,
+        0.18045370001345873
+      ],
+      "peak_allocated_mib": 1084.46533203125,
+      "preparation_seconds": 1.1870000001508743,
+      "warmup_updates": 2,
+      "measured_updates": 9
+    },
+    {
+      "name": "optimized-bf16",
+      "report": "work/pretraining-performance/optimized-bf16.json",
+      "sha256": "c8dc37105d8e5cd0e95fe1ee9e7370f0809bf97fbb5a4a323eceaf5eff923c19",
+      "median_paired_step_seconds": 0.09602189995348454,
+      "paired_step_seconds": [
+        0.09294230001978576,
+        0.09383699996396899,
+        0.10368079994805157,
+        0.09865280007943511,
+        0.09727309993468225,
+        0.09288290003314614,
+        0.09602189995348454,
+        0.09582320018671453,
+        0.0971414998639375
+      ],
+      "peak_allocated_mib": 684.36376953125,
+      "preparation_seconds": 1.172000000020489,
+      "warmup_updates": 2,
+      "measured_updates": 9
+    },
+    {
+      "name": "final-bf16",
+      "report": "work/pretraining-performance/final-bf16.json",
+      "sha256": "5da9928c9fea54485f476755fead86178323f7522ecc2efdb762a491cb52ba2a",
+      "median_paired_step_seconds": 0.09947129990905523,
+      "paired_step_seconds": [
+        0.10008230013772845,
+        0.10364389978349209,
+        0.08667410002090037,
+        0.09262530016712844,
+        0.10870740003883839,
+        0.10533920000307262,
+        0.11220129998400807,
+        0.09947129990905523,
+        0.10698059992864728,
+        0.10036469995975494,
+        0.09124730015173554,
+        0.09894329984672368,
+        0.09859330020844936,
+        0.09839139995165169,
+        0.09928119997493923,
+        0.09733009990304708,
+        0.0977348000742495,
+        0.10192389995791018,
+        0.09511850005947053,
+        0.095794300083071,
+        0.10098049999214709,
+        0.08270129980519414,
+        0.1029401000123471,
+        0.10063260002061725,
+        0.10878130001947284,
+        0.10094240005128086,
+        0.10449380008503795,
+        0.10077989986166358,
+        0.1001989000942558,
+        0.10042120004072785,
+        0.09678069991059601,
+        0.10769199999049306,
+        0.09575169999152422,
+        0.09207609994336963,
+        0.08076060004532337,
+        0.08616530010476708,
+        0.07885859999805689
+      ],
+      "peak_allocated_mib": 686.2841796875,
+      "preparation_seconds": 2.3589999999385327,
+      "warmup_updates": 2,
+      "measured_updates": 37
+    }
+  ],
+  "score_cache": {
+    "timings": {
+      "uncached": 5.245650100056082,
+      "cold_cache": 2.8948723000939935,
+      "warm_cache": 1.918706800090149
+    },
+    "paired_batches": 60,
+    "clips_per_batch": 20,
+    "cache_entries": 690,
+    "exact_masks_and_metadata": true
+  },
+  "real_integration": {
+    "status": "Complete",
+    "full_grid_executed": false,
+    "folds": [
+      0
+    ],
+    "seeds": [
+      42
+    ],
+    "encoders": 5,
+    "updates_per_encoder": 12,
+    "precision": "bf16",
+    "train_clips": 436,
+    "test_clips": 189,
+    "prediction_rows": 7560,
+    "cached_bootstrap_reused": true,
+    "directory": "C:\\Users\\alexm\\dev\\alexpose\\experiments\\sjepa\\gavd5-drift\\work\\pretraining-performance\\real-grid\\grids\\d1cf4bdd3984cf79a13400da56966eb4df81c7f21deda91ff672aabb04d7ea8a"
+  },
+  "tests": {
+    "motion_workflow_tests_passed": 32,
+    "existing_progress_tests_passed": 10
+  },
+  "executed_notebooks": {
+    "synthetic": "executed/motion_structured/synthetic_4cqagqw6",
+    "real_cuda_bf16_preflight": "executed/motion_structured/gavd_chsc84y2"
+  },
+  "final_source_sha256": {
+    "motion_structured_training.py": "9e7d6d9d68db66bc580498787c39f3a8611b291911914ab5c577b46eca69442d",
+    "motion_structured_masks.py": "befc196c96074eac0eb4943c8adf588d67bfaa98e9f448f9c992ed44b3c140b9",
+    "motion_runtime.py": "932f1cef9aa6f60d72f071a924fff276fb65d6e5cb476f2433b32576eef7f7e6",
+    "motion_gavd.py": "0a9062de32263bac6f6d1fda79e6c738fe98bca8810bf43014dd9687bb7ab3f0",
+    "motion_readout.py": "7bc11451b3b625d154ab9f29873d515ef3dc1eb6a49fff235b19e5f4e642fc68"
+  },
+  "low_precision_decision": {
+    "registered_precision_modes": [
+      "fp32",
+      "bf16"
+    ],
+    "recommended_accelerated_mode": "bf16 compute with FP32 state, sensitive reductions, and evaluation",
+    "fp8": {
+      "status": "future isolated benchmark only",
+      "hardware_capable": true,
+      "current_environment_ready": false,
+      "minimum_repeatable_end_to_end_speedup_to_continue": 0.15
+    },
+    "eight_bit_adam": {
+      "status": "not recommended for current grid",
+      "trainable_parameters_per_arm": 719424,
+      "fp32_adam_moments_mib_per_arm": 5.48876953125,
+      "maximum_three_arm_moment_savings_mib": 12.3497314453125,
+      "estimated_savings_excluding_small_tensors_mib": 12.0234375,
+      "fraction_of_measured_bf16_peak": 0.018
+    },
+    "int8": {
+      "status": "separate inference or deployment study"
+    }
+  },
+  "full_real_grid_executed": false
+}

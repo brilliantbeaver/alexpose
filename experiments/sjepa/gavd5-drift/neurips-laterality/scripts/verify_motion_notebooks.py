@@ -1,4 +1,9 @@
-"""Verify notebooks 15--18 in explicit synthetic or real-GAVD mode; never train the real grid."""
+"""Verify notebooks 15--18 in explicit synthetic or real-GAVD mode; never train the real grid.
+
+Saved execution outputs are evidence and may be retained.  Verification compares
+the ordered cell types and sources with the builders, then clears outputs only in
+the in-memory copy when a fresh execution was requested.
+"""
 from __future__ import annotations
 
 import argparse
@@ -34,6 +39,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--data-mode", choices=("synthetic", "gavd"), default="synthetic")
+    parser.add_argument("--device", choices=("cpu", "auto", "cuda", "mps"), default="cpu")
+    parser.add_argument("--precision", choices=("fp32", "bf16"), default="fp32")
     parser.add_argument("--only", nargs="+", choices=("15", "16", "17", "18"), default=["15", "16", "17", "18"])
     args = parser.parse_args()
     before = protected_files()
@@ -46,7 +53,9 @@ def main():
     for name in ("LATERALITY_MOTION_VALIDATE_REAL", "LATERALITY_MOTION_RUN_REAL",
                  "LATERALITY_RESEARCH_RUN_REAL", "LATERALITY_RESEARCH_VALIDATE_REAL"):
         environment[name] = "0"
-    environment["LATERALITY_DEVICE"] = "cpu"
+    environment["LATERALITY_DEVICE"] = args.device
+    environment["LATERALITY_MOTION_PRECISION"] = args.precision
+    environment["LATERALITY_MOTION_BENCHMARK"] = "0"
     environment["LATERALITY_MOTION_DATA_MODE"] = args.data_mode
     # Isolate generated checkpoints; real verification uses the normal real grid.
     if destination and args.data_mode == "synthetic":
@@ -56,15 +65,25 @@ def main():
     environment["LATERALITY_RESEARCH_CPU_THREADS"] = "1"
     for number in args.only:
         path = SUITE_ROOT / NOTEBOOKS[number]
-        if path.read_text(encoding="utf-8") != render(number):
-            raise AssertionError(f"Source notebook differs from its builder: {path.name}")
         notebook = nbformat.read(path, as_version=4)
+        expected = nbformat.reads(render(number), as_version=4)
+        actual_sources = [(cell.cell_type, cell.source) for cell in notebook.cells]
+        expected_sources = [(cell.cell_type, cell.source) for cell in expected.cells]
+        if actual_sources != expected_sources:
+            raise AssertionError(f"Source notebook differs from its builder: {path.name}")
         nbformat.validate(notebook)
         code_cells = [c for c in notebook.cells if c.cell_type == "code"]
-        if any(c.outputs or c.execution_count is not None for c in code_cells):
-            raise AssertionError("Source notebooks must remain output-free")
-        record = {"notebook": path.name, "source_valid": True, "executed": False}
+        retained_output_cells = sum(bool(c.outputs) for c in code_cells)
+        record = {
+            "notebook": path.name,
+            "source_valid": True,
+            "retained_output_cells": retained_output_cells,
+            "executed": False,
+        }
         if args.execute:
+            for cell in code_cells:
+                cell.execution_count = None
+                cell.outputs = []
             print(f"Executing {args.data_mode} notebook {number} with {sys.executable}", flush=True)
             manager = KernelManager(kernel_name="python3")
             manager.kernel_spec.argv = [sys.executable, "-m", "ipykernel_launcher", "-f", "{connection_file}"]

@@ -17,6 +17,7 @@ import numpy as np
 from .comparative_masks import (
     ANATOMICAL_EDGES, GAIT_JOINTS, InfeasibleMaskBudget, MaskBudget, MaskPolicy,
     MaskResult, _validate_input, coverage_summary, sample_mask,
+    motion_scores,
 )
 
 
@@ -80,14 +81,36 @@ endpoints too. Stationary/single-block inputs have uniform log weights.
                     "normalization": "per-clip maximum, as in official MAMP code"}
 
 
+def _cached_scores(xyz, valid, observed, arm, segment_length, cache):
+    """Cache deterministic clip scores only; never cache a random mask draw.
+
+Content keys include invalid observations too, so an in-place data change cannot
+reuse stale weights. Training passes only its permitted rows to this function.
+"""
+    digest = hashlib.sha256(repr((arm, segment_length)).encode())
+    for value in (xyz, valid, observed):
+        array = np.ascontiguousarray(value)
+        digest.update(str((array.shape, array.dtype)).encode())
+        digest.update(array.tobytes())
+    key = digest.hexdigest()
+    if key not in cache:
+        cache[key] = (mamp_logits(xyz, valid, segment_length=segment_length,
+            observation_valid=observed, temperature=arm.temperature) if arm.name == "mamp_motion"
+            else motion_scores(xyz, valid, segment_length=segment_length,
+                observation_valid=observed, clip_quantile=arm.clip_quantile))
+    scores, metadata = cache[key]
+    return scores, dict(metadata)
+
+
 def sample_study_mask(xyz, valid, arm, hidden_count, rng, *, segment_length=4,
-                      observation_valid=None):
+                      observation_valid=None, score_cache=None):
     """Hide unique valid targets; every arm retains observed context."""
     arm.validate()
     if arm.name == "mamp_motion":
         MaskBudget(hidden_count=hidden_count).validate(MaskPolicy("uniform"))
-        logits, metadata = mamp_logits(xyz, valid, segment_length=segment_length,
-            observation_valid=observation_valid, temperature=arm.temperature)
+        logits, metadata = (mamp_logits(xyz, valid, segment_length=segment_length,
+            observation_valid=observation_valid, temperature=arm.temperature) if score_cache is None
+            else _cached_scores(xyz, valid, observation_valid, arm, segment_length, score_cache))
         candidates = np.flatnonzero(valid)
         if hidden_count >= len(candidates):
             raise InfeasibleMaskBudget("MAMP targets must retain valid context")
@@ -98,6 +121,29 @@ def sample_study_mask(xyz, valid, arm, hidden_count, rng, *, segment_length=4,
         mask.ravel()[selected] = True
         coverage = {**coverage_summary(mask, valid, segment_length=segment_length), **metadata,
                     "policy": arm.name, "eligible_landmarks": list(range(33))}
+        return MaskResult(mask, np.argwhere(mask), coverage)
+    if arm.name == "robust_motion" and score_cache is not None:
+        # Same candidate order, arithmetic, RNG call and metadata as sample_mask.
+        # Only deterministic motion_scores (33 nanmedians/clip) are memoized.
+        MaskBudget(hidden_count=hidden_count).validate(MaskPolicy("motion"))
+        xyz, valid, observed = _validate_input(xyz, valid, segment_length, observation_valid)
+        candidates = np.flatnonzero(valid.ravel())
+        if hidden_count >= len(candidates):
+            raise InfeasibleMaskBudget("Motion targets must retain valid context")
+        scores, metadata = _cached_scores(xyz, valid, observed, arm, segment_length, score_cache)
+        weights = np.ones(len(candidates), dtype=float) / len(candidates)
+        selected_scores = scores.ravel()[candidates]
+        if selected_scores.sum() > 0:
+            weights = ((1 - arm.motion_weight) * weights
+                + arm.motion_weight * selected_scores / selected_scores.sum())
+        else:
+            metadata["motion_fallback_uniform"] = True
+        selected = rng.choice(candidates, size=hidden_count, replace=False, p=weights)
+        mask = np.zeros_like(valid)
+        mask.ravel()[selected] = True
+        coverage = {**coverage_summary(mask, valid, segment_length=segment_length), **metadata,
+            "policy": "motion", "eligible_landmarks": list(range(33)),
+            "eligible_tokens": int(valid.sum()), "requested_hidden_count": hidden_count}
         return MaskResult(mask, np.argwhere(mask), coverage)
     name = "motion" if arm.name == "robust_motion" else arm.name
     policy = MaskPolicy(name, motion_weight=arm.motion_weight,
@@ -130,7 +176,7 @@ def study_arms(experiment, blocks):
     return {"uniform": StudyArm("uniform"), specifications[experiment].name: specifications[experiment]}
 
 
-def paired_study_masks(dataset, rows, settings, arms, *, step=0):
+def paired_study_masks(dataset, rows, settings, arms, *, step=0, score_cache=None):
     """Mask RNGs cannot alter source draws or geometric augmentation streams.
 
 Counts match between arms for each clip. A structure's realized count determines
@@ -155,7 +201,8 @@ its scattered reference, including with missing measurements; no trimming occurs
             code = int.from_bytes(hashlib.sha256(name.encode()).digest()[:4], "little")
             rng = np.random.default_rng(np.random.SeedSequence([settings.seed, settings.fold, 151, code, step, offset]))
             result = sample_study_mask(dataset.xyz[row], valid[offset], arms[name], clip_count, rng,
-                segment_length=settings.segment_length, observation_valid=dataset.valid[row])
+                segment_length=settings.segment_length, observation_valid=dataset.valid[row],
+                score_cache=score_cache)
             if name in structured:
                 clip_count = int(result.mask.sum())
             result.coverage["reflected"] = False

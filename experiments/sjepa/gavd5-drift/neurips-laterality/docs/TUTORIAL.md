@@ -1,8 +1,8 @@
 # From gait symmetry to useful movement prediction
 
-A guide to our research questions, findings, and next experiments. Notebook evidence reviewed on 8 September 2026; related literature and workshop information were last checked on 7 September 2026.
+A guide to our research questions, findings, and next experiments. Notebook evidence, related literature, and workshop information were last checked on 8 September 2026.
 
-The next implementation is available in notebooks [15](../15_motion_weighted_masking.ipynb),
+The latest completed comparison is documented in notebooks [15](../15_motion_weighted_masking.ipynb),
 [16](../16_structured_masking_and_context.ipynb), [17](../17_motion_and_structure_pretraining.ipynb)
 and [18](../18_motion_information_and_readout.ipynb). They examine the MAMP code's
 motion weighting, structured target geometry, paired JEPA training and
@@ -12,13 +12,15 @@ All four now default to real GAVD, displaying five source folds and seeds
 42–46. The [GAVD run guide](MOTION_GAVD_WORKFLOW.md) explains preparation,
 training enablement and loading the same complete grid in Notebook 18.
 Real-input and masking audits reproduce the 625-clip, 93-video cohort; the
-full new pretraining comparison remains unrun. Generated software checks are
-explicitly separate. The empirical findings below are unchanged. This
-implementation follows Direction A before expanding the forecasting work.
+full comparison is complete: 50 paired jobs, 125 encoders and 150,000
+arm-specific optimizer updates. The grid used CUDA BF16 training with FP32
+weights, loss reductions and frozen evaluation. Generated software checks are
+explicitly separate.
 
 ## Contents
 
 - [Research question and current finding](#1-the-question-connecting-the-work)
+- [Latest results from notebooks 15–18](#latest-results-from-notebooks-1518-a-simple-walkthrough)
 - [Data and research trajectory](#2-the-data-and-the-research-trajectory)
 - [What notebooks 11–14 have established](#what-has-run-in-notebooks-1114)
 - [Real-data masking findings](#question-2-does-hiding-gait-relevant-landmarks-help-learning)
@@ -41,7 +43,7 @@ Our experiments study sequences of estimated body landmarks, including shoulders
 
 The motivating idea is that predicting missing observations could encourage a model to represent meaningful relationships between body parts and their movement. For example, the visible hip and knee trajectory might help predict an obscured ankle. We evaluate that idea by holding the encoder's weights fixed—often called freezing the encoder—and testing whether its features help a simple regression model predict a movement quantity on videos excluded from training.
 
-The latest real-data comparison, completed through Notebook 12, contains 50 trained encoders evaluated on 625 clips from 93 source videos. Selecting gait-relevant landmarks as hidden targets does not establish better movement prediction than selecting targets across the body. Both trained alternatives perform worse than their matched untrained encoder, even with the regression penalty selected using training videos only. Direct summaries of the pose coordinates give the best scores among these tested representations.
+The latest real-data comparison, completed through Notebook 18, contains 125 trained encoders evaluated on 625 clips from 93 source videos. It compares random targets with motion-weighted targets and connected anatomical regions. None of the alternative masks demonstrates better movement prediction than its matched random reference. More strikingly, every trained encoder performs worse than its matched untrained encoder when both use the same motion-sensitive summary.
 
 The trained predictor also carries clip-related information: it estimates its own clip's hidden teacher features more accurately than teacher features from a different video, while the initial control shows no consistent preference for correct targets. That result does not translate into better prediction of our left–right movement score. A predictor can exploit posture, viewpoint, or other clip-specific information without improving the movement distinction we want to recover. This is the most useful finding to investigate next.
 
@@ -51,7 +53,83 @@ Three questions are especially interesting now:
 2. **Which left–right relationships should the representation preserve?** Overall movement and the side contributing more movement need different responses to reflection.
 3. **Can learning these relationships improve prediction of future movement?** This would provide a stronger connection to temporal world models than a test of whole-clip consistency alone.
 
-This tutorial separates measured results on gait recordings from synthetic demonstrations and proposed experiments. The real-data evidence covers two scattered masking policies. Motion-weighted and structured masks have been implemented and demonstrated, but their real-data training comparisons remain unrun. Forecast decoding in Notebook 14 is also a synthetic demonstration; it has not established a benefit on human gait recordings.
+This tutorial separates measured results on gait recordings from synthetic demonstrations and proposed experiments. The real-data evidence now covers scattered, motion-weighted and connected-region training masks. Whole-trajectory and interior-gap masks have real-data coverage audits but no trained comparison. Forecast decoding in Notebook 14 is also a synthetic demonstration; it has not established a benefit on human gait recordings.
+
+### Latest results from notebooks 15–18: a simple walkthrough
+
+This section follows the four notebooks in order. Keep two questions separate:
+
+1. Did the method change what the model had to predict?
+2. Did that change make the frozen representation more useful?
+
+#### Step 1: Notebook 15 confirms that motion weighting changes target selection
+
+All three motion arms hide the same average number of targets: 80.771 per clip, or about 17% of valid all-landmark tokens. The configured 50% mask fraction is calculated from the smaller twelve-landmark gait budget, so it must not be described as hiding half of all tokens.
+
+| Motion arm | Target minus eligible motion | Both legs receive at least one target |
+|:--|--:|--:|
+| Random uniform | -0.0001 | 1.000 |
+| MAMP convention | 0.0175 | 0.999 |
+| Robust motion mixture | 0.0378 | 1.000 |
+
+Positive enrichment means that hidden tokens move more than the clip's eligible tokens under one common robust displacement score. The robust mixture shows the largest enrichment, and this pattern is stable across the five mask seeds. This establishes that the sampler works as intended. It does not show that the selected motion is clinically important, free of tracking jumps, or useful for the final prediction task.
+
+#### Step 2: Notebook 16 confirms that mask shapes remove different clues
+
+The structure audit covers 75,000 mask draws. These are repeated draws from the same 625 clips and 93 videos, rather than 75,000 independent observations.
+
+| Mask | Immediate time brackets | Visible body neighbor |
+|:--|--:|--:|
+| Random region reference | 0.699 | 0.988 |
+| Connected region | 0.000 | 0.512 |
+| Whole trajectory | 0.000 | 0.995 |
+| Interior temporal gap | 0.000 | 0.000 |
+
+Read the rows this way. Random regions usually leave both nearby time and body clues. Connected regions remove immediate time brackets and about half of local body clues. Whole trajectories remove a landmark's local time series but leave body neighbors. Interior gaps remove both measured local clues inside the gap.
+
+The geometry is working. A harder mask is not automatically a better learning task. Each structure also needs its own count-matched random reference: completion hides about 25.3% of valid tokens, while regions and trajectories hide about 9.5-9.9%.
+
+#### Step 3: Notebook 17 confirms that training completed and optimized its objective
+
+The saved grid contains all 50 paired fold/seed jobs: 75 motion-arm encoders and 50 region-arm encoders. Each history contains 1,200 updates. The average masked prediction loss falls from about 15 at the first recorded update to 0.84-0.95 at update 1,200, depending on the arm.
+
+This is evidence that optimization ran and that the predictor learned its training target. It is not evidence that the representation became more useful. Each arm has its own changing teacher and target distribution, so small differences in final training loss cannot rank the masks.
+
+#### Step 4: Notebook 18 provides the decisive held-out result
+
+For each seed, the score pools all five held-out folds and gives every source video equal total weight. The table then averages the five seed scores. The five seeds repeat training on the same videos; they are not five new cohorts.
+
+| Frozen representation | Mean R² | Mean absolute error |
+|:--|--:|--:|
+| Training-video target mean | -0.0106 | 0.04617 |
+| Direct pose summary | 0.0345 | 0.04496 |
+| Initial encoder, simple mean | 0.0708 | 0.04434 |
+| Initial encoder, motion-sensitive summary | **0.2225** | **0.04155** |
+| Trained teachers, motion-sensitive summary | 0.1008-0.1142 | 0.04360-0.04404 |
+
+The motion-sensitive summary adds temporal variation, feature changes and observation support. It reveals substantially more useful signal in the initial encoder: R² rises by 0.1517 over the simple mean. It helps the trained teachers by only 0.0270-0.0468. Every trained arm has lower R² and higher error than its matched initial encoder in all five seeds. This is consistent unfavorable evidence for the current pretraining recipe and laterality readout.
+
+The mask comparisons are also small and uncertain:
+
+| Mask versus its random reference | Difference in R² | 95% source-bootstrap interval |
+|:--|--:|:--|
+| MAMP motion | -0.0008 | [-0.0204, 0.0153] |
+| Robust motion mixture | 0.0005 | [-0.0155, 0.0152] |
+| Connected region | -0.0087 | [-0.0333, 0.0177] |
+
+All three intervals include zero. They do not demonstrate that an alternative mask is better, and they are too wide to establish that the masks are equivalent.
+
+There is one positive learning result. For every trained predictor diagnostic, a hidden target from the correct clip is easier to predict than a valid target taken from another source video. The initial predictor does not show this consistent preference. Training therefore learns clip correspondence. That information could describe motion, pose, viewpoint, recording style or another clip property; it does not yet improve the left-right movement endpoint.
+
+#### Step 5: Proceed in this order
+
+1. **Reuse the saved encoders and widen ridge regularization.** Many trained readouts choose 10,000, the largest tested penalty. Add 100,000 and 1,000,000, select using training-source groups only, and retain the current scores as the original analysis.
+2. **Find which part of the motion-sensitive summary helps.** Compare mean, observation support, temporal standard deviation and absolute feature changes in fixed ablations. Add support-only and matching direct-coordinate controls. This separates movement information from missingness information.
+3. **Check the target against input preparation.** Compare the original target with the same calculation after interpolation, normalization and resizing, stratified by timing and valid support. Treat this as a diagnostic because the same development cohort has already informed the question.
+4. **Change training only after those checks.** If the trained deficit remains, use a source-separated pilot with initial and intermediate checkpoints. Change one factor at a time, such as regularizer strength or target objective, and keep masking, initialization and exposure paired.
+5. **Run another full grid only after a fixed pilot criterion is met.** Require a consistent trained-over-initial gain on reserved training sources. Preserve the current unfavorable result and seek later confirmation on an untouched cohort or setting.
+
+The practical conclusion is simple: motion weighting and connected regions change the prediction problem, but neither improves the tested laterality readout. Training learns clip correspondence while making the endpoint less accessible to the tested linear readout. The next work should explain that gap before adding more masks, model size or training time.
 
 Section 4 examines whether our masking choices are too restrictive. It distinguishes the landmarks supplied to the encoder from those selected as hidden targets, explains established alternatives, and proposes a manageable comparison grounded in the current results.
 
@@ -262,9 +340,9 @@ The landmark scheme itself matters: several of the 33 points describe the face o
 
 **2. Motion-weighted masking.** Instead of always favoring the same landmarks, assign higher masking probability to joint–time regions with more observed movement. A swinging arm may receive more targets in one clip, and a moving foot in another. Selection remains stochastic, so this need not always hide the single fastest-moving joint.
 
-This is the most direct unrun real-data comparison with the source method. The original S-JEPA uses motion-weighted masking inherited from MAMP; our fixed gait-target pool is an adaptation. MAMP's mask-only ablation reports NTU-60 cross-subject linear-evaluation accuracy of 84.9% with motion-weighted masking versus 83.7% with random masking. MAMP also changes the prediction target to motion, so its overall performance cannot be attributed to mask selection alone. Notebook 11 now demonstrates an adapted motion-weighted sampler while retaining our JEPA feature target; its real-data predictive value still needs evaluation. [S-JEPA, ECCV 2024](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf), [MAMP, ICCV 2023, Table 8](https://openaccess.thecvf.com/content/ICCV2023/papers/Mao_Masked_Motion_Predictors_are_Strong_3D_Action_Representation_Learners_ICCV_2023_paper.pdf)
+This is the closest completed real-data comparison with the source method. The original S-JEPA uses motion-weighted masking inherited from MAMP; our adaptation retains the JEPA feature target and compares MAMP-style and robust motion weighting with a matched random mask. MAMP's mask-only ablation reports NTU-60 cross-subject linear-evaluation accuracy of 84.9% with motion-weighted masking versus 83.7% with random masking. MAMP also changes the prediction target to motion, so its overall performance cannot be attributed to mask selection alone. In our completed GAVD grid, neither motion mask improves the teacher mean-motion readout over random masking, and both are below their matched initial encoder. [S-JEPA, ECCV 2024](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf), [MAMP, ICCV 2023, Table 8](https://openaccess.thecvf.com/content/ICCV2023/papers/Mao_Masked_Motion_Predictors_are_Strong_3D_Action_Representation_Learners_ICCV_2023_paper.pdf)
 
-For laterality, movement magnitude is an imperfect guide. A limb that moves less can be essential to the left–right contrast, while an implausibly large jump can come from a tracking error. A practical adaptation should preserve a nonzero chance of masking slow-moving regions, exclude invalid observations, and control the influence of isolated jumps. These are proposed safeguards to evaluate, not evidence that motion-weighted masking already works here.
+For laterality, movement magnitude is an imperfect guide. A limb that moves less can be essential to the left–right contrast, while an implausibly large jump can come from a tracking error. The robust arm preserves a 25% uniform component, excludes invalid targets and clips extreme motion scores. Its mask audit shows higher-motion target selection. The held-out result shows that these safeguards do not, by themselves, produce a better laterality representation.
 
 **3. Whole-joint trajectories and connected body regions.** A trajectory mask hides the same landmark throughout the input window. For example, withholding the left ankle for the whole clip removes the immediate before-and-after observations that could fill a short gap. VideoMAE's analogous “tube” mask repeats a spatial mask through the video. At the same 90% masking ratio, its reported Something-Something V2 accuracy is 69.6% for tube masking and 68.3% for independent random masking. Those are fine-tuned RGB action-recognition scores; the very high ratio should not be copied directly to sparse pose input. [VideoMAE, NeurIPS 2022](https://arxiv.org/abs/2203.12602)
 
@@ -298,11 +376,11 @@ The same distinction applies to broadening the regularizer's twelve-landmark sum
 
 ### Which comparisons should we prioritize?
 
-The most useful next experiment is a focused comparison of what information is hidden, rather than a large search over every available technique. The following order balances scientific value with the weakness of the current predictive results.
+The latest grid has completed the first motion and connected-region comparisons. The most useful next work is to explain the common trained-versus-initial deficit before searching more masks. The following order uses the saved encoders first.
 
 1. **Make the evaluation informative before expanding training.** Use training-source validation to check regression regularization and motion-sensitive feature summaries, retaining the untrained encoder and direct-pose controls. A masking comparison needs a way to reveal useful learned information if it is present.
 2. **Test the anatomical exclusion rule.** Keep scattered masks and compare the gait-only and all-landmark references with several preselected random twelve-landmark sets and one soft gait preference. Judge random sets as a declared group rather than reporting whichever set gives the most favorable contrast. If a new condition changes the feasible shared token budget, repeat the reference conditions at that budget.
-3. **Test motion and mask shape under all-landmark eligibility.** Prioritize motion-weighted selection because it is the missing canonical S-JEPA comparator, and connected-limb intervals because they remove nearby body cues. A whole-joint trajectory condition would distinguish missing one trajectory from missing a connected region. Ensure the body-region groups together cover the declared landmark pool; otherwise the structured mask quietly introduces another exclusion rule. Keep the feature-prediction objective and all other training choices fixed for these comparisons.
+3. **Use the completed motion and region results as fixed references.** Motion weighting and connected regions have now been tested with matched random controls, without a demonstrated readout gain. Run a whole-trajectory or completion grid only after a specific hypothesis survives the readout and preparation checks. Keep each structure's own count-matched random reference.
 4. **Evaluate temporal prediction separately.** Complete the real-data past-only comparison, including direct past-pose regression, initial features, simple motion continuation, and mismatched futures. Compare twelve- and all-landmark inputs only as an explicitly separate question. Future prediction should be scored at the same times on the same supported observations.
 5. **Add complex combinations only when simpler results justify them.** Complementary views, visible-token supervision, and learned selectors become more informative after identifying which mask types preserve useful movement. A favorable training loss alone is insufficient grounds to expand the method.
 
@@ -346,15 +424,15 @@ The August 2026 Human-JEPA preprint makes the evaluation of forecasting particul
 
 ### Direction A: Explain and recover access to movement information
 
-This is the first priority because the completed masking comparisons show weak learned-feature prediction even before asking which anatomical targets are best. Notebook 12 adds evidence that both online and teacher features underperform their initial control, while Notebook 13's real-data diagnostics show that predicting the correct clip's features has become easier. Together with Notebook 07's measurement discrepancy, these findings point toward a mismatch among what is retained, what is predicted during pretraining, and what the readout is asked to recover.
+This is the first priority because two complete masking studies now show weak learned-feature prediction. Notebooks 15–18 add motion-weighted and connected-region comparisons to Notebook 12's anatomical target comparison. Every new trained arm is below its matched initial encoder under the motion-sensitive summary, while the predictor consistently distinguishes the correct clip's hidden features from a different source's features. Together with Notebook 07's measurement discrepancy, these findings point toward a mismatch among what is retained, what is predicted during pretraining, and what the readout is asked to recover.
 
-The first readout improvement has now been implemented: penalty selection uses inner training-source groups. Its repeated selection of the largest candidate calls for a wider range, declared before examining the next outer-test scores. Other separate comparisons should retain timing more faithfully during preparation and preserve movement order in the feature summary. Keep the compared clips and outer groups fixed, and apply each change to initial and trained encoders alike. An improved regression model must not be mistaken for improved pretraining.
+Penalty selection now uses inner training-source groups, but 39% of teacher mean-motion fits and 77% of online mean-motion fits select 10,000, the largest candidate. Widen the range using the saved encoders. The motion-sensitive summary also combines temporal variation with observation-support features, so ablate those components before calling its gain a motion gain. Keep clips and outer groups fixed, and apply each readout change to initial and trained encoders alike. A better regression model would improve evaluation, not pretraining.
 
 For example, if training-only penalty selection improves trained and untrained features equally, the main improvement concerns the readout. If preserving time substantially improves a direct movement baseline but leaves learned features unchanged, the training representation still deserves investigation. If a motion-sensitive feature summary reveals a repeatable learned-over-initial advantage, that would support the more specific explanation that the old summary obscured useful learned content.
 
 The new real-data evaluation already compares the actively optimized encoder and the slowly updated teacher at the final checkpoint; neither has a learned-over-initial advantage. What remains missing is a real-data predictive learning curve at prespecified earlier checkpoints. Such a comparison could help select a defensible training budget through inner source validation, provided candidate pretraining also excludes those validation sources when the whole recipe is being selected. Neither the final checkpoint nor decreasing training loss proves why prediction is weak.
 
-After establishing an informative evaluation, use Section 4's staged masking comparison to separate the effect of anatomical selection from movement weighting and the shape of missing observations. A gait-specific advantage that persists against matched random sets and structured alternatives would be more informative than the present two-choice comparison. Add visible-token or intermediate-layer supervision separately if the diagnostics justify it.
+The completed motion and region comparisons should remain fixed evidence. A broader mask sweep is not justified until the readout and preparation checks show a reproducible trained-over-initial benefit. If that benefit appears, test one additional geometry at a time. Whole trajectories isolate loss of one landmark's time series while retaining body neighbors; interior gaps test completion with context on both sides. Add visible-token or intermediate-layer supervision as a separate objective comparison.
 
 For a concrete test of observation loss, hide a short ankle segment and ask whether the remaining hip, knee, and opposite-leg observations help predict the laterality score calculated from the unaltered recording. Follow Section 4's preparation safeguards and compare with randomly placed gaps of the same size, retaining the same clips and reference targets. Such a result could show when learned body relationships help beyond direct measurements of the available coordinates. The reference would still be pose-derived, so clinical accuracy would remain a separate question.
 
@@ -419,21 +497,25 @@ Direction A has the best near-term return because it uses completed experiments 
 
 ### Which workshop audience is most appropriate?
 
-**Foundation Models for the Brain and Body: topic fit 5/5.** Its call includes movement, video-derived pose, and evaluation of pretraining. Direction A addresses whether a body encoder learns useful information, while Direction C could add temporal evidence. A broad foundation-model capability would still require transfer across tasks or datasets. The posted paper deadline was 5 September AoE and has passed. Its separate interactive-demo call remains open until 19 September AoE, but a demonstration would be a different submission from a research paper. [Paper call](https://brainbodyfm-workshop.github.io/call-for-papers.html), [demo call](https://brainbodyfm-workshop.github.io/call-for-demos.html)
+Two scores are needed to avoid mistaking subject overlap for paper readiness. **Topic fit** asks whether the workshop audience studies this problem. **Current-package fit** asks whether the result we actually have—complete paired negative evidence, a useful representation diagnostic, one dataset, and no external, clinical, or forecasting validation—supports a paper in the advertised format. These are editorial judgments, not acceptance probabilities.
 
-**NeurReps: topic fit 5/5; track choice matters.** Direction B directly concerns the geometry of neural representations. The four-page, non-archival extended-abstract track is the best format fit for the present controlled findings and developing explanation. The call advertises a nine-page archival proceedings track for more developed work. Its **Findings Track receives 2/5 for our current work**: it emphasizes high-impact collaborations between experimentalists and theorists, including biological discoveries with substantial geometric insight. It uses editorial review and has no page limit. “Findings” here does not mean an easier route for any negative experimental result. The posted deadline was 24 August AoE; no extension was verified. [Official track descriptions](https://neurreps.org/#cfp)
+| Workshop or track | Topic fit | Current-package fit | Posted status on 8 September 2026 | Grounded assessment |
+|:--|--:|--:|:--|:--|
+| Foundation Models for the Brain and Body, paper | 5/5 | 4/5 | Paper deadline passed: 5 September AoE | **Strong scientific audience, closed paper route.** The call explicitly covers behavioral signals, movement, self-supervision, and testing whether pretraining helps. Our source-separated failure analysis fits that evaluation question. The limitation is scale and breadth: one small pose task does not establish a general foundation-model capability. |
+| Foundation Models for the Brain and Body, demo | 5/5 | 2/5 | Demo deadline: 19 September AoE | **Possible only after building a real interactive artifact.** A mask/feature explorer could fit its video-analysis and visualization themes. The present notebooks and plots do not by themselves demonstrate an interactive system. |
+| NeurReps, extended abstract | 5/5 | 4/5 | Deadline passed: 24 August AoE | **Best conceptual audience for Direction B, but closed.** Symmetry, equivariance, representational geometry, and motor control are central topics. Its four-page non-archival format explicitly accommodates preliminary or negative work. |
+| NeurReps, proceedings / Findings | 5/5 | 2/5 / 1/5 | Deadline passed: 24 August AoE | **Current evidence is below these tracks.** A proceedings paper needs a developed geometric explanation or general result. The Findings track targets unusually high-impact experimental-theoretical findings; a controlled null mask contrast alone does not meet that standard. |
+| Foundation Models for Temporal Systems (FMTS) | 4/5 | 4/5 | Open until 15 September AoE | **Best currently open paper fit.** The call explicitly welcomes negative findings and critical analyses, alongside sparse observations, leakage-aware evaluation, and temporal consistency. The paper should ask when masked temporal pretraining makes movement information less accessible, report the complete grid and clip-correspondence diagnostic, and avoid claiming forecasting or foundation-model scale. |
+| Physical World AI | 3/5 | 2/5 | Advertised archival deadline: 9 September; non-archival window: 29 September–29 October | **Adjacent, not a strong fit for the current paper.** Articulated geometry and representation evaluation overlap, but the experiment has no 3D/4D reconstruction, contact, object interaction, physical intervention, or learned dynamics. Direction C could raise the fit to about 4/5 after a real future-movement result. The later deadline does not repair the present scope mismatch. |
+| Embodied Spatial Reasoning | 2/5 | 2/5 | Deadline passed: 5 September AoE | **Weak current fit.** A body moving in video is spatial data, but this study has no embodied agent, environment, surrounding objects, spatial memory, or 3D reasoning. |
+| GenAI4Health | 1/5 | 1/5 | Deadline: 9 September AoE | **Do not submit the current work.** GAVD supplies a health motivation, but the target is coordinate-derived, the model is not evaluated as a generative clinical system, and there is no clinical endpoint, user, or benefit. |
+| Med-Reasoner | 1/5 | 1/5 | Deadline passed: 5 September AoE | **No current fit.** The work does not study medical reasoning, diagnosis, clinical text, or a medical vision-language model. |
 
-**Physical World AI: topic fit 4/5.** Articulated geometry and evaluation of learned physical representations are relevant, with Direction C offering a stronger temporal connection if completed. The present work does not evaluate contact, materials, or multimodal sensor fusion. The call advertises an archival deadline of 9 September and a non-archival window of 29 September–29 October, with eight-page papers or four-page extended abstracts. That later window is the most practical posted paper route among the previously considered venues for developing a focused result. [Official call](https://physworld-org.github.io/physworld.github.io/cfp/)
+[Foundation Models for the Brain and Body paper call](https://brainbodyfm-workshop.github.io/call-for-papers.html) and [demo call](https://brainbodyfm-workshop.github.io/call-for-demos.html); [NeurReps track descriptions](https://neurreps.org/#cfp); [FMTS call](https://fmts-workshop.github.io/cfp.html); [Physical World AI call](https://physworld-org.github.io/physworld.github.io/cfp/); [Embodied Spatial Reasoning call](https://embodiedsr.github.io/call-for-papers.html); [GenAI4Health call](https://genai4health.github.io/2026-NeurIPS/); [Med-Reasoner call](https://med-reasoner.github.io/neurips2026/call_for_paper.html)
 
-**Foundation Models for Temporal Systems (FMTS): topic fit 4/5 for Directions A and C.** This additional workshop explicitly includes irregular sampling, sparse observations, leakage-aware evaluation, and temporal consistency. It accepts four-page non-archival submissions, including preliminary and negative findings, until 15 September AoE. A completed analysis of movement timing or forecasting would fit; a general roadmap alone would not establish a temporal-learning contribution. [Official call](https://fmts-workshop.github.io/cfp.html)
+The practical submission order is therefore: **FMTS for the current bounded negative and diagnostic result; a future NeurReps submission if Direction B yields a real geometric explanation; Foundation Models for the Brain and Body at a future paper cycle, or its current demo track only after an interactive tool exists; and Physical World AI only after Direction C demonstrates physical or future-state prediction.** The other listed workshops would require changing the research question, not merely changing the paper framing.
 
-**Embodied Spatial Reasoning: topic fit 3/5.** Body geometry and movement prediction connect to spatial and temporal reasoning, but we do not yet study an interacting agent, surrounding objects, or spatial memory. The workshop welcomes preliminary and negative results; its posted 5 September AoE paper deadline has passed. [Official call](https://embodiedsr.github.io/call-for-papers.html)
-
-**GenAI4Health: topic fit 2/5.** Careful evaluation is relevant to clinical trust, but a coordinate-derived gait result does not supply the missing medical generative application or clinical benefit. Its 9 September AoE deadline is close, and the evidence should determine the claim rather than the available deadline. [Official call](https://genai4health.github.io/2026-NeurIPS/)
-
-**Med-Reasoner: topic fit 1/5.** The current pose-only model does not address the workshop's medical vision-language reasoning problem. Its posted 5 September AoE deadline has passed. A future submission would require a genuine clinical reasoning task and evidence about that reasoning, not simply health-related input data. [Official call](https://med-reasoner.github.io/neurips2026/call_for_paper.html)
-
-NeurReps and PhysWorldAI advertise archival options, while central NeurIPS guidance describes workshop papers as non-archival. This unresolved policy difference should be checked with organizers before choosing an archival route or relying on its compatibility with another submission. [NeurIPS workshop guidance](https://neurips.cc/Conferences/2026/WorkshopsGuidance)
+NeurReps and Physical World AI advertise archival options, while central NeurIPS guidance says workshop papers are non-archival and do not appear in proceedings. Obtain written clarification from the relevant organizers before treating either route as archival or relying on its compatibility with another submission. [NeurIPS workshop guidance](https://neurips.cc/Conferences/2026/WorkshopsGuidance)
 
 ### Why IAAI remains a different research trajectory
 
@@ -444,7 +526,7 @@ The posted IAAI deadline is 8 September AoE. Its restrictions on overlapping sub
 ## 8. A practical sequence toward the next paper
 
 1. **Preserve and explain the completed masking results.** Lead with the new comparison's complete source coverage, both learned-versus-initial controls, and the uncertainty in the masking contrast. Explain why improved feature prediction does not establish improved movement prediction. Keep the older implementation's scores distinct.
-2. **Resolve the smallest plausible explanations first.** Broaden the training-only regression penalty range, then compare temporal preparation and motion-sensitive summaries in separate steps. Once these controls are informative, test a limited motion-weighted or structured-mask comparison with a count-matched scattered reference. In parallel, the frozen-feature reflection test from Direction B remains a focused geometry question.
+2. **Resolve the smallest plausible explanations first.** Refit the saved features with a wider training-only ridge range, then separate temporal variation from observation-support features and compare the original target with prepared-input diagnostics. The completed motion and region comparisons remain the fixed masking references. In parallel, the frozen-feature reflection test from Direction B remains a focused geometry question.
 3. **Choose one main contribution.** If the information-recovery experiments identify a repeatable mechanism, develop a focused body-representation paper. If the learned reflection rule explains feature behavior with a useful consequence, develop the geometry paper. Pursue the larger forecasting study when its simple real-data controls establish a credible starting point.
 4. **Confirm the selected result independently.** Freeze the principal choices before the external evaluation and make the intended generalization claim explicit. Keep clinical interpretation proportional to the available reference measurements.
 5. **Write around the answer, including an unfavorable one.** A workshop paper should make one question, its decisive comparison, and its implications easy to follow. Avoid presenting the entire notebook roadmap as demonstrated novelty. Finalize the applicable ethics, data-use, and submission-policy documentation separately from the scientific assessment.
@@ -453,7 +535,7 @@ The project has progressed from a sensible anatomical training choice to a more 
 
 ## 9. Copy-ready implementation prompt for the next notebook suite
 
-The specification below has now been implemented in notebooks 11–14. Their small examples use generated movement to check the software, and Notebook 12's retained working copy now records an explicitly enabled, completed real-data gait-target versus all-landmark comparison. The other masking-family comparisons and real-data future-feature training remain unrun. Section 3 reports the evidence from the completed grid rather than assuming every implemented method has been evaluated.
+The specification below was implemented first in notebooks 11–14. Notebook 12 records the completed real-data gait-target versus all-landmark comparison. Notebooks 15–18 subsequently completed the motion-weighted and connected-region grid described in the latest-results walkthrough. Whole trajectories, interior completion and real-data future-feature training remain unrun. The older prompt is retained as design history; current evidence and priorities appear above.
 
 The automatic missing-observation comparisons evaluate sensitivity to masking prepared coordinates. Notebook 13 also provides and tests a helper that removes raw observations before input preparation. A full dataset comparison using that helper needs a declared raw-recording corruption plan; the prepared-coordinate results alone would support a narrower sensitivity claim.
 
@@ -624,6 +706,9 @@ The current masking table and Figure 1 use one pooled held-out score per seed, f
 
 The [new result-figure generator](figures/make_comparative_findings.py) verifies the saved summary files, checks paired prediction coverage, and independently recomputes source-balanced scores before drawing Figure 1. Its [numerical summary](figures/tutorial_comparative_masking_summary.json) retains full-precision aggregate values for the new comparison. The [earlier generator](figures/make_tutorial_figures.py) and its [summary](figures/tutorial_masking_summary.json) remain available for the distinct Notebook 08 evidence. The [mask-pattern illustration generator](figures/make_tutorial_masking_patterns.py) draws Figure 2 and verifies that its four hypothetical panels hide equal numbers of cells; it does not run an experiment.
 
-The review checked the new grid's 25 paired jobs and all 50 complete training histories, compared the saved prediction tables with an independent metric calculation, and inspected predictor diagnostics, readout selection, and corruption coverage. Recorded forecasting numbers come from the executed synthetic notebook; raw per-example forecast artifacts were not retained for that demonstration, so differences smaller than its displayed precision were not inferred. Notebook commentary was checked by independent masking, evaluation, and forecasting reviewers, and its code and outputs were preserved. No new model training was performed.
+The earlier review checked Notebook 12's 25 paired jobs and 50 complete training histories. The latest review separately verified notebooks 15–18: all 50 motion/region jobs, 125 complete 1,200-step histories, file hashes, 125,000 prediction rows and all 200 pooled score rows. It inspected mask coverage, predictor diagnostics, readout selection and paired source intervals. Recorded forecasting numbers come from the executed synthetic notebook; raw per-example forecast artifacts were not retained for that demonstration, so differences smaller than its displayed precision were not inferred. The notebook interpretation update changed markdown only and preserved 31 code cells and 46 output records. No new model training was performed for the review.
 
 Run the [PDF build script](build_tutorial.sh) after editing this Markdown source to regenerate [TUTORIAL.pdf](TUTORIAL.pdf). Notebooks 00–10, their source tutorials, model implementations, and empirical artifacts were not edited during this documentation review.
+
+
+For the execution details of Notebook 17, see [the pretraining performance review](MOTION_PRETRAINING_PERFORMANCE.md): the verified CUDA kernel, optional BF16 mode, content-checked motion-score and tensor caches, periodic optimizer recovery, measured real-GAVD throughput, and the boundaries of the short validation runs. Its [low-precision decision](MOTION_PRETRAINING_PERFORMANCE.md#fp8-and-8-bit-quantization-decision) keeps FP32 and BF16 as the only registered modes, reserves FP8 for a separately identified benchmark, rejects 8-bit Adam as immaterial at this model size, and treats INT8 as an inference/deployment study.
