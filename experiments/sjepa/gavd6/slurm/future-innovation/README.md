@@ -4,14 +4,16 @@ This implements the [experiment guide](../../notes/future-innovation-distillatio
 
 ## Prepare the environment and inputs
 
-On HAIC, set explicit persistent paths. Each repaired protocol needs a new run ID and change reason. Keep source videos, decoded windows, weights, and outputs outside the checkout.
+On HAIC, set explicit persistent paths. Each repaired protocol needs a new run ID and change reason. The full-GAVD source cache and annotation checkout live under the gavd6 checkout. `FI_RUN_ROOT` may be inside or outside the checkout; choose a versioned directory that is ignored by Git when it is inside.
 
 ```bash
-export GAVD6_ROOT="/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6"
-export GAVD_FULL_ROOT="/hai/scratch/$USER/datasets/gavd_full"
+export SJEPA_ROOT="/hai/scratch/$USER/alexpose/experiments/sjepa"
+export GAVD6_ROOT="$SJEPA_ROOT/gavd6"
+export GAVD_FULL_ROOT="$GAVD6_ROOT/data/gavd_full"
 export VJEPA2_ROOT="/hai/scratch/$USER/vendor/vjepa2"
 export FI_TEACHER_CHECKPOINT="/hai/scratch/$USER/models/vjepa2_1_vitb_dist_vitG_384.pt"
 export FI_POSE_MODEL="/hai/scratch/$USER/models/pose_landmarker_lite.task"
+export FI_ANNOTATION_ROOT="$GAVD_FULL_ROOT/annotations/GAVD/data"
 export FI_RUN_ROOT="/hai/scratch/$USER/experiments/future-innovation/gate-v1"
 export FI_CHANGE_REASON="Initial Experiment 0 preregistration"
 cd "$GAVD6_ROOT"
@@ -28,11 +30,11 @@ Required data layout:
 $GAVD_FULL_ROOT/
   manifests/gavd_full_sequences.csv
   manifests/gavd_full_videos.csv
-  annotations/GAVD_Clinical_Annotations_1.csv ... _5.csv
+  annotations/GAVD/data/GAVD_Clinical_Annotations_1.csv ... _5.csv
   youtube/all/<video_id>.mp4   # existing supported extensions also work
 ```
 
-Use the existing `gavd6 gavd download` workflow to fill missing videos. The sequence manifest alone has no per-frame boxes; all five non-overlapping annotation partitions are needed. Set `FI_ANNOTATION_ROOT` if they live elsewhere. Do not mix incremental `1.1`, `1.2`, or `1.3` files with the five official partitions, or substitute the historical GAVD96 pose cache.
+Use the existing `gavd6 gavd download` workflow to fill missing videos. The sequence manifest alone has no per-frame boxes; all five non-overlapping annotation partitions are needed. `FI_ANNOTATION_ROOT` is set above to the `GAVD/data` directory inside the checked-out annotation source. Do not mix incremental `1.1`, `1.2`, or `1.3` files with the five official partitions, or substitute the historical GAVD96 pose cache.
 
 ## Build and inspect the frozen cohort
 

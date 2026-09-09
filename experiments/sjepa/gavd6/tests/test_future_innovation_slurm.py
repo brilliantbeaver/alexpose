@@ -21,6 +21,27 @@ class FutureInnovationSlurmTests(unittest.TestCase):
                 )
                 self.assertEqual(completed.returncode, 0, completed.stderr)
 
+    def test_common_helper_allows_run_root_inside_checkout(self):
+        env = {
+            **os.environ,
+            "GAVD6_ROOT": str(PROJECT),
+            "FI_RUN_ROOT": str(PROJECT / "outputs/future-innovation/gate-v1"),
+        }
+        completed = subprocess.run(
+            [
+                "bash",
+                "-c",
+                'mkdir() { :; }; source "$1"',
+                "_",
+                str(SCRIPTS / "fi-common.sh"),
+            ],
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+
     def test_each_job_routes_to_existing_cli_and_outer_fold(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -35,7 +56,7 @@ class FutureInnovationSlurmTests(unittest.TestCase):
             run = root / "run"
             (run / "qc").mkdir(parents=True)
             (run / "qc/alignment-review.json").write_text("{}")
-            annotation = root / "dataset/annotations"
+            annotation = root / "dataset/annotations/GAVD/data"
             annotation.mkdir(parents=True)
             for part in range(1, 6):
                 (annotation / f"GAVD_Clinical_Annotations_{part}.csv").touch()
