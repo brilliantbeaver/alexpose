@@ -4,7 +4,7 @@ Audit date: 2026-09-03. Counts below come from the five public annotation CSVs a
 
 ## Verdict
 
-The configured HAIC root is `/hai/scratch/tedmui/datasets/gavd_full`. The expected source cache is `youtube/all`, manifests are in `manifests`, original annotations are in `annotations`, and downloader reports are `reports/video_download_audit_shard-<i>-of-<n>.csv`. On 2026-09-03, the user confirmed that all 348 source videos are present and decodable on HAIC and cover all 1,874 sequences. These operational counts reconcile exactly with the checked-in manifest. This session could not independently enumerate the cache because one read-only SSH attempt timed out and a second failed during host-name resolution.
+The configured HAIC root is `$GAVD6_ROOT/data/gavd_full`. The expected source cache is `youtube/all`, manifests are in `manifests`, original annotations are in `annotations/GAVD/data`, and downloader reports are `reports/video_download_audit_shard-<i>-of-<n>.csv`. On 2026-09-03, the user confirmed that all 348 source videos are present and decodable on HAIC and cover all 1,874 sequences. These operational counts reconcile exactly with the checked-in manifest. This session could not independently enumerate the cache because one read-only SSH attempt timed out and a second failed during host-name resolution.
 
 The checked-in sequence manifest has 1,874 unique sequences and 348 unique YouTube IDs. All 1,874 rows map to a syntactically valid 11-character ID, every URL encodes the recorded ID, and there are 348 distinct ID/URL pairs. The manifest proves resolution. The user confirmation above supplies the current HAIC availability status.
 
@@ -70,8 +70,10 @@ On a network with HAIC access, validate the cache without substituting manifest 
 
 ```bash
 ssh tedmui@haic.stanford.edu
-cd /hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6
-export GAVD_FULL_ROOT=/hai/scratch/tedmui/datasets/gavd_full
+export SJEPA_ROOT="/hai/scratch/$USER/alexpose/experiments/sjepa"
+export GAVD6_ROOT="$SJEPA_ROOT/gavd6"
+export GAVD_FULL_ROOT="$GAVD6_ROOT/data/gavd_full"
+cd "$GAVD6_ROOT"
 find "$GAVD_FULL_ROOT/youtube/all" -maxdepth 1 -type f
 ls "$GAVD_FULL_ROOT/reports"/video_download_audit_shard-*-of-*.csv
 ```

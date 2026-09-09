@@ -16,7 +16,7 @@ source "$GAVD6_ROOT/slurm/future-innovation/fi-common.sh"
 : "${FI_TEACHER_CHECKPOINT:?Set the V-JEPA 2.1 checkpoint path}"
 : "${FI_POSE_MODEL:?Set the MediaPipe model path}"
 : "${FI_CHANGE_REASON:?Describe this initial preregistration or version change}"
-FI_ANNOTATION_ROOT="${FI_ANNOTATION_ROOT:-$GAVD_FULL_ROOT/annotations}"
+FI_ANNOTATION_ROOT="${FI_ANNOTATION_ROOT:-$GAVD_FULL_ROOT/annotations/GAVD/data}"
 # Match only the five official non-overlapping partitions; never mix 1.1/1.2 releases.
 annotations=()
 for part in 1 2 3 4 5; do

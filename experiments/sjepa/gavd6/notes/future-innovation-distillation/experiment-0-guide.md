@@ -160,13 +160,16 @@ The Python blocks below are implementation sketches. Some define complete helper
 
 ### 2.2 Create a versioned HAIC run root
 
-Keep videos, checkpoint downloads, and teacher tensors outside the Git checkout. Use explicit HAIC paths:
+Keep checkpoint downloads and teacher tensors outside the Git checkout. The full-GAVD source cache and annotation checkout live under `gavd6/data/gavd_full`. Use explicit HAIC paths:
 
 ```bash
 export SJEPA_ROOT="/hai/scratch/$USER/alexpose/experiments/sjepa"
 export GAVD6_ROOT="$SJEPA_ROOT/gavd6"
-export GAVD_FULL_ROOT="/hai/scratch/$USER/datasets/gavd_full"
+export GAVD_FULL_ROOT="$GAVD6_ROOT/data/gavd_full"
 export VJEPA2_ROOT="/hai/scratch/$USER/vendor/vjepa2"
+export FI_TEACHER_CHECKPOINT="/hai/scratch/$USER/models/vjepa2_1_vitb_dist_vitG_384.pt"
+export FI_POSE_MODEL="/hai/scratch/$USER/models/pose_landmarker_lite.task"
+export FI_ANNOTATION_ROOT="$GAVD_FULL_ROOT/annotations/GAVD/data"
 export FUTURE_INNOVATION_ROOT="/hai/scratch/$USER/experiments/future-innovation"
 export FI_RUN_ID="gate-v1"
 export FI_RUN_ROOT="$FUTURE_INNOVATION_ROOT/$FI_RUN_ID"

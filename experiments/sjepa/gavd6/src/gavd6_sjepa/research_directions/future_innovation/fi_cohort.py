@@ -254,7 +254,7 @@ def extract_and_freeze(root):
                     row["source_first_frame"], row["source_first_frame"] + 32
                 ),
             )
-            # Keep the exactly decoded RGB once, outside the checkout on HAIC.
+            # Keep the exactly decoded RGB once under the versioned run root.
             save_npz(frame_path, video=video)
             model_box_path = root / "boxes" / f"{row['window_id']}-model.npz"
             save_npz(model_box_path, model_boxes=model_boxes, crop_retention=retention)

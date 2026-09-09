@@ -27,10 +27,10 @@ and stop unless its `gate_decision.json` sets `ready_for_sg_jepa=true`.
 The following variables are already part of the HAIC environment:
 
 ```bash
-export GAVD_FULL_ROOT="/hai/scratch/$USER/datasets/gavd_full"
 export CODY_JEPA_ROOT="/hai/scratch/$USER/cody-jepa"
 export SJEPA_ROOT="/hai/scratch/$USER/alexpose/experiments/sjepa"
 export GAVD6_ROOT="$SJEPA_ROOT/gavd6"
+export GAVD_FULL_ROOT="$GAVD6_ROOT/data/gavd_full"
 export GAVD5TM_ROOT="$SJEPA_ROOT/gavd5-tm"
 export AMASS_ROOT="$GAVD6_ROOT/data/amass"
 export AMASS_EXTRACTED_ROOT="$AMASS_ROOT/extracted"
@@ -50,7 +50,7 @@ export LATENT_LATERALITY_RUN_ROOT="$AMASS_RUN_ROOT/latent-laterality"
 export AMASS_INVENTORY="$AMASS_RUN_ROOT/manifests/amass_raw_inventory_eligible.csv"
 export GAVD_SEQUENCE_MANIFEST="$GAVD_FULL_ROOT/manifests/gavd_full_sequences.csv"
 export GAVD_VIDEO_MANIFEST="$GAVD_FULL_ROOT/manifests/gavd_full_videos.csv"
-export GAVD_ANNOTATION_ROOT="$GAVD_FULL_ROOT/annotations"
+export GAVD_ANNOTATION_ROOT="$GAVD_FULL_ROOT/annotations/GAVD/data"
 export GAVD_POSE_ROOT="$GAVD_FULL_ROOT/poses/latent-laterality"
 export GAVD_POSE_MANIFEST="$GAVD_POSE_ROOT/full_gavd_pose_split_manifest.csv"
 
@@ -100,7 +100,7 @@ Before full-GAVD extraction, stage the following under `GAVD_FULL_ROOT`:
 
 ```text
 $GAVD_FULL_ROOT/
-├── annotations/GAVD_Clinical_Annotations_1.csv ... _5.csv
+├── annotations/GAVD/data/GAVD_Clinical_Annotations_1.csv ... _5.csv
 ├── manifests/gavd_full_sequences.csv
 ├── manifests/gavd_full_videos.csv
 ├── youtube/all/<video_id>.<video-extension>

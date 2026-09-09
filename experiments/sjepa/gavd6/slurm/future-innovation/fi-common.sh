@@ -3,11 +3,8 @@
 set -euo pipefail
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT to the gavd6 checkout}"
-: "${FI_RUN_ROOT:?Export FI_RUN_ROOT to a new versioned run outside the checkout}"
+: "${FI_RUN_ROOT:?Export FI_RUN_ROOT to a versioned run directory}"
 [[ -d "$GAVD6_ROOT/src/gavd6_sjepa" ]] || { echo "Invalid checkout: $GAVD6_ROOT" >&2; exit 1; }
-case "$FI_RUN_ROOT/" in
-  "$GAVD6_ROOT/"*) echo "Store experiment artifacts outside the checkout" >&2; exit 1 ;;
-esac
 export OMP_NUM_THREADS="${FI_TORCH_THREADS:-1}"
 export MKL_NUM_THREADS="$OMP_NUM_THREADS"
 export OPENBLAS_NUM_THREADS="$OMP_NUM_THREADS"
