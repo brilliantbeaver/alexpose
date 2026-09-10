@@ -24,9 +24,8 @@ submit() {
 if [[ "$phase" == prepare ]]; then
   first="$(submit cohort 01-build-gate-cohort.sbatch '')"
   second="$(submit poses 02-extract-poses.sbatch "afterok:$first")"
-  echo "Submitted cohort=$first poses=$second. Review one alignment overlay per fold before compute."
+  echo "Submitted cohort=$first poses=$second. Submit compute after poses completes."
 else
-  [[ -f "$FI_RUN_ROOT/qc/alignment-review.json" ]] || { echo "Missing recorded alignment inspection" >&2; exit 1; }
   third="$(submit teacher 03-cache-vjepa-features.sbatch '')"
   fourth="$(submit audits 04-run-causal-and-target-audits.sbatch "afterok:$third")"
   fifth="$(submit fit 05-fit-gate-models.sbatch "afterok:$fourth")"

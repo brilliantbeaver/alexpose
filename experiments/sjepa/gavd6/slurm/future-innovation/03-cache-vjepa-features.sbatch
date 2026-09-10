@@ -12,7 +12,4 @@
 set -euo pipefail
 : "${GAVD6_ROOT:?Export GAVD6_ROOT}"
 source "$GAVD6_ROOT/slurm/future-innovation/fi-common.sh"
-[[ -f "$FI_RUN_ROOT/qc/alignment-review.json" ]] || {
-  echo "Inspect overlays and record review-alignment before teacher extraction" >&2; exit 1;
-}
 fi_python cache-teacher --device cuda

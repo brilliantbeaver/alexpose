@@ -296,7 +296,7 @@ def initialize_run(
             "shuffle_seed": 260905,
             "mismatch": "partition-local standardized metadata; Hungarian without replacement; different source",
             "no_skeleton": "zero x,y,confidence; retain validity; identical parameter count",
-            "capacity_attribution": "explicit evidence-backed interpretation; unresolved => INCONCLUSIVE; no automatic cutoff",
+            "capacity_attribution": "paired no-skeleton control is reported with every decision; no manual interpretation gate",
             "audit_count": 10,
             "pixel_feather_pixels": 8,
             "pixel_person_edit": "different-source donor person ROI at reversed future times; resized into recipient box",

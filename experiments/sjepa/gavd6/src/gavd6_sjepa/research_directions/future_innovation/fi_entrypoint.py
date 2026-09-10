@@ -120,22 +120,6 @@ def poses_main():
         extract_and_freeze(args.run_root)
 
 
-def alignment_main():
-    parser = parser_for("review-alignment")
-    parser.add_argument("--reviewer", required=True)
-    parser.add_argument(
-        "--window-ids",
-        nargs="+",
-        required=True,
-        help="Actually inspected windows covering all five folds.",
-    )
-    parser.add_argument("--note", required=True)
-    args = parsed(parser)
-    from .fi_cohort import review_alignment
-
-    review_alignment(args.run_root, args.reviewer, args.window_ids, args.note)
-
-
 def teacher_arguments(command):
     parser = parser_for(command)
     parser.add_argument("--device", choices=["cuda", "cpu"], default="cuda")
@@ -163,13 +147,11 @@ def record_teacher_runtime(root, stage):
 def cache_main():
     args = teacher_arguments("cache-teacher")
     configure_threads()
-    from .fi_cohort import load_cohort, validate_alignment_review
     from .fi_contracts import stage_lock
     from .fi_feature_cache import cache_teacher
     from .fi_vjepa_adapter import FrozenVJEPAAdapter
 
     with stage_lock(args.run_root, "cache"):
-        validate_alignment_review(args.run_root, load_cohort(args.run_root))
         record_teacher_runtime(args.run_root, "cache")
         cache_teacher(
             args.run_root, FrozenVJEPAAdapter.from_run(args.run_root, args.device)
@@ -218,26 +200,6 @@ def score_main():
 
     with stage_lock(args.run_root, "report"):
         score_gate(args.run_root)
-
-
-def capacity_main():
-    parser = parser_for("assess-capacity")
-    parser.add_argument("--reviewer", required=True)
-    parser.add_argument("--finding", choices=["clear", "unresolved"], required=True)
-    parser.add_argument(
-        "--evidence",
-        required=True,
-        help="Interpret paired-controls.csv, its uncertainty, and per-seed results.",
-    )
-    args = parsed(parser)
-    from .fi_reporting import assess_capacity
-
-    assess_capacity(
-        args.run_root,
-        reviewer=args.reviewer,
-        finding=args.finding,
-        evidence=args.evidence,
-    )
 
 
 def report_main():

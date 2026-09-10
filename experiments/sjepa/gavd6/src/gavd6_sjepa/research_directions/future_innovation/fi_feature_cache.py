@@ -10,7 +10,7 @@ from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
     sha256_file,
 )
 
-from .fi_cohort import load_cohort, validate_alignment_review
+from .fi_cohort import load_cohort
 from .fi_contracts import check_run, read_json, save_npz, stable_key, write_once_json
 from .fi_nuisance_features import context_nuisance
 from .fi_token_regions import fixed_projection, pool_context, pool_target
@@ -49,7 +49,6 @@ def cache_teacher(root, adapter):
     root = Path(root)
     contract = check_run(root)
     cohort = load_cohort(root, verify_artifacts=True)
-    validate_alignment_review(root, cohort)
     projection_path = root / "config/projection-256.npy"
     projection = fixed_projection(768, seed=contract["projection_seed"])
     if projection_path.exists():

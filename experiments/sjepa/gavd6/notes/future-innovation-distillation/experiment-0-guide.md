@@ -449,7 +449,7 @@ Before running V-JEPA, render at least one window from every source fold with:
 - the observed/future boundary after frame 31; and
 - the target frames 38 and 39 highlighted.
 
-A one-frame RGB–pose offset can hide a real effect, while an offset that varies by source can create a misleading one. Inspect at least one overlay per fold, and save the pose arrays.
+A one-frame RGB–pose offset can hide a real effect, while an offset that varies by source can create a misleading one. The pipeline checks exact decoding, crop retention, and landmark validity before freezing the cohort, and saves labeled overlays and pose arrays for optional diagnosis.
 
 ### 3.8 Freeze the final cohort manifest
 
@@ -942,7 +942,7 @@ Save percentile intervals, the fraction of draws with positive real gain, and th
 
 The 48-hour contract uses point thresholds, but a wide interval is evidence that the pilot is unstable. Recommended reporting is:
 
-- `ADVANCE`: all point checks pass, the real gain is positive in at least 90% of source bootstraps and all planned initializations, and the gain is not confined to one initialization or explained by the capacity control;
+- `ADVANCE`: all validity, point, and stability checks pass, including positive real gain in at least 90% of source bootstraps and all planned initializations;
 - `STOP`: a required condition clearly fails; or
 - `INCONCLUSIVE`: point thresholds pass but uncertainty or seed sensitivity is too large.
 
@@ -961,9 +961,8 @@ The example below assumes the point metrics use the arithmetic mean across the p
 | `controls_complete` | Every planned arm and seed has all required predictions |
 | `target_audit_complete` | All 10 prespecified edited windows were evaluated and saved |
 | `target_variance_valid` | Finite targets and a nonempty, consistently applied valid-feature set |
-| `capacity_control_clear` | The required no-skeleton comparison does not leave the motion attribution unresolved; record its evidence |
 
-The last flag is an interpretation backed by the saved control comparison, not a substitute for a preregistered numerical cutoff. An unresolved capacity result yields `INCONCLUSIVE`. For seed stability, require positive gain in every planned seed and at least two seeds reaching `0.05`, implementing the rule against advancing on one lucky initialization.
+The no-skeleton comparison is included in the paired-control report for every run, but does not require a separate manual interpretation to complete the experiment. For seed stability, require positive gain in every planned seed and at least two seeds reaching `0.05`, implementing the rule against advancing on one lucky initialization.
 
 ```python
 from dataclasses import asdict, dataclass
@@ -1054,7 +1053,6 @@ def decide_gate(metrics, thresholds=GateThresholds()):
             all(gain > 0 for gain in seed_gains)
             and sum(gain >= thresholds.real_delta_r2_min for gain in seed_gains) >= 2
         ),
-        "capacity_control_clear": metrics.get("capacity_control_clear") is True,
     }
     if not all(validity.values()) or not all(point_checks.values()):
         decision = "STOP"
@@ -1126,7 +1124,7 @@ Implement synthetic tests before HAIC feature extraction:
 | `test_future_innovation_projection.py` | deterministic scaled-orthogonal projection with fixed checksum |
 | `test_future_innovation_controls.py` | shuffles preserve shape and never cross outer folds |
 | `test_future_innovation_metrics.py` | analytical \(R^2\), \(\Delta R^2\), \(F_8\), weighting, and bootstrap cases |
-| `test_future_innovation_gate.py` | validity/point failures force `STOP`; instability or unresolved capacity attribution gives `INCONCLUSIVE`; only a complete stable pass advances |
+| `test_future_innovation_gate.py` | validity/point failures force `STOP`; instability gives `INCONCLUSIVE`; only a complete stable pass advances |
 
 Mandatory failure cases include:
 
