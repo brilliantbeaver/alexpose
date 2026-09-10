@@ -1,0 +1,224 @@
+{
+  "grid": "C:\\Users\\alexm\\dev\\alexpose\\experiments\\sjepa\\gavd5-drift\\neurips-laterality\\artifacts\\motion_structured\\grids\\292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57",
+  "grid_file_hashes_verified": 10,
+  "prediction_rows": 125000,
+  "pooled_rows_recomputed": 200,
+  "largest_absolute_score_discrepancy": {
+    "r2": 9.194034422677078e-17,
+    "mae": 9.71445146547012e-17
+  },
+  "histories_verified": 125,
+  "arm_optimizer_updates": 150000,
+  "training_history_means": [
+    {
+      "experiment": "motion",
+      "arm": "mamp_motion",
+      "initial_prediction_loss": 15.041837158203125,
+      "final_prediction_loss": 0.8354706072807312,
+      "initial_total_loss": 16.211147117614747,
+      "final_total_loss": 1.3162331295013427
+    },
+    {
+      "experiment": "motion",
+      "arm": "robust_motion",
+      "initial_prediction_loss": 15.02394672393799,
+      "final_prediction_loss": 0.8644281005859376,
+      "initial_total_loss": 16.19325668334961,
+      "final_total_loss": 1.3479380846023559
+    },
+    {
+      "experiment": "motion",
+      "arm": "uniform",
+      "initial_prediction_loss": 15.077817726135255,
+      "final_prediction_loss": 0.8492676949501038,
+      "initial_total_loss": 16.247127723693847,
+      "final_total_loss": 1.3351859092712401
+    },
+    {
+      "experiment": "regions",
+      "arm": "connected_region",
+      "initial_prediction_loss": 15.125258560180663,
+      "final_prediction_loss": 0.9478531956672669,
+      "initial_total_loss": 16.294568519592286,
+      "final_total_loss": 1.4520746421813966
+    },
+    {
+      "experiment": "regions",
+      "arm": "uniform",
+      "initial_prediction_loss": 15.232295989990234,
+      "final_prediction_loss": 0.8392627596855163,
+      "initial_total_loss": 16.401606025695802,
+      "final_total_loss": 1.3244102907180786
+    }
+  ],
+  "recomputed_mask_intervals": {
+    "motion/mamp_motion-uniform": {
+      "difference_r2": -0.0008343231183529948,
+      "r2_ci95": [
+        -0.020371641246858252,
+        0.015295818028835301
+      ],
+      "difference_mae": 0.0000927741572908072,
+      "mae_ci95": [
+        -0.00038239450595551277,
+        0.000606633174942129
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    },
+    "motion/robust_motion-uniform": {
+      "difference_r2": 0.000484830147298573,
+      "r2_ci95": [
+        -0.015497433812028704,
+        0.015173390970635666
+      ],
+      "difference_mae": -0.00006322220286960718,
+      "mae_ci95": [
+        -0.0005736069634182712,
+        0.000470090280267381
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    },
+    "regions/connected_region-uniform": {
+      "difference_r2": -0.008668689484462838,
+      "r2_ci95": [
+        -0.033289702978767516,
+        0.017666366278819998
+      ],
+      "difference_mae": -0.0002815649384984013,
+      "mae_ci95": [
+        -0.0008809397396615285,
+        0.00035173395682631367
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    }
+  },
+  "exploratory_new_trained_minus_initial_intervals": {
+    "motion/uniform": {
+      "difference_r2": -0.10881896465065069,
+      "r2_ci95": [
+        -0.17009285990237175,
+        -0.04121913742107222
+      ],
+      "difference_mae": 0.002112199128920737,
+      "mae_ci95": [
+        0.0004936827613279933,
+        0.003878142071694799
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    },
+    "motion/mamp_motion": {
+      "difference_r2": -0.1096532877690037,
+      "r2_ci95": [
+        -0.1650708929103768,
+        -0.05135145586688491
+      ],
+      "difference_mae": 0.002204973286211544,
+      "mae_ci95": [
+        0.0007060703333325817,
+        0.003862675425969197
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    },
+    "motion/robust_motion": {
+      "difference_r2": -0.10833413450335212,
+      "r2_ci95": [
+        -0.17063963105124824,
+        -0.042307129099839885
+      ],
+      "difference_mae": 0.00204897692605113,
+      "mae_ci95": [
+        0.00036675187572255086,
+        0.003926554565661798
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    },
+    "regions/uniform": {
+      "difference_r2": -0.1130976866566081,
+      "r2_ci95": [
+        -0.1661916516988264,
+        -0.05962327557373979
+      ],
+      "difference_mae": 0.002491163352258784,
+      "mae_ci95": [
+        0.0010502170837334253,
+        0.004047287215800784
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    },
+    "regions/connected_region": {
+      "difference_r2": -0.12176637614107096,
+      "r2_ci95": [
+        -0.18278749531890806,
+        -0.05528134371715435
+      ],
+      "difference_mae": 0.0022095984137603824,
+      "mae_ci95": [
+        0.0005845233567557063,
+        0.00409721864961431
+      ],
+      "repetitions": 2000,
+      "bootstrap_seed": 812
+    }
+  },
+  "predictor_correspondence": [
+    {
+      "experiment": "motion",
+      "condition": "initial",
+      "rows": 75,
+      "mean": -0.003064908305809245,
+      "positive": 33
+    },
+    {
+      "experiment": "motion",
+      "condition": "mamp_motion",
+      "rows": 75,
+      "mean": 0.43287508434192923,
+      "positive": 75
+    },
+    {
+      "experiment": "motion",
+      "condition": "robust_motion",
+      "rows": 75,
+      "mean": 0.42836991247785333,
+      "positive": 75
+    },
+    {
+      "experiment": "motion",
+      "condition": "uniform",
+      "rows": 75,
+      "mean": 0.43536791172498984,
+      "positive": 75
+    },
+    {
+      "experiment": "regions",
+      "condition": "connected_region",
+      "rows": 75,
+      "mean": 0.3447904224381262,
+      "positive": 75
+    },
+    {
+      "experiment": "regions",
+      "condition": "initial",
+      "rows": 75,
+      "mean": -0.003064908305809245,
+      "positive": 33
+    },
+    {
+      "experiment": "regions",
+      "condition": "uniform",
+      "rows": 75,
+      "mean": 0.41830547216265757,
+      "positive": 75
+    }
+  ],
+  "analysis_date": "2026-09-09",
+  "uncertainty_scope": "Paired source-video bootstrap conditional on fitted models and existing source partitions; no retraining, no selection adjustment, marginal intervals without familywise correction.",
+  "new_analysis_note": "Trained-minus-initial and MAE intervals are new exploratory analyses. Existing mask R2 intervals were independently reproduced."
+}

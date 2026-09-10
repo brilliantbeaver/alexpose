@@ -1,0 +1,212 @@
+{
+  "created_for": "Physical World AI paper revisions, 2026-09-09",
+  "grid": "artifacts\\motion_structured\\grids\\292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57",
+  "artifact_sha256": {
+    "artifacts\\motion_structured\\grids\\292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57\\summary.csv": "f208a2a2f430cd95cd7ce8b133059f0622e00ee440deb704ca07bc8e79302b38",
+    "artifacts\\motion_structured\\grids\\292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57\\per_seed.csv": "84b8f73b6a305b0e854d8ad904bef3f036a71f6827572fd3278ce8f44155d901",
+    "artifacts\\motion_structured\\grids\\292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57\\paired_intervals.csv": "0516cb7689f8c81df75510f338e9248cb9acc7ece20724264a2ad969a38869b6",
+    "artifacts\\motion_structured\\grids\\292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57\\predictor_diagnostics.csv": "2907bbf5d26c5c605a4695709b42b715f91f11d1e9cc892fe1912e6603ce039e",
+    "config\\protocol.json": "83911436f99a41473bc124999b2285444cd0c48cec3633a6a5e45096a79a12c9",
+    "laterality\\geometry.py": "901395b881cfcb2e6c9abbc5e6881b475d9e36120d2bd9e7892837fd485f9491",
+    "laterality\\model.py": "6b6ed139ad26e74b00a9ad338a8671dd686fc356b2a4b99174a64afb88b040ed",
+    "laterality\\data.py": "478f945eb3d3f93dfc966e0d5b2b64cfa1ce06ec1c50bf44bb3a4a856f0bb349",
+    "laterality\\splitting.py": "05747010d572009d265a3f10f2ddc64967e74753c22ef8ad0c75a8274f592bae",
+    "laterality_extensions\\symmetry_learning.py": "33bfd1a996f32b9ec5b1d532c0677f8367f9ab41098f931542a359750b81cd13",
+    "laterality_extensions\\motion_structured_training.py": "c3d2fcd70e666451e1a4b49d1c8c4273b2460067c8ed13e13e2d8372c1b5d1ac",
+    "laterality_extensions\\motion_gavd.py": "a58352c8dabcffb859bed82efd40259ff7f410c658246754d413885c6cbdd9c9",
+    "tutorials\\research_09.py": "cfe6b316d0f12f26eaaa1976724ab2c4478b6b077f665208860df6545d4a2f83"
+  },
+  "numbers": {
+    "readout_rows": [
+      {
+        "label": "Initial · mean",
+        "experiment": "motion",
+        "condition": "uniform",
+        "representation": "initial_online__mean",
+        "mean_r2": 0.070827155920603,
+        "mean_mae": 0.0443441888337462,
+        "per_seed_r2": [
+          0.07336520925101764,
+          0.07668370763530152,
+          0.06967307351761731,
+          0.04159815590918581,
+          0.09281563328989273
+        ],
+        "color": "#546675"
+      },
+      {
+        "label": "Initial · motion summary",
+        "experiment": "motion",
+        "condition": "uniform",
+        "representation": "initial_online__mean_motion",
+        "mean_r2": 0.22254357355538518,
+        "mean_mae": 0.04154614546478362,
+        "per_seed_r2": [
+          0.2552373412609289,
+          0.23652085303261894,
+          0.23028761154168753,
+          0.18942092269856947,
+          0.201251139243121
+        ],
+        "color": "#137E8A"
+      },
+      {
+        "label": "Teacher · motion random",
+        "experiment": "motion",
+        "condition": "uniform",
+        "representation": "pretrained_teacher__mean_motion",
+        "mean_r2": 0.11372460890473453,
+        "mean_mae": 0.043658344593704365,
+        "per_seed_r2": [
+          0.09681285997699962,
+          0.11303048423327988,
+          0.12746183450095683,
+          0.11467786309370642,
+          0.11664000271872987
+        ],
+        "color": "#7857A6"
+      },
+      {
+        "label": "Teacher · MAMP motion",
+        "experiment": "motion",
+        "condition": "mamp_motion",
+        "representation": "pretrained_teacher__mean_motion",
+        "mean_r2": 0.11289028578638174,
+        "mean_mae": 0.043751118750995174,
+        "per_seed_r2": [
+          0.12027131893871501,
+          0.12937584723095852,
+          0.1504431880899576,
+          0.07442329013716875,
+          0.08993778453510881
+        ],
+        "color": "#7857A6"
+      },
+      {
+        "label": "Teacher · robust motion",
+        "experiment": "motion",
+        "condition": "robust_motion",
+        "representation": "pretrained_teacher__mean_motion",
+        "mean_r2": 0.11420943905203321,
+        "mean_mae": 0.043595122390834753,
+        "per_seed_r2": [
+          0.1022719072151792,
+          0.10522206796931066,
+          0.15163023461292724,
+          0.10368168039257808,
+          0.10824130507017082
+        ],
+        "color": "#7857A6"
+      },
+      {
+        "label": "Teacher · region random",
+        "experiment": "regions",
+        "condition": "uniform",
+        "representation": "pretrained_teacher__mean_motion",
+        "mean_r2": 0.10944588689877721,
+        "mean_mae": 0.04403730881704242,
+        "per_seed_r2": [
+          0.11587431117286429,
+          0.12057373731066168,
+          0.10882017488937268,
+          0.10245838876637736,
+          0.09950282235461005
+        ],
+        "color": "#7857A6"
+      },
+      {
+        "label": "Teacher · connected region",
+        "experiment": "regions",
+        "condition": "connected_region",
+        "representation": "pretrained_teacher__mean_motion",
+        "mean_r2": 0.10077719741431432,
+        "mean_mae": 0.043755743878544015,
+        "per_seed_r2": [
+          0.08960164003376592,
+          0.10082626961352426,
+          0.10072759687922728,
+          0.09758759139710205,
+          0.11514288914795212
+        ],
+        "color": "#7857A6"
+      },
+      {
+        "label": "Direct pose summary",
+        "experiment": "motion",
+        "condition": "uniform",
+        "representation": "direct_pose",
+        "mean_r2": 0.03454120636613722,
+        "mean_mae": 0.04495955030361003,
+        "per_seed_r2": [
+          0.03454120636613722,
+          0.03454120636613722,
+          0.03454120636613722,
+          0.03454120636613722,
+          0.03454120636613722
+        ],
+        "color": "#546675"
+      }
+    ],
+    "mask_intervals": [
+      {
+        "experiment": "motion",
+        "difference": "-0.0008343231183527867",
+        "lower_95": "-0.020371641246858082",
+        "upper_95": "0.015295818028835291",
+        "metric": "r2",
+        "subtraction": "mamp_motion minus uniform",
+        "sources": "93",
+        "clips_per_seed": "625",
+        "seeds": "5",
+        "requested_resamples": "2000",
+        "finite_resamples": "2000",
+        "uncertainty_scope": "source resampling conditional on fitted models; excludes retraining uncertainty"
+      },
+      {
+        "experiment": "motion",
+        "difference": "0.00048483014729867603",
+        "lower_95": "-0.015497433812028515",
+        "upper_95": "0.015173390970635844",
+        "metric": "r2",
+        "subtraction": "robust_motion minus uniform",
+        "sources": "93",
+        "clips_per_seed": "625",
+        "seeds": "5",
+        "requested_resamples": "2000",
+        "finite_resamples": "2000",
+        "uncertainty_scope": "source resampling conditional on fitted models; excludes retraining uncertainty"
+      },
+      {
+        "experiment": "regions",
+        "difference": "-0.008668689484462888",
+        "lower_95": "-0.03328970297876744",
+        "upper_95": "0.017666366278820043",
+        "metric": "r2",
+        "subtraction": "connected_region minus uniform",
+        "sources": "93",
+        "clips_per_seed": "625",
+        "seeds": "5",
+        "requested_resamples": "2000",
+        "finite_resamples": "2000",
+        "uncertainty_scope": "source resampling conditional on fitted models; excludes retraining uncertainty"
+      }
+    ],
+    "correspondence": {
+      "trained_positive_rows": 375,
+      "trained_rows": 375,
+      "initial_positive_rows": 33,
+      "initial_rows": 75,
+      "initial_duplicate_across_experiments_removed": true,
+      "unit": "fold × seed × arm × evaluation mask; repeated checks on the same source videos"
+    }
+  },
+  "scope_notes": [
+    "No new model training.",
+    "The pipeline documents actual clip preparation before source split; no fitted cross-source preparation statistics.",
+    "The full-scale model tensor is B×64×33×3; patch length 4; embedding width 96.",
+    "The explicit reflection loss is demonstrated on synthetic data only (16 frames, width 16).",
+    "Targets and dataset conditions never enter the encoder objective.",
+    "Reflection schematic values are illustrative; they are not observed clip results.",
+    "Existing study files and original figures are preserved."
+  ]
+}

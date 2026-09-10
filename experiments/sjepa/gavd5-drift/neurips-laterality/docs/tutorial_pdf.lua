@@ -25,6 +25,8 @@ function Table(tbl)
   elseif #tbl.colspecs == 3 then
     if pandoc.utils.stringify(tbl.head):match('Horizon') then
       widths = {0.24, 0.38, 0.38}
+    elseif pandoc.utils.stringify(tbl.head):match('Workshop area') then
+      widths = {0.22, 0.10, 0.68}
     else
       widths = {0.65, 0.12, 0.23}
     end

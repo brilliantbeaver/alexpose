@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="990" height="710" viewBox="0 0 990 710" role="img" aria-labelledby="title desc">
+<title id="title">Where laterality enters a skeleton JEPA</title><desc id="desc">Print layout of the source-separated training pipeline. Anatomical identity and masking enter the fixed grid. A separate explicit reflection penalty has synthetic evidence only. The teacher is an exponential average without gradients; the signed target enters only frozen readout and evaluation.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#546675"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#203846}.muted{fill:#546675}</style>
+<rect width="990" height="710" fill="white"/>
+<text x="20" y="37" font-size="28" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="20" dy="0">Where laterality enters a skeleton JEPA</tspan>
+</text>
+<text x="20" y="72" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="20" dy="0">Encoder updates use training sources; side identity enters through joints and masks.</tspan>
+</text>
+<rect x="20" y="95" width="150" height="125" rx="16" fill="white" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="34" y="126" font-size="20" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="34" dy="0">Pose + folds</tspan>
+</text>
+<text x="34" y="158" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="34" dy="0">64 × 33 × 3</tspan>
+<tspan x="34" dy="26.0">Validity V</tspan>
+<tspan x="34" dy="26.0">Source folds</tspan>
+</text>
+<rect x="210" y="95" width="155" height="125" rx="16" fill="#EAF5F5" stroke="#A9CED0" stroke-width="1.5"/>
+<text x="224" y="126" font-size="20" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="224" dy="0">Joint tokens</tspan>
+</text>
+<text x="224" y="158" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="224" dy="0">16 × 33 × 96</tspan>
+<tspan x="224" dy="26.0">L/R names</tspan>
+<tspan x="224" dy="26.0">All positions</tspan>
+</text>
+<rect x="405" y="95" width="155" height="125" rx="16" fill="#EAF5F5" stroke="#A9CED0" stroke-width="1.5"/>
+<text x="419" y="126" font-size="20" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="419" dy="0">Student</tspan>
+<tspan x="419" dy="26.0">encoder</tspan>
+</text>
+<text x="419" y="193" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="419" dy="0">Masked tokens</tspan>
+</text>
+<rect x="600" y="95" width="155" height="125" rx="16" fill="white" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="614" y="126" font-size="20" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="614" dy="0">Predictor</tspan>
+</text>
+<text x="614" y="158" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="614" dy="0">Hidden-token</tspan>
+<tspan x="614" dy="26.0">features</tspan>
+</text>
+<rect x="795" y="95" width="175" height="125" rx="16" fill="#FFF8ED" stroke="#E5D2AD" stroke-width="1.5"/>
+<text x="809" y="126" font-size="20" font-weight="700" text-anchor="start" style="fill:#A46B1C">
+<tspan x="809" dy="0">Joint loss</tspan>
+</text>
+<text x="809" y="158" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="809" dy="0">Masked CE</tspan>
+<tspan x="809" dy="26.0">+ VICReg</tspan>
+</text>
+<path d="M 170 157 H 200" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 365 157 H 395" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 560 157 H 590" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 755 157 H 785" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="270" y="320" width="285" height="158" rx="16" fill="#F7F3FB" stroke="#CBBEDD" stroke-width="1.5" stroke-dasharray="6 5"/>
+<text x="288" y="351" font-size="22" font-weight="700" text-anchor="start" style="fill:#7857A6">
+<tspan x="288" dy="0">Explicit reflection loss</tspan>
+</text>
+<text x="288" y="382" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="288" dy="0">M(X) = D Xπ</tspan>
+<tspan x="288" dy="26.0">D = diag(−1, 1, 1)</tspan>
+<tspan x="288" dy="26.0">Z(MX) ≈ P Z(X)</tspan>
+</text>
+<text x="288" y="460" font-size="20" font-weight="700" text-anchor="start" style="fill:#7857A6">
+<tspan x="288" dy="0">SYNTHETIC ONLY</tspan>
+</text>
+<path d="M 450 320 V 230" fill="none" stroke="#7857A6" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="6 5"/>
+<rect x="600" y="320" width="155" height="142" rx="16" fill="#F1EDF7" stroke="#CBBEDD" stroke-width="1.5"/>
+<text x="614" y="351" font-size="20" font-weight="700" text-anchor="start" style="fill:#7857A6">
+<tspan x="614" dy="0">Teacher</tspan>
+<tspan x="614" dy="26.0">encoder</tspan>
+</text>
+<text x="614" y="409" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="614" dy="0">Full input</tspan>
+<tspan x="614" dy="26.0">No gradient</tspan>
+</text>
+<path d="M 540 220 V 265 H 677 V 310" fill="none" stroke="#7857A6" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="6 5"/>
+<text x="576" y="249" font-size="20" font-weight="700" text-anchor="start" style="fill:#7857A6">
+<tspan x="576" dy="0">EMA</tspan>
+</text>
+<path d="M 740 320 V 265 H 825 V 230" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="749" y="249" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="749" dy="0">targets</tspan>
+</text>
+<rect x="795" y="320" width="175" height="142" rx="16" fill="#FFF8ED" stroke="#E5D2AD" stroke-width="1.5"/>
+<text x="809" y="351" font-size="20" font-weight="700" text-anchor="start" style="fill:#A46B1C">
+<tspan x="809" dy="0">VICReg</tspan>
+</text>
+<text x="809" y="383" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="809" dy="0">Two unmasked</tspan>
+<tspan x="809" dy="26.0">student views</tspan>
+<tspan x="809" dy="26.0">12 gait joints</tspan>
+</text>
+<path d="M 930 320 V 230" fill="none" stroke="#A46B1C" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 145 220 V 520 H 642 V 472" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="250" y="507" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="250" dy="0">complete input</tspan>
+</text>
+<rect x="600" y="570" width="370" height="115" rx="16" fill="white" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="618" y="602" font-size="22" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="618" dy="0">Frozen readout + evaluation</tspan>
+</text>
+<text x="618" y="634" font-size="20" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="618" dy="0">Train-source ridge; held-out test</tspan>
+<tspan x="618" dy="26.0">Signed target y enters here</tspan>
+</text>
+<path d="M 710 462 V 560" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="734" y="543" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="734" dy="0">freeze</tspan>
+</text>
+<path d="M 95 220 V 630 H 590" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="115" y="610" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="115" dy="0">held-out sources: excluded from encoder updates</tspan>
+</text>
+</svg>
