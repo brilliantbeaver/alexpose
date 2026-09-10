@@ -1,0 +1,31 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.60in,top=0.58in,bottom=0.56in]{geometry}
+\usepackage{mathptmx}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.5pt}
+\setlength{\columnsep}{0.25in}
+\setcounter{secnumdepth}{0}
+\renewcommand{\section}[1]{\vspace{3pt}\noindent\textbf{\underline{#1}}\par\vspace{1pt}}
+\renewcommand{\subsection}[1]{\vspace{2pt}\noindent\textbf{#1}\par\vspace{1pt}}
+\renewcommand{\familydefault}{\rmdefault}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{\sbox0{#1}\ifdim\wd0>\linewidth\resizebox{\linewidth}{!}{#1}\else\usebox0\fi}
+\title{\vspace{-1.2em}\textbf{\MakeUppercase{$title$}}\vspace{-0.5em}}
+\author{\normalsize [Authors and affiliations to be inserted in the RISEx template]}
+\date{}
+\begin{document}
+\twocolumn[
+  \begin{@twocolumnfalse}
+  \maketitle
+  \vspace{-1.1em}
+  \end{@twocolumnfalse}
+]
+$body$
+\end{document}

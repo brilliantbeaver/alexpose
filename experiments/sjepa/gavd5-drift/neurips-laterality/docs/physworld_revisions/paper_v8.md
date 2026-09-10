@@ -23,7 +23,7 @@ Masked prediction offers several ways to use the structure of a skeleton. The ta
 
 Geometry places a second requirement on representation learning: features may need to retain a transformation rather than discard it. *Invariance* means that features stay unchanged; *equivariance* means that they change by a specified rule. Predictive models can distinguish these properties [[8]](https://proceedings.neurips.cc/paper_files/paper/2025/hash/2f63d2963526bdd9ff1b8bcc2dc9905a-Abstract-Conference.html), and geometric regularization can alter the tradeoff between them [[9]](https://proceedings.iclr.cc/paper_files/paper/2026/hash/3be6511c8f56d0dca4b5ed59fdf9b2f4-Abstract-Conference.html). A reflection-invariant representation assigns the same features to a clip and its mirror, although their nonzero targets have opposite signs. We therefore consider feature transformations alongside prediction of the signed measure.
 
-Dense video features and anticipation of human activity extend predictive learning toward physical behavior [[10]](https://arxiv.org/abs/2603.14482), [[11]](https://arxiv.org/abs/2608.21160), while gait silhouettes offer a related test of identity recognition [[12]](https://github.com/AVAuco/GaitJEPA). Our experiments examine a different outcome: recovery of a coordinate-derived movement contrast using the same readout procedure before and after training. This comparison connects the learned prediction task to a physical property without assuming that recognition, feature matching, and movement estimation improve together.
+Dense video features and anticipation of human activity extend predictive learning toward physical behavior [[10]](https://arxiv.org/abs/2603.14482), [[11]](https://arxiv.org/abs/2608.21160), while gait silhouettes offer a related test of identity recognition [[12]](https://github.com/AVAuco/GaitJEPA). Our experiments examine a different outcome: recovery of a coordinate-derived movement contrast using the same readout procedure before and after training. The comparison tests a physical property directly, rather than assuming that better feature matching also means better movement estimates.
 
 ## 3. Data, training, and evaluation
 
@@ -90,7 +90,7 @@ Grid differences are calculated from full-precision saved predictions; summary-o
 
 Uncertainty is estimated by resampling whole source videos, keeping their clips and paired seed predictions together. Mask intervals compare a body- or motion-based policy with its random reference; training intervals compare an encoder with its own initialization. We did not define a smallest meaningful difference in advance, so an interval containing zero cannot establish equivalence.
 
-For the mask and trained-versus-initial results, 2,000 resamples are drawn from the saved predictions while the fitted models and splits remain fixed. Retraining and alternative splits would add uncertainty that these intervals do not capture. The reflection comparison also used 2,000 resamples, although only its summary survives and the underlying inputs are unavailable. Seeds and mask draws reuse the same videos; they are repeated fits, not independent participants. Source holdout protects the individual comparisons from direct leakage, while repeated development on this cohort keeps the overall study exploratory.
+For the mask and trained-versus-initial results, 2,000 resamples are drawn from the saved predictions while the fitted models and splits remain fixed. Retraining and alternative splits would add uncertainty that these intervals do not capture. The reflection comparison also used 2,000 resamples, although only its summary survives and the underlying inputs are unavailable. Seeds and mask draws reuse the same videos; they are repeated fits, not independent participants. Source holdout prevents direct leakage into individual comparisons, but the findings remain exploratory because we developed and refined the study on the same videos.
 
 
 ## 4. Results
@@ -135,7 +135,7 @@ For the expanded summary, 49 of 125 teacher fits (39.2%) and 96 of 125 online-en
 
 For each diagnostic evaluation, we compare source-weighted mean squared feature error against correct-clip teacher targets and valid targets from another source, holding control clips and hidden positions fixed. Correct-clip error is lower in all 375 trained evaluations, compared with 33 of 75 initial evaluations. Each teacher target uses the full clip, so matching can draw on pose, camera view, missing-data patterns, or motion also available in the visible context. These comparisons measure clip correspondence without isolating hidden movement.
 
-Each condition learns against its own teacher, whose feature scale and variation may differ. Consequently, raw feature losses do not provide a common scale for ranking the encoders. The movement readout supplies that shared outcome. The present diagnostics leave the cause of its training deficit unresolved.
+Because each condition trains against its own teacher, feature scales and variation differ across conditions, so raw training losses do not provide a common basis for ranking the encoders. Our analysis cannot explain why the trained encoders score below initialization for predicting physical movements.
 
 ## 5. Discussion and next steps
 
