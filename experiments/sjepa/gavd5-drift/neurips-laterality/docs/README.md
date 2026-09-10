@@ -1682,3 +1682,30 @@ The protocol was frozen internally following prior development. No external prer
 Read-only verification with the suite's own cohort, split, and evaluation loaders passed for all 100,000 prediction rows, 50 jobs, and 16 lanes. This checked artifact lineage, checkpoint and CSV fingerprints, source coverage and weights, and the saved token-error algebra. The experiment, protocol, trained checkpoints, and governance statuses were not changed during manuscript revision.
 
 </details>
+
+<a id="v8-processing-verification"></a>
+
+## V8 processing table and notebook verification — 10 September 2026
+
+Section 3.2 was checked against the notebook entry points, their implementation, and the saved GAVD inputs. The revision changes the two surrounding paragraphs, their heading, and the table descriptions. Its dimensions describe the completed GAVD runs, not the smaller synthetic examples. No scientific results, cohort membership, or training settings were changed.
+
+| Detail checked | Correction or clarification | Implementation |
+|:--|:--|:--|
+| Missing samples and resizing | Only interior gaps of at most four samples are filled. Filled samples count as valid encoder input. Coordinates and validity are resized by sequence index; resized validity must reach 0.999. | [geometry.py](../laterality/geometry.py), `interpolate_short_gaps`, `temporal_resize`, `prepare_pose` |
+| Centering and scaling | The encoder path uses a within-clip median pelvis fallback and a scale from valid shoulder and hip widths. The movement-measure path has no pelvis fallback, gap filling, or temporal resizing. | [geometry.py](../laterality/geometry.py), `pelvis_normalize`, `prepare_pose` |
+| Patches, features, and masks | Four prepared steps give 12 values per landmark, projected to 96 features. All 528 positions remain in the attention grid. Prepared validity and deliberately hidden targets have separate masks; numeric target indices are optional. | [model.py](../laterality/model.py), [motion_structured_training.py](../laterality_extensions/motion_structured_training.py), [motion_runtime.py](../laterality_extensions/motion_runtime.py) |
+| Identity and source exclusion | Landmark identity follows a fixed index order. IDs and movement targets are stored alongside arrays. Each fitted encoder and regression excludes that outer fold's test sources. | [data.py](../laterality/data.py), [splitting.py](../laterality/splitting.py), [comparative_evaluation.py](../laterality_extensions/comparative_evaluation.py) |
+
+Reapplying `prepare_pose` and `paired_valid_target` to all 625 manifest-listed raw clips reproduced the saved coordinates, validity, and per-pair contrasts exactly. All 625 archive hashes, sequence IDs, and source IDs matched. The largest scalar-target difference from the CSV was approximately 9.93e-17. All invalid saved coordinates were zero. The existing five geometry contract tests also passed.
+
+The separate source check covered all 50 saved motion/region jobs: none of their 1,200,000 sampled clip draws came from the corresponding test sources. The saved grid's [15,625 membership records](../artifacts/motion_structured/grids/292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57/memberships.csv) likewise had no source crossing training and testing within a fold and seed.
+
+The current pose cache contains **656 archives**, while the locked inventory specifies **642**. A normal `prepare_cohort` call correctly stops at this mismatch. The verification above used only the existing 625 accepted clips from 93 sources, all of whose archive hashes still match. The inventory must be reconciled before a fresh full-cohort rebuild; neither the inventory contract nor the saved cohort was changed here. This local reproducibility issue is recorded outside the workshop manuscript.
+
+The generated submission files and verification hashes are recorded in the [build manifest](physworld_revisions/submission_build_manifest.json) and [revision verification record](physworld_revision_verification.json). Token projection and attention behavior were checked against code; no encoder training or checkpoint inference was performed.
+
+## V8 discussion, scope, and ethics wording — 10 September 2026
+
+Sections 5 and 6 were rewritten in plain language without changing the reported results or turning proposed work into completed experiments. Section 5 keeps the poorer movement estimates tied to the motion-containing feature summary and tested regression. It names the no-augmentation baseline for the reflection result, preserves the need for a real-data test of explicit reflection loss, and explains the proposed readout and forecasting checks. The movement measure is described as averaging normalized left-right median-speed differences.
+
+Section 6 keeps the reasons for choosing GAVD, the distinction between held-out videos and unseen people, and the absence of independent clinical validation. The [pinned repository documentation](https://github.com/Rahmyyy/GAVD/blob/a87859c881603443f200bcd640663d2c3d7a8136/README.md) and [MIT License](https://github.com/Rahmyyy/GAVD/blob/a87859c881603443f200bcd640663d2c3d7a8136/LICENSE) were rechecked. The paper retains the license conditions and separates repository permissions from the reviews needed for videos and derived-pose releases. Verification counts and the distinction between checking saved outputs and rerunning inference are unchanged. The bibliography and numerical results were not revised.
