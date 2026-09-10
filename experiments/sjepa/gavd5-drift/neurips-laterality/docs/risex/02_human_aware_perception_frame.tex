@@ -1,0 +1,94 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.60in,top=0.58in,bottom=0.56in]{geometry}
+\usepackage{mathptmx}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.5pt}
+\setlength{\columnsep}{0.25in}
+\setcounter{secnumdepth}{0}
+\renewcommand{\section}[1]{\vspace{3pt}\noindent\textbf{\underline{#1}}\par\vspace{1pt}}
+\renewcommand{\subsection}[1]{\vspace{2pt}\noindent\textbf{#1}\par\vspace{1pt}}
+\renewcommand{\familydefault}{\rmdefault}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{\sbox0{#1}\ifdim\wd0>\linewidth\resizebox{\linewidth}{!}{#1}\else\usebox0\fi}
+\title{\vspace{-1.2em}\textbf{\MakeUppercase{Neurologically Motivated
+Self-Supervised Learning for Bilateral Gait Geometry}}\vspace{-0.5em}}
+\author{\normalsize [Authors and affiliations to be inserted in the RISEx template]}
+\date{}
+\begin{document}
+\twocolumn[
+  \begin{@twocolumnfalse}
+  \maketitle
+  \vspace{-1.1em}
+  \end{@twocolumnfalse}
+]
+\subsection{INTRODUCTION}\label{introduction}
+
+Human-aware robots often begin with a perception module that summarizes
+a person's pose and motion. Before such a summary is used for prediction
+or interaction, it should be tested for geometric information relevant
+to the task. We study a small but concrete case: a reflected skeleton
+swaps anatomical sides and reverses a left--right speed contrast. Stroke
+and Parkinson's disease can alter gait asymmetry {[}1{]}, which
+motivates the geometry; our target remains a pose-derived movement score
+rather than a clinical label. We test whether masked joint-embedding
+predictive architecture (JEPA) training makes this score easier to
+recover.
+
+\subsection{MATERIALS AND METHODS}\label{materials-and-methods}
+
+GAVD contributes 625 quality-checked clips from 93 source videos
+{[}2{]}. We process each clip independently, retaining its 33 landmarks
+in a 64-time-step, three-coordinate array. Four consecutive steps form
+one patch, preserving a 16-by-33 time-by-joint layout. The online
+encoder sees visible patches, a predictor estimates hidden-patch
+features, and an exponential-moving-average teacher provides targets
+{[}3{]}. No movement score or affected-side label enters encoder
+training.
+
+The target is the mean normalized difference of left and right median
+speeds across five paired joints. Five outer folds hold out complete
+source videos; every clip from a held-out source remains outside encoder
+training, readout fitting, and readout tuning. Five seeds repeat the
+matched comparison of each trained encoder with its own starting
+weights. We resample whole sources for paired intervals while holding
+fitted models fixed.
+
+\subsection{RESULTS AND DISCUSSION}\label{results-and-discussion}
+
+The initial encoder reached \(R^2=0.223\) with a motion-sensitive frozen
+readout. The five trained teacher encoders reached \(0.101\)--\(0.114\);
+their paired differences from initialization ranged from \(-0.109\) to
+\(-0.122\). Yet trained predictors preferred correct-clip teacher
+features to features from another source in 375 of 375 diagnostic
+checks, compared with 33 of 75 checks before training. Feature
+correspondence therefore improved without improving the tested
+bilateral-motion estimate.
+
+This is a useful failure mode for human-aware perception, but its reach
+is limited. The expanded readout also adds temporal and missingness
+statistics, and preprocessing changes the target calculation. The
+evidence identifies a shortfall in this training-and-readout pipeline
+rather than proving that trained features lack all geometric motion
+information.
+
+\subsection{CONCLUSIONS}\label{conclusions}
+
+Masked feature prediction can capture clip-related structure while
+making a relevant bilateral motion quantity less accessible to a frozen
+linear readout. The result motivates explicit task-level checks before
+using self-supervised articulated-motion features downstream. It does
+not claim robotic performance or control benefit.
+
+\subsection{REFERENCES}\label{references}
+
+{[}1{]} Lewek MD et al.~\emph{Gait Posture} 31:256--260, 2010. {[}2{]}
+Ranjan R et al.~\emph{IEEE Access} 13:45321--45339, 2025. {[}3{]} Assran
+M et al.~arXiv:2301.08243, 2023.
+\end{document}

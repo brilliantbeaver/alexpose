@@ -1,0 +1,102 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.60in,top=0.58in,bottom=0.56in]{geometry}
+\usepackage{mathptmx}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.5pt}
+\setlength{\columnsep}{0.25in}
+\setcounter{secnumdepth}{0}
+\renewcommand{\section}[1]{\vspace{3pt}\noindent\textbf{\underline{#1}}\par\vspace{1pt}}
+\renewcommand{\subsection}[1]{\vspace{2pt}\noindent\textbf{#1}\par\vspace{1pt}}
+\renewcommand{\familydefault}{\rmdefault}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{\sbox0{#1}\ifdim\wd0>\linewidth\resizebox{\linewidth}{!}{#1}\else\usebox0\fi}
+\title{\vspace{-1.2em}\textbf{\MakeUppercase{Neurologically Motivated
+Self-Supervised Learning for Bilateral Gait Geometry}}\vspace{-0.5em}}
+\author{\normalsize [Authors and affiliations to be inserted in the RISEx template]}
+\date{}
+\begin{document}
+\twocolumn[
+  \begin{@twocolumnfalse}
+  \maketitle
+  \vspace{-1.1em}
+  \end{@twocolumnfalse}
+]
+\subsection{INTRODUCTION}\label{introduction}
+
+Self-supervised motion features are attractive for AI systems that must
+interpret people from incomplete observations. A central question is
+whether success at predicting a hidden feature means that the
+representation retains a useful physical relation. We test this question
+with bilateral gait geometry. Reflection exchanges left and right body
+landmarks and reverses a signed contrast of their movement speeds. This
+relation is relevant to gait asymmetry in several neurological and
+musculoskeletal conditions {[}1{]}, while remaining independent of a
+diagnostic label.
+
+\subsection{MATERIALS AND METHODS}\label{materials-and-methods}
+
+The study uses 625 quality-checked GAVD pose clips from 93 source videos
+{[}2{]}. Each clip is prepared independently. All 33 landmarks remain in
+a 64-by-33-by-3 input, and four-frame patches yield a 16-by-33
+time-by-joint grid. A skeleton JEPA predicts teacher features for masked
+grid positions from their visible context {[}3{]}. No label, target, or
+affected side supervises encoder training.
+
+We define a left-minus-right median-speed contrast over five paired
+joints. The null hypothesis is that JEPA does not improve its frozen
+ridge-regression estimate over a matched initial encoder. Five outer
+folds exclude complete source videos from pretraining and readout
+fitting; five seeds repeat each condition. Mask comparisons share
+starting weights, source draws, training views, and updates. We weight
+sources equally and resample sources, not clips, for paired intervals.
+
+\subsection{RESULTS AND DISCUSSION}\label{results-and-discussion}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{tabular}{@{}p{0.40\columnwidth}p{0.22\columnwidth}p{0.28\columnwidth}@{}}
+\toprule\noalign{}
+Outcome & Before JEPA & After JEPA \\
+\midrule\noalign{}
+Bilateral readout \(R^2\) & 0.223 & 0.101--0.114 \\
+Correct-clip target preferred & 33/75 checks & 375/375 checks \\
+\end{tabular}
+}
+
+All five trained-minus-initial contrasts were negative (\(-0.109\) to
+\(-0.122\)); their saved source intervals lay below zero.
+Motion-weighted and connected-region masks had no clear advantage over
+their own count-matched random references. The predictor therefore
+learns within-clip feature correspondence while the tested
+encoder-plus-readout pipeline produces a weaker bilateral movement
+estimate.
+
+The evidence has limits that matter for interpretation. Teacher feature
+scales differ between conditions. The expanded readout adds temporal
+summaries and missing-data support while increasing dimension. Moreover,
+preparation changes the target calculation: its agreement with the
+original calculation is 70.4\% by sign and \(R^2=0.218\). The study does
+not show that JEPA destroys geometric information, only that this
+training recipe and readout fail to improve this observable.
+
+\subsection{CONCLUSIONS}\label{conclusions}
+
+A latent prediction diagnostic can improve even when a prespecified
+geometric readout declines. Human-aware robotics may benefit from
+testing learned motion features against task-relevant observables before
+using them downstream. Future work should evaluate past-only motion
+prediction with persistence and velocity baselines, a stable target
+path, and new source or participant groups.
+
+\subsection{REFERENCES}\label{references}
+
+{[}1{]} Lewek MD et al.~\emph{Gait Posture} 31:256--260, 2010. {[}2{]}
+Ranjan R et al.~\emph{IEEE Access} 13:45321--45339, 2025. {[}3{]}
+Abdelfattah M, Alahi A. \emph{ECCV}, 2024.
+\end{document}

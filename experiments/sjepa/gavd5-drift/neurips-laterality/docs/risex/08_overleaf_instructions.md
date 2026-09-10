@@ -1,0 +1,9 @@
+# Revision 08: LaTeX and Overleaf
+
+Upload the ZIP as a new Overleaf project. Set `08_risex_bilateral_motion_evaluation.tex` as the main document and choose **XeLaTeX** as the compiler. References and the results table are included in this standalone file; no bibliography service or external figure is required.
+
+The supplied PDF was generated with Times New Roman available on the author's machine. If that font is unavailable, the LaTeX source explicitly falls back to TeX Gyre Termes and issues a warning. That fallback is suitable for editing, but does not meet the conference's literal Times New Roman requirement. Use a licensed Times New Roman installation for the final build, or transfer the text into the supplied official Word template and export there. Font files are not redistributed in this package.
+
+This is an author-supplied LaTeX adaptation of the official Word template's stated layout, not a conference-issued LaTeX template. It retains the conference header text, full-width title/author block, two-column body, required headings, letter paper, stated margins, 11-point body text and 9-point table caption. The unmodified official Word template is included for comparison. Confirm the final layout against that template before uploading.
+
+The authors are Alexander Mui (corresponding; alexander.mui@students.asdrp.org) and Penelope Inouye, both at Computer Science & Engineering, ASDRP, Fremont, CA, USA. Recheck that the PDF remains one page after any edits. No submission has been made. The scientific source is `08_risex_bilateral_motion_evaluation.md`; repository users can regenerate its derived files with `bash build_risex_v08.sh`. The author block is also recorded in `risex_v08_template.tex`; update that template when changing author details locally. Changes made only in the generated TeX file will not survive regeneration.
