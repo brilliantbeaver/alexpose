@@ -11,6 +11,28 @@ from nbformat.v4 import new_markdown_cell
 GRID = "artifacts/motion_structured/grids/292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57"
 ARCHIVED_15 = "executed/motion_structured/gavd_5yc3ve5h/15_motion_weighted_masking.ipynb"
 
+SUITE_GUIDE = """
+### Current result in plain language
+
+The masks in this notebook suite work as designed, and training learns to
+predict features associated with the correct clip. The learned features do
+not improve the tested left-versus-right movement score. With the same
+motion-sensitive summary, every trained encoder performs worse than its
+matched initial encoder in all five seeds. This finding applies to the tested
+training and readout procedure; it does not show that untrained encoders are
+generally preferable or that S-JEPA cannot learn useful movement features.
+
+A **matched initial encoder** is an exact snapshot saved before training. For
+each video fold and random seed, the trained model begins from the same
+weights as this unchanged control. S-JEPA starts with identical online and
+teacher encoders. Gradient descent updates the online encoder, while an
+exponential moving average of the online weights updates the teacher. The
+initial control, trained online encoder and trained teacher are later frozen
+and evaluated with the same held-out videos and readout procedure. This
+pairing helps isolate what changed during pretraining from differences due
+to architecture or a lucky random initialization.
+"""
+
 OPENING = {
     15: """
     ### What to look for in the reviewed results — 2026-09-08
@@ -342,6 +364,28 @@ ANALYSIS = {
     coordinate-derived movement contrast, with video rather than verified
     person separation.
 
+    ### Plain-language conclusion
+
+    The experiment succeeded at changing the learning task. Motion weighting
+    hid more active observations, connected-region masks removed nearby clues,
+    and the loss decreased during training. Those successes did not make the
+    final representation more useful for the tested left-versus-right movement
+    score. The matched initial encoder reached mean R² 0.2225, while the five
+    trained teacher conditions reached 0.1008–0.1142 under the same
+    motion-sensitive summary. The predictors could distinguish the correct
+    clip's hidden features from features taken from another video, showing
+    clip-related learning, but this did not improve laterality prediction.
+
+    The most useful near-term research is therefore to locate where movement
+    information becomes difficult to recover. Reuse the saved encoders to test
+    input preparation, temporal summaries and regression regularization before
+    training more masks or larger models. A focused reflection experiment can
+    then test whether overall movement remains stable while left-minus-right
+    features change sign predictably. Real future-position prediction has the
+    greatest longer-term potential, but the current forecasting evidence is
+    synthetic and does not establish a gain on GAVD. Any selected explanation
+    should later be tested on independently chosen data or outcomes.
+
     ### Step 1: Compare learning under an identical readout
 
     Values below are from [summary.csv]({grid}/summary.csv). R² is computed
@@ -538,7 +582,7 @@ def interpretation_text(number):
 
 def add_saved_result_interpretation(notebook, number):
     opening, analysis = interpretation_text(number)
-    notebook.cells[0].source += "\n\n" + opening
+    notebook.cells[0].source += "\n\n" + opening + "\n\n" + dedent(SUITE_GUIDE).strip()
     notebook.cells.append(new_markdown_cell(
         analysis,
         metadata={"tags": ["results-interpretation", "review-2026-09-08"]},
