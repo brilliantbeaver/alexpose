@@ -14,7 +14,6 @@ from gavd6_sjepa.research_directions.future_innovation.fi_cohort import (
     build_candidates,
     extract_and_freeze,
     load_cohort,
-    review_alignment,
 )
 from gavd6_sjepa.research_directions.future_innovation.fi_contracts import (
     initialize_run,
@@ -117,11 +116,6 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
             cohort = load_cohort(root, verify_artifacts=True)
             self.assertEqual(len(cohort), 50)
             self.assertEqual(cohort.source_first_frame.unique().tolist(), [0])
-            inspected = cohort.groupby("outer_fold").first().window_id.tolist()
-            review_alignment(
-                root, "synthetic fixture", inspected, "Synthetic interface test only"
-            )
-
             class Teacher:
                 def verify_geometry(self, video):
                     return 0.0

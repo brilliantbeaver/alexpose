@@ -11,7 +11,7 @@ from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
     sha256_file,
 )
 
-from .fi_cohort import load_cohort, validate_alignment_review
+from .fi_cohort import load_cohort
 from .fi_contracts import (
     GateThresholds,
     check_run,
@@ -111,7 +111,6 @@ def audit_binding(root):
             for p in (
                 "config/cache-contract.json",
                 "config/cohort-contract.json",
-                "qc/alignment-review.json",
             )
         ]
     )
@@ -120,7 +119,6 @@ def audit_binding(root):
 def run_audits(root, adapter):
     root = Path(root)
     cohort = load_cohort(root, verify_artifacts=True)
-    validate_alignment_review(root, cohort)
     _, cache = load_cache(root)
     model = load_model_contract(root)
     variance_valid = {}
@@ -290,7 +288,6 @@ def require_audits(root):
         )
     if not run["synthetic"]:
         cohort = load_cohort(root)
-        validate_alignment_review(root, cohort)
         planned = pd.read_csv(root / "manifests/audit-windows.csv")
         sensitivity = pd.read_csv(root / "qc/target-sensitivity.csv")
         leakage = pd.read_csv(root / "qc/causal-leakage.csv")

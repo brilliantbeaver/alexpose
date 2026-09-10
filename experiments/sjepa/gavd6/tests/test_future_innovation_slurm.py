@@ -54,8 +54,6 @@ class FutureInnovationSlurmTests(unittest.TestCase):
             )
             mock.chmod(0o755)
             run = root / "run"
-            (run / "qc").mkdir(parents=True)
-            (run / "qc/alignment-review.json").write_text("{}")
             annotation = root / "dataset/annotations/GAVD/data"
             annotation.mkdir(parents=True)
             for part in range(1, 6):
@@ -113,8 +111,6 @@ class FutureInnovationSlurmTests(unittest.TestCase):
             )
             mock.chmod(0o755)
             run = root / "run"
-            (run / "qc").mkdir(parents=True)
-            (run / "qc/alignment-review.json").write_text("{}")
             env = {
                 **os.environ,
                 "PATH": str(binaries) + os.pathsep + os.environ["PATH"],

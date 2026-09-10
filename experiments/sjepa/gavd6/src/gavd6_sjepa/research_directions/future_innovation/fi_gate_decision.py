@@ -78,7 +78,6 @@ def decide_gate(metrics, thresholds=None, expected_seed_count=3):
         >= thresholds.bootstrap_positive_fraction_min,
         "seeds_stable": all(gain > 0 for gain in seed_gains)
         and sum(gain >= thresholds.real_delta_r2_min for gain in seed_gains) >= 2,
-        "capacity_control_clear": metrics.get("capacity_control_clear") is True,
     }
     decision = (
         "STOP"

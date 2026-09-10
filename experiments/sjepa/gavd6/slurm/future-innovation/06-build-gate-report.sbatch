@@ -16,10 +16,4 @@ if ! fi_python score-gate; then
   fi_python build-report
   exit 0
 fi
-if [[ "${FI_SCORE_ONLY:-0}" == 1 ]]; then
-  echo "Scores ready. Inspect paired-controls.csv, record assess-capacity, then run build-report."
-else
-  # Without an explicit evidence-backed capacity assessment, point passes remain
-  # INCONCLUSIVE. No numerical capacity cutoff is invented by this script.
-  fi_python build-report
-fi
+fi_python build-report

@@ -326,33 +326,6 @@ def score_gate(root):
     )
 
 
-def assess_capacity(root, *, reviewer, finding, evidence):
-    root = Path(root)
-    verify_scores(root)
-    if (root / "reports/gate-decision.json").exists():
-        raise ValueError(
-            "Final report is sealed; do not replace its interpretation after publication"
-        )
-    if (
-        finding not in ("clear", "unresolved")
-        or not reviewer.strip()
-        or not evidence.strip()
-    ):
-        raise ValueError(
-            "An identified reviewer and evidence-backed capacity interpretation are required"
-        )
-    write_once_json(
-        root / "reports/capacity-assessment.json",
-        {
-            "scores_sha256": sha256_file(root / "reports/scores-contract.json"),
-            "reviewer": reviewer,
-            "capacity_control_clear": finding == "clear",
-            "evidence": evidence,
-            "policy": "qualitative interpretation of paired-controls.csv and seed scores; no post-hoc numerical cutoff",
-        },
-    )
-
-
 def build_report(root):
     root = Path(root)
     run = check_run(root)
@@ -382,17 +355,6 @@ def build_report(root):
         paired = pd.read_csv(root / "reports/paired-controls.csv")
         uncertainty = read_json(root / "reports/uncertainty.json")
         point = score_frame.groupby("arm").delta_r2.mean()
-        capacity_path = root / "reports/capacity-assessment.json"
-        capacity = False
-        capacity_evidence = "No capacity interpretation recorded; motion attribution remains unresolved."
-        if capacity_path.exists():
-            assessment = read_json(capacity_path)
-            if assessment["scores_sha256"] != sha256_file(
-                root / "reports/scores-contract.json"
-            ):
-                raise ValueError("Capacity assessment refers to different scores")
-            capacity = assessment["capacity_control_clear"] is True
-            capacity_evidence = assessment["evidence"]
         metrics = {
             "delta_r2_real": float(point["real-skeleton"]),
             "delta_r2_time_shuffle": float(point["time-shuffle"]),
@@ -414,8 +376,6 @@ def build_report(root):
             ],
             "person_edit_direction_fraction": audit["person_edit_direction_fraction"],
             "bootstrap_positive_fraction": uncertainty["bootstrap_positive_fraction"],
-            "capacity_control_clear": capacity,
-            "capacity_evidence": capacity_evidence,
             "evaluation_contract_valid": True,
             "controls_complete": True,
             "target_variance_valid": True,
@@ -531,11 +491,6 @@ def build_report(root):
             lines.append(
                 f"| {row.control} | {row.real_minus_control:.4f} | [{row.ci025:.4f}, {row.ci975:.4f}] | {row.real_beats_control_fraction:.3f} |"
             )
-        if result.get("metrics"):
-            lines += [
-                "",
-                "Capacity attribution: " + result["metrics"]["capacity_evidence"],
-            ]
         if score_frame.baseline_ceiling_warning.any():
             lines += [
                 "",

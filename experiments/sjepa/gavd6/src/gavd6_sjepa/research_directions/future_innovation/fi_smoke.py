@@ -152,16 +152,6 @@ def synthetic_cache(root):
         },
     )
     write_once_json(
-        root / "qc/alignment-review.json",
-        {
-            "manifest_sha256": sha256_file(root / "manifests/gate-windows.csv"),
-            "window_ids": cohort.groupby("outer_fold").first().window_id.tolist(),
-            "reviewer": "synthetic fixture",
-            "note": "No real video was inspected",
-            "passed": True,
-        },
-    )
-    write_once_json(
         root / "qc/validity-summary.json",
         {
             "binding": audit_binding(root),

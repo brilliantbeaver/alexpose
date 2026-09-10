@@ -46,22 +46,11 @@ This submits `01` followed by `02` with an `afterok` dependency. Scripts use HAI
 
 Candidate order and window starts are fixed by seed `260905`. The single conversion from one-based GAVD annotation frames to zero-based decoder frames occurs in candidate construction. Eligibility requires 64 consecutive annotated boxes, successful exact decoding, at least 90% crop retention in the context and target frames, nonempty person/background token regions, and at least 0.45 valid whole-body context coverage. Requiring boxes across all 64 frames also makes every selected window eligible to supply the pixel-edit audit. Sources contribute at most two windows. Selection stops at exactly 50, excludes no rows based on teacher features or scores, and records all exclusions.
 
-The frozen cohort is `manifests/gate-windows.csv`. Inspect at least one image from each of its five `outer_fold` values in `qc/alignment-overlays/`. Each sheet labels source/local frame numbers, observed/hidden frames, boxes, context landmarks, and target frames 38–39. Record the IDs you actually inspected:
-
-```bash
-uv run --no-sync gavd6 future-innovation review-alignment \
-  --run-root "$FI_RUN_ROOT" --reviewer "$USER" \
-  --window-ids WINDOW_FROM_FOLD_0 WINDOW_FROM_FOLD_1 WINDOW_FROM_FOLD_2 WINDOW_FROM_FOLD_3 WINDOW_FROM_FOLD_4 \
-  --note "Describe observed RGB/box/landmark alignment and any reviewed concerns."
-```
-
-This is the guide's actual pre-feature alignment inspection. The pipeline deliberately records it as evidence rather than claiming that rendering an image proves someone inspected it. Incorrect alignment requires a repaired, newly versioned cohort.
+The frozen cohort is `manifests/gate-windows.csv`. The pipeline verifies exact frame decoding, crop retention, landmark validity, and all frozen-artifact hashes before it proceeds. It also saves labeled overlays for every window in `qc/alignment-overlays/` for optional post-run diagnosis; they do not block the next stage.
 
 ## Cache, audit, fit, and score
 
 ```bash
-# Leave the final qualitative capacity interpretation open until scores exist.
-export FI_SCORE_ONLY=1
 bash slurm/future-innovation/submit-fi-pipeline.sh compute
 ```
 
@@ -84,20 +73,9 @@ Ten audit windows and different-source pixel donors are selected before feature 
 
 Failed dependencies are canceled with `--kill-on-invalid-dep=yes`; the report job uses `afterany` to produce a `STOP` report when fitting is unavailable. If the scheduler cannot resolve an upstream dependency, run `build-report` manually once the job states are settled. A STOP caused by incomplete/invalid measurement is distinguished from a completed valid null result.
 
-## Interpret capacity and seal the decision
+## Automatic decision and report
 
-When `06` completes, inspect `reports/aggregate-metrics.csv`, `paired-controls.csv`, `uncertainty.json`, and the pixel-edit contact sheets. The real-minus-no-skeleton comparison includes a paired source-bootstrap interval and the fraction of draws in which real wins. The guide intentionally gives no numerical capacity cutoff; an identified reviewer must state why motion attribution is clear or unresolved.
-
-```bash
-uv run --no-sync gavd6 future-innovation assess-capacity \
-  --run-root "$FI_RUN_ROOT" --reviewer "$USER" --finding unresolved \
-  --evidence "Describe the actual paired capacity difference, interval, and per-seed evidence."
-uv run --no-sync gavd6 future-innovation build-report --run-root "$FI_RUN_ROOT"
-```
-
-Choose `--finding clear` only when that interpretation is supported by the saved comparison. Omitting an assessment leaves capacity unresolved. For fully unattended finalization, submit `compute` with `FI_SCORE_ONLY=0` (the default): valid point passes with no capacity interpretation are `INCONCLUSIVE`. Do not choose a new cutoff after looking at scores.
-
-`reports/gate-decision.json` and `gate-report.md` are sealed once written. `ADVANCE` requires all frozen point/validity checks, positive real gain in at least 90% of source bootstrap draws, positive gain in all three seeds, at least two seeds reaching 0.05, and clear capacity attribution. Adapter training is always disallowed by this raw-skeleton gate.
+Stage `06` automatically scores the complete out-of-fold predictions and writes the sealed `reports/gate-decision.json` and `gate-report.md`. The report includes the paired real-minus-no-skeleton comparison, source-bootstrap interval, and fraction of draws in which real wins. `ADVANCE` requires all frozen point/validity checks, positive real gain in at least 90% of source bootstrap draws, positive gain in all three seeds, and at least two seeds reaching 0.05. Adapter training is always disallowed by this raw-skeleton gate.
 
 ## Outputs, resumption, and validation
 

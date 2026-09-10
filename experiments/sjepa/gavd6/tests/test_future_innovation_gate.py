@@ -27,7 +27,6 @@ class FutureInnovationGateTests(unittest.TestCase):
                     "target_variance_valid",
                     "teacher_stable",
                     "causal_leakage_absent",
-                    "capacity_control_clear",
                 )
             },
         }
@@ -67,15 +66,19 @@ class FutureInnovationGateTests(unittest.TestCase):
                 decide_gate({**self.valid(), **change})["decision"], "STOP"
             )
 
-    def test_instability_and_unresolved_capacity_are_inconclusive(self):
+    def test_instability_is_inconclusive(self):
         for change in (
             {"bootstrap_positive_fraction": 0.7},
-            {"capacity_control_clear": False},
             {"seed_real_gains": [0.16, 0.01, 0.01]},
         ):
             self.assertEqual(
                 decide_gate({**self.valid(), **change})["decision"], "INCONCLUSIVE"
             )
+
+    def test_retired_manual_capacity_field_does_not_gate_advance(self):
+        result = decide_gate({**self.valid(), "capacity_control_clear": False})
+        self.assertEqual(result["decision"], "ADVANCE")
+        self.assertNotIn("capacity_control_clear", result["checks"])
 
     def test_missing_seed_nonfinite_and_inconsistent_aggregation_stop(self):
         for change in (
