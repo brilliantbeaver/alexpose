@@ -3,6 +3,29 @@
 Notebooks are grouped by purpose. Numeric prefixes define the order only within
 their directory; they are not a single global sequence.
 
+## Future Innovation: question to decision
+
+Start with the [study overview](../docs/studies/future-innovation/) for the
+current evidence and execution boundary. These five notebooks work independently
+in fresh kernels. `teach` is the default and uses generated examples;
+`FI_TUTORIAL_MODE=inspect` reads an explicit `FI_RUN_ROOT` without training,
+downloads, submissions or report writes. `FI_TUTORIAL_MODE=execute` runs the full
+Experiment 0 stages in order with an explicit `FI_RUN_ROOT`. Use the separate
+[notebook HAIC launchers](../slurm/future-innovation/NOTEBOOKS.md) to schedule
+fresh kernels, including the five-fold CPU array, and retain executed copies.
+
+| Order | Notebook | Question |
+| --- | --- | --- |
+| 00 | [Question and worked example](experiments/future_innovation/00_question_and_worked_example.ipynb) | What could skeleton history add? |
+| 01 | [Cohort and alignment](experiments/future_innovation/01_cohort_and_alignment.ipynb) | Are windows aligned and sources separated? |
+| 02 | [Teacher features and validity](experiments/future_innovation/02_teacher_features_and_validity.ipynb) | Are inputs past-only and targets meaningful? |
+| 03 | [Predictors and controls](experiments/future_innovation/03_matched_predictors_and_controls.ipynb) | Does correctly paired motion help? |
+| 04 | [Results and next decision](experiments/future_innovation/04_results_and_next_decision.ipynb) | What does the evidence permit next? |
+
+Edit [the builder](../scripts/research_directions/future_innovation/build_future_innovation_notebooks.py),
+then regenerate selected notebooks. The [maintenance guide](../scripts/research_directions/future_innovation/future_innovation_tutorial_guide.md)
+documents source checks, fresh-kernel verification and executed-copy storage.
+
 ## Foundations
 
 Run these in order to reproduce the original GAVD S-JEPA workflow.

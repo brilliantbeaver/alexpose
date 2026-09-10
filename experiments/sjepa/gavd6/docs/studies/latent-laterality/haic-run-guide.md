@@ -1,9 +1,14 @@
 # Latent Laterality: ordered HAIC run guide
 
-The local synthetic gate is a code/mechanism check only. The real paired-AMASS
-v2 gate has already passed and authorizes the current seed-7 training run. Do
-not rerun that gate in place. A fresh run root must run the real sequence gate
-and stop unless its `gate_decision.json` sets `ready_for_sg_jepa=true`.
+**Current decision, reconciled 10 September 2026:** seed-7 training and
+validation are complete. The uniform control reproduced SG-JEPA's gain, so
+confirmation stopped. Do not submit jobs 15/16 or open the test split under
+this plan. Read the [completed findings](study-so-far.md#current-conclusion-and-next-decision).
+
+The commands below preserve the execution record. The paired-AMASS v2
+benchmark gate passed before training; that earlier gate does not override
+the later validation stop. A fresh exploratory run needs its own declared
+comparison and evidence gates.
 
 ## Inputs and prerequisites
 
@@ -129,17 +134,17 @@ login node. GPU jobs request one H100; manifest construction and the benchmark
 gate are CPU-only. Array jobs give each model its own allocation, exit status,
 and log.
 
-This is the only current route for the AMASS SG-JEPA experiment:
+This records the paired-AMASS v2 route and its current stopping point:
 
 | Order | Script | Current action | Purpose |
 | --- | --- | --- | --- |
 | Prerequisite | `01-convert-amass-neutral.sbatch` | **Already complete.** Run only if the neutral AMASS tensors or their manifest are genuinely absent. | Create the shared neutral Core11 tensors. |
 | Completed | `11-build-amass-gauge-v2-chart-paired.sbatch` | **Do not resubmit.** | Create the paired v2 corruption manifest. |
 | Completed | `12-run-amass-sequence-benchmark-v2.sbatch` | **Passed. Do not resubmit.** | Verify that the paired manifest is fair and leaves meaningful learning headroom. |
-| **Run now** | `13-train-amass-gauge-v2-seed7.sbatch` | Submit once as its declared three-task array. | Train correction-first, SG-JEPA, and the uniform-uncertainty control at seed 7. |
-| Then | `14-evaluate-amass-gauge-v2-seed7-validation.sbatch` | Submit only after every task in 13 succeeds. | Compare all three seed-7 runs on validation people only. |
-| Conditional | `15-train-amass-gauge-v2-confirmation.sbatch` | Submit only after manually reviewing 14. | Repeat correction-first and SG-JEPA at seeds 19 and 31. |
-| Last | `16-evaluate-amass-gauge-v2-confirmation-test.sbatch` | Submit only after every task in 15 succeeds. | Read the sealed test split once for all three seeds. |
+| Completed | `13-train-amass-gauge-v2-seed7.sbatch` | Inspect retained runs; do not resubmit. | Trained all three seed-7 arms. |
+| Completed; advancement failed | `14-evaluate-amass-gauge-v2-seed7-validation.sbatch` | Read the saved summary and interpretation. | Uniform uncertainty reproduced SG-JEPA's gain. |
+| Stopped | `15-train-amass-gauge-v2-confirmation.sbatch` | Do not submit under this plan. | Confirmation seeds 19 and 31. |
+| Sealed | `16-evaluate-amass-gauge-v2-confirmation-test.sbatch` | Do not submit under this plan. | Final test evaluation remains unopened. |
 
 Scripts `02` and `03` are the failed historical v1 AMASS diagnostic. Scripts
 `04` through `10` are a separate, future GAVD/source-route screen. Neither
@@ -152,8 +157,8 @@ intentionally refuse to replace their existing manifest or non-empty output
 directory. Rebuilding either one in place would fail, and creating a different
 manifest would require a new gate before training.
 
-On HAIC, verify that the stored files are present and still match the passing
-gate before requesting GPUs:
+On HAIC, the following read-only check verifies that the stored files still
+match the earlier passing benchmark gate. It does not authorize new training:
 
 ```bash
 GAUGE_MANIFEST="$LATENT_LATERALITY_RUN_ROOT/amass-neutral/gauge-seed7-v2-chart-paired.csv"
@@ -176,7 +181,10 @@ order is `01` (only if needed) → `11` → `12`. Stop after 12 and inspect its
 decision before submitting 13. Do not use that rebuild recipe to overwrite the
 current approved artifacts.
 
-### 1. Run the seed-7 development comparison now
+### 1. Completed seed-7 development comparison
+
+The submission command is retained for reproduction of the execution record.
+The current runs are complete; inspect their artifacts rather than resubmitting.
 
 Script 13 is a three-task array. Its task mapping is fixed:
 
@@ -186,8 +194,8 @@ Script 13 is a three-task array. Its task mapping is fixed:
 | `1` | SG-JEPA |
 | `2` | Uniform-uncertainty control |
 
-It rechecks both the gate decision and the manifest fingerprint itself. Submit
-it once:
+It rechecks both the gate decision and the manifest fingerprint itself. The
+original submission was:
 
 ```bash
 cd "$GAVD6_ROOT"
@@ -195,11 +203,12 @@ j13=$(sbatch --parsable --export=ALL slurm/latent-laterality/13-train-amass-gaug
 printf 'Seed-7 training array: %s\n' "$j13"
 ```
 
-### 2. Evaluate seed 7 on validation people only
+### 2. Completed validation evaluation
 
-Wait until **all three** tasks in `j13` have succeeded. Then submit 14 with an
-`afterok` dependency; it refuses to run if any expected `run_result.json` is
-missing. This evaluation uses the validation split, not the test split.
+The completed evaluation followed **all three** successful tasks in `j13`,
+using an `afterok` dependency. Script 14 refuses to run if any expected
+`run_result.json` is missing. It evaluated validation people only. The command
+below records that completed step:
 
 ```bash
 j14=$(sbatch --parsable --export=ALL --dependency="afterok:$j13" \
@@ -207,16 +216,19 @@ j14=$(sbatch --parsable --export=ALL --dependency="afterok:$j13" \
 printf 'Seed-7 validation readout: %s\n' "$j14"
 ```
 
-Review `amass-gauge-v2-seed7-validation/gauge_readout_summary.csv` before any
-further submission. Advance only if SG-JEPA improves the identity-macro
-side-sensitive score over correction-first without a material even-channel
-loss, and if the uniform-uncertainty control does not reproduce the gain.
+The original advancement rule required improvement over correction-first
+without a material even-channel loss and without the uniform control reproducing
+the gain. The saved `amass-gauge-v2-seed7-validation/gauge_readout_summary.csv`
+failed the latter condition. No further submission follows from this result.
 
-### 3. Confirm only a development-supported result
+### 3. Confirmation stopped after validation
 
-Script 15 does not automatically interpret the validation result. Do **not**
-submit it merely because script 14 completed. Submit it only after the manual
-decision in Step 2 supports the pre-set SG-JEPA contrast.
+The condition in Step 2 failed: the uniform control reproduced the gain.
+The following command documents the original conditional plan and must not
+be submitted for the current result.
+
+Script 15 does not automatically interpret validation. Its original use was
+conditional on support for the pre-set SG-JEPA contrast, which was not found.
 
 Its four tasks are fixed:
 
@@ -232,12 +244,15 @@ j15=$(sbatch --parsable --export=ALL slurm/latent-laterality/15-train-amass-gaug
 printf 'Confirmation training array: %s\n' "$j15"
 ```
 
-### 4. Read the sealed test split once
+### 4. Keep the test split sealed
 
-Script 16 is the only step in this path that evaluates AMASS test rows. Wait
-for all four tasks in `j15` to succeed, then submit it once. It evaluates the
-six required completed runs: correction-first and SG-JEPA at seeds 7, 19, and
-31.
+The advancement condition failed, so this conditional command remains unused.
+Do not submit it under the current plan.
+
+Script 16 is the only step in this path that evaluates AMASS test rows. The
+original plan required all four confirmation tasks and six completed model
+runs: correction-first and SG-JEPA at seeds 7, 19, and 31. Those conditional
+requirements do not override the development stop.
 
 ```bash
 j16=$(sbatch --parsable --export=ALL --dependency="afterok:$j15" \

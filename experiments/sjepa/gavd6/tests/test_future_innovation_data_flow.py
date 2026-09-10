@@ -116,6 +116,14 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
             cohort = load_cohort(root, verify_artifacts=True)
             self.assertEqual(len(cohort), 50)
             self.assertEqual(cohort.source_first_frame.unique().tolist(), [0])
+            frozen = (root / "config/run-contract.json").read_bytes()
+            build_candidates(root, sequences, videos, [annotations], youtube)
+            with patch(
+                "gavd6_sjepa.research_directions.future_innovation.fi_cohort.extract_history",
+                side_effect=AssertionError("must reuse frozen poses"),
+            ):
+                extract_and_freeze(root)
+            self.assertEqual((root / "config/run-contract.json").read_bytes(), frozen)
             class Teacher:
                 def verify_geometry(self, video):
                     return 0.0
@@ -142,6 +150,9 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
                 Teacher,
                 "encode_full_target",
                 side_effect=AssertionError("must reuse cache"),
+            ), patch(
+                "gavd6_sjepa.research_directions.future_innovation.fi_feature_cache.fixed_projection",
+                side_effect=AssertionError("must reuse saved projection across runtimes"),
             ):
                 cache_teacher(root, Teacher())
             # The same complete audit pipeline rejects a constant fake target
@@ -154,3 +165,11 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, "Validity audit failed"):
                 require_audits(root)
+            with (root / "manifests/candidates.csv").open("a") as handle:
+                handle.write("tampered\n")
+            with self.assertRaisesRegex(ValueError, "Candidate order changed"):
+                build_candidates(root, sequences, videos, [annotations], youtube)
+            with Path(cohort.iloc[0].pose_path).open("ab") as handle:
+                handle.write(b"tampered")
+            with self.assertRaisesRegex(ValueError, "Cohort artifact changed"):
+                extract_and_freeze(root)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import shutil
 from dataclasses import asdict
 from pathlib import Path
 
@@ -17,10 +18,14 @@ from .fi_contracts import (
     ARMS,
     GateThresholds,
     check_run,
+    code_fingerprint,
     equal_source_weights,
     load_model_contract,
+    measurement_complete,
     read_json,
     stable_key,
+    verified_report_decision,
+    write_json,
     write_once_json,
 )
 from .fi_feature_cache import load_cache
@@ -329,15 +334,17 @@ def score_gate(root):
 def build_report(root):
     root = Path(root)
     run = check_run(root)
-    if (root / "reports/final-report-contract.json").exists():
-        sealed = read_json(root / "reports/final-report-contract.json")
-        for path, digest in sealed["artifacts"].items():
-            if sha256_file(root / path) != digest:
-                raise ValueError("Sealed final report changed")
-        return read_json(root / "reports/gate-decision.json")
+    previous = verified_report_decision(root)
+    if (
+        previous is not None
+        and measurement_complete(previous)
+        and (root / "reports/final-report-contract.json").exists()
+    ):
+        return previous
     thresholds = GateThresholds(**read_json(root / "config/thresholds.json"))
     config = load_model_contract(root)
     score_frame, paired, uncertainty = None, None, None
+    complete = False
     try:
         audit = require_audits(root)
         cohort, cache = load_cache(root)
@@ -395,6 +402,7 @@ def build_report(root):
             or "All preregistered checks passed."
         )
         stage = "all five outer folds scored"
+        complete = True
     except (ValueError, FileNotFoundError, KeyError) as error:
         result = {
             "decision": "STOP",
@@ -428,22 +436,25 @@ def build_report(root):
         vjepa_commit=teacher["commit"],
         checkpoint_sha256=teacher["checkpoint_sha256"],
         code_sha256=run["code_sha256"],
+        report_code_sha256=code_fingerprint(),
+        execution_provenance="logs/provenance/",
+        measurement_complete=complete,
         synthetic=run["synthetic"],
     )
-    write_once_json(root / "reports/gate-decision.json", result)
     lines = [
         f"# Experiment 0: {result['decision']}",
         "",
         reason,
         "",
         f"Run: `{root.name}`. Stage: {stage}.",
+        "Execution code and runtime provenance: `logs/provenance/`. Source/version differences are recorded, not treated as measurement failures.",
         "",
         f"Planned: 50 windows, at least 25 sources, five source-disjoint outer folds, seeds {list(config.seeds)}, all five arms.",
         "The 8-frame horizon locates a full-clip contextual target at frames 38–39; predictors only see frames 0–31.",
         "Annotated endpoints are allowed offline metadata. Source-disjoint evaluation does not establish participant-disjoint evaluation.",
         "",
     ]
-    if manifest.exists():
+    if complete and manifest.exists():
         cohort = pd.read_csv(manifest)
         lines += [
             f"Cohort: {len(cohort)} windows from {cohort.video_id.nunique()} sources. Elapsed horizons range from {cohort.horizon_seconds.min():.4f} to {cohort.horizon_seconds.max():.4f} seconds.",
@@ -455,7 +466,7 @@ def build_report(root):
     lines += ["", "Frozen thresholds:", ""] + [
         f"- {name}: {value}" for name, value in asdict(thresholds).items()
     ]
-    if score_frame is not None:
+    if complete:
         lines += [
             "",
             "Scores use predictive R² against each fold's training mean, uniform valid-feature averages, and equal total weight per source. Seeds are averaged as scores, not as predictions.",
@@ -497,7 +508,7 @@ def build_report(root):
                 "Some baseline R² values are at least 0.95: little or no room remains for the required absolute gain. The baseline was not weakened.",
             ]
     audit_path = root / "qc/target-sensitivity.csv"
-    if audit_path.exists():
+    if complete and audit_path.exists():
         audit_rows = pd.read_csv(audit_path)
         lines += [
             "",
@@ -514,7 +525,7 @@ def build_report(root):
         "",
         (
             "Complete feature distributions, seed metrics, paired controls, bootstrap draws, fitted preprocessing, checkpoints, split audits, and raw/standardized predictions are saved beside this report."
-            if score_frame is not None
+            if complete
             else "This run lacks a complete valid prediction set. Only completed stages and available failure evidence are saved; missing stages provide no scientific result."
         ),
         "",
@@ -522,21 +533,44 @@ def build_report(root):
         "A failed validity audit requires data/measurement repair in a new versioned run. A valid null result stops this gate; an inconclusive result calls for a larger preregistered confirmation.",
         "",
     ]
+    # An early STOP describes an unfinished attempt, not a scientific result.
+    # Preserve previous attempts (including legacy sealed STOPs) before updating.
+    # Complete measurements, even null/synthetic results, remain immutable.
+    if previous is not None and not measurement_complete(previous):
+        archive = (
+            root / "reports/attempts"
+            / sha256_file(root / "reports/gate-decision.json")
+        )
+        archive.mkdir(parents=True, exist_ok=True)
+        for name in ("gate-decision.json", "gate-report.md", "final-report-contract.json"):
+            source = root / "reports" / name
+            if source.exists():
+                shutil.copyfile(source, archive / name)
+        (root / "reports/final-report-contract.json").unlink(missing_ok=True)
+    if previous is not None and measurement_complete(previous):
+        write_once_json(root / "reports/gate-decision.json", result)
+    else:
+        write_json(root / "reports/gate-decision.json", result)
     report_path = root / "reports/gate-report.md"
-    if report_path.exists():
+    if (
+        report_path.exists()
+        and previous is not None
+        and measurement_complete(previous)
+    ):
         if report_path.read_text() != "\n".join(lines):
             raise ValueError("Final report already exists and differs")
     else:
         temporary = report_path.with_suffix(".tmp")
         temporary.write_text("\n".join(lines))
         temporary.replace(report_path)
-    write_once_json(
-        root / "reports/final-report-contract.json",
-        {
-            "artifacts": {
-                path: sha256_file(root / path)
-                for path in ("reports/gate-decision.json", "reports/gate-report.md")
-            }
-        },
-    )
+    if complete:
+        write_once_json(
+            root / "reports/final-report-contract.json",
+            {
+                "artifacts": {
+                    path: sha256_file(root / path)
+                    for path in ("reports/gate-decision.json", "reports/gate-report.md")
+                }
+            },
+        )
     return result

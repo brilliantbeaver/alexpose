@@ -1,5 +1,11 @@
 # Latent Laterality implementation prompt
 
+> **Historical implementation request:** the paired-AMASS v2 benchmark and
+> seed-7 comparison described by this development trajectory are complete.
+> Validation stopped confirmation. This prompt is retained as design history;
+> it is not an instruction to restart training. Read the
+> [completed findings and next decision](study-so-far.md#current-conclusion-and-next-decision).
+
 **Role**: You are an expert JEPA researcher specializing in human motion,
 reflection equivariance, structured latent-variable models, and careful
 experimental design.

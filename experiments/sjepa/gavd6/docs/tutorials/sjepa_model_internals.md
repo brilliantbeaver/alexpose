@@ -1,5 +1,10 @@
 # S-JEPA gait model internals
 
+> **Scope:** this guide documents the historical foundation notebooks and their
+> duplicated classes. Use the [study index](../studies/) for current research
+> status and the [Future Innovation tutorial](../studies/future-innovation/) for
+> the frozen-video-teacher feasibility workflow.
+
 This tutorial explains how `SkeletonPatchEncoder`, `SkeletonPredictor`, and `SJEPAGait` work in this project. It also covers the preprocessing, masking, loss, pooling, replay, and diagnostic helpers that make the classes usable as a training system.
 
 The goal is to make every tensor transformation and state update inspectable. By the end, you should be able to trace one pose clip from `[B,F,V,C]` coordinates to masked latent predictions, identify which parameters receive gradients, and explain what the model does not learn from its objective.

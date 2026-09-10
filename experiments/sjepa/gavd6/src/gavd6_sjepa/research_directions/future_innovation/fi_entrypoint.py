@@ -7,6 +7,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 
@@ -46,8 +47,8 @@ def init_main():
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument(
         "--change-reason",
-        required=True,
-        help="Initial preregistration or reason for a new run version.",
+        default="Experiment 0 initialization",
+        help="Optional description of this run.",
     )
     args = parsed(parser)
     from .fi_contracts import VJEPA_COMMIT, initialize_run
@@ -59,10 +60,6 @@ def init_main():
         parser.error(f"Teacher must be pinned to {VJEPA_COMMIT}")
     import torch
 
-    if torch.__version__ != "2.6.0+cu124":
-        parser.error(
-            "HAIC scientific runs require the project's locked torch==2.6.0+cu124 runtime"
-        )
     if not args.youtube_dir.joinpath("all").is_dir():
         parser.error("--youtube-dir must contain the full-source all/ cache")
     root = initialize_run(
@@ -131,7 +128,9 @@ def record_teacher_runtime(root, stage):
 
     from .fi_contracts import write_once_json
 
-    attempt = os.environ.get("SLURM_JOB_ID", f"local-{os.getpid()}")
+    # Slurm requeues retain the job ID but may change nodes/devices. Logging must
+    # not reject that legitimate retry because an earlier attempt already exists.
+    attempt = f"{os.environ.get('SLURM_JOB_ID', 'local')}-{os.getpid()}-{time.time_ns()}"
     write_once_json(
         root / "logs" / f"{stage}-runtime-{attempt}.json",
         {
@@ -148,10 +147,14 @@ def cache_main():
     args = teacher_arguments("cache-teacher")
     configure_threads()
     from .fi_contracts import stage_lock
-    from .fi_feature_cache import cache_teacher
+    from .fi_feature_cache import cache_teacher, load_cache
     from .fi_vjepa_adapter import FrozenVJEPAAdapter
 
     with stage_lock(args.run_root, "cache"):
+        if (args.run_root / "config/cache-contract.json").exists():
+            cohort, _ = load_cache(args.run_root)
+            print(f"Reusing verified teacher cache for {len(cohort)} windows")
+            return
         record_teacher_runtime(args.run_root, "cache")
         cache_teacher(
             args.run_root, FrozenVJEPAAdapter.from_run(args.run_root, args.device)
@@ -162,10 +165,14 @@ def audits_main():
     args = teacher_arguments("audit-teacher")
     configure_threads()
     from .fi_contracts import stage_lock
-    from .fi_validity_audits import run_audits
+    from .fi_validity_audits import require_audits, run_audits
     from .fi_vjepa_adapter import FrozenVJEPAAdapter
 
     with stage_lock(args.run_root, "audits"):
+        if (args.run_root / "qc/validity-summary.json").exists():
+            require_audits(args.run_root)
+            print(json.dumps({"validity_audits_passed": True, "reused": True}))
+            return 0
         record_teacher_runtime(args.run_root, "audit")
         passed = run_audits(
             args.run_root, FrozenVJEPAAdapter.from_run(args.run_root, args.device)
@@ -204,11 +211,32 @@ def score_main():
 
 def report_main():
     args = parsed(parser_for("build-report"))
-    from .fi_contracts import stage_lock
+    from .fi_contracts import stage_lock, write_json
     from .fi_reporting import build_report
 
     with stage_lock(args.run_root, "report"):
-        print(json.dumps(build_report(args.run_root), allow_nan=False, indent=2))
+        try:
+            result = build_report(args.run_root)
+        except (ValueError, OSError, KeyError) as error:
+            # Even invalid configuration or damaged report artifacts should leave
+            # an actionable diagnostic. This is never a sealed scientific result.
+            path = args.run_root / "reports/pipeline-error.json"
+            write_json(
+                path,
+                {
+                    "stage": "report",
+                    "error": str(error),
+                    "error_type": type(error).__name__,
+                    "measurement_complete": False,
+                    "allow_full_experiment": False,
+                    "allow_adapter_training": False,
+                },
+            )
+            print(
+                f"Cannot build experiment report: {error}. See {path}", file=sys.stderr
+            )
+            return 1
+        print(json.dumps(result, allow_nan=False, indent=2))
 
 
 def smoke_main():

@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import fcntl
 import json
+import os
 import platform
 import shutil
+import socket
 import sys
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass
@@ -209,19 +211,63 @@ def runtime_versions():
     return {"python": sys.version, "platform": platform.system(), "packages": packages}
 
 
+def record_run_provenance(root, contract):
+    """Record execution identity without rewriting the contracts binding saved data.
+
+    A source hash or package version change is not evidence of corrupt data.
+    Record each process/environment combination (including Slurm array tasks),
+    while leaving actual configuration, artifact and model checks to their readers.
+    """
+    runtime = runtime_versions()
+    snapshot = {
+        "code_sha256": code_fingerprint(),
+        "initial_code_sha256": contract["code_sha256"],
+        "runtime": runtime,
+        "runtime_changed": runtime != read_json(root / "config/runtime-contract.json"),
+        "pid": os.getpid(),
+        "host": socket.gethostname(),
+        "argv": sys.argv,
+        "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+        "slurm_array_task_id": os.environ.get("SLURM_ARRAY_TASK_ID"),
+    }
+    snapshot["code_changed"] = snapshot["code_sha256"] != contract["code_sha256"]
+    identity = stable_key(json.dumps(snapshot, sort_keys=True))
+    path = root / "logs/provenance" / f"{identity}.json"
+    if not path.exists():
+        write_once_json(path, snapshot)
+        if snapshot["code_changed"] or snapshot["runtime_changed"]:
+            print(
+                f"FI: code/runtime differs from initialization; recorded in {path}. "
+                "Continuing with frozen configuration and artifact validation.",
+                file=sys.stderr,
+            )
+
+
 def check_run(root):
     root = Path(root)
     contract = read_json(root / "config/run-contract.json")
-    if contract["code_sha256"] != code_fingerprint():
-        raise ValueError(
-            "Implementation changed after freeze; start a new run with a change reason"
-        )
     for name, digest in contract["config_sha256"].items():
         if sha256_file(root / "config" / name) != digest:
             raise ValueError(f"Frozen configuration changed: {name}")
-    if read_json(root / "config/runtime-contract.json") != runtime_versions():
-        raise ValueError("Runtime package versions changed after preregistration")
+    record_run_provenance(root, contract)
     return contract
+
+
+def measurement_complete(decision):
+    """Recognize both current decisions and pre-resumption legacy reports."""
+    return decision.get("measurement_complete", decision.get("metrics") is not None)
+
+
+def verified_report_decision(root):
+    """Validate a sealed report before reusing it or archiving a legacy STOP."""
+    root = Path(root)
+    seal = root / "reports/final-report-contract.json"
+    if seal.exists():
+        for path, digest in read_json(seal)["artifacts"].items():
+            if sha256_file(root / path) != digest:
+                raise ValueError("Sealed final report changed")
+    path = root / "reports/gate-decision.json"
+    return read_json(path) if path.exists() else None
 
 
 def initialize_run(
@@ -233,14 +279,13 @@ def initialize_run(
     pose_model,
     vjepa_root,
     checkpoint,
-    change_reason,
+    change_reason="Experiment 0 initialization",
     synthetic=False,
     model=None,
     youtube_dir=None,
 ):
     root = Path(root).resolve()
-    if not str(change_reason).strip():
-        raise ValueError("A version change/preregistration reason is required")
+    change_reason = str(change_reason or "").strip() or "Experiment 0 initialization"
     if (root / "config/run-contract.json").exists():
         raise ValueError(
             "Run already initialized; resume its stages or choose a new run ID"

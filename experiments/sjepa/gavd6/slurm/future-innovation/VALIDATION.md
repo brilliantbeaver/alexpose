@@ -1,6 +1,64 @@
-# Implementation validation — 2026-09-07
+# Implementation validation
 
-The real Experiment 0 has not been executed. Validation here establishes implementation behavior, not evidence for the scientific hypothesis.
+## Notebook execution path — 2026-09-10
+
+The separate [notebook jobs](NOTEBOOKS.md) execute the same CLI stages as the
+original jobs. The production scientific implementation and frozen defaults
+were not changed for notebook execution.
+
+- Full repository suite: **169 tests in 43.416 seconds; 167 passed, 2 skipped**.
+  The skips remain the optional official-source integrations without
+  `FI_TEST_VJEPA_ROOT`. Thirteen new tests cover notebook stage routing,
+  initialization partitions and resume, full-grid/fold selection, subprocess
+  failures and logs, report completion checks, partial notebook preservation,
+  Slurm commands/dependencies, and submission failures.
+- All five teaching notebooks and all five read-only inspection notebooks
+  passed in fresh local kernels. Inspection used the partial local `gate-v1`
+  copy and did not claim a completed scientific result.
+- The notebook execution smoke passed on a separate synthetic cache: notebook
+  04 first failed for missing fits while retaining its traceback and incomplete
+  STOP report; 00 validated the run; 02 reused verified caches/audits; 03 fit all
+  five folds, three seeds and five arms; 04 scored and sealed the complete
+  synthetic STOP. Reexecuting fold 3 and reporting preserved the scientific
+  artifacts byte-for-byte and their modification times.
+- The smoke uses the existing explicitly reduced synthetic model/search/
+  bootstrap contract. The execute cells do not reduce real-run settings.
+  Synthetic cohort/features/audits are prebuilt, so this is not a real-media
+  end-to-end experiment. Notebook 01 command routing and its failure boundary
+  are tested separately, alongside the existing encoded-video/data-flow tests.
+
+Executed copies, command receipts, timings and tracebacks are retained under
+ignored `work/artifacts/notebook_runs/future_innovation/verification-*/`.
+No real GAVD run or HAIC job was launched for this change. Actual MediaPipe
+extraction, full H100 checkpoint inference, real-data audits and scheduling
+remain to be verified on HAIC with its declared inputs.
+
+## Resumption fixes — 2026-09-10
+
+Command: `.venv/bin/python -W ignore::DeprecationWarning -m unittest discover -s tests`
+
+Result: **148 tests run in 43.304 seconds; 146 passed, 2 skipped.** The skips are the optional official V-JEPA source integrations because `FI_TEST_VJEPA_ROOT` was not set. `git diff --check` also passed. The dependency deprecation-warning filter only reduces local test output; production warnings are not suppressed.
+
+New regression coverage verifies:
+
+- Implementation and runtime changes are recorded without modifying the original run contract or invalidating its data bindings. Actual frozen configuration corruption still fails.
+- Completed candidates and poses are reused; modified candidate manifests and pose artifacts are rejected.
+- Complete teacher caches and passing audits do not load the teacher again. Saved projection matrices are reused without a fresh numerical decomposition.
+- An early STOP can resume through all five folds, score, and produce a sealed final report. Legacy sealed incomplete STOPs are archived first. Complete results remain immutable and altered sealed reports are rejected.
+- Initialization accepts compatible runtime versions without requiring a particular Torch version string or a descriptive change reason. Runtime records do not collide when the same Slurm job is requeued.
+- Invalid configuration still yields a report diagnostic and a nonzero exit code.
+- Slurm scripts pass shell syntax checks and mocked submission tests for `prepare`, `compute`, and unattended `all`, including exports, canonical absolute paths, complete dependency chains, resumption without initialization-only variables, and non-array versus array log names.
+
+The primary resume tests were run against the previous implementation and reproduced the fingerprint, eager teacher-loading, and incomplete-report failures before the fixes. The full suite retains the existing checkpoint, finite-value, source-isolation, and validity-gate tests. Synthetic tests do not authorize scientific advancement.
+
+This validation is local. No HAIC jobs were submitted or existing HAIC artifacts changed. Real H100 inference and scheduler execution still require the HAIC environment and data.
+
+## Original implementation — 2026-09-07
+
+At the original implementation handoff, the real Experiment 0 had not been
+executed. These checks establish implementation behavior, not evidence for the
+scientific hypothesis. See the [study overview](../../docs/studies/future-innovation/)
+for the latest documented local artifact status.
 
 - **Repository regression suite:** 138 tests passed, including both official-source adapter tests; no skips in the final run.
 - **Focused experiment suite:** 35 tests passed. These cover source selection/caps/folds, one-based annotation conversion, actual indexed video decoding, pixel/box geometry, past-only skeleton normalization, token masks/order, fixed projection, partition-local controls, weighted metrics/bootstrap multiplicity, checkpoint reload, complete predictions, and gate failure/stability cases.

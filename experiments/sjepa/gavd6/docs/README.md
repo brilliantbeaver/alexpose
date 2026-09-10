@@ -8,8 +8,11 @@ for the current state of the project.
 
 ## Current documentation
 
-- [Latent Laterality](studies/latent-laterality/): active controlled-mechanism
-  study and its executable frozen-encoder swap-probe gate.
+- [Study index](studies/): evidence status and next action for each study.
+- [Future Innovation](studies/future-innovation/): connected tutorials for the
+  implemented feasibility gate; no completed scientific report is available locally.
+- [Latent Laterality](studies/latent-laterality/): completed seed-7 validation;
+  confirmation stopped because the uniform control reproduced the gain.
 - [Fixed-reflection baselines](studies/fixed-reflection-baselines/): the
   necessary known-reflection controls and their repaired mask contract.
 - [Frozen Core11 probe results](studies/frozen-core11-probe-results.md): the
@@ -17,7 +20,7 @@ for the current state of the project.
 - [StrokePIG frozen-probe results](studies/strokepig-frozen-probe-results.md):
   the current negative force-prediction feasibility result.
 - [S-JEPA model internals](tutorials/sjepa_model_internals.md): class and
-  tensor-flow reference for the implementation.
+  tensor-flow reference for the historical foundation notebooks.
 - [Diagram design system](contributing/diagram_design_system.md): contributor
   contract for project diagrams.
 
