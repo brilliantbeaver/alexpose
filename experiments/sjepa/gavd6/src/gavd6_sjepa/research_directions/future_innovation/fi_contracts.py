@@ -283,6 +283,7 @@ def initialize_run(
     synthetic=False,
     model=None,
     youtube_dir=None,
+    video_roots=(),
 ):
     root = Path(root).resolve()
     change_reason = str(change_reason or "").strip() or "Experiment 0 initialization"
@@ -380,6 +381,7 @@ def initialize_run(
                         youtube_dir or Path(sequence_manifest).parent.parent / "youtube"
                     ).resolve()
                 ),
+                "video_roots": [str(Path(p).expanduser().resolve()) for p in video_roots],
             },
             "cohort_size": 50,
             "minimum_sources": 25,

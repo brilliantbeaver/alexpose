@@ -1,9 +1,13 @@
 # Future Innovation: from question to decision
 
-**Status checked 10 September 2026:** Experiment 0 is implemented. This local
-checkout contains alignment overlays under `outputs/future-innovation/gate-v1`,
-but no completed gate report in that run. Preparation artifacts do not establish
-a scientific result. This status does not describe live HAIC jobs.
+**Copied HAIC evidence, 10 September 2026:** notebook 01 reused 1,662 candidates
+and completed a frozen 50-window cohort. Notebook 02 completed teacher caching
+but failed the validity audit. The original success-only dependency prevented
+notebook 03 from fitting; notebook 04 recorded an incomplete STOP. This is a
+measurement blockage, not evidence against the prediction hypothesis. The
+specific failed checks require the HAIC QC summary and per-window CSVs, which
+were not included in the copied notebooks. See the
+[investigation and adversarial review](notebook-run-investigation.md).
 
 The question is whether skeleton history helps a small predictor after it has
 already seen the recent video and recording details. We first test raw skeletons
@@ -70,7 +74,8 @@ The stage commands retain their caching, compatibility checks, locks and
 resumption behavior. Reuse the existing run root to recover interrupted work.
 Small CPU heads reuse the expensive teacher features. Completed report
 inspection does not require either stage to run again. Every notebook attempt
-retains its outputs and command logs under `FI_RUN_ROOT/notebook_runs/`. Notebook
+retains its outputs together in `FI_RUN_ROOT/notebook_runs/haic-<batch-id>/`;
+command logs live separately under `FI_RUN_ROOT/logs/notebooks/`. Notebook
 03 uses the full frozen selection grid and all 75 final heads; teaching settings
 never enter execution mode. Notebook 04 fails for an incomplete measurement,
 while a complete negative result remains a successful execution.

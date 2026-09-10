@@ -74,15 +74,15 @@ def inspect_report(run_root):
                 raise ValueError("Report seal omits its decision or narrative")
             result["seal_verified"] = True
         result["decision"] = decision
-        if decision.get("synthetic") is True:
-            result.update(
-                state="SYNTHETIC",
-                explanation="Software demonstration only. It cannot support a scientific conclusion or authorize training.",
-            )
-        elif not complete:
+        if not complete:
             result.update(
                 state="INCOMPLETE",
                 explanation="The saved STOP describes incomplete or invalid measurement. It is not a negative finding about skeleton information.",
+            )
+        elif decision.get("synthetic") is True:
+            result.update(
+                state="SYNTHETIC",
+                explanation="Software demonstration only. It cannot support a scientific conclusion or authorize training.",
             )
         elif not result["seal_verified"] or decision.get("synthetic") is not False:
             result.update(

@@ -68,8 +68,8 @@ class FutureInnovationNotebookSlurmTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
         calls = self.calls()
         self.assertEqual(len(calls), 10)
-        expected = {1: "afterok:100", 3: "afterok:102", 4: "afterany:102:103",
-                    6: "afterok:105", 7: "afterok:106", 8: "afterok:107", 9: "afterany:105:106:107:108"}
+        expected = {1: "afterok:100", 3: "afterany:102", 4: "afterany:102:103",
+                    6: "afterok:105", 7: "afterok:106", 8: "afterany:107", 9: "afterany:105:106:107:108"}
         for index, dependency in expected.items():
             self.assertIn(f"--dependency={dependency}", calls[index])
         for index in (0, 2, 5):
@@ -82,6 +82,9 @@ class FutureInnovationNotebookSlurmTests(unittest.TestCase):
             self.assertTrue(Path(call[-1]).is_absolute())
         receipts = (self.run / "logs/notebook-submissions.tsv").read_text().splitlines()
         self.assertEqual(len(receipts), 10)
+        folders = list((self.run / "notebook_runs").iterdir())
+        self.assertEqual(len(folders), 3)  # One shared folder per submission, not per notebook.
+        self.assertTrue(all(p.is_dir() and p.name.startswith("haic-") for p in folders))
 
     def test_submission_failure_stops_downstream_jobs_and_preserves_receipts(self):
         self.mock_command("sbatch", "print(100+n)\nsys.exit(1 if n==1 else 0)\n")

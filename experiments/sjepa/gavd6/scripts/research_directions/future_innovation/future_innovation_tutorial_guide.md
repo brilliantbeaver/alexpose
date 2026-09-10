@@ -19,8 +19,8 @@ the HAIC CUDA lock over a working development environment.
 
 The verifier and HAIC jobs share `execute_future_innovation_notebook.py`, which
 runs each notebook in its own kernel using the invoking Python environment.
-The verifier saves executed copies and timing records in a new directory
-under ignored `work/artifacts/notebook_runs/future_innovation/`. It never
+The verifier saves executed copies together in a `notebooks/` subfolder of a
+new verification bundle under ignored `work/artifacts/notebook_runs/future_innovation/`. It never
 overwrites source notebooks. `--mode inspect --run-root /path/to/run` checks the
 read-only path. An absent run directory is a supported inspection state.
 `--pipeline-smoke` additionally exercises the execution mode on a separate

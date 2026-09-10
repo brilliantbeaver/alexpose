@@ -42,6 +42,9 @@ def init_main():
     parser.add_argument("--video-manifest", type=Path, required=True)
     parser.add_argument("--annotations", type=Path, nargs="+", required=True)
     parser.add_argument("--youtube-dir", type=Path, required=True)
+    parser.add_argument("--video-root", action="append", type=Path,
+                        default=[Path(p) for p in os.environ.get("FI_VIDEO_ROOTS", "").split(os.pathsep) if p],
+                        help="Additional full-source storage directory; repeat or set FI_VIDEO_ROOTS (colon-separated on HAIC).")
     parser.add_argument("--pose-model", type=Path, required=True)
     parser.add_argument("--vjepa-root", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
@@ -60,8 +63,9 @@ def init_main():
         parser.error(f"Teacher must be pinned to {VJEPA_COMMIT}")
     import torch
 
-    if not args.youtube_dir.joinpath("all").is_dir():
-        parser.error("--youtube-dir must contain the full-source all/ cache")
+    for directory in (args.youtube_dir, *args.video_root):
+        if not directory.is_dir():
+            parser.error(f"Full-source storage directory is unavailable: {directory}")
     root = initialize_run(
         args.run_root,
         sequence_manifest=args.sequence_manifest,
@@ -72,6 +76,7 @@ def init_main():
         checkpoint=args.checkpoint,
         change_reason=args.change_reason,
         youtube_dir=args.youtube_dir,
+        video_roots=args.video_root,
     )
     environment = [
         f"Python: {sys.version}",

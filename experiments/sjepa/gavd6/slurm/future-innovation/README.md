@@ -3,15 +3,22 @@
 This implements the [experiment guide](../../notes/future-innovation-distillation/experiment-0-guide.md): 50 aligned full-GAVD windows, a frozen V-JEPA 2.1 ViT-B/16 teacher, source-disjoint nested ridge/residual fits, all five arms, three initialization seeds, and a reproducible `ADVANCE` / `STOP` / `INCONCLUSIVE` report. It does not train S-JEPA or a distillation adapter.
 
 Start with the [study overview and five notebooks](../../docs/studies/future-innovation/)
-for the question, controls and current evidence. As of the 10 September 2026
-local check, alignment overlays exist but no completed gate report is available
-in this checkout. Inspect an explicit run root to establish its evidence state;
-this documentation does not infer live HAIC job status.
+for the question, controls and current evidence. Copied 10 September 2026 HAIC
+notebooks show a completed cohort/cache, a failed validity audit, and an incomplete
+STOP. See the [investigation](../../docs/studies/future-innovation/notebook-run-investigation.md)
+for the observed failures and repairs. This does not infer live HAIC job status.
 
 To execute and retain the five notebooks themselves, use the separate
 [notebook HAIC path](NOTEBOOKS.md): `submit-fi-notebooks.sh all` schedules jobs
 `10`–`14`, including the five-fold notebook array. It shares the setup below and
 the production CLI. The original `01`–`06` scripts remain the direct CLI path.
+
+New runs discover exact source IDs throughout declared storage and accept
+explicit full-source paths in the video manifest. Set `FI_VIDEO_ROOTS` to
+additional colon-separated HAIC directories before initialization. The
+[notebook guide](NOTEBOOKS.md) describes supported paths and the single shared
+notebook output folder. Existing frozen cohorts retain their original selection;
+use a new run ID to apply changed discovery rules.
 
 ## Prepare the environment and inputs
 

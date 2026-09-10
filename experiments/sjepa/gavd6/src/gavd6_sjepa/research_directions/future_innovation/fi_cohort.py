@@ -9,7 +9,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from gavd6_sjepa.data_foundations.gavd_video_download_pipeline import cached_video_path
 from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
     atomic_write_dataframe_csv,
     sha256_file,
@@ -24,6 +23,7 @@ from .fi_contracts import (
     write_once_json,
 )
 from .fi_token_regions import region_masks, union_box
+from .fi_source_inventory import discover_sources
 from .fi_video_pose import (
     CropGeometry,
     alignment_sheet,
@@ -74,7 +74,7 @@ def validate_cohort(cohort):
         raise ValueError("Cohort must cover all five outer folds")
 
 
-def build_candidates(root, sequence_manifest, video_manifest, annotations, youtube_dir):
+def build_candidates(root, sequence_manifest, video_manifest, annotations, youtube_dir, video_roots=()):
     root = Path(root)
     contract = check_run(root)
     if (root / "config/candidates-contract.json").exists():
@@ -110,6 +110,12 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
             "Duplicate frame annotations (do not mix overlapping annotation releases)"
         )
     groups = {key: group for key, group in frames.groupby("seq", sort=False)}
+    sources = discover_sources(videos, video_manifest, youtube_dir, video_roots)
+    atomic_write_dataframe_csv(root / "manifests/source-availability.csv", pd.DataFrame([
+        {"video_id": video_id, "available": item["path"] is not None,
+         "video_path": str(item["path"] or ""), "method": item["method"], "reason": item["error"]}
+        for video_id, item in sorted(sources.items())
+    ]))
     candidates, exclusions = [], []
     for row in sorted(
         sequences.to_dict("records"),
@@ -129,6 +135,11 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
                 raise ValueError(
                     "GAVD source frames must be one-based positive integers"
                 )
+            source = sources[str(row["video_id"])]
+            if source["path"] is None:
+                raise ValueError(source["error"])
+            # The annotation span, not the duration of the entire source video,
+            # bounds a tracked person's window. Never fabricate repeated frames.
             start = deterministic_window_start(first, last, sequence)
             group = groups.get(sequence)
             if group is None:
@@ -137,7 +148,17 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
                 range(start + 1, start + 65)
             )
             if selected[columns[2:]].isna().any().any():
-                raise ValueError("Window lacks 64 consecutive annotated person boxes")
+                # A hash landing on a gap must not discard another intact window.
+                available = sorted({int(f) for f in group.dropna(subset=columns[2:]).frame_num
+                                    if first + 1 <= int(f) <= last + 1})
+                starts = [available[i] - 1 for i in range(max(0, len(available) - 63))
+                          if available[i + 63] - available[i] == 63]
+                if not starts:
+                    raise ValueError("No 64 consecutive annotated person boxes in sequence")
+                start = starts[int(stable_key("window", sequence)[:16], 16) % len(starts)]
+                selected = group.set_index("frame_num").reindex(range(start + 1, start + 65))
+                if selected[columns[2:]].isna().any().any():
+                    raise ValueError("Window has incomplete box or source metadata")
             if set(selected.id.astype(str)) != {str(row["video_id"])}:
                 raise ValueError("Frame annotation source differs from sequence source")
             records = selected.reset_index().to_dict("records")
@@ -147,9 +168,7 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
             save_npz(box_path, source_boxes=boxes)
             annotation_path = root / "boxes" / f"{window_id}.json"
             write_json(annotation_path, records)
-            video_path = cached_video_path(Path(youtube_dir), str(row["video_id"]))
-            if not video_path.is_file():
-                raise ValueError("Source video not cached")
+            video_path = source["path"]
             candidates.append(
                 {
                     "window_id": window_id,
@@ -176,19 +195,27 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
         root / "manifests/exclusions.csv",
         pd.DataFrame(exclusions, columns=["sequence_id", "stage", "reason"]),
     )
+    # A failed discovery is retryable when storage is mounted or completed later.
+    # Do not freeze an unusable candidate inventory permanently.
+    if len(candidates) < 50:
+        raise ValueError(f"Only {len(candidates)} candidates; see source-availability.csv and exclusions.csv")
+    usable = sum(min(2, count) for count in Counter(row["video_id"] for row in candidates).values())
+    if usable < 50:
+        raise ValueError(f"Only {usable} candidate windows after source cap; need 50 from at least 25 sources")
     write_once_json(
         root / "config/candidates-contract.json",
         {
             "manifest_sha256": sha256_file(root / "manifests/candidates.csv"),
             "artifacts": {
+                "manifests/source-availability.csv": sha256_file(root / "manifests/source-availability.csv"),
+                **{
                 str(Path(r[key]).relative_to(root)): sha256_file(r[key])
                 for r in candidates
                 for key in ("box_path", "annotation_path")
+                },
             },
         },
     )
-    if len(candidates) < 50:
-        raise ValueError(f"Only {len(candidates)} candidates; see exclusions.csv")
 
 
 def extract_and_freeze(root):
