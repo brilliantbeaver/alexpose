@@ -21,6 +21,8 @@ explicitly separate.
 
 - [Research question and current finding](#1-the-question-connecting-the-work)
 - [Latest results from notebooks 15–18](#latest-results-from-notebooks-1518-a-simple-walkthrough)
+- [Plain-language conclusion and research outlook](#plain-language-conclusion-and-research-outlook)
+- [How the matched initial and trained encoders are related](#how-the-matched-initial-and-trained-encoders-are-related)
 - [Data and research trajectory](#2-the-data-and-the-research-trajectory)
 - [What notebooks 11–14 have established](#what-has-run-in-notebooks-1114)
 - [Real-data masking findings](#question-2-does-hiding-gait-relevant-landmarks-help-learning)
@@ -130,6 +132,38 @@ There is one positive learning result. For every trained predictor diagnostic, a
 5. **Run another full grid only after a fixed pilot criterion is met.** Require a consistent trained-over-initial gain on reserved training sources. Preserve the current unfavorable result and seek later confirmation on an untouched cohort or setting.
 
 The practical conclusion is simple: motion weighting and connected regions change the prediction problem, but neither improves the tested laterality readout. Training learns clip correspondence while making the endpoint less accessible to the tested linear readout. The next work should explain that gap before adding more masks, model size or training time.
+
+#### Plain-language conclusion and research outlook
+
+The experiments ask whether S-JEPA-style self-supervised training can learn useful information from human walking. The model sees estimated locations of body landmarks such as knees and ankles. Some observations are hidden, and the model learns to predict features for them without using gait-condition labels.
+
+The strongest experiment used 625 clips from 93 source videos and evaluated 125 trained encoders. Motion-weighted and connected-body masks worked technically: they changed which observations were hidden, and the training loss decreased. Neither change improved prediction of the left-versus-right movement score compared with its matched random mask. More importantly, the matched initial encoder achieved an average R² of 0.2225, while the trained teacher encoders achieved 0.1008–0.1142 with the same motion-sensitive summary. All trained conditions performed worse than their matched initial encoder in every seed.
+
+The predictors did learn clip-related information. After training, they predicted hidden features from the correct clip more accurately than features taken from another video. This information might describe movement, posture, viewpoint, recording style or a mixture of these properties. It did not improve the laterality score. Lower training loss therefore shows that the pretraining task was learned, but does not show that the resulting representation became more useful for the scientific outcome.
+
+There is also evidence that movement information may weaken before or after pretraining. The direction of the original laterality measurement agrees with the same measurement after input preparation in about 70% of comparable clips. In addition, a motion-sensitive feature summary reveals much more signal in the initial encoder than a simple average does. These findings motivate checking the data preparation, temporal summary and final regression procedure separately.
+
+S-JEPA remains worth studying, but the current evidence does not justify starting with larger models, longer training or a broad search over more masks. The most useful directions are:
+
+1. **Find where movement information becomes difficult to recover.** Test interpolation, normalization, temporal summaries and regression settings one at a time, first reusing the saved encoders.
+2. **Test reflection more carefully.** Overall movement should remain similar when left and right are exchanged, while a left-minus-right feature should reverse sign. A learned transformation of the feature values may describe this behavior better than requiring every feature to remain unchanged.
+3. **Predict observable future movement.** Test whether features predicted from the observed past improve future ankle or knee position estimates over direct pose, simple motion continuation and initial-encoder controls. The current forecasting evidence is synthetic and does not demonstrate a benefit on the gait recordings.
+4. **Confirm any selected explanation independently.** A later study should use new people or another dataset and, where possible, an independently measured movement outcome.
+
+The most practical near-term project is the first direction. Reflection-aware features are a focused, low-compute follow-up. Future-motion prediction has greater long-term potential, but requires substantially more empirical work.
+
+#### How the matched initial and trained encoders are related
+
+For each video fold and random seed, the experiment creates an encoder with randomly initialized weights and saves an exact copy before the first optimizer update. The saved copy is the **matched initial encoder**, also called the untrained encoder. An identical copy enters pretraining. In this sense, the trained encoder starts as the matched initial encoder, although the implementation keeps the unchanged snapshot separate so that it remains available as a control.
+
+S-JEPA contains two encoder branches. At initialization, they have identical weights:
+
+- The **online encoder** is updated directly by gradient descent.
+- The **teacher encoder** begins as a copy of the online encoder and is updated gradually from it during training. It does not receive direct gradient updates.
+
+The reported trained-teacher comparison therefore relates a final teacher to the same random starting weights from which its online-and-teacher pair developed. Alternative masking conditions within the same fold and seed also start from copies of one common initialization. This pairing prevents a favorable or unfavorable random start from being mistaken for an effect of the mask.
+
+The initial and trained representations are frozen and evaluated on the same held-out source videos. Separate regression models are fitted to their features using the same training-only selection procedure and the same feature summary. Thus, “matched” means that architecture, exact starting weights, video fold, random seed and evaluation procedure are controlled. The difference in held-out scores estimates what changed after this pretraining procedure. The unfavorable difference found here does not show that random encoders are generally better than trained encoders; it shows that this training recipe did not improve access to this laterality outcome under the tested readout.
 
 Section 4 examines whether our masking choices are too restrictive. It distinguishes the landmarks supplied to the encoder from those selected as hidden targets, explains established alternatives, and proposes a manageable comparison grounded in the current results.
 

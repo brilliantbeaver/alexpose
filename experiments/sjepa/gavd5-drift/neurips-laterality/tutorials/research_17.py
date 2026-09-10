@@ -311,8 +311,11 @@ def build_notebook():
            optimization. Sample videos uniformly and clips within videos; many
            clips from one recording must not dominate the source schedule.
         2. Initialize the online encoder, predictor and regularizer projector
-           once per job. Copy their parameters into every mask arm. Seeds are
-           explicit, and each fold/seed starts a new model.
+           once per job. Before the first optimizer update, save an exact model
+           copy as the matched initial control, then copy the same starting
+           parameters into every mask arm. Seeds are explicit, and each fold/seed
+           starts a new model. The saved control stays unchanged while the other
+           copies are trained.
         3. Use separate streams for clip exposure, shared geometric views and
            arm-specific mask draws. Validate every scheduled mask before the
            first optimizer update. The mask sampler never reads the target label.
@@ -326,6 +329,13 @@ def build_notebook():
         6. Freeze the encoder. Fit preprocessing and ridge readout using only
            training sources, then predict every outer-test clip once for this
            seed/arm. Test outcomes cannot choose masks, checkpoints or penalties.
+
+        The online and teacher encoders are also related within each trained
+        model. They start with identical weights. Gradient descent updates the
+        online encoder directly, and an exponential moving average of its weights
+        updates the gradient-free teacher after each optimizer step. Notebook 18
+        therefore compares the saved starting encoder with both descendants of
+        that same initialization: the final online encoder and the final teacher.
 
         The objective retains AdamW betas (0.9, 0.95), constant learning rate,
         temperatures 0.06/0.10, center momentum 0.9, gradient clipping at 1,

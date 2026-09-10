@@ -58,6 +58,22 @@ def build_notebook():
         | `direct_pose` | Prepared coordinates | Information already accessible from pose summaries |
         | `training_mean` | Training-source target mean | No-feature prediction baseline |
 
+        Here, **matched initial** has a precise meaning. At the start of each
+        fold/seed job, the code saves an exact copy of the randomly initialized
+        model before any optimizer update. Another copy with those same weights
+        enters training. The saved copy remains unchanged. Alternative mask arms
+        in that job also begin from the same initialization, so differences
+        cannot be attributed to one arm receiving a luckier random start.
+
+        Each S-JEPA model begins with identical online and teacher encoders.
+        Gradient descent changes the online encoder, while an exponential moving
+        average of the online weights changes the teacher. The rows above compare
+        the unchanged starting online encoder with the final online encoder and
+        final teacher. All are frozen and passed through the same feature summary,
+        held-out videos and training-only ridge procedure. A trained-minus-initial
+        score therefore estimates the change after this pretraining procedure;
+        it is not a general comparison between all trained and random networks.
+
         `mean` retains the existing five bilateral sums and differences of
         average features. `mean_motion` also includes temporal standard
         deviation, mean absolute consecutive feature changes and valid-support
