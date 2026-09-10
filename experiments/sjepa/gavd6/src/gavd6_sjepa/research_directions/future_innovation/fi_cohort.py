@@ -77,13 +77,23 @@ def validate_cohort(cohort):
 def build_candidates(root, sequence_manifest, video_manifest, annotations, youtube_dir):
     root = Path(root)
     contract = check_run(root)
+    if (root / "config/candidates-contract.json").exists():
+        saved = read_json(root / "config/candidates-contract.json")
+        if sha256_file(root / "manifests/candidates.csv") != saved["manifest_sha256"]:
+            raise ValueError("Candidate order changed after freeze")
+        for path, digest in saved["artifacts"].items():
+            if sha256_file(root / path) != digest:
+                raise ValueError(f"Candidate artifact changed: {path}")
+        candidates = pd.read_csv(root / "manifests/candidates.csv")
+        if len(candidates) < 50:
+            raise ValueError(f"Only {len(candidates)} candidates; see exclusions.csv")
+        print(f"Reusing {len(candidates)} verified candidates")
+        return
     for path in [sequence_manifest, video_manifest, *annotations]:
         if contract["inputs_sha256"].get(str(Path(path).resolve())) != sha256_file(
             path
         ):
             raise ValueError(f"Input was not preregistered or changed: {path}")
-    if (root / "config/candidates-contract.json").exists():
-        raise ValueError("Candidate manifest already exists")
     sequences = pd.read_csv(sequence_manifest)
     videos = pd.read_csv(video_manifest)
     if not sequences.sequence_id.is_unique or not videos.video_id.is_unique:
@@ -185,7 +195,9 @@ def extract_and_freeze(root):
     root = Path(root)
     contract = check_run(root)
     if (root / "config/cohort-contract.json").exists():
-        raise ValueError("Cohort already frozen; use a new run for changes")
+        cohort = load_cohort(root, verify_artifacts=True)
+        print(f"Reusing {len(cohort)} verified cohort windows")
+        return
     candidate_contract = read_json(root / "config/candidates-contract.json")
     if (
         sha256_file(root / "manifests/candidates.csv")

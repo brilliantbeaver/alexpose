@@ -167,6 +167,12 @@ realtime/
 # Local experiment mirrors (generated caches, environments, and credentials)
 /docs/penny/
 
+# Gavd5's local run products are large, regenerable artifacts. Scope these
+# rules to its output roots so CSV/JSON/NPZ/image source and documentation
+# assets elsewhere in the monorepo remain visible to Git.
+/experiments/sjepa/gavd5/work/
+/experiments/sjepa/gavd5/cache/
+
 # Ephemeral slide-generation workspaces and render scratch files.
 /experiments/sjepa/.codex-build/
 /experiments/sjepa/tmp/

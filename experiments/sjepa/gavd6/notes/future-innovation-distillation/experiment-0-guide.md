@@ -1,6 +1,12 @@
 # Experiment 0: does skeleton history help predict the future?
 
-**Status:** implemented 48-hour feasibility protocol; the real experiment has not been run. See the [HAIC implementation and run guide](../../slurm/future-innovation/README.md) for executable commands, frozen implementation choices, and validation instructions.
+**Status reconciled 10 September 2026:** the feasibility pipeline is implemented.
+This checkout has local alignment overlays but no completed gate report; it
+does not establish the current remote job state. Start with the
+[study overview and five executable tutorials](../../docs/studies/future-innovation/).
+Use the [HAIC guide](../../slurm/future-innovation/README.md) for real execution
+and recovery. This document preserves the detailed design and implementation
+sketches; saved run contracts and production code define actual execution.
 
 Before training a skeleton model to learn from a large video model, we need to know whether the skeleton contains a useful part of what we want it to learn. This guide turns the [48-hour gate in Proposal 2](../world-model-extensions/proposals-03/02-future-innovation-distillation.md#the-48-hour-decision-gate) into that first test:
 
@@ -123,9 +129,20 @@ Separately, before any fitting, edit the future pixels and check the teacher. Fu
 | Measurement is valid | Complete cohort and controls; aligned inputs; stable teacher; no future leakage; valid source splits and metrics |
 | Result is stable | Real gain is positive in at least 90% of source-bootstrap resamples and every planned initialization; a threshold reached only for a lucky initialization is inconclusive |
 
-Use a fixed summary across initialization seeds, such as their arithmetic mean, for the point checks; record that choice before fitting. Also report every seed separately. The no-skeleton control is a required diagnostic, but the proposal does not give it a numerical cutoff. If it explains the apparent gain, report the unresolved attribution as `INCONCLUSIVE`; do not silently invent a cutoff after seeing results.
+The implementation uses the arithmetic mean of seed scores for point checks
+and also reports every seed. The no-skeleton arm is a required diagnostic with
+paired contrasts and uncertainty, but the implemented gate has no separate
+cutoff for it. If it reproduces the apparent gain, state that motion attribution
+is unresolved even if the automatic gate returns `ADVANCE`; do not rewrite the
+saved decision or invent a cutoff after seeing results. The pseudocode later
+in this design document is not a replacement for the production gate.
 
-`ADVANCE` means the valid, stable gate supports the full measurement experiment. `STOP` means a required validity or point-threshold check failed. `INCONCLUSIVE` means the point checks pass but uncertainty, seed sensitivity, or the capacity control prevents a clear interpretation.
+`ADVANCE` means the valid, stable gate supports the next measurement experiment.
+`STOP` means a required validity or point-threshold check failed, or measurement
+is incomplete; inspect `measurement_complete` and the failed checks.
+`INCONCLUSIVE` means the point checks pass but source-bootstrap or seed
+stability fails. Interpret the reported capacity control alongside the saved
+automatic decision without assigning it an undeclared cutoff.
 
 This first gate uses 50 windows, the 8-frame horizon, and raw whole-body skeletons. It does not train S-JEPA, adapt V-JEPA, compare all three horizons, or train a skeleton-only student. An advance permits those next measurement steps; adapter training still depends on the later frozen-S-JEPA result. No outcome here establishes a publication or clinical claim.
 
@@ -1217,7 +1234,7 @@ The final cohort is frozen after eligibility is established but before inspectin
 | Time shuffle performs similarly | Correct block order is not needed for the gain | Investigate static pose, within-block motion, or source shortcuts; the timing criterion fails |
 | Clip mismatch performs similarly | Correct pairing is not needed for the gain | Investigate source, view, phase, or model-capacity explanations |
 | Person and background targets show similar gains | Effect is not localized to the person | Stop the claimed mechanism |
-| No-skeleton head explains the apparent gain | Motion attribution remains unresolved | Mark `INCONCLUSIVE` and resolve the capacity comparison |
+| No-skeleton head explains the apparent gain | Motion attribution remains unresolved | Preserve the automatic decision, report the paired contrast, and investigate capacity before claiming a motion contribution |
 | Seeds or bootstrap fail the frozen stability rule | Pilot does not provide a stable pass | Mark `INCONCLUSIVE` if point checks pass; plan a larger gate |
 
 A valid null result says that this gate does not justify skeleton distillation from the chosen target under these controls. It does not establish that skeleton motion contains no useful information under every target, horizon, or model.

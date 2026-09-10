@@ -50,11 +50,17 @@ def cache_teacher(root, adapter):
     contract = check_run(root)
     cohort = load_cohort(root, verify_artifacts=True)
     projection_path = root / "config/projection-256.npy"
-    projection = fixed_projection(768, seed=contract["projection_seed"])
-    if projection_path.exists():
-        if not np.array_equal(np.load(projection_path, allow_pickle=False), projection):
-            raise ValueError("Projection changed")
+    if (root / "config/projection-contract.json").exists():
+        saved = read_json(root / "config/projection-contract.json")
+        if sha256_file(projection_path) != saved["sha256"]:
+            raise ValueError("Projection checksum mismatch")
+        # Reuse the frozen matrix, not a new QR decomposition whose final bits
+        # may differ across otherwise compatible BLAS/NumPy versions.
+        projection = np.load(projection_path, allow_pickle=False)
+        if projection.shape != (768, 256) or not np.isfinite(projection).all():
+            raise ValueError("Invalid frozen projection")
     else:
+        projection = fixed_projection(768, seed=contract["projection_seed"])
         temporary = projection_path.with_suffix(".tmp")
         with temporary.open("wb") as handle:
             np.save(handle, projection)

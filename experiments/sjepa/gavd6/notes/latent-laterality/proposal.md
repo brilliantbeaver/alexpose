@@ -1,5 +1,12 @@
 # Latent Laterality: predictive motion representations when left and right cannot be trusted
 
+> **Proposal status:** the seed-7 AMASS v2 comparison has since completed and
+> failed the mechanism advancement rule because uniform uncertainty reproduced
+> the gain. Confirmation stopped. Read the
+> [completed findings](../../docs/studies/latent-laterality/study-so-far.md)
+> before using this original proposal or its implementation inventory to plan
+> further work. The sealed test split remains unopened under the current plan.
+
 **Study 02 proposal.** Companion documents: [theory.md](./theory.md) for the
 mathematics, [experiments.md](./experiments.md) for the experimental program,
 and [swap-probe.md](../../docs/studies/latent-laterality/swap-probe.md) for the

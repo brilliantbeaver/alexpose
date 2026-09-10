@@ -5,6 +5,11 @@ set -euo pipefail
 : "${GAVD6_ROOT:?Export GAVD6_ROOT to the gavd6 checkout}"
 : "${FI_RUN_ROOT:?Export FI_RUN_ROOT to a versioned run directory}"
 [[ -d "$GAVD6_ROOT/src/gavd6_sjepa" ]] || { echo "Invalid checkout: $GAVD6_ROOT" >&2; exit 1; }
+export GAVD6_ROOT="$(cd "$GAVD6_ROOT" && pwd -P)"
+# Relative run paths are always relative to the checkout, including on workers.
+[[ "$FI_RUN_ROOT" == /* ]] || FI_RUN_ROOT="$GAVD6_ROOT/$FI_RUN_ROOT"
+mkdir -p "$FI_RUN_ROOT/logs"
+export FI_RUN_ROOT="$(cd "$FI_RUN_ROOT" && pwd -P)"
 export OMP_NUM_THREADS="${FI_TORCH_THREADS:-1}"
 export MKL_NUM_THREADS="$OMP_NUM_THREADS"
 export OPENBLAS_NUM_THREADS="$OMP_NUM_THREADS"
@@ -15,7 +20,6 @@ export PYTHONUNBUFFERED=1
 export MPLBACKEND=Agg
 export UV_PROJECT_ENVIRONMENT="${FI_ENVIRONMENT:-$GAVD6_ROOT/.venv}"
 cd "$GAVD6_ROOT"
-mkdir -p "$FI_RUN_ROOT/logs"
 fi_python() {
   uv run --no-sync python -m gavd6_sjepa.command_line_interface future-innovation "$@" --run-root "$FI_RUN_ROOT"
 }

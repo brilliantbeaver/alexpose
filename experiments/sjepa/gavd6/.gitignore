@@ -1,5 +1,4 @@
 .venv/
-work/
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
@@ -17,8 +16,12 @@ cache/artifacts/real/
 artifacts/notebook_runs/
 
 # Local experiment outputs are retained for reproducibility but never committed.
+# Keep this boundary path-scoped: CSV/JSON/NPZ and image files are also source
+# manifests, protocol fixtures, and documentation assets elsewhere in this
+# repository, so a repository-wide extension ignore would hide real work.
 outputs/
 output/
+work/
 tmp/
 
 # Generated AMASS/GAVD inventories and benchmark manifests are local data

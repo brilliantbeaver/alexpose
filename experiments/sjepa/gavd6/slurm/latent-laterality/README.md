@@ -1,12 +1,17 @@
 # Latent-laterality HAIC jobs
 
+**Current decision:** seed-7 AMASS v2 validation completed and the uniform
+control reproduced SG-JEPA's gain. Confirmation stopped. Do not submit jobs
+15/16 under the current plan; keep the test split sealed. See the
+[completed findings](../../docs/studies/latent-laterality/study-so-far.md).
+
 The numbered files cover three workflows; they are **not** one submission chain.
 See the [HAIC run guide](../../docs/studies/latent-laterality/haic-run-guide.md)
 for the environment contract, submission commands, and scientific decisions.
 
 | Workflow | Jobs | Order and decision points |
 | --- | --- | --- |
-| Paired AMASS v2 | `11`–`16` | `11` → `12`; inspect the gate before `13` → `14`; review validation before `15` → `16`. |
+| Paired AMASS v2 | `11`–`16` | `11`–`14` completed; validation stopped `15`/`16`. |
 | Historical AMASS v1 diagnostic | `02`–`03` | `02` → `03`. The recorded v1 gate failed; it does not authorize v2 training. |
 | Deferred GAVD/source-route screen | `04`–`10` | `04` → `05` → `06`; select a single-source route before `07` → `08`; inspect the gate before `09`, then review seed 7 before `10`. |
 

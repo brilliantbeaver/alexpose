@@ -1,9 +1,17 @@
 # Experiments: the Latent Laterality study program
 
-This is the experiment guide for Study 02. It is organized around the
-**questions we are going to ask the data**, in the order we ask them, and it
-walks you from the repository's current state to a state where each experiment
-can actually be run.
+> **Design history, reconciled 10 September 2026:** this document preserves the
+> original experiment program, including its earlier implementation inventory
+> and schedule. The paired-AMASS v2 benchmark and seed-7 comparison subsequently
+> completed. The uniform control reproduced SG-JEPA's gain, so confirmation
+> stopped and the test split remains sealed. Use the
+> [completed findings](../../docs/studies/latent-laterality/study-so-far.md) for
+> the current decision and the [HAIC execution record](../../docs/studies/latent-laterality/haic-run-guide.md)
+> for implemented commands. Entries marked “To build” below describe the
+> planning snapshot, not current work orders.
+
+This experiment guide records the original questions for Study 02 and the
+reason for each proposed setup step.
 
 Two things this guide tries to do that a conventional runbook does not:
 

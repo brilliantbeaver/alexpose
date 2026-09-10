@@ -1,5 +1,10 @@
 # Research notebook builders
 
+The [Future Innovation maintenance guide](future_innovation/future_innovation_tutorial_guide.md)
+covers its five connected tutorials, selective generation, source checks and
+fresh-kernel verification. Its builder is
+`future_innovation/build_future_innovation_notebooks.py`.
+
 These scripts are the authoritative cell-source representation for generated
 research notebooks. Run them from the project root with `uv`:
 

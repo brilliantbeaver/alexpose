@@ -3,15 +3,12 @@
 **Study 02: predictive motion representations under unknown left/right
 correspondence.**
 
-> **Status:** the gauge-neutral/validity-aware local implementation, persistent
-> sequence benchmark, duration-model gate, source-route screen, and gated
-> SG-JEPA objective are implemented and CPU-smoke-tested. The real paired AMASS
-> eligibility gate has passed; the real GAVD gate and GPU training remain to run
-> on HAIC. The core deliverable is an AMASS
-> benchmark and a predictive representation evaluated for relative-gauge and
-> output calibration. A GAVD
-> natural-event result is included only if a blinded audit passes its evidence
-> gate. This study does not claim force prediction or clinical validity.
+> **Status, reconciled 10 September 2026:** the paired AMASS v2 benchmark and
+> three seed-7 training arms completed. Validation found that the uniform
+> control reproduced SG-JEPA's gain, so the current confirmation plan stopped.
+> Do not run seeds 19/31 or open the sealed test split. Start with the
+> [completed findings and next decision](study-so-far.md). The GAVD natural-event
+> study remains deferred. No force-prediction or clinical claim is established.
 
 ## Overview
 
@@ -114,6 +111,14 @@ real-world pose claim is made.
 
 ## Current evidence boundary
 
+The [seed-7 validation summary](../../../outputs/latent-laterality/amass-gauge-v2-seed7-validation/gauge_readout_summary.csv)
+and [evaluation contract](../../../outputs/latent-laterality/amass-gauge-v2-seed7-validation/evaluation_contract.json)
+cover 15 validation identities. The contract records `test_split_evaluated: false`.
+The [progress report](study-so-far.md) owns the numerical interpretation and
+explains why the uniform control defeats the mechanism claim.
+
+### Earlier scaffold evidence
+
 `outputs/repaired-jepa-seed7-v2` contains four seed-7, 100-epoch histories and
 checkpoints at roughly 822k trainable parameters. The saved features have
 nonzero variance, and the tied models pass their programmed commutation audit.
@@ -127,19 +132,19 @@ not rank the models and must not be presented as repaired-baseline results.
 The [working proposal](../../../notes/latent-laterality/proposal.md) gives the
 exact audit.
 
-## Immediate execution gate
+## Next decision
 
-Run the [frozen-encoder swap probe](swap-probe.md) before beginning SG-JEPA
-training. It is the smallest validation-only experiment that can establish
-whether temporary bilateral token-name swaps are consequential and recoverable
-under the declared corruption contract.
+Inspect why informative and uniform probabilities produced nearly identical
+representations. Any continuation is a new exploratory phase with its own
+comparison and confirmation rule. The [swap probe](swap-probe.md) is an earlier
+diagnostic in this trajectory, not an instruction to restart the study.
 
 ## Documents
 
 - [study-so-far.md](study-so-far.md) is the plain-language progress report.
   It explains the motivation, the generated results, why the first AMASS gate
-  correctly stopped training, and why the repaired AMASS gate now permits a
-  fair model comparison.
+  correctly stopped training, how the repaired benchmark enabled a fair
+  comparison, and why the completed comparison stopped confirmation.
 - [visual-review-workflow.md](visual-review-workflow.md) is the checklist for
   making the study's conceptual figures readable and keeping them distinct from
   experimental evidence.
@@ -157,15 +162,17 @@ under the declared corruption contract.
   specifies corruption artifacts and model arms, separates available commands
   from interfaces still to implement, budgets cluster time, and explains how
   to interpret each result pattern.
-- [implementation-tutorial.md](implementation-tutorial.md) gives the ordered
+- [implementation-tutorial.md](implementation-tutorial.md) preserves the earlier
   code-level migration from the legacy AMASS artifacts to gauge-neutral,
   validity-aware baselines and the harder sequence-level AMASS-Gauge benchmark.
 - [haic-run-guide.md](haic-run-guide.md) gives the exact benchmark gate,
   three-route source screen, common readout, and gated SG-JEPA commands.
 
-## Definition of done
+## Original completion criteria
 
-At day 14, a complete study has:
+The original plan made the following deliverables conditional on successful
+development evidence. The completed seed-7 result stopped that progression;
+these are not outstanding instructions to run confirmation:
 
 - immutable data/code/corruption manifests and corpus-qualified identity-disjoint splits;
 - no-copy mask, gauge-neutrality, oracle, and checkpoint-reload tests;

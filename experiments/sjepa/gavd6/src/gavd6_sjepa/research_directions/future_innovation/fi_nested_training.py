@@ -20,7 +20,9 @@ from .fi_contracts import (
     ARMS,
     equal_source_weights,
     load_model_contract,
+    measurement_complete,
     read_json,
+    verified_report_decision,
     write_json,
     write_once_json,
 )
@@ -68,8 +70,7 @@ def raw_source_weights(video_ids):
 def fit_outer_fold(root, outer_fold, device="cpu"):
     root = Path(root)
     require_audits(root)
-    if (root / "reports/gate-decision.json").exists():
-        raise ValueError("Final decision is sealed; fitting requires a new run ID")
+    decision = verified_report_decision(root)
     cohort, arrays = load_cache(root)
     config = load_model_contract(root)
     if outer_fold not in range(5):
@@ -80,6 +81,8 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
     if receipt_path.exists():
         verify_fold(root, outer_fold)
         return
+    if decision is not None and measurement_complete(decision):
+        raise ValueError("Final decision is sealed; fitting requires a new run ID")
     # Incomplete folds can resume by deterministic refitting. Completed folds are immutable.
     train = np.flatnonzero(cohort.outer_fold.to_numpy() != outer_fold)
     test = np.flatnonzero(cohort.outer_fold.to_numpy() == outer_fold)

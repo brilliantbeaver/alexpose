@@ -2,17 +2,19 @@
 
 ## Start here
 
-The active research direction is [Latent Laterality](../docs/studies/latent-laterality/)
-(Study 02): predictive motion representations under unknown left/right
-correspondence. Start with its documentation overview, then follow the stated
-decision gates before launching a training study.
+Use the [study index](../docs/studies/) for current evidence and next actions.
+The [Future Innovation tutorial](../docs/studies/future-innovation/) is the
+connected learning path for the implemented feasibility pipeline.
+Latent Laterality has completed seed-7 validation and stopped confirmation.
 
 ## Active work
 
-- [Latent Laterality documentation](../docs/studies/latent-laterality/):
-  question, evidence boundary, and executable validation-only gate.
+- [Future Innovation](../docs/studies/future-innovation/): five tutorials,
+  artifact inspection, and the existing HAIC execution path.
+- [Latent Laterality findings](../docs/studies/latent-laterality/study-so-far.md):
+  completed comparison, mechanism failure, and stop decision.
 - [Working theory, proposal, and experiment guide](latent-laterality/): mutable research
-  design material for the active study.
+  design material; read the completed findings before following the older plan.
 - [Fixed-reflection controls](../docs/studies/fixed-reflection-baselines/):
   necessary baseline and negative-control material, not the main claim.
 - [Current fixed-reflection evidence](reflection-baselines/results.md):
@@ -24,14 +26,14 @@ decision gates before launching a training study.
   prospective protocol and availability-and-harmonization gate for testing
   predictive recovery responses across independent perturbation datasets.
 - [Future-innovation distillation guide](future-innovation-distillation/experiment-0-guide.md):
-  prospective feasibility gate for testing whether skeleton history adds
-  predictive information beyond video context.
+  detailed specification for the implemented feasibility gate; the tutorial
+  and HAIC guide supply runnable paths.
 - [Literature and domain facts](reference/)
 - [Model-history reports](../docs/history/)
 
 ## Archive
 
-Historical ideas, baseline tutorials, prior runbooks, drafts, and reviews live
-in [archive/](archive/). Historical prompt transcripts are in
-[prompts/](prompts/). Neither location contains current execution instructions;
-use the active documents above for decisions.
+Historical ideas, baseline tutorials, prior runbooks, drafts, reviews, and older
+prompts live in [archive/](archive/). [Recent prompts](prompts/) record the
+requests behind current studies. Prompts preserve design intent; use the study
+overviews and run artifacts for current execution decisions.

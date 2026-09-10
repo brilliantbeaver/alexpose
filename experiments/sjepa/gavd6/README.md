@@ -2,11 +2,14 @@
 
 > **Documentation status:** the original augmented-normal five-stage GAVD
 > tutorial below is preserved historical context, not the active research
-> contract. Start with the [current documentation](docs/), especially the
-> [Latent Laterality study](docs/studies/latent-laterality/) and its
-> [validation-only swap probe](docs/studies/latent-laterality/swap-probe.md).
-> The [Future Innovation Experiment 0 implementation and HAIC run guide](slurm/future-innovation/README.md)
-> covers the 50-window frozen-V-JEPA feasibility gate; real experimental results are not yet available.
+> contract. Start with the [study index](docs/studies/) for current evidence and
+> next actions. The [Future Innovation tutorial](docs/studies/future-innovation/)
+> provides teaching, artifact inspection, and full execution of the existing
+> 50-window feasibility pipeline through five notebooks and separate HAIC jobs.
+> Its local artifacts do not yet include a completed scientific report.
+> [Latent Laterality](docs/studies/latent-laterality/study-so-far.md) completed
+> seed-7 validation and stopped confirmation because the uniform control
+> reproduced the proposed mechanism's gain. Its test split remains sealed.
 > The prior manuscript, figures, and result ledger now live in
 > [docs/history/urtc-2026/](docs/history/urtc-2026/).
 
