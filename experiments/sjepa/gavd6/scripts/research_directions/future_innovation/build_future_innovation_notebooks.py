@@ -84,6 +84,7 @@ print("Teaching examples only; no empirical gait findings." if MODE == "teach"
 if MODE == "execute":
     from gavd6_sjepa.research_directions.future_innovation.fi_notebook_workflow import (
         initialize_from_environment, run_stage, build_notebook_report, require_complete_report,
+        attempt_stage, require_stage_success,
     )
 '''
 
@@ -98,15 +99,13 @@ def execution_cells(number):
     }
     operations = {
         "00": 'initialize_from_environment(RUN_ROOT)',
-        "01": 'run_stage("build-cohort", RUN_ROOT)\nrun_stage("extract-poses", RUN_ROOT)',
-        "02": 'device = os.environ.get("FI_NOTEBOOK_DEVICE", "cuda")\nrun_stage("cache-teacher", RUN_ROOT, "--device", device)\nrun_stage("audit-teacher", RUN_ROOT, "--device", device)',
-        "03": '''from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
-display(read_json(RUN_ROOT / "config/model-contract.json"))
-fold = os.environ.get("FI_NOTEBOOK_FOLD")
+        "01": 'stage_error = attempt_stage("build-cohort", RUN_ROOT)\nif stage_error is None:\n    stage_error = attempt_stage("extract-poses", RUN_ROOT)',
+        "02": 'device = os.environ.get("FI_NOTEBOOK_DEVICE", "cuda")\nstage_error = attempt_stage("cache-teacher", RUN_ROOT, "--device", device)\nif stage_error is None:\n    stage_error = attempt_stage("audit-teacher", RUN_ROOT, "--device", device)',
+        "03": '''fold = os.environ.get("FI_NOTEBOOK_FOLD")
 if fold is not None and fold not in {"0", "1", "2", "3", "4"}:
     raise ValueError("FI_NOTEBOOK_FOLD must be 0–4; unset it to run all five folds.")
 options = [] if fold is None else ["--outer-fold", fold]
-run_stage("run-gate", RUN_ROOT, "--device", "cpu", *options)''',
+stage_error = attempt_stage("run-gate", RUN_ROOT, "--device", "cpu", *options)''',
         "04": 'scoring_succeeded = build_notebook_report(RUN_ROOT)',
     }
     return [md(f"## Execute this stage\n\n{descriptions[number]}\n\nThis cell runs only in `execute` mode. Each command uses this kernel's Python and the existing production CLI; stage logs are retained alongside the executed notebook."),
@@ -141,6 +140,8 @@ def ending(number, text):
             "Return to the [study overview](../../../docs/studies/future-innovation/README.md) to record the next decision.")
     completion = ([code('if MODE == "execute":\n    completed_decision = require_complete_report(RUN_ROOT, scoring_succeeded=scoring_succeeded)\n    print("Complete measurement:", completed_decision["decision"], "— synthetic:", completed_decision.get("synthetic"))')]
                   if number == "04" else [])
+    if number in {"01", "02", "03"}:
+        completion = [code('if MODE == "execute":\n    require_stage_success(stage_error)')]
     return completion + [md(f"## What this step establishes\n\n{text}\n\n{link}"),
             code('print(f"Notebook elapsed time: {perf_counter() - started:.2f} seconds ({MODE} mode).")')]
 
@@ -293,12 +294,46 @@ by verified person identity.
         Exclusion counts can reveal a narrow selected cohort. An overlay can
         reveal a misplaced crop; it does not certify timing, source separation,
         or teacher validity. Read the manifests as well as the pictures.
+
+        ### How to read the common exclusion reasons
+
+        - **Sequence shorter than 64 frames** means the sequence's inclusive
+          `first_frame`–`last_frame` span contains fewer than 64 frames. The
+          pipeline must choose one contiguous 64-frame window (frames 0–63 in
+          the clip contract), so this sequence cannot supply a valid window.
+          This is a length check, not a claim that an individual annotation is
+          invalid.
+        - **Source video not cached** in an older run describes the old
+          `youtube/all/<video_id>` lookup, not all storage on HAIC. New runs
+          resolve explicit full-source paths in the video manifest, then exact
+          source IDs throughout the configured storage directories. Add other
+          directories through `FI_VIDEO_ROOTS` before initialization. Ambiguous
+          exports require an explicit manifest `video_path`; clips with reset
+          frame numbering are not substitutes for full source videos.
+        - **After fixed cohort reached 50** and **source cap** mean a candidate
+          was not selected. They are not evidence of a missing or invalid video.
+          This pilot deliberately selects 50 windows; accepting all available
+          sequences into the study would be a different experiment.
+
+        Existing cohorts retain their original candidate/exclusion records on
+        resume. To apply new discovery or window-selection rules, initialize a
+        new run directory; never silently replace a cohort behind cached features.
         """), code("""
         if MODE != "teach":
             exclusions = read_optional_table(RUN_ROOT, "manifests/exclusions.csv")
             if exclusions is not None:
-                display(exclusions.head(10))
-                print(f"{len(exclusions)} recorded exclusions; showing at most ten.")
+                summary = exclusions.groupby(["stage", "reason"]).size().rename("sequences").reset_index()
+                summary["outcome"] = np.where(summary.stage == "selection", "Not selected", "Eligibility failure")
+                display(summary[["outcome", "stage", "reason", "sequences"]])
+                failures = exclusions[exclusions.stage != "selection"]
+                display(failures.head(10))
+                print(f"{len(failures)} eligibility failures; {len(exclusions) - len(failures)} not selected by cohort size/source cap.")
+            availability = read_optional_table(RUN_ROOT, "manifests/source-availability.csv")
+            if availability is not None:
+                display(availability.groupby(["available", "method"]).size().rename("source videos").reset_index())
+                display(availability[availability.video_path.fillna("") == ""].head(10))
+            else:
+                print("No source-discovery inventory in this older run. Its exclusions describe the original lookup.")
             overlays = sorted((RUN_ROOT / "qc/alignment-overlays").glob("*.jpg"))
             print(f"{len(overlays)} local overlays. Their presence alone does not establish a completed cohort.")
             if overlays:
@@ -378,8 +413,20 @@ The teaching examples use token arithmetic, not downloaded teacher weights.
             if audit_path.is_file():
                 audit = read_json(audit_path)
                 display(pd.DataFrame(list(audit.get("checks", {}).items()), columns=["saved check", "passed"]))
+                failed = [name for name, passed in audit.get("checks", {}).items() if passed is not True]
+                print("Failed checks:", ", ".join(failed) if failed else "none")
+                display({key: audit.get(key) for key in
+                         ("motion_to_background_change_ratio", "person_edit_direction_fraction")})
+                thresholds = RUN_ROOT / "config/thresholds.json"
+                if thresholds.is_file():
+                    display(read_json(thresholds))
+                for filename in ("teacher-stability.csv", "causal-leakage.csv", "target-sensitivity.csv"):
+                    table = read_optional_table(RUN_ROOT, "qc/" + filename)
+                    if table is not None:
+                        print(filename)
+                        display(table)
                 print("Saved audit only; inspection does not revalidate it." if MODE == "inspect"
-                      else "Production audit command completed or verified its existing artifacts.")
+                      else "Production commands were attempted; failed checks remain blocking.")
             else:
                 print("No saved validity summary. The measurement has not been verified by this notebook.")
             display(artifact_inventory(RUN_ROOT).iloc[3:5])
@@ -480,6 +527,13 @@ data. It demonstrates the production APIs, not the complete scientific grid.
             else:
                 print("No model configuration available locally; inspect the run's config directory on HAIC.")
             display(artifact_inventory(RUN_ROOT))
+            audit_path = RUN_ROOT / "qc/validity-summary.json"
+            if audit_path.is_file():
+                audit = read_json(audit_path)
+                failed = [name for name, passed in audit.get("checks", {}).items() if passed is not True]
+                if failed or audit.get("passed") is not True:
+                    print("FITTING BLOCKED by teacher validity:", ", ".join(failed) or "invalid summary")
+                    print("Inspect notebook 02 and its per-window QC. Do not tune thresholds to pass this run.")
         """), md("""
         ## 4. Execute these notebooks on HAIC
 

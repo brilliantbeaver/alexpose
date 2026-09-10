@@ -65,6 +65,12 @@ class FutureInnovationTutorialTests(unittest.TestCase):
         self.assertEqual(result["state"], "SYNTHETIC")
         self.assertIn("cannot", result["explanation"])
 
+    def test_incomplete_synthetic_report_still_shows_missing_measurement(self):
+        self.decision(complete=False, synthetic=True, sealed=False)
+        result = inspect_report(self.root)
+        self.assertEqual(result["state"], "INCOMPLETE")
+        self.assertTrue(result["decision"]["synthetic"])
+
     def test_complete_report_requires_both_seal_entries_and_real_data_flag(self):
         self.decision(sealed=False)
         self.assertEqual(inspect_report(self.root)["state"], "UNVERIFIED")

@@ -7,7 +7,7 @@ from pathlib import Path
 import shlex
 import subprocess
 import sys
-import tempfile
+from uuid import uuid4
 
 from .fi_contracts import check_run, measurement_complete, stage_lock
 from .fi_tutorial_inspection import inspect_report
@@ -24,9 +24,10 @@ def run_stage(command, run_root, *options):
         raise ValueError(f"Unknown Future Innovation stage: {command}")
     root = Path(run_root).expanduser()
     root = (PROJECT / root).resolve()
-    parent = Path(os.environ.get("FI_NOTEBOOK_ATTEMPT", root / "notebook_runs"))
+    parent = Path(os.environ.get("FI_NOTEBOOK_LOG_DIR", root / "logs/notebooks/manual"))
     parent.mkdir(parents=True, exist_ok=True)
-    attempt = Path(tempfile.mkdtemp(prefix=f"{command}-", dir=parent))
+    label = os.environ.get("FI_NOTEBOOK_LABEL", "interactive")
+    log_path = parent / f"{label}-{command}-{uuid4().hex[:12]}.log"
     argv = [sys.executable, "-u", "-m", "gavd6_sjepa.command_line_interface",
             "future-innovation", command, *map(str, options), "--run-root", str(root)]
     environment = {**os.environ, "PYTHONPATH": os.pathsep.join(filter(None, (
@@ -38,13 +39,12 @@ def run_stage(command, run_root, *options):
     controls.update(CUBLAS_WORKSPACE_CONFIG=":4096:8", PYTHONHASHSEED="260905", MPLBACKEND="Agg")
     environment.update(controls)
     receipt = {"argv": argv, "cwd": str(PROJECT), "started_utc": datetime.now(timezone.utc).isoformat(),
-               "status": "running", "log": "stage.log", "execution_controls": controls}
-    record = attempt / "command.json"
-    record.write_text(json.dumps(receipt, indent=2) + "\n")
-    print(f"$ {shlex.join(argv)}\nStage log: {attempt / 'stage.log'}", flush=True)
+               "status": "running", "execution_controls": controls}
+    log_path.write_text(json.dumps(receipt) + "\n")
+    print(f"$ {shlex.join(argv)}\nStage log: {log_path}", flush=True)
     process = None
     try:
-        with (attempt / "stage.log").open("w", buffering=1) as log:
+        with log_path.open("a", buffering=1) as log:
             process = subprocess.Popen(argv, cwd=PROJECT, env=environment, stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT, text=True, bufsize=1)
             try:
@@ -70,7 +70,22 @@ def run_stage(command, run_root, *options):
     finally:
         receipt.update(finished_utc=datetime.now(timezone.utc).isoformat(),
                        returncode=process.returncode if process is not None else None)
-        record.write_text(json.dumps(receipt, indent=2) + "\n")
+        with log_path.open("a") as log:
+            log.write("\n" + json.dumps(receipt) + "\n")
+
+
+def attempt_stage(command, run_root, *options):
+    """Let a notebook display diagnostics before it propagates stage failure."""
+    try:
+        run_stage(command, run_root, *options)
+    except subprocess.CalledProcessError as error:
+        return f"{command} failed (exit {error.returncode}); see the stage log and diagnostics below."
+    return None
+
+
+def require_stage_success(error):
+    if error is not None:
+        raise RuntimeError(error)
 
 
 def initialize_from_environment(run_root):

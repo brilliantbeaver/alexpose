@@ -12,6 +12,11 @@ if [[ "$phase" == compute && ! -f "$FI_RUN_ROOT/config/cohort-contract.json" ]];
   echo "No completed cohort at $FI_RUN_ROOT. Run prepare and wait, or use all." >&2
   exit 1
 fi
+mkdir -p "$FI_RUN_ROOT/notebook_runs"
+# One shared, notebook-only folder for this submission; every array task inherits it.
+export FI_NOTEBOOK_OUTPUT_DIR="$(mktemp -d "$FI_RUN_ROOT/notebook_runs/haic-XXXXXXXX")"
+export FI_NOTEBOOK_ARRAY=1
+echo "Executed notebooks: $FI_NOTEBOOK_OUTPUT_DIR"
 submit_notebook() {
   local label="$1" script="$2" dependency="$3" suffix='%j' job
   [[ "$label" != fit ]] || suffix='%A_%a'
@@ -40,7 +45,9 @@ if [[ "$phase" == prepare || "$phase" == all ]]; then
 fi
 if [[ "$phase" == compute || "$phase" == all ]]; then
   teacher="$(submit_notebook teacher 12-notebook-02-teacher.sbatch "$teacher_dependency")"
-  fit="$(submit_notebook fit 13-notebook-03-fit.sbatch "afterok:$teacher")"
+  # Save the blocked notebook after an audit failure. The production CLI still
+  # prohibits fitting unless every required audit passes.
+  fit="$(submit_notebook fit 13-notebook-03-fit.sbatch "afterany:$teacher")"
   report="$(submit_notebook report 14-notebook-04-report.sbatch "afterany:${report_jobs}$teacher:$fit")"
   echo "Submitted notebook teacher=$teacher fit=$fit report=$report."
 fi

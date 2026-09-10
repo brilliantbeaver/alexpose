@@ -1,5 +1,39 @@
 # Implementation validation
 
+## Discovery, failed-audit diagnostics and shared notebook output — 2026-09-10
+
+- Full repository suite: **178 tests in 41.099 seconds; 176 passed, 2 optional
+  official-source integrations skipped**. The final cross-run notebook-writer
+  guard additionally passed the ten focused execution tests.
+- All five teaching and all five inspection notebooks passed fresh kernels.
+  The synthetic pipeline fit and retained all 75 residual checkpoints, scored,
+  sealed its non-evidentiary STOP, and resumed without changing scientific
+  artifact bytes or modification times.
+- A separate failed-audit fixture saved notebooks 02, 03 and 04 with diagnostic
+  outputs and failed status, creating **zero** residual checkpoints. Incomplete
+  synthetic reports now remain visibly incomplete. This reproduces the observed
+  HAIC orchestration failure without pretending to diagnose its unknown numeric
+  audit check.
+- Against the previous committed cohort implementation, the regression fixtures
+  reproduced both the discarded intact window (49 candidates) and the failed
+  retry after a missing source arrived (48 frozen candidates). Both pass with
+  the fixes. Discovery tests also cover nested files, explicit manifest paths,
+  extra roots, duplicate symlinks/hard links, ambiguous exports, partial files,
+  lookalike IDs, and genuine short sequences.
+- Output tests cover one shared notebook-only folder, distinct fold filenames,
+  duplicate-writer rejection even across run roots, source protection, retained
+  failed-cell outputs, deterministic subprocess controls, and relocated links.
+  Existing shell tests check syntax and mocked Slurm dependencies.
+- The four original copied HAIC notebooks were consolidated byte-for-byte;
+  notebook 03 was added only as an explicitly unexecuted blocked-run diagnostic.
+
+Local evidence is retained in `work/artifacts/future-innovation-fixes-tests.log`
+and `work/artifacts/future-innovation-kernel-fixes.log`; executed integration
+notebooks are under `verification-kzfbkaan/` in the ignored notebook verification
+directory. See the [investigation and adversarial review](../../docs/studies/future-innovation/notebook-run-investigation.md)
+for the real-run evidence still needed. No HAIC runs or scientific thresholds
+were changed during this repair.
+
 ## Notebook execution path — 2026-09-10
 
 The separate [notebook jobs](NOTEBOOKS.md) execute the same CLI stages as the

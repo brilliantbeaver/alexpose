@@ -33,17 +33,21 @@ For a new run, set the same inputs used by the original jobs:
 
 ```bash
 export GAVD6_ROOT=/path/to/checkout/gavd6
-export FI_RUN_ROOT=/path/to/runs/fi-gate-v1
+export FI_RUN_ROOT=/path/to/runs/fi-gate-v2
 export GAVD_FULL_ROOT=/path/to/gavd-full
 export VJEPA2_ROOT=/path/to/pinned/vjepa2
 export FI_TEACHER_CHECKPOINT=/path/to/vjepa2_1_vitb384.pt
 export FI_POSE_MODEL=/path/to/pose_landmarker_heavy.task
 # Optional: FI_ENVIRONMENT, FI_ANNOTATION_ROOT, FI_CHANGE_REASON (see README).
+# Additional full-source video directories, if needed:
+# export FI_VIDEO_ROOTS=/path/to/other/videos:/path/to/another/cache
 cd "$GAVD6_ROOT"
 bash slurm/future-innovation/submit-fi-notebooks.sh all
 ```
 
-`all` submits 00 → 01 → 02 → the five-task 03 array using `afterok`. Notebook 04
+`all` submits 00 → 01 → 02 using `afterok`. The five-task 03 array uses `afterany`
+on 02 so it retains a diagnostic notebook even if the audit fails. **The fitting
+CLI still prohibits training unless all validity checks pass.** Notebook 04
 uses `afterany` for **every submitted predecessor**, so upstream failures can
 still produce a diagnostic report. Invalid dependent jobs are cancelled. Job
 IDs and dependencies are saved in `$FI_RUN_ROOT/logs/notebook-submissions.tsv`.
@@ -57,14 +61,28 @@ must remain accessible. Relative run paths resolve from the checkout.
 
 ## Outputs and recovery
 
-Each launch creates a unique `$FI_RUN_ROOT/notebook_runs/execute-NN-…/` directory;
-03 also includes its fold number. It contains the executed `.ipynb`,
-`execution.json` with interpreter, source hash, job IDs and status, copies of the
-notebook orchestration sources, and per-command logs and exit-status receipts.
+Each submission creates **one notebook-only folder**, printed before submission:
+
+```text
+$FI_RUN_ROOT/notebook_runs/haic-<batch-id>/
+    00_question_and_worked_example.ipynb
+    01_cohort_and_alignment.ipynb
+    02_teacher_features_and_validity.ipynb
+    03_matched_predictors_and_controls_fold-0.ipynb
+    ... fold-1 through fold-4 ...
+    04_results_and_next_decision.ipynb
+```
+
+All jobs inherit `FI_NOTEBOOK_OUTPUT_DIR`. Fold suffixes prevent concurrent
+writers from overwriting each other. Interpreter, source hashes, job IDs and
+execution status are embedded in each notebook's `metadata.fi_execution`.
+There are no duplicate source snapshots, execution JSON files or font/kernel
+caches in the notebook folder. Durable command/output/exit logs are stored in
+`$FI_RUN_ROOT/logs/notebooks/haic-<batch-id>/`; normal Slurm logs remain in `logs/`.
 Notebook saves are atomic before each cell, after completed/error cells, and on
 normal or exceptional exit. A hard kill can leave status `running` and the last
 completed cell; consult Slurm accounting and the stage logs for that case.
-The active long-running cell streams its CLI output into a durable `stage.log`.
+The active long-running cell streams its CLI output into a durable stage log.
 Canonical notebooks stay output-free and are never overwritten by execution.
 
 Re-submit the same phase and run directory after repairing an execution issue.
@@ -72,6 +90,29 @@ Completed data, caches, audits and folds are verified and reused. Contracts are
 not deleted or replaced. A protocol change needs a new versioned run. Code and
 runtime drift are recorded by the existing provenance checks; review that record
 before claiming a reproduction across versions.
+
+For newly initialized runs, source discovery checks full-source paths declared
+in video-manifest columns `video_path`, `local_path`, `cached_path` or
+`source_path`, then exact video IDs recursively under the configured YouTube
+directory and optional `FI_VIDEO_ROOTS`. Relative manifest paths resolve from
+the manifest's directory or the declared storage roots. Supported containers
+include MP4, MKV, WebM, MOV, M4V and AVI. Ambiguous exports require an explicit
+path; symlinks and hard links to the same file are deduplicated.
+
+Notebook 01 reports source availability separately from candidate eligibility
+and cohort selection. The 50-window limit and two-window source cap are selection
+outcomes, not missing-video failures. A sequence still needs 64 contiguous
+annotated source frames; source-video duration alone does not establish this.
+An annotation gap no longer discards another intact 64-frame window. No frames
+are padded, repeated or interpolated. Missing-source discovery can be retried
+before candidates freeze. Applying new discovery rules to an already frozen
+cohort requires a new run (for example `gate-v2`); existing run artifacts remain
+unchanged on resume.
+
+Notebook 02 displays failed check names, recorded thresholds and per-window
+stability, leakage and target-sensitivity CSVs before returning failure.
+Notebook 03 displays the same blocking audit reason and its fold inventory.
+An audit failure is not permission to weaken tolerances or train through it.
 
 Notebook 04 attempts a report even when scoring fails, then returns failure for
 incomplete, invalid or unsealed measurement. A complete `STOP` or `INCONCLUSIVE`
@@ -96,6 +137,11 @@ fold. The executor clears inherited fold settings unless the option is supplied.
 Teacher execution defaults to CUDA (`--device cpu` is available for a deliberate
 CPU run). Per-cell timeouts are unlimited by default; Slurm enforces the job
 wall time. `--timeout SECONDS` can impose a positive per-cell limit locally.
+
+Without an explicit output directory or batch environment, standalone runs
+write into `$FI_RUN_ROOT/notebook_runs/manual/`. Use `--output-dir /path/to/folder`
+to group a manual sequence; rerunning the same notebook there replaces its
+previous executed copy atomically. Use a new folder when retaining attempts.
 
 ## Local verification
 

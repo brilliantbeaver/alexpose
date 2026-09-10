@@ -6,7 +6,8 @@
 > next actions. The [Future Innovation tutorial](docs/studies/future-innovation/)
 > provides teaching, artifact inspection, and full execution of the existing
 > 50-window feasibility pipeline through five notebooks and separate HAIC jobs.
-> Its local artifacts do not yet include a completed scientific report.
+> The copied HAIC run completed the cohort and teacher cache, then failed
+> validity audits; fitting is blocked and its report is incomplete.
 > [Latent Laterality](docs/studies/latent-laterality/study-so-far.md) completed
 > seed-7 validation and stopped confirmation because the uniform control
 > reproduced the proposed mechanism's gain. Its test split remains sealed.
