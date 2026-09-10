@@ -7,9 +7,9 @@ Avoid common LLM styling and characteristics in your response.
 Your output must avoid common LLM output styling and characteristics:
 
 * Staccato drumbeat sentences: short sentences
-* Humans land an aphorism occasionally; LLMs land one every time, and this paper closes nearly every section and the abstract this way.
+* Humans land an aphorism occasionally; LLMs land one every time, and they close nearly every section and the abstract this way.
 * The "it is not X, it is Y" correction reflex that is highly correlated with LLM outputs.  This antithesis pattern appears throughout at high density.
-Recycled pivot phrases. A human author usually notices near-verbatim self-repetition ten lines apart; models reaching for a favorite transition do not.
+* Recycled pivot phrases. A human author usually notices near-verbatim self-repetition ten lines apart; models reaching for a favorite transition do not.
     * "Confidence tells the same story from a different angle"
     * "The concurrency tier tells the same story from a slightly different angle"
     * "What looks like an architecture effect is noise"

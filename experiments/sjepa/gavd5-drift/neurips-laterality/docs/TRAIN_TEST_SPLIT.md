@@ -2,9 +2,9 @@
 
 This page is the canonical human-readable account of the registered laterality
 v2.1 split. The machine-readable authority is
-[`../artifacts/paper/splits/source_splits.json`](../artifacts/paper/splits/source_splits.json),
+[`../artifacts/paper/protocol_6f7baefbda07/splits/source_splits.json`](../artifacts/paper/protocol_6f7baefbda07/splits/source_splits.json),
 derived from the accepted cohort in
-[`../artifacts/paper/cohort/manifest.csv`](../artifacts/paper/cohort/manifest.csv).
+[`../artifacts/paper/protocol_6f7baefbda07/cohort/manifest.csv`](../artifacts/paper/protocol_6f7baefbda07/cohort/manifest.csv).
 
 ## Accepted GAVD cohort
 

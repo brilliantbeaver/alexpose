@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="1035" viewBox="0 0 1540 1035" role="img" aria-labelledby="title desc">
+<title id="title">Learned correspondence and laterality readout diverge</title><desc id="desc">Saved results from 625 clips in 93 source videos. Trained predictors consistently favor correct-clip hidden teacher targets, but every trained encoder arm has lower motion-sensitive laterality R squared than the paired initial encoder. All three alternative-mask contrasts have source-bootstrap confidence intervals crossing zero. Individual seed scores and uncertainty interpretation are shown.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#546675"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#203846}.muted{fill:#546675}</style>
+<rect width="1540" height="1035" fill="white"/>
+<text x="40" y="45" font-size="29" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="40" dy="0">Learning clip correspondence does not establish useful laterality features</tspan>
+</text>
+<text x="40" y="79" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">625 clips · 93 source videos · five outer folds · five seeds</tspan>
+</text>
+<rect x="40" y="111" width="925" height="548" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="62" y="143" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="62" dy="0">A  FROZEN LATERALITY READOUT</tspan>
+</text>
+<text x="62" y="174" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">The initial encoder retains the strongest tested readout</tspan>
+</text>
+<line x1="365.0" y1="205" x2="365.0" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="365.0" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="365.0" dy="0">0.00</tspan>
+</text>
+<line x1="445.83333333333337" y1="205" x2="445.83333333333337" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="445.83333333333337" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="445.83333333333337" dy="0">0.05</tspan>
+</text>
+<line x1="526.6666666666667" y1="205" x2="526.6666666666667" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="526.6666666666667" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="526.6666666666667" dy="0">0.10</tspan>
+</text>
+<line x1="607.5" y1="205" x2="607.5" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="607.5" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="607.5" dy="0">0.15</tspan>
+</text>
+<line x1="688.3333333333334" y1="205" x2="688.3333333333334" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="688.3333333333334" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="688.3333333333334" dy="0">0.20</tspan>
+</text>
+<line x1="769.1666666666667" y1="205" x2="769.1666666666667" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="769.1666666666667" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="769.1666666666667" dy="0">0.25</tspan>
+</text>
+<line x1="850.0" y1="205" x2="850.0" y2="579" stroke="#D7E1E7" stroke-width="1"/>
+<text x="850.0" y="608" font-size="15" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="850.0" dy="0">0.30</tspan>
+</text>
+<text x="607.5" y="638" font-size="17" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="607.5" dy="0">Source-balanced R² · higher is better</tspan>
+</text>
+<text x="63" y="229" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="63" dy="0">Initial · mean</tspan>
+</text>
+<circle cx="483.60708828914517" cy="216.0" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="488.97199401040416" cy="219.5" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="477.638135520148" cy="223.0" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="432.25035205318375" cy="226.5" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="515.0519404853266" cy="230.0" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="479.5039020716415" cy="223" r="6.6" fill="#546675" stroke="white" stroke-width="1.5"/>
+<text x="930" y="229" font-size="18" font-weight="700" text-anchor="end" style="fill:#546675">
+<tspan x="930" dy="0">0.071</tspan>
+</text>
+<rect x="57" y="249" width="890" height="43" rx="5" fill="#EAF5F5" stroke="#EAF5F5" stroke-width="1.5"/>
+<text x="63" y="277" font-size="17.5" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="63" dy="0">Initial · motion summary</tspan>
+</text>
+<circle cx="777.6337017051684" cy="264.0" r="3.3" fill="white" stroke="#137E8A" stroke-width="1.1"/>
+<circle cx="747.3753790694007" cy="267.5" r="3.3" fill="white" stroke="#137E8A" stroke-width="1.1"/>
+<circle cx="737.2983053257283" cy="271.0" r="3.3" fill="white" stroke="#137E8A" stroke-width="1.1"/>
+<circle cx="671.2304916960206" cy="274.5" r="3.3" fill="white" stroke="#137E8A" stroke-width="1.1"/>
+<circle cx="690.3560084430455" cy="278.0" r="3.3" fill="white" stroke="#137E8A" stroke-width="1.1"/>
+<circle cx="724.7787772478728" cy="271" r="6.6" fill="#137E8A" stroke="white" stroke-width="1.5"/>
+<text x="930" y="277" font-size="18" font-weight="700" text-anchor="end" style="fill:#137E8A">
+<tspan x="930" dy="0">0.223</tspan>
+</text>
+<text x="63" y="325" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#7857A6">
+<tspan x="63" dy="0">Teacher · motion random</tspan>
+</text>
+<circle cx="521.5141236294827" cy="312.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="547.7326161771358" cy="315.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="571.0632991098802" cy="319.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="550.3958786681587" cy="322.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="553.56800439528" cy="326.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="548.8547843959875" cy="319" r="6.6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="930" y="325" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="930" dy="0">0.114</tspan>
+</text>
+<text x="63" y="373" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#7857A6">
+<tspan x="63" dy="0">Teacher · MAMP motion</tspan>
+</text>
+<circle cx="559.438632284256" cy="360.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="574.1576196900496" cy="363.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="608.2164874120981" cy="367.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="485.3176523884228" cy="370.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="510.39941833175925" cy="374.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="547.5059620213171" cy="367" r="6.6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="930" y="373" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="930" dy="0">0.113</tspan>
+</text>
+<text x="63" y="421" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#7857A6">
+<tspan x="63" dy="0">Teacher · robust motion</tspan>
+</text>
+<circle cx="530.3395833312063" cy="408.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="535.109009883719" cy="411.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="610.1355459575657" cy="415.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="532.6187166346679" cy="418.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="539.9901098634429" cy="422.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="549.6385931341204" cy="415" r="6.6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="930" y="421" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="930" dy="0">0.114</tspan>
+</text>
+<text x="63" y="469" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#7857A6">
+<tspan x="63" dy="0">Teacher · region random</tspan>
+</text>
+<circle cx="552.3301363961306" cy="456.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="559.9275419855697" cy="459.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="540.9259494044859" cy="463.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="530.6410618389767" cy="466.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="525.8628961399529" cy="470.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="541.9375171530232" cy="463" r="6.6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="930" y="469" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="930" dy="0">0.109</tspan>
+</text>
+<text x="63" y="517" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#7857A6">
+<tspan x="63" dy="0">Teacher · connected region</tspan>
+</text>
+<circle cx="509.8559847212549" cy="504.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="528.0024692085309" cy="507.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="527.8429482880841" cy="511.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="522.7666060919817" cy="514.5" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="551.1476707891893" cy="518.0" r="3.3" fill="white" stroke="#7857A6" stroke-width="1.1"/>
+<circle cx="527.9231358198082" cy="511" r="6.6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="930" y="517" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="930" dy="0">0.101</tspan>
+</text>
+<text x="63" y="565" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="63" dy="0">Direct pose summary</tspan>
+</text>
+<circle cx="420.84161695858853" cy="552.0" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="420.84161695858853" cy="555.5" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="420.84161695858853" cy="559.0" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="420.84161695858853" cy="562.5" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="420.84161695858853" cy="566.0" r="3.3" fill="white" stroke="#546675" stroke-width="1.1"/>
+<circle cx="420.84161695858853" cy="559" r="6.6" fill="#546675" stroke="white" stroke-width="1.5"/>
+<text x="930" y="565" font-size="18" font-weight="700" text-anchor="end" style="fill:#546675">
+<tspan x="930" dy="0">0.035</tspan>
+</text>
+<rect x="990" y="111" width="510" height="548" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="1012" y="143" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="1012" dy="0">B  HIDDEN-FEATURE DIAGNOSTIC</tspan>
+</text>
+<text x="1012" y="174" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="1012" dy="0">Correct-clip targets are easier after training</tspan>
+</text>
+<text x="1012" y="209" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="1012" dy="0">Count of diagnostic rows with lower error for</tspan>
+<tspan x="1012" dy="23.12">the correct clip than a different source video:</tspan>
+</text>
+<text x="1012" y="284" font-size="19" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="1012" dy="0">Initial predictor</tspan>
+</text>
+<rect x="1012" y="299" width="455" height="34" rx="4" fill="#E2E9ED" stroke="#E2E9ED" stroke-width="1.5"/>
+<rect x="1012" y="299" width="200.2" height="34" rx="4" fill="#546675" stroke="#546675" stroke-width="1.5"/>
+<text x="1458" y="322" font-size="18" font-weight="700" text-anchor="end" style="fill:#203846">
+<tspan x="1458" dy="0">33 / 75</tspan>
+</text>
+<text x="1012" y="380" font-size="19" font-weight="400" text-anchor="start" style="fill:#137E8A">
+<tspan x="1012" dy="0">Trained predictors</tspan>
+</text>
+<rect x="1012" y="395" width="455" height="34" rx="4" fill="#137E8A" stroke="#137E8A" stroke-width="1.5"/>
+<text x="1458" y="418" font-size="18" font-weight="700" text-anchor="end" style="fill:white">
+<tspan x="1458" dy="0">375 / 375</tspan>
+</text>
+<text x="1012" y="478" font-size="17" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="1012" dy="0">Each row combines one fold, seed, arm,</tspan>
+<tspan x="1012" dy="23.12">and evaluation mask. These are repeated</tspan>
+<tspan x="1012" dy="23.12">checks on the same videos; the counts</tspan>
+<tspan x="1012" dy="23.12">do not represent independent participants.</tspan>
+</text>
+<text x="1012" y="600" font-size="16" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="1012" dy="0">Only the sign of the comparison is summarized.</tspan>
+<tspan x="1012" dy="21.76">Teacher-feature error scales differ across arms.</tspan>
+</text>
+<rect x="40" y="684" width="1460" height="270" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="62" y="716" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="62" dy="0">C  MASK-AGAINST-RANDOM CONTRASTS</tspan>
+</text>
+<text x="62" y="747" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Alternative target policies do not establish a readout improvement</tspan>
+</text>
+<line x1="660.0" y1="784" x2="660.0" y2="899" stroke="#D7E1E7" stroke-width="1"/>
+<text x="660.0" y="923" font-size="16" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="660.0" dy="0">-0.04</tspan>
+</text>
+<line x1="893.8461538461538" y1="784" x2="893.8461538461538" y2="899" stroke="#D7E1E7" stroke-width="1"/>
+<text x="893.8461538461538" y="923" font-size="16" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="893.8461538461538" dy="0">-0.02</tspan>
+</text>
+<line x1="1127.6923076923076" y1="784" x2="1127.6923076923076" y2="899" stroke="#546675" stroke-width="2" stroke-dasharray="4 4"/>
+<text x="1127.6923076923076" y="923" font-size="16" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="1127.6923076923076" dy="0">0</tspan>
+</text>
+<line x1="1361.5384615384614" y1="784" x2="1361.5384615384614" y2="899" stroke="#D7E1E7" stroke-width="1"/>
+<text x="1361.5384615384614" y="923" font-size="16" font-weight="400" text-anchor="middle" style="fill:#546675">
+<tspan x="1361.5384615384614" dy="0">+0.02</tspan>
+</text>
+<text x="62" y="806" font-size="19" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">MAMP motion − motion random</tspan>
+</text>
+<text x="600" y="806" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="600" dy="0">-0.0008</tspan>
+</text>
+<line x1="889.5008100367363" y1="800" x2="1306.5357184909972" y2="800" stroke="#7857A6" stroke-width="3"/>
+<line x1="889.5008100367363" y1="794" x2="889.5008100367363" y2="806" stroke="#7857A6" stroke-width="2"/>
+<line x1="1306.5357184909972" y1="794" x2="1306.5357184909972" y2="806" stroke="#7857A6" stroke-width="2"/>
+<circle cx="1117.9371450777212" cy="800" r="6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="62" y="848" font-size="19" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Robust motion − motion random</tspan>
+</text>
+<text x="600" y="848" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="600" dy="0">+0.0005</tspan>
+</text>
+<line x1="946.4915431208974" y1="842" x2="1305.1042636566654" y2="842" stroke="#7857A6" stroke-width="3"/>
+<line x1="946.4915431208974" y1="836" x2="946.4915431208974" y2="848" stroke="#7857A6" stroke-width="2"/>
+<line x1="1305.1042636566654" y1="836" x2="1305.1042636566654" y2="848" stroke="#7857A6" stroke-width="2"/>
+<circle cx="1133.3610909530307" cy="842" r="6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="62" y="890" font-size="19" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Connected region − region random</tspan>
+</text>
+<text x="600" y="890" font-size="18" font-weight="700" text-anchor="end" style="fill:#7857A6">
+<tspan x="600" dy="0">-0.009</tspan>
+</text>
+<line x1="738.4588574790268" y1="884" x2="1334.2528980292805" y2="884" stroke="#7857A6" stroke-width="3"/>
+<line x1="738.4588574790268" y1="878" x2="738.4588574790268" y2="890" stroke="#7857A6" stroke-width="2"/>
+<line x1="1334.2528980292805" y1="878" x2="1334.2528980292805" y2="890" stroke="#7857A6" stroke-width="2"/>
+<circle cx="1026.3353229508955" cy="884" r="6" fill="#7857A6" stroke="white" stroke-width="1.5"/>
+<text x="40" y="987" font-size="16" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">Panel A: large dots are mean seed scores; small open dots are the five seed scores, not confidence intervals. Motion summaries add variation, feature changes, and support.</tspan>
+</text>
+<text x="40" y="1014" font-size="15.5" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">Panel C: 95% intervals use 2,000 paired source-video resamples, conditional on fitted models. Each mask has its own count-matched random reference; intervals do not establish equivalence.</tspan>
+</text>
+</svg>

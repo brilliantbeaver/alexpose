@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="1120" viewBox="0 0 1560 1120" role="img" aria-labelledby="title desc">
+<title id="title">Where anatomical laterality enters skeleton JEPA training</title><desc id="desc">Clip-local pose preparation retains 33 landmarks and a separate validity mask. Five source-video folds precede all model training and derived training views. A student predicts hidden teacher features with a stop-gradient EMA teacher. Completed reflection augmentation and anatomical or motion target selection are separate experiments. Explicit token reflection loss is implemented in Notebook 09, with synthetic evidence only. Frozen evaluation uses held-out sources and a signed coordinate-derived endpoint.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#546675"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#203846}.muted{fill:#546675}</style>
+<rect width="1560" height="1120" fill="white"/>
+<text x="40" y="45" font-size="31" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="40" dy="0">Where anatomical laterality enters skeleton JEPA training</tspan>
+</text>
+<text x="40" y="78" font-size="20" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">Completed experiments and the explicit-reflection extension have different evidence status.</tspan>
+</text>
+<rect x="40" y="110" width="300" height="195" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="62" y="142" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="62" dy="0">01  INPUT</tspan>
+</text>
+<text x="62" y="173" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Pose clips + source IDs</tspan>
+</text>
+<text x="62" y="203" font-size="18" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">625 accepted clips / 93 videos</tspan>
+<tspan x="62" dy="24.48">33 anatomical landmarks</tspan>
+<tspan x="62" dy="24.48">Coordinates + validity + time</tspan>
+<tspan x="62" dy="24.48">Five dataset condition annotations</tspan>
+</text>
+<path d="M 340 208 H 367" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="380" y="110" width="370" height="195" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="402" y="142" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="402" dy="0">02  CLIP-LOCAL PREPARATION</tspan>
+</text>
+<text x="402" y="173" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="402" dy="0">Keep anatomy and validity</tspan>
+</text>
+<text x="402" y="203" font-size="18" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="402" dy="0">Model: short gaps, pelvis centering,</tspan>
+<tspan x="402" dy="24.48">body scaling, 64-frame resizing</tspan>
+<tspan x="402" dy="24.48">Input X: [B, 64, 33, 3]</tspan>
+<tspan x="402" dy="24.48">Validity V: [B, 64, 33]</tspan>
+</text>
+<path d="M 750 208 H 777" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="790" y="110" width="325" height="195" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="812" y="142" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="812" dy="0">03  SOURCE SPLIT</tspan>
+</text>
+<text x="812" y="173" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="812" dy="0">Five outer folds</tspan>
+</text>
+<text x="812" y="203" font-size="17.5" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="812" dy="0">Keep every video’s clips together</tspan>
+<tspan x="812" dy="23.8">Four folds supply training sources</tspan>
+<tspan x="812" dy="23.8">One fold supplies held-out sources</tspan>
+<tspan x="812" dy="23.8">All derived views inherit the fold</tspan>
+</text>
+<rect x="1155" y="110" width="365" height="195" rx="16" fill="#FFF8ED" stroke="#E5D2AD" stroke-width="1.5"/>
+<text x="1177" y="142" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="1177" dy="0">SEPARATE COORDINATE LANE</tspan>
+</text>
+<text x="1177" y="173" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="1177" dy="0">Signed movement contrast</tspan>
+</text>
+<text x="1177" y="203" font-size="18" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="1177" dy="0">Original-time, paired-valid motions</tspan>
+<tspan x="1177" dy="24.48">No gap filling or temporal resizing</tspan>
+<tspan x="1177" dy="24.48">Five bilateral pairs define y</tspan>
+<tspan x="1177" dy="24.48">y enters the readout after training</tspan>
+</text>
+<text x="40" y="334" font-size="15.5" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">Preparation occurs before fold assignment in the saved workflow; it fits no cross-clip statistics. Source separation precedes training sampling and augmentation.</tspan>
+</text>
+<rect x="40" y="359" width="1480" height="407" rx="16" fill="#FBFCFD" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="62" y="392" font-size="16" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="62" dy="0">04  TRAINING ON OUTER-TRAIN SOURCES</tspan>
+</text>
+<text x="62" y="425" font-size="21" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Anatomy enters through named joints, bilateral transformations, and the choice of hidden targets.</tspan>
+</text>
+<rect x="65" y="451" width="350" height="132" rx="16" fill="#EAF5F5" stroke="#A9CED0" stroke-width="1.5"/>
+<text x="85" y="482" font-size="19" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="85" dy="0">Choose the experimental intervention</tspan>
+</text>
+<text x="85" y="511" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="85" dy="0">00–05: reflect whole clips with p = 0.5</tspan>
+<tspan x="85" dy="23.12">12: gait-joint vs all-joint targets</tspan>
+<tspan x="85" dy="23.12">15–18: motion / connected-region targets</tspan>
+</text>
+<text x="85" y="607" font-size="16.5" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="85" dy="0">Reflection: x-coordinate sign + joint swap</tspan>
+<tspan x="85" dy="22.44">Validity and selected targets stay aligned</tspan>
+<tspan x="85" dy="22.44">15–18 use no reflection augmentation</tspan>
+</text>
+<path d="M 415 515 H 442" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="455" y="451" width="330" height="132" rx="16" fill="white" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="476" y="482" font-size="19" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="476" dy="0">Four frames form one joint patch</tspan>
+</text>
+<text x="476" y="512" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="476" dy="0">Patches: [B, 16, 33, 12]</tspan>
+<tspan x="476" dy="23.12">Tokens: [B, 528, 96]</tspan>
+<tspan x="476" dy="23.12">Valid and hidden masks: [B, 16, 33]</tspan>
+</text>
+<text x="476" y="607" font-size="16.5" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="476" dy="0">All 33 landmarks remain in the input.</tspan>
+<tspan x="476" dy="22.44">Hidden content is zeroed; grid positions</tspan>
+<tspan x="476" dy="22.44">remain. A patch needs four valid frames.</tspan>
+</text>
+<path d="M 785 495 H 830" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 808 495 V 643 H 830" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="845" y="451" width="270" height="112" rx="16" fill="#EAF5F5" stroke="#A9CED0" stroke-width="1.5"/>
+<text x="866" y="483" font-size="23" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="866" dy="0">Student encoder</tspan>
+</text>
+<text x="866" y="514" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="866" dy="0">Masked, geometric input view</tspan>
+<tspan x="866" dy="23.12">Gradients update its weights</tspan>
+</text>
+<rect x="845" y="609" width="270" height="112" rx="16" fill="#F1EDF7" stroke="#CBBEDD" stroke-width="1.5"/>
+<text x="866" y="641" font-size="23" font-weight="700" text-anchor="start" style="fill:#7857A6">
+<tspan x="866" dy="0">Teacher encoder</tspan>
+</text>
+<text x="866" y="672" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="866" dy="0">Complete permitted clip</tspan>
+<tspan x="866" dy="23.12">Stop gradient; EMA update</tspan>
+</text>
+<path d="M 980 563 V 600" fill="none" stroke="#7857A6" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="5 4"/>
+<text x="1000" y="591" font-size="14" font-weight="400" text-anchor="start" style="fill:#7857A6">
+<tspan x="1000" dy="0">slow weight average</tspan>
+</text>
+<path d="M 1115 507 H 1142" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1155" y="451" width="335" height="112" rx="16" fill="white" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="1176" y="483" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="1176" dy="0">Predictor</tspan>
+</text>
+<text x="1176" y="514" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="1176" dy="0">Predict features at hidden positions</tspan>
+<tspan x="1176" dy="23.12">Preserve each clip’s target mask</tspan>
+</text>
+<path d="M 1320 563 V 600" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1115 666 H 1142" fill="none" stroke="#546675" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1155" y="609" width="335" height="112" rx="16" fill="#FFF8ED" stroke="#E5D2AD" stroke-width="1.5"/>
+<text x="1176" y="641" font-size="21" font-weight="700" text-anchor="start" style="fill:#A46B1C">
+<tspan x="1176" dy="0">Masked feature objective</tspan>
+</text>
+<text x="1176" y="672" font-size="17" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="1176" dy="0">Centered target cross-entropy</tspan>
+<tspan x="1176" dy="23.12">+ feature-variation regularization</tspan>
+</text>
+<text x="62" y="704" font-size="17" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="62" dy="0">Anatomical and motion masks change the self-supervised task.</tspan>
+<tspan x="62" dy="23.12">Condition labels and the signed target y never supervise the encoder.</tspan>
+</text>
+<rect x="40" y="794" width="730" height="230" rx="16" fill="#F7F3FB" stroke="#CBBEDD" stroke-width="1.5"/>
+<text x="62" y="826" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="62" dy="0">05  EXPLICIT RELATION · NOTEBOOK 09</tspan>
+</text>
+<text x="62" y="857" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Extra encoder loss on original + reflected clips</tspan>
+</text>
+<text x="62" y="887" font-size="18" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="62" dy="0">Z(MX) ≈ P Z(X): reflection should exchange anatomical token positions.</tspan>
+<tspan x="62" dy="24.48">The penalty compares aligned valid tokens; feature channels stay fixed.</tspan>
+<tspan x="62" dy="24.48">Its energy denominator is detached from gradients; λ = 1 in the demo.</tspan>
+<tspan x="62" dy="24.48">This adds two encoder passes with gradients and uses no signed labels.</tspan>
+</text>
+<rect x="62" y="983" width="678" height="26" rx="6" fill="#EDE5F5" stroke="#EDE5F5" stroke-width="1.5"/>
+<text x="75" y="1002" font-size="14" font-weight="700" text-anchor="start" style="fill:#7857A6">
+<tspan x="75" dy="0">SYNTHETIC DEMONSTRATION ONLY · 16 frames / 16 channels · no real-data benefit established</tspan>
+</text>
+<rect x="795" y="794" width="725" height="230" rx="16" fill="#F4F7F9" stroke="#D7E1E7" stroke-width="1.5"/>
+<text x="817" y="826" font-size="15" font-weight="700" text-anchor="start" style="fill:#137E8A">
+<tspan x="817" dy="0">06  FROZEN EVALUATION · HELD-OUT VIDEOS</tspan>
+</text>
+<text x="817" y="857" font-size="23" font-weight="700" text-anchor="start" style="fill:#203846">
+<tspan x="817" dy="0">Test whether learned features recover laterality</tspan>
+</text>
+<text x="817" y="887" font-size="18" font-weight="400" text-anchor="start" style="fill:#203846">
+<tspan x="817" dy="0">Freeze the declared encoder; compare with its paired initial weights.</tspan>
+<tspan x="817" dy="24.48">Fit feature scaling and ridge readout using outer-train sources only.</tspan>
+<tspan x="817" dy="24.48">Use source groups for readout penalty selection; test on the held-out fold.</tspan>
+<tspan x="817" dy="24.48">Pool held-out predictions per seed; give every source equal total weight.</tspan>
+</text>
+<text x="817" y="1000" font-size="15" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="817" dy="0">Five seeds repeat the same cohort. Video-bootstrap intervals condition on the fitted models.</tspan>
+</text>
+<path d="M 770 815 H 782 V 779 H 837 V 541 H 845" fill="none" stroke="#7857A6" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="6 5"/>
+<text x="40" y="1061" font-size="17" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">Shape contract: transformations preserve the model tensor axes and carry validity alongside coordinates. Interpolation and resizing change the raw trajectory.</tspan>
+</text>
+<text x="40" y="1088" font-size="17" font-weight="400" text-anchor="start" style="fill:#546675">
+<tspan x="40" dy="0">Initial control = untrained S-JEPA weights, with the same learned pose extractor and anatomical schema. Source folds do not establish participant separation.</tspan>
+</text>
+</svg>

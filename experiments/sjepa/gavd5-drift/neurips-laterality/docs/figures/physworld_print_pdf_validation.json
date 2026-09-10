@@ -1,0 +1,133 @@
+{
+  "method": "Headless Chromium print with exact-size zero-margin CSS page; independent Poppler rendering",
+  "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "pdftoppm": "C:\\Users\\alexm\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin\\pdftoppm.exe",
+  "original_svg_png_sha256_unchanged": {
+    "training_pipeline_compact_print.svg": "b726b810b650fc07e636bc50d26155f0744b49c6f9ed38e89bc6b1e11bce4732",
+    "training_pipeline_print.svg": "db625a18f684460753fa0e1b1010883d021dfc345c8397feb356b344164b6d22",
+    "reflection_and_target_print.svg": "006ec7618e2f1e10229104ad4ce18b0186f1d04c6ea1e20fa09ba5bcd7ed08ac",
+    "learning_results_print.svg": "48283f3f1d9dd0953bc77a54d9cdb7b344c97f052731ec48f69429619434a115"
+  },
+  "assets": {
+    "training_pipeline_compact_print": {
+      "pages": 1,
+      "svg_pixels": [
+        990.0,
+        710.0
+      ],
+      "expected_points_at_96_dpi": [
+        742.5,
+        532.5
+      ],
+      "page_points": [
+        743.03998,
+        533.03998
+      ],
+      "text_characters": 681,
+      "searchable_text_checks": [
+        "Student",
+        "Teacher",
+        "SYNTHETIC ONLY"
+      ],
+      "fonts": [
+        "/AAAAAA+Arial-BoldMT",
+        "/BAAAAA+ArialMT"
+      ],
+      "raster_image_xobjects": [],
+      "vector_path_operations": 1273,
+      "text_show_operations": 61,
+      "pdf_sha256": "fdd5c5cdacae62108e99647ee1b2f2ee31fbaa588fef9e1945989215c08a2af2",
+      "preview": "training_pipeline_compact_print_pdf_preview.png"
+    },
+    "training_pipeline_print": {
+      "pages": 1,
+      "svg_pixels": [
+        990.0,
+        1320.0
+      ],
+      "expected_points_at_96_dpi": [
+        742.5,
+        990.0
+      ],
+      "page_points": [
+        743.03998,
+        990.0
+      ],
+      "text_characters": 1804,
+      "searchable_text_checks": [
+        "Student encoder",
+        "Teacher encoder",
+        "Signed movement contrast"
+      ],
+      "fonts": [
+        "/AAAAAA+Arial-BoldMT",
+        "/BAAAAA+ArialMT"
+      ],
+      "raster_image_xobjects": [],
+      "vector_path_operations": 1673,
+      "text_show_operations": 80,
+      "pdf_sha256": "afaa48577bfbbb580fbe98b6a418e5cd6faaf3be93fb8e1c46e102028f491c5b",
+      "preview": "training_pipeline_print_pdf_preview.png"
+    },
+    "reflection_and_target_print": {
+      "pages": 1,
+      "svg_pixels": [
+        990.0,
+        790.0
+      ],
+      "expected_points_at_96_dpi": [
+        742.5,
+        592.5
+      ],
+      "page_points": [
+        743.03998,
+        593.03998
+      ],
+      "text_characters": 738,
+      "searchable_text_checks": [
+        "Original X",
+        "Reflected MX",
+        "Token equivariance"
+      ],
+      "fonts": [
+        "/AAAAAA+Arial-BoldMT",
+        "/BAAAAA+ArialMT"
+      ],
+      "raster_image_xobjects": [],
+      "vector_path_operations": 2288,
+      "text_show_operations": 48,
+      "pdf_sha256": "c6afd39150116a1e89e0b1498fd27d5cf39fc2f91a37130ab4586a03cabf16cb",
+      "preview": "reflection_and_target_print_pdf_preview.png"
+    },
+    "learning_results_print": {
+      "pages": 1,
+      "svg_pixels": [
+        990.0,
+        960.0
+      ],
+      "expected_points_at_96_dpi": [
+        742.5,
+        720.0
+      ],
+      "page_points": [
+        743.03998,
+        720.0
+      ],
+      "text_characters": 821,
+      "searchable_text_checks": [
+        "Initial",
+        "375 / 375",
+        "Connected region"
+      ],
+      "fonts": [
+        "/AAAAAA+Arial-BoldMT",
+        "/BAAAAA+ArialMT"
+      ],
+      "raster_image_xobjects": [],
+      "vector_path_operations": 2444,
+      "text_show_operations": 56,
+      "pdf_sha256": "9d9c280ac21b67074646fa72503de79ea51838193131b65196376633a77153bc",
+      "preview": "learning_results_print_pdf_preview.png"
+    }
+  }
+}
