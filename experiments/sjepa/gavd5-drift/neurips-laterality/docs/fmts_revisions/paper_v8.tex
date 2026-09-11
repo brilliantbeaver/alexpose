@@ -1,0 +1,343 @@
+\documentclass{article}
+\PassOptionsToPackage{numbers,sort&compress}{natbib}
+\usepackage[dblblindworkshop]{neurips_2026}
+\workshoptitle{Foundation Models for Temporal Systems: From Forecasting to World Modeling}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,graphicx,booktabs,longtable,array,calc}
+\usepackage{microtype,url}
+\usepackage[hidelinks,unicode]{hyperref}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\setlength{\emergencystretch}{1em}
+\title{Hidden-Feature Matching and Left-Right Movement: Different Outcomes in a Gait JEPA}
+\author{Anonymous Author(s)}
+\hypersetup{pdftitle={Hidden-Feature Matching and Left-Right Movement: Different Outcomes in a Gait JEPA},pdfauthor={},pdfcreator={LaTeX}}
+\begin{document}
+\maketitle
+\begin{abstract}
+We test whether learning to predict hidden skeleton features helps
+estimate a left--right difference in movement speed during walking. A
+small skeleton Joint-Embedding Predictive Architecture (JEPA) learns
+without movement labels; a separate regression then estimates a signed
+speed contrast from its frozen features. In source-video
+cross-validation on 625 clips from 93 videos, trained predictors more
+consistently favor hidden features from the correct clip over features
+from another video. With the same expanded feature summary and
+regression procedure, however, mean source-balanced \(R^2\) falls from
+0.22 at initialization to 0.10--0.11 after training. Motion-weighted and
+connected-region masks leave their movement-readout benefits uncertain.
+The comparison identifies a gap between hidden-feature matching and
+access to a specified observable of an evolving gait system, within this
+cohort, training recipe and readout. It motivates evaluating observable
+movement alongside latent prediction in representations intended for
+temporal modeling.
+\end{abstract}
+\section{Introduction}\label{introduction}
+
+Walking involves coupled body landmarks whose positions change over
+time. Their trajectories carry information about movement that a single
+pose cannot supply, while video-derived coordinates capture only part of
+the physical process: camera geometry and pose errors affect them, and
+forces and contact remain unobserved. Gait rhythm, phase and
+coordination make this an appealing temporal system to study. Temporal
+world modeling aims to represent an evolving system well enough to
+predict its observable behavior; our experiment examines access to one
+movement measurement within that broader objective.
+
+We use a small S-JEPA \citep{sjepa} to predict features at hidden
+positions in a skeleton sequence, then ask a separate regression to
+estimate a left--right contrast of median coordinate speeds. The central
+null is no improvement from JEPA training over matched initial weights
+on held-out source videos. This null also motivates the registered
+reflection test; the mask comparisons and expanded readout were
+developed on the same cohort and remain exploratory. By comparing the
+training task with a measurement of the observed movement, the study
+offers focused evidence for evaluating representations used in temporal
+foundation models.
+
+\section{Data, prediction task and
+evaluation}\label{data-prediction-task-and-evaluation}
+
+\textbf{Measuring movement.} Quality checks retain 625 GAVD clips from
+93 source videos \citep{gavd}. Archives contain \(T_i\times33\times4\)
+arrays of three estimated coordinates and visibility, plus frame numbers
+and frame rate. The coordinates are image normalized with inferred
+depth, rather than calibrated metric positions. We center observed
+coordinates at the pelvis and divide by body width, keeping original
+timestamps and leaving gaps unfilled. Five pairs---shoulders, knees,
+ankles, heels and foot tips---each need at least eight transitions with
+both sides observed at both ends. For left and right median coordinate
+speeds \(m_{L,k},m_{R,k}\), the signed contrast is
+
+\[y=\frac{1}{5}\sum_{k=1}^{5}\frac{m_{L,k}-m_{R,k}}{m_{L,k}+m_{R,k}+10^{-8}}.\]
+
+Reflection \(M\) flips the centered horizontal coordinate and exchanges
+anatomical sides, including validity flags, so \(y(Mx)=-y(x)\). Hips
+establish the pelvis but are excluded from the sum because centering
+equalizes their speed magnitudes. The contrast measures relative median
+speed. It omits phase, stride timing and loading, and remains unchanged
+when a trajectory and its sampling intervals are reversed. Its recovery
+alone therefore provides limited evidence about temporal dynamics.
+
+\textbf{Preparing encoder inputs.} A landmark is observed when
+visibility is at least 0.45 and its coordinates are finite. A separate
+path fills interior gaps of up to four samples and treats those
+positions as valid. After pelvis centering and body-width normalization,
+coordinates and validity are linearly resized by sequence index to 64
+positions; original time intervals are discarded. Resized validity must
+reach 0.999, and invalid coordinates are zero. Each joint's
+four-position patch projects 12 coordinates to 96 features, producing
+\(16\times33\) tokens. All four positions must be valid for a patch to
+be used. Anatomical identities and prepared positions remain, but
+original duration and cadence are not retained; trajectory-derived
+quantities can also change.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{assets/v8/figures/training_pipeline_compact.pdf}
+\caption{Completed model. Poses and tokens are schematic: skeleton colors mark anatomical left (teal) and right (purple), with an open circle for a missing landmark. Tokens are visible (teal), hidden (orange) or missing (gray). Scattered/motion-weighted and connected-region masks may leave context on both sides. Full clips reach the teacher and regularizer; target y supervises the separate readout.}
+\end{figure}
+
+\textbf{Learning hidden features.} The online encoder zeroes hidden
+patch content before adding joint and position embeddings. The predictor
+inserts learned mask tokens at target positions and estimates the
+teacher's features there. Cross-entropy compares distributions over
+feature channels at hidden valid positions, averaging within clips and
+then across clips. The teacher receives the full prepared clip; its
+weights follow an exponential moving average of the online weights
+without gradients. A VICReg regularizer \citep{vicreg}, weighted 0.05,
+also uses full clips: two geometric views pass through the online
+encoder, a twelve-joint gait pool including hips, and a projector.
+Movement targets and gait-category labels never enter these losses.
+
+The grid contains 125 encoders: three motion-mask conditions and two
+region conditions across five folds and five seeds, each trained for
+1,200 AdamW updates in CUDA BF16 and evaluated in FP32. Motion
+conditions use random, MAMP-style \citep{mamp} or mixed
+uniform/clipped-motion sampling over all 33 joints, with counts derived
+from a twelve-joint gait pool. Region masks hide six connected landmarks
+over eight of sixteen blocks. Each family has its own count-matched
+random reference and shares initial weights, source draws, views and
+update counts. Reflection augmentation and explicit reflection loss are
+absent from this grid. Appendix A gives settings and their separate
+evidence.
+
+\textbf{Estimating movement from frozen features.} Five outer folds keep
+every video's clips, overlapping windows, mirrors and augmented views
+together wherever these derivatives are used. A fresh encoder fits only
+outer-training sources, sampling videos equally. Its matched
+initialization and final encoders are then frozen for ridge regression,
+a linear readout with a coefficient penalty. Three inner source folds
+select that penalty using outer-training labels only. Imputation and
+scaling fit within each inner training split, then refit with the
+selected regression on all outer-training sources. Inner-validation
+clips may have contributed without labels to encoder fitting.
+
+The readout summarizes five bilateral pairs using feature means (960
+inputs), expanded with standard deviations, absolute adjacent-block
+changes and ten support fractions (2,890 inputs). We pool held-out
+predictions within each seed, give each source video equal total weight,
+and average the five \(R^2\) scores. The 2,000 paired source-bootstrap
+resamples retain each video's clips and seed predictions together. Their
+95\% intervals condition on fitted models and splits, excluding
+retraining, partition and development-selection uncertainty. Repeated
+seeds and mask draws reuse the same 93 videos.
+
+\section{Feature matching and movement estimates give different
+results}\label{feature-matching-and-movement-estimates-give-different-results}
+
+With the expanded summary, initial features yield mean \(R^2=0.223\),
+compared with \(0.101\)--\(0.114\) for trained teachers (Figure 2).
+Every training condition scores below its initialization in every seed;
+all five paired intervals are below zero (Table 1). Mean absolute error
+increases by 0.0020--0.0025 in the dimensionless contrast, from 0.0415
+to 0.0436--0.0440. Final online encoders also score below their initial
+weights.
+
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+Training mask & Mean $R^2$ & $\Delta R^2$ & 95\% source interval \\
+\midrule
+Random (motion) & 0.114 & -0.109 & [-0.170, -0.041] \\
+MAMP-style & 0.113 & -0.110 & [-0.165, -0.051] \\
+Motion mixture & 0.114 & -0.108 & [-0.171, -0.042] \\
+Random (region) & 0.109 & -0.113 & [-0.166, -0.060] \\
+Connected region & 0.101 & -0.122 & [-0.183, -0.055] \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Table 1: trained teacher minus matched initialization, using the
+expanded summary. Exploratory intervals resample source videos with
+fitted models fixed; differences precede rounding.
+
+Expanding the initial summary raises \(R^2\) from 0.071 to 0.223
+(\(+0.152\)). This combines several changes: more regression inputs,
+temporal variation, absolute feature increments and observation support.
+Standard deviations discard order, and absolute increments discard
+direction, so the gain cannot be attributed specifically to temporal
+order. The initial control already includes a pretrained pose detector,
+preparation, anatomical identities and supervised regression.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{assets/v8/figures/learning_results.pdf}
+\caption{Different outcomes from the same fitted models. A: movement estimates from the matched initial encoder and trained teachers with the expanded summary; dots are seed scores and ticks their mean. B: correct-clip feature error is lower in 375/375 trained checks and 33/75 distinct initial checks. These checks reuse models and videos.}
+\end{figure}
+
+The predictor diagnostic compares source-weighted mean squared feature
+error against correct-clip targets and valid targets from another
+source, holding clips and hidden positions fixed. Correct targets have
+lower error in 375/375 trained checks and 33/75 initial checks. These
+totals cover 125 trained models and 25 deduplicated initial controls,
+each under left-leg, right-leg and scattered gaps. Pose, viewpoint and
+missingness shared by visible context and full-clip teacher features
+could support this correspondence alongside motion. Changing teachers
+and target distributions also prevent raw training losses from providing
+a common ranking of representation quality.
+
+Mask construction works in the inspection draws: motion weighting
+selects higher-motion targets, and regions reduce targets with both
+immediate temporal neighbors visible from 69.9\% to zero. Motion masks
+hide approximately 17\% of valid tokens and regions 9.9\%, requiring
+distinct random references. Their movement-readout intervals cross zero,
+leaving mask benefits uncertain without establishing equivalence
+(Appendix A).
+
+Input preparation also changes the observable. On 623 clips from 92
+sources with finite values on both paths, a retained calculation
+comparison gives 70.4\% source-weighted sign agreement and
+\(R^2=0.218\). This disagreement between measurement paths neither
+bounds achievable model accuracy nor isolates the effect of an
+individual preparation step.
+
+\section{Implications and a future-motion
+test}\label{implications-and-a-future-motion-test}
+
+For this gait measurement, greater consistency in hidden-feature
+matching accompanies poorer movement estimates under the expanded
+readout. Another readout may access information that ridge regression
+leaves unused: 49/125 teacher fits and 96/125 online fits select the
+largest tested penalty, 10,000. Wider training-only penalty selection,
+support-only controls and summaries of matched dimension would help
+distinguish readout limitations from changes in the features.
+Source-video holdout leaves participant independence, chronological
+generalization and an untouched development cohort unresolved; recording
+and pose-estimation cues also remain possible explanations.
+
+The next experiment would predict future coordinates from an observed
+prefix, with preparation, normalization and mask selection restricted to
+the past. Training evidence for past-feature readout and
+predicted-future-feature decoding is currently synthetic; real-data
+horizon counts establish eligibility only. A real-data comparison should
+use common valid endpoints and physical-time horizons, with
+last-position, constant-velocity, direct-pose, initial-encoder and
+mismatched-training-future controls. Decoders and their settings must
+use training sources only, and future-coordinate or visibility changes
+must leave the prefix and forecast unchanged. Observed future-teacher
+features provide a decoder diagnostic; only features predicted from the
+past test forecasting. Several horizons from one prefix still require a
+separate recursive-rollout evaluation.
+
+The present result concerns one small gait model, cohort and readout.
+Foundation-model scale, broad transfer, persistent temporal state and a
+working simulator require evidence beyond this study.
+
+\section{Related work}\label{related-work}
+
+Prediction targets and available context influence which movement
+differences a representation retains. Skeleton methods predict learned
+features \citep{sjepa} or explicit motion \citep{mamp}, while
+connected-body masks reduce nearby cues \citep{slim}. Their
+action-recognition evaluations assess suitability for labels. Video
+anticipation and action-conditioned planning \citep{vjepa2} ask
+different questions about behavior, and separating invariant from
+transformation-sensitive features \citep{seqjepa} makes this dependence
+on the intended task explicit. Our paired initial-versus-trained
+comparison examines a particular observed gait quantity within that
+research agenda. The mask variants borrow sampling ideas from related
+methods, whose complete systems are not experimentally compared here.
+
+\clearpage
+\bibliographystyle{unsrtnat}
+\bibliography{assets/v8/references}
+\clearpage
+\appendix
+\section{Implementation and supporting
+checks}\label{implementation-and-supporting-checks}
+
+Of 666 selected annotations, 642 match pose archives and 625 pass
+quality checks. Archive coordinates are \(p_x=(x_0+uW_c)/W\),
+\(p_y=(y_0+vH_c)/H\) and \(p_z=dW_c/W\), for crop origin \((x_0,y_0)\),
+crop size \(W_c,H_c\), frame size \(W,H\) and pose estimates \(u,v,d\).
+Body scale is the median valid shoulder/hip width, with unit fallback.
+The target requires observed hips; the encoder substitutes the clip's
+median valid pelvis midpoint when hips are missing (zero if none
+exists). Gap filling is linear between observed endpoints, without
+boundary extrapolation.
+
+Training uses width 96, encoder/predictor depths 4/2, four heads, batch
+20, AdamW learning rate 0.001, weight decay 0.05, gradient clipping at 1
+and teacher EMA 0.999. Geometric views rotate up to 8 degrees in the
+horizontal-depth plane and translate up to 0.03 in the image plane; the
+teacher receives unaugmented input. Teacher/predictor temperatures are
+0.06/0.10, with center EMA 0.9. The regularizer's two-layer
+96-dimensional projector uses GELU; internal
+invariance/variance/covariance weights are 25/25/1. The motion target
+count is half the batch's smallest valid twelve-joint gait pool, rounded
+down, sampled across 33 joints. Motion weights use prepared-index
+displacements: MAMP-style temperature is 0.8; the mixture combines 25\%
+uniform with 75\% motion weights capped at the 95th positive-score
+percentile.
+
+Summary means and standard deviations use common paired validity;
+increments require consecutive common valid blocks. Missing support
+produces zero values. Each pair contributes six 96-vectors (left/right
+differences and sums) and two support fractions, totaling 2,890. Ridge
+candidates are \(0.01,0.1,1,10,100,1000,10000\). For \(V\) videos with
+\(n_v\) clips, \(w_{vi}=1/(Vn_v)\) and \(\bar y_w=\sum w_{vi}y_{vi}\)
+define
+
+\[R_w^2=1-\frac{\sum_{vi}w_{vi}(y_{vi}-\hat y_{vi})^2}{\sum_{vi}w_{vi}(y_{vi}-\bar y_w)^2}.\]
+
+The test mean is a metric reference; a deployable constant prediction
+must be fitted on training sources. Test folds contain 19/19/19/18/18
+videos and 189/182/72/77/105 clips. Retained audits check archive
+integrity and split adherence. Missing person IDs and acquisition
+records leave cross-upload/person deduplication and exact cohort
+reconstruction unresolved.
+
+MAMP-style, motion-mixture and region masks minus their own random
+references give \(\Delta R^2=-0.0008\), \(+0.0005\) and \(-0.009\), with
+intervals \([-0.020,0.015]\), \([-0.015,0.015]\) and \([-0.033,0.018]\).
+A limited 264-value coordinate/validity baseline reaches \(R^2=0.035\).
+Grid intervals are exploratory percentiles (bootstrap seed 812), without
+familywise or development-selection adjustment. The supplement retains
+aggregate seed scores and recorded intervals. Raw predictions and
+checkpoints were unavailable for this revision, which checks aggregate
+consistency rather than rerunning inference or source bootstraps.
+
+Reflection augmentation has separate real-data summary evidence (mirror
+probability 0.5, scheduled EMA, compact readout, four inner folds):
+relative to training without mirrors, normalized teacher-token
+reflection error decreases by \(\Delta q=-0.008\) \([-0.010,-0.007]\),
+while \(\Delta R^2=0.004\) \([-0.006,0.013]\) leaves the movement
+benefit uncertain. The comparison swaps joint identities while leaving
+feature channels unchanged. An explicit reflection loss has synthetic
+evidence only and adds two full encoder passes. The construction
+\(g(x)=[h(x)-h(Mx)]/2\) guarantees sign reversal independently of
+accuracy.
+
+Clinical asymmetry motivates this observable \citep{stroke}, but pair
+contrasts can cancel and affected-side labels and clinical validation
+are absent. Videos and derived poses are excluded from the supplement;
+public annotation access does not authorize their redistribution.
+
+\textbf{AI assistance.} An AI assistant supported author-side evidence
+reconciliation, literature checking, revision, figure programming and
+adversarial checks. No new training was performed. Authors remain
+responsible for the text, figures, claims and references.
+
+\end{document}

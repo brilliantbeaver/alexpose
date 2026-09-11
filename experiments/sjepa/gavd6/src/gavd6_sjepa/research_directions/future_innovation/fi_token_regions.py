@@ -18,7 +18,7 @@ def union_box(boxes):
     return np.r_[boxes[:, :2].min(axis=0), boxes[:, 2:].max(axis=0)]
 
 
-def region_masks(box, grid=24, dilation=1):
+def region_masks(box, grid=24, dilation=1, allow_empty_background=False):
     box = np.asarray(box)
     if box.shape != (4,) or not np.isfinite(box).all() or np.any(box[2:] <= box[:2]):
         raise ValueError("Invalid person box")
@@ -38,30 +38,32 @@ def region_masks(box, grid=24, dilation=1):
 
     person = rectangle(dilation)
     background = ~rectangle(dilation + 1)
-    if not background.any():
+    if not background.any() and not allow_empty_background:
         raise ValueError("Empty background region beyond person guard band")
     return person, background
 
 
-def pool_context(tokens, boxes, frame=FRAME):
+def pool_context(tokens, boxes, frame=FRAME, allow_empty_background=False):
     time = frame.context_stop_exclusive // frame.tubelet_size
     tokens = np.asarray(tokens).reshape(time, frame.grid**2, -1)
     background = []
     for t in range(time):
         person_mask, background_mask = region_masks(
-            union_box(boxes[2 * t : 2 * t + 2]), frame.grid
+            union_box(boxes[2 * t : 2 * t + 2]), frame.grid,
+            allow_empty_background=allow_empty_background,
         )
         background.append(tokens[t, background_mask])
     return np.concatenate(
         (
             tokens.mean(axis=(0, 1)),
             tokens[-1, person_mask].mean(axis=0),
-            np.concatenate(background).mean(axis=0),
+            (np.concatenate(background).mean(axis=0) if any(len(b) for b in background)
+             else np.zeros(tokens.shape[-1], dtype=tokens.dtype)),
         )
     ).astype(np.float32)
 
 
-def pool_target(tokens, boxes, frame=FRAME):
+def pool_target(tokens, boxes, frame=FRAME, allow_empty_background=False):
     t = frame.target_tubelet_start // frame.tubelet_size
     tokens = np.asarray(tokens).reshape(
         frame.frames_per_clip // frame.tubelet_size, frame.grid**2, -1
@@ -71,8 +73,11 @@ def pool_target(tokens, boxes, frame=FRAME):
             boxes[frame.target_tubelet_start : frame.target_tubelet_stop_exclusive]
         ),
         frame.grid,
+        allow_empty_background=allow_empty_background,
     )
-    return tokens[t, person].mean(axis=0), tokens[t, background].mean(axis=0)
+    return (tokens[t, person].mean(axis=0),
+            tokens[t, background].mean(axis=0) if background.any()
+            else np.zeros(tokens.shape[-1], dtype=tokens.dtype))
 
 
 def fixed_projection(input_dim, output_dim=256, seed=260905):

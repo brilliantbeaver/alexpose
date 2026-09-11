@@ -13,6 +13,14 @@ downloads, submissions or report writes. `FI_TUTORIAL_MODE=execute` runs the ful
 Experiment 0 stages in order with an explicit `FI_RUN_ROOT`. Use the separate
 [notebook HAIC launchers](../slurm/future-innovation/NOTEBOOKS.md) to schedule
 fresh kernels, including the five-fold CPU array, and retain executed copies.
+New runs use the [direct-v2 50-clip gate](../docs/studies/future-innovation/direct-gate-protocol.md):
+four matched arms, no background-quality/selectivity prerequisite, and a primary
+real-minus-no-skeleton comparison. The full GAVD dataset is reserved for the real
+experiment after the gate. Use a new run root; legacy runs keep their rules.
+A verified teacher-audit rejection finishes 02–04 with **TRAINING BLOCKED**,
+retains the diagnostic STOP, and skips fitting. The predictive measurement
+remains incomplete. Missing or corrupt evidence and unexpected execution
+failures still raise errors; see the [run investigation](../docs/studies/future-innovation/notebook-run-investigation.md#run-haic-gojuxseb-verified-audit-rejection).
 
 | Order | Notebook | Question |
 | --- | --- | --- |

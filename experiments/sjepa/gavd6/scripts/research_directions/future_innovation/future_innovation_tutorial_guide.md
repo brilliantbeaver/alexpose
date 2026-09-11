@@ -5,8 +5,10 @@ The five notebooks have one editable source:
 Their scientific operations remain in `src/gavd6_sjepa/research_directions/future_innovation/`.
 The small `fi_tutorial_inspection.py` module reads existing artifacts without
 starting a pipeline stage. `fi_notebook_workflow.py` supplies the execution mode
-by streaming the existing CLI in the kernel's Python environment. No new
-training implementation or dependency is added.
+by streaming the existing CLI in the kernel's Python environment. The current
+[direct-v2 protocol](../../../docs/studies/future-innovation/direct-gate-protocol.md)
+uses 50 clips and four arms, with no background-selectivity prerequisite. The full
+dataset is reserved for the subsequent real experiment. No dependency is added.
 
 From the `gavd6` root, use the existing environment. On macOS, do not synchronize
 the HAIC CUDA lock over a working development environment.
@@ -24,7 +26,10 @@ new verification bundle under ignored `work/artifacts/notebook_runs/future_innov
 overwrites source notebooks. `--mode inspect --run-root /path/to/run` checks the
 read-only path. An absent run directory is a supported inspection state.
 `--pipeline-smoke` additionally exercises the execution mode on a separate
-synthetic cache, including incomplete failure and sealed resume. It calls the
+synthetic cache for each protocol (60 direct-v2 and 75 legacy final heads), including missing-fit failure, sealed resume, and verified
+audit rejection in 02, all five 03 fold kernels and 04. Rejected audits retain
+an explicit blocked status with no fits and an incomplete predictive
+measurement; corrupt evidence and runtime failures still raise errors. It calls the
 production CLI for all folds and controls using the existing reduced smoke
 configuration, with no real teacher inference. It prebuilds the synthetic cohort
 and audits; real notebook 01 extraction still needs actual media and MediaPipe.
@@ -43,7 +48,7 @@ The wider future-innovation tests cover the reused scientific operations and
 notebook execution/submission adapters. Synthetic cached features and fabricated
 teacher audits cannot establish real checkpoint behavior. Use `execute` mode
 and the [notebook HAIC jobs](../../../slurm/future-innovation/NOTEBOOKS.md) for the
-full real experiment, including initialization, cohort and poses, teacher
+50-clip real-data gate, including initialization, cohort and poses, teacher
 features and validity, complete nested fitting, scoring and report generation.
 Production execution requires an explicit run root and never falls back to
 teaching data. Stage locks, scientific contracts, source splits and thresholds
@@ -82,3 +87,11 @@ execution/failure/resume checks through the shared notebook runner.
 Executed copies and machine-readable timings are retained under the ignored
 `work/artifacts/notebook_runs/future_innovation/` directory. No real experiment
 or Slurm job was launched during this tutorial verification.
+
+## Direct-v2 verification, 11 September 2026
+
+The [validation record](../../../slurm/future-innovation/VALIDATION.md#direct-v2-50-clip-gate--2026-09-11)
+records 207 tests (205 passed, two optional integrations skipped), fresh teaching
+and inspection kernels, both protocol pipelines, and the final direct-v2 rerun.
+All source notebooks retain their five-file structure and empty outputs. These
+checks establish software readiness for the 50-clip gate, not a real GAVD result.

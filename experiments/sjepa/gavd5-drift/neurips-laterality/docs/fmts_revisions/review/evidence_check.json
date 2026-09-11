@@ -1,0 +1,157 @@
+{
+  "date": "2026-09-10",
+  "raw_grid_available": false,
+  "current_checks": "Retained seed means, paired differences, mask differences, notebook evidence types, implementation and recorded-audit consistency. No new source-bootstrap or inference.",
+  "retained_audit_scope": "Paired source-video bootstrap conditional on fitted models and existing source partitions; no retraining, no selection adjustment, marginal intervals without familywise correction.",
+  "checks": [
+    {
+      "experiment": "motion",
+      "condition": "uniform",
+      "representation": "initial_online__mean",
+      "mean_r2": 0.070827155920603,
+      "seed_sd_r2": 0.018573505307123917
+    },
+    {
+      "experiment": "motion",
+      "condition": "uniform",
+      "representation": "initial_online__mean_motion",
+      "mean_r2": 0.22254357355538518,
+      "seed_sd_r2": 0.026808089597296216
+    },
+    {
+      "experiment": "motion",
+      "condition": "uniform",
+      "representation": "pretrained_teacher__mean_motion",
+      "mean_r2": 0.11372460890473453,
+      "seed_sd_r2": 0.011006914219880664,
+      "paired_seed_differences": [
+        -0.15842448128392927,
+        -0.12349036879933906,
+        -0.1028257770407307,
+        -0.07474305960486305,
+        -0.08461113652439112
+      ],
+      "mean_paired_difference": -0.10881896465065063,
+      "retained_source_interval": [
+        -0.17009285990237175,
+        -0.04121913742107222
+      ]
+    },
+    {
+      "experiment": "motion",
+      "condition": "mamp_motion",
+      "representation": "pretrained_teacher__mean_motion",
+      "mean_r2": 0.11289028578638174,
+      "seed_sd_r2": 0.030590034839498504,
+      "paired_seed_differences": [
+        -0.13496602232221389,
+        -0.10714500580166042,
+        -0.07984442345172993,
+        -0.11499763256140072,
+        -0.11131335470801218
+      ],
+      "mean_paired_difference": -0.10965328776900343,
+      "retained_source_interval": [
+        -0.1650708929103768,
+        -0.05135145586688491
+      ]
+    },
+    {
+      "experiment": "motion",
+      "condition": "robust_motion",
+      "representation": "pretrained_teacher__mean_motion",
+      "mean_r2": 0.11420943905203321,
+      "seed_sd_r2": 0.02103595595261765,
+      "paired_seed_differences": [
+        -0.1529654340457497,
+        -0.13129878506330828,
+        -0.07865737692876029,
+        -0.08573924230599139,
+        -0.09300983417295017
+      ],
+      "mean_paired_difference": -0.10833413450335197,
+      "retained_source_interval": [
+        -0.17063963105124824,
+        -0.042307129099839885
+      ]
+    },
+    {
+      "experiment": "regions",
+      "condition": "uniform",
+      "representation": "pretrained_teacher__mean_motion",
+      "mean_r2": 0.10944588689877721,
+      "seed_sd_r2": 0.008849221316525931,
+      "paired_seed_differences": [
+        -0.1393630300880646,
+        -0.11594711572195726,
+        -0.12146743665231485,
+        -0.08696253393219211,
+        -0.10174831688851094
+      ],
+      "mean_paired_difference": -0.11309768665660795,
+      "retained_source_interval": [
+        -0.1661916516988264,
+        -0.05962327557373979
+      ]
+    },
+    {
+      "experiment": "regions",
+      "condition": "connected_region",
+      "representation": "pretrained_teacher__mean_motion",
+      "mean_r2": 0.10077719741431432,
+      "seed_sd_r2": 0.009239110300655202,
+      "paired_seed_differences": [
+        -0.16563570122716298,
+        -0.13569458341909468,
+        -0.12956001466246025,
+        -0.09183333130146742,
+        -0.08610825009516887
+      ],
+      "mean_paired_difference": -0.12176637614107085,
+      "retained_source_interval": [
+        -0.18278749531890806,
+        -0.05528134371715435
+      ]
+    },
+    {
+      "experiment": "motion",
+      "condition": "uniform",
+      "representation": "direct_pose",
+      "mean_r2": 0.03454120636613722,
+      "seed_sd_r2": 0.0
+    }
+  ],
+  "sha256": {
+    "docs/figures/physworld_figure_provenance.json": "e1d72abad0b6527c0209a8a7ffa0a45af2f3127ebe31ebcdeeafdfe3c453c33a",
+    "docs/physworld_evidence_recomputed.json": "17b0f9839f2fa2d61588fa97443fe479e3e1f9793253385a937c22241e827ec6",
+    "docs/paper.md": "f228b0da3b1659a4bd21c31c9b26b86635ce4591f9322914ef6f6e1196323e42",
+    "docs/physworld_revisions/paper_v8.md": "45d5f01df000649a4ed43a4e35fbdc0cea18587256d71d12b5c3a931940e9b83",
+    "docs/TUTORIAL.md": "fff714f7f1e8a97f36b175f50fbca11c03d338883b757b175672ff2fa260646e",
+    "17_motion_and_structure_pretraining.ipynb": "ed7686cb7ebc2d16fadf45acdebb63a66d42e78b53131cf15320ebedc503cc48",
+    "08_matched_budget_masking.ipynb": "54b9078de5e0ccdc8eb52e71c5e8e77838b71e622e09a96d0d259811fac3942c",
+    "00_protocol_and_governance.ipynb": "405cbe4727212563000def153d88a7f5d254876fbe479c38c79615559320fe81",
+    "03_fold_local_training.ipynb": "b7e0cc644eea7b5978a50f032c7f41e4e4047f5e3c1f9eb323f752675b70101e",
+    "16_structured_masking_and_context.ipynb": "73d11f54dea4ef676a09d4bbe3b025af215817e21b0dba1ccffa01ef358d5076",
+    "07_research_questions_and_diagnostics.ipynb": "b479b47dc3ca3bcca2d408e4dc930ca1896cbe9d3e4076b5456829f07bc9667c",
+    "10_past_only_movement_prediction.ipynb": "d9031c0f97ba32e28b25a38d2044e4eb538e2c085ab731866d25fbf607cbb6b2",
+    "13_masking_encoder_and_predictor_evaluation.ipynb": "4d5e64c3301fbad315e9e8c4337a746b34baf16ed32b7164a499e6115441025e",
+    "18_motion_information_and_readout.ipynb": "267006f38d967bb734d74024f5a0e12893262d5b737df616a38748c73e07edd6",
+    "05_aggregate_statistics.ipynb": "7331ad1bfc6a9aef3c631d64c127392d365c1ece10f44f9db10c1c0d8c93e02e",
+    "06_external_subject_gate.ipynb": "173405821b0f51e0a97a4e76a1c762705265f9e6c06ee7cccfffbb8c73684187",
+    "14_future_features_and_movement_prediction.ipynb": "59cecac4ef18553170cccb2d4c433233d7e9486d9e0059059dd72d30fb6d7691",
+    "02_source_level_splits.ipynb": "524d648de44cbc3ea3622dba95e3338a86e23f0e2046e056bd283e0ae0cc2096",
+    "01_cohort_and_target_audit.ipynb": "7e63ce1cba01a442f784e55af8275a262d08739a8bf90828c9c62b1e244d4b1a",
+    "11_masking_patterns_and_coverage.ipynb": "8e7861070ad67d6863662cb5965c8c08b739105394188d87b1cafa0907f8b460",
+    "09_symmetry_aware_jepa.ipynb": "c59e4186f30faa10b9a3cba8a5c9929bd97be80105b2d81f719145b2bb4a4e8b",
+    "12_controlled_masking_pretraining.ipynb": "2dd42da3c2ffb715e3c654eee61319eae1bde270c8b38e75e8249fdc0d8639e5",
+    "04_held_out_evaluation.ipynb": "b232bd2dd7716457522982ab90e6092bb2bb6e6ed326080bf20e722ced8f29df",
+    "15_motion_weighted_masking.ipynb": "9c414dfb4700b9dd2721cfd0d2156804e2fde229496d7509f4595857506ca2a6",
+    "laterality/model.py": "2568284072ddd66c25a9726836e7195af5f4b05047c7a08128a048d9b4e52c99",
+    "laterality/geometry.py": "c9da31994dba3a7bb92a69c419b827d5cbd63c4ac9d8dd3aa065e216d7bb978c",
+    "laterality/data.py": "00235879b149e5cd3b8afa4bf03b261f07949c20353e7b9f5bbaa070fb171cc0",
+    "laterality_extensions/motion_structured_training.py": "77a71091a0646b4603cacbc34518da7247a01e2cce08226c6fa36d592716d82b",
+    "laterality_extensions/motion_readout.py": "282772a549e7f38043472abca16e2b67a567d82ea8aff3fa0870a92397094f16",
+    "laterality_extensions/motion_runtime.py": "932f1cef9aa6f60d72f071a924fff276fb65d6e5cb476f2433b32576eef7f7e6",
+    "laterality_extensions/comparative_evaluation.py": "0ae137fc5f36e264460393cb26a2b8f096dc801e5307cd2bdb483edc57d72bec"
+  }
+}

@@ -14,7 +14,7 @@ def view_one_hot(value):
     )
 
 
-def context_nuisance(video, boxes, skeleton, row):
+def context_nuisance(video, boxes, skeleton, row, *, allow_empty_background=False):
     # Slice at entry: future values cannot influence any statistic below.
     video, boxes, skeleton = video[:32], boxes[:32], skeleton[:32]
     if len(video) != 32 or skeleton.shape != (32, 33, 4):
@@ -64,23 +64,30 @@ def context_nuisance(video, boxes, skeleton, row):
         mask[max(0, y0) : min(96, y1 + 1), max(0, x0) : min(160, x1 + 1)] = False
         masks.append(mask)
     pixels = small[np.stack(masks)].astype(float) / 255
-    if not len(pixels):
+    if not len(pixels) and not allow_empty_background:
         raise ValueError("No context background pixels")
-    add("background_rgb_mean_std", np.r_[pixels.mean(axis=0), pixels.std(axis=0)])
+    add("background_rgb_mean_std", np.r_[pixels.mean(axis=0), pixels.std(axis=0)]
+        if len(pixels) else np.zeros(6))
     gray = [cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) for frame in small]
     flows = []
     for t in range(1, 32):
+        mask = masks[t - 1] & masks[t]
+        if not mask.any():
+            continue
         flow = cv2.calcOpticalFlowFarneback(
             gray[t - 1], gray[t], None, 0.5, 3, 15, 3, 5, 1.2, 0
         )
-        mask = masks[t - 1] & masks[t]
-        if mask.any():
-            flows.append(np.median(flow[mask], axis=0) / [160, 96] * fps)
-    if not flows:
+        flows.append(np.median(flow[mask], axis=0) / [160, 96] * fps)
+    if not flows and not allow_empty_background:
         raise ValueError("No background support for context camera motion")
-    add(
-        "background_flow_mean_std", np.r_[np.mean(flows, axis=0), np.std(flows, axis=0)]
-    )
+    add("background_flow_mean_std", np.r_[np.mean(flows, axis=0), np.std(flows, axis=0)]
+        if flows else np.zeros(4))
+    if allow_empty_background:
+        # A recorded zero without support must remain distinguishable from a
+        # measured black background or measured zero camera motion.
+        add("background_rgb_pixel_fraction", np.mean(masks))
+        add("background_flow_pair_fraction", len(flows) / 31)
+        add("background_flow_pixel_fraction", np.mean(np.asarray(masks[:-1]) & np.asarray(masks[1:])))
     matching = np.r_[
         fps,
         view_one_hot(row.get("cam_view")),

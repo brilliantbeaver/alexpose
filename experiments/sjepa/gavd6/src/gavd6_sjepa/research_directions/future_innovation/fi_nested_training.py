@@ -17,7 +17,8 @@ from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
 
 from .fi_cohort import assign_source_folds
 from .fi_contracts import (
-    ARMS,
+    experiment_arms,
+    audit_summary_path,
     equal_source_weights,
     load_model_contract,
     measurement_complete,
@@ -73,6 +74,7 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
     decision = verified_report_decision(root)
     cohort, arrays = load_cache(root)
     config = load_model_contract(root)
+    arms = experiment_arms(root)
     if outer_fold not in range(5):
         raise ValueError("Outer fold must be 0..4")
     directory = root / "models" / f"fold-{outer_fold}"
@@ -114,7 +116,7 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
             }
         )
     predictions, artifacts, selection_records = [], [], []
-    for target_name in ("person", "background"):
+    for target_name in (("person", "background") if "background-target" in arms else ("person",)):
         target = arrays[target_name]
         alphas = []
         for alpha in config.ridge_alphas:
@@ -191,7 +193,7 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
         target_arms = (
             ["background-target"]
             if target_name == "background"
-            else [a for a in ARMS if a != "background-target"]
+            else [a for a in arms if a != "background-target"]
         )
         for arm in target_arms:
             inner_controls = []
@@ -348,32 +350,28 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
                     },
                 )
                 artifacts.append(training_path)
-                for position, index in enumerate(test):
-                    for feature in range(256):
-                        predictions.append(
-                            {
-                                "window_id": cohort.iloc[index].window_id,
-                                "video_id": cohort.iloc[index].video_id,
-                                "outer_fold": outer_fold,
-                                "arm": arm,
-                                "seed": seed,
-                                "target": target_name,
-                                "target_feature": feature,
-                                "y_true": float(y_test[position, feature]),
-                                "y_pred_baseline": float(base_test[position, feature]),
-                                "y_pred_full": float(full[position, feature]),
-                                "y_reference": 0.0,
-                                "target_mean": float(baseline.y_scaler.mean[feature]),
-                                "target_scale": float(baseline.y_scaler.scale[feature]),
-                                "target_training_variance": float(
-                                    baseline.y_scaler.variance[feature]
-                                ),
-                                "valid_feature": bool(baseline.valid_features[feature]),
-                            }
-                        )
+                # Column arrays avoid thousands of Python dictionaries per window.
+                n = len(test)
+                predictions.append(pd.DataFrame({
+                    "window_id": pd.Categorical(np.repeat(cohort.iloc[test].window_id.to_numpy(), 256)),
+                    "video_id": pd.Categorical(np.repeat(cohort.iloc[test].video_id.to_numpy(), 256)),
+                    "outer_fold": np.full(n * 256, outer_fold, dtype=np.int8),
+                    "arm": pd.Categorical([arm] * (n * 256)),
+                    "seed": seed, "target": pd.Categorical([target_name] * (n * 256)),
+                    "target_feature": np.tile(np.arange(256, dtype=np.int16), n),
+                    "y_true": y_test.reshape(-1), "y_pred_baseline": base_test.reshape(-1),
+                    "y_pred_full": full.reshape(-1), "y_reference": 0.0,
+                    "target_mean": np.tile(baseline.y_scaler.mean, n),
+                    "target_scale": np.tile(baseline.y_scaler.scale, n),
+                    "target_training_variance": np.tile(baseline.y_scaler.variance, n),
+                    "valid_feature": np.tile(baseline.valid_features, n),
+                }))
     prediction_path = root / "predictions" / f"fold-{outer_fold}.parquet"
     temporary = prediction_path.with_suffix(".tmp")
-    pd.DataFrame(predictions).to_parquet(temporary, index=False)
+    table = pd.concat(predictions, ignore_index=True)
+    for column in ("window_id", "video_id", "arm", "target"):
+        table[column] = table[column].astype("category")
+    table.to_parquet(temporary, index=False)
     temporary.replace(prediction_path)
     split_path = directory / "split-audit.json"
     write_json(split_path, split_audit)
@@ -385,7 +383,7 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
         {
             "outer_fold": outer_fold,
             "cache_contract_sha256": sha256_file(root / "config/cache-contract.json"),
-            "validity_sha256": sha256_file(root / "qc/validity-summary.json"),
+            "validity_sha256": sha256_file(audit_summary_path(root)),
             "artifacts": {str(p.relative_to(root)): sha256_file(p) for p in artifacts},
         },
     )
@@ -398,7 +396,7 @@ def verify_fold(root, fold):
     receipt = read_json(root / "models" / f"fold-{fold}" / "fold-complete.json")
     if receipt["cache_contract_sha256"] != sha256_file(
         root / "config/cache-contract.json"
-    ) or receipt["validity_sha256"] != sha256_file(root / "qc/validity-summary.json"):
+    ) or receipt["validity_sha256"] != sha256_file(audit_summary_path(root)):
         raise ValueError("Fit lineage mismatch")
     for path, digest in receipt["artifacts"].items():
         if sha256_file(root / path) != digest:

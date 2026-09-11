@@ -1,0 +1,10 @@
+# FMTS V6 adversarial review
+
+| Perspective | Objection and severity | Evidence | Correction in V7 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Moderate: successful region construction is described without its measured temporal-cue effect. | Notebook 16: fraction with both adjacent temporal blocks visible 0.699 to 0.000 in region vs count-matched random inspection draws. | Add 69.9% to zero, explicitly as inspection-draw evidence. | Those are repeated mask draws, not realized masks logged at every optimizer step. |
+| Evidence auditor | Moderate: teacher-token reflection discrepancy q is underspecified. | Original reflection metric fixes joint permutation and identity feature-channel action. | Define that action and normalized error in the supporting paragraph. | Another learned channel action could yield a different result. |
+| Statistical reviewer | Moderate: “greater mean absolute error” needs magnitude and a defensible display rule. | Retained MAE means 0.0415461 versus 0.0435951–0.0440373; paired increases 0.00204898–0.00249116. | Report MAE to four decimal places and increases 0.0020–0.0025; preserve full precision in local numerical record. | Main uncertainty concerns paired R²; full MAE intervals remain in numerical supplement. |
+| Editor | Moderate: two appendix headings separate details that can fit one supporting section. | Central paired table already appears in main text; no notebook inventory is needed. | Consolidate into one appendix, update all cross-references, and audit repeated estimates. | Missing primary artifacts remains an empirical reproducibility limitation. |
+
+Precision policy: R² and interval bounds to three decimal places; nonzero differences below 0.001 retain one significant digit and their sign. Headline R² is explicitly approximate at two decimals. Percentages use one decimal, counts remain integers, and exact settings/thresholds are not rounded as estimates. Every difference is formed before display rounding. V7 does not gain scientific-evidence credit for changing precision.

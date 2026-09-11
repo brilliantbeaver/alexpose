@@ -82,7 +82,7 @@ class FutureInnovationSourceDiscoveryTests(unittest.TestCase):
         model = root / "model"
         model.write_text("fixture")
         run = root / "run"
-        initialize_run(run, sequence_manifest=sequence_path, video_manifest=video_path,
+        initialize_run(run, protocol="legacy-v1", sequence_manifest=sequence_path, video_manifest=video_path,
                        annotations=[annotation_path], pose_model=model, vjepa_root=root,
                        checkpoint=model, synthetic=True, youtube_dir=cache)
         return (run, sequence_path, video_path, [annotation_path], cache), missing_frame

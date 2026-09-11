@@ -1,5 +1,11 @@
 # Experiment 0: does skeleton history help predict the future?
 
+**Historical protocol:** this document describes the original five-arm gate.
+For new runs, use the [direct-v2 50-clip gate specification](../../docs/studies/future-innovation/direct-gate-protocol.md).
+Direct-v2 removes background-selectivity prerequisites and explicitly tests the
+increment over a matched no-skeleton head. Existing legacy runs retain their
+frozen rules. Full GAVD is reserved for the subsequent real experiment.
+
 **Status reconciled 10 September 2026:** the feasibility pipeline is implemented.
 This checkout has local alignment overlays but no completed gate report; it
 does not establish the current remote job state. Start with the

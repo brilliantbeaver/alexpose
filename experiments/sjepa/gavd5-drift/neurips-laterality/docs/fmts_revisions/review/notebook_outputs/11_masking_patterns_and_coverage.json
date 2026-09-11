@@ -1,0 +1,79 @@
+[
+  {
+    "cell": 2,
+    "output": 0,
+    "execution": 1,
+    "text": "<IPython.core.display.HTML object>",
+    "html": "\n        <div style=\"font-family:system-ui,-apple-system,sans-serif;border:1px solid #cbd5e1;\n                    border-radius:8px;padding:14px;max-width:920px\">\n          <div style=\"display:flex;justify-content:space-between;gap:16px;align-items:baseline\">\n            <strong>Masking patterns and coverage tutorial</strong><span>Masking-pattern tutorial complete</span>\n          </div>\n          <div role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n               aria-valuenow=\"100.0\" aria-label=\"Masking patterns and coverage tutorial\"\n               style=\"height:14px;background:#e2e8f0;border-radius:7px;margin:10px 0 6px;overflow:hidden\">\n            <div style=\"height:100%;width:100.000%;background:#2a9d8f\"></div>\n          </div>\n          <div><strong>100.0%</strong> complete &nbsp;\u00b7&nbsp;\n            stages 8/8 &nbsp;\u00b7&nbsp;\n            elapsed 1s &nbsp;\u00b7&nbsp;\n            estimated remaining 0s &nbsp;\u00b7&nbsp;\n            estimated finish 10:51 PM</div>\n          <div style=\"margin-top:5px;color:#475569\">\n            profile synthetic mask construction &nbsp;\u00b7&nbsp; reused 0 &nbsp;\u00b7&nbsp; newly computed 8\n            &nbsp;\u00b7&nbsp; skipped 0\n          </div>\n          <div style='margin-top:8px;color:#475569'>Last stage: Verify reflection of observations and masks \u2014 completed in 0s.</div>\n          <div style=\"margin-top:10px;font-size:0.88em;color:#64748b\">\n            ETA is adaptive, not a deadline. It uses the median duration of completed,\n            non-cached stages; differently sized sources, bootstrap\n            stages, device load, or suspended execution can change it.\n             Repeated sampling reports its completed draws within the active stage.\n          </div>\n        </div>\n        "
+  },
+  {
+    "cell": 2,
+    "output": 1,
+    "execution": 1,
+    "text": "Generated examples: mask construction only; no real-data training.\n",
+    "html": ""
+  },
+  {
+    "cell": 4,
+    "output": 0,
+    "execution": 2,
+    "text": "   potential tokens  valid tokens  naturally missing tokens\n0               198           197                         1",
+    "html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>potential tokens</th>\n      <th>valid tokens</th>\n      <th>naturally missing tokens</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>198</td>\n      <td>197</td>\n      <td>1</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+  },
+  {
+    "cell": 6,
+    "output": 0,
+    "execution": 3,
+    "text": "                               target eligibility  eligible landmarks  hidden  \\\n0                                            gait                  12      18   \n1                                         uniform                  33      18   \n2  fixed random individual set, selection seed 31                  12      18   \n3  fixed random individual set, selection seed 47                  12      18   \n4  fixed random individual set, selection seed 59                  12      18   \n5                                       soft gait                  33      18   \n\n   context  \n0      179  \n1      179  \n2      179  \n3      179  \n4      179  \n5      179  ",
+    "html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>target eligibility</th>\n      <th>eligible landmarks</th>\n      <th>hidden</th>\n      <th>context</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>gait</td>\n      <td>12</td>\n      <td>18</td>\n      <td>179</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>uniform</td>\n      <td>33</td>\n      <td>18</td>\n      <td>179</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>fixed random individual set, selection seed 31</td>\n      <td>12</td>\n      <td>18</td>\n      <td>179</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>fixed random individual set, selection seed 47</td>\n      <td>12</td>\n      <td>18</td>\n      <td>179</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>fixed random individual set, selection seed 59</td>\n      <td>12</td>\n      <td>18</td>\n      <td>179</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>soft gait</td>\n      <td>33</td>\n      <td>18</td>\n      <td>179</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+  },
+  {
+    "cell": 7,
+    "output": 0,
+    "execution": 4,
+    "text": "   selection seed                   fixed twelve-landmark identities\n0              31  left eye inner, left eye, right mouth, left sh...\n1              47  left eye, left eye outer, right mouth, left sh...\n2              59  left eye, left eye outer, right eye, right mou...",
+    "html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>selection seed</th>\n      <th>fixed twelve-landmark identities</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>31</td>\n      <td>left eye inner, left eye, right mouth, left sh...</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>47</td>\n      <td>left eye, left eye outer, right mouth, left sh...</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>59</td>\n      <td>left eye, left eye outer, right eye, right mou...</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+  },
+  {
+    "cell": 9,
+    "output": 0,
+    "execution": 5,
+    "text": "             structured task  structured targets  scattered reference targets  \\\n0         Whole trajectories                  18                           18   \n1  Connected region interval                   9                            9   \n2      Interior temporal gap                  65                           65   \n\n   covered landmarks  declared interval blocks  left targets  right targets  \n0                  3                         6             6             12  \n1                  3                         3             9              0  \n2                 33                         2            31             32  ",
+    "html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>structured task</th>\n      <th>structured targets</th>\n      <th>scattered reference targets</th>\n      <th>covered landmarks</th>\n      <th>declared interval blocks</th>\n      <th>left targets</th>\n      <th>right targets</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>Whole trajectories</td>\n      <td>18</td>\n      <td>18</td>\n      <td>3</td>\n      <td>6</td>\n      <td>6</td>\n      <td>12</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>Connected region interval</td>\n      <td>9</td>\n      <td>9</td>\n      <td>3</td>\n      <td>3</td>\n      <td>9</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>Interior temporal gap</td>\n      <td>65</td>\n      <td>65</td>\n      <td>33</td>\n      <td>2</td>\n      <td>31</td>\n      <td>32</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+  },
+  {
+    "cell": 10,
+    "output": 0,
+    "execution": 6,
+    "text": "<Figure size 1300x760 with 4 Axes>",
+    "html": ""
+  },
+  {
+    "cell": 13,
+    "output": 0,
+    "execution": 7,
+    "text": "Six complete trajectories hide 96 tokens.\nExpected impossible-budget example: No intact temporal_gap satisfies the budget; feasible observed counts: [99]\n",
+    "html": ""
+  },
+  {
+    "cell": 15,
+    "output": 0,
+    "execution": 8,
+    "text": "                                  landmark  times selected in 200 draws  \\\n0   left ankle: greater generated movement                          128   \n1  right ankle: smaller generated movement                           30   \n2                   left elbow: stationary                            1   \n\n   mean motion score  \n0               0.10  \n1               0.02  \n2               0.00  ",
+    "html": "<div>\n<style scoped>\n    .dataframe tbody tr th:only-of-type {\n        vertical-align: middle;\n    }\n\n    .dataframe tbody tr th {\n        vertical-align: top;\n    }\n\n    .dataframe thead th {\n        text-align: right;\n    }\n</style>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>landmark</th>\n      <th>times selected in 200 draws</th>\n      <th>mean motion score</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>left ankle: greater generated movement</td>\n      <td>128</td>\n      <td>0.10</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>right ankle: smaller generated movement</td>\n      <td>30</td>\n      <td>0.02</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>left elbow: stationary</td>\n      <td>1</td>\n      <td>0.00</td>\n    </tr>\n  </tbody>\n</table>\n</div>"
+  },
+  {
+    "cell": 15,
+    "output": 1,
+    "execution": 8,
+    "text": "Motion units: coordinate units / prepared step\n",
+    "html": ""
+  },
+  {
+    "cell": 18,
+    "output": 0,
+    "execution": 9,
+    "text": "Reflection preserved corresponding observations, validity, and targets.\nConnected region bank covers 33 landmarks.\n",
+    "html": ""
+  }
+]

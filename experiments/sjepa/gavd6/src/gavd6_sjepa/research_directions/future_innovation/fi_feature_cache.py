@@ -11,9 +11,9 @@ from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
 )
 
 from .fi_cohort import load_cohort
-from .fi_contracts import check_run, read_json, save_npz, stable_key, write_once_json
+from .fi_contracts import DIRECT_PROTOCOL, protocol_name, check_run, read_json, save_npz, stable_key, write_once_json
 from .fi_nuisance_features import context_nuisance
-from .fi_token_regions import fixed_projection, pool_context, pool_target
+from .fi_token_regions import fixed_projection, pool_context, pool_target, region_masks, union_box
 
 
 def load_window(row):
@@ -48,6 +48,7 @@ def cache_binding(root):
 def cache_teacher(root, adapter):
     root = Path(root)
     contract = check_run(root)
+    direct = protocol_name(contract) == DIRECT_PROTOCOL
     cohort = load_cohort(root, verify_artifacts=True)
     projection_path = root / "config/projection-256.npy"
     if (root / "config/projection-contract.json").exists():
@@ -87,9 +88,14 @@ def cache_teacher(root, adapter):
             continue
         video, boxes, model_boxes, skeleton = load_window(row)
         geometry_error = adapter.verify_geometry(video)
-        context = pool_context(adapter.encode_past_context(video), model_boxes)
-        person, background = pool_target(adapter.encode_full_target(video), model_boxes)
-        nuisance, names, matching = context_nuisance(video, boxes, skeleton, row)
+        context = pool_context(adapter.encode_past_context(video), model_boxes, allow_empty_background=direct)
+        person, background = pool_target(adapter.encode_full_target(video), model_boxes, allow_empty_background=direct)
+        nuisance, names, matching = context_nuisance(video, boxes, skeleton, row, allow_empty_background=direct)
+        if direct:
+            support = np.mean([region_masks(union_box(model_boxes[t:t + 2]),
+                                           allow_empty_background=True)[1].mean() for t in range(0, 32, 2)])
+            nuisance = np.r_[nuisance, support]
+            names = [*names, "observed_background_token_fraction"]
         if schema is not None and schema != names:
             raise ValueError("Nuisance schema changed across windows")
         schema = names
@@ -196,8 +202,8 @@ def load_cache(root):
                     raise ValueError("Non-finite cache array")
                 entries.append(value)
     arrays = {name: np.stack(values) for name, values in arrays.items()}
-    if arrays["skeleton"].shape != (50, 32, 33, 4) or any(
-        arrays[name].shape != (50, 256) for name in ("person", "background")
+    if arrays["skeleton"].shape != (len(cohort), 32, 33, 4) or any(
+        arrays[name].shape != (len(cohort), 256) for name in ("person", "background")
     ):
         raise ValueError("Cache array shapes violate experiment contract")
     return cohort, arrays

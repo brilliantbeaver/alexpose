@@ -4,7 +4,11 @@ The five notebooks in `notebooks/experiments/future_innovation/` now have three
 modes: `teach` (small generated examples, the default), `inspect` (read saved
 artifacts), and `execute` (run the existing production CLI stages). Execution
 reproduces the full **Experiment 0 gate**, including all controls and nested
-selection. It does not train a distillation adapter or authorize a later study.
+selection. New runs use direct-v2: **50 clips**, four arms and an explicit
+real-minus-no-skeleton comparison, without background-quality/selectivity gates.
+The full dataset is reserved for the real experiment. ADVANCE recommends planning
+that full-GAVD JEPA comparison; it never launches training or enables distillation.
+See the [protocol](../../docs/studies/future-innovation/direct-gate-protocol.md).
 
 The separate jobs `10`–`14` execute these notebooks in fresh kernels. The original
 jobs `01`–`06` and `submit-fi-pipeline.sh` remain the direct CLI path. Both paths
@@ -33,7 +37,8 @@ For a new run, set the same inputs used by the original jobs:
 
 ```bash
 export GAVD6_ROOT=/path/to/checkout/gavd6
-export FI_RUN_ROOT=/path/to/runs/fi-gate-v2
+export FI_RUN_ROOT=/path/to/runs/fi-direct-v2
+export FI_EXPERIMENT_PROTOCOL=direct-v2
 export GAVD_FULL_ROOT=/path/to/gavd-full
 export VJEPA2_ROOT=/path/to/pinned/vjepa2
 export FI_TEACHER_CHECKPOINT=/path/to/vjepa2_1_vitb384.pt
@@ -76,6 +81,10 @@ $FI_RUN_ROOT/notebook_runs/haic-<batch-id>/
 All jobs inherit `FI_NOTEBOOK_OUTPUT_DIR`. Fold suffixes prevent concurrent
 writers from overwriting each other. Interpreter, source hashes, job IDs and
 execution status are embedded in each notebook's `metadata.fi_execution`.
+A completed diagnostic for a verified audit rejection has `status: blocked`,
+`execution_completed: true`, and `scientific_outcome.measurement_complete: false`.
+Its process exits zero so downstream diagnostics can finish; this does not
+authorize fitting or mark the scientific measurement complete.
 There are no duplicate source snapshots, execution JSON files or font/kernel
 caches in the notebook folder. Durable command/output/exit logs are stored in
 `$FI_RUN_ROOT/logs/notebooks/haic-<batch-id>/`; normal Slurm logs remain in `logs/`.
@@ -109,16 +118,31 @@ before candidates freeze. Applying new discovery rules to an already frozen
 cohort requires a new run (for example `gate-v2`); existing run artifacts remain
 unchanged on resume.
 
-Notebook 02 displays failed check names, recorded thresholds and per-window
-stability, leakage and target-sensitivity CSVs before returning failure.
-Notebook 03 displays the same blocking audit reason and its fold inventory.
-An audit failure is not permission to weaken tolerances or train through it.
+Notebook 02 displays failed check names, frozen thresholds and per-window
+stability and prefix-isolation CSVs. Target-sensitivity tables belong only to
+legacy runs; direct-v2 does not create or require them. A complete, internally
+consistent audit that fails a frozen criterion ends with **TRAINING BLOCKED**.
+Notebook 03 verifies the same rejection, displays its fold inventory and skips
+fitting. Missing/corrupt artifacts or unexpected CLI failures still produce
+failed notebooks. The audit CLI returns exit 2 for a verified rejection on
+both first execution and reuse; notebook orchestration validates the retained
+evidence before recognizing that outcome.
 
-Notebook 04 attempts a report even when scoring fails, then returns failure for
-incomplete, invalid or unsealed measurement. A complete `STOP` or `INCONCLUSIVE`
-returns success: the scientific outcome is in `reports/gate-decision.json` and
-`reports/gate-report.md`, independently of notebook process status. Synthetic
-smoke artifacts remain marked synthetic and cannot authorize advancement.
+Notebook 04 builds an unsealed diagnostic STOP for a verified audit rejection,
+bound to that audit's checksum. It keeps `measurement_complete: false`,
+`metrics: null`, and all advancement permissions false (including `allow_jepa_training_comparison` for direct-v2). A fresh blocked
+report must match the current audit; arbitrary or stale STOP records cannot
+hide execution errors. Other scoring failures still build diagnostics and
+return failure. Complete `STOP` and `INCONCLUSIVE` measurements remain sealed
+successful executions. Synthetic smoke artifacts remain marked synthetic and
+cannot authorize advancement.
+
+A legacy audit is never reclassified by changing its saved thresholds. The
+separately initialized direct-v2 gate adopts the author's revised scientific
+question and skips selectivity tests. The GOjuXSEB legacy sensitivity ratio was **1.360**,
+below the frozen **2.0** requirement. See the
+[investigation](../../docs/studies/future-innovation/notebook-run-investigation.md#run-haic-gojuxseb-verified-audit-rejection)
+for evidence, repairs and remaining real-data checks.
 
 ## Interactive execution
 
@@ -132,7 +156,7 @@ uv run --no-sync python scripts/research_directions/future_innovation/execute_fu
 ```
 
 Without `--outer-fold`, 03 runs all five folds sequentially with all three seeds,
-all five arms and the frozen selection grid. `--outer-fold 0` through `4` runs one
+all four direct-v2 arms and the frozen selection grid (five arms for legacy runs). `--outer-fold 0` through `4` runs one
 fold. The executor clears inherited fold settings unless the option is supplied.
 Teacher execution defaults to CUDA (`--device cpu` is available for a deliberate
 CPU run). Per-cell timeouts are unlimited by default; Slurm enforces the job
@@ -147,9 +171,14 @@ previous executed copy atomically. Use a new folder when retaining attempts.
 
 See the [tutorial maintenance guide](../../scripts/research_directions/future_innovation/future_innovation_tutorial_guide.md)
 for generation and checks. `verify_future_innovation_tutorials.py --pipeline-smoke`
-executes the real notebook/CLI path on a separate synthetic fixture: missing-fit
-failure, cache/audit reuse, all five folds and 75 final heads, complete report,
-then sealed resume. The fixture reduces model width, updates, search and bootstrap
-budget explicitly; it does not measure real accuracy or teacher causality.
-Real cohort/pose extraction and real H100 teacher inference still require HAIC
-inputs and are not certified by that local smoke test.
+executes both frozen protocols on separate synthetic fixtures: missing-fit failure,
+cache/readiness reuse, all five folds (60 direct-v2 heads; 75 legacy heads), complete
+report and sealed resume. It also checks rejected readiness/audit outcomes in 02,
+all five 03 kernels and 04, with zero fits and incomplete predictive measurement.
+`--pipeline-protocol direct-v2` selects only the current protocol.
+
+The fixture reduces width, update/search and bootstrap budgets explicitly and
+cannot measure real accuracy or teacher behavior. Separate data-flow tests use
+actual generated video decoding with an injected detector/teacher, including
+absent background pixels and absent shared flow support. Real GAVD/MediaPipe and
+pretrained H100 inference still require HAIC verification.

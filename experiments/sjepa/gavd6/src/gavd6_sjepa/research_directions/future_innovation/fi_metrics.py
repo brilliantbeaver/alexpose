@@ -81,3 +81,34 @@ def source_bootstrap_indices(video_ids, repetitions=2000, seed=260905):
         yield np.concatenate(
             [groups[source] for source in rng.choice(unique, len(unique), replace=True)]
         )
+
+
+def source_error_sums(y_true, base, full, weights, video_ids):
+    """Sufficient statistics for the same paired bootstrap without rescanning clips."""
+    unique, inverse = np.unique(np.asarray(video_ids, dtype=str), return_inverse=True)
+    totals = np.zeros((len(unique), 3, y_true.shape[1]), dtype=np.float64)
+    for column, errors in enumerate((y_true ** 2, (y_true - base) ** 2, (y_true - full) ** 2)):
+        np.add.at(totals[:, column, :], inverse, weights[:, None] * errors)
+    if not np.isfinite(totals).all():
+        raise ValueError("Invalid bootstrap source sums")
+    return totals
+
+
+def source_bootstrap_counts(video_ids, repetitions=2000, seed=260905):
+    count = len(set(map(str, video_ids)))
+    if count < 1 or repetitions < 1:
+        raise ValueError("Bootstrap requires sources and repetitions")
+    rng = np.random.default_rng(seed)
+    for _ in range(repetitions):
+        yield np.bincount(rng.choice(count, count, replace=True), minlength=count)
+
+
+def score_source_sums(sums, multiplicity, valid):
+    reference, base_error, full_error = np.einsum("s,sjf->jf", multiplicity, sums)
+    mask = valid & (reference > 1e-12)
+    if not mask.any():
+        raise ValueError("No valid bootstrap features")
+    rb = float((1 - base_error[mask] / reference[mask]).mean())
+    rf = float((1 - full_error[mask] / reference[mask]).mean())
+    return {"r2_baseline": rb, "r2_full": rf, "delta_r2": rf - rb,
+            "f8": (rf - rb) / (1 - rb) if 1 - rb > 1e-8 else None}

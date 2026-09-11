@@ -65,7 +65,7 @@ plt.rcParams.update({"figure.figsize": (8, 3), "axes.spines.top": False,
                     "axes.spines.right": False, "font.size": 11})
 
 from gavd6_sjepa.research_directions.future_innovation.fi_tutorial_inspection import (
-    artifact_inventory, inspect_report, read_optional_table,
+    artifact_inventory, inspect_report, read_optional_table, inspection_audit_path,
 )
 
 # Use "execute" for real stages or "inspect" for saved artifacts.
@@ -75,7 +75,7 @@ if MODE not in {"teach", "inspect", "execute"}:
     raise ValueError("FI_TUTORIAL_MODE must be teach, inspect, or execute.")
 if MODE == "execute" and not os.environ.get("FI_RUN_ROOT"):
     raise ValueError("Set FI_RUN_ROOT explicitly before executing real experiment stages.")
-RUN_ROOT = Path(os.environ.get("FI_RUN_ROOT", "outputs/future-innovation/gate-v1")).expanduser()
+RUN_ROOT = Path(os.environ.get("FI_RUN_ROOT", "outputs/future-innovation/direct-v2")).expanduser()
 if not RUN_ROOT.is_absolute():
     RUN_ROOT = PROJECT_ROOT / RUN_ROOT
 RUN_ROOT = RUN_ROOT.resolve()
@@ -83,9 +83,16 @@ print("Teaching examples only; no empirical gait findings." if MODE == "teach"
       else f"{MODE.upper()} mode: {RUN_ROOT}")
 if MODE == "execute":
     from gavd6_sjepa.research_directions.future_innovation.fi_notebook_workflow import (
-        initialize_from_environment, run_stage, build_notebook_report, require_complete_report,
+        initialize_from_environment, run_stage, build_notebook_report, finish_notebook_report,
         attempt_stage, require_stage_success,
     )
+    if (RUN_ROOT / "config/run-contract.json").is_file():
+        import json
+        saved_run = json.loads((RUN_ROOT / "config/run-contract.json").read_text())
+        print("Frozen protocol:", saved_run.get("protocol", "legacy-v1"),
+              "— gate clips:", saved_run.get("cohort_size"))
+        if saved_run.get("protocol", "legacy-v1") == "legacy-v1":
+            print("This run retains legacy selectivity gates. Use a new run root for direct-v2.")
 '''
 
 
@@ -93,9 +100,9 @@ def execution_cells(number):
     descriptions = {
         "00": "Initialize the immutable protocol and input provenance, or validate the existing run. New runs use the same environment variables and five official annotation partitions as Slurm job 01. Complete the HAIC environment and input setup first.",
         "01": "Build eligible candidates, extract aligned poses, then freeze the cohort and source folds. This can take hours. The existing stages verify and reuse completed work; inspect the resulting exclusions and overlays below.",
-        "02": "Cache the frozen teacher features and run causal/target validity audits on the declared checkpoint. This requires the prepared cohort and normally one H100. Failed audits stop execution before fitting. Completed stages are verified and reused without loading the teacher again.",
-        "03": "Run the full registered nested comparison: five outer folds, three seeds, all five arms, and the complete frozen inner-selection grid. With FI_NOTEBOOK_FOLD set, run just that outer fold (all seeds and arms); HAIC supplies five CPU array tasks. Without it, run all folds sequentially. No teaching settings enter this branch.",
-        "04": "Score the out-of-fold predictions and build the sealed production report. If scoring fails, still attempt a diagnostic STOP report. After displaying evidence, the notebook fails if measurement is incomplete or scoring failed. A completed scientific STOP or INCONCLUSIVE is a successful execution.",
+        "02": "Cache the frozen teacher features and check input integrity, teacher repeatability and future isolation. The new direct-v2 protocol performs no person/background replacement or selectivity tests. This requires the prepared cohort and normally one H100. A verified audit rejection finishes with TRAINING BLOCKED and no fitting; missing or corrupt evidence remains an execution error. Completed stages are verified and reused without loading the teacher again.",
+        "03": "Run the frozen direct-prediction comparison: five outer folds, three seeds, all frozen arms, and the complete frozen inner-selection grid. With FI_NOTEBOOK_FOLD set, run just that outer fold (all seeds and arms); HAIC supplies five CPU array tasks. Without it, run all folds sequentially. A verified audit rejection skips fitting and records a blocked outcome. No teaching settings enter this branch.",
+        "04": "Score the out-of-fold predictions and build the sealed production report. If scoring fails, still attempt a diagnostic STOP report. A verified audit rejection builds an unsealed diagnostic STOP and finishes with TRAINING BLOCKED, measurement_complete=False. Unexpected scoring failures and missing or corrupt evidence still fail. Complete STOP and INCONCLUSIVE results are also successful executions.",
     }
     operations = {
         "00": 'initialize_from_environment(RUN_ROOT)',
@@ -127,7 +134,7 @@ def opening(number, title, text):
         file says nothing about the current state of a remote HAIC job.
 
         [Study overview](../../../docs/studies/future-innovation/README.md) ·
-        [Detailed experiment specification](../../../notes/future-innovation-distillation/experiment-0-guide.md)
+        [Direct gate specification](../../../docs/studies/future-innovation/direct-gate-protocol.md)
         """),
         code(STARTUP),
     ] + execution_cells(number)
@@ -138,7 +145,7 @@ def ending(number, text):
     link = (f"Continue with [{NAMES[f'{following:02d}']}]({NAMES[f'{following:02d}']})."
             if following < 5 else
             "Return to the [study overview](../../../docs/studies/future-innovation/README.md) to record the next decision.")
-    completion = ([code('if MODE == "execute":\n    completed_decision = require_complete_report(RUN_ROOT, scoring_succeeded=scoring_succeeded)\n    print("Complete measurement:", completed_decision["decision"], "— synthetic:", completed_decision.get("synthetic"))')]
+    completion = ([code('if MODE == "execute":\n    completed_decision = finish_notebook_report(RUN_ROOT, scoring_succeeded=scoring_succeeded)')]
                   if number == "04" else [])
     if number in {"01", "02", "03"}:
         completion = [code('if MODE == "execute":\n    require_stage_success(stage_error)')]
@@ -206,7 +213,6 @@ the person region. We predict those numbers, not a diagnosis or future pixels.
         | Real skeleton | Does the correctly paired history help? |
         | Time shuffle | Does the original temporal order matter? |
         | Clip mismatch | Does this skeleton need to belong to this video? |
-        | Background target | Is the gain concentrated in the person region? |
         | No skeleton | Could capacity, baseline features, or validity explain the gain? |
 
         The last control retains validity while zeroing coordinates and
@@ -219,7 +225,7 @@ the person region. We predict those numbers, not a diagnosis or future pixels.
             evidence = inspect_report(RUN_ROOT)
             print(evidence["state"], "—", evidence["explanation"])
         """)]
-    return cells + ending("00", "Execution initializes or verifies the run's frozen protocol; teaching mode constructs an illustrative gain. Neither establishes that skeletons help on GAVD. That question requires aligned examples, source-held-out predictions and all five controls. Next we establish the cohort.")
+    return cells + ending("00", "Execution initializes or verifies the run's frozen protocol; teaching mode constructs an illustrative gain. Neither establishes that skeletons help on GAVD. That question requires aligned examples, source-held-out predictions and the timing, pairing and matched-capacity controls. Next we establish the cohort.")
 
 
 def lesson01():
@@ -233,11 +239,14 @@ by verified person identity.
     cells += [md("""
         ## 1. Count windows and sources separately
 
-        The real gate freezes 50 eligible windows and permits at most two from
-        a source, so at least 25 source videos are needed. Eligibility uses
-        alignment and observation quality, not teacher scores or condition labels.
-        This generated census uses the production fold assignment and cohort
-        validator. All excerpts from one source must receive the same fold.
+        Experiment 0 uses 50 eligible clips selected from the full-GAVD candidate
+        pool, with at least 25 sources and at most two clips per source. The full
+        dataset is reserved for the subsequent real experiment. Clips need
+        aligned observations, a usable person target and an observed joint
+        transition. Background quality, crop-retention percentage and overall
+        pose-coverage percentage do not screen this cohort. The small generated
+        census below illustrates source grouping; all windows from a source share
+        its split. The frozen run contract records the 50-clip gate size.
         """), code("""
         if MODE == "teach":
             from gavd6_sjepa.research_directions.future_innovation.fi_cohort import assign_source_folds, validate_cohort
@@ -286,8 +295,8 @@ by verified person identity.
         """), md("""
         ## 3. Inspect exclusions before interpreting model scores
 
-        A usable row needs exact decoding, retained person crops, aligned boxes
-        and adequate pose coverage. Natural missingness stays explicit through
+        A usable row needs exact decoding, aligned boxes, a nonempty person
+        token region and at least one observed joint transition. Natural missingness stays explicit through
         confidence and validity channels. The pipeline saves every exclusion and
         an alignment overlay for each accepted window.
 
@@ -310,10 +319,10 @@ by verified person identity.
           directories through `FI_VIDEO_ROOTS` before initialization. Ambiguous
           exports require an explicit manifest `video_path`; clips with reset
           frame numbering are not substitutes for full source videos.
-        - **After fixed cohort reached 50** and **source cap** mean a candidate
-          was not selected. They are not evidence of a missing or invalid video.
-          This pilot deliberately selects 50 windows; accepting all available
-          sequences into the study would be a different experiment.
+        - **Cohort cap** means 50 usable clips have already been selected;
+          **source cap** limits each source to two clips. Neither indicates a
+          missing or low-quality video. Candidates after the cap are not pose
+          evaluated, and no quality finding can be inferred for those clips.
 
         Existing cohorts retain their original candidate/exclusion records on
         resume. To apply new discovery or window-selection rules, initialize a
@@ -348,7 +357,7 @@ def lesson02():
     cells = opening("02", "Can we trust the teacher inputs and targets?", """
 A frozen encoder can still leak future information through attention or
 preprocessing. This stage explains where tokens come from, which tokens the
-past input may use, and why the target must respond meaningfully to the person.
+past input may use, and which person-region features supply the target.
 The teaching examples use token arithmetic, not downloaded teacher weights.
 """)
     cells += [md("""
@@ -374,9 +383,12 @@ The teaching examples use token arithmetic, not downloaded teacher weights.
         is invented to show that geometry. Real boxes come from the aligned
         annotations and declared crop transformation.
 
-        Person and background targets each have their own baseline fit and
-        training-variance mask. Teacher attention can mix information across
-        regions, so a background target is not isolated background content.
+        Direct-v2 predicts the person-region feature. Full-clip attention mixes
+        scene and person information, so this target is contextual. Background
+        context remains an input when available; an empty background contributes
+        a zero vector. Prefix-only pixel, optical-flow and token support values
+        distinguish unavailable measurements from observed zeros in nuisance inputs.
+        Background-target prediction remains part of the legacy protocol only.
         """), code("""
         if MODE == "teach":
             person, background = region_masks(np.array([0.35, 0.15, 0.65, 0.85]))
@@ -392,31 +404,35 @@ The teaching examples use token arithmetic, not downloaded teacher weights.
             ax.set(title="Illustrative spatial target regions", xlabel="Patch column", ylabel="Patch row")
             plt.tight_layout(); plt.show()
         """), md("""
-        ## 3. Try to invalidate the measurement before fitting
+        ## 3. Check that inputs and targets can support the comparison
 
         | Saved audit | What must hold |
         | --- | --- |
         | Repeated teacher inference | The declared numerical tolerance is met |
         | Randomized future pixels | The past input features remain unchanged |
-        | Future person replacement | The target responds more than to background replacement |
+        | Person-target variance | Nonconstant training features exist |
         | Crop and frame alignment | Features correspond to the declared observations |
 
         The numerical thresholds and measurements live in the run artifacts.
         Reading a passed flag is inspection of an earlier audit, not a new test.
-        The production audit stage uses the actual frozen checkpoint and saves
-        pixel-edit contact sheets. The synthetic pipeline smoke uses fabricated
-        features and audit records; it cannot verify real teacher causality.
+        Direct-v2 checks three frozen windows for repeatability and future
+        isolation, plus cached person-target variance and artifact integrity.
+        It does not generate person/background edit contact sheets or require
+        selectivity thresholds. The legacy run keeps its original tests.
+        Synthetic fixtures verify software routing, not real teacher behavior.
         """), code("""
         if MODE != "teach":
             from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
-            audit_path = RUN_ROOT / "qc/validity-summary.json"
+            audit_path = inspection_audit_path(RUN_ROOT)
             if audit_path.is_file():
                 audit = read_json(audit_path)
                 display(pd.DataFrame(list(audit.get("checks", {}).items()), columns=["saved check", "passed"]))
                 failed = [name for name, passed in audit.get("checks", {}).items() if passed is not True]
                 print("Failed checks:", ", ".join(failed) if failed else "none")
-                display({key: audit.get(key) for key in
-                         ("motion_to_background_change_ratio", "person_edit_direction_fraction")})
+                if audit_path.name == "validity-summary.json":
+                    print("Legacy selectivity audit; its rules are preserved for this run.")
+                    display({key: audit.get(key) for key in
+                             ("motion_to_background_change_ratio", "person_edit_direction_fraction")})
                 thresholds = RUN_ROOT / "config/thresholds.json"
                 if thresholds.is_file():
                     display(read_json(thresholds))
@@ -454,11 +470,11 @@ data. It demonstrates the production APIs, not the complete scientific grid.
 
         Shuffle moves four-frame blocks with coordinates, confidence and
         validity together. No-skeleton retains validity in the same-size head.
-        The background arm retains real skeleton history and changes the target
-        downstream; it is not a second skeleton transformation.
+        The real-minus-no-skeleton comparison measures what coordinate and
+        confidence history adds while matching the head's size and validity inputs.
         """), code("""
         if MODE == "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_contracts import ARMS
+            from gavd6_sjepa.research_directions.future_innovation.fi_contracts import DIRECT_ARMS
             from gavd6_sjepa.research_directions.future_innovation.fi_controls import controlled_history
             rng = np.random.default_rng(260905)
             skeleton = rng.normal(size=(12, 32, 33, 4)).astype(np.float32)
@@ -469,7 +485,7 @@ data. It demonstrates the production APIs, not the complete scientific grid.
             x = rng.normal(size=(12, 4))
             # This example is one training partition, never a mix of train and test.
             controls = {}
-            for arm in ARMS:
+            for arm in DIRECT_ARMS:
                 controls[arm], donors = controlled_history(arm, skeleton, window_ids, source_ids, x)
                 if donors is not None:
                     source_for = dict(zip(window_ids, source_ids))
@@ -486,7 +502,7 @@ data. It demonstrates the production APIs, not the complete scientific grid.
 
         This demonstration reduces width, target dimension and updates explicitly.
         Real configuration remains owned by the initialized run; never transfer
-        these teaching settings into the registered comparison.
+        these teaching settings into the frozen comparison.
         """), code("""
         if MODE == "teach":
             import torch
@@ -510,10 +526,13 @@ data. It demonstrates the production APIs, not the complete scientific grid.
         """), md("""
         ## 3. Inspect the real workload and reuse completed stages
 
-        The declared real grid has 5 outer folds × 3 seeds × 5 arms = 75 final
-        residual fits, plus inner model selection. Person-target arms reuse a
-        baseline within the same fold; background targets have a separate fit.
-        Teacher features are cached once. Small heads run in CPU array tasks.
+        Direct-v2 fits 5 outer folds × 3 seeds × 4 arms = 60 final heads,
+        plus training-only inner selection. Correct skeleton, time shuffle,
+        wrong-clip skeleton and a matched no-skeleton head share the same
+        person target and ridge baseline in each fold. Teacher features are
+        cached once, and CPU array tasks fit the heads. Legacy runs retain
+        their five-arm grid. The gate uses 50 clips; the full GAVD dataset is
+        reserved for the real experiment. No reduced teaching settings enter the fits.
 
         Inspect saved configuration before submitting anything. Presence of a
         fold receipt is not a fresh validation of its predictions. Existing
@@ -527,7 +546,7 @@ data. It demonstrates the production APIs, not the complete scientific grid.
             else:
                 print("No model configuration available locally; inspect the run's config directory on HAIC.")
             display(artifact_inventory(RUN_ROOT))
-            audit_path = RUN_ROOT / "qc/validity-summary.json"
+            audit_path = inspection_audit_path(RUN_ROOT)
             if audit_path.is_file():
                 audit = read_json(audit_path)
                 failed = [name for name, passed in audit.get("checks", {}).items() if passed is not True]
@@ -544,7 +563,7 @@ data. It demonstrates the production APIs, not the complete scientific grid.
 
         ```bash
         export GAVD6_ROOT=/path/to/gavd6
-        export FI_RUN_ROOT=/path/to/existing/future-innovation/run
+        export FI_RUN_ROOT=/path/to/new/future-innovation/direct-v2
         cd "$GAVD6_ROOT"
         bash slurm/future-innovation/submit-fi-notebooks.sh all
         ```
@@ -555,7 +574,7 @@ data. It demonstrates the production APIs, not the complete scientific grid.
         The notebook itself never submits jobs. In `execute` mode its stage cell
         launches the production fit grid, using the allocated CPU resources.
         """)]
-    return cells + ending("03", "Teaching mode illustrates a small fit; execute mode completes the registered fits for all folds or the selected array fold. Scientific interpretation needs out-of-fold predictions for every arm and seed across all five folds. Next we score that complete comparison; job completion alone does not establish useful motion information.")
+    return cells + ending("03", "Teaching mode illustrates a small fit. With passing validity audits, execute mode fits all folds or the selected array fold; a verified audit rejection records TRAINING BLOCKED without fitting. Scientific interpretation needs out-of-fold predictions for every arm and seed across all five folds. Next we score that complete comparison; job completion alone does not establish useful motion information.")
 
 
 def lesson04():
@@ -581,22 +600,23 @@ only reads it. Both use the experiment's existing decision rules.
             from gavd6_sjepa.research_directions.future_innovation.fi_gate_decision import decide_gate
             metrics = {
                 "delta_r2_real": 0.06, "delta_r2_time_shuffle": 0.02,
-                "delta_r2_clip_mismatch": 0.005, "delta_r2_background_target": 0.02,
-                "delta_r2_no_skeleton": 0.005, "motion_to_background_change_ratio": 3.0,
-                "person_edit_direction_fraction": 0.9, "bootstrap_positive_fraction": 0.95,
+                "delta_r2_clip_mismatch": 0.005,
+                "delta_r2_no_skeleton": 0.005, "seed_skeleton_increments": [0.055] * 3,
+                "skeleton_increment_positive_fraction": 0.95, "bootstrap_positive_fraction": 0.95,
                 "seed_real_gains": [0.06, 0.06, 0.06],
                 **{key: True for key in ("data_contract_valid", "evaluation_contract_valid",
-                    "controls_complete", "target_audit_complete", "target_variance_valid",
+                    "controls_complete", "input_audit_complete", "target_variance_valid",
                     "teacher_stable", "causal_leakage_absent")},
             }
             scenarios = {
                 "Illustrative stable gain": metrics,
-                "Illustrative weak real gain": {**metrics, "delta_r2_real": 0.01, "seed_real_gains": [0.01] * 3},
+                "Illustrative weak real gain": {**metrics, "delta_r2_real": 0.01, "seed_real_gains": [0.01] * 3, "seed_skeleton_increments": [0.005] * 3},
+                "Extra capacity explains gain": {**metrics, "delta_r2_no_skeleton": 0.06, "seed_skeleton_increments": [0.0] * 3},
                 "Illustrative uncertainty": {**metrics, "bootstrap_positive_fraction": 0.7},
                 "Illustrative invalid input": {**metrics, "causal_leakage_absent": False},
             }
-            display(pd.DataFrame([{"invented case": name, "decision": decide_gate(values)["decision"],
-                "adapter allowed": decide_gate(values)["allow_adapter_training"]}
+            display(pd.DataFrame([{"invented case": name, "decision": decide_gate(values, protocol="direct-v2")["decision"],
+                "adapter allowed": decide_gate(values, protocol="direct-v2")["allow_adapter_training"]}
                 for name, values in scenarios.items()]))
         """), md("""
         ## 2. Establish the status of the saved evidence
@@ -613,9 +633,9 @@ only reads it. Both use the experiment's existing decision rules.
         | Incomplete | Execution or measurement still needs repair |
         | Invalid / unverified | Resolve missing or inconsistent report evidence |
         | Synthetic | Software demonstration; no scientific advancement |
-        | Complete / STOP | Read failed checks to distinguish validity failure from insufficient effect |
+        | Complete / STOP | Read effect and control checks; the validity audits passed before fitting |
         | Complete / INCONCLUSIVE | Point checks passed; stability was insufficient |
-        | Complete / ADVANCE | Proceed only to the measurement steps permitted by this gate |
+        | Complete / ADVANCE | Design the full-GAVD JEPA comparison; adapter distillation remains separate |
         """), code("""
         if MODE != "teach":
             evidence = inspect_report(RUN_ROOT)
@@ -631,17 +651,22 @@ only reads it. Both use the experiment's existing decision rules.
 
         Pool out-of-fold predictions within each seed, then average seed scores.
         Do not average fold R² values or treat repeated seeds as new people.
-        Source bootstraps keep each source's windows together. The sealed report
+        Source bootstraps keep each source's windows together. Intervals are
+        conditional on the saved fits; model selection and training are not
+        repeated within each draw. The sealed report
         includes the per-seed scores, intervals and paired real-minus-control
         contrasts; use that report for numerical interpretation.
 
-        The no-skeleton arm is required and reported, but the implemented gate
-        has no additional numerical cutoff for its paired contrast. If it
-        reproduces the gain, an automatic ADVANCE alone does not establish a
-        specific motion contribution. State that limitation and investigate it
-        without inventing a new post-result threshold.
+        The primary skeleton increment is the real head's R² minus the matched
+        no-skeleton head's R². That control retains time-varying validity flags
+        and receives the same RGB and nuisance inputs, so the contrast measures
+        additional coordinate/confidence history. A positive mean must also
+        appear in every seed and at least 90% of paired source draws to advance.
+        Report its 95% interval separately; crossing zero leaves uncertainty.
+        The real head must still improve on ridge by at least 0.05, exceed twice
+        the nonnegative shuffled gain, and keep wrong-clip gain at most 0.01.
 
-        Background targets remain contextual and the horizon is located inside
+        The target remains contextual and its horizon is located inside
         full-clip teacher features. No result here establishes a clinical
         endpoint, isolated dynamics, or the benefit of a trained S-JEPA student.
         """), md("""
@@ -654,7 +679,7 @@ only reads it. Both use the experiment's existing decision rules.
         | Complete, valid gain below the rule | Preserve the negative result; reconsider the representation or endpoint |
         | Gain reproduced by controls | Investigate the remaining shortcut or capacity explanation |
         | Unstable gain | Report uncertainty and define any further measurement before running it |
-        | Complete stable advance with interpretable controls | Follow the proposal's next measurement stage; adapter training remains gated |
+        | Complete stable skeleton increment | Compare trained JEPA features, matched initial encoders and raw skeleton history |
 
         Update the study overview with the identified run, exact report path,
         supported conclusion, unresolved explanation, and next action. Keep

@@ -48,6 +48,7 @@ def init_main():
     parser.add_argument("--pose-model", type=Path, required=True)
     parser.add_argument("--vjepa-root", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
+    parser.add_argument("--protocol", choices=("direct-v2", "legacy-v1"), default="direct-v2")
     parser.add_argument(
         "--change-reason",
         default="Experiment 0 initialization",
@@ -77,6 +78,7 @@ def init_main():
         change_reason=args.change_reason,
         youtube_dir=args.youtube_dir,
         video_roots=args.video_root,
+        protocol=args.protocol,
     )
     environment = [
         f"Python: {sys.version}",
@@ -169,17 +171,24 @@ def cache_main():
 def audits_main():
     args = teacher_arguments("audit-teacher")
     configure_threads()
-    from .fi_contracts import stage_lock
-    from .fi_validity_audits import require_audits, run_audits
+    from .fi_contracts import stage_lock, audit_summary_path, protocol_name, check_run, DIRECT_PROTOCOL
+    from .fi_validity_audits import ValidityAuditRejected, require_audits, run_audits
     from .fi_vjepa_adapter import FrozenVJEPAAdapter
 
     with stage_lock(args.run_root, "audits"):
-        if (args.run_root / "qc/validity-summary.json").exists():
-            require_audits(args.run_root)
+        if audit_summary_path(args.run_root).exists():
+            try:
+                require_audits(args.run_root)
+            except ValidityAuditRejected as error:
+                print(json.dumps({"validity_audits_passed": False, "reused": True,
+                                  "failed_checks": error.failed_checks, "reason": str(error)}))
+                return 2
             print(json.dumps({"validity_audits_passed": True, "reused": True}))
             return 0
         record_teacher_runtime(args.run_root, "audit")
-        passed = run_audits(
+        from .fi_readiness import run_readiness
+        audit = run_readiness if protocol_name(check_run(args.run_root)) == DIRECT_PROTOCOL else run_audits
+        passed = audit(
             args.run_root, FrozenVJEPAAdapter.from_run(args.run_root, args.device)
         )
     print(json.dumps({"validity_audits_passed": passed}))
@@ -245,8 +254,10 @@ def report_main():
 
 
 def smoke_main():
-    args = parsed(parser_for("smoke"))
+    parser = parser_for("smoke")
+    parser.add_argument("--protocol", choices=("direct-v2", "legacy-v1"), default="direct-v2")
+    args = parsed(parser)
     configure_threads()
     from .fi_smoke import run_smoke
 
-    print(json.dumps(run_smoke(args.run_root), allow_nan=False, indent=2))
+    print(json.dumps(run_smoke(args.run_root, protocol=args.protocol), allow_nan=False, indent=2))

@@ -1,12 +1,12 @@
 # Study documentation
 
 Start with the evidence and next action below. Status was reconciled against
-the local artifacts on 10 September 2026; this is not a live view of HAIC jobs.
+the local artifacts on 11 September 2026; this is not a live view of HAIC jobs.
 Each linked study overview owns its interpretation and points to its evidence.
 
 | Study | Evidence available | Next action |
 | --- | --- | --- |
-| [Future Innovation](future-innovation/) | Copied HAIC run: 50-window cohort and teacher cache completed; validity audit failed; fitting blocked and report incomplete | Inspect the failed QC checks; use the repaired discovery and notebook workflow without weakening scientific controls |
+| [Future Innovation](future-innovation/) | Copied HAIC run: 50-window cohort and teacher cache completed; validity audit failed; fitting blocked and report incomplete | Run the separately versioned direct-v2 50-clip gate; reserve full GAVD for the real JEPA experiment |
 | [Latent Laterality](latent-laterality/study-so-far.md) | Seed-7 validation complete; uniform uncertainty reproduced SG-JEPA's gain | Inspect the mechanism failure; stop confirmation seeds 19/31 and keep the test split sealed |
 | [Fixed-reflection baselines](fixed-reflection-baselines/) | Known-reflection controls with historical artifact limitations | Use as scoped controls, following their protocol |
 | [Frozen Core11 probe](frozen-core11-probe-results.md) | Frozen-representation result with a limited generalization claim | Read the stated evidence boundary |
