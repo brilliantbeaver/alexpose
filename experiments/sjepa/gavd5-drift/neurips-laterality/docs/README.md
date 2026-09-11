@@ -1709,3 +1709,413 @@ The generated submission files and verification hashes are recorded in the [buil
 Sections 5 and 6 were rewritten in plain language without changing the reported results or turning proposed work into completed experiments. Section 5 keeps the poorer movement estimates tied to the motion-containing feature summary and tested regression. It names the no-augmentation baseline for the reflection result, preserves the need for a real-data test of explicit reflection loss, and explains the proposed readout and forecasting checks. The movement measure is described as averaging normalized left-right median-speed differences.
 
 Section 6 keeps the reasons for choosing GAVD, the distinction between held-out videos and unseen people, and the absence of independent clinical validation. The [pinned repository documentation](https://github.com/Rahmyyy/GAVD/blob/a87859c881603443f200bcd640663d2c3d7a8136/README.md) and [MIT License](https://github.com/Rahmyyy/GAVD/blob/a87859c881603443f200bcd640663d2c3d7a8136/LICENSE) were rechecked. The paper retains the license conditions and separates repository permissions from the reviews needed for videos and derived-pose releases. Verification counts and the distinction between checking saved outputs and rerunning inference are unchanged. The bibliography and numerical results were not revised.
+
+
+<a id="fmts-2026-review"></a>
+
+## FMTS 2026 revision and adversarial review record — 10 September 2026
+
+This is a separate author-side FMTS revision series, starting editorially from Physical World AI V8 and reconciling it with the original paper, implementation, executed notebook outputs and retained numerical records. The original paper, Physical World AI files and their review history are preserved. The final manuscript is [FMTS V8](fmts_revisions/paper_v8.md), with its [PDF](fmts_revisions/paper_v8.pdf), [anonymous source package](fmts_revisions/paper_v8_overleaf.zip), [anonymous numerical supplement](fmts_revisions/paper_v8_supplement.zip), and [complete version index](fmts_revisions/README.md).
+
+The scientific contribution is a focused evaluation of a small gait representation: trained predictors more consistently match hidden features from their own clip, while a frozen regression estimates the chosen left–right movement contrast less accurately from trained encoders than from their matched initial weights. The two outcomes concern different tasks. Neither is, by itself, a test of future movement prediction. The strongest FMTS connection is evaluation and reliability, supported by temporal gait observations and a temporal encoder. Forecasting and simulation motivate stronger subsequent tests; they are not established capabilities of this study.
+
+### Evidence access and the scope of this revision
+
+The requested preference order was applied: retained predictions and manifests where accessible, executed outputs, saved aggregate audits, then manuscript/tutorial summaries. In this checkout, the `neurips-laterality/artifacts` directory, raw prediction CSVs and trained checkpoints are absent. The optional query about another artifact location received no answer during the revision. We therefore did not rerun encoder inference, source bootstraps, source-content deduplication or cohort reconstruction. No model was trained. New local calculations check retained seed means, paired differences before rounding, mask-reference differences, denominator arithmetic and agreement among records. These are aggregate verification, not new confirmatory experiments.
+
+The [current evidence check](fmts_revisions/review/evidence_check.json) hashes the input manuscripts, notebooks and implementation files and reports the calculations. Its [script](fmts_revisions/tools/audit_evidence.py) and the [portable aggregate verifier](fmts_revisions/tools/verify_summary.py) preserve the computation. The [anonymous numerical record](fmts_revisions/assets/v8/numerical_evidence.json) contains full-precision seed aggregates and explicitly identifies retained intervals that cannot be reconstructed from those aggregates. A fresh raw-data audit would strengthen reproducibility, but its absence is not concealed by the precision of a saved summary.
+
+The decisive grid is identified by `292443b0fab5339f5da7ca566a85d6172ffc5b64abe5febf2546681a0152ff57`, cohort digest `bc23447824d2bc2bbe62dfdc7df5da8db7d1e73291d1675f2556597eeeefe2e3`, and split digest `0dd230e67d5eb583013ef6e4e295713d30e30799eea160adc8cb51b4db58eb1b`. It uses 625 clips, 93 source videos, five source folds, seeds 42–46, CUDA BF16 training and FP32 evaluation. Twenty-five motion jobs each contain three conditions; twenty-five region jobs each contain two. These are 125 trained encoders at 1,200 updates each, with matched initial encoders. The grid uses a three-inner-fold ridge readout. It must not be merged with the compact, four-inner-fold reflection-augmentation experiment merely because both use the same cohort.
+
+### Claim-to-evidence ledger
+
+| Claim retained in the paper | Specific local evidence | Matching and interpretation |
+|:--|:--|:--|
+| Trained teacher expanded readout is below matched initialization | `docs/figures/physworld_figure_provenance.json` readout seed rows; executed Notebook 18; `docs/physworld_evidence_recomputed.json` paired audit | Same grid, cohort, fold/seed pairing, 2,890-input summary and regression procedure. Initial mean R² 0.22254357355538518; trained means 0.10077719741431432–0.11420943905203321. All 25 condition-by-seed differences are negative. |
+| The paired source intervals are below zero | `docs/physworld_evidence_recomputed.json` `trained_minus_initial`; copied to each version's numerical supplement | Saved exploratory percentile intervals, 2,000 source draws, seed 812, fixed fitted models. They were not rerun here. No retraining, split-allocation, familywise or development-selection uncertainty is included. |
+| Mean absolute error increases | Same matched teacher/readout rows and paired audit | Initial 0.04154614546478362; teachers 0.043595122390834753–0.04403730881704242. Paired increases 0.00204897692605113–0.002491163352258784, calculated before display rounding. |
+| Correct-clip targets have lower predictor error more consistently after training | Notebook 18 retained diagnostic tables, including cell 13; retained diagnostic totals in figure provenance | 375/375 trained checks = 125 models × three evaluation masks; 33/75 distinct initial checks = 25 initial models × three masks. Left-leg, right-leg and scattered masks reuse the same videos. Initial controls duplicated across grid families are counted once. This is a within-model correct-versus-mismatched MSE diagnostic, not a common training-loss scale or per-clip forecasting accuracy. |
+| Expanded initial summary improves readout over mean features | Same initial seed rows, 960 versus 2,890 readout inputs | R² 0.070827155920603 to 0.22254357355538518; difference 0.15171641763478218. Dimensions, standard deviations, absolute adjacent-block increments and support fractions change together. Temporal-order learning is not isolated. |
+| Motion/region masks do not establish a movement benefit | Notebook 18 and retained mask source-bootstrap table | MAMP-style −0.0008343231183527867; mixture +0.00048483014729867603; region −0.008668689484462888 versus their own count-matched random reference. All intervals contain zero. No equivalence inference. |
+| Mask construction changes available context as intended | Executed Notebook 16 inspection tables and mask implementation | Region targets with both immediate temporal neighbors visible: 69.9% under its random reference to 0%; visible graph-neighbor fraction 98.8% to 51.2%. Motion mean hidden count approximately 80.771 (17% of valid all-landmark tokens); region fraction 9.9%. Repeated inspection draws are not a log of every training mask or extra independent data. |
+| The two measurement paths disagree | Saved audit `docs/physworld_evidence_recomputed.json`; corroborating tutorial summary | 623 clips/92 sources finite on both paths; source-weighted sign agreement 0.7041029623, calculation-agreement R² 0.2181898870. This is an observed-versus-prepared calculation comparison. It is neither a model ceiling nor an ablation of any one preparation step. |
+| Readout regularization remains unresolved | Notebook 18 retained readout-selection counts | Upper ridge candidate 10,000 selected in 49/125 teacher fits and 96/125 online fits. New training-only penalty searches and capacity controls are needed; the manuscript does not claim all movement information has been destroyed. |
+| A limited direct-coordinate baseline performs below the expanded initial encoder | Executed Notebook 18 and seed aggregate record | 264-value coordinate/validity summary, mean R² 0.03454120636613722. This is not an exhaustive direct-pose model. Its repeated identical seed scores do not create independent baseline replications. |
+| Reflection augmentation reduces a token reflection error but has uncertain movement benefit | `docs/README.md` preserved reflection record, `docs/TUTORIAL.md`, protocol/config and original paper profile | Summary-only real-data recipe: p(mirror)=0.5, 960-input compact readout, four inner folds, scheduled teacher EMA 0.999→1. Reported Δq −0.00843 [−0.01020, −0.00687]; reported ΔR² approximately +0.00373 with interval approximately [−0.006, +0.013]. No additional precision is invented. No pooling with the motion/region grid. |
+| An explicit reflection loss and future-feature decoding work as implementation demonstrations | Retained synthetic notebook outputs and extension code | Reflection loss has synthetic evidence only and adds two full encoder passes. Notebook 10's past-feature readout and Notebook 14's predictor-future-feature decoder have synthetic training evidence; real-data horizon eligibility is preparation only. No real-data forecast, recursion or simulator is reported. |
+| Saved integrity checks cover the retained cohort and source splits | `docs/physworld_revision_verification.json`, `docs/physworld_evidence_recomputed.json`, protocol and split documents | A prior replay reports all 625 archives matching, no outer-test source in corresponding encoder training, 125 histories, 125,000 readout predictions and 200 pooled score rows. These are prior records, not checks rerun here. The inventory changed from 642 to 656 available archives, blocking exact rebuild of the locked 642-archive census in that audit. Hash integrity does not establish cross-upload content or participant deduplication. |
+
+The notebook trail is useful for local provenance, so it belongs here rather than in the workshop appendix. Notebooks 00–06 define protocol, cohort, source splits, fold-local training, evaluation, aggregation and an external-data gate; 07–09 develop diagnostic/masking/reflection questions; 10 specifies past-feature movement prediction; 11–14 retain synthetic masking, training, evaluation and future-feature demonstrations; 15 defines motion weighting; 16 has executed mask/context inspections; 17 defines the motion/region training grid; and 18 retains its readout and correspondence outputs. Notebooks 00–10, 15 and 17 have no executed outputs in this checkout. A code cell is evidence of a method's implementation or proposal, not of a completed empirical result. Extracted outputs from 11–14, 16 and 18 are preserved under `fmts_revisions/review/notebook_outputs/`.
+
+### Method checks that govern the interpretation
+
+Original timestamps are frame numbers divided by frame rate. Visibility ≥0.45 and finite coordinates define observed landmarks. The movement path uses only common observed transitions, including observed hips for centering, and the original positive time differences. Five pairs each require at least eight transitions. The encoder path additionally fills interior gaps of up to four sample positions, marks fills valid, uses a median-pelvis fallback when necessary, and linearly resizes by sequence index to 64 positions. Resized validity must reach 0.999, and invalid coordinates become zero. This preserves the landmark schema and prepared positions but not original duration, cadence or every trajectory-derived measurement. No isolated preprocessing ablation identifies the source of the observed path disagreement.
+
+The source implementation is `laterality/geometry.py`, `laterality/model.py`, `laterality/data.py`, and `laterality_extensions/{motion_structured_training,motion_runtime,motion_readout,comparative_evaluation}.py`. Patches contain four positions for one joint, so twelve coordinates project to 96 channels on a 16×33 grid; all four positions must be valid. Hidden content is zeroed before joint/position embeddings. The predictor uses learned mask tokens. Hidden cross-entropy uses centered/sharpened teacher channel distributions at temperature 0.06 against predictor temperature 0.10, averaged within clips then across clips. Teacher EMA is fixed at 0.999; center EMA is 0.9. A weighted 0.05 full-view VICReg term includes a twelve-joint pool, a 96→96→96 GELU projector and 25/25/1 invariance/variance/covariance weights. This completed recipe has access to full clips and cannot be described as past-only prediction.
+
+The grid uses width 96, encoder/predictor depths 4/2, four heads, batch 20, AdamW 0.001 learning rate and 0.05 weight decay, clipping norm 1 and 1,200 updates. Geometric views use horizontal-depth rotation up to 8 degrees and image-plane translation up to 0.03. There is no reflection augmentation or explicit reflection loss in this grid. In `motion_structured_masks.py`, MAMP-style sampling has temperature 0.8. The mixture puts weight 0.75 on median displacement scores capped at their positive-score 0.95 quantile and 0.25 on uniform sampling. These weights use prepared indices, not physical time. Counts derive from half the smallest valid twelve-joint gait pool in the batch, while eligible targets span 33 joints. Region masks use six connected landmarks and eight of sixteen blocks. Different realized fractions require separate random references.
+
+All derivative clips and views inherit source splits. Each outer-fold encoder sees only outer-training sources, and every comparison uses matched initial weights. Ridge imputation, scaling and penalty selection use inner training sources; selected readouts refit on outer-training sources only. Inner-validation clips can have appeared without movement labels in outer-training representation fitting. The protocol is post-development within-cohort source holdout, not an untouched development cohort. The registered reflection tests remain distinguished from mask and expanded-summary questions developed after inspecting the same cohort.
+
+Laterality is concrete here: the average of five normalized left-minus-right median coordinate-speed contrasts. Geometric reflection swaps anatomy and validity and reverses the signed target. Algebraic oddness of a constructed readout is separate from learned usefulness. Time reversal with the sampling intervals reversed preserves speed magnitudes, making the target insufficient to validate learned temporal direction or dynamics. The initial baseline already includes a pretrained pose detector, anatomy, preparation and labeled regression. More complex static posture, viewpoint and missingness explanations remain possible even when the hidden-feature diagnostic succeeds.
+
+### Workshop and reference verification
+
+The [FMTS workshop](https://fmts-workshop.github.io/) and [CFP](https://fmts-workshop.github.io/cfp.html) were rechecked on 10 September 2026, including again during final preparation. The CFP welcomes negative findings and critical analyses, permits up to four main-text pages excluding references and appendices, and says reviewers need not read appendices. It requires anonymous manuscript and supplementary material. It links the [official NeurIPS 2026 template](https://media.neurips.cc/Conferences/NeurIPS2026/Formatting_Instructions_For_NeurIPS_2026.zip). Its workshop deadline is 16 September at 11:59 AM UTC (15 September AoE); this record is not a submission or acceptance claim.
+
+The downloaded official style is copied byte-for-byte into each private version and its source package. The `dblblindworkshop` option is used, without `final` or `preprint`, reduced fonts, narrower margins or negative spacing adjustments. Numeric natbib citations and `unsrtnat` references are consistent; the template permits numeric or author-year citations and does not require one particular bibliography style. The workshop's four-page limit overrides the template's main-track nine-page example. A main-track checklist was not imported as an assumed workshop requirement because the FMTS CFP does not request one. No acknowledgements, author identities, personal repository links, execution paths or identifying PDF author metadata are included in submission packages. The template's own credits and cited publications' author names are ordinary public bibliographic material.
+
+| Primary reference | Verified publication status and purpose |
+|:--|:--|
+| [S-JEPA](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf), [official project](https://sjepa.github.io/) | Abdelfattah and Alahi, ECCV 2024, pp. 367–384. The Springer chapter appeared in 2025, while the conference/project citation uses ECCV 2024. Basis for skeleton hidden-feature prediction; not an experimental comparison with the complete original system. |
+| [GAVD](https://doi.org/10.1109/ACCESS.2025.3545787), [author preprint](https://arxiv.org/abs/2407.04190) | Ranjan, Ahmedt-Aristizabal, Ali Armin and Kim, IEEE Access 13:45321–45339, 2025. Publisher-deposited metadata was checked, including author names and journal status. Dataset provenance, not clinical validation of this target. |
+| [VICReg](https://arxiv.org/abs/2105.04906) | Bardes, Ponce and LeCun, ICLR 2022. Describes the regularizer actually included in the completed objective. |
+| [MAMP](https://arxiv.org/abs/2308.07092), [official implementation](https://github.com/maoyunyao/MAMP) | Mao et al., ICCV 2023, pp. 10181–10191. Motion-weighted sampling and explicit motion targets contrast with latent feature prediction. The local arm adapts sampling, not the complete MAMP method. |
+| [SLiM](https://arxiv.org/abs/2603.10648v3) | Do, Chen, Youk and Kim; arXiv preprint v3, revised 3 August 2026. No unverified conference acceptance is claimed. Connected anatomical masking motivates a local context test. |
+| [V-JEPA 2](https://arxiv.org/abs/2506.09985), [official implementation](https://github.com/facebookresearch/vjepa2) | Assran et al., 2025 arXiv preprint. Video anticipation and action-conditioned planning exemplify behavior-oriented evaluation at a scale and scope absent here. |
+| [seq-JEPA](https://proceedings.neurips.cc/paper_files/paper/2025/hash/2f63d2963526bdd9ff1b8bcc2dc9905a-Abstract-Conference.html) | Ghaemi, Muller and Bakhtiari, NeurIPS 38, 2025. Its invariant/equivariant task separation supports the argument that representation usefulness depends on the observable and task. |
+| [Gait asymmetry in stroke survivors](https://doi.org/10.1016/j.apmr.2007.08.142) | Patterson et al., Archives of Physical Medicine and Rehabilitation 89(2):304–310, 2008. Limited clinical motivation in the appendix. It supplies no affected-side labels or clinical validation for the present video-derived contrast. |
+
+The Related Work synthesis distinguishes recognition of action labels, prediction of learned features, explicit motion targets and evaluation of observable future behavior. Citation does not imply a reproduced benchmark. The anonymous appendix discloses substantive AI assistance with evidence reconciliation, literature checking, writing, figure programming and author-side adversarial checking. AI is not listed as an author, and the disclosure leaves responsibility with the authors. The workshop's restriction on reviewer use of LLMs is not represented as permission to conduct an official peer review; this work is author-side manuscript preparation.
+
+Local `PROTOCOL.md` and `governance/status.json` retain unresolved institutional ethics, data-use and derived-pose release determinations. Preparing anonymous text, vector schematics and aggregate supplements neither resolves those determinations nor requires distributing restricted data. No external submission or data release was performed. This work completes manuscript preparation; the local governance submission gate remains an administrative prerequisite for an actual submission.
+
+### Fixed scoring rubric
+
+Scores are author-side judgments, not acceptance probabilities. Every dimension is scored 0–10; 5 means a substantial unresolved weakness and 10 means no material weakness within the stated scope. The weighted total is `sum(weight_percent × score / 10)`, out of 100. Scores do not increase for chronology or typography alone. Better wording can improve claim accuracy and interpretation, but it cannot supply missing participants, raw predictions, new readout controls, independent development data or real-data forecasting results.
+
+| Dimension | Weight | What is assessed |
+|:--|--:|:--|
+| Temporal-system relevance and workshop contribution | 20% | A concrete system observable, clear temporal information boundary and an evaluation lesson proportional to the actual gait study. |
+| Claim accuracy and evidence support | 20% | Correct estimates, matched run profiles, evidence types, settings and limits; no unsupported scale, forecasting, clinical or causal inference. |
+| Evaluation and statistical rigor | 15% | Source splitting, matched initialization, training-only selection, meaningful controls and honest conditional uncertainty. |
+| Scientific insight and related-work positioning | 15% | A testable distinction between latent prediction and observable behavior, with alternative explanations and verified primary literature. |
+| Reproducibility | 10% | Recoverable methods, provenance, numerical checks and private version assets; unavailable raw data/checkpoints remain a weakness. |
+| Clarity and narrative | 10% | A fluent motivation–hypothesis–test–result–interpretation arc with terms explained and repetition controlled. |
+| Figures | 5% | Accurate model/data paths, visible temporal and supervision boundaries, useful results and print-size legibility. |
+| Submission fit | 5% | Four-page self-contained main text, restrained appendix, official style, citations, anonymity and disclosure. |
+
+| Manuscript | Temporal | Claims | Statistics | Insight | Repro. | Clarity | Figures | Fit | /100 |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| Original paper | 4 | 3 | 5.5 | 5 | 4.5 | 5.5 | 6 | 2 | **43.75** |
+| Physical World AI V8 | 6.5 | 8 | 7 | 7.5 | 6.5 | 7 | 7 | 3 | **69.25** |
+| FMTS V1 | 8 | 8 | 7 | 7.5 | 6.5 | 7.5 | 6.5 | 8.5 | **75.25** |
+| FMTS V2 | 8 | 8.5 | 7.5 | 7.5 | 6.5 | 7.5 | 6.5 | 8.5 | **77.00** |
+| FMTS V3 | 8 | 9 | 7.5 | 7.5 | 6.5 | 8 | 6.5 | 8.5 | **78.50** |
+| FMTS V4 | 8.5 | 9 | 7.5 | 8 | 6.5 | 8 | 6.5 | 8.5 | **80.25** |
+| FMTS V5 | 8.5 | 9 | 7.5 | 8 | 6.5 | 8.5 | 8.5 | 8.5 | **81.75** |
+| FMTS V6 | 8.5 | 9 | 7.5 | 8 | 7 | 8.5 | 8.5 | 9 | **82.50** |
+| FMTS V7 | 8.5 | 9 | 7.5 | 8 | 7 | 8.5 | 8.5 | 9 | **82.50** |
+| FMTS V8 | 8.5 | 9 | 7.5 | 8 | 7 | 9 | 9 | 9.5 | **83.50** |
+
+V6 and V7 intentionally receive the same total. V7 improves precision and organization without removing an additional material scientific weakness. V8 gains for clearer prose, diagram labeling and a shorter appendix; its scientific-evidence scores remain unchanged.
+
+#### Original paper — 43.75/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 4 | The gait setting is temporal, but the symmetry/world-model verdict exceeds a whole-clip observable test. Reframe the contribution around observable recovery. |
+| Claim accuracy | 3 | The fully powered null, only-route claim, augmentation verdict and oracle localization overreach the evidence. Keep separate recipes and inferential limits. |
+| Evaluation/statistics | 5.5 | Source folds, matched starts and conditional bootstrap are strengths. Failed superiority is not equivalence; the development cohort and participant identities remain unresolved. |
+| Insight/positioning | 5 | Constructed parity is mathematically informative, but it displaces the more revealing comparison between predictive matching and movement readout. |
+| Reproducibility | 4.5 | Protocol paths and code are useful; missing raw artifacts and an obsolete recipe for the proposed central grid prevent a reproducible latest-results account. |
+| Clarity/narrative | 5.5 | The exposition explains terminology, but broad verdicts and execution history interrupt the empirical story. Rewrite around the specific measured contrast. |
+| Figures | 6 | Vector illustrations help, but they need a clearer time boundary, target branch and actual full-view training recipe at workshop size. |
+| Submission fit | 2 | No four-page FMTS main-text artifact; working metadata, local operational detail and submission/governance history need separation from anonymous files. |
+
+#### Physical World AI V8 — 69.25/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 6.5 | A sound observed-system framing is present, but the temporal-order limit and completion-versus-forecasting distinction deserve earlier, sharper treatment. |
+| Claim accuracy | 8 | Most claims are carefully bounded and current settings are recoverable. The new revision must distinguish saved raw-data audits from present artifact access. |
+| Evaluation/statistics | 7 | Matched starts, source weighting and nested readout selection are clear. Put all paired deficit intervals in the main text and explain coupled summary/capacity changes. |
+| Insight/positioning | 7.5 | The loss-versus-observable gap is valuable. Related work and the future test need a focused temporal evaluation synthesis rather than broader physical-world coverage. |
+| Reproducibility | 6.5 | Detailed methods and retained audits help. Raw artifacts are absent here, and shared asset paths could let later edits change earlier versions. |
+| Clarity/narrative | 7 | Generally careful prose is burdened by repeated limits and lengthy supporting material. Reduce the claim count and foreground the decisive comparison. |
+| Figures | 7 | Pipeline and results figures are useful; short arrow tails, small labels and training/evaluation boundaries need a dedicated FMTS redesign. |
+| Submission fit | 3 | Its eight main pages and eleven total pages exceed FMTS's main-text limit. Official 2026 workshop formatting and a much shorter appendix are required. |
+
+#### FMTS V1 — 75.25/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8 | The paper now evaluates a concrete movement observable within a temporal system. Temporal-direction sensitivity and the limits of correspondence still need sharper placement. |
+| Claim accuracy | 8 | Obsolete recipes and general symmetry verdicts are removed. The headline is supported; the detailed correspondence denominator and all five paired intervals need prominence. |
+| Evaluation/statistics | 7 | Source weighting, matched starts and train-only regression selection are explicit. One main-text interval leaves the central comparison less assessable than it could be. |
+| Insight/positioning | 7.5 | The latent-matching/movement distinction drives the paper. Related Work remains somewhat descriptive; static and support-based explanations need stronger integration. |
+| Reproducibility | 6.5 | Each version has private sources, figures and aggregate records. Raw predictions/checkpoints and complete acquisition provenance remain unavailable. |
+| Clarity/narrative | 7.5 | A four-page motivation-to-result arc replaces the longer draft. The opening is generic and the decisive uncertainty is unnecessarily in the appendix. |
+| Figures | 6.5 | Schematic poses and separate target/training paths are useful, but labels near 6.7 pt and an omitted projector in the graphic need correction. |
+| Submission fit | 8.5 | Official anonymous four-page main text compiles. Two supporting sections, working Markdown references and small figure labels still reduce usability. |
+
+#### FMTS V2 — 77.00/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8 | The gait evaluation remains focused. The speed contrast still needs a direct explanation of why its recovery is insufficient to validate temporal dynamics. |
+| Claim accuracy | 8.5 | All five paired contrasts and the 125-model/25-initial-control diagnostic counts are now explicit. Broader contamination and development claims need tighter qualification. |
+| Evaluation/statistics | 7.5 | The full main-text interval table makes the primary inference assessable. Conditional selection/split uncertainty and hash-versus-deduplication distinctions still need clearer wording. |
+| Insight/positioning | 7.5 | The decisive comparison is stronger on the page, but the same unisolated readout and nuisance explanations remain. No new empirical evidence is added. |
+| Reproducibility | 6.5 | Private assets and aggregate checks are retained. Missing raw rows still prevent bootstraps or inference from being independently repeated here. |
+| Clarity/narrative | 7.5 | The abstract names the movement estimate and source cross-validation more clearly. Repeated explanatory headings and generic related-work prose remain. |
+| Figures | 6.5 | Main-text table improves uncertainty display; pipeline label size and projector omission are unchanged, so figure score does not rise. |
+| Submission fit | 8.5 | Four-page official anonymous layout remains intact with an ordinary-size table. Supporting material and Markdown citation presentation still need refinement. |
+
+#### FMTS V3 — 78.50/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8 | Source holdout is now distinguished from chronology and person independence. The target's temporal-direction weakness remains the next substantive positioning issue. |
+| Claim accuracy | 9 | Archive integrity is separated from content/person deduplication; registered reflection tests are separated from post-inspection extensions. Material scope claims are now bounded. |
+| Evaluation/statistics | 7.5 | Omitted retraining, split and selection uncertainty is explicit. This improves interpretation, while the underlying cohort/control limitations keep the score unchanged. |
+| Insight/positioning | 7.5 | Possible nuisance and capacity explanations are visible but not tested. A synthesized account of task-dependent representation quality would strengthen the contribution. |
+| Reproducibility | 6.5 | The provenance narrative is more honest about missing records. It cannot replace raw predictions, acquisition versions or participant IDs. |
+| Clarity/narrative | 8 | Cleaner inferential boundaries and clearer registered/exploratory distinctions improve readability. Temporal and related-work explanations still need consolidation. |
+| Figures | 6.5 | Plots and vector pipeline remain as in V2, including small labels and the projector omission. No cosmetic chronology credit is given. |
+| Submission fit | 8.5 | Four main pages, anonymous style and consistent PDF references pass. The appendix and Markdown references are still less polished than the eventual final version. |
+
+#### FMTS V4 — 80.25/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8.5 | Time-reversal invariance and the necessary-but-limited observable-recovery test now anchor the temporal contribution. Genuine dynamics and forecasting still require experiments. |
+| Claim accuracy | 9 | Correct-clip preference is distinguished from comparing losses across changing teachers. Coupled readout changes are stated without an unsupported order-learning claim. |
+| Evaluation/statistics | 7.5 | The inference remains conditional and source paired. No new ablation, penalty search, independent cohort or multiplicity adjustment has been added. |
+| Insight/positioning | 8 | Related Work synthesizes which variation prediction retains and which behaviors downstream evaluation tests. It remains conceptual rather than a benchmark comparison. |
+| Reproducibility | 6.5 | Private inputs and reproducible typesetting persist. Aggregate-only access and incomplete acquisition/person records remain material limitations. |
+| Clarity/narrative | 8 | The scientific argument is more direct; compressed labels and repetitive caveats still add friction, motivating the design and editorial passes. |
+| Figures | 6.5 | The figure's full-view projector omission and minimum label size remain unresolved here, despite improved surrounding explanation. |
+| Submission fit | 8.5 | Four-page main text and anonymous sources meet the structural requirement. Appendix length, figure usability and Markdown reference completeness still need work. |
+
+#### FMTS V5 — 81.75/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8.5 | The redesigned time axis, index-resizing label and two-sided context make the temporal boundary easier to see. No future-gait prediction is visually implied. |
+| Claim accuracy | 9 | The graphic now includes the full-view projector and distinguishes target supervision from encoder training. Evidence support otherwise remains unchanged. |
+| Evaluation/statistics | 7.5 | Seed dots, means and repeated diagnostic checks are labeled by their actual units. This improves communication, not the underlying statistical design. |
+| Insight/positioning | 8 | The figure makes the two evaluations easier to compare. A causal explanation for their disagreement remains unresolved and is not inferred from the visual design. |
+| Reproducibility | 6.5 | Private vector generators reproduce each version's own assets. They do not restore raw training or source-bootstrap artifacts. |
+| Clarity/narrative | 8.5 | Shorter labels and clearer branches improve the main narrative. Appendix execution detail and the working Markdown reference section still interrupt the reading. |
+| Figures | 8.5 | About 8.1-pt minimum labels, continuous arrow approaches, a separate y branch and the regularizer projector correct the material V4 diagram weaknesses. |
+| Submission fit | 8.5 | Main text remains four pages after redesign. Anonymous citation presentation and supporting-section economy still benefit from revision. |
+
+#### FMTS V6 — 82.50/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8.5 | Suitability for the chosen gait measurement is stated without demanding preservation of every possible observable. The temporal empirical scope is unchanged. |
+| Claim accuracy | 9 | Reflection augmentation and explicit reflection loss retain separate recipes and evidence types even after execution chronology is removed. |
+| Evaluation/statistics | 7.5 | Conditional paired intervals and alternative readout explanations remain clear. New statistical evidence is still absent, so rigor does not rise with the version number. |
+| Insight/positioning | 8 | The task-dependent evaluation synthesis remains strong. Additional gait observables, order controls and future-motion tests would be needed for broader insight. |
+| Reproducibility | 7 | Complete numbered Markdown references, private BibTeX and an explicit aggregate-only availability statement make the deliverable easier to inspect and rebuild. |
+| Clarity/narrative | 8.5 | Local execution history is removed from manuscript prose; repeated caveats and audit-like phrasing still warrant a final editorial pass. |
+| Figures | 8.5 | The V5 vector design is retained unchanged. Its print-size legibility and accurate branching remain strengths, without further score inflation. |
+| Submission fit | 9 | Official four-page PDF, complete Markdown references, anonymous packages and disclosure are in place. Two supporting sections remain longer than necessary. |
+
+#### FMTS V7 — 82.50/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8.5 | The measured temporal-neighbor mask effect is now explicit. This clarifies context availability but does not add a new temporal capability. |
+| Claim accuracy | 9 | Precision is reconciled across prose, table and plots; reflection error's fixed joint/channel action is clearer. No new scientific-evidence credit is awarded for rounding. |
+| Evaluation/statistics | 7.5 | MAE increases have defensible magnitudes, and signed tiny mask effects retain uncertainty. Source intervals remain fixed-fit and exploratory. |
+| Insight/positioning | 8 | The same empirical evaluation lesson and unresolved capacity/nuisance controls remain. Numerical polish does not change the scientific evidence. |
+| Reproducibility | 7 | Full-precision aggregates and private build assets remain available; the paper now has one supporting section. Missing primary artifacts are unchanged. |
+| Clarity/narrative | 8.5 | Consolidation reduces headings, but explanatory rhythm and repeated qualifications remain formulaic enough to justify a fluent rewrite. |
+| Figures | 8.5 | The V5 design remains accurate and readable. Further anatomical identity and encoder-role labeling is reserved for V8. |
+| Submission fit | 9 | Four main pages with a single appendix section; seven pages total. Reduced headings improve organization but do not materially change the overall score. |
+
+#### FMTS V8 — 83.50/100
+
+| Dimension | Score | Concrete reason, remaining weakness or next correction |
+|:--|--:|:--|
+| Temporal relevance | 8.5 | The abstract and introduction lead with an observed gait-speed contrast and its relationship to predictive features. A future-only test is concise and explicitly proposed. |
+| Claim accuracy | 9 | Final claims trace to the matched grid or labeled summary/synthetic evidence. No unresolved material misstatement was found; raw-row verification remains unavailable. |
+| Evaluation/statistics | 7.5 | All five paired effects, source conditioning, readout selection and possible nuisance/capacity explanations are explicit. New data and ablations remain necessary for stronger inference. |
+| Insight/positioning | 8 | A coherent evaluation contribution connects latent matching with a specified observable. Mechanism, temporal order, broad transfer and true forecasting remain untested. |
+| Reproducibility | 7 | Eight isolated source packages reproduce their PDFs; private numerical verifiers reproduce seed means and differences. Raw inference and source intervals remain unreproducible from aggregates alone. |
+| Clarity/narrative | 9 | Connected prose replaces repeated audit statements; the actual measurement appears first, terms are explained and the appendix is one page. Some technical density is unavoidable. |
+| Figures | 9 | Explicit anatomical identities, left/right colors, missing-landmark key and frozen encoder label complete the print-size diagram; teacher readout values and repeated diagnostic units are clear. |
+| Submission fit | 9.5 | Four main pages, one reference page and one appendix page in the official anonymous style, with verified citations and AI disclosure. Actual submission still depends on the project's unresolved governance determinations. |
+
+
+### Adversarial critique of the two starting manuscripts
+
+| Manuscript / perspective | Substantive objection, severity and evidence | Revision or reasoned disposition | Residual limitation |
+|:--|:--|:--|:--|
+| Original / temporal researcher | Major: the abstract calls the model a skeleton world model and concludes that symmetry must be installed. The experiments recover one observed contrast, not future trajectories or state. | Reframe around evaluating features for a specified observable; make sign reversal a consistency check. | No demonstrated forecasting, phase, temporal direction, persistent state or simulator. |
+| Original / evidence auditor | Major: “reflection augmentation does not repair any of this” overlooks the saved decrease in q; a self-consistency oracle is used to locate failure in the learned features. | Report augmentation's token effect and uncertain movement effect separately. Remove the oracle's localization inference. | The oracle simply reconstructs a target from its components; it cannot diagnose the encoder or preprocessing. |
+| Original / evidence auditor | Major: 300-epoch/scheduled-EMA reflection settings would misdescribe the motion/region grid if carried into the new central comparison. | Use the completed 1,200-update, fixed-EMA, CE-plus-full-view-VICReg recipe; keep reflection evidence separate. | No single pooled “JEPA effect” across incompatible grids. |
+| Original / statistical reviewer | Major: “fully powered null” and “only route” exceed failed superiority/equivariance gates and intervals containing zero. | Replace with the tested estimands and intervals; neither nonsignificance nor constructed oddness establishes impossibility. | No equivalence test, causal localization or exhaustive readout search. |
+| Original / statistical reviewer | Moderate: strong protocol language invites an untouched-data or person-independent reading. | State post-development source holdout, label-free inner encoder exposure and conditional bootstrap limits. | Missing identities, chronology and independent development cohort. |
+| Original / editor | Major: a broad symmetry verdict and local operational catalogue obscure the latest decisive comparison and FMTS question. | Center the trained-versus-initial movement table and predictor diagnostic; move provenance to this record. | Short-paper space limits secondary investigations. |
+| Physical World V8 / temporal researcher | Major: its observational framework is largely careful, but the speed contrast's time-reversal invariance and the distinction between two-sided completion and forecasting need sharper placement. | Add these boundaries where the target and available context are introduced. | The temporal contribution remains a necessary observable-recovery check, not evidence of learned dynamics. |
+| Physical World V8 / evidence auditor | Moderate: a historical raw-data replay is easy to read as current artifact availability. | State the present aggregate-only verification and preserve prior audit provenance separately. | Inference and source bootstraps cannot be rerun in this checkout. |
+| Physical World V8 / statistical reviewer | Moderate: the central paired teacher-versus-initial intervals need prominence; the expanded-summary improvement still mixes capacity and support changes. | Put all five paired intervals in the main text and name the coupled changes in the summary. | Readout regularization, nuisance cues and causal mechanisms require new tests. |
+| Physical World V8 / editor | Major: eight main pages and eleven total pages cannot fit FMTS's four-page main-text limit; substantial detail is peripheral to the central result. | Rebuild in the official 2026 workshop style; retain one supporting appendix by V7 and condense it to one page in V8. | Detailed provenance and the full forecast protocol are deliberately local review material. |
+
+### Successive revision reviews and dispositions
+
+`codex:adversarial-review` was not available: no matching callable tool or installed skill was found. The following explicit systematic reviews apply the four requested perspectives directly. They are not represented as independent reviewers, external tool outputs or scientific replications. Each revision was written, reviewed and used to select the next revision's changes; later discovery does not silently rewrite a frozen earlier version.
+
+#### FMTS V1 adversarial review
+
+Author-side systematic review; codex:adversarial-review is not exposed in this session. Four perspectives were applied directly, without claiming a tool or independent reviewer.
+
+| Perspective | Objection and severity | Evidence | Correction in V2 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Major: a feature-correspondence count could be read as movement prediction. | Notebook 18 cell 13 and retained diagnostic totals; three gap masks. | Name all three evaluation masks, 125 models and 25 deduplicated initial controls. | Static posture, camera and missingness can explain correspondence. |
+| Evidence auditor | Major: only one paired training interval appears in the main text. | Five retained exploratory intervals; seed differences independently agree. | Bring the full paired comparison table into Findings. | Raw rows and checkpoints unavailable here; intervals retained from the saved audit. |
+| Statistical reviewer | Moderate: abstract phrase “held-out-by-source videos” is awkward and conceals rotating cross-validation. | Five folds reuse 93 videos. | State source-video cross-validation and keep paired conditional intervals explicit. | No independent development cohort. |
+| Four-page editor | Moderate: generic opening delays the actual observable. | Abstract and introduction. | Open with observable movement and shorten introductory scaffolding. | Figure annotations remain small at print size; redesign scheduled in V5. |
+
+V1 already compiles to four main pages in the official template. Its central finding is supportable, but decisive uncertainty is unnecessarily hidden in the appendix. No new empirical evidence is added by V2.
+
+
+#### FMTS V2 adversarial review
+
+| Perspective | Objection and severity | Evidence | Correction in V3 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Moderate: source holdout might be read as temporal generalization. | Source folds are stratified video partitions; no chronological test. | State that chronology, participant independence and untouched development are untested. | New source/person/temporal splits require new data or experiments. |
+| Evidence auditor | Major: file-hash checks can be mistaken for content deduplication. | Recorded 625-archive replay and source-membership audit; no complete reupload/person audit. | Separate integrity and split checks from contamination checks in Appendix A. | Acquisition versions and person IDs are unavailable. |
+| Statistical reviewer | Moderate: conditional intervals omit selection and split uncertainty. | Bootstrap seed 812 resamples saved predictions, without retraining or selection correction. | Name the omitted sources of uncertainty and preserve exploratory status. | No familywise or development-selection adjustment. |
+| Editor | Moderate: the registered hypothesis and post-inspection extension are awkwardly juxtaposed. | PROTOCOL.md and extension module docstrings. | Connect the null across studies while distinguishing registration from exploratory questions. | Shared development cohort limits confirmation. |
+
+V2 moved all five paired contrasts into the main text. The table was typeset with ordinary 10-point text and short headings, rather than reduced fonts. V3 adds inferential boundaries without claiming new evidence.
+
+
+#### FMTS V3 adversarial review
+
+| Perspective | Objection and severity | Evidence | Correction in V4 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Major: a speed-derived target may still be insensitive to temporal direction. | The median norm of a transition divided by its interval is preserved under trajectory/time-interval reversal. | Link this property directly to the limit on claiming learned dynamics. | No phase, timing, future behavior or persistent-state test. |
+| Evidence auditor | Moderate: “matching improves” may invite comparison of MSE from differently scaled teachers. | Each training arm has its own teacher; diagnostic contrasts pair correct and mismatched targets within a model. | Describe increased consistency of correct-clip preference, not a common cross-model loss ranking. | No causal mechanism identified. |
+| Statistical reviewer | Major: expanded summaries change capacity and nuisance information jointly. | 960 to 2,890 inputs; SD, absolute increments and support added together. | Explain order and direction limitations at the reported gain. | Requires matched-dimension, support-only and regularization ablations. |
+| Editor | Moderate: Related Work is a short list of papers rather than a scientific synthesis. | Recognition, masking, prediction and transformation papers address distinct outcomes. | Organize around what variation prediction retains and how downstream behavior evaluates it. | Literature comparisons remain conceptual, not empirical baselines. |
+
+V4 sharpens the temporal contribution by making its weakest interpretation explicit. Removing generic workshop language does more for relevance than adding unsupported topics.
+
+
+#### FMTS V4 adversarial review
+
+| Perspective | Objection and severity | Evidence | Correction in V5 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Moderate: the schematic could be mistaken for future gait prediction or a real pose example. | All drawn poses are hand-built schematics; the model completes hidden positions. | Label schematic poses, original time, index resizing and two-sided context at the point of use. | No observed-to-future gait demonstration is claimed. |
+| Evidence auditor | Major: the full-view branch omitted its projector in the graphic. | motion_structured_training.py encodes both full views, pools gait joints, then projects before VICReg. | Add projector, clarify twelve-joint pool includes hips, and keep y entirely outside encoder supervision. | No ablation isolates the full-view regularizer. |
+| Statistical reviewer | Moderate: result-plot dots and diagnostic bars invite an independence interpretation. | Five seeds reuse 93 videos; diagnostic counts reuse fitted models and masks. | Increase size of unit labels and retain mean-versus-seed distinction. | Bootstrap intervals remain fixed-fit conditional estimates. |
+| Editor/designer | Major: 6.7-point labels were readable enlarged but weak at final paper size. | V1-V4 rendered pipeline and result panels. | V5 uses minimum 20.5 vector units at 1,000-unit width, about 8.1 pt at 5.5 inches; short labels and long final arrow segments. | Dense figure; inspect every rendered label for clipping. |
+
+The reflection loss is deliberately absent from the main figure because it did not run in the completed gait grid. Its synthetic-only evidence remains in a short appendix paragraph.
+
+
+#### FMTS V5 adversarial review
+
+| Perspective | Objection and severity | Evidence | Correction in V6 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Major: losing a low-level speed quantity may be acceptable for action recognition, so why is this a temporal-model result? | Training predicts learned features; evaluation deliberately chooses a different system observable. | State that the test concerns suitability for the chosen gait measurement, rather than universal preservation of all details. | No claim that JEPA should preserve every observable or that this is a general JEPA failure. |
+| Evidence auditor | Moderate: reflection augmentation and reflection loss need their distinct recipes even after chronology is removed. | Augmentation summary uses p=0.5, scheduled teacher EMA and four inner folds; explicit loss only synthetic. | Preserve recipe, evidence type and extra-pass cost in one appendix paragraph. | No real-data reflection-loss effect estimate. |
+| Statistical reviewer | Moderate: provenance details consume space without making bootstrap reproducible from aggregates. | Raw predictions absent; numerical supplement contains seed aggregates and retained intervals. | State the limitation once and remove local execution counts from manuscript prose. | Source resampling cannot be rerun with aggregate-only supplement. |
+| Editor | Major: Markdown References is only a working placeholder despite a complete PDF bibliography. | V1-V5 use Pandoc citation keys and BibTeX. | Materialize complete numbered Markdown references with a private key map, keeping natbib/BibTeX in PDF. Shorten appendix duplication. | No requirement inferred for a main-track checklist: FMTS CFP does not request one. |
+
+V6 retains two short appendices rather than a notebook catalogue. Detailed future controls and provenance remain in the FMTS README record.
+
+
+#### FMTS V6 adversarial review
+
+| Perspective | Objection and severity | Evidence | Correction in V7 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Moderate: successful region construction is described without its measured temporal-cue effect. | Notebook 16: fraction with both adjacent temporal blocks visible 0.699 to 0.000 in region vs count-matched random inspection draws. | Add 69.9% to zero, explicitly as inspection-draw evidence. | Those are repeated mask draws, not realized masks logged at every optimizer step. |
+| Evidence auditor | Moderate: teacher-token reflection discrepancy q is underspecified. | Original reflection metric fixes joint permutation and identity feature-channel action. | Define that action and normalized error in the supporting paragraph. | Another learned channel action could yield a different result. |
+| Statistical reviewer | Moderate: “greater mean absolute error” needs magnitude and a defensible display rule. | Retained MAE means 0.0415461 versus 0.0435951–0.0440373; paired increases 0.00204898–0.00249116. | Report MAE to four decimal places and increases 0.0020–0.0025; preserve full precision in local numerical record. | Main uncertainty concerns paired R²; full MAE intervals remain in numerical supplement. |
+| Editor | Moderate: two appendix headings separate details that can fit one supporting section. | Central paired table already appears in main text; no notebook inventory is needed. | Consolidate into one appendix, update all cross-references, and audit repeated estimates. | Missing primary artifacts remains an empirical reproducibility limitation. |
+
+Precision policy: R² and interval bounds to three decimal places; nonzero differences below 0.001 retain one significant digit and their sign. Headline R² is explicitly approximate at two decimals. Percentages use one decimal, counts remain integers, and exact settings/thresholds are not rounded as estimates. Every difference is formed before display rounding. V7 does not gain scientific-evidence credit for changing precision.
+
+
+#### FMTS V7 adversarial and editorial review
+
+| Perspective | Objection and severity | Evidence | Correction in V8 | Residual limitation |
+|---|---|---|---|---|
+| Temporal researcher | Moderate: the opening discusses “access” before explaining what is estimated. | Main comparison estimates a signed median-speed contrast, not future motion. | Open with estimating how much left and right sides move, then connect it to the evolving system. | Speed contrast alone cannot demonstrate dynamics. |
+| Evidence auditor | Moderate: “Both encoders” is ambiguous when initial, online and teacher are evaluated. | Grid contains initial and two final encoder roles. | Explicitly identify matched initial and final encoders and keep the headline table teacher-specific. | Another readout or recipe may change the outcome. |
+| Statistical reviewer | Moderate: summary and regression changes could be attributed too narrowly to time. | Dimension, variation, increments and support change together. | Name all changed factors at the gain, and retain boundary-selection counts and proposed controls. | No isolated explanation is established. |
+| Editor | Major: repeated “does not” statements and numbered audit-like paragraphs flatten the story. | V7 abstract, introduction, results and discussion repeat boundaries. | Rewrite main text in connected prose, state the measurement once, integrate limits where they affect interpretation, and remove redundant conclusion-like transitions. | Natural prose remains an editorial judgment, not evidence of human or AI authorship. |
+
+V8 keeps the same numerical evidence. It clarifies that correct-clip matching and estimating left–right movement are different evaluations, neither of which itself predicts future movement.
+
+
+#### FMTS V8 final adversarial and natural-prose review
+
+Author-side systematic review, 10 September 2026. No `codex:adversarial-review` tool or skill was available. Four perspectives were applied directly. This is not an independent peer review or a judgment about whether prose was written by a human or an AI.
+
+| Perspective | Substantive objection and severity | Evidence examined | Correction or reasoned disposition | Residual limitation |
+|:--|:--|:--|:--|:--|
+| Temporal researcher | Major: a time-reversal-invariant speed contrast could make the temporal contribution seem empty. | Target formula, original timestamps, shared valid transitions, geometry implementation. | Describe a movement-derived observable that a single pose cannot determine, while explicitly stating its invariance to reversal and its omission of phase, timing and loading. The contribution evaluates suitability for one observable within a temporal representation agenda. | No learned dynamics, temporal direction or persistent-state capability is established. A direction-sensitive future-motion test needs new evidence. |
+| Temporal researcher | Major: a correct-clip diagnostic can succeed through static appearance, anatomy or missingness. | Three-gap diagnostic and full-clip teacher access; no shuffled-time or support-only completed control. | Name pose, viewpoint and missingness as plausible shared cues. Use “more consistently” for correct-versus-mismatched preference, rather than comparing raw losses across different teachers. | Static/nuisance explanations are still possible; no causal account is asserted. |
+| Temporal researcher | Major: a selected low-level observable need not improve under every useful representation. | Action-recognition purposes of related skeleton methods; limited ridge readout and small gait grid. | Bound the result by observable, cohort, recipe and readout. Do not interpret it as a general JEPA failure, destruction of all information or a demand that every representation retain every detail. | Other observables, training recipes and readouts may give different results. |
+| Temporal researcher | Major: synthetic future decoding could quietly become a forecasting claim. | Notebook 10 design and Notebook 14 executed synthetic demonstration; real-data eligibility census. | Keep one proposed next-experiment paragraph. Distinguish observed future-teacher decoding from past-conditioned predicted-feature decoding. Specify prefix-only preparation and matched observable controls. | No real-data forecast, recursive rollout, simulation, predictive calibration or intervention test. |
+| Evidence auditor | Major: exact-looking estimates might conceal missing primary artifacts. | Figure provenance seed rows, saved paired audit, Notebook 18 outputs, local artifact search. | Independently verify aggregate means/differences; label retained intervals and absent raw predictions/checkpoints in Appendix A and supplement. Make no claim to have rerun source bootstrap or inference. | Raw audit must be repeated when the artifacts are restored. |
+| Evidence auditor | Major: teacher readout values and predictor diagnostics could be attributed to the wrong representation. | Five teacher rows, matched initial rows, online selection counts and diagnostic denominator construction. | Name trained teachers in Table 1 and Figure 2's caption; describe final online results separately. Explain 375/375 and 33/75 as repeated model/mask checks. | Underlying individual diagnostic rows cannot be replayed here. |
+| Evidence auditor | Major: the figure could depict a different objective or imply movement-label supervision. | `model.py`, `motion_structured_training.py`, teacher/full-view code, vector drawing. | Show teacher EMA, full teacher input, full-view pool/projector/VICReg, masked online input and separate target-to-readout branch. Add anatomical identity text, missing-landmark key and explicit frozen encoder label. CE training and MSE diagnostic are described separately. | The full-view regularizer's individual effect has not been ablated. |
+| Evidence auditor | Moderate: “how much the sides move” may be read as total distance or absolute speed estimation. | Normalized contrast of five median-speed pairs. | Rewrite the abstract's first sentence as estimating a left–right difference in movement speed, then define the signed contrast in Methods. | The target is image/body-normalized and can cancel across pairs; it is not a clinical or metric-speed measurement. |
+| Evidence auditor | Moderate: removing execution chronology could merge reflection recipes. | Compact four-inner-fold reflection summary, scheduled EMA, main grid's fixed EMA and absence of mirrors. | Use “separate real-data summary evidence,” name its recipe and no-mirror reference, and state that explicit reflection loss has synthetic evidence only. V7 and V8 contain no “An earlier reflection experiment.” | No real-data explicit-reflection-loss effect is available. |
+| Statistical reviewer | Major: negative paired intervals might be oversold as broad confirmation. | Five source-weighted seed scores per condition; fixed-fit paired source bootstrap, seed 812. | Keep effect sizes and intervals in the main text, explain repeated sources and omitted retraining/partition/selection uncertainty, and call the intervals exploratory. | Marginal intervals have no familywise or development-selection adjustment; there is no untouched cohort. |
+| Statistical reviewer | Major: expanded summaries jointly change readout capacity and nuisance information. | 960 versus 2,890 inputs, common paired support, SD/absolute increments, upper-penalty counts. | Report the +0.152 initial-readout gain with its coupled changes; identify 49/125 teacher and 96/125 online fits at the penalty boundary. Propose training-only regularization and capacity/support controls. | No isolated explanation for the gain or trained deficit. |
+| Statistical reviewer | Major: integrity hashes and source folds do not prove person or duplicate independence. | Prior archive replay and training-source checks; missing identities and acquisition versions. | Separate source split adherence from participant independence, chronological testing and cross-upload deduplication; retain unknown provenance. | New metadata and data are required, not stronger wording. |
+| Statistical reviewer | Moderate: tiny rounded mask effects could become apparent zeros or false ties. | Full-precision paired mask and teacher differences. | Form differences before rounding; keep MAMP −0.0008 and mixture +0.0005 with their zero-containing intervals. Use consistent R², MAE, percentage and integer precision. | Uncertain benefits remain uncertain, not equivalent to zero. |
+| Editor | Major: an audit-like cadence can obscure the scientific argument. | Abstract, introduction, findings, discussion and related-work paragraphs read as continuous prose. | Lead with the measurement and paired comparison; use declarative findings; integrate boundaries at the target, readout and forecast discussion; remove duplicated caveats and notebook chronology. | Technical terms such as source-balanced R² and ridge regression still require concise definitions, which are retained. |
+| Editor | Moderate: appendix growth could displace the contribution or require reviewers to read it. | Rendered four main pages; principal comparison, preprocessing, split and uncertainty in main text. | Consolidate supporting details into one one-page appendix. Keep notebook inventory, extensive provenance, title options and detailed proposed experiments in the README. | Main-text space cannot accommodate every useful future control or code setting. |
+| Editor | Moderate: citation, anonymity or encoding defects could undermine an otherwise sound revision. | Primary papers/official implementations, official 2026 style, extracted PDF text, isolated source builds and rendered references. | Use consistent numbered citations, verified publication status, ASCII title hyphens for reliable PDF extraction, anonymous metadata and a substantive AI-assistance disclosure. | Local ethics/data-use submission gates remain unresolved; no submission has been made. |
+
+The final pass found no unresolved material misstatement in V8. The stronger scientific objections remain explicitly bounded limitations or proposed experiments rather than claims rewritten as solved. The abstract, title, paired table, predictor diagnostic and discussion describe the same narrow contribution. No score increase is assigned to unperformed controls, restored data access or a capability demonstrated only synthetically.
+
+
+### Seven title suggestions
+
+1. **Hidden-Feature Matching and Left-Right Movement: Different Outcomes in a Gait JEPA** — V8's selected title; it names both evaluations without implying forecasting.
+2. **Measuring Left-Right Movement in Predictive Gait Representations** — emphasizes the observable and temporal setting.
+3. **Predicting Hidden Features and Estimating Movement in a Gait JEPA** — makes the distinct tasks easy to recognize.
+4. **Left-Right Speed Contrast as a Test of Predictive Gait Features** — precise about the measurement's limited scope.
+5. **Evaluating Gait Representations Beyond Hidden-Feature Matching** — foregrounds the workshop's evaluation theme.
+6. **Initial and Trained Gait Features for Estimating Left-Right Movement** — emphasizes the decisive matched control.
+7. **A Gap Between Hidden-Feature Correspondence and Movement Readout in Gait** — names the empirical finding, using a more technical title than the selected option.
+
+In plain language, the sentence about clip-specific correspondence says: **After training, the model more consistently matches hidden features from the same walking clip. But a separate regression estimates the clip's left–right movement difference less accurately from the trained encoder's features than from its starting features.** Matching a clip's hidden features and estimating its movement are different evaluations; neither one tests prediction of future movement. V8 uses this distinction throughout, while explaining the measured normalized median-speed contrast more precisely in Methods.
+
+### Precision and repeated-estimate audit
+
+The abstract's 0.22 versus 0.10–0.11 is a compact, rounded headline for the same initial/teacher expanded-summary comparison. The main text, table and plot use R² 0.223 versus 0.101–0.114. R² and interval limits generally use three decimals. Differences below 0.001 retain a sign and one significant digit: MAMP −0.0008 and mixture +0.0005. Their intervals remain visible, including the negative lower bound −0.015 after rounding the mixture's −0.015497…; no rounded zero is called equivalence. MAE uses four decimals (0.0415 to 0.0436–0.0440), with paired increases computed first (0.0020–0.0025). Percentages use one decimal when supported; integer counts and exact method settings are not rounded as estimates. Reflection summary values are rounded from the saved summary, without invented seed-level or bootstrap precision.
+
+The source table computes differences before formatting. In particular, 0.113−0.223 would misleadingly suggest −0.110 even when an arm's underlying difference differs from that rounded subtraction. The mixture's underlying −0.108334… is displayed as −0.108, although its mean R² shares 0.114 with the random motion arm. Seed aggregates and source intervals are different objects: neither seed scatter nor 375 repeated diagnostic checks supplies 375 independent source videos or predictive calibration. The final manuscript, captions and figure labels were checked against the private numerical record.
+
+### Detailed design for the next real-data forecast experiment — proposed, not completed
+
+The new scientific question is whether correct past–future training pairs help predict observable future coordinates beyond simple extrapolation and an initial encoder. This is distinct from reconstructing an observed whole-clip speed statistic. Notebook 10 reads out past-encoder features; Notebook 14 decodes features predicted for the future. Their retained training evidence is synthetic. The real-data horizon census says which examples might be eligible, not how accurately any model forecasts them.
+
+1. **Freeze the test contract before new outcomes.** Choose a primary physical-time horizon and a small set of secondary horizons using training-source eligibility, not outer-test performance. Specify the prefix duration, minimum observed support, timestamp tolerance and score before fitting. Candidate horizons such as 0.2, 0.4 and 0.8 seconds are design examples, not completed evaluations or promised eligible sample sizes. A new held-out source cohort would strengthen confirmation; unknown participant identities still limit person-level claims.
+2. **Split sources before generating examples.** Every overlapping prefix/window, future, mirrored version and augmentation inherits its video's split. Report unique source videos alongside prefixes, endpoints and clip–horizon examples. Repeated horizons or windows never increase the independent source count. Fit encoders within outer-training sources, preserve matched initial weights and keep all decoder selection within training sources.
+3. **Enforce the past boundary throughout preparation.** Derive normalization and body/pelvis references only from the prefix; lock that coordinate frame for the forecast and target. Fill a prefix gap only using endpoints already observed within the prefix, with no future extrapolation or clip-wide median. Retain original timestamps or explicitly supply elapsed time. Resize or patch the prefix independently of future duration. Future endpoint visibility may define the scoring subset after prediction, but must not change the prefix, query construction, mask sampling or model input. Motion-mask weights must use permitted past samples only.
+4. **Separate three feature routes.** A past-feature readout maps the prefix encoder to future coordinates. A predicted-feature decoder maps the predictor's past-conditioned future features to coordinates. A diagnostic decoder applied to observed future-teacher features tests decoder adequacy, with future information clearly acknowledged; it is never scored as a forecast. Fit each decoder and its settings on training sources, recording whether it was fitted on teacher or predicted features to expose any feature-distribution mismatch.
+5. **Use matched observable controls.** Compare last observed position, constant velocity estimated only from past observations, a direct-pose prefix model, and the matched initial encoder. Select velocity windows, model capacity and regularization on training sources. Share valid endpoints, physical-time horizons, source weights and permitted coordinates across all methods. Do not compare a strong future-informed decoder with a weaker past-only baseline and attribute the difference to dynamics.
+6. **Break temporal pairing as a training control.** Pair prefixes with futures from different training sources, preserving horizon and comparable observation support, using a fixed documented permutation. Match initialization, training budget, decoder procedure and evaluation sets to the correctly paired condition. No test future is used for this control. Correct-versus-mismatched training estimates the value of temporal pairing more directly than falling latent loss alone.
+7. **Test non-anticipation before scoring.** Change future coordinates, replace future visibility flags, append future samples and alter future duration while holding the prefix fixed. Prepared prefix arrays, normalization parameters, mask decisions and forecast outputs must remain unchanged. These are proposed implementation checks, not tests run during this manuscript revision.
+8. **Measure observable error and appropriate uncertainty.** Report endpoint and displacement errors in the stated image/body-normalized coordinate system, with horizons in seconds; do not present pseudo-depth as calibrated physical distance. Use a common valid-endpoint set for paired comparisons and report missingness strata. Source-bootstrap intervals resample videos with all their examples and seed predictions, remaining conditional on fitted models unless retraining is explicitly performed. Choose a primary comparison or state multiplicity; predictive calibration requires a separate forecast-distribution evaluation.
+9. **Reserve rollout and simulation claims for additional evidence.** Multiple horizons from one prefix are direct forecasts, not recursion. A recursive test must feed predictions forward and measure accumulating trajectory/coordination error on held-out observations; simulator fidelity would require further behavior and physical-consistency evaluation. No claim of long-horizon consistency, calibrated uncertainty, multimodal fusion, intervention prediction or a working gait simulator follows from the current census or synthetic demonstrations.
+
+### What revision resolves and what still requires evidence
+
+Editorial changes resolve obsolete settings, incompatible-grid comparisons, overclaiming of symmetry and world modeling, unclear time boundaries, ambiguous denominators, inconsistent numerical precision, citation status, excessive appendices and unreadable figure labels. The retained evidence supports the bounded negative comparison after these corrections.
+
+New empirical work is required to resolve: the effect of each preparation operation; regularization beyond the upper selected ridge candidate; support-only, matched-dimension, shuffled-order and stronger direct-pose controls; causal explanations for the trained-feature deficit; person independence and cross-upload duplication; independent development or distribution-shift evaluation; real-data explicit reflection loss; genuine forecasting and recursive rollout; and foundation-model scale or broad transfer. These remain stated limitations or proposed tests. No version receives scientific-evidence credit for merely describing them more elegantly.
+
+### Final artifact and visual verification
+
+All eight manuscripts compile independently from their anonymous source ZIPs, and their extracted PDF text matches the delivered PDFs page for page. Every version has four main-text pages; V1–V7 have seven total pages, and V8 has six (four main, one references, one appendix). No margin or body-font reduction was used. The official style hash, manuscript/source/PDF hashes and private asset inventory are retained in each version's manifest.
+
+All 55 rendered pages were checked in layout contact sheets, with larger inspections of the V1 and V5 figures and every final V8 page. The final V8 source package was rebuilt and its pages inspected again after the last caption, method and prose edits. There are no clipped figures, overlapping labels, missing glyphs, unresolved citations or overfull boxes in the final artifact. V1–V4 retain their smaller figure lettering as part of the revision history; the review and lower figure scores identify that weakness. V5–V8 use larger labels, and V8 adds explicit anatomical identities and the frozen encoder role. The schematic poses show neither participant images nor generated gait forecasts.
+
+The [delivery checks](fmts_revisions/review/delivery_checks.json), [numerical check](fmts_revisions/review/evidence_check.json), [final adversarial review](fmts_revisions/review/review_v8_final.md) and version-specific rendered pages document the scope of verification. Source packages contain frozen manuscript TeX, bibliography, official style and vector figures; numerical supplements contain retained seed aggregates, recorded intervals, a mean/difference verifier and the corresponding figure generator. They intentionally contain no original videos, poses, prediction rows, checkpoints or identifying repository links. Thus the manuscript and figures are reproducible, while full experimental replication and source-bootstrap reconstruction still require the missing primary artifacts.
+
+The original paper and Physical World AI V8 retain their initial SHA-256 values, and the pre-existing README record is preserved byte for byte before this appended FMTS section. FMTS assets are private to each version, with no references to mutable Physical World AI figures. The existing unrelated note is untouched. This completes the requested author-side revision and packaging exercise; no new experiment, external submission or data release is claimed.
