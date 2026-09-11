@@ -30,7 +30,7 @@ for part in 1 2 3 4 5; do
   annotations+=("$path")
 done
 if [[ ! -f "$FI_RUN_ROOT/config/run-contract.json" ]]; then
-  fi_python init-run \
+  fi_python init-run --protocol "${FI_EXPERIMENT_PROTOCOL:-direct-v2}" \
     --sequence-manifest "$GAVD_FULL_ROOT/manifests/gavd_full_sequences.csv" \
     --video-manifest "$GAVD_FULL_ROOT/manifests/gavd_full_videos.csv" \
     --annotations "${annotations[@]}" --youtube-dir "$GAVD_FULL_ROOT/youtube" \

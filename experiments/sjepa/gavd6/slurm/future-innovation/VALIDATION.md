@@ -1,5 +1,105 @@
 # Implementation validation
 
+## Direct-v2 50-clip gate — 2026-09-11
+
+The author clarified the final scope: **50 clips for Experiment 0**, selected from
+the full-GAVD candidate pool; the full dataset belongs to the subsequent real
+experiment. New runs use direct-v2, while legacy runs preserve their five-arm
+selectivity protocol. See the [current protocol](../../docs/studies/future-innovation/direct-gate-protocol.md)
+and [independent review/dispositions](../../docs/studies/future-innovation/notebook-run-investigation.md#direct-v2-50-clip-gate--11-september-2026).
+
+- Final repository suite: **207 tests in 35.102 seconds; 205 passed, 2 skipped**.
+  The skipped tests require an external official V-JEPA source checkout. The
+  final log is `work/artifacts/direct-v2-final-tests.log`. This is a local
+  macOS/Python 3.12.10 verification, not the HAIC CUDA environment.
+- Fourteen direct-protocol tests check the fixed 50-clip contract, deterministic
+  selection from a larger pool, absent-background behavior, causal/readiness
+  rejection and corruption, preserved diagnostic routing, blocked JEPA/protocol
+  guards, matched-capacity attribution, uncertainty decisions and bootstrap
+  equivalence. Legacy scientific rules remain covered by the existing tests.
+- Three data-flow tests decode generated video and exercise actual manifests,
+  pose/cache interfaces and teacher-check routines with an injected detector and
+  teacher. Full-frame person boxes and alternating boxes without shared background
+  flow now complete cache construction. The constant injected teacher fails only
+  the intended person-target variance requirement in direct-v2. No pixel-edit
+  evidence is fabricated as real teacher evidence.
+- `verification-nzdmi50q` passed all five fresh teaching kernels, both complete
+  synthetic notebook/CLI paths (**60 direct-v2 heads; 75 legacy heads**), deliberate
+  missing-fit failure, and unchanged sealed resumption. Each protocol also passed
+  seven rejected-readiness/audit notebook cases: 02, five 03 folds, and 04. These
+  finish as explicitly blocked, with zero heads and no notebook error outputs.
+- After adding conditional-on-saved-fits wording to the report and notebooks,
+  `verification-sii_rgbe` passed fresh 03/04 teaching kernels and repeated the
+  entire direct-v2 synthetic complete, incomplete, blocked and resume checks.
+  The final report states 50 clips, the matched skeleton increment, its conditional
+  interval and the full-GAVD next step. Synthetic ADVANCE is prohibited.
+- `verification-od1co0n_` passed all five notebooks in read-only inspection mode
+  against the completed direct-v2 synthetic report. The inspector remains able
+  to read preserved artifacts generated before the final prose clarification.
+- Generated sources, updated guide links, all Future Innovation shell syntax and
+  `git diff --check` passed. All nine original `haic-GOjuXSEB` notebook SHA-256
+  hashes match the saved pre-edit inventory.
+
+The three bundles are under
+`work/artifacts/notebook_runs/future_innovation/`. A machine-readable acceptance
+summary is retained at `work/artifacts/direct-v2-verification-summary.json`.
+Source notebooks remain unexecuted; executed copies and logs remain separate.
+The synthetic fitting fixtures explicitly reduce width, search/update budgets
+and bootstrap repetitions. They verify routing and estimation, not the full
+real-data training budget or the pretrained teacher's behavior on GAVD.
+
+Independent review found no remaining blocking code issues after correcting
+missing-background nuisances, corrupt-config diagnostic routing, blocked JEPA
+permissions and report provenance. The final uncertainty wording distinguishes
+conditional bootstrap intervals from repeated training and preserves the separate
+90%-positive decision rule. No real direct-v2 result or fresh HAIC run was produced
+locally. Start a new run root to obtain that result; existing caches and legacy
+thresholds are not silently relabeled.
+
+
+## Verified audit rejection in haic-GOjuXSEB — 2026-09-10
+
+- Final repository suite: **191 tests in 45.707 seconds; 189 passed and 2
+  optional official V-JEPA source integrations skipped**. Thirteen new tests
+  cover verified rejection, complete numeric audit validation, corrupt and
+  rehashed rows, missing files/plan changes, boolean/finite-value checks,
+  diagnostic-report fallback, stale reports, runtime errors and audit reuse.
+- The initial rejected-audit regression reproduced the old RuntimeError before
+  the repair. The final code distinguishes verified scientific rejection from
+  execution errors while preserving the frozen threshold and fitting gate.
+- Independent read-only adversarial review found two implementation issues:
+  corruption bypassing report fallback, and Infinity passing numeric checks.
+  Both were fixed with regressions; the final review found no blocking issues.
+- The canonical notebooks pass the builder synchronization check. Python
+  syntax checks and `git diff --check` passed. The original nine HAIC notebook
+  files retain their original statuses and error outputs; a digest inventory is
+  saved under `work/artifacts/haic-GOjuXSEB-original-notebooks.json`.
+
+- Final fresh-kernel inspection and full pipeline smoke **passed** in
+  `work/artifacts/notebook_runs/future_innovation/verification-9zg6grzj/`.
+  All five inspection notebooks passed. The execution smoke retained 75 final
+  synthetic checkpoints, a complete synthetic STOP, and unchanged scientific
+  artifacts on fold/report resume. Its missing-fit scenario correctly failed
+  before fitting, as asserted by the verifier.
+- All **seven** rejected-audit notebooks (02, the five 03 folds, and 04) finished
+  with `status=blocked`, `execution_completed=true`, incomplete predictive
+  measurement and **zero cell errors or fitted checkpoints**. Their diagnostic
+  STOP remains unsealed, has no predictive metrics and grants no advancement.
+- All five teaching notebooks passed in fresh kernels in the intermediate
+  `verification-qv7oyhnl/notebooks/` bundle before its later source-change
+  mismatch. The final inspection/smoke bundle is green and all retained
+  notebook/source/orchestration hashes match the final code. The earlier
+  failed bundle and initial socket-denied attempt remain preserved.
+
+Final kernel evidence includes `verification.json`, `checked-outcomes.json`,
+executed notebooks and durable CLI logs in that bundle's run directories.
+Full suite output: `work/artifacts/haic-GOjuXSEB-repair-tests.log`.
+The [investigation](../../docs/studies/future-innovation/notebook-run-investigation.md#run-haic-gojuxseb-verified-audit-rejection)
+records the exact saved real-data ratio, all checks, root cause and review
+objections. These are local implementation checks. The recorded HAIC audit
+still fails its fixed sensitivity criterion; no real teacher inference or
+HAIC scheduling was rerun, and no run thresholds or models were changed.
+
 ## Discovery, failed-audit diagnostics and shared notebook output — 2026-09-10
 
 - Full repository suite: **178 tests in 41.099 seconds; 176 passed, 2 optional

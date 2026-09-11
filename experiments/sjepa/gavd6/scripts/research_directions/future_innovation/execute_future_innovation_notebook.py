@@ -23,6 +23,7 @@ from build_future_innovation_notebooks import DESTINATION, NAMES, ROOT, render
 
 sys.path.insert(0, str(ROOT / "src"))
 from gavd6_sjepa.research_directions.future_innovation.fi_contracts import stage_lock
+from gavd6_sjepa.research_directions.future_innovation.fi_notebook_workflow import OUTCOME_MIME
 
 
 def atomic_text(path, content):
@@ -64,7 +65,7 @@ def execute_notebook(number, *, mode="teach", run_root=None, outer_fold=None,
         raise ValueError("--timeout must be positive; omit for no per-cell time limit.")
     if device not in {"cpu", "cuda"}:
         raise ValueError("Teacher device must be cpu or cuda.")
-    root = (ROOT / Path(run_root or "outputs/future-innovation/gate-v1").expanduser()).resolve()
+    root = (ROOT / Path(run_root or "outputs/future-innovation/direct-v2").expanduser()).resolve()
     source = DESTINATION / NAMES[number]
     notebook = nbformat.read(source, as_version=4)
     if [(c.cell_type, c.source) for c in notebook.cells] != [
@@ -158,9 +159,19 @@ def execute_notebook(number, *, mode="teach", run_root=None, outer_fold=None,
                     finally:
                         manager.cleanup_resources()
             record["status"] = "passed"
+            record["execution_completed"] = True
+            outcomes = [o["data"][OUTCOME_MIME] for c in notebook.cells for o in c.get("outputs", [])
+                        if OUTCOME_MIME in o.get("data", {})]
+            if outcomes:
+                outcome = outcomes[-1]
+                if outcome.get("status") not in {"passed", "blocked"}:
+                    raise ValueError("Unknown notebook completion outcome")
+                record["status"] = outcome["status"]
+                record["scientific_outcome"] = outcome
         except BaseException as error:
             # The cell already contains the full traceback; metadata needs a short summary.
-            record.update(status="failed", error=f"{type(error).__name__}: {str(error).splitlines()[-1:]}")
+            record.update(status="failed", execution_completed=False,
+                          error=f"{type(error).__name__}: {str(error).splitlines()[-1:]}")
             raise
         finally:
             record.update(finished_utc=datetime.now(timezone.utc).isoformat(),

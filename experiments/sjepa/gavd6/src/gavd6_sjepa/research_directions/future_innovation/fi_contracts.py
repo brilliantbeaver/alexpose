@@ -30,6 +30,29 @@ ARMS = (
     "background-target",
     "no-skeleton",
 )
+LEGACY_PROTOCOL = "legacy-v1"
+DIRECT_PROTOCOL = "direct-v2"
+DIRECT_ARMS = tuple(arm for arm in ARMS if arm != "background-target")
+
+
+def protocol_name(run):
+    name = run.get("protocol", LEGACY_PROTOCOL)
+    if name not in {LEGACY_PROTOCOL, DIRECT_PROTOCOL}:
+        raise ValueError(f"Unknown Experiment 0 protocol: {name}")
+    return name
+
+
+def experiment_arms(root):
+    run = check_run(root)
+    expected = DIRECT_ARMS if protocol_name(run) == DIRECT_PROTOCOL else ARMS
+    if tuple(read_json(Path(root) / "config/control-contract.json")["arms"]) != expected:
+        raise ValueError("Control arms disagree with the frozen experiment protocol")
+    return expected
+
+
+def audit_summary_path(root):
+    name = "readiness-summary.json" if protocol_name(check_run(root)) == DIRECT_PROTOCOL else "validity-summary.json"
+    return Path(root) / "qc" / name
 
 
 @dataclass(frozen=True)
@@ -284,9 +307,16 @@ def initialize_run(
     model=None,
     youtube_dir=None,
     video_roots=(),
+    protocol=DIRECT_PROTOCOL,
+    cohort_size=None,
 ):
     root = Path(root).resolve()
     change_reason = str(change_reason or "").strip() or "Experiment 0 initialization"
+    protocol_name({"protocol": protocol})
+    direct = protocol == DIRECT_PROTOCOL
+    if cohort_size is not None and (type(cohort_size) is not int or cohort_size != 50):
+        raise ValueError("Experiment 0 requires exactly 50 clips; full GAVD is reserved for the real experiment")
+    cohort_size = 50
     if (root / "config/run-contract.json").exists():
         raise ValueError(
             "Run already initialized; resume its stages or choose a new run ID"
@@ -337,12 +367,13 @@ def initialize_run(
             "background_flow": "median Farneback outside union of adjacent context person boxes",
         },
         "control-contract.json": {
-            "arms": ARMS,
+            "arms": DIRECT_ARMS if direct else ARMS,
             "shuffle_block": 4,
             "shuffle_seed": 260905,
             "mismatch": "partition-local standardized metadata; Hungarian without replacement; different source",
             "no_skeleton": "zero x,y,confidence; retain validity; identical parameter count",
-            "capacity_attribution": "paired no-skeleton control is reported with every decision; no manual interpretation gate",
+            "capacity_attribution": ("primary paired real-minus-no-skeleton contrast; validity retained in matched control"
+                                     if direct else "paired no-skeleton control is reported with every decision; no manual interpretation gate"),
             "audit_count": 10,
             "pixel_feather_pixels": 8,
             "pixel_person_edit": "different-source donor person ROI at reversed future times; resized into recipient box",
@@ -350,6 +381,24 @@ def initialize_run(
             "pixel_donor": "different source, stable hash order, fixed before teacher features",
         },
     }
+    if direct:
+        config["protocol-contract.json"] = {
+            "name": DIRECT_PROTOCOL,
+            "purpose": "incremental skeleton coordinate/confidence history beyond RGB, nuisance and matched validity/capacity",
+            "revision": "author-requested after inspection of legacy sensitivity audit; not the original preregistration",
+            "removed_prerequisites": ["person/background pixel-edit selectivity", "background-target gain reduction",
+                                      "minimum 90% crop retention", "minimum 45% whole-body pose coverage"],
+            "retained_checks": ["artifact integrity", "source isolation", "past-only inputs", "teacher repeatability", "person-target variance"],
+            "cohort_policy": "50 eligible clips from the available full-GAVD candidate pool; at least 25 sources, at most two clips per source",
+            "empty_background": "zero unavailable RGB/flow summaries and pooling vectors; prefix pixel, flow-pair and token support in nuisance inputs",
+            "skeleton_increment_min": 0.0,
+            "skeleton_increment_comparison": "strictly positive mean real-minus-no-skeleton; positive in every seed and >=90% paired source draws",
+        }
+        for key in ("motion_to_background_change_min", "person_edit_direction_fraction_min", "person_ablation_reduction_min"):
+            config["thresholds.json"].pop(key)
+        for key in ("pixel_feather_pixels", "pixel_person_edit", "pixel_background_edit", "pixel_donor"):
+            config["control-contract.json"].pop(key)
+        config["control-contract.json"]["audit_count"] = 3
     for name, value in config.items():
         write_once_json(root / "config" / name, value)
     lock = Path(__file__).resolve().parents[4] / "uv.lock"
@@ -362,6 +411,7 @@ def initialize_run(
         root / "config/run-contract.json",
         {
             "experiment": "future-innovation-experiment-0",
+            "protocol": protocol,
             "run_id": root.name,
             "change_reason": change_reason,
             "code_sha256": code_fingerprint(),
@@ -383,16 +433,17 @@ def initialize_run(
                 ),
                 "video_roots": [str(Path(p).expanduser().resolve()) for p in video_roots],
             },
-            "cohort_size": 50,
+            "cohort_size": cohort_size,
             "minimum_sources": 25,
             "source_cap": 2,
             "outer_folds": 5,
             "source_frame_origin": "GAVD one-based converted once to zero-based at candidate construction",
             "pose_model": str(Path(pose_model).resolve()),
             "pose_visibility_threshold": 0.45,
-            "minimum_pose_coverage": 0.45,
-            "minimum_crop_retention": 0.90,
-            "box_eligibility": "all 64 source frames annotated; retention >=0.9 for context and target",
+            "minimum_pose_coverage": 0.0 if direct else 0.45,
+            "minimum_crop_retention": 0.0 if direct else 0.90,
+            "box_eligibility": ("64 aligned source frames; nonempty person token region at context/target; at least one observed joint transition"
+                                if direct else "all 64 source frames annotated; retention >=0.9 for context and target"),
             "synthetic": synthetic,
         },
     )

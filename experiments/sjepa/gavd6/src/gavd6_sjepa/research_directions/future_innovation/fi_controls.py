@@ -2,6 +2,7 @@
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment
+from scipy.spatial.distance import cdist
 
 from .fi_contracts import stable_key
 
@@ -31,7 +32,7 @@ def mismatch_donors(video_ids, metadata):
     # Donor matching is a control construction, not learned model preprocessing.
     # Its statistics are confined to this partition, including validation/test.
     scaled = (metadata - metadata.mean(axis=0)) / np.maximum(metadata.std(axis=0), 1e-8)
-    cost = ((scaled[:, None] - scaled[None]) ** 2).sum(axis=-1)
+    cost = cdist(scaled, scaled, metric="sqeuclidean")
     cost[video_ids[:, None] == video_ids[None]] = np.inf
     try:
         recipients, donors = linear_sum_assignment(cost)

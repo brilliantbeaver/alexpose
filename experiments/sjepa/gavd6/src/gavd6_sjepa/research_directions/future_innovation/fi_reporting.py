@@ -16,6 +16,10 @@ from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
 
 from .fi_contracts import (
     ARMS,
+    DIRECT_PROTOCOL,
+    protocol_name,
+    experiment_arms,
+    audit_summary_path,
     GateThresholds,
     check_run,
     code_fingerprint,
@@ -30,10 +34,10 @@ from .fi_contracts import (
 )
 from .fi_feature_cache import load_cache
 from .fi_gate_decision import decide_gate
-from .fi_metrics import score_arrays, source_bootstrap_indices
+from .fi_metrics import score_arrays, source_bootstrap_indices, source_error_sums, source_bootstrap_counts, score_source_sums
 from .fi_nested_training import verify_fold
 from .fi_residual_models import TrainingScaler
-from .fi_validity_audits import require_audits
+from .fi_validity_audits import ValidityAuditRejected, require_audits
 
 
 def scores_binding(root):
@@ -41,23 +45,23 @@ def scores_binding(root):
     paths = [
         "config/run-contract.json",
         "config/cache-contract.json",
-        "qc/validity-summary.json",
+        str(audit_summary_path(root).relative_to(root)),
     ]
     paths += [f"models/fold-{fold}/fold-complete.json" for fold in range(5)]
     return stable_key(*[sha256_file(root / path) for path in paths])
 
 
-def assemble_oof(cohort, cache, predictions, config):
+def assemble_oof(cohort, cache, predictions, config, arms=ARMS):
     """Check identities, fitted statistics, target units, and every expected row."""
     keys = ["window_id", "arm", "seed", "target_feature"]
     if (
         predictions.duplicated(keys).any()
-        or len(predictions) != 50 * len(ARMS) * len(config.seeds) * 256
+        or len(predictions) != len(cohort) * len(arms) * len(config.seeds) * 256
     ):
         raise ValueError("Missing or duplicated OOF predictions")
     if (
         set(predictions.window_id) != set(cohort.window_id)
-        or set(predictions.arm) != set(ARMS)
+        or set(predictions.arm) != set(arms)
         or set(predictions.seed) != set(config.seeds)
         or set(predictions.target_feature) != set(range(256))
     ):
@@ -90,11 +94,11 @@ def assemble_oof(cohort, cache, predictions, config):
         ):
             raise ValueError("Prediction source/fold does not match frozen cohort")
     result, shared = {}, {}
-    for arm in ARMS:
+    for arm in arms:
         target_name = "background" if arm == "background-target" else "person"
         for seed in config.seeds:
             table = predictions[(predictions.arm == arm) & (predictions.seed == seed)]
-            if len(table) != 50 * 256 or set(table.target) != {target_name}:
+            if len(table) != len(cohort) * 256 or set(table.target) != {target_name}:
                 raise ValueError("Incomplete arm/seed or wrong target")
 
             def matrix(name, table=table):
@@ -197,9 +201,10 @@ def score_gate(root):
         return
     cohort, cache = load_cache(root)
     config = load_model_contract(root)
+    arms = experiment_arms(root)
     tables = [verify_fold(root, fold) for fold in range(5)]
     predictions = pd.concat(tables, ignore_index=True)
-    arrays = assemble_oof(cohort, cache, predictions, config)
+    arrays = assemble_oof(cohort, cache, predictions, config, arms=arms)
     weights = equal_source_weights(cohort.video_id.to_numpy())
     aggregates, features = [], []
     for (arm, seed), (target, baseline, full, valid) in arrays.items():
@@ -225,20 +230,20 @@ def score_gate(root):
                 }
             )
     bootstrap = []
-    for draw, indices in enumerate(
-        source_bootstrap_indices(
-            cohort.video_id.to_numpy(), config.bootstrap_repetitions
-        )
-    ):
+    direct = protocol_name(check_run(root)) == DIRECT_PROTOCOL
+    sufficient = ({key: source_error_sums(target, base, full, weights, cohort.video_id)
+                   for key, (target, base, full, _) in arrays.items()} if direct else {})
+    draws = (source_bootstrap_counts if direct else source_bootstrap_indices)(
+        cohort.video_id.to_numpy(), config.bootstrap_repetitions)
+    for draw, indices in enumerate(draws):
         seed_scores = {}
-        for (arm, seed), (target, base, full, valid) in arrays.items():
-            # Carry each original weight with each sampled occurrence. Recomputing
-            # source counts here would incorrectly cancel bootstrap multiplicity.
-            score, _, _, _ = score_arrays(
-                target[indices], base[indices], full[indices], weights[indices], valid
-            )
-            seed_scores[(arm, seed)] = score
-        for arm in ARMS:
+        for key, (target, base, full, valid) in arrays.items():
+            if direct:
+                score = score_source_sums(sufficient[key], indices, valid)
+            else:
+                score, _, _, _ = score_arrays(target[indices], base[indices], full[indices], weights[indices], valid)
+            seed_scores[key] = score
+        for arm in arms:
             record = {"draw": draw, "arm": arm}
             for metric in ("r2_baseline", "r2_full", "delta_r2", "f8"):
                 values = [seed_scores[(arm, seed)][metric] for seed in config.seeds]
@@ -254,7 +259,7 @@ def score_gate(root):
     real_draws = bootstrap_frame.loc[
         bootstrap_frame.arm == "real-skeleton", "delta_r2"
     ].to_numpy()
-    for arm in ARMS:
+    for arm in arms:
         selected = bootstrap_frame[bootstrap_frame.arm == arm]
         summary[arm] = {}
         for metric in ("r2_baseline", "r2_full", "delta_r2", "f8"):
@@ -308,7 +313,7 @@ def score_gate(root):
     predictions["y_pred_full_raw"] = (
         predictions.y_pred_full * predictions.target_scale + predictions.target_mean
     )
-    for arm in ARMS:
+    for arm in arms:
         path = f"predictions/{arm}.parquet"
         predictions[predictions.arm == arm].to_parquet(root / path, index=False)
         saved_files.append(path)
@@ -334,6 +339,9 @@ def score_gate(root):
 def build_report(root):
     root = Path(root)
     run = check_run(root)
+    if protocol_name(run) == DIRECT_PROTOCOL:
+        from .fi_direct_reporting import build_direct_report
+        return build_direct_report(root)
     previous = verified_report_decision(root)
     if (
         previous is not None
@@ -416,6 +424,11 @@ def build_report(root):
         stage = (
             "incomplete or invalid measurement; scientific hypothesis not established"
         )
+        if isinstance(error, ValidityAuditRejected):
+            result.update(workflow_status="blocked_by_validity_audit",
+                          audit_summary_sha256=error.summary_sha256,
+                          checks={**error.summary["checks"], "complete_valid_evidence": False})
+            stage = "verified validity rejection; predictive measurement not run"
     if run["synthetic"]:
         result.update(
             decision="STOP", allow_full_experiment=False, allow_adapter_training=False
@@ -463,6 +476,14 @@ def build_report(root):
     lines += ["| Check | Passed |", "|---|---|"] + [
         f"| {name} | {passed} |" for name, passed in result["checks"].items()
     ]
+    if result.get("workflow_status") == "blocked_by_validity_audit":
+        rejected = read_json(root / "qc/validity-summary.json")
+        lines += ["", f"Person/background sensitivity ratio: {rejected['motion_to_background_change_ratio']:.3f} "
+                  f"(required: {thresholds.motion_to_background_change_min:g}). "
+                  f"Person edit direction fraction: {rejected['person_edit_direction_fraction']:.2f} "
+                  f"(required: {thresholds.person_edit_direction_fraction_min:g}).",
+                  "The notebook workflow completed its diagnostics. Fitting and advancement remain blocked; "
+                  "this is not a completed negative prediction result."]
     lines += ["", "Frozen thresholds:", ""] + [
         f"- {name}: {value}" for name, value in asdict(thresholds).items()
     ]

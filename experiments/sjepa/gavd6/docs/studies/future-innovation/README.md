@@ -1,17 +1,24 @@
 # Future Innovation: from question to decision
 
-**Copied HAIC evidence, 10 September 2026:** notebook 01 reused 1,662 candidates
-and completed a frozen 50-window cohort. Notebook 02 completed teacher caching
-but failed the validity audit. The original success-only dependency prevented
-notebook 03 from fitting; notebook 04 recorded an incomplete STOP. This is a
-measurement blockage, not evidence against the prediction hypothesis. The
-specific failed checks require the HAIC QC summary and per-window CSVs, which
-were not included in the copied notebooks. See the
-[investigation and adversarial review](notebook-run-investigation.md).
+**Current protocol: `direct-v2`, 50 clips.** Experiment 0 now tests how much
+skeleton coordinate/confidence history adds beyond RGB, nuisance inputs and a
+matched head with validity flags. The gate samples 50 eligible clips from the
+available full-GAVD pool; the full dataset is reserved for the real experiment.
+Background quality, person/background edit sensitivity, and background-target
+gain reduction are no longer prerequisites. Source holdout, timing boundaries,
+training-only selection and paired controls remain required. Read the
+[current protocol and decision rules](direct-gate-protocol.md).
 
-The question is whether skeleton history helps a small predictor after it has
-already seen the recent video and recording details. We first test raw skeletons
-against controls. S-JEPA training and adapter distillation are later questions.
+The five-notebook structure is unchanged. New runs fit four arms × three seeds ×
+five folds, producing 60 final heads. No completed real `direct-v2` prediction
+result is available in this checkout. An ADVANCE recommends designing the
+full-GAVD JEPA comparison; it does not establish a JEPA training benefit.
+
+**Preserved legacy evidence:** copied run `haic-GOjuXSEB` completed a 50-clip cache
+but stopped at sensitivity 1.360, below its frozen 2.0 threshold; all other six
+checks passed. It never tested the prediction hypothesis. The new protocol was
+adopted after that rejection and retains a separate run identity. See the
+[investigation and independent review](notebook-run-investigation.md).
 
 ## Follow the five notebooks
 
@@ -24,7 +31,7 @@ execution follows 00 → 04 through the shared run artifacts.
 | --- | --- | --- |
 | [00 · Question and worked example](../../../notebooks/experiments/future_innovation/00_question_and_worked_example.ipynb) | What does a skeleton correction add to a video baseline? | Initialize or verify the run |
 | [01 · Cohort and alignment](../../../notebooks/experiments/future_innovation/01_cohort_and_alignment.ipynb) | Are the windows aligned and sources separated? | Candidate construction and pose extraction |
-| [02 · Teacher features and validity](../../../notebooks/experiments/future_innovation/02_teacher_features_and_validity.ipynb) | Are the inputs past-only and the targets meaningful? | Feature cache and validity audits |
+| [02 · Teacher features and validity](../../../notebooks/experiments/future_innovation/02_teacher_features_and_validity.ipynb) | Are prefix inputs isolated and cached targets usable? | Feature cache and validity audits |
 | [03 · Predictors and controls](../../../notebooks/experiments/future_innovation/03_matched_predictors_and_controls.ipynb) | Does correctly paired motion help under a fair comparison? | Nested fitting and Slurm arrays |
 | [04 · Results and next decision](../../../notebooks/experiments/future_innovation/04_results_and_next_decision.ipynb) | What does the complete evidence justify next? | Existing gate decision and sealed report |
 
@@ -55,7 +62,7 @@ Copy the entire `reports/` directory for sealed report inspection. Cohort and
 alignment inspection additionally needs the corresponding manifests and QC
 files; large teacher caches and checkpoints are unnecessary for reading reports.
 
-## Execute or recover the real experiment
+## Execute or recover the 50-clip gate
 
 Use the [HAIC run guide](../../../slurm/future-innovation/README.md) for input
 setup, then the [separate notebook launchers](../../../slurm/future-innovation/NOTEBOOKS.md):
@@ -67,26 +74,32 @@ bash slurm/future-innovation/submit-fi-notebooks.sh all
 They force `execute` mode and call the same production CLI as the original jobs:
 
 ```text
-initialize → cohort → poses → cached teacher → validity audits → five fitting tasks → report
+initialize → 50-clip cohort → poses → cached teacher → readiness → five fitting tasks → report
 ```
 
 The stage commands retain their caching, compatibility checks, locks and
-resumption behavior. Reuse the existing run root to recover interrupted work.
+resumption behavior. Use a new root for direct-v2; reuse that root to resume it.
+Legacy roots retain their original requirements. An unfinished pose stage restarts
+candidate processing; a complete frozen cohort is reused.
 Small CPU heads reuse the expensive teacher features. Completed report
 inspection does not require either stage to run again. Every notebook attempt
 retains its outputs together in `FI_RUN_ROOT/notebook_runs/haic-<batch-id>/`;
 command logs live separately under `FI_RUN_ROOT/logs/notebooks/`. Notebook
-03 uses the full frozen selection grid and all 75 final heads; teaching settings
-never enter execution mode. Notebook 04 fails for an incomplete measurement,
-while a complete negative result remains a successful execution.
+03 uses the full frozen selection grid and all 60 final heads when direct readiness
+checks pass; teaching settings never enter execution mode. A verified audit
+rejection ends 02–04 with an explicit blocked outcome, no fitting, and an
+unsealed diagnostic STOP with incomplete predictive measurement. Other
+incomplete or corrupt evidence still fails execution. Complete negative
+results remain successful executions.
 
 For interactive execution on allocated resources, set `FI_TUTORIAL_MODE=execute`
 and an explicit `FI_RUN_ROOT`, then run all cells of 00–04 in order. Without a
 fold override, notebook 03 runs all five folds sequentially. The original
 `submit-fi-pipeline.sh` remains available for direct CLI execution.
 
-The [experiment specification](../../../notes/future-innovation-distillation/experiment-0-guide.md)
-contains the full design and implementation sketches. The production code and
+The [direct gate specification](direct-gate-protocol.md) defines the current
+comparison. The [original guide](../../../notes/future-innovation-distillation/experiment-0-guide.md)
+remains historical design context. The production code and
 each run's saved contracts define its actual execution; conceptual snippets
 in the specification are not a second pipeline.
 
@@ -98,18 +111,19 @@ in the specification are not a second pipeline.
 | Incomplete STOP | Recover execution or repair invalid measurement |
 | Complete valid STOP | Preserve the result and inspect which effect threshold failed |
 | INCONCLUSIVE | Report the instability and define any further measurement in advance |
-| ADVANCE | Follow the next measurement stage in the proposal; adapter training remains disallowed |
+| ADVANCE | Design the full-GAVD JEPA comparison; adapter training remains disallowed |
 | Synthetic result | Use only as a software demonstration |
 
-Read validity checks before treating a STOP as evidence against the hypothesis.
-The no-skeleton comparison is a required reported diagnostic without an extra
-numerical cutoff in the implemented gate. If that control reproduces the gain,
-state the unresolved attribution even if the automatic gate advances.
+The primary increment compares the real-skeleton head with the matched
+no-skeleton head. It must be positive on average, in each seed and in at least
+90% of paired source-bootstrap draws, alongside the retained ridge/shuffle/mismatch
+criteria. The 95% interval is reported separately; containing zero leaves the
+increment uncertain even if the 90% rule passes.
 
-Source videos are the independent sampling units; they are not verified people.
-The target is a full-clip contextual feature at frames 38–39, while inputs use
-frames 0–31. Background targets can retain person information through attention.
-These limits remain applicable when every numerical check passes.
+Source videos are the sampling units; they are not verified people. Inputs use
+frames 0–31, while the target at frames 38–39 is contextualized by all 64 frames.
+The comparison concerns teacher features rather than decoded future movement.
+Background and recording cues remain possible explanations of parts of that target.
 
 ## Maintain one current interpretation
 

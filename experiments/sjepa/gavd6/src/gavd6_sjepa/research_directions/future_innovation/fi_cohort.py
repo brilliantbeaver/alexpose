@@ -15,6 +15,8 @@ from gavd6_sjepa.shared_infrastructure.artifact_io_operations import (
 )
 
 from .fi_contracts import (
+    DIRECT_PROTOCOL,
+    protocol_name,
     check_run,
     read_json,
     save_npz,
@@ -47,15 +49,17 @@ def deterministic_window_start(first_frame, last_frame, sequence_id):
     return first_frame + int(stable_key("window", sequence_id)[:16], 16) % choices
 
 
-def select_eligible(rows, count=50):
+def select_eligible(rows, count=50, source_cap=2):
+    if count != 50:
+        raise ValueError("Experiment 0 requires exactly 50 clips")
     selected, counts = [], Counter()
     for row in sorted(rows, key=lambda r: stable_key("candidate", r["sequence_id"])):
-        if counts[row["video_id"]] < 2:
+        if counts[row["video_id"]] < source_cap:
             selected.append(row)
             counts[row["video_id"]] += 1
         if len(selected) == count:
             break
-    if len(selected) != count:
+    if count is not None and len(selected) != count:
         raise ValueError(
             f"Need exactly {count} eligible windows; found {len(selected)}"
         )
@@ -63,10 +67,14 @@ def select_eligible(rows, count=50):
     return pd.DataFrame([{**r, "outer_fold": folds[r["video_id"]]} for r in selected])
 
 
-def validate_cohort(cohort):
-    if len(cohort) != 50 or not cohort.window_id.is_unique:
-        raise ValueError("Cohort must contain exactly 50 unique windows")
-    if cohort.video_id.nunique() < 25 or cohort.groupby("video_id").size().max() > 2:
+def validate_cohort(cohort, contract=None):
+    contract = contract or {"cohort_size": 50, "minimum_sources": 25, "source_cap": 2}
+    count = contract["cohort_size"]
+    if count != 50:
+        raise ValueError("Experiment 0 requires exactly 50 clips")
+    if not len(cohort) or not cohort.window_id.is_unique or (count is not None and len(cohort) != count):
+        raise ValueError(f"Cohort must contain {'exactly ' + str(count) if count else 'nonempty'} unique windows")
+    if cohort.video_id.nunique() < contract["minimum_sources"] or cohort.groupby("video_id").size().max() > contract["source_cap"]:
         raise ValueError("Cohort violates source count/cap")
     if cohort.groupby("video_id").outer_fold.nunique().max() != 1:
         raise ValueError("A source appears in multiple folds")
@@ -85,7 +93,7 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
             if sha256_file(root / path) != digest:
                 raise ValueError(f"Candidate artifact changed: {path}")
         candidates = pd.read_csv(root / "manifests/candidates.csv")
-        if len(candidates) < 50:
+        if len(candidates) < (contract["cohort_size"] or contract["minimum_sources"]):
             raise ValueError(f"Only {len(candidates)} candidates; see exclusions.csv")
         print(f"Reusing {len(candidates)} verified candidates")
         return
@@ -197,11 +205,12 @@ def build_candidates(root, sequence_manifest, video_manifest, annotations, youtu
     )
     # A failed discovery is retryable when storage is mounted or completed later.
     # Do not freeze an unusable candidate inventory permanently.
-    if len(candidates) < 50:
+    if len(candidates) < (contract["cohort_size"] or contract["minimum_sources"]):
         raise ValueError(f"Only {len(candidates)} candidates; see source-availability.csv and exclusions.csv")
     usable = sum(min(2, count) for count in Counter(row["video_id"] for row in candidates).values())
-    if usable < 50:
-        raise ValueError(f"Only {usable} candidate windows after source cap; need 50 from at least 25 sources")
+    needed = contract["cohort_size"] or contract["minimum_sources"]
+    if usable < needed or len({r["video_id"] for r in candidates}) < contract["minimum_sources"]:
+        raise ValueError(f"Only {usable} candidate windows after source cap; need {needed} from at least {contract['minimum_sources']} sources")
     write_once_json(
         root / "config/candidates-contract.json",
         {
@@ -241,13 +250,15 @@ def extract_and_freeze(root):
         if row["stage"] == "candidate"
     ]
     eligible, counts = [], Counter()
+    direct = protocol_name(contract) == DIRECT_PROTOCOL
+    limit = contract["cohort_size"]
     for row in candidates:
-        if len(eligible) == 50:
+        if limit is not None and len(eligible) == limit:
             exclusions.append(
                 {
                     "sequence_id": row["sequence_id"],
                     "stage": "selection",
-                    "reason": "after fixed cohort reached 50",
+                    "reason": f"after explicit cohort cap reached {limit}",
                 }
             )
             continue
@@ -276,10 +287,12 @@ def extract_and_freeze(root):
             if retention[np.r_[0:32, 38:40]].min() < contract["minimum_crop_retention"]:
                 raise ValueError("Person crop retention below 90%")
             for t in list(range(16)) + [19]:
-                region_masks(union_box(model_boxes[2 * t : 2 * t + 2]))
+                region_masks(union_box(model_boxes[2 * t : 2 * t + 2]), allow_empty_background=direct)
             raw, history, scale = extract_history(
                 video, records, boxes, fps, pose_model
             )
+            if direct and not np.any((history[1:, :, 3] > 0) & (history[:-1, :, 3] > 0)):
+                raise ValueError("No valid observed joint transition")
             if history[..., 3].mean() < contract["minimum_pose_coverage"]:
                 raise ValueError("Whole-body valid context coverage below 0.45")
             pose_path = root / "poses" / f"{row['window_id']}.npz"
@@ -310,7 +323,9 @@ def extract_and_freeze(root):
                     "frame_path": str(frame_path),
                     "model_box_path": str(model_box_path),
                     "overlay_path": str(overlay),
-                    "eligibility_reason": "all checks passed",
+                    "eligibility_reason": "required input checks passed",
+                    "context_pose_coverage": float(history[..., 3].mean()),
+                    "minimum_person_crop_retention": float(retention[np.r_[0:32, 38:40]].min()),
                 }
             )
             counts[row["video_id"]] += 1
@@ -328,11 +343,12 @@ def extract_and_freeze(root):
     atomic_write_dataframe_csv(
         root / "manifests/exclusions.csv", pd.DataFrame(exclusions)
     )
-    cohort = select_eligible(eligible)
-    validate_cohort(cohort)
+    cohort = select_eligible(eligible, count=limit, source_cap=contract["source_cap"])
+    validate_cohort(cohort, contract)
     atomic_write_dataframe_csv(root / "manifests/gate-windows.csv", cohort)
     rows = cohort.to_dict("records")
-    audit_rows = sorted(rows, key=lambda r: stable_key("audit", r["window_id"]))[:10]
+    audit_count = read_json(root / "config/control-contract.json")["audit_count"]
+    audit_rows = sorted(rows, key=lambda r: stable_key("audit", r["window_id"]))[:audit_count]
     audits = []
     for row in audit_rows:
         donor = min(
@@ -393,5 +409,5 @@ def load_cohort(root, verify_artifacts=False):
             if sha256_file(root / path) != digest:
                 raise ValueError(f"Cohort artifact changed: {path}")
     cohort = pd.read_csv(root / "manifests/gate-windows.csv")
-    validate_cohort(cohort)
+    validate_cohort(cohort, run)
     return cohort

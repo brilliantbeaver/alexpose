@@ -16,7 +16,7 @@ from gavd6_sjepa.research_directions.future_innovation.fi_cohort import (
     load_cohort,
 )
 from gavd6_sjepa.research_directions.future_innovation.fi_contracts import (
-    initialize_run,
+    initialize_run, read_json,
 )
 from gavd6_sjepa.research_directions.future_innovation.fi_feature_cache import (
     cache_teacher,
@@ -33,6 +33,15 @@ from gavd6_sjepa.research_directions.future_innovation.fi_video_pose import (
 
 class FutureInnovationDataFlowTests(unittest.TestCase):
     def test_manifest_decode_pose_freeze_and_cache_interfaces(self):
+        self._data_flow("legacy-v1", "central")
+
+    def test_direct_cache_and_readiness_with_no_background_pixels(self):
+        self._data_flow("direct-v2", "full")
+
+    def test_direct_cache_and_readiness_with_no_shared_background_flow(self):
+        self._data_flow("direct-v2", "alternating")
+
+    def _data_flow(self, protocol, box_pattern):
         with tempfile.TemporaryDirectory() as directory:
             directory = Path(directory)
             youtube = directory / "youtube"
@@ -68,6 +77,10 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
                     }
                 )
                 for frame in range(1, 65):
+                    if box_pattern == "full":
+                        box = {"left": 0, "top": 0, "width": 64, "height": 64}
+                    elif box_pattern == "alternating":
+                        box = {"left": 0 if frame % 2 else 31, "top": 0, "width": 33, "height": 64}
                     annotation_rows.append(
                         {
                             "seq": f"seq-{i}",
@@ -88,6 +101,7 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
             root = directory / "run"
             initialize_run(
                 root,
+                protocol=protocol,
                 sequence_manifest=sequences,
                 video_manifest=videos,
                 annotations=[annotations],
@@ -155,14 +169,31 @@ class FutureInnovationDataFlowTests(unittest.TestCase):
                 side_effect=AssertionError("must reuse saved projection across runtimes"),
             ):
                 cache_teacher(root, Teacher())
-            # The same complete audit pipeline rejects a constant fake target
-            # before training and preserves all ten intervention reports/sheets.
-            self.assertFalse(run_audits(root, Teacher()))
-            sensitivity = pd.read_csv(root / "qc/target-sensitivity.csv")
-            self.assertEqual(len(sensitivity), 10)
-            self.assertEqual(
-                len(list(root.glob("qc/pixel-edit-contact-sheets/*.jpg"))), 10
-            )
+            # A constant fake target fails the variance check, after completing
+            # either protocol's actual teacher calls and retained measurements.
+            if protocol == "legacy-v1":
+                self.assertFalse(run_audits(root, Teacher()))
+                self.assertEqual(len(pd.read_csv(root / "qc/target-sensitivity.csv")), 10)
+                self.assertEqual(len(list(root.glob("qc/pixel-edit-contact-sheets/*.jpg"))), 10)
+            else:
+                from gavd6_sjepa.research_directions.future_innovation.fi_readiness import run_readiness
+                self.assertFalse(run_readiness(root, Teacher()))
+                summary = read_json(root / "qc/readiness-summary.json")
+                self.assertTrue(summary["checks"]["teacher_stable"])
+                self.assertTrue(summary["checks"]["causal_leakage_absent"])
+                self.assertFalse(summary["checks"]["target_variance_valid"])
+                self.assertFalse((root / "qc/target-sensitivity.csv").exists())
+                schema = read_json(root / "config/nuisance-schema.json")
+                nuisance = arrays["baseline"][:, schema["context_embedding_columns"]:]
+                columns = schema["columns"]
+                self.assertTrue(np.isfinite(nuisance).all())
+                for name in ("background_flow_pair_fraction", "background_flow_pixel_fraction"):
+                    np.testing.assert_array_equal(nuisance[:, columns.index(name)], 0)
+                rgb_support = nuisance[:, columns.index("background_rgb_pixel_fraction")]
+                if box_pattern == "full":
+                    np.testing.assert_array_equal(rgb_support, 0)
+                else:
+                    self.assertTrue(np.all(rgb_support > 0))
             with self.assertRaisesRegex(ValueError, "Validity audit failed"):
                 require_audits(root)
             with (root / "manifests/candidates.csv").open("a") as handle:

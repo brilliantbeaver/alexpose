@@ -29,9 +29,19 @@ def artifact_inventory(run_root):
     return pd.DataFrame(
         [
             {"stage": stage, "record": name, "present_locally": (root / name).is_file()}
-            for stage, name in STAGE_ARTIFACTS
+            for stage, name in [(stage, str(inspection_audit_path(root).relative_to(root))
+                                  if name == "qc/validity-summary.json" else name)
+                                 for stage, name in STAGE_ARTIFACTS]
         ]
     )
+
+
+def inspection_audit_path(root):
+    """Choose the saved protocol without invoking execution provenance writers."""
+    root = Path(root)
+    path = root / "config/run-contract.json"
+    protocol = read_json(path).get("protocol", "legacy-v1") if path.is_file() else "direct-v2"
+    return root / "qc" / ("readiness-summary.json" if protocol == "direct-v2" else "validity-summary.json")
 
 
 def read_optional_table(run_root, relative_path):
