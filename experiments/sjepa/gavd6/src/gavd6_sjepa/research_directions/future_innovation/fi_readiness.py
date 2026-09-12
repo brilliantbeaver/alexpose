@@ -82,6 +82,20 @@ def verify_readiness(root):
     count = read_json(root / "config/control-contract.json")["audit_count"]
     if len(planned) != count or not planned.window_id.is_unique or not set(planned.window_id) <= set(cohort.window_id):
         raise ValueError("Invalid readiness window plan")
+    stable, leakage = verify_readiness_tables(root, planned, count)
+    _, cache = load_cache(root)
+    expected = readiness_checks(root, cohort, cache, stable, leakage)
+    checks = summary.get("checks", {})
+    if (not isinstance(checks, dict) or any(type(v) is not bool for v in checks.values())
+            or checks != expected or type(summary.get("passed")) is not bool
+            or summary["passed"] != all(expected.values()) or summary.get("pixel_selectivity_evaluated") is not False):
+        raise ValueError("Readiness flags disagree with retained measurements")
+    return summary
+
+
+def verify_readiness_tables(root, planned, count):
+    """Read-only arithmetic checks, also used for explicitly inherited audits."""
+    root = Path(root)
     stable = pd.read_csv(root / "qc/teacher-stability.csv")
     leakage = pd.read_csv(root / "qc/causal-leakage.csv")
     for table in (stable, leakage):
@@ -99,11 +113,4 @@ def verify_readiness(root):
     _check_boolean_column(stable, "passed", (stability_values <= 1e-6).all(axis=1))
     _check_boolean_column(leakage, "passed", leakage.max_abs_difference <= leakage.tolerance)
     _check_boolean_column(leakage, "stable", leakage.repeat_max_abs <= 1e-6)
-    _, cache = load_cache(root)
-    expected = readiness_checks(root, cohort, cache, stable, leakage)
-    checks = summary.get("checks", {})
-    if (not isinstance(checks, dict) or any(type(v) is not bool for v in checks.values())
-            or checks != expected or type(summary.get("passed")) is not bool
-            or summary["passed"] != all(expected.values()) or summary.get("pixel_selectivity_evaluated") is not False):
-        raise ValueError("Readiness flags disagree with retained measurements")
-    return summary
+    return stable, leakage

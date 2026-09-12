@@ -117,7 +117,11 @@ def assemble_oof(cohort, cache, predictions, config, arms=ARMS):
             for fold in range(5):
                 train = cohort.outer_fold.to_numpy() != fold
                 test = ~train
-                scaler = TrainingScaler.fit(
+                scaler_type = TrainingScaler
+                if getattr(config, "target_version", None) == "training-target-v1":
+                    from .fi_joint_models import TargetStandardizer
+                    scaler_type = TargetStandardizer
+                scaler = scaler_type.fit(
                     cache[target_name][train],
                     equal_source_weights(cohort.loc[train, "video_id"]),
                     cohort.loc[train, "window_id"],
@@ -203,6 +207,8 @@ def score_gate(root):
     config = load_model_contract(root)
     arms = experiment_arms(root)
     tables = [verify_fold(root, fold) for fold in range(5)]
+    if protocol_name(check_run(root)) == "direct-v3" and not all(read_json(root / f"models/fold-{f}/fold-complete.json")["all_candidates_valid"] for f in range(5)):
+        raise ValueError("Required candidate failed; scientific measurement incomplete")
     predictions = pd.concat(tables, ignore_index=True)
     arrays = assemble_oof(cohort, cache, predictions, config, arms=arms)
     weights = equal_source_weights(cohort.video_id.to_numpy())
@@ -230,7 +236,7 @@ def score_gate(root):
                 }
             )
     bootstrap = []
-    direct = protocol_name(check_run(root)) == DIRECT_PROTOCOL
+    direct = protocol_name(check_run(root)) in {DIRECT_PROTOCOL, "direct-v3"}
     sufficient = ({key: source_error_sums(target, base, full, weights, cohort.video_id)
                    for key, (target, base, full, _) in arrays.items()} if direct else {})
     draws = (source_bootstrap_counts if direct else source_bootstrap_indices)(
@@ -339,6 +345,9 @@ def score_gate(root):
 def build_report(root):
     root = Path(root)
     run = check_run(root)
+    if protocol_name(run) == "direct-v3":
+        from .fi_joint_reporting import build_joint_report
+        return build_joint_report(root)
     if protocol_name(run) == DIRECT_PROTOCOL:
         from .fi_direct_reporting import build_direct_report
         return build_direct_report(root)

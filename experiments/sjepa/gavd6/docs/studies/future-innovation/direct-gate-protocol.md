@@ -1,10 +1,13 @@
 # Experiment 0: the 50-clip direct skeleton gate
 
-This is the current `direct-v2` protocol, adopted on 11 September 2026 after
+This is the retained `direct-v2` protocol, adopted on 11 September 2026 after
 inspection of the legacy teacher-selectivity rejection. It is an explicit
 protocol amendment, not the original preregistration or a result from the new
 prediction comparison. New run directories freeze it before fitting. Existing
-`legacy-v1` runs retain their original rules and artifacts.
+`legacy-v1` runs retain their original rules and artifacts. The separately
+versioned [direct-v3 cached repair](direct-v3-repair-protocol.md) and its
+[measured development result](direct-v3-repair-validation.md) preserve this run
+while replacing prediction-side preprocessing and fitting.
 
 ## Question and primary comparison
 

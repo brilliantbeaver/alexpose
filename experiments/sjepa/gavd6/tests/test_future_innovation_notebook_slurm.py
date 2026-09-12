@@ -86,6 +86,26 @@ class FutureInnovationNotebookSlurmTests(unittest.TestCase):
         self.assertEqual(len(folders), 3)  # One shared folder per submission, not per notebook.
         self.assertTrue(all(p.is_dir() and p.name.startswith("haic-") for p in folders))
 
+    def test_cached_cli_and_notebook_paths_request_no_gpu(self):
+        self.mock_command("sbatch", "print(str(100+n)+';cluster')\n")
+        self.env.update(FI_PARENT_ROOT=str(self.root/'parent'),FI_CALIBRATION=str(self.root/'calibration.json'))
+        for script,args,count in (("submit-fi-cached-repair.sh",(),3),("submit-fi-notebooks.sh",("cached",),5)):
+            result=self.command(script,*args)
+            self.assertEqual(result.returncode,0,result.stderr)
+        calls=self.calls()
+        self.assertEqual(len(calls),8)
+        self.assertIn('--dependency=afterok:100',calls[1])
+        self.assertIn('--dependency=afterany:100:101',calls[2])
+        self.assertTrue(calls[5][-1].endswith('15-notebook-02-cached.sbatch'))
+        for call in calls:
+            self.assertNotIn('--gres',Path(call[-1]).read_text())
+        self.mock_command('uv','')
+        result=self.command('07-initialize-cached-repair.sbatch')
+        self.assertEqual(result.returncode,0,result.stderr)
+        result=self.command('15-notebook-02-cached.sbatch')
+        self.assertEqual(result.returncode,0,result.stderr)
+        self.assertEqual(self.calls()[-1][-2:],['--device','cpu'])
+
     def test_submission_failure_stops_downstream_jobs_and_preserves_receipts(self):
         self.mock_command("sbatch", "print(100+n)\nsys.exit(1 if n==1 else 0)\n")
         result = self.command("submit-fi-notebooks.sh", "all")

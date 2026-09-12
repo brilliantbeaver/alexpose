@@ -70,6 +70,9 @@ def raw_source_weights(video_ids):
 
 def fit_outer_fold(root, outer_fold, device="cpu"):
     root = Path(root)
+    if read_json(root / "config/run-contract.json").get("protocol") == "direct-v3":
+        from .fi_joint_training import fit_joint_outer_fold
+        return fit_joint_outer_fold(root, outer_fold, device)
     require_audits(root)
     decision = verified_report_decision(root)
     cohort, arrays = load_cache(root)
@@ -392,6 +395,9 @@ def fit_outer_fold(root, outer_fold, device="cpu"):
 
 def verify_fold(root, fold):
     root = Path(root)
+    if read_json(root / "config/run-contract.json").get("protocol") == "direct-v3":
+        from .fi_joint_training import verify_joint_fold
+        return verify_joint_fold(root, fold)
     cohort, _ = load_cache(root)
     receipt = read_json(root / "models" / f"fold-{fold}" / "fold-complete.json")
     if receipt["cache_contract_sha256"] != sha256_file(

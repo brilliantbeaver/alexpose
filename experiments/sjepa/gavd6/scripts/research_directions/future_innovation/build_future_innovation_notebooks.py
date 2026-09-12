@@ -75,7 +75,7 @@ if MODE not in {"teach", "inspect", "execute"}:
     raise ValueError("FI_TUTORIAL_MODE must be teach, inspect, or execute.")
 if MODE == "execute" and not os.environ.get("FI_RUN_ROOT"):
     raise ValueError("Set FI_RUN_ROOT explicitly before executing real experiment stages.")
-RUN_ROOT = Path(os.environ.get("FI_RUN_ROOT", "outputs/future-innovation/direct-v2")).expanduser()
+RUN_ROOT = Path(os.environ.get("FI_RUN_ROOT", "outputs/future-innovation-direct-v3-dev-20260911")).expanduser()
 if not RUN_ROOT.is_absolute():
     RUN_ROOT = PROJECT_ROOT / RUN_ROOT
 RUN_ROOT = RUN_ROOT.resolve()
@@ -98,10 +98,10 @@ if MODE == "execute":
 
 def execution_cells(number):
     descriptions = {
-        "00": "Initialize the immutable protocol and input provenance, or validate the existing run. New runs use the same environment variables and five official annotation partitions as Slurm job 01. Complete the HAIC environment and input setup first.",
-        "01": "Build eligible candidates, extract aligned poses, then freeze the cohort and source folds. This can take hours. The existing stages verify and reuse completed work; inspect the resulting exclusions and overlays below.",
-        "02": "Cache the frozen teacher features and check input integrity, teacher repeatability and future isolation. The new direct-v2 protocol performs no person/background replacement or selectivity tests. This requires the prepared cohort and normally one H100. A verified audit rejection finishes with TRAINING BLOCKED and no fitting; missing or corrupt evidence remains an execution error. Completed stages are verified and reused without loading the teacher again.",
-        "03": "Run the frozen direct-prediction comparison: five outer folds, three seeds, all frozen arms, and the complete frozen inner-selection grid. With FI_NOTEBOOK_FOLD set, run just that outer fold (all seeds and arms); HAIC supplies five CPU array tasks. Without it, run all folds sequentially. A verified audit rejection skips fitting and records a blocked outcome. No teaching settings enter this branch.",
+        "00": "Initialize the immutable protocol and input provenance, or validate the existing run. Cached direct-v3 uses FI_PARENT_ROOT and a passing FI_CALIBRATION record; other protocols use the original HAIC input setup.",
+        "01": "Original runs build candidates and aligned poses. Cached direct-v3 verifies and reuses the frozen parent cohort and pose evidence. This can take hours. The existing stages verify and reuse completed work; inspect the resulting exclusions and overlays below.",
+        "02": "Cache the frozen teacher features and check input integrity, teacher repeatability and future isolation. The new direct-v2 protocol performs no person/background replacement or selectivity tests. Original encoding normally uses one H100. Cached direct-v3 verifies inherited arrays and audits entirely on CPU. A verified audit rejection finishes with TRAINING BLOCKED and no fitting; missing or corrupt evidence remains an execution error. Completed stages are verified and reused without loading the teacher again.",
+        "03": "Run five outer folds, all frozen arms and the complete frozen inner grid. Direct-v3 has one deterministic fit; historical protocols retain three seeds. With FI_NOTEBOOK_FOLD set, run just that outer fold (all seeds and arms); HAIC supplies five CPU array tasks. Without it, run all folds sequentially. A verified audit rejection skips fitting and records a blocked outcome. No teaching settings enter this branch.",
         "04": "Score the out-of-fold predictions and build the sealed production report. If scoring fails, still attempt a diagnostic STOP report. A verified audit rejection builds an unsealed diagnostic STOP and finishes with TRAINING BLOCKED, measurement_complete=False. Unexpected scoring failures and missing or corrupt evidence still fail. Complete STOP and INCONCLUSIVE results are also successful executions.",
     }
     operations = {
@@ -134,7 +134,8 @@ def opening(number, title, text):
         file says nothing about the current state of a remote HAIC job.
 
         [Study overview](../../../docs/studies/future-innovation/README.md) ·
-        [Direct gate specification](../../../docs/studies/future-innovation/direct-gate-protocol.md)
+        [Historical direct-v2 specification](../../../docs/studies/future-innovation/direct-gate-protocol.md) ·
+        [Calibrated direct-v3 specification](../../../docs/studies/future-innovation/direct-v3-repair-protocol.md)
         """),
         code(STARTUP),
     ] + execution_cells(number)
@@ -154,540 +155,351 @@ def ending(number, text):
 
 
 def lesson00():
-    cells = opening("00", "What can skeleton history add?", """
-We want to know whether an explicit skeleton helps a small predictor after it
-has already seen the recent video. A skeleton is derived from the video, so
-the claim concerns useful representation under these predictors. It does not
-claim that pose reveals information absent from RGB.
+    cells = opening('00', 'What can past skeleton motion add?', '''
+We predict a teacher's future person-region feature vector from the first 32
+frames of a clip. The RGB reference already sees video features, framing,
+recording conditions and observation quality. The comparison asks whether an
+explicit skeleton representation improves that prediction. Skeletons come from
+RGB, so an improvement concerns representation for these predictors.
+''')
+    cells += [md('''
+The inspected `gate-v2` / `direct-v2` run completed with STOP. Its residual head
+added an unrestricted RGB map to ridge's own training errors. Unsupported weights
+and unstable missingness scaling damaged prediction. The saved result stays
+historical evidence; deleting weights afterward was a diagnostic intervention.
 
-Follow one walking clip. The predictor sees frames 0–31. A frozen video teacher
-supplies a target at frames 38–39. This target is a vector of numbers describing
-the person region. We predict those numbers, not a diagnosis or future pixels.
-""")
-    cells += [md("""
-        ## 1. Predict first, then learn what was missed
+`direct-v3` fits `intercept + X W_x + S W_s` jointly. X is safely transformed RGB
+and nuisance information; S contains ordered skeleton summaries. Separate ridge
+penalties restrain the two coefficient blocks. The squared Frobenius penalty is
+the sum of squared matrix entries. Source weights balance videos, and the
+intercept is unpenalized. Inner validation can choose the exact RGB baseline.
+Legacy-v1 retains its selectivity rules; direct-v2 and direct-v3 omit them.
 
-        Let `x` contain past video features and recording details, `s` contain
-        past skeleton coordinates, confidence and validity, and `y` be the future
-        target. Fit a baseline using `x`. The residual `y - baseline(x)` is what
-        remains unexplained. A small head uses `s` and `x` to predict a correction.
-        It never receives `y` when making a prediction.
+For an invented target of 0.8, a baseline of 0.5 and full prediction of 0.7,
+the improvement is visible as smaller squared error. A baseline-only outcome
+returns 0.5 exactly, including after saving and reloading. The difference
+`full - baseline` describes a prediction difference; direct-v3 does not train a
+second RGB map on ridge residuals.
+'''), code('''
+if MODE == "teach":
+    display(pd.DataFrame({"target": [0.8]*3, "prediction": [0.5, 0.7, 0.5]},
+                         index=["RGB reference", "Illustrative joint prediction", "Exact baseline fallback"]))
+    from gavd6_sjepa.research_directions.future_innovation.fi_metrics import score_arrays
+    target = np.array([[-1.], [0.], [1.]])
+    reference = np.zeros_like(target)
+    base = target * 0.5
+    fallback = score_arrays(target, base, base.copy(), np.ones(3), np.ones(1,dtype=bool))[0]
+    assert fallback['delta_r2'] == 0.0
+    display(pd.DataFrame([fallback]))
+'''), md('''
+The main estimate is real-skeleton R² minus no-skeleton R². No-skeleton retains
+time-varying joint validity while zeroing coordinates and confidence. Gain over
+the shared RGB-only reference is a separate requirement. R² compares prediction
+error with the outer-training-mean error; it can be negative. The target mean is
+zero in training-standardized units, never the test-set mean.
 
-        For one imaginary feature, an answer of 0.8 and baseline of 0.5 leave
-        a residual of 0.3. A predicted correction of 0.2 moves the prediction to
-        0.7. The example below makes that arithmetic visible.
-        """), code("""
-        if MODE == "teach":
-            answer, baseline_prediction, correction = 0.8, 0.5, 0.2
-            full_prediction = baseline_prediction + correction
-            display(pd.DataFrame({"value": [answer, baseline_prediction, full_prediction]},
-                                 index=["Answer", "Video baseline", "With correction"]))
-            fig, ax = plt.subplots()
-            ax.barh(["Video baseline", "With correction"],
-                    [baseline_prediction, full_prediction], color=["#2f6f99", "#5f9e7e"])
-            ax.axvline(answer, color="#e07a4b", label="Illustrative answer")
-            ax.set(xlim=(0, 1), xlabel="One feature value", title="A correction can reduce the remaining error")
-            ax.legend(); plt.show()
-        """), md("""
-        ## 2. Measure the gain against a common reference
-
-        Predictive R² compares squared error with predicting the training mean.
-        It can be negative. `delta_r2` is full R² minus baseline R²; 0.05 means
-        an absolute increase of 0.05. `f8` is the fraction of the baseline's
-        remaining error recovered at the eight-frame horizon.
-
-        Use the production scoring function on already training-centered toy
-        targets. Zero therefore represents the training-mean reference. Real
-        fits learn this centering and scaling separately inside training sources.
-        """), code("""
-        if MODE == "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_metrics import score_arrays
-            y = np.array([[-1.0], [1.0], [-0.5], [0.5]])
-            scores, *_ = score_arrays(y, 0.4 * y, 0.7 * y, np.ones(4), np.array([True]))
-            display(pd.DataFrame([scores])[["r2_baseline", "r2_full", "delta_r2", "f8"]])
-        """), md("""
-        ## 3. Ask which alternative explanation each control tests
-
-        | Arm | Question |
-        | --- | --- |
-        | Real skeleton | Does the correctly paired history help? |
-        | Time shuffle | Does the original temporal order matter? |
-        | Clip mismatch | Does this skeleton need to belong to this video? |
-        | No skeleton | Could capacity, baseline features, or validity explain the gain? |
-
-        The last control retains validity while zeroing coordinates and
-        confidence. Background features still attend to the person in the
-        teacher. Each control narrows the interpretation; none proves a clinical
-        or causal mechanism on its own.
-        """), code("""
-        if MODE != "teach":
-            display(artifact_inventory(RUN_ROOT))
-            evidence = inspect_report(RUN_ROOT)
-            print(evidence["state"], "—", evidence["explanation"])
-        """)]
-    return cells + ending("00", "Execution initializes or verifies the run's frozen protocol; teaching mode constructs an illustrative gain. Neither establishes that skeletons help on GAVD. That question requires aligned examples, source-held-out predictions and the timing, pairing and matched-capacity controls. Next we establish the cohort.")
+The inspected cohort is development data. Passing all repaired criteria would
+justify independent-source confirmation before scaling. Synthetic examples in
+teach mode illustrate software behavior and cannot authorize scientific ADVANCE.
+'''), code('''
+if MODE != "teach":
+    from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
+    path = RUN_ROOT / 'config/run-contract.json'
+    if path.is_file():
+        run = read_json(path)
+        display(pd.DataFrame([{'run_id':run['run_id'], 'protocol':run.get('protocol','legacy-v1'),
+                               'root':str(RUN_ROOT), 'synthetic':run['synthetic'],
+                               'development':run.get('development',True)}]))
+    display(artifact_inventory(RUN_ROOT))
+    evidence = inspect_report(RUN_ROOT)
+    print('Report integrity checked:', evidence['seal_verified'])
+    numerical = RUN_ROOT / 'reports/numerical-verification.json'
+    print('Saved numerical reconstruction record present:', numerical.is_file())
+    print('This inventory checks local presence. The report seal checks report integrity; neither is a fresh numerical reconstruction.')
+''')]
+    return cells + ending('00', 'The question, RGB reference and matched skeleton increment are distinct. Next establish which clips and source partitions supply the inputs and targets.')
 
 
 def lesson01():
-    cells = opening("01", "Are the examples aligned and independent?", """
-Two excerpts from one upload may share a person, background and camera. Treating
-them as independent test examples can reward recognition of the recording.
-This stage establishes what one example is and keeps each source video in one
-outer fold before any fitting. A source-video split does not establish a split
-by verified person identity.
-""")
-    cells += [md("""
-        ## 1. Count windows and sources separately
+    cells = opening('01', 'Align clips, joints and source folds', '''
+A useful predictor comparison needs a fixed boundary between past inputs and
+the teacher target. All clips from a source video stay together in five outer
+folds. Three inner source folds choose settings within each outer-training set.
+A source split is not proof that participants differ across recordings.
+''')
+    cells += [md('''
+The existing 50 clips and their source labels are reused unchanged in direct-v3.
+The original cohort has 43 sources and 39–41 training clips per outer fold.
+These sources have been inspected during debugging and are development data.
+No clip is removed because a held-out joint becomes missing or a transform
+produces an unusually difficult prediction.
 
-        Experiment 0 uses 50 eligible clips selected from the full-GAVD candidate
-        pool, with at least 25 sources and at most two clips per source. The full
-        dataset is reserved for the subsequent real experiment. Clips need
-        aligned observations, a usable person target and an observed joint
-        transition. Background quality, crop-retention percentage and overall
-        pose-coverage percentage do not screen this cohort. The small generated
-        census below illustrates source grouping; all windows from a source share
-        its split. The frozen run contract records the 50-clip gate size.
-        """), code("""
-        if MODE == "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_cohort import assign_source_folds, validate_cohort
-            sources = [f"generated-source-{i // 2:02d}" for i in range(50)]
-            fold_for = assign_source_folds(sources)
-            cohort = pd.DataFrame({"window_id": [f"generated-window-{i}" for i in range(50)],
-                                   "video_id": sources, "outer_fold": [fold_for[s] for s in sources]})
-            validate_cohort(cohort)
-        else:
-            cohort = read_optional_table(RUN_ROOT, "manifests/gate-windows.csv")
-        if cohort is not None:
-            census = cohort.groupby("outer_fold").agg(windows=("window_id", "size"),
-                                                      sources=("video_id", "nunique"))
-            display(census)
-            assert cohort.groupby("video_id").outer_fold.nunique().max() == 1
-            ax = census.plot.bar(color=["#2f6f99", "#5f9e7e"], rot=0,
-                                 title="Generated outer held-out folds" if MODE == "teach" else "Saved outer held-out folds")
-            ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-            ax.set(xlabel="Held-out fold", ylabel="Count")
-            plt.tight_layout(); plt.show()
-        else:
-            print("No frozen cohort manifest in this local copy. No census is inferred from images alone.")
-        """), md("""
-        ## 2. Put the observation boundary on one timeline
-
-        Frames are zero-based after annotation conversion. Frames 0–31 supply
-        the inputs; the target spans 38–39 and ends eight frames after the last
-        observed frame. The teacher target uses the full 64-frame clip and can
-        therefore include information after frame 39. Its interpretation is a
-        full-clip contextual feature at that location.
-
-        The timeline reads the production `FRAME` contract, keeping the displayed
-        boundary tied to the implementation. The physical horizon in seconds
-        depends on the source frame rate.
-        """), code("""
-        from gavd6_sjepa.research_directions.future_innovation.fi_contracts import FRAME
-        fig, ax = plt.subplots(figsize=(9, 2.6))
-        ax.broken_barh([(0, FRAME.context_stop_exclusive)], (1, 0.65), facecolors="#2f6f99")
-        ax.broken_barh([(FRAME.target_tubelet_start, FRAME.tubelet_size)], (1, 0.65), facecolors="#e07a4b")
-        ax.broken_barh([(0, FRAME.frames_per_clip)], (0, 0.65), facecolors="#e6f2ea")
-        ax.set(yticks=[0.325, 1.325], yticklabels=["Teacher target context", "Past input / target location"],
-               xticks=[0, 31, 38.5, 63], xticklabels=["0", "31", "38–39", "63"],
-               xlabel="Zero-based frame", xlim=(0, 64))
-        ax.set_title("Inputs use the past; target encoding uses the full clip")
-        plt.tight_layout(); plt.show()
-        """), md("""
-        ## 3. Inspect exclusions before interpreting model scores
-
-        A usable row needs exact decoding, aligned boxes, a nonempty person
-        token region and at least one observed joint transition. Natural missingness stays explicit through
-        confidence and validity channels. The pipeline saves every exclusion and
-        an alignment overlay for each accepted window.
-
-        Exclusion counts can reveal a narrow selected cohort. An overlay can
-        reveal a misplaced crop; it does not certify timing, source separation,
-        or teacher validity. Read the manifests as well as the pictures.
-
-        ### How to read the common exclusion reasons
-
-        - **Sequence shorter than 64 frames** means the sequence's inclusive
-          `first_frame`–`last_frame` span contains fewer than 64 frames. The
-          pipeline must choose one contiguous 64-frame window (frames 0–63 in
-          the clip contract), so this sequence cannot supply a valid window.
-          This is a length check, not a claim that an individual annotation is
-          invalid.
-        - **Source video not cached** in an older run describes the old
-          `youtube/all/<video_id>` lookup, not all storage on HAIC. New runs
-          resolve explicit full-source paths in the video manifest, then exact
-          source IDs throughout the configured storage directories. Add other
-          directories through `FI_VIDEO_ROOTS` before initialization. Ambiguous
-          exports require an explicit manifest `video_path`; clips with reset
-          frame numbering are not substitutes for full source videos.
-        - **Cohort cap** means 50 usable clips have already been selected;
-          **source cap** limits each source to two clips. Neither indicates a
-          missing or low-quality video. Candidates after the cap are not pose
-          evaluated, and no quality finding can be inferred for those clips.
-
-        Existing cohorts retain their original candidate/exclusion records on
-        resume. To apply new discovery or window-selection rules, initialize a
-        new run directory; never silently replace a cohort behind cached features.
-        """), code("""
-        if MODE != "teach":
-            exclusions = read_optional_table(RUN_ROOT, "manifests/exclusions.csv")
-            if exclusions is not None:
-                summary = exclusions.groupby(["stage", "reason"]).size().rename("sequences").reset_index()
-                summary["outcome"] = np.where(summary.stage == "selection", "Not selected", "Eligibility failure")
-                display(summary[["outcome", "stage", "reason", "sequences"]])
-                failures = exclusions[exclusions.stage != "selection"]
-                display(failures.head(10))
-                print(f"{len(failures)} eligibility failures; {len(exclusions) - len(failures)} not selected by cohort size/source cap.")
-            availability = read_optional_table(RUN_ROOT, "manifests/source-availability.csv")
-            if availability is not None:
-                display(availability.groupby(["available", "method"]).size().rename("source videos").reset_index())
-                display(availability[availability.video_path.fillna("") == ""].head(10))
-            else:
-                print("No source-discovery inventory in this older run. Its exclusions describe the original lookup.")
-            overlays = sorted((RUN_ROOT / "qc/alignment-overlays").glob("*.jpg"))
-            print(f"{len(overlays)} local overlays. Their presence alone does not establish a completed cohort.")
-            if overlays:
-                from IPython.display import Image
-                display(Image(filename=str(overlays[0]), width=720))
-            display(artifact_inventory(RUN_ROOT).iloc[:3])
-        """)]
-    return cells + ending("01", "In teaching mode the census is generated; in execution and inspection it describes the saved cohort. Examine exclusions and alignment alongside source counts. Missing manifests or inconsistent source assignments must be resolved before fitting. Next we test the teacher's observation boundary.")
+| Quantity | Boundary and meaning |
+|---|---|
+| Prefix RGB, pose and normalization | frames 0–31 only |
+| Skeleton history | 32 frames × 33 joints × x, y, confidence, validity |
+| Teacher target region | frames 38–39 |
+| Teacher target encoding context | full 64-frame clip, including later observations |
+| Missing joint | no invented coordinate or velocity observation |
+| Velocity summary | adjacent valid endpoints within each ordered 8-frame bin |
+'''), code('''
+from gavd6_sjepa.research_directions.future_innovation.fi_contracts import FRAME
+fig, ax = plt.subplots(figsize=(9,2.2))
+ax.broken_barh([(0,32)],(0,0.7),facecolors='#2f6f99',label='Predictor inputs')
+ax.broken_barh([(38,2)],(0,0.7),facecolors='#d4803f',label='Target region')
+ax.broken_barh([(0,64)],(1,0.5),facecolors='#bdd5c8',label='Full teacher context')
+ax.set(xlim=(0,64),xticks=[0,8,16,24,32,38,40,64],yticks=[],xlabel='Clip frame boundary')
+ax.legend(loc='upper center',bbox_to_anchor=(.5,1.4),ncol=3); plt.show()
+if MODE != "teach":
+    cohort = read_optional_table(RUN_ROOT,'manifests/gate-windows.csv')
+    if cohort is not None:
+        display(cohort.groupby('outer_fold').agg(test_clips=('window_id','size'),test_sources=('video_id','nunique'))
+                .assign(training_clips=lambda t: len(cohort)-t.test_clips))
+        print(f'{len(cohort)} clips from {cohort.video_id.nunique()} source videos; inspected development cohort.')
+        columns=[c for c in ['window_id','video_id','outer_fold','source_first_frame','source_last_frame',
+                             'context_pose_coverage','minimum_person_crop_retention','horizon_seconds'] if c in cohort]
+        display(cohort[columns])
+    else:
+        print('No local frozen cohort. Source availability and cohort eligibility are separate stages.')
+'''), code('''
+if MODE != "teach":
+    from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
+    run_path=RUN_ROOT/'config/run-contract.json'
+    if run_path.is_file() and read_json(run_path).get('protocol')=='direct-v3':
+        from gavd6_sjepa.research_directions.future_innovation.fi_cache_reuse import load_reused_cache
+        cohort, arrays=load_reused_cache(RUN_ROOT)  # Verified and read-only; no raw media.
+        sk=arrays['skeleton']
+        display(pd.DataFrame({'window_id':cohort.window_id,'valid_fraction':sk[...,3].mean(axis=(1,2)),
+                              'confidence_mean':sk[...,2].mean(axis=(1,2)),
+                              'missing_fraction':1-sk[...,3].mean(axis=(1,2))}))
+        fig,ax=plt.subplots(figsize=(9,3))
+        ax.imshow(sk[0,...,3].T,aspect='auto',vmin=0,vmax=1,cmap='Blues')
+        ax.set(xlabel='Prefix frame',ylabel='Joint',title=f'Validity: {cohort.window_id.iloc[0]}'); plt.show()
+        print('Inherited cache integrity checked here. Raw alignment evidence is reused from parent receipts.')
+''')]
+    return cells + ending('01', 'The same cohort and source folds now define every fitting boundary. Next establish how teacher features were encoded and which validity evidence is reused.')
 
 
 def lesson02():
-    cells = opening("02", "Can we trust the teacher inputs and targets?", """
-A frozen encoder can still leak future information through attention or
-preprocessing. This stage explains where tokens come from, which tokens the
-past input may use, and which person-region features supply the target.
-The teaching examples use token arithmetic, not downloaded teacher weights.
-""")
-    cells += [md("""
-        ## 1. Count tokens before pooling them
+    cells = opening('02','Teacher features, prefix isolation and lineage','''
+A frozen teacher supplies features without learning from this predictor study.
+Its input encoding must exclude future information before attention mixes tokens.
+Its target encoding deliberately uses the full clip. These are different roles.
+''')
+    cells += [md('''
+At 384 × 384 pixels, 16-pixel patches form a 24 × 24 grid. Two-frame tubelets
+cover the temporal axis. Prefix encoding keeps only frames 0–31 before attention;
+masking after full-clip attention would already contain future information.
+The target pools the person region at frames 38–39 and applies the same frozen
+256-dimensional projection in every fold.
 
-        At 384 × 384 pixels, 16-pixel patches form a 24 × 24 grid. Each temporal
-        token covers two frames. The full clip has 32 temporal groups; the past
-        input has 16. The actual adapter removes future tokens before attention.
-        Removing them only after full-clip attention would leave future content
-        mixed into the retained past features.
-        """), code("""
-        from gavd6_sjepa.research_directions.future_innovation.fi_contracts import FRAME
-        from gavd6_sjepa.research_directions.future_innovation.fi_token_regions import context_indices, region_masks
-        past_ids = context_indices()
-        full_count = FRAME.frames_per_clip // FRAME.tubelet_size * FRAME.grid ** 2
-        display(pd.DataFrame({"tokens": [len(past_ids), full_count]}, index=["Past before attention", "Full teacher clip"]))
-        assert past_ids[-1] < FRAME.context_stop_exclusive // FRAME.tubelet_size * FRAME.grid ** 2
-        """), md("""
-        ## 2. See which spatial region supplies the target
+RGB inputs concatenate global prefix pooling, the last prefix person region,
+prefix background pooling, and nuisance summaries. Unavailable background
+measurements have separate support fractions. Recording conditions may help
+explain the contextual target, so a gain is not automatically a gait-dynamics claim.
+'''), code('''
+from gavd6_sjepa.research_directions.future_innovation.fi_contracts import FRAME
+from gavd6_sjepa.research_directions.future_innovation.fi_token_regions import context_indices
+past_ids=context_indices()
+assert past_ids[-1] < FRAME.context_stop_exclusive // FRAME.tubelet_size * FRAME.grid**2
+display(pd.DataFrame({'tokens':[len(past_ids),FRAME.frames_per_clip//FRAME.tubelet_size*FRAME.grid**2]},
+                     index=['Prefix before attention','Full target context']))
+'''), md('''
+Direct-v2 retained three preselected windows for repeatability and randomized
+future-pixel checks. Direct-v3 reuses those measurements and cached arrays after
+checking their original contracts, file hashes, identities, shapes and audit
+arithmetic. It needs neither raw-video mounts nor a GPU. It does not rerun
+teacher encoding or certify person/background selectivity. Legacy-v1 still
+requires its original selectivity measurements.
 
-        The production region helper expands the person rectangle by one patch
-        and leaves a further guard band before background patches. Here the box
-        is invented to show that geometry. Real boxes come from the aligned
-        annotations and declared crop transformation.
-
-        Direct-v2 predicts the person-region feature. Full-clip attention mixes
-        scene and person information, so this target is contextual. Background
-        context remains an input when available; an empty background contributes
-        a zero vector. Prefix-only pixel, optical-flow and token support values
-        distinguish unavailable measurements from observed zeros in nuisance inputs.
-        Background-target prediction remains part of the legacy protocol only.
-        """), code("""
-        if MODE == "teach":
-            person, background = region_masks(np.array([0.35, 0.15, 0.65, 0.85]))
-            regions = np.ones(FRAME.grid ** 2)
-            regions[background] = 0
-            regions[person] = 2
-            from matplotlib.colors import ListedColormap
-            fig, ax = plt.subplots(figsize=(5, 4))
-            picture = ax.imshow(regions.reshape(FRAME.grid, FRAME.grid),
-                                cmap=ListedColormap(["#e7f0f8", "#f7f5ef", "#5f9e7e"]), vmin=0, vmax=2)
-            colorbar = fig.colorbar(picture, ax=ax, ticks=[0, 1, 2])
-            colorbar.ax.set_yticklabels(["Background", "Guard band", "Person"])
-            ax.set(title="Illustrative spatial target regions", xlabel="Patch column", ylabel="Patch row")
-            plt.tight_layout(); plt.show()
-        """), md("""
-        ## 3. Check that inputs and targets can support the comparison
-
-        | Saved audit | What must hold |
-        | --- | --- |
-        | Repeated teacher inference | The declared numerical tolerance is met |
-        | Randomized future pixels | The past input features remain unchanged |
-        | Person-target variance | Nonconstant training features exist |
-        | Crop and frame alignment | Features correspond to the declared observations |
-
-        The numerical thresholds and measurements live in the run artifacts.
-        Reading a passed flag is inspection of an earlier audit, not a new test.
-        Direct-v2 checks three frozen windows for repeatability and future
-        isolation, plus cached person-target variance and artifact integrity.
-        It does not generate person/background edit contact sheets or require
-        selectivity thresholds. The legacy run keeps its original tests.
-        Synthetic fixtures verify software routing, not real teacher behavior.
-        """), code("""
-        if MODE != "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
-            audit_path = inspection_audit_path(RUN_ROOT)
-            if audit_path.is_file():
-                audit = read_json(audit_path)
-                display(pd.DataFrame(list(audit.get("checks", {}).items()), columns=["saved check", "passed"]))
-                failed = [name for name, passed in audit.get("checks", {}).items() if passed is not True]
-                print("Failed checks:", ", ".join(failed) if failed else "none")
-                if audit_path.name == "validity-summary.json":
-                    print("Legacy selectivity audit; its rules are preserved for this run.")
-                    display({key: audit.get(key) for key in
-                             ("motion_to_background_change_ratio", "person_edit_direction_fraction")})
-                thresholds = RUN_ROOT / "config/thresholds.json"
-                if thresholds.is_file():
-                    display(read_json(thresholds))
-                for filename in ("teacher-stability.csv", "causal-leakage.csv", "target-sensitivity.csv"):
-                    table = read_optional_table(RUN_ROOT, "qc/" + filename)
-                    if table is not None:
-                        print(filename)
-                        display(table)
-                print("Saved audit only; inspection does not revalidate it." if MODE == "inspect"
-                      else "Production commands were attempted; failed checks remain blocking.")
-            else:
-                print("No saved validity summary. The measurement has not been verified by this notebook.")
-            display(artifact_inventory(RUN_ROOT).iloc[3:5])
-        """)]
-    return cells + ending("02", "Token arithmetic explains the interface. Teacher behavior requires the cache and audit stages, which execute mode runs or verifies here. Inspect the saved checks and resolve validity failures before comparing predictors. Fabricated smoke audits remain software tests only.")
+| Evidence | What it establishes |
+|---|---|
+| Cache and projection hashes | Identity of reused arrays and projection |
+| Repeated inference measurements | Teacher numerical stability on audited windows |
+| Randomized future-pixel measurements | Prefix feature isolation on audited windows |
+| Training target variance | Usable dimensions, with a training-only mask |
+| Original cohort receipts | Inherited alignment and pose provenance |
+'''), code('''
+if MODE != "teach":
+    from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
+    lineage=RUN_ROOT/'config/parent-lineage.json'
+    if lineage.is_file():
+        record=read_json(lineage)
+        display({k:record[k] for k in ['parent_root','parent_run_id','parent_protocol','teacher_evidence','raw_alignment_evidence','identities']})
+    audit=inspection_audit_path(RUN_ROOT)
+    if audit.is_file():
+        record=read_json(audit)
+        display(pd.DataFrame(list(record.get('checks',{}).items()),columns=['saved check','passed']))
+        print('Teacher evidence:',record.get('teacher_evidence','original run audit; consult saved protocol'))
+        print('Failed checks:',[k for k,v in record.get('checks',{}).items() if not v])
+    for name in ['teacher-stability.csv','causal-leakage.csv','target-sensitivity.csv']:
+        table=read_optional_table(RUN_ROOT,'qc/'+name)
+        if table is not None:
+            print(name); display(table)
+    print('Inspect mode reads saved audit evidence; execution verifies the applicable stage.')
+''')]
+    return cells + ending('02','The cached predictor inputs and contextual targets have explicit lineage. Next fit matched models using only training sources and expose each candidate’s validation evidence.')
 
 
 def lesson03():
-    cells = opening("03", "Does correctly paired motion help?", """
-We now hold the prediction problem fixed and change only the skeleton control.
-The production experiment uses five source-disjoint outer folds and three
-initialization seeds. Inner source folds choose hyperparameters. Outer test
-sources never choose a ridge penalty, update count, or preferred arm.
+    cells=opening('03','Select jointly regularized predictors and controls','''
+Direct-v3 fits one deterministic model per outer fold and arm. It does not repeat
+the same solution under three seed labels. Legacy-v1 and direct-v2 keep their
+historical stochastic heads and loading paths. All model choices are confined to
+inner source validation; outer-test scores never choose a penalty or checkpoint.
+''')
+    cells += [md('''
+Four ordered bins `[0,8)`, `[8,16)`, `[16,24)`, `[24,32)` preserve temporal position.
+Each of 33 joints contributes mean valid x/y, valid adjacent-frame velocity x/y,
+confidence, frame support and transition support: 924 fixed features. Missing
+observations are imputed from training means only. Unsupported or near-constant
+training columns become exact zeros in every partition, with their positions
+retained. Target scaling is a separate operation and keeps target variation.
 
-The short example below fits one baseline and one two-update head on generated
-data. It demonstrates the production APIs, not the complete scientific grid.
-""")
-    cells += [md("""
-        ## 1. Build every control inside its own partition
+| Arm | Transformation before feature construction |
+|---|---|
+| Real | Original coordinate/confidence/validity history |
+| Time shuffle | Permute four-frame blocks, moving all channels together |
+| Clip mismatch | Different-source, context-matched donor inside the current partition |
+| No skeleton | Zero x/y/confidence; retain the original time-varying validity |
 
-        A mismatched donor must be from another source in the same training,
-        validation or test partition. Moving a donor across partitions changes
-        the information boundary. The production helper enforces different
-        sources; the nested runner supplies each partition separately.
+All arms receive 36 pairs from the same positive RGB/skeleton penalty grids plus
+the same selected RGB-only baseline. Inner loss pools source-weighted error sums
+and weight totals. Ties within the frozen numerical tolerance prefer baseline;
+other ties prefer stronger penalties. Failed candidates stay visible and prevent
+a complete scientific result. The exact fallback can win every comparison.
+'''), code('''
+if MODE=='teach':
+    from gavd6_sjepa.research_directions.future_innovation.fi_joint_calibration import exact_calibration
+    from gavd6_sjepa.research_directions.future_innovation.fi_joint_models import JointRidge
+    demo=exact_calibration()
+    display(pd.DataFrame([demo]))
+    rng=np.random.default_rng(41)
+    x=rng.normal(size=(20,4)); s=rng.normal(size=(20,2)); y=x[:,:1]+s[:,:1]
+    joint=JointRidge.fit(x,s,y,np.ones(20),10.,10.)
+    display(pd.DataFrame({'illustrative_target':y[:,0],'training_prediction':joint.predict(x,s)[:,0]}))
+    print('Synthetic training illustration only; real calibration uses complete source-held selection.')
+'''), md('''
+The historical all-candidates-loss problem is visible in each inner partition,
+not just its pooled score. Large losses should stay in the numerical table even
+when a logarithmic plot is easier to read. Direct-v3 train and validation losses
+come from the same closed-form fit within each inner partition. Historical
+neural training loss was recorded before an update and validation afterward;
+new timing labels describe that difference. It was not the headline R² cause.
 
-        Shuffle moves four-frame blocks with coordinates, confidence and
-        validity together. No-skeleton retains validity in the same-size head.
-        The real-minus-no-skeleton comparison measures what coordinate and
-        confidence history adds while matching the head's size and validity inputs.
-        """), code("""
-        if MODE == "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_contracts import DIRECT_ARMS
-            from gavd6_sjepa.research_directions.future_innovation.fi_controls import controlled_history
-            rng = np.random.default_rng(260905)
-            skeleton = rng.normal(size=(12, 32, 33, 4)).astype(np.float32)
-            skeleton[..., 2] = 0.8  # confidence
-            skeleton[..., 3] = 1.0  # validity
-            source_ids = np.array([f"generated-source-{i // 2}" for i in range(12)])
-            window_ids = np.array([f"generated-window-{i}" for i in range(12)])
-            x = rng.normal(size=(12, 4))
-            # This example is one training partition, never a mix of train and test.
-            controls = {}
-            for arm in DIRECT_ARMS:
-                controls[arm], donors = controlled_history(arm, skeleton, window_ids, source_ids, x)
-                if donors is not None:
-                    source_for = dict(zip(window_ids, source_ids))
-                    assert all(source_for[w] != source_for[d] for w, d in zip(window_ids, donors["donor_window_ids"]))
-            assert np.array_equal(controls["no-skeleton"][..., 3], skeleton[..., 3])
-            display(pd.DataFrame({"arm": list(controls), "history shape": [str(a.shape) for a in controls.values()]}))
-        """), md("""
-        ## 2. Fit the baseline before defining its residual
-
-        Both scalers and the ridge fit see training examples only. Targets passed
-        to the residual head use the baseline's training-standardized units.
-        A lower training loss merely shows optimization on those examples.
-        It cannot establish held-out prediction quality.
-
-        This demonstration reduces width, target dimension and updates explicitly.
-        Real configuration remains owned by the initialized run; never transfer
-        these teaching settings into the frozen comparison.
-        """), code("""
-        if MODE == "teach":
-            import torch
-            from gavd6_sjepa.research_directions.future_innovation.fi_contracts import ModelContract
-            from gavd6_sjepa.research_directions.future_innovation.fi_residual_models import fit_baseline, train_head, predict_head
-            y = x @ rng.normal(size=(4, 3)) + rng.normal(size=(12, 3)) * 0.2
-            baseline = fit_baseline(x, y, window_ids, source_ids, alpha=1.0, variance_tolerance=1e-10)
-            residual = baseline.y_scaler.transform(y) - baseline.predict(x)
-            old_threads = torch.get_num_threads()
-            try:
-                torch.set_num_threads(1)  # Local teaching budget; restore before leaving.
-                head, history = train_head(skeleton, baseline.x_scaler.transform(x), residual,
-                    source_ids, baseline.valid_features, seed=7, weight_decay=0.1,
-                    updates=(1, 2), model_contract=ModelContract(width=8, updates=(1, 2)), device="cpu")
-                correction = predict_head(head, skeleton, baseline.x_scaler.transform(x), "cpu")
-            finally:
-                torch.set_num_threads(old_threads)
-            assert correction.shape == y.shape and np.isfinite(correction).all()
-            display(pd.DataFrame(history))
-            print("Two CPU updates on generated training examples; no held-out scientific result.")
-        """), md("""
-        ## 3. Inspect the real workload and reuse completed stages
-
-        Direct-v2 fits 5 outer folds × 3 seeds × 4 arms = 60 final heads,
-        plus training-only inner selection. Correct skeleton, time shuffle,
-        wrong-clip skeleton and a matched no-skeleton head share the same
-        person target and ridge baseline in each fold. Teacher features are
-        cached once, and CPU array tasks fit the heads. Legacy runs retain
-        their five-arm grid. The gate uses 50 clips; the full GAVD dataset is
-        reserved for the real experiment. No reduced teaching settings enter the fits.
-
-        Inspect saved configuration before submitting anything. Presence of a
-        fold receipt is not a fresh validation of its predictions. Existing
-        pipeline commands perform their own integrity and resumption checks.
-        """), code("""
-        if MODE != "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
-            config_path = RUN_ROOT / "config/model-contract.json"
-            if config_path.is_file():
-                display(read_json(config_path))
-            else:
-                print("No model configuration available locally; inspect the run's config directory on HAIC.")
-            display(artifact_inventory(RUN_ROOT))
-            audit_path = inspection_audit_path(RUN_ROOT)
-            if audit_path.is_file():
-                audit = read_json(audit_path)
-                failed = [name for name, passed in audit.get("checks", {}).items() if passed is not True]
-                if failed or audit.get("passed") is not True:
-                    print("FITTING BLOCKED by teacher validity:", ", ".join(failed) or "invalid summary")
-                    print("Inspect notebook 02 and its per-window QC. Do not tune thresholds to pass this run.")
-        """), md("""
-        ## 4. Execute these notebooks on HAIC
-
-        Run these commands in a HAIC terminal only when you intend to execute the
-        real experiment. Set the paths to your checkout and existing run. For a
-        new run, first complete the environment/input setup in the
-        [HAIC guide](../../../slurm/future-innovation/README.md).
-
-        ```bash
-        export GAVD6_ROOT=/path/to/gavd6
-        export FI_RUN_ROOT=/path/to/new/future-innovation/direct-v2
-        cd "$GAVD6_ROOT"
-        bash slurm/future-innovation/submit-fi-notebooks.sh all
-        ```
-
-        `all` arranges preparation and compute dependencies and reuses verified
-        completed artifacts. Use `compute` when preparation has finished. The
-        run guide describes recovery; do not delete run contracts to resume.
-        The notebook itself never submits jobs. In `execute` mode its stage cell
-        launches the production fit grid, using the allocated CPU resources.
-        """)]
-    return cells + ending("03", "Teaching mode illustrates a small fit. With passing validity audits, execute mode fits all folds or the selected array fold; a verified audit rejection records TRAINING BLOCKED without fitting. Scientific interpretation needs out-of-fold predictions for every arm and seed across all five folds. Next we score that complete comparison; job completion alone does not establish useful motion information.")
+Inspect supported feature counts alongside nominal dimensions. Baseline-only
+uses no skeleton coefficients. A joint candidate that wins inner validation can
+still lose on unseen sources; fallback eligibility does not guarantee outer gain.
+'''), code('''
+if MODE!='teach':
+    from gavd6_sjepa.research_directions.future_innovation.fi_tutorial_inspection import prediction_fit_tables
+    from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
+    path=RUN_ROOT/'config/model-contract.json'
+    if path.is_file(): display(read_json(path))
+    tables=prediction_fit_tables(RUN_ROOT,os.environ.get('FI_NOTEBOOK_FOLD'))
+    for name,table in tables.items():
+        if not table.empty:
+            print(name, f'({len(table)} records; full machine-readable records under models/fold-*/.)')
+            with pd.option_context('display.max_rows',None,'display.max_columns',None,'display.precision',10):
+                display(table)
+    candidates=tables['candidates']
+    if not candidates.empty:
+        selected=tables['selected']
+        print('Baseline fallback frequency:', (selected.selected_type=='baseline_only').sum(), '/',len(selected))
+        fig,ax=plt.subplots(figsize=(9,3))
+        for arm,rows in candidates.groupby('arm'):
+            ax.scatter(np.arange(len(rows)), rows.pooled_loss, s=12, alpha=.55, label=arm)
+        ax.set(yscale='log',xlabel='Candidate record within arm',ylabel='Pooled inner MSE',title='All candidate losses; numeric values retained above')
+        ax.legend(); plt.show()
+    elif not tables['historical_inner_fits'].empty:
+        history=tables['historical_inner_fits']
+        fig,ax=plt.subplots(figsize=(9,3))
+        ax.scatter(np.arange(len(history)),history.validation_squared_error/history.validation_weight,s=8)
+        ax.set(yscale='log',xlabel='Historical inner fit record',ylabel='Validation MSE'); plt.show()
+    display(artifact_inventory(RUN_ROOT))
+''')]
+    return cells+ending('03','Every selected model has an inner-validation reason, a fitted preprocessing record and an explicit type. Next reconstruct its held-out predictions and assess the paired effect and uncertainty.')
 
 
 def lesson04():
-    cells = opening("04", "What does the evidence permit next?", """
-The final question is whether the full comparison justifies continuing. Read
-completion, validity and effect size separately. A failed job, a failed
-causality audit and a valid negative prediction result require different next
-actions even when a saved report labels each one STOP.
+    cells=opening('04','Measure the increment and decide what follows','''
+A valid negative result is useful. A missing prediction, a corrupted mask and a
+complete failed effect criterion are different outcomes. Execution reconstructs
+and scores the saved models before sealing a result. Inspect mode reads the
+saved evidence without rewriting it.
+''')
+    cells += [md('''
+Pool held-out predictions over the five folds. For each target feature, R² is
+one minus source-weighted squared prediction error divided by the error of its
+outer-training mean. Average featurewise R² on the intersection of training-valid
+dimensions. Stochastic historical runs then average seed scores; deterministic
+direct-v3 has one score. Neither fold-score averaging nor test-mean centering
+implements this metric.
 
-In `execute` mode this notebook scores and builds the report. `inspect` mode
-only reads it. Both use the experiment's existing decision rules.
-""")
-    cells += [md("""
-        ## 1. Understand the decision rule with invented evidence
+The 2,000 paired bootstrap draws resample whole source videos with replacement.
+Keep clips together and count a source twice when drawn twice. The same draws
+serve every arm. These intervals condition on saved models and omit repeated
+fitting, selection and this cohort's adaptive redesign. They add no independent
+sources. Report the 95% interval separately from the 90%-positive decision rule.
 
-        The production gate first checks valid finite measurements, then point
-        thresholds, then source-bootstrap and seed stability. These invented
-        cases show its behavior. An illustrative ADVANCE has no authority over
-        a real run. Adapter training is disallowed even when this raw-skeleton
-        feasibility gate advances.
-        """), code("""
-        if MODE == "teach":
-            from gavd6_sjepa.research_directions.future_innovation.fi_gate_decision import decide_gate
-            metrics = {
-                "delta_r2_real": 0.06, "delta_r2_time_shuffle": 0.02,
-                "delta_r2_clip_mismatch": 0.005,
-                "delta_r2_no_skeleton": 0.005, "seed_skeleton_increments": [0.055] * 3,
-                "skeleton_increment_positive_fraction": 0.95, "bootstrap_positive_fraction": 0.95,
-                "seed_real_gains": [0.06, 0.06, 0.06],
-                **{key: True for key in ("data_contract_valid", "evaluation_contract_valid",
-                    "controls_complete", "input_audit_complete", "target_variance_valid",
-                    "teacher_stable", "causal_leakage_absent")},
-            }
-            scenarios = {
-                "Illustrative stable gain": metrics,
-                "Illustrative weak real gain": {**metrics, "delta_r2_real": 0.01, "seed_real_gains": [0.01] * 3, "seed_skeleton_increments": [0.005] * 3},
-                "Extra capacity explains gain": {**metrics, "delta_r2_no_skeleton": 0.06, "seed_skeleton_increments": [0.0] * 3},
-                "Illustrative uncertainty": {**metrics, "bootstrap_positive_fraction": 0.7},
-                "Illustrative invalid input": {**metrics, "causal_leakage_absent": False},
-            }
-            display(pd.DataFrame([{"invented case": name, "decision": decide_gate(values, protocol="direct-v2")["decision"],
-                "adapter allowed": decide_gate(values, protocol="direct-v2")["allow_adapter_training"]}
-                for name, values in scenarios.items()]))
-        """), md("""
-        ## 2. Establish the status of the saved evidence
+| Required criterion | Threshold |
+|---|---|
+| Mean real gain over shared RGB ridge | at least +0.05 R² |
+| Shuffle | real gain ≥ 2 × max(shuffled gain, 0) |
+| Mismatch | gain ≤ +0.01 R² |
+| Matched skeleton increment | real minus no-skeleton > 0 |
+| Paired bootstrap | real gain and matched increment each positive in ≥90% of draws |
+| Measurement evidence | all required input, target, audit, source, model and numerical checks valid |
 
-        A local copy may contain only overlays or an incomplete STOP report.
-        A complete report is sealed with hashes for its decision and narrative.
-        Inspection uses the production seal verifier and never rewrites it.
-        A seal establishes file integrity; it does not independently rerun the
-        original data, causal audits, predictions or statistical analysis.
-
-        | Inspection state | Interpretation |
-        | --- | --- |
-        | Unavailable | No decision in this copy; remote state is unknown |
-        | Incomplete | Execution or measurement still needs repair |
-        | Invalid / unverified | Resolve missing or inconsistent report evidence |
-        | Synthetic | Software demonstration; no scientific advancement |
-        | Complete / STOP | Read effect and control checks; the validity audits passed before fitting |
-        | Complete / INCONCLUSIVE | Point checks passed; stability was insufficient |
-        | Complete / ADVANCE | Design the full-GAVD JEPA comparison; adapter distillation remains separate |
-        """), code("""
-        if MODE != "teach":
-            evidence = inspect_report(RUN_ROOT)
-            print(evidence["state"], "—", evidence["explanation"])
-            decision = evidence["decision"]
-            if decision is not None:
-                print("Saved reason:", decision.get("reason", "No reason recorded"))
-                display(pd.DataFrame(list(decision.get("checks", {}).items()), columns=["saved check", "passed"]))
-            if evidence["report_text"] is not None:
-                display(Markdown(evidence["report_text"]))
-        """), md("""
-        ## 3. Compare controls before attributing a gain to motion
-
-        Pool out-of-fold predictions within each seed, then average seed scores.
-        Do not average fold R² values or treat repeated seeds as new people.
-        Source bootstraps keep each source's windows together. Intervals are
-        conditional on the saved fits; model selection and training are not
-        repeated within each draw. The sealed report
-        includes the per-seed scores, intervals and paired real-minus-control
-        contrasts; use that report for numerical interpretation.
-
-        The primary skeleton increment is the real head's R² minus the matched
-        no-skeleton head's R². That control retains time-varying validity flags
-        and receives the same RGB and nuisance inputs, so the contrast measures
-        additional coordinate/confidence history. A positive mean must also
-        appear in every seed and at least 90% of paired source draws to advance.
-        Report its 95% interval separately; crossing zero leaves uncertainty.
-        The real head must still improve on ridge by at least 0.05, exceed twice
-        the nonnegative shuffled gain, and keep wrong-clip gain at most 0.01.
-
-        The target remains contextual and its horizon is located inside
-        full-clip teacher features. No result here establishes a clinical
-        endpoint, isolated dynamics, or the benefit of a trained S-JEPA student.
-        """), md("""
-        ## 4. Record one next action
-
-        | Observation | Next action |
-        | --- | --- |
-        | Missing or incomplete artifacts | Recover the existing run through its normal pipeline |
-        | Failed input or teacher validity | Repair the measurement before interpreting prediction scores |
-        | Complete, valid gain below the rule | Preserve the negative result; reconsider the representation or endpoint |
-        | Gain reproduced by controls | Investigate the remaining shortcut or capacity explanation |
-        | Unstable gain | Report uncertainty and define any further measurement before running it |
-        | Complete stable skeleton increment | Compare trained JEPA features, matched initial encoders and raw skeleton history |
-
-        Update the study overview with the identified run, exact report path,
-        supported conclusion, unresolved explanation, and next action. Keep
-        synthetic examples and older prompts visibly separate from that record.
-        Preserve the executed notebook as an artifact when adding result-specific
-        commentary; edit the builder for changes to the reusable explanation.
-        """)]
-    return cells + ending("04", "Record the identified run, its measurement status, the supported conclusion and one next action. Execution scores and seals complete evidence; inspection reads the existing seal. A complete negative result is useful evidence, while an incomplete STOP calls for execution or measurement repair.")
+Direct-v3's prospective deterministic policy makes stochastic seed stability
+inapplicable. Historical stochastic runs still require all three gains positive,
+at least two ≥0.05, and matched increment positive in every seed. Point failures
+produce complete STOP. Passed points with insufficient stability produce
+INCONCLUSIVE. A passing direct-v3 result is development ADVANCE and requires
+independent-source confirmation before scaling.
+'''), code('''
+if MODE=='teach':
+    from gavd6_sjepa.research_directions.future_innovation.fi_joint_reporting import decide_joint_gate
+    metrics={'delta_r2_real':.06,'delta_r2_time_shuffle':.02,'delta_r2_clip_mismatch':.005,'delta_r2_no_skeleton':.005,
+             'seed_real_gains':[.06],'seed_skeleton_increments':[.055],
+             'bootstrap_positive_fraction':.95,'skeleton_increment_positive_fraction':.95,
+             **{k:True for k in ('data_contract_valid','evaluation_contract_valid','controls_complete','input_audit_complete',
+                                  'target_variance_valid','teacher_stable','causal_leakage_absent')}}
+    cases={'Invented passing development evidence':metrics,
+           'Invented uncertainty':{**metrics,'bootstrap_positive_fraction':.7},
+           'Exact fallback / zero increment':{**metrics,'delta_r2_real':0.,'delta_r2_no_skeleton':0.,'seed_real_gains':[0.],'seed_skeleton_increments':[0.]}}
+    display(pd.DataFrame([{'synthetic illustration':name,**{k:decide_joint_gate(m)[k] for k in ('decision','allow_full_experiment','stochastic_seed_stability')}} for name,m in cases.items()]))
+'''), code('''
+if MODE!='teach':
+    evidence=inspect_report(RUN_ROOT)
+    print(evidence['state'],evidence['explanation'])
+    print('Report seal integrity checked:',evidence['seal_verified'])
+    for path in ['reports/aggregate-metrics.csv','reports/paired-controls.csv']:
+        table=read_optional_table(RUN_ROOT,path)
+        if table is not None:
+            with pd.option_context('display.precision',10,'display.max_columns',None): display(table)
+    from gavd6_sjepa.research_directions.future_innovation.fi_contracts import read_json
+    for path in ['reports/uncertainty.json','reports/numerical-verification.json']:
+        p=RUN_ROOT/path
+        if p.is_file():
+            print(path,'— saved evidence; numerical reconstruction is not rerun in inspect mode')
+            display(read_json(p))
+    aggregate=read_optional_table(RUN_ROOT,'reports/aggregate-metrics.csv')
+    if aggregate is not None:
+        points=aggregate.groupby('arm',sort=False).delta_r2.mean()
+        fig,ax=plt.subplots(figsize=(9,3)); ax.barh(points.index,points.values,color='#2f6f99')
+        ax.axvline(0,color='black',linewidth=.7); ax.axvline(.05,color='#d4803f',linestyle='--',label='Required real gain')
+        ax.set(xlabel='Gain over shared RGB reference (R²)'); ax.legend(); plt.show()
+    if evidence['report_text'] is not None: display(Markdown(evidence['report_text']))
+'''), md('''
+A negative repaired result concerns this predictor, these ordered summaries,
+the contextual teacher target and the small data regime. A separately specified
+representation, target or data study may be reasonable, but this result does
+not justify increasing student capacity by itself. A positive development result
+requires independent-source confirmation. Neither outcome trains S-JEPA,
+adapters or a skeleton-only distilled student; those remain subsequent experiments.
+''')]
+    return cells+ending('04','Record the exact run, measured effect, uncertainty and evidence status. A complete negative measurement closes this comparison; an incomplete result identifies required recovery work.')
 
 
 LESSONS = {"00": lesson00, "01": lesson01, "02": lesson02, "03": lesson03, "04": lesson04}

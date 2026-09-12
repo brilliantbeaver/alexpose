@@ -2,8 +2,8 @@
 # Independent notebook submission path; the original CLI jobs remain available.
 set -euo pipefail
 phase="${1:-}"
-if [[ "$phase" != prepare && "$phase" != compute && "$phase" != all ]]; then
-  echo "Usage: bash slurm/future-innovation/submit-fi-notebooks.sh prepare|compute|all" >&2
+if [[ "$phase" != prepare && "$phase" != compute && "$phase" != all && "$phase" != cached ]]; then
+  echo "Usage: bash slurm/future-innovation/submit-fi-notebooks.sh prepare|compute|all|cached" >&2
   exit 2
 fi
 : "${GAVD6_ROOT:=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)}"
@@ -34,17 +34,24 @@ submit_notebook() {
   printf '%s\t%s\t%s\n' "$label" "$job" "$dependency" >> "$FI_RUN_ROOT/logs/notebook-submissions.tsv"
   printf '%s\n' "$job"
 }
+if [[ "$phase" == cached ]]; then
+  : "${FI_PARENT_ROOT:?Export FI_PARENT_ROOT for direct-v3}"
+  : "${FI_CALIBRATION:?Export FI_CALIBRATION for direct-v3}"
+  export FI_EXPERIMENT_PROTOCOL=direct-v3
+fi
 teacher_dependency=''
 report_jobs=''
-if [[ "$phase" == prepare || "$phase" == all ]]; then
+if [[ "$phase" == prepare || "$phase" == all || "$phase" == cached ]]; then
   setup="$(submit_notebook setup 10-notebook-00-setup.sbatch '')"
   cohort="$(submit_notebook cohort 11-notebook-01-cohort.sbatch "afterok:$setup")"
   echo "Submitted notebook setup=$setup cohort=$cohort."
   teacher_dependency="afterok:$cohort"
   report_jobs="$setup:$cohort:"
 fi
-if [[ "$phase" == compute || "$phase" == all ]]; then
-  teacher="$(submit_notebook teacher 12-notebook-02-teacher.sbatch "$teacher_dependency")"
+if [[ "$phase" == compute || "$phase" == all || "$phase" == cached ]]; then
+  teacher_script=12-notebook-02-teacher.sbatch
+  [[ "$phase" != cached ]] || teacher_script=15-notebook-02-cached.sbatch
+  teacher="$(submit_notebook teacher "$teacher_script" "$teacher_dependency")"
   # Save the blocked notebook after an audit failure. The production CLI still
   # prohibits fitting unless every required audit passes.
   fit="$(submit_notebook fit 13-notebook-03-fit.sbatch "afterany:$teacher")"

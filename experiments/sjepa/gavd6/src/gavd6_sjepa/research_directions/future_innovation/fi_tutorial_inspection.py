@@ -41,7 +41,7 @@ def inspection_audit_path(root):
     root = Path(root)
     path = root / "config/run-contract.json"
     protocol = read_json(path).get("protocol", "legacy-v1") if path.is_file() else "direct-v2"
-    return root / "qc" / ("readiness-summary.json" if protocol == "direct-v2" else "validity-summary.json")
+    return root / "qc" / ("readiness-summary.json" if protocol in {"direct-v2", "direct-v3"} else "validity-summary.json")
 
 
 def read_optional_table(run_root, relative_path):
@@ -116,3 +116,30 @@ def inspect_report(run_root):
             seal_verified=False,
         )
         return result
+
+
+def prediction_fit_tables(root, fold=None):
+    """Read full selection evidence without loading fitted objects or writing files."""
+    root = Path(root)
+    candidates, selected, scaling, histories = [], [], [], []
+    folds = range(5) if fold is None else [int(fold)]
+    for f in folds:
+        directory = root / f'models/fold-{f}'
+        path = directory / 'selection.json'
+        if path.is_file():
+            for arm, payload in read_json(path).items():
+                for row in payload['candidates']:
+                    entry = {'outer_fold': f, 'arm': arm, **{k:v for k,v in row.items() if k != 'inner_folds'}}
+                    for inner in row['inner_folds']:
+                        entry[f"inner_{inner['inner_fold']}_validation_mse"] = inner['validation_mse']
+                        entry[f"inner_{inner['inner_fold']}_training_mse"] = inner.get('training_mse')
+                    candidates.append(entry)
+            selected.extend({'outer_fold': f, **r} for r in read_json(directory / 'fit-diagnostics.json'))
+            for scope, row in read_json(directory / 'preprocessing.json').items():
+                for key in ('heldout_x', 'heldout_s'):
+                    if key in row: scaling.append({'outer_fold':f,'scope':scope,'block':key,**row[key]})
+        elif (directory / 'inner-selection.parquet').is_file():
+            table = pd.read_parquet(directory / 'inner-selection.parquet')
+            histories.extend(table.assign(outer_fold=f).to_dict('records'))
+    return {'candidates':pd.DataFrame(candidates),'selected':pd.DataFrame(selected),
+            'scaling':pd.DataFrame(scaling),'historical_inner_fits':pd.DataFrame(histories)}

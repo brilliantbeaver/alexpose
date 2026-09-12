@@ -1,6 +1,9 @@
 # Future Innovation Experiment 0 on HAIC
 
-The current [direct-v2 protocol](../../docs/studies/future-innovation/direct-gate-protocol.md)
+The expanded source study uses the separate [source learning-curve guide](SOURCE_LEARNING_CURVE.md)
+and jobs 20–23. The historical commands below retain their 50-clip contracts.
+
+The retained [direct-v2 protocol](../../docs/studies/future-innovation/direct-gate-protocol.md)
 uses **50 aligned clips** selected from the full-GAVD pool, a frozen V-JEPA 2.1
 teacher, four matched arms and source-disjoint nested fitting. It directly tests
 what skeleton history adds beyond RGB and nuisance inputs. Background-quality
@@ -171,3 +174,87 @@ uv run --no-sync gavd6 future-innovation smoke \
 The optional official-source test uses a small randomly initialized instance of the actual V-JEPA 2.1 encoder to check mask order, preprocessing, token order, and causal invariance. The smoke command defaults to direct-v2 and exercises all 60 tiny residual fits and reports from synthetic cached features; it always forbids scientific advancement. Pass `--protocol legacy-v1` to exercise the preserved 75-head path. Neither substitutes for real checkpoint inference or cohort audits on HAIC.
 
 All commands have `--help`, and each numbered `.sbatch` can be submitted independently with the required environment. If submitting manually, override `--output` and `--error` with absolute paths to an existing logs directory and arrange the same dependencies.
+
+## Calibrated cached development repair (`direct-v3`)
+
+The [repair protocol](../../docs/studies/future-innovation/direct-v3-repair-protocol.md)
+uses the same 50 clips, five source folds, projected targets and control rules as
+`gate-v2`, with supported input scaling and deterministic two-penalty ridge.
+Each arm has 36 joint candidates and the exact selected RGB reference. There are
+20 selected artifacts, not 60 random-seed replicates. The old protocols and their
+sealed results remain readable.
+
+Use a sibling output root. The copied local directory `outputs/future-innovation`
+is the **direct-v2 parent**, despite its generic name. It is read-only. These
+commands need the cached arrays and audit records, not videos or teacher weights.
+The Mac environment already has compatible numerical packages; the locked HAIC
+CUDA environment remains the Slurm environment. Do not run `uv sync` on a Mac to
+install the Linux CUDA lock. Commands below use the existing local interpreter:
+
+```bash
+.venv/bin/python -m gavd6_sjepa.command_line_interface future-innovation calibrate-repair \
+  --output work/artifacts/future-innovation-repair-2026-09-11/calibration-final.json
+
+.venv/bin/python -m gavd6_sjepa.command_line_interface future-innovation init-cached-run \
+  --run-root outputs/future-innovation-direct-v3-dev-20260911 \
+  --parent-root outputs/future-innovation \
+  --calibration work/artifacts/future-innovation-repair-2026-09-11/calibration-final.json
+
+.venv/bin/python -m gavd6_sjepa.command_line_interface future-innovation run-gate \
+  --run-root outputs/future-innovation-direct-v3-dev-20260911 --device cpu
+.venv/bin/python -m gavd6_sjepa.command_line_interface future-innovation score-gate \
+  --run-root outputs/future-innovation-direct-v3-dev-20260911
+.venv/bin/python -m gavd6_sjepa.command_line_interface future-innovation build-report \
+  --run-root outputs/future-innovation-direct-v3-dev-20260911
+.venv/bin/python -m gavd6_sjepa.command_line_interface future-innovation verify-repair \
+  --run-root outputs/future-innovation-direct-v3-dev-20260911
+```
+
+Calibration output paths must be new. To repeat calibration, choose a new file.
+Initialization requires passing calibration with the same model contract. It
+copies the protocol document into immutable configuration before any real fit.
+The inherited cache remains bound to the original parent run; absolute HAIC index
+paths are resolved inside the supplied parent root without rewriting them.
+`config/parent-lineage.json` records all parent files' checksums, sizes and
+modification times, plus run/config/cohort/cache/projection/audit identities.
+Changing an inherited artifact is rejected, including a changed file timestamp.
+
+`verify-repair` performs read-only numerical reconstruction, including exported
+raw target units, shared baselines, input/target statistics, candidate selection
+records, scores and paired uncertainty. An optional `--output` must be a new
+file outside the run. The report stage saves its own numerical evidence under
+`reports/numerical-verification.json`. Reading a report seal alone checks integrity
+and must not be described as new numerical reconstruction.
+
+To resume, rerun initialization after an interrupted setup, or `run-gate
+--outer-fold N` for an unfinished fold. A fold without its completion receipt is
+refitted from the frozen choices; a completed fold is reloaded and verified.
+OS locks reject concurrent writers to the same stage/fold and release on a crash.
+Different folds own separate directories. Scoring/reporting share the report
+lock. Incomplete reports are archived on recovery. Complete scientific reports
+are sealed. Do not edit hashes or delete completion records to force a refit.
+
+For HAIC, use the existing environment and CPU allocations:
+
+```bash
+export GAVD6_ROOT=/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6
+export FI_PARENT_ROOT="$GAVD6_ROOT/outputs/future-innovation/gate-v2"
+export FI_RUN_ROOT="$GAVD6_ROOT/outputs/future-innovation-direct-v3-dev-haic"
+export FI_CALIBRATION="$GAVD6_ROOT/work/artifacts/future-innovation-repair-2026-09-11/calibration-final.json"
+cd "$GAVD6_ROOT"
+bash slurm/future-innovation/submit-fi-cached-repair.sh
+```
+
+This submits cached initialization/QC → five CPU fitting tasks → score/report.
+It does not request a GPU or load the teacher. Scheduler dependencies, command
+routing and allocation declarations are tested with local command stand-ins;
+actual HAIC execution must be identified separately in the run report. Cache
+reuse verifies original teacher evidence and records it as reused. Any change to
+teacher encoding, target projection, temporal boundary, nuisance definitions,
+pose processing or cohort needs a new cache/audit compatibility assessment.
+## Source learning-curve extension
+
+The separately versioned expanded-cohort study is documented in
+[SOURCE_LEARNING_CURVE.md](SOURCE_LEARNING_CURVE.md). It reserves confirmation
+recordings before processing and retains the repaired joint model. Use its own
+CLI and jobs 20–23; the historical 50-clip commands keep their contracts.

@@ -156,7 +156,9 @@ def train_head(
         )
         optimizer.step()
         if step in updates:
-            record = {"updates": step, "training_mse": float(loss.detach().cpu())}
+            record = {"updates": step, "training_mse": float(loss.detach().cpu()),
+                      "training_state_updates": step - 1, "validation_state_updates": step,
+                      "loss_timing": "training before optimizer update; validation after update"}
             if validation is not None:
                 correction = predict_head(
                     head, validation["skeleton"], validation["x"], device

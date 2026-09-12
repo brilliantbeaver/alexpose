@@ -110,6 +110,11 @@ def cohort_main():
     from .fi_cohort import build_candidates
     from .fi_contracts import check_run, stage_lock
 
+    if check_run(args.run_root).get("protocol") == "direct-v3":
+        from .fi_cache_reuse import load_reused_cache
+        cohort, _ = load_reused_cache(args.run_root)
+        print(f"Reusing frozen development cohort: {len(cohort)} windows")
+        return
     paths = check_run(args.run_root)["input_paths"]
     with stage_lock(args.run_root, "cohort"):
         build_candidates(args.run_root, **paths)
@@ -120,6 +125,12 @@ def poses_main():
     from .fi_cohort import extract_and_freeze
     from .fi_contracts import stage_lock
 
+    from .fi_contracts import read_json
+    if read_json(args.run_root / "config/run-contract.json").get("protocol") == "direct-v3":
+        from .fi_cache_reuse import load_reused_cache
+        load_reused_cache(args.run_root)
+        print("Reusing prefix pose arrays and parent alignment evidence")
+        return
     with stage_lock(args.run_root, "poses"):
         extract_and_freeze(args.run_root)
 
@@ -158,6 +169,12 @@ def cache_main():
     from .fi_vjepa_adapter import FrozenVJEPAAdapter
 
     with stage_lock(args.run_root, "cache"):
+        from .fi_contracts import read_json
+        if read_json(args.run_root / "config/run-contract.json").get("protocol") == "direct-v3":
+            # A damaged inheritance record must never trigger new teacher inference.
+            cohort, _ = load_cache(args.run_root)
+            print(f"Reusing verified parent teacher cache for {len(cohort)} windows")
+            return
         if (args.run_root / "config/cache-contract.json").exists():
             cohort, _ = load_cache(args.run_root)
             print(f"Reusing verified teacher cache for {len(cohort)} windows")
@@ -176,6 +193,11 @@ def audits_main():
     from .fi_vjepa_adapter import FrozenVJEPAAdapter
 
     with stage_lock(args.run_root, "audits"):
+        from .fi_contracts import read_json
+        if read_json(args.run_root / "config/run-contract.json").get("protocol") == "direct-v3":
+            require_audits(args.run_root)
+            print(json.dumps({"validity_audits_passed": True, "reused": True}))
+            return 0
         if audit_summary_path(args.run_root).exists():
             try:
                 require_audits(args.run_root)
@@ -261,3 +283,41 @@ def smoke_main():
     from .fi_smoke import run_smoke
 
     print(json.dumps(run_smoke(args.run_root, protocol=args.protocol), allow_nan=False, indent=2))
+
+
+def init_cached_main():
+    parser = parser_for("init-cached-run")
+    parser.add_argument("--parent-root", type=Path, required=True)
+    parser.add_argument("--calibration", type=Path, required=True)
+    parser.add_argument("--protocol", choices=("direct-v3",), default="direct-v3")
+    parser.add_argument("--protocol-document", type=Path,
+                        default=Path(__file__).resolve().parents[4] / "docs/studies/future-innovation/direct-v3-repair-protocol.md")
+    args = parsed(parser)
+    from .fi_contracts import stage_lock
+    from .fi_cache_reuse import initialize_cached_run
+    with stage_lock(args.run_root, "init"):
+        initialize_cached_run(args.run_root, args.parent_root, args.protocol_document, args.calibration)
+    print(f"Initialized verified cached direct-v3 development run: {args.run_root}")
+
+
+def calibrate_main():
+    parser = argparse.ArgumentParser(prog="gavd6 future-innovation calibrate-repair")
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    from .fi_joint_calibration import calibrate
+    result = calibrate(args.output)
+    print(json.dumps({"passed": result["passed"], "output": str(args.output)}))
+
+
+def verify_main():
+    parser = parser_for("verify-repair")
+    parser.add_argument("--output", type=Path)
+    args = parsed(parser)
+    from .fi_joint_reporting import verify_numerics
+    if args.output and (args.output.resolve().is_relative_to(args.run_root) or args.output.exists()):
+        parser.error("Read-only verification output must be a new file outside the run")
+    result = verify_numerics(args.run_root)
+    if args.output:
+        from .fi_contracts import write_json
+        write_json(args.output,result)
+    print(json.dumps(result,indent=2))

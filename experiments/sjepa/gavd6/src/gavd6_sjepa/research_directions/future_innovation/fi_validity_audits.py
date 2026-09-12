@@ -398,6 +398,9 @@ def verify_audits(root):
 
 
 def require_audits(root):
+    if read_json(Path(root) / "config/run-contract.json").get("protocol") == "direct-v3":
+        from .fi_cache_reuse import verify_reused_readiness
+        return verify_reused_readiness(root)
     if protocol_name(check_run(root)) == DIRECT_PROTOCOL:
         from .fi_readiness import verify_readiness
         summary = verify_readiness(root)
