@@ -8,7 +8,7 @@ from pathlib import Path
 import json
 
 ROOT = Path(__file__).resolve().parents[3]
-NB_PATH = ROOT / "notebooks" / "experiments" / "idea09_reflection_equivariance" / "01_encoder_contract.ipynb"
+NB_PATH = ROOT / "notebooks" / "idea09_reflection_equivariance" / "01_encoder_contract.ipynb"
 
 _CELL_N = [0]
 
@@ -141,7 +141,7 @@ ARTIFACT_DIR = artifact_dir_for(MODE)
 POSE_DIR = ARTIFACT_DIR / "poses"
 CHECKPOINT_PATH = checkpoint_path_for(MODE)
 ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-IDEA9_DIR = TUTORIAL_DIR / "notes" / "research" / "ideas" / "09-reflection-equivariant-symmetry-axis"
+IDEA9_DIR = TUTORIAL_DIR / "notes" / "archive" / "portfolio-ideas" / "ideas" / "09-reflection-equivariant-symmetry-axis"
 RUN_ID = os.getenv("IDEA9_RUN_ID", f"idea9-{MODE}")
 OUT_DIR = ARTIFACT_DIR / "idea9" / RUN_ID
 OUT_DIR.mkdir(parents=True, exist_ok=True)

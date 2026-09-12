@@ -2,11 +2,11 @@
 
 This is the implementation and analysis contract for Idea 9. It turns [README.md](./README.md) into a falsifiable experiment and an executable notebook sequence. It is deliberately stricter than putting a shared left/right head on an ordinary encoder: that head can make a *final scalar* odd, but cannot make the preceding representation equivariant. The distinction is the scientific point.
 
-- [`01_encoder_contract.ipynb`](../../../../../notebooks/experiments/idea09_reflection_equivariance/01_encoder_contract.ipynb) is the executable architecture contract, smoke-mode training path, and core matched comparison.
-- [`02_futures_and_reach.ipynb`](../../../../../notebooks/experiments/idea09_reflection_equivariance/02_futures_and_reach.ipynb) is the pre-registered future simulator, decision table, and non-clinical multi-view reach scaffold.
-- [`03_gavd_contract.ipynb`](../../../../../notebooks/experiments/idea09_reflection_equivariance/03_gavd_contract.ipynb) freezes the complete local-GAVD cohort, preprocessing, objective, health gates, and matching ledger.
-- [`04_gavd_training.ipynb`](../../../../../notebooks/experiments/idea09_reflection_equivariance/04_gavd_training.ipynb) trains fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPAs.
-- [`05_gavd_audit.ipynb`](../../../../../notebooks/experiments/idea09_reflection_equivariance/05_gavd_audit.ipynb) reloads every checkpoint and independently audits collapse and the numerical geometry contract.
+- [`01_encoder_contract.ipynb`](../../../../../notebooks/idea09_reflection_equivariance/01_encoder_contract.ipynb) is the executable architecture contract, smoke-mode training path, and core matched comparison.
+- [`02_futures_and_reach.ipynb`](../../../../../notebooks/idea09_reflection_equivariance/02_futures_and_reach.ipynb) is the pre-registered future simulator, decision table, and non-clinical multi-view reach scaffold.
+- [`03_gavd_contract.ipynb`](../../../../../notebooks/idea09_reflection_equivariance/03_gavd_contract.ipynb) freezes the complete local-GAVD cohort, preprocessing, objective, health gates, and matching ledger.
+- [`04_gavd_training.ipynb`](../../../../../notebooks/idea09_reflection_equivariance/04_gavd_training.ipynb) trains fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPAs.
+- [`05_gavd_audit.ipynb`](../../../../../notebooks/idea09_reflection_equivariance/05_gavd_audit.ipynb) reloads every checkpoint and independently audits collapse and the numerical geometry contract.
 
 All GAVD results are source-video-level and descriptive unless every encoder is trained inside an outer source-disjoint fold. Folder names are dataset annotations, not diagnoses. Neither AMASS nor MoVi contains a clinical outcome and neither can establish clinical benefit.
 

@@ -13,7 +13,7 @@ The laterality study tests access to a signed movement observable after skeleton
 | Frozen design | [Prospective protocol](02_cached_panel_protocol.md), copied into [frozen-protocol.md](../../../outputs/iclr-bridge-cached-20260911/config/frozen-protocol.md) before fitting. SHA-256 `f91181e1b3a13a1d7f121052f9e650fa5a36bf67ecbed596e41f39780dbc70e3`. |
 | Symmetry and order calibration | `symmetry_calibration.py`: complete channel reflection, physical-interval reversal, four parity classes, zero-feature control, paired pooled-teacher arithmetic and a source-held constructed continuation fixture. |
 | Additional numerical verification | `verification_supplement.py` adds metadata, exact inventory, displayed candidate and outer training-diagnostic checks after adversarial review. It changes no fitting decision or sealed artifact. |
-| Tutorial implementation | Canonical `scripts/research_directions/iclr_bridge/build_notebooks.py` generates top-level notebooks 19–22. All 23 code cells executed successfully. Notebook 21 defaults to CPU reconstruction refits without artifact writes; its explicit no-fit mode checks file integrity only. No notebook starts a new real comparison. |
+| Tutorial implementation | Canonical `scripts/research_directions/iclr_bridge/build_notebooks.py` generates notebooks 19–22 in `notebooks/iclr_bridge/`. All 23 code cells executed successfully. Notebook 21 defaults to CPU reconstruction refits without artifact writes; its explicit no-fit mode checks file integrity only. No notebook starts a new real comparison. |
 | Vector graphics | `build_figures.py` generates five explanatory SVG/PDF pairs and a sixth results pair directly from the saved report. Trajectory illustrations are labeled synthetic. |
 
 The primary fitted comparison is not an estimator of conditional mutual information. Real and no-skeleton models can choose different regularization, and their history blocks differ in coordinates and confidence. In particular, the reference includes **raw** confidence means, whereas real history also includes means conditioned on valid observations. These are not generally equal. Some confidence columns also duplicate reference columns: two identical routes penalized by λ_x and λ_s have effective penalty (1/λ_x + 1/λ_s)⁻¹ for their summed coefficient. Current reference inputs therefore do not exhaust observation-quality or regularization effects. A future study claiming a coordinate-motion effect should include confidence, validity and transition support once and identically across arms, vary only coordinate/displacement features, and control the reference route more tightly. The current evidence does not quantify the contribution of these routes to the observed estimate.
@@ -82,7 +82,8 @@ The [supplemental verification record](../../../work/artifacts/iclr-bridge-2026-
 
 The complete current bridge suite comprises 22 tests: 20 core/symmetry/supplemental tests plus two subsequently added no-fit inspection tests. All pass. Logs are [bridge-final-tests.log](../../../work/artifacts/iclr-bridge-2026-09-11/bridge-final-tests.log), [inspection-tests.log](../../../work/artifacts/iclr-bridge-2026-09-11/inspection-tests.log), and [future-regression-tests.log](../../../work/artifacts/iclr-bridge-2026-09-11/future-regression-tests.log). Synthetic sources and random draws add no independent real videos.
 
-Notebook generation and actual execution:
+Historical notebook generation and execution, before the source files moved
+into `notebooks/` on 12 September 2026:
 
 ```bash
 .venv/bin/python scripts/research_directions/iclr_bridge/build_notebooks.py
@@ -92,6 +93,16 @@ Notebook generation and actual execution:
 ```
 
 Notebook 21 was re-executed after integrating the supplemental verifier. Figure PDFs and manuscript pages were rendered and visually checked. The [delivery audit](../../../work/artifacts/iclr-bridge-2026-09-11/deliverable-audit.json) compares source/executed cells, validates notebook schemas and local links, and verifies the external source snapshot.
+
+The current [notebook guide](../../../notebooks/iclr_bridge/README.md)
+gives commands using the new source paths and a fresh output directory. During
+the relocation check, all four notebooks were executed again from
+`notebooks/iclr_bridge/`, including notebook 21's default numerical
+reconstruction. The [new executed copies](../../../work/artifacts/notebook-organization-20260912/)
+are separate from the historical batch. The audit now requires exactly one of
+each notebook 19–22 and accepts `--executed-dir` to check the matching batch;
+an empty directory cannot silently pass. This organization changes no experiment
+definition or measured result.
 
 ## Building the documents
 

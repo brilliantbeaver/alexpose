@@ -1,6 +1,6 @@
 # Reflection-equivariant representation: separating lateralized from symmetric gait by construction
 
-> **Historical protocol and notebooks:** [METHODOLOGY.md](./METHODOLOGY.md), [01](../../../../../notebooks/experiments/idea09_reflection_equivariance/01_encoder_contract.ipynb), [02](../../../../../notebooks/experiments/idea09_reflection_equivariance/02_futures_and_reach.ipynb), and the full-GAVD feasibility sequence [03](../../../../../notebooks/experiments/idea09_reflection_equivariance/03_gavd_contract.ipynb) → [04](../../../../../notebooks/experiments/idea09_reflection_equivariance/04_gavd_training.ipynb) → [05](../../../../../notebooks/experiments/idea09_reflection_equivariance/05_gavd_audit.ipynb). This archival material predates the repaired fixed-reflection contract in the current documentation.
+> **Historical protocol and notebooks:** [METHODOLOGY.md](./METHODOLOGY.md), [01](../../../../../notebooks/idea09_reflection_equivariance/01_encoder_contract.ipynb), [02](../../../../../notebooks/idea09_reflection_equivariance/02_futures_and_reach.ipynb), and the full-GAVD feasibility sequence [03](../../../../../notebooks/idea09_reflection_equivariance/03_gavd_contract.ipynb) → [04](../../../../../notebooks/idea09_reflection_equivariance/04_gavd_training.ipynb) → [05](../../../../../notebooks/idea09_reflection_equivariance/05_gavd_audit.ipynb). This archival material predates the repaired fixed-reflection contract in the current documentation.
 
 ## 0. Implementation correction and notebook map
 

@@ -184,13 +184,13 @@ The outer source-video split must happen first. Pose preprocessing rules, all fi
 |[`foundations/04`](notebooks/foundations/04_pretrain_sjepa_on_normal.ipynb)|The complete five-stage checkpoint lineage and training history|
 |[`foundations/05`](notebooks/foundations/05_inspect_latent_motion.ipynb)|Prediction, collapse, drift, retrieval, and condition-geometry audits|
 |[`foundations/06`](notebooks/foundations/06_capstone_health_condition_classifiers.ipynb)|Three leakage-aware readout lanes and missingness controls|
-|[`idea09/01`](notebooks/experiments/idea09_reflection_equivariance/01_encoder_contract.ipynb)|The reflection-equivariant encoder contract and smoke-mode matched comparison|
-|[`idea09/02`](notebooks/experiments/idea09_reflection_equivariance/02_futures_and_reach.ipynb)|Pre-registered futures, decision tables, and non-clinical reach scaffolds|
-|[`idea09/03`](notebooks/experiments/idea09_reflection_equivariance/03_gavd_contract.ipynb)|The frozen full-GAVD cohort, objective, health gates, and matching ledger|
-|[`idea09/04`](notebooks/experiments/idea09_reflection_equivariance/04_gavd_training.ipynb)|Fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPA training|
-|[`idea09/05`](notebooks/experiments/idea09_reflection_equivariance/05_gavd_audit.ipynb)|Checkpoint health and reflection-geometry audits for the matched GAVD run|
-|[`idea09/06`](notebooks/experiments/idea09_reflection_equivariance/06_cpu_replication.ipynb)|Opt-in, three-seed full-96 CPU replication under exposure and compute matching|
-|[`idea09/07`](notebooks/experiments/idea09_reflection_equivariance/07_gpu_replication.ipynb)|Opt-in, three-seed full-96 CUDA replication under exposure and compute matching|
+|[`idea09/01`](notebooks/idea09_reflection_equivariance/01_encoder_contract.ipynb)|The reflection-equivariant encoder contract and smoke-mode matched comparison|
+|[`idea09/02`](notebooks/idea09_reflection_equivariance/02_futures_and_reach.ipynb)|Pre-registered futures, decision tables, and non-clinical reach scaffolds|
+|[`idea09/03`](notebooks/idea09_reflection_equivariance/03_gavd_contract.ipynb)|The frozen full-GAVD cohort, objective, health gates, and matching ledger|
+|[`idea09/04`](notebooks/idea09_reflection_equivariance/04_gavd_training.ipynb)|Fresh paired-seed standard, paired-unconstrained, and reflection-equivariant JEPA training|
+|[`idea09/05`](notebooks/idea09_reflection_equivariance/05_gavd_audit.ipynb)|Checkpoint health and reflection-geometry audits for the matched GAVD run|
+|[`idea09/06`](notebooks/idea09_reflection_equivariance/06_cpu_replication.ipynb)|Opt-in, three-seed full-96 CPU replication under exposure and compute matching|
+|[`idea09/07`](notebooks/idea09_reflection_equivariance/07_gpu_replication.ipynb)|Opt-in, three-seed full-96 CUDA replication under exposure and compute matching|
 
 Each notebook repeats the code it needs. Later notebooks reject missing, incomplete, wrong-mode, or wrong-cohort artifacts instead of silently falling back.
 See the [complete notebook index](notebooks/README.md) for the AMASS utility,

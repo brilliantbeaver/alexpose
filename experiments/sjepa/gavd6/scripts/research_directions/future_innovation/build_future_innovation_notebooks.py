@@ -16,7 +16,7 @@ import nbformat
 
 
 ROOT = Path(__file__).resolve().parents[3]
-DESTINATION = ROOT / "notebooks/experiments/future_innovation"
+DESTINATION = ROOT / "notebooks/future_innovation"
 BUILDER = Path(__file__).relative_to(ROOT).as_posix()
 NAMES = {
     "00": "00_question_and_worked_example.ipynb",
@@ -129,13 +129,13 @@ def opening(number, title, text):
         Set `FI_TUTORIAL_MODE=execute` with an explicit `FI_RUN_ROOT` to run the
         production stages below. Execute notebooks **00 → 04** in order for the
         full Experiment 0; each uses a fresh kernel and the same run directory.
-        Use the [notebook HAIC launchers](../../../slurm/future-innovation/NOTEBOOKS.md)
+        Use the [notebook HAIC launchers](../../slurm/future-innovation/NOTEBOOKS.md)
         for scheduled execution. Inspection remains read-only. An absent local
         file says nothing about the current state of a remote HAIC job.
 
-        [Study overview](../../../docs/studies/future-innovation/README.md) ·
-        [Historical direct-v2 specification](../../../docs/studies/future-innovation/direct-gate-protocol.md) ·
-        [Calibrated direct-v3 specification](../../../docs/studies/future-innovation/direct-v3-repair-protocol.md)
+        [Study overview](../../docs/studies/future-innovation/README.md) ·
+        [Historical direct-v2 specification](../../docs/studies/future-innovation/direct-gate-protocol.md) ·
+        [Calibrated direct-v3 specification](../../docs/studies/future-innovation/direct-v3-repair-protocol.md)
         """),
         code(STARTUP),
     ] + execution_cells(number)
@@ -145,7 +145,7 @@ def ending(number, text):
     following = int(number) + 1
     link = (f"Continue with [{NAMES[f'{following:02d}']}]({NAMES[f'{following:02d}']})."
             if following < 5 else
-            "Return to the [study overview](../../../docs/studies/future-innovation/README.md) to record the next decision.")
+            "Return to the [study overview](../../docs/studies/future-innovation/README.md) to record the next decision.")
     completion = ([code('if MODE == "execute":\n    completed_decision = finish_notebook_report(RUN_ROOT, scoring_succeeded=scoring_succeeded)')]
                   if number == "04" else [])
     if number in {"01", "02", "03"}:

@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-NB_PATH = ROOT / "notebooks" / "experiments" / "idea05_signed_laterality" / "02_futures_and_reach.ipynb"
+NB_PATH = ROOT / "notebooks" / "idea05_signed_laterality" / "02_futures_and_reach.ipynb"
 
 _CELL_N = [0]
 
@@ -79,14 +79,14 @@ RANDOM_SEED = 42
 def project_root():
     '''Resolve the gavd6 root robustly regardless of the kernel cwd.'''
     for base in [Path.cwd(), *Path.cwd().parents]:
-        cand = base / "notes" / "research" / "ideas" / "05-signed-laterality-decodability"
+        cand = base / "notes" / "archive" / "portfolio-ideas" / "ideas" / "05-signed-laterality-decodability"
         if cand.exists():
             return base
     return Path.cwd()
 
 
 PROJECT_DIR = project_root()
-IDEA5_DIR = PROJECT_DIR / "notes" / "research" / "ideas" / "05-signed-laterality-decodability"
+IDEA5_DIR = PROJECT_DIR / "notes" / "archive" / "portfolio-ideas" / "ideas" / "05-signed-laterality-decodability"
 BUNDLE_DIR = Path(os.getenv(
     "IDEA5_BUNDLE_DIR", PROJECT_DIR / "artifacts" / "research" / "idea05"
 )).expanduser()

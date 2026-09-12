@@ -9,6 +9,7 @@ import textwrap
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[3]
+OUTPUT_DIR = ROOT / 'notebooks/iclr_bridge'
 
 
 def md(text): return nbf.v4.new_markdown_cell(textwrap.dedent(text).strip())
@@ -72,8 +73,8 @@ def evidence_notebook():
     print('Laterality inventory type:', type(later_inventory).__name__)
     print('Future inventory type:', type(future_inventory).__name__)
     print('Read the complete notebook maps:')
-    display(Markdown('[Laterality audit](work/artifacts/iclr-bridge-2026-09-11/laterality/evidence-and-critical-analysis.md)'))
-    display(Markdown('[Future / S-JEPA audit](work/artifacts/iclr-bridge-2026-09-11/future/evidence-audit.md)'))
+    display(Markdown('[Laterality audit](../../work/artifacts/iclr-bridge-2026-09-11/laterality/evidence-and-critical-analysis.md)'))
+    display(Markdown('[Future / S-JEPA audit](../../work/artifacts/iclr-bridge-2026-09-11/future/evidence-audit.md)'))
     ''') , md('''
     ## 2. Read the laterality comparison within its own protocol
 
@@ -163,7 +164,7 @@ def evidence_notebook():
     Continue with **20** for exact symmetry and temporal-order examples, **21**
     for the actual cached comparison, and **22** for a selective-target research
     design. The full critique and step-by-step research plan are in
-    [the tutorial](docs/studies/iclr/01_critique_and_research_tutorial.md).
+    [the tutorial](../../docs/studies/iclr/01_critique_and_research_tutorial.md).
     ''')]
 
 
@@ -443,8 +444,8 @@ def panel_notebook():
     .venv/bin/python scripts/research_directions/iclr_bridge/run_cached_panel.py verify --output-root outputs/iclr-bridge-cached-20260911
     ```
 
-    The [frozen protocol](docs/studies/iclr/02_cached_panel_protocol.md) specifies
-    the construction and the [validation report](docs/studies/iclr/03_implementation_and_validation.md)
+    The [frozen protocol](../../docs/studies/iclr/02_cached_panel_protocol.md) specifies
+    the construction and the [validation report](../../docs/studies/iclr/03_implementation_and_validation.md)
     records what actually ran. Continue with notebook **22** to design the
     next target and student study.
     ''')]
@@ -609,6 +610,7 @@ def distillation_notebook():
 
 
 def main():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     notebooks={
         '19_evidence_and_observability':evidence_notebook,
         '20_symmetry_and_temporal_information':symmetry_notebook,
@@ -624,8 +626,9 @@ def main():
         # Deterministic cell IDs keep regeneration diffs reviewable.
         for i,cell in enumerate(nb.cells): cell['id']=f'{name[:2]}-{i:03d}'
         nbf.validate(nb)
-        nbf.write(nb,ROOT/f'{name}.ipynb')
-        print(f'{name}.ipynb: {len(nb.cells)} cells')
+        destination = OUTPUT_DIR / f'{name}.ipynb'
+        nbf.write(nb, destination)
+        print(f'{destination.relative_to(ROOT)}: {len(nb.cells)} cells')
 
 
 if __name__=='__main__':main()

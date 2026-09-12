@@ -238,7 +238,7 @@ idea; F4 is the trap the nuisance control exists to catch.
 
 ## 9. Reproducibility
 
-- [`01_probe.ipynb`](../../../../../notebooks/experiments/idea05_signed_laterality/01_probe.ipynb): the
+- [`01_probe.ipynb`](../../../../../notebooks/idea05_signed_laterality/01_probe.ipynb): the
   decisive probe. Copies the S-JEPA model classes verbatim so `load_state_dict` matches key for key,
   loads the `d0acc262` checkpoint under the notebook-05 guards, caches the frozen target-encoder
   features, fits Lanes A through D with source-video-disjoint ridge probes, runs the mirror-equivariance
@@ -246,7 +246,7 @@ idea; F4 is the trap the nuisance control exists to catch.
   `GAVD_MODE=real` (reads the checkpoint and pose cache exactly as notebook 05) and degrades gracefully
   to `GAVD_MODE=smoke`, which reuses the project's synthetic fixtures plus one clearly-labelled signed
   lean overlay so the plumbing runs end to end; smoke numbers are illustrative only.
-- [`02_futures_and_reach.ipynb`](../../../../../notebooks/experiments/idea05_signed_laterality/02_futures_and_reach.ipynb):
+- [`02_futures_and_reach.ipynb`](../../../../../notebooks/idea05_signed_laterality/02_futures_and_reach.ipynb):
   the possible-futures simulator (writes `idea5_futures_bundle.json` and
   `images/idea5_possible_futures.png`) and the honestly-stubbed external multi-view reach scaffold.
 - Determinism. Seeds are fixed; the smoke lean overlay is deterministic. A future real run diffs its

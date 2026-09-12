@@ -1,7 +1,10 @@
 # Future Innovation Experiment 0 on HAIC
 
-The expanded source study uses the separate [source learning-curve guide](SOURCE_LEARNING_CURVE.md)
-and jobs 20–23. The historical commands below retain their 50-clip contracts.
+The expanded source study uses the separate [source learning-curve guide](SOURCE_LEARNING_CURVE.md).
+It uses the same environment variables, with `FI_RUN_ROOT` for the new study and
+`FI_PARENT_ROOT` for gate-v2. Its launcher initializes the study automatically
+before jobs 20–23 and executes notebook 23 afterward. The historical commands
+below retain their 50-clip contracts.
 
 The retained [direct-v2 protocol](../../docs/studies/future-innovation/direct-gate-protocol.md)
 uses **50 aligned clips** selected from the full-GAVD pool, a frozen V-JEPA 2.1
@@ -256,5 +259,9 @@ pose processing or cohort needs a new cache/audit compatibility assessment.
 
 The separately versioned expanded-cohort study is documented in
 [SOURCE_LEARNING_CURVE.md](SOURCE_LEARNING_CURVE.md). It reserves confirmation
-recordings before processing and retains the repaired joint model. Use its own
-CLI and jobs 20–23; the historical 50-clip commands keep their contracts.
+recordings before processing and retains the repaired joint model. After setting
+its paths, run `bash slurm/future-innovation-scaling/launch/submit.sh all`.
+Calibration and source reservation run automatically before preparation, caching,
+fitting and reporting. A final CPU job executes the source learning-curve
+inspection notebook. Use the same launcher with `notebooks` to execute that
+notebook separately. The historical 50-clip commands keep their contracts.

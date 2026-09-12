@@ -12,7 +12,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-NOTEBOOK_DIR = ROOT / "notebooks" / "experiments" / "idea09_reflection_equivariance"
+NOTEBOOK_DIR = ROOT / "notebooks" / "idea09_reflection_equivariance"
 
 
 def md(source: str) -> dict:
@@ -53,7 +53,7 @@ def find_notebook_root(start=None):
     for candidate in dict.fromkeys(candidates):
         if ((candidate / "src" / "gavd6_sjepa" / "research_directions"
              / "reflection_equivariance" / "jepa_model_architecture.py").is_file()
-                and (candidate / "notebooks" / "experiments" / "idea09_reflection_equivariance"
+                and (candidate / "notebooks" / "idea09_reflection_equivariance"
                      / "01_encoder_contract.ipynb").is_file()):
             return candidate
     searched = "\n - ".join(str(path) for path in dict.fromkeys(candidates))
