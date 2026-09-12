@@ -1,5 +1,6 @@
 """README-style launcher: real shell submission routing and frozen-init recovery."""
 import importlib.util
+import ast
 import hashlib
 import json
 import os
@@ -126,19 +127,36 @@ class LaunchTests(unittest.TestCase):
                 self.assertNotIn('/unused/old-root',result.stdout)
                 self.assertFalse(Path(env['FI_RUN_ROOT']).exists())
 
-    def test_check_is_read_only_and_partial_media_blocks_submission(self):
+    def test_check_is_read_only_and_only_an_empty_development_pool_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:
             env = fixture(Path(tmp))
             command = ['bash', str(LAUNCH/'submit.sh'), 'check']
             result = subprocess.run(command, env={**os.environ, **env}, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn('1/1 recording files', result.stdout)
+            self.assertIn('Available development recordings: 1/1', result.stdout)
             self.assertFalse(Path(env['FI_RUN_ROOT']).exists())
             (Path(env['GAVD_FULL_ROOT'])/'youtube/all/parent-source.mp4').unlink()
             result = subprocess.run(command, env={**os.environ, **env}, capture_output=True, text=True)
             self.assertEqual(result.returncode, 2)
-            self.assertIn('1 of 1 development recordings', result.stderr)
+            self.assertIn('No available development recordings', result.stderr)
             self.assertFalse(Path(env['FI_RUN_ROOT']).exists())
+
+    def test_missing_recording_is_reported_and_does_not_block_submission_preview(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            env=fixture(Path(tmp)); cfg=launch.settings(env)
+            sequences=cfg['full']/'manifests/gavd_full_sequences.csv'
+            videos=cfg['full']/'manifests/gavd_full_videos.csv'
+            sequences.write_text(sequences.read_text()+'missing-sequence,missing-source\n')
+            videos.write_text(videos.read_text()+'missing-source\n')
+            # Record both as previously exposed so both must remain development.
+            exposed=Path(tmp)/'extra-exposure.csv'; exposed.write_text('video_id\nmissing-source\n')
+            result=subprocess.run(['bash',str(LAUNCH/'submit.sh'),'all','--dry-run'],
+                                  env={**os.environ,**env,'FI_INSPECTED_MANIFESTS':str(exposed)},capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.assertIn('Available development recordings: 1/2',result.stdout)
+            self.assertIn('missing-source',result.stdout)
+            self.assertEqual(sum(line.startswith('sbatch ') for line in result.stdout.splitlines()),6)
+            self.assertFalse(cfg['root'].exists())
 
     def test_original_inputs_cannot_be_replaced_behind_valid_paths(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -211,15 +229,19 @@ print(800+len(rows))
 
 class RetainedStudyIntegrationTests(unittest.TestCase):
     def test_operational_repairs_preserve_frozen_numerical_implementation(self):
-        # Preparation guards and job routing are fingerprinted changes and need
-        # a fresh study. The numerical model, selection, plan and scoring remain
-        # byte-for-byte unchanged by this operational repair.
-        for relative,digest in launch.fingerprint().items():
-            if not relative.endswith(('fi_scaling_cohort.py', 'fi_scaling_training.py')):
-                continue
+        # The amended freeze and report metadata change these files. Compare
+        # numerical/source-assignment functions, not unrelated file bytes.
+        prefix='src/gavd6_sjepa/research_directions/future_innovation_scaling/'
+        for relative,names in {
+                prefix+'fi_scaling_cohort.py':{'source_groups','reserve_sources','make_plan'},
+                prefix+'fi_scaling_training.py':{'compute_curve','verify_fit','prediction_payload'}}.items():
             saved=subprocess.run(['git','show',f'HEAD:./{relative}'],cwd=ROOT,capture_output=True)
             self.assertEqual(saved.returncode,0,saved.stderr)
-            self.assertEqual(digest,hashlib.sha256(saved.stdout).hexdigest(),relative)
+            def functions(source):
+                return {node.name:ast.dump(node,include_attributes=False) for node in ast.parse(source).body
+                        if isinstance(node,ast.FunctionDef) and node.name in names}
+            self.assertEqual(set(functions(saved.stdout)),names)
+            self.assertEqual(functions(saved.stdout),functions((ROOT/relative).read_text()),relative)
 
     def test_real_parent_freeze_publish_recovery_and_exact_reservation(self):
         parent=ROOT/'outputs/future-innovation'
@@ -234,6 +256,12 @@ class RetainedStudyIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             env=dict(GAVD6_ROOT=str(ROOT), FI_RUN_ROOT=str(Path(tmp)/'source-curve'),
                      FI_PARENT_ROOT=str(parent),GAVD_FULL_ROOT=str(Path(tmp)/'full'))
+            # Presence-only synthetic storage matching the historical inventory.
+            # These bytes are never decoded or passed to a real teacher.
+            media=Path(tmp)/'full/youtube/all'; media.mkdir(parents=True)
+            available=pd.read_csv(parent/'manifests/source-availability.csv')
+            for video in available.loc[available.available,'video_id']:
+                (media/f'{video}.mp4').write_bytes(b'synthetic discovery fixture')
             cfg=launch.settings(env)
             attempt=cfg['root']/'launch/calibration/attempt-001'
             attempt.mkdir(parents=True)
@@ -251,6 +279,9 @@ class RetainedStudyIntegrationTests(unittest.TestCase):
             expected=pd.read_csv(historical/'config/source-reservation.csv')
             actual=pd.read_csv(cfg['root']/'config/source-reservation.csv')
             pd.testing.assert_frame_equal(actual,expected)
+            inventory=launch.verify_available(cfg['root'],check_files=True)
+            self.assertEqual(int(inventory.included.sum()),292)
+            self.assertEqual(launch.read_json(cfg['root']/'config/study.json')['cohort_policy'],'available-development-v1')
             self.assertEqual(launch.read_json(cfg['root']/'config/study.json')['run_id'],'source-curve')
             files_before=snapshot(cfg['root']/'config')
             launch.initialize(cfg,env,no_calibration)

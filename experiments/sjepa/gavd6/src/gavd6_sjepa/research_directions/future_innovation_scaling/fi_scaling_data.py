@@ -16,6 +16,7 @@ from ..future_innovation.fi_validity_audits import future_pixel_leakage_test
 from ..future_innovation.fi_readiness import verify_readiness_tables
 from .fi_scaling_cohort import read_study, PROTOCOL
 from .fi_scaling_readiness import development_media, require_development_media, original_inputs
+from .fi_scaling_availability import verify_available, require_included_windows, check_selected_file
 
 
 def seal(root, path, files, **metadata):
@@ -59,12 +60,15 @@ def initialize_data(root, parent, annotations, video_root, pose_model, teacher_r
     teacher = original_inputs(parent, annotations, pose_model, checkpoint)
     if not Path(video_root).is_dir():
         raise FileNotFoundError(f'Full-source video directory unavailable: {video_root}')
+    available = study.get('cohort_policy') is not None
+    if available:
+        verify_available(root, check_files=True)
     teacher.update(repository_path=str(Path(teacher_root).resolve()), checkpoint_path=str(Path(checkpoint).resolve()))
     data = Path(root) / 'data'
     for directory in ('config','manifests','boxes','frames','poses','qc/alignment-overlays','teacher-cache','logs'):
         (data / directory).mkdir(parents=True, exist_ok=True)
-    paths = dict(sequence_manifest=str((Path(root)/'config/full-sequences.csv').resolve()),
-                 video_manifest=str((Path(root)/'config/full-videos.csv').resolve()),
+    paths = dict(sequence_manifest=str((Path(root)/('config/processing-sequences.csv' if available else 'config/full-sequences.csv')).resolve()),
+                 video_manifest=str((Path(root)/('config/processing-videos.csv' if available else 'config/full-videos.csv')).resolve()),
                  annotations=[str(Path(p).resolve()) for p in annotations], youtube_dir=str(Path(video_root).resolve()), video_roots=[])
     write_once_json(data / 'config/teacher-contract.json', teacher)
     write_once_json(data / 'config/runtime-contract.json', runtime_versions())
@@ -108,20 +112,27 @@ def extract_one(row, data, pose_model):
 
 def prepare(root, parent=None, **runtime):
     root = Path(root)
-    _, parent = read_study(root, parent, require_software=True)
+    study, parent = read_study(root, parent, require_software=True)
     if (root/'data/cohort-complete.json').exists():
         verify_prepared_inputs(root)
         return
     data, run = initialize_data(root, parent, **runtime)
     roster = pd.read_csv(root/'config/source-reservation.csv', dtype={'video_id': str})
-    media = development_media(roster, run['input_paths']['video_manifest'], run['input_paths']['youtube_dir'])
-    # Retryable operational inventory, not a scientific exclusion list. No
-    # candidate contract may be sealed until all development media are available.
+    available = study.get('cohort_policy') is not None
+    if available:
+        media = verify_available(root, check_files=True)
+    else:
+        media = development_media(roster, run['input_paths']['video_manifest'], run['input_paths']['youtube_dir'])
+        media.to_csv(data/'logs/development-media.csv', index=False)
+        require_development_media(media)
     media.to_csv(data/'logs/development-media.csv', index=False)
-    require_development_media(media)
     build_candidates(data, **run['input_paths'])
     candidates = pd.read_csv(data/'manifests/candidates.csv')
     old_candidates = pd.read_csv(parent/'manifests/candidates.csv')
+    if available:
+        processing = pd.read_csv(root/'config/processing-sequences.csv')
+        old_candidates = old_candidates.loc[old_candidates.sequence_id.isin(processing.sequence_id)]
+        require_included_windows(root, candidates)
     # Expanding size must not silently change old windows or lose available inputs.
     compared = old_candidates.merge(candidates, on='sequence_id', suffixes=('_old','_new'), how='left')
     for column in ('window_id','video_id','source_first_frame','source_last_frame'):
@@ -132,6 +143,7 @@ def prepare(root, parent=None, **runtime):
     dev = set(roster.loc[roster.role == 'development','video_id'])
     eligible, failures, receipts = [], [], []
     selected = candidates.loc[candidates.video_id.isin(dev)].to_dict('records')
+    selected_media = media.set_index('video_id') if available else None
     for position, row in enumerate(selected, 1):
         if position % 25 == 1 or position == len(selected):
             print(f'Pose preparation: checking window {position}/{len(selected)}; {len(eligible)} eligible so far', flush=True)
@@ -139,10 +151,13 @@ def prepare(root, parent=None, **runtime):
         if receipt_path.exists():
             item = verify_seal(root, str(receipt_path.relative_to(root)))
         elif row['window_id'] in old_rows:
-            item = dict(status='eligible', row={**old_rows[row['window_id']], 'evidence_origin':'parent_cache'},
+            item = dict(status='eligible', row={**old_rows[row['window_id']], 'video_path':row['video_path'], 'evidence_origin':'parent_cache'},
                         artifacts={'config/parent-snapshot.json':sha256_file(root/'config/parent-snapshot.json')})
             write_once_json(receipt_path, item)
         else:
+            # A storage change during a long pose job is not a pose exclusion.
+            if selected_media is not None:
+                check_selected_file(selected_media.loc[row['video_id']])
             try:
                 result = extract_one(row, data, run['pose_model'])
                 paths = [Path(result[k]) for k in ('pose_path','frame_path','model_box_path','box_path','annotation_path','overlay_path')]
@@ -243,6 +258,8 @@ def load_expanded(root,parent=None,*,require_audit=True):
     binding=stable_key(sha256_file(root/'config/study.json'),sha256_file(root/'data/cohort-complete.json'))
     if contract['binding']!=binding: raise ValueError('Expanded cache binding differs from frozen cohort/study')
     cohort=pd.read_csv(root/'data/manifests/development-windows.csv')
+    if (root/'config/availability-contract.json').exists():
+        require_included_windows(root, cohort)
     roster=pd.read_csv(root/'config/source-reservation.csv').set_index('video_id')
     if not cohort.window_id.is_unique or any(roster.loc[v,'role']!='development' for v in cohort.video_id):
         raise ValueError('Invalid development/confirmation cohort')

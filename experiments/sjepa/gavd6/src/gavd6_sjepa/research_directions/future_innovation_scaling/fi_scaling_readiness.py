@@ -7,7 +7,7 @@ from ..future_innovation.fi_contracts import read_json, sha256_file
 from ..future_innovation.fi_source_inventory import discover_sources
 
 
-def development_media(roster, video_manifest, video_root):
+def development_media(roster, video_manifest, video_root, *, include_confirmation=False, resolution_manifest=None):
     """Resolve every development recording before candidate exclusions can hide it.
 
     Reservation uses metadata only and is independent of media availability.
@@ -20,10 +20,11 @@ def development_media(roster, video_manifest, video_root):
             or not set(roster.role) <= {'development', 'confirmation'}
             or not set(roster.video_id) <= set(videos.video_id)):
         raise ValueError('Invalid recording inventory or source reservation')
-    selected = videos[videos.video_id.isin(roster.loc[roster.role == 'development', 'video_id'])]
+    wanted = roster if include_confirmation else roster.loc[roster.role == 'development']
+    selected = videos[videos.video_id.isin(wanted.video_id)]
     if selected.empty:
         raise ValueError('No development recordings in source reservation')
-    found = discover_sources(selected, video_manifest, video_root)
+    found = discover_sources(selected, resolution_manifest or video_manifest, video_root)
     rows = []
     for source, item in sorted(found.items()):
         path = item['path']

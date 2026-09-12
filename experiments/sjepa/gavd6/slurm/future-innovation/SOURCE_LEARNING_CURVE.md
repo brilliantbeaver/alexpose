@@ -1,8 +1,9 @@
 # Source Learning-Curve Experiment on HAIC
 
 This experiment tests whether more training recordings make skeleton history more
-useful for predicting the existing teacher target. It reuses your completed
-**gate-v2** run and writes the expanded study to a **new run directory**.
+useful for predicting the existing teacher target. It uses **available videos
+matched to the GAVD manifests**, reuses your completed **gate-v2** cache where
+applicable, and writes the expanded study to a **new run directory**.
 
 Use the same environment variables as [README.md](README.md). The launcher below
 runs calibration and freezes the source reservation automatically. You do not
@@ -24,7 +25,7 @@ export FI_TEACHER_CHECKPOINT="/hai/scratch/$USER/models/vjepa2_1_vitb_dist_vitG_
 export FI_POSE_MODEL="/hai/scratch/$USER/models/pose_landmarker_lite.task"
 export FI_ANNOTATION_ROOT="$GAVD_FULL_ROOT/annotations/GAVD/data"
 export FI_PARENT_ROOT="$GAVD6_ROOT/outputs/future-innovation/gate-v2"
-export FI_RUN_ROOT="$GAVD6_ROOT/outputs/future-innovation/source-learning-curve-dev-20260912"
+export FI_RUN_ROOT="$GAVD6_ROOT/outputs/future-innovation/source-learning-curve-available-dev-20260912"
 cd "$GAVD6_ROOT"
 ```
 
@@ -39,19 +40,25 @@ If your videos are in other subfolders under `youtube/`, set
 `export FI_VIDEO_ROOT="$GAVD_FULL_ROOT/youtube"`; discovery searches recursively
 for exact video IDs. These must be full recording files, not sequence clips.
 
-Submission checks every development recording's file availability and verifies
-the original annotation/model checksums. Missing, ambiguous or empty files block
-the run; they cannot silently reduce the cohort. Frame decoding and pose quality
-are checked later. To check the paths without submitting or creating a run:
+Submission matches the manifests to local files and verifies the original
+annotation/model checksums. **Missing, ambiguous, empty or unreadable recordings
+are listed and excluded before processing.** Confirmation recordings stay
+reserved. Frame decoding and pose quality are checked later. To preview the
+available development count without submitting or creating a run:
 
 ```bash
 bash slurm/future-innovation-scaling/launch/submit.sh check
 ```
 
-The September 12 media guard changes the recorded implementation. Start it in a
-fresh directory; older frozen studies remain inspectable. Once initialized with
-this implementation, keep the same directory and code when resuming. Do not edit
-saved hashes to make an older study accept changed code.
+For example, 305 planned development recordings with 12 unavailable produces
+293 recordings for preparation; actual pose eligibility may reduce that count.
+Every excluded ID and its reason is saved. Extra files absent from the manifests
+are ignored.
+
+This is the `available-development-v1` cohort amendment. If your earlier command
+stopped at preflight before initialization, you can keep that intended run root.
+If it already froze a study under the old policy/code, choose a fresh directory.
+Keep the same directory and code for subsequent retries; do not edit saved hashes.
 
 ## 2. Submit the experiment
 
@@ -62,7 +69,7 @@ bash slurm/future-innovation-scaling/launch/submit.sh all
 This is the command for both a new study and resuming an existing one. It submits:
 
 ```text
-CPU: calibration and source reservation
+CPU: calibration, source reservation and available-video selection
   → CPU: alignment and pose preparation
   → GPU: teacher cache, validity audits and training-subset plan
   → CPU: five-fold learning-curve fitting
@@ -105,6 +112,8 @@ The report job performs numerical verification after fitting.
 | `logs/` | Slurm output, errors and submitted job IDs |
 | `logs/stages/` | Separate command, exit status and output for every stage attempt |
 | `reports/cohort-audit.json` | Recording counts and development/confirmation reservation |
+| `config/media-availability.csv` | Every manifest recording, availability, inclusion and exclusion reason |
+| `config/processing-sequences.csv`, `config/processing-videos.csv` | Frozen processing inputs containing only available development recordings |
 | `data/manifests/development-windows.csv` | Actual eligible expanded clips and folds after preparation |
 | `data/teacher-cache/` | Newly encoded arrays; the parent's original cache stays in `FI_PARENT_ROOT/teacher-cache/` |
 | `reports/learning-curve.svg` | Learning-curve figure, available after reporting |
@@ -129,7 +138,10 @@ That log records a previous check; the notebook does not reconstruct models.
 The main scientific comparison is **real history minus no skeleton** at each
 training size, alongside gain over RGB-only and the shuffle/mismatch controls.
 The [protocol](../../docs/studies/future-innovation/source-learning-curve-protocol.md)
-defines the model, source subsets, metric and decision rules.
+defines the model, source subsets, metric and decision rules. The
+[cohort amendment](../../docs/studies/future-innovation/source-learning-curve-available-cohort-protocol.md)
+defines availability selection. Conclusions concern the eligible available
+recordings; their representativeness of the full GAVD corpus remains unestablished.
 
 ## Resume after a failure
 
@@ -142,17 +154,17 @@ can resume directly from CPU fitting:
 bash slurm/future-innovation-scaling/launch/submit.sh fit
 ```
 
-For missing videos, restore the reported files using the existing
-`gavd6 gavd download` workflow described in [README.md](README.md), then rerun
-`check`. An unavailable recording is an execution blocker. Excluding it requires
-a separately documented cohort amendment, not an edit to the frozen reservation.
+Missing files excluded during initialization do not need to be downloaded to
+run this study. Later downloads do not change its frozen membership. If an
+**included** file disappears or changes before preparation completes, restore
+that file or use a new run; the existing study is not silently changed on retry.
 If a stage log still says `running` after a job stops, check Slurm's final state:
 an abrupt termination can prevent the process from saving its final log record.
 
 Keep gate-v2 unchanged after initialization. For manual commands, other resume
 modes, or relocation of the older frozen study, see the
 [advanced instructions](SOURCE_LEARNING_CURVE_DETAILS.md). The
-[real-data execution validation](../../docs/studies/future-innovation/source-learning-curve-real-data-enablement.md)
+[available-cohort validation](../../docs/studies/future-innovation/source-learning-curve-available-cohort-validation.md)
 distinguishes local checks from actual HAIC execution. HAIC is not accessible
 from the current assistant session, and no expanded real-data learning curve
 has been measured locally.

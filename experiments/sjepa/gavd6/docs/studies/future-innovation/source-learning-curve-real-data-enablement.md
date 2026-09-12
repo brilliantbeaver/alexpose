@@ -1,5 +1,10 @@
 # Connecting the source learning curve to real videos and notebook results
 
+This records the earlier strict media-completeness implementation. New runs now
+use the explicitly authorized [available-cohort amendment](source-learning-curve-available-cohort-protocol.md)
+and its [validation record](source-learning-curve-available-cohort-validation.md).
+The historical tests and observations below describe the earlier revision.
+
 The real-video pipeline already contained preparation, teacher encoding, nested
 fitting, scoring and notebook execution. This revision closes a missing-media
 failure path and makes the stages' evidence visible in notebook 23. It preserves
