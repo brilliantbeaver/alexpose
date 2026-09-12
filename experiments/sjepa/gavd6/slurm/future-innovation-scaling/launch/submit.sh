@@ -3,11 +3,11 @@
 set -euo pipefail
 mode="${1:-all}"
 dry="${2:-}"
-case "$mode" in all|prepare|compute|fit|report|status|verify|notebooks) ;; *)
-  echo 'Usage: submit.sh {all|prepare|compute|fit|report|status|verify|notebooks} [--dry-run]' >&2; exit 2;; esac
+case "$mode" in all|prepare|compute|fit|report|status|verify|check|notebooks) ;; *)
+  echo 'Usage: submit.sh {all|prepare|compute|fit|report|status|verify|check|notebooks} [--dry-run]' >&2; exit 2;; esac
 [[ $# -le 2 && ( -z "$dry" || "$dry" == --dry-run ) ]] || exit 2
 source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
-if [[ "$mode" == status || "$mode" == verify ]]; then
+if [[ "$mode" == status || "$mode" == verify || "$mode" == check ]]; then
   [[ -z "$dry" ]] || { echo '--dry-run applies to submissions only' >&2; exit 2; }
   exec "$FI_PYTHON" slurm/future-innovation-scaling/launch/initialize.py "$mode"
 fi

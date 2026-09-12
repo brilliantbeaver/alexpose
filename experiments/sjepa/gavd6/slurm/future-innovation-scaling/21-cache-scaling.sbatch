@@ -10,9 +10,9 @@ set -euo pipefail
 : "${GAVD6_ROOT:?}" "${FI_SCALING_ROOT:?}" "${FI_PARENT_ROOT:?}"
 cd "$GAVD6_ROOT"
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
-"${FI_PYTHON:-.venv/bin/python}" scripts/research_directions/future_innovation/run_source_learning_curve.py cache \
+"${FI_PYTHON:-.venv/bin/python}" slurm/future-innovation-scaling/launch/run_stage.py cache \
   --run-root "$FI_SCALING_ROOT" --parent-root "$FI_PARENT_ROOT" --device cuda
-"${FI_PYTHON:-.venv/bin/python}" scripts/research_directions/future_innovation/run_source_learning_curve.py audit-teacher \
+"${FI_PYTHON:-.venv/bin/python}" slurm/future-innovation-scaling/launch/run_stage.py audit-teacher \
   --run-root "$FI_SCALING_ROOT" --parent-root "$FI_PARENT_ROOT" --device cuda
-"${FI_PYTHON:-.venv/bin/python}" scripts/research_directions/future_innovation/run_source_learning_curve.py plan \
+"${FI_PYTHON:-.venv/bin/python}" slurm/future-innovation-scaling/launch/run_stage.py plan \
   --run-root "$FI_SCALING_ROOT" --parent-root "$FI_PARENT_ROOT"

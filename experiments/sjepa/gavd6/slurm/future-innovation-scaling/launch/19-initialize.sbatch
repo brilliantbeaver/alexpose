@@ -8,4 +8,4 @@
 set -euo pipefail
 source "$GAVD6_ROOT/slurm/future-innovation-scaling/launch/common.sh"
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
-"$FI_PYTHON" slurm/future-innovation-scaling/launch/initialize.py initialize
+"$FI_PYTHON" slurm/future-innovation-scaling/launch/run_stage.py initialize

@@ -21,6 +21,7 @@ and [execution guide](../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md). T
 is an execution state and is not another negative scientific result.'''),
     code('''from pathlib import Path
 import json
+import hashlib
 import os
 import pandas as pd
 from IPython.display import display
@@ -34,8 +35,15 @@ if not RUN.is_dir():
 print("Study root:", RUN)
 print("Protocol: source-learning-curve-v1; development data")
 print("Inspection only: saved values and file presence; no fitting or numerical verification.")
+if (RUN / "config/study.json").exists():
+    study = json.loads((RUN / "config/study.json").read_text())
+    print("Frozen run ID:", study.get("run_id", "not recorded"))
+    print("Synthetic study:", study.get("synthetic", "not recorded"))
 def read(relative):
     return json.loads((RUN / relative).read_text())
+def file_hash(relative):
+    path = RUN / relative
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 '''),
     md('''## 1. Establish the denominator before counting examples
 
@@ -49,11 +57,26 @@ encoding. All sequences from those recordings stay outside the development curve
 Prior experiment exposure is recorded conservatively from supplied manifests.'''),
     code('''if (RUN / "reports/cohort-audit.json").exists():
     audit = read("reports/cohort-audit.json")
+    print("Inventory at reservation time — verified counts here precede expanded processing:")
     display(pd.Series({k: audit[k] for k in ["annotated_sequences", "recordings", "parent_candidates", "verified_eligible_sequences", "explicitly_identified_participants", "total_participants"]}, dtype=object).to_frame("count"))
     display(pd.DataFrame(audit["reservation"]).T)
     print(audit["participant_status"])
 else:
     print("No frozen expanded inventory is present locally.")
+if (RUN / "data/cohort-complete.json").exists():
+    prepared = read("data/cohort-complete.json")
+    print("Saved completed preparation:")
+    display(pd.Series({k: prepared.get(k) for k in ["eligible_windows", "eligible_sources", "failed_pose_windows", "confirmation_processed"]}, dtype=object).to_frame("saved value"))
+    windows = pd.read_csv(RUN / "data/manifests/development-windows.csv")
+    display(windows.groupby("outer_fold").agg(clips=("window_id", "size"), recordings=("video_id", "nunique")))
+    display(windows.groupby("evidence_origin").agg(clips=("window_id", "size"), recordings=("video_id", "nunique")))
+else:
+    print("Expanded pose eligibility has not been sealed. The initial verified count is not the expanded cohort size.")
+if (RUN / "data/cache-complete.json").exists():
+    cached = read("data/cache-complete.json")
+    display(pd.Series({k: v for k, v in cached.items() if k != "artifacts"}, dtype=object).to_frame("saved cache evidence"))
+else:
+    print("Expanded teacher encoding has not completed. Existing gate-v2 arrays cover only their original windows.")
 '''),
     md('''## 2. Compare increasing training subsets on fixed evaluation sources
 
@@ -88,6 +111,25 @@ does not change that target or claim a pure coordinate-motion effect.'''),
     code('''stages = ["data/cohort-complete.json", "data/cache-complete.json", "data/audit-complete.json", "manifests/plan-complete.json", "reports/complete.json"]
 display(pd.DataFrame({"artifact": stages, "present_locally": [(RUN / p).is_file() for p in stages]}))
 print("Presence is an inventory check. It does not assert integrity or numerical reconstruction.")
+if (RUN / "manifests/learning-plan.json").exists():
+    identities = read("manifests/learning-plan.json")["fits"]
+    print("Selected-model completion receipts present:", sum((RUN / f"models/{i}/complete.json").is_file() for i in identities), "/", len(identities))
+if (RUN / "data/logs/development-media.csv").exists():
+    media = pd.read_csv(RUN / "data/logs/development-media.csv")
+    unavailable = media.loc[~media.available]
+    print("Last preparation media check: unavailable development recordings =", len(unavailable))
+    if len(unavailable):
+        display(unavailable[["video_id", "method", "reason"]])
+attempts = [json.loads(p.read_text()) for p in sorted((RUN / "logs/stages").glob("*.json"))]
+if attempts:
+    display(pd.DataFrame(attempts).reindex(columns=["started_utc", "stage", "fold", "status", "returncode", "elapsed_seconds", "slurm_job_id", "log"]))
+    for attempt in attempts:
+        if attempt["status"] == "failed":
+            print(f"Failed {attempt['stage']} attempt: {attempt['log']}")
+            print(attempt.get("error", ""), attempt.get("output_tail", "")[-2000:])
+else:
+    print("No structured stage logs are present. Older runs may have ordinary Slurm logs only.")
+print("A running record without a finish time may reflect an interrupted job; check Slurm. Old failures remain visible after retries.")
 '''),
     md('''## 4. Interpret the curve and its uncertainty
 
@@ -111,6 +153,15 @@ if report_path.exists():
     display(pd.DataFrame(result["arm_means"]))
     display(pd.DataFrame(result["contrasts"]))
     display(pd.DataFrame(result["per_subset_contrasts"]))
+    current_binding = {p: file_hash(p) for p in ["config/study.json", "manifests/learning-plan.json", "reports/complete.json", "reports/learning-curve.json"]}
+    verified = [a for a in attempts if a.get("stage") == "verify" and a.get("status") == "passed"
+                and a.get("returncode") == 0 and all(current_binding.values())
+                and a.get("binding_before") == current_binding and a.get("binding_after") == current_binding]
+    if verified:
+        print("Saved numerical-verification job succeeded for these study/plan/report bytes:", verified[-1]["finished_utc"])
+        print("This notebook has not rechecked model or cache integrity. Use verify for a fresh reconstruction.")
+    else:
+        print("No successful numerical-verification log matches the current study/plan/report bytes.")
     from IPython.display import SVG, display
     if (RUN / "reports/learning-curve.svg").exists():
         display(SVG(filename=str(RUN / "reports/learning-curve.svg")))

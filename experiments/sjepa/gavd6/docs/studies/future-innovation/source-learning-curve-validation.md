@@ -5,8 +5,15 @@ reservation, CPU fitting/reporting path, expanded-data preparation, Slurm jobs,
 and read-only inspection notebook. The local cohort audit and synthetic checks
 are real executed work. **The expanded real-data learning curve has not run.**
 The full-source media and annotation checkout are unavailable locally, and HAIC
-rejected non-interactive authentication. This is incomplete execution, not a
+is not accessible in the current session. This is incomplete execution, not a
 scientific STOP and not evidence that larger training sets fail.
+
+The latest [real-data execution revision](source-learning-curve-real-data-enablement.md)
+adds development-media completeness checks, stage-attempt logs and expanded
+processing/verification tables in notebook 23. It requires a fresh software-bound
+study; the earlier execution records below remain historical. Use the current
+[short guide](../../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md) to submit
+from your HAIC session.
 
 ## What was reserved before expanded fitting
 

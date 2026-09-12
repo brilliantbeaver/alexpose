@@ -10,7 +10,7 @@ set -euo pipefail
 : "${FI_ANNOTATION_ROOT:?}" "${FI_VIDEO_ROOT:?}" "${FI_POSE_MODEL:?}"
 : "${VJEPA2_ROOT:?}" "${FI_TEACHER_CHECKPOINT:?}"
 cd "$GAVD6_ROOT"
-"${FI_PYTHON:-.venv/bin/python}" scripts/research_directions/future_innovation/run_source_learning_curve.py prepare \
+"${FI_PYTHON:-.venv/bin/python}" slurm/future-innovation-scaling/launch/run_stage.py prepare \
   --run-root "$FI_SCALING_ROOT" --parent-root "$FI_PARENT_ROOT" \
   --annotations "$FI_ANNOTATION_ROOT"/GAVD_Clinical_Annotations_{1,2,3,4,5}.csv \
   --video-root "$FI_VIDEO_ROOT" --pose-model "$FI_POSE_MODEL" \

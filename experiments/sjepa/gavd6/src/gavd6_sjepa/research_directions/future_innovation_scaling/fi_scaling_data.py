@@ -15,6 +15,7 @@ from ..future_innovation.fi_video_pose import CropGeometry, decode_exact_window,
 from ..future_innovation.fi_validity_audits import future_pixel_leakage_test
 from ..future_innovation.fi_readiness import verify_readiness_tables
 from .fi_scaling_cohort import read_study, PROTOCOL
+from .fi_scaling_readiness import development_media, require_development_media, original_inputs
 
 
 def seal(root, path, files, **metadata):
@@ -55,20 +56,9 @@ def verify_data_identity(root):
 def initialize_data(root, parent, annotations, video_root, pose_model, teacher_root, checkpoint):
     """Bind supplied runtime locations to original model and annotation digests."""
     study, parent = read_study(root, parent, require_software=True)
-    original = read_json(parent / 'config/run-contract.json')
-    expected = original['inputs_sha256']
-    by_name = {Path(p).name: h for p,h in expected.items()}
-    required = {Path(p).name for p in original['input_paths']['annotations']}
-    if {Path(p).name for p in annotations} != required:
-        raise ValueError('Supply the same five original annotation partitions')
-    for p in [*annotations, pose_model]:
-        if sha256_file(p) != by_name.get(Path(p).name):
-            raise ValueError(f'Original input/model checksum mismatch: {p}')
+    teacher = original_inputs(parent, annotations, pose_model, checkpoint)
     if not Path(video_root).is_dir():
         raise FileNotFoundError(f'Full-source video directory unavailable: {video_root}')
-    teacher = read_json(parent / 'config/teacher-contract.json')
-    if sha256_file(checkpoint) != teacher['checkpoint_sha256']:
-        raise ValueError('Teacher checkpoint changed')
     teacher.update(repository_path=str(Path(teacher_root).resolve()), checkpoint_path=str(Path(checkpoint).resolve()))
     data = Path(root) / 'data'
     for directory in ('config','manifests','boxes','frames','poses','qc/alignment-overlays','teacher-cache','logs'):
@@ -123,6 +113,12 @@ def prepare(root, parent=None, **runtime):
         verify_prepared_inputs(root)
         return
     data, run = initialize_data(root, parent, **runtime)
+    roster = pd.read_csv(root/'config/source-reservation.csv', dtype={'video_id': str})
+    media = development_media(roster, run['input_paths']['video_manifest'], run['input_paths']['youtube_dir'])
+    # Retryable operational inventory, not a scientific exclusion list. No
+    # candidate contract may be sealed until all development media are available.
+    media.to_csv(data/'logs/development-media.csv', index=False)
+    require_development_media(media)
     build_candidates(data, **run['input_paths'])
     candidates = pd.read_csv(data/'manifests/candidates.csv')
     old_candidates = pd.read_csv(parent/'manifests/candidates.csv')
@@ -133,10 +129,12 @@ def prepare(root, parent=None, **runtime):
             raise ValueError('Original candidate unavailable or alignment changed; repair inputs before continuing')
     _, old, _, _ = read_parent(parent)
     old_rows = {r['window_id']:r for r in old.to_dict('records')}
-    roster = pd.read_csv(root/'config/source-reservation.csv')
     dev = set(roster.loc[roster.role == 'development','video_id'])
     eligible, failures, receipts = [], [], []
-    for row in candidates.loc[candidates.video_id.isin(dev)].to_dict('records'):
+    selected = candidates.loc[candidates.video_id.isin(dev)].to_dict('records')
+    for position, row in enumerate(selected, 1):
+        if position % 25 == 1 or position == len(selected):
+            print(f'Pose preparation: checking window {position}/{len(selected)}; {len(eligible)} eligible so far', flush=True)
         receipt_path = data/f"poses/{row['window_id']}.json"
         if receipt_path.exists():
             item = verify_seal(root, str(receipt_path.relative_to(root)))
@@ -206,7 +204,9 @@ def cache(root, parent=None, device='cuda', adapter=None):
     parent_index = pd.read_csv(parent/'manifests/cache-index.csv').set_index('window_id')
     binding = stable_key(sha256_file(root/'config/study.json'),sha256_file(root/'data/cohort-complete.json'))
     entries, files = [], []
-    for row in cohort.to_dict('records'):
+    for position, row in enumerate(cohort.to_dict('records'), 1):
+        if position % 25 == 1 or position == len(cohort):
+            print(f'Teacher cache: checking window {position}/{len(cohort)}; {len(entries)} entries ready', flush=True)
         window = row['window_id']
         if row['evidence_origin'] == 'parent_cache':
             original = parent_index.loc[window]
