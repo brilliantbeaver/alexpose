@@ -35,6 +35,7 @@ INPUTS = (
     'manifests/plan-complete.json', 'reports/complete.json',
     'reports/learning-curve.json', 'reports/learning-curve.svg',
     'data/manifests/development-windows.csv', 'data/logs/development-media.csv',
+    'config/availability-contract.json', 'config/media-availability.csv',
 )
 
 

@@ -32,6 +32,7 @@ def main(argv=None):
             p.add_argument('--video-manifest',type=Path,required=True)
             p.add_argument('--inspected-manifest',type=Path,action='append',required=True)
             p.add_argument('--participant-registry',type=Path)
+            p.add_argument('--video-root',type=Path,help='Freeze only available development recordings; omission preserves the historical strict cohort policy')
             p.add_argument('--calibration',type=Path,required=True)
             p.add_argument('--protocol-document',type=Path,default=Path('docs/studies/future-innovation/source-learning-curve-protocol.md'))
         if name=='prepare':

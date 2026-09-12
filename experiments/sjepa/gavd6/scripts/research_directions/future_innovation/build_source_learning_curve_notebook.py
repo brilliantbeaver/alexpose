@@ -16,7 +16,9 @@ recordings while the training set grows by whole recordings. More clips from one
 recording are useful examples, but they are not more independent sources.
 
 Read [the protocol](../../docs/studies/future-innovation/source-learning-curve-protocol.md)
-and [execution guide](../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md). The repaired
+and [execution guide](../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md). New runs use the
+[available-cohort amendment](../../docs/studies/future-innovation/source-learning-curve-available-cohort-protocol.md);
+the saved configuration below identifies the policy for this run. The repaired
 50-clip STOP remains a completed historical result. Missing expanded processing
 is an execution state and is not another negative scientific result.'''),
     code('''from pathlib import Path
@@ -39,6 +41,7 @@ if (RUN / "config/study.json").exists():
     study = json.loads((RUN / "config/study.json").read_text())
     print("Frozen run ID:", study.get("run_id", "not recorded"))
     print("Synthetic study:", study.get("synthetic", "not recorded"))
+    print("Cohort policy:", study.get("cohort_policy", "historical strict development-media policy"))
 def read(relative):
     return json.loads((RUN / relative).read_text())
 def file_hash(relative):
@@ -63,6 +66,16 @@ Prior experiment exposure is recorded conservatively from supplied manifests.'''
     print(audit["participant_status"])
 else:
     print("No frozen expanded inventory is present locally.")
+if (RUN / "config/availability-contract.json").exists():
+    availability = read("config/availability-contract.json")
+    print("Frozen available-cohort selection (file availability precedes pose eligibility):")
+    display(pd.Series(availability["summary"], dtype=object).to_frame("saved value"))
+    inventory = pd.read_csv(RUN / "config/media-availability.csv")
+    omitted = inventory.loc[inventory.role.eq("development") & ~inventory.included]
+    print("Unavailable development recordings excluded before processing:", len(omitted))
+    display(omitted[["video_id", "annotated_sequences", "exclusion_reason"]])
+    print("Confirmation roles and source folds were assigned before filtering and remain unchanged.")
+    print("Only config/processing-sequences.csv and config/processing-videos.csv feed new candidate construction.")
 if (RUN / "data/cohort-complete.json").exists():
     prepared = read("data/cohort-complete.json")
     print("Saved completed preparation:")
@@ -116,8 +129,11 @@ if (RUN / "manifests/learning-plan.json").exists():
     print("Selected-model completion receipts present:", sum((RUN / f"models/{i}/complete.json").is_file() for i in identities), "/", len(identities))
 if (RUN / "data/logs/development-media.csv").exists():
     media = pd.read_csv(RUN / "data/logs/development-media.csv")
+    if "role" in media:
+        media = media.loc[media.role.eq("development")]
     unavailable = media.loc[~media.available]
-    print("Last preparation media check: unavailable development recordings =", len(unavailable))
+    label = "Frozen availability exclusions" if (RUN / "config/availability-contract.json").exists() else "Last preparation media check: unavailable development recordings"
+    print(label, "=", len(unavailable))
     if len(unavailable):
         display(unavailable[["video_id", "method", "reason"]])
 attempts = [json.loads(p.read_text()) for p in sorted((RUN / "logs/stages").glob("*.json"))]
@@ -150,6 +166,9 @@ if report_path.exists():
     print("Saved status (not independently verified here):", result["status"])
     print("Saved measurement_complete:", result["measurement_complete"])
     print("Synthetic fixture:", result["synthetic"])
+    if "cohort_availability" in result:
+        print("Result population:", result["cohort_policy"])
+        display(pd.Series(result["cohort_availability"], dtype=object).to_frame("saved cohort"))
     display(pd.DataFrame(result["arm_means"]))
     display(pd.DataFrame(result["contrasts"]))
     display(pd.DataFrame(result["per_subset_contrasts"]))

@@ -1,5 +1,11 @@
 # Source learning curve: advanced and historical execution
 
+New public-launcher runs apply the
+[available-development-v1 cohort amendment](../../docs/studies/future-innovation/source-learning-curve-available-cohort-protocol.md).
+Missing manifest recordings are recorded and omitted before candidate creation;
+confirmation assignments are preserved. The retained September 11 study below
+uses its original strict policy and is not converted in place.
+
 For ordinary HAIC execution, use the [short guide](SOURCE_LEARNING_CURVE.md).
 Its launcher uses `FI_RUN_ROOT` and initializes new studies automatically. The
 manual commands retained below use the older internal `FI_SCALING_ROOT` name.
@@ -34,11 +40,12 @@ staged and published by directory so initialization can recover after a crash.
 Once a study is frozen, changing these environment variables does not revise its
 reservation. Changed exposure or participant information requires a new study.
 
-The launcher is under `future-innovation-scaling/launch/` to preserve every file
-covered by the original experiment fingerprints. It delegates fitting to the
-unchanged jobs 20–23. Both the historical and expanded scientific contracts stay
-unchanged. The original top-level wrapper remains available for manual execution
-of already frozen studies; it does not initialize a new study.
+The launcher is under `future-innovation-scaling/launch/` and delegates to jobs
+20–23. Their numerical fitting behavior is unchanged. The availability amendment
+changes processing membership and records a new code fingerprint; historical
+studies retain their original contracts and require their matching code to fit.
+The original top-level wrapper remains available for manual execution of already
+frozen studies; it does not initialize a new study.
 
 The new launcher supports `prepare` (initialization and poses), `compute`
 (cache/audits/plan then fitting/report), `fit`, `report`, `status` and `verify`.
@@ -391,6 +398,7 @@ After calibration passes, freeze the source reservation before expanded processi
   --parent-root "$FI_PARENT_ROOT" \
   --sequence-manifest "$GAVD6_ROOT/manifests/gavd/gavd_full_sequences.csv" \
   --video-manifest "$GAVD6_ROOT/manifests/gavd/gavd_full_videos.csv" \
+  --video-root "$FI_VIDEO_ROOT" \
   --inspected-manifest "$FI_PARENT_ROOT/manifests/gate-windows.csv" \
   --inspected-manifest "$SJEPA_ROOT/gavd5-drift/work/artifacts/gavd_valid_sequences.csv" \
   --inspected-manifest "$FI_EXPOSURE_ROOT/gavd96-cpu-strong-v1/compute/window_manifest.csv" \

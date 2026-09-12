@@ -21,6 +21,8 @@ from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_cohort
 from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_data import seal, verify_seal
 from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_readiness import (
     development_media, require_development_media, original_inputs)
+from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_availability import (
+    discover_available, availability_summary, verify_available)
 import pandas as pd
 
 
@@ -143,9 +145,24 @@ def preflight(cfg, env, mode):
             participants = pd.read_csv(plan['participants'], dtype=str) if plan['participants'] else None
             roster = reserve_sources(sequences, plan['source_ids'], participants)
             videos = plan['videos']
-        media = development_media(roster, videos, env.get('FI_VIDEO_ROOT') or cfg['full'] / 'youtube/all')
-        require_development_media(media)
-        print(f'Development media: {len(media)}/{len(media)} recording files found; decoding and pose eligibility still pending.')
+        video_root = env.get('FI_VIDEO_ROOT') or cfg['full'] / 'youtube/all'
+        if bound is not None and (bound/'config/availability-contract.json').exists():
+            media = verify_available(bound, check_files=not (bound/'data/cohort-complete.json').exists())
+        elif bound is not None:
+            media = development_media(roster, videos, video_root)
+            require_development_media(media)
+        else:
+            media = discover_available(roster, videos, video_root)
+        if 'included' in media:
+            summary = availability_summary(media)
+            print(f"Available development recordings: {summary['included_development_recordings']}/{summary['planned_development_recordings']}; "
+                  f"excluded unavailable: {summary['unavailable_development_recordings']}; confirmation recordings stay reserved.")
+            omitted = media.loc[media.role.eq('development') & ~media.available, ['video_id', 'reason']]
+            if len(omitted):
+                print(omitted.to_string(index=False))
+            print('These exclusions are frozen before processing; decoding and pose eligibility are checked afterward.')
+        else:
+            print(f'Development media: {len(media)}/{len(media)} recording files found; historical strict cohort policy.')
         print('Original annotation, pose-model and teacher-checkpoint checksums match gate-v2.')
     print(f'Study: {cfg["root"]}\nParent: {cfg["parent"]}')
     print('Frozen study will be verified and reused.' if frozen else
@@ -265,7 +282,9 @@ def initialize(cfg, env, runner=subprocess.run):
             freeze(staging, cfg['parent'], inputs / 'full-sequences.csv', inputs / 'full-videos.csv',
                    [inputs / 'inspected-recordings.csv'],
                    cfg['checkout'] / 'docs/studies/future-innovation/source-learning-curve-protocol.md',
-                   calibration, inputs / 'participants.csv' if record['participants_supplied'] else None)
+                   calibration, inputs / 'participants.csv' if record['participants_supplied'] else None,
+                   video_root=env.get('FI_VIDEO_ROOT') or cfg['full']/'youtube/all',
+                   resolution_manifest=Path(record['manifest_sources']['videos']['path']))
         publish(cfg, staging)
         seal(root, 'launch/complete.json', [root / 'launch/inputs.json',
              *[root / relative for relative in record['artifacts']], root / 'config/launcher.json'])

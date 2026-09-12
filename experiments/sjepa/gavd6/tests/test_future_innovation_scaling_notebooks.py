@@ -143,6 +143,10 @@ class SourceNotebookTests(unittest.TestCase):
             (root/'data/manifests').mkdir(parents=True)
             (root/'manifests').mkdir()
             (root/'logs/stages').mkdir(parents=True)
+            (root/'config/availability-contract.json').write_text(json.dumps(dict(version='available-development-v1',
+                summary=dict(included_development_recordings=2,unavailable_development_recordings=1))))
+            (root/'config/media-availability.csv').write_text(
+                'video_id,role,included,annotated_sequences,exclusion_reason\nv0,development,True,1,\nv1,development,True,2,\nv2,development,False,2,synthetic missing-file fixture\n')
             (root/'data/cohort-complete.json').write_text(json.dumps(dict(eligible_windows=3, eligible_sources=2,
                                                                        failed_pose_windows=0, confirmation_processed=False)))
             (root/'data/manifests/development-windows.csv').write_text(
@@ -167,6 +171,7 @@ class SourceNotebookTests(unittest.TestCase):
                 return output.getvalue()
             text = inspect()
             self.assertIn('Saved completed preparation', text)
+            self.assertIn('Unavailable development recordings excluded before processing: 1', text)
             self.assertIn('synthetic GPU-error fixture', text)
             self.assertIn('Saved numerical-verification job succeeded', text)
             before = runner.input_snapshot(root)

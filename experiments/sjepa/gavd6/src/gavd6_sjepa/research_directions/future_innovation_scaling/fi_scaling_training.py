@@ -383,6 +383,9 @@ def report(root,parent=None,verify=False):
         if not read_json(root/f'models/{identity}/complete.json')['all_candidates_valid']:
             raise ValueError('Required candidate failed; scientific measurement incomplete')
     computed,metrics,bootstrap,raw=compute_curve(plan,payloads,synthetic=study['synthetic'])
+    if study.get('cohort_policy') is not None:
+        computed['cohort_policy'] = study['cohort_policy']
+        computed['cohort_availability'] = read_json(root/'config/availability-contract.json')['summary']
     computed['fallback_count']=sum(m['checkpoint_type']=='baseline_only' for identity in plan['fits'] for m in joblib.load(root/f'models/{identity}/selected.joblib')['models'].values())
     if verify or (root/'reports/complete.json').exists():
         verify_seal(root,'reports/complete.json')

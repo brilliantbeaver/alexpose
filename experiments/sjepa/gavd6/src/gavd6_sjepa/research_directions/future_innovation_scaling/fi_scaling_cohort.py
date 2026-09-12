@@ -135,7 +135,7 @@ def make_plan(cohort, roster, policy=None):
 
 
 def freeze(root, parent, sequence_manifest, video_manifest, inspected_manifests,
-           protocol_document, calibration, participant_registry=None):
+           protocol_document, calibration, participant_registry=None, video_root=None, resolution_manifest=None):
     root, parent = Path(root).resolve(), Path(parent).resolve()
     if root == parent or root.is_relative_to(parent) or parent.is_relative_to(root):
         raise ValueError('Study and parent roots must be separate and nonnested')
@@ -177,6 +177,12 @@ def freeze(root, parent, sequence_manifest, video_manifest, inspected_manifests,
         shutil.copyfile(path, root / 'config' / name)
     shutil.copyfile(protocol_document, root / 'config/frozen-protocol.md')
     roster.to_csv(root / 'config/source-reservation.csv', index=False)
+    availability = None
+    if video_root is not None:
+        from .fi_scaling_availability import freeze_available
+        availability = freeze_available(root, video_root, resolution_manifest=resolution_manifest or video_manifest)
+        amendment = Path(__file__).resolve().parents[4]/'docs/studies/future-innovation/source-learning-curve-available-cohort-protocol.md'
+        shutil.copyfile(amendment, root/'config/frozen-cohort-amendment.md')
     copied = ('teacher-contract.json', 'frame-contract.json', 'nuisance-contract.json', 'control-contract.json',
               'nuisance-schema.json', 'projection-contract.json', 'projection-256.npy', 'thresholds.json')
     for name in copied:
@@ -190,6 +196,8 @@ def freeze(root, parent, sequence_manifest, video_manifest, inspected_manifests,
     study = dict(protocol=PROTOCOL, run_id=root.name, parent_root=str(parent), synthetic=parent_run['synthetic'],
                  config_sha256=sealed, input_provenance={n: {'path': str(p.resolve()), 'sha256': sha256_file(p)} for n,p in inputs.items()},
                  parent_run_sha256=sha256_file(parent / 'config/run-contract.json'))
+    if availability is not None:
+        study['cohort_policy'] = availability['cohort_policy']
     write_once_json(root / 'config/study.json', study)
     # Generic run metadata lets the original candidate builder validate inputs.
     # The scaling CLI owns dispatch; old gate commands never accept this protocol.
@@ -221,6 +229,8 @@ def freeze(root, parent, sequence_manifest, video_manifest, inspected_manifests,
                   exposed_recordings=int(roster.previously_exposed.sum()),
                   reservation=roster.groupby('role').agg(recordings=('video_id','size'), sequences=('annotated_sequences','sum')).to_dict('index'),
                   confirmation_claim='reserved relative to supplied exposure registries; participant independence unestablished')
+    if availability is not None:
+        report['availability'] = availability
     write_json(root / 'reports/cohort-audit.json', report)
     write_json(root/'reports/cohort-audit-complete.json',{'artifacts':{name:sha256_file(root/name) for name in
                ('reports/cohort-audit.json','manifests/initial-eligibility.csv','config/source-reservation.csv')}})
@@ -239,6 +249,11 @@ def read_study(root, parent_override=None, *, require_software=False):
         raise ValueError('Unsupported scaling policy; use a new version for amendments')
     if require_software and read_json(root / 'config/software.json') != fingerprint():
         raise ValueError('Fitting code changed after freeze; create a new study')
+    if 'availability-contract.json' in study['config_sha256'] or study.get('cohort_policy') is not None:
+        from .fi_scaling_availability import COHORT_POLICY, verify_available
+        if study.get('cohort_policy') != COHORT_POLICY or 'availability-contract.json' not in study['config_sha256']:
+            raise ValueError('Inconsistent available-cohort version/binding')
+        verify_available(root)
     parent = Path(parent_override or study['parent_root']).resolve()
     verify_snapshot(parent, read_json(root / 'config/parent-snapshot.json'))
     return study, parent
