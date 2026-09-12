@@ -1,5 +1,7 @@
 """Real-kernel inspection tests plus scheduler and interruption regressions."""
 import hashlib
+from contextlib import redirect_stdout
+import io
 import importlib.util
 import json
 import os
@@ -134,6 +136,46 @@ class SourceNotebookTests(unittest.TestCase):
             self.assertFalse(notebook.metadata.fi_execution.execution_completed)
             self.assertEqual(notebook.cells[1].execution_count,1)
             self.assertTrue(any(o.get('output_type')=='error' for c in notebook.cells for o in c.get('outputs',[])))
+
+    def test_expanded_counts_failures_and_stale_verification_are_distinguished(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)/'run'; fixture(root, complete=True)
+            (root/'data/manifests').mkdir(parents=True)
+            (root/'manifests').mkdir()
+            (root/'logs/stages').mkdir(parents=True)
+            (root/'data/cohort-complete.json').write_text(json.dumps(dict(eligible_windows=3, eligible_sources=2,
+                                                                       failed_pose_windows=0, confirmation_processed=False)))
+            (root/'data/manifests/development-windows.csv').write_text(
+                'window_id,video_id,outer_fold,evidence_origin\nw0,v0,0,parent_cache\nw1,v1,1,new_processing\nw2,v1,1,new_processing\n')
+            (root/'data/cache-complete.json').write_text('{"reused_windows":1,"new_windows":2}')
+            (root/'manifests/learning-plan.json').write_text('{"entries":[],"fits":{}}')
+            (root/'reports/complete.json').write_text('{}')
+            bindings = {p: runner.digest(root/p) for p in ['config/study.json','manifests/learning-plan.json',
+                                                         'reports/complete.json','reports/learning-curve.json']}
+            failure = dict(stage='cache',status='failed',returncode=7,log='logs/stages/synthetic-failure.log',
+                           output_tail='synthetic GPU-error fixture')
+            verified = dict(stage='verify',status='passed',returncode=0,log='logs/stages/synthetic-verify.log',
+                            binding_before=bindings,binding_after=bindings,finished_utc='synthetic timestamp')
+            (root/'logs/stages/failure.json').write_text(json.dumps(failure))
+            (root/'logs/stages/verify.json').write_text(json.dumps(verified))
+            def inspect():
+                namespace = {}; output = io.StringIO()
+                with patch.dict(os.environ, {'FI_RUN_ROOT':str(root),'GAVD6_ROOT':str(ROOT)}), \
+                     patch('IPython.display.display'), redirect_stdout(output):
+                    for cell in runner.load_source('23')[1].cells:
+                        if cell.cell_type == 'code': exec(cell.source, namespace)
+                return output.getvalue()
+            text = inspect()
+            self.assertIn('Saved completed preparation', text)
+            self.assertIn('synthetic GPU-error fixture', text)
+            self.assertIn('Saved numerical-verification job succeeded', text)
+            before = runner.input_snapshot(root)
+            with (root/'reports/learning-curve.json').open('a') as f: f.write(' ')
+            self.assertIn('No successful numerical-verification log matches', inspect())
+            self.assertNotEqual(runner.input_snapshot(root), before)
+            before = runner.input_snapshot(root)
+            (root/'logs/stages/failure.json').write_text(json.dumps({**failure,'returncode':9}))
+            self.assertNotEqual(runner.input_snapshot(root), before)
 
     def test_duplicate_writer_rejected_and_completed_batches_not_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -34,6 +34,7 @@ INPUTS = (
     'data/cohort-complete.json', 'data/cache-complete.json', 'data/audit-complete.json',
     'manifests/plan-complete.json', 'reports/complete.json',
     'reports/learning-curve.json', 'reports/learning-curve.svg',
+    'data/manifests/development-windows.csv', 'data/logs/development-media.csv',
 )
 
 
@@ -50,7 +51,9 @@ def atomic_text(path, text):
 def input_snapshot(root):
     """Hash exactly the artifacts used for display; do not load models or cache arrays."""
     result = {}
-    for relative in INPUTS:
+    dynamic = [str(p.relative_to(root)) for pattern in ('logs/stages/*.json', 'models/*/complete.json')
+               for p in sorted(root.glob(pattern))]
+    for relative in (*INPUTS, *dynamic):
         path = root / relative
         result[relative] = (dict(sha256=digest(path), size=path.stat().st_size,
                                  mtime_ns=path.stat().st_mtime_ns) if path.is_file() else None)

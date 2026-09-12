@@ -1,8 +1,7 @@
 """Automate metadata preparation, synthetic calibration and source reservation.
 
-The numerical implementation is unchanged. This launcher lives outside the
-historical top-level fingerprint globs and freezes its own initialization
-provenance into each new study. It never encodes video or writes to the parent.
+This launcher freezes its own initialization provenance into each new study.
+It never encodes video or writes to the parent.
 """
 import argparse
 import json
@@ -18,8 +17,10 @@ from gavd6_sjepa.research_directions.future_innovation.fi_contracts import (
     read_json, write_json, sha256_file, stage_lock)
 from gavd6_sjepa.research_directions.future_innovation.fi_cache_reuse import read_parent
 from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_cohort import (
-    freeze, read_study, fingerprint)
+    freeze, read_study, fingerprint, reserve_sources)
 from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_data import seal, verify_seal
+from gavd6_sjepa.research_directions.future_innovation_scaling.fi_scaling_readiness import (
+    development_media, require_development_media, original_inputs)
 import pandas as pd
 
 
@@ -120,8 +121,7 @@ def preflight(cfg, env, mode):
         verify_seal(cfg['root'], required[mode])
     if mode in ('all', 'prepare'):
         annotation_root = Path(env.get('FI_ANNOTATION_ROOT') or cfg['full'] / 'annotations/GAVD/data')
-        for i in range(1, 6):
-            require_file(annotation_root / f'GAVD_Clinical_Annotations_{i}.csv')
+        annotations = [require_file(annotation_root / f'GAVD_Clinical_Annotations_{i}.csv') for i in range(1, 6)]
         for name in ('FI_POSE_MODEL', 'FI_TEACHER_CHECKPOINT'):
             if not env.get(name):
                 raise ValueError(f'Set {name} using the same value as the gate-v2 run')
@@ -130,6 +130,23 @@ def preflight(cfg, env, mode):
             p = Path(env.get(name) or default) if env.get(name) or default else None
             if p is None or not p.is_dir():
                 raise FileNotFoundError(f'Required directory is missing: {name}={p}')
+        original_inputs(cfg['parent'], annotations, Path(env['FI_POSE_MODEL']), Path(env['FI_TEACHER_CHECKPOINT']))
+        # Preview the exact metadata-only reservation for a new study; do not
+        # freeze it here or let local video availability change its assignment.
+        bound = cfg['root'] if frozen else staging if recovering else None
+        if bound is not None:
+            roster = pd.read_csv(bound / 'config/source-reservation.csv', dtype={'video_id': str})
+            videos = bound / 'config/full-videos.csv'
+        else:
+            plan = input_plan(cfg, env)
+            sequences = pd.read_csv(plan['sequences'], dtype={'video_id': str, 'sequence_id': str})
+            participants = pd.read_csv(plan['participants'], dtype=str) if plan['participants'] else None
+            roster = reserve_sources(sequences, plan['source_ids'], participants)
+            videos = plan['videos']
+        media = development_media(roster, videos, env.get('FI_VIDEO_ROOT') or cfg['full'] / 'youtube/all')
+        require_development_media(media)
+        print(f'Development media: {len(media)}/{len(media)} recording files found; decoding and pose eligibility still pending.')
+        print('Original annotation, pose-model and teacher-checkpoint checksums match gate-v2.')
     print(f'Study: {cfg["root"]}\nParent: {cfg["parent"]}')
     print('Frozen study will be verified and reused.' if frozen else
           'Initialization will calibrate and freeze the source reservation before pose processing.')
@@ -257,12 +274,12 @@ def initialize(cfg, env, runner=subprocess.run):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['preflight', 'initialize', 'status', 'verify'])
+    parser.add_argument('command', choices=['preflight', 'check', 'initialize', 'status', 'verify'])
     parser.add_argument('--mode', choices=['all', 'prepare', 'compute', 'fit', 'report'], default='all')
     args = parser.parse_args()
     try:
         cfg = settings(os.environ)
-        if args.command == 'preflight':
+        if args.command in ('preflight', 'check'):
             preflight(cfg, os.environ, args.mode)
         elif args.command == 'initialize':
             initialize(cfg, os.environ)

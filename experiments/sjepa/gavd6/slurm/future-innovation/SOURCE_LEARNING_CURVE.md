@@ -24,7 +24,7 @@ export FI_TEACHER_CHECKPOINT="/hai/scratch/$USER/models/vjepa2_1_vitb_dist_vitG_
 export FI_POSE_MODEL="/hai/scratch/$USER/models/pose_landmarker_lite.task"
 export FI_ANNOTATION_ROOT="$GAVD_FULL_ROOT/annotations/GAVD/data"
 export FI_PARENT_ROOT="$GAVD6_ROOT/outputs/future-innovation/gate-v2"
-export FI_RUN_ROOT="$GAVD6_ROOT/outputs/future-innovation/source-learning-curve-v1"
+export FI_RUN_ROOT="$GAVD6_ROOT/outputs/future-innovation/source-learning-curve-dev-20260912"
 cd "$GAVD6_ROOT"
 ```
 
@@ -35,7 +35,23 @@ as in the main README and otherwise defaults to `.venv`.
 The launcher finds full manifests under `$GAVD_FULL_ROOT/manifests/`, or uses
 `manifests/gavd/` in the checkout. It expects the five official annotation CSVs in
 `FI_ANNOTATION_ROOT` and source videos under `$GAVD_FULL_ROOT/youtube/all/`.
-Missing required paths are reported before submission.
+If your videos are in other subfolders under `youtube/`, set
+`export FI_VIDEO_ROOT="$GAVD_FULL_ROOT/youtube"`; discovery searches recursively
+for exact video IDs. These must be full recording files, not sequence clips.
+
+Submission checks every development recording's file availability and verifies
+the original annotation/model checksums. Missing, ambiguous or empty files block
+the run; they cannot silently reduce the cohort. Frame decoding and pose quality
+are checked later. To check the paths without submitting or creating a run:
+
+```bash
+bash slurm/future-innovation-scaling/launch/submit.sh check
+```
+
+The September 12 media guard changes the recorded implementation. Start it in a
+fresh directory; older frozen studies remain inspectable. Once initialized with
+this implementation, keep the same directory and code when resuming. Do not edit
+saved hashes to make an older study accept changed code.
 
 ## 2. Submit the experiment
 
@@ -53,6 +69,13 @@ CPU: calibration and source reservation
   → CPU: report and numerical verification
   → CPU: execute the source learning-curve notebook
 ```
+
+The GPU job loads the original V-JEPA checkpoint and encodes the newly eligible
+development clips. It reuses the 50 original cached windows where applicable;
+those 50 arrays cannot supply features for the remaining videos. The subsequent
+fitting, reporting and notebook jobs use the completed cache on CPUs. Notebook
+23 displays the measured curve after these jobs succeed. Running the notebook
+alone cannot create additional teacher features or fit the curve.
 
 Data and model stages wait for the previous stage to succeed. The final notebook
 waits for all submitted stages to finish, including failures, so it can also show
@@ -79,8 +102,11 @@ The report job performs numerical verification after fitting.
 
 | Location under `$FI_RUN_ROOT` | What to read |
 |---|---|
-| `logs/` | Job output, errors and submitted job IDs |
+| `logs/` | Slurm output, errors and submitted job IDs |
+| `logs/stages/` | Separate command, exit status and output for every stage attempt |
 | `reports/cohort-audit.json` | Recording counts and development/confirmation reservation |
+| `data/manifests/development-windows.csv` | Actual eligible expanded clips and folds after preparation |
+| `data/teacher-cache/` | Newly encoded arrays; the parent's original cache stays in `FI_PARENT_ROOT/teacher-cache/` |
 | `reports/learning-curve.svg` | Learning-curve figure, available after reporting |
 | `reports/learning-curve.json` | All arm comparisons, uncertainty and the development decision |
 | `notebook_runs/<batch>/23_source_learning_curves.ipynb` | Executed notebook with saved tables and figures |
@@ -96,6 +122,9 @@ bash slurm/future-innovation-scaling/launch/submit.sh notebooks
 Each execution creates a new notebook batch and uses `FI_RUN_ROOT` automatically.
 The notebook inspects saved artifacts; successful execution does not establish
 that the experiment is complete or numerically verified.
+It shows initial inventory separately from expanded processing counts, all stage
+attempts, and whether a successful verification log matches the current report.
+That log records a previous check; the notebook does not reconstruct models.
 
 The main scientific comparison is **real history minus no skeleton** at each
 training size, alongside gain over RGB-only and the shuffle/mismatch controls.
@@ -113,9 +142,17 @@ can resume directly from CPU fitting:
 bash slurm/future-innovation-scaling/launch/submit.sh fit
 ```
 
+For missing videos, restore the reported files using the existing
+`gavd6 gavd download` workflow described in [README.md](README.md), then rerun
+`check`. An unavailable recording is an execution blocker. Excluding it requires
+a separately documented cohort amendment, not an edit to the frozen reservation.
+If a stage log still says `running` after a job stops, check Slurm's final state:
+an abrupt termination can prevent the process from saving its final log record.
+
 Keep gate-v2 unchanged after initialization. For manual commands, other resume
 modes, or relocation of the older frozen study, see the
 [advanced instructions](SOURCE_LEARNING_CURVE_DETAILS.md). The
-[validation record](../../docs/studies/future-innovation/source-learning-curve-validation.md)
-distinguishes local checks from actual HAIC execution; no expanded real-data
-learning curve has been measured locally.
+[real-data execution validation](../../docs/studies/future-innovation/source-learning-curve-real-data-enablement.md)
+distinguishes local checks from actual HAIC execution. HAIC is not accessible
+from the current assistant session, and no expanded real-data learning curve
+has been measured locally.
