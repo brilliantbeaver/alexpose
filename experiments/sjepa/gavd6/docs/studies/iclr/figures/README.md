@@ -1,0 +1,3 @@
+# Figure provenance
+
+Figures 01-05 are original editable vector diagrams. Coordinates and trajectories are schematic, not extracted poses. Figure 01 uses reported laterality and verified direct-v3 aggregates, keeping their metrics separate. Figure 06 reads `outputs/iclr-bridge-cached-20260911/reports/panel-report.json` directly and shows the paired conditional source-bootstrap intervals, distinguishing the primary posture contrast from secondary comparisons. SVG files are editable vectors; PDF companions support manuscript typesetting. Regenerate with `.venv/bin/python scripts/research_directions/iclr_bridge/build_figures.py`.

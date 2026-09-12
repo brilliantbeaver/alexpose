@@ -32,26 +32,27 @@ ARMS = (
 )
 LEGACY_PROTOCOL = "legacy-v1"
 DIRECT_PROTOCOL = "direct-v2"
+REPAIR_PROTOCOL = "direct-v3"
 DIRECT_ARMS = tuple(arm for arm in ARMS if arm != "background-target")
 
 
 def protocol_name(run):
     name = run.get("protocol", LEGACY_PROTOCOL)
-    if name not in {LEGACY_PROTOCOL, DIRECT_PROTOCOL}:
+    if name not in {LEGACY_PROTOCOL, DIRECT_PROTOCOL, REPAIR_PROTOCOL}:
         raise ValueError(f"Unknown Experiment 0 protocol: {name}")
     return name
 
 
 def experiment_arms(root):
     run = check_run(root)
-    expected = DIRECT_ARMS if protocol_name(run) == DIRECT_PROTOCOL else ARMS
+    expected = DIRECT_ARMS if protocol_name(run) in {DIRECT_PROTOCOL, REPAIR_PROTOCOL} else ARMS
     if tuple(read_json(Path(root) / "config/control-contract.json")["arms"]) != expected:
         raise ValueError("Control arms disagree with the frozen experiment protocol")
     return expected
 
 
 def audit_summary_path(root):
-    name = "readiness-summary.json" if protocol_name(check_run(root)) == DIRECT_PROTOCOL else "validity-summary.json"
+    name = "readiness-summary.json" if protocol_name(check_run(root)) in {DIRECT_PROTOCOL, REPAIR_PROTOCOL} else "validity-summary.json"
     return Path(root) / "qc" / name
 
 
@@ -313,6 +314,8 @@ def initialize_run(
     root = Path(root).resolve()
     change_reason = str(change_reason or "").strip() or "Experiment 0 initialization"
     protocol_name({"protocol": protocol})
+    if protocol == REPAIR_PROTOCOL:
+        raise ValueError("direct-v3 requires init-cached-run with verified parent evidence")
     direct = protocol == DIRECT_PROTOCOL
     if cohort_size is not None and (type(cohort_size) is not int or cohort_size != 50):
         raise ValueError("Experiment 0 requires exactly 50 clips; full GAVD is reserved for the real experiment")
@@ -461,4 +464,7 @@ def equal_source_weights(video_ids):
 
 
 def load_model_contract(root):
+    if read_json(Path(root) / "config/run-contract.json").get("protocol") == REPAIR_PROTOCOL:
+        from .fi_joint_models import JointModelContract
+        return JointModelContract(**read_json(Path(root) / "config/model-contract.json"))
     return ModelContract(**read_json(Path(root) / "config/model-contract.json"))

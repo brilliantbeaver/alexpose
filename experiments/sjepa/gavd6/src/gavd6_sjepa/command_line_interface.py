@@ -107,6 +107,9 @@ COMMANDS: dict[tuple[str, str], CommandSpec] = {
 # Resolve experiment modules only when the selected command runs. Global and
 # command-specific help stay usable without loading teacher/pose dependencies.
 for _command, _handler, _description in (
+    ("init-cached-run", "init_cached_main", "Initialize calibrated direct-v3 using a read-only parent teacher cache."),
+    ("calibrate-repair", "calibrate_main", "Calibrate joint predictors on fixed synthetic source-held fixtures."),
+    ("verify-repair", "verify_main", "Read-only reconstruction of repaired predictions and numerical reports."),
     ("init-run", "init_main", "Freeze the Future Innovation Experiment 0 protocol and input hashes."),
     ("build-cohort", "cohort_main", "Build label-blind full-GAVD window candidates."),
     ("extract-poses", "poses_main", "Extract aligned whole-body histories and freeze the 50-window cohort."),

@@ -1,0 +1,3 @@
+# Evidence copies for the documents
+
+These JSON files are byte-identical copies of the measured report, independent verification, retained laterality arithmetic, synthetic calibration and post-hoc confidence-route diagnostic. Their source paths and SHA-256 digests are in `source-manifest.json`. The diagnostic explains a claim limitation and does not estimate a corrected effect. No new teacher or student-training result is present. Full models, predictions and bootstrap draws remain in the linked run root. Regenerate with `.venv/bin/python scripts/research_directions/iclr_bridge/build_evidence.py`.

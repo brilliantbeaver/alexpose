@@ -16,7 +16,7 @@ from .fi_validity_audits import ValidityAuditRejected, require_audits
 
 
 PROJECT = Path(__file__).resolve().parents[4]
-STAGES = frozenset({"init-run", "build-cohort", "extract-poses", "cache-teacher",
+STAGES = frozenset({"init-cached-run", "init-run", "build-cohort", "extract-poses", "cache-teacher",
                     "audit-teacher", "run-gate", "score-gate", "build-report"})
 OUTCOME_MIME = "application/vnd.gavd6.notebook-outcome+json"
 
@@ -151,6 +151,15 @@ def initialize_from_environment(run_root):
         if (root / "config/run-contract.json").is_file():
             check_run(root)
             print(f"Verified existing run: {root}")
+            return
+        if os.environ.get("FI_EXPERIMENT_PROTOCOL") == "direct-v3":
+            from .fi_cache_reuse import initialize_cached_run
+            parent = os.environ.get("FI_PARENT_ROOT")
+            calibration = os.environ.get("FI_CALIBRATION")
+            if not parent or not calibration:
+                raise ValueError("direct-v3 initialization requires FI_PARENT_ROOT and FI_CALIBRATION")
+            initialize_cached_run(root, parent, PROJECT / "docs/studies/future-innovation/direct-v3-repair-protocol.md", calibration)
+            print(f"Initialized cached development run: {root}")
             return
         names = ("GAVD_FULL_ROOT", "VJEPA2_ROOT", "FI_TEACHER_CHECKPOINT", "FI_POSE_MODEL")
         missing = [key for key in names if not os.environ.get(key)]

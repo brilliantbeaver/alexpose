@@ -154,6 +154,9 @@ def cache_teacher(root, adapter):
 
 def load_cache(root):
     root = Path(root)
+    if read_json(root / "config/run-contract.json").get("protocol") == "direct-v3":
+        from .fi_cache_reuse import load_reused_cache
+        return load_reused_cache(root)
     cohort = load_cohort(root)
     contract = read_json(root / "config/cache-contract.json")
     binding = cache_binding(root)

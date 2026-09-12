@@ -182,3 +182,48 @@ cannot measure real accuracy or teacher behavior. Separate data-flow tests use
 actual generated video decoding with an injected detector/teacher, including
 absent background pixels and absent shared flow support. Real GAVD/MediaPipe and
 pretrained H100 inference still require HAIC verification.
+
+## Cached `direct-v3` notebooks
+
+The canonical notebooks now explain the historical failure, repaired joint model,
+source-held selection, exact fallback, parent-cache lineage and deterministic
+seed policy. They dispatch from the saved protocol. `legacy-v1` and `direct-v2`
+keep their original loading and decision behavior. Inspect mode remains read-only;
+`present_locally` still reports presence, separately from report integrity and
+saved numerical reconstruction evidence.
+
+Initialize from a passing calibration as described in the
+[cached execution guide](README.md#calibrated-cached-development-repair-direct-v3).
+With `FI_EXPERIMENT_PROTOCOL=direct-v3`, notebook 00 uses `FI_PARENT_ROOT` and
+`FI_CALIBRATION`. Notebooks 01 and 02 verify inherited cohort/pose/cache/audit
+records without loading raw videos or the teacher. Notebook 03 fits one
+closed-form solution per fold/arm and displays the full candidate ledger.
+Notebook 04 performs numerical verification before sealing a scientific result.
+
+Run all five locally on the existing child, using the current interpreter:
+
+```bash
+.venv/bin/python scripts/research_directions/future_innovation/execute_future_innovation_notebook.py \
+  --notebook 00 --mode execute --run-root outputs/future-innovation-direct-v3-dev-20260911 \
+  --output-dir outputs/future-innovation-direct-v3-dev-20260911/notebook_runs/local-cached
+# Repeat with --notebook 01, 02, 03 and 04, using --device cpu for 02.
+```
+
+A local Jupyter kernel opens localhost sockets. A sandbox that prohibits sockets
+must approve notebook execution outside that sandbox; ordinary cached CLI fitting
+and scoring do not need that permission. Executed copies are separate from the
+output-free source notebooks. Keep the historical executed notebooks unchanged.
+Generator snapshots belong in a separate `notebook_runs/source-snapshots/` folder
+inside the new child, outside the notebook-only execution batch.
+
+For CPU-only notebook jobs on HAIC, export the variables from the cached guide,
+then use:
+
+```bash
+bash slurm/future-innovation/submit-fi-notebooks.sh cached
+```
+
+The cached mode selects `15-notebook-02-cached.sbatch` with CPU resources; it does
+not submit the original H100 notebook-02 wrapper. A fresh `haic-*` output batch
+preserves previous executed notebooks. Both submission paths use the same
+production functions and locks; choose one path per run.

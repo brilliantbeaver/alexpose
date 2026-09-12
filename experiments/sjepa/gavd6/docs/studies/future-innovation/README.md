@@ -1,6 +1,12 @@
 # Future Innovation: from question to decision
 
-**Current protocol: `direct-v2`, 50 clips.** Experiment 0 now tests how much
+**Current development extension:** the [source learning curve](source-learning-curve-protocol.md)
+tests whether more training recordings help the [completed direct-v3 repair](direct-v3-repair-validation.md).
+Its [audit and validation record](source-learning-curve-validation.md) distinguishes
+the frozen confirmation reservation from the expanded real-data fit, which is
+blocked on input/HAIC access. See the [execution guide](../../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md).
+
+**Historical protocol: `direct-v2`, 50 clips.** Experiment 0 tests how much
 skeleton coordinate/confidence history adds beyond RGB, nuisance inputs and a
 matched head with validity flags. The gate samples 50 eligible clips from the
 available full-GAVD pool; the full dataset is reserved for the real experiment.
@@ -10,9 +16,30 @@ training-only selection and paired controls remain required. Read the
 [current protocol and decision rules](direct-gate-protocol.md).
 
 The five-notebook structure is unchanged. New runs fit four arms × three seeds ×
-five folds, producing 60 final heads. No completed real `direct-v2` prediction
-result is available in this checkout. An ADVANCE recommends designing the
-full-GAVD JEPA comparison; it does not establish a JEPA training benefit.
+five folds, producing 60 final heads. **Completed real result: STOP**, run
+`gate-v2`, notebook batch `haic-xaGGjyT7`. The retained executed notebooks report
+ridge R² ≈ 0.27170 versus real-skeleton full R² ≈ 0.02846; the matched skeleton
+increment is −0.00006651 (95% source-bootstrap interval −0.00027454 to +0.00008082).
+Every residual-head condition substantially worsens ridge. All required readiness
+checks passed and the predictive measurement completed; this is a scientific
+negative result rather than blocked execution.
+
+**Saved-model diagnosis completed:** all 60 models, prediction scores and 2,000
+source-bootstrap draws were independently checked using the supplied artifacts
+in `outputs/future-innovation/`. Removing unsupported baseline-input weights
+recovers 92% of the real head's loss, but zero-initialized refits still lose to
+ridge. A training-constant missingness feature can also become 100,000,000 after
+scaling in two inner partitions; all 480 candidate configurations lose to ridge.
+
+**Historical next action, subsequently implemented by direct-v3:** stabilize training-only preprocessing, prevent the correction
+from undoing RGB regularization, and include a baseline-only candidate in a new
+cached development comparison. Read the [saved-model evaluation and revised plan](saved-model-evaluation.md)
+for the real-data interventions, verified evidence and conditional distillation
+steps. The [initial synthetic investigation](residual-head-root-cause-and-next-experiment.md)
+is retained as history. The original STOP and protocol remain preserved.
+An ADVANCE in a future valid
+experiment would recommend designing the full-GAVD JEPA comparison; it would
+not establish a JEPA training benefit.
 
 **Preserved legacy evidence:** copied run `haic-GOjuXSEB` completed a 50-clip cache
 but stopped at sensitivity 1.360, below its frozen 2.0 threshold; all other six
@@ -135,3 +162,17 @@ reported measurements or rewrite the experiment's thresholds after seeing them.
 
 The [notebook maintenance and verification guide](../../../scripts/research_directions/future_innovation/future_innovation_tutorial_guide.md)
 documents selective regeneration, fresh-kernel checks and measured runtimes.
+
+## Calibrated direct-v3 development repair
+
+The [repair and validation report](direct-v3-repair-validation.md) records the
+completed cached comparison: real-minus-no-skeleton **−0.00024242 R²**, 95% paired
+source-bootstrap interval **[−0.00147402, +0.00091980]**, and **36.35%** positive
+draws. The result is a complete development **STOP**. The original `gate-v2`
+artifacts and historical executed notebooks remain unchanged.
+
+The [frozen repair protocol](direct-v3-repair-protocol.md) specifies safe input
+preprocessing, a deterministic joint ridge model, exact baseline-only selection,
+and unchanged effect/control/bootstrap thresholds. Independent reconstruction
+verified all 51,200 prediction rows and 8,000 bootstrap rows. No full S-JEPA
+training, adapter training or distillation follows from this result.

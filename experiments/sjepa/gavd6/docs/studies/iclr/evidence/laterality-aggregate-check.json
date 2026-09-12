@@ -1,0 +1,116 @@
+{
+  "date": "2026-09-11",
+  "status": "passed",
+  "scope": "Recomputed retained seed means, paired seed differences and mask contrast arithmetic; raw predictions/checkpoints unavailable, no new inference or source bootstrap.",
+  "raw_artifacts_present": false,
+  "source_path": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd5-drift/neurips-laterality/docs/fmts_revisions/assets/v8/numerical_evidence.json",
+  "checks": [
+    {
+      "label": "Initial \u00b7 mean",
+      "recomputed_mean_r2": 0.070827155920603,
+      "recomputed_seed_sd": 0.018573505307123917
+    },
+    {
+      "label": "Initial \u00b7 motion summary",
+      "recomputed_mean_r2": 0.22254357355538518,
+      "recomputed_seed_sd": 0.026808089597296216
+    },
+    {
+      "label": "Teacher \u00b7 motion random",
+      "recomputed_mean_r2": 0.11372460890473453,
+      "recomputed_seed_sd": 0.011006914219880664,
+      "paired_seed_differences": [
+        -0.15842448128392927,
+        -0.12349036879933906,
+        -0.1028257770407307,
+        -0.07474305960486305,
+        -0.08461113652439112
+      ],
+      "mean_difference": -0.10881896465065063,
+      "retained_ci95": [
+        -0.17009285990237175,
+        -0.04121913742107222
+      ],
+      "new_bootstrap_run": false
+    },
+    {
+      "label": "Teacher \u00b7 MAMP motion",
+      "recomputed_mean_r2": 0.11289028578638174,
+      "recomputed_seed_sd": 0.030590034839498504,
+      "paired_seed_differences": [
+        -0.13496602232221389,
+        -0.10714500580166042,
+        -0.07984442345172993,
+        -0.11499763256140072,
+        -0.11131335470801218
+      ],
+      "mean_difference": -0.10965328776900343,
+      "retained_ci95": [
+        -0.1650708929103768,
+        -0.05135145586688491
+      ],
+      "new_bootstrap_run": false
+    },
+    {
+      "label": "Teacher \u00b7 robust motion",
+      "recomputed_mean_r2": 0.11420943905203321,
+      "recomputed_seed_sd": 0.02103595595261765,
+      "paired_seed_differences": [
+        -0.1529654340457497,
+        -0.13129878506330828,
+        -0.07865737692876029,
+        -0.08573924230599139,
+        -0.09300983417295017
+      ],
+      "mean_difference": -0.10833413450335197,
+      "retained_ci95": [
+        -0.17063963105124824,
+        -0.042307129099839885
+      ],
+      "new_bootstrap_run": false
+    },
+    {
+      "label": "Teacher \u00b7 region random",
+      "recomputed_mean_r2": 0.10944588689877721,
+      "recomputed_seed_sd": 0.008849221316525931,
+      "paired_seed_differences": [
+        -0.1393630300880646,
+        -0.11594711572195726,
+        -0.12146743665231485,
+        -0.08696253393219211,
+        -0.10174831688851094
+      ],
+      "mean_difference": -0.11309768665660795,
+      "retained_ci95": [
+        -0.1661916516988264,
+        -0.05962327557373979
+      ],
+      "new_bootstrap_run": false
+    },
+    {
+      "label": "Teacher \u00b7 connected region",
+      "recomputed_mean_r2": 0.10077719741431432,
+      "recomputed_seed_sd": 0.009239110300655202,
+      "paired_seed_differences": [
+        -0.16563570122716298,
+        -0.13569458341909468,
+        -0.12956001466246025,
+        -0.09183333130146742,
+        -0.08610825009516887
+      ],
+      "mean_difference": -0.12176637614107085,
+      "retained_ci95": [
+        -0.18278749531890806,
+        -0.05528134371715435
+      ],
+      "new_bootstrap_run": false
+    },
+    {
+      "label": "Direct pose summary",
+      "recomputed_mean_r2": 0.03454120636613722,
+      "recomputed_seed_sd": 0.0
+    }
+  ],
+  "three_mask_contrast_checks": "passed",
+  "initial_summary_increment": 0.15171641763478216
+}
