@@ -10,7 +10,7 @@ from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parents[3]
 NOTEBOOK_DIR = (
-    PROJECT_DIR / "notebooks" / "experiments" / "idea09_reflection_equivariance"
+    PROJECT_DIR / "notebooks" / "idea09_reflection_equivariance"
 )
 REPO_DIR = PROJECT_DIR.parents[2]
 EXPECTED_NOTEBOOKS = {
@@ -88,7 +88,7 @@ def main() -> None:
 
     for name in ("06_cpu_replication.ipynb", "07_gpu_replication.ipynb"):
         source = (NOTEBOOK_DIR / name).read_text(encoding="utf-8")
-        assert 'PROJECT_DIR / \\"notebooks\\" / \\"experiments\\" /' in source
+        assert 'PROJECT_DIR / \\"notebooks\\" /' in source
         assert '\\"idea09_reflection_equivariance\\" / name' in source
 
     generator_dir = (
@@ -105,7 +105,7 @@ def main() -> None:
         path = generator_dir / name
         source = path.read_text(encoding="utf-8")
         compile(source, str(path), "exec")
-        assert '"notebooks" / "experiments" / "idea09_reflection_equivariance"' in source
+        assert '"notebooks" / "idea09_reflection_equivariance"' in source
         if name == "build_reflection_amass_training_notebook.py":
             assert '"08_amass_core11_training.ipynb"' in source
         else:

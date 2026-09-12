@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
-NOTEBOOK = ROOT / "notebooks" / "experiments" / "idea09_reflection_equivariance" / "08_amass_core11_training.ipynb"
+NOTEBOOK = ROOT / "notebooks" / "idea09_reflection_equivariance" / "08_amass_core11_training.ipynb"
 
 
 def markdown(source: str) -> dict:

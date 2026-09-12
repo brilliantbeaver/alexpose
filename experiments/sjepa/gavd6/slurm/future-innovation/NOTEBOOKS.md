@@ -1,6 +1,14 @@
 # Run Experiment 0 through notebooks on HAIC
 
-The five notebooks in `notebooks/experiments/future_innovation/` now have three
+For the expanded **source learning curve**, use
+`bash slurm/future-innovation-scaling/launch/submit.sh notebooks` with
+`FI_RUN_ROOT` set to the source study. That executes
+[notebook 23](../../notebooks/future_innovation/23_source_learning_curves.ipynb); `all` in the
+same launcher also executes it after the pipeline. See the
+[source learning-curve guide](SOURCE_LEARNING_CURVE.md). The commands below are
+for the historical 50-clip gate notebooks 00–04.
+
+The five gate notebooks 00–04 in `notebooks/future_innovation/` have three
 modes: `teach` (small generated examples, the default), `inspect` (read saved
 artifacts), and `execute` (run the existing production CLI stages). Execution
 reproduces the full **Experiment 0 gate**, including all controls and nested

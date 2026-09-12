@@ -183,10 +183,10 @@ Use the new sequence to make the research questions explicit:
 
 | Notebook | Read or run it to establish |
 |---|---|
-| [19 — Evidence and observability](../../../19_evidence_and_observability.ipynb) | Which claims are measured, which are algebraic, and which still need experiments. |
-| [20 — Symmetry and temporal information](../../../20_symmetry_and_temporal_information.ipynb) | Why reflection, temporal order and prediction are distinct properties. |
-| [21 — Student-accessible future features](../../../21_student_accessible_future_features.ipynb) | How to inspect the separately fitted cached accessibility comparison. |
-| [22 — Selective future distillation](../../../22_selective_future_distillation.ipynb) | How to calibrate target selection and design the subsequent student study. |
+| [19 — Evidence and observability](../../../notebooks/iclr_bridge/19_evidence_and_observability.ipynb) | Which claims are measured, which are algebraic, and which still need experiments. |
+| [20 — Symmetry and temporal information](../../../notebooks/iclr_bridge/20_symmetry_and_temporal_information.ipynb) | Why reflection, temporal order and prediction are distinct properties. |
+| [21 — Student-accessible future features](../../../notebooks/iclr_bridge/21_student_accessible_future_features.ipynb) | How to inspect the separately fitted cached accessibility comparison. |
+| [22 — Selective future distillation](../../../notebooks/iclr_bridge/22_selective_future_distillation.ipynb) | How to calibrate target selection and design the subsequent student study. |
 
 The [notebook inventory](../../../work/artifacts/iclr-bridge-2026-09-11/future/notebook-inventory.csv)
 records the inspected files. Treat synthetic teaching output, saved real-data

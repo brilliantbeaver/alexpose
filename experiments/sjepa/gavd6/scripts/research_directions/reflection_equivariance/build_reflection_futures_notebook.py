@@ -8,7 +8,7 @@ from pathlib import Path
 import json
 
 ROOT = Path(__file__).resolve().parents[3]
-NB_PATH = ROOT / "notebooks" / "experiments" / "idea09_reflection_equivariance" / "02_futures_and_reach.ipynb"
+NB_PATH = ROOT / "notebooks" / "idea09_reflection_equivariance" / "02_futures_and_reach.ipynb"
 
 _CELL_N = [0]
 
@@ -64,13 +64,13 @@ if MODE not in {"smoke", "real"}:
 def project_root():
     '''Resolve the gavd6 root without requiring a GAVD artifact tree.'''
     for base in [Path.cwd(), *Path.cwd().parents]:
-        candidate = base / "notes" / "research" / "ideas" / "09-reflection-equivariant-symmetry-axis"
+        candidate = base / "notes" / "archive" / "portfolio-ideas" / "ideas" / "09-reflection-equivariant-symmetry-axis"
         if candidate.exists():
             return base
     return Path.cwd()
 
 PROJECT_DIR = project_root()
-IDEA9_DIR = PROJECT_DIR / "notes" / "research" / "ideas" / "09-reflection-equivariant-symmetry-axis"
+IDEA9_DIR = PROJECT_DIR / "notes" / "archive" / "portfolio-ideas" / "ideas" / "09-reflection-equivariant-symmetry-axis"
 RUN_ID = os.getenv("IDEA9_RUN_ID", f"idea9-{MODE}")
 OUT_DIR = Path(os.getenv(
     "IDEA9_OUTPUT_DIR", PROJECT_DIR / "artifacts" / "research" / "idea09" / RUN_ID

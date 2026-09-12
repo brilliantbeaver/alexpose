@@ -84,7 +84,7 @@ intersected across all required fits; held-out observations never select them.
 | Saved models and reports | `fi_scaling_training.py`; unique fit identities, all candidate records, selected coefficients, preprocessing/donors, predictions, paired uncertainty and an SVG curve |
 | CLI | `run_source_learning_curve.py` and the isolated `future_innovation_scaling.fi_scaling_cli` module; old gate initialization still requires 50 clips |
 | Slurm | Jobs 20–23 under `slurm/future-innovation-scaling/` and `submit-source-learning-curve.sh`; separate CPU/GPU stages, five-fold fit array, dependencies and explicit roots |
-| Notebook | [23_source_learning_curves.ipynb](../../../23_source_learning_curves.ipynb), generated from `build_source_learning_curve_notebook.py`; inspection does not fit or encode |
+| Notebook | [23_source_learning_curves.ipynb](../../../notebooks/future_innovation/23_source_learning_curves.ipynb), generated from `build_source_learning_curve_notebook.py`; inspection does not fit or encode |
 
 Review identified and repaired two additional integrity gaps before freezing the
 real study. First, a valid hash for a per-window receipt does not by itself check
@@ -170,8 +170,9 @@ git diff --check
 ```
 
 The [execution guide](../../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md)
-contains the complete local freeze command and HAIC submission/resumption
-commands. Completed real-data stages do not exist yet; completed fitting reuse
+provides the automatic HAIC submission path; the
+[advanced guide](../../../slurm/future-innovation/SOURCE_LEARNING_CURVE_DETAILS.md)
+retains the complete manual freeze and resumption commands. Completed real-data stages do not exist yet; completed fitting reuse
 was tested on an injected synthetic source-held fit, not an expanded real cohort.
 The actual new pose/teacher path has not been exercised on HAIC. Existing tests
 cover the reused decoder, controls, causal teacher interface and old resumption
@@ -214,3 +215,146 @@ measure the curve. A growing matched increment could support a frozen
 confirmation experiment. Better overall prediction with a flat increment would
 favor a separate target or representation study. The current work establishes
 neither outcome on the expanded real cohort.
+
+## September 12: simpler HAIC initialization
+
+The [short execution guide](../../../slurm/future-innovation/SOURCE_LEARNING_CURVE.md)
+now uses `FI_RUN_ROOT` and the existing README data/model variables. The new
+`slurm/future-innovation-scaling/launch/submit.sh all` schedules a CPU initialization
+job before the unchanged jobs 20–23. Initialization checks the direct-v2 parent,
+captures exposure metadata, runs synthetic calibration and freezes the source
+reservation. Users no longer need to assemble calibration paths or historical
+exposure arguments manually. Missing required input paths fail before submission.
+
+The packaged exposure CSV contains the same 128 recording IDs as the five
+verified historical inventories. Its provenance retains their original paths,
+digests and counts. New initialization also includes the parent and available
+sibling gate manifests; additional exposures and participant links have explicit
+optional inputs. This packaging changes how metadata reaches the freeze command,
+not the reservation rule or its limitations.
+
+The launcher lives in a nested directory outside the existing fingerprint globs.
+Every previously fingerprinted implementation file remains unchanged by this
+work. Its own files and input provenance are archived and bound into the new
+study's configuration. Calibration attempts and staged initialization support
+recovery without changing a completed reservation. Existing historical hashes
+are still enforced.
+
+An initial compatibility check found a pre-existing difference between the
+merged checkout and the September 11 scaling snapshot: a final blank line had
+been removed from `fi_scaling_nested.py`. The older calibration correctly failed
+the exact software check. The implementation was left intact and a fresh
+calibration was executed under the current fingerprint; no saved hash was edited.
+All six calibration criteria passed across 80 synthetic fit jobs. The
+[new calibration](../../../work/artifacts/source-learning-curve-launch-20260912/calibration/calibration.json)
+is software evidence, not a real-data learning curve.
+
+Validation ran 11 launcher tests and all 13 existing scaling tests successfully.
+The launcher tests cover real shell submission with a scheduler stand-in, dry
+runs on a new root, environment translation, missing/changed exposure evidence,
+parent/output protection, locks, calibration recovery, and interrupted freeze
+publication. A local integration check reused the passing current calibration
+and the verified real parent: it recovered after an injected publication failure,
+reproduced the saved source reservation exactly, and verified unchanged parent
+hashes and modification times. The temporary test study was not used for fitting.
+
+```bash
+.venv/bin/python scripts/research_directions/future_innovation/calibrate_source_learning_curve.py \
+  --output-root work/artifacts/source-learning-curve-launch-20260912/calibration
+
+FI_LAUNCH_TEST_CALIBRATION=work/artifacts/source-learning-curve-launch-20260912/calibration/calibration.json \
+  .venv/bin/python -m unittest discover -s tests -p 'test_future_innovation_launch.py' -v
+
+.venv/bin/python -m unittest discover -s tests -p 'test_future_innovation_scaling.py' -v
+```
+
+Shell syntax, documentation examples/links, Python syntax and whitespace checks
+passed. No HAIC jobs were submitted during this launcher revision, and no expanded
+real-data results are claimed. The manual freeze commands and exact-parent
+relocation requirements remain in the [advanced guide](../../../slurm/future-innovation/SOURCE_LEARNING_CURVE_DETAILS.md).
+
+## September 12: source notebook execution
+
+`launch/notebooks.py` now executes the canonical source learning-curve notebook
+in a fresh kernel using the selected interpreter and explicit `FI_RUN_ROOT`.
+The generator has a side-effect-free `render()` function, stable cell identities,
+and environment-based run selection; the regenerated source stays output-free.
+The notebook identifies its tables as saved, unverified values and labels
+synthetic reports explicitly. Its successful execution is separate from scientific
+completion or numerical verification.
+
+`submit.sh notebooks` schedules only CPU inspection job 24 and needs no parent
+cache, raw video or teacher resources. The launcher also appends job 24 to `all`,
+`compute`, `fit` and `report`. It uses `afterany` dependencies on every submitted
+predecessor, allowing an incomplete-evidence notebook after failures while
+waiting for the remaining jobs to settle. Jobs 19–23 keep their `afterok` chains.
+The historical gate notebooks and training implementation are unchanged.
+
+Execution writes unique notebook batches and separate JSON logs, with atomic
+per-cell checkpoints and OS locks. Failed cells retain their outputs and
+tracebacks; changed displayed inputs, incomplete cell execution, and kernel
+startup failures return nonzero. Completed batches and canonical sources cannot
+be overwritten by the runner. Kernel startup and channel cleanup are explicitly
+managed so startup failure cannot leave a notebook-client exit handler waiting
+on a nonexistent kernel.
+
+The [retained executed notebook](../../../outputs/future-innovation-source-curve-dev-20260911-v2/notebook_runs/manual-20260912T160403-4d747a14/23_source_learning_curves.ipynb)
+ran all five code cells successfully against the saved development study. It
+shows the existing cohort audit and the absence of expanded results. The
+[execution/validation record](../../../work/artifacts/source-learning-curve-notebooks-20260912/validation.json)
+confirms unchanged displayed artifacts, matching source/executor digests and
+no numerical reconstruction. Earlier executed batches remain preserved.
+
+Validation passed 10 new notebook tests, all 11 launcher tests and 10 historical
+notebook-execution tests: **31 tests passed**. Real kernels exercised incomplete
+input, a clearly labeled synthetic report with an embedded SVG, and a malformed
+JSON failure. Additional checks covered explicit run binding, source preservation,
+changed-input rejection, duplicate writers, kernel startup failure, selected
+environments, scheduler dependencies and exit-code propagation. The first local
+kernel tests were blocked by the sandbox's localhost-port restriction; they were
+rerun with the required execution permission. Shell/Python syntax, documentation
+commands/links and whitespace checks passed.
+
+```bash
+.venv/bin/python -m unittest discover -s tests -p 'test_future_innovation_scaling_notebooks.py' -v
+
+FI_LAUNCH_TEST_CALIBRATION=work/artifacts/source-learning-curve-launch-20260912/calibration/calibration.json \
+  .venv/bin/python -m unittest discover -s tests -p 'test_future_innovation_launch.py' -v
+
+.venv/bin/python -m unittest discover -s tests -p 'test_future_innovation_notebook_execution.py' -v
+
+uv run --no-sync python slurm/future-innovation-scaling/launch/notebooks.py \
+  --run-root outputs/future-innovation-source-curve-dev-20260911-v2
+```
+
+This is local notebook execution and scheduler testing with stand-ins. No HAIC
+job or expanded real-data fit was run for this change.
+
+### Notebook organization, 12 September 2026
+
+Notebook 23 now lives in
+[`notebooks/future_innovation/`](../../../notebooks/future_innovation/23_source_learning_curves.ipynb),
+alongside the Experiment 0 notebooks. The separate laterality-to-distillation
+tutorials 19–22 live in `notebooks/iclr_bridge/`. Their numbers and
+scientific content are preserved. Both generators, document links and the
+source-study notebook launcher use the new locations. The launcher resolves
+copied Markdown links from the source notebook's directory and records its
+repository-relative path with the existing source digest.
+
+The [relocation validation record](../../../work/artifacts/notebook-organization-20260912/validation.json)
+records successful execution of all five notebooks, **28 code cells**, and all
+10 source-notebook launcher regression tests. Each setup cell also found the
+repository when started from its notebook's new directory without `GAVD6_ROOT`.
+The six previously executed notebook copies retained their hashes, sizes and
+modification times. The bridge audit additionally verified preservation of 22
+external historical source files.
+
+The [new notebook 23 execution](../../../outputs/future-innovation-source-curve-dev-20260911-v2/notebook_runs/manual-20260912T164103-70df86ed/23_source_learning_curves.ipynb)
+used the existing saved study, left displayed inputs unchanged, and performed no
+numerical reconstruction. It still reports incomplete expanded results. This
+was exercised locally with:
+
+```bash
+.venv/bin/python slurm/future-innovation-scaling/launch/notebooks.py \
+  --run-root outputs/future-innovation-source-curve-dev-20260911-v2
+```

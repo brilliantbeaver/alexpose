@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
-NOTEBOOK_DIR = ROOT / "notebooks" / "experiments" / "idea09_reflection_equivariance"
+NOTEBOOK_DIR = ROOT / "notebooks" / "idea09_reflection_equivariance"
 
 
 def markdown(source: str) -> dict:
@@ -87,7 +87,7 @@ def find_notebook_root(start=None):
     for candidate in dict.fromkeys(candidates):
         if ((candidate / "src" / "gavd6_sjepa" / "research_directions"
              / "reflection_equivariance" / "jepa_model_architecture.py").is_file()
-                and (candidate / "notebooks" / "experiments" / "idea09_reflection_equivariance"
+                and (candidate / "notebooks" / "idea09_reflection_equivariance"
                      / "01_encoder_contract.ipynb").is_file()):
             return candidate
     searched = "\\n - ".join(str(path) for path in dict.fromkeys(candidates))
@@ -187,7 +187,7 @@ matching run directory.
             print(f"\\n=== {matching}: 09c → 09d → 09e ===")
             for name in child_notebooks:
                 notebook = nbformat.read(
-                    PROJECT_DIR / "notebooks" / "experiments" /
+                    PROJECT_DIR / "notebooks" /
                     "idea09_reflection_equivariance" / name,
                     as_version=4,
                 )

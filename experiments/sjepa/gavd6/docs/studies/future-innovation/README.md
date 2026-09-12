@@ -56,11 +56,11 @@ execution follows 00 → 04 through the shared run artifacts.
 
 | Notebook | Question | Existing pipeline stage |
 | --- | --- | --- |
-| [00 · Question and worked example](../../../notebooks/experiments/future_innovation/00_question_and_worked_example.ipynb) | What does a skeleton correction add to a video baseline? | Initialize or verify the run |
-| [01 · Cohort and alignment](../../../notebooks/experiments/future_innovation/01_cohort_and_alignment.ipynb) | Are the windows aligned and sources separated? | Candidate construction and pose extraction |
-| [02 · Teacher features and validity](../../../notebooks/experiments/future_innovation/02_teacher_features_and_validity.ipynb) | Are prefix inputs isolated and cached targets usable? | Feature cache and validity audits |
-| [03 · Predictors and controls](../../../notebooks/experiments/future_innovation/03_matched_predictors_and_controls.ipynb) | Does correctly paired motion help under a fair comparison? | Nested fitting and Slurm arrays |
-| [04 · Results and next decision](../../../notebooks/experiments/future_innovation/04_results_and_next_decision.ipynb) | What does the complete evidence justify next? | Existing gate decision and sealed report |
+| [00 · Question and worked example](../../../notebooks/future_innovation/00_question_and_worked_example.ipynb) | What does a skeleton correction add to a video baseline? | Initialize or verify the run |
+| [01 · Cohort and alignment](../../../notebooks/future_innovation/01_cohort_and_alignment.ipynb) | Are the windows aligned and sources separated? | Candidate construction and pose extraction |
+| [02 · Teacher features and validity](../../../notebooks/future_innovation/02_teacher_features_and_validity.ipynb) | Are prefix inputs isolated and cached targets usable? | Feature cache and validity audits |
+| [03 · Predictors and controls](../../../notebooks/future_innovation/03_matched_predictors_and_controls.ipynb) | Does correctly paired motion help under a fair comparison? | Nested fitting and Slurm arrays |
+| [04 · Results and next decision](../../../notebooks/future_innovation/04_results_and_next_decision.ipynb) | What does the complete evidence justify next? | Existing gate decision and sealed report |
 
 The default `teach` mode uses small generated examples, including only two CPU
 updates for one residual head. Those examples have no empirical interpretation

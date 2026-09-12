@@ -267,9 +267,9 @@ This proposal is reified as two runnable notebooks plus a full methodology docum
 
 - [METHODOLOGY.md](./METHODOLOGY.md): the historical scientific specification. Its former source fact sheets were retired; current literature notes are background only.
 
-- [01_probe.ipynb](../../../../../notebooks/experiments/idea05_signed_laterality/01_probe.ipynb): the decisive historical probe.
+- [01_probe.ipynb](../../../../../notebooks/idea05_signed_laterality/01_probe.ipynb): the decisive historical probe.
 
-- [02_futures_and_reach.ipynb](../../../../../notebooks/experiments/idea05_signed_laterality/02_futures_and_reach.ipynb): the historical pre-registration and reach scaffold.
+- [02_futures_and_reach.ipynb](../../../../../notebooks/idea05_signed_laterality/02_futures_and_reach.ipynb): the historical pre-registration and reach scaffold.
 
 The four possible futures and exactly what each one licenses:
 

@@ -13,12 +13,13 @@ The new cached experiment completed successfully but did not establish that bene
 | [05 — Extended abstract](05_extended_abstract.md), [PDF](05_extended_abstract.pdf) | Summarizes the proposed contribution and actual evidence without claiming unperformed experiments. |
 | [06 — Adversarial review and resolution](06_adversarial_review_and_resolution.md) | Records independent review findings, repairs and limits of the resulting claims. |
 
-The new source notebooks continue the laterality numbering in this repository's top level:
+The source notebooks preserve the laterality numbering in
+[`notebooks/iclr_bridge/`](../../../notebooks/iclr_bridge/README.md):
 
-1. [19 — Evidence and observability](../../../19_evidence_and_observability.ipynb)
-2. [20 — Symmetry and temporal information](../../../20_symmetry_and_temporal_information.ipynb)
-3. [21 — Actual cached comparison](../../../21_student_accessible_future_features.ipynb)
-4. [22 — Selective future-distillation design](../../../22_selective_future_distillation.ipynb)
+1. [19 — Evidence and observability](../../../notebooks/iclr_bridge/19_evidence_and_observability.ipynb)
+2. [20 — Symmetry and temporal information](../../../notebooks/iclr_bridge/20_symmetry_and_temporal_information.ipynb)
+3. [21 — Actual cached comparison](../../../notebooks/iclr_bridge/21_student_accessible_future_features.ipynb)
+4. [22 — Selective future-distillation design](../../../notebooks/iclr_bridge/22_selective_future_distillation.ipynb)
 
 All four execute as read-only inspection and labeled synthetic calculations. Executed copies, full evidence inventories and logs live in [the work artifact directory](../../../work/artifacts/iclr-bridge-2026-09-11). Real fit artifacts live in [the new run root](../../../outputs/iclr-bridge-cached-20260911). The historical laterality paper and notebooks and both original future-innovation runs are preserved. [Figures](figures/README.md) are supplied as editable SVGs with PDF companions; the results figure reads saved machine-readable scores.
 
