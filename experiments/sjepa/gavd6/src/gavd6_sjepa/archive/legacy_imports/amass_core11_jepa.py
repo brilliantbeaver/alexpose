@@ -3,8 +3,8 @@
 New code should import the reflection-equivariance implementation package.
 """
 
-from gavd6_sjepa.research_directions.reflection_equivariance import amass_core11_training_pipeline as _implementation
-from gavd6_sjepa.research_directions.reflection_equivariance.amass_core11_training_pipeline import *
+from gavd6_sjepa.research_directions.reflection_equivariance import amass_training as _implementation
+from gavd6_sjepa.research_directions.reflection_equivariance.amass_training import *
 
 
 def __getattr__(name: str):

@@ -1,7 +1,7 @@
 # Repaired JEPA experiment status
 
 > **Historical record.** This report predates the active
-> [swap probe](../studies/latent-laterality/swap-probe.md).
+> [swap probe](../studies/latent-laterality/results/swap-probe.md).
 > Its “no downstream probe” limitation describes the repository at the time of
 > the repair experiment and is not a statement about the current workflow.
 

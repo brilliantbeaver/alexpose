@@ -1,6 +1,6 @@
 # Reflection-equivariant representation: separating lateralized from symmetric gait by construction
 
-> **Historical protocol and notebooks:** [METHODOLOGY.md](./METHODOLOGY.md), [01](../../../../../notebooks/idea09_reflection_equivariance/01_encoder_contract.ipynb), [02](../../../../../notebooks/idea09_reflection_equivariance/02_futures_and_reach.ipynb), and the full-GAVD feasibility sequence [03](../../../../../notebooks/idea09_reflection_equivariance/03_gavd_contract.ipynb) → [04](../../../../../notebooks/idea09_reflection_equivariance/04_gavd_training.ipynb) → [05](../../../../../notebooks/idea09_reflection_equivariance/05_gavd_audit.ipynb). This archival material predates the repaired fixed-reflection contract in the current documentation.
+> **Historical protocol and notebooks:** [METHODOLOGY.md](METHODOLOGY.md), [01](../../../../../notebooks/reflection_equivariance/01_encoder_contract.ipynb), [02](../../../../../notebooks/reflection_equivariance/02_futures_and_reach.ipynb), and the full-GAVD feasibility sequence [03](../../../../../notebooks/reflection_equivariance/03_gavd_contract.ipynb) → [04](../../../../../notebooks/reflection_equivariance/04_gavd_training.ipynb) → [05](../../../../../notebooks/reflection_equivariance/05_gavd_audit.ipynb). This archival material predates the repaired fixed-reflection contract in the current documentation.
 
 ## 0. Implementation correction and notebook map
 
@@ -218,11 +218,11 @@ Reach tier (+2 to 3 weeks, marked honestly): the multi-view mirror-consistency c
 
 ## Figures
 
-![Signed-laterality decodability: retrained reflection-equivariant encoder vs standard d0acc262, per held-out source, with the pre-registered advantage annotated](./images/fig1.svg)
+![Signed-laterality decodability: retrained reflection-equivariant encoder vs standard d0acc262, per held-out source, with the pre-registered advantage annotated](images/fig1.svg)
 
 Fig 1: per held-out source, the signed-decodability R-squared of the by-construction reflection-equivariant encoder against the standard `d0acc262` encoder on item 05's frozen instrument, paired dot by dot, with the pre-registered 0.05 R-squared advantage drawn as the pass band. The by-construction encoder must beat `d0acc262` by at least that margin.
 
-![Mirror-slope check: decoded scalar on original versus anatomically mirrored input against the y = -x reflection line](./images/fig2.svg)
+![Mirror-slope check: decoded scalar on original versus anatomically mirrored input against the y = -x reflection line](images/fig2.svg)
 
 Fig 2: the mirror-slope check. Readout on the original input (x) against readout on the anatomically mirrored input (y), against the y = -x reflection line. The by-construction head lands exactly on y = -x (a mirror is guaranteed to negate its output), while the standard `d0acc262` encoder only approximates that line (a measured, approximate slope), which is the geometric core of the reflection-equivariance claim.
 

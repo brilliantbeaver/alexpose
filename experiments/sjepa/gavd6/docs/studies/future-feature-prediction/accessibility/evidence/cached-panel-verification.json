@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "supplement_version": "accessibility-verification-supplement-v1",
+  "supplement_code_sha256": "b61837d62d17a7547652649f6c3d8f0fd3d74801fe8096d852df6dc0a08d5ed1",
+  "original_verification": {
+    "status": "passed",
+    "version": "student-accessibility-v1",
+    "measurement_complete": true,
+    "scientific_status": "no_supported_temporal_lead",
+    "model_count": 40,
+    "prediction_rows": 102400,
+    "bootstrap_rows": 16000,
+    "source_artifacts_unchanged": true,
+    "parent_artifacts_unchanged": true,
+    "read_only": true,
+    "tolerance": {
+      "prediction_atol": 1e-10,
+      "prediction_rtol": 1e-10,
+      "score_atol": 1e-12,
+      "score_rtol": 1e-10
+    },
+    "verification_scope": "reload and refit selected linear models and preprocessing from declared training sources; reconstruct OOF, all bootstrap draws and report; inner losses are checked for pooling and selection but not independently refitted"
+  },
+  "checked_candidate_display_records": 1480,
+  "checked_fitted_state_diagnostics": 40,
+  "checks": {
+    "top_level_report_metadata": true,
+    "exact_completion_artifact_schema": true,
+    "completion_consistency": true,
+    "candidate_improvement_flags_reasons": true,
+    "outer_training_losses_and_dimensions": true,
+    "all_inner_outer_preprocessing": "reconstructed by original verifier",
+    "wall_time": "finite nonnegative value; elapsed timing is not independently reproducible"
+  },
+  "frozen_fitting_implementation_unchanged": true,
+  "sealed_run_unchanged": true,
+  "read_only": true,
+  "wall_seconds": 4.790173290995881,
+  "child_hash_size_mtime_unchanged": true
+}

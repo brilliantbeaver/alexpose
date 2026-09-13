@@ -244,10 +244,10 @@ The nearest neighbor is **plan/04, the motion-vs-position TARGET ablation**, whi
 
 ## Figures
 
-![Per-source AUC grid across scoring targets](./images/fig1.svg)
+![Per-source AUC grid across scoring targets](images/fig1.svg)
 *Figure 1: a 3 (target: position, motion, mix) by 4 grid of source-level AUC. The leftmost x-group is the PRIMARY mechanism-matched PD-versus-canonical-myopathic contrast (the loss-of-automaticity versus symmetric-myopathy axis); the remaining three are secondary exploratory lanes (stroke vs myo, the pooled PD+stroke vs myopathic+CP broad-abnormality lane, and the confounded normal-vs-abnormal lane), all canonical path except the flagged normal lane. Bootstrap CIs over held-out sources, plus a shuffled-motion control lane that must not beat motion.*
 
-![Velocity recoverability before and after orthogonalization](./images/fig2.svg)
+![Velocity recoverability before and after orthogonalization](images/fig2.svg)
 *Figure 2: scatter of raw residual-velocity recoverability R-squared versus the orthogonalized residual after regressing out fps, clip length, and provenance, per held-out source. The pre-registered floor is the untrained-encoder baseline plus 0.10; a source below the y = x line lost recoverability to nuisances.*
 
 ## Responsible use

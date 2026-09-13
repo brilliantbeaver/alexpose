@@ -9,14 +9,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .research_directions.reflection_equivariance.jepa_model_architecture import TrainConfig
+    from .research_directions.reflection_equivariance.jepa import TrainConfig
 
 __all__ = ["TrainConfig", "VARIANTS", "build_model"]
 
 
 def __getattr__(name: str):
     if name in __all__:
-        from .research_directions.reflection_equivariance import jepa_model_architecture
+        from .research_directions.reflection_equivariance import jepa as jepa_model_architecture
 
         return getattr(jepa_model_architecture, name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

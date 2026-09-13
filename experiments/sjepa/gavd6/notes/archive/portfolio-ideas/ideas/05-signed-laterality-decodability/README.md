@@ -253,11 +253,11 @@ Week 3 (30 Aug to 5 Sep 2026): produce the two figures, finalize the signed-deco
 
 ## Figures
 
-![Signed-laterality decodability against the raw-coordinate ceiling and untrained-encoder floor, per held-out source](./images/fig1.svg)
+![Signed-laterality decodability against the raw-coordinate ceiling and untrained-encoder floor, per held-out source](images/fig1.svg)
 
 Fig 1: Decoded signed-laterality scalar vs ground-truth signed target scatter, with R-squared, the raw-coordinate ceiling and untrained-encoder floor overlaid, one dot per held-out source.
 
-![Mirror-equivariance: original vs mirrored decoded scalar against the y = -x reflection line, with the mean/std-pooled negative-control cloud](./images/fig2.svg)
+![Mirror-equivariance: original vs mirrored decoded scalar against the y = -x reflection line, with the mean/std-pooled negative-control cloud](images/fig2.svg)
 
 Fig 2: Mirror-equivariance scatter of original vs mirrored decoded scalar against the y = -x line, with the mean/std-pooled negative-control cloud as reference.
 
@@ -265,15 +265,15 @@ Fig 2: Mirror-equivariance scatter of original vs mirrored decoded scalar agains
 
 This proposal is reified as two runnable notebooks plus a full methodology document, so the question above is not just described but executable. Nothing retrains the encoder; the primary arm is a test-time-only linear read of the frozen `d0acc262` tokens.
 
-- [METHODOLOGY.md](./METHODOLOGY.md): the historical scientific specification. Its former source fact sheets were retired; current literature notes are background only.
+- [METHODOLOGY.md](METHODOLOGY.md): the historical scientific specification. Its former source fact sheets were retired; current literature notes are background only.
 
-- [01_probe.ipynb](../../../../../notebooks/idea05_signed_laterality/01_probe.ipynb): the decisive historical probe.
+- [01_probe.ipynb](../../../../../notebooks/signed_laterality/01_probe.ipynb): the decisive historical probe.
 
-- [02_futures_and_reach.ipynb](../../../../../notebooks/idea05_signed_laterality/02_futures_and_reach.ipynb): the historical pre-registration and reach scaffold.
+- [02_futures_and_reach.ipynb](../../../../../notebooks/signed_laterality/02_futures_and_reach.ipynb): the historical pre-registration and reach scaffold.
 
 The four possible futures and exactly what each one licenses:
 
-![Idea 5 possible futures: simulated expected shapes for clean-flip positive, decodable-but-non-flipping, informative null, and artifact, on the decodability and mirror panels](./images/idea5_possible_futures.png)
+![Idea 5 possible futures: simulated expected shapes for clean-flip positive, decodable-but-non-flipping, informative null, and artifact, on the decodability and mirror panels](images/idea5_possible_futures.png)
 
 Fig 3: The four canonical futures as simulated expected shapes (not data). Top row is the decodability scatter (Lane A against the y = x identity); bottom row is the mirror scatter (against the y = -x reflection line). F1 clean-flip positive licenses both the decodability and the reflection-equivariance claim; F2 decodable-but-non-flipping licenses decodability but withholds equivariance; F3 informative null overturns the belief that the checkpoint organized a laterality axis; F4 artifact withdraws the signed claim because the side-agnostic mean/std control fired. Given that asymmetry is the project's weakest-decoded scalar (R-squared about 0.154), F2 or F3 are the a priori more likely futures, and both are publishable.
 

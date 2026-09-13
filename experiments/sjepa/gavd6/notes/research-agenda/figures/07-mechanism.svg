@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" role="img" aria-labelledby="title desc">
+<title id="title">Keep visible motion that joint positions can miss.</title>
+<desc id="desc">Test a limitation of the skeleton state, then add only the surface motion needed for a useful forecast. Design schematic. No experimental outcomes are shown.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9" fill="#64748b"/></marker></defs>
+<rect width="1440" height="800" fill="#ffffff"/>
+<text x="48" y="63" font-family="DejaVu Sans, sans-serif" font-size="34" font-weight="700" fill="#182b43" text-anchor="start">Keep visible motion that joint positions can miss.</text>
+<text x="48" y="104" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="400" fill="#64748b" text-anchor="start">Test a limitation of the skeleton state, then add only the surface motion needed for a useful forecast.</text>
+<rect x="48" y="166" width="315" height="424" rx="20" fill="#eef4fa"/>
+<circle cx="77" cy="196" r="15" fill="#2767b2"/>
+<text x="77" y="202" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="white" text-anchor="middle">1</text>
+<text x="205.5" y="244" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#182b43" text-anchor="middle">Same joint history</text>
+<line x1="143.5" y1="339.0" x2="143.5" y2="370.5" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="143.5" y1="370.5" x2="130.9" y2="396.4" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="143.5" y1="370.5" x2="157.5" y2="395.0" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="130.9" y1="396.4" x2="123.2" y2="420.2" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="157.5" y1="395.0" x2="165.2" y2="418.8" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="143.5" y1="339.0" x2="127.4" y2="345.3" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="143.5" y1="339.0" x2="159.6" y2="345.3" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="127.4" y1="345.3" x2="116.2" y2="365.6" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="116.2" y1="365.6" x2="112.0" y2="383.1" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="159.6" y1="345.3" x2="170.8" y2="365.6" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="170.8" y1="365.6" x2="175.0" y2="383.1" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<circle cx="143.5" cy="323.6" r="9.1" fill="white" stroke="#2767b2" stroke-width="2"/>
+<circle cx="143.5" cy="370.5" r="2.8" fill="#2767b2"/>
+<circle cx="130.9" cy="396.4" r="2.8" fill="#2767b2"/>
+<circle cx="157.5" cy="395.0" r="2.8" fill="#2767b2"/>
+<circle cx="123.2" cy="420.2" r="2.8" fill="#2767b2"/>
+<circle cx="165.2" cy="418.8" r="2.8" fill="#2767b2"/>
+<line x1="267.5" y1="339.0" x2="267.5" y2="370.5" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="267.5" y1="370.5" x2="254.9" y2="396.4" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="267.5" y1="370.5" x2="281.5" y2="395.0" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="254.9" y1="396.4" x2="247.2" y2="420.2" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="281.5" y1="395.0" x2="289.2" y2="418.8" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="267.5" y1="339.0" x2="251.4" y2="345.3" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="267.5" y1="339.0" x2="283.6" y2="345.3" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="251.4" y1="345.3" x2="240.2" y2="365.6" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="240.2" y1="365.6" x2="236.0" y2="383.1" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="283.6" y1="345.3" x2="294.8" y2="365.6" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="294.8" y1="365.6" x2="299.0" y2="383.1" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<circle cx="267.5" cy="323.6" r="9.1" fill="white" stroke="#2767b2" stroke-width="2"/>
+<circle cx="267.5" cy="370.5" r="2.8" fill="#2767b2"/>
+<circle cx="254.9" cy="396.4" r="2.8" fill="#2767b2"/>
+<circle cx="281.5" cy="395.0" r="2.8" fill="#2767b2"/>
+<circle cx="247.2" cy="420.2" r="2.8" fill="#2767b2"/>
+<circle cx="289.2" cy="418.8" r="2.8" fill="#2767b2"/>
+<text x="205.5" y="508" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">Validate actual input equality</text>
+<text x="205.5" y="540" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">Match the final image too</text>
+<line x1="367" y1="371" x2="387" y2="371" stroke="#64748b" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="391" y="166" width="315" height="424" rx="20" fill="#eef4fa"/>
+<circle cx="420" cy="196" r="15" fill="#2767b2"/>
+<text x="420" y="202" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="white" text-anchor="middle">2</text>
+<text x="548.5" y="244" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#182b43" text-anchor="middle">Different surface motion</text>
+<rect x="461.5" y="303" width="54" height="138" rx="26" fill="white" stroke="#087f78" stroke-width="2"/>
+<line x1="488.5" y1="322" x2="488.5" y2="422" stroke="#2767b2" stroke-width="5" stroke-linecap="round"/>
+<circle cx="488.5" cy="322" r="6" fill="#2767b2"/>
+<circle cx="488.5" cy="422" r="6" fill="#2767b2"/>
+<circle cx="505.5" cy="352" r="6" fill="#087f78"/>
+<circle cx="473.5" cy="400" r="6" fill="#087f78"/>
+<path d="M451.5,362 Q488.5,390 525.5,362" stroke="#087f78" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="581.5" y="303" width="54" height="138" rx="26" fill="white" stroke="#ba4256" stroke-width="2"/>
+<line x1="608.5" y1="322" x2="608.5" y2="422" stroke="#2767b2" stroke-width="5" stroke-linecap="round"/>
+<circle cx="608.5" cy="322" r="6" fill="#2767b2"/>
+<circle cx="608.5" cy="422" r="6" fill="#2767b2"/>
+<circle cx="591.5" cy="352" r="6" fill="#ba4256"/>
+<circle cx="623.5" cy="400" r="6" fill="#ba4256"/>
+<path d="M571.5,362 Q608.5,390 645.5,362" stroke="#ba4256" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="548.5" y="508" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">A visible pattern can rotate</text>
+<text x="548.5" y="540" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">Joint endpoints stay fixed</text>
+<line x1="710" y1="371" x2="730" y2="371" stroke="#64748b" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="734" y="166" width="315" height="424" rx="20" fill="#eef4fa"/>
+<circle cx="763" cy="196" r="15" fill="#2767b2"/>
+<text x="763" y="202" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="white" text-anchor="middle">3</text>
+<text x="891.5" y="244" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#182b43" text-anchor="middle">Add a few probes</text>
+<line x1="891.5" y1="331.8" x2="891.5" y2="371.4" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="891.5" y1="371.4" x2="875.66" y2="403.96" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="891.5" y1="371.4" x2="909.1" y2="402.2" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="875.66" y1="403.96" x2="865.98" y2="433.88" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="909.1" y1="402.2" x2="918.78" y2="432.12" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="891.5" y1="331.8" x2="871.26" y2="339.72" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="891.5" y1="331.8" x2="911.74" y2="339.72" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="871.26" y1="339.72" x2="857.18" y2="365.24" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="857.18" y1="365.24" x2="851.9" y2="387.24" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="911.74" y1="339.72" x2="925.82" y2="365.24" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<line x1="925.82" y1="365.24" x2="931.1" y2="387.24" stroke="#2767b2" stroke-width="4" stroke-linecap="round"/>
+<circle cx="891.5" cy="312.44" r="11.44" fill="white" stroke="#2767b2" stroke-width="2"/>
+<circle cx="891.5" cy="371.4" r="3.52" fill="#2767b2"/>
+<circle cx="875.66" cy="403.96" r="3.52" fill="#2767b2"/>
+<circle cx="909.1" cy="402.2" r="3.52" fill="#2767b2"/>
+<circle cx="865.98" cy="433.88" r="3.52" fill="#2767b2"/>
+<circle cx="918.78" cy="432.12" r="3.52" fill="#2767b2"/>
+<circle cx="860.5" cy="346" r="6" fill="#087f78"/>
+<line x1="860.5" y1="346" x2="874.5" y2="336" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="922.5" cy="346" r="6" fill="#087f78"/>
+<line x1="922.5" y1="346" x2="936.5" y2="336" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="852.5" cy="371" r="6" fill="#087f78"/>
+<line x1="852.5" y1="371" x2="866.5" y2="361" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="930.5" cy="371" r="6" fill="#087f78"/>
+<line x1="930.5" y1="371" x2="944.5" y2="361" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="878.5" cy="391" r="6" fill="#087f78"/>
+<line x1="878.5" y1="391" x2="892.5" y2="381" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="904.5" cy="391" r="6" fill="#087f78"/>
+<line x1="904.5" y1="391" x2="918.5" y2="381" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="867.5" cy="424" r="6" fill="#087f78"/>
+<line x1="867.5" y1="424" x2="881.5" y2="414" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<circle cx="916.5" cy="424" r="6" fill="#087f78"/>
+<line x1="916.5" y1="424" x2="930.5" y2="414" stroke="#087f78" stroke-width="2" stroke-linecap="round"/>
+<text x="891.5" y="508" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">4, 8 or 16 flow tokens</text>
+<text x="891.5" y="540" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">Keep uncertain evidence</text>
+<line x1="1053" y1="371" x2="1073" y2="371" stroke="#64748b" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1077" y="166" width="315" height="424" rx="20" fill="#eef4fa"/>
+<circle cx="1106" cy="196" r="15" fill="#2767b2"/>
+<text x="1106" y="202" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="400" fill="white" text-anchor="middle">4</text>
+<text x="1234.5" y="244" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#182b43" text-anchor="middle">Forecast new motion</text>
+<path d="M1128.5,347.0 L1131.2,345.0 L1133.8,343.1 L1136.5,341.2 L1139.1,339.3 L1141.8,337.4 L1144.4,335.7 L1147.0,333.9 L1149.7,332.3 L1152.3,330.8 L1155.0,329.3 L1157.7,328.0 L1160.3,326.8 L1163.0,325.7 L1165.6,324.7 L1168.2,323.9 L1170.9,323.2 L1173.5,322.7 L1176.2,322.3 L1178.8,322.1 L1181.5,322.0 L1184.2,322.1 L1186.8,322.3 L1189.5,322.7 L1192.1,323.2 L1194.8,323.9 L1197.4,324.7 L1200.0,325.7 L1202.7,326.8 L1205.3,328.0 L1208.0,329.3 L1210.7,330.8 L1213.3,332.3 L1216.0,333.9 L1218.6,335.7 L1221.2,337.4 L1223.9,339.3 L1226.5,341.2 L1229.2,343.1 L1231.8,345.0 L1234.5,347.0 L1237.2,349.0 L1239.8,350.9 L1242.5,352.8 L1245.1,354.7 L1247.8,356.6 L1250.4,358.3 L1253.0,360.1 L1255.7,361.7 L1258.3,363.2 L1261.0,364.7 L1263.7,366.0 L1266.3,367.2 L1269.0,368.3 L1271.6,369.3 L1274.2,370.1 L1276.9,370.8 L1279.5,371.3 L1282.2,371.7 L1284.8,371.9 L1287.5,372.0 L1290.2,371.9 L1292.8,371.7 L1295.5,371.3 L1298.1,370.8 L1300.8,370.1 L1303.4,369.3 L1306.0,368.3 L1308.7,367.2 L1311.3,366.0 L1314.0,364.7 L1316.7,363.2 L1319.3,361.7 L1322.0,360.1 L1324.6,358.3 L1327.2,356.6 L1329.9,354.7 L1332.5,352.8 L1335.2,350.9 L1337.8,349.0 L1340.5,347.0" stroke="#2767b2" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1128.5,389.1 L1131.2,387.7 L1133.8,386.4 L1136.5,385.3 L1139.1,384.2 L1141.8,383.2 L1144.4,382.4 L1147.0,381.7 L1149.7,381.1 L1152.3,380.6 L1155.0,380.3 L1157.7,380.1 L1160.3,380.0 L1163.0,380.1 L1165.6,380.3 L1168.2,380.6 L1170.9,381.1 L1173.5,381.7 L1176.2,382.4 L1178.8,383.2 L1181.5,384.2 L1184.2,385.3 L1186.8,386.4 L1189.5,387.7 L1192.1,389.1 L1194.8,390.5 L1197.4,392.0 L1200.0,393.6 L1202.7,395.2 L1205.3,396.9 L1208.0,398.6 L1210.7,400.3 L1213.3,402.0 L1216.0,403.7 L1218.6,405.4 L1221.2,407.1 L1223.9,408.8 L1226.5,410.4 L1229.2,412.0 L1231.8,413.5 L1234.5,414.9 L1237.2,416.3 L1239.8,417.6 L1242.5,418.7 L1245.1,419.8 L1247.8,420.8 L1250.4,421.6 L1253.0,422.3 L1255.7,422.9 L1258.3,423.4 L1261.0,423.7 L1263.7,423.9 L1266.3,424.0 L1269.0,423.9 L1271.6,423.7 L1274.2,423.4 L1276.9,422.9 L1279.5,422.3 L1282.2,421.6 L1284.8,420.8 L1287.5,419.8 L1290.2,418.7 L1292.8,417.6 L1295.5,416.3 L1298.1,414.9 L1300.8,413.5 L1303.4,412.0 L1306.0,410.4 L1308.7,408.8 L1311.3,407.1 L1314.0,405.4 L1316.7,403.7 L1319.3,402.0 L1322.0,400.3 L1324.6,398.6 L1327.2,396.9 L1329.9,395.2 L1332.5,393.6 L1335.2,392.0 L1337.8,390.5 L1340.5,389.1" stroke="#087f78" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="1165.5" cy="380.2607519796967" r="5" fill="#087f78"/>
+<circle cx="1234.5" cy="414.9312755504344" r="5" fill="#087f78"/>
+<circle cx="1304.5" cy="411.34353891058066" r="5" fill="#087f78"/>
+<text x="1234.5" y="508" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">Unedited AMASS trajectories</text>
+<text x="1234.5" y="540" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#64748b" text-anchor="middle">Model-derived surface targets</text>
+<rect x="48" y="660" width="1344" height="78" rx="20" fill="#edf7f5"/>
+<text x="72" y="692" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#087f78" text-anchor="start">Flow is additional evidence from the same pixels. It is neither independent ground truth nor a unique 3D explanation.</text>
+<text x="48" y="774" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" fill="#64748b" text-anchor="start">Design schematic. No experimental outcomes are shown.</text>
+</svg>

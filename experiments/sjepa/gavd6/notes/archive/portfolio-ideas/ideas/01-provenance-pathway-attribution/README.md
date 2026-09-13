@@ -248,10 +248,10 @@ The nearest neighbor is `plan/06`, the missingness/visibility confound control. 
 
 ## Figures
 
-![Provenance decodability across lanes under one checkpoint](./images/fig1.svg)
+![Provenance decodability across lanes under one checkpoint](images/fig1.svg)
 Fig 1: Grouped bar chart of provenance-decodability balanced accuracy (embedding vs missingness-only visibility feature vs untrained-encoder vs chance) with a source-permutation null band, all under one checkpoint fingerprint.
 
-![Within-normal provenance separability against the source-identity ceiling](./images/fig2.svg)
+![Within-normal provenance separability against the source-identity ceiling](images/fig2.svg)
 Fig 2: Two-panel dot plot of within-normal 12-canonical-vs-63-augmented provenance separability against the source-identity upper bound and the leave-one-normal-video-out diagnostic bound with augmented subsampled to 12.
 
 ## Responsible use

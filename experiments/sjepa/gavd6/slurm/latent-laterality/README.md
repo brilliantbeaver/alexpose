@@ -3,10 +3,10 @@
 **Current decision:** seed-7 AMASS v2 validation completed and the uniform
 control reproduced SG-JEPA's gain. Confirmation stopped. Do not submit jobs
 15/16 under the current plan; keep the test split sealed. See the
-[completed findings](../../docs/studies/latent-laterality/study-so-far.md).
+[completed findings](../../docs/studies/latent-laterality/results/validation.md).
 
 The numbered files cover three workflows; they are **not** one submission chain.
-See the [HAIC run guide](../../docs/studies/latent-laterality/haic-run-guide.md)
+See the [HAIC run guide](../../docs/studies/latent-laterality/execution/haic.md)
 for the environment contract, submission commands, and scientific decisions.
 
 | Workflow | Jobs | Order and decision points |
@@ -38,7 +38,7 @@ Submit from `$GAVD6_ROOT` after preparing its `uv` environment. Jobs use
 directory. Array logs include both the job and task IDs. Resource requests,
 arm mappings, seeds, and CLI arguments remain explicit in each batch file.
 
-`ll-common.sh` provides shared setup, input/output checks, and array-index
+`common.sh` provides shared setup, input/output checks, and array-index
 validation. Each job sources it through `GAVD6_ROOT`, so it also works when
 Slurm executes a spool copy. Deploy the whole directory together. Jobs reject
 existing output manifests, non-empty output directories, and symlink outputs.

@@ -1,30 +1,28 @@
 # Research notebook builders
 
-The [Future Innovation maintenance guide](future_innovation/future_innovation_tutorial_guide.md)
-covers its five connected tutorials, selective generation, source checks and
-fresh-kernel verification. Its builder is
-`future_innovation/build_future_innovation_notebooks.py`.
+Generated notebooks are organized by study. These builders own their cell sources; existing script paths remain stable execution interfaces.
 
-These scripts are the authoritative cell-source representation for generated
-research notebooks. Run them from the project root with `uv`:
+| Study and notebook destination | Builders |
+| --- | --- |
+| [Motion preservation](../../notebooks/motion_preservation/README.md) | [build_notebooks.py](motion_preservation/build_notebooks.py) |
+| [Future-feature prediction gate](../../notebooks/future_innovation) | [build_notebooks.py](future_prediction/build_notebooks.py) |
+| [Source scaling](../../notebooks/source_scaling) | [build_notebook.py](source_scaling/build_notebook.py) |
+| [Target accessibility](../../notebooks/target_accessibility/README.md) | [build_notebooks.py](target_accessibility/build_notebooks.py) |
+| [Reflection equivariance](../../notebooks/reflection_equivariance) | [Encoder contract](reflection_equivariance/build_encoder_notebook.py), [futures](reflection_equivariance/build_extension_notebook.py), [GAVD](reflection_equivariance/build_gavd_notebooks.py), [replication](reflection_equivariance/build_replication_notebooks.py), [AMASS training](reflection_equivariance/build_amass_notebook.py) |
+| [Signed-laterality probes](../../notebooks/signed_laterality) | [Probe](signed_laterality/build_probe_notebook.py), [futures](signed_laterality/build_extension_notebook.py) |
+
+Run the selected script from the project root, for example:
 
 ```bash
-uv run python scripts/research_directions/signed_laterality/build_signed_laterality_probe_notebook.py
-uv run python scripts/research_directions/signed_laterality/build_signed_laterality_futures_notebook.py
-uv run python scripts/research_directions/reflection_equivariance/build_reflection_encoder_contract_notebook.py
-uv run python scripts/research_directions/reflection_equivariance/build_reflection_futures_notebook.py
-uv run python scripts/research_directions/reflection_equivariance/build_reflection_gavd_notebooks.py
-uv run python scripts/research_directions/reflection_equivariance/build_reflection_replication_notebooks.py
-uv run python scripts/research_directions/reflection_equivariance/build_reflection_amass_training_notebook.py
+uv run python scripts/research_directions/motion_preservation/build_notebooks.py
 ```
 
-Builders reset cell outputs. Preserve an executed notebook as a run artifact
-before regenerating it if its outputs matter. After rebuilding reflection-
-equivariance notebooks, run:
+Builders reset cell outputs. Preserve scientifically relevant executed notebooks in their run bundles before regeneration. Notebook aliases under earlier directory names identify the same canonical files.
+
+The [prediction-gate maintenance guide](future_prediction/README.md) covers selective generation and fresh-kernel verification. Motion-preservation and scaling notebook tests check their builders against the saved sources. After rebuilding reflection-equivariance notebooks, run:
 
 ```bash
 uv run gavd6 notebooks validate
 ```
 
-The validator checks cell syntax, cell IDs, root discovery from multiple
-working directories, and builder references.
+That validator checks cell syntax, cell IDs, root discovery from multiple working directories, and builder references. It does not execute a research experiment or establish a model result.

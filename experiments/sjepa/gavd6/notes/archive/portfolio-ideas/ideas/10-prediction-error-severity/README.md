@@ -198,11 +198,11 @@ Reach tier (beyond Week 3, honestly marked): PhysioNet Gait-in-PD (gaitpdb, 93 P
 
 ## Figures
 
-![Synthetic-injection direction test with random-encoder control](./images/fig1.svg)
+![Synthetic-injection direction test with random-encoder control](images/fig1.svg)
 
 Fig 1: the synthetic-injection direction test. Two stacked sub-panels share an injection-magnitude x axis. Under the one-sided knee-flexion injection the asymmetry-channel relative error (warm) rises steeply while the posture channel (blue) stays flat; under the symmetric proximal-deficit injection the posture channel rises while asymmetry stays flat. A grey dashed random-encoder control lane stays flat in both panels, and a dark card lists the pre-registered margins over that control (matched rise at least 0.05 over the floor, selectivity at least 0.05 over the other channel, at least 80 percent of the raw-coordinate ceiling, monotone across at least 3 magnitudes).
 
-![Mechanism-channel error decomposition on the lower-body skeleton](./images/fig2.svg)
+![Mechanism-channel error decomposition on the lower-body skeleton](images/fig2.svg)
 
 Fig 2: the mechanism-channel error decomposition. The left card shows a desaturated lower-body stick skeleton with warm halos whose size marks per-token relative error, bracketed into the posture (pelvis, trunk) and asymmetry (left vs right limb) channels, with the rhythm channel noted as temporal and exploratory. The right card is a bar chart of per-channel relative error on a held-out abnormal source, with a near-tautology control bar (error beyond the injected coordinate) held low to show the signal is not merely echoing the perturbed coordinate.
 

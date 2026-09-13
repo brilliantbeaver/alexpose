@@ -2,7 +2,7 @@
 
 > **Scope:** this guide documents the historical foundation notebooks and their
 > duplicated classes. Use the [study index](../studies/) for current research
-> status and the [Future Innovation tutorial](../studies/future-innovation/) for
+> status and the [Future Innovation tutorial](../studies/future-feature-prediction/) for
 > the frozen-video-teacher feasibility workflow.
 
 This tutorial explains how `SkeletonPatchEncoder`, `SkeletonPredictor`, and `SJEPAGait` work in this project. It also covers the preprocessing, masking, loss, pooling, replay, and diagnostic helpers that make the classes usable as a training system.
@@ -22,10 +22,10 @@ The goal is to make every tensor transformation and state update inspectable. By
 
 The core class cell is currently duplicated byte-for-byte in four notebooks:
 
-- [00_sjepa_from_first_principles.ipynb](../../notebooks/foundations/00_sjepa_from_first_principles.ipynb), the smallest teaching path;
-- [04_pretrain_sjepa_on_normal.ipynb](../../notebooks/foundations/04_pretrain_sjepa_on_normal.ipynb), the full training path and the main source for this guide;
-- [05_inspect_latent_motion.ipynb](../../notebooks/foundations/05_inspect_latent_motion.ipynb), the representation inspection path;
-- [06_capstone_health_condition_classifiers.ipynb](../../notebooks/foundations/06_capstone_health_condition_classifiers.ipynb), the downstream readout path.
+- [00_sjepa_from_first_principles.ipynb](../../notebooks/gait_classification/00_sjepa_basics.ipynb), the smallest teaching path;
+- [04_pretrain_sjepa_on_normal.ipynb](../../notebooks/gait_classification/04_staged_training.ipynb), the full training path and the main source for this guide;
+- [05_inspect_latent_motion.ipynb](../../notebooks/gait_classification/05_representation_analysis.ipynb), the representation inspection path;
+- [06_capstone_health_condition_classifiers.ipynb](../../notebooks/gait_classification/06_gait_classifiers.ipynb), the downstream readout path.
 
 The duplication is convenient for standalone notebooks, but it creates a maintenance risk. A class change must be synchronized across all four copies and tested in every consumer.
 

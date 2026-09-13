@@ -175,11 +175,11 @@ Reach tier (extra weeks, NOT in the core three): any clinical-accuracy statement
 
 ## Figures
 
-![Leave-one-view-out feature drift: view-conditioned no-flip predictor vs flip-augmented baseline vs Procrustes raw-coordinate baseline, per held-out camera view](./images/fig1.svg)
+![Leave-one-view-out feature drift: view-conditioned no-flip predictor vs flip-augmented baseline vs Procrustes raw-coordinate baseline, per held-out camera view](images/fig1.svg)
 
 Fig 1: held-out-view feature drift (lower is better) for one point per held-out camera view across the public multi-view cohorts CASIA-B, OU-MVLP-Pose, GREW, and Gait3D. Lane A (view-conditioned, no-flip, warm) sits lowest, Lane B (flip-augmented, blue) sits higher, and Lane C (Procrustes raw-coordinate, grey) sits highest. A bracket marks the pre-registered relative drift-reduction margin of at least 10 percent between Lane A and Lane B, and a dark pass card states the full margin (Lane A drift at most 0.90 times Lane B drift, and reconstruction at least matching Lane B). The cohorts are non-clinical multi-view pose and the figure shows illustrative expected shape, not measured results.
 
-![Mirror-equivariance of the signed-asymmetry probe against the y = -x reflection line, no-flip predictor vs flip-augmented baseline](./images/fig2.svg)
+![Mirror-equivariance of the signed-asymmetry probe against the y = -x reflection line, no-flip predictor vs flip-augmented baseline](images/fig2.svg)
 
 Fig 2: signed-asymmetry scalar decoded from the original input (x) versus the same scalar decoded from the left-right-flipped input (y), against the green dashed reflection line y equals minus x. The no-flip view-conditioned predictor (warm) preserves the sign and falls along y equals minus x, so a mirror correctly inverts it. The flip-augmented baseline (blue) collapses the sign toward y equals plus x, so a mirror does not invert it and the lateralized axis is destroyed. The two behaviors are labeled side by side, separating the invariance benefit from the asymmetry-protection benefit; the encoder read is credited only above the raw-coordinate signed left-minus-right null (Lane E). The figure shows illustrative expected shape, not measured results.
 

@@ -3,8 +3,8 @@
 New code should import the reflection-equivariance implementation package.
 """
 
-from gavd6_sjepa.research_directions.reflection_equivariance import jepa_model_architecture as _implementation
-from gavd6_sjepa.research_directions.reflection_equivariance.jepa_model_architecture import *
+from gavd6_sjepa.research_directions.reflection_equivariance import jepa as _implementation
+from gavd6_sjepa.research_directions.reflection_equivariance.jepa import *
 
 
 def __getattr__(name: str):
