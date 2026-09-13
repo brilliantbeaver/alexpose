@@ -1,7 +1,7 @@
 """Compatibility imports for the renamed swap-probe evaluation pipeline."""
 
-from gavd6_sjepa.research_directions.reflection_equivariance import swap_probe_evaluation_pipeline as _implementation
-from gavd6_sjepa.research_directions.reflection_equivariance.swap_probe_evaluation_pipeline import *
+from gavd6_sjepa.research_directions.reflection_equivariance import swap_probe as _implementation
+from gavd6_sjepa.research_directions.reflection_equivariance.swap_probe import *
 
 
 def __getattr__(name: str):

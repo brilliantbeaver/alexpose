@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Independent notebook submission path; the original CLI jobs remain available.
+set -euo pipefail
+phase="${1:-}"
+if [[ "$phase" != prepare && "$phase" != compute && "$phase" != all && "$phase" != cached ]]; then
+  echo "Usage: bash slurm/future-prediction/submit-notebooks.sh prepare|compute|all|cached" >&2
+  exit 2
+fi
+: "${GAVD6_ROOT:=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)}"
+source "$GAVD6_ROOT/slurm/future-prediction/common.sh"
+if [[ "$phase" == compute && ! -f "$FI_RUN_ROOT/config/cohort-contract.json" ]]; then
+  echo "No completed cohort at $FI_RUN_ROOT. Run prepare and wait, or use all." >&2
+  exit 1
+fi
+mkdir -p "$FI_RUN_ROOT/notebook_runs"
+# One shared, notebook-only folder for this submission; every array task inherits it.
+export FI_NOTEBOOK_OUTPUT_DIR="$(mktemp -d "$FI_RUN_ROOT/notebook_runs/haic-XXXXXXXX")"
+export FI_NOTEBOOK_ARRAY=1
+echo "Executed notebooks: $FI_NOTEBOOK_OUTPUT_DIR"
+submit_notebook() {
+  local label="$1" script="$2" dependency="$3" suffix='%j' job
+  [[ "$label" != fit ]] || suffix='%A_%a'
+  local options=(--parsable --export=ALL --kill-on-invalid-dep=yes --chdir="$GAVD6_ROOT"
+                 --output="$FI_RUN_ROOT/logs/notebook-$label-$suffix.out"
+                 --error="$FI_RUN_ROOT/logs/notebook-$label-$suffix.err")
+  [[ -z "$dependency" ]] || options+=(--dependency="$dependency")
+  # Explicitly propagate sbatch failure even when this function is command-substituted.
+  if ! job="$(sbatch "${options[@]}" "$GAVD6_ROOT/slurm/future-prediction/$script")"; then
+    echo "Notebook submission failed at $label; see logs/notebook-submissions.tsv for earlier jobs." >&2
+    return 1
+  fi
+  job="${job%%;*}"
+  [[ "$job" =~ ^[0-9]+$ ]] || { echo "Invalid sbatch response: $job" >&2; return 1; }
+  printf '%s\t%s\t%s\n' "$label" "$job" "$dependency" >> "$FI_RUN_ROOT/logs/notebook-submissions.tsv"
+  printf '%s\n' "$job"
+}
+if [[ "$phase" == cached ]]; then
+  : "${FI_PARENT_ROOT:?Export FI_PARENT_ROOT for direct-v3}"
+  : "${FI_CALIBRATION:?Export FI_CALIBRATION for direct-v3}"
+  export FI_EXPERIMENT_PROTOCOL=direct-v3
+fi
+teacher_dependency=''
+report_jobs=''
+if [[ "$phase" == prepare || "$phase" == all || "$phase" == cached ]]; then
+  setup="$(submit_notebook setup notebooks/setup.sbatch '')"
+  cohort="$(submit_notebook cohort notebooks/cohort.sbatch "afterok:$setup")"
+  echo "Submitted notebook setup=$setup cohort=$cohort."
+  teacher_dependency="afterok:$cohort"
+  report_jobs="$setup:$cohort:"
+fi
+if [[ "$phase" == compute || "$phase" == all || "$phase" == cached ]]; then
+  teacher_script=notebooks/teacher-cache.sbatch
+  [[ "$phase" != cached ]] || teacher_script=notebooks/reuse-cache.sbatch
+  teacher="$(submit_notebook teacher "$teacher_script" "$teacher_dependency")"
+  # Save the blocked notebook after an audit failure. The production CLI still
+  # prohibits fitting unless every required audit passes.
+  fit="$(submit_notebook fit notebooks/fit.sbatch "afterany:$teacher")"
+  report="$(submit_notebook report notebooks/report.sbatch "afterany:${report_jobs}$teacher:$fit")"
+  echo "Submitted notebook teacher=$teacher fit=$fit report=$report."
+fi

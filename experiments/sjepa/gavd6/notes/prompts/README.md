@@ -1,27 +1,17 @@
-# Recent research prompts
+# Research request history
 
-These files record requests and design intent. They are not live execution
-orders. Follow the [study index](../../docs/studies/) and identified run
-artifacts for current evidence and next actions.
+Original requests live with the study or planning portfolio they informed. They record design intent, not current execution instructions. Use the [study index](../../docs/studies/README.md) for current status and evidence.
 
-| Prompt | Resulting material |
+| Request | Owning material |
 | --- | --- |
-| [01 · Latent laterality](01_latent_laterality.md) | [Theory, proposal and experiments](../latent-laterality/); confirmation has since stopped |
-| [02 · Next-action prediction](02_next_action_prediction.md) | [World-model idea exploration](../world-model-extensions/) |
-| [03 · Gait JEPA](03_gait_jepa.md) | [Second proposal collection](../world-model-extensions/proposals-02/) |
-| [04 · Biomechanics JEPA](04_biomech_jepa.md) | [Third proposal collection](../world-model-extensions/proposals-03/) |
-| [05 · Cross-protocol setup](05_cross_protocol_setup.md) | [Availability and harmonization guide](../cross-protocol-perturbation-response/) |
-| [06 · Future innovation](06_future_innovation.md) | [Implemented study and tutorials](../../docs/studies/future-innovation/) |
+| [Latent laterality](../../docs/studies/latent-laterality/development/prompts/study.md) | [Laterality protocol](../../docs/studies/latent-laterality/protocol/); confirmation stopped |
+| [World models](../archive/research-planning/prompts/world-models.md) | [Earlier research planning](../archive/research-planning/README.md) |
+| [Gait JEPA](../../docs/studies/gait-classification/development/prompts/gait-jepa.md) | [Gait-classification history](../../docs/studies/gait-classification/) |
+| [Biomechanics JEPA](../archive/research-planning/prompts/biomechanics.md) | [Third proposal collection](../archive/research-planning/proposals-03/) |
+| [Cross-protocol setup](../../docs/studies/perturbation-response/development/setup-prompt.md) | [Perturbation-response protocol](../../docs/studies/perturbation-response/) |
+| [Future innovation](../../docs/studies/future-feature-prediction/gate/prompts/study.md) | [Prediction gate](../../docs/studies/future-feature-prediction/gate/) |
+| [Gate repair](../../docs/studies/future-feature-prediction/gate/prompts/model-repair.md) | [Prediction-gate results](../../docs/studies/future-feature-prediction/gate/results.md) |
+| [Laterality manuscript](../../docs/studies/latent-laterality/development/prompts/manuscript.md) | Historical request concerning the separate laterality manuscript workspace |
+| [Research agenda](../research-agenda/development/research-prompt.md) | [Selected study and deferred alternatives](../research-agenda/README.md) |
 
-For further work, make four outputs explicit in the request:
-
-1. Review identified evidence and choose one unresolved question.
-2. Specify the smallest controlled comparison and its decision rules.
-3. Implement a connected tutorial using existing code and execution stages.
-4. Interpret actual outputs, then update the study overview and next action.
-
-State the audience, required artifacts and verification steps. Explanations
-should introduce consequential choices before code and interpret results
-afterward. Keep historical requests intact when evidence changes; update the
-current study overview instead. The [Future Innovation maintenance guide](../../scripts/research_directions/future_innovation/future_innovation_tutorial_guide.md)
-provides the concrete generated-notebook workflow.
+For new work, state the unresolved question, controlled comparison, decision rules, required artifacts and validation. Update the owning study overview when evidence changes; retain the original request as history.

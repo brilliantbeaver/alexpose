@@ -32,10 +32,16 @@ future-innovation = [
   "timm==1.0.15",
   "einops==0.8.1",
 ]
+motion-preservation = [
+  "torchvision==0.21.0+cu124",
+  "einops>=0.8",
+  "safetensors>=0.4",
+  "huggingface-hub>=0.25",
+]
 
 [project.scripts]
-gavd6 = "gavd6_sjepa.command_line_interface:main"
-train-amass-core11 = "gavd6_sjepa.research_directions.reflection_equivariance.amass_training_entrypoint:main"
+gavd6 = "gavd6_sjepa.cli:main"
+train-amass-core11 = "gavd6_sjepa.research_directions.reflection_equivariance.train_amass:main"
 
 [build-system]
 requires = ["setuptools>=68"]

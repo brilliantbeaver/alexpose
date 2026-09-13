@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Compatibility launcher for ``gavd6 amass convert``."""
 
-from gavd6_sjepa.data_foundations import amass_core11_conversion_pipeline as _implementation
-from gavd6_sjepa.data_foundations.amass_core11_conversion_pipeline import *
+from gavd6_sjepa.data_foundations import amass_conversion as _implementation
+from gavd6_sjepa.data_foundations.amass_conversion import *
 
 
 def __getattr__(name: str):

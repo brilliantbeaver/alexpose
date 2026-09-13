@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-13",
+  "description": "Research ownership and canonical code navigation. Protocol/run identities remain unchanged; the code-layout refactor has a new software identity and an exact historical replay snapshot.",
+  "studies": [
+    {
+      "id": "motion-preservation",
+      "title": "Motion preservation during tracking repair",
+      "status": "current; real-model evaluation pending",
+      "code": [
+        "src/gavd6_sjepa/research_directions/motion_preservation"
+      ],
+      "notebooks": [
+        "notebooks/motion_preservation"
+      ],
+      "scripts": [
+        "scripts/research_directions/motion_preservation"
+      ],
+      "slurm": [
+        "slurm/motion-preservation"
+      ],
+      "tests": [
+        "tests/motion_preservation/**/test_*.py"
+      ],
+      "documentation": "docs/studies/motion-preservation",
+      "overview": "docs/studies/motion-preservation/README.md"
+    },
+    {
+      "id": "future-feature-prediction",
+      "title": "Future feature prediction",
+      "status": "historical development studies; no established student benefit",
+      "code": [
+        "src/gavd6_sjepa/research_directions/future_prediction",
+        "src/gavd6_sjepa/research_directions/source_scaling",
+        "src/gavd6_sjepa/research_directions/target_accessibility"
+      ],
+      "notebooks": [
+        "notebooks/future_innovation",
+        "notebooks/source_scaling",
+        "notebooks/target_accessibility"
+      ],
+      "scripts": [
+        "scripts/research_directions/future_prediction",
+        "scripts/research_directions/target_accessibility",
+        "scripts/research_directions/source_scaling"
+      ],
+      "slurm": [
+        "slurm/future-prediction",
+        "slurm/source-scaling"
+      ],
+      "tests": [
+        "tests/future_feature_prediction/**/test_*.py"
+      ],
+      "documentation": "docs/studies/future-feature-prediction",
+      "overview": "docs/studies/future-feature-prediction/README.md"
+    },
+    {
+      "id": "latent-laterality",
+      "title": "Latent laterality",
+      "status": "historical; confirmation stopped",
+      "code": [
+        "src/gavd6_sjepa/research_directions/latent_laterality"
+      ],
+      "notebooks": [],
+      "scripts": [],
+      "slurm": [
+        "slurm/latent-laterality"
+      ],
+      "tests": [
+        "tests/latent_laterality/**/test_*.py"
+      ],
+      "documentation": "docs/studies/latent-laterality",
+      "overview": "docs/studies/latent-laterality/README.md"
+    },
+    {
+      "id": "reflection-equivariance",
+      "title": "Reflection equivariance and signed-laterality probes",
+      "status": "historical controls and probes",
+      "code": [
+        "src/gavd6_sjepa/research_directions/reflection_equivariance"
+      ],
+      "notebooks": [
+        "notebooks/reflection_equivariance",
+        "notebooks/signed_laterality"
+      ],
+      "scripts": [
+        "scripts/research_directions/reflection_equivariance",
+        "scripts/research_directions/signed_laterality"
+      ],
+      "slurm": [
+        "slurm/shared-data/convert-amass.sbatch",
+        "slurm/reflection-equivariance/train-amass.sbatch",
+        "slurm/reflection-equivariance/evaluate-swaps.sbatch"
+      ],
+      "tests": [
+        "tests/reflection_equivariance/**/test_*.py"
+      ],
+      "documentation": "docs/studies/reflection-equivariance",
+      "overview": "docs/studies/reflection-equivariance/README.md"
+    },
+    {
+      "id": "gait-classification",
+      "title": "Gait representation and classification",
+      "status": "historical label-informed curriculum",
+      "code": [],
+      "notebooks": [
+        "notebooks/gait_classification"
+      ],
+      "scripts": [
+        "scripts/archive/gavd96_augmentation_launchers"
+      ],
+      "slurm": [],
+      "tests": [],
+      "documentation": "docs/studies/gait-classification",
+      "overview": "docs/studies/gait-classification/README.md"
+    },
+    {
+      "id": "force-prediction",
+      "title": "Force prediction from frozen motion representations",
+      "status": "negative feasibility result",
+      "code": [],
+      "notebooks": [
+        "notebooks/force_prediction"
+      ],
+      "scripts": [],
+      "slurm": [],
+      "tests": [],
+      "documentation": "docs/studies/force-prediction",
+      "overview": "docs/studies/force-prediction/README.md"
+    },
+    {
+      "id": "perturbation-response",
+      "title": "Cross-protocol perturbation response",
+      "status": "deferred protocol; not executed",
+      "code": [],
+      "notebooks": [],
+      "scripts": [],
+      "slurm": [],
+      "tests": [],
+      "documentation": "docs/studies/perturbation-response",
+      "overview": "docs/studies/perturbation-response/README.md"
+    }
+  ],
+  "shared": {
+    "data": [
+      "src/gavd6_sjepa/data_foundations",
+      "notebooks/amass",
+      "manifests/amass",
+      "manifests/gavd",
+      "slurm/shared-data/download-gavd.sbatch"
+    ],
+    "infrastructure": [
+      "src/gavd6_sjepa/shared_infrastructure",
+      "src/gavd6_sjepa/workspace_validation",
+      "scripts/workspace_management"
+    ],
+    "environment": [
+      "pyproject.toml",
+      "uv.lock",
+      ".env.example",
+      ".gitignore"
+    ],
+    "research_agenda": [
+      "notes/research-agenda"
+    ],
+    "historical_material": [
+      "docs/history",
+      "notes/archive",
+      "src/gavd6_sjepa/archive",
+      "scripts/archive"
+    ]
+  }
+}

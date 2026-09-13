@@ -1,33 +1,13 @@
-# GAVD6 documentation
+# Research documentation
 
-This directory documents the current research program, its executable study
-protocols, and its preserved experimental history. A document is **current**
-only when it names the code and artifacts it applies to. Historical records are
-kept separately so that their results remain inspectable without being mistaken
-for the current state of the project.
+Start with the [study index](studies/README.md). The current objective is [motion preservation during tracking repair](studies/motion-preservation/README.md).
 
-## Current documentation
+Study documentation is organized by research question, with a short overview and a few protocol, execution, results or manuscript sections. Numerical findings remain attached to their original experiment and evidence boundary.
 
-- [Study index](studies/): evidence status and next action for each study.
-- [Future Innovation](studies/future-innovation/): connected tutorials for the
-  implemented feasibility gate; no completed scientific report is available locally.
-- [Latent Laterality](studies/latent-laterality/): completed seed-7 validation;
-  confirmation stopped because the uniform control reproduced the gain.
-- [Fixed-reflection baselines](studies/fixed-reflection-baselines/): the
-  necessary known-reflection controls and their repaired mask contract.
-- [Frozen Core11 probe results](studies/frozen-core11-probe-results.md): the
-  current GAVD frozen-representation result, including its generalization limit.
-- [StrokePIG frozen-probe results](studies/strokepig-frozen-probe-results.md):
-  the current negative force-prediction feasibility result.
-- [S-JEPA model internals](tutorials/sjepa_model_internals.md): class and
-  tensor-flow reference for the historical foundation notebooks.
-- [Diagram design system](contributing/diagram_design_system.md): contributor
-  contract for project diagrams.
+- [Repository layout](repository/layout.md): naming, ownership, compatibility and migration verification.
+- [Research agenda](../notes/research-agenda/README.md): deferred alternatives and shared literature.
+- [Historical publications](history/README.md): preserved older manuscripts and method history.
+- [Model tutorials](tutorials/README.md): background S-JEPA teaching material, not the current experimental contract.
+- [Result organization](studies/output-organization.md): frozen run identities and artifact policy.
 
-## Historical documentation
-
-The [history index](history/) contains immutable records that remain useful for
-provenance and reproduction. In particular, the [URTC 2026 package](history/urtc-2026/)
-documents the prior augmented-normal five-stage GAVD run. Its figures, result
-ledger, and build scripts are retained as a coherent package, but are not a
-source of current model claims or instructions.
+The output-migration record is a dated report. Its referenced historical bundles and catalog are currently absent locally; it must not be read as a live installation or HAIC status check.

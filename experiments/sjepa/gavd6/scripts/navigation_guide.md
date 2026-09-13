@@ -1,43 +1,18 @@
-# Command and research-script guide
+# Research commands and scripts
 
-Use the installed `gavd6` command for data, training, and evaluation workflows.
-The `scripts` tree now contains only research notebook builders and explicitly
-archived compatibility tools:
+Start from the [study index](../docs/studies/README.md). Numerical methods live in `src/gavd6_sjepa`; scripts own notebook generation, experiment orchestration and artifact inspection.
 
-```bash
-uv run gavd6 --help
-uv run gavd6 amass --help
-uv run gavd6 gavd --help
-uv run gavd6 laterality --help
-```
+| Study or responsibility | Scripts | Entry point |
+| --- | --- | --- |
+| Motion preservation | [motion_preservation](research_directions/motion_preservation/) | `build_notebooks.py`, `execute_notebook.py`; follow the [current experiment guide](../notebooks/motion_preservation/README.md). |
+| Future-feature prediction gate | [future_prediction](research_directions/future_prediction/README.md) | Build, execute and verify notebooks; inspect fitted models and residual-head failures. |
+| Source scaling | [source_scaling](research_directions/source_scaling/README.md) | Calibration, initialization, stage execution and read-only notebook inspection. |
+| Student accessibility | [target_accessibility](research_directions/target_accessibility/) | Cached-panel execution and notebook, evidence, figure and manuscript generation. |
+| Reflection equivariance | [reflection_equivariance](research_directions/reflection_equivariance/) | Separate encoder, GAVD, AMASS, replication and extension lessons. |
+| Signed laterality | [signed_laterality](research_directions/signed_laterality/) | Probe and extension lessons. |
+| Result administration | [workspace_management](workspace_management/) | Locate, inventory and verify installed run bundles. |
+| Historical command adapters | [archive](archive/) | Retained command entry points backed by the current package. |
 
-## Common workflows
+`uv run gavd6 --help` lists shared-data and historical study commands. The motion-preservation workflow has a dedicated notebook executor and Slurm launcher. The three future-prediction diagnostic scripts perform different analyses: saved-fit inspection, synthetic residual-head probes and forensic failure evaluation.
 
-| Goal | Command |
-|---|---|
-| Inventory AMASS archives | `uv run gavd6 amass inventory` |
-| Convert AMASS to Core11 | `uv run gavd6 amass convert --help` |
-| Train the AMASS baselines | `uv run gavd6 amass train` |
-| Download full-GAVD videos | `uv run gavd6 gavd download --help` |
-| Convert GAVD poses to Core11 | `uv run gavd6 gavd convert-core11 --help` |
-| Build a laterality manifest | `uv run gavd6 laterality build-manifest --help` |
-| Run the benchmark gate | `uv run gavd6 laterality benchmark --help` |
-| Train SG-JEPA | `uv run gavd6 laterality train --help` |
-| Evaluate SG-JEPA | `uv run gavd6 laterality evaluate --help` |
-| Run the swap probe | `uv run gavd6 swap-probe run --help` |
-| Run the Future Innovation feasibility gate | `uv run gavd6 future-innovation --help` ([HAIC workflow](../slurm/future-innovation/README.md)) |
-| Validate generated notebooks | `uv run gavd6 notebooks validate` |
-
-## Directory ownership
-
-| Directory | Status | Purpose |
-|---|---|---|
-| `research_directions/reflection_equivariance/` | Active | Builders for the reflection-equivariant JEPA, GAVD, AMASS, and replication notebooks |
-| `research_directions/signed_laterality/` | Scoped research | Builders for the signed-laterality probe and reach notebooks |
-| `archive/legacy_command_launchers/` | Archived | Thin launchers superseded by `gavd6`; retained only to reproduce older commands |
-| `archive/gavd96_augmentation_launchers/` | Archived | Utilities for the superseded local GAVD96 augmentation workflow |
-
-New scientific implementations belong under the matching
-`src/gavd6_sjepa/research_directions/` directory. New dataset plumbing belongs
-under `src/gavd6_sjepa/data_foundations/`. Do not add new top-level Python
-scripts or depend on anything under `archive/` from active code.
+The September 2026 code refactor changes software identity. Existing sealed runs must reject incompatible code for resume or fitting. The pre-refactor source and environment contract are preserved in [the replay snapshot](../scripts/archive/code_layout_20260913/README.md); historical run receipts are not rewritten. See [notebook ownership](research_directions/research_notebook_builder_guide.md) and [layout conventions](../docs/repository/layout.md).

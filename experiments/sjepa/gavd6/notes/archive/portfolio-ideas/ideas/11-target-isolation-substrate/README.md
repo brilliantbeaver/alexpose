@@ -187,11 +187,11 @@ REACH TIER (plus several weeks, new data, marked honestly). Any external partici
 
 ## Figures
 
-![Per-mechanism recovery R-squared by target family against the raw-input ceiling and untrained-encoder floor](./images/fig1.svg)
+![Per-mechanism recovery R-squared by target family against the raw-input ceiling and untrained-encoder floor](images/fig1.svg)
 
 Fig 1: a grouped bar chart with one column group per mechanism (symmetry ratio, stride-time CV, anterior pelvic tilt) and four bars per group (T1 to T4). Each group draws the raw-input ceiling as a green dashed line and the untrained-encoder floor as a lower grey dashed line, with the pre-registered 0.05 margin shaded as a band above the ceiling. It shows at a glance which target family, if any, clears both the ceiling and the floor by the margin on each mechanism. The illustrative shape has the latent-target families lifting anterior pelvic tilt above the ceiling while stride-time CV stays below the ceiling for every family, an informative null. All values are illustrative and transductive.
 
-![Matched-substrate audit confirming only the prediction target differs across the four target arms](./images/fig2.svg)
+![Matched-substrate audit confirming only the prediction target differs across the four target arms](images/fig2.svg)
 
 Fig 2: a four-row audit grid, one row per target arm (T1 to T4), with columns for Encoder, Compute budget, Updates, and Mask. Every cell holds identical values across all four rows (same embed 64 and depth 2, same `d0acc262` curriculum budget, same 11,400 optimizer updates, same 12-joint mask at 0.60 of eligible tokens), and a green checkmark strip confirms each arm is substrate-matched. This is the internal-validity control: everything is fixed except the prediction target, so any recovery difference is attributable to the target alone.
 

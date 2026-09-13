@@ -1,19 +1,19 @@
-# Study documentation
+# Study index
 
-Start with the evidence and next action below. Status was reconciled against
-the local artifacts on 11 September 2026; this is not a live view of HAIC jobs.
-Each linked study overview owns its interpretation and points to its evidence.
+The current study is **motion preservation during tracking repair**. Historical findings motivate it but do not establish a preservation result. Each overview links its protocol, execution, evidence and implementation.
 
-| Study | Evidence available | Next action |
+| Study | State | Read next |
 | --- | --- | --- |
-| [ICLR research bridge](iclr/) | Laterality/FI critique, four executed tutorials, exact symmetry calibrations and a new cached comparison; primary gain +0.001994 R² with interval spanning zero | Test student-accessible future targets under tighter confidence/reference controls, then evaluate actual student transfer and independent confirmation |
-| [Future Innovation](future-innovation/) | Historical direct-v2 STOP preserved; repaired direct-v3 complete development STOP, matched gain −0.00024242 R² with interval spanning zero | Preserve the repaired result; use the separately specified ICLR bridge to investigate target meaning and student accessibility before distillation |
-| [Latent Laterality](latent-laterality/study-so-far.md) | Seed-7 validation complete; uniform uncertainty reproduced SG-JEPA's gain | Inspect the mechanism failure; stop confirmation seeds 19/31 and keep the test split sealed |
-| [Fixed-reflection baselines](fixed-reflection-baselines/) | Known-reflection controls with historical artifact limitations | Use as scoped controls, following their protocol |
-| [Frozen Core11 probe](frozen-core11-probe-results.md) | Frozen-representation result with a limited generalization claim | Read the stated evidence boundary |
-| [StrokePIG probe](strokepig-frozen-probe-results.md) | Negative force-prediction feasibility result | Read the failed feasibility comparison before extending it |
+| [Motion preservation](motion-preservation/README.md) | Current implementation; CPU/demo checks, real model experiment pending | Protocol, frozen-model load and small pilot. |
+| [Future feature prediction](future-feature-prediction/README.md) | Completed negative development gates and expanded scaling inspection; accessibility uncertainty remains | Separate gate, scaling, accessibility and manuscript sections. |
+| [Latent laterality](latent-laterality/README.md) | Seed-7 validation stopped confirmation because a uniform control reproduced the gain | Validation and the original protocol; keep the test split sealed. |
+| [Reflection equivariance](reflection-equivariance/README.md) | Historical known-reflection controls and GAVD probes | Protocol and limitations of each retained comparison. |
+| [Gait classification](gait-classification/README.md) | Historical staged, label-informed experiment | Tutorial and original manuscript; not unseen-patient validation. |
+| [Force prediction](force-prediction/README.md) | Negative StrokePIG feasibility result | Result and measurement limitations. |
+| [Perturbation response](perturbation-response/README.md) | Deferred, unexecuted protocol | Data availability and cross-protocol harmonization. |
 
-For each new study, keep one short overview, an experiment specification, and
-notebooks that explain individual comparisons. Numerical findings belong to
-identified run artifacts. Update the overview and its next action when those
-artifacts change; retain old prompts as design history, not current run orders.
+The current portfolio's other ideas live in the [research agenda](../../notes/research-agenda/README.md). Study status is distinct from file location: archiving a record does not negate its result or release its held-out data.
+
+[File ownership](../repository/studies.json) maps study names to code, notebooks, tests, execution and evidence. [Layout and naming](../repository/layout.md) describes the organization. Legacy folders `future-innovation` and `iclr` preserve frozen protocol paths and compatibility links; their canonical research home is `future-feature-prediction`.
+
+The [result registry](experiment-registry.json) preserves historical run IDs. Its 16 canonical/legacy bundle paths are absent in this checkout as inspected on 13 September 2026. Consult actual installed artifacts before inferring execution state; [organization policy](output-organization.md) and [dated migration validation](output-organization-validation.md) remain available.

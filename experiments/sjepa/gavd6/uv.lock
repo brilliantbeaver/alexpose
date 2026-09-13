@@ -568,11 +568,19 @@ future-innovation = [
     { name = "timm" },
     { name = "torchvision" },
 ]
+motion-preservation = [
+    { name = "einops" },
+    { name = "huggingface-hub" },
+    { name = "safetensors" },
+    { name = "torchvision" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "einops", marker = "extra == 'future-innovation'", specifier = "==0.8.1" },
+    { name = "einops", marker = "extra == 'motion-preservation'", specifier = ">=0.8" },
     { name = "ezc3d", specifier = ">=1.5" },
+    { name = "huggingface-hub", marker = "extra == 'motion-preservation'", specifier = ">=0.25" },
     { name = "human-body-prior", git = "https://github.com/nghorbani/human_body_prior.git?rev=78c86eae5ed518ae22bf197fd74211bbfa45551a" },
     { name = "ipykernel", specifier = ">=6.29" },
     { name = "joblib", specifier = ">=1.6.0" },
@@ -586,16 +594,18 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2" },
     { name = "pyarrow", specifier = ">=15.0" },
     { name = "python-dotenv", specifier = ">=1.0" },
+    { name = "safetensors", marker = "extra == 'motion-preservation'", specifier = ">=0.4" },
     { name = "scikit-learn", specifier = ">=1.5" },
     { name = "scipy", specifier = ">=1.12" },
     { name = "seaborn", specifier = ">=0.13" },
     { name = "timm", marker = "extra == 'future-innovation'", specifier = "==1.0.15" },
     { name = "torch", specifier = "==2.6.0+cu124", index = "https://download.pytorch.org/whl/cu124" },
     { name = "torchvision", marker = "extra == 'future-innovation'", specifier = "==0.21.0+cu124", index = "https://download.pytorch.org/whl/cu124" },
+    { name = "torchvision", marker = "extra == 'motion-preservation'", specifier = "==0.21.0+cu124", index = "https://download.pytorch.org/whl/cu124" },
     { name = "tqdm", specifier = ">=4.66" },
     { name = "yt-dlp", extras = ["default"], specifier = ">=2025.1.1" },
 ]
-provides-extras = ["future-innovation"]
+provides-extras = ["future-innovation", "motion-preservation"]
 
 [[package]]
 name = "h11"

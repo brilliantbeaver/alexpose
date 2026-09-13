@@ -187,11 +187,11 @@ Week 8 (4 to 10 Oct 2026): write the honest limitation that no participant-disjo
 
 ## Figures
 
-![Steerability matrix: intervening on each named subspace versus the change in each biomarker, with the pre-registered leak bound and the raw-coordinate ceiling](./images/fig1.svg)
+![Steerability matrix: intervening on each named subspace versus the change in each biomarker, with the pre-registered leak bound and the raw-coordinate ceiling](images/fig1.svg)
 
 Fig 1: the steerability matrix. Rows are the subspace we intervene on (z_asym, z_rhythm, z_posture); columns are the change observed in each biomarker (symmetry ratio, stride-time CV, anterior pelvic tilt). Diagonal cells sit above the raw-coordinate ceiling (a subspace moves its own biomarker), off-diagonal cells fall below the pre-registered leak bound (it leaves the other two unmoved), which is the falsifiable signature of steerable disentanglement.
 
-![Per-subspace biomarker recovery against the raw-coordinate ceiling and untrained-encoder floor, per held-out source](./images/fig2.svg)
+![Per-subspace biomarker recovery against the raw-coordinate ceiling and untrained-encoder floor, per held-out source](images/fig2.svg)
 
 Fig 2: per-subspace biomarker recovery R-squared, one dot per held-out source, with the raw-coordinate probe ceiling (Lane B) and the untrained-encoder floor (Lane C) overlaid, and z_rhythm flagged as the highest-risk subspace because stride-time CV is not linearly decodable from roughly two-second windows.
 

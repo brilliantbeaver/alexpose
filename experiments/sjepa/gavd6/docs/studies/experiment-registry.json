@@ -1,0 +1,266 @@
+{
+  "schema": "experiment-catalog-v1",
+  "description": "Curated identities and evidence boundaries. Runtime locations, counts and verification live in the ignored outputs/catalog.json. Scientific status must be read from identified reports; comments are not execution receipts.",
+  "entries": [
+    {
+      "id": "gate-v2",
+      "identity_file": "config/run-contract.json",
+      "alternate_paths": ["outputs/future-innovation/gate-v2"],
+      "study": "future-innovation",
+      "legacy_path": "outputs/future-innovation",
+      "canonical_path": "outputs/studies/future-innovation/gate-v2",
+      "kind": "feasibility_gate",
+      "description": "Historical 50-window / 43-source direct-v2 gate and inherited teacher cache.",
+      "parents": [],
+      "limitations": [
+        "STOP preserved; residual-head setup was subsequently repaired in a separate development experiment."
+      ],
+      "migrate": true,
+      "protocol": "direct-v2",
+      "primary_report": "reports/gate-report.md",
+      "origin_hint": "HAIC project: outputs/future-innovation/gate-v2"
+    },
+    {
+      "id": "future-innovation-direct-v3-dev-20260911",
+      "study": "future-innovation",
+      "legacy_path": "outputs/future-innovation-direct-v3-dev-20260911",
+      "canonical_path": "outputs/studies/future-innovation/future-innovation-direct-v3-dev-20260911",
+      "kind": "development_comparison",
+      "description": "Deterministic repaired prediction comparison on the original cohort.",
+      "parents": [
+        "gate-v2"
+      ],
+      "limitations": [
+        "Development STOP; no student training benefit established."
+      ],
+      "migrate": true,
+      "protocol": "direct-v3",
+      "primary_report": "reports/gate-report.md"
+    },
+    {
+      "id": "future-innovation-source-curve-dev-20260911",
+      "study": "future-innovation",
+      "legacy_path": "outputs/future-innovation-source-curve-dev-20260911",
+      "canonical_path": "outputs/studies/future-innovation/future-innovation-source-curve-dev-20260911",
+      "kind": "learning_curve_setup",
+      "description": "Initial expanded-cohort freeze and unsuccessful preparation attempt.",
+      "parents": [
+        "gate-v2"
+      ],
+      "limitations": [
+        "No expanded fitting or completed learning-curve result in this local bundle.",
+        "Frozen software identity predates current launcher/cohort amendments; continuation under changed software requires a new run."
+      ],
+      "migrate": true,
+      "protocol": "source-learning-curve-v1",
+      "primary_report": "reports/execution-status.json"
+    },
+    {
+      "id": "future-innovation-source-curve-dev-20260911-v2",
+      "study": "future-innovation",
+      "legacy_path": "outputs/future-innovation-source-curve-dev-20260911-v2",
+      "canonical_path": "outputs/studies/future-innovation/future-innovation-source-curve-dev-20260911-v2",
+      "kind": "learning_curve_setup",
+      "description": "Revised software/calibration freeze with the same source reservation.",
+      "parents": [
+        "gate-v2"
+      ],
+      "limitations": [
+        "No expanded fitting or completed learning-curve result in this local bundle.",
+        "Frozen software identity predates current launcher/cohort amendments; continuation under changed software requires a new run."
+      ],
+      "migrate": true,
+      "protocol": "source-learning-curve-v1",
+      "primary_report": "reports/execution-status.json"
+    },
+    {
+      "id": "iclr-bridge-cached-20260911",
+      "study": "future-innovation",
+      "legacy_path": "outputs/iclr-bridge-cached-20260911",
+      "canonical_path": "outputs/studies/future-innovation/iclr-bridge-cached-20260911",
+      "kind": "accessibility_comparison",
+      "description": "Student-accessible reference panels using the preserved teacher cache.",
+      "parents": [
+        "gate-v2",
+        "future-innovation-direct-v3-dev-20260911"
+      ],
+      "limitations": [
+        "Exploratory development; interval spans zero; no supported temporal lead or distillation claim."
+      ],
+      "migrate": true,
+      "protocol": "student-accessibility-v1",
+      "primary_report": "reports/panel-report.json"
+    },
+    {
+      "id": "repaired-jepa-seed7",
+      "study": "fixed-reflection-baselines",
+      "legacy_path": "outputs/repaired-jepa-seed7",
+      "canonical_path": "outputs/studies/fixed-reflection-baselines/repaired-jepa-seed7",
+      "kind": "checkpoint_collection",
+      "description": "Historical paired and reflection-equivariant best/latest checkpoints.",
+      "parents": [],
+      "limitations": [
+        "No run configuration or aggregate report accompanies this copied collection.",
+        "The paired_shared_no_cross best checkpoint is also present in the v2 collection."
+      ],
+      "migrate": true,
+      "primary_report": null,
+      "origin_hint": "HAIC project: data/amass/outputs/repaired-jepa-seed7"
+    },
+    {
+      "id": "repaired-jepa-seed7-v2",
+      "study": "fixed-reflection-baselines",
+      "legacy_path": "outputs/repaired-jepa-seed7-v2",
+      "canonical_path": "outputs/studies/fixed-reflection-baselines/repaired-jepa-seed7-v2",
+      "kind": "checkpoint_collection",
+      "description": "Four AMASS seed-7 variants with histories and incomplete run-level provenance.",
+      "parents": [],
+      "limitations": [
+        "run_config.json and summary.csv describe only the final standard-only invocation.",
+        "Checkpoints predate the orbit-closed mask repair; this collection does not rank repaired baseline models."
+      ],
+      "migrate": true,
+      "primary_report": "summary.csv",
+      "origin_hint": "HAIC project: data/amass/outputs/repaired-jepa-seed7-v2"
+    },
+    {
+      "id": "swap-probe-seed7",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/swap-probe-seed7",
+      "canonical_path": "outputs/studies/latent-laterality/swap-probe-seed7",
+      "kind": "validation_diagnostic",
+      "description": "Frozen-encoder anchored swap mechanism screen.",
+      "parents": [
+        "repaired-jepa-seed7-v2"
+      ],
+      "limitations": [
+        "Validation-only exploratory diagnostic; legacy encoder and synthetic root anchor."
+      ],
+      "migrate": true,
+      "primary_report": "summary.csv",
+      "protocol": "swap-probe-v1",
+      "origin_hint": "HAIC project: data/amass/outputs/swap-probe-seed7"
+    },
+    {
+      "id": "latent-laterality-collection",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study",
+      "kind": "study_collection",
+      "description": "Preserved AMASS manifests, benchmark versions, training arms and validation evaluation.",
+      "parents": [],
+      "limitations": [
+        "Container only; consult individual experiment entries.",
+        "Validation study stopped confirmation because the uniform control reproduced the gain."
+      ],
+      "migrate": true
+    },
+    {
+      "id": "amass-neutral",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/amass-neutral",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/amass-neutral",
+      "kind": "dataset_manifests",
+      "description": "AMASS neutral-motion and gauge manifests.",
+      "parents": [],
+      "limitations": [],
+      "migrate": false,
+      "primary_report": "manifest.csv"
+    },
+    {
+      "id": "amass-benchmark-seed7",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/amass-benchmark-seed7",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/amass-benchmark-seed7",
+      "kind": "benchmark",
+      "description": "Initial controlled-corruption benchmark; readiness gate did not pass.",
+      "parents": [
+        "amass-neutral"
+      ],
+      "limitations": [],
+      "migrate": false,
+      "primary_report": "gate_decision.json"
+    },
+    {
+      "id": "amass-benchmark-seed7-v2-chart-paired",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/amass-benchmark-seed7-v2-chart-paired",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/amass-benchmark-seed7-v2-chart-paired",
+      "kind": "benchmark",
+      "description": "Revised chart-paired benchmark; readiness gate passed.",
+      "parents": [
+        "amass-neutral"
+      ],
+      "limitations": [],
+      "migrate": false,
+      "primary_report": "gate_decision.json"
+    },
+    {
+      "id": "amass-gauge-correction-first-seed7",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/decisive/amass-v2-chart-paired/correction-first-seed7",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/decisive/amass-v2-chart-paired/correction-first-seed7",
+      "kind": "training",
+      "description": "Correction-first S-JEPA control",
+      "parents": [
+        "amass-benchmark-seed7-v2-chart-paired"
+      ],
+      "limitations": [
+        "Seed-7 development training; test split not evaluated."
+      ],
+      "migrate": false,
+      "primary_report": "run_result.json"
+    },
+    {
+      "id": "amass-gauge-sg-jepa-seed7",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/decisive/amass-v2-chart-paired/sg-jepa-seed7",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/decisive/amass-v2-chart-paired/sg-jepa-seed7",
+      "kind": "training",
+      "description": "Structured posterior SG-JEPA",
+      "parents": [
+        "amass-benchmark-seed7-v2-chart-paired"
+      ],
+      "limitations": [
+        "Seed-7 development training; test split not evaluated."
+      ],
+      "migrate": false,
+      "primary_report": "run_result.json"
+    },
+    {
+      "id": "amass-gauge-uniform-seed7",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/decisive/amass-v2-chart-paired/uniform-seed7",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/decisive/amass-v2-chart-paired/uniform-seed7",
+      "kind": "training",
+      "description": "Uniform posterior control",
+      "parents": [
+        "amass-benchmark-seed7-v2-chart-paired"
+      ],
+      "limitations": [
+        "Seed-7 development training; test split not evaluated."
+      ],
+      "migrate": false,
+      "primary_report": "run_result.json"
+    },
+    {
+      "id": "amass-gauge-v2-seed7-validation",
+      "study": "latent-laterality",
+      "legacy_path": "outputs/latent-laterality/amass-gauge-v2-seed7-validation",
+      "canonical_path": "outputs/studies/latent-laterality/amass-gauge-study/amass-gauge-v2-seed7-validation",
+      "kind": "validation_evaluation",
+      "description": "Common evaluation of three seed-7 training arms.",
+      "parents": [
+        "amass-gauge-correction-first-seed7",
+        "amass-gauge-sg-jepa-seed7",
+        "amass-gauge-uniform-seed7"
+      ],
+      "limitations": [
+        "Validation identities only; no sealed-test result.",
+        "Uniform control reproduced the structured model's gain; confirmation stopped."
+      ],
+      "migrate": false,
+      "primary_report": "gauge_readout_summary.csv"
+    }
+  ]
+}

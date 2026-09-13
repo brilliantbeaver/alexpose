@@ -298,11 +298,11 @@ The nearest neighbors in the existing `plan/` portfolio are plan/01 (honest vide
 
 ## Figures
 
-![Held-out-source decodability for uniform vs structured mask, with a twin provenance panel that must not rise](./images/fig1.svg)
+![Held-out-source decodability for uniform vs structured mask, with a twin provenance panel that must not rise](images/fig1.svg)
 
 **fig1.svg** Grouped bar chart of held-out-source normalized MAE on the timing and laterality targets for the uniform versus the structured mask, with per-source paired dots, alongside a twin panel of provenance balanced accuracy that must not rise.
 
-![Difficulty audit: masked-count distribution and visible-neighbor fraction across arms](./images/fig2.svg)
+![Difficulty audit: masked-count distribution and visible-neighbor fraction across arms](images/fig2.svg)
 
 **fig2.svg** Difficulty-audit panel showing the per-sample masked-count distribution and the fraction of masked tokens that retain a visible same-side or temporal neighbor, for the uniform mask, the structured mask, and the marginal-matched scrambled control.
 

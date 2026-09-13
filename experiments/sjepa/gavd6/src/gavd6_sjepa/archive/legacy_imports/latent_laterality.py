@@ -1,7 +1,7 @@
 """Compatibility imports for the renamed laterality inference module."""
 
-from gavd6_sjepa.research_directions.latent_laterality import laterality_corruption_inference as _implementation
-from gavd6_sjepa.research_directions.latent_laterality.laterality_corruption_inference import *
+from gavd6_sjepa.research_directions.latent_laterality import inference as _implementation
+from gavd6_sjepa.research_directions.latent_laterality.inference import *
 
 
 def __getattr__(name: str):

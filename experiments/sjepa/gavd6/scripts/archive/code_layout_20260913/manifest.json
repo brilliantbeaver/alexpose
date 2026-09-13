@@ -1,0 +1,1472 @@
+{
+  "snapshot": "before code filename refactor on 2026-09-13",
+  "archive": "source.tar.gz",
+  "archive_sha256": "f0aa1c3de809402dc555d5225f9863a0481b19b09eba32ee5accfb5fe99a662b",
+  "scope": "Exact original numerical source, CLI/Slurm launchers, environment files and five numerical protocols. Source notebooks and execution outputs remain in the full local recovery snapshot.",
+  "files": {
+    ".env.example": {
+      "sha256": "f108a543c2ff11dadeaf82fccd9a8e4159c142afebf0d11abfc896b5b86469df",
+      "size": 1096,
+      "mode": 420
+    },
+    "docs/repository/studies.json": {
+      "sha256": "1cae4e27ea01881498a24419087b50aba6d674070429cfe1dbff3a81aef51d9a",
+      "size": 5449,
+      "mode": 420
+    },
+    "docs/studies/experiment-registry.json": {
+      "sha256": "ac439f12dc343b5dfff7018e6c3d68ec2fc9e5e0a5eede2c685092d97386a2f0",
+      "size": 11223,
+      "mode": 420
+    },
+    "docs/studies/future-innovation/direct-gate-protocol.md": {
+      "sha256": "ae45a72f1820d1d7cec4e8763cc51de80244c34c38762ce98a756031706e5b7c",
+      "size": 9868,
+      "mode": 420
+    },
+    "docs/studies/future-innovation/direct-v3-repair-protocol.md": {
+      "sha256": "06b3519c3967ff3a1363f0d2662ccd08dc5ad8cbc5ed8d33fa20949725fd3a05",
+      "size": 12159,
+      "mode": 420
+    },
+    "docs/studies/future-innovation/source-learning-curve-available-cohort-protocol.md": {
+      "sha256": "b1595b8e6875ba3dc829098dbfc16764414ff4b457041ed04bf0c89024e3f1f8",
+      "size": 4050,
+      "mode": 420
+    },
+    "docs/studies/future-innovation/source-learning-curve-protocol.md": {
+      "sha256": "9b87f2889aa74fe358c433a2e1b8f5ace336dab6a2cd9dbdfc94c594578a6311",
+      "size": 9772,
+      "mode": 420
+    },
+    "docs/studies/iclr/02_cached_panel_protocol.md": {
+      "sha256": "f91181e1b3a13a1d7f121052f9e650fa5a36bf67ecbed596e41f39780dbc70e3",
+      "size": 10854,
+      "mode": 420
+    },
+    "pyproject.toml": {
+      "sha256": "b1e6a0a329ec10b2b3a4c0abf29a6b5b01f1202b4780530f38d374a9720d6fab",
+      "size": 1554,
+      "mode": 420
+    },
+    "scripts/archive/gavd96_augmentation_launchers/annotate_normal_clips.py": {
+      "sha256": "cb0da1bb08c224125e9247dd6f175e2e7976d87875f76e4c5e92770d88d92e32",
+      "size": 214,
+      "mode": 420
+    },
+    "scripts/archive/gavd96_augmentation_launchers/extract_augmented_poses.py": {
+      "sha256": "14c922f996ebd2e5a62a49a4614d9b988861c71f8cfa02ffeedf8154002fe4b2",
+      "size": 219,
+      "mode": 420
+    },
+    "scripts/archive/gavd96_augmentation_launchers/gavd96_augmentation_archive_guide.md": {
+      "sha256": "9a0e2fd268f3fe05d1bae601b9b7e6884ed064f0d21a902a28e090df9f5c5dd4",
+      "size": 686,
+      "mode": 420
+    },
+    "scripts/archive/gavd96_augmentation_launchers/migrate_augmented_pose_artifacts.py": {
+      "sha256": "c08e6b35115ea10b911ba48b27f8bf5cab89b6cde050d86f836078ec3f9e1423",
+      "size": 222,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/build_amass_gauge_manifest.py": {
+      "sha256": "11ee72e69eb244e356f8aa8839c80d6ddfe77038354fadcb1e1656c3b40b1e6c",
+      "size": 451,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/build_gavd_core11.py": {
+      "sha256": "c4a0eea6a8ea5b930325e7a48d202c4bee02cf199544a9f937c363cbb0fe6dd3",
+      "size": 224,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/build_sequence_gauge_manifest.py": {
+      "sha256": "8b1a00d8e2b28f1f4bb0fbacc858a11064e619c9180ec22578ffec52718f2481",
+      "size": 417,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/convert_amass_core11.py": {
+      "sha256": "491c3ceaa32fc299aa9223232f62e8ba5de6d4972cad5e4b8c29c205bc43a52c",
+      "size": 397,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/download_gavd_full.py": {
+      "sha256": "fe8649fd98a3d3445acf3ba20d9707d2d9bf2e74efb9ce9f46db112770372783",
+      "size": 389,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/evaluate_gauge_jepa.py": {
+      "sha256": "70e0e42d6b4dec429519b2a48aa5a9d3916622a46e1222b4c2b7e40260f92362",
+      "size": 240,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/evaluate_gavd_core11_probe.py": {
+      "sha256": "36092b4c8402ea61458a58827eabb5dfe30443e0028f6efea96ccfaf6dd0aff0",
+      "size": 231,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/evaluate_source_transfer.py": {
+      "sha256": "37e9f850e041446351952591db1ebb3184b84cf27593658acd00df43195309f5",
+      "size": 185,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/finalize_amass_subject_registry.py": {
+      "sha256": "24329bb3571005348623f82a11a12bce7fd4ccc6f3f5b388dd67062c3944b01a",
+      "size": 214,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/legacy_command_launcher_archive_guide.md": {
+      "sha256": "d4425952ec9ecb29257ad769a2ed3d7407d227b7de588325664ddfee28a70b78",
+      "size": 687,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/make_amass_inventory.py": {
+      "sha256": "9ea9d714b092bd41595d23e7e01f5b0a950c43472d881193857048a2c27dab45",
+      "size": 215,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/run_gauge_training_smoke.py": {
+      "sha256": "8b3ca1b9e94ce09368c6dcaa481fd4411eaa48c71672cadab4657237f8a405a1",
+      "size": 242,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/run_sequence_benchmark.py": {
+      "sha256": "266f2239cf0a30d1033e95bb2ca57f1c1a7758d9d9f52cf3d4e0bd5d4f3e2995",
+      "size": 246,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/run_swap_probe.py": {
+      "sha256": "e0d2d8393b45c88269aa757f6a64e58523d6c7cc2f2ca2757de9774bc8db7ac4",
+      "size": 218,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/train_amass_core11.py": {
+      "sha256": "a466dfba690894a55955ab15fe126dad40f043ccad092594eccd1275b1170b6a",
+      "size": 219,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/train_gauge_jepa.py": {
+      "sha256": "f173cb18536da98bdbc2da3032db50a07572f789145fd4573e634e022f4541df",
+      "size": 184,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/train_latent_laterality.py": {
+      "sha256": "919ab565a64eb16bce83366ed991087ef1f10797fbf50e67dab00e6a50f1171f",
+      "size": 180,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/validate_notebook_startup.py": {
+      "sha256": "331987670c22d70bcbbad78f24d60006fbd6747e42a77053d2e177dce949d709",
+      "size": 205,
+      "mode": 420
+    },
+    "scripts/archive/legacy_command_launchers/verify_historical_amass_checkpoint.py": {
+      "sha256": "46ba3d67712137cba795d072cfdfa61fff906c31e89f8963d8f3de88735cc66c",
+      "size": 233,
+      "mode": 420
+    },
+    "scripts/navigation_guide.md": {
+      "sha256": "b932883dacc9659e6d309e988228d0893173f45779c5e7c3b93a4f0b1f3d813a",
+      "size": 1942,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/build_future_innovation_notebooks.py": {
+      "sha256": "d99b1d0628f05af49cdac0ff25961a710e3ff6b13ebe2811a9a548a6a94f2287",
+      "size": 33016,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/build_source_learning_curve_notebook.py": {
+      "sha256": "ecbe6bdb613992f574900af384bd624e45d20c9cb2876cc0ebeef8c4a30054b3",
+      "size": 12937,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/calibrate_source_learning_curve.py": {
+      "sha256": "40f21ba27b3c4eb58abc40c327cecd8e877556f5af362d6bf3bc1015582048fc",
+      "size": 5061,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/diagnose_future_innovation_fits.py": {
+      "sha256": "ca6aad9b260cc77138de4f4460eab2a6aa14b65febdf9c0a0a1728b40dc8be87",
+      "size": 14205,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/evaluate_future_innovation_failures.py": {
+      "sha256": "7d39fc69f9dfee9d5c0e531df8402da81f3c092daca5051cc05bdfd960fe3003",
+      "size": 19209,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/execute_future_innovation_notebook.py": {
+      "sha256": "8410b647a1921fac2ec1fe1025316313052af8072df48afb0394f23b4abcd4b8",
+      "size": 10781,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/future_innovation_tutorial_guide.md": {
+      "sha256": "d3e1ec633982da98507611e551ab57a9a0d0b444f26fa6be9086fa74bfbe976e",
+      "size": 5897,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/plot_direct_v3_repair.py": {
+      "sha256": "a8480e7e2e4da75c00a27dee16001560957a9a2ca53cfcdbb980b58f60f4287c",
+      "size": 3709,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/probe_future_innovation_residual_failure.py": {
+      "sha256": "41ee96343820b04359d6c7440ffd0df32053cd249fafce0c48766ed0d5bcbf66",
+      "size": 6888,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/run_source_learning_curve.py": {
+      "sha256": "77af7d7a4614f95516b9836a1fd85873bdb627f0b310dc78dceb71b5e8b8d03d",
+      "size": 314,
+      "mode": 420
+    },
+    "scripts/research_directions/future_innovation/verify_future_innovation_tutorials.py": {
+      "sha256": "f19d1df2f08264747ec57959a4110e94a6fa12b69ff5f7107cc7bb557978cc8f",
+      "size": 7625,
+      "mode": 420
+    },
+    "scripts/research_directions/iclr_bridge/build_evidence.py": {
+      "sha256": "36ef531a8ec5b592c78181c65dfe70ad8f60f44b7c5444cc63f6f44eada6d6e6",
+      "size": 2123,
+      "mode": 420
+    },
+    "scripts/research_directions/iclr_bridge/build_figures.py": {
+      "sha256": "99867d05fcf11dac3298f325c88775f6f4cc35bcd98111227179a727fee9161d",
+      "size": 14522,
+      "mode": 420
+    },
+    "scripts/research_directions/iclr_bridge/build_manuscripts.py": {
+      "sha256": "9a0507e6ce4c23c8713657483d50495a0306982f231a3566635f70a7e57e1148",
+      "size": 9144,
+      "mode": 420
+    },
+    "scripts/research_directions/iclr_bridge/build_notebooks.py": {
+      "sha256": "75690757d1bd48fd16d40348c79250f91a0a68dcc3972b3a30c5a02aead5c38b",
+      "size": 36215,
+      "mode": 420
+    },
+    "scripts/research_directions/iclr_bridge/check_deliverables.py": {
+      "sha256": "a342e1c9ee749d64bf425c6090120a9b8b9fdfad66ca7561ccff41ce3c1fa9b3",
+      "size": 3379,
+      "mode": 420
+    },
+    "scripts/research_directions/iclr_bridge/run_cached_panel.py": {
+      "sha256": "837dd6d1db811c5a876fd236f5124d2ca249228b7cdfe6234c9987d5d7f5d050",
+      "size": 1227,
+      "mode": 420
+    },
+    "scripts/research_directions/motion_preservation/build_notebooks.py": {
+      "sha256": "6709c36f2ccdce7e007ecaba97d23c12da99d81ac56aba8dbe5602bed315b659",
+      "size": 38166,
+      "mode": 420
+    },
+    "scripts/research_directions/motion_preservation/execute_notebook.py": {
+      "sha256": "b590b75244e98bd03b8918bda598c198d40b7ce2c5f4d3eece6d2648bf3d0527",
+      "size": 6639,
+      "mode": 420
+    },
+    "scripts/research_directions/reflection_equivariance/build_reflection_amass_training_notebook.py": {
+      "sha256": "e41fa26a7ea1f93100fc37921c7eb8289ad5b8c91bb55be697ef147148755ea5",
+      "size": 3956,
+      "mode": 420
+    },
+    "scripts/research_directions/reflection_equivariance/build_reflection_encoder_contract_notebook.py": {
+      "sha256": "34e69b19982e5382bc93436bd456fb5d3d8146f80dec4bf41efe6aebfde115e1",
+      "size": 44793,
+      "mode": 420
+    },
+    "scripts/research_directions/reflection_equivariance/build_reflection_futures_notebook.py": {
+      "sha256": "4bb5d1534a21f12940bc427a4b036ab855a918f1c2dc1f2e7ecb4d09902b69c0",
+      "size": 16533,
+      "mode": 420
+    },
+    "scripts/research_directions/reflection_equivariance/build_reflection_gavd_notebooks.py": {
+      "sha256": "1e213d65de4911cf88e942bde50184c2b433be1ac5f680f2c4550396833b4dbb",
+      "size": 22651,
+      "mode": 420
+    },
+    "scripts/research_directions/reflection_equivariance/build_reflection_replication_notebooks.py": {
+      "sha256": "5496d63d67bf8d4e49a4b048c58ed1908e7a90281b30f4eda7045ce8e3aff8e8",
+      "size": 9030,
+      "mode": 420
+    },
+    "scripts/research_directions/research_notebook_builder_guide.md": {
+      "sha256": "5054b73cc1801c7c0c51ef25a6e816304adb034bb288c85fa48e775edc871b9a",
+      "size": 2415,
+      "mode": 420
+    },
+    "scripts/research_directions/signed_laterality/build_signed_laterality_futures_notebook.py": {
+      "sha256": "5eba92f64af18bcb653c7e2db14191b8fa1d30d226d51d844b604ad471c2f796",
+      "size": 22162,
+      "mode": 420
+    },
+    "scripts/research_directions/signed_laterality/build_signed_laterality_probe_notebook.py": {
+      "sha256": "c89c110e23e41bd43f47e564ab7d57de6200be7b8e9a62450d96c8b82f642da1",
+      "size": 44806,
+      "mode": 420
+    },
+    "scripts/workspace_management/experiment-results.sh": {
+      "sha256": "dd436a52cb9a1bbff8a4269496be97e6a33e779684e81bbc829e66fcb6713141",
+      "size": 419,
+      "mode": 420
+    },
+    "slurm/README.md": {
+      "sha256": "8b4d262a87f90f82fc60462060a665e56ba22c3fdebc1b565186a6113a52da74",
+      "size": 1480,
+      "mode": 420
+    },
+    "slurm/convert-amass-core11-full.sbatch": {
+      "sha256": "3ed6b916bdfd59b567446ecc6739e5a6dceee62880557a895b8774ec122fe94f",
+      "size": 800,
+      "mode": 420
+    },
+    "slurm/download-gavd-full.sbatch": {
+      "sha256": "c4eeee58b567b931fe3d0730c4bfa75811381cd98588ccd7293aef2fed3b8469",
+      "size": 1633,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/20-prepare-scaling.sbatch": {
+      "sha256": "a1e3885de9a18c3ea4d2b73ad97be72675e5db2a81d3b30f7b5445c679c52987",
+      "size": 765,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/21-cache-scaling.sbatch": {
+      "sha256": "2a1a3b5aecd4c2fcbd0e78a26d0784ec66cf16e1c2b5eaaf8bc77222b8868924",
+      "size": 867,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/22-fit-scaling.sbatch": {
+      "sha256": "0883a211e86bc2d1a6fe20a7da46aca703774eca002bc51ab1c5b78ac3b33f39",
+      "size": 565,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/23-report-scaling.sbatch": {
+      "sha256": "d1a8b62fbbc09074a1f467cf63aaaedddd2406961c994a8393687939116f7741",
+      "size": 652,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/19-initialize.sbatch": {
+      "sha256": "e331c052a9c41ef5063755d326378ed20279dffdc543a25a5ef1218486530fe8",
+      "size": 398,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/24-notebooks.sbatch": {
+      "sha256": "6b057627a23b1846a22f69121d8295d198a2994fc7751a9db4057757c07ef40b",
+      "size": 417,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/common.sh": {
+      "sha256": "45e7d12e9a51631ec700adb8450b7d51432be1ab57320be59da3b62bf8a3809f",
+      "size": 2078,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/initialize.py": {
+      "sha256": "6820326a32ef2eed620d33c694263e2a0d79f86ed6e4edb59ca380a912cb5b28",
+      "size": 17946,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/known-exposure.csv": {
+      "sha256": "de1fb80d9d0bb7053879f047e7b0ac233b50d24130c1e424b56433358115475e",
+      "size": 4548,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/known-exposure.json": {
+      "sha256": "565a2aa03b08b9232ea1a7ea99b90de9643ce2ecf9ffe03afa56784e88052752",
+      "size": 1963,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/notebooks.py": {
+      "sha256": "a589861b62a2301e901c13ca42185ffb54bbfb6cbe3a84241234ce1710e808b8",
+      "size": 14540,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/run_stage.py": {
+      "sha256": "c725971231c96da28616191448a7fce8348a3bd209deab0a770063a2d052f2ff",
+      "size": 5431,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/launch/submit.sh": {
+      "sha256": "f4f0e21cc5e535eabe68c964a5d55fd750b54bc68e7c4dbbf68aa35e8533dcd3",
+      "size": 2783,
+      "mode": 420
+    },
+    "slurm/future-innovation-scaling/submit-source-learning-curve.sh": {
+      "sha256": "8452fc460b435ab928f05916d7b725cb4e2708c6e461fd9c9767ba8c6db6af0f",
+      "size": 1934,
+      "mode": 420
+    },
+    "slurm/future-innovation/00-setup-environment.sh": {
+      "sha256": "22558465abe2be72919061ce5ec3e1cac20e4b73dc2b4fbaf5f97653a369505b",
+      "size": 1944,
+      "mode": 420
+    },
+    "slurm/future-innovation/01-build-gate-cohort.sbatch": {
+      "sha256": "313ea0ac2c165579a5475c1cf4d808d118df6cd8eaa0ebe1ebeb10ea0316a793",
+      "size": 1754,
+      "mode": 420
+    },
+    "slurm/future-innovation/02-extract-poses.sbatch": {
+      "sha256": "27b3af7ca7e1e565ebc952db1ebb7b3fd7375ab84aa323733b25023ae6c65f72",
+      "size": 386,
+      "mode": 420
+    },
+    "slurm/future-innovation/03-cache-vjepa-features.sbatch": {
+      "sha256": "68b04efc1baac703951a13f39af3ca841fb62a8f4435b1d08c140fe5a3077c7a",
+      "size": 432,
+      "mode": 420
+    },
+    "slurm/future-innovation/04-run-causal-and-target-audits.sbatch": {
+      "sha256": "22ff3653c2857685ab18924a99621e9c1f53aed5ac640cf05a7e325985f40f7d",
+      "size": 429,
+      "mode": 420
+    },
+    "slurm/future-innovation/05-fit-gate-models.sbatch": {
+      "sha256": "30661dff12e7f9cbe2a50d90bae819cc8d2de9afd53162199099891cb299d932",
+      "size": 665,
+      "mode": 420
+    },
+    "slurm/future-innovation/06-build-gate-report.sbatch": {
+      "sha256": "3591e8f7c94882da45e968f9d9c9077d11a7508023c76032374c54a176ea3ff6",
+      "size": 544,
+      "mode": 420
+    },
+    "slurm/future-innovation/07-initialize-cached-repair.sbatch": {
+      "sha256": "777b04fa83c389b0062732bbe8821d6c8db9e3d37c58189c8b95d5ecd25c0337",
+      "size": 600,
+      "mode": 420
+    },
+    "slurm/future-innovation/10-notebook-00-setup.sbatch": {
+      "sha256": "0bf700e57d7b02f63c9d62c163862c4f79a5e8b46cbb14ab5824b800dbe1aaf2",
+      "size": 395,
+      "mode": 420
+    },
+    "slurm/future-innovation/11-notebook-01-cohort.sbatch": {
+      "sha256": "45f384dc9ce2b32cad6222526709d22ec1b9fd74b29066dba4e0f45849e3941b",
+      "size": 398,
+      "mode": 420
+    },
+    "slurm/future-innovation/12-notebook-02-teacher.sbatch": {
+      "sha256": "44723de78dfa8de86f743da9889b57b1f0ec1ed65cdd82639da719d29be594a2",
+      "size": 441,
+      "mode": 420
+    },
+    "slurm/future-innovation/13-notebook-03-fit.sbatch": {
+      "sha256": "1398e2b58d7b1621021a628e5e74fc1ab988cf0d147e84946bace2e9b5492917",
+      "size": 520,
+      "mode": 420
+    },
+    "slurm/future-innovation/14-notebook-04-report.sbatch": {
+      "sha256": "b955036f1e94aa142f1cd1170d228475f8a806927c4e23a2acc0eed48453e810",
+      "size": 398,
+      "mode": 420
+    },
+    "slurm/future-innovation/15-notebook-02-cached.sbatch": {
+      "sha256": "bf5ede08e7336b89fd1c099239f05d5ef8388c33f9d44807e132085fbfab7c33",
+      "size": 345,
+      "mode": 420
+    },
+    "slurm/future-innovation/NOTEBOOKS.md": {
+      "sha256": "348c782d8f951c17fb29a2759977072fda038a2e3c669f35cd5bbe3e8bc6ca27",
+      "size": 13764,
+      "mode": 420
+    },
+    "slurm/future-innovation/README.md": {
+      "sha256": "daf6d1d4f7ad572af5538bdefc576cc73a33d2be3d3d10ee8b61fbc4249051de",
+      "size": 22203,
+      "mode": 420
+    },
+    "slurm/future-innovation/SOURCE_LEARNING_CURVE.md": {
+      "sha256": "e13bc7ffb755a9f25c49ea18eeb0038f262d4c54627076b24fceee18a66bb215",
+      "size": 10025,
+      "mode": 420
+    },
+    "slurm/future-innovation/SOURCE_LEARNING_CURVE_DETAILS.md": {
+      "sha256": "8bed356ab5dbd676e6ee7449c9662a00d5f1a972899353c0db37cdc99e723b7e",
+      "size": 23093,
+      "mode": 420
+    },
+    "slurm/future-innovation/VALIDATION.md": {
+      "sha256": "c5631561f8ea65a996c4d2dc949d07833165129797bdc34728dd5fbccdb0479d",
+      "size": 17154,
+      "mode": 420
+    },
+    "slurm/future-innovation/fi-common.sh": {
+      "sha256": "52456e4454fb62bd2af9074558fa1f44f9f0f6eae60268235af6f533d9b645be",
+      "size": 1231,
+      "mode": 420
+    },
+    "slurm/future-innovation/fi-notebook-common.sh": {
+      "sha256": "8a0608c62058f4fd4f8f6cd8662e1366229b8f234d7e3ba5dbb3fe31950b4eb6",
+      "size": 461,
+      "mode": 420
+    },
+    "slurm/future-innovation/submit-fi-cached-repair.sh": {
+      "sha256": "f428920123113ead3c13e6a308b7a8ed82e930f0865596d0d03a3f1644d7eacc",
+      "size": 1342,
+      "mode": 420
+    },
+    "slurm/future-innovation/submit-fi-notebooks.sh": {
+      "sha256": "e125b6b0b6188b0b128239c14116811d3b249e6c85144caf20d6f1fa3da00e31",
+      "size": 3171,
+      "mode": 420
+    },
+    "slurm/future-innovation/submit-fi-pipeline.sh": {
+      "sha256": "f191fea1dec0832132c5441501fbb39969c8b889232a3fea29ef4f0b410f109a",
+      "size": 2090,
+      "mode": 420
+    },
+    "slurm/latent-laterality/01-convert-amass-neutral.sbatch": {
+      "sha256": "3be26a2149e4ce17e639e296e70551ed2cca48257cf924c7fa2c87830470bc9d",
+      "size": 2292,
+      "mode": 420
+    },
+    "slurm/latent-laterality/02-build-amass-gauge-manifest.sbatch": {
+      "sha256": "96229a18d3b639ebe279d306fe29cfbfbbe94ba33564e9358c1f7f5f87003eb1",
+      "size": 1054,
+      "mode": 420
+    },
+    "slurm/latent-laterality/03-run-amass-sequence-benchmark.sbatch": {
+      "sha256": "d52e879ba1b0f8c81fcf64d275e1b2f9baff22aaed188b9d22f88f78d4aa077b",
+      "size": 1008,
+      "mode": 420
+    },
+    "slurm/latent-laterality/04-build-gavd-core11.sbatch": {
+      "sha256": "a571306cc0c1781eed7a19115f82447bf0c80e4825d05f46bd47e878c4c4ba26",
+      "size": 1387,
+      "mode": 420
+    },
+    "slurm/latent-laterality/05-source-screen-seed7.sbatch": {
+      "sha256": "b0b3b4986689201bc39a759e3161eed83d1c4c917fa8b17d2f81d87125cb3373",
+      "size": 2226,
+      "mode": 420
+    },
+    "slurm/latent-laterality/06-evaluate-source-transfer.sbatch": {
+      "sha256": "3990bec7f213779ccfc818be9fab69fd8a17516f4410e84b455c22d20557cf32",
+      "size": 2208,
+      "mode": 420
+    },
+    "slurm/latent-laterality/07-build-selected-gauge-manifest.sbatch": {
+      "sha256": "94aa481ccfab40829924059638799c8e687177a5f30681dc86ef6b447cbfb18b",
+      "size": 1276,
+      "mode": 420
+    },
+    "slurm/latent-laterality/08-run-selected-sequence-benchmark.sbatch": {
+      "sha256": "ec9b08e51ab1b0f7b16b620437033ac9e9475c23638ca0094666c07b4169df99",
+      "size": 1174,
+      "mode": 420
+    },
+    "slurm/latent-laterality/09-train-gauge-seed7.sbatch": {
+      "sha256": "881f3b9c1b59f14ccb9ca643167156d8938b1e085c2ac3bcdf5321b132d0726a",
+      "size": 2034,
+      "mode": 420
+    },
+    "slurm/latent-laterality/10-train-gauge-confirmation.sbatch": {
+      "sha256": "b8b291e61e43b1e857dccc3f35051672c93386c949f33a3fbfebf89b60435463",
+      "size": 2011,
+      "mode": 420
+    },
+    "slurm/latent-laterality/11-build-amass-gauge-v2-chart-paired.sbatch": {
+      "sha256": "317b72cfee0cdcd0a975cd23452f9c86c3fc4d45eace8e2af186363db80ce33c",
+      "size": 1416,
+      "mode": 420
+    },
+    "slurm/latent-laterality/12-run-amass-sequence-benchmark-v2.sbatch": {
+      "sha256": "5401cb5b58b758bdb7f39059cb5857d965e58097d69510bc18b1488295eab8ef",
+      "size": 1255,
+      "mode": 420
+    },
+    "slurm/latent-laterality/13-train-amass-gauge-v2-seed7.sbatch": {
+      "sha256": "2027b32bf971b06630197c85c66099f149a56f1416f96daf2f451ae973341a4c",
+      "size": 1790,
+      "mode": 420
+    },
+    "slurm/latent-laterality/14-evaluate-amass-gauge-v2-seed7-validation.sbatch": {
+      "sha256": "991e35f7f42455aa8942046441e3925a0752cf319160dac76308acaf225c10f0",
+      "size": 1890,
+      "mode": 420
+    },
+    "slurm/latent-laterality/15-train-amass-gauge-v2-confirmation.sbatch": {
+      "sha256": "1a714d84d4878e407b77fa1508b6d16e522db8ec8050f518a8b355f3c97f0832",
+      "size": 2019,
+      "mode": 420
+    },
+    "slurm/latent-laterality/16-evaluate-amass-gauge-v2-confirmation-test.sbatch": {
+      "sha256": "802b51bfde433e6c3d37f1ebf6de0da5566a9d3ebca2ba94b195e159c6884f98",
+      "size": 1924,
+      "mode": 420
+    },
+    "slurm/latent-laterality/README.md": {
+      "sha256": "89336f5920d95497d8a728bc32aa75735a0a4e6319eec0aa1c7ee5ba01371db8",
+      "size": 2971,
+      "mode": 420
+    },
+    "slurm/latent-laterality/ll-common.sh": {
+      "sha256": "23843d86322f694dcc63d996d81eb79d2ecd81a1514ee6d6ffc91a758be818cf",
+      "size": 2070,
+      "mode": 420
+    },
+    "slurm/motion-preservation/00-inventory.sbatch": {
+      "sha256": "fd74b525ed2ccb60fe9e6d2406b0b05842f81c21e5557e330e4e9e6180dd6960",
+      "size": 315,
+      "mode": 420
+    },
+    "slurm/motion-preservation/01-controlled-pairs.sbatch": {
+      "sha256": "44f0461e57c3ff65aa5ece15f0d66a012650a2e1fdba12f841cffa5b6dbb59f1",
+      "size": 337,
+      "mode": 420
+    },
+    "slurm/motion-preservation/02-cache-evidence.sbatch": {
+      "sha256": "120838202d0fbbd291baae7394eb8a2b0d646dae1c0a0a5e78c803704223b7c6",
+      "size": 340,
+      "mode": 420
+    },
+    "slurm/motion-preservation/03-train-calibrate.sbatch": {
+      "sha256": "ca53e9920f3fe4a1915ba05a6f2d45f27ceda37ed9d2a57aa4582f3c12bed622",
+      "size": 336,
+      "mode": 420
+    },
+    "slurm/motion-preservation/04-evaluate.sbatch": {
+      "sha256": "cd9bd5e6d68f31ac13d2a87863e970b95d823a9db33e669546b9508f6f01b065",
+      "size": 340,
+      "mode": 420
+    },
+    "slurm/motion-preservation/05-gavd-stress.sbatch": {
+      "sha256": "2a634d6cc28e289c6deb94f869cec25a898325ce17330265ea8e999b482bb15c",
+      "size": 336,
+      "mode": 420
+    },
+    "slurm/motion-preservation/README.md": {
+      "sha256": "d8124d17661342c4c13b827e40bbd1a49c7cd7dd23d3fa09cdecc440678561a2",
+      "size": 13590,
+      "mode": 420
+    },
+    "slurm/motion-preservation/common.sh": {
+      "sha256": "7d1c82573bbbf184cee5c273c3960802fc11dd874d41dbd691f7ef00106e9962",
+      "size": 1503,
+      "mode": 420
+    },
+    "slurm/motion-preservation/pilot.example.json": {
+      "sha256": "20bb62be16e82a21b551bcb38bf47a529db6be2f979a53ed94c10e209e9287f0",
+      "size": 497,
+      "mode": 420
+    },
+    "slurm/motion-preservation/submit.sh": {
+      "sha256": "cb00a352262ca010a44fdbf5d978d32253c35175049043b67507977e868ff75c",
+      "size": 2678,
+      "mode": 420
+    },
+    "slurm/run-swap-probe.sbatch": {
+      "sha256": "22caa1149e70618349e8be63cf2dd72f78445fd292b1013a141a0255c2505ee7",
+      "size": 1918,
+      "mode": 420
+    },
+    "slurm/train-amass-core11-full.sbatch": {
+      "sha256": "c8e4dde7edcb87e78c5e6c9c2d124865178449b4cf7782d00669e04f80d32827",
+      "size": 1982,
+      "mode": 420
+    },
+    "src/gavd6_sjepa.egg-info/PKG-INFO": {
+      "sha256": "30ae850298eba7bacd64b977fcc175e596b49f709d31638f9b59e07b56476367",
+      "size": 756,
+      "mode": 420
+    },
+    "src/gavd6_sjepa.egg-info/SOURCES.txt": {
+      "sha256": "3ea8313f0d9c55c24a750d88a6a7e07c4cf8ece1b1aea2efa5086ec43891c124",
+      "size": 3738,
+      "mode": 420
+    },
+    "src/gavd6_sjepa.egg-info/dependency_links.txt": {
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size": 1,
+      "mode": 420
+    },
+    "src/gavd6_sjepa.egg-info/entry_points.txt": {
+      "sha256": "64dcd89e0902de6fef3d3d7d1908c05c4248a9aa9d325917b6e02a468ddd3742",
+      "size": 174,
+      "mode": 420
+    },
+    "src/gavd6_sjepa.egg-info/requires.txt": {
+      "sha256": "e1c6577ca6bb3d43f37d43efcf2c5e4ba25b25867062534a5100245dab888460",
+      "size": 325,
+      "mode": 420
+    },
+    "src/gavd6_sjepa.egg-info/top_level.txt": {
+      "sha256": "357cea85ed53b21dbbdfcd5efbffcb06a505bb1cc7b55a4c7f16172a82fe295c",
+      "size": 12,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/__init__.py": {
+      "sha256": "6e3ce51e63b86a9817458d1b1fdee9494497e3ed338b03e9272426d1083796df",
+      "size": 671,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/gavd96_augmentation/gavd_augmented_artifact_migration.py": {
+      "sha256": "817a7d4d141dd6ddac6281598a5bfbd23ad90f062be5a545f0cce0628b042a6a",
+      "size": 5253,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/gavd96_augmentation/gavd_augmented_pose_extraction.py": {
+      "sha256": "bcf1be719edcf311a0ccc505f19d8467a24c43da001efd7a194de042232a3794",
+      "size": 6912,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/gavd96_augmentation/gavd_normal_clip_annotation.py": {
+      "sha256": "0184b418d11b9d883890a4e4c513787591fc61a7a313fd72c0e60f7c890087c7",
+      "size": 16632,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/historical_checkpoints/historical_amass_checkpoint_verification.py": {
+      "sha256": "71e1dc2f545d58670533e78fb32d41e1cfdf5931907f03d3f9854ac73db0ccd0",
+      "size": 9532,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/amass_core11_jepa.py": {
+      "sha256": "182fdf6608ce50cad950c85b6697ba695662f316b9842e6d5ad75b2b88da9d6f",
+      "size": 537,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/gait_parity_jepa.py": {
+      "sha256": "599da34d29f934e2edcb308c227897bfca4b665560d7ec1fc0d83386674264ff",
+      "size": 512,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/gauge_evaluation.py": {
+      "sha256": "4cd33c261514de5665d57ef4e041c4e9515c4a1fcc5949a00255e0c6b633ec6c",
+      "size": 364,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/gauge_training.py": {
+      "sha256": "0faad97e92f3fc94865e732430c40841f90bf40c2807f3a0ff1008ca55d9486e",
+      "size": 358,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/gavd_core11_probe.py": {
+      "sha256": "b96c653cfbae68d4c1f39183b5e3134ff5db7f029c7bff1ef19855fd035ff2cd",
+      "size": 361,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/latent_laterality.py": {
+      "sha256": "c07a6ea6f66eae4a660a4a2778b92f174df0b90ddf5dd32a8340c5afc44313e3",
+      "size": 447,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/sequence_benchmark.py": {
+      "sha256": "bbc513780c2b4ee99aa427a5c018669a95b6745931b48eea407db0b9c443ebe9",
+      "size": 449,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/source_transfer.py": {
+      "sha256": "3627e6e18a7165c1b100ff1265830f19b3b682135e512bc4aee4e54ae40b0fd8",
+      "size": 172,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/study_protocol.py": {
+      "sha256": "4d6f83b5c7970f762b50425dca184ca7dc73f56fe05875649bb783954b8843b1",
+      "size": 162,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/swap_probe.py": {
+      "sha256": "11e9519e4c1b840c850845bbaba49c40ccf36af3f1f5a1bc0e49eccc4471f197",
+      "size": 460,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/train_amass.py": {
+      "sha256": "24c6b1c8dbd064036930eff3896e7575b9d5bbf1ff252dabd03c82b6b62838f5",
+      "size": 156,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/archive/legacy_imports/train_laterality.py": {
+      "sha256": "4811b781220a2d8d49bb0acb811c1841671df7d2992861ce54871b50a9469fbe",
+      "size": 158,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/command_line_interface.py": {
+      "sha256": "86e55fbc609aa6541bb45ae172d2e9d2b83dc6470d9d1c7cfa7a6496c7d1efe5",
+      "size": 8871,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/data_foundations/amass_core11_conversion_pipeline.py": {
+      "sha256": "ec702cf0f8f4038b60d8ca79fb2b68fb2b6be4ae387f337b5d1dc8fff67bbc79",
+      "size": 55210,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/data_foundations/amass_inventory_generation.py": {
+      "sha256": "47e4aad16fa9229a2cbd3a5797abee610f6119b4b435da9607dba14a5530b887",
+      "size": 4175,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/data_foundations/amass_subject_registry_finalization.py": {
+      "sha256": "1ce5805313d725099a53e2f9c58fbd4cc36ed52f5555776754abaab693837acc",
+      "size": 9963,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/data_foundations/gavd_core11_conversion_pipeline.py": {
+      "sha256": "9854b6037dd0c4c0ac3fa0e0f7b164ed6d88983f9af32aaf31674dd477f592b6",
+      "size": 6857,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/data_foundations/gavd_pose_extraction_primitives.py": {
+      "sha256": "ec67304a1634d82227efdd7bfeab1548cf3dc98087d9564db6b636edb31b2da3",
+      "size": 3537,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/data_foundations/gavd_video_download_pipeline.py": {
+      "sha256": "5ed7e16c06e1fc8399442a1c22a915086a8e962a27625e92c84b905afece4dc0",
+      "size": 15418,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_cache_reuse.py": {
+      "sha256": "fe4dbd6efa14848c497b1eb360a149cf730d03193b817fc750f510ec12488a54",
+      "size": 17606,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_cohort.py": {
+      "sha256": "f6bbc65e0af96e81973ccd0cf0954875ecab43cb8aca8da6e259b708f8897382",
+      "size": 18851,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_contracts.py": {
+      "sha256": "56d88cbc4b7e179641a0aa6aec18a142aec0a5b5949bf305a37a3f3cf645727f",
+      "size": 18882,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_controls.py": {
+      "sha256": "03d75cd626334ed72aaf81d422976d4d9452a63eb3ee69bcf98847c468973dfc",
+      "size": 2782,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_direct_reporting.py": {
+      "sha256": "ab5c24a2316e5b204a14834e2061401951929a5c08943e5e7622c9bff051b18f",
+      "size": 10426,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_entrypoint.py": {
+      "sha256": "721e57ea65421df3aad50f51b1d35cb6f1b8c9f6cfb2fe273c98f748b6304a9e",
+      "size": 12443,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_feature_cache.py": {
+      "sha256": "12c72faa15dae2056c821123fe2275b560fd8bd17aa9f9b85350bc3134faed84",
+      "size": 8647,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_gate_decision.py": {
+      "sha256": "943d98f4562f13902cfa4028e87fed01ac98d0895df1df65ac7ce9433b17f80e",
+      "size": 7304,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_joint_calibration.py": {
+      "sha256": "eee5404e5f8ccd044911fe1be264c7852e84bd18db5cbf5c15caa7054b991525",
+      "size": 7544,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_joint_models.py": {
+      "sha256": "9bd0779d16e1c442813d18239614376af6ef133e2788aaf69a20d05881fc3879",
+      "size": 14582,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_joint_reporting.py": {
+      "sha256": "d6b8b929f8ead9b20c782718916151f2562c3d9c504f0ff31f5f7d532f75e9ec",
+      "size": 17737,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_joint_training.py": {
+      "sha256": "2f9586d701d49fb87a326c00e0d80fd5d9186a19916bbba8bbe30b044cedd5ae",
+      "size": 31434,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_metrics.py": {
+      "sha256": "847ae62ded50abc277ec84649e22e2bacd93ca7f3d9336ee27830e138a2cb0cb",
+      "size": 4962,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_nested_training.py": {
+      "sha256": "17952e8bc3c3799c9dd5fa89995caafdbedf799bb9e2acd15d9b33338977a5e8",
+      "size": 19769,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_notebook_workflow.py": {
+      "sha256": "d59e35418ad3074a23dd5128efa78dda46c36f2d77baff69fbee9376e8ff6110",
+      "size": 13074,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_nuisance_features.py": {
+      "sha256": "ccbf925cee9804a9c9ce60fc9c1fd4a2d249d652b1ba321a4f792c5f7f88d578",
+      "size": 4300,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_readiness.py": {
+      "sha256": "c48e6e6a7f2f98ae30793fed413b32192aa15b3f1b9c2af5d03e0030da726509",
+      "size": 6891,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_reporting.py": {
+      "sha256": "730d5e2d636f6d840d573cb7090bd0b7c14edcd2f67b97e481cd9b9ee1526a69",
+      "size": 26387,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_residual_models.py": {
+      "sha256": "c9d695aafb95eaee4a6022b561f4cf842fe2e3f8b222b9113ff05e4666f4609b",
+      "size": 6341,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_smoke.py": {
+      "sha256": "6b76d02824e25631eb818a502e3898b6471bdf0e346ac599b5ecb329984a94c6",
+      "size": 10347,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_source_inventory.py": {
+      "sha256": "83e0fe0fe6ff717c0d512cfc312dc501b457d1cd86391b5bf386733abf67ecf8",
+      "size": 2830,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_token_regions.py": {
+      "sha256": "53a3f045bf2888c32b53a64605addfc1ff849d681bf06c1b1dc2872407b28551",
+      "size": 3494,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_tutorial_inspection.py": {
+      "sha256": "f4e1e831d45f67c80e8fc343fc491f5d36d4845729cc880c22bce85053054630",
+      "size": 6827,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_validity_audits.py": {
+      "sha256": "41e46150be954035de3297f5d4e3ef8847a12c817f2c7e17f4ade05bb7ee591b",
+      "size": 19026,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_video_pose.py": {
+      "sha256": "c28eed7e33a4e59525960f488812109db42b9a2f43db67abd100f0b4a4f37af9",
+      "size": 7541,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation/fi_vjepa_adapter.py": {
+      "sha256": "b2698852d01a1fed7e308b1795f405aafc23b31ff3e2a1296d46795d44934322",
+      "size": 7290,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/__init__.py": {
+      "sha256": "bac2c8a6ec6795aeb6a30a62e3a99c8e4b2259f3132a477a25f07e2ce509de09",
+      "size": 86,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_availability.py": {
+      "sha256": "539802994a61ad6aaf39322e1a37a63333e3477556513cbb42e8ea88bc487e38",
+      "size": 8867,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_cli.py": {
+      "sha256": "f6b7a1d41d38b1110e8ac7b79497878ef19c78de7a3055d941a177a503e15e0c",
+      "size": 3783,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_cohort.py": {
+      "sha256": "abfb85f2b6f43879c9a0e86d3e3ae4434882fd6f480a82c9e7fe02c37b275706",
+      "size": 16979,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_data.py": {
+      "sha256": "ae5e1fc76be43e1976862617e8ed8c6708d9b050faf6274eb426831c44ea1584",
+      "size": 21915,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_nested.py": {
+      "sha256": "da7c869782948ca0e1b28aeb956d9efe8fc0a165297ec2f4db805ce26c3fda1c",
+      "size": 11749,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_readiness.py": {
+      "sha256": "9ab2cdb74b07370ce28bce0274707790e9086b0225bb1b42cccfe21d42b3f188",
+      "size": 3364,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_training.py": {
+      "sha256": "bce1da19b4672b87a8798ef695ed0a2b8c6caabb23a599ed42d8cd80e274efcc",
+      "size": 29206,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/iclr_bridge/__init__.py": {
+      "sha256": "0f8693a00c9c9ba543ba2167519425859e30983058635994efd78d558cc5375e",
+      "size": 86,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/iclr_bridge/cached_panel.py": {
+      "sha256": "3aa97a03eacc9800cbba7d74932ccf35e5a8ab80394477d78f430e468e3be8d4",
+      "size": 34668,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/iclr_bridge/inspection.py": {
+      "sha256": "ace4669f9e4260db8c2df5aa1ab63a7822a4f3c586dbe444872eae7024ba1cca",
+      "size": 1520,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/iclr_bridge/symmetry_calibration.py": {
+      "sha256": "6fea3bceb7152840d6386d5a24555c1a972d046c496ab6cd6d54665201187572",
+      "size": 23529,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/iclr_bridge/verification_supplement.py": {
+      "sha256": "b61837d62d17a7547652649f6c3d8f0fd3d74801fe8096d852df6dc0a08d5ed1",
+      "size": 8659,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_benchmark_entrypoint.py": {
+      "sha256": "b289473efc79421022e43add5ebc507384f758b18c630991f96e921b90793c55",
+      "size": 2306,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_corruption_inference.py": {
+      "sha256": "a24634e9e98987c0f20d2c87183b77842492dec650e79d5c798c4d6372145bcd",
+      "size": 37187,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_gauge_evaluation_pipeline.py": {
+      "sha256": "8cee5fc9aea7cc7a3beba2c1b6e8f0b9d24d075c648e7f7589674290c3d03040",
+      "size": 19414,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_gauge_training_pipeline.py": {
+      "sha256": "d62f763ea9346d48090c8f3287a90737d12e84d10beea9596e29195adcb1f8bf",
+      "size": 20368,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_manifest_construction.py": {
+      "sha256": "41e2ce681a3966cc98b72a3b6e4c12cb3f7e19d4d68462c0f0864ee51fd79ed9",
+      "size": 8412,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_sequence_benchmarking.py": {
+      "sha256": "50d56f4adc9aa9bc80e10027697f825bd601c8f551450b7aae8541d9facfcff1",
+      "size": 34441,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_study_protocol.py": {
+      "sha256": "f0d73abe8e771d583f8f42d1f6fa9fc8b1e200f85fab05b58cf8c724c5b825d8",
+      "size": 4856,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_training_entrypoint.py": {
+      "sha256": "8f5d1b655519e4e034c70d255846e781b09bcf32e38adeeb181bdf70387ead32",
+      "size": 5600,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/laterality_training_smoke_check.py": {
+      "sha256": "c0a6a72896370ed83e5cc8486eb83f3649c670e193f8b6ae7304d5b3fd637dc2",
+      "size": 3076,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/latent_laterality/source_transfer_evaluation_pipeline.py": {
+      "sha256": "bf15efac56c5e77a7d65420577d6600f28966ca21a8d9e0db9f9eacaba254365",
+      "size": 10699,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/__init__.py": {
+      "sha256": "ff147ff2474b648190431b8cbfe527371083e1547a97bef53568006e23bd2529",
+      "size": 127,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/adapters.py": {
+      "sha256": "35e4509eb6d7692dd21212cedb55641c70e3573d96cd7eef70815f4df91204a6",
+      "size": 33976,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/config.py": {
+      "sha256": "6338168cd2ac0aede6bc62154356850575df967b22ef0d4e8eaefe4730b76ddf",
+      "size": 4878,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/data.py": {
+      "sha256": "2517cd795c906b086835758cecb5bda6f6b9fc130cd414791c95ef7e9fb2d891",
+      "size": 10362,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/gavd.py": {
+      "sha256": "979408a1371c82efbdfcc7c89e5bc1f2449a88228a3197be40a7811b0bf97bdb",
+      "size": 12970,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/geometry.py": {
+      "sha256": "e0967359312d6d724a8df8c60418b0f8dc60d52227c5d0bef1978b26a9d13e26",
+      "size": 13089,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/learning.py": {
+      "sha256": "341011ea8269fa6e29e57a51984d28743886399a45286c298760052c7f6dbc67",
+      "size": 12662,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/metrics.py": {
+      "sha256": "9534285bb636ffdc37a806d129ae07910869e84c1b95c83f142a6ae26c2e8994",
+      "size": 6846,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/rendering.py": {
+      "sha256": "2dea2840a4dadf3c8020e3f242fa9272623bbb12381672be82e696026b7c7707",
+      "size": 8911,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/reporting.py": {
+      "sha256": "5c67b41a9ddd10ebb071a3c7bb7a574d557a587229ac0ef0624ca83402f60ad7",
+      "size": 4645,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/motion_preservation/workflow.py": {
+      "sha256": "45005d94ecb07b523761a5176522b82ff7ba3443bdf50db27f8d39221ccbf663",
+      "size": 40499,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/amass_core11_training_pipeline.py": {
+      "sha256": "453739e34e00050d32ac0bcd1c5c62d63f91ea7db95a3df3663156201572f2e7",
+      "size": 42720,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/amass_training_entrypoint.py": {
+      "sha256": "77d4161c0d9ec78cd9198c7be7f3ee503b529ba5d63a15abde75ff270f2578c1",
+      "size": 11757,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/gavd_core11_probe_entrypoint.py": {
+      "sha256": "1feb01ab0dda35a1d6aa05b411142bc3985c4f62a0b8e4ace34b38995fc40704",
+      "size": 2316,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/gavd_core11_probe_evaluation.py": {
+      "sha256": "5d9a4c2c1040ca8ff03280a57d42896b3091a4660c7e782a8f41b4a9d20330d8",
+      "size": 32094,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/jepa_model_architecture.py": {
+      "sha256": "6fd45e28dee09bab25c8dd7c8a2a5a1e506ea17b6bc3d89c92d1d15aa530a6e3",
+      "size": 51701,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/swap_probe_entrypoint.py": {
+      "sha256": "c113e71a051a029a3dc907e8130658a69790da9048a19cbb0979a72119c23879",
+      "size": 9050,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/research_directions/reflection_equivariance/swap_probe_evaluation_pipeline.py": {
+      "sha256": "b60f0c5e8625ee39662f5e272693ef550affaaf15f0a2299b3d6777353586227",
+      "size": 76695,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/shared_infrastructure/artifact_io_operations.py": {
+      "sha256": "a5985ab782025fa0211b7d493aa94d99aed6246662d6d07e99dc7bdce3625d4c",
+      "size": 1783,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/shared_infrastructure/experiment_result_catalog.py": {
+      "sha256": "2bd416ac3ee672906f4deb5ab6a279a71e0a1776055a82b22da89564eb29fca5",
+      "size": 18386,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/shared_infrastructure/experiment_result_migration.py": {
+      "sha256": "8e7694a6e284fa16482e9aec30d2e72a1b95c19a79a174b59bdd6f4f15752844",
+      "size": 18085,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/source_module_guide.md": {
+      "sha256": "f76241f054741be7042380c9e2a2f869d70b967742add6ccdf615f90f60f6b5f",
+      "size": 2506,
+      "mode": 420
+    },
+    "src/gavd6_sjepa/workspace_validation/notebook_startup_validation.py": {
+      "sha256": "1003ce1a6bb2dc7c1e081dc35fe34ff4f08d13836a01320ec10acc4276a2cea6",
+      "size": 4246,
+      "mode": 420
+    },
+    "tests/test_amass_core11_jepa.py": {
+      "sha256": "73aab9ed3b4b1c79669d39b9ceaabf9aa638573991100649fb2ffadc67abe747",
+      "size": 25415,
+      "mode": 420
+    },
+    "tests/test_archived_compatibility_paths.py": {
+      "sha256": "045875a600a842f599ed7981a98b0e941b8f06e78c6e7f77c01062fd7c3e71a1",
+      "size": 1708,
+      "mode": 420
+    },
+    "tests/test_command_line_interface.py": {
+      "sha256": "08c46ea620326cc7e01356233025b2d782632bd4f2bc5f946d85b426ca7158a9",
+      "size": 2406,
+      "mode": 420
+    },
+    "tests/test_convert_amass_core11.py": {
+      "sha256": "99cdb4a48d3f8efc56eafe82b18340cca0506ebcc527816b5bae8a2b1d93c41c",
+      "size": 16744,
+      "mode": 420
+    },
+    "tests/test_download_gavd_full.py": {
+      "sha256": "647f36be51d75327e42beb7882ba1675196ef80e19c1fcbd00262ffd63e65751",
+      "size": 3506,
+      "mode": 420
+    },
+    "tests/test_experiment_result_organization.py": {
+      "sha256": "438f1134c82dcae416377ca1837235fca990b4809114cfafa8a7cf91e102eff9",
+      "size": 11684,
+      "mode": 420
+    },
+    "tests/test_future_innovation_audit_outcomes.py": {
+      "sha256": "657d00c4a1107c4c2b88e628c7491c9bcbd238fa09025afe7a85c650938c47bb",
+      "size": 10755,
+      "mode": 420
+    },
+    "tests/test_future_innovation_available_cohort.py": {
+      "sha256": "02463b0b1e1f66d7544c3f5c65deb2dc156b483a24a3e7946eab9494ce084e89",
+      "size": 13858,
+      "mode": 420
+    },
+    "tests/test_future_innovation_boxes.py": {
+      "sha256": "8fdcee41773c6294b9ceeba750e00b376beef81f91aaea9cc2377d9cb5dca74c",
+      "size": 2322,
+      "mode": 420
+    },
+    "tests/test_future_innovation_causality.py": {
+      "sha256": "9fff3cb9ca59e44ee1e6571a9301d9585551c0921171081c4c6c568f4812da66",
+      "size": 2841,
+      "mode": 420
+    },
+    "tests/test_future_innovation_cohort.py": {
+      "sha256": "3e464c9e80ecfccfdc806589c90c1ec671988ad5463b5ec61efe6cc76ac3bcc0",
+      "size": 2963,
+      "mode": 420
+    },
+    "tests/test_future_innovation_controls.py": {
+      "sha256": "8ce10daf805d2601d7307acfaa2b2bea029087d7926b2a8e170b793df8be1bca",
+      "size": 2732,
+      "mode": 420
+    },
+    "tests/test_future_innovation_data_flow.py": {
+      "sha256": "46768a9213201fc6698e359b88b81af4f2e571473a973bac826171f926ab6757",
+      "size": 9762,
+      "mode": 420
+    },
+    "tests/test_future_innovation_diagnostics.py": {
+      "sha256": "d5ec1c70c0c657243ad0d876792a209d744561ccde0e5f0a92acaff6d9a3d73c",
+      "size": 3870,
+      "mode": 420
+    },
+    "tests/test_future_innovation_direct_protocol.py": {
+      "sha256": "d8ee37610cd7557a7e824dc60f16a486f047ec5ab62f92171e2c3e4639497cdb",
+      "size": 11356,
+      "mode": 420
+    },
+    "tests/test_future_innovation_failure_evaluation.py": {
+      "sha256": "96c73a3b51b15b9580f520b315c57747769a5061fd6e9bd8c3c41662d00d20dd",
+      "size": 3154,
+      "mode": 420
+    },
+    "tests/test_future_innovation_frames.py": {
+      "sha256": "5211ade4fd1c6c1a40adef360fddff120c5f55572fdaea0a5521649c073ada7f",
+      "size": 2631,
+      "mode": 420
+    },
+    "tests/test_future_innovation_gate.py": {
+      "sha256": "6accd56b524b01b9e887950bba284e1569231a00899d3cd71545697866dd0ac4",
+      "size": 3545,
+      "mode": 420
+    },
+    "tests/test_future_innovation_joint_repair.py": {
+      "sha256": "108eb1a6c421433f27b98ff023d4b8cf5b3bc5427284189244a89c29ee609a30",
+      "size": 13610,
+      "mode": 420
+    },
+    "tests/test_future_innovation_launch.py": {
+      "sha256": "903aab01f648f640961efafc522b3bcec0f6dcf873a4806ce52551de1c656573",
+      "size": 17485,
+      "mode": 420
+    },
+    "tests/test_future_innovation_metrics.py": {
+      "sha256": "326c24f42ac871efc61e7f74c115dc042bc39bac5052ccc84461f334824fcac0",
+      "size": 2807,
+      "mode": 420
+    },
+    "tests/test_future_innovation_notebook_execution.py": {
+      "sha256": "07665c474781cb91dad063ded55dae5d25e0fd86582d880c91ded816c362d4f7",
+      "size": 12613,
+      "mode": 420
+    },
+    "tests/test_future_innovation_notebook_slurm.py": {
+      "sha256": "f91bf7efd890d9145a8d69b3ef06237565d4e948f3d2697e39f9757386e3a826",
+      "size": 6921,
+      "mode": 420
+    },
+    "tests/test_future_innovation_official_adapter.py": {
+      "sha256": "df6c23a7aea361c7f662865a2fa492e1d8a7fc276a6332827841c3196a0a594e",
+      "size": 3752,
+      "mode": 420
+    },
+    "tests/test_future_innovation_projection.py": {
+      "sha256": "48992d13e1e289cdc12eb6157e319134ae5c34ac9ab69e7427d86a705e5e7b76",
+      "size": 1109,
+      "mode": 420
+    },
+    "tests/test_future_innovation_resumption.py": {
+      "sha256": "9c654eab695e32d09e12f9387fe55846645cb98a481db47142bf788074afd367",
+      "size": 7224,
+      "mode": 420
+    },
+    "tests/test_future_innovation_scaling.py": {
+      "sha256": "7474975f1dd6a52c19261126673f858912c32a096c02cc92305e2097708f03af",
+      "size": 13469,
+      "mode": 420
+    },
+    "tests/test_future_innovation_scaling_media.py": {
+      "sha256": "baff8be3c25baf12e925ef2e561018c32cb651321a1970dbe51f0febdfee535b",
+      "size": 6925,
+      "mode": 420
+    },
+    "tests/test_future_innovation_scaling_notebooks.py": {
+      "sha256": "a48fc9ebc09c4a357d12a5f7c464a4967a6390f3db363cff4f94f3327dfec039",
+      "size": 17143,
+      "mode": 420
+    },
+    "tests/test_future_innovation_slurm.py": {
+      "sha256": "fed6445f711a091d2c6f25fd056003da4e199347db3c4262cdae498dbd853ca6",
+      "size": 8095,
+      "mode": 420
+    },
+    "tests/test_future_innovation_source_discovery.py": {
+      "sha256": "26a3030c4ec0a25e18c1a3e87c10a0a3030f74a26b5cbc1458623cb6898c99fa",
+      "size": 7047,
+      "mode": 420
+    },
+    "tests/test_future_innovation_stage_execution.py": {
+      "sha256": "32f0ed08bc83eceeb2fbd2c60d03c856fa4edcf6d3b70ffcda9a54539026719d",
+      "size": 6963,
+      "mode": 420
+    },
+    "tests/test_future_innovation_tokens.py": {
+      "sha256": "1f22eff657688ff134677b980ae871789f1297e973a5c896fd8c24ed424c2226",
+      "size": 1479,
+      "mode": 420
+    },
+    "tests/test_future_innovation_training.py": {
+      "sha256": "bc72ff687030f811a410f049d739eaedb18b6c646ee633ad07d092dec8cb185c",
+      "size": 4029,
+      "mode": 420
+    },
+    "tests/test_future_innovation_tutorials.py": {
+      "sha256": "3a8c61b651403af5d31da807dbbce33271e15a0518c73f153cd6e7a0d3fcc5c9",
+      "size": 5885,
+      "mode": 420
+    },
+    "tests/test_gavd_core11_probe.py": {
+      "sha256": "659de38348da7f08773133900525d1f1c0cb0eca4141c14288aab76b18a8d7d5",
+      "size": 9079,
+      "mode": 420
+    },
+    "tests/test_iclr_bridge.py": {
+      "sha256": "4bb2bf016377edd732436f19613fa407e47e5a29c99b91e34afd4f22015a0616",
+      "size": 6712,
+      "mode": 420
+    },
+    "tests/test_iclr_bridge_inspection.py": {
+      "sha256": "05b13365e48841085dcbfd9b324d949d76bd9baaccd80ff430494703f496c52c",
+      "size": 2942,
+      "mode": 420
+    },
+    "tests/test_iclr_bridge_supplement.py": {
+      "sha256": "62e5561efa0352a4ad8fdc1c66819fb54fd2d81b9134ca14bdea47c9b747bad6",
+      "size": 4513,
+      "mode": 420
+    },
+    "tests/test_iclr_bridge_symmetry.py": {
+      "sha256": "556e0a948ae190b028f2d550e05bfc14ef2f6c6861bf747d218396f2b102eda7",
+      "size": 8403,
+      "mode": 420
+    },
+    "tests/test_latent_laterality.py": {
+      "sha256": "579bcdb0470ed232ce73ac6a941a93f13a5caff65b0e4c1cf443ccb5ca32a954",
+      "size": 25166,
+      "mode": 420
+    },
+    "tests/test_motion_preservation_adapters.py": {
+      "sha256": "122816f85080e5f12f477b995208454d935847e6d7d711d63fd4a4c0d67f8317",
+      "size": 10714,
+      "mode": 420
+    },
+    "tests/test_motion_preservation_data.py": {
+      "sha256": "660c430a072851eb4cd682c2c7bceb06aa928457e1361e47c26510ed5d6d7586",
+      "size": 6330,
+      "mode": 420
+    },
+    "tests/test_motion_preservation_gavd.py": {
+      "sha256": "6ec17aa3df56ee2df8a1fab5bab61b6d2ef97ed29ed9c75f2fa11d2dadc6875e",
+      "size": 3702,
+      "mode": 420
+    },
+    "tests/test_motion_preservation_learning.py": {
+      "sha256": "e6b07be4bf9204b8f95062fc3aec646ffa57022084e94cf5b11624adc53f49fa",
+      "size": 5649,
+      "mode": 420
+    },
+    "tests/test_motion_preservation_notebooks.py": {
+      "sha256": "1679ea876228adf4d13ef55c0e5e4bf7ef9901708949ebc3626929c137ddf238",
+      "size": 5505,
+      "mode": 420
+    },
+    "tests/test_motion_preservation_workflow.py": {
+      "sha256": "989d6332c9f8152358a35b6f76f6a636bdfb8cd6f7ee442f309b78c3a5b642ea",
+      "size": 3942,
+      "mode": 420
+    },
+    "tests/test_research_directory_ownership.py": {
+      "sha256": "5a23803540287658585062920e0d79f4eeca27fc35e9c4129bc6757cdaab458e",
+      "size": 1792,
+      "mode": 420
+    },
+    "tests/test_run_swap_probe_sbatch.py": {
+      "sha256": "e1f1b3130d66808ac86eb2bf94f0791a27d80e3ebf38d3db082b80c79dcaa322",
+      "size": 853,
+      "mode": 420
+    },
+    "tests/test_study_layout.py": {
+      "sha256": "cfd34dc6f1fa0fc07928a575309ecd091219a63366ce5d747595714a6bd692dd",
+      "size": 2034,
+      "mode": 420
+    },
+    "tests/test_swap_probe.py": {
+      "sha256": "cf34fbc609de8ced02143c899699dca05771f9bd41551e0883a351dc553db381",
+      "size": 22546,
+      "mode": 420
+    },
+    "tests/test_unique_project_filenames.py": {
+      "sha256": "eb15955dcda16cb638069570d3f3f4d5014f539f7ff7ac247cbc6d6172a6636f",
+      "size": 1123,
+      "mode": 420
+    },
+    "uv.lock": {
+      "sha256": "8b0024ba6d915802d1a3db47acccea142470127350d5e38299eda99f62292361",
+      "size": 279378,
+      "mode": 420
+    }
+  },
+  "fingerprints": {
+    "gate": "65bb4138cf19d3413ec35d629a493c6697a8b047cfd11bb2d7577c5c8a937272",
+    "scaling": {
+      "historical_future_innovation": "65bb4138cf19d3413ec35d629a493c6697a8b047cfd11bb2d7577c5c8a937272",
+      "scripts/research_directions/future_innovation/calibrate_source_learning_curve.py": "40f21ba27b3c4eb58abc40c327cecd8e877556f5af362d6bf3bc1015582048fc",
+      "scripts/research_directions/future_innovation/run_source_learning_curve.py": "77af7d7a4614f95516b9836a1fd85873bdb627f0b310dc78dceb71b5e8b8d03d",
+      "slurm/future-innovation-scaling/20-prepare-scaling.sbatch": "a1e3885de9a18c3ea4d2b73ad97be72675e5db2a81d3b30f7b5445c679c52987",
+      "slurm/future-innovation-scaling/21-cache-scaling.sbatch": "2a1a3b5aecd4c2fcbd0e78a26d0784ec66cf16e1c2b5eaaf8bc77222b8868924",
+      "slurm/future-innovation-scaling/22-fit-scaling.sbatch": "0883a211e86bc2d1a6fe20a7da46aca703774eca002bc51ab1c5b78ac3b33f39",
+      "slurm/future-innovation-scaling/23-report-scaling.sbatch": "d1a8b62fbbc09074a1f467cf63aaaedddd2406961c994a8393687939116f7741",
+      "slurm/future-innovation-scaling/submit-source-learning-curve.sh": "8452fc460b435ab928f05916d7b725cb4e2708c6e461fd9c9767ba8c6db6af0f",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/__init__.py": "bac2c8a6ec6795aeb6a30a62e3a99c8e4b2259f3132a477a25f07e2ce509de09",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_availability.py": "539802994a61ad6aaf39322e1a37a63333e3477556513cbb42e8ea88bc487e38",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_cli.py": "f6b7a1d41d38b1110e8ac7b79497878ef19c78de7a3055d941a177a503e15e0c",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_cohort.py": "abfb85f2b6f43879c9a0e86d3e3ae4434882fd6f480a82c9e7fe02c37b275706",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_data.py": "ae5e1fc76be43e1976862617e8ed8c6708d9b050faf6274eb426831c44ea1584",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_nested.py": "da7c869782948ca0e1b28aeb956d9efe8fc0a165297ec2f4db805ce26c3fda1c",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_readiness.py": "9ab2cdb74b07370ce28bce0274707790e9086b0225bb1b42cccfe21d42b3f188",
+      "src/gavd6_sjepa/research_directions/future_innovation_scaling/fi_scaling_training.py": "bce1da19b4672b87a8798ef695ed0a2b8c6caabb23a599ed42d8cd80e274efcc"
+    },
+    "accessibility": {
+      "future_innovation_sha256": "65bb4138cf19d3413ec35d629a493c6697a8b047cfd11bb2d7577c5c8a937272",
+      "bridge_files": {
+        "__init__.py": "0f8693a00c9c9ba543ba2167519425859e30983058635994efd78d558cc5375e",
+        "cached_panel.py": "3aa97a03eacc9800cbba7d74932ccf35e5a8ab80394477d78f430e468e3be8d4",
+        "run_cached_panel.py": "837dd6d1db811c5a876fd236f5124d2ca249228b7cdfe6234c9987d5d7f5d050"
+      }
+    }
+  }
+}

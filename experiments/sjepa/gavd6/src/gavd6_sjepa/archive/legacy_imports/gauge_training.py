@@ -1,7 +1,7 @@
 """Compatibility imports for the renamed laterality gauge trainer."""
 
-from gavd6_sjepa.research_directions.latent_laterality import laterality_gauge_training_pipeline as _implementation
-from gavd6_sjepa.research_directions.latent_laterality.laterality_gauge_training_pipeline import *
+from gavd6_sjepa.research_directions.latent_laterality import training as _implementation
+from gavd6_sjepa.research_directions.latent_laterality.training import *
 
 
 def __getattr__(name: str):

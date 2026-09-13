@@ -1,6 +1,6 @@
 # Tutorials
 
-- [Future Innovation: question to decision](../studies/future-innovation/): five
+- [Future Innovation: question to decision](../studies/future-feature-prediction/): five
   connected notebooks with short generated examples, read-only artifact
   inspection, and full Experiment 0 execution through the existing pipeline.
 - [S-JEPA gait model internals](sjepa_model_internals.md): a step-by-step guide to the patch encoder, predictor, student-teacher wrapper, masking, objectives, training state, and downstream pooling.
