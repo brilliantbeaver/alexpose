@@ -189,6 +189,98 @@ class FlowInterfaceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "array of integers"):
                 load_external_prior(path)
 
+
+@unittest.skipUnless(importlib.util.find_spec("safetensors"),
+                     "Install the motion-preservation extra for checkpoint tests")
+class FlowCheckpointTests(unittest.TestCase):
+    """Exercise real serialization with SEA-RAFT's shared BatchNorm layout."""
+
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        core = self.root / "core"
+        core.mkdir()
+        (core / "extractor.py").write_text(
+            "class ResNetFPN:\n"
+            "    def _init_weights(self, args):\n"
+            "        raise AssertionError('Unexpected pretrained initialization')\n"
+        )
+        (core / "raft.py").write_text(
+            "import torch\n"
+            "class RAFT(torch.nn.Module):\n"
+            "    def __init__(self, args):\n"
+            "        super().__init__()\n"
+            "        self.bn3 = torch.nn.BatchNorm2d(2)\n"
+            "        self.downsample = torch.nn.Sequential(\n"
+            "            torch.nn.Conv2d(3, 2, 1), self.bn3)\n"
+        )
+        self.config = self.root / "config.json"
+        self.config.write_text(json.dumps({"iters": 1}))
+        with _AuthorRepository(core).activate():
+            self.source = importlib.import_module("raft").RAFT(SimpleNamespace())
+        with torch.no_grad():
+            for index, tensor in enumerate(self.source.state_dict().values(), start=1):
+                tensor.fill_(index)
+
+    def load(self, checkpoint):
+        return OpticalFlowEstimator("sea_raft", checkpoint, repo_dir=self.root,
+                                    config_path=self.config, device="cpu").model
+
+    def test_shared_checkpoint_restores_parameters_and_batchnorm_buffers(self):
+        from safetensors.torch import load_file, save_model
+
+        checkpoint = self.root / "model.safetensors"
+        save_model(self.source, str(checkpoint))
+        self.assertNotIn("downsample.1.running_mean", load_file(str(checkpoint)))
+        loaded = self.load(checkpoint)
+        self.assertIs(loaded.bn3, loaded.downsample[1])
+        self.assertFalse(loaded.training)
+        self.assertTrue(all(not parameter.requires_grad for parameter in loaded.parameters()))
+        for name, tensor in self.source.state_dict().items():
+            torch.testing.assert_close(loaded.state_dict()[name], tensor)
+
+    def test_full_and_prefixed_checkpoints_remain_supported(self):
+        from safetensors.torch import load_file, save_file, save_model
+
+        checkpoint = self.root / "model.safetensors"
+        save_model(self.source, str(checkpoint))
+        shared = load_file(str(checkpoint))
+        full = {key: value.clone() for key, value in self.source.state_dict().items()}
+        for suffix, values, prefix in [(".safetensors", shared, "module."),
+                                       (".safetensors", full, ""),
+                                       (".pth", full, "module.")]:
+            with self.subTest(suffix=suffix, prefix=prefix):
+                checkpoint = self.root / f"weights{suffix}"
+                weights = {prefix + key: value for key, value in values.items()}
+                if suffix == ".safetensors":
+                    save_file(weights, str(checkpoint))
+                else:
+                    torch.save({"state_dict": weights}, checkpoint)
+                loaded = self.load(checkpoint)
+                for name, tensor in self.source.state_dict().items():
+                    torch.testing.assert_close(loaded.state_dict()[name], tensor)
+
+    def test_missing_unexpected_and_wrong_shape_weights_still_fail(self):
+        from safetensors.torch import load_file, save_file, save_model
+
+        checkpoint = self.root / "model.safetensors"
+        save_model(self.source, str(checkpoint))
+        weights = load_file(str(checkpoint))
+        for key in ("bn3.weight", "bn3.running_mean", "downsample.0.weight"):
+            with self.subTest(missing=key):
+                save_file({name: tensor for name, tensor in weights.items() if name != key},
+                          str(checkpoint))
+                with self.assertRaisesRegex(RuntimeError, "Missing key"):
+                    self.load(checkpoint)
+        save_file({**weights, "unrelated.weight": torch.ones(1)}, str(checkpoint))
+        with self.assertRaisesRegex(RuntimeError, "Unexpected key"):
+            self.load(checkpoint)
+        save_file({**weights, "bn3.weight": torch.ones(3)}, str(checkpoint))
+        with self.assertRaisesRegex(RuntimeError, "size mismatch"):
+            self.load(checkpoint)
+
+
 @unittest.skipUnless(os.environ.get("MOTION_PRESERVATION_MOMASK_REPO"),
                      "Set MOTION_PRESERVATION_MOMASK_REPO for the actual author conversion check")
 class AuthorHumanMLTests(unittest.TestCase):
