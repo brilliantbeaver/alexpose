@@ -425,6 +425,17 @@ class OpticalFlowEstimator:
             weights = torch.load(checkpoint, map_location="cpu", weights_only=True)
         weights = weights.get("state_dict", weights)
         weights = {k.removeprefix("module."): v for k, v in weights.items()}
+        if checkpoint.suffix == ".safetensors":
+            # SEA-RAFT registers the same BatchNorm as both bn3 and
+            # downsample.1. Its safetensors release stores only one name.
+            # Restore aliases only when the model proves object identity;
+            # absent independent tensors must still fail strict loading.
+            state = self.model.state_dict(keep_vars=True)
+            shared = {id(tensor): weights[name] for name, tensor in state.items()
+                      if name in weights}
+            for name, tensor in state.items():
+                if name not in weights and id(tensor) in shared:
+                    weights[name] = shared[id(tensor)]
         self.model.load_state_dict(weights, strict=True)
         self.model.to(self.device).eval().requires_grad_(False)
         self.checkpoint = str(checkpoint.resolve())
