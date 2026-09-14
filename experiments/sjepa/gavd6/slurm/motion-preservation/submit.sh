@@ -3,8 +3,8 @@
 set -euo pipefail
 phase="${1:-}"
 case "$phase" in
-  pilot|inventory|pairs|cache|fit|evaluate|final|gavd) ;;
-  *) echo "Usage: bash slurm/motion-preservation/submit.sh pilot|inventory|pairs|cache|fit|evaluate|final|gavd [--dry-run]" >&2; exit 2 ;;
+  pilot|inventory|pairs|cache|fit|evaluate|final|gavd|diagnose) ;;
+  *) echo "Usage: bash slurm/motion-preservation/submit.sh pilot|inventory|pairs|cache|fit|evaluate|final|gavd|diagnose [--dry-run]" >&2; exit 2 ;;
 esac
 dry_run=0
 [[ $# -le 2 ]] || { echo "Expected one phase and optional --dry-run." >&2; exit 2; }
@@ -19,7 +19,7 @@ else
 fi
 # The executor places each notebook in notebook_runs/run-XX. An explicit
 # MP_NOTEBOOK_OUTPUT_DIR remains available as an exact-path override.
-echo "Notebook outputs: $MP_RUN_ROOT/notebook_runs/run-XX"
+echo "Notebook outputs: ${MP_NOTEBOOK_OUTPUT_DIR:-$MP_RUN_ROOT/notebook_runs/run-XX}"
 dependency="${MP_DEPENDENCY:-}"
 [[ -z "$dependency" || "$dependency" =~ ^(afterok:)?[0-9]+(:[0-9]+)*$ ]] || {
   echo "MP_DEPENDENCY must be a job ID or afterok:jobid[:jobid]." >&2; exit 2;
@@ -28,14 +28,14 @@ dependency="${MP_DEPENDENCY:-}"
 case "$phase" in
   pilot) stages=(00 01 02 03 04) ;;
   inventory) stages=(00) ;; pairs) stages=(01) ;; cache) stages=(02) ;;
-  fit) stages=(03) ;; evaluate|final) stages=(04) ;; gavd) stages=(05) ;;
+  fit) stages=(03) ;; evaluate|final) stages=(04) ;; gavd) stages=(05) ;; diagnose) stages=(06) ;;
 esac
 
 for number in "${stages[@]}"; do
   case "$number" in
     00) script=inventory.sbatch ;; 01) script=controlled-pairs.sbatch ;;
     02) script=cache-evidence.sbatch ;; 03) script=train-calibrate.sbatch ;;
-    04) script=evaluate.sbatch ;; 05) script=gavd-stress.sbatch ;;
+    04) script=evaluate.sbatch ;; 05) script=gavd-stress.sbatch ;; 06) script=diagnose-repair.sbatch ;;
   esac
   options=(--parsable --export=ALL --kill-on-invalid-dep=yes --chdir="$GAVD6_ROOT"
            --output="$MP_RUN_ROOT/logs/$phase-$number-%j.out"

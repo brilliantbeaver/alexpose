@@ -1,6 +1,6 @@
 # Preserve real movement while repairing tracking failures
 
-These six notebooks implement the staged experiment in [Proposal 01](../../docs/studies/motion-preservation/protocol/proposal.md). The question is whether a small gate can preserve real motion while removing tracking noise, beyond a calibrated simple optical-flow baseline.
+These notebooks implement the staged experiment in [Proposal 01](../../docs/studies/motion-preservation/protocol/proposal.md). The question is whether a small gate can preserve real motion while removing tracking noise, beyond a calibrated simple optical-flow baseline. Notebook 06 diagnoses the mechanism using an existing prediction cache.
 
 The default uses real data and configured pretrained models. The explicit `demo` mode uses generated motions and stand-in estimators to teach and check the pipeline. A demo result cannot support a claim about AMASS, GAVD, or a released motion prior.
 
@@ -12,6 +12,7 @@ The default uses real data and configured pretrained models. The explicit `demo`
 | [03 · Train and calibrate](03_train_and_calibrate.ipynb) | Fit the small gate and choose strengths on calibration people | Optimization history and locked operating points |
 | [04 · Preservation and repair](04_preservation_and_repair.ipynb) | Evaluate saved models on development or an explicitly opened final set | Retention versus achieved noise removal and the continue/stop decision |
 | [05 · GAVD visual stress](05_gavd_visual_stress.ipynb) | Inspect real-video flow and optional projected trajectory exports | Flow galleries, unresolved ambiguity and transfer limitations |
+| [06 · Diagnose repair mechanisms](06_diagnose_repair_mechanism.ipynb) | Read existing cached predictions on CPU | Projection effects, conversion loss, signed event errors, and paired flow support |
 
 Run each notebook from top to bottom in a fresh kernel. Every notebook contains the same short setup cell, explains the experiment step, executes it, and displays its outputs. Python implementation lives in `src/gavd6_sjepa/research_directions/motion_preservation`; the notebook cells expose the research sequence without duplicating the numerical code.
 
@@ -30,6 +31,16 @@ export MP_CONFIG="$GAVD6_ROOT/slurm/motion-preservation/pilot.example.json"
 ```
 
 The example configuration selects a small workload. It does not contain personal scratch paths or licensed body assets. Notebook 00 inventories data without claiming that a listed checkpoint has successfully loaded; notebook 02 performs the actual model load.
+
+## Diagnose an existing pilot
+
+Run [notebook 06](06_diagnose_repair_mechanism.ipynb) after notebook 02 or after inspecting the pilot evaluation. Point `MP_RUN_ROOT` at the existing run and use its saved configuration. The diagnostic reads existing NPZ predictions and camera metadata on CPU. It does not load pretrained models, train a gate, or replace calibration settings. Copies of executed notebooks alone are insufficient; the prediction cache must be available.
+
+The default roles are `calibration,development`. `MP_DIAGNOSTIC_ROLES` can select existing training, calibration, or development caches; final data is rejected. `MP_DIAGNOSTIC_TRACE_CASES` controls the number of examples, initially six. Tables, selected traces, and SVG figures are saved under `diagnostics/repair-mechanism` inside the run, or under `MP_DIAGNOSTIC_OUTPUT_DIR` when provided.
+
+Read absolute observed-joint error and signed event error before interpreting retention. The diagnostic separates errors at originally corrupted joints from new damage at previously accurate joints. It also contrasts unprojected candidates with fixed-length projection, including the original projected zero-strength behavior. New strength curves are descriptive analyses on already inspected people, not newly calibrated operating points. Reference-informed controls remain explicitly privileged.
+
+Paired flow contrasts compare each video's available event locations. Coverage can differ between the two explanations; a favorable mean gap alone is not proof that the same pixels support the right decision. Read the complete pair-status and coverage tables alongside the plots.
 
 ## The experiment boundary
 

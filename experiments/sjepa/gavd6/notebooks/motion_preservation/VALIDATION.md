@@ -1,5 +1,24 @@
 # Implementation validation
 
+## Diagnostic stage, 14 September 2026
+
+Notebook 06 and the `diagnose` Slurm phase were added after reviewing the real pilot. This stage reads its existing prediction cache to separate projection damage, prior and representation errors, useful repair, and available optical-flow evidence. It does not fit models, replace calibration, or open final cases.
+
+| Check | Result |
+| --- | --- |
+| Complete motion-preservation test suite | 58 tests ran: 55 passed and 3 optional SEA-RAFT checkpoint tests skipped because the local environment lacks their required dependency |
+| New diagnostic tests | 12 passed, covering corrupted versus accurate positions, the unprojected oracle, projection of variable reference lengths, exact zero strength, person weighting, flow support, matched pairs, and reserved roles |
+| Fresh Jupyter kernel for notebook 06 | All 8 code cells completed with zero error outputs |
+| Cached CPU demo | 32 cases across calibration and development, with two generated people per role; tables, two selected traces, and six SVG figures saved |
+| Figure review | Repair, strength, bone-length, flow, and trace layouts inspected visually |
+| Slurm launch | Shell syntax and launcher tests passed; `diagnose` selects only notebook 06 and requests 8 CPUs, 32 GB, and no GPU |
+
+The fresh-kernel check used generated motion, a smoothing stand-in, and Farneback flow. It validates execution and diagnostic definitions, not a successful repair mechanism. The run's saved configuration may specify CUDA, but the diagnostic itself uses cached arrays on CPU. A focused test verifies that fit and calibration files remain unchanged.
+
+The real pilot's prediction arrays remain on HAIC and were not available for this local diagnostic execution. No HAIC job was submitted. Run `bash slurm/motion-preservation/submit.sh diagnose` against that original run as described in the [Slurm guide](../../slurm/motion-preservation/README.md#5-diagnose-the-existing-pilot-without-another-model-run).
+
+## Original workflow, 13 September 2026
+
 Validated on 13 September 2026. These checks establish that the research workflow runs and preserves its evaluation boundaries. They do not establish that the proposed method works on real motion.
 
 | Check | Result |

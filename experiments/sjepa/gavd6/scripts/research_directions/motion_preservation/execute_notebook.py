@@ -26,10 +26,11 @@ NOTEBOOKS = {
     "03": "03_train_and_calibrate.ipynb",
     "04": "04_preservation_and_repair.ipynb",
     "05": "05_gavd_visual_stress.ipynb",
+    "06": "06_diagnose_repair_mechanism.ipynb",
 }
 
 
-def relocate_links(notebook, output: Path) -> None:
+def relocate_links(notebook, output: Path, *, staged_run_root: Path | None = None) -> None:
     """Keep local reading links usable in the executed copy on scratch."""
     for cell in notebook.cells:
         if cell.cell_type != "markdown":
@@ -40,9 +41,13 @@ def relocate_links(notebook, output: Path) -> None:
             if "://" in target or target.startswith("#"):
                 return match.group(0)
             path, separator, fragment = target.partition("#")
-            # Adjacent notebooks land in the same output folder for a batch.
-            if path not in NOTEBOOKS.values():
+            if path in NOTEBOOKS.values() and staged_run_root is not None:
+                number = next(key for key, name in NOTEBOOKS.items() if name == path)
+                target = staged_run_root / "notebook_runs" / f"run-{number}" / path
+                path = Path(os.path.relpath(target, output)).as_posix()
+            elif path not in NOTEBOOKS.values():
                 path = Path(os.path.relpath((SOURCE / path).resolve(), output)).as_posix()
+            # Explicit shared output folders keep adjacent notebook links.
             return f"[{label}]({path}{separator}{fragment})"
 
         cell.source = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", replace, cell.source)
@@ -59,7 +64,7 @@ def execute_notebook(
     timeout: int | None = None,
 ) -> Path:
     if number not in NOTEBOOKS:
-        raise ValueError("Choose notebook 00 through 05.")
+        raise ValueError("Choose notebook 00 through 06.")
     if mode is not None and mode not in {"real", "demo"}:
         raise ValueError("Mode must be real or demo.")
     if timeout is not None and timeout <= 0:
@@ -68,7 +73,8 @@ def execute_notebook(
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     # Generated outputs use the notebook number as a stable, short reference.
     # Explicit output directories remain supported for one-off workflows.
-    output = Path(output_dir or os.environ.get("MP_NOTEBOOK_OUTPUT_DIR") or
+    output_override = output_dir or os.environ.get("MP_NOTEBOOK_OUTPUT_DIR")
+    output = Path(output_override or
                   run_root / "notebook_runs" / f"run-{number}").expanduser().resolve()
     if output == SOURCE or SOURCE in output.parents:
         raise ValueError("Save executed notebooks outside the source notebook folder.")
@@ -81,7 +87,7 @@ def execute_notebook(
         if cell.cell_type == "code":
             cell.outputs = []
             cell.execution_count = None
-    relocate_links(notebook, output)
+    relocate_links(notebook, output, staged_run_root=None if output_override else run_root)
     record = {"run_root": str(run_root),
               "mode": mode or os.environ.get("MP_MODE", "config/default"),
               "device": device or os.environ.get("MP_DEVICE", "config/default"),
