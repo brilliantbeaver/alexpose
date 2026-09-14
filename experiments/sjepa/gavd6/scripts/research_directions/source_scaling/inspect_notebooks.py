@@ -16,7 +16,6 @@ import re
 import sys
 import tempfile
 import time
-from uuid import uuid4
 
 from jupyter_client import KernelManager
 from jupyter_client.kernelspec import KernelSpecManager
@@ -133,16 +132,16 @@ def execute_notebooks(run_root, *, timeout=600, output_dir=None, inspection_root
         raise ValueError('--timeout must be positive (seconds per code cell)')
     root = check_inputs(run_root)
     base, write_root, binding = inspection_layout(root, inspection_root)
-    label = ('haic-' + os.environ['SLURM_JOB_ID'] if os.environ.get('SLURM_JOB_ID') else 'manual')
-    label += '-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S') + '-' + uuid4().hex[:8]
-    output = Path(output_dir).expanduser().resolve() if output_dir else base / label
+    # Use the registered notebook number as the stable run reference.
+    output = Path(output_dir).expanduser().resolve() if output_dir else base / 'run-23'
     if output == base or not output.is_relative_to(base):
         raise ValueError('Notebook output must be a new directory beneath the selected inspection storage')
     lock_id = hashlib.sha256(str(output).encode()).hexdigest()[:24]
     with stage_lock(write_root, f'source-notebooks-{lock_id}'):
         if binding is not None:
             write_once_json(base / 'inspection-binding.json', binding)
-        # Even a finished batch is immutable: rerunning creates a new batch.
+        # The short run-23 directory is immutable; use --output-dir for a
+        # separately retained attempt.
         output.mkdir(parents=True, exist_ok=False)
         logs = write_root / 'logs/notebooks' / output.name
         logs.mkdir(parents=True, exist_ok=False)
@@ -250,7 +249,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-root', type=Path, default=os.environ.get('FI_RUN_ROOT'))
     parser.add_argument('--timeout', type=int, default=600, help='Seconds per code cell (default 600)')
-    parser.add_argument('--output-dir', type=Path, help='New batch directory beneath the study notebook_runs directory')
+    parser.add_argument('--output-dir', type=Path, help='Explicit alternate output directory beneath inspection storage')
     parser.add_argument('--inspection-root', type=Path, help='External inspection storage; defaults to FI_INSPECTION_ROOT when set')
     parser.add_argument('--check', action='store_true', help='Validate paths and canonical sources without executing or writing')
     args = parser.parse_args()

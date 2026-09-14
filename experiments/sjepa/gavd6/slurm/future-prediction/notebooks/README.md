@@ -74,19 +74,20 @@ must remain accessible. Relative run paths resolve from the checkout.
 
 ## Outputs and recovery
 
-Each submission creates **one notebook-only folder**, printed before submission:
+Each notebook writes to a short, stable `run-XX` folder:
 
 ```text
-$FI_RUN_ROOT/notebook_runs/haic-<batch-id>/
+$FI_RUN_ROOT/notebook_runs/run-00/
     00_question_and_worked_example.ipynb
-    01_cohort_and_alignment.ipynb
-    02_teacher_features_and_validity.ipynb
+$FI_RUN_ROOT/notebook_runs/run-03/
     03_matched_predictors_and_controls_fold-0.ipynb
     ... fold-1 through fold-4 ...
-    04_results_and_next_decision.ipynb
+$FI_RUN_ROOT/notebook_runs/run-01/  # 01_cohort_and_alignment.ipynb
+$FI_RUN_ROOT/notebook_runs/run-02/  # 02_teacher_features_and_validity.ipynb
+$FI_RUN_ROOT/notebook_runs/run-04/  # 04_results_and_next_decision.ipynb
 ```
 
-All jobs inherit `FI_NOTEBOOK_OUTPUT_DIR`. Fold suffixes prevent concurrent
+All jobs use the parent in `FI_NOTEBOOK_OUTPUT_DIR` when supplied. Fold suffixes prevent concurrent
 writers from overwriting each other. Interpreter, source hashes, job IDs and
 execution status are embedded in each notebook's `metadata.fi_execution`.
 A completed diagnostic for a verified audit rejection has `status: blocked`,
@@ -95,7 +96,7 @@ Its process exits zero so downstream diagnostics can finish; this does not
 authorize fitting or mark the scientific measurement complete.
 There are no duplicate source snapshots, execution JSON files or font/kernel
 caches in the notebook folder. Durable command/output/exit logs are stored in
-`$FI_RUN_ROOT/logs/notebooks/haic-<batch-id>/`; normal Slurm logs remain in `logs/`.
+`$FI_RUN_ROOT/logs/notebooks/run-XX/`; normal Slurm logs remain in `logs/`.
 Notebook saves are atomic before each cell, after completed/error cells, and on
 normal or exceptional exit. A hard kill can leave status `running` and the last
 completed cell; consult Slurm accounting and the stage logs for that case.
@@ -170,10 +171,10 @@ Teacher execution defaults to CUDA (`--device cpu` is available for a deliberate
 CPU run). Per-cell timeouts are unlimited by default; Slurm enforces the job
 wall time. `--timeout SECONDS` can impose a positive per-cell limit locally.
 
-Without an explicit output directory or batch environment, standalone runs
-write into `$FI_RUN_ROOT/notebook_runs/manual/`. Use `--output-dir /path/to/folder`
-to group a manual sequence; rerunning the same notebook there replaces its
-previous executed copy atomically. Use a new folder when retaining attempts.
+Without an explicit output parent, standalone runs write into
+`$FI_RUN_ROOT/notebook_runs/run-XX/`. Use `--output-dir /path/to/parent` to
+choose another parent; the executor creates the corresponding `run-XX` child.
+Use a separate parent when retaining multiple attempts.
 
 ## Local verification
 
@@ -232,6 +233,6 @@ bash slurm/future-prediction/submit-notebooks.sh cached
 ```
 
 The cached mode selects [`slurm/future-prediction/notebooks/reuse-cache.sbatch`](reuse-cache.sbatch) with CPU resources; it does
-not submit the original H100 notebook-02 wrapper. A fresh `haic-*` output batch
-preserves previous executed notebooks. Both submission paths use the same
+not submit the original H100 notebook-02 wrapper. The short `run-XX` directories
+preserve the notebook reference. Both submission paths use the same
 production functions and locks; choose one path per run.

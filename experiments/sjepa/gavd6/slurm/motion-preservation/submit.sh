@@ -17,12 +17,9 @@ if [[ "$phase" == final ]]; then
 else
   export MP_EVALUATION_SPLIT=development
 fi
-# Each submission keeps its own executed notebook copies.
-if [[ -z "${MP_NOTEBOOK_OUTPUT_DIR:-}" ]]; then
-  mkdir -p "$MP_RUN_ROOT/notebook_runs"
-  export MP_NOTEBOOK_OUTPUT_DIR="$(mktemp -d "$MP_RUN_ROOT/notebook_runs/haic-XXXXXXXX")"
-fi
-echo "Executed notebooks: $MP_NOTEBOOK_OUTPUT_DIR"
+# The executor places each notebook in notebook_runs/run-XX. An explicit
+# MP_NOTEBOOK_OUTPUT_DIR remains available as an exact-path override.
+echo "Notebook outputs: $MP_RUN_ROOT/notebook_runs/run-XX"
 dependency="${MP_DEPENDENCY:-}"
 [[ -z "$dependency" || "$dependency" =~ ^(afterok:)?[0-9]+(:[0-9]+)*$ ]] || {
   echo "MP_DEPENDENCY must be a job ID or afterok:jobid[:jobid]." >&2; exit 2;

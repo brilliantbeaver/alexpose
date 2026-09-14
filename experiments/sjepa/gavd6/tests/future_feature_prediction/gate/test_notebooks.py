@@ -160,7 +160,7 @@ class FutureInnovationNotebookExecutionTests(unittest.TestCase):
                 cell.outputs = [nbformat.v4.new_output("error", ename="RuntimeError", evalue="fixture", traceback=["fixture"])]
                 kwargs["on_cell_executed"](cell=cell, cell_index=2)
                 # A completed/error cell has already been checkpointed before exit.
-                saved = nbformat.read(next(self.root.glob("notebooks/03*.ipynb")), as_version=4)
+                saved = nbformat.read(next(self.root.glob("notebooks/run-03/03*.ipynb")), as_version=4)
                 self.assertEqual(saved.cells[2].outputs[0].evalue, "fixture")
                 raise RuntimeError("fixture")
             return MagicMock(execute=execute)
@@ -173,13 +173,13 @@ class FutureInnovationNotebookExecutionTests(unittest.TestCase):
                                           output_parent=self.root / "notebooks")
         self.assertEqual(observed[0]["FI_TUTORIAL_MODE"], "execute")
         self.assertNotIn("FI_NOTEBOOK_FOLD", observed[0])
-        receipts = list(self.root.glob("notebooks/*.ipynb"))
+        receipts = list(self.root.glob("notebooks/run-03/*.ipynb"))
         self.assertEqual(len(receipts), 1)
         record = nbformat.read(receipts[0], as_version=4).metadata.fi_execution
         self.assertEqual(record["status"], "failed")
         self.assertEqual(record["last_finished_cell"], 2)
         self.assertEqual(before, hashlib.sha256(source.read_bytes()).hexdigest())
-        self.assertTrue(all(p.suffix == ".ipynb" for p in (self.root / "notebooks").iterdir()))
+        self.assertTrue(all(p.suffix == ".ipynb" for p in (self.root / "notebooks/run-03").iterdir()))
 
     def test_shared_folder_keeps_fold_outputs_separate_and_rejects_duplicate_writers(self):
         folder = self.root / "notebooks"
@@ -195,9 +195,10 @@ class FutureInnovationNotebookExecutionTests(unittest.TestCase):
         ):
             paths = [executor.execute_notebook("03", mode="execute", run_root=self.root,
                                               outer_fold=fold, output_parent=folder) for fold in (0, 1)]
-        self.assertEqual(len(list(folder.iterdir())), 2)
+        run_folder = folder / "run-03"
+        self.assertEqual(len(list(run_folder.iterdir())), 2)
         self.assertEqual({nbformat.read(p, as_version=4).metadata.fi_execution.outer_fold for p in paths}, {0, 1})
-        self.assertTrue(all(p.parent == folder and p.suffix == ".ipynb" for p in paths))
+        self.assertTrue(all(p.parent == run_folder and p.suffix == ".ipynb" for p in paths))
 
     def test_executed_document_links_follow_new_folder_and_array_filenames(self):
         notebook = builder.render("02")

@@ -204,7 +204,7 @@ Each submission prints its executed-notebook folder. The run contains:
 
 ```text
 config.json                 selected experiment configuration
-notebook_runs/haic-*/        executed notebook copies
+notebook_runs/run-XX/        executed notebook copies (XX is the notebook number)
 logs/                       Slurm stdout/stderr and submissions.tsv
 ...                         cases, cached predictions, model fits and reports
 ```

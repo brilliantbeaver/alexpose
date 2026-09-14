@@ -130,9 +130,9 @@ The report job performs numerical verification after fitting.
 | `reports/learning-curve.svg` | Learning-curve figure, available after reporting |
 | `reports/learning-curve.json` | All arm comparisons, uncertainty and the development decision |
 
-New notebook batches live outside the run at
-`$FI_INSPECTION_ROOT/<batch>/23_source_learning_curves.ipynb`, defaulting to
-`outputs/inspections/<run-id>/<batch>/`. Notebook execution receipts are under
+Notebook 23 is stored outside the run at
+`$FI_INSPECTION_ROOT/run-23/23_source_learning_curves.ipynb`, defaulting to
+`outputs/inspections/<run-id>/run-23/`. Notebook execution receipts are under
 `$FI_INSPECTION_ROOT/logs/notebooks/`; notebook Slurm output and submitted IDs are
 under `$FI_INSPECTION_ROOT/logs/slurm/`. Data, fitting and reporting submission
 IDs remain under `$FI_RUN_ROOT/logs/submissions.tsv`. Older notebook copies already

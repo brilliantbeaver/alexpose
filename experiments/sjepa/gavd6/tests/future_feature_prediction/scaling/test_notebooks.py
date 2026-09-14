@@ -240,7 +240,9 @@ class SourceNotebookTests(unittest.TestCase):
             self.assertFalse(saved.metadata.fi_execution.input_snapshot_unchanged)
             with patch.object(runner,'KernelManager',return_value=MagicMock(has_kernel=False)), patch.object(runner,'NotebookClient',return_value=MagicMock()):
                 with self.assertRaisesRegex(RuntimeError,'every code cell'):
-                    runner.execute_notebooks(root)
+                    # Generated run-23 is immutable; use an explicit path for
+                    # the independent second attempt in this test.
+                    runner.execute_notebooks(root, output_dir=root/'notebook_runs/recheck')
 
     def test_notebook_only_submission_needs_no_parent_models_or_media(self):
         with tempfile.TemporaryDirectory() as tmp:

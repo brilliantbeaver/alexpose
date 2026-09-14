@@ -12,11 +12,8 @@ if [[ "$phase" == compute && ! -f "$FI_RUN_ROOT/config/cohort-contract.json" ]];
   echo "No completed cohort at $FI_RUN_ROOT. Run prepare and wait, or use all." >&2
   exit 1
 fi
-mkdir -p "$FI_RUN_ROOT/notebook_runs"
-# One shared, notebook-only folder for this submission; every array task inherits it.
-export FI_NOTEBOOK_OUTPUT_DIR="$(mktemp -d "$FI_RUN_ROOT/notebook_runs/haic-XXXXXXXX")"
 export FI_NOTEBOOK_ARRAY=1
-echo "Executed notebooks: $FI_NOTEBOOK_OUTPUT_DIR"
+echo "Notebook outputs: $FI_RUN_ROOT/notebook_runs/run-XX"
 submit_notebook() {
   local label="$1" script="$2" dependency="$3" suffix='%j' job
   [[ "$label" != fit ]] || suffix='%A_%a'
