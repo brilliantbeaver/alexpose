@@ -82,15 +82,16 @@ generator. `--timeout` sets a per-code-cell limit in seconds (default 600).
 `--check` validates paths and source consistency without executing or writing.
 The notebook also honors `FI_RUN_ROOT` when opened interactively.
 
-Each execution writes a new batch under `$FI_RUN_ROOT/notebook_runs/`. Those
-folders contain executed `.ipynb` files only; execution records live in
-`logs/notebooks/<batch>/23-execution.json` and are also embedded in notebook
+Each execution writes notebook 23 under `$FI_RUN_ROOT/notebook_runs/run-23/`.
+That folder contains executed `.ipynb` files only; execution records live in
+`logs/notebooks/run-23/23-execution.json` and are also embedded in notebook
 metadata. Source notebooks and scientific artifacts are preserved. Saves are
 atomic before cells and after completed/error cells. A failed cell retains its
 traceback and returns nonzero. A hard kill may leave a `running` record and the
-last checkpoint; a new invocation preserves that batch and creates another.
+last checkpoint; use an explicit `--output-dir` for a separately retained retry.
 Explicit `--output-dir` values must be new directories beneath `notebook_runs`;
-locks reject simultaneous writers to the same batch.
+they are exact overrides for one-off attempts. Locks reject simultaneous
+writers to the same run directory.
 
 The runner records the interpreter, source/generator/executor digests, Slurm
 identity and before/after hashes of the displayed artifacts. Changed inputs

@@ -20,14 +20,14 @@ def verify_pipeline_smoke(output, protocol):
     root = synthetic_cache(output / f"{protocol}-synthetic-run", protocol=protocol)
     def execute(number, **kwargs):
         return execute_notebook(number, mode="execute", run_root=root,
-                                output_parent=root / "notebook_runs/manual", **kwargs)
+                                output_parent=root / "notebook_runs", **kwargs)
     # No predictions yet: notebook 04 must retain a failed attempt and a diagnostic STOP.
     try:
         execute("04", timeout=180)
     except CellExecutionError:
         decision = json.loads((root / "reports/gate-decision.json").read_text())
         assert not decision["measurement_complete"]
-        failed = root / "notebook_runs/manual" / NAMES["04"]
+        failed = root / "notebook_runs/run-04" / NAMES["04"]
         assert nbformat.read(failed, as_version=4).metadata.fi_execution.status == "failed"
     else:
         raise AssertionError("An incomplete experiment must fail notebook execution.")
@@ -54,7 +54,7 @@ def verify_pipeline_smoke(output, protocol):
     execute("03", outer_fold=3, timeout=180)
     execute("04", timeout=180)
     assert before == {p: (p.stat().st_mtime_ns, p.read_bytes()) for p in watched}
-    assert all(p.suffix == ".ipynb" for p in (root / "notebook_runs/manual").iterdir())
+    assert all(p.suffix == ".ipynb" for p in (root / "notebook_runs/run-04").iterdir())
     # Reproduce the actual HAIC failure: cache exists but teacher audit fails.
     # Notebook 02 must show diagnostics; 03 must exist but never create fits.
     blocked_root = synthetic_cache(output / f"{protocol}-blocked-synthetic-run", protocol=protocol)
@@ -78,7 +78,7 @@ def verify_pipeline_smoke(output, protocol):
     for number, fold in jobs:
         destination = execute_notebook(number, mode="execute", run_root=blocked_root,
                                        outer_fold=fold, device="cpu", timeout=180,
-                                       output_parent=blocked_root / "notebook_runs/manual")
+                                       output_parent=blocked_root / "notebook_runs")
         notebook = nbformat.read(destination, as_version=4)
         record = notebook.metadata.fi_execution
         assert record.status == "blocked" and record.execution_completed

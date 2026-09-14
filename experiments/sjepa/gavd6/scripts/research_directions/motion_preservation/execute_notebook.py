@@ -66,8 +66,10 @@ def execute_notebook(
         raise ValueError("Timeout must be positive; omit for no per-cell limit.")
     run_root = (ROOT / run_root.expanduser()).resolve()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    # Generated outputs use the notebook number as a stable, short reference.
+    # Explicit output directories remain supported for one-off workflows.
     output = Path(output_dir or os.environ.get("MP_NOTEBOOK_OUTPUT_DIR") or
-                  run_root / "notebook_runs" / stamp).expanduser().resolve()
+                  run_root / "notebook_runs" / f"run-{number}").expanduser().resolve()
     if output == SOURCE or SOURCE in output.parents:
         raise ValueError("Save executed notebooks outside the source notebook folder.")
     output.mkdir(parents=True, exist_ok=True)

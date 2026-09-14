@@ -96,7 +96,7 @@ The dependency chain is:
 New arrays go under `$FI_RUN_ROOT/data/teacher-cache/`; reused original arrays stay
 under `$FI_PARENT_ROOT/teacher-cache/`. The new cache index records their origins
 and bindings. Results go under `$FI_RUN_ROOT/reports/`, stage attempts under
-`logs/stages/`, and each executed notebook under a new `notebook_runs/<batch>/`.
+`logs/stages/`, and notebook 23 under `notebook_runs/run-23/`.
 The older Experiment 0 notebooks and bridge notebooks 19–22 describe separate
 experiments; notebook 23 is the source-learning-curve report.
 

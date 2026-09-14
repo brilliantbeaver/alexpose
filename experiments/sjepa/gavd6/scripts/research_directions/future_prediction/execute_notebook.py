@@ -54,7 +54,7 @@ def relocate_links(notebook, output):
 
 def execute_notebook(number, *, mode="teach", run_root=None, outer_fold=None,
                      device="cuda", timeout=None, output_parent=None):
-    """output_parent is the shared notebook folder, not a parent of per-notebook folders."""
+    """Execute one notebook beneath a short ``run-XX`` output directory."""
     if number not in NAMES or mode not in {"teach", "inspect", "execute"}:
         raise ValueError("Choose notebook 00–04 and teach, inspect, or execute mode.")
     if mode == "execute" and run_root is None:
@@ -76,9 +76,10 @@ def execute_notebook(number, *, mode="teach", run_root=None, outer_fold=None,
             cell.outputs = []
             cell.execution_count = None
             cell.metadata.pop("execution", None)
-    default = (root / "notebook_runs/manual" if mode == "execute"
-               else ROOT / "work/artifacts/notebook_runs/future_innovation" / mode)
-    output = Path(output_parent or os.environ.get("FI_NOTEBOOK_OUTPUT_DIR") or default).expanduser().resolve()
+    default_parent = (root / "notebook_runs" if mode == "execute"
+                      else ROOT / "work/artifacts/notebook_runs/future_innovation" / mode)
+    output_parent_path = Path(output_parent or os.environ.get("FI_NOTEBOOK_OUTPUT_DIR") or default_parent)
+    output = (output_parent_path.expanduser().resolve() / f"run-{number}")
     if output == DESTINATION.resolve():
         raise ValueError("Executed notebooks must be stored outside the canonical notebook directory.")
     label = source.stem + (f"_fold-{outer_fold}" if outer_fold is not None else "")
@@ -190,7 +191,7 @@ def main():
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
     parser.add_argument("--timeout", type=int, help="Per-cell seconds; default unlimited (Slurm enforces job time).")
     parser.add_argument("--output-dir", "--output-parent", dest="output_parent", type=Path,
-                        help="Shared folder containing only executed notebooks.")
+                        help="Parent folder; the executor creates its run-XX child.")
     args = parser.parse_args()
     execute_notebook(args.notebook, mode=args.mode, run_root=args.run_root, outer_fold=args.outer_fold,
                      device=args.device, timeout=args.timeout, output_parent=args.output_parent)
