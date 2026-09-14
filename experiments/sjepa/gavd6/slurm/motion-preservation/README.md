@@ -1,10 +1,37 @@
-# Proposal 01 on HAIC
+# Motion-preservation experiments on HAIC
 
 The launchers execute the [six motion-preservation notebooks](../../notebooks/motion_preservation/README.md) and save their outputs. They use the existing HAIC defaults, account `mind` and partition `hai`. GPU stages request one H100. Use independent experimental conditions to occupy additional GPUs after a passing pilot. The configured optimization seeds run sequentially within each fit job.
 
 ## 1. Set paths in the existing experiment environment
 
-Run from the gavd6 checkout. The examples below are paths to replace with the corresponding files on HAIC; they do not download data or models.
+The six experiments are notebook stages **00–05** sharing one run directory. `pilot` submits 00–04 in order; `gavd` submits 05 separately. Export variables in the shell where you call `submit.sh`; it passes them to every submitted job with `--export=ALL`.
+
+### Shared variables
+
+| Variable | Purpose and requirement |
+| --- | --- |
+| `MP_RUN_ROOT` | **Required by `submit.sh`.** Output directory shared by all stages; use a new directory for a new experiment condition. |
+| `GAVD6_ROOT` | gavd6 checkout. `submit.sh` detects it when unset; exporting it is required when submitting an `.sbatch` file directly. |
+| `MP_PYTHON` | Python interpreter containing the study dependencies. Defaults to `$GAVD6_ROOT/.venv/bin/python`. |
+| `MP_CONFIG` | Optional JSON configuration. Use `pilot.example.json` for the small pilot; when unset, an existing `$MP_RUN_ROOT/config.json` is loaded, otherwise built-in defaults apply. |
+| `MP_MODE`, `MP_DEVICE` | Optional overrides: `real` or `demo`, and `cuda` or `cpu`. The pilot JSON selects `real` and `cuda`; explicit demo mode defaults to CPU. |
+
+### Variables needed by each stage
+
+The table describes **real runs using the default MoMask and SEA-RAFT backends**. Asset locations can also be set in JSON; the corresponding environment variables are overrides, not additional mandatory exports.
+
+| Notebook / submission | Inputs to configure |
+| --- | --- |
+| **00 — Inventory** / `inventory` | Shared variables above. Set asset paths before this stage to inventory them; it reports their availability without loading the models. |
+| **01 — Controlled pairs** / `pairs` | `MP_AMASS_ROOT`: extracted motion files. `MP_BODY_MODEL_ROOT`: licensed SMPL-H and DMPL assets. Optional `MP_DMPL_ROOT` if DMPL files live separately. |
+| **02 — Prior and flow** / `cache` | `MP_MOMASK_REPO`: author checkout; `MP_MOMASK_CHECKPOINT`: RVQ model **directory**. `MP_FLOW_REPO`: SEA-RAFT checkout; `MP_FLOW_CHECKPOINT`: weight **file**; `MP_FLOW_CONFIG`: matching architecture JSON. Reads the cases from 01. |
+| **03 — Train and calibrate** / `fit` | Same run and configuration; reads the cache from 02. Optional `MP_EPOCHS` and `MP_SEEDS` control training. |
+| **04 — Evaluate** / `evaluate` or `final` | Same run with fitted models and calibration from 03. `final` also needs the AMASS/body-model and pretrained-model assets from 01–02 to build and cache final cases. The launcher selects `MP_EVALUATION_SPLIT` automatically. |
+| **05 — GAVD stress** / `gavd` | `MP_GAVD_VIDEO_ROOT`: real videos; `MP_GAVD_RESERVATION`: existing source-reservation CSV. Reuses the SEA-RAFT path settings from 02. Optional `MP_GAVD_POSE_ROOT` adds pose overlays. This stage does not load MoMask or the trained repair gate. |
+
+**Precedence:** explicit `MP_*` experiment settings override the selected JSON. Legacy AMASS variables fill only fields absent from both; built-in defaults fill the rest. Keep the same configuration when resuming. Unsetting `MP_CONFIG` selects the saved run configuration, but other exported overrides still apply.
+
+Run from the gavd6 checkout. Replace the example HAIC asset paths below with your installed locations; these exports do not download anything. The pilot JSON already sets the mode, device, backends and one training seed.
 
 ```bash
 export GAVD6_ROOT="$PWD"
@@ -13,16 +40,24 @@ export MP_RUN_ROOT="/hai/scratch/$USER/motion-preservation/pilot-01"
 export MP_CONFIG="$GAVD6_ROOT/slurm/motion-preservation/pilot.example.json"
 export MP_AMASS_ROOT="/hai/scratch/$USER/amass"
 export MP_BODY_MODEL_ROOT="/hai/scratch/$USER/body_models"
-export MP_GAVD_VIDEO_ROOT="/hai/scratch/$USER/gavd_full/youtube/all"
-export MP_MODE=real
-export MP_DEVICE=cuda
 ```
 
-`MP_AMASS_ROOT` contains paths relative to `manifests/amass/amass_raw_inventory_eligible.csv`. The existing `AMASS_EXTRACTED_ROOT` and `AMASS_BODY_MODEL_ROOT` environment variables are accepted when explicit `MP_*` settings are absent. GAVD selection uses `manifests/gavd/gavd_full_sequences.csv` and recording IDs. Manifests record the available inventory; they are not copied or replaced by generated fixture data.
+`MP_AMASS_ROOT` is the base directory for relative file paths in `manifests/amass/amass_raw_inventory_eligible.csv`; its built-in default is `data/amass`. `AMASS_EXTRACTED_ROOT` and `AMASS_BODY_MODEL_ROOT` are fallbacks only when the corresponding `amass_root` or `body_model_root` field is absent from both JSON and explicit `MP_*` settings. There is no built-in body-model location. GAVD selection uses `manifests/gavd/gavd_full_sequences.csv` and recording IDs. Its video-root default is `data/gavd_full/youtube/all`; configure it in section 4, or earlier to include the installed videos in notebook 00's inventory.
 
 The licensed body-model directory contains `smplh/{male,female}/model.npz` and `dmpls/{male,female}/model.npz`. An explicit `MP_DMPL_ROOT` can point to a separate DMPL tree. Raw AMASS parameters are converted to the first 22 SMPL-H joints and the corresponding body mesh, including the saved shape and DMPL parameters. Model-space coordinates use meters and a positive-up vertical axis; exported predictions must match this convention.
 
 Use the existing project environment with notebook, PyTorch, body-model and image-processing dependencies installed. `MP_PYTHON` can point to another compatible environment. The notebook runner always starts its kernel with that interpreter. It does not use a possibly stale user Jupyter kernel.
+
+### Optional overrides
+
+| Variables | When to use them |
+| --- | --- |
+| `MP_MAX_MOTIONS`, `MP_EPOCHS`, `MP_IMAGE_SIZE`, `MP_SEEDS` | Change motions per role, training epochs, render size or comma-separated training seeds. The pilot JSON uses `8`, `10`, `128` and `17`, respectively. Choose these before creating run artifacts. |
+| `MP_ACCOUNT`, `MP_PARTITION`, `MP_DEPENDENCY` | Override `mind`, `hai`, or add a prerequisite job ID / `afterok:jobid[:jobid]`. |
+| `MP_TORCH_THREADS` | Set the OpenMP/MKL/OpenBLAS thread limit; defaults to `4`. It does not request more Slurm CPUs or GPUs. |
+| `MP_NOTEBOOK_OUTPUT_DIR` | Choose where executed notebooks are saved. Normally leave unset so each submission creates a fresh folder under the run directory. |
+
+Alternative model settings (`MP_FLOW_BACKEND`, `MP_PRIOR_BACKEND`, `MP_PRIOR_ID`, `MP_PRIOR_PREDICTIONS`) and optional `MP_TARGET_SKELETON` are explained in section 2.
 
 ## 2. Configure released models
 
@@ -52,13 +87,15 @@ mkdir -p "$(dirname "$MP_MOMASK_REPO")" "$(dirname "$MP_FLOW_REPO")"
 Download the HumanML3D bundle using the exact file published in MoMask's [author download script](https://github.com/EricGuo5513/momask-codes/blob/main/prepare/download_models.sh). This bundle contains other HumanML3D models alongside the RVQ model. A separate author-hosted RVQ-only download was not verified. The KIT bundle is unnecessary for this experiment.
 
 ```bash
-mkdir -p "$MP_MOMASK_REPO/checkpoints/t2m"
-"$MP_PYTHON" -m gdown --fuzzy \
+mkdir -p "$MP_MOMASK_REPO/checkpoints/t2m" &&
+"$MP_PYTHON" -m gdown \
   'https://drive.google.com/file/d/1vXS7SHJBgWPt59wupQ5UUzhFObrnGkQ0/view?usp=sharing' \
-  --output "$MP_MOMASK_REPO/checkpoints/t2m/humanml3d_models.zip"
+  --output "$MP_MOMASK_REPO/checkpoints/t2m/humanml3d_models.zip" &&
 unzip -n "$MP_MOMASK_REPO/checkpoints/t2m/humanml3d_models.zip" \
   -d "$MP_MOMASK_REPO/checkpoints/t2m"
 ```
+
+Pass the share URL directly: [gdown 6 removed `--fuzzy`](https://github.com/wkentaro/gdown/releases/tag/v6.0.0) because Google Drive URL parsing is automatic. An `unrecognized arguments: --fuzzy` error occurs before downloading; a subsequent missing-ZIP error is a consequence. The `&&` operators above stop the sequence if directory creation or downloading fails. Check the installed version with `"$MP_PYTHON" -m gdown --version`.
 
 The author's alternative command is `bash prepare/download_models.sh` from the MoMask repository root. That script first deletes its existing `checkpoints` directory and then downloads both dataset bundles. The commands above fetch only HumanML3D and preserve existing extracted files.
 
@@ -144,17 +181,18 @@ MP_DEPENDENCY=123456 bash slurm/motion-preservation/submit.sh cache
 bash slurm/motion-preservation/submit.sh final
 
 # Separate stress path; protect the existing FI confirmation sources.
+export MP_GAVD_VIDEO_ROOT="/hai/scratch/$USER/gavd_full/youtube/all"
 export MP_GAVD_RESERVATION="/hai/scratch/$USER/previous-fi-run/config/source-reservation.csv"
 # Optional 22-joint trajectories already projected into original video pixels.
 export MP_GAVD_POSE_ROOT="/hai/scratch/$USER/gavd_projected_pose_exports"
 bash slurm/motion-preservation/submit.sh gavd
 ```
 
-`final` runs notebook 04 with `MP_EVALUATION_SPLIT=final`. It builds/caches final cases and evaluates the saved gate and operating points. It never retrains or recalibrates. `MP_DEPENDENCY` accepts a job ID or `afterok:jobid[:jobid]`. Set `MP_ACCOUNT` or `MP_PARTITION` to override scheduler defaults.
+`final` runs notebook 04 with `MP_EVALUATION_SPLIT=final`; every other `submit.sh` command sets it to `development`, overriding any shell value. Set this variable yourself only when executing notebook 04 directly. Final evaluation builds/caches final cases and uses the saved gate and operating points; it never retrains or recalibrates.
 
 The current final setting changes the event family, camera angle and corruption mechanism together. Interpret it as a combined stress test, not an isolated estimate of event-family transfer.
 
-The GAVD stage requires the existing source-reservation CSV before decoding real video. The prior study's 43 held source IDs are not stored in the local full-video manifest. Without the reservation file, it returns `not_run_missing_source_reservation`. This preserves that study's unopened sources without guessing their identities. Demo mode returns `not_run_demo` for GAVD.
+The GAVD stage requires an existing source-reservation CSV before decoding real video. Set `MP_GAVD_RESERVATION` explicitly for reproducibility. If no reservation is configured, it searches `future-innovation*/config/source-reservation.csv` under `outputs/` and the run directory's parent. The prior study's 43 held source IDs are not stored in the local full-video manifest. If none is found, the stage returns `not_run_missing_source_reservation`; an explicitly configured nonexistent file raises an error. Demo mode returns `not_run_demo` for GAVD.
 
 Optional pose exports are `{sequence_id}.npz` containing `source_frames[N]` (zero-based original-video frame IDs), `joints2d[N,22,2]` (full-frame pixels), and `coordinate_system="full_frame_pixels"`. `repaired_joints2d` is optional. A WHAM 3D estimate needs an upstream camera projection first. The implemented GAVD stage produces flow galleries, contact sheets and diagnostics; it does not automatically claim learned 3D-gate transfer or ground-truth event preservation.
 
