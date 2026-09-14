@@ -1,6 +1,12 @@
 # From laterality to useful future prediction
 
-## A critical tutorial for the next S-JEPA study
+> **Study context:** This tutorial records the September 2026 target-accessibility
+> investigation. For the current objective, begin with the
+> [motion-preservation guide](../../motion-preservation/README.md).
+> The [evidence inventory](../../../repository/evidence-availability.md) distinguishes
+> preserved report copies from original run bundles absent from this checkout.
+
+## A critical tutorial on choosing future prediction targets
 
 **Research question:** can we teach a skeleton model future information that it
 can actually predict, while preserving meaningful differences in how the body
@@ -26,7 +32,7 @@ Read this document alongside the [laterality paper](../../../../../gavd5-drift/n
 the [direct-v3 repair assessment](../gate/results.md),
 and the [prospective cached-panel protocol](../../iclr/02_cached_panel_protocol.md). The
 new notebooks follow the laterality suite's sequence, starting at 19, and live
-at the top level of this repository.
+in [notebooks/target_accessibility](../../../../notebooks/target_accessibility/).
 
 ![Two completed findings motivate a sharper prediction question.](../manuscript/figures/01_evidence_bridge.svg)
 
@@ -42,8 +48,8 @@ history and useful for observable movement.*
 The laterality experiment starts with 625 accepted clips from 93 source videos.
 A pose detector supplies estimated landmark coordinates and visibility. For
 five bilateral landmark pairs, the target compares median left and right
-coordinate speeds. If the two sides have median speeds \(m_L\) and \(m_R\),
-their contrast is approximately \((m_L-m_R)/(m_L+m_R)\). The full target
+coordinate speeds. If the two sides have median speeds $m_L$ and $m_R$,
+their contrast is approximately $(m_L-m_R)/(m_L+m_R)$. The full target
 averages this quantity over the five pairs.
 
 This is a useful observable: a number calculated from measured trajectories,
@@ -131,9 +137,10 @@ usable negative result, not a failed software job.
 The laterality revision can recompute retained seed means and contrast arithmetic.
 Its raw predictions and checkpoints were unavailable in the reviewed local
 bundle, so it cannot repeat model inference or independently regenerate those
-source-bootstrap intervals here. The direct-v3 bundle supports a stronger local
-reconstruction check. This distinction concerns available evidence, not a reason
-to silently discard either result. See the [laterality aggregate
+source-bootstrap intervals here. The direct-v3 bundle supported a stronger local
+reconstruction check when it was reviewed on 11 September 2026. That original
+bundle is absent from this checkout as of 13 September; retained reports describe
+the earlier check and do not establish that it can be repeated here. See the [laterality aggregate
 recomputation](../../../../work/artifacts/iclr-bridge-2026-09-11/laterality/aggregate_recomputation.json).
 
 ## Step 2 — Read the notebooks as an evidence chain
@@ -171,7 +178,7 @@ either study: some archived outputs predate later masking fixes.
 The broader notebook portfolio supplies useful tools but no substitute for these
 source-held comparisons. Some foundation notebooks learn a label-informed
 representation from rows later used in descriptive evaluation. Those scores are
-not independent-source clinical validation. The frozen Core11 probe likewise
+not independent-source clinical validation. The frozen 11-landmark lower-body probe likewise
 does not establish a trained-feature advantage, and its overlapping source split
 blocks a stronger generalization claim. Early signed-excursion tutorials also
 give the raw baseline the same coordinate summary used to construct the target;
@@ -218,20 +225,20 @@ authorize their use in the student's inputs.*
 
 Under ideal squared-error prediction, define the temporal contribution as
 
-\[
+$$
 u(H)=\mathbb{E}[Y\mid H]-\mathbb{E}[Y\mid C].
-\]
+$$
 
 The conditional expectation is the best average prediction given the indicated
 information. Because C is contained in H, the difference is a function of
 student-available inputs. Under finite second moments and a fixed target metric,
 the corresponding population risk reduction is
 
-\[
+$$
 \mathbb{E}\|Y-\mathbb{E}[Y\mid C]\|^2
 -\mathbb{E}\|Y-\mathbb{E}[Y\mid H]\|^2
 =\mathbb{E}\|u(H)\|^2.
-\]
+$$
 
 To understand the equality, write the first error as the second error plus u.
 The cross term averages to zero because the remaining error has zero conditional
@@ -253,17 +260,17 @@ Reflection M reverses the centered horizontal coordinate and exchanges left and
 right anatomical landmarks, together with confidence and validity. Applied
 twice, it returns the original sequence. For the signed speed contrast,
 
-\[
+$$
 y(MH)=-y(H).
-\]
+$$
 
 A temporal reversal R instead presents the observed trajectory in the opposite
 order while reversing its sampling intervals consistently. Speed magnitudes
 are preserved, so this laterality measurement satisfies
 
-\[
+$$
 y(RH)=y(H).
-\]
+$$
 
 The first equation makes laterality a useful reflection-sensitive observable.
 The second explains why laterality alone cannot establish direction-sensitive
@@ -279,10 +286,10 @@ trajectories are schematic.*
 
 For any encoder h, the two constructed features
 
-\[
+$$
 z^+(H)=\tfrac12[h(H)+h(MH)],\qquad
 z^-(H)=\tfrac12[h(H)-h(MH)]
-\]
+$$
 
 are respectively unchanged and sign-reversed by M. These are called the even
 and odd parts. The identities follow directly from M² = I. They hold for an
@@ -298,7 +305,7 @@ both H and MH. Also examine the unprojected features. Otherwise, an imposed
 algebraic rule can be mistaken for a learned property.
 
 Teacher parity requires its own data. To construct
-\(Y^-(V)=[f(V)-f(MV)]/2\), encode both the video and its mirrored version. The
+$Y^-(V)=[f(V)-f(MV)]/2$, encode both the video and its mirrored version. The
 current pooled cache does not contain f(MV), and mirroring only the skeleton
 while reusing the original video target cannot produce it. Dense-token comparisons
 also require spatial alignment. Even a valid odd video target may describe
@@ -457,7 +464,7 @@ bootstrap summaries. It does not independently refit every saved inner candidate
 the candidate ledger remains the record of those selection fits. A changed
 implementation requires a separately versioned experiment.
 
-The [sealed panel report](../../../../outputs/iclr-bridge-cached-20260911/reports/panel-report.json)
+The [preserved copy of the panel report](evidence/cached-panel-report.json)
 now records a complete measurement. All 1,480 pooled candidates are valid, all
 256 target dimensions remain evaluable, and 17 of 40 selected fold-arm models use
 exact baseline fallback. The independent check reconstructs the selected linear

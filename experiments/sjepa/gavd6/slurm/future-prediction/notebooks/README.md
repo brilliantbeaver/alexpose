@@ -231,7 +231,7 @@ then use:
 bash slurm/future-prediction/submit-notebooks.sh cached
 ```
 
-The cached mode selects `notebooks/reuse-cache.sbatch` with CPU resources; it does
+The cached mode selects [`slurm/future-prediction/notebooks/reuse-cache.sbatch`](reuse-cache.sbatch) with CPU resources; it does
 not submit the original H100 notebook-02 wrapper. A fresh `haic-*` output batch
 preserves previous executed notebooks. Both submission paths use the same
 production functions and locks; choose one path per run.

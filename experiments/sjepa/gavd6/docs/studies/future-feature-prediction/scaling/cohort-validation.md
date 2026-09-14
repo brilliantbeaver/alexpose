@@ -1,5 +1,7 @@
 # Available-video source learning curve: implementation and validation
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 The source learning-curve launcher now freezes a processing cohort from **GAVD
 manifest recordings whose files are available**. It lists missing, ambiguous,
 empty or unreadable recordings as exclusions and continues with available
@@ -94,7 +96,7 @@ The [calibration result](../../../../work/artifacts/source-learning-curve-availa
 is synthetic software evidence, not a scientific result on GAVD.
 
 The separately executed
-[notebook 23](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/notebook_runs/manual-20260912T221427-a0d77ebc/23_source_learning_curves.ipynb)
+[notebook 23 (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
 inspects the retained historical study. It correctly identifies its historical
 cohort policy and the absence of expanded results. It does not retrofit the new
 policy into that study or claim numerical verification. Initial notebook tests

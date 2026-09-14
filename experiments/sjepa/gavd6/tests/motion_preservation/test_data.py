@@ -96,6 +96,15 @@ class ManifestTests(unittest.TestCase):
             np.testing.assert_allclose(motion.timestamps,[0,.25,.5])
             np.testing.assert_allclose(motion.trans[:,0],[0,.5,1])
 
+    def test_nonfinite_dynamic_shape_cannot_be_reference_motion(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path=Path(temporary)/'motion.npz'
+            dmpls=np.zeros((3,8),np.float32);dmpls[1,0]=np.nan
+            np.savez(path,poses=np.zeros((3,156),np.float32),trans=np.zeros((3,3),np.float32),
+                     betas=np.zeros(16,np.float32),dmpls=dmpls,gender='male',mocap_framerate=2.)
+            with self.assertRaisesRegex(ValueError,'Nonfinite motion parameters'):
+                load_motion({'raw_path':str(path)},duration_s=.75,fps=4)
+
 class MeshTransportTests(unittest.TestCase):
     def test_reference_flow_matches_translated_surface(self):
         vertices=np.array([[[-.5,-.5,0],[.5,-.5,0],[0,.5,0]],
@@ -112,6 +121,31 @@ class MeshTransportTests(unittest.TestCase):
         self.assertFalse(blocked.flow_valid.any())
         self.assertFalse(blocked.joint_visible.any())
         self.assertFalse(blocked.foreground.any())
+
+    def test_nearby_occluding_surface_is_not_a_valid_correspondence(self):
+        rear=np.array([[-.6,-.6,0],[.6,-.6,0],[0,.6,0]],np.float32)
+        # The front surface enters the image and hides the rear surface by 1 cm.
+        # The old 1.5 cm nearest-pixel tolerance accepted all 200 hidden points.
+        vertices=np.stack([np.concatenate([rear,rear+[3,0,.01]]),
+                           np.concatenate([rear,rear+[0,0,.01]])])
+        body=BodySequence(np.zeros((2,22,3)),vertices,np.array([[0,1,2],[3,4,5]]),20,
+                          np.array([0,.05]))
+        camera=Camera.look_at(target=(0,0,0),eye=(0,0,3),width=48,height=48,focal_px=48)
+        rendered=render_sequence(body,camera)
+        self.assertGreater(rendered.foreground[0].sum(),100)
+        self.assertFalse(rendered.flow_valid.any())
+
+    def test_slanted_surface_transport_uses_subpixel_depth(self):
+        first=np.array([[-.5,-.5,-.6],[.5,-.5,.6],[0,.5,0]],np.float32)
+        vertices=np.stack([first,first+[.1,0,0]])
+        body=BodySequence(np.zeros((2,22,3)),vertices,np.array([[0,1,2]]),20,np.array([0,.05]))
+        camera=Camera.look_at(target=(0,0,0),eye=(0,0,3),width=48,height=48,focal_px=48)
+        rendered=render_sequence(body,camera)
+        valid=rendered.flow_valid[0]
+        self.assertGreater(valid.sum(),30)
+        expected=48*.1/rendered.depth[0][valid]
+        np.testing.assert_allclose(rendered.flow[0,...,0][valid],expected,atol=1e-5)
+        np.testing.assert_allclose(rendered.flow[0,...,1][valid],0,atol=1e-5)
 
 
 if __name__ == "__main__":

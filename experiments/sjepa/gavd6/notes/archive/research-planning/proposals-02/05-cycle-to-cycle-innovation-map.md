@@ -6,7 +6,7 @@ Do not describe a walk only by its average cycle. Measure what changes unexpecte
 
 Here, **innovation** means new information relative to the immediately preceding cycle. It does not mean improvement, decline, or disease progression.
 
-The comparison is self-referenced: cycle \(c\) predicts cycle \(c+1\) from the same visible walk. This is not a normative anomaly score or a reconstruction of how a patient should walk.
+The comparison is self-referenced: cycle $c$ predicts cycle $c+1$ from the same visible walk. This is not a normative anomaly score or a reconstruction of how a patient should walk.
 
 ## Research question
 
@@ -18,17 +18,17 @@ This proposal is intentionally about nonpersistent change. A stable difference p
 
 Two walks can have the same mean range of motion and the same average cadence but differ in how one step departs from the last. Clinical gait research has long found information in stride-to-stride fluctuations, especially in neurological gait. Simple coefficients of variation summarize their size but lose anatomy and phase.
 
-Let \(C_c(r,p)\) be the frozen target latent for region \(r\) and phase bin \(p\) in cycle \(c\). A small head predicts cycle \(c+1\) from cycle \(c\):
+Let $C_c(r,p)$ be the frozen target latent for region $r$ and phase bin $p$ in cycle $c$. A small head predicts cycle $c+1$ from cycle $c$:
 
-\[
+$$
 \widehat C_{c+1}=F(C_c).
-\]
+$$
 
 For each cell, subtract the expected residual caused by processing the same underlying motion through different source profiles:
 
-\[
+$$
 I(r,p)=\frac{\lVert C_{c+1}(r,p)-\widehat C_{c+1}(r,p)\rVert-\mu_{\mathrm{profile}}(r,p)}{\sigma_{\mathrm{profile}}(r,p)+\epsilon}.
-\]
+$$
 
 The result is a small joint-by-phase map. Positive cells mark changes larger than the calibrated observation floor.
 
@@ -38,25 +38,25 @@ The result is a small joint-by-phase map. Positive cells mark changes larger tha
 
 ### 1. Build cycle pairs without using GAVD event labels
 
-Select manually verified AMASS locomotion sequences with at least four cycles. Use exact 3D contacts or kinematic events to define phase before projection. Resample each accepted cycle separately to 32 phase-aligned frames, then concatenate cycles \(c\) and \(c+1\) into the fixed 64-frame encoder input. The causal cross-cycle head sees only the first 32 frames. Project motions through fold-local GAVD observation profiles, then estimate phase again from the noisy Core11 track.
+Select manually verified AMASS locomotion sequences with at least four cycles. Use exact 3D contacts or kinematic events to define phase before projection. Resample each accepted cycle separately to 32 phase-aligned frames, then concatenate cycles $c$ and $c+1$ into the fixed 64-frame encoder input. The causal cross-cycle head sees only the first 32 frames. Project motions through fold-local GAVD observation profiles, then estimate phase again from the noisy Core11 track.
 
 Train a separate confidence model to predict phase error. Accept an estimated cycle only if held-profile AMASS tests place its expected boundary error below one eighth of a cycle. This matters because GAVD provides gait-event labels on only 758 of 458,116 frames. Those sparse labels cannot validate a full phase-localization claim.
 
 ### 2. Train a small cross-cycle predictor
 
-Freeze the standard S-JEPA student and EMA target encoders. Train one rank-8 phase-conditioned head on AMASS training identities. The head receives cycle \(c\) and predicts target latents for cycle \(c+1\). A random-encoder arm uses the same head and data.
+Freeze the standard S-JEPA student and EMA target encoders. Train one rank-8 phase-conditioned head on AMASS training identities. The head receives cycle $c$ and predicts target latents for cycle $c+1$. A random-encoder arm uses the same head and data.
 
 The model does not segment recurring motifs or learn a vocabulary. Every comparison is between two adjacent, explicitly phase-aligned cycles.
 
 ### 3. Calibrate the observation floor
 
-For each clean AMASS pair, create replicas through several outer-training observation profiles. Estimate \(\mu_{\mathrm{profile}}\) and \(\sigma_{\mathrm{profile}}\) only from differences among replicas of the same motion. Hold out both identities and profile operators when testing.
+For each clean AMASS pair, create replicas through several outer-training observation profiles. Estimate $\mu_{\mathrm{profile}}$ and $\sigma_{\mathrm{profile}}$ only from differences among replicas of the same motion. Hold out both identities and profile operators when testing.
 
 Also fit a simpler floor using detector confidence, missingness, blur, view, and crop statistics. If that shortcut floor works as well as the S-JEPA calibration, use the simpler method and reject the model claim.
 
 ### 4. Inject changes with known support
 
-Apply an edit only to cycle \(c+1\), with exact region-phase support:
+Apply an edit only to cycle $c+1$, with exact region-phase support:
 
 - one swing-phase foot-clearance reduction;
 - one-cycle knee-excursion reduction;
@@ -96,7 +96,7 @@ Do not infer that a high map indicates deterioration, falls, or a specific patho
 - cycle-to-cycle differences in raw coordinates, velocity, and acceleration;
 - boundary-matched random edits with identical jerk energy;
 - coefficient of variation of phase duration and joint range;
-- phase-matched copy of cycle \(c\);
+- phase-matched copy of cycle $c$;
 - harmonic and vector-autoregressive predictors;
 - confidence and missingness maps;
 - frozen random encoder with the same cross-cycle head;

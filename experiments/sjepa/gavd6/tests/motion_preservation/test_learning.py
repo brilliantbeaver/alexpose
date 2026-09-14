@@ -13,6 +13,7 @@ from gavd6_sjepa.research_directions.motion_preservation.body_geometry import (
 )
 from gavd6_sjepa.research_directions.motion_preservation.preservation_metrics import (
     paired_person_interval,
+    score_case,
     summarize,
 )
 from gavd6_sjepa.research_directions.motion_preservation.repair_models import (
@@ -110,6 +111,34 @@ class PersonAggregationTests(unittest.TestCase):
         second = summarize(repeated).set_index("method")
         np.testing.assert_allclose(first.brier, second.brier)
         np.testing.assert_allclose(first.retention, second.retention)
+
+
+class RepairMetricTests(unittest.TestCase):
+    def test_gap_filling_does_not_count_as_repairing_observed_joints(self):
+        from gavd6_sjepa.research_directions.motion_preservation.body_geometry import demo_motion
+        clean, event = demo_motion(frames=16)
+        truth = event.joints.copy()
+        raw = truth.copy()
+        raw[:, 0, 0] += .02
+        observed = np.ones(raw.shape[:2], bool)
+        observed[4:9, 10] = False
+        # Cached raw gaps are interpolated. A poor interpolation can dominate
+        # total error even when the remaining measured errors are unchanged.
+        raw[4:9, 10, 1] -= .25
+        repaired = raw.copy()
+        repaired[~observed] = truth[~observed]
+        case = dict(raw=raw, truth=truth, clean=clean.joints,
+                    event_reference=truth, observed=observed)
+        metadata = dict(case_id="gap", person_id="p", role="development",
+                        event_family="foot_clearance", fixture="factorial",
+                        event_present=True, noise_present=True)
+        score = score_case(repaired, case, metadata, "gap_fill_only")
+        self.assertAlmostEqual(score["noise_removal"], 0.)
+        self.assertAlmostEqual(score["completion_mse_m2"], 0.)
+        self.assertLess(score["mse_m2"], score["raw_mse_m2"])
+        repaired[observed] = truth[observed] + .5 * (raw[observed] - truth[observed])
+        score = score_case(repaired, case, metadata, "half_observed_error")
+        self.assertAlmostEqual(score["noise_removal"], .75, places=5)
 
 
 if __name__ == "__main__":

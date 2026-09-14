@@ -181,7 +181,7 @@ side-to-contact assignment, that fixes one root convention. A noisy binary
 anchor can be written
 
 $$
-a=g_r\oplus\eta,\qquad \eta\sim\operatorname{Bernoulli}(e_a),
+a=g_r\oplus\eta,\qquad \eta\sim\mathrm{Bernoulli}(e_a),
 $$
 
 for reference block $r$. Calling an experiment “unanchored” while exposing the

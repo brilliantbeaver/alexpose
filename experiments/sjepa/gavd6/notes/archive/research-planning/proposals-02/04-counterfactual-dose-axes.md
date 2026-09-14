@@ -12,7 +12,7 @@ Learn continuous, named projected-motion axes from controlled counterfactual dos
 
 GAVD provides clip labels but no continuous severity field. Turning model confidence or distance from normal into a severity score would invent ground truth. A defensible route starts with quantities that can be changed exactly and measured exactly.
 
-For a clean motion \(m\), define a controlled edit \(T_k(m,d)\). The axis name \(k\) states what changes, and dose \(d\) states how much. For example, a foot-clearance edit changes the minimum swing-foot height by a known amount while preserving the global route. The model is asked to recover the order of \(d\), not to guess a disease.
+For a clean motion $m$, define a controlled edit $T_k(m,d)$. The axis name $k$ states what changes, and dose $d$ states how much. For example, a foot-clearance edit changes the minimum swing-foot height by a known amount while preserving the global route. The model is asked to recover the order of $d$, not to guess a disease.
 
 ![Counterfactual dose axes](images/04-counterfactual-dose-axes.svg)
 

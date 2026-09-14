@@ -1,0 +1,94 @@
+{
+  "date": "2026-09-13",
+  "status": "passed_with_explicit_historical_navigation",
+  "command": ".venv/bin/python scripts/workspace_management/validate_documentation.py",
+  "renderer": "pandoc 3.10.2 TeXMath to native MathML; independent Markdown parsing checks for dropped formulas",
+  "scope": {
+    "files": 540,
+    "markdown_tex_documents_and_notebook_cells": 854,
+    "svg_files": 173,
+    "excluded": [
+      ".agents",
+      ".cache",
+      ".codex",
+      ".git",
+      ".ipynb_checkpoints",
+      ".mypy_cache",
+      ".pytest_cache",
+      ".ruff_cache",
+      ".venv",
+      "__pycache__",
+      "cache",
+      "data",
+      "node_modules",
+      "outputs",
+      "tmp",
+      "work",
+      "scripts/archive/code_layout_20260913"
+    ],
+    "symlink_files": 34,
+    "symlink_content": "file aliases are parsed at their opened path, with relative links resolved from the alias directory; directory symlinks are not traversed",
+    "remote_links": "not fetched",
+    "notebook_outputs": "not inspected; authored markdown only",
+    "strict_archive_links": false,
+    "latex_reader": "preamble macro expansion disabled; table* float width normalized for AST inspection; not a full publication build"
+  },
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "information": 224,
+    "math_occurrences": 852,
+    "unique_expressions": 499,
+    "rendered_expressions": 499,
+    "links": 2348,
+    "code_file_references": 369,
+    "DisplayMath": 165,
+    "images": 199,
+    "html_references": 0,
+    "InlineMath": 687,
+    "resolved_local_references": 3352,
+    "preserved_notebook_navigation": 37,
+    "remote_references_unchecked": 1101
+  },
+  "repairs": {
+    "moved_or_incorrect_clickable_paths": 13,
+    "links_to_verified_report_copy": 2,
+    "missing_artifact_references_documented": 37,
+    "distinct_missing_artifact_paths": 32,
+    "editable_saved_analysis_source_links": 3,
+    "previously_unparsed_display_equations_fixed": 6,
+    "historical_notebook_navigation_occurrences": 37,
+    "historical_notebook_files_preserved": 11,
+    "canonical_notebook_code_outputs_and_metadata_unchanged": 36,
+    "generated_notebook_sources_match_builders": 26,
+    "numerical_protocols_unchanged": 5,
+    "replay_archive_matches_recorded_sha256": true,
+    "legacy_markdown_symlink_replaced_with_navigation_page": 1
+  },
+  "verification": {
+    "documentation_regression_tests_passed": 17,
+    "layout_and_compatibility_tests_passed": 10,
+    "source_figure_assets_checked": {
+      "svg": 166,
+      "png": 47,
+      "pdf": 30,
+      "invalid": 0
+    },
+    "visual_check": "Representative native MathML equations and embedded tutorial SVG inspected in Chrome; this is not a full PDF rebuild.",
+    "independent_review": "Three agents audited references, preservation boundaries and mathematical/readability changes. Adversarial comparison found six display equations dropped by Markdown lists/headings; all six are now parsed and rendered.",
+    "git_diff_check": "passed",
+    "independent_authoring_reference_check": {
+      "opened_paths": 342,
+      "clickable_references": 2308,
+      "missing_local_files_or_anchors": 0,
+      "valid_referenced_local_images": 148
+    },
+    "prohibited_macro_occurrences_in_document_sources": 0
+  },
+  "limitations": [
+    "Original stale navigation remains inside unchanged historical execution payloads. Verified companion destinations are documented; strict archive mode reports the 37 originals as errors.",
+    "Missing historical run artifacts were not regenerated or fabricated; original paths and available copies are documented separately.",
+    "Remote URLs were not fetched. Code-formatted references can describe historical inputs, commands, examples or generated artifacts; unresolved ones remain explicit review information.",
+    "See scope exclusions for runtime/cache trees, notebook outputs and exact replay archives. TeX inspection is not a full publication build."
+  ]
+}

@@ -5,10 +5,9 @@ the mechanism that motivates it, the datasets, the exact measurement instrument,
 decision rule, every control, the possible futures and what each licenses, and the threats to validity.
 Its source fact sheets were retired with the former research-program tree; the
 numbers in this archival document must therefore be treated as historical. The
-remaining [literature and domain notes](../../../../reference/literature/neuro-facts.md)
+remaining [literature and domain notes](../../../../reference/neuro-facts.md)
 are background rather than a replacement numerical contract. The proposal narrative lives in
-[`README.md`](README.md); the runnable experiment lives in the two notebooks named below. No number
-here may contradict `_shared_facts.md`. Folder labels (stroke, parkinsons) are dataset annotations, not
+[`README.md`](README.md); the runnable experiment lives in the two notebooks named below. The original rule required numerical agreement with a now-retired fact sheet. Folder labels (stroke, parkinsons) are dataset annotations, not
 diagnoses, and every gavd5 readout is transductive.
 
 ## 1. The question, in one sentence

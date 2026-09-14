@@ -1,6 +1,6 @@
 > **Archived prompt.** The external and `gavd5` paths below describe the
 > originating workspace and are not available here. Current and archived
-> gavd6 studies are indexed in [notes/README.md](../README.md).
+> gavd6 studies are indexed in [notes/README.md](../../README.md).
 
 **Role**: You are an expert AI/ML research scientist and a specialist for world models and Joint Embedding Predictive Architecture (JEPA)
 

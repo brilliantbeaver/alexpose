@@ -57,7 +57,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from IPython.display import HTML, Markdown, Video, display
-from gavd6_sjepa.research_directions.motion_preservation import workflow, reporting
+from gavd6_sjepa.research_directions.motion_preservation import workflow, plots
 
 get_ipython().run_line_magic("matplotlib", "inline")
 plt.rcParams.update({"figure.figsize": (9, 3.5), "font.size": 11,
@@ -98,8 +98,11 @@ def render_all():
 
         We need two separate measurements:
 
-        - **Repair:** how much injected tracking error is removed?
+        - **Repair:** how much squared error at observed joints is removed?
         - **Preservation:** how much of the known real movement remains?
+
+        Filling missing joints is measured separately. An interpolated gap is
+        a model input, not an observation that can earn tracking-repair credit.
 
         We compare methods at a repair strength chosen on separate calibration
         people. A method cannot win by leaving every noisy coordinate unchanged.
@@ -279,7 +282,7 @@ def render_all():
         a separate requirement.
         """),
         code("""
-        figure = reporting.preview_pair(cfg, split="train")
+        figure = plots.preview_pair(cfg, split="train")
         display(figure)
         plt.close(figure)
         """),
@@ -361,6 +364,13 @@ def render_all():
         alternate backend. Renderer-derived flow is an oracle diagnostic, never
         an estimated-flow research result. Crop transforms apply to both flow
         endpoints; camera compensation must be consistent on both trajectories.
+
+        Read reference flow error together with its coverage columns. The
+        conservative visibility check excludes occluded and unresolved surface
+        points. Foreground coverage is the fraction of visible source-body
+        pixels scored; all-pixel coverage uses the whole source image. A low
+        error on a small visible subset does not establish reliable whole-body
+        flow. MoMask inputs must use its trained rate of 20 frames per second.
         """),
         code("""
         started = perf_counter()
@@ -392,7 +402,7 @@ def render_all():
         comparisons, not silently replaced or counted as executed baselines.
         """),
         code("""
-        figure = reporting.preview_pair(cfg, split="train")
+        figure = plots.preview_pair(cfg, split="train")
         display(figure)
         plt.close(figure)
         """),
@@ -411,7 +421,7 @@ def render_all():
         code("""
         baseline_report = workflow.baseline_report(cfg, split="development")
         display(baseline_report["summary"])
-        figure = reporting.plot_tradeoff(baseline_report)
+        figure = plots.plot_tradeoff(baseline_report)
         figure.axes[0].set_title("Full-strength baselines: unmatched repair quality")
         display(figure)
         plt.close(figure)
@@ -487,7 +497,7 @@ def render_all():
         display(history.tail(12))
         """),
         code("""
-        figure = reporting.plot_history(history)
+        figure = plots.plot_history(history)
         display(figure)
         plt.close(figure)
         """),
@@ -517,9 +527,11 @@ def render_all():
         understanding the tradeoff, but its best test point cannot replace the
         locked primary comparison.
 
-        For three optimization seeds, use separate run directories. Reuse the
-        same people and variants across seeds. The bootstrap groups by person;
-        frames and variants are not independent experimental units.
+        To fit three optimization seeds in one run, set `MP_SEEDS=17,23,42`
+        before training. The workflow reuses the same people and variants and
+        reports seed consistency. Use a new run directory when changing the
+        method or data condition. The bootstrap groups by person; frames,
+        variants and optimization seeds are not independent people.
 
         Next: [04 · Measure preservation and repair](04_preservation_and_repair.ipynb).
         """),
@@ -568,13 +580,19 @@ def render_all():
 
         `1 - abs(d(y) - d(x_event)) / abs(a)`.
 
-        One means the correct event amplitude remains. Zero means an error as
+        One means the event descriptor matches its reference. Zero means an error as
         large as the event itself. Negative retention is allowed and must not
         be clipped away. Overshoot and signed errors are reported separately.
 
-        Repair is measured against the correct truth for the case, including
-        `x_event` when an event is present. Noise removal of 0.25 means a quarter
-        of the declared raw error has been removed under that metric.
+        Repair uses squared 3D error at observed joints, measured against the
+        correct truth for the case, including `x_event` when an event is present.
+        Noise removal of 0.25 means a quarter of that observed-joint squared
+        error was removed. The raw and repaired scores use the same mask.
+
+        Missing joints are interpolated before the prior runs. Their separate
+        `completion_mse_m2` score measures gap filling. Also inspect
+        `observed_mse_m2`, all-joint `mse_m2`, and `missing_fraction`. Missing
+        joints cannot inflate the primary repair ratio.
         """),
         code("""
         # Worked metric example only. These numbers are not model results.
@@ -592,6 +610,8 @@ def render_all():
         transfer perfectly, so two methods can achieve different removal on new
         people despite sharing a calibration target. Do not call a retention
         gain a matched-quality improvement if repair quality is materially worse.
+        Both methods must reach the target on event-plus-noise cases, as well
+        as in the overall noisy-case average.
         """),
         code("""
         started = perf_counter()
@@ -600,7 +620,7 @@ def render_all():
         display(report["summary"])
         """),
         code("""
-        figure = reporting.plot_tradeoff(report)
+        figure = plots.plot_tradeoff(report)
         display(figure)
         plt.close(figure)
         """),

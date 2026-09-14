@@ -15,7 +15,7 @@ PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -t . -v
 | [reflection_equivariance](reflection_equivariance/) | Reflection contracts, representation training, frozen GAVD probes and the bilateral-correction control. |
 | [latent_laterality](latent_laterality/) | Sequence corruption, unknown correspondence and benchmark gates. |
 | [data](data/) | AMASS conversion and GAVD acquisition. |
-| [infrastructure](infrastructure/) | Command routing, archived adapters, repository ownership and result organization. |
+| [infrastructure](infrastructure/) | Command routing, archived adapters, repository ownership, result organization and documentation rendering/link checks. |
 
 Run one package, for example:
 

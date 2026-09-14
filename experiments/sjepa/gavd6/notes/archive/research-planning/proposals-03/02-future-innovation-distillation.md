@@ -87,7 +87,7 @@ This order prevents an easy but misleading result. Without the baseline, skeleto
 
 The formal two-week question is:
 
-> On GAVD source videos excluded from training, does whole-body skeleton history increase the prediction \(R^2\) for V-JEPA 2.1 future representations by at least 0.05 beyond current RGB features and the full nuisance baseline? Is the real-skeleton gain at least twice the gain from time-shuffled skeletons, while skeletons from mismatched clips provide approximately no gain?
+> On GAVD source videos excluded from training, does whole-body skeleton history increase the prediction $R^2$ for V-JEPA 2.1 future representations by at least 0.05 beyond current RGB features and the full nuisance baseline? Is the real-skeleton gain at least twice the gain from time-shuffled skeletons, while skeletons from mismatched clips provide approximately no gain?
 
 In plainer language, the experiment must satisfy all three conditions:
 
@@ -103,22 +103,22 @@ The notation below describes the same logic precisely.
 
 Let:
 
-- \(v_t\) be the frozen V-JEPA representation of the observed RGB context up to time \(t\);
-- \(v_{t+h}\) be the teacher's representation of a future video block \(h\) frames later;
-- \(n_t\) be nuisance variables available at time \(t\);
-- \(s_{\leq t}\) be all skeleton observations up to time \(t\).
+- $v_t$ be the frozen V-JEPA representation of the observed RGB context up to time $t$;
+- $v_{t+h}$ be the teacher's representation of a future video block $h$ frames later;
+- $n_t$ be nuisance variables available at time $t$;
+- $s_{\leq t}$ be all skeleton observations up to time $t$.
 
-The horizon \(h\) says how far into the future we are trying to predict. The experiment uses horizons of 8, 16, and 32 frames.
+The horizon $h$ says how far into the future we are trying to predict. The experiment uses horizons of 8, 16, and 32 frames.
 
 ### Step 1: predict the future without skeleton history
 
-Fit a baseline function \(g\):
+Fit a baseline function $g$:
 
 $$
 \hat{v}_{t+h}^{\mathrm{base}} = g(v_t, n_t)
 $$
 
-The hat means “predicted.” Thus, \(\hat{v}_{t+h}^{\mathrm{base}}\) is the baseline's best prediction of the future teacher representation.
+The hat means “predicted.” Thus, $\hat{v}_{t+h}^{\mathrm{base}}$ is the baseline's best prediction of the future teacher representation.
 
 ### Step 2: calculate what the baseline missed
 
@@ -126,11 +126,11 @@ $$
 e_{t,h} = v_{t+h} - \hat{v}_{t+h}^{\mathrm{base}}
 $$
 
-The residual \(e_{t,h}\) is the future innovation. It is a vector because the teacher representation contains many features.
+The residual $e_{t,h}$ is the future innovation. It is a vector because the teacher representation contains many features.
 
 ### Step 3: test what skeleton history adds
 
-Fit a small predictor \(q\) for the remaining error:
+Fit a small predictor $q$ for the remaining error:
 
 $$
 \hat{e}_{t,h} = q(s_{\leq t}, v_t, n_t)
@@ -145,7 +145,7 @@ $$
 
 The full system differs from the baseline by its residual-prediction head and skeleton history. The same head is therefore tested with correctly paired, shuffled, and mismatched skeletons. The extra gain from the correctly paired skeleton—beyond these matched controls—is the evidence for skeleton-specific information.
 
-Let \(R^2_{\mathrm{base}}\) be the held-out \(R^2\) of the baseline and \(R^2_{\mathrm{full}}\) be the held-out \(R^2\) after skeleton history is added. Here, \(R^2\) measures how much variation in the true future representation a predictor explains. Higher is better; zero means no better than always predicting the training mean, and a negative value means worse than that simple mean prediction. Compute it for each of the 256 projected features, use a prespecified aggregate for the headline score, and also show the full feature-level distribution.
+Let $R^2_{\mathrm{base}}$ be the held-out $R^2$ of the baseline and $R^2_{\mathrm{full}}$ be the held-out $R^2$ after skeleton history is added. Here, $R^2$ measures how much variation in the true future representation a predictor explains. Higher is better; zero means no better than always predicting the training mean, and a negative value means worse than that simple mean prediction. Compute it for each of the 256 projected features, use a prespecified aggregate for the headline score, and also show the full feature-level distribution.
 
 The raw skeleton gain is:
 
@@ -153,7 +153,7 @@ $$
 \Delta R^2_h = R^2_{\mathrm{full}} - R^2_{\mathrm{base}}
 $$
 
-The headline threshold is \(\Delta R^2_h \geq 0.05\) at one or more horizons.
+The headline threshold is $\Delta R^2_h \geq 0.05$ at one or more horizons.
 
 We also report the **skeleton-explainable fraction**:
 
@@ -162,9 +162,9 @@ F_h = \frac{R^2_{\mathrm{full}} - R^2_{\mathrm{base}}}
 {1 - R^2_{\mathrm{base}}}
 $$
 
-The denominator is the fraction of future variation that the baseline did not explain. Therefore, \(F_h\) asks what fraction of the baseline's remaining error is recovered after skeleton history is added.
+The denominator is the fraction of future variation that the baseline did not explain. Therefore, $F_h$ asks what fraction of the baseline's remaining error is recovered after skeleton history is added.
 
-For example, suppose the baseline has \(R^2=0.60\) and the full predictor has \(R^2=0.66\). Then:
+For example, suppose the baseline has $R^2=0.60$ and the full predictor has $R^2=0.66$. Then:
 
 $$
 \Delta R^2 = 0.66 - 0.60 = 0.06
@@ -176,11 +176,11 @@ $$
 F = \frac{0.06}{1-0.60} = 0.15
 $$
 
-Skeleton history added 0.06 \(R^2\) and explained 15% of what the baseline had missed.
+Skeleton history added 0.06 $R^2$ and explained 15% of what the baseline had missed.
 
-- \(F_h=0\): skeleton history adds nothing.
-- \(F_h=1\): skeleton history explains everything the baseline missed.
-- \(F_h<0\): adding skeleton history makes prediction worse.
+- $F_h=0$: skeleton history adds nothing.
+- $F_h=1$: skeleton history explains everything the baseline missed.
+- $F_h<0$: adding skeleton history makes prediction worse.
 
 Negative values are reported rather than clipped to zero because they reveal failed or harmful distillation.
 
@@ -192,7 +192,7 @@ Use the official [V-JEPA 2.1 ViT-B checkpoint](https://github.com/facebookresear
 
 ViT-B is chosen because it is fast enough for the two-week study. A larger teacher is tested only later as a sensitivity analysis if the main mechanism works.
 
-The prediction must be **causal**: information after time \(t\) cannot enter any input used to predict time \(t+h\). A causal mask hides future video blocks from the context pathway while retaining them as targets. Synthetic tests will alter future pixels and verify that the context representation does not change. If the official predictor cannot provide a clean past-to-future setup, frozen future encoder features will remain the targets and a separate equal-capacity predictor will be trained. That limitation will be reported explicitly.
+The prediction must be **causal**: information after time $t$ cannot enter any input used to predict time $t+h$. A causal mask hides future video blocks from the context pathway while retaining them as targets. Synthetic tests will alter future pixels and verify that the context representation does not change. If the official predictor cannot provide a clean past-to-future setup, frozen future encoder features will remain the targets and a separate equal-capacity predictor will be trained. That limitation will be reported explicitly.
 
 ### 2. Construct training and test clips without source leakage
 
@@ -206,7 +206,7 @@ Also test **Core11**, the repository's smaller skeleton made of the pelvis plus 
 
 ### 3. Build a deliberately strong baseline
 
-The baseline \(g\) receives:
+The baseline $g$ receives:
 
 - current V-JEPA context features;
 - clip duration and current temporal position;
@@ -238,7 +238,7 @@ Run every model at 8-, 16-, and 32-frame horizons. A method should produce a sen
 
 The conditional experiment above may use RGB and nuisance controls because its purpose is to measure the unique value of skeleton history. Deployment is a separate stage.
 
-If \(F_h\) is reliably positive, freeze the measured innovation targets \(e_{t,h}\) and train a new student that receives skeleton history alone. This student attempts to predict only the skeleton-explainable future-innovation code; it does not copy the teacher's complete video representation.
+If $F_h$ is reliably positive, freeze the measured innovation targets $e_{t,h}$ and train a new student that receives skeleton history alone. This student attempts to predict only the skeleton-explainable future-innovation code; it does not copy the teacher's complete video representation.
 
 Test the student with **future retrieval**. Give it many possible future teacher codes from a held-out batch and ask whether its predicted code selects the correct future. Include difficult distractors matched by walking phase and, where the data permit, by source or person. Retrieval checks whether the predicted representation identifies the correct future, rather than merely achieving a small average improvement across latent dimensions.
 
@@ -250,7 +250,7 @@ Begin with 50 clips from source-separated GAVD development folds. Cache the froz
 
 Continue to the full experiment only if all of the following hold:
 
-- real skeleton history adds at least 0.05 held-source \(R^2\) beyond current RGB and nuisance inputs;
+- real skeleton history adds at least 0.05 held-source $R^2$ beyond current RGB and nuisance inputs;
 - its gain is at least twice the gain from time-shuffled skeleton history;
 - a skeleton taken from the wrong example gives approximately no positive gain;
 - removing the person's image-region tokens from the teacher sharply reduces the effect;
@@ -264,14 +264,14 @@ Stop before training adapters if teacher inference is unstable, future informati
 
 | Question | How it is tested | Result required to pass |
 | --- | --- | --- |
-| Does skeleton history add information? | Held-source \(\Delta R^2\) beyond current RGB and nuisances | At least 0.05 at one horizon and positive at two horizons. |
+| Does skeleton history add information? | Held-source $\Delta R^2$ beyond current RGB and nuisances | At least 0.05 at one horizon and positive at two horizons. |
 | Does correct motion matter? | Compare real skeletons with time-shuffled and clip-mismatched skeletons | Real gain is at least twice the shuffled gain; mismatched gain is near zero. |
-| Did S-JEPA learn something beyond raw coordinates? | Same-size head on S-JEPA features versus raw skeleton history | The source-bootstrap interval for S-JEPA's \(\Delta R^2\) over raw skeletons is entirely positive. |
+| Did S-JEPA learn something beyond raw coordinates? | Same-size head on S-JEPA features versus raw skeleton history | The source-bootstrap interval for S-JEPA's $\Delta R^2$ over raw skeletons is entirely positive. |
 | Is the distilled code useful? | Retrieve the correct future among phase-matched distractors | At least 10 percentage points better than the raw-skeleton student. |
 | Does the result survive difficult videos? | Repeat on unseen sources and within pose-quality groups | Positive gain in at least three of four pose-quality quartiles. |
 | Does the upper body help? | Whole body versus Core11, followed by an upper-body time shuffle | Whole body improves prediction, and the improvement disappears when upper-body timing is destroyed. |
 
-The primary figure is the complete \(F_h\) curve across all horizons, not only the best point. Also report results for individual projected teacher features so the average cannot hide a large effect in only a few unusually variable dimensions.
+The primary figure is the complete $F_h$ curve across all horizons, not only the best point. Also report results for individual projected teacher features so the average cannot hide a large effect in only a few unusually variable dimensions.
 
 For uncertainty estimates, resample whole source videos rather than individual windows. This **source bootstrap** respects the fact that windows from the same source are related.
 
@@ -351,7 +351,7 @@ The cross-modal scientific result would still be real: body kinematics carry som
 
 ### If shuffled or mismatched skeletons also help
 
-The apparent improvement is probably caused by timing, source, phase, or identity leakage. The main claim fails even if the raw \(R^2\) is high.
+The apparent improvement is probably caused by timing, source, phase, or identity leakage. The main claim fails even if the raw $R^2$ is high.
 
 ### If skeleton history does not help
 

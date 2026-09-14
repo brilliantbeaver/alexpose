@@ -69,6 +69,8 @@ class RunConfig:
         """
         selected_root = os.environ.get("MP_RUN_ROOT", cls.run_root)
         path = Path(os.environ.get("MP_CONFIG", str(Path(selected_root) / "config.json"))).expanduser()
+        if "MP_CONFIG" in os.environ and not path.is_file():
+            raise FileNotFoundError(f"MP_CONFIG does not name a readable configuration file: {path}")
         values = json.loads(path.read_text()) if path.is_file() else {}
         env = {
             "MP_RUN_ROOT": "run_root", "MP_MODE": "mode", "MP_DEVICE": "device",

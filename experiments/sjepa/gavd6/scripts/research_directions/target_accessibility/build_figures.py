@@ -161,8 +161,11 @@ def main():
     argparse.ArgumentParser(description=__doc__).parse_args()
     evidence();information();parity();workflow();matched()
     report_path=ROOT/'outputs/iclr-bridge-cached-20260911/reports/panel-report.json'
-    if report_path.exists(): results(report_path)
-    (OUT/'README.md').write_text('# Figure provenance\n\nFigures 01-05 are original editable vector diagrams. Coordinates and trajectories are schematic, not extracted poses. Figure 01 uses reported laterality and verified direct-v3 aggregates, keeping their metrics separate. Figure 06 reads `outputs/iclr-bridge-cached-20260911/reports/panel-report.json` directly and shows the paired conditional source-bootstrap intervals, distinguishing the primary posture contrast from secondary comparisons. SVG files are editable vectors; PDF companions support manuscript typesetting. Regenerate with `.venv/bin/python scripts/research_directions/target_accessibility/build_figures.py`.\n')
+    if report_path.exists():
+        results(report_path)
+    else:
+        print('Skipped Figure 06: original cached-panel report is not installed; existing figure preserved.')
+    (OUT/'README.md').write_text('# Figure provenance\n\nFigures 01–05 are editable vector diagrams. Coordinates and trajectories are schematic, not extracted poses. Figure 01 uses reported laterality and direct-v3 aggregates while keeping their metrics separate. SVG files are editable vectors; PDF companions support manuscript typesetting.\n\nFigure 06 displays paired source-bootstrap intervals from the cached panel, distinguishing the primary posture contrast from secondary comparisons. Its original input was `outputs/iclr-bridge-cached-20260911/reports/panel-report.json`. That run is absent from this checkout; the [preserved report copy](../../accessibility/evidence/cached-panel-report.json) and its [provenance record](../../accessibility/evidence/README.md) remain available for inspection.\n\nFrom the repository root, regenerate Figures 01–05 with:\n\n```bash\n.venv/bin/python scripts/research_directions/target_accessibility/build_figures.py\n```\n\nThe command also regenerates Figure 06 if the original report is installed. Otherwise it explicitly reports that Figure 06 was skipped and keeps its existing SVG/PDF pair. A successful command therefore does not imply that Figure 06 was rebuilt or that the original run was reverified.\n')
     print(f'Built SVG/PDF figures in {OUT}')
 
 

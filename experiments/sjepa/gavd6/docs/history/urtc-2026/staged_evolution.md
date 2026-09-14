@@ -28,7 +28,7 @@ Every method in this document has one of three statuses.
 |Proposed|The idea appears in the improvement notes, but the current checkpoint does not implement it.|
 
 This distinction is especially important for the retired improvement plan and
-the [archived execution prompt](../../../notes/prompts/improvement_instruction.md).
+the [archived execution prompt](../../../notes/archive/prompts/improvement_instruction.md).
 They contain useful research hypotheses, but they predate the completed
 five-stage run. They must not be read as a list of current features.
 
@@ -304,12 +304,7 @@ possible positions.
 For sample $b$, let $\mathcal E_b$ be its valid eligible positions. The common target count is:
 
 $$
-n_{\mathrm{mask}}
-=
-\min\left(
-\left\lfloor 0.60\min_b|\mathcal E_b|\right\rfloor,
-\min_b|\mathcal E_b|-1
-\right).
+n_{\mathrm{mask}} = \min\left(\left\lfloor 0.60\min_b|\mathcal E_b|\right\rfloor,\min_b|\mathcal E_b|-1\right).
 $$
 
 Every sample in the batch receives this same target count. A sample with more valid eligible tokens therefore realizes a fraction below 0.60.
@@ -333,11 +328,7 @@ The sampler does not read coordinate magnitude, displacement, velocity, accelera
 The current objective is:
 
 $$
-L
-=
-L_{\mathrm{JEPA}}
-+0.05L_{\mathrm{VICReg}}
-+0.25L_{\mathrm{group}}.
+L = L_{\mathrm{JEPA}}+0.05L_{\mathrm{VICReg}}+0.25L_{\mathrm{group}}.
 $$
 
 ![Objective evolution and measured consequences](figures/evolution_objective.svg)
@@ -349,17 +340,15 @@ The target encoder sees the complete sequence. The view encoder sees only non-ta
 For target features $R_t$, predictor features $R_p$, target center $c$, teacher temperature 0.06, and predictor temperature 0.10:
 
 $$
-q = \operatorname{softmax}((R_t-c)/0.06),
+q = \mathrm{softmax}((R_t-c)/0.06),
 $$
 
 $$
-\log p = \operatorname{logsoftmax}(R_p/0.10),
+\log p = \mathrm{logsoftmax}(R_p/0.10),
 $$
 
 $$
-L_{\mathrm{JEPA}}
-=
--\frac{1}{M}\sum_m q_m^\top\log p_m.
+L_{\mathrm{JEPA}} = -\frac{1}{M}\sum_m q_m^\top\log p_m.
 $$
 
 The target center uses momentum 0.9. The target encoder follows the view encoder through an exponential moving average that starts at 0.999 and approaches 1.0 within each stage.
@@ -371,11 +360,7 @@ Two transformed views of a sequence pass through the view encoder. Valid authori
 The inner VICReg expression is [2]:
 
 $$
-L_{\mathrm{VICReg}}
-=
-25L_{\mathrm{inv}}
-+25L_{\mathrm{var}}
-+L_{\mathrm{cov}}.
+L_{\mathrm{VICReg}} = 25L_{\mathrm{inv}}+25L_{\mathrm{var}}+L_{\mathrm{cov}}.
 $$
 
 - Invariance brings paired views together.
@@ -391,10 +376,7 @@ The group term is zero during Stage 0 because only normal data are active. In St
 Compactness reduces squared distance to the condition centroid. Separation penalizes centroid pairs closer than margin 1.0:
 
 $$
-L_{\mathrm{sep}}
-=
-\frac{1}{P}\sum_{i<j}
-\left[\max(0,1-\|c_i-c_j\|_2)\right]^2.
+L_{\mathrm{sep}} = \frac{1}{P}\sum_{i<j}\left[\max(0,1-\|c_i-c_j\|_2)\right]^2.
 $$
 
 This means the complete five-stage method is not fully self-supervised. Stage 0 is label-free representation learning. Stages 1 through 4 are label-informed representation fine-tuning.

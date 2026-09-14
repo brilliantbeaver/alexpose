@@ -54,7 +54,9 @@ target-encoder tokens. The notebook is written to run in two modes:
 
 All results are TRANSDUCTIVE: the encoder saw the evaluation rows during training. The source video
 is the independent unit, and folder labels (stroke, parkinsons) are dataset annotations, not
-diagnoses. See `notes/research/_shared_facts.md` for the single source of truth on every number.
+diagnoses. The original numerical fact sheet was retired. The
+[archived methodology](../../notes/archive/portfolio-ideas/ideas/05-signed-laterality-decodability/METHODOLOGY.md)
+records the historical assumptions; verify counts against the supplied run before reusing them.
 """))
 
 # ------------------------------------------------------------------ 0. Environment

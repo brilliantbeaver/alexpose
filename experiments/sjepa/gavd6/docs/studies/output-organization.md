@@ -1,10 +1,12 @@
 # Experiment result organization
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 Organize results by study and stable run identity. Keep each run's configuration,
 manifests, cache receipts, models, predictions, quality checks and reports together.
 The [curated registry](experiment-registry.json) records purpose and evidence
-boundaries. The generated [local index](../../outputs/README.md) and
-[catalog](../../outputs/catalog.json) record installed locations and observed state.
+boundaries. The generated [local index (unavailable here)](../repository/evidence-availability.md#local-output-catalog-and-relocation-receipt) and
+[catalog (unavailable here)](../repository/evidence-availability.md#local-output-catalog-and-relocation-receipt) record installed locations and observed state.
 The catalog is a dated local view, not a live HAIC job monitor.
 
 See the [completed local migration and validation](output-organization-validation.md)

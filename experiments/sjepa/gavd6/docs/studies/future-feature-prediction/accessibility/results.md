@@ -1,5 +1,7 @@
 # Implemented comparison, verification and the next scientific decision
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 The new source-held comparison ran to completion on the existing cached arrays. Its primary increment is **+0.001993744 R²**, with a 95% source-bootstrap interval **[−0.006672679, +0.012608431]** and **68.35%** positive draws. Under the prospectively frozen rule, this is `no_supported_temporal_lead`. It is a complete development measurement, not a positive student-distillation result. The original direct-v3 result remains a separate completed STOP.
 
 ## What changed and why
@@ -10,7 +12,7 @@ The laterality study tests access to a signed movement observable after skeleton
 |---|---|
 | New finite-family measurement | `src/gavd6_sjepa/research_directions/target_accessibility/cached_panel.py`, version `student-accessibility-v1`; 331/397-dimensional references and unchanged 924-dimensional history summaries. |
 | Safe fitting and controls | Reuses direct-v3 float64 joint ridge, input-support masks, separate target scaling, source partitions, raw controls, exact baseline option and paired score/bootstrap calculations. Historical FI code was not changed by this bridge. |
-| Frozen design | [Prospective protocol](../../iclr/02_cached_panel_protocol.md), copied into [frozen-protocol.md](../../../../outputs/iclr-bridge-cached-20260911/config/frozen-protocol.md) before fitting. SHA-256 `f91181e1b3a13a1d7f121052f9e650fa5a36bf67ecbed596e41f39780dbc70e3`. |
+| Frozen design | [Prospective protocol](../../iclr/02_cached_panel_protocol.md), copied into [frozen-protocol.md (unavailable here)](../../../repository/evidence-availability.md#target-accessibility) before fitting. SHA-256 `f91181e1b3a13a1d7f121052f9e650fa5a36bf67ecbed596e41f39780dbc70e3`. |
 | Symmetry and order calibration | `symmetry.py`: complete channel reflection, physical-interval reversal, four parity classes, zero-feature control, paired pooled-teacher arithmetic and a source-held constructed continuation fixture. |
 | Additional numerical verification | `verification.py` adds metadata, exact inventory, displayed candidate and outer training-diagnostic checks after adversarial review. It changes no fitting decision or sealed artifact. |
 | Tutorial implementation | Canonical `scripts/research_directions/target_accessibility/build_notebooks.py` generates notebooks 19–22 in `notebooks/target_accessibility/`. All 23 code cells executed successfully. Notebook 21 defaults to CPU reconstruction refits without artifact writes; its explicit no-fit mode checks file integrity only. No notebook starts a new real comparison. |
@@ -20,7 +22,7 @@ The primary fitted comparison is not an estimator of conditional mutual informat
 
 ## Measured results
 
-Every number below is linked to [panel-report.json](../../../../outputs/iclr-bridge-cached-20260911/reports/panel-report.json). Models are deterministic; seed 0 is an identity, not one of three repeated optimization runs. All 256 target features survived the intersection of training-derived variance masks.
+Every number below is linked to [preserved copy of the panel report](evidence/cached-panel-report.json). Models are deterministic; seed 0 is an identity, not one of three repeated optimization runs. All 256 target features survived the intersection of training-derived variance masks.
 
 | Reference panel | Shared reference | Real history | No skeleton | Shuffle | Mismatch |
 |---|---:|---:|---:|---:|---:|

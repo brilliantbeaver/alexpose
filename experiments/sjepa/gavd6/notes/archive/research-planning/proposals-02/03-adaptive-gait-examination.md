@@ -16,19 +16,19 @@ The controlled benchmark uses rendered AMASS RGB and actual weak-versus-strong d
 
 A 64-frame Core11 window contains 16 four-frame token blocks. One action reruns a locked, expensive full-body pose route on the original RGB frames for one block. Every joint returned by those frame passes is charged once and becomes available together. This matches the real cost of pose estimation. It does not pretend that a standard full-body detector can price one knee separately from the rest of the frame.
 
-For action \(q\), define per-example realized utility with multiclass Brier loss:
+For action $q$, define per-example realized utility with multiclass Brier loss:
 
-\[
+$$
 U(q)=B(y,p_{\mathrm{before}})-B(y,p_{\mathrm{after}\ q}).
-\]
+$$
 
-The conclusion head and label \(y\) are fixed before actions are scored. The oracle knows all 16 detector outcomes and chooses the largest utility. The learned policy sees only the current cheap track. Normalized first-action regret is reported only when oracle gain is at least 0.02 Brier units, with the eligible fraction shown separately.
+The conclusion head and label $y$ are fixed before actions are scored. The oracle knows all 16 detector outcomes and chooses the largest utility. The learned policy sees only the current cheap track. Normalized first-action regret is reported only when oracle gain is at least 0.02 Brier units, with the eligible fraction shown separately.
 
-For macro average precision \(A\), define the fraction of recoverable performance gap after \(k\) actions as
+For macro average precision $A$, define the fraction of recoverable performance gap after $k$ actions as
 
-\[
+$$
 R(k)=\frac{A_k-A_{\mathrm{cheap}}}{A_{\mathrm{all\ strong}}-A_{\mathrm{cheap}}}.
-\]
+$$
 
 This measures recovered value rather than closeness to a possibly weak full-information score.
 
@@ -40,7 +40,7 @@ This measures recovered value rather than closeness to a possibly weak full-info
 
 Use held-identity AMASS locomotion in four states: clean, reduced knee excursion, lower swing clearance, and inter-limb phase lag. Render the underlying body into RGB under camera, crop, lighting, compression, background, and occlusion conditions derived only from outer-training source profiles. Preserve exact projected joints as evaluation geometry.
 
-Run both MediaPipe and the locked RTMPose route on every rendered frame. The cheap track is MediaPipe Core11. Action \(q\) replaces all Core11 joints in four frames with the actual RTMPose output for those frames. Exact clean projection is used only to measure normalized joint error and an unattainable ideal ceiling. Since all 16 real detector outcomes are cached, every first action has measured utility without rerunning a detector during policy training.
+Run both MediaPipe and the locked RTMPose route on every rendered frame. The cheap track is MediaPipe Core11. Action $q$ replaces all Core11 joints in four frames with the actual RTMPose output for those frames. Exact clean projection is used only to measure normalized joint error and an unattainable ideal ceiling. Since all 16 real detector outcomes are cached, every first action has measured utility without rerunning a detector during policy training.
 
 Before training the policy, require RTMPose to reduce held-condition normalized joint error by at least 20 percent and require full RTMPose processing to improve edit macro average precision by at least 0.05 over the cheap track. Otherwise there is no useful acquisition problem.
 

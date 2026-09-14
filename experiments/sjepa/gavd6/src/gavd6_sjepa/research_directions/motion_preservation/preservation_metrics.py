@@ -13,20 +13,29 @@ MIN_EVENT_DELTA = {"arm_leg_timing": .01, "foot_clearance": .002, "trunk_pelvis_
 
 
 def score_case(prediction, case, metadata, method, strength=1.0, probability=np.nan, threshold=.5):
-    """Retention is not clipped. Missing observations still have reference targets."""
+    """Unclipped event fidelity and observed-joint repair, with gap error separate."""
     family = metadata["event_family"]
     raw, truth, clean, event = (case[k] for k in ("raw", "truth", "clean", "event_reference"))
     d, d_truth, d_clean, d_event = [descriptor(x, family) for x in (prediction, truth, clean, event)]
     magnitude = d_event-d_clean
-    mse = float(np.mean(np.sum((prediction-truth)**2, axis=-1)))
-    raw_mse = float(np.mean(np.sum((raw-truth)**2, axis=-1)))
+    error = np.sum((prediction-truth)**2, axis=-1)
+    raw_error = np.sum((raw-truth)**2, axis=-1)
+    observed = np.asarray(case.get("observed", np.ones(raw.shape[:2], bool)), bool)
+    mse, raw_mse = float(np.mean(error)), float(np.mean(raw_error))
+    observed_mse = float(np.mean(error[observed])) if observed.any() else np.nan
+    raw_observed_mse = float(np.mean(raw_error[observed])) if observed.any() else np.nan
+    completion_mse = float(np.mean(error[~observed])) if (~observed).any() else np.nan
     present = bool(metadata["event_present"])
     eligible = present and abs(magnitude) >= MIN_EVENT_DELTA[family]
     probability = float(probability)
     return {
         **{k: metadata[k] for k in ("case_id", "person_id", "role", "event_family", "fixture", "event_present", "noise_present")},
         "method": method, "strength": float(strength), "mse_m2": mse, "raw_mse_m2": raw_mse,
-        "noise_removal": 1-mse/raw_mse if raw_mse > 1e-10 else np.nan,
+        # Interpolated gaps are not tracker measurements. Otherwise fixing a
+        # difficult gap can overwhelm unchanged errors at observed positions.
+        "noise_removal": 1-observed_mse/raw_observed_mse if raw_observed_mse > 1e-10 else np.nan,
+        "observed_mse_m2": observed_mse, "raw_observed_mse_m2": raw_observed_mse,
+        "completion_mse_m2": completion_mse, "missing_fraction": float((~observed).mean()),
         "retention": 1-abs(d-d_event)/abs(magnitude) if eligible else np.nan,
         "descriptor_abs_error": abs(d-d_truth), "descriptor_signed_error": d-d_truth,
         "event_magnitude": magnitude, "event_eligible": eligible,
@@ -48,7 +57,9 @@ def summarize(scores):
     records = []
     for method, rows in scores.groupby("method", sort=False):
         primary = _primary(rows)
-        person = primary.groupby("person_id")[["retention", "noise_removal", "descriptor_abs_error", "mse_m2"]].mean()
+        columns = ["retention", "noise_removal", "descriptor_abs_error", "mse_m2"]
+        columns += [name for name in ("observed_mse_m2", "completion_mse_m2", "missing_fraction") if name in primary]
+        person = primary.groupby("person_id")[columns].mean()
         record = dict(method=method, **person.mean().to_dict(), n_people=len(person))
         both=primary.loc[primary.event_present.astype(bool)]
         record["event_and_noise_removal"]=both.groupby("person_id").noise_removal.mean().mean()

@@ -1,6 +1,7 @@
 """motion preservation / test notebooks."""
 
 
+import ast
 import importlib.util
 import json
 import os
@@ -35,6 +36,11 @@ class MotionPreservationNotebookTests(unittest.TestCase):
                 self.assertEqual(cell.outputs, [])
                 self.assertIsNone(cell.execution_count)
                 compile(cell.source, name, "exec")
+                for statement in ast.walk(ast.parse(cell.source)):
+                    if isinstance(statement, ast.ImportFrom) and statement.module == \
+                            "gavd6_sjepa.research_directions.motion_preservation":
+                        for alias in statement.names:
+                            importlib.import_module(f"{statement.module}.{alias.name}")
             if number == "04":
                 source = "\n".join(c.source for c in code_cells)
                 self.assertNotIn("workflow.train_gate(", source)
@@ -53,7 +59,8 @@ class MotionPreservationNotebookTests(unittest.TestCase):
                 "p=pathlib.Path(os.environ['FAKE_JOB_LOG'])\n"
                 "number=100 + (len(p.read_text().splitlines()) if p.exists() else 0)\n"
                 "with p.open('a') as stream: stream.write(json.dumps({'args':sys.argv[1:],"
-                "'split':os.environ['MP_EVALUATION_SPLIT']})+'\\n')\n"
+                "'split':os.environ['MP_EVALUATION_SPLIT'],"
+                "'mode':os.environ.get('MP_MODE'),'device':os.environ.get('MP_DEVICE')})+'\\n')\n"
                 "print(str(number)+';fake-cluster')\n"
             )
             fake_sbatch.chmod(0o755)
@@ -61,22 +68,55 @@ class MotionPreservationNotebookTests(unittest.TestCase):
                            "PATH": str(fake_bin) + os.pathsep + os.environ["PATH"], "FAKE_JOB_LOG": str(log)}
             environment.pop("MP_NOTEBOOK_OUTPUT_DIR", None)
             environment.pop("MP_DEPENDENCY", None)
+            environment.pop("MP_MODE", None)
+            environment.pop("MP_DEVICE", None)
+            environment.pop("MP_CONFIG", None)
             subprocess.run(["bash", str(ROOT / "slurm/motion-preservation/submit.sh"), "pilot"],
                            env=environment, capture_output=True, text=True, check=True)
             jobs = [json.loads(line) for line in log.read_text().splitlines()]
             self.assertEqual(len(jobs), 5)
             for index, job in enumerate(jobs):
                 self.assertEqual(job["split"], "development")
+                self.assertIsNone(job["mode"])
+                self.assertIsNone(job["device"])
                 self.assertTrue(job["args"][-1].endswith(("inventory.sbatch", "controlled-pairs.sbatch",
                                                         "cache-evidence.sbatch", "train-calibrate.sbatch",
                                                         "evaluate.sbatch")[index]))
                 dependencies = [a for a in job["args"] if a.startswith("--dependency=")]
                 self.assertEqual(dependencies, [] if index == 0 else [f"--dependency=afterok:{99 + index}"])
+            environment.update(MP_DEPENDENCY="afterok:71:72", MP_ACCOUNT="test-account", MP_PARTITION="test-partition")
             subprocess.run(["bash", str(ROOT / "slurm/motion-preservation/submit.sh"), "final"],
                            env=environment, capture_output=True, text=True, check=True)
             final = json.loads(log.read_text().splitlines()[-1])
             self.assertEqual(final["split"], "final")
             self.assertTrue(final["args"][-1].endswith("evaluate.sbatch"))
+            for option in ("--dependency=afterok:71:72", "--account=test-account", "--partition=test-partition"):
+                self.assertIn(option, final["args"])
+
+    def test_runner_only_overrides_mode_and_device_when_requested(self):
+        captured = []
+
+        def make_client(notebook, **kwargs):
+            return MagicMock(execute=lambda **options: captured.append(options["env"]))
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = root / "settings.json"
+            config.write_text(json.dumps({"mode": "demo", "device": "cpu"}))
+            clean_environment = {key: value for key, value in os.environ.items()
+                                 if key not in {"MP_MODE", "MP_DEVICE", "MP_CONFIG"}}
+            with patch.dict(os.environ, clean_environment, clear=True), \
+                 patch.object(runner, "KernelManager", return_value=MagicMock(has_kernel=False)), \
+                 patch.object(runner, "NotebookClient", side_effect=make_client):
+                runner.execute_notebook("00", run_root=root / "run", config=config,
+                                        output_dir=root / "configured")
+                runner.execute_notebook("00", run_root=root / "run", config=config,
+                                        output_dir=root / "overridden", mode="real", device="cuda")
+            self.assertNotIn("MP_MODE", captured[0])
+            self.assertNotIn("MP_DEVICE", captured[0])
+            self.assertEqual(captured[0]["MP_CONFIG"], str(config.resolve()))
+            self.assertEqual(captured[1]["MP_MODE"], "real")
+            self.assertEqual(captured[1]["MP_DEVICE"], "cuda")
 
     def test_notebook_failure_keeps_partial_outputs(self):
         def make_client(notebook, **kwargs):

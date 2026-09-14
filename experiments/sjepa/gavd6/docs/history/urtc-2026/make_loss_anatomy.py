@@ -173,7 +173,7 @@ def make_figure():
     label_box(
         ax,
         student_boxes[3],
-        r"$\mathbf{r}=\operatorname{softmax}(\mathbf{p}/\tau_p)$",
+        r"$\mathbf{r}=\mathrm{softmax}(\mathbf{p}/\tau_p)$",
         "student emphasis across 96 dimensions",
         True,
         heading_size=14.5,
@@ -235,7 +235,7 @@ def make_figure():
     label_box(
         ax,
         teacher_boxes[3],
-        r"$\mathbf{q}=\operatorname{softmax}((\mathbf{z}_t-\mathbf{c})/\tau_t)$",
+        r"$\mathbf{q}=\mathrm{softmax}((\mathbf{z}_t-\mathbf{c})/\tau_t)$",
         "teacher importance across 96 dimensions",
         True,
         heading_size=13.5,

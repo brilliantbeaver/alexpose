@@ -69,8 +69,10 @@ def decode_gavd_window(row, duration_s=3.2, target_fps=20, max_side=256):
     height,width=max(1,round(original_h*scale)),max(1,round(original_w*scale))
     selected=np.stack([cv2.resize(frame,(width,height),interpolation=cv2.INTER_AREA) for frame in selected])
     source_frames=first+offsets
-    return selected,source_frames,source_frames/actual_fps,dict(
+    timestamps=source_frames/actual_fps
+    return selected,source_frames,timestamps,dict(
         source_fps=float(actual_fps),source_height=original_h,source_width=original_w,
+        sampled_mean_fps=float((len(source_frames)-1)/(timestamps[-1]-timestamps[0])),
         scale_xy=[width/original_w,height/original_h],manifest_frame_base=1,cache_frame_base=0)
 
 
@@ -78,7 +80,8 @@ def load_pose_overlay(path, source_frames, scale_xy):
     """Read optional aligned full-frame 22-joint exports, without guessing a camera.
 
     NPZ fields: source_frames[N] (zero-based original video), joints2d[N,22,2]
-    (original full-frame pixels), coordinate_system='full_frame_pixels'. Optional
+    (original full-frame pixel centers, with the top-left center at (0,0)),
+    coordinate_system='full_frame_pixels'. Optional
     repaired_joints2d has the same shape. These are model estimates. A joints3d
     array alone is insufficient to place a 2D overlay and is not silently lifted
     or treated as reference truth.
@@ -89,9 +92,12 @@ def load_pose_overlay(path, source_frames, scale_xy):
             raise ValueError(f"Pose overlay needs {sorted(required)}: {path}")
         if str(cache["coordinate_system"].item())!="full_frame_pixels":
             raise ValueError("Pose overlays must declare original full-frame pixel coordinates")
-        frames=np.asarray(cache["source_frames"],int)
-        if frames.ndim!=1 or len(np.unique(frames))!=len(frames):
-            raise ValueError("Pose source_frames must contain unique original frame indices")
+        frames=np.asarray(cache["source_frames"])
+        if (frames.ndim!=1 or not np.issubdtype(frames.dtype,np.number)
+                or not np.isfinite(frames).all() or np.any(frames!=np.floor(frames))
+                or np.any(frames<0) or len(np.unique(frames))!=len(frames)):
+            raise ValueError("Pose source_frames must contain unique nonnegative integer frame indices")
+        frames=frames.astype(int)
         lookup={int(frame):i for i,frame in enumerate(frames)}
         result={}
         for field in ("joints2d","repaired_joints2d"):
@@ -103,7 +109,8 @@ def load_pose_overlay(path, source_frames, scale_xy):
             aligned=np.full((len(source_frames),22,2),np.nan,np.float32)
             for t,frame in enumerate(source_frames):
                 if int(frame) in lookup:
-                    aligned[t]=data[lookup[int(frame)]]*np.asarray(scale_xy)
+                    # OpenCV resize maps pixel centers, not image-corner coordinates.
+                    aligned[t]=(data[lookup[int(frame)]]+.5)*np.asarray(scale_xy)-.5
             result[field]=aligned
     return result
 
@@ -225,7 +232,9 @@ def gavd_stress(cfg) -> pd.DataFrame:
                     record[f"{name}_evidence_coverage"]=float(valid.mean())
             record["pose_overlay"]="provided_estimate" if overlays else "unavailable"
             np.savez_compressed(item/"flow-observations.npz",**arrays)
-            sheet,video=_gallery(rgb,flow.forward,frames,overlays,item,cfg.fps)
+            # Source clips below the requested FPS have duplicate sampled frames
+            # removed. Preserve their average physical playback rate in the gallery.
+            sheet,video=_gallery(rgb,flow.forward,frames,overlays,item,decode_info["sampled_mean_fps"])
             magnitude=np.linalg.norm(flow.forward,axis=-1)
             record.update(frames=len(rgb),source_fps=decode_info["source_fps"],
                           median_image_motion_px=float(np.median(magnitude)),

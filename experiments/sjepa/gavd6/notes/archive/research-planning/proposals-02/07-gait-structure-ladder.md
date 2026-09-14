@@ -18,9 +18,9 @@ A classifier can succeed for very different reasons. It may read missing joints.
 
 A surrogate time series keeps selected statistics while randomizing others. By arranging surrogates from weak to strong, the experiment asks a sequence of sharper questions:
 
-\[
+$$
 \text{observation} \subset \text{unary dynamics} \subset \text{within-leg} \subset \text{cross-leg linear} \subset \text{original}.
-\]
+$$
 
 If performance is already high on the observation rung, source or detector behavior is enough. If it rises only when cross-leg relations return, bilateral timing is required. If raw Core11 rises at that rung but S-JEPA does not, predictive pretraining failed to capture the available relation.
 

@@ -1,10 +1,12 @@
 # Local result organization validation
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 Completed on 12 September 2026 Pacific time (13 September UTC).
 
 The nine original top-level bundles were relocated under
 `outputs/studies/{future-innovation,fixed-reflection-baselines,latent-laterality}`.
-The [catalog](../../outputs/README.md) indexes 16 study/run/dataset/evaluation
+The [catalog (unavailable here)](../repository/evidence-availability.md#local-output-catalog-and-relocation-receipt) indexes 16 study/run/dataset/evaluation
 entries and 21 preserved notebook files. Collection entries overlap their child
 entries and must not be added together when calculating storage use.
 
@@ -39,7 +41,7 @@ and are enumerated in the catalog's `unavailable_source_evidence`. The legacy
 AMASS collections lack comprehensive hash seals and receive
 `inventory_recorded`; they are not mislabeled as numerically verified.
 
-The [migration receipt](../../outputs/.organization/relocations/2026-09-13T040646.982820_0000-ebd8d885/relocation.json)
+The [migration receipt (unavailable here)](../repository/evidence-availability.md#local-output-catalog-and-relocation-receipt)
 contains original snapshots, backup paths and reader results. Additional checks
 are recorded under `outputs/.organization/`. Backups are retained, adding
 approximately 560 MiB of storage. The [organization policy](output-organization.md)

@@ -114,11 +114,11 @@ head. The direct $h_-$ head remains a labelled ablation, never the privileged pr
 The co-primary effects are participant-orbit-averaged error differences:
 
 $$
-\Delta_\mathrm{repair}=\operatorname{MAE}(\mathrm{equivariant})-\operatorname{MAE}(\mathrm{odd\_output}),
+\Delta_\mathrm{repair}=\mathrm{MAE}(\mathrm{equivariant})-\mathrm{MAE}(\mathrm{odd\_output}),
 $$
 
 $$
-\Delta_\mathrm{pair}=\operatorname{MAE}(\mathrm{equivariant})-\operatorname{MAE}(\mathrm{paired\_unconstrained}).
+\Delta_\mathrm{pair}=\mathrm{MAE}(\mathrm{equivariant})-\mathrm{MAE}(\mathrm{paired\_unconstrained}).
 $$
 
 Negative values favour the equivariant encoder. Compare each seed only with the same seed; never compare best-run to best-run.
