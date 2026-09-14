@@ -62,9 +62,9 @@ The view encoder sees a partly hidden sequence. The target encoder sees the comp
 
 The loss has three jobs:
 
-\[
+$$
 L = L_{\mathrm{JEPA}} + 0.05L_{\mathrm{VICReg}} + 0.25L_{\mathrm{group}}.
-\]
+$$
 
 - JEPA trains latent prediction.
 - VICReg keeps dimensions variable and reduces redundant covariance, which helps resist collapse.

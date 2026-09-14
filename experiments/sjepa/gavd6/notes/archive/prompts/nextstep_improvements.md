@@ -1,6 +1,6 @@
 > **Archived prompt.** This is a record of a prior request. The numbered
 > `notes/` paths named below were retired; use [current study
-> documentation](../../docs/studies/) rather than executing this prompt.
+> documentation](../../../docs/studies/README.md) rather than executing this prompt.
 
 **Role**: You are an expert in AI/ML, specializing in JEPA and gait analysis.
 

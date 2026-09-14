@@ -1,5 +1,7 @@
 # Experiment 0 repair: a calibrated, complete development STOP
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 The repaired comparison is complete. **Past skeleton coordinates and confidence
 did not improve this predictor's held-source prediction of contextual teacher
 features beyond RGB, nuisance inputs and the validity-only comparison.** The
@@ -9,10 +11,10 @@ positive increment, below the required 90%. This is a valid STOP for the specifi
 predictor, target and data regime, rather than an incomplete execution.
 
 The run is
-[`future-innovation-direct-v3-dev-20260911`](../../../../outputs/future-innovation-direct-v3-dev-20260911/reports/gate-report.md).
-Its [decision JSON](../../../../outputs/future-innovation-direct-v3-dev-20260911/reports/gate-decision.json),
-[numerical verification](../../../../outputs/future-innovation-direct-v3-dev-20260911/reports/numerical-verification.json)
-and [frozen protocol](../../../../outputs/future-innovation-direct-v3-dev-20260911/config/frozen-protocol.md)
+[`future-innovation-direct-v3-dev-20260911` (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate).
+Its [decision JSON (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate),
+[numerical verification (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate)
+and [frozen protocol (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate)
 are the authoritative measured record. The [protocol document](../../future-innovation/direct-v3-repair-protocol.md)
 was written before the real comparison. Calibration and initialization have the
 same production fingerprint as every fitted fold and the final report:
@@ -177,13 +179,13 @@ uses the same CLI functions and stage locks. Local tests exercised interrupted
 initialization, interrupted folds, completed reuse, duplicate writers, changed
 parent artifacts and invalid selected checkpoint types. Inspect mode stays
 read-only, with file presence distinct from report integrity and saved numerical
-evidence. All five [executed real notebooks](../../../../outputs/future-innovation-direct-v3-dev-20260911/notebook_runs/local-cached/00_question_and_worked_example.ipynb)
-and both [generator snapshots](../../../../outputs/future-innovation-direct-v3-dev-20260911/notebook_runs/source-snapshots/generator-direct-v3.py)
+evidence. All five [executed real notebooks (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate)
+and both [generator snapshots (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate)
 are retained inside the child.
 
 Local computation used Python 3.12.10, NumPy 2.5.2, SciPy 1.18.0, scikit-learn
 1.9.0 and Torch 2.13.0 on macOS. The full software record is in
-[`runtime-contract.json`](../../../../outputs/future-innovation-direct-v3-dev-20260911/config/runtime-contract.json).
+[`runtime-contract.json` (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate).
 Actual HAIC jobs were not submitted. The optional official-source tests require
 `FI_TEST_VJEPA_ROOT`, which was not configured. No pretrained teacher inference
 or fresh raw-video audit is claimed; the original teacher evidence is explicitly
@@ -217,7 +219,7 @@ models, predictions and report are retained exactly as measured. The subsequent
 records the current verification fingerprint separately from the fit-time
 fingerprint and reproduces the same STOP and increment without writing inside
 the run. The full 125-test suite passed after this change. Exact fingerprinted
-[fit-time sources](../../../../outputs/future-innovation-direct-v3-dev-20260911/source_snapshots/fitting-code-contract.json)
+[fit-time sources (unavailable here)](../../../repository/evidence-availability.md#direct-v3-gate)
 were archived by reversing only these two edits; their fingerprint matches the
 calibration, initialization, all fitted folds and sealed report.
 

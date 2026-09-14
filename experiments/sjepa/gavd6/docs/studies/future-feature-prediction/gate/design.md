@@ -99,11 +99,11 @@ Three quantities summarize prediction quality:
 
 | Quantity | Plain-language meaning | Illustrative value |
 | --- | --- | --- |
-| \(R^2_{\mathrm{base}}\) | How well the baseline predicts, compared with always predicting the training mean | `0.60` |
-| \(\Delta R^2 = R^2_{\mathrm{full}} - R^2_{\mathrm{base}}\) | How much the skeleton correction improves that score | `0.66 - 0.60 = 0.06` |
-| \(F_8 = \Delta R^2 / (1 - R^2_{\mathrm{base}})\) | The fraction of the baseline's remaining error recovered at the 8-frame horizon | `0.06 / 0.40 = 0.15`, or 15% |
+| $R^2_{\mathrm{base}}$ | How well the baseline predicts, compared with always predicting the training mean | `0.60` |
+| $\Delta R^2 = R^2_{\mathrm{full}} - R^2_{\mathrm{base}}$ | How much the skeleton correction improves that score | `0.66 - 0.60 = 0.06` |
+| $F_8 = \Delta R^2 / (1 - R^2_{\mathrm{base}})$ | The fraction of the baseline's remaining error recovered at the 8-frame horizon | `0.06 / 0.40 = 0.15`, or 15% |
 
-The required gain of `0.05` is an absolute increase in \(R^2\), not a 5% relative improvement and not classification accuracy. Higher \(R^2\) is better; zero matches the training-mean reference, and negative values mean worse predictions than that reference. Report negative gains too.
+The required gain of `0.05` is an absolute increase in $R^2$, not a 5% relative improvement and not classification accuracy. Higher $R^2$ is better; zero matches the training-mean reference, and negative values mean worse predictions than that reference. Report negative gains too.
 
 The residual can contain body motion, appearance changes, camera effects, and noise. Calling it “innovation” does not establish that all of it is useful or skeleton-predictable. That is why we need controls.
 
@@ -127,8 +127,8 @@ Separately, before any fitting, edit the future pixels and check the teacher. Fu
 
 | Check | Required result |
 | --- | --- |
-| Real gain | \(\Delta R^2_{\mathrm{real}} \geq 0.05\) |
-| Timing matters | Real gain is at least \(2\max(\Delta R^2_{\mathrm{shuffle}}, 0)\) |
+| Real gain | $\Delta R^2_{\mathrm{real}} \geq 0.05$ |
+| Timing matters | Real gain is at least $2\max(\Delta R^2_{\mathrm{shuffle}}, 0)$ |
 | Correct pairing matters | Mismatched gain is at most `0.01` |
 | Gain is concentrated in person tokens | Using the background target reduces the positive real-skeleton gain by at least 50% |
 | Target responds preferentially to the person | Median target change from person edits is at least twice that from background replacement; person edits have the larger effect in at least 8 of 10 audit windows |
@@ -590,7 +590,7 @@ The first three are past inputs; the last two are targets. Use the final normali
 
 The pooled feature may contain more numbers than a small pilot can model efficiently. Multiply it by one fixed random matrix to obtain a 256-number target. This **projection** chooses random combinations of the original features. It is not learned from the videos and must not be selected for a favorable result.
 
-For a pooled dimension \(D \geq 256\), use orthogonal matrix columns, then scale them so squared distances are preserved in expectation over random projections:
+For a pooled dimension $D \geq 256$, use orthogonal matrix columns, then scale them so squared distances are preserved in expectation over random projections:
 
 ```python
 import numpy as np
@@ -934,16 +934,16 @@ denominator = 1.0 - r2_base
 f8 = delta_r2 / denominator if denominator > 1e-8 else np.nan
 ```
 
-This is **predictive \(R^2\)**: the reference is the mean available during training, rather than a mean computed from held-out answers. Equal feature weights prevent a few large-scale dimensions from dominating. Report the valid-feature count, median, quartiles, fraction of positive feature gains, and complete distribution alongside the headline mean.
+This is **predictive $R^2$**: the reference is the mean available during training, rather than a mean computed from held-out answers. Equal feature weights prevent a few large-scale dimensions from dominating. Report the valid-feature count, median, quartiles, fraction of positive feature gains, and complete distribution alongside the headline mean.
 
-Record both ways of aggregating \(\Delta R^2\):
+Record both ways of aggregating $\Delta R^2$:
 
-1. subtract the two aggregate \(R^2\) values; and
-2. average the 256 feature-level \(R^2\) differences.
+1. subtract the two aggregate $R^2$ values; and
+2. average the 256 feature-level $R^2$ differences.
 
 They are algebraically equal under a uniform mean; asserting equality catches bookkeeping errors.
 
-If baseline \(R^2 > 0.95\), even perfect prediction cannot add `0.05`; at exactly `0.95`, passing would require perfection. Report that the target leaves little or no room for the required gain. Do not weaken the baseline to manufacture more innovation. If \(1 - R^2_{\mathrm{base}}\) is effectively zero, report \(F_8\) as undefined rather than forcing a finite value.
+If baseline $R^2 > 0.95$, even perfect prediction cannot add `0.05`; at exactly `0.95`, passing would require perfection. Report that the target leaves little or no room for the required gain. Do not weaken the baseline to manufacture more innovation. If $1 - R^2_{\mathrm{base}}$ is effectively zero, report $F_8$ as undefined rather than forcing a finite value.
 
 ### 7.2 Ask how sensitive the result is to sources and seeds
 
@@ -959,7 +959,7 @@ def source_bootstrap_indices(video_ids, repetitions=2000, seed=260905):
         yield np.concatenate([np.flatnonzero(video_ids == source) for source in draw])
 ```
 
-For every draw, recompute baseline \(R^2\), each arm's \(R^2\), \(\Delta R^2\), and \(F_8\) from saved OOF predictions. Use the same draw for all arms so their comparisons stay paired. Carry the original per-window source weights with each sampled occurrence; do not collapse repeated source draws or recompute weights that cancel their multiplicity. Each occurrence of a source must retain equal total weight.
+For every draw, recompute baseline $R^2$, each arm's $R^2$, $\Delta R^2$, and $F_8$ from saved OOF predictions. Use the same draw for all arms so their comparisons stay paired. Carry the original per-window source weights with each sampled occurrence; do not collapse repeated source draws or recompute weights that cancel their multiplicity. Each occurrence of a source must retain equal total weight.
 
 Save percentile intervals, the fraction of draws with positive real gain, and the fraction in which the real arm beats each control. When combining seeds, recompute each seed's score within the draw and apply the frozen seed-aggregation rule. Resampling saved predictions estimates source sensitivity; it does not refit the networks or replace the separate initialization check.
 
@@ -1118,7 +1118,7 @@ The JSON above is an output schema, not an observed result. `allow_adapter_train
 
 ### 7.4 Write a report that makes the decision checkable
 
-Lead `gate-report.md` with the decision and the reason. Then show the data count, validity audits, and a table with each arm's baseline \(R^2\), full \(R^2\), \(\Delta R^2\), and \(F_8\). Identify the background arm's separate target and baseline. Include every seed, source-bootstrap intervals, and the person-edit audit; do not show only the best scores.
+Lead `gate-report.md` with the decision and the reason. Then show the data count, validity audits, and a table with each arm's baseline $R^2$, full $R^2$, $\Delta R^2$, and $F_8$. Identify the background arm's separate target and baseline. Include every seed, source-bootstrap intervals, and the person-edit audit; do not show only the best scores.
 
 For orientation, these are hypothetical outcomes, not experimental evidence:
 
@@ -1146,7 +1146,7 @@ Implement synthetic tests before HAIC feature extraction:
 | `test_future_innovation_causality.py` | arbitrary future-pixel edits cannot alter context features |
 | `test_future_innovation_projection.py` | deterministic scaled-orthogonal projection with fixed checksum |
 | `test_future_innovation_controls.py` | shuffles preserve shape and never cross outer folds |
-| `test_future_innovation_metrics.py` | analytical \(R^2\), \(\Delta R^2\), \(F_8\), weighting, and bootstrap cases |
+| `test_future_innovation_metrics.py` | analytical $R^2$, $\Delta R^2$, $F_8$, weighting, and bootstrap cases |
 | `test_future_innovation_gate.py` | validity/point failures force `STOP`; instability gives `INCONCLUSIVE`; only a complete stable pass advances |
 
 Mandatory failure cases include:
@@ -1159,7 +1159,7 @@ Mandatory failure cases include:
 - normalization fitted on all sources;
 - a clip-mismatch pairing crossing an outer fold;
 - a constant target dimension being treated as valid evidence;
-- NaN or infinite \(R^2\) being converted to zero;
+- NaN or infinite $R^2$ being converted to zero;
 - a gate pass when any required check is false;
 - a target audit passing its ratio but failing the 8-of-10 direction rule;
 - an unstable point pass being labeled `ADVANCE`; and
@@ -1235,8 +1235,8 @@ The final cohort is frozen after eligibility is established but before inspectin
 | Fewer than 50 aligned windows | Data route is not ready | Repair decoding, box, or pose extraction before modeling |
 | Context changes after a future edit | Direct temporal leakage | Repair masking or abandon the teacher route |
 | Background edits change the target as much as person motion | Target is not person-selective | Redesign region pooling; do not fit the skeleton head |
-| Baseline \(R^2\) is near 1 | Almost no innovation remains | Report a low ceiling; do not weaken the baseline |
-| Real \(\Delta R^2<0.05\) | Skeleton signal is too small in this gate | Stop or run one preregistered larger confirmation gate |
+| Baseline $R^2$ is near 1 | Almost no innovation remains | Report a low ceiling; do not weaken the baseline |
+| Real $\Delta R^2<0.05$ | Skeleton signal is too small in this gate | Stop or run one preregistered larger confirmation gate |
 | Time shuffle performs similarly | Correct block order is not needed for the gain | Investigate static pose, within-block motion, or source shortcuts; the timing criterion fails |
 | Clip mismatch performs similarly | Correct pairing is not needed for the gain | Investigate source, view, phase, or model-capacity explanations |
 | Person and background targets show similar gains | Effect is not localized to the person | Stop the claimed mechanism |

@@ -108,6 +108,45 @@ def _vertex_colors(vertices, appearance, seed):
     return (.50+.27*np.sin(phase)).astype(np.float32)
 
 
+def _transport_visible(points, depths, vertices, faces, camera, triangle_ids):
+    """Conservative subpixel visibility against nearby rasterized triangles.
+
+    Compare depth at the transported point itself. A centimeter-scale tolerance
+    against the nearest pixel can incorrectly accept a different, occluding limb.
+    At unresolved triangle boundaries, exclude the correspondence from scoring.
+    """
+    result = np.zeros(len(points), bool)
+    inside = (np.isfinite(points).all(axis=1) & np.isfinite(depths) & (depths > .01)
+              & (points[:, 0] >= 0) & (points[:, 0] <= camera.width-1)
+              & (points[:, 1] >= 0) & (points[:, 1] <= camera.height-1))
+    take = np.flatnonzero(inside)
+    if not len(take):
+        return result
+    xy = points[take]
+    lower = np.floor(xy).astype(int)
+    offsets = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    neighbors = np.minimum(lower[:, None] + offsets, [camera.width-1, camera.height-1])
+    candidate_ids = triangle_ids[neighbors[..., 1], neighbors[..., 0]]
+    projected, vertex_depth = camera.project(vertices)
+    candidate_faces = faces[np.maximum(candidate_ids, 0)]
+    uv, z = projected[candidate_faces], vertex_depth[candidate_faces]
+    a, b, c = uv[:, :, 0], uv[:, :, 1], uv[:, :, 2]
+    denominator = (b[..., 1]-c[..., 1])*(a[..., 0]-c[..., 0]) + (c[..., 0]-b[..., 0])*(a[..., 1]-c[..., 1])
+    safe = np.where(np.abs(denominator) > 1e-8, denominator, np.nan)
+    x, y = xy[:, None, 0], xy[:, None, 1]
+    w0 = ((b[..., 1]-c[..., 1])*(x-c[..., 0])+(c[..., 0]-b[..., 0])*(y-c[..., 1])) / safe
+    w1 = ((c[..., 1]-a[..., 1])*(x-c[..., 0])+(a[..., 0]-c[..., 0])*(y-c[..., 1])) / safe
+    weights = np.stack([w0, w1, 1-w0-w1], axis=-1)
+    covers = (candidate_ids >= 0) & (weights.min(axis=-1) >= -1e-6) & (z.min(axis=-1) > .01)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        surface_depth = 1 / np.sum(weights/z, axis=-1)
+    nearest = np.min(np.where(covers, surface_depth, np.inf), axis=1)
+    rounded = np.rint(xy).astype(int)
+    foreground = triangle_ids[rounded[:, 1], rounded[:, 0]] >= 0
+    result[take] = foreground & np.isfinite(nearest) & (np.abs(nearest-depths[take]) < 1e-4)
+    return result
+
+
 def render_sequence(body: BodySequence, camera=None, appearance="textured",
                     occlusion=None, seed=17) -> RenderedSequence:
     """Render RGB, projected joints, and exact mesh material-flow references.
@@ -118,9 +157,10 @@ def render_sequence(body: BodySequence, camera=None, appearance="textured",
     motion, providing a flow-confusion stress test. Use identical scene settings
     for the real-event and tracking-failure members of each matched pair.
 
-    Flow is valid only where the same human surface point is visible in both
-    frames. Anatomical-joint visibility is an approximate depth-neighborhood
-    proxy, not a surface correspondence or pose-confidence reference.
+    Flow scoring retains surface points that pass a conservative raster-based
+    visibility check in both frames. Anatomical-joint visibility is an approximate
+    depth-neighborhood proxy, not a surface correspondence or pose-confidence
+    reference.
     """
     if body.coordinate_system != "y_up":
         raise ValueError("Renderer expects the common +Y-up world frame")
@@ -166,22 +206,16 @@ def render_sequence(body: BodySequence, camera=None, appearance="textured",
         faces=body.faces[ids[frame][source]]
         transported=np.sum(body.vertices[frame+1,faces]*barys[frame][source,...,None],axis=1)
         target_xy,target_z=camera.project(transported)
-        target_x,target_y=np.rint(target_xy).astype(int).T
-        inside=(target_x>=0)&(target_x<w)&(target_y>=0)&(target_y<h)&(target_z>.01)
-        visible=np.zeros(len(xs),bool)
-        take=np.flatnonzero(inside)
-        if len(take):
-            destination_depth=depth[frame+1,target_y[take],target_x[take]]
-            # Rasterized depth has a finite pixel footprint; reject disocclusion.
-            visible[take]=np.isfinite(destination_depth)&(np.abs(destination_depth-target_z[take])<.015)
-            visible[take]&=foreground[frame+1,target_y[take],target_x[take]]
+        visible = _transport_visible(target_xy, target_z, body.vertices[frame+1],
+                                     body.faces, camera, ids[frame+1])
         flow[frame,ys,xs]=target_xy-np.stack([xs,ys],axis=-1)
         valid[frame,ys,xs]=visible
     q,z=camera.project(body.joints)
     joint_visible=np.zeros(q.shape[:2],bool)
     # Joint centers are inside a limb, so this is intentionally a loose proxy.
     for frame in range(t):
-        coords=np.rint(q[frame]).astype(int)
+        finite = np.isfinite(q[frame]).all(axis=-1) & (z[frame] > .01)
+        coords=np.rint(np.where(finite[:, None], q[frame], -1)).astype(int)
         for joint,(x,y) in enumerate(coords):
             if 0<=x<w and 0<=y<h and not blocker[y,x]:
                 neighborhood=depth[frame,max(0,y-1):min(h,y+2),max(0,x-1):min(w,x+2)]
@@ -189,5 +223,6 @@ def render_sequence(body: BodySequence, camera=None, appearance="textured",
                 joint_visible[frame,joint]=np.isfinite(d) and abs(float(z[frame,joint]-d))<.16
     metadata=dict(renderer="perspective_mesh_cpu",reference="model_derived_mesh_material_transport",
                   appearance=appearance,seed=int(seed),occlusion=occlusion,
-                  joint_visibility="approximate_anatomical_depth_proxy",camera=camera.as_dict())
+                  joint_visibility="approximate_anatomical_depth_proxy",
+                  flow_visibility="conservative_subpixel_raster_depth",camera=camera.as_dict())
     return RenderedSequence(rgb,depth,q,joint_visible,flow,valid,foreground,camera,metadata)

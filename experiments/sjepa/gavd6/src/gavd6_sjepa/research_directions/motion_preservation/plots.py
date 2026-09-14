@@ -74,12 +74,12 @@ def plot_tradeoff(report):
         ax.scatter(row.noise_removal,row.retention,s=80 if is_gate else 45,color=color,
                    marker="*" if is_gate else "o",label=row.method,alpha=.8)
         count+=1
-    ax.axvline(.25,color="#a9b7c8",ls="--",lw=1)
-    ax.set(xlabel="Tracking error removed (fraction)",ylabel="True event retained (unclipped)",
+    ax.axvline(report["decision"].get("target_noise_removal",.25),color="#a9b7c8",ls="--",lw=1)
+    ax.set(xlabel="Observed-joint error removed (fraction)",ylabel="Event descriptor fidelity (unclipped)",
            title="Selected comparisons at saved strengths; all methods remain in the table")
     if (summary.noise_removal.abs()>2).any():
         ax.set_xscale("symlog",linthresh=.5)
-        ax.set_xlabel("Tracking error removed (fraction; symmetric log beyond ±0.5)")
+        ax.set_xlabel("Observed-joint error removed (fraction; symmetric log beyond ±0.5)")
     ax.legend(fontsize=8,bbox_to_anchor=(1.01,1),loc="upper left")
     if report["decision"].get("mode")=="demo":
         fig.suptitle("SIMULATED MECHANICS ONLY: no pretrained-model result",color="#9c6800")

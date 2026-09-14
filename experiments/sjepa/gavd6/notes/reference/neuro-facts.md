@@ -1,7 +1,7 @@
 # Neuroscience + world-model priors for iterating the 7 proposals
 
 This is historical background for the archived
-[`portfolio ideas`](../../archive/portfolio-ideas/) rather than a current study
+[`portfolio ideas`](../archive/portfolio-ideas/README.md) rather than a current study
 contract. Its former `notes/research/ideas/` tree and
 `active/shared/evidence-constraints.md` fact sheet are not included in this
 checkout. Use the active study documents for executable claims and treat the

@@ -1,12 +1,16 @@
 # Notebook index
 
-The current [motion-preservation study](../docs/studies/motion-preservation/README.md) has six stages. Other folders preserve distinct historical experiments or shared data inspection. Numbers specify sequence within each folder; 19–23 retain established references.
+Start with the current [motion-preservation study](../docs/studies/motion-preservation/README.md) and its [six-stage guide](motion_preservation/README.md). The [tutorial reading guide](../docs/tutorials/reading-guide.md) explains prerequisites, expected outputs and the difference between demonstrations, saved evidence and real execution.
+
+Other folders preserve distinct historical experiments or shared data inspection. Numbers specify sequence within each folder; 19–23 retain established references and do not extend the current experiment.
 
 Canonical notebooks are listed below. Old `foundations`, `idea05_signed_laterality`, `idea09_reflection_equivariance` and `iclr_bridge` paths contain compatibility links, not additional experiments. Outputs in historical classification and AMASS notebooks are preserved.
 
 ## Motion preservation during tracking repair
 
-[current; real-model evaluation pending](../docs/studies/motion-preservation/README.md)
+[Current study; real pretrained-model evaluation pending](../docs/studies/motion-preservation/README.md)
+
+Read 00–01 to establish controlled events and tracking failures, 02–03 to build the evidence and calibrate comparisons, then 04 to evaluate preservation at comparable error removal. Notebook 05 is an optional real-video stress inspection. The [workflow guide](motion_preservation/README.md) explains asset requirements, the explicit `demo` mode and the reserved final evaluation.
 
 | Notebook | Canonical file |
 | --- | --- |
@@ -19,7 +23,9 @@ Canonical notebooks are listed below. Old `foundations`, `idea05_signed_laterali
 
 ## Future feature prediction
 
-[historical development studies; no established student benefit](../docs/studies/future-feature-prediction/README.md)
+[Historical development studies; no established student benefit](../docs/studies/future-feature-prediction/README.md)
+
+Notebooks 00–04 teach the prediction gate; 23 covers a separate source-scaling experiment; 19–22 examine evidence and target accessibility. Start with each study overview. The gate defaults to generated `teach` examples; the [accessibility guide](target_accessibility/README.md) specifies the retained artifacts needed by 19–22.
 
 | Notebook | Canonical file |
 | --- | --- |
@@ -40,17 +46,17 @@ Canonical notebooks are listed below. Old `foundations`, `idea05_signed_laterali
 
 | Notebook | Canonical file |
 | --- | --- |
-| Notebook 09a: Reflection-equivariant encoder contract (Idea 9, core arm) | [01_encoder_contract.ipynb](reflection_equivariance/01_encoder_contract.ipynb) |
-| Notebook 09b: Possible futures and reach scaffolds for Idea 9 | [02_futures_and_reach.ipynb](reflection_equivariance/02_futures_and_reach.ipynb) |
-| 09c. Freeze the full-GAVD GaitParity training contract | [03_gavd_contract.ipynb](reflection_equivariance/03_gavd_contract.ipynb) |
-| 09d. Train the three matched GAVD JEPAs | [04_gavd_training.ipynb](reflection_equivariance/04_gavd_training.ipynb) |
-| 09e. Audit GAVD checkpoint health and reflection geometry | [05_gavd_audit.ipynb](reflection_equivariance/05_gavd_audit.ipynb) |
-| Full-GAVD GaitParity replication — CPU | [06_cpu_replication.ipynb](reflection_equivariance/06_cpu_replication.ipynb) |
-| Full-GAVD GaitParity replication — CUDA GPU | [07_gpu_replication.ipynb](reflection_equivariance/07_gpu_replication.ipynb) |
-| Train the three JEPA variants on AMASS 11-landmark lower-body | [08_amass_training.ipynb](reflection_equivariance/08_amass_training.ipynb) |
-| Frozen AMASS-11-landmark lower-body JEPA probes on GAVD | [09_gavd_frozen_probe.ipynb](reflection_equivariance/09_gavd_frozen_probe.ipynb) |
-| Notebook 05a: Signed-laterality decodability probe (Idea 5, core arm) | [01_probe.ipynb](signed_laterality/01_probe.ipynb) |
-| Notebook 05b: Reflection reach and the possible futures of Idea 5 | [02_futures_and_reach.ipynb](signed_laterality/02_futures_and_reach.ipynb) |
+| 01 · Define the reflection-equivariant encoder contract | [01_encoder_contract.ipynb](reflection_equivariance/01_encoder_contract.ipynb) |
+| 02 · Explore reflection-based future and reach tasks | [02_futures_and_reach.ipynb](reflection_equivariance/02_futures_and_reach.ipynb) |
+| 03 · Freeze the full-GAVD training contract | [03_gavd_contract.ipynb](reflection_equivariance/03_gavd_contract.ipynb) |
+| 04 · Train three matched GAVD JEPA variants | [04_gavd_training.ipynb](reflection_equivariance/04_gavd_training.ipynb) |
+| 05 · Audit GAVD checkpoints and reflection geometry | [05_gavd_audit.ipynb](reflection_equivariance/05_gavd_audit.ipynb) |
+| 06 · Reproduce the full-GAVD comparison on CPU | [06_cpu_replication.ipynb](reflection_equivariance/06_cpu_replication.ipynb) |
+| 07 · Reproduce the full-GAVD comparison on CUDA | [07_gpu_replication.ipynb](reflection_equivariance/07_gpu_replication.ipynb) |
+| 08 · Train three JEPA variants on AMASS lower-body landmarks | [08_amass_training.ipynb](reflection_equivariance/08_amass_training.ipynb) |
+| 09 · Probe frozen AMASS-trained features on GAVD | [09_gavd_frozen_probe.ipynb](reflection_equivariance/09_gavd_frozen_probe.ipynb) |
+| 01 · Measure signed-laterality information in frozen features | [01_probe.ipynb](signed_laterality/01_probe.ipynb) |
+| 02 · Explore signed-laterality and reflection tasks | [02_futures_and_reach.ipynb](signed_laterality/02_futures_and_reach.ipynb) |
 
 ## Gait representation and classification
 
@@ -58,13 +64,13 @@ Canonical notebooks are listed below. Old `foundations`, `idea05_signed_laterali
 
 | Notebook | Canonical file |
 | --- | --- |
-| The shortest useful definition | [00_sjepa_basics.ipynb](gait_classification/00_sjepa_basics.ipynb) |
-| One CSV is one sequence | [01_gavd_data.ipynb](gait_classification/01_gavd_data.ipynb) |
-| Why sequence-level extraction matters | [02_pose_extraction.ipynb](gait_classification/02_pose_extraction.ipynb) |
-| Required de-duplicated table | [03_keypoint_masking.ipynb](gait_classification/03_keypoint_masking.ipynb) |
-| Tutorial scale and curriculum scale | [04_staged_training.ipynb](gait_classification/04_staged_training.ipynb) |
-| Load the completed curriculum checkpoint | [05_representation_analysis.ipynb](gait_classification/05_representation_analysis.ipynb) |
-| The capstone question | [06_gait_classifiers.ipynb](gait_classification/06_gait_classifiers.ipynb) |
+| 00 · Learn the S-JEPA architecture | [00_sjepa_basics.ipynb](gait_classification/00_sjepa_basics.ipynb) |
+| 01 · Inspect GAVD data and sequence boundaries | [01_gavd_data.ipynb](gait_classification/01_gavd_data.ipynb) |
+| 02 · Extract and inspect pose sequences | [02_pose_extraction.ipynb](gait_classification/02_pose_extraction.ipynb) |
+| 03 · Construct keypoint masks | [03_keypoint_masking.ipynb](gait_classification/03_keypoint_masking.ipynb) |
+| 04 · Run the staged training curriculum | [04_staged_training.ipynb](gait_classification/04_staged_training.ipynb) |
+| 05 · Inspect learned motion representations | [05_representation_analysis.ipynb](gait_classification/05_representation_analysis.ipynb) |
+| 06 · Evaluate gait-classification readouts | [06_gait_classifiers.ipynb](gait_classification/06_gait_classifiers.ipynb) |
 
 ## Force prediction from frozen motion representations
 

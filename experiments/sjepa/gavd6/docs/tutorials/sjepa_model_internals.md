@@ -2,7 +2,7 @@
 
 > **Scope:** this guide documents the historical foundation notebooks and their
 > duplicated classes. Use the [study index](../studies/) for current research
-> status and the [Future Innovation tutorial](../studies/future-feature-prediction/) for
+> status and the [future-feature prediction guide](../studies/future-feature-prediction/) for
 > the frozen-video-teacher feasibility workflow.
 
 This tutorial explains how `SkeletonPatchEncoder`, `SkeletonPredictor`, and `SJEPAGait` work in this project. It also covers the preprocessing, masking, loss, pooling, replay, and diagnostic helpers that make the classes usable as a training system.
@@ -22,10 +22,10 @@ The goal is to make every tensor transformation and state update inspectable. By
 
 The core class cell is currently duplicated byte-for-byte in four notebooks:
 
-- [00_sjepa_from_first_principles.ipynb](../../notebooks/gait_classification/00_sjepa_basics.ipynb), the smallest teaching path;
-- [04_pretrain_sjepa_on_normal.ipynb](../../notebooks/gait_classification/04_staged_training.ipynb), the full training path and the main source for this guide;
-- [05_inspect_latent_motion.ipynb](../../notebooks/gait_classification/05_representation_analysis.ipynb), the representation inspection path;
-- [06_capstone_health_condition_classifiers.ipynb](../../notebooks/gait_classification/06_gait_classifiers.ipynb), the downstream readout path.
+- [00_sjepa_basics.ipynb](../../notebooks/gait_classification/00_sjepa_basics.ipynb), the smallest teaching path;
+- [04_staged_training.ipynb](../../notebooks/gait_classification/04_staged_training.ipynb), the full training path and the main source for this guide;
+- [05_representation_analysis.ipynb](../../notebooks/gait_classification/05_representation_analysis.ipynb), the representation inspection path;
+- [06_gait_classifiers.ipynb](../../notebooks/gait_classification/06_gait_classifiers.ipynb), the downstream readout path.
 
 The duplication is convenient for standalone notebooks, but it creates a maintenance risk. A class change must be synchronized across all four copies and tested in every consumer.
 
@@ -469,21 +469,22 @@ sjepa_cross_entropy(
 
 For each `[B,M,D]` teacher target, the code computes:
 
-\[
-q = \operatorname{softmax}\left(\frac{z_t-c}{0.06}\right)
-\]
+$$
+q = \mathrm{softmax}\left(\frac{z_t-c}{0.06}\right)
+$$
 
 For each prediction:
 
-\[
-\log p = \operatorname{logsoftmax}\left(\frac{z_p}{0.10}\right)
-\]
+$$
+\log p = \mathrm{logsoftmax}\left(\frac{z_p}{0.10}\right)
+$$
 
 Then it averages categorical cross-entropy over the batch and masked-token axes:
 
-\[
-L_{JEPA} = -\operatorname{mean}_{B,M}\sum_D q\log p
-\]
+$$
+\mathcal{L}_{\mathrm{JEPA}} = -\frac{1}{BM}
+\sum_{b=1}^{B}\sum_{m=1}^{M}\sum_{d=1}^{D}q_{bmd}\log p_{bmd}
+$$
 
 The softmax categories are latent dimensions. They are not health-condition classes. This is also not mean squared error and not coordinate reconstruction.
 
@@ -491,9 +492,9 @@ The teacher probabilities are detached even though targets were already computed
 
 `update_center` computes the mean of selected masked teacher targets over `B` and `M`, then updates:
 
-\[
+$$
 c \leftarrow \beta c + (1-\beta)\bar z_t
-\]
+$$
 
 with default `beta=0.9`. It does not use every full teacher token.
 
@@ -512,9 +513,9 @@ After backpropagation:
 
 The target update applied after each optimizer step is:
 
-\[
+$$
 \theta_t \leftarrow m\theta_t + (1-m)\theta_v
-\]
+$$
 
 `cosine_ema` raises `m` from a configured starting value toward 1.0. As `m` approaches 1, the teacher changes more slowly.
 
@@ -528,9 +529,9 @@ One extension caveat is worth preserving: `model.train()` also places the frozen
 
 Using the default outer weights, the full training objective is:
 
-\[
+$$
 L_{total}=L_{JEPA}+0.05L_{VICReg}+0.25L_{group}
-\]
+$$
 
 ![JEPA, VICReg, and group objectives](figures/11_objective_stack.svg)
 

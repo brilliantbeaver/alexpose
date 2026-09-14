@@ -73,22 +73,22 @@ support/metadata controls, with earlier coordinate motion removed. Let Y_h be
 the teacher representation of a precisely bounded future interval. In the
 population, under squared loss, define
 
-\[
+$$
 u_h(H) = \mathbb{E}[Y_h\mid H] - \mathbb{E}[Y_h\mid C].
-\]
+$$
 
 An expectation here is the ideal average prediction given the specified inputs.
 The difference is the part of that prediction made possible by history beyond
 C. Since C is available in H, this target is a function of the student's input.
 For finite second moments and a common fixed target metric,
 
-\[
+$$
 \mathbb{E}[u_h(H)\mid C]=0,
 \qquad
 \mathbb{E}\|Y_h-\mathbb{E}[Y_h\mid C]\|^2
 -\mathbb{E}\|Y_h-\mathbb{E}[Y_h\mid H]\|^2
 =\mathbb{E}\|u_h(H)\|^2.
-\]
+$$
 
 The second identity says that the ideal reduction in error equals the size of
 the history-dependent prediction. It follows from conditional expectation and
@@ -237,11 +237,13 @@ metric and use a common downstream evaluation for all methods.
 A possible student objective combines ordinary S-JEPA training with prediction
 of selected future residuals:
 
-\[
-\mathcal L = \mathcal L_{\mathrm{S\text{-}JEPA}}
- + \beta\sum_h
- \|p_h(f(H))-\operatorname{stopgrad}\{P_h(Y_h-\hat m_{C,h}^{(-k)}(C))\}\|^2.
-\]
+$$
+\begin{aligned}
+\mathcal L &= \mathcal L_{\mathrm{S\text{-}JEPA}} \\
+&\quad + \beta\sum_h
+\|p_h(f(H))-\mathrm{stopgrad}\{P_h(Y_h-\hat m_{C,h}^{(-k)}(C))\}\|^2.
+\end{aligned}
+$$
 
 Here f is the skeleton encoder, p is a small prediction head, P is a selected
 and frozen target projection, and m is a current-state predictor fitted without

@@ -1,5 +1,7 @@
 # Source Learning-Curve Experiment on HAIC
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../docs/repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 This experiment tests whether more training recordings make skeleton history more
 useful for predicting the existing teacher target. It uses **available videos
 matched to the GAVD manifests**, reuses your completed **gate-v2** cache where
@@ -38,7 +40,7 @@ The launcher also accepts `FI_PARENT_ID=gate-v2` and a new or existing
 IDs select `outputs/studies/future-innovation/<id>`. Conflicting IDs and roots
 are rejected. The selected study and parent paths are printed before submission.
 See the [result organization policy](../../docs/studies/output-organization.md)
-and [local catalog](../../outputs/README.md) for historical bundles and their
+and [local catalog (unavailable here)](../../docs/repository/evidence-availability.md#local-output-catalog-and-relocation-receipt) for historical bundles and their
 compatibility paths. The copied Mac gate and the HAIC gate use different legacy
 layouts; `outputs/future-innovation` is itself the frozen parent on the Mac.
 

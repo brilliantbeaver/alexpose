@@ -7,6 +7,7 @@ case "$phase" in
   *) echo "Usage: bash slurm/motion-preservation/submit.sh pilot|inventory|pairs|cache|fit|evaluate|final|gavd [--dry-run]" >&2; exit 2 ;;
 esac
 dry_run=0
+[[ $# -le 2 ]] || { echo "Expected one phase and optional --dry-run." >&2; exit 2; }
 if [[ "${2:-}" == --dry-run ]]; then dry_run=1; elif [[ -n "${2:-}" ]]; then echo "Unknown option: $2" >&2; exit 2; fi
 : "${GAVD6_ROOT:=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)}"
 export GAVD6_ROOT
@@ -23,6 +24,9 @@ if [[ -z "${MP_NOTEBOOK_OUTPUT_DIR:-}" ]]; then
 fi
 echo "Executed notebooks: $MP_NOTEBOOK_OUTPUT_DIR"
 dependency="${MP_DEPENDENCY:-}"
+[[ -z "$dependency" || "$dependency" =~ ^(afterok:)?[0-9]+(:[0-9]+)*$ ]] || {
+  echo "MP_DEPENDENCY must be a job ID or afterok:jobid[:jobid]." >&2; exit 2;
+}
 [[ -z "$dependency" || "$dependency" == afterok:* ]] || dependency="afterok:$dependency"
 case "$phase" in
   pilot) stages=(00 01 02 03 04) ;;

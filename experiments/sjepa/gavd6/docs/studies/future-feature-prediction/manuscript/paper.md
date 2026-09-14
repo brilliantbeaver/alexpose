@@ -68,13 +68,13 @@ Both cohorts derive from [GAVD](https://arxiv.org/abs/2407.04190), a video datas
 for gait analysis. The laterality cohort contains 625 accepted clips from 93 source videos. For
 each of five bilateral landmark pairs, both sides must be observed at both ends
 of at least eight recorded transitions. Coordinates are centered at the pelvis
-and normalized by body width. Let \(m_{L,k}\) and \(m_{R,k}\) be median coordinate
+and normalized by body width. Let $m_{L,k}$ and $m_{R,k}$ be median coordinate
 speeds, using the original time intervals. The scalar target is
 
-\[
+$$
 y=\frac{1}{5}\sum_{k=1}^{5}
 \frac{m_{L,k}-m_{R,k}}{m_{L,k}+m_{R,k}+10^{-8}}.
-\]
+$$
 
 The pairs are shoulders, knees, ankles, heels and foot tips. Hips establish the
 origin and are excluded because centering equalizes their speed magnitudes.
@@ -83,9 +83,9 @@ clinical affected side. Image-normalized coordinates and inferred depth are not
 metric three-dimensional measurements.
 
 An anatomical reflection M flips the centered horizontal coordinate and swaps
-left/right identities, confidence and validity. Then \(y(MH)=-y(H)\). Reversing
+left/right identities, confidence and validity. Then $y(MH)=-y(H)$. Reversing
 a trajectory and its physical sampling intervals preserves speed magnitudes,
-so \(y(RH)=y(H)\). Laterality is therefore reflection-odd and time-even: it
+so $y(RH)=y(H)$. Laterality is therefore reflection-odd and time-even: it
 changes sign under one operation and remains unchanged under the other.
 Recovering it does not establish direction-sensitive forecasting.
 
@@ -111,15 +111,15 @@ establish their gait-specific usefulness.
 
 Let H contain skeleton history and permitted observation/timing channels. Define
 C as a fixed function of H retaining current posture and observation support.
-For a target \(Y_h\) at a declared horizon, write
+For a target $Y_h$ at a declared horizon, write
 
-\[
+$$
 u_h(H)=\mathbb{E}[Y_h\mid H]-\mathbb{E}[Y_h\mid C].
-\]
+$$
 
 For finite second moments and a common squared-error metric, the population
-risk reduction equals \(\mathbb{E}\|u_h(H)\|^2\). This follows by decomposing
-\(Y_h-\mathbb{E}[Y_h\mid C]\) into the residual conditional on H and \(u_h\);
+risk reduction equals $\mathbb{E}\|u_h(H)\|^2$. This follows by decomposing
+$Y_h-\mathbb{E}[Y_h\mid C]$ into the residual conditional on H and $u_h$;
 their expected cross product is zero. These are standard conditional-expectation
 identities. They are not a new theorem, mutual-information estimator or guarantee
 for a regularized predictor trained on a small cohort.
@@ -179,10 +179,10 @@ direction-of-time mechanism.
 
 Each fit minimizes a source-weighted, summed objective,
 
-\[
+$$
 \sum_i w_i\|Y_i-b-X_iW_x-S_iW_s\|^2
 +\lambda_x\|W_x\|_F^2+\lambda_s\|W_s\|_F^2.
-\]
+$$
 
 Here X is the safely transformed reference, S the skeleton summary and Y the
 target standardized with current training-partition statistics. The squared
@@ -193,7 +193,7 @@ unobserved, constant or insufficiently supported input columns have zero influen
 in all partitions; target standardization and masks remain separate.
 
 Five outer source folds measure excluded-source prediction. Three inner source
-folds choose positive penalties from \(\{0.1,1,10,100,1000,10000\}\), using the
+folds choose positive penalties from $\{0.1,1,10,100,1000,10000\}$, using the
 same 36 joint combinations per arm. A separately selected shared reference is
 also an exact `baseline_only` candidate. Inner losses pool source-weighted error
 sums consistently; ties within the frozen tolerance prefer the baseline, then
@@ -220,11 +220,11 @@ on the saved models and exclude repeated fitting, selection and adaptive redesig
 Reflection and time reversal provide interpretable tests when their action on
 the observable is explicit. M and R commute under the declared landmark and
 timestamp transformations and each squares to identity. For any feature function
-h and signs \(a,b\in\{-1,+1\}\), define
+h and signs $a,b\in\{-1,+1\}$, define
 
-\[
+$$
 P_{a,b}h(H)=\frac{h(H)+a h(MH)+b h(RH)+ab h(MRH)}{4}.
-\]
+$$
 
 The projected feature gains factor a under M and b under R. This construction
 separates four transformation types, but its exactness is algebraic. Zero features
@@ -234,7 +234,7 @@ yet positive energy still does not establish useful movement information.
 Our deterministic calibration checks the two involutions, their commutation,
 physical-interval reversal and four observable parity types. Group errors are
 zero on the constructed fixture; the largest recorded projector error is
-\(5.55\times10^{-17}\), below the prespecified \(10^{-12}\) tolerance. A zero-feature
+$5.55\times10^{-17}$, below the prespecified $10^{-12}$ tolerance. A zero-feature
 control has exact symmetry and zero predictive R² on the balanced nonzero target.
 These results verify the construction rather than a learned model.
 
@@ -367,8 +367,8 @@ Adversarial reconstruction identified an additional interpretation limit: 182
 finite confidence summaries differ between X's raw means and S's valid-conditioned
 means. Real-arm fits retain 132 confidence columns, versus zero in no-skeleton.
 Thirty-one confidence columns exactly duplicate standardized X columns in every
-fold. Duplicate columns with penalties \(\lambda_x\) and \(\lambda_s\) have
-effective penalty \((\lambda_x^{-1}+\lambda_s^{-1})^{-1}\), so they alter
+fold. Duplicate columns with penalties $\lambda_x$ and $\lambda_s$ have
+effective penalty $(\lambda_x^{-1}+\lambda_s^{-1})^{-1}$, so they alter
 regularization as well as nominal representation. The current evidence does not
 quantify their contribution to the estimate. The preserved negative conclusion
 does not establish that confidence and recording quality were fully controlled.
@@ -398,14 +398,14 @@ the completed comparison.
 The next method experiment would select teacher directions by their source-held
 temporal value. Let U contain a small number of constrained teacher directions,
 learned using training sources only. Cross-fitted current-state predictions
-\(\widehat m_C\) define residual targets in common raw teacher units. A student
+$\widehat m_C$ define residual targets in common raw teacher units. A student
 would minimize an auxiliary objective of the form
 
-\[
+$$
 \mathcal L=\mathcal L_{\text{S-JEPA}}+
 \beta\,\mathbb E\big\|g_\theta(H)-
 U^\top[Y_h-\widehat m_C(C)]\big\|^2.
-\]
+$$
 
 This is a proposed experiment, not a completed student implementation or result.
 Ranks and weights include an exact zero-transfer choice. Normalization,

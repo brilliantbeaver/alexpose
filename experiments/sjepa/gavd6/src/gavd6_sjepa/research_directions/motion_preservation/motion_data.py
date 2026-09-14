@@ -94,7 +94,8 @@ def load_motion(row: Mapping[str, Any], start_s: float = 0, duration_s: float = 
     target_t = start_s + np.arange(n) / fps
     if target_t[-1] > source_t[-1] + 1e-9:
         raise ValueError(f"Requested window extends past {row['raw_path']}")
-    if not np.isfinite(sequence.poses).all() or not np.isfinite(sequence.trans).all():
+    if not all(np.isfinite(values).all() for values in
+               (sequence.poses, sequence.trans, sequence.dmpls)):
         raise ValueError(f"Nonfinite motion parameters in {row['raw_path']}")
     poses = np.empty((n, 156), dtype=np.float32)
     for joint in range(52):

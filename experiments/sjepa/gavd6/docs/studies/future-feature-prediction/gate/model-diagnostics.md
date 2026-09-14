@@ -42,7 +42,7 @@ The common degradation is much larger than the differences between skeleton
 conditions. A pipeline that fails even with no skeleton needs diagnosis before
 this becomes a claim that skeleton motion is intrinsically uninformative.
 
-Source: [retained notebook 04](../../../../notebook_runs/04_results_and_next_decision.ipynb).
+Source: [retained notebook 04](../../../../notebook_runs/gate-v2/04_results_and_next_decision.ipynb).
 The [previous notebook evaluation](../../../../work/artifacts/notebook-results-evaluation-2026-09-11/report.md)
 contains execution identities, gate arithmetic and limitations. Full R² values
 above are averaged from rounded report entries; gains use its embedded exact JSON.
@@ -56,10 +56,10 @@ predictions and report seal have not been independently recomputed here.
 
 The head is additive:
 
-\[
+$$
 \hat y = g(x) + c(s,x), \qquad
 c(s,x) = W_x x + W_s h(s) + b.
-\]
+$$
 
 Here `g` is the fitted ridge baseline, `x` contains **2,382** standardized
 baseline inputs, and `h(s)` is a width-64 temporal skeleton encoder. The baseline
@@ -77,9 +77,9 @@ directions for which the small training sample supplies no constraint.
 For training design matrix `X`, decompose the baseline weights into a component
 in the row space of `X` and an orthogonal component:
 
-\[
+$$
 W_x = W_{\parallel}+W_{\perp}, \qquad XW_{\perp}^{\mathsf T}=0.
-\]
+$$
 
 Removing `W_perp` cannot change predictions on those training rows. It can change
 predictions on new rows. A 40-row centered design has rank at most 39, leaving

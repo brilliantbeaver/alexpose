@@ -1,5 +1,7 @@
 # Future Innovation Experiment 0 on HAIC
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../docs/repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 The expanded source study uses the separate [source learning-curve guide](../source-scaling/README.md).
 It uses the same environment variables, with `FI_RUN_ROOT` for the new study and
 `FI_PARENT_ROOT` for gate-v2. Its launcher initializes the study automatically
@@ -192,7 +194,7 @@ is the **direct-v2 parent**, despite its generic name. It is read-only. These
 commands need the cached arrays and audit records, not videos or teacher weights.
 After local result organization, that path is a compatibility link to
 `outputs/studies/future-innovation/gate-v2`. Existing recorded paths and reader
-commands continue to resolve. Use the [local catalog](../../outputs/README.md)
+commands continue to resolve. Use the [local catalog (unavailable here)](../../docs/repository/evidence-availability.md#local-output-catalog-and-relocation-receipt)
 and [organization policy](../../docs/studies/output-organization.md) to find runs;
 new experiments use `outputs/studies/future-innovation/<run-id>`. Historical
 initialization commands below document their original setup; new scientific

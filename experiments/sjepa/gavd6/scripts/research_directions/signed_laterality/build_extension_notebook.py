@@ -56,8 +56,10 @@ This notebook does the two things 05a cannot:
 Every margin here is copied verbatim from the proposal: beat the untrained floor by at least 0.05
 R-squared, reach at least 80 percent of the raw-coordinate-null R-squared, decoded sign correct on at
 least 75 percent of held-out sources, and a mirror slope inside the band [-1.25, -0.8] to count as a
-flip. See `notes/research/_shared_facts.md` for the single source of truth. Folder labels are
-dataset annotations, not diagnoses; all gavd5 readouts are transductive.
+flip. The original numerical fact sheet was retired; see the
+[archived methodology](../../notes/archive/portfolio-ideas/ideas/05-signed-laterality-decodability/METHODOLOGY.md)
+for the historical assumptions and margins. Folder labels are dataset annotations, not diagnoses;
+all gavd5 readouts are transductive.
 """))
 
 # ------------------------------------------------------------------ 0. Margins

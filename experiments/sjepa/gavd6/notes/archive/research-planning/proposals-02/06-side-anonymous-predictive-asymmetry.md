@@ -14,28 +14,28 @@ No part of the question requires an affected-side label.
 
 ## First principles
 
-Walking has approximate **glide-reflection symmetry**. The motion of one leg resembles the other leg about half a cycle later. Let \(e\) be an anatomically indexed S-JEPA prediction-error field over side, region, and phase. Define \(G\) as side swap composed with a half-cycle phase shift. The implementation must satisfy \(G^2=I\).
+Walking has approximate **glide-reflection symmetry**. The motion of one leg resembles the other leg about half a cycle later. Let $e$ be an anatomically indexed S-JEPA prediction-error field over side, region, and phase. Define $G$ as side swap composed with a half-cycle phase shift. The implementation must satisfy $G^2=I$.
 
 Split the error field into
 
-\[
+$$
 e_{+}=\frac{e+Ge}{2}, \qquad
 e_{-}=\frac{e-Ge}{2}.
-\]
+$$
 
-The even field \(e_{+}\) contains error shared by counterpart motions, while \(Ge_-=-e_-\). A pure global side-label swap is a different action, \(Q\). When \(Q\) commutes with \(G\) and the entire residual field is transported consistently, it permutes orbit scores without changing them. Model-level relabel stability is tested rather than assumed.
+The even field $e_{+}$ contains error shared by counterpart motions, while $Ge_-=-e_-$. A pure global side-label swap is a different action, $Q$. When $Q$ commutes with $G$ and the entire residual field is transported consistently, it permutes orbit scores without changing them. Model-level relabel stability is tested rather than assumed.
 
-\[
+$$
 Z_{\mathrm{odd}}([c])=
 \frac{m([c])-\mu_{\mathrm{null}}([c])}
 {\sigma_{\mathrm{null}}([c])+\epsilon},
 \qquad
 m([c])=\frac{|e_-(c)|+|e_-(Gc)|}{2}.
-\]
+$$
 
-This source-null-standardized orbit score is the primary output. The global ratio \(\lVert e_-\rVert_1/(\lVert e_+\rVert_1+\epsilon)\) is auxiliary because it can become large when even energy is merely small. The assay measures predictive asymmetry, not affected-side identity.
+This source-null-standardized orbit score is the primary output. The global ratio $\lVert e_-\rVert_1/(\lVert e_+\rVert_1+\epsilon)$ is auxiliary because it can become large when even energy is merely small. The assay measures predictive asymmetry, not affected-side identity.
 
-A nonzero unilateral cell necessarily creates an equal-magnitude response at its transported counterpart because \(Ge_-=-e_-\). Localization therefore operates on unordered orbits \([c]=\{c,Gc\}\), not on a falsely one-sided target. Phase is reported modulo half a cycle.
+A nonzero unilateral cell necessarily creates an equal-magnitude response at its transported counterpart because $Ge_-=-e_-$. Localization therefore operates on unordered orbits $[c]=\{c,Gc\}$, not on a falsely one-sided target. Phase is reported modulo half a cycle.
 
 ![Side-anonymous predictive asymmetry](images/06-side-anonymous-predictive-asymmetry.svg)
 
@@ -45,7 +45,7 @@ A nonzero unilateral cell necessarily creates an equal-magnitude response at its
 
 Freeze `outputs/repaired-jepa-seed7-v2/seed-7_standard_sjepa_best.pt`. Estimate gait phase from AMASS contacts for the clean benchmark and from Core11 periodicity after observation corruption. Query a fixed mask bank that hides one bilateral region and phase bin at a time. For each cell, use the median cosine divergence between predicted and EMA-target latents.
 
-Only anatomically indexed residuals enter the parity split. A pooled feature vector has no justified side-and-phase transport. Numerically test token permutations, coordinate reflection, phase shift, inverse transport, \(G^2=I\), and commutation of \(Q\) with \(G\) before any experiment.
+Only anatomically indexed residuals enter the parity split. A pooled feature vector has no justified side-and-phase transport. Numerically test token permutations, coordinate reflection, phase shift, inverse transport, $G^2=I$, and commutation of $Q$ with $G$ before any experiment.
 
 ### 2. Create matched unilateral and bilateral interventions
 
@@ -56,13 +56,13 @@ Use four edit families at three doses:
 - lower-leg phase lag;
 - shortened stance-like phase interval, validated from exact AMASS contact.
 
-Apply each unilateral edit on either side. Build its bilateral null by group symmetrization, \(\Delta_{+}=(\Delta+G\Delta)/2\), then renormalize it to the unilateral edit's coordinate energy. Numerically require \(G\Delta_{+}=\Delta_{+}\), including the half-cycle shift. Merely editing both sides with equal norm is not a valid even null. Randomize the input side convention for half the samples. Process every motion through seen and unseen observation profiles, including view, compression, crop, confidence loss, missingness, and side-specific occlusion.
+Apply each unilateral edit on either side. Build its bilateral null by group symmetrization, $\Delta_{+}=(\Delta+G\Delta)/2$, then renormalize it to the unilateral edit's coordinate energy. Numerically require $G\Delta_{+}=\Delta_{+}$, including the half-cycle shift. Merely editing both sides with equal norm is not a valid even null. Randomize the input side convention for half the samples. Process every motion through seen and unseen observation profiles, including view, compression, crop, confidence loss, missingness, and side-specific occlusion.
 
 The scientific target is not unilateral-versus-bilateral accuracy alone. The collapsed odd map must place the unilateral change in the correct region-phase orbit. Opposite-side versions must agree after transport as full maps, not merely as scalar scores.
 
 ### 3. Calibrate an observation-asymmetry floor
 
-Camera view and pose failure can be asymmetric. Estimate \(\mu_{\mathrm{null}}\) and \(\sigma_{\mathrm{null}}\) for each orbit magnitude, plus the null distribution of global odd norm, from identical clean motions passed through different outer-training source profiles. Lock a global threshold at 5 percent source-only false positives. Apply all orbit standardizers and the threshold unchanged to held identities and held profile operators.
+Camera view and pose failure can be asymmetric. Estimate $\mu_{\mathrm{null}}$ and $\sigma_{\mathrm{null}}$ for each orbit magnitude, plus the null distribution of global odd norm, from identical clean motions passed through different outer-training source profiles. Lock a global threshold at 5 percent source-only false positives. Apply all orbit standardizers and the threshold unchanged to held identities and held profile operators.
 
 Compare the learned map with raw glide-reflection distance, dynamic time warping, classical symmetry ratios, detector confidence, and the same residual calculation on a random encoder. If a raw method matches it, there is no S-JEPA contribution.
 
@@ -83,7 +83,7 @@ Pool a fixed number of windows per source. Test whether `shortcut + raw Core11 +
 | Question | Metric | Advance rule |
 | --- | --- | --- |
 | Is the transport correct? | Numerical involution and opposite-side alignment error | Below `1e-6` before learned scoring |
-| Is the unilateral support found? | Localization AUPRC over unordered \(G\)-orbits | At least 0.70 and at least 0.15 above every raw, confidence, and random-encoder baseline |
+| Is the unilateral support found? | Localization AUPRC over unordered $G$-orbits | At least 0.70 and at least 0.15 above every raw, confidence, and random-encoder baseline |
 | Are bilateral changes rejected? | False-positive rate at the locked odd-energy threshold | Below 5 percent for group-symmetrized, renormalized bilateral edits |
 | Is the result side-anonymous? | Scalar change after global relabeling and transported orbit-map agreement | Below 2 percent relative scalar error, with map cosine similarity and ICC both above 0.90 |
 | Does it survive source profiles? | Cross-profile coefficient of variation | Below 15 percent on held profile operators |
@@ -102,7 +102,7 @@ Stop if raw bilateral differences or glide-reflection distance come within 0.03 
 - random S-JEPA residual parity;
 - the reflection-equivariant local checkpoint as a manipulation control, not the primary method;
 - phase-shuffled and side-permutation-broken transports;
-- group-symmetrized, energy-matched bilateral edits with \(G\Delta=\Delta\);
+- group-symmetrized, energy-matched bilateral edits with $G\Delta=\Delta$;
 - source-only asymmetric occlusion;
 - identical edit with the side convention globally relabeled.
 

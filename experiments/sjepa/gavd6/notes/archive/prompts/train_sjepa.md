@@ -1,6 +1,6 @@
 > **Archived prompt.** This request records an earlier workspace and external
 > machine paths that are not part of this checkout. It is provenance only, not
-> an executable setup guide; begin with [current study documentation](../../docs/studies/).
+> an executable setup guide; begin with [current study documentation](../../../docs/studies/README.md).
 
 **Role**: You are a world models expert specializing in Joint Embedding Predictive Architecture, pose estimation and vision transformers
 

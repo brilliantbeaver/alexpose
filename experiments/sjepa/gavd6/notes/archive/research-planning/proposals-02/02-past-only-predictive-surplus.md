@@ -18,21 +18,21 @@ The local S-JEPA hides selected joint-time tokens inside one window. Visible tok
 
 The test imposes a strict arrow of time:
 
-\[
+$$
 z_{\le t} \longrightarrow \widehat z_{t+h}, \qquad h \in \{0.27, 0.53, 1.07\}\text{ seconds}.
-\]
+$$
 
 The 64-frame window is divided into sixteen four-frame patches. The student sees only the first eight patches. Target blocks are centered 8, 16, or 32 frames later, which gives patch-aligned horizons of approximately 0.27, 0.53, and 1.07 seconds at 30 Hz. No future token, future validity flag, or centered statistic may enter the context.
 
 The frozen EMA target encoder was trained with bidirectional context. Its target is therefore a contextual representation of the later block, not a literal physical state variable. Passing this assay is necessary evidence of forward information, but it is not sufficient by itself to call the representation a physical world model.
 
-Define the normalized surplus at horizon \(h\) as
+Define the normalized surplus at horizon $h$ as
 
-\[
+$$
 S(h)=1-\frac{L_{\mathrm{SJEPA}}(h)}{\min_b L_b(h)},
-\]
+$$
 
-where \(L_b\) is the loss of each preregistered simple baseline. Positive surplus means S-JEPA beats the best baseline. Zero means it adds nothing. Negative values mean a simple model is better.
+where $L_b$ is the loss of each preregistered simple baseline. Positive surplus means S-JEPA beats the best baseline. Zero means it adds nothing. Negative values mean a simple model is better.
 
 ![Past-only predictive surplus](images/02-past-only-predictive-surplus.svg)
 
@@ -50,8 +50,8 @@ Evaluate the same target under four fixed masks:
 
 | Query | Visible information | Purpose |
 | --- | --- | --- |
-| past-only | tokens no later than \(t\) | the actual predictive test |
-| future-only | tokens no earlier than \(t+h\) | time-reversal control |
+| past-only | tokens no later than $t$ | the actual predictive test |
+| future-only | tokens no earlier than $t+h$ | time-reversal control |
 | bidirectional | matched token count on both sides | quantifies the interpolation advantage |
 | phase-only | phase, mean pose, and one prior cycle | strong periodic baseline |
 
@@ -73,7 +73,7 @@ All baselines receive the same valid past and are scored against the same frozen
 
 ### 4. Separate motion failure from observation failure
 
-Project each held-out AMASS motion through source profiles learned from outer-training GAVD sources. Score clean and corrupted copies with identical masks. Add persistent motion edits that begin in the visible past and continue into the target: reduced knee excursion, lower swing clearance, and inter-limb phase lag. Add a separate unexpected-onset edit only after \(t\). A model may predict a persistent edit, but it should be surprised by an unseen onset.
+Project each held-out AMASS motion through source profiles learned from outer-training GAVD sources. Score clean and corrupted copies with identical masks. Add persistent motion edits that begin in the visible past and continue into the target: reduced knee excursion, lower swing clearance, and inter-limb phase lag. Add a separate unexpected-onset edit only after $t$. A model may predict a persistent edit, but it should be surprised by an unseen onset.
 
 The result is a region-by-horizon table with three interpretable quantities: predictable continuation, unexpected-change residual, and observation-profile sensitivity.
 
@@ -81,8 +81,8 @@ The result is a region-by-horizon table with three interpretable quantities: pre
 
 | Test | Metric | Advance rule |
 | --- | --- | --- |
-| Learned future information | \(S(0.53)\) against the validation-selected best baseline | At least 0.10, with the 95 percent held-identity bootstrap interval above zero |
-| Longer horizon | \(S(1.07)\) | Positive in every seed, even if smaller than at 0.53 seconds |
+| Learned future information | $S(0.53)$ against the validation-selected best baseline | At least 0.10, with the 95 percent held-identity bootstrap interval above zero |
+| Longer horizon | $S(1.07)$ | Positive in every seed, even if smaller than at 0.53 seconds |
 | Pretraining value | Paired error versus random-encoder and teacher-shuffled placebos | Positive bootstrap interval against both |
 | Arrow of time | Past-only versus bidirectional loss | Report the gap; never use bidirectional performance as future prediction |
 | Semantic retention | Persistent-edit prediction and unexpected-onset detection | Edit AUROC at least 0.75 and at least 90 percent of clean-profile contrast |

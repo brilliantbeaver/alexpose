@@ -17,6 +17,7 @@ from gavd6_sjepa.research_directions.motion_preservation.gavd_stress import (
     gavd_stress,
     load_pose_overlay,
 )
+from gavd6_sjepa.research_directions.motion_preservation.pretrained_models import FlowResult
 
 # GAVD sampling and observability checks, using no actual clinical videos.
 
@@ -60,14 +61,43 @@ class GavdStressTests(unittest.TestCase):
             self.assertEqual(info['manifest_frame_base'],1)
             self.assertEqual(info['cache_frame_base'],0)
 
+    def test_low_fps_source_gallery_preserves_physical_playback_rate(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            path=root/'slow.avi'
+            writer=cv2.VideoWriter(str(path),cv2.VideoWriter_fourcc(*'MJPG'),10,(32,24))
+            self.assertTrue(writer.isOpened())
+            for index in range(30):
+                writer.write(np.full((24,32,3),index*5,np.uint8))
+            writer.release()
+            table=pd.DataFrame([dict(sequence_id='s',video_id='v',video_path=str(path),
+                                     first_frame=1,last_frame=30,available=True)])
+            cfg=SimpleNamespace(root=root/'run',mode='real',gavd_manifest_dir='',gavd_video_root='',
+                                seed=17,max_gavd_sequences=1,flow_backend='fixture',flow_checkpoint='',
+                                flow_repo=None,flow_config=None,device='cpu',duration_s=2,fps=20,
+                                image_size=32,gavd_pose_root='')
+            module='gavd6_sjepa.research_directions.motion_preservation.gavd_stress'
+            with patch(f'{module}.load_gavd_manifest',return_value=table), \
+                 patch(f'{module}.discover_reservations',return_value=([],pd.DataFrame(dict(video_id=['v'],reserved=[False])))), \
+                 patch(f'{module}.OpticalFlowEstimator') as model, \
+                 patch(f'{module}._gallery',return_value=('sheet','video')) as gallery:
+                model.return_value.estimate.side_effect=lambda rgb,**kwargs: FlowResult(
+                    np.zeros((len(rgb)-1,*rgb.shape[1:3],2),np.float32))
+                report=gavd_stress(cfg)
+            self.assertEqual(report.iloc[0].status,'observational_only')
+            self.assertAlmostEqual(gallery.call_args.args[-1],10)
+
     def test_pose_overlay_requires_original_frame_geometry(self):
         with tempfile.TemporaryDirectory() as temporary:
             path=Path(temporary)/'pose.npz'
             points=np.full((2,22,2),[20,30],np.float32)
             np.savez(path,source_frames=[10,12],joints2d=points,coordinate_system='full_frame_pixels')
             result=load_pose_overlay(path,[10,11,12],[.5,.25])['joints2d']
-            np.testing.assert_allclose(result[0],np.broadcast_to([10,7.5],(22,2)))
+            np.testing.assert_allclose(result[0],np.broadcast_to([9.75,7.125],(22,2)))
             self.assertTrue(np.isnan(result[1]).all())
+            np.savez(path,source_frames=[10,12.9],joints2d=points,coordinate_system='full_frame_pixels')
+            with self.assertRaisesRegex(ValueError,'integer frame indices'):
+                load_pose_overlay(path,[10,12],[1,1])
             np.savez(path,source_frames=[10,12],joints3d=np.zeros((2,22,3)))
             with self.assertRaisesRegex(ValueError,'Pose overlay needs'):
                 load_pose_overlay(path,[10,12],[1,1])

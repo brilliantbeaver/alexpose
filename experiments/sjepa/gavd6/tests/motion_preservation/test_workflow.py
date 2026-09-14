@@ -2,8 +2,12 @@
 
 
 from pathlib import Path
+from dataclasses import replace
+import json
+import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -23,6 +27,18 @@ from gavd6_sjepa.research_directions.motion_preservation.config import RunConfig
 
 
 class ResearchBoundaryTests(unittest.TestCase):
+    def test_explicit_missing_configuration_does_not_start_another_experiment(self):
+        with tempfile.TemporaryDirectory() as root:
+            with patch.dict(os.environ, {"MP_CONFIG": str(Path(root) / "missing.json")}, clear=True):
+                with self.assertRaisesRegex(FileNotFoundError, "MP_CONFIG"):
+                    RunConfig.from_env()
+
+    def test_momask_requires_its_trained_sample_rate(self):
+        with tempfile.TemporaryDirectory() as root:
+            cfg = RunConfig(run_root=root, mode="real", fps=30.)
+            with self.assertRaisesRegex(ValueError, "20 FPS"):
+                workflow.cache_predictions(cfg)
+
     def test_final_is_not_constructed_before_calibration(self):
         with tempfile.TemporaryDirectory() as root:
             cfg=RunConfig(run_root=root,mode="demo",device="cpu")
@@ -68,6 +84,29 @@ class ResearchBoundaryTests(unittest.TestCase):
             locked=(Path(root)/"calibration/locked.json").read_bytes()
             result=workflow.evaluate(cfg)
             self.assertEqual(result["decision"]["status"],"demo_only_no_research_decision")
+            self.assertEqual(result["decision"]["noise_removal_scope"], "observed_joints")
+            legacy = json.loads(locked)
+            legacy.pop("noise_removal_scope")
+            (Path(root)/"calibration/locked.json").write_text(json.dumps(legacy))
+            with self.assertRaisesRegex(RuntimeError, "previous all-joint repair metric"):
+                workflow.require_fitted(cfg)
+            (Path(root)/"calibration/locked.json").write_bytes(locked)
+            # Good average repair cannot hide a comparator that misses the
+            # target on the cases where event preservation actually matters.
+            summary = result["summary"].copy()
+            primary = result["decision"]["primary"]
+            comparator = result["decision"]["calibration_selected_comparator"]
+            summary.loc[summary.method.isin([primary, comparator]), "noise_removal"] = .30
+            summary.loc[summary.method.eq(primary), "event_and_noise_removal"] = .25
+            summary.loc[summary.method.eq(comparator), "event_and_noise_removal"] = .20
+            with patch.object(metrics, "summarize", return_value=summary):
+                mixed = workflow.evaluate(cfg)["decision"]
+            self.assertTrue(mixed["minimum_repair_met"])
+            self.assertFalse(mixed["same_clip_event_and_noise_repair"])
+            with self.assertRaisesRegex(ValueError, "Demo results"):
+                workflow.evaluate(replace(cfg, mode="real"))
+            with self.assertRaisesRegex(ValueError, "Demo cases"):
+                workflow._load_cases(replace(cfg, mode="real"), "development")
             self.assertNotIn("final",pd.read_csv(Path(root)/"cases.csv").role.unique())
             workflow.build_pairs(cfg,roles=("final",))
             workflow.cache_predictions(cfg,roles=("final",))

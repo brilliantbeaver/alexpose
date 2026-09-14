@@ -1,5 +1,7 @@
 # Implemented source learning curve: audit, validation and execution status
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 The source-scaling study is implemented, with a separate protocol, source
 reservation, CPU fitting/reporting path, expanded-data preparation, Slurm jobs,
 and read-only inspection notebook. The local cohort audit and synthetic checks
@@ -17,7 +19,7 @@ from your HAIC session.
 
 ## What was reserved before expanded fitting
 
-The [new run](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/)
+The [new run (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
 preserves the [protocol](../../future-innovation/source-learning-curve-protocol.md), copied manifests,
 historical-exposure records, participant policy, calibration and parent hashes.
 
@@ -41,8 +43,8 @@ another analysis. Confirmation requires a final exposure reconciliation and, if
 participant-level claims are intended, an explicit participant registry. No
 sequence/video identifier is treated as a person identifier.
 
-The [machine-readable audit](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/reports/cohort-audit.json)
-and [source reservation](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/config/source-reservation.csv)
+The [machine-readable audit (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
+and [source reservation (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
 retain exact identities and counts. The initial eligibility table distinguishes
 parent-verified clips, parent pose failures, and unprocessed sequences. Necessary
 annotation-length conditions are reported separately from actual eligibility.
@@ -186,7 +188,7 @@ cover the reused decoder, controls, causal teacher interface and old resumption
 contracts; injected checks cannot establish the availability or runtime of new
 media processing.
 
-The final root retains [65 implementation files and their digests](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/implementation/manifest.json).
+The final root retains [65 implementation files and their digests (unavailable here)](../../../repository/evidence-availability.md#source-scaling).
 The [final execution record](../../../../work/artifacts/source-learning-curve-20260911/execution-record-final.json)
 links the exercised commands and logs. The [preservation check](../../../../work/artifacts/source-learning-curve-20260911/parent-preservation-final.json)
 confirms the parent artifact snapshot and the identical source reservation across
@@ -305,7 +307,7 @@ be overwritten by the runner. Kernel startup and channel cleanup are explicitly
 managed so startup failure cannot leave a notebook-client exit handler waiting
 on a nonexistent kernel.
 
-The [retained executed notebook](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/notebook_runs/manual-20260912T160403-4d747a14/23_source_learning_curves.ipynb)
+The [retained executed notebook (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
 ran all five code cells successfully against the saved development study. It
 shows the existing cohort audit and the absence of expanded results. The
 [execution/validation record](../../../../work/artifacts/source-learning-curve-notebooks-20260912/validation.json)
@@ -356,7 +358,7 @@ The six previously executed notebook copies retained their hashes, sizes and
 modification times. The bridge audit additionally verified preservation of 22
 external historical source files.
 
-The [new notebook 23 execution](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/notebook_runs/manual-20260912T164103-70df86ed/23_source_learning_curves.ipynb)
+The [new notebook 23 execution (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
 used the existing saved study, left displayed inputs unchanged, and performed no
 numerical reconstruction. It still reports incomplete expanded results. This
 was exercised locally with:

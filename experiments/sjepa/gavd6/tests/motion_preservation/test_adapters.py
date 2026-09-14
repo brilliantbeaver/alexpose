@@ -183,6 +183,11 @@ class FlowInterfaceTests(unittest.TestCase):
             result = load_external_prior(path)
             self.assertEqual(result.metadata["integration"], "external_cached_predictions")
             np.testing.assert_array_equal(result.frame_indices, [0, 1, 2, 3])
+            # Truncating fractional indices would silently align the wrong poses.
+            np.savez(path, joints=np.zeros((4, 22, 3)), frame_indices=[0., 1.9, 2.9, 3.9],
+                     metadata_json=np.array(json.dumps(metadata)))
+            with self.assertRaisesRegex(ValueError, "array of integers"):
+                load_external_prior(path)
 
 @unittest.skipUnless(os.environ.get("MOTION_PRESERVATION_MOMASK_REPO"),
                      "Set MOTION_PRESERVATION_MOMASK_REPO for the actual author conversion check")

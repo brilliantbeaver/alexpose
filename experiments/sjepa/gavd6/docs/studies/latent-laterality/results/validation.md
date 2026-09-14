@@ -1,5 +1,7 @@
 # Latent Laterality: what we have learned so far
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 **Study update — 31 August 2026**
 
 > **Bottom line:** this study found a real failure mode in side-specific motion analysis and built a controlled AMASS benchmark that tests it without leaking the answer. The first seed-7 model comparison is now complete. SG-JEPA reduced the validation errors relative to a correction-first motion model, but an otherwise identical model given no useful left/right probabilities matched the improvement almost exactly. The result therefore does **not** support the proposed probability-aware mechanism. Under the study's pre-set rule, confirmation training should stop and the final test set should remain unopened.
@@ -60,7 +62,7 @@ Two targets are reported. The **side-sensitive** target preserves the magnitude 
 
 An exploratory swap probe showed that leaving prepared naming errors untouched produced a normalized squared-error score of 2.79, compared with 0.096 after a simple continuity correction. This established that the error can materially damage a side-sensitive calculation.
 
-However, continuity correction tied the answer-key correction and detected every prepared boundary. The experiment had made the changes too obvious. It demonstrated the failure mechanism, but not a need for SG-JEPA. The run used a legacy model and an artificial starting reference. Its [summary](../../../../outputs/swap-probe-seed7/summary.csv) and [boundary results](../../../../outputs/swap-probe-seed7/validation_edge_metrics.csv) should not be read as SG-JEPA results.
+However, continuity correction tied the answer-key correction and detected every prepared boundary. The experiment had made the changes too obvious. It demonstrated the failure mechanism, but not a need for SG-JEPA. The run used a legacy model and an artificial starting reference. Its [summary (unavailable here)](../../../repository/evidence-availability.md#latent-laterality) and [boundary results (unavailable here)](../../../repository/evidence-availability.md#latent-laterality) should not be read as SG-JEPA results.
 
 ### 2. The first persistent-sequence benchmark failed its fairness gate
 
@@ -69,7 +71,7 @@ The next benchmark applied one hidden naming path to each full sequence and requ
 - An arbitrary coordinate label was predictable with a classification score (AUROC) of 0.680, where 0.500 is chance. Its cautious 95% upper estimate was 0.786, above the allowed 0.550.
 - Continuity correction and answer-key correction both had zero side-sensitive error, leaving no meaningful room for a learned method to improve.
 
-The benchmark correctly recorded `ready_for_sg_jepa: false`. This was a successful safeguard: it stopped a model from being rewarded for a bookkeeping shortcut or an already-solved task. The original [gate results](../../../../outputs/latent-laterality/amass-benchmark-seed7/benchmark_gates.csv) and [decision record](../../../../outputs/latent-laterality/amass-benchmark-seed7/gate_decision.json) preserve that failure.
+The benchmark correctly recorded `ready_for_sg_jepa: false`. This was a successful safeguard: it stopped a model from being rewarded for a bookkeeping shortcut or an already-solved task. The original [gate results (unavailable here)](../../../repository/evidence-availability.md#latent-laterality) and [decision record (unavailable here)](../../../repository/evidence-availability.md#latent-laterality) preserve that failure.
 
 ### 3. The repaired benchmark passed
 
@@ -83,7 +85,7 @@ All three pre-set checks passed:
 
 The continuity rule was useful but imperfect. Among 177 validation sequences with one or more temporary changes, it recovered the complete path in 106 and made a path error in 71. Its correction made the side-sensitive result worse than no correction in 36 of the 177 sequences. This created a real opportunity for learning rather than guaranteeing a win for either method.
 
-The gate recorded `ready_for_sg_jepa: true`. That meant the comparison was eligible to run; it did not predict that SG-JEPA would succeed. See the repaired [gate results](../../../../outputs/latent-laterality/amass-benchmark-seed7-v2-chart-paired/benchmark_gates.csv), [decision record](../../../../outputs/latent-laterality/amass-benchmark-seed7-v2-chart-paired/gate_decision.json), and [per-sequence results](../../../../outputs/latent-laterality/amass-benchmark-seed7-v2-chart-paired/sequence_metrics.csv).
+The gate recorded `ready_for_sg_jepa: true`. That meant the comparison was eligible to run; it did not predict that SG-JEPA would succeed. See the repaired [gate results (unavailable here)](../../../repository/evidence-availability.md#latent-laterality), [decision record (unavailable here)](../../../repository/evidence-availability.md#latent-laterality), and [per-sequence results (unavailable here)](../../../repository/evidence-availability.md#latent-laterality).
 
 ### 4. The seed-7 model comparison does not support the proposed mechanism
 
@@ -104,7 +106,7 @@ The uniform control, however, reduced the same errors by 6.8% and 10.5%. It was 
 
 This control is decisive because it differs from SG-JEPA in the proposed ingredient: informative path probabilities. The near-identical result means the gain over correction-first cannot be credited to using the estimated probabilities. It may come from the paired, relabelling-aware architecture, from training on uncorrected inputs, or from another difference between the model families; this experiment does not separate those explanations.
 
-The full [validation summary](../../../../outputs/latent-laterality/amass-gauge-v2-seed7-validation/gauge_readout_summary.csv), [window-level predictions](../../../../outputs/latent-laterality/amass-gauge-v2-seed7-validation/gauge_readout_predictions.csv), [path metrics](../../../../outputs/latent-laterality/amass-gauge-v2-seed7-validation/gauge_path_metrics.csv), and [evaluation contract](../../../../outputs/latent-laterality/amass-gauge-v2-seed7-validation/evaluation_contract.json) record the result. The contract confirms that the test split was not evaluated.
+The full [validation summary (unavailable here)](../../../repository/evidence-availability.md#latent-laterality), [window-level predictions (unavailable here)](../../../repository/evidence-availability.md#latent-laterality), [path metrics (unavailable here)](../../../repository/evidence-availability.md#latent-laterality), and [evaluation contract (unavailable here)](../../../repository/evidence-availability.md#latent-laterality) record the result. The contract confirms that the test split was not evaluated.
 
 ## Interpretation and limits
 

@@ -52,15 +52,15 @@ def execute_notebook(
     number: str,
     *,
     run_root: Path,
-    mode: str = "real",
-    device: str = "cuda",
+    mode: str | None = None,
+    device: str | None = None,
     output_dir: Path | None = None,
     config: Path | None = None,
     timeout: int | None = None,
 ) -> Path:
     if number not in NOTEBOOKS:
         raise ValueError("Choose notebook 00 through 05.")
-    if mode not in {"real", "demo"}:
+    if mode is not None and mode not in {"real", "demo"}:
         raise ValueError("Mode must be real or demo.")
     if timeout is not None and timeout <= 0:
         raise ValueError("Timeout must be positive; omit for no per-cell limit.")
@@ -80,7 +80,9 @@ def execute_notebook(
             cell.outputs = []
             cell.execution_count = None
     relocate_links(notebook, output)
-    record = {"run_root": str(run_root), "mode": mode, "device": device,
+    record = {"run_root": str(run_root),
+              "mode": mode or os.environ.get("MP_MODE", "config/default"),
+              "device": device or os.environ.get("MP_DEVICE", "config/default"),
               "started_utc": stamp, "status": "running", "notebook": number}
 
     def save():
@@ -108,9 +110,12 @@ def execute_notebook(
                 "display_name": "Motion preservation", "language": "python",
             }))
             environment = {**os.environ, "GAVD6_ROOT": str(ROOT), "MP_RUN_ROOT": str(run_root),
-                           "MP_MODE": mode, "MP_DEVICE": device,
                            "MPLCONFIGDIR": str(kernel_root / "matplotlib"),
                            "IPYTHONDIR": str(kernel_root / "ipython"), "PYTHONUNBUFFERED": "1"}
+            if mode is not None:
+                environment["MP_MODE"] = mode
+            if device is not None:
+                environment["MP_DEVICE"] = device
             if config is not None:
                 environment["MP_CONFIG"] = str(config.expanduser().resolve())
             manager = KernelManager(
@@ -145,8 +150,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--notebook", choices=tuple(NOTEBOOKS), required=True)
     parser.add_argument("--run-root", type=Path, required=True)
-    parser.add_argument("--mode", choices=("real", "demo"), default="real")
-    parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
+    parser.add_argument("--mode", choices=("real", "demo"), help="Override config/environment mode.")
+    parser.add_argument("--device", choices=("cpu", "cuda"), help="Override config/environment device.")
     parser.add_argument("--config", type=Path)
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--timeout", type=int, help="Per-cell seconds; Slurm otherwise sets the time limit.")

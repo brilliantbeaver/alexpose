@@ -1,3 +1,6 @@
+> **Historical execution prompt:** This request guided the completed gate repair.
+> Read the [result and limitations](../results.md) before reusing its commands or artifact assumptions.
+
 **Role**: You are an AI/ML researcher and research engineer specializing in world models, Joint Embedding Predictive Architecture (JEPA), statistical evaluation, and reproducible experiments on Slurm/HPC systems.
 
 **Task**: Carefully and systematically repair Experiment 0 for the future-innovation distillation study. Use the executed notebooks in `notebook_runs/`, the matching artifacts in `outputs/future-innovation/`, and the verified investigation to understand the failures, implement the necessary changes, and run a separately versioned feasibility experiment using the existing teacher cache. Carry the work through implementation, calibration, evaluation, notebook updates, and a clear account of the result.
@@ -35,7 +38,7 @@ Start with these sources in order, then follow their relevant implementation ref
 1. [Saved-model evaluation and revised next steps](../model-evaluation.md): the confirmed mechanisms and numerical evidence.
 2. [Current direct-v2 protocol](../../../future-innovation/direct-gate-protocol.md): the scientific question, data boundaries, controls, metric, and decision rules.
 3. `outputs/future-innovation/`: inspect the frozen configuration, manifests, teacher cache, models, predictions, QC records, and reports. The copied local root contains the `gate-v2` artifacts despite its directory name.
-4. `notebook_runs/`: inspect the executed results. The editable source notebooks are in `notebooks/experiments/future_innovation/`.
+4. `notebook_runs/`: inspect the executed results. The editable source notebooks are in `notebooks/future_innovation/`.
 5. [Fitted-model diagnostic](../../../../../scripts/research_directions/future_prediction/inspect_fits.py) and [numerical failure evaluation](../../../../../scripts/research_directions/future_prediction/evaluate_failures.py): reuse their verified calculations and relocated-cache handling where appropriate.
 6. [HAIC execution guide](../../../../../slurm/future-prediction/README.md), [notebook execution guide](../../../../../slurm/future-prediction/notebooks/README.md), and the relevant tests: understand execution, resumption, and artifact ownership.
 
@@ -174,7 +177,7 @@ Keep outputs and provenance writes in the child run. Test completed-stage reuse,
 
 **8. Revise the notebooks into a coherent explanation of the experiment**
 
-Update the [canonical notebook generator](../../../../../scripts/research_directions/future_prediction/build_notebooks.py) and regenerate the source notebooks in `notebooks/experiments/future_innovation/`. Retain historical executed notebooks and generator snapshots under `notebook_runs/`.
+Update the [canonical notebook generator](../../../../../scripts/research_directions/future_prediction/build_notebooks.py) and regenerate the source notebooks in `notebooks/future_innovation/`. Retain historical executed notebooks and generator snapshots under `notebook_runs/`.
 
 Build a clear progression from the scientific question through data alignment, teacher features, predictor fitting, and the final decision. Explain what each stage establishes and how the next stage uses its outputs.
 

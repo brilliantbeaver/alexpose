@@ -47,6 +47,7 @@ class SMPLHBody:
         self.device, self.batch_size, self.models = device, int(batch_size), {}
 
     def _model(self, gender):
+        import inspect
         import torch
         from human_body_prior.body_model.body_model import BodyModel
         if gender not in self.models:
@@ -54,8 +55,18 @@ class SMPLHBody:
             for path in (body_path, dmpl_path):
                 if not path.is_file():
                     raise FileNotFoundError(f"Licensed AMASS body-model asset required: {path}")
+            if not {"bm_fname", "dmpl_fname"} <= set(inspect.signature(BodyModel).parameters):
+                raise RuntimeError(
+                    "This study requires the official AMASS human_body_prior BodyModel "
+                    "with bm_fname/dmpl_fname and dynamic shape support. The older PyPI "
+                    "API does not apply DMPL coefficients. Install the GitHub version: "
+                    "python -m pip install --upgrade git+https://github.com/nghorbani/human_body_prior.git"
+                )
             model = BodyModel(bm_fname=str(body_path), num_betas=16,
                               dmpl_fname=str(dmpl_path), num_dmpls=8).to(self.device).eval()
+            if (model.model_type != "smplh" or model.shapedirs.shape[-1] != 16
+                    or not getattr(model, "use_dmpl", False) or model.dmpldirs.shape[-1] != 8):
+                raise ValueError("Expected an SMPL-H model with 16 shape and 8 active DMPL components")
             for parameter in model.parameters():
                 parameter.requires_grad_(False)
             self.models[gender] = model
@@ -78,7 +89,10 @@ class SMPLHBody:
             vertices.append(output.v.detach().cpu().numpy())
         faces = model.f.detach().cpu().numpy() if torch.is_tensor(model.f) else np.asarray(model.f)
         transform = lambda a: (np.concatenate(a) @ AMASS_TO_Y_UP.T).astype(np.float32)
-        return BodySequence(transform(joints), transform(vertices), faces.astype(np.int32), motion.fps,
+        joints, vertices = transform(joints), transform(vertices)
+        if not np.isfinite(joints).all() or not np.isfinite(vertices).all():
+            raise ValueError("SMPL-H returned nonfinite geometry; this motion cannot supply reference truth")
+        return BodySequence(joints, vertices, faces.astype(np.int32), motion.fps,
                             motion.timestamps.copy(), {**motion.metadata, "geometry": "SMPL-H+DMPL",
                                                        "world_units": "meters", "world_up": "+Y"})
 

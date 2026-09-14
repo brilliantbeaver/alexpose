@@ -353,8 +353,12 @@ def load_external_prior(path: str | Path) -> PriorResult:
     """
     with np.load(path, allow_pickle=False) as data:
         joints = data["joints"].astype(np.float32)
-        frames = data["frame_indices"].astype(int)
+        frames = np.asarray(data["frame_indices"])
         metadata = json.loads(str(data["metadata_json"].item()))
+    if (frames.ndim != 1 or not np.issubdtype(frames.dtype, np.number)
+            or not np.isfinite(frames).all() or np.any(frames != np.floor(frames))):
+        raise ValueError("External prior frame indices must be a one-dimensional array of integers")
+    frames = frames.astype(int)
     if joints.shape != (len(frames), 22, 3) or not np.isfinite(joints).all():
         raise ValueError("External prior needs finite joints [K,22,3] and aligned frame indices")
     if np.any(np.diff(frames) <= 0) or np.any(frames < 0):

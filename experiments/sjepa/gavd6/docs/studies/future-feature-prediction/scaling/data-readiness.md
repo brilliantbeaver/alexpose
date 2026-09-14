@@ -1,5 +1,7 @@
 # Connecting the source learning curve to real videos and notebook results
 
+> **Artifact availability, 13 September 2026:** This document records earlier work. Some linked run artifacts and generated catalogs are absent from this checkout. Links marked “unavailable here” open the [evidence inventory](../../../repository/evidence-availability.md), which preserves their original paths. Recorded results below have not been rerun by this documentation update.
+
 This records the earlier strict media-completeness implementation. New runs now
 use the explicitly authorized [available-cohort amendment](../../future-innovation/source-learning-curve-available-cohort-protocol.md)
 and its [validation record](cohort-validation.md).
@@ -20,7 +22,7 @@ to development and **44 recordings / 178 sequences** to confirmation. These
 are metadata counts, not counts of successfully decoded or pose-eligible clips.
 Only the original **50 clips from 43 recordings** have the inherited completed
 teacher evidence. Participant identities remain unknown without an explicit
-registry. See the [frozen cohort audit](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/reports/cohort-audit.json).
+registry. See the [frozen cohort audit (unavailable here)](../../../repository/evidence-availability.md#source-scaling).
 
 Additional videos need their own teacher features. The existing 50-window cache
 cannot supply those arrays. The expanded path preserves input frames 0–31, the
@@ -130,7 +132,7 @@ links the command logs and confirms unchanged parent file hashes, sizes and
 modification times. The retained study configuration and cohort audit still
 pass their original integrity checks.
 
-The new [executed notebook 23](../../../../outputs/future-innovation-source-curve-dev-20260911-v2/notebook_runs/manual-20260912T193406-e6c6f7ba/23_source_learning_curves.ipynb)
+The new [executed notebook 23 (unavailable here)](../../../repository/evidence-availability.md#source-scaling)
 ran all five code cells against the retained local inventory and correctly shows
 that expanded processing and the learning-curve report are absent. It left its
 displayed inputs unchanged and performed no numerical reconstruction.

@@ -1,6 +1,6 @@
 # Proposal 01 on HAIC
 
-The launchers execute the [six motion-preservation notebooks](../../notebooks/motion_preservation/README.md) and save their outputs. They use the existing HAIC defaults, account `mind` and partition `hai`. GPU stages request one H100. Use independent conditions or seeds to occupy additional GPUs after a passing pilot.
+The launchers execute the [six motion-preservation notebooks](../../notebooks/motion_preservation/README.md) and save their outputs. They use the existing HAIC defaults, account `mind` and partition `hai`. GPU stages request one H100. Use independent experimental conditions to occupy additional GPUs after a passing pilot. The configured optimization seeds run sequentially within each fit job.
 
 ## 1. Set paths in the existing experiment environment
 
@@ -40,13 +40,13 @@ If these files are not already on HAIC, the following preparation commands downl
 
 ```bash
 cd "$GAVD6_ROOT"
-uv sync --extra motion-preservation
+uv sync --extra motion-preservation --inexact
 uv pip install --python "$MP_PYTHON" gdown
 
 # Clone only repositories that are not already present.
 mkdir -p "$(dirname "$MP_MOMASK_REPO")" "$(dirname "$MP_FLOW_REPO")"
-git clone --depth 1 https://github.com/EricGuo5513/momask-codes.git "$MP_MOMASK_REPO"
-git clone --depth 1 https://github.com/princeton-vl/SEA-RAFT.git "$MP_FLOW_REPO"
+[[ -d "$MP_MOMASK_REPO/.git" ]] || git clone --depth 1 https://github.com/EricGuo5513/momask-codes.git "$MP_MOMASK_REPO"
+[[ -d "$MP_FLOW_REPO/.git" ]] || git clone --depth 1 https://github.com/princeton-vl/SEA-RAFT.git "$MP_FLOW_REPO"
 ```
 
 Download the HumanML3D bundle using the exact file published in MoMask's [author download script](https://github.com/EricGuo5513/momask-codes/blob/main/prepare/download_models.sh). This bundle contains other HumanML3D models alongside the RVQ model. A separate author-hosted RVQ-only download was not verified. The KIT bundle is unnecessary for this experiment.
@@ -73,7 +73,16 @@ curl --fail --location \
 
 `MP_MOMASK_CHECKPOINT` is a directory, not a single weight file. It contains `opt.txt`, `meta/mean.npy`, `meta/std.npy` and `model/net_best_fid.tar`. The bridge defaults to the author's bundled `example_data/000612.npy` as its HumanML3D reference skeleton. Optional `MP_TARGET_SKELETON` accepts a canonical HumanML3D `[T, 263]` representation or `[T, 22, 3]` joint sequence. It does not accept unconverted AMASS pose parameters. MoMask's representation may reconstruct one fewer frame; saved frame indices align outputs rather than inventing a last frame from reference truth.
 
-MoMask needs its author code and `einops`; SEA-RAFT needs its author code, `huggingface_hub`, `safetensors` and compatible PyTorch/torchvision. The `motion-preservation` extra provides these additions. With an existing alternative environment, install the small additions with `uv pip install --python "$MP_PYTHON" einops safetensors huggingface_hub gdown` and retain that environment's matching PyTorch/torchvision pair. The wrappers use the RVQ and flow modules directly, so MoMask's text encoders, text-generation dependencies and separate legacy environment are unnecessary. This launcher never downloads weights. Missing assets or failed model loads stop the real run rather than choosing a synthetic prior.
+MoMask needs its author code and `einops`; SEA-RAFT needs its author code, `huggingface_hub`, `safetensors` and compatible PyTorch/torchvision. The `motion-preservation` extra provides these additions. `--inexact` retains other packages in the shared environment. With an existing alternative environment, install the small additions with `uv pip install --python "$MP_PYTHON" einops safetensors huggingface_hub gdown` and retain that environment's matching PyTorch/torchvision pair. The wrappers use the RVQ and flow modules directly, so MoMask's text encoders, text-generation dependencies and separate legacy environment are unnecessary.
+
+The body-model dependency must be the official GitHub version selected in this project's `pyproject.toml`, not the older PyPI release. The old release has a different constructor and does not apply the study's dynamic shape parameters. `uv sync` above installs the selected version. For a separate environment, install it explicitly:
+
+```bash
+uv pip install --python "$MP_PYTHON" --reinstall-package human-body-prior \
+  'human-body-prior @ git+https://github.com/nghorbani/human_body_prior.git@78c86eae5ed518ae22bf197fd74211bbfa45551a'
+```
+
+This launcher never downloads weights. Missing assets or failed model loads stop the real run rather than choosing a synthetic prior.
 
 If SEA-RAFT is unavailable, the [official torchvision RAFT-small weight](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.optical_flow.raft_small.html) is an explicit fallback:
 
@@ -85,7 +94,7 @@ curl --fail --location \
   --output "$MP_FLOW_CHECKPOINT"
 ```
 
-That backend needs no external repository or config. Imported prior or comparator predictions must correspond to the exact saved cases. Set `MP_PRIOR_PREDICTIONS` and a distinct `MP_PRIOR_ID` for an imported prior, or the `external_methods` mapping in JSON for external comparisons. A name alone does not verify that the original published method ran.
+That backend needs no external repository or config. Imported prior or comparator predictions must correspond to the exact saved cases. For an imported prior, set `MP_PRIOR_BACKEND=external`, `MP_PRIOR_PREDICTIONS` to its export directory, and a distinct `MP_PRIOR_ID`. Use the `external_methods` mapping in JSON for external comparisons. A name alone does not verify that the original published method ran.
 
 External prior files are `{case_id}.npz` with `joints[K,22,3]`, `frame_indices[K]` and `metadata_json`. The JSON records `model`, `checkpoint`, `coordinate_system: "world_y_up"`, and `context: "whole_supplied_clip"`. This interchange supports separately generated MDM or other outputs; it is not a complete MDM reconstruction implementation. Generate those outputs using the same observed case and retain their actual supported frame indices.
 
@@ -95,7 +104,7 @@ Notebook 00 is inexpensive and inventories the selected paths. It does not load 
 
 ```bash
 "$MP_PYTHON" scripts/research_directions/motion_preservation/execute_notebook.py \
-  --notebook 00 --run-root "$MP_RUN_ROOT" --mode real --device cpu \
+  --notebook 00 --run-root "$MP_RUN_ROOT" \
   --config "$MP_CONFIG"
 
 bash slurm/motion-preservation/submit.sh pilot --dry-run
@@ -110,6 +119,8 @@ The submission sequence is:
 
 Every arrow is an `afterok` dependency. A failed notebook prevents dependent jobs from starting. `pilot` never opens the reserved final event family and never launches GAVD automatically. The dry run prints scheduler commands and creates the output/log folders, but submits no jobs.
 
+Explicit `MP_*` settings override JSON values. Otherwise, the launcher respects `MP_CONFIG`, or the existing run's `config.json` when `MP_CONFIG` is unset. With neither configuration, the initial defaults are real data and CUDA. Notebook 00 performs only an inventory, so a CPU allocation is sufficient even when the configured model device is CUDA.
+
 | Stage | Default resource | Time limit | Main output |
 | --- | --- | --- | --- |
 | 00 inventory | 4 CPU, 16 GB | 30 minutes | Manifest and asset inventory |
@@ -119,7 +130,7 @@ Every arrow is an `afterok` dependency. A failed notebook prevents dependent job
 | 04 evaluation | 1 H100, 8 CPU, 64 GB | 12 hours | Scores, plots and decision |
 | 05 GAVD | 1 H100, 8 CPU, 64 GB | 8 hours | Stress table and available overlays |
 
-These are scheduler limits, not measured runtime estimates. The notebooks print elapsed stage times. Start with the example's eight motions per role and one optimization seed, then expand only when the first mechanism check passes. The larger proposal allocation is a 280 H100-hour cap, not a request for eight-way training.
+These are scheduler limits, not measured runtime estimates. The notebooks print elapsed stage times. Stage 01 uses the GPU for body reconstruction, but its triangle rendering runs on the CPU; more GPUs will not directly accelerate that rendering. Stage 04 also builds and caches cases when opening the final split, which is why it reserves a GPU. Start with the example's eight motions per role and one optimization seed, then expand only when the first mechanism check passes. The larger proposal allocation is a 280 H100-hour cap, not a request for eight-way training.
 
 ## 4. Resume, evaluate the final family, or inspect GAVD
 
@@ -163,6 +174,8 @@ logs/                       Slurm stdout/stderr and submissions.tsv
 Notebook outputs are saved after cells and on failure. A model-loading error is therefore visible both in the Slurm log and the partial executed notebook. Existing executed notebook files are not overwritten; a new submission creates another output folder.
 
 The notebooks display the experiment's scores and backend metadata. Successful execution is not a passing scientific result. The relevant result is the locked preservation-versus-repair comparison against the strongest implemented baseline.
+
+The [implementation review](../../docs/studies/motion-preservation/results/implementation-review.md) corrected the repair metric and renderer visibility. Use a fresh run directory for the corrected pilot. Old operating points must be recalibrated because noise removal now measures observed joints, with missing-joint completion reported separately. Previously inspected final results remain development evidence.
 
 ## CPU walkthrough, explicitly separate from research
 

@@ -80,6 +80,10 @@ def require_fitted(cfg):
     if not training.is_file() or not calibration.is_file():
         raise RuntimeError("Run notebook03 training and calibration before opening final cases.")
     trained, locked = json.loads(training.read_text()), json.loads(calibration.read_text())
+    if trained["mode"] != cfg.mode or locked["mode"] != cfg.mode:
+        raise ValueError("Run mode differs from the fitted experiment. Demo results cannot be relabeled as real research.")
+    if locked.get("noise_removal_scope") != "observed_joints":
+        raise RuntimeError("Saved strengths used the previous all-joint repair metric. Recalibrate on calibration people before evaluation; if final was opened, use a new run and treat that final set as development.")
     if trained["created"] != locked["training_created"]:
         raise RuntimeError("The gate changed after calibration. Recalibrate on calibration people before evaluating.")
     return trained, locked
@@ -314,6 +318,8 @@ def cache_predictions(cfg, roles=DEVELOPMENT_ROLES):
     Exact renderer flow is retained only for flow-error auditing. It is not used
     for training features, calibration, propagation or restoration predictions.
     """
+    if cfg.mode == "real" and cfg.prior_backend == "momask" and not np.isclose(cfg.fps, 20.0):
+        raise ValueError("The released MoMask representation requires 20 FPS. Resample the motion before reconstruction.")
     if "final" in roles:
         require_fitted(cfg)
     index = pd.read_csv(cfg.root / "cases.csv")
@@ -338,6 +344,8 @@ def cache_predictions(cfg, roles=DEVELOPMENT_ROLES):
             raise ValueError("Real prior_backend must be momask or external. Demo smoothing is not a research prior.")
         estimator = OpticalFlowEstimator(cfg.flow_backend, cfg.flow_checkpoint, repo_dir=cfg.flow_repo,
                                          config_path=cfg.flow_config, device=cfg.device)
+    flow_audit_fields = ("flow_reference_epe", "flow_reference_coverage_all_pixels",
+                         "flow_reference_coverage_foreground")
     records = []
     for number, row in index.iterrows():
         path = destination / f"{row.case_id}.npz"
@@ -345,7 +353,8 @@ def cache_predictions(cfg, roles=DEVELOPMENT_ROLES):
             old = _npz(path)
             records.append({**row.to_dict(), "prior_id": cfg.prior_id, "prior_backend": cfg.prior_backend,
                             "flow_backend": cfg.flow_backend, "cache_path": str(path),
-                            "bridge_roundtrip_error_m": float(old["bridge_error"])})
+                            "bridge_roundtrip_error_m": float(old["bridge_error"]),
+                            **{key: float(old.get(key, np.nan)) for key in flow_audit_fields}})
             continue
         case, scene = _npz(row.path), _npz(cfg.root / "scenes" / f"{row.scene_id}.npz")
         filled = _fill_missing(case["raw"], case["observed"])
@@ -408,13 +417,22 @@ def cache_predictions(cfg, roles=DEVELOPMENT_ROLES):
         visible = scene["reference_valid"][frames[:-1]]
         error = np.linalg.norm(flow.forward-ref,axis=-1)
         arrays["flow_reference_epe"] = np.asarray(np.mean(error[visible]) if visible.any() else np.nan)
+        # The conservative reference mask can exclude difficult surface boundaries.
+        # Report its denominator beside EPE; zero foreground means undefined
+        # foreground coverage, not perfect coverage. These are audit fields only.
+        source_foreground = scene["foreground"][frames[:-1]]
+        foreground_pixels = int(source_foreground.sum())
+        arrays["flow_reference_coverage_all_pixels"] = np.asarray(visible.mean())
+        arrays["flow_reference_coverage_foreground"] = np.asarray(
+            visible.sum()/foreground_pixels if foreground_pixels else np.nan)
         arrays["foreground_fraction"] = np.asarray(scene["foreground"][frames].mean())
         arrays["flow_energy"] = np.asarray(np.linalg.norm(flow.forward,axis=-1).mean())
         arrays["prior_metadata_json"] = np.asarray(json.dumps(result.metadata))
         np.savez_compressed(path, **arrays)
         records.append({**row.to_dict(), "prior_id":cfg.prior_id, "prior_backend":cfg.prior_backend,
                         "flow_backend":cfg.flow_backend, "cache_path":str(path),
-                        "bridge_roundtrip_error_m":float(arrays["bridge_error"])})
+                        "bridge_roundtrip_error_m":float(arrays["bridge_error"]),
+                        **{key: float(arrays[key]) for key in flow_audit_fields}})
         if len(records)%8 == 0:
             print(f"Cached {len(records)}/{len(index)} cases with {cfg.prior_id}",flush=True)
     previous = pd.read_csv(destination/"index.csv") if (destination/"index.csv").exists() else pd.DataFrame()
@@ -431,6 +449,8 @@ def _load_cases(cfg, role):
     index = index.loc[index.role.eq(role)].reset_index(drop=True)
     if not len(index):
         raise ValueError(f"No cached {role} cases. Check excluded_motions.csv and the available person groups.")
+    if not index["mode"].eq(cfg.mode).all():
+        raise ValueError("Cached case mode differs from this run. Demo cases cannot be used as real research data.")
     cases = [_npz(row.cache_path) for row in index.itertuples()]
     return index, cases
 
@@ -536,7 +556,9 @@ def baseline_report(cfg, split="development"):
         for method,prediction in learning.baseline_candidates(case).items():
             rows.append(metrics.score_case(prediction,case,record,method))
     scores=pd.DataFrame(rows)
-    return dict(scores=scores,summary=metrics.summarize(scores),decision={"status":"diagnostic_unmatched_strength","mode":cfg.mode})
+    return dict(scores=scores,summary=metrics.summarize(scores),decision={
+        "status":"diagnostic_unmatched_strength","mode":cfg.mode,
+        "noise_removal_scope":"observed_joints","target_noise_removal":cfg.target_noise_removal})
 
 
 def calibrate(cfg):
@@ -574,7 +596,7 @@ def calibrate(cfg):
     locked=dict(training_created=training["created"],primary_method=training["primary_method"],
                 comparator=best,prior_id=cfg.prior_id,probability=probability,
                 target_noise_removal=cfg.target_noise_removal,removal_tolerance=cfg.removal_tolerance,
-                retention_gain=cfg.retention_gain,mode=cfg.mode,
+                retention_gain=cfg.retention_gain,mode=cfg.mode,noise_removal_scope="observed_joints",
                 calibration_people=sorted(index.person_id.unique()), points=points.to_dict("records"))
     _json(cfg.root / "calibration/locked.json",locked)
     points.to_csv(cfg.root / "calibration/operating_points.csv",index=False)
@@ -645,6 +667,7 @@ def evaluate(cfg, split="development"):
     useful_repair=bool(a.noise_removal>=locked["target_noise_removal"] and b.noise_removal>=locked["target_noise_removal"])
     useful_gain=bool(interval["mean"]>=locked["retention_gain"] and interval["low"]>0)
     same_clip=bool(a.event_and_noise_removal>=locked["target_noise_removal"] and
+                   b.event_and_noise_removal>=locked["target_noise_removal"] and
                    abs(a.event_and_noise_removal-b.event_and_noise_removal)<=locked["removal_tolerance"])
     seed_gains={name:float(by_method.loc[name,"retention"]-b.retention) for name in training["models"]
                 if name.startswith("gate_full_")}
@@ -656,6 +679,7 @@ def evaluate(cfg, split="development"):
     if cfg.mode=="demo":
         status="demo_only_no_research_decision"
     decision=dict(status=status,split=split,mode=cfg.mode,prior_id=cfg.prior_id,trained_prior=training["prior_id"],
+                  noise_removal_scope="observed_joints",target_noise_removal=locked["target_noise_removal"],
                   primary=primary,calibration_selected_comparator=comparator,retention_difference=interval,
                   matched_achieved_repair=repair_match,minimum_repair_met=useful_repair,
                   primary_noise_removal=float(a.noise_removal),comparator_noise_removal=float(b.noise_removal),

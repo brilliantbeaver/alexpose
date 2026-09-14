@@ -87,12 +87,12 @@ This batch-minimum rule gives tensors a common target count. A sample with more 
 
 ## Three loss terms with three jobs
 
-\[
+$$
 \mathcal L_{total}
 =\mathcal L_{JEPA}
 +0.05\mathcal L_{VICReg}
 +0.25\mathcal L_{group}.
-\]
+$$
 
 `L_JEPA` trains the predictor to match hidden target-encoder features. The target encoder receives the full sequence and no gradient. It follows the view encoder through a cosine EMA schedule that starts at 0.999.
 
