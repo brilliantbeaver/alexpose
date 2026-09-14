@@ -1,10 +1,10 @@
 # Motion-preservation experiments on HAIC
 
-The launchers execute the [six motion-preservation notebooks](../../notebooks/motion_preservation/README.md) and save their outputs. They use the existing HAIC defaults, account `mind` and partition `hai`. GPU stages request one H100. Use independent experimental conditions to occupy additional GPUs after a passing pilot. The configured optimization seeds run sequentially within each fit job.
+The launchers execute the [motion-preservation notebooks](../../notebooks/motion_preservation/README.md) and save their outputs. They use the existing HAIC defaults, account `mind` and partition `hai`. GPU stages request one H100. Notebook 06 diagnoses an existing pilot from cached arrays on CPU. Use independent experimental conditions to occupy additional GPUs after a passing pilot. The configured optimization seeds run sequentially within each fit job.
 
 ## 1. Set paths in the existing experiment environment
 
-The six experiments are notebook stages **00–05** sharing one run directory. `pilot` submits 00–04 in order; `gavd` submits 05 separately. Export variables in the shell where you call `submit.sh`; it passes them to every submitted job with `--export=ALL`.
+Notebook stages **00–06** share one run directory. `pilot` submits 00–04 in order; `gavd` submits 05 separately; `diagnose` submits the cache-only notebook 06. Export variables in the shell where you call `submit.sh`; it passes them to every submitted job with `--export=ALL`.
 
 ### Shared variables
 
@@ -146,7 +146,7 @@ Notebook 00 is inexpensive and inventories the selected paths. It does not load 
 ```bash
 "$MP_PYTHON" scripts/research_directions/motion_preservation/execute_notebook.py \
   --notebook 00 --run-root "$MP_RUN_ROOT" \
-  --config "$MP_CONFIG"
+  --config "$MP_CONFIG" --output-dir "$MP_RUN_ROOT/notebook_runs/inventory-preview"
 
 bash slurm/motion-preservation/submit.sh pilot --dry-run
 bash slurm/motion-preservation/submit.sh pilot
@@ -170,12 +170,13 @@ Explicit `MP_*` settings override JSON values. Otherwise, the launcher respects 
 | 03 fit | 1 H100, 8 CPU, 48 GB | 8 hours | Small gates and calibration strengths |
 | 04 evaluation | 1 H100, 8 CPU, 64 GB | 12 hours | Scores, plots and decision |
 | 05 GAVD | 1 H100, 8 CPU, 64 GB | 8 hours | Stress table and available overlays |
+| 06 diagnose | 8 CPU, 32 GB; no GPU | 2 hours | Projection, reconstruction and image-evidence diagnostics from saved cases |
 
 These are scheduler limits, not measured runtime estimates. The notebooks print elapsed stage times. Stage 01 uses the GPU for body reconstruction, but its triangle rendering runs on the CPU; more GPUs will not directly accelerate that rendering. Stage 04 also builds and caches cases when opening the final split, which is why it reserves a GPU. Start with the example's eight motions per role and one optimization seed, then expand only when the first mechanism check passes. The larger proposal allocation is a 280 H100-hour cap, not a request for eight-way training.
 
 ## 4. Resume, evaluate the final family, or inspect GAVD
 
-Individual stage names are `inventory`, `pairs`, `cache`, `fit`, `evaluate`, `final`, and `gavd`.
+Individual stage names are `inventory`, `pairs`, `cache`, `fit`, `evaluate`, `final`, `gavd`, and `diagnose`.
 
 ```bash
 # Example: submit caching after an already queued pair-building job.
@@ -202,7 +203,42 @@ Optional pose exports are `{sequence_id}.npz` containing `source_frames[N]` (zer
 
 For several optimization seeds, edit `seeds` in a new configuration or set `MP_SEEDS=17,23,42`. The initial example uses one seed. To compare different model or data conditions, use separate run directories. Preserve the same case identities, feature conventions and saved calibration when claiming transfer to a second prior.
 
-## 5. Read outputs and failures
+## 5. Diagnose the existing pilot without another model run
+
+Use notebook 06 after notebooks 01 and 02 have saved their cases and predictions. It reads those arrays, compares the repair mechanisms, and writes diagnostic tables and figures. It does not train, recalibrate, regenerate cases, load model weights or body assets, or open the final split. Keep the original pilot directory and its saved configuration:
+
+```bash
+# From the same gavd6 checkout on HAIC:
+export GAVD6_ROOT="$PWD"
+export MP_PYTHON="$GAVD6_ROOT/.venv/bin/python"
+export MP_RUN_ROOT="$GAVD6_ROOT/outputs/motion-preservation/pilot-01"
+unset MP_CONFIG MP_MODE MP_DEVICE
+export MP_DIAGNOSTIC_ROLES=calibration,development
+
+bash slurm/motion-preservation/submit.sh diagnose --dry-run
+bash slurm/motion-preservation/submit.sh diagnose
+```
+
+Unsetting a stale `MP_CONFIG` makes the notebook use the existing `pilot-01/config.json`, rather than a new example configuration. The saved device may remain `cuda`: these diagnostics compute on CPU regardless, so no device override is needed. The command submits one CPU job for notebook 06, with no training or cache jobs attached.
+
+`MP_DIAGNOSTIC_ROLES` defaults to `calibration,development`. Only `train`, `calibration`, and `development` are accepted. Diagnostic artifacts normally go to `$MP_RUN_ROOT/diagnostics/repair-mechanism`. Optional `MP_DIAGNOSTIC_OUTPUT_DIR` selects another exact folder, and `MP_DIAGNOSTIC_TRACE_CASES` limits the number of detailed case traces. Reusing an artifact folder replaces its diagnostic tables and figures; choose another folder to preserve an earlier diagnosis. For example:
+
+```bash
+export MP_DIAGNOSTIC_OUTPUT_DIR="$MP_RUN_ROOT/diagnostics/repair-01"
+export MP_DIAGNOSTIC_TRACE_CASES=3
+```
+
+Executed notebook 06 normally lands in `notebook_runs/run-06/`. An existing executed copy is never overwritten. To rerun the diagnostic, explicitly choose a new notebook output folder; changing the diagnostic artifact folder alone is insufficient:
+
+```bash
+export MP_NOTEBOOK_OUTPUT_DIR="$MP_RUN_ROOT/notebook_runs/diagnose-repeat-02"
+export MP_DIAGNOSTIC_OUTPUT_DIR="$MP_RUN_ROOT/diagnostics/repair-02"
+bash slurm/motion-preservation/submit.sh diagnose
+```
+
+Choose another unused notebook folder for each repeat. Unset `MP_NOTEBOOK_OUTPUT_DIR` afterward to restore the usual `run-XX` locations.
+
+## 6. Read outputs and failures
 
 Each submission prints its executed-notebook folder. The run contains:
 
@@ -213,7 +249,7 @@ logs/                       Slurm stdout/stderr and submissions.tsv
 ...                         cases, cached predictions, model fits and reports
 ```
 
-Notebook outputs are saved after cells and on failure. A model-loading error is therefore visible both in the Slurm log and the partial executed notebook. Existing executed notebook files are not overwritten; a new submission creates another output folder.
+Notebook outputs are saved after cells and on failure. A model-loading error is therefore visible both in the Slurm log and the partial executed notebook. Existing executed notebook files are not overwritten. Repeating a stage requires an explicit, unused `MP_NOTEBOOK_OUTPUT_DIR` or runner `--output-dir`; submitting the same stage again does not automatically create a new folder.
 
 The notebooks display the experiment's scores and backend metadata. Successful execution is not a passing scientific result. The relevant result is the locked preservation-versus-repair comparison against the strongest implemented baseline.
 

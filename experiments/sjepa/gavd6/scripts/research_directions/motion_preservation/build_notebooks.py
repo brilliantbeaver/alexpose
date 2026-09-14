@@ -1,4 +1,4 @@
-"""Build the six readable Proposal 01 experiment notebooks."""
+"""Build the readable Proposal 01 experiment and mechanism-diagnostic notebooks."""
 
 from __future__ import annotations
 
@@ -799,7 +799,285 @@ def render_all():
         the distinction between implemented experiments and external comparisons.
         """),
     ])
+    result["06_diagnose_repair_mechanism.ipynb"] = diagnostic_notebook()
     return result
+
+
+def diagnostic_notebook():
+    notebook = make(
+        """
+        # 06 · Find out why a repair helps or hurts
+
+        **Does a method remove the injected error, or does it change joints that
+        were already correct?** This notebook separates motion reconstruction,
+        bone-length projection, and optical-flow evidence using existing caches.
+        It explains a result before we spend more time training.
+        """, [
+        md("""
+        ## 1. Choose the existing cases and calculate the diagnostics once
+
+        Use this notebook after notebook 02 has cached the prior and flow.
+        It reads existing predictions and rendered scenes on the CPU. It does
+        not load pretrained weights, train a gate, choose calibration settings,
+        or open the final event family.
+
+        By default, inspect calibration and development people separately.
+        `MP_DIAGNOSTIC_ROLES` can restrict those roles; the final role is rejected.
+        `MP_DIAGNOSTIC_OUTPUT_DIR` can change the report folder, and
+        `MP_DIAGNOSTIC_TRACE_CASES` sets the number of example traces, initially six.
+        Missing cached evidence remains missing rather than being regenerated.
+        """),
+        code("""
+        from gavd6_sjepa.research_directions.motion_preservation import diagnostics, diagnostic_plots
+
+        roles = tuple(value.strip() for value in
+                      os.environ.get("MP_DIAGNOSTIC_ROLES", "calibration,development").split(",")
+                      if value.strip())
+        output_dir = os.environ.get("MP_DIAGNOSTIC_OUTPUT_DIR") or None
+        trace_count = int(os.environ.get("MP_DIAGNOSTIC_TRACE_CASES", "6"))
+        started = perf_counter()
+        report = diagnostics.run_diagnostics(cfg, roles=roles, output_dir=output_dir,
+                                             max_trace_cases=trace_count)
+        print(f"Diagnostics completed in {perf_counter() - started:.1f} seconds.")
+        print(f"Saved tables and notes: {report['output_dir']}")
+        FIGURE_DIR = Path(report["output_dir"]) / "figures"
+        FIGURE_DIR.mkdir(parents=True, exist_ok=True)
+
+        def show_figure(figure, name):
+            figure.savefig(FIGURE_DIR / f"{name}.svg", format="svg", bbox_inches="tight")
+            display(figure)
+            plt.close(figure)
+
+        print(f"Vector figures: {FIGURE_DIR}")
+        with pd.option_context("display.max_rows", None, "display.max_columns", None):
+            display(report["inventory"])
+        display(report["notes"])
+        """),
+        md("""
+        ## 2. Separate reconstruction error from loss of the event
+
+        Start with the difficult **event plus tracking error** cases. Every method
+        receives the same case, and summaries average within a person before
+        averaging people. Generated variants do not create new independent people.
+
+        - `observed_mse_m2` is squared 3D error at observed joints. Lower is better.
+          The plot converts square meters to square centimeters for readability.
+        - `noise_removal` is the reduction in that error relative to the raw input.
+          Zero means unchanged error; a negative value means the method made it worse.
+        - `retention` measures fidelity to the edited movement descriptor. One is
+          exact. It is not clipped, so a very poor reconstruction can score below zero.
+        - `signed_event_error` keeps the direction that retention discards. Zero is
+          exact, minus one returns to the unedited descriptor, and positive values
+          go beyond the edited descriptor in the direction of the event.
+        - `affected_mse_m2` concerns observed positions that originally had tracker
+          error. `unaffected_mse_m2` concerns observed positions that were already
+          correct. These regions are defined by corruption, not by event location.
+
+        Compare `raw` with `projected_raw` to isolate bone-length projection.
+        Compare the conversion-only `bridge` with the `prior` to examine the
+        learned reconstruction. Each has projected and unprojected versions.
+        Oracle mixtures and reference-length controls use hidden truth and are
+        diagnostic aids, not eligible practical competitors.
+        """),
+        code("""
+        summary = report["summary"]
+        difficult = summary.loc[summary.fixture.eq("factorial")
+                                & summary.event_present.astype(bool)
+                                & summary.noise_present.astype(bool)]
+        score_columns = [column for column in (
+            "role", "method", "privileged", "n_people", "n_cases",
+            "observed_mse_m2", "noise_removal", "retention", "signed_event_error",
+            "descriptor_signed_error", "affected_mse_m2", "unaffected_mse_m2",
+            "completion_mse_m2") if column in difficult]
+        with pd.option_context("display.max_rows", None, "display.max_columns", None):
+            display(difficult[score_columns])
+        figure = diagnostic_plots.plot_repair(report)
+        show_figure(figure, "repair_and_preservation")
+        """),
+        md("""
+        Also inspect clips with no event and no injected error. A method that
+        damages these inputs cannot attribute every error to a difficult event.
+        Missing-joint completion is a separate column because imputed positions
+        were not observed tracker measurements. Its value is undefined when a
+        case contains no missing joints.
+        """),
+        code("""
+        clean_controls = summary.loc[summary.fixture.eq("factorial")
+                                     & ~summary.event_present.astype(bool)
+                                     & ~summary.noise_present.astype(bool)]
+        with pd.option_context("display.max_rows", None, "display.max_columns", None):
+            display(clean_controls[score_columns])
+        """),
+        md("""
+        ## 3. Check what zero repair strength actually does
+
+        A strength of zero should return the cached raw input, including any
+        previously imputed gaps. However, the original candidate mixing step
+        still projected the skeleton onto fixed bone lengths at strength zero.
+        That operation can move joints even when no prior repair is accepted.
+        The original step also substituted the candidate at missing joints
+        regardless of strength. The `legacy_prior_strength0` row retains both
+        original behaviors. The new curves below blend all cached positions,
+        keeping completion error separate from observed-joint repair.
+
+        This diagnostic shows both paths explicitly:
+
+        ```text
+        mixed motion = raw + strength × (candidate - raw)
+        projection = none: return the mixed motion
+        projection = fixed_lengths: project the mixed motion onto estimated lengths
+        ```
+
+        If a projected curve is already poor at zero, investigate projection
+        before blaming the learned prior. If an unprojected prior curve degrades
+        as strength rises, investigate the candidate reconstruction itself.
+
+        These are descriptive curves on already inspected people. They do not
+        replace the saved calibration settings or create a new official result.
+        """),
+        code("""
+        figure = diagnostic_plots.plot_strength_curves(report)
+        show_figure(figure, "strength_curves")
+        curves = report["strength_curve"]
+        zero = curves.loc[curves.fixture.eq("factorial")
+                          & curves.event_present.astype(bool)
+                          & curves.noise_present.astype(bool) & curves.strength.eq(0)]
+        with pd.option_context("display.max_rows", None, "display.max_columns", None):
+            display(zero[["role", "method", "projection", "strength",
+                          "observed_mse_m2", "noise_removal", "retention"]])
+        """),
+        md("""
+        ## 4. Ask whether the bone lengths explain the change
+
+        A fixed-length projection preserves each bone's direction but changes
+        its length. Changes near the pelvis can also move joints farther along
+        the same chain. The estimated lengths come from the permitted raw input.
+        The reference lengths below are used only to diagnose their accuracy.
+
+        **Bias** is the estimated length minus the reference median. Positive
+        bias means the estimate is too long. **Variation** is the reference
+        length's standard deviation across frames. SMPL-H with dynamic body
+        shape can produce reference joints whose distances vary slightly.
+
+        The plot uses noisy factorial cases and takes the absolute bias before
+        averaging, so positive and negative errors cannot cancel. It averages
+        cases within each person, then averages people. The saved bone-length
+        table retains signed bias for inspecting individual cases. Reference
+        variation is summarized on the same cohort.
+
+        Large bias suggests inaccurate length estimates. Appreciable reference
+        variation means that even an accurate fixed median cannot reproduce
+        every reference frame. Compare the reference-length controls in step 2
+        before concluding which mechanism dominates.
+        """),
+        code("""
+        figure = diagnostic_plots.plot_bones(report)
+        show_figure(figure, "bone_lengths")
+        """),
+        md("""
+        ## 5. Check whether the video evidence separates the paired explanations
+
+        A skeleton-matched pair has the same tracker output but two different
+        videos: one supports the event and one does not. The useful question is
+        whether flow changes which candidate it supports between these videos.
+
+        The transport gap is the prior path's disagreement with flow minus the
+        raw path's disagreement. Positive gaps favor the raw path; negative gaps
+        favor the prior. A useful change would favor the raw path more in the
+        real-event video than in the tracking-failure video.
+        The strongest pattern has a positive real-event gap and a negative
+        tracking-failure gap. A change between two negative gaps does not mean
+        that both explanations favor the appropriate path.
+
+        Read every gap with its **coverage**, the fraction of relevant event
+        positions that have usable flow evidence. The two videos can have
+        different supported positions, so a difference between their means is
+        not automatically a comparison of identical pixels. Missing support is
+        not evidence of zero error. The pair table records missing or incomplete
+        evidence explicitly.
+
+        Projected event size, in pixels, provides context: a meaningful 3D change
+        can be difficult to see at the rendered resolution. Renderer-reference
+        EPE measures estimated flow error only where reference transport is valid;
+        it also needs its own foreground-coverage denominator.
+        The plot uses the maximum clean-to-edited separation, not its typical
+        size, temporal velocity, or a guarantee of visibility through occlusion.
+        """),
+        code("""
+        with pd.option_context("display.max_rows", None, "display.max_columns", None):
+            display(report["flow_summary"])
+            display(report["flow_pairs"])
+            flow_cases = report["flow_cases"]
+            flow_columns = [column for column in (
+                "role", "case_id", "event_present", "event_flow_coverage",
+                "event_displacement_max_px", "event_projected_in_frame_fraction",
+                "flow_reference_epe", "flow_reference_coverage_foreground") if column in flow_cases]
+            display(flow_cases.loc[flow_cases.fixture.eq("matched"), flow_columns])
+        figure = diagnostic_plots.plot_flow(report)
+        show_figure(figure, "paired_flow_evidence")
+        """),
+        md("""
+        ## 6. Use signed traces to distinguish erasure from overshoot
+
+        A poor retention score alone does not say whether a method erased an
+        event or exaggerated it. The left-foot trace and its signed vertical
+        error expose the direction: positive height error means the output is
+        too high at that frame. Foot height is one coordinate, not the complete
+        peak-height descriptor or an estimate of clinical foot clearance.
+
+        The lower panels separate originally corrupted observed positions from
+        previously accurate ones. A useful repair reduces the first error without
+        creating large error in the second. Frames with no positions in a group
+        are left blank. The cached raw trace can include interpolated missing
+        joints, but these are excluded from the lower panels.
+
+        These examples explain mechanisms. The full tables, not a selected trace,
+        establish how common a behavior is. Timing-family events also require
+        their descriptor table because a foot-height trace cannot measure arm-leg
+        or trunk-pelvis timing by itself.
+        """),
+        code("""
+        for number, trace in enumerate(report["traces"], 1):
+            figure = diagnostic_plots.plot_trace(trace)
+            show_figure(figure, f"trace_{number:02d}")
+        if not report["traces"]:
+            print("No trace cases were requested or available; use the full diagnostic tables.")
+        """),
+        md("""
+        ## 7. Choose the next experiment from the evidence
+
+        | What the diagnostics show | What to investigate next |
+        | --- | --- |
+        | Projection hurts raw or reference motion | Length estimation and the fixed-length assumption |
+        | Conversion-only reconstruction already loses detail | The representation and inverse transform |
+        | The unprojected prior damages previously accurate joints | Whether this prior is a suitable repair candidate |
+        | Signed error shows overshoot | Candidate bias rather than only an event-erasure explanation |
+        | Flow support is sparse or the event is barely visible | Observation resolution and evidence quality |
+        | Flow does not distinguish the matched videos despite adequate support | The transport evidence or the paired construction |
+        | Repair is useful and flow is discriminative | A focused adapter experiment on development people |
+
+        Record the explanation supported by several cases and the comparisons
+        that could disprove it. Do not revise the meaning of a metric to rescue
+        a preferred hypothesis. Any later method change needs a new development
+        comparison before an untouched final evaluation.
+
+        The generated CSV files, notes, and SVG figures stay in the diagnostic output folder.
+        Original predictions, trained models, and calibration files remain intact.
+        """),
+    ])
+    notebook.cells[1] = md("""
+        This is a CPU diagnostic of **existing caches**, usually run after 02
+        or after inspecting the pilot result in 04. Run it in a fresh kernel.
+        Calibration and development remain separate; final data stays closed.
+
+        Set `MP_RUN_ROOT` to the existing run and use its saved configuration.
+        The [launch guide](../../slurm/motion-preservation/README.md) describes
+        the HAIC launcher. No raw-data or checkpoint download is needed.
+
+        [Proposal](../../docs/studies/motion-preservation/protocol/proposal.md)
+        · [Notebook guide](README.md)
+    """)
+    return notebook
 
 
 def main():

@@ -26,7 +26,19 @@ runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 
 class MotionPreservationNotebookTests(unittest.TestCase):
-    def test_six_notebooks_have_readable_steps_and_compile(self):
+    def test_notebook_links_follow_default_stage_folders_or_custom_shared_folder(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            text = "[Evaluation](04_preservation_and_repair.ipynb#results)"
+            staged = nbformat.v4.new_notebook(cells=[nbformat.v4.new_markdown_cell(text)])
+            runner.relocate_links(staged, root / "notebook_runs/run-06", staged_run_root=root)
+            self.assertEqual(staged.cells[0].source,
+                             "[Evaluation](../run-04/04_preservation_and_repair.ipynb#results)")
+            shared = nbformat.v4.new_notebook(cells=[nbformat.v4.new_markdown_cell(text)])
+            runner.relocate_links(shared, root / "shared-output")
+            self.assertEqual(shared.cells[0].source, text)
+
+    def test_notebooks_have_readable_steps_and_compile(self):
         for number, name in runner.NOTEBOOKS.items():
             notebook = nbformat.read(runner.SOURCE / name, as_version=4)
             code_cells = [c for c in notebook.cells if c.cell_type == "code"]
@@ -41,10 +53,13 @@ class MotionPreservationNotebookTests(unittest.TestCase):
                             "gavd6_sjepa.research_directions.motion_preservation":
                         for alias in statement.names:
                             importlib.import_module(f"{statement.module}.{alias.name}")
-            if number == "04":
+            if number in {"04", "06"}:
                 source = "\n".join(c.source for c in code_cells)
                 self.assertNotIn("workflow.train_gate(", source)
                 self.assertNotIn("workflow.calibrate(", source)
+                if number == "06":
+                    self.assertNotIn("workflow.build_pairs(", source)
+                    self.assertNotIn("workflow.cache_predictions(", source)
 
     def test_pilot_uses_afterok_and_leaves_final_unopened(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -92,6 +107,64 @@ class MotionPreservationNotebookTests(unittest.TestCase):
             self.assertTrue(final["args"][-1].endswith("evaluate.sbatch"))
             for option in ("--dependency=afterok:71:72", "--account=test-account", "--partition=test-partition"):
                 self.assertIn(option, final["args"])
+
+    def test_diagnose_submits_one_cpu_notebook_from_saved_run(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            log = root / "diagnose.jsonl"
+            fake_sbatch = fake_bin / "sbatch"
+            fake_sbatch.write_text(
+                "#!/usr/bin/env python3\n"
+                "import json, os, pathlib, sys\n"
+                "with pathlib.Path(os.environ['FAKE_JOB_LOG']).open('a') as stream:\n"
+                " stream.write(json.dumps({'args':sys.argv[1:],'split':os.environ['MP_EVALUATION_SPLIT'],"
+                "'device':os.environ.get('MP_DEVICE'),'config':os.environ.get('MP_CONFIG')})+'\\n')\n"
+                "print('201;fake-cluster')\n"
+            )
+            fake_sbatch.chmod(0o755)
+            run = root / "existing pilot"
+            run.mkdir()
+            config = run / "config.json"
+            config.write_text(json.dumps({"mode": "real", "device": "cuda"}))
+            original = config.read_bytes()
+            environment = {key: value for key, value in os.environ.items() if not key.startswith("MP_")}
+            environment.update(GAVD6_ROOT=str(ROOT), MP_RUN_ROOT=str(run),
+                               MP_EVALUATION_SPLIT="final", FAKE_JOB_LOG=str(log),
+                               PATH=str(fake_bin) + os.pathsep + os.environ["PATH"])
+            subprocess.run(["bash", str(ROOT / "slurm/motion-preservation/submit.sh"), "diagnose"],
+                           env=environment, capture_output=True, text=True, check=True)
+            jobs = [json.loads(line) for line in log.read_text().splitlines()]
+            self.assertEqual(len(jobs), 1)
+            job = jobs[0]
+            self.assertEqual(job["split"], "development")
+            self.assertIsNone(job["device"])
+            self.assertIsNone(job["config"])
+            self.assertEqual(Path(job["args"][-1]).name, "diagnose-repair.sbatch")
+            script = Path(job["args"][-1]).read_text()
+            self.assertIn("#SBATCH --cpus-per-task=8", script)
+            self.assertIn("#SBATCH --mem=32G", script)
+            self.assertIn("mp_notebook 06", script)
+            self.assertNotIn("--gres", script)
+            self.assertNotIn("--gpus", script)
+            self.assertEqual(config.read_bytes(), original)
+            capture = root / "notebook-launch.json"
+            fake_python = fake_bin / "python"
+            fake_python.write_text(
+                "#!/usr/bin/env python3\n"
+                "import json, os, pathlib, sys\n"
+                "pathlib.Path(os.environ['FAKE_NOTEBOOK_LOG']).write_text(json.dumps({"
+                "'args':sys.argv[1:],'roles':os.environ.get('MP_DIAGNOSTIC_ROLES')}))\n"
+            )
+            fake_python.chmod(0o755)
+            environment.update(MP_PYTHON=str(fake_python), FAKE_NOTEBOOK_LOG=str(capture))
+            subprocess.run(["bash", job["args"][-1]], env=environment,
+                           capture_output=True, text=True, check=True)
+            launch = json.loads(capture.read_text())
+            self.assertEqual(launch["roles"], "calibration,development")
+            self.assertEqual(launch["args"][launch["args"].index("--notebook") + 1], "06")
+            self.assertNotIn("--device", launch["args"])
 
     def test_runner_only_overrides_mode_and_device_when_requested(self):
         captured = []

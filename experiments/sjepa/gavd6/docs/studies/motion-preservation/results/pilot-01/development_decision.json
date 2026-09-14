@@ -1,0 +1,51 @@
+{
+  "status": "development_stop",
+  "split": "development",
+  "mode": "real",
+  "prior_id": "momask",
+  "trained_prior": "momask",
+  "noise_removal_scope": "observed_joints",
+  "target_noise_removal": 0.25,
+  "primary": "gate_full_seed17",
+  "calibration_selected_comparator": "calibrated_flow_gate",
+  "retention_difference": {
+    "mean": -0.004576915939058859,
+    "low": -0.007846983647700593,
+    "high": -0.0009779958333944688,
+    "n_people": 8
+  },
+  "matched_achieved_repair": true,
+  "minimum_repair_met": false,
+  "primary_noise_removal": -0.5469822258889965,
+  "comparator_noise_removal": -0.5369017237997581,
+  "same_clip_event_and_noise_repair": false,
+  "seed_retention_gains": {
+    "gate_full_seed17": -0.004576915939058734
+  },
+  "final_shift": null,
+  "oracle_note": "Reference-informed pointwise mixture before projection; not a certified optimum after projection.",
+  "shortcut_probe": {
+    "status": "no_observed_shortcut_in_this_probe",
+    "balanced_accuracy": 0.5,
+    "n_people": 8,
+    "features": [
+      "duration",
+      "centroid_drift",
+      "joint_speed",
+      "foreground_fraction",
+      "flow_energy",
+      "confidence",
+      "missingness"
+    ]
+  },
+  "seed_methods": [
+    "gate_full_seed17"
+  ],
+  "interpretation": "A pilot decision, not evidence of clinical validity or publication readiness.",
+  "missing_exact_comparisons": [
+    "HTD-Refine",
+    "MFTIQ",
+    "H-MoRe",
+    "two_tracker"
+  ]
+}
