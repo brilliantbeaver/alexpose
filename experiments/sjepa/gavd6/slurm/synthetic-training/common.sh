@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 # Shared HAIC environment for synthetic-training notebooks.
 set -euo pipefail
+unset PYTHONHOME PYTHONPATH
+export PYTHONNOUSERSITE=1
 
 : "${GAVD6_ROOT:?Export GAVD6_ROOT to the gavd6 checkout}"
 : "${ST_RUN_ROOT:?Export ST_RUN_ROOT to the experiment output directory}"
+: "${ST_PYTHON:?Export ST_PYTHON to the dedicated study environment; see setup-environment.sh}"
+[[ "$ST_PYTHON" == /* && -x "$ST_PYTHON" ]] || {
+  echo "Study Python not found at an absolute executable path: $ST_PYTHON. Run setup-environment.sh first." >&2
+  exit 1
+}
 [[ -d "$GAVD6_ROOT/src/gavd6_sjepa" ]] || { echo "Invalid GAVD6_ROOT: $GAVD6_ROOT" >&2; exit 1; }
 export GAVD6_ROOT="$(cd "$GAVD6_ROOT" && pwd -P)"
 [[ "$ST_RUN_ROOT" == /* ]] || ST_RUN_ROOT="$GAVD6_ROOT/$ST_RUN_ROOT"
@@ -21,7 +28,7 @@ if [[ -n "${ST_CONFIG:-}" ]]; then
 fi
 
 st_python() {
-  local interpreter="${ST_PYTHON:-$GAVD6_ROOT/.venv/bin/python}"
+  local interpreter="$ST_PYTHON"
   [[ -x "$interpreter" ]] || { echo "Python not found: $interpreter. Set ST_PYTHON to the study environment." >&2; return 1; }
   "$interpreter" "$@"
 }

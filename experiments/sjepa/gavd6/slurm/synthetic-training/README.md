@@ -9,6 +9,22 @@ Real evaluation:   04 prepare GAVD → 05 deploy → 08 exchange lessons → 06 
 
 Run the source experiment first. GAVD deployment and scoring are separate submissions.
 
+## Updating from the earlier instructions
+
+**No blanket reset is needed.** Keep your existing dedicated Python 3.11 study environment, downloaded models, datasets, experiment outputs, and pilot JSON. After updating the checkout, set the variables in step 1 to your existing paths and rerun the two setup commands in step 2. You do not need to delete the environment or repeat `uv venv`. Keep an existing pilot JSON instead of recreating it in step 4.
+
+The setup script handles the old `UV_CONSTRAINT` and `UV_NO_CONFIG` exports internally. It synchronizes package versions with the study lockfile and may remove packages outside that set. If your environment is shared with another project, choose a new dedicated `ST_PYTHON` path. If setup reports an incompatible Python version, also choose a fresh environment path; preserve the old environment.
+
+If you previously ran `uv add chumpy` or another `uv add` command, inspect possible changes to the repository's root dependency files:
+
+```bash
+git diff -- pyproject.toml uv.lock
+```
+
+Those additions are unnecessary for the standalone study setup. Review the diff and remove only accidental changes, preserving other work; do not use a broad `git reset` to undo the earlier instructions.
+
+Use the commands under `slurm/synthetic-training/` for this study. The launcher under `slurm/future-innovation-scaling/` runs a separate experiment and is not part of this setup.
+
 ## 1. Set the project, Python, and run paths
 
 Use absolute paths available on both login and compute nodes. Change the examples to match your installation, and choose a fresh run directory for a new experiment.
@@ -20,7 +36,8 @@ export ST_PYTHON="/hai/scratch/$USER/envs/synthetic-training/bin/python"
 export ST_MODEL_ROOT="/hai/scratch/$USER/models/synthetic-training"
 export ST_RUN_ROOT="$GAVD6_ROOT/outputs/synthetic-training/pilot-01"
 export ST_CONFIG="$ST_RUN_ROOT/pilot.json"
-unset ST_STUDENT_ID ST_DEPENDENCY ST_NOTEBOOK_OUTPUT_DIR
+unset ST_STUDENT_ID ST_DEPENDENCY ST_NOTEBOOK_OUTPUT_DIR PYTHONHOME PYTHONPATH
+export PYTHONNOUSERSITE=1
 ```
 
 | Variable | Meaning |
@@ -33,62 +50,67 @@ unset ST_STUDENT_ID ST_DEPENDENCY ST_NOTEBOOK_OUTPUT_DIR
 
 Keep exports in the shell that calls `submit.sh`. Save them in a shell file and `source` it after reconnecting. Slurm captures exported values when you submit; later shell changes do not update queued jobs.
 
-## 2. Install the study environment and pose models
+## 2. Install the locked study environment and pose models
 
-Use a **separate Python 3.11 environment**. The motion-preservation environment's PyTorch 2.6 stack differs from this study's pinned MMPose stack. These commands target Linux x86-64 with a CUDA 12.1-compatible NVIDIA driver.
+The study has its own [pyproject.toml](pyproject.toml) and [uv.lock](uv.lock). They select **Python 3.11 on Linux x86-64**, with the CUDA 12.1 build of PyTorch 2.1 and the matching MMCV wheel. Keep the `ST_PYTHON` path from step 1; the setup script creates that environment if it is missing or synchronizes an existing one.
 
-You need `git`, `curl`, `unzip`, and [uv](https://docs.astral.sh/uv/getting-started/installation/). If `uv` is missing:
+You need `git`, `curl`, `unzip`, the standard Linux `realpath` and `flock` commands, and **uv >=0.12.15,<0.13**. Check an existing installation with `uv --version`. If uv is missing or outside that range, install the tested version:
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+curl -LsSf https://astral.sh/uv/0.12.15/install.sh | sh
 source "$HOME/.local/bin/env"
+uv --version
 ```
 
-Create the environment once, then install packages in this order:
+Then run these two commands from the gavd6 checkout:
 
 ```bash
-export UV_CONSTRAINT="$GAVD6_ROOT/slurm/synthetic-training/constraints-haic.txt"
-export UV_NO_CONFIG=1
-uv venv --python 3.11 "$(dirname "$(dirname "$ST_PYTHON")")"
-
-uv pip install --python "$ST_PYTHON" \
-  'torch==2.1.0' 'torchvision==0.16.0' \
-  --index-url https://download.pytorch.org/whl/cu121
-uv pip install --python "$ST_PYTHON" 'numpy==1.26.4'
-uv pip install --python "$ST_PYTHON" 'mmcv==2.1.0' --only-binary mmcv \
-  --find-links https://download.openmmlab.com/mmcv/dist/cu121/torch2.1.0/index.html
-uv pip install --python "$ST_PYTHON" \
-  'mmengine==0.10.7' 'mmdet==3.3.0' 'mmpretrain==1.2.0' 'opencv-python==4.9.0.80'
-
+bash slurm/synthetic-training/setup-environment.sh
 bash slurm/synthetic-training/download-students.sh
-uv pip install --python "$ST_PYTHON" --editable "$ST_MODEL_ROOT/mmpose"
-uv pip install --python "$ST_PYTHON" \
-  nbclient nbformat ipykernel jupyterlab pandas scipy scikit-learn matplotlib \
-  Pillow tqdm pyrender trimesh einops 'timm==1.0.15' iopath PyYAML
-uv pip install --python "$ST_PYTHON" \
-  'human-body-prior @ git+https://github.com/nghorbani/human_body_prior.git@78c86eae5ed518ae22bf197fd74211bbfa45551a'
 ```
 
-The [constraints file](constraints-haic.txt) keeps these versions fixed; `UV_NO_CONFIG` prevents the checkout's usual `uv` settings from selecting another stack. Keep both variables set during installation. The notebooks import this checkout directly, so **do not run the project's default `uv sync` in this study environment**.
+The first command runs `uv sync --locked` against the **study's** manifest and lockfile, targets `ST_PYTHON`, and checks the installed runtime. It handles old `UV_CONSTRAINT`, `UV_NO_CONFIG`, and other installation overrides internally. You do not need to activate the environment, create it manually, or install packages one at a time. The repository's root manifest and `.venv` belong to a different Torch stack; use the wrapper above for this study.
 
-If MMPose installation fails while building `chumpy`, run the following, then repeat the failed installation and remaining package commands:
+Use this environment only for synthetic training. Synchronization removes packages outside the study's locked dependency set, so do not point `ST_PYTHON` at an environment shared with another project. Run setup before submitting jobs, or after jobs using that environment have finished.
+
+The second command downloads the matching MMPose configuration checkout and five released pose checkpoints under `ST_MODEL_ROOT`. It checks the checkout against the package's locked revision and preserves existing files. A different revision or edited configuration requires a clean matching checkout or a fresh `ST_MODEL_ROOT`; create the pilot configuration afterward. MMPose's Python package is already installed by setup; no editable installation is needed. The pilot uses RTMPose-m/HRNet-w32 for fitting, RTMPose-s/HRNet-w48 for validation, and ViTPose-base only for held-architecture deployment. Datasets, body models, textures, and V-JEPA remain separate assets in step 3.
+
+The installed versions include:
+
+| Component | Study version |
+| --- | --- |
+| Python | 3.11 |
+| PyTorch / torchvision | 2.1.0+cu121 / 0.16.0+cu121 |
+| MMCV / MMPose | 2.1.0 / 1.3.2 |
+| NumPy / SciPy | 1.26.4 / 1.14.1 |
+| Human Body Prior | 2.2.2.0, from the locked Git revision |
+| Chumpy | 0.71, from the locked Git revision |
+
+The manifest supplies Chumpy's missing build dependency and retains the compatible Human Body Prior revision. It also pins Setuptools to retain `pkg_resources`, which this MMEngine release still uses. The earlier [body-model](../../docs/studies/synthetic-training/body-model-dependency-repair.md) and [Chumpy](../../docs/studies/synthetic-training/chumpy-installation-repair.md) investigations explain why these choices are necessary; their manual repair commands have been replaced by the setup script.
+
+To check an existing environment without installing or removing packages:
 
 ```bash
-uv pip install --python "$ST_PYTHON" pip setuptools
-uv pip install --python "$ST_PYTHON" --no-build-isolation chumpy
+bash slurm/synthetic-training/setup-environment.sh --check
 ```
 
-After installation, check the environment:
+CUDA may be unavailable on a login node. Inside an existing GPU allocation, additionally require a working CUDA runtime:
 
 ```bash
-uv pip check --python "$ST_PYTHON"
-unset UV_CONSTRAINT UV_NO_CONFIG
-"$ST_PYTHON" -c 'import torch, mmcv, mmpose; from mmcv.ops import nms; print(torch.__version__, mmcv.__version__, mmpose.__version__, torch.cuda.is_available())'
+bash slurm/synthetic-training/setup-environment.sh --check --require-cuda
 ```
 
-Expect PyTorch `2.1.0`, MMCV `2.1.0`, and MMPose `1.3.2`. CUDA availability should be `True` on a GPU node; it may be `False` on the login node. The [PyTorch release instructions](https://pytorch.org/get-started/previous-versions/#v210) and [MMPose installation guide](https://mmpose.readthedocs.io/en/latest/installation.html) provide upstream details. This installation has not been executed on HAIC during this documentation revision.
+From a login node, request a short allocation for that check with:
 
-[download-students.sh](download-students.sh) downloads MMPose v1.3.2 and five pose checkpoints, preserving existing files. An existing MMPose checkout must already be compatible. The pilot uses RTMPose-m/HRNet-w32 for fitting, RTMPose-s/HRNet-w48 for validation, and ViTPose-base only for held-architecture deployment. The script does not download datasets, body models, rendering assets, or V-JEPA.
+```bash
+srun --account="${ST_ACCOUNT:-mind}" --partition="${ST_PARTITION:-hai}" \
+  --gres=gpu:h100:1 --cpus-per-task=2 --mem=8G --time=00:10:00 \
+  bash slurm/synthetic-training/setup-environment.sh --check --require-cuda
+```
+
+These checks do not establish that the licensed assets, pose checkpoints, V-JEPA forward pass, or EGL rendering work. Continue with asset preparation and notebook 00 before starting the source experiment. The [validation record](../../docs/studies/synthetic-training/locked-environment-validation.md) distinguishes local checks from the remaining HAIC/GPU validation.
+
+If installation is interrupted, or a previous manual installation failed, fix the reported cause and rerun `setup-environment.sh` with the same `ST_PYTHON`. Keep the existing environment. If only the asset download fails, rerun `download-students.sh`. Do not run `uv add`, root-level `uv sync`, or an unpinned package upgrade to repair this study environment. Changes to dependencies belong in the study manifest and regenerated lockfile, followed by validation; routine setup uses the checked-in lock unchanged.
 
 ## 3. Prepare the source data and encoder
 
