@@ -141,9 +141,12 @@ def execute_notebook(
                 "display_name": "Synthetic training", "language": "python",
             }))
             environment = {
-                **os.environ, "GAVD6_ROOT": str(ROOT), "ST_RUN_ROOT": str(run_root),
+                **{key: value for key, value in os.environ.items()
+                   if key not in {"PYTHONHOME", "PYTHONPATH"}},
+                "GAVD6_ROOT": str(ROOT), "ST_RUN_ROOT": str(run_root),
                 "MPLCONFIGDIR": str(kernel_root / "matplotlib"),
                 "IPYTHONDIR": str(kernel_root / "ipython"), "PYTHONUNBUFFERED": "1",
+                "PYTHONNOUSERSITE": "1",
             }
             if config is not None:
                 environment["ST_CONFIG"] = str(config.expanduser().resolve())

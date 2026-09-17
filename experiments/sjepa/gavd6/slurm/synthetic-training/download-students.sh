@@ -2,13 +2,29 @@
 # Fetch public MMPose configurations and the five released pilot checkpoints.
 # Package installation, AMASS assets and COCO data remain separate setup steps.
 set -euo pipefail
+unset PYTHONHOME PYTHONPATH
+export PYTHONNOUSERSITE=1
 : "${GAVD6_ROOT:=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)}"
 : "${ST_MODEL_ROOT:=$GAVD6_ROOT/models}"
+: "${ST_PYTHON:?Run setup-environment.sh first with ST_PYTHON set}"
+[[ -x "$ST_PYTHON" ]] || { echo "Python not found: $ST_PYTHON. Run setup-environment.sh first." >&2; exit 1; }
+pose_revision="$("$ST_PYTHON" -c 'import sys,tomllib; print(tomllib.load(open(sys.argv[1], "rb"))["tool"]["uv"]["sources"]["mmpose"]["rev"])' "$GAVD6_ROOT/slurm/synthetic-training/pyproject.toml")"
 mkdir -p "$ST_MODEL_ROOT/pose"
 if [[ ! -d "$ST_MODEL_ROOT/mmpose" ]]; then
   git clone --depth 1 --branch v1.3.2 https://github.com/open-mmlab/mmpose.git "$ST_MODEL_ROOT/mmpose"
-elif [[ ! -d "$ST_MODEL_ROOT/mmpose/.git" ]]; then
+elif [[ ! -e "$ST_MODEL_ROOT/mmpose/.git" ]]; then
   echo "Existing model directory is not an MMPose checkout: $ST_MODEL_ROOT/mmpose" >&2
+  exit 1
+fi
+actual_revision="$(git -C "$ST_MODEL_ROOT/mmpose" rev-parse HEAD)"
+if [[ "$actual_revision" != "$pose_revision" ]]; then
+  echo "MMPose configs must match the locked package revision $pose_revision; found $actual_revision." >&2
+  echo "Existing files were preserved. Set ST_MODEL_ROOT to a fresh directory, then rerun and recreate the pilot configuration." >&2
+  exit 1
+fi
+if [[ -n "$(git -C "$ST_MODEL_ROOT/mmpose" status --porcelain --untracked-files=all -- configs mmpose)" ]]; then
+  echo "The MMPose checkout contains changed configurations or package files. Existing edits were preserved." >&2
+  echo "Use a clean checkout at $pose_revision, or choose a fresh ST_MODEL_ROOT before creating the pilot configuration." >&2
   exit 1
 fi
 

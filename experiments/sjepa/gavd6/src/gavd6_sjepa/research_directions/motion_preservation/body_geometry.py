@@ -59,8 +59,9 @@ class SMPLHBody:
                 raise RuntimeError(
                     "This study requires the official AMASS human_body_prior BodyModel "
                     "with bm_fname/dmpl_fname and dynamic shape support. The older PyPI "
-                    "API does not apply DMPL coefficients. Install the GitHub version: "
-                    "python -m pip install --upgrade git+https://github.com/nghorbani/human_body_prior.git"
+                    "API does not apply DMPL coefficients. Use the pinned environment "
+                    "in the applicable study's Slurm README. For synthetic training, run "
+                    "bash slurm/synthetic-training/setup-environment.sh."
                 )
             model = BodyModel(bm_fname=str(body_path), num_betas=16,
                               dmpl_fname=str(dmpl_path), num_dmpls=8).to(self.device).eval()
