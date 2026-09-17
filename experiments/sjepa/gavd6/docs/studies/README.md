@@ -4,6 +4,7 @@ The current study is **motion preservation during tracking repair**. Historical 
 
 | Study | State | Read next |
 | --- | --- | --- |
+| [Synthetic training selection](synthetic-training/README.md) | Implemented source trials and real evaluation; CPU checks complete, HAIC results pending | Nine notebooks, released pose models, full-body rendering, and independent annotations. |
 | [Motion preservation](motion-preservation/README.md) | Current implementation; CPU/demo checks, real model experiment pending | Protocol, frozen-model load and small pilot. |
 | [Future feature prediction](future-feature-prediction/README.md) | Completed negative development gates and expanded scaling inspection; accessibility uncertainty remains | Separate gate, scaling, accessibility and manuscript sections. |
 | [Latent laterality](latent-laterality/README.md) | Seed-7 validation stopped confirmation because a uniform control reproduced the gain | Validation and the original protocol; keep the test split sealed. |

@@ -1,6 +1,6 @@
 # Repository relevance and archive assessment
 
-**Assessment date: 13 September 2026.** The selected objective is **preserving real movement while repairing tracking failures**, as specified by [Proposal 01](../../../notes/world-model-extensions/proposals-04/01-preserve-real-movement.md) and implemented in the [motion-preservation notebooks](../../../notebooks/motion_preservation/README.md).
+**Assessment date: 13 September 2026.** The selected objective is **preserving real movement while repairing tracking failures**, as specified by [Proposal 01](../../studies/motion-preservation/protocol/proposal.md) and implemented in the [motion-preservation notebooks](../../../notebooks/motion_preservation/README.md).
 
 **Recommendation:** make motion preservation the primary entry point; reclassify the earlier classification, reflection, laterality and teacher-distillation programs as historical studies or optional comparisons. Archive superseded design material first. Keep scientific evidence, audited identities and shared implementation available. Physical relocation of research code needs a separate dependency and compatibility change.
 

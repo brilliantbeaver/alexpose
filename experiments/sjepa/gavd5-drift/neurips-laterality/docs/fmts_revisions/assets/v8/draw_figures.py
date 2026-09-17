@@ -133,7 +133,7 @@ def pipeline_print(path):
     c.arrow([(686,103),(729,103)],ORANGE)
     c.rect(729,67,236,78,'#FFF5EC','#E4CBB8')
     c.text(748,94,'Signed movement y',22,ORANGE,True)
-    c.text(748,124,'Left–right contrast',20.5)
+    c.text(748,124,'Left-right contrast',20.5)
     c.arrow([(965,105),(988,105),(988,471),(954,471)],ORANGE)
     c.arrow([(134,195),(134,216)],TEAL)
     c.rect(12,216,244,137,'#EDF7F7','#B7D8D9')

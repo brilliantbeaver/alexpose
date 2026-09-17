@@ -12,6 +12,7 @@ Original requests live with the study or planning portfolio they informed. They 
 | [Future innovation](../../docs/studies/future-feature-prediction/gate/prompts/study.md) | [Prediction gate](../../docs/studies/future-feature-prediction/gate/) |
 | [Gate repair](../../docs/studies/future-feature-prediction/gate/prompts/model-repair.md) | [Prediction-gate results](../../docs/studies/future-feature-prediction/gate/results.md) |
 | [Laterality manuscript](../../docs/studies/latent-laterality/development/prompts/manuscript.md) | Historical request concerning the separate laterality manuscript workspace |
-| [Research agenda](../research-agenda/development/research-prompt.md) | [Selected study and deferred alternatives](../research-agenda/README.md) |
+| [Research agenda](../research-agenda/archive/2026-09-13/research-brief.md) | [Research proposals and decision history](../research-agenda/README.md) |
+| [JEPA research directions](../archive/research-planning/prompts/jepa-research-directions.md) | Follow-up ideation request for the [research agenda](../research-agenda/README.md); preserved separately from the original brief |
 
 For new work, state the unresolved question, controlled comparison, decision rules, required artifacts and validation. Update the owning study overview when evidence changes; retain the original request as history.

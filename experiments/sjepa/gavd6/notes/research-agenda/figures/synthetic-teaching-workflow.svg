@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1120" role="img" aria-labelledby="title desc">
+<title id="title">Learn in simulation, choose without real labels, evaluate independently</title>
+<desc id="desc">A proposed synthetic teaching workflow. Labeled simulation trials train a lesson selector. The frozen selector uses an unfamiliar estimator&#x27;s probe response and unlabeled GAVD context to select synthetic training. Independent real landmarks evaluate the adapted model and never feed into selection. Design schematic, not measured results.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#6D7D8F"/></marker></defs>
+<rect width="1440" height="1120" fill="white"/>
+<text x="48" y="57" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#17324A" text-anchor="start">Learn from teaching trials. Test on real movement.</text>
+<text x="48" y="98" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#50647A" text-anchor="start">The selector learns which lesson helps. Real reference labels are reserved for the final measurement.</text>
+<circle cx="65" cy="149" r="17" fill="#275D9F"/>
+<text x="65" y="155" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">1</text>
+<text x="94" y="158" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Learn the selector from labeled simulation</text>
+<rect x="48" y="184" width="392" height="186" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="72" y="226" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Run teaching trials</text>
+<text x="72" y="267" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">AMASS images + pose labels</text>
+<text x="72" y="297" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Probe each source estimator</text>
+<text x="72" y="327" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Try each lesson separately</text>
+<rect x="524" y="184" width="392" height="186" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="548" y="226" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Measure lesson gains</text>
+<text x="548" y="267" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Labeled simulated references</text>
+<text x="548" y="297" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Compare with replay-only training</text>
+<text x="548" y="327" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Record the benefit of each lesson</text>
+<rect x="1000" y="184" width="392" height="186" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="1024" y="226" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Fit the lesson selector</text>
+<text x="1024" y="267" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Inputs: context + probe response</text>
+<text x="1024" y="297" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Target: measured lesson gains</text>
+<text x="1024" y="327" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Then freeze the selector</text>
+<path d="M448,278 L515,278" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M924,278 L991,278" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1196,378 L1196,412 L720,412 L720,471" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="982" y="442" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#50647A" text-anchor="start">frozen selector</text>
+<circle cx="65" cy="437" r="17" fill="#0A7267"/>
+<text x="65" y="443" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">2</text>
+<text x="94" y="446" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#0A7267" text-anchor="start">Choose training from unlabeled real video</text>
+<rect x="48" y="480" width="392" height="186" rx="18" fill="#E9F5F2" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="72" y="522" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#0A7267" text-anchor="start">Probe a new estimator</text>
+<text x="72" y="563" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">One short AMASS training lesson</text>
+<text x="72" y="593" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Save before + after predictions</text>
+<text x="72" y="623" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Use unlabeled GAVD context</text>
+<rect x="524" y="480" width="392" height="186" rx="18" fill="#E9F5F2" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="548" y="522" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#0A7267" text-anchor="start">Choose one AMASS lesson</text>
+<text x="548" y="563" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Apply the frozen selector</text>
+<text x="548" y="593" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Use context and probe response</text>
+<text x="548" y="623" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">No real reference labels</text>
+<rect x="1000" y="480" width="392" height="186" rx="18" fill="#E9F5F2" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="1024" y="522" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#0A7267" text-anchor="start">Adapt the estimator</text>
+<text x="1024" y="563" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Replay + selected synthetic data</text>
+<text x="1024" y="593" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Fixed number of updates</text>
+<text x="1024" y="623" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Output: adapted pose estimates</text>
+<path d="M448,574 L515,574" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M924,574 L991,574" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<circle cx="65" cy="749" r="17" fill="#755495"/>
+<text x="65" y="755" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">3</text>
+<text x="94" y="758" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#755495" text-anchor="start">Evaluate on independent real references</text>
+<rect x="48" y="792" width="392" height="146" rx="18" fill="#F2EDF8" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="72" y="834" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#755495" text-anchor="start">Independent references</text>
+<text x="72" y="875" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Human-marked GAVD landmarks</text>
+<text x="72" y="905" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Recordings excluded from selection</text>
+<rect x="524" y="792" width="392" height="146" rx="18" fill="#F2EDF8" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="548" y="834" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#755495" text-anchor="start">Measure real accuracy</text>
+<text x="548" y="875" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Compare all selection methods</text>
+<text x="548" y="905" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Use the same reference panel</text>
+<path d="M448,866 L515,866" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1196,674 L1196,866 L925,866" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1220" y="763" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#50647A" text-anchor="start">adapted</text>
+<text x="1220" y="790" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#50647A" text-anchor="start">predictions</text>
+<rect x="48" y="978" width="1344" height="76" rx="18" fill="#F7F9FC" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="72" y="1010" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" fill="#17324A" text-anchor="start">Real reference labels are used only for evaluation.</text>
+<text x="72" y="1039" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#50647A" text-anchor="start">They never train, tune, or choose the lesson.</text>
+<text x="48" y="1093" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#50647A" text-anchor="start">Proposed study workflow. Schematic only; no experimental outcomes are shown.</text>
+</svg>

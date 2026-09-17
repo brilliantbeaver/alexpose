@@ -41,7 +41,7 @@ During evaluation, the repair method must not see the reference answer. It recei
 
 **Success requires both preservation and repair.** Keeping the original trajectory preserves genuine movement but also keeps tracking errors. Heavy smoothing may remove errors while deleting genuine movement. We want a better balance between those two outcomes.
 
-![A motion prior proposes a repair, and video evidence helps a small gate decide what to retain](../../../../notes/research-agenda/figures/01-mechanism.svg)
+![A motion prior proposes a repair, and video evidence helps a small gate decide what to retain](../../../../notes/research-agenda/archive/2026-09-13/figures/motion-preservation-mechanism.svg)
 
 *This is a design diagram. It does not show a measured result.*
 
@@ -544,7 +544,7 @@ The links below point to research papers or their authoritative publication page
 13. Shin et al. (2023). [WHAM: Reconstructing World-grounded Humans with Accurate 3D Motion][wham]. arXiv:2312.07531. Read for a possible upstream source of estimated real-video body trajectories.
 14. Abdelfattah and Alahi (2024). [S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition][s-jepa]. ECCV 2024; official project page with paper link. Read for the optional skeleton-representation extension, which requires its own comparison.
 
-For checkpoint access and additional context, see the [study reference index](../references/README.md), [shared execution constraints](../../../../notes/research-agenda/references/execution-contract.md), and [optical-flow analysis](../../../../notes/research-agenda/references/optical-flow.md).
+For checkpoint access and additional context, see the [study reference index](../references/README.md), [shared execution constraints](../../../../notes/research-agenda/references/experiment-guidelines.md), and [optical-flow analysis](../../../../notes/research-agenda/references/optical-flow-evidence.md).
 
 [amass]: https://arxiv.org/abs/1904.03278
 [humanml3d]: https://openaccess.thecvf.com/content/CVPR2022/papers/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Text_CVPR_2022_paper.pdf

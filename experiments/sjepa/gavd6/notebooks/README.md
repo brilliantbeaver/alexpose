@@ -6,6 +6,10 @@ Other folders preserve distinct historical experiments or shared data inspection
 
 Canonical notebooks are listed below. Old `foundations`, `idea05_signed_laterality`, `idea09_reflection_equivariance` and `iclr_bridge` paths contain compatibility links, not additional experiments. Outputs in historical classification and AMASS notebooks are preserved.
 
+## Synthetic training selection
+
+The [nine-notebook tutorial](synthetic_training/README.md) implements source lesson trials, response-based selection, held-architecture deployment, and independent GAVD landmark evaluation. Follow 00, 01, 02, 03, and 07 for the source experiment; 04, 05, 08, and 06 cover real-video preparation, deployment, crossover, and scoring. Start with the [HAIC setup guide](../slurm/synthetic-training/README.md). Local implementation checks are complete; real GPU experiment results remain to be generated.
+
 ## Motion preservation during tracking repair
 
 [Current study; real pretrained-model evaluation pending](../docs/studies/motion-preservation/README.md)

@@ -4,6 +4,30 @@
   "description": "Research ownership and canonical code navigation. Protocol/run identities remain unchanged; the code-layout refactor has a new software identity and an exact historical replay snapshot.",
   "studies": [
     {
+      "id": "temporal-gait",
+      "title": "Source-aware temporal gait JEPA and observable forecasting",
+      "status": "E0-E2 implemented; local software verification; real HAIC evidence pending",
+      "code": ["src/gavd6_sjepa/research_directions/temporal_gait"],
+      "notebooks": ["notebooks/temporal_gait"],
+      "scripts": ["scripts/research_directions/temporal_gait"],
+      "slurm": ["slurm/temporal-gait"],
+      "tests": ["tests/temporal_gait/**/test_*.py"],
+      "documentation": "docs/studies/temporal-gait",
+      "overview": "docs/studies/temporal-gait/README.md"
+    },
+    {
+      "id": "synthetic-training",
+      "title": "Response-conditioned synthetic training selection",
+      "status": "implemented; CPU validation complete; real HAIC experiments pending",
+      "code": ["src/gavd6_sjepa/research_directions/synthetic_training"],
+      "notebooks": ["notebooks/synthetic_training"],
+      "scripts": ["scripts/research_directions/synthetic_training"],
+      "slurm": ["slurm/synthetic-training"],
+      "tests": ["tests/synthetic_training/**/test_*.py"],
+      "documentation": "docs/studies/synthetic-training",
+      "overview": "docs/studies/synthetic-training/README.md"
+    },
+    {
       "id": "motion-preservation",
       "title": "Motion preservation during tracking repair",
       "status": "current; real-model evaluation pending",

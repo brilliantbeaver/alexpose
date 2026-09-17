@@ -4,6 +4,7 @@ Start from the [study index](../docs/studies/README.md). Numerical methods live 
 
 | Study or responsibility | Scripts | Entry point |
 | --- | --- | --- |
+| Synthetic training selection | [synthetic_training](research_directions/synthetic_training/) | `build_notebooks.py`, `execute_notebook.py`; follow the [teaching experiment guide](../notebooks/synthetic_training/README.md). |
 | Motion preservation | [motion_preservation](research_directions/motion_preservation/) | `build_notebooks.py`, `execute_notebook.py`; follow the [current experiment guide](../notebooks/motion_preservation/README.md). |
 | Future-feature prediction gate | [future_prediction](research_directions/future_prediction/README.md) | Build, execute and verify notebooks; inspect fitted models and residual-head failures. |
 | Source scaling | [source_scaling](research_directions/source_scaling/README.md) | Calibration, initialization, stage execution and read-only notebook inspection. |

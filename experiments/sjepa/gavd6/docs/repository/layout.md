@@ -45,6 +45,9 @@ Consolidation means giving each record an owner and a clear reading order. Indep
 | Earlier path or name | Canonical location |
 | --- | --- |
 | `notes/world-model-extensions/proposals-04/01-preserve-real-movement.md` | [Motion-preservation proposal](../studies/motion-preservation/protocol/proposal.md) |
+| `notes/world-model-extensions/proposals-04/README.md` | [Research agenda](../../notes/research-agenda/README.md) |
+| `notes/world-model-extensions/proposals-04/00-evidence-and-execution.md` | [Shared experiment guidelines](../../notes/research-agenda/references/experiment-guidelines.md) |
+| `notes/world-model-extensions/proposals-04/02-iterate-ideas.md` | [JEPA research-directions prompt](../../notes/archive/research-planning/prompts/jepa-research-directions.md) |
 | `docs/studies/iclr/07_scaling_result_and_research_strategy.md` | [Scaling research strategy](../studies/future-feature-prediction/scaling/research-strategy.md) |
 | `docs/studies/iclr/04_paper.md` | [Historical manuscript](../studies/future-feature-prediction/manuscript/paper.md) |
 | `notebooks/idea09_reflection_equivariance/08_amass_core11_training.ipynb` | [AMASS training notebook](../../notebooks/reflection_equivariance/08_amass_training.ipynb) |
@@ -57,6 +60,8 @@ The [documentation migration record](migration-2026-09-13.json) and its [review]
 ## Compatibility and evidence
 
 Canonical navigation uses the new study names. Older notebook paths remain relative symlinks where launchers or historical workflows use them. Legacy documentation entry points redirect to the new overviews. These paths identify the same source, not additional experiments or independent evidence.
+
+The redundant `notes/world-model-extensions/proposals-04/` redirects were subsequently removed after updating incoming document links. Its remaining follow-up prompt now lives with the archived planning prompts; the table above records all four destinations. Historical migration receipts retain the paths recorded at the time.
 
 Original numerical protocols and result identities retain their paths and exact bytes. Current Python modules, scripts and Slurm jobs use the concise names described in [code organization](code-organization.md); historical software paths are preserved inside an [exact replay snapshot](../../scripts/archive/code_layout_20260913/README.md). Current code has a new software identity. Old receipts are not rewritten to conceal that change.
 
