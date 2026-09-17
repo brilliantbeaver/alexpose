@@ -9,6 +9,8 @@ Real evaluation:   04 prepare GAVD → 05 deploy → 08 exchange lessons → 06 
 
 Run the source experiment first. GAVD deployment and scoring are separate submissions.
 
+For the existing `pilot-01` setup shown in inventory v3, use the [complete setup commands](../../docs/studies/synthetic-training/setup-after-v3.md). They include a saved environment profile, real rendering-asset preparation, effective-configuration backup, and CPU/GPU preflight checks before the next notebook run.
+
 ## Updating from the earlier instructions
 
 Keep your existing dedicated Python 3.11 study environment, downloaded models, datasets, and experiment outputs. If inventory already ran, reuse `$ST_RUN_ROOT/config.json`; you do not need a file named `pilot.json`. [Step 4](#4-create-or-correct-the-run-configuration) preserves your settings and corrects the student paths. Changing `ST_CONFIG` alone only selects a file; it does not change the paths inside it.
