@@ -1,0 +1,50 @@
+{
+  "source_notebook": "notebook_runs/motion-preservation/run-06/06_diagnose_repair_mechanism.ipynb",
+  "source_sha256": "5c6dbf85eaa91f11fd2a40b13ccfa98a023c1737384b0e1253d6ebecf145a8c0",
+  "execution": {
+    "device": "config/default",
+    "finished_utc": "2026-09-14T23:30:43.937507+00:00",
+    "mode": "config/default",
+    "notebook": "06",
+    "run_root": "/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/outputs/motion-preservation/pilot-01",
+    "started_utc": "20260914T232952676506Z",
+    "status": "completed"
+  },
+  "extraction": "HTML table cells preserved as displayed; unnamed first column is the DataFrame index.",
+  "limits": [
+    "Numeric values are rounded notebook displays, usually six decimal places.",
+    "Some long case IDs were already truncated in notebook HTML and remain truncated here.",
+    "Only displayed tables were extracted. Full strength curves, bone-length CSVs and trace NPZs are not in the local run-06 directory.",
+    "No full HAIC cache was read and no experiment was rerun."
+  ],
+  "tables": {
+    "inventory.csv": {
+      "notebook_cell_one_based": 5,
+      "output_zero_based": 4
+    },
+    "event_noise_scores.csv": {
+      "notebook_cell_one_based": 7,
+      "output_zero_based": 0
+    },
+    "clean_scores.csv": {
+      "notebook_cell_one_based": 9,
+      "output_zero_based": 0
+    },
+    "zero_strength_scores.csv": {
+      "notebook_cell_one_based": 11,
+      "output_zero_based": 1
+    },
+    "flow_summary.csv": {
+      "notebook_cell_one_based": 15,
+      "output_zero_based": 0
+    },
+    "flow_pairs.csv": {
+      "notebook_cell_one_based": 15,
+      "output_zero_based": 1
+    },
+    "flow_cases.csv": {
+      "notebook_cell_one_based": 15,
+      "output_zero_based": 2
+    }
+  }
+}

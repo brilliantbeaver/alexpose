@@ -1,0 +1,76 @@
+{
+  "schema_version": "temporal-gait-v1",
+  "mode": "real",
+  "run_root": "",
+  "video_manifest": "",
+  "sequence_manifest": "",
+  "pose_manifest": "",
+  "identity_manifest": "",
+  "exposure_manifest": "",
+  "reservation_manifest": "",
+  "split_manifest": "",
+  "device": "cuda",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "pilot_seeds": [
+    42
+  ],
+  "development_seeds": [42, 43, 44],
+  "recipe": "historical_schedule_adaptation",
+  "cohort_scope": "historical_overlap",
+  "updates": 1200,
+  "checkpoint_updates": [
+    0,
+    300,
+    1200
+  ],
+  "batch_size": 20,
+  "hidden_dim": 96,
+  "encoder_depth": 4,
+  "predictor_depth": 2,
+  "heads": 4,
+  "patch_size": 4,
+  "clock_channels": false,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0,
+  "ema_start": 0.999,
+  "ema_end": 0.999,
+  "mask_fraction": 0.5,
+  "prefix_seconds": 2.56,
+  "grid_hz": 25,
+  "horizons": [
+    0.25,
+    0.5,
+    1
+  ],
+  "target_interval_seconds": 0.08,
+  "endpoint_tolerance_seconds": 0.02,
+  "max_observation_age_seconds": 0.08,
+  "window_stride_seconds": 0.5,
+  "bootstrap_samples": 2000,
+  "ridge_alphas": [
+    0.01,
+    0.1,
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    1000000,
+    100000000
+  ],
+  "precision": "bfloat16",
+  "min_relative_improvement": 0.05,
+  "arms": [
+    "masked_index",
+    "masked",
+    "future",
+    "future_wrong_source",
+    "future_wrong_time"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "temporal-gait-software-verification-summary-v1",
+  "execution_date_utc": "2026-09-15",
+  "status": "software_verified_only",
+  "real_data_accessed": false,
+  "real_runs_complete": false,
+  "haic_connected": false,
+  "slurm_jobs_submitted": 0,
+  "historical_manuscript_revised_by_this_task": false,
+  "run_root_relative_to_gavd6": "outputs/temporal-gait/software-20260915-03",
+  "frozen_identity": "dcd02f5ead7c638498387ced10b10ae437c93d9b31f7987c33b26bd2446a5892",
+  "study_tests": {
+    "command_from_gavd6": "env MPLCONFIGDIR=/tmp/temporal-gait-matplotlib-tests PYTHONPATH=src OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m unittest discover -s tests/temporal_gait -t . -q",
+    "passed": 85,
+    "failed": 0,
+    "skipped": 0,
+    "elapsed_seconds": 67.379,
+    "evidence_type": "coordinator-observed command output; full stdout not retained as a separate log"
+  },
+  "repository_layout_tests": {
+    "command_from_gavd6": "env PYTHONPATH=src .venv/bin/python -m unittest tests.infrastructure.test_layout -v",
+    "passed": 6,
+    "failed": 0,
+    "elapsed_seconds": 0.229,
+    "evidence_type": "coordinator-observed command output"
+  },
+  "fresh_kernel_verification": {
+    "canonical_notebooks": 9,
+    "executions": 15,
+    "failed": 0,
+    "elapsed_notebook_seconds_sum": 82.147,
+    "device": "cpu",
+    "real_plan_only_status": "completed_without_input_manifests",
+    "verification_artifact": "outputs/temporal-gait/software-20260915-03/verification.json",
+    "claim_audit_artifact": "outputs/temporal-gait/software-20260915-03/reports/claim-audit.json"
+  },
+  "retention": {
+    "verified_present_receipts": 13,
+    "output_hash_validation": "passed",
+    "raw_predictions_retained": true,
+    "fitted_predictors_retained": true,
+    "initialized_online_teacher_checkpoints_retained": true,
+    "conditional_bootstrap_draws_retained": true
+  },
+  "scheduler": {
+    "bash_syntax": "passed",
+    "dry_run_and_mocked_submission": "passed in study tests",
+    "shellcheck": "not installed; not run",
+    "real_cluster_behavior": "unverified"
+  },
+  "review": {
+    "protocol": "completed; required selection and seed-estimand clarifications fixed",
+    "implementation": "completed; original and follow-up supported findings fixed and fault-tested; final new run verified by coordinator",
+    "independent_codex_software_evidence": "28 scratch-free tests, retained inference and arithmetic replay verified against pre-fix run02; final fixes required new run03, not an empirical approval",
+    "empirical_evidence_claims": "pending real artifacts; no paper revision authorized"
+  },
+  "not_implemented": [
+    "E3 dense by intermediate-layer factorial",
+    "released RGB/video checkpoint extraction and transfer",
+    "raw-video pose extraction",
+    "uncertainty calibration",
+    "clinical or physical-unit endpoints",
+    "exact historical checkpoint replay"
+  ]
+}

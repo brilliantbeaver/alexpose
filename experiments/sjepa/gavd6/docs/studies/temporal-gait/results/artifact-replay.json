@@ -1,0 +1,275 @@
+{
+  "anchor_sha256": {
+    "config/identity.json": "f002e3185fe33345c9e93d3d72e566a737d80e932a97e1664574b044f6ea5d48",
+    "config/resolved.json": "0eda29340a9e6f4d83e10784307a7b28f80c070ef1b9a86045f699eeb27377bd",
+    "decisions/pilot.json": "0f747380ee29cd6d2cc25866ba4ee0d76d7712b541ffc0f7c16defb180468dd8",
+    "locks/analysis.json": "0a77e9490a000d1e477a0efd45b5c2044d73165c87028c475421117690e9110f",
+    "reports/claim-audit.json": "b3f39e7e417185905062ca6552d9f8099b21056d9aac6f3a5db87cc10c6dd121",
+    "test/summary/locked-test-summary.json": "c65c36300589edc2a49ca9a17e505c62da90a6e98e996e64789411e84f842bd5",
+    "verification.json": "354b5f98c6a83cc9e809a3239e4be9e773f3831569c3942d7285ce925390c68f"
+  },
+  "counts": {
+    "bootstrap_draw_pairs": 200,
+    "checkpoint_hashes": 6,
+    "evaluation_artifact_hashes": 28,
+    "evaluations": 7,
+    "fitted_array_hashes": 7,
+    "locked_test_fits_verified": 1,
+    "method_evaluations": 98,
+    "paired_contrasts": 4,
+    "primary_source_scores": 882,
+    "primary_summary_scores": 294,
+    "receipt_output_hashes": 116,
+    "secondary_source_scores": 1764,
+    "secondary_summary_scores": 588,
+    "secondary_window_arrays": 784
+  },
+  "diagnostic_source_sha256": "4de85ce24cd659e7e56cc988043684e4b0d7d3e64c6b2e5bf89543dbf89969f9",
+  "environment": {
+    "numpy": "2.5.2",
+    "python": "3.12.10"
+  },
+  "evaluations": [
+    {
+      "arm": "baselines",
+      "groups": 3,
+      "methods": 8,
+      "path": "evaluation/E0/evaluation.json",
+      "role": "development",
+      "seed": 42,
+      "sha256": "c7a249825a05364cbb5d4fa6482945391b6054f8cc6a235a1150b79452344790",
+      "videos": 3,
+      "windows": 48
+    },
+    {
+      "arm": "masked_index",
+      "groups": 3,
+      "methods": 15,
+      "path": "evaluation/pilot/task-0000/evaluation.json",
+      "role": "development",
+      "seed": 42,
+      "sha256": "3e1f55d549435538c08c5c90e8db8a7b9ada51876d540651fb4a8167279ecc02",
+      "videos": 3,
+      "windows": 48
+    },
+    {
+      "arm": "masked",
+      "groups": 3,
+      "methods": 15,
+      "path": "evaluation/pilot/task-0001/evaluation.json",
+      "role": "development",
+      "seed": 42,
+      "sha256": "2f8e97d85c93c84451e1e4de701e7469e892f05fd414534a0f6b73a7024c22ce",
+      "videos": 3,
+      "windows": 48
+    },
+    {
+      "arm": "future",
+      "groups": 3,
+      "methods": 15,
+      "path": "evaluation/pilot/task-0002/evaluation.json",
+      "role": "development",
+      "seed": 42,
+      "sha256": "73ba2bca1400d35a8db25bf4b44c03b3f4f45dcfc27d7f9e99fbfd091ff5aec4",
+      "videos": 3,
+      "windows": 48
+    },
+    {
+      "arm": "future_wrong_source",
+      "groups": 3,
+      "methods": 15,
+      "path": "evaluation/pilot/task-0003/evaluation.json",
+      "role": "development",
+      "seed": 42,
+      "sha256": "5a1d2250b49271340b54b17a61629b558e0551d54491120b979f24afa9cfb61d",
+      "videos": 3,
+      "windows": 48
+    },
+    {
+      "arm": "future_wrong_time",
+      "groups": 3,
+      "methods": 15,
+      "path": "evaluation/pilot/task-0004/evaluation.json",
+      "role": "development",
+      "seed": 42,
+      "sha256": "e0901a9307734634698b8d016e68ffce2b30f238ae2720cdcafa6541289349ac",
+      "videos": 3,
+      "windows": 48
+    },
+    {
+      "arm": "masked",
+      "groups": 3,
+      "methods": 15,
+      "path": "test/task-0001/evaluation.json",
+      "role": "test",
+      "seed": 42,
+      "sha256": "689e85aa55bdd8546fd2f1110c3ee49c46ed3d7f153865d9215f84169438da88",
+      "videos": 3,
+      "windows": 48
+    }
+  ],
+  "frozen_identity": "dcd02f5ead7c638498387ced10b10ae437c93d9b31f7987c33b26bd2446a5892",
+  "limitations": [
+    "One seed, three videos/groups per held-out role, 50 bootstrap draws: software fixture only.",
+    "Repeated methods and arms reuse observations; score-row counts are not independent sample sizes.",
+    "Tiny periodic-fixture baseline error makes relative gains numerically large; not clinical performance.",
+    "Replays retained predictions, arithmetic and provenance, not model retraining, real GAVD validity or GPU/Slurm execution."
+  ],
+  "manifest_digest_rule": "SHA256(JSON mapping run-relative paths to SHA256, sorted keys, compact separators)",
+  "maximum_absolute_discrepancies": {
+    "bootstrap_differences": 9.540979117872439e-18,
+    "bootstrap_relative_improvements": 3.637978807091713e-12,
+    "difference": 0.0,
+    "difference_CI": 6.938893903907228e-18,
+    "first_mean": 0.0,
+    "gain_CI": 4.547473508864641e-13,
+    "paired_source_score": 0.0,
+    "primary_source_eligible_windows": 0.0,
+    "primary_source_missing_predictions": 0.0,
+    "primary_source_score": 0.0,
+    "primary_source_scored_bouts": 0.0,
+    "primary_source_scored_windows": 0.0,
+    "primary_summary": 0.0,
+    "reference_mean": 0.0,
+    "relative_improvement": 0.0,
+    "secondary_source_eligible_windows": 0.0,
+    "secondary_source_missing_predictions": 0.0,
+    "secondary_source_score": 2.7755575615628914e-17,
+    "secondary_source_scored_bouts": 0.0,
+    "secondary_source_scored_windows": 0.0,
+    "secondary_summary": 2.7755575615628914e-17,
+    "secondary_window_errors": 5.551115123125783e-17,
+    "seed_effects": 0.0,
+    "seed_sd": 0.0
+  },
+  "mutation_policy": "No files modified by diagnostic; stdout only; no experiment-package import or training",
+  "paired_comparisons": [
+    {
+      "contrast": "baseline",
+      "difference": 0.005147312089560964,
+      "difference_ci95": [
+        0.003698638826696646,
+        0.006595985352425282
+      ],
+      "draws": 50,
+      "first_mean": 0.005149632973505037,
+      "groups": 3,
+      "path": "evaluation/pilot/summary/development-selection.json",
+      "reference": "periodic",
+      "reference_mean": 2.3208839440733224e-06,
+      "relative_improvement": -2217.823990167751,
+      "relative_improvement_ci95": [
+        -2995.263263437389,
+        -1516.066026582735
+      ],
+      "role": "development",
+      "seeds": [
+        42
+      ],
+      "selected_arm": "masked",
+      "selected_method": "online_context_ridge",
+      "status": "failure",
+      "videos": 3
+    },
+    {
+      "contrast": "initialized",
+      "difference": -0.00032186737568443347,
+      "difference_ci95": [
+        -0.0004103071462872813,
+        -0.0002334276050815857
+      ],
+      "draws": 50,
+      "first_mean": 0.005149632973505037,
+      "groups": 3,
+      "path": "evaluation/pilot/summary/development-selection.json",
+      "reference": "initialized_context_ridge",
+      "reference_mean": 0.0054715003491894705,
+      "relative_improvement": 0.05882616378378072,
+      "relative_improvement_ci95": [
+        0.03777463992340765,
+        0.08613525815953478
+      ],
+      "role": "development",
+      "seeds": [
+        42
+      ],
+      "selected_arm": "masked",
+      "selected_method": "online_context_ridge",
+      "status": "success",
+      "videos": 3
+    },
+    {
+      "contrast": "baseline",
+      "difference": 0.03754965699960471,
+      "difference_ci95": [
+        0.028046591248164877,
+        0.047052722751044544
+      ],
+      "draws": 50,
+      "first_mean": 0.03755226941240341,
+      "groups": 3,
+      "path": "test/summary/locked-test-summary.json",
+      "reference": "periodic",
+      "reference_mean": 2.6124127986972324e-06,
+      "relative_improvement": -14373.55421713219,
+      "relative_improvement_ci95": [
+        -16150.510530144966,
+        -12133.83640062233
+      ],
+      "role": "test",
+      "seeds": [
+        42
+      ],
+      "selected_arm": "masked",
+      "selected_method": "online_context_ridge",
+      "status": "failure",
+      "videos": 3
+    },
+    {
+      "contrast": "initialized",
+      "difference": -0.004694818977038735,
+      "difference_ci95": [
+        -0.0062540220682963206,
+        -0.003135615885781151
+      ],
+      "draws": 50,
+      "first_mean": 0.03755226941240341,
+      "groups": 3,
+      "path": "test/summary/locked-test-summary.json",
+      "reference": "initialized_context_ridge",
+      "reference_mean": 0.04224708838944214,
+      "relative_improvement": 0.1111276340220407,
+      "relative_improvement_ci95": [
+        0.10055040223586693,
+        0.1173149909127689
+      ],
+      "role": "test",
+      "seeds": [
+        42
+      ],
+      "selected_arm": "masked",
+      "selected_method": "online_context_ridge",
+      "status": "success",
+      "videos": 3
+    }
+  ],
+  "run_root": "gavd6/outputs/temporal-gait/software-20260915-03",
+  "schema_version": "independent-artifact-replay-v1",
+  "scientific_status": {
+    "confirmatory_claim": false,
+    "development_scientific_status": "software_only",
+    "mode": "synthetic",
+    "ready_for_expansion": false,
+    "real_runs_complete": false,
+    "status": "software_verified_only"
+  },
+  "status": "passed",
+  "tolerance": {
+    "absolute": 1e-12,
+    "boolean_support": "exact",
+    "missingness": "exact",
+    "relative": 1e-12
+  },
+  "unique_verified_files": 121,
+  "verified_file_manifest_sha256": "82f3c6a1d7a59a5850566cd1de70802790cc83756a3ab3a1c785ef8fb0d25b7a"
+}

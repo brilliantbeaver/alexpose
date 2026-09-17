@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1060" role="img" aria-labelledby="title desc">
+<title id="title">Does observing training change improve lesson selection?</title>
+<desc id="desc">Three selectors receive a before snapshot, an after snapshot, or both snapshots from the same short probe. Each chosen lesson is trained from the identical post-probe checkpoint with the same remaining update budget. Accuracy is evaluated on identical independent real references. This separates information from the response from improvements caused by receiving more probe training. Design schematic, not measured results.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#6D7D8F"/></marker></defs>
+<rect width="1440" height="1060" fill="white"/>
+<text x="48" y="57" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#17324A" text-anchor="start">Does the response to training reveal what to teach next?</text>
+<text x="48" y="98" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#50647A" text-anchor="start">Compare how a model changed with what it looks like before or after the probe.</text>
+<rect x="48" y="139" width="1344" height="110" rx="18" fill="#F7F9FC" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="720" y="179" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#17324A" text-anchor="middle">One estimator receives one common short probe.</text>
+<text x="720" y="217" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#50647A" text-anchor="middle">Save both snapshots. Copy the same post-probe checkpoint into every training branch.</text>
+<path d="M260,257 L260,311" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="48" y="320" width="424" height="155" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="72" y="362" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Before snapshot only</text>
+<text x="72" y="403" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Context + initial weaknesses</text>
+<text x="72" y="433" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">No observed training change</text>
+<text x="260" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#50647A" text-anchor="middle">select an AMASS lesson</text>
+<path d="M260,526 L260,565" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="48" y="574" width="424" height="146" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="72" y="616" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Train the selected lesson</text>
+<text x="72" y="657" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Same post-probe checkpoint</text>
+<text x="72" y="687" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Same remaining update budget</text>
+<path d="M260,728 L260,786" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M720,257 L720,311" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="508" y="320" width="424" height="155" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="532" y="362" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">After snapshot only</text>
+<text x="532" y="403" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Context + remaining weaknesses</text>
+<text x="532" y="433" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">No before snapshot</text>
+<text x="720" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#50647A" text-anchor="middle">select an AMASS lesson</text>
+<path d="M720,526 L720,565" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="508" y="574" width="424" height="146" rx="18" fill="#EDF3FA" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="532" y="616" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#275D9F" text-anchor="start">Train the selected lesson</text>
+<text x="532" y="657" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Same post-probe checkpoint</text>
+<text x="532" y="687" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Same remaining update budget</text>
+<path d="M720,728 L720,786" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1180,257 L1180,311" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="968" y="320" width="424" height="155" rx="18" fill="#E9F5F2" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="992" y="362" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#0A7267" text-anchor="start">Before + after response</text>
+<text x="992" y="403" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Context + both snapshots</text>
+<text x="992" y="433" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Includes the observed change</text>
+<text x="1180" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#50647A" text-anchor="middle">select an AMASS lesson</text>
+<path d="M1180,526 L1180,565" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="968" y="574" width="424" height="146" rx="18" fill="#E9F5F2" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="992" y="616" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#0A7267" text-anchor="start">Train the selected lesson</text>
+<text x="992" y="657" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Same post-probe checkpoint</text>
+<text x="992" y="687" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#17324A" text-anchor="start">Same remaining update budget</text>
+<path d="M1180,728 L1180,786" fill="none" stroke="#6D7D8F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="48" y="795" width="1344" height="110" rx="18" fill="#F2EDF8" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="720" y="837" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#755495" text-anchor="middle">Evaluate on identical held-out real references.</text>
+<text x="720" y="875" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" fill="#17324A" text-anchor="middle">Does the response improve selection beyond the strongest snapshot-only selector?</text>
+<rect x="48" y="941" width="1344" height="62" rx="18" fill="#F7F9FC" stroke="#D6E0EA" stroke-width="1.5"/>
+<text x="720" y="980" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#50647A" text-anchor="middle">Also match the selector capacity, source trials, context features, and evaluation recordings.</text>
+<text x="48" y="1037" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#50647A" text-anchor="start">Proposed information comparison. Schematic only; no experimental outcomes are shown.</text>
+</svg>

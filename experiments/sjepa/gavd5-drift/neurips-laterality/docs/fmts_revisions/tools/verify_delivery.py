@@ -66,7 +66,7 @@ def check(version):
         for filename in ("numerical_evidence.json", "draw_figures.py", "verify_summary.py"):
             z.write(assets / filename, filename)
         z.write(assets / "figures/FIGURE_NOTES.md", "FIGURE_NOTES.md")
-        z.writestr("README.md", "# Anonymous numerical supplement\n\nRetained seed aggregates and recorded source intervals accompany the manuscript. Run `python verify_summary.py` to check means and paired differences. Raw poses, predictions and checkpoints are absent: the source-bootstrap intervals and encoder inference cannot be reproduced from these aggregates.\n\nInstall ReportLab and run `python draw_figures.py --version "+str(version)+" --assets .` to regenerate the SVG/PDF figures. The poses are schematic, not participant examples or forecasts. The source package separately contains the manuscript, bibliography, official style and frozen figures. No new model training was performed.\n")
+        z.writestr("README.md", "# Anonymous numerical supplement\n\nRetained seed aggregates and recorded source intervals accompany the manuscript. Run `python verify_summary.py` to check means and paired differences. Raw poses, predictions and checkpoints are absent: the source-bootstrap intervals and encoder inference cannot be reproduced from these aggregates.\n\nInstall "+("Matplotlib and NumPy" if version >= 9 else "ReportLab")+" and run `python draw_figures.py --version "+str(version)+" --assets .` to regenerate the SVG/PDF figures. The illustrations contain no participant examples or forecasts. The source package separately contains the manuscript, bibliography, official style and frozen figures. No new model training was performed.\n")
     render = assets / "rendered"
     render.mkdir(exist_ok=True)
     poppler = os.getenv("PDFTOPPM") or shutil.which("pdftoppm")
@@ -94,6 +94,6 @@ def check(version):
 if __name__ == "__main__":
     # Independent version directories; no common TeX or figure files are mutated.
     with ThreadPoolExecutor(max_workers=3) as executor:
-        records = list(executor.map(check, range(1, 9)))
+        records = list(executor.map(check, range(1, 10)))
     (ROOT / "review/delivery_checks.json").write_text(json.dumps(records, indent=2)+"\n")
     print(json.dumps(records, indent=2))

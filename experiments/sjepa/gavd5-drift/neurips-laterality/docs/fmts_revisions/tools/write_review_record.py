@@ -96,7 +96,16 @@ CARDS=[
   "Eight isolated source packages reproduce their PDFs; private numerical verifiers reproduce seed means and differences. Raw inference and source intervals remain unreproducible from aggregates alone.",
   "Connected prose replaces repeated audit statements; the actual measurement appears first, terms are explained and the appendix is one page. Some technical density is unavoidable.",
   "Explicit anatomical identities, left/right colors, missing-landmark key and frozen encoder label complete the print-size diagram; teacher readout values and repeated diagnostic units are clear.",
-  "Four main pages, one reference page and one appendix page in the official anonymous style, with verified citations and AI disclosure. Actual submission still depends on the project's unresolved governance determinations." ])
+  "Four main pages, one reference page and one appendix page in the official anonymous style, with verified citations and AI disclosure. Actual submission still depends on the project's unresolved governance determinations." ]),
+ ("FMTS V9", [8.8,9,7.5,8,7,9.3,9,9.7], [
+  "The abstract now begins with the FMTS evaluation problem and presents the gait study as a bounded test of a temporal representation. The target remains a whole-clip, time-reversal-invariant observable rather than a forecasting task.",
+  "The strategic abstract preserves the supported comparison without turning the paper into a numerical inventory. The same aggregate-only evidence boundary and readout scope remain explicit.",
+  "Source holdout, matched initialization, conditional intervals and leakage-aware readout selection are unchanged. No new participant metadata, ablation, multiplicity adjustment or external cohort was added.",
+  "The title and abstract make the distinction between hidden-feature matching and observable movement the paper's organizing idea. The mechanism and broader transfer still require experiments.",
+  "A ninth private source package, numerical supplement and rendered record preserve the revision. Missing raw predictions, checkpoints and source-level bootstrap inputs remain unresolved.",
+  "The abstract removes stage-by-stage counts and effect ranges, gives one headline comparison, and closes with the evaluation lesson. The full numerical evidence remains in Results.",
+  "V9 retains the verified V8 figures unchanged apart from their private version paths. Their labels, branches and print-size legibility remain strengths.",
+  "The title and abstract directly engage the CFP's evaluation, reliability, leakage-awareness and negative-results themes while avoiding claims of foundation-model scale or demonstrated forecasting." ])
 ]
 
 
@@ -107,13 +116,18 @@ def build():
     (ROOT/'review/scores.json').write_text(json.dumps({"weights_percent":dict(zip(DIMENSIONS,WEIGHTS)),"cards":cards},indent=2)+'\n')
     header='| Manuscript | Temporal | Claims | Statistics | Insight | Repro. | Clarity | Figures | Fit | /100 |\n|:--|--:|--:|--:|--:|--:|--:|--:|--:|--:|\n'
     header+='\n'.join('| '+c['version']+' | '+' | '.join(f'{s:g}' for s in c['scores'].values())+f" | **{c['weighted_total']:.2f}** |" for c in cards)
-    header+='\n\nV6 and V7 intentionally receive the same total. V7 improves precision and organization without removing an additional material scientific weakness. V8 gains for clearer prose, diagram labeling and a shorter appendix; its scientific-evidence scores remain unchanged.\n'
+    header+='\n\nV6 and V7 intentionally receive the same total. V7 improves precision and organization without removing an additional material scientific weakness. V8 gains for clearer prose, diagram labeling and a shorter appendix. V9 improves workshop framing and abstract strategy without changing the empirical-evidence scores.\n'
     for c in cards:
         header+='\n#### '+c['version']+f" — {c['weighted_total']:.2f}/100\n\n| Dimension | Score | Concrete reason, remaining weakness or next correction |\n|:--|--:|:--|\n"
         header+='\n'.join(f'| {d} | {c["scores"][d]:g} | {c["reasons"][d]} |' for d in DIMENSIONS)+'\n'
     reviews=[]
-    for v in range(1,9):
-        path=ROOT/f'review/review_v{v}.md' if v<8 else ROOT/'review/review_v8_final.md'
+    for v in range(1,10):
+        if v < 8:
+            path=ROOT/f'review/review_v{v}.md'
+        elif v == 8:
+            path=ROOT/'review/review_v8_final.md'
+        else:
+            path=ROOT/'review/review_v9_final.md'
         value=path.read_text()
         value=value.replace('# FMTS', '#### FMTS',1)
         reviews.append(value)

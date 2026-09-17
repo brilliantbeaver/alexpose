@@ -249,6 +249,30 @@
         "Figures": "Explicit anatomical identities, left/right colors, missing-landmark key and frozen encoder label complete the print-size diagram; teacher readout values and repeated diagnostic units are clear.",
         "Submission fit": "Four main pages, one reference page and one appendix page in the official anonymous style, with verified citations and AI disclosure. Actual submission still depends on the project's unresolved governance determinations."
       }
+    },
+    {
+      "version": "FMTS V9",
+      "scores": {
+        "Temporal relevance": 8.8,
+        "Claim accuracy": 9,
+        "Evaluation/statistics": 7.5,
+        "Insight/positioning": 8,
+        "Reproducibility": 7,
+        "Clarity/narrative": 9.3,
+        "Figures": 9,
+        "Submission fit": 9.7
+      },
+      "weighted_total": 84.5,
+      "reasons": {
+        "Temporal relevance": "The abstract now begins with the FMTS evaluation problem and presents the gait study as a bounded test of a temporal representation. The target remains a whole-clip, time-reversal-invariant observable rather than a forecasting task.",
+        "Claim accuracy": "The strategic abstract preserves the supported comparison without turning the paper into a numerical inventory. The same aggregate-only evidence boundary and readout scope remain explicit.",
+        "Evaluation/statistics": "Source holdout, matched initialization, conditional intervals and leakage-aware readout selection are unchanged. No new participant metadata, ablation, multiplicity adjustment or external cohort was added.",
+        "Insight/positioning": "The title and abstract make the distinction between hidden-feature matching and observable movement the paper's organizing idea. The mechanism and broader transfer still require experiments.",
+        "Reproducibility": "A ninth private source package, numerical supplement and rendered record preserve the revision. Missing raw predictions, checkpoints and source-level bootstrap inputs remain unresolved.",
+        "Clarity/narrative": "The abstract removes stage-by-stage counts and effect ranges, gives one headline comparison, and closes with the evaluation lesson. The full numerical evidence remains in Results.",
+        "Figures": "V9 retains the verified V8 figures unchanged apart from their private version paths. Their labels, branches and print-size legibility remain strengths.",
+        "Submission fit": "The title and abstract directly engage the CFP's evaluation, reliability, leakage-awareness and negative-results themes while avoiding claims of foundation-model scale or demonstrated forecasting."
+      }
     }
   ]
 }

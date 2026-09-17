@@ -1,4 +1,4 @@
-"""Verify frozen assets, original-file preservation, local links and V7/V8 numbers."""
+"""Verify frozen assets, original-file preservation, local links and V7-V9 numbers."""
 from pathlib import Path
 import hashlib
 import json
@@ -23,7 +23,7 @@ def main():
     assert hashlib.sha256(readme[:state['original_bytes']]).hexdigest()==state['original_sha256']
     links=[(r/'README.md',(r/'README.md').read_text()),
            (r.parent/'README.md',readme.decode().split('<a id="fmts-2026-review"></a>',1)[1])]
-    for v in range(1,9):
+    for v in range(1,10):
         md=r/f'paper_v{v}.md';links.append((md,md.read_text()))
         a=r/f'assets/v{v}';manifest=json.loads((a/'manifest.json').read_text())
         for key,suffix in [('markdown_sha256','.md'),('tex_sha256','.tex'),('pdf_sha256','.pdf'),('overleaf_sha256','_overleaf.zip'),('supplement_sha256','_supplement.zip')]:
@@ -45,10 +45,10 @@ def main():
             local=target.split('#',1)[0]
             if local:
                 assert (path.parent/local).exists(),(path,target)
-    for v in [7,8]:
+    for v in [7,8,9]:
         text=(r/f'paper_v{v}.md').read_text()
         assert not re.search(r'An earlier reflection|earlier reflection experiment|fully powered null|only route',text,re.I)
-        assert re.search(r'375(?: of |/)375',text)
+        assert re.search(r'375(?: of |/)375|all 375 trained (?:comparisons|checks)',text)
         assert re.search(r'33(?: of |/)75',text)
         evidence=json.loads((r/f'assets/v{v}/numerical_evidence.json').read_text())
         rows=[line for line in text.splitlines() if re.match(r'\|[^|]+\|\s*0\.\d+',line)]
@@ -62,14 +62,14 @@ def main():
         for value in ['0.223','49/125','96/125','70.4%','0.218','0.0415','0.0436','0.0440']:
             assert value in text,(v,value)
     result={'original_evidence_files_unchanged':len(audit['sha256']),
-            'prior_readme_bytes_preserved':state['original_bytes'],'versions_checked':8,
-            'all_main_text_pages':4,'final_total_pages':6,'manifests':'pass',
+            'prior_readme_bytes_preserved':state['original_bytes'],'versions_checked':9,
+            'all_main_text_pages':4,'final_total_pages':len(PdfReader(r/'paper_v9.pdf').pages),'manifests':'pass',
             'supplement_anonymity_and_private_asset_consistency':'pass','local_links':'pass',
-            'v7_v8_paired_tables_repeated_values_and_chronology':'pass',
+            'v7_v9_paired_tables_repeated_values_and_chronology':'pass',
             'raw_inference_or_bootstrap_rerun':False}
     (r/'review/final_integrity_checks.json').write_text(json.dumps(result,indent=2)+'\n')
     files={str(p.relative_to(r)):sha(p) for p in r.rglob('*') if p.is_file() and p.name!='artifact_manifest.json'}
-    (r/'artifact_manifest.json').write_text(json.dumps({'date':'2026-09-10',
+    (r/'artifact_manifest.json').write_text(json.dumps({'date':'2026-09-15',
         'scope':'Local manuscript revision snapshots; no external release','files':files},indent=2)+'\n')
     print(json.dumps(result,indent=2))
 
