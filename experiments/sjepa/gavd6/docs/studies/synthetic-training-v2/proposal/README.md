@@ -4,7 +4,20 @@
 
 ## Introduction
 
-Blur and obstruction can make a person appear to move differently. Temporal correction may improve estimated joint positions, yet also suppress real changes in timing, amplitude or left–right coordination. We ask: **can paired synthetic motion train a temporal skeleton JEPA to restore imperfect pose tracks while preserving movement better than direct denoising?**
+When a camera image is blurry or someone is partly hidden, pose-tracking software can make mistakes. It may estimate that a person’s arms, legs, or other joints moved in a way they did not actually move.
+
+A method that uses information from nearby video frames—“temporal correction”—can fix some of these mistaken joint positions. But it has a risk: it may smooth the motion too much. In doing so, it could erase genuine aspects of how the person moves, such as:
+
+* timing: when a step, reach, or turn happens;
+* amplitude: how large or small the movement is;
+* left–right coordination: how the two sides of the body work together.
+
+Our research explores whether a model can be trained using pairs of synthetic motion sequences:
+
+1. one clean, accurate skeleton-motion sequence; and
+2. a matching version deliberately made imperfect, resembling errors caused by blur or obstruction.
+
+Succinctly: **can paired synthetic motion train a temporal skeleton JEPA to restore imperfect pose tracks while preserving movement better than direct denoising?**
 
 The initial task is **offline 2D sequence restoration**: every method receives the same full observed clip. It is a measurement study, with clinical utility requiring separate evidence.
 
