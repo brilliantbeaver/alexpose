@@ -1,0 +1,86 @@
+{
+  "budget": 75,
+  "primary_comparator": "domain",
+  "best_fixed": "front",
+  "methods": {
+    "before": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.027025762386308137
+    },
+    "after": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.027025762386308137
+    },
+    "response": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.02702220227058258
+    },
+    "source_progress": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.027025762386308137
+    },
+    "full": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.02702647999854117
+    },
+    "magnitude": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.027025762386308137
+    },
+    "weakness": {
+      "kind": "nearest",
+      "parameter": 5.0,
+      "validation_error": 0.026937256984499655
+    },
+    "domain": {
+      "kind": "nearest",
+      "parameter": 3.0,
+      "validation_error": 0.02678073984210087
+    },
+    "no_context": {
+      "kind": "nearest",
+      "parameter": 5.0,
+      "validation_error": 0.026942018663320872
+    },
+    "simple_context": {
+      "kind": "nearest",
+      "parameter": 3.0,
+      "validation_error": 0.026842177140979057
+    },
+    "image_context": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.026847083700731394
+    },
+    "shuffled_context": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.02706667066353521
+    },
+    "source_progress_matched": {
+      "kind": "nearest",
+      "parameter": 1.0,
+      "validation_error": 0.027025762386308137
+    }
+  },
+  "lessons": [
+    "balanced",
+    "blur",
+    "front",
+    "low_resolution",
+    "low_resolution_occlusion",
+    "oblique",
+    "occlusion",
+    "side"
+  ],
+  "context_kind": "vjepa",
+  "omitted_feature_views": [],
+  "n_train_students": 2,
+  "n_validation_students": 2
+}
