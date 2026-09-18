@@ -9,6 +9,7 @@
 #SBATCH --mem=32G
 #SBATCH --time=00:10:00
 #SBATCH --export=ALL
+#SBATCH --no-requeue
 set -euo pipefail
 source "$STV2_ROOT/slurm/synthetic-training-v2/common.sh"
 : "${STV2_CONFIG:?Explicit run scope config required}"

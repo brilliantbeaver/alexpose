@@ -1,64 +1,165 @@
-# Run the paired restoration study on HAIC
+# Synthetic training v2 on HAIC
 
-The new [notebooks](../../notebooks/synthetic_training_v2/README.md) and [protocol](../../docs/studies/synthetic-training-v2/protocol.md) distinguish software fixtures from source results and protected confirmation. No GPU jobs have been submitted for this implementation. The default GPU authorization is **zero**. The 48 H100-hour proposal is not permission to spend it.
+Use your existing synthetic-training environment, AMASS data, body models, rendering assets, and MMPose checkpoints. The launcher creates the v2 configurations and manages Slurm jobs and cost records. You do not need to copy JSON fragments or export settings for each stage.
 
-Use the established checkout `/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6` and interpreter `/hai/scratch/tedmui/envs/synthetic-training-cu124/bin/python`. These are configured paths, not a claim that remote access was tested. `common.sh` verifies both paths and requires Torch **2.6.0+cu124**. The allocated preflight executes CUDA arithmetic and Torchvision/MMCV NMS, requiring Torchvision **0.21.0+cu124** and MMCV **2.1.0**. Preserve the [existing environment manifest](../synthetic-training/pyproject.toml) and working MMCV build. Do not run root `uv sync`, change Torch, or set a guessed `CUDA_HOME`. This study adds no GPU package dependency.
+The experiment prepares paired synthetic **2D body-12 tracks**, then compares eight temporal restoration methods. The image pose estimators stay frozen. Start with a small source run to check the pipeline.
 
-Start with local dry-run inspection, which submits nothing and does not open data:
-
-```bash
-PYTHONPATH=src /private/tmp/gavd6-stv2-cpu/bin/python scripts/research_directions/synthetic_training_v2/submit.py \
-  --config slurm/synthetic-training-v2/source.example.json --dry-run
-bash -n slurm/synthetic-training-v2/common.sh
-bash -n slurm/synthetic-training-v2/stage.sbatch
-bash -n slurm/synthetic-training-v2/preflight.sbatch
-bash -n slurm/synthetic-training-v2/prepare.sbatch
-```
-
-Before a real batch submission, copy the templates into a unique run configuration directory, replace every `REPLACE`/`DEFINE` value, and record the **explicitly authorized** compute scope. Set `authorized_gpu_hours`, measured prior hours, projected hours for one stage, and a real `cost_ledger` path. The ledger includes all previous GPU attempts, including preflight, body models, EGL, extraction and failed retries; its measured sum must match configuration. Use separate run IDs/configurations for preparation, the one-seed screen and later expansions. Import previous attempt costs into the next ledger. The immutable run identity rejects changes to configuration, source bundle, protocol, code, prior ledger or decision specification.
-
-The source preparation audit CSV must contain `relative_path,start_s,locomotion_status,audit_reviewer,audit_evidence,audit_date,exposure,canonical_person_id`. Locomotion status must be `audited_locomotion`; an AMASS availability row is not sufficient. The authoritative reservation CSV contains `person_id,canonical_person_id,original_split,reserved,exposure`, covering every audited person. Preserve all existing protected identities and aliases. Audit 24 train/8 development people only if enough eligible assets exist; the program reports achieved counts and rejects unsupported windows. Supply local MMPose `StudentSpec` dictionaries (`student_id,family,config,checkpoint`, optional `head_checkpoint`) in the preparation JSON. Name the excluded extractor family before fitting. Existing ViTPose names do not establish lack of exposure.
-
-After verifying the above on HAIC, these are the concrete batch commands. The first command prepares environment variables only. Submission remains an explicit user action:
+**Update HAIC once, before starting a run.** If these changes are only on your Mac, run this from the local `gavd6` checkout:
 
 ```bash
-cd /hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6
-source slurm/synthetic-training-v2/study.env
-export STV2_CONFIG="$STV2_ROOT/outputs/synthetic-training-v2/config-source-smoke.json"
-export STV2_PREFLIGHT_OUTPUT="$STV2_ROOT/outputs/synthetic-training-v2/preflight-UNIQUE.json"
-PYTHONPATH="$STV2_ROOT/src" "$STV2_PYTHON" -c 'from gavd6_sjepa.research_directions.synthetic_training_v2.config import RunConfig; import os; RunConfig.load(os.environ["STV2_CONFIG"]).require_gpu_scope()'
-sbatch slurm/synthetic-training-v2/preflight.sbatch
+bash slurm/synthetic-training-v2/sync-to-haic.sh \
+  tedmui@haic.stanford.edu:/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6
 ```
 
-Use account `mind`, partition `hai`, and batch jobs; the existing partition rejected interactive allocation. A preflight job requests one H100 for 10 minutes. Record its actual cost before updating a **new** preparation scope. Then:
+This previews one transfer containing the required code and verified historical evidence. Review the list, then repeat with `--apply`:
 
 ```bash
-export STV2_PREPARATION_CONFIG="$STV2_ROOT/outputs/synthetic-training-v2/config-paired-data.json"
-export STV2_PREPARATION_OUTPUT="$STV2_ROOT/outputs/synthetic-training-v2/paired-UNIQUE"
-sbatch slurm/synthetic-training-v2/prepare.sbatch
+bash slurm/synthetic-training-v2/sync-to-haic.sh \
+  tedmui@haic.stanford.edu:/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6 --apply
 ```
 
-Preparation holds body motion, shape, times, appearance, camera and seed fixed; it creates clean, blur and obstruction tracks, and a development-only blur+obstruction combination. It saves overlays, achieved pixel heights/framing/clipping, target/input arrays, actual scores, pair hashes, and attempt cost. Review the contact sheet and approximate landmark convention before source fitting. Without independent annotations, the target remains a projected joint-center proxy. Camera-distance/view experiments and real detector-box evidence are pending.
+The destination checkout must already exist. Existing study profiles are preserved; replaced files receive a backup. Transfer before initialization, since changing scientific code after a run starts changes its identity. If a local historical hash fails, use the [historical recovery guide](historical-audit.md).
 
-Once the prepared bundle and its provenance have passed inspection, set a new source scope pointing to it and include all preparation costs. Preview and then submit the dependency chain:
+All remaining commands run on **HAIC**, except the optional preview download in Step 3.
+
+**1. Initialize one run using your existing environment.**
+
+Your current `ST_*` exports can be used directly. After a fresh login, first source your usual `slurm/synthetic-training/pilot-01.env` profile. Then:
 
 ```bash
-"$STV2_PYTHON" scripts/research_directions/synthetic_training_v2/submit.py --config "$STV2_CONFIG" --dry-run
-"$STV2_PYTHON" scripts/research_directions/synthetic_training_v2/submit.py --config "$STV2_CONFIG"
+cd "$GAVD6_ROOT" &&
+bash slurm/synthetic-training-v2/submit.sh init \
+  --name source-smoke-01 --gpu-hours 4 --prior-gpu-hours 0 &&
+source outputs/synthetic-training-v2/source-smoke-01/session.env
 ```
 
-The launcher builds audit → data → adaptation status → information controls → direct baselines → JEPA → evaluation → optional status → snapshot → report. Only direct/JEPA request GPUs. Each reserves one H100 for at most one hour, sequentially: **two GPU jobs, maximum concurrency one, two reserved H100-hours**, in addition to prior preparation. There is no automatic sweep/job-array expansion. The budget guard accounts for actual stage attempts and stops at projected/remaining time; Slurm is the allocation limit. CPU preparation, storage, annotations and queue time are separate. The stage guard includes load/prediction/checkpoint overhead, while per-fit logs isolate training costs.
+`source-smoke-01` is the new run directory name. Choose a fresh name; initialization will not overwrite an existing run. The example authorizes a **four-GPU-hour total scope** and declares zero earlier costs charged to that scope. Replace those values with your actual allowance and earlier setup/failed-allocation costs. Initialization submits no jobs. The initial preparation needs room for one one-hour allocation; training needs room for two more. See [cost accounting](costs.md) for carrying a previous run's costs forward.
 
-Resume only with unchanged content/configuration:
+The initializer checks the selected Python environment, generates the configurations and review worksheets, and saves a `session.env` that remembers the run. It reuses these paths:
+
+| Existing setting | Used for |
+| --- | --- |
+| `GAVD6_ROOT` | The checkout you run from |
+| `ST_PYTHON`, or an explicit `STV2_PYTHON` | Study interpreter |
+| `ST_AMASS_ROOT` | Extracted AMASS motions |
+| `ST_BODY_MODEL_ROOT`, `ST_DMPL_ROOT` | Licensed body models |
+| `ST_UV_PATH`, `ST_TEXTURE_DIR`, `ST_BACKGROUND_DIR` | Rendering assets |
+| `ST_MODEL_ROOT` | MMPose configuration files and checkpoints |
+| `ST_ACCOUNT`, `ST_PARTITION`, if set | Slurm account and partition; defaults are `mind` and `hai` |
+
+The generated estimator list contains **RTMPose-m, HRNet-W32, and ViTPose-Base**. ViTPose is excluded from temporal-model training and included in development evaluation. Its previous exposure still limits the claims you can make. COCO training, V-JEPA2, and GAVD video assets are not needed for this first source experiment.
+
+Your supplied `ST_PYTHON` points to `envs/synthetic-training`. Its installed packages determine compatibility. If initialization rejects that interpreter and you already built the repaired environment, select it explicitly and repeat initialization:
 
 ```bash
-"$STV2_PYTHON" scripts/research_directions/synthetic_training_v2/run.py --config "$STV2_CONFIG" --stage direct --resume
+export STV2_PYTHON="/hai/scratch/$USER/envs/synthetic-training-cu124/bin/python"
 ```
 
-Completed receipts are reused after checking their entire dependency chain. A partial model resumes from its latest checkpoint only with `--resume`; the trainer validates data, masks, preprocessing, code, optimizer, RNG and runtime identity. Changing the recipe requires a new run ID. Failed preparation uses a new attempt ID, and its cost still counts.
+Require **Torch 2.6.0+cu124, Torchvision 0.21.0+cu124, and MMCV 2.1.0**. If the repaired environment is unavailable, follow Steps 4a–4c of the [original HAIC guide](../synthetic-training/README.md). Do not rebuild an environment that already passes its checks.
 
-The initial comparison matches data/steps and reports unequal costs. For the distinct practical compute comparison, use a new configuration with `resource_contrast: "equal_total_compute"` and `total_compute_seconds` set from the complete paired-JEPA pretraining-plus-readout `training.json` for the corresponding seed/hardware. The direct/SmoothNet/static fits use a synchronized elapsed-time limit and a maximum update count. Report actual seconds, steps, ceiling termination and one-step overhead; if the update ceiling prevents spending the budget, no exact compute-matching claim is supported. Preserve both configurations and source identities. An official GPU throughput projection must come from allocated measurements, never CPU fixture timing.
+**2. Complete the two source reviews, then check the inputs.**
 
-Gate B stays `insufficient_evidence` for fixtures and uncalibrated/single-seed screens. A pre-fit `decision_spec` can enable source adjudication after independent calibration and three-seed evidence; see the exact rules in the protocol. Gate A is a separate pending augmented-COCO/adaptation experiment. No failure in Gate A cancels temporal restoration. A failed JEPA gate does not erase a useful direct-denoising result.
+Initialization creates draft worksheets under:
 
-Real transfer requires supplied independent, blinded temporal annotations. `annotations.annotation_template` exports blank development landmarks with timing/effort fields; it never exports candidate output as truth. Notebook 07 makes a **development snapshot only**. Confirmation freezing and explicit access are separate APIs; automatic protected confirmation scoring is intentionally unavailable until independent references, exposure, margins and scorer review exist. No source or notebook command opens protected labels.
+```text
+$STV2_WORK/inputs/review-drafts/
+```
+
+Follow [Prepare the reviewed AMASS inputs](source-inputs.md). Save the completed records as:
+
+```text
+$STV2_WORK/inputs/locomotion-audit.csv
+$STV2_WORK/inputs/person-reservations.csv
+```
+
+For the first engineering check, aim for two eligible training people and two development people, with two reviewed windows per person. The source review must preserve original splits, known aliases, reservations, and exposure history. The old `ST_GAVD_RESERVATION` file describes video recordings and cannot replace the AMASS person file.
+
+This review is the manual prerequisite: motion filenames alone cannot establish locomotion, and a generated configuration cannot establish permission to use a reserved person. The launcher leaves these decisions blank.
+
+Now run:
+
+```bash
+bash slurm/synthetic-training-v2/submit.sh check
+```
+
+**Continue when `STV2_INPUTS_PASSED` appears and the printed people/window counts match your intended panel.** The check covers the environment, historical evidence, CSV joins, required files, estimator configurations, and the held family. It reports missing inputs together. GPU operators, rendering, and checkpoint execution are checked in the next step.
+
+If your assets use nonstandard filenames, the generated file to inspect is `$STV2_WORK/config/preparation.json`. Normal setup does not require editing it. Correct asset paths before preparation; completed attempts keep their own configuration snapshots.
+
+**3. Prepare the paired data and inspect the overlays.**
+
+```bash
+bash slurm/synthetic-training-v2/submit.sh prepare
+bash slurm/synthetic-training-v2/submit.sh status
+```
+
+The launcher repeats the input checks, creates a fresh preparation scope, and submits **one H100, 8 CPUs, 96 GB, for at most one hour**. Within that allocation, preparation checks the CUDA operators, loads the body models and frozen estimators, renders the reviewed windows, and saves their tracks. A separate preflight submission is unnecessary.
+
+`status` prints each job's state, exit code, log path, and paired-data directory. Run it again later to check progress. Require the preparation job to show **`COMPLETED` and `0:0`**, and inspect its `overlay-*.png` files. Check body orientation, framing, anatomical sides, and landmark placement. The source launcher also requires a successful `preparation-status.json` and a valid bundle.
+
+Open the overlays through your remote file browser, or copy just the PNGs to your Mac. For the first attempt with the run name above, run on the **Mac**:
+
+```bash
+mkdir -p "$HOME/Downloads/stv2-source-smoke-01"
+rsync -av \
+  'tedmui@haic.stanford.edu:/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2/source-smoke-01/paired-01/overlay-*.png' \
+  "$HOME/Downloads/stv2-source-smoke-01/"
+open "$HOME/Downloads/stv2-source-smoke-01"
+```
+
+For a retry or another run name, use the paired-data directory printed by `status`. Preparation processes every admitted audit row; it does not automatically cap the panel. The one-hour limit is a bound, not a throughput estimate.
+
+**4. Train, monitor, and read the results.**
+
+After the overlays pass your review, run on **HAIC**:
+
+```bash
+bash slurm/synthetic-training-v2/submit.sh source --overlays-reviewed
+bash slurm/synthetic-training-v2/submit.sh status
+```
+
+This records your overlay review and submits the sequential stage chain. It creates the source configuration and carries preparation costs forward automatically. Only `direct` and `jepa` request a GPU: each has one H100 and a one-hour limit. The remaining stages use CPUs. The first recipe has seed 17, 200 pretraining updates, and 200 readout updates. Failed attempts count toward the same allowance.
+
+The first run includes unchanged/filter baselines and these learned comparisons:
+
+| Methods | Purpose |
+| --- | --- |
+| `direct`, `smoothnet`, `static` | Practical restoration and coordinate-history controls |
+| `initialized` | Readout from an untrained frozen encoder |
+| `coordinate` | Clean-coordinate pretraining with a separately fitted readout |
+| `ordinary_jepa` | Pretraining against observed-track latent targets |
+| `paired_jepa` | Pretraining against aligned clean synthetic latent targets |
+| `shuffled_jepa` | Test the value of correct pretraining pairs |
+
+Require a successful completed attempt for every source stage. Earlier failed attempts remain in the history and budget. Then read:
+
+```bash
+less "$STV2_WORK/source-01/report.md"
+```
+
+The report links metrics, uncertainty, support counts, and scientific gates. A one-seed engineering run establishes feasibility. `insufficient_evidence` is expected when calibration, repeated seeds, or motion-reference support is missing; a successful Slurm job is not a scientific pass. These results concern synthetic 2D joint-center proxies with supplied boxes, not real gait measurement or 3D/world-model capability.
+
+**After reconnecting.** Restore the saved run, then use the same commands:
+
+```bash
+source "/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2/source-smoke-01/session.env"
+cd "$STV2_ROOT"
+bash slurm/synthetic-training-v2/submit.sh status
+```
+
+For a preview, add `--dry-run` to `prepare` or `source`; the source preview also needs `--overlays-reviewed`. Previews do not submit jobs or create phase configurations. Actual GPU execution remains the allocated job's check.
+
+**If something fails.**
+
+| Symptom | Next step |
+| --- | --- |
+| Missing review CSVs | Complete the worksheets in [source inputs](source-inputs.md), then run `check`. |
+| Historical hash failure | Use the [historical recovery guide](historical-audit.md); retain the original recorded hashes. |
+| Environment check fails | Select the verified `STV2_PYTHON`, or use the original guide's environment repair. |
+| Missing model/render assets | Reuse the original guide's asset helpers; v2 does not need `save_effective_config.py`. |
+| Preparation fails | Read its printed log, correct the cause, then use `prepare --retry`. |
+| Training fails or leaves pending dependencies | Use the [retry instructions](costs.md#retry-a-failed-job); preserve the recorded jobs and costs. |
+| Budget is insufficient or a scientific recipe must change | Start a fresh named run with the prior cost ledger; see [cost accounting](costs.md). |
+| Uncertain scheduler response | Use [submission recovery](costs.md#recover-an-uncertain-submission); do not repeatedly submit the same job. |
+
+For scientific extensions and claim limits, read the [development protocol](../../docs/studies/synthetic-training-v2/protocol.md) and [review findings](../../docs/studies/synthetic-training-v2/haic-workflow-review.md). The [notebook guide](../../notebooks/synthetic_training_v2/README.md) is a CPU fixture walkthrough; source execution uses this Slurm workflow.

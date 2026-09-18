@@ -43,7 +43,13 @@ class RunConfig:
         for name in ('authorized_gpu_hours','measured_gpu_hours','projected_gpu_hours','total_compute_seconds'):
             if not math.isfinite(getattr(self,name)) or getattr(self,name)<0:raise ValueError('Budget fields must be finite and nonnegative')
         if not 0<=self.authorized_gpu_hours<=48:raise ValueError('GPU hours must lie in [0,48]')
-        if len(set(self.seeds))!=len(self.seeds) or not self.seeds:raise ValueError('Seeds must be nonempty and unique')
+        if type(self.seed) is not int or not 0<=self.seed<=2**32-1:
+            raise ValueError('Seed must be a nonboolean integer in [0, 2**32-1]')
+        if not isinstance(self.seeds,(list,tuple)) or not self.seeds:
+            raise ValueError('Seeds must be a nonempty list or tuple of integers')
+        if any(type(value) is not int or not 0<=value<=2**32-1 for value in self.seeds):
+            raise ValueError('Seeds must be nonboolean integers in [0, 2**32-1]')
+        if len(set(self.seeds))!=len(self.seeds):raise ValueError('Seeds must be unique')
         if self.resource_contrast not in {'matched_data_steps','equal_total_compute'}:raise ValueError('Unknown resource comparison')
         if self.resource_contrast=='equal_total_compute' and self.total_compute_seconds<=0:raise ValueError('Compute comparison needs a measured per-arm budget')
         if self.mode=='source' and not self.bundle:raise ValueError('Source mode requires prepared audited paired bundle')

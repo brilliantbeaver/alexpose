@@ -291,7 +291,10 @@ def run_stage(cfg,stage,repo_root=None,*,resume=False):
         from .runtime import budgeted_gpu_stage
         context=budgeted_gpu_stage(cfg,stage) if cfg.device=='cuda' and stage in {'direct','jepa'} else nullcontext()
         with context:result=_safe(_stage(cfg,stage,repo,identity,resume=resume))
+        # Slurm appends stdout after the stage returns, while the launcher may
+        # still add job IDs. Keep that mutable bookkeeping outside receipts.
         paths=[p for p in cfg.root.rglob('*') if p.is_file() and str(p.relative_to(cfg.root)) not in owned
+               and p.relative_to(cfg.root).parts[0]!='logs' and p!=cfg.root/'submission.json'
                and 'receipts' not in p.parts and 'notebook_runs' not in p.parts and not p.name.endswith('.lock')]
         receipt=dict(stage=stage,identity=identity,result=result,elapsed_seconds=time.perf_counter()-start,
                      files={str(p.relative_to(cfg.root)):sha256_file(p) for p in sorted(paths)})

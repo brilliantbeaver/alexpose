@@ -55,8 +55,10 @@ def validate_inputs(inputs, window_size=None):
     confidence, times = inputs["confidence"], inputs["timestamps"]
     if confidence.shape != observed.shape or times.shape != xy.shape[:2]:
         raise ValueError("Confidence/timestamp shape mismatch")
-    if not torch.isfinite(confidence).all() or ((confidence < 0) | (confidence > 1)).any():
-        raise ValueError("Confidence must be finite in [0,1]; unsupported scores need an explicit adapter")
+    if not torch.isfinite(confidence).all():
+        raise ValueError("Native estimator scores must be finite after the missing-score adapter")
+    if (observed & (confidence <= 0)).any():
+        raise ValueError("Observed joints require positive native estimator scores")
     if not torch.isfinite(times).all() or (times.diff(dim=1) <= 0).any():
         raise ValueError("Timestamps must be finite and strictly increasing physical seconds")
     if (observed & ~torch.isfinite(xy).all(-1)).any():

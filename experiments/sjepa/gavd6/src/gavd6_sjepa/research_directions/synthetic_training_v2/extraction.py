@@ -20,10 +20,12 @@ def extract_tracks(estimator,images,boxes,timestamps,*,box_source,threshold=0.,b
     """No renderer labels or true-error arguments exist on this API.
 
     No-detection outputs retain a frame of missing joints. Missing scores are
-    counted as unsupported and never replaced with guessed confidence.
+    counted as unsupported and never replaced with guessed confidence. MMPose
+    heatmap/SimCC maxima are native scores, not bounded probabilities. Preserve
+    them unchanged; the codecs mark nonpositive scores as invalid coordinates.
     """
     import torch
-    if not box_source or not 0<=threshold<=1 or batch_size<1:raise ValueError('Box provenance and valid source-set threshold required')
+    if not box_source or not np.isfinite(threshold) or threshold<0 or batch_size<1:raise ValueError('Box provenance and finite nonnegative native-score threshold required')
     images=list(images);boxes=np.asarray(boxes);times=np.asarray(timestamps,float)
     if boxes.shape!=(len(images),4) or times.shape!=(len(images),):raise ValueError('Frame/box/time alignment mismatch')
     if not np.isfinite(times).all() or np.any(np.diff(times)<=0):raise ValueError('Physical timestamps required')
@@ -49,8 +51,15 @@ def extract_tracks(estimator,images,boxes,timestamps,*,box_source,threshold=0.,b
                 if raw.shape!=(1,17):raise ValueError('Unexpected score schema')
                 scores[i]=raw[0,5:17]
     finite=np.isfinite(xy).all(-1);counts['nonfinite_joints']=int((~finite).sum())
-    if np.any(np.isfinite(scores)&((scores<0)|(scores>1))):raise ValueError('Scores outside[0,1]; require source-only calibrated adapter')
-    observed=finite & np.isfinite(scores) & (scores>=threshold)
+    finite_scores=np.isfinite(scores)
+    actual_scores=scores[finite_scores]
+    counts.update(score_semantics='native_mmpose_keypoint_scores_not_probabilities',
+                  native_score_min=float(actual_scores.min()) if actual_scores.size else None,
+                  native_score_max=float(actual_scores.max()) if actual_scores.size else None,
+                  score_threshold=float(threshold),
+                  nonfinite_score_joints=int((~finite_scores).sum()),
+                  nonpositive_score_joints=int((finite_scores & (scores<=0)).sum()))
+    observed=finite & finite_scores & (scores>threshold)
     xy[~observed]=np.nan
     return TrackExtraction(xy,scores,observed,times,box_source,counts)
 

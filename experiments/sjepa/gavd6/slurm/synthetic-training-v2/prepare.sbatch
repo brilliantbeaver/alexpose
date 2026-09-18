@@ -9,6 +9,7 @@
 #SBATCH --mem=96G
 #SBATCH --time=01:00:00
 #SBATCH --export=ALL
+#SBATCH --no-requeue
 set -euo pipefail
 source "$STV2_ROOT/slurm/synthetic-training-v2/common.sh"
 : "${STV2_PREPARATION_CONFIG:?Audited asset/preparation config required}"
