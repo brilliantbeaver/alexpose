@@ -5,6 +5,7 @@ Choose a study launcher; each Sbatch file retains its resource request and opera
 | Study | Entry point | Execution boundary |
 | --- | --- | --- |
 | Synthetic training selection | [synthetic-training](synthetic-training/README.md) | Source student arrays and frozen selection; separate GAVD deployment, crossover, and human-reference evaluation. |
+| Synthetic training v2 | [synthetic-training-v2](synthetic-training-v2/README.md) | CUDA preflight, audited paired-data preparation, and temporal restoration comparisons; separate scopes for each phase. |
 | Motion preservation | [motion-preservation](motion-preservation/README.md) | Pilot inventory through evaluation; final family and GAVD require explicit selections. |
 | Future-feature prediction gate | [future-prediction](future-prediction/README.md) | Versioned direct-prediction gates with separate CLI, notebook and cached-repair submission paths. |
 | Source scaling | [source-scaling](source-scaling/README.md) | Calibration, source reservation, fitting and inspection of an identified parent cache. |

@@ -7,6 +7,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --export=ALL
+#SBATCH --no-requeue
 set -euo pipefail
 : "${STV2_ROOT:?Source study.env}"
 source "$STV2_ROOT/slurm/synthetic-training-v2/common.sh"

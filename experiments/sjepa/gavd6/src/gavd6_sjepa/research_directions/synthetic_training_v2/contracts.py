@@ -35,8 +35,8 @@ def validate_inputs(inputs, *, samples=64, hz=25.):
         raise ValueError('Physical clock must be an increasing fixed-rate grid; no duration stretching')
     if np.any(o & ~np.isfinite(x).all(-1)):
         raise ValueError('Observed coordinates must be finite')
-    if np.any(o & (~np.isfinite(c) | (c < 0) | (c > 1))):
-        raise ValueError('Observed confidence must be an actual score in [0,1]')
+    if np.any(o & (~np.isfinite(c) | (c <= 0))):
+        raise ValueError('Observed confidence must be a finite positive native estimator score')
     return len(x)
 
 
@@ -158,9 +158,50 @@ class TrackBundle:
         return result
 
 
-def verify_preservation(repo):
+def inspect_preservation(repo):
+    """Read the frozen manifest without conflating missing and altered files."""
     root=Path(repo);p=root/'docs/studies/synthetic-training-v2/preservation-manifest.json'
     saved=json.loads(p.read_text())['files']
-    changed=[name for name,h in saved.items() if not (root/name).is_file() or sha256_file(root/name)!=h]
-    if changed: raise RuntimeError(f'Pre-existing artifacts changed: {changed}')
-    return {'status':'pass','files_checked':len(saved)}
+    missing,mismatched,unreadable=[],[],[]
+    matched=0
+    for name,expected in saved.items():
+        path=root/name
+        try:
+            if not path.is_file():
+                missing.append(name)
+                continue
+            actual=sha256_file(path)
+        except OSError as exc:
+            unreadable.append({'path':name,'error':str(exc)})
+            continue
+        if actual!=expected:
+            mismatched.append({'path':name,'expected_sha256':expected,'actual_sha256':actual})
+        else:
+            matched+=1
+    return {'status':'fail' if missing or mismatched or unreadable else 'pass',
+            'files_checked':len(saved),'matched':matched,
+            'missing':missing,'mismatched':mismatched,'unreadable':unreadable}
+
+
+def preservation_failure(report):
+    lines=[f"Historical preservation check failed: {report['matched']}/{report['files_checked']} files match."]
+    groups=(('Missing or not regular files',report['missing']),
+            ('SHA256 mismatches',[r['path'] for r in report['mismatched']]),
+            ('Unreadable files',[f"{r['path']}: {r['error']}" for r in report['unreadable']]))
+    for label,names in groups:
+        if names:
+            lines.append(f'{label} ({len(names)}):')
+            lines.extend(f'  {name}' for name in names)
+    if any(name.startswith('notebook_runs/') for name in report['missing']) or any(
+        row['path'].startswith('notebook_runs/') for row in report['mismatched']+report['unreadable']):
+        lines.append('notebook_runs is not transferred by Git. Restore verified historical files; '
+                     'rsync --ignore-existing does not replace mismatched files. '
+                     'Back up existing copies before replacing them.')
+    lines.append('Keep the recorded hashes unchanged. See slurm/synthetic-training-v2/historical-audit.md.')
+    return '\n'.join(lines)
+
+
+def verify_preservation(repo):
+    report=inspect_preservation(repo)
+    if report['status']!='pass':raise RuntimeError(preservation_failure(report))
+    return {'status':'pass','files_checked':report['files_checked']}

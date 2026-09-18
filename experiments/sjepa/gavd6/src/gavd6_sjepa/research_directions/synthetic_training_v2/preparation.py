@@ -185,8 +185,31 @@ def preparation_provenance(config, table, repo):
 
 
 def held_family(specs, held):
-    named = [spec["family"] for spec in specs if spec["student_id"] == held]
-    return named[0] if named else held
+    """Resolve a present, unambiguous held family without losing training input."""
+    if not isinstance(specs, (list, tuple)) or not specs:
+        raise ValueError("An explicit nonempty extractor roster is required")
+    students = {}
+    for spec in specs:
+        if not isinstance(spec, dict) or any(
+            not isinstance(spec.get(key), str) or not spec[key].strip()
+            or spec[key] != spec[key].strip() for key in ("student_id", "family")
+        ):
+            raise ValueError("Every extractor needs a nonempty student_id and family")
+        if spec["student_id"] in students:
+            raise ValueError(f"Duplicate source extractor ID: {spec['student_id']}")
+        students[spec["student_id"]] = spec["family"]
+    families = set(students.values())
+    if not isinstance(held, str) or not held.strip():
+        raise ValueError("Specify a held extractor ID or family from the roster")
+    matches = ({students[held]} if held in students else set()) | ({held} if held in families else set())
+    if not matches:
+        raise ValueError(f"Requested held extractor {held!r} is absent from the roster")
+    if len(matches) != 1:
+        raise ValueError(f"Requested held extractor {held!r} is ambiguous between an ID and a family")
+    family = matches.pop()
+    if not families - {family}:
+        raise ValueError("Every configured extractor is held; no training extractor remains")
+    return family
 
 
 def prepare_source(config, output, repo):
@@ -215,11 +238,9 @@ def prepare_source(config, output, repo):
                 counts=counts, reason="nonempty_training_and_development_required" if shortage else "runtime_pending"))
     if shortage:
         raise ValueError("No adequate train/development source windows; see preparation-status.json")
+    excluded_family = held_family(config["estimators"], scope.held_extractor)
     provenance = preparation_provenance(config, table, repo)
     atomic_json(output / "preparation-provenance.json", provenance)
-    excluded_family = held_family(config["estimators"], scope.held_extractor)
-    if not any(s["family"] != excluded_family for s in config["estimators"]):
-        raise ValueError("Every configured extractor is held; no training extractor remains")
     from .runtime import require_haic_runtime
     require_haic_runtime()
     from ..motion_preservation.motion_data import load_motion
