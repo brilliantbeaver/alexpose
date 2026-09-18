@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="505" viewBox="0 0 1200 505" role="img" aria-labelledby="title desc">
+<title id="title">Separate the value of clean targets from the value of JEPA</title><desc id="desc">Compare restored coordinates, not losses measured in different learned feature spaces.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#53677b"/></marker></defs>
+<rect width="1200" height="505" fill="white"/>
+<text x="36" y="43" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="start" fill="#172b40">Separate the value of clean targets from the value of JEPA</text>
+<text x="36" y="76" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="start" fill="#53677b">Compare restored coordinates, not losses measured in different learned feature spaces.</text>
+<rect x="36" y="125" width="270" height="245" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="171.0" y="159" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Matched training data</text>
+<text x="171.0" y="190" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Same training people</text>
+<text x="171.0" y="217" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Same observed clips</text>
+<text x="171.0" y="244" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Clean labels: training only</text>
+<rect x="390" y="110" width="360" height="92" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="570.0" y="144" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Coordinate pretraining</text>
+<text x="570.0" y="175" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Freeze; fit matched readout design</text>
+<rect x="390" y="230" width="360" height="92" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="570.0" y="264" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Paired JEPA</text>
+<text x="570.0" y="295" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Freeze; fit matched readout design</text>
+<rect x="390" y="350" width="360" height="92" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="570.0" y="384" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Practical denoisers</text>
+<text x="570.0" y="415" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Direct model + SmoothNet-style MLP</text>
+<polyline points="306,248 348,248 348,156 390,156" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="348,248 348,276 390,276" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="348,276 348,396 390,396" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="885" y="198" width="279" height="150" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="1024.5" y="232" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Common evaluation</text>
+<text x="1024.5" y="263" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Coordinate accuracy</text>
+<text x="1024.5" y="290" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Motion preservation</text>
+<text x="1024.5" y="317" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Clean-input retention</text>
+<polyline points="750,156 813,156 813,233 885,233" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="750,276 885,276" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="750,396 813,396 813,311 885,311" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="885" y="375" width="279" height="85" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="1024.5" y="409" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Scoring references</text>
+<text x="1024.5" y="440" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Evaluation only</text>
+<polyline points="1024,375 1024,348" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="484" font-family="Arial, sans-serif" font-size="19" font-weight="normal" text-anchor="start" fill="#53677b">Objective test: match data and steps. Practical test: match total compute, including readout training.</text>
+</svg>

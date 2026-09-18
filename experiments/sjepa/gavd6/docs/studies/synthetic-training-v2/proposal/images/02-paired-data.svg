@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="510" viewBox="0 0 1200 510" role="img" aria-labelledby="title desc">
+<title id="title">One motion, controlled observation changes</title><desc id="desc">Keep person, motion, timestamps and camera fixed within each intervention pair.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#53677b"/></marker></defs>
+<rect width="1200" height="510" fill="white"/>
+<text x="36" y="43" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="start" fill="#172b40">One motion, controlled observation changes</text>
+<text x="36" y="76" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="start" fill="#53677b">Keep person, motion, timestamps and camera fixed within each intervention pair.</text>
+<rect x="36" y="195" width="225" height="115" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="148.5" y="229" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Audited walking</text>
+<text x="148.5" y="260" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">AMASS motion</text>
+<text x="148.5" y="287" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Same physical times</text>
+<rect x="325" y="110" width="245" height="95" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="447.5" y="144" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Clean render</text>
+<text x="447.5" y="175" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Reference appearance</text>
+<rect x="325" y="250" width="245" height="95" rx="14" fill="#fff4e7" stroke="#d5dfe7"/>
+<text x="447.5" y="284" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Degraded render</text>
+<text x="447.5" y="315" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Blur or obstruction</text>
+<polyline points="261,232 293,232 293,157 325,157" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="293,232 293,297 325,297" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="640" y="175" width="225" height="115" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="752.5" y="209" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Pose estimator</text>
+<text x="752.5" y="240" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Coordinates + scores</text>
+<text x="752.5" y="267" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Observed / missing</text>
+<polyline points="570,157 605,157 605,211 640,211" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="570,297 605,297 605,258 640,258" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="930" y="175" width="234" height="115" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="1047.0" y="209" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Estimated tracks</text>
+<text x="1047.0" y="240" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Restoration inputs</text>
+<text x="1047.0" y="267" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">No reference labels</text>
+<polyline points="865,232 930,232" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="325" y="390" width="540" height="90" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="595.0" y="424" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Same-view projected joints</text>
+<text x="595.0" y="455" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Privileged targets for training and scoring</text>
+<polyline points="148,310 148,435 325,435" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1047" y="409" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#172b40">Held combination:</text>
+<text x="1047" y="438" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">blur + obstruction</text>
+<text x="1047" y="467" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#53677b">on development people</text>
+</svg>

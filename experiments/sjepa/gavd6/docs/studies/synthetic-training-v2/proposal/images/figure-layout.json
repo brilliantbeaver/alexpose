@@ -1,0 +1,832 @@
+[
+  {
+    "file": "01-preserve-motion.svg",
+    "height": 410,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Correct the observation. Preserve the movement.",
+        "size": 28,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 36,
+        "y": 76,
+        "text": "Conceptual trajectories: smoothness alone cannot establish faithful restoration.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 210.0,
+        "y": 144,
+        "text": "Imperfect observation",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 210,
+        "y": 327,
+        "text": "Errors obscure the trajectory",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 600.0,
+        "y": 144,
+        "text": "Useful restoration",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 600,
+        "y": 327,
+        "text": "Amplitude and timing retained",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 990.0,
+        "y": 144,
+        "text": "Over-smoothed output",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 990,
+        "y": 327,
+        "text": "Variation is reduced",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 93,
+        "y": 390,
+        "text": "Dashed: reference motion",
+        "size": 17,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 487,
+        "y": 390,
+        "text": "Solid: illustrative output / observation",
+        "size": 17,
+        "anchor": "start",
+        "weight": "normal"
+      }
+    ]
+  },
+  {
+    "file": "02-paired-data.svg",
+    "height": 510,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "One motion, controlled observation changes",
+        "size": 28,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 36,
+        "y": 76,
+        "text": "Keep person, motion, timestamps and camera fixed within each intervention pair.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 148.5,
+        "y": 229,
+        "text": "Audited walking",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 148.5,
+        "y": 260,
+        "text": "AMASS motion",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 148.5,
+        "y": 287,
+        "text": "Same physical times",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 447.5,
+        "y": 144,
+        "text": "Clean render",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 447.5,
+        "y": 175,
+        "text": "Reference appearance",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 447.5,
+        "y": 284,
+        "text": "Degraded render",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 447.5,
+        "y": 315,
+        "text": "Blur or obstruction",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 752.5,
+        "y": 209,
+        "text": "Pose estimator",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 752.5,
+        "y": 240,
+        "text": "Coordinates + scores",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 752.5,
+        "y": 267,
+        "text": "Observed / missing",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1047.0,
+        "y": 209,
+        "text": "Estimated tracks",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1047.0,
+        "y": 240,
+        "text": "Restoration inputs",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1047.0,
+        "y": 267,
+        "text": "No reference labels",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 595.0,
+        "y": 424,
+        "text": "Same-view projected joints",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 595.0,
+        "y": 455,
+        "text": "Privileged targets for training and scoring",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1047,
+        "y": 409,
+        "text": "Held combination:",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1047,
+        "y": 438,
+        "text": "blur + obstruction",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1047,
+        "y": 467,
+        "text": "on development people",
+        "size": 17,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ]
+  },
+  {
+    "file": "03-paired-jepa.svg",
+    "height": 590,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Paired JEPA: learn features, then restore coordinates",
+        "size": 28,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 36,
+        "y": 76,
+        "text": "The clean teacher is available during training only; the deployed model receives observed tracks.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 36,
+        "y": 119,
+        "text": "A  REPRESENTATION TRAINING",
+        "size": 17,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 151.0,
+        "y": 179,
+        "text": "Imperfect tracks",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 151.0,
+        "y": 210,
+        "text": "Coordinates + support",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 460.0,
+        "y": 179,
+        "text": "Online encoder",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 460.0,
+        "y": 210,
+        "text": "Learned temporal tokens",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 765.0,
+        "y": 179,
+        "text": "Predictor",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 765.0,
+        "y": 210,
+        "text": "Masked target features",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1057.0,
+        "y": 256,
+        "text": "Feature loss",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1057.0,
+        "y": 287,
+        "text": "Compare valid targets",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1057.0,
+        "y": 314,
+        "text": "Update online branch",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 151.0,
+        "y": 344,
+        "text": "Clean projections",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 151.0,
+        "y": 375,
+        "text": "Same view and times",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 460.0,
+        "y": 344,
+        "text": "EMA teacher",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 460.0,
+        "y": 375,
+        "text": "No target gradients",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 765.0,
+        "y": 344,
+        "text": "Target features",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 765.0,
+        "y": 375,
+        "text": "Clean motion encoding",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 483,
+        "y": 280,
+        "text": "EMA weights",
+        "size": 16,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 36,
+        "y": 454,
+        "text": "B  FROZEN ENCODER + TRAINED COORDINATE READOUT",
+        "size": 17,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 151.0,
+        "y": 512,
+        "text": "Observed tracks",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 151.0,
+        "y": 543,
+        "text": "Deployment input",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 460.0,
+        "y": 512,
+        "text": "Frozen encoder",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 460.0,
+        "y": 543,
+        "text": "Time and joint tokens",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 765.0,
+        "y": 512,
+        "text": "Temporal readout",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 765.0,
+        "y": 543,
+        "text": "Trained on synthetic pairs",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1057.0,
+        "y": 512,
+        "text": "Restored tracks",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1057.0,
+        "y": 543,
+        "text": "2D coordinates",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ]
+  },
+  {
+    "file": "04-fair-comparison.svg",
+    "height": 505,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Separate the value of clean targets from the value of JEPA",
+        "size": 28,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 36,
+        "y": 76,
+        "text": "Compare restored coordinates, not losses measured in different learned feature spaces.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 171.0,
+        "y": 159,
+        "text": "Matched training data",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 171.0,
+        "y": 190,
+        "text": "Same training people",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 171.0,
+        "y": 217,
+        "text": "Same observed clips",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 171.0,
+        "y": 244,
+        "text": "Clean labels: training only",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 570.0,
+        "y": 144,
+        "text": "Coordinate pretraining",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 570.0,
+        "y": 175,
+        "text": "Freeze; fit matched readout design",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 570.0,
+        "y": 264,
+        "text": "Paired JEPA",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 570.0,
+        "y": 295,
+        "text": "Freeze; fit matched readout design",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 570.0,
+        "y": 384,
+        "text": "Practical denoisers",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 570.0,
+        "y": 415,
+        "text": "Direct model + SmoothNet-style MLP",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1024.5,
+        "y": 232,
+        "text": "Common evaluation",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1024.5,
+        "y": 263,
+        "text": "Coordinate accuracy",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1024.5,
+        "y": 290,
+        "text": "Motion preservation",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1024.5,
+        "y": 317,
+        "text": "Clean-input retention",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1024.5,
+        "y": 409,
+        "text": "Scoring references",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1024.5,
+        "y": 440,
+        "text": "Evaluation only",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 36,
+        "y": 484,
+        "text": "Objective test: match data and steps. Practical test: match total compute, including readout training.",
+        "size": 19,
+        "anchor": "start",
+        "weight": "normal"
+      }
+    ]
+  },
+  {
+    "file": "05-evidence-workflow.svg",
+    "height": 590,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Advance on evidence; retain useful negative results",
+        "size": 28,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 36,
+        "y": 76,
+        "text": "Planned stages: a successful software run does not establish a scientific benefit.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 151.0,
+        "y": 164,
+        "text": "Validate pairs",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 151.0,
+        "y": 195,
+        "text": "Anatomy, time, splits",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 151.0,
+        "y": 222,
+        "text": "Input / target isolation",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 460.0,
+        "y": 164,
+        "text": "Compare methods",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 460.0,
+        "y": 195,
+        "text": "Strong direct baselines",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 460.0,
+        "y": 222,
+        "text": "Matched JEPA test",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 775.0,
+        "y": 164,
+        "text": "Repeat finalists",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 775.0,
+        "y": 195,
+        "text": "Three training seeds",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 775.0,
+        "y": 222,
+        "text": "Held people / extractor",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1064.5,
+        "y": 164,
+        "text": "Real-data check",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1064.5,
+        "y": 195,
+        "text": "Development labels",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1064.5,
+        "y": 222,
+        "text": "Check preservation",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 216.0,
+        "y": 366,
+        "text": "JEPA does not add value?",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 216.0,
+        "y": 397,
+        "text": "Stop JEPA-specific expansion.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 216.0,
+        "y": 424,
+        "text": "A qualifying direct denoiser",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 216.0,
+        "y": 451,
+        "text": "can still advance.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 620.0,
+        "y": 400,
+        "text": "Freeze the protocol",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 620.0,
+        "y": 431,
+        "text": "Method, metrics and margins",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 1007.0,
+        "y": 400,
+        "text": "Independent confirmation",
+        "size": 22,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 1007.0,
+        "y": 431,
+        "text": "Previously unexamined recordings",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 822,
+        "y": 540,
+        "text": "Evidence missing? Pause that claim and report what remains unresolved.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ]
+  }
+]
