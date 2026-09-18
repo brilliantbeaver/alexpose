@@ -58,6 +58,8 @@ elif name == "flock":
         fcntl.flock(int(args[-1]), fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         raise SystemExit(1)
+elif name == "nvcc":
+    print(os.environ.get("ST_MOCK_NVCC", "Cuda compilation tools, release 12.4, V12.4.131"))
 elif name == "uv":
     record("uv", args)
     if args == ["--version"]:
@@ -130,7 +132,7 @@ class EnvironmentSetupTests(unittest.TestCase):
         self.fake = "#!" + sys.executable + " -I\n" + FAKE_BODY
         self.template = self.folder / "fake-template"
         self.template.write_text(self.fake)
-        for name in ("uv", "uname", "realpath", "flock", "git", "curl"):
+        for name in ("uv", "uname", "realpath", "flock", "git", "curl", "nvcc"):
             path = self.bin / name
             path.write_text(self.fake)
             path.chmod(0o755)
@@ -142,8 +144,11 @@ class EnvironmentSetupTests(unittest.TestCase):
         self.environment.update(
             PATH=str(self.bin) + os.pathsep + os.environ["PATH"],
             ST_PYTHON=str(self.python), GAVD6_ROOT=str(self.checkout),
+            CUDA_HOME=str(self.folder), SLURM_JOB_ID="fixture-allocation",
             ST_MOCK_LOG=str(self.log), ST_MOCK_TEMPLATE=str(self.template),
         )
+        # Match CUDA_HOME/bin/nvcc without conflating it with the executable PATH.
+        (self.folder / "bin").symlink_to(self.bin, target_is_directory=True)
 
     def calls(self, kind=None):
         rows = [json.loads(line) for line in self.log.read_text().splitlines()] if self.log.exists() else []
@@ -191,6 +196,24 @@ class EnvironmentSetupTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.sync_calls()[0]["argv"][-2:], ["--python", str(self.python)])
         self.assertEqual(self.calls("python")[0]["argv"][0], "-c")
+
+    def test_build_requires_compute_allocation_and_matching_toolkit(self):
+        for overrides, message in (
+            ({"SLURM_JOB_ID": ""}, "compute node"),
+            ({"CUDA_HOME": "/missing-toolkit"}, "compiler unavailable"),
+            ({"ST_MOCK_NVCC": "Cuda compilation tools, release 12.1, V12.1.0"}, "toolkit 12.4"),
+        ):
+            with self.subTest(overrides=overrides):
+                result = self.run_setup(overrides=overrides)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
+                self.assertFalse(self.sync_calls())
+                self.assertFalse(self.env_root.exists())
+
+    def test_check_does_not_require_toolkit_or_compute_allocation(self):
+        self.make_existing_environment()
+        result = self.run_setup("--check", overrides={"CUDA_HOME": "", "SLURM_JOB_ID": ""})
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_check_is_offline_and_does_not_change_environment_files(self):
         self.make_existing_environment()

@@ -191,6 +191,7 @@ def _write_rendered_clip(folder, result, clip_id, metadata):
     (item / "scene.json").write_text(json.dumps({
         "recipe": result["recipe"], "azimuth_deg": result["azimuth_deg"],
         "camera_pose": result["camera_pose"].tolist(),
+        "camera_framing": result["camera_framing"],
         "visibility_reference": result["visibility_reference"],
     }, indent=2) + "\n")
     return rows

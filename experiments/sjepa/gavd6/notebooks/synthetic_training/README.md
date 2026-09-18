@@ -24,6 +24,8 @@ Run each notebook in a fresh kernel from top to bottom. Its setup cell discovers
 
 First establish that the available rendering assets and trainable models work. Inspect the rendered RGB task and landmark convention before collecting source trials. A colorized mesh, random encoder, model-generated reference pose, or repeated checkpoint with a different name cannot stand in for the required experiment.
 
+The renderer uses one fixed camera per clip and fits the full body trajectory inside the image. When motion needs more room, camera distances increase by the same factor across resolution settings for that motion and viewpoint. This preserves their distance ratios, but a person can appear smaller than the requested height fraction. Each clip's `scene.json` records the framing adjustment and the range of projected person heights; inspect these alongside the images when assessing the resolution conditions.
+
 Then ask whether lesson gains vary and whether a selector exploits that variation on excluded source students. Extra training may help all students equally; that is not personalized teaching. A source utility table also does not guarantee sim-to-real transfer.
 
 The final claim requires three distinct comparisons:

@@ -7,8 +7,9 @@ usage() {
 Usage: bash slurm/synthetic-training/setup-environment.sh [--check] [--require-cuda]
 
 Set ST_PYTHON to an absolute .../bin/python path in a dedicated environment.
-Default: create/reuse Python 3.11, sync the study lockfile, then verify imports
-and small CPU operations. Model weights and data are downloaded separately.
+Default: on a Slurm compute node with CUDA_HOME pointing at toolkit 12.4,
+create/reuse Python 3.11, build MMCV for H100, sync the study lockfile, and
+verify imports and small CPU operations. See README Step 4 for the batch job.
 --check         Check the installed lock and runtime without syncing packages.
 --require-cuda  Also require working CUDA operations (use in a GPU allocation).
 EOF
@@ -31,7 +32,7 @@ repo_root="$(cd "$project_dir/../.." && pwd -P)"
   fail "GAVD6_ROOT does not match this checkout: $repo_root"
 [[ "$(uname -s)" == Linux && "$(uname -m)" == x86_64 ]] ||
   fail "This lock targets Linux x86_64 (HAIC), not this host. No environment was changed."
-[[ -n "${ST_PYTHON:-}" ]] || fail "Export ST_PYTHON, for example /hai/scratch/\$USER/envs/synthetic-training/bin/python."
+[[ -n "${ST_PYTHON:-}" ]] || fail "Export ST_PYTHON, for example /hai/scratch/\$USER/envs/synthetic-training-cu124/bin/python."
 case "$ST_PYTHON" in
   /*/bin/python|/*/bin/python3|/*/bin/python3.11) ;;
   *) fail "ST_PYTHON must be an absolute path ending in /bin/python (or python3/python3.11), not an environment directory." ;;
@@ -79,7 +80,19 @@ if sys.prefix == sys.base_prefix or pathlib.Path(sys.prefix).resolve() != pathli
     raise SystemExit("ST_PYTHON does not belong to the declared virtual environment.")
 ' "$env_root"
 elif [[ "$check_only" == 1 ]]; then
-  fail "Environment does not exist: $env_root. Run this command without --check first."
+  fail "Environment does not exist: $env_root. Submit setup-environment.sbatch as described in README Step 4."
+fi
+
+if [[ "$check_only" == 0 ]]; then
+  [[ -n "${SLURM_JOB_ID:-}" ]] ||
+    fail "MMCV must be built on a compute node. Submit setup-environment.sbatch as described in README Step 4."
+  [[ -n "${CUDA_HOME:-}" && -x "$CUDA_HOME/bin/nvcc" ]] ||
+    fail "CUDA 12.4 compiler unavailable. Use setup-environment.sbatch; it prepares the toolkit before setup."
+  "$CUDA_HOME/bin/nvcc" --version | grep -Eq 'release 12\.4,' ||
+    fail "CUDA_HOME must contain toolkit 12.4 to match torch==2.6.0+cu124."
+  command -v c++ >/dev/null || fail "A C++ compiler is required to build MMCV."
+  export MAX_JOBS="${ST_BUILD_JOBS:-4}"
+  [[ "$MAX_JOBS" =~ ^[1-9][0-9]*$ ]] || fail "ST_BUILD_JOBS must be a positive integer."
 fi
 
 mkdir -p "$(dirname "$env_root")"

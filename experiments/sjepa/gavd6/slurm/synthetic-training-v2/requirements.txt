@@ -1,0 +1,7 @@
+# Constraints only; preserve the established synthetic-training-cu124 environment.
+# Do not use this as permission to replace its MMCV build or synchronize the root.
+torch==2.6.0+cu124
+torchvision==0.21.0+cu124
+mmcv==2.1.0
+# Existing study manifest additionally owns mmengine/mmpose/body-model/rendering deps.
+# See ../synthetic-training/pyproject.toml and its pinned compatible build.

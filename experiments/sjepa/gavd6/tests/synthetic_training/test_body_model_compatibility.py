@@ -1,6 +1,6 @@
 """Opt-in test of the real pinned body backend with invented mesh coefficients.
 
-Run with ST_TEST_BODY_MODEL=1 in the Python 3.11 / Torch 2.1 study environment.
+Run with ST_TEST_BODY_MODEL=1 in the Python 3.11 / Torch 2.6 study environment.
 No licensed body assets, pretrained models, renderer, CUDA or HAIC are needed.
 The tiny mesh validates arithmetic and API compatibility, not human anatomy.
 """
@@ -22,10 +22,10 @@ class BodyModelCompatibilityTests(unittest.TestCase):
     def setUpClass(cls):
         import torch
         from human_body_prior.body_model.body_model import BodyModel
-        if (torch.__version__.split("+")[0] != "2.1.0"
+        if (torch.__version__.split("+")[0] != "2.6.0"
                 or np.__version__ != "1.26.4"
                 or importlib.metadata.version("human-body-prior") != "2.2.2.0"):
-            raise RuntimeError("This integration check requires Torch 2.1.0, NumPy 1.26.4 and human-body-prior 2.2.2.0")
+            raise RuntimeError("This integration check requires Torch 2.6.0, NumPy 1.26.4 and human-body-prior 2.2.2.0")
         cls.torch, cls.backend = torch, BodyModel
 
     def setUp(self):

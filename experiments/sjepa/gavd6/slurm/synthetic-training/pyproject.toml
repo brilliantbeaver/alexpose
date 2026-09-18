@@ -4,8 +4,8 @@ version = "0.1.0"
 description = "Dedicated Linux HAIC environment for the synthetic-training study"
 requires-python = ">=3.11,<3.12"
 dependencies = [
-  "torch==2.1.0+cu121",
-  "torchvision==0.16.0+cu121",
+  "torch==2.6.0+cu124",
+  "torchvision==0.21.0+cu124",
   "numpy==1.26.4",
   "scipy==1.14.1",
   "mmcv==2.1.0",
@@ -47,22 +47,32 @@ required-environments = ["sys_platform == 'linux' and platform_machine == 'x86_6
 build-constraint-dependencies = ["setuptools==80.9.0", "wheel==0.48.0"]
 
 [tool.uv.sources]
-torch = { index = "pytorch-cu121" }
-torchvision = { index = "pytorch-cu121" }
-# Pin the binary for CPython 3.11 / Linux x86_64; never compile a different MMCV.
-mmcv = { url = "https://download.openmmlab.com/mmcv/dist/cu121/torch2.1.0/mmcv-2.1.0-cp311-cp311-manylinux1_x86_64.whl" }
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }
+# MMDetection 3.3 requires MMCV <2.2. Build 2.1.0 against this Torch for H100.
+mmcv = { git = "https://github.com/open-mmlab/mmcv.git", rev = "57c4e25e06e2d4f8a9357c84bcd24089a284dc88" }
 mmpose = { git = "https://github.com/open-mmlab/mmpose.git", rev = "5408bc76f5b848cf925a0d1857899011d8c5b497" }
 chumpy = { git = "https://github.com/mattloper/chumpy.git", rev = "580566eafc9ac68b2614b64d6f7aaa84eebb70da" }
 human-body-prior = { git = "https://github.com/nghorbani/human_body_prior.git", rev = "4c246d8a83ce16d3cff9c79dcf04d81fa440a6bc" }
 
 [tool.uv.extra-build-dependencies]
+mmcv = ["torch==2.6.0+cu124", "numpy==1.26.4", "setuptools==80.9.0", "wheel==0.48.0", "ninja==1.13.0"]
 chumpy = ["pip==26.2.1", "setuptools==80.9.0", "wheel==0.48.0"]
 mmpose = ["setuptools==80.9.0"]
 human-body-prior = ["setuptools==80.9.0"]
 
+[tool.uv.extra-build-variables]
+mmcv = { MMCV_WITH_OPS = "1", FORCE_CUDA = "1", TORCH_CUDA_ARCH_LIST = "9.0+PTX" }
+
+# Exact Linux build metadata avoids running CUDA setup during lock resolution.
+[[tool.uv.dependency-metadata]]
+name = "mmcv"
+version = "2.1.0"
+requires-dist = ["addict", "mmengine>=0.3.0", "numpy", "packaging", "Pillow", "pyyaml", "yapf", "opencv-python>=3", "regex; sys_platform == 'win32'"]
+
 [[tool.uv.index]]
-name = "pytorch-cu121"
-url = "https://download.pytorch.org/whl/cu121"
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
 explicit = true
 
 [[tool.uv.index]]

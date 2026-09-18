@@ -248,14 +248,56 @@ class MMPoseEstimator:
         self.load_head_state(torch.load(Path(path), map_location="cpu", weights_only=True))
 
 
+def _load_pose_checkpoint(model, path: str | Path) -> dict:
+    """Strictly load released pose weights and their known numeric metadata.
+
+    Torch 2.6 defaults to restricted checkpoint loading. The five released
+    checkpoints also contain NumPy COCO metadata; HRNet includes MMEngine
+    metric histories. Allow only those types for this call, preserving the
+    restriction for unrelated objects and all other checkpoint loads.
+    """
+    from mmengine.logging import HistoryBuffer
+    from mmengine.runner import load_checkpoint
+    from numpy.core.multiarray import _reconstruct, scalar
+
+    metadata_types = [
+        np.ndarray, np.dtype, _reconstruct, scalar, HistoryBuffer,
+        np.dtypes.UInt8DType, np.dtypes.Int64DType,
+        np.dtypes.Float32DType, np.dtypes.Float64DType,
+        # Released checkpoints use NumPy 1.x module names. Explicit names
+        # also let CPU development checks run with NumPy 2.x.
+        (_reconstruct, "numpy.core.multiarray._reconstruct"),
+        (scalar, "numpy.core.multiarray.scalar"),
+    ]
+    token_hook = None
+    backbone = getattr(model, "backbone", None)
+    if (getattr(backbone, "with_cls_token", None) is False
+            and getattr(backbone, "cls_token", None) is None):
+        from mmpretrain.models.backbones import VisionTransformer
+        if isinstance(backbone, VisionTransformer):
+            # The released ViTPose checkpoint retained an unused mmcls class
+            # token. MMPreTrain omits that parameter when with_cls_token=False.
+            # Filter only this key in the loader's copy, preserving strict
+            # checks on every used weight and leaving the checkpoint unchanged.
+            def drop_unused_token(module, state_dict, prefix, *args):
+                state_dict.pop(prefix + "cls_token", None)
+            token_hook = backbone.register_load_state_dict_pre_hook(drop_unused_token)
+    try:
+        with torch.serialization.safe_globals(metadata_types):
+            return load_checkpoint(model, str(Path(path).expanduser()),
+                                   map_location="cpu", strict=True)
+    finally:
+        if token_hook is not None:
+            token_hook.remove()
+
+
 def load_estimator(spec: StudentSpec, device: str = "cuda") -> MMPoseEstimator:
-    """Load a real local COCO checkpoint, failing if any weights are unmatched."""
+    """Strictly load all model weights from a real local COCO checkpoint."""
     for name, path in (("config", spec.config), ("checkpoint", spec.checkpoint)):
         if not Path(path).expanduser().is_file():
             raise FileNotFoundError(f"Student {spec.student_id} {name} does not exist: {path}")
     try:
         from mmengine.dataset import Compose, pseudo_collate
-        from mmengine.runner import load_checkpoint
         from mmpose.apis import init_model
     except ImportError as error:
         raise ImportError(
@@ -265,8 +307,7 @@ def load_estimator(spec: StudentSpec, device: str = "cuda") -> MMPoseEstimator:
     # Building without a checkpoint suppresses any separate backbone download.
     # Strict loading then prevents accidental experiments with missing head keys.
     model = init_model(str(Path(spec.config).expanduser()), checkpoint=None, device=device)
-    payload = load_checkpoint(model, str(Path(spec.checkpoint).expanduser()),
-                              map_location="cpu", strict=True)
+    payload = _load_pose_checkpoint(model, spec.checkpoint)
     if "dataset_meta" in payload.get("meta", {}):
         model.dataset_meta = payload["meta"]["dataset_meta"]
     names = model.dataset_meta.get("keypoint_id2name", {})

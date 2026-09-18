@@ -54,10 +54,10 @@ class EnvironmentCheckTests(unittest.TestCase):
         return stack
 
     def test_contract_records_hashes_and_exact_cuda_and_git_pins(self):
-        self.assertEqual(self.contract["versions"]["torch"], "2.1.0+cu121")
-        self.assertEqual(self.contract["versions"]["torchvision"], "0.16.0+cu121")
+        self.assertEqual(self.contract["versions"]["torch"], "2.6.0+cu124")
+        self.assertEqual(self.contract["versions"]["torchvision"], "0.21.0+cu124")
         self.assertEqual(self.contract["versions"]["chumpy"], "0.71")
-        self.assertEqual(set(self.contract["git_sources"]), {"mmpose", "chumpy", "human-body-prior"})
+        self.assertEqual(set(self.contract["git_sources"]), {"mmcv", "mmpose", "chumpy", "human-body-prior"})
         for key in ("manifest_sha256", "lock_sha256"):
             self.assertRegex(self.contract[key], r"^[0-9a-f]{64}$")
 
@@ -71,12 +71,12 @@ class EnvironmentCheckTests(unittest.TestCase):
         self.assertTrue(any(c["name"] == "platform" and c["status"] == "failed" for c in result["checks"]))
 
     def test_cpu_torch_build_cannot_pass_cuda_wheel_contract(self):
-        versions = dict(self.contract["versions"], torch="2.1.0")
+        versions = dict(self.contract["versions"], torch="2.6.0")
         with self.good_checks(), patch.object(checker.metadata, "version", side_effect=versions.__getitem__):
             result = checker.run_checks()
         failure = next(c for c in result["checks"] if c["name"] == "version:torch")
         self.assertEqual(failure["status"], "failed")
-        self.assertIn("required 2.1.0+cu121", failure["detail"])
+        self.assertIn("required 2.6.0+cu124", failure["detail"])
 
     def test_login_node_without_gpu_can_pass_but_gpu_is_not_certified(self):
         with self.good_checks():

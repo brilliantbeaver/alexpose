@@ -101,6 +101,51 @@ def project_points(points, pose, width, height, yfov):
     return xy.astype(np.float32), depth.astype(np.float32)
 
 
+def fitted_camera_pose(vertices, joints, azimuth_deg, person_height_fraction,
+                       width, height, yfov, znear=0.05):
+    """Fit the whole moving mesh inside one fixed camera, with a two-pixel margin.
+
+    The height-only distance is the starting point. If the trajectory needs
+    more room, expand distances by a common factor computed at the study's
+    high-resolution setting (0.65). Applying that factor to lower-resolution
+    settings preserves their distance ratios instead of collapsing both onto
+    the same minimum fitting distance. Large motions can consequently appear
+    smaller than the requested person-height fraction; record actual sizes.
+    Geometry, camera orientation and the body's translation remain unchanged.
+    """
+    fraction = float(person_height_fraction)
+    if not np.isfinite(fraction) or not 0 < fraction <= 1:
+        raise ValueError("person_height_fraction must be finite and in (0, 1]")
+    pose = camera_pose(joints, azimuth_deg, 0.0)
+    points = (np.asarray(vertices) - pose[:3, 3]) @ pose[:3, :3]
+    focal = height / (2 * np.tan(yfov / 2))
+    margin = 2.0
+    half_width, half_height = (width - 1) / 2 - margin, (height - 1) / 2 - margin
+    if min(half_width, half_height) <= 0:
+        raise ValueError("Camera viewport must leave room for the framing margin")
+    # At distance d, depth = d - points[..., 2]. Solve each vertex's
+    # horizontal, vertical and near-plane inequalities directly; no search or
+    # per-frame camera tracking is needed. A small slack covers roundoff.
+    required_distance = max(
+        float(np.max(points[..., 2] + focal * np.abs(points[..., 0]) / half_width)),
+        float(np.max(points[..., 2] + focal * np.abs(points[..., 1]) / half_height)),
+        float(np.max(points[..., 2]) + znear + 0.01),
+    ) + 1e-5
+    body_height = float(np.ptp(np.asarray(vertices)[..., 1]))
+    reference_fraction = max(0.65, fraction)
+    reference_distance = max(2.0, body_height * focal / (height * reference_fraction))
+    nominal_distance = max(2.0, body_height * focal / (height * fraction))
+    scale = max(1.0, required_distance / reference_distance)
+    distance = nominal_distance * scale
+    pose[:3, 3] += distance * pose[:3, 2]
+    return pose, dict(
+        policy="fixed_camera_full_clip_v1", margin_px=margin,
+        requested_person_height_fraction=fraction,
+        nominal_distance_m=nominal_distance, distance_m=distance,
+        distance_scale=scale, yfov_deg=float(np.rad2deg(yfov)), near_m=float(znear),
+    )
+
+
 def load_uv_topology(path, faces):
     """Read a seam-preserving UV asset and reject a different mesh topology.
 
@@ -182,7 +227,7 @@ class TexturedBodyRenderer:
 
         Low resolution is produced by increasing camera distance in the source
         image. Person crops are resized only later by the common estimator path.
-        No perfect high-resolution crop is downsampled as a hidden substitute.
+        The fixed camera fits the entire motion before any frame is rendered.
         """
         import pyrender
         import trimesh
@@ -200,9 +245,10 @@ class TexturedBodyRenderer:
         uv, face_uv = load_uv_topology(self.uv_path, body.faces)
         azimuth = float(recipe.azimuth_deg if recipe.azimuth_deg is not None else rng.choice([0, 45, 90, 135, 180]))
         yfov = np.deg2rad(50.0)
-        body_height = float(np.ptp(body.vertices[..., 1]))
-        distance = max(2.0, body_height / (2 * np.tan(yfov / 2) * recipe.person_height_fraction))
-        pose = camera_pose(body.joints, azimuth, distance)
+        pose, framing = fitted_camera_pose(
+            body.vertices, body.joints, azimuth, recipe.person_height_fraction,
+            self.width, self.height, yfov,
+        )
         camera = pyrender.PerspectiveCamera(yfov=yfov, aspectRatio=self.width / self.height, znear=0.05)
         scene = pyrender.Scene(bg_color=[0, 0, 0, 0], ambient_light=[0.35, 0.35, 0.35])
         scene.add(camera, pose=pose)
@@ -214,7 +260,10 @@ class TexturedBodyRenderer:
         triangles = np.arange(body.faces.size).reshape(-1, 3)
         expanded_uv = uv[face_uv.reshape(-1)]
         joints, joint_depth = project_points(body.joints[:, SMPL_INDICES], pose, self.width, self.height, yfov)
-        projected_vertices, _ = project_points(body.vertices, pose, self.width, self.height, yfov)
+        projected_vertices, vertex_depth = project_points(body.vertices, pose, self.width, self.height, yfov)
+        projected_heights = np.ptp(projected_vertices[..., 1], axis=1) / self.height
+        framing.update(projected_person_height_fraction_min=float(projected_heights.min()),
+                       projected_person_height_fraction_max=float(projected_heights.max()))
         blocker = np.zeros((self.height, self.width), dtype=bool)
         if recipe.occlusion_fraction:
             center_x = int(self.width / 2)
@@ -235,7 +284,24 @@ class TexturedBodyRenderer:
             scene.remove_node(node)
             foreground = depth > 0
             if not foreground.any():
-                raise ValueError("Camera produced no body pixels; inspect the rendering assets")
+                # Empty depth alone cannot distinguish off-camera geometry from
+                # a renderer failure. Report the exact input and projection so
+                # the failing case can be reproduced without changing the data.
+                xy, z = projected_vertices[frame], vertex_depth[frame]
+                raise ValueError(
+                    "Camera produced no body pixels; "
+                    f"motion={body.metadata.get('relative_path', '<unknown>')!r}, "
+                    f"recipe={recipe.name}, frame_index={frame}/{len(body.vertices)} (zero-based), "
+                    f"source_time_s={float(body.timestamps[frame]):.6f}, seed={seed}, "
+                    f"azimuth_deg={azimuth:g}, distance_m={framing['distance_m']:.6f}, "
+                    f"framing_scale={framing['distance_scale']:.6f}, "
+                    f"viewport={self.width}x{self.height}, near_m={camera.znear:g}, "
+                    f"projected_x_px=[{xy[:, 0].min():.3f}, {xy[:, 0].max():.3f}], "
+                    f"projected_y_px=[{xy[:, 1].min():.3f}, {xy[:, 1].max():.3f}], "
+                    f"depth_m=[{z.min():.6f}, {z.max():.6f}]. "
+                    "Projection bounds use the unoccluded mesh; "
+                    "nonpositive depth places geometry behind the camera."
+                )
             pixels = background.copy()
             pixels[foreground] = rgba[..., :3][foreground]
             ys, xs = np.where(foreground)
@@ -260,7 +326,7 @@ class TexturedBodyRenderer:
         return dict(
             images=np.stack(rgbs), keypoints=joints, visible=np.stack(visible), boxes=np.stack(boxes),
             texture_path=str(texture_path), background_path=str(background_path),
-            camera_pose=pose, azimuth_deg=azimuth, recipe=recipe.name,
+            camera_pose=pose, camera_framing=framing, azimuth_deg=azimuth, recipe=recipe.name,
             landmark_convention="projected_smplh_joint_centers_approximate_coco_body12",
             visibility_reference="synthetic_depth_proxy_0.16m_not_real_annotation",
         )
