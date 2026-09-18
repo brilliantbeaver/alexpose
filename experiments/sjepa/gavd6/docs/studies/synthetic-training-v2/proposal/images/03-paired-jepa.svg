@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="590" viewBox="0 0 1200 590" role="img" aria-labelledby="title desc">
+<title id="title">Paired JEPA: learn features, then restore coordinates</title><desc id="desc">The clean teacher is available during training only; the deployed model receives observed tracks.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#53677b"/></marker></defs>
+<rect width="1200" height="590" fill="white"/>
+<text x="36" y="43" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="start" fill="#172b40">Paired JEPA: learn features, then restore coordinates</text>
+<text x="36" y="76" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="start" fill="#53677b">The clean teacher is available during training only; the deployed model receives observed tracks.</text>
+<text x="36" y="119" font-family="Arial, sans-serif" font-size="17" font-weight="bold" text-anchor="start" fill="#2862ba">A  REPRESENTATION TRAINING</text>
+<rect x="36" y="145" width="230" height="96" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="151.0" y="179" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Imperfect tracks</text>
+<text x="151.0" y="210" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Coordinates + support</text>
+<rect x="340" y="145" width="240" height="96" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="460.0" y="179" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Online encoder</text>
+<text x="460.0" y="210" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Learned temporal tokens</text>
+<rect x="650" y="145" width="230" height="96" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="765.0" y="179" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Predictor</text>
+<text x="765.0" y="210" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Masked target features</text>
+<rect x="950" y="222" width="214" height="105" rx="14" fill="#fff4e7" stroke="#d5dfe7"/>
+<text x="1057.0" y="256" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Feature loss</text>
+<text x="1057.0" y="287" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Compare valid targets</text>
+<text x="1057.0" y="314" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Update online branch</text>
+<polyline points="266,193 340,193" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="580,193 650,193" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="880,193 915,193 915,250 950,250" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="310" width="230" height="96" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="151.0" y="344" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Clean projections</text>
+<text x="151.0" y="375" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Same view and times</text>
+<rect x="340" y="310" width="240" height="96" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="460.0" y="344" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">EMA teacher</text>
+<text x="460.0" y="375" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">No target gradients</text>
+<rect x="650" y="310" width="230" height="96" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="765.0" y="344" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Target features</text>
+<text x="765.0" y="375" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Clean motion encoding</text>
+<polyline points="266,358 340,358" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="580,358 650,358" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="880,358 915,358 915,300 950,300" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="460,241 460,310" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="483" y="280" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="start" fill="#53677b">EMA weights</text>
+<text x="36" y="454" font-family="Arial, sans-serif" font-size="17" font-weight="bold" text-anchor="start" fill="#2862ba">B  FROZEN ENCODER + TRAINED COORDINATE READOUT</text>
+<rect x="36" y="478" width="230" height="90" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="151.0" y="512" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Observed tracks</text>
+<text x="151.0" y="543" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Deployment input</text>
+<rect x="340" y="478" width="240" height="90" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="460.0" y="512" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Frozen encoder</text>
+<text x="460.0" y="543" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Time and joint tokens</text>
+<rect x="650" y="478" width="230" height="90" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="765.0" y="512" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Temporal readout</text>
+<text x="765.0" y="543" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Trained on synthetic pairs</text>
+<rect x="950" y="478" width="214" height="90" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="1057.0" y="512" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Restored tracks</text>
+<text x="1057.0" y="543" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">2D coordinates</text>
+<polyline points="266,523 340,523" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="580,523 650,523" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="880,523 950,523" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+</svg>
