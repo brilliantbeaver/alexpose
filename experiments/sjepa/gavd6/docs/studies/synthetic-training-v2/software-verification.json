@@ -1,0 +1,65 @@
+{
+  "environment_versions": {
+    "ipykernel": "7.3.0",
+    "matplotlib": "3.11.1",
+    "nbclient": "0.11.0",
+    "nbformat": "5.11.0",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scipy": "1.18.0",
+    "torch": "2.6.0"
+  },
+  "evidence_status": "fixture-tested",
+  "final_checks": {
+    "canonical_notebooks": 9,
+    "current_code_matches_run_identity": true,
+    "git_diff_check": "pass",
+    "local_links": 60,
+    "shell_syntax": "pass",
+    "stage_receipts": 10
+  },
+  "fixture_computed_from_scratch": true,
+  "fresh_kernels": true,
+  "gate_decisions": {
+    "A": {
+      "reason": "Augmented-COCO versus synthetic image adaptation is a separate pending branch",
+      "status": "insufficient_evidence"
+    },
+    "B": {
+      "evidence_status": "fixture-tested",
+      "reason": "Fixtures cannot authorize a scientific advance",
+      "status": "insufficient_evidence"
+    },
+    "personalization": {
+      "reason": "Closed on historical development panel;0.0406% retrospective incremental oracle headroom; fresh panel needed to reopen",
+      "status": "fail"
+    },
+    "real_transfer": {
+      "reason": "Independent real temporal annotations and held recording evidence absent",
+      "status": "insufficient_evidence"
+    },
+    "video": {
+      "reason": "Optional incremental-benefit branch not run",
+      "status": "insufficient_evidence"
+    }
+  },
+  "gpu_jobs_submitted": 0,
+  "haic_runtime_verified": false,
+  "historical_contract_tests": 37,
+  "new_contract_tests": 54,
+  "notebooks_completed": 9,
+  "preservation": {
+    "files_checked": 72,
+    "status": "pass"
+  },
+  "report_sha256": "f73daaa1d1460a06967d6dfb6899ba77930171393cdb382a6254610761bbc495",
+  "run_id": "fixture-notebooks-20260918-final",
+  "run_identity": "8e74d8dae1f51f3be72ceadb37bb613064580839ae6bd50e47442c995b8cc947",
+  "slurm_dry_run": {
+    "gpu_jobs": 2,
+    "max_parallel": 1,
+    "reserved_hours": 2,
+    "submitted": false
+  },
+  "torch": "2.6.0"
+}

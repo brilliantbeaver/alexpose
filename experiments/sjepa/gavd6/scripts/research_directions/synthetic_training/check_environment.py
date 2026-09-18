@@ -94,13 +94,13 @@ def _nms_check(torch, tv_nms, mmcv_nms, device: str) -> None:
 
 def _check_torch_cpu() -> str:
     torch = importlib.import_module("torch")
-    if torch.version.cuda != "12.1":
-        raise ValueError(f"Torch was compiled for CUDA {torch.version.cuda}; expected 12.1")
+    if torch.version.cuda != "12.4":
+        raise ValueError(f"Torch was compiled for CUDA {torch.version.cuda}; expected 12.4")
     x = torch.tensor([[1., 2.], [3., 4.]])
     torch.testing.assert_close(x @ x, torch.tensor([[7., 10.], [15., 22.]]), rtol=0, atol=0)
     _nms_check(torch, importlib.import_module("torchvision.ops").nms,
                importlib.import_module("mmcv.ops").nms, "cpu")
-    return "CPU matrix arithmetic and Torchvision/MMCV NMS passed; Torch compiled for CUDA 12.1"
+    return "CPU matrix arithmetic and Torchvision/MMCV NMS passed; Torch compiled for CUDA 12.4"
 
 
 def _check_pose_imports() -> str:

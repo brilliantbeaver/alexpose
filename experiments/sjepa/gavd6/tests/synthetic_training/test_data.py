@@ -16,7 +16,7 @@ from gavd6_sjepa.research_directions.synthetic_training.data import (
     BOX_COLUMNS, PoseFrameDataset, assign_amass_roles, context_clip_indices,
 )
 from gavd6_sjepa.research_directions.synthetic_training.rendering import (
-    KEYPOINT_NAMES, camera_pose, load_uv_topology, project_points,
+    KEYPOINT_NAMES, camera_pose, fitted_camera_pose, load_uv_topology, project_points,
 )
 
 
@@ -81,6 +81,68 @@ class TeachingDataTests(unittest.TestCase):
             self.assertEqual(uv.shape, (3, 2))
             with self.assertRaisesRegex(ValueError, "exactly match"):
                 load_uv_topology(path, faces[:, ::-1])
+
+
+class CameraFramingTests(unittest.TestCase):
+    def setUp(self):
+        self.vertices = np.array([[x, y, z] for x in (-.3, .3) for y in (-.9, .9)
+                                  for z in (-.15, .15)])[None].repeat(64, axis=0)
+        self.joints = np.zeros((64, 22, 3))
+        self.joints[:, 1, 0], self.joints[:, 2, 0] = .1, -.1
+        self.yfov = np.deg2rad(50.)
+
+    def fit(self, fraction, width=256, height=320, angle=45):
+        pose, details = fitted_camera_pose(self.vertices, self.joints, angle, fraction,
+                                           width, height, self.yfov)
+        pixels, depth = project_points(self.vertices, pose, width, height, self.yfov)
+        self.assertTrue(np.isfinite(pixels).all())
+        self.assertTrue((depth > .05).all())
+        self.assertTrue((pixels >= 1.99).all())
+        self.assertTrue((pixels <= [width - 2.99, height - 2.99]).all())
+        return pose, details, pixels
+
+    def test_stationary_clip_keeps_the_original_camera(self):
+        for fraction in (.25, .45, .65):
+            with self.subTest(fraction=fraction):
+                pose, details, _ = self.fit(fraction)
+                nominal = max(2., 1.8 / (2 * np.tan(self.yfov / 2) * fraction))
+                np.testing.assert_allclose(pose, camera_pose(self.joints, 45, nominal))
+                self.assertEqual(details['distance_scale'], 1.)
+
+    def test_large_travel_preserves_the_resolution_distance_ratios(self):
+        shift = np.zeros((64, 1, 3))
+        shift[:, 0, 0] = np.linspace(-5, 5, 64)
+        self.vertices += shift
+        self.joints += shift
+        for width, height in ((256, 320), (64, 512), (512, 64)):
+            with self.subTest(viewport=(width, height)):
+                results = [self.fit(fraction, width, height) for fraction in (.65, .45, .25)]
+                scales = [result[1]['distance_scale'] for result in results]
+                self.assertGreater(scales[0], 1.)
+                np.testing.assert_allclose(scales, scales[0])
+                distances = [result[1]['distance_m'] for result in results]
+                np.testing.assert_allclose(np.array(distances) / distances[0], [.65/.65, .65/.45, .65/.25])
+                heights = [np.ptp(result[2][..., 1], axis=1).mean() for result in results]
+                self.assertGreater(heights[0], heights[1])
+                self.assertGreater(heights[1], heights[2])
+
+    def test_motion_toward_camera_and_global_world_offset(self):
+        shift = np.zeros((64, 1, 3))
+        shift[:, 0, 2] = np.linspace(-8, 8, 64)
+        self.vertices += shift
+        self.joints += shift
+        pose, _, pixels = self.fit(.65, angle=0)
+        offset = np.array([150., -25., 30.])
+        self.vertices += offset
+        self.joints += offset
+        moved_pose, _, moved_pixels = self.fit(.65, angle=0)
+        np.testing.assert_allclose(pose[:3, 3] + offset, moved_pose[:3, 3])
+        np.testing.assert_allclose(pixels, moved_pixels, atol=2e-5)
+
+    def test_invalid_person_fraction_fails_clearly(self):
+        for fraction in (0, -1, 1.1, np.nan, np.inf):
+            with self.subTest(fraction=fraction), self.assertRaisesRegex(ValueError, 'person_height_fraction'):
+                self.fit(fraction)
 
 
 class GAVDPanelTests(unittest.TestCase):

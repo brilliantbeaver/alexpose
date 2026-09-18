@@ -1,0 +1,18 @@
+{
+  "run_id": "source-smoke-REPLACE-WITH-UNIQUE-ID",
+  "output_root": "/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2",
+  "mode": "source",
+  "bundle": "/hai/scratch/tedmui/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2/paired-REPLACE/bundle",
+  "device": "cuda",
+  "seed": 17,
+  "seeds": [17],
+  "updates": 200,
+  "readout_updates": 200,
+  "batch_size": 64,
+  "authorized_gpu_hours": 0,
+  "measured_gpu_hours": 0,
+  "projected_gpu_hours": 0,
+  "cost_ledger": "",
+  "held_extractor": "DEFINE-AFTER-EXPOSURE-AUDIT",
+  "resource_contrast": "matched_data_steps"
+}
