@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">The retained models make different class errors</title><desc id="desc">Confusion matrices have true class in rows and predicted class in columns, ordered normal, MS, PD. S-JEPA: rows 11 3 5; 0 6 5; 5 8 4. Random Forest: rows 13 1 5; 1 8 2; 5 2 10. Counts are clips, not independent people.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<text x="215" y="32" font-size="29" style="fill:#142b45" font-weight="bold" text-anchor="middle">S-JEPA</text>
+<text x="270" y="68" font-size="21" style="fill:#536779" font-weight="normal" text-anchor="middle">Predicted label →</text>
+<text x="160" y="104" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">normal</text>
+<text x="260" y="104" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">MS</text>
+<text x="360" y="104" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">PD</text>
+<text x="95" y="151" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="end">normal</text>
+<rect x="113" y="117" width="94" height="67" rx="5" fill="#e6f2f3" stroke="none" stroke-width="2"/>
+<text x="160" y="160" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">11</text>
+<rect x="213" y="117" width="94" height="67" rx="5" fill="#f1f5f8" stroke="none" stroke-width="2"/>
+<text x="260" y="160" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">3</text>
+<rect x="313" y="117" width="94" height="67" rx="5" fill="#fff1e4" stroke="none" stroke-width="2"/>
+<text x="360" y="160" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">5</text>
+<text x="95" y="224" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="end">MS</text>
+<rect x="113" y="190" width="94" height="67" rx="5" fill="#f1f5f8" stroke="none" stroke-width="2"/>
+<text x="160" y="233" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">0</text>
+<rect x="213" y="190" width="94" height="67" rx="5" fill="#e6f2f3" stroke="none" stroke-width="2"/>
+<text x="260" y="233" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">6</text>
+<rect x="313" y="190" width="94" height="67" rx="5" fill="#fff1e4" stroke="none" stroke-width="2"/>
+<text x="360" y="233" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">5</text>
+<text x="95" y="297" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="end">PD</text>
+<rect x="113" y="263" width="94" height="67" rx="5" fill="#fff1e4" stroke="none" stroke-width="2"/>
+<text x="160" y="306" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">5</text>
+<rect x="213" y="263" width="94" height="67" rx="5" fill="#fff1e4" stroke="none" stroke-width="2"/>
+<text x="260" y="306" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">8</text>
+<rect x="313" y="263" width="94" height="67" rx="5" fill="#e6f2f3" stroke="none" stroke-width="2"/>
+<text x="360" y="306" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">4</text>
+<text x="215" y="363" font-size="25" style="fill:#142b45" font-weight="bold" text-anchor="middle">PD recall: 4/17 = 0.235</text>
+<text x="770" y="32" font-size="29" style="fill:#142b45" font-weight="bold" text-anchor="middle">Random Forest</text>
+<text x="825" y="68" font-size="21" style="fill:#536779" font-weight="normal" text-anchor="middle">Predicted label →</text>
+<text x="715" y="104" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">normal</text>
+<text x="815" y="104" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">MS</text>
+<text x="915" y="104" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">PD</text>
+<text x="650" y="151" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="end">normal</text>
+<rect x="668" y="117" width="94" height="67" rx="5" fill="#e6f2f3" stroke="none" stroke-width="2"/>
+<text x="715" y="160" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">13</text>
+<rect x="768" y="117" width="94" height="67" rx="5" fill="#f1f5f8" stroke="none" stroke-width="2"/>
+<text x="815" y="160" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">1</text>
+<rect x="868" y="117" width="94" height="67" rx="5" fill="#fff1e4" stroke="none" stroke-width="2"/>
+<text x="915" y="160" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">5</text>
+<text x="650" y="224" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="end">MS</text>
+<rect x="668" y="190" width="94" height="67" rx="5" fill="#f1f5f8" stroke="none" stroke-width="2"/>
+<text x="715" y="233" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">1</text>
+<rect x="768" y="190" width="94" height="67" rx="5" fill="#e6f2f3" stroke="none" stroke-width="2"/>
+<text x="815" y="233" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">8</text>
+<rect x="868" y="190" width="94" height="67" rx="5" fill="#f1f5f8" stroke="none" stroke-width="2"/>
+<text x="915" y="233" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">2</text>
+<text x="650" y="297" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="end">PD</text>
+<rect x="668" y="263" width="94" height="67" rx="5" fill="#fff1e4" stroke="none" stroke-width="2"/>
+<text x="715" y="306" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">5</text>
+<rect x="768" y="263" width="94" height="67" rx="5" fill="#f1f5f8" stroke="none" stroke-width="2"/>
+<text x="815" y="306" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">2</text>
+<rect x="868" y="263" width="94" height="67" rx="5" fill="#e6f2f3" stroke="none" stroke-width="2"/>
+<text x="915" y="306" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">10</text>
+<text x="770" y="363" font-size="25" style="fill:#142b45" font-weight="bold" text-anchor="middle">PD recall: 10/17 = 0.588</text>
+<text x="20" y="395" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="start">Rows are true labels. S-JEPA sends 8 PD clips to MS; the Random Forest sends 5 PD clips to normal.</text>
+</svg>

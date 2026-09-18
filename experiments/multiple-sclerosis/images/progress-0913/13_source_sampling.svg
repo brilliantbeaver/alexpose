@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Equalize expected training exposure by source</title><desc id="desc">Source-uniform sampling gives a short and a long source equal total probability even when they produce different numbers of windows. This changes training weights without generating independent observations.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="25" y="35" width="420" height="190" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="45" y="73" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Long source</text>
+<text x="45" y="115" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Many clips and windows</text>
+<rect x="655" y="35" width="420" height="190" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="675" y="73" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Short source</text>
+<text x="675" y="115" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Few clips and windows</text>
+<rect x="49" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="88" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="127" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="166" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="205" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="244" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="283" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="322" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="361" y="148" width="30" height="44" rx="3" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="785" y="148" width="37" height="44" rx="3" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<rect x="833" y="148" width="37" height="44" rx="3" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<text x="460" y="126" font-size="24" style="fill:#142b45" font-weight="bold" text-anchor="start">Equal total</text>
+<text x="459" y="161" font-size="24" style="fill:#142b45" font-weight="bold" text-anchor="start">probability</text>
+<line x1="232" y1="236" x2="462" y2="299" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="862" y1="236" x2="640" y2="299" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="377" y="282" width="346" height="66" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="405" y="324" font-size="29" style="fill:#142b45" font-weight="bold" text-anchor="start">Training minibatch</text>
+<text x="25" y="389" font-size="21" style="fill:#536779" font-weight="normal" text-anchor="start">The current SSL loop does not read condition labels. Labels enter later when fitting the classifier.</text>
+</svg>

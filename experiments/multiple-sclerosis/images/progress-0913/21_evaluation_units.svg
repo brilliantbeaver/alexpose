@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Sampling and inference use different units</title><desc id="desc">One source can contribute many windows and several clips. Training samples sources uniformly in expectation, but reported scores count clips. More windows do not create new participants, and five overlapping training folds are not five independent experiments.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="25" y="40" width="285" height="230" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="45" y="78" font-size="26.688453159041394" style="fill:#142b45" font-weight="bold" text-anchor="start">Training exposure</text>
+<text x="45" y="120" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">Source-uniform sampling</text>
+<text x="45" y="152" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">Limits domination by</text>
+<text x="45" y="184" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">long source recordings</text>
+<rect x="408" y="40" width="285" height="230" rx="12" fill="#fff1e4" stroke="#cfdae3" stroke-width="2"/>
+<text x="428" y="78" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Reported scores</text>
+<text x="428" y="120" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">One prediction per clip</text>
+<text x="428" y="152" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">47 clips in total</text>
+<text x="428" y="184" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">Sources have unequal</text>
+<text x="428" y="216" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">numbers of clips</text>
+<rect x="791" y="40" width="285" height="230" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="811" y="78" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Future inference</text>
+<text x="811" y="120" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">Verify participants</text>
+<text x="811" y="152" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">Bootstrap source groups</text>
+<text x="811" y="184" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">or participant groups</text>
+<text x="811" y="216" font-size="20.484949832775918" style="fill:#142b45" font-weight="normal" text-anchor="start">Use a fresh test cohort</text>
+<text x="25" y="319" font-size="24" style="fill:#142b45" font-weight="bold" text-anchor="start">Five-fold grouping protects the source boundary.</text>
+<text x="25" y="351" font-size="24" style="fill:#142b45" font-weight="bold" text-anchor="start">A confidence interval requires an explicit uncertainty calculation.</text>
+<text x="25" y="385" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="start">Current estimates reuse an inspected development collection, so they cannot support confirmatory clinical claims.</text>
+</svg>

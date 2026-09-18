@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Predict teacher features at hidden joint-time positions</title><desc id="desc">The student encodes visible tokens from an augmented window. A predictor with target position vectors predicts hidden features. A full-window teacher supplies targets and is updated by an exponential moving average of student encoder weights, without backpropagating through teacher targets.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="15" y="32" width="210" height="120" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="35" y="70" font-size="24.216524216524213" style="fill:#142b45" font-weight="bold" text-anchor="start">Student input</text>
+<text x="35" y="112" font-size="17.20647773279352" style="fill:#142b45" font-weight="normal" text-anchor="start">Augmented window</text>
+<text x="35" y="144" font-size="17.20647773279352" style="fill:#142b45" font-weight="normal" text-anchor="start">Visible tokens only</text>
+<rect x="290" y="32" width="205" height="120" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="310" y="70" font-size="20.370370370370367" style="fill:#142b45" font-weight="bold" text-anchor="start">Student encoder</text>
+<text x="310" y="112" font-size="19.83173076923077" style="fill:#142b45" font-weight="normal" text-anchor="start">Learned features</text>
+<rect x="565" y="32" width="225" height="120" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="585" y="70" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Predictor</text>
+<text x="585" y="112" font-size="16.94139194139194" style="fill:#142b45" font-weight="normal" text-anchor="start">Hidden positions</text>
+<text x="585" y="144" font-size="16.94139194139194" style="fill:#142b45" font-weight="normal" text-anchor="start">+ joint/time identity</text>
+<rect x="15" y="237" width="210" height="120" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="35" y="275" font-size="24.216524216524213" style="fill:#142b45" font-weight="bold" text-anchor="start">Teacher input</text>
+<text x="35" y="317" font-size="16.346153846153847" style="fill:#142b45" font-weight="normal" text-anchor="start">Full original window</text>
+<rect x="290" y="237" width="205" height="120" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="310" y="275" font-size="20.370370370370367" style="fill:#142b45" font-weight="bold" text-anchor="start">Teacher encoder</text>
+<text x="310" y="317" font-size="16.700404858299592" style="fill:#142b45" font-weight="normal" text-anchor="start">Slow moving weights</text>
+<rect x="565" y="237" width="225" height="120" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="585" y="275" font-size="22.839506172839503" style="fill:#142b45" font-weight="bold" text-anchor="start">Target features</text>
+<text x="585" y="317" font-size="19.764957264957268" style="fill:#142b45" font-weight="normal" text-anchor="start">Hidden slots only</text>
+<text x="585" y="349" font-size="19.764957264957268" style="fill:#142b45" font-weight="normal" text-anchor="start">No target gradient</text>
+<line x1="235" y1="90" x2="278" y2="90" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="505" y1="90" x2="553" y2="90" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="235" y1="295" x2="278" y2="295" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="505" y1="295" x2="553" y2="295" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="867" y="113" width="213" height="164" rx="12" fill="#fff1e4" stroke="#cfdae3" stroke-width="2"/>
+<text x="891" y="153" font-size="24" style="fill:#142b45" font-weight="bold" text-anchor="start">Match features</text>
+<text x="890" y="194" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Update student</text>
+<text x="890" y="226" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">and predictor</text>
+<line x1="800" y1="90" x2="857" y2="150" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="800" y1="295" x2="857" y2="245" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="392" y1="163" x2="392" y2="225" stroke="#087e8b" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="410" y="193" font-size="22" style="fill:#087e8b" font-weight="bold" text-anchor="start">EMA</text>
+<text x="18" y="395" font-size="19" style="fill:#536779" font-weight="normal" text-anchor="start">EMA = exponential moving average. Centering and sharpening shape the loss; collapse is checked separately.</text>
+</svg>

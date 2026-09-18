@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Notebook 03&#x27;s retained training diagnostics</title><desc id="desc">For the fold-zero 800-update demonstration, first-five-update mean loss is 4.990 and last-five-update mean loss is 1.112. Final effective rank is 9.5, a within-batch representation-spread diagnostic rather than a test accuracy.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<text x="25" y="35" font-size="28" style="fill:#142b45" font-weight="bold" text-anchor="start">Notebook 03 • one training fold • 800 updates</text>
+<rect x="100" y="91.42999999999998" width="180" height="214.57000000000002" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<text x="190" y="75.42999999999998" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">4.990</text>
+<text x="190" y="340" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">First 5 updates</text>
+<rect x="390" y="258.18399999999997" width="180" height="47.816" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<text x="480" y="242.184" font-size="30" style="fill:#142b45" font-weight="bold" text-anchor="middle">1.112</text>
+<text x="480" y="340" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="middle">Last 5 updates</text>
+<line x1="80" y1="306" x2="598" y2="306" stroke="#536779" stroke-width="2"/>
+<text x="190" y="382" font-size="22" style="fill:#536779" font-weight="normal" text-anchor="start">Mean training objective</text>
+<rect x="680" y="94" width="390" height="230" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="700" y="132" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Effective rank: 9.5</text>
+<text x="700" y="174" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Feature spread within a batch</text>
+<text x="700" y="206" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Batch size 32 → ceiling 31</text>
+<text x="700" y="238" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">A training diagnostic;</text>
+<text x="700" y="270" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">no clinical meaning assigned.</text>
+</svg>

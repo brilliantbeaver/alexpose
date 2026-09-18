@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Keep three training protocols separate</title><desc id="desc">The 03 to 04 teaching sequence runs 800 then 400 updates from saved weights on fold zero. Notebook 06 separately runs a fresh 500-update model on fold zero. The retained R1 reference trains 1000 updates independently in each of five folds.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="20" y="60" width="325" height="235" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="40" y="98" font-size="25.132275132275133" style="fill:#142b45" font-weight="bold" text-anchor="start">03 → 04 demonstration</text>
+<text x="40" y="140" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Fold 0 only</text>
+<text x="40" y="172" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">800 + 400 from weights</text>
+<text x="40" y="204" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Probe F1: 0.600 → 0.600</text>
+<rect x="389" y="60" width="325" height="235" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="409" y="98" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">06 demonstration</text>
+<text x="409" y="140" font-size="22.83653846153846" style="fill:#142b45" font-weight="normal" text-anchor="start">Fold 0 only; fresh model</text>
+<text x="409" y="172" font-size="22.83653846153846" style="fill:#142b45" font-weight="normal" text-anchor="start">500 updates</text>
+<text x="409" y="204" font-size="22.83653846153846" style="fill:#142b45" font-weight="normal" text-anchor="start">S-JEPA 0.644 · RF 0.915</text>
+<rect x="757" y="60" width="325" height="235" rx="12" fill="#fff1e4" stroke="#cfdae3" stroke-width="2"/>
+<text x="777" y="98" font-size="23.98989898989899" style="fill:#142b45" font-weight="bold" text-anchor="start">Frozen older reference</text>
+<text x="777" y="140" font-size="21.079881656804734" style="fill:#142b45" font-weight="normal" text-anchor="start">All five source folds</text>
+<text x="777" y="172" font-size="21.079881656804734" style="fill:#142b45" font-weight="normal" text-anchor="start">1,000 updates per fold</text>
+<text x="777" y="204" font-size="21.079881656804734" style="fill:#142b45" font-weight="normal" text-anchor="start">S-JEPA 0.438 · RF 0.667</text>
+<text x="777" y="236" font-size="21.079881656804734" style="fill:#142b45" font-weight="normal" text-anchor="start">Before final centering fix</text>
+<text x="25" y="350" font-size="24" style="fill:#142b45" font-weight="bold" text-anchor="start">All displayed scores are macro F1, but their training budgets and evaluation coverage differ.</text>
+<text x="25" y="390" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="start">The larger fold-0 scores are not an updated five-fold estimate or evidence that a shorter training run is better.</text>
+</svg>

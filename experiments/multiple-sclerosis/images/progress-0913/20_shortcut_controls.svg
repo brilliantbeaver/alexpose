@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Simple controls also predict the dataset labels</title><desc id="desc">Pooled macro F1 from five source-grouped folds for both logistic regression and Random Forest control models. Controls use mean-and-spread pose, mean pose, visibility, retained-frame count, and median-pose pixel distances. Both classifiers are retained without selecting a winner. Mean/std pose logistic regression reaches 0.703, and visibility-only Random Forest reaches 0.636. These descriptive controls do not establish a causal explanation.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<line x1="400.0" y1="50" x2="400.0" y2="329" stroke="#cfdae3" stroke-width="1"/>
+<text x="400.0" y="356" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="middle">0.0</text>
+<line x1="550.0" y1="50" x2="550.0" y2="329" stroke="#cfdae3" stroke-width="1"/>
+<text x="550.0" y="356" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="middle">0.2</text>
+<line x1="700.0" y1="50" x2="700.0" y2="329" stroke="#cfdae3" stroke-width="1"/>
+<text x="700.0" y="356" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="middle">0.4</text>
+<line x1="850.0" y1="50" x2="850.0" y2="329" stroke="#cfdae3" stroke-width="1"/>
+<text x="850.0" y="356" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="middle">0.6</text>
+<line x1="1000.0" y1="50" x2="1000.0" y2="329" stroke="#cfdae3" stroke-width="1"/>
+<text x="1000.0" y="356" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="middle">0.8</text>
+<text x="20" y="82" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Pose mean + spread</text>
+<line x1="927.0588235294117" y1="73" x2="868.1331953071083" y2="73" stroke="#536779" stroke-width="2"/>
+<circle cx="927.0588235294117" cy="73" r="8" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<rect x="861.1331953071083" y="66" width="14" height="14" rx="1" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<text x="20" y="136" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Pose mean</text>
+<line x1="783.0400782013685" y1="127" x2="892.3835125448029" y2="127" stroke="#536779" stroke-width="2"/>
+<circle cx="783.0400782013685" cy="127" r="8" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<rect x="885.3835125448029" y="120" width="14" height="14" rx="1" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<text x="20" y="190" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Visibility only</text>
+<line x1="812.9032258064516" y1="181" x2="876.7898767898766" y2="181" stroke="#536779" stroke-width="2"/>
+<circle cx="812.9032258064516" cy="181" r="8" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<rect x="869.7898767898766" y="174" width="14" height="14" rx="1" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<text x="20" y="244" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Retained-frame count</text>
+<line x1="665.0383141762452" y1="235" x2="752.124183006536" y2="235" stroke="#536779" stroke-width="2"/>
+<circle cx="665.0383141762452" cy="235" r="8" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<rect x="745.124183006536" y="228" width="14" height="14" rx="1" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<text x="20" y="298" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Median-pose pixel distances</text>
+<line x1="704.6241030111998" y1="289" x2="729.9247049247049" y2="289" stroke="#536779" stroke-width="2"/>
+<circle cx="704.6241030111998" cy="289" r="8" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<rect x="722.9247049247049" y="282" width="14" height="14" rx="1" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<circle cx="32" cy="388" r="7" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<text x="47" y="395" font-size="20" style="fill:#142b45" font-weight="normal" text-anchor="start">Logistic regression</text>
+<rect x="251" y="381" width="14" height="14" rx="1" fill="#4264a8" stroke="#4264a8" stroke-width="2"/>
+<text x="278" y="395" font-size="20" style="fill:#142b45" font-weight="normal" text-anchor="start">Random Forest</text>
+<text x="600" y="394" font-size="22" style="fill:#536779" font-weight="normal" text-anchor="start">Pooled macro F1 →</text>
+</svg>
