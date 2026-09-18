@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">The next tests should measure geometry and time directly</title><desc id="desc">Three proposed experiments test mirror consistency, time order, and aligned left-right angle differences. Each needs training-only model selection, unchanged source or participant test boundaries, and explicit nuisance controls. None has a retained result in the current notebooks.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="20" y="30" width="325" height="240" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="40" y="68" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Reflection test</text>
+<text x="40" y="110" font-size="20.299145299145298" style="fill:#142b45" font-weight="normal" text-anchor="start">Mirror x and relabel joints</text>
+<text x="40" y="142" font-size="20.299145299145298" style="fill:#142b45" font-weight="normal" text-anchor="start">Compare model features</text>
+<text x="40" y="174" font-size="20.299145299145298" style="fill:#142b45" font-weight="normal" text-anchor="start">under the defined mapping</text>
+<line x1="91.0" y1="200.0" x2="91.0" y2="207.35" stroke="#087e8b" stroke-width="5"/>
+<line x1="91.0" y1="207.35" x2="84.07" y2="208.4" stroke="#087e8b" stroke-width="5"/>
+<line x1="91.0" y1="207.35" x2="97.93" y2="208.4" stroke="#087e8b" stroke-width="5"/>
+<line x1="84.07" y1="208.4" x2="81.34" y2="218.9" stroke="#087e8b" stroke-width="5"/>
+<line x1="97.93" y1="208.4" x2="103.6" y2="216.8" stroke="#087e8b" stroke-width="5"/>
+<line x1="84.07" y1="208.4" x2="87.22" y2="222.05" stroke="#087e8b" stroke-width="5"/>
+<line x1="97.93" y1="208.4" x2="94.78" y2="222.05" stroke="#087e8b" stroke-width="5"/>
+<line x1="87.22" y1="222.05" x2="94.78" y2="222.05" stroke="#087e8b" stroke-width="5"/>
+<line x1="87.22" y1="222.05" x2="81.34" y2="235.7" stroke="#087e8b" stroke-width="5"/>
+<line x1="94.78" y1="222.05" x2="101.92" y2="234.44" stroke="#087e8b" stroke-width="5"/>
+<line x1="81.34" y1="235.7" x2="84.7" y2="248.3" stroke="#087e8b" stroke-width="5"/>
+<line x1="101.92" y1="234.44" x2="106.75" y2="246.82999999999998" stroke="#087e8b" stroke-width="5"/>
+<circle cx="91.0" cy="207.35" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="84.07" cy="208.4" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="97.93" cy="208.4" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="81.34" cy="218.9" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="103.6" cy="216.8" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="87.22" cy="222.05" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="94.78" cy="222.05" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="81.34" cy="235.7" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="101.92" cy="234.44" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="84.7" cy="248.3" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="106.75" cy="246.82999999999998" r="4.2" fill="#087e8b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="91.0" cy="200.0" r="3.36" fill="#ffffff" stroke="#087e8b" stroke-width="2"/>
+<line x1="263.0" y1="200.0" x2="263.0" y2="207.35" stroke="#c66c24" stroke-width="5"/>
+<line x1="263.0" y1="207.35" x2="269.93" y2="208.4" stroke="#c66c24" stroke-width="5"/>
+<line x1="263.0" y1="207.35" x2="256.07" y2="208.4" stroke="#c66c24" stroke-width="5"/>
+<line x1="269.93" y1="208.4" x2="272.66" y2="218.9" stroke="#c66c24" stroke-width="5"/>
+<line x1="256.07" y1="208.4" x2="250.4" y2="216.8" stroke="#c66c24" stroke-width="5"/>
+<line x1="269.93" y1="208.4" x2="266.78" y2="222.05" stroke="#c66c24" stroke-width="5"/>
+<line x1="256.07" y1="208.4" x2="259.22" y2="222.05" stroke="#c66c24" stroke-width="5"/>
+<line x1="266.78" y1="222.05" x2="259.22" y2="222.05" stroke="#c66c24" stroke-width="5"/>
+<line x1="266.78" y1="222.05" x2="272.66" y2="235.7" stroke="#c66c24" stroke-width="5"/>
+<line x1="259.22" y1="222.05" x2="252.08" y2="234.44" stroke="#c66c24" stroke-width="5"/>
+<line x1="272.66" y1="235.7" x2="269.3" y2="248.3" stroke="#c66c24" stroke-width="5"/>
+<line x1="252.08" y1="234.44" x2="247.25" y2="246.82999999999998" stroke="#c66c24" stroke-width="5"/>
+<circle cx="263.0" cy="207.35" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="269.93" cy="208.4" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="256.07" cy="208.4" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="272.66" cy="218.9" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="250.4" cy="216.8" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="266.78" cy="222.05" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="259.22" cy="222.05" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="272.66" cy="235.7" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="252.08" cy="234.44" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="269.3" cy="248.3" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="247.25" cy="246.82999999999998" r="4.2" fill="#c66c24" stroke="#ffffff" stroke-width="2"/>
+<circle cx="263.0" cy="200.0" r="3.36" fill="#ffffff" stroke="#c66c24" stroke-width="2"/>
+<line x1="126" y1="228" x2="226" y2="228" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="389" y="30" width="325" height="240" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="409" y="68" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Time-order control</text>
+<text x="409" y="110" font-size="22.83653846153846" style="fill:#142b45" font-weight="normal" text-anchor="start">Keep each pose intact</text>
+<text x="409" y="142" font-size="22.83653846153846" style="fill:#142b45" font-weight="normal" text-anchor="start">Shuffle frame order</text>
+<text x="409" y="174" font-size="22.83653846153846" style="fill:#142b45" font-weight="normal" text-anchor="start">Measure the score change</text>
+<rect x="414" y="208" width="48" height="42" rx="3" fill="#ffffff" stroke="#cfdae3" stroke-width="2"/>
+<text x="438" y="237" font-size="24" style="fill:#142b45" font-weight="normal" text-anchor="middle">3</text>
+<rect x="484" y="208" width="48" height="42" rx="3" fill="#ffffff" stroke="#cfdae3" stroke-width="2"/>
+<text x="508" y="237" font-size="24" style="fill:#142b45" font-weight="normal" text-anchor="middle">1</text>
+<rect x="554" y="208" width="48" height="42" rx="3" fill="#ffffff" stroke="#cfdae3" stroke-width="2"/>
+<text x="578" y="237" font-size="24" style="fill:#142b45" font-weight="normal" text-anchor="middle">4</text>
+<rect x="624" y="208" width="48" height="42" rx="3" fill="#ffffff" stroke="#cfdae3" stroke-width="2"/>
+<text x="648" y="237" font-size="24" style="fill:#142b45" font-weight="normal" text-anchor="middle">2</text>
+<rect x="757" y="30" width="325" height="240" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="777" y="68" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Symmetry measure</text>
+<text x="777" y="110" font-size="21.923076923076923" style="fill:#142b45" font-weight="normal" text-anchor="start">Align gait-cycle phase</text>
+<text x="777" y="142" font-size="21.923076923076923" style="fill:#142b45" font-weight="normal" text-anchor="start">Compare left/right angles</text>
+<text x="777" y="174" font-size="21.923076923076923" style="fill:#142b45" font-weight="normal" text-anchor="start">Control camera viewpoint</text>
+<polyline points="779.00,225.00 781.40,223.31 783.80,221.63 786.20,219.98 788.60,218.37 791.00,216.83 793.40,215.36 795.80,213.97 798.20,212.68 800.60,211.50 803.00,210.44 805.40,209.51 807.80,208.71 810.20,208.06 812.60,207.57 815.00,207.22 817.40,207.04 819.80,207.01 822.20,207.14 824.60,207.43 827.00,207.88 829.40,208.48 831.80,209.23 834.20,210.11 836.60,211.13 839.00,212.27 841.40,213.53 843.80,214.88 846.20,216.33 848.60,217.85 851.00,219.44 853.40,221.07 855.80,222.74 858.20,224.43 860.60,226.13 863.00,227.82 865.40,229.48 867.80,231.10 870.20,232.66 872.60,234.16 875.00,235.58 877.40,236.90 879.80,238.12 882.20,239.22 884.60,240.20 887.00,241.04 889.40,241.74 891.80,242.29 894.20,242.68 896.60,242.92 899.00,243.00 901.40,242.92 903.80,242.68 906.20,242.29 908.60,241.74 911.00,241.04 913.40,240.20 915.80,239.22 918.20,238.12 920.60,236.90 923.00,235.58 925.40,234.16 927.80,232.66 930.20,231.10 932.60,229.48 935.00,227.82 937.40,226.13 939.80,224.43 942.20,222.74 944.60,221.07 947.00,219.44 949.40,217.85 951.80,216.33 954.20,214.88 956.60,213.53 959.00,212.27 961.40,211.13 963.80,210.11 966.20,209.23 968.60,208.48 971.00,207.88 973.40,207.43 975.80,207.14 978.20,207.01 980.60,207.04 983.00,207.22 985.40,207.57 987.80,208.06 990.20,208.71 992.60,209.51 995.00,210.44 997.40,211.50 999.80,212.68 1002.20,213.97 1004.60,215.36 1007.00,216.83 1009.40,218.37 1011.80,219.98 1014.20,221.63 1016.60,223.31 1019.00,225.00" fill="none" stroke="#087e8b" stroke-width="4"/>
+<polyline points="779.00,225.00 781.40,224.06 783.80,223.13 786.20,222.21 788.60,221.32 791.00,220.46 793.40,219.64 795.80,218.87 798.20,218.15 800.60,217.50 803.00,216.91 805.40,216.39 807.80,215.95 810.20,215.59 812.60,215.31 815.00,215.12 817.40,215.02 819.80,215.00 822.20,215.08 824.60,215.24 827.00,215.49 829.40,215.82 831.80,216.24 834.20,216.73 836.60,217.29 839.00,217.93 841.40,218.63 843.80,219.38 846.20,220.18 848.60,221.03 851.00,221.91 853.40,222.82 855.80,223.75 858.20,224.69 860.60,225.63 863.00,226.56 865.40,227.49 867.80,228.39 870.20,229.26 872.60,230.09 875.00,230.88 877.40,231.61 879.80,232.29 882.20,232.90 884.60,233.44 887.00,233.91 889.40,234.30 891.80,234.60 894.20,234.82 896.60,234.96 899.00,235.00 901.40,234.96 903.80,234.82 906.20,234.60 908.60,234.30 911.00,233.91 913.40,233.44 915.80,232.90 918.20,232.29 920.60,231.61 923.00,230.88 925.40,230.09 927.80,229.26 930.20,228.39 932.60,227.49 935.00,226.56 937.40,225.63 939.80,224.69 942.20,223.75 944.60,222.82 947.00,221.91 949.40,221.03 951.80,220.18 954.20,219.38 956.60,218.63 959.00,217.93 961.40,217.29 963.80,216.73 966.20,216.24 968.60,215.82 971.00,215.49 973.40,215.24 975.80,215.08 978.20,215.00 980.60,215.02 983.00,215.12 985.40,215.31 987.80,215.59 990.20,215.95 992.60,216.39 995.00,216.91 997.40,217.50 999.80,218.15 1002.20,218.87 1004.60,219.64 1007.00,220.46 1009.40,221.32 1011.80,222.21 1014.20,223.13 1016.60,224.06 1019.00,225.00" fill="none" stroke="#c66c24" stroke-width="4" stroke-dasharray="8 6"/>
+<text x="25" y="314" font-size="23" style="fill:#142b45" font-weight="bold" text-anchor="start">Proposed experiments: no measured equivariance, temporal ablation</text>
+<text x="25" y="345" font-size="23" style="fill:#142b45" font-weight="bold" text-anchor="start">or phase-aligned asymmetry result is available yet.</text>
+<text x="25" y="385" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="start">Schematic. Predefine the comparison and fit only on training sources before measuring the held-out result.</text>
+</svg>

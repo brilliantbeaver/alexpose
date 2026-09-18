@@ -1,0 +1,440 @@
+{
+  "source": "slides/slides.md",
+  "source_sha256": "7964bf65ff76d94e581a20cd7e1540d7de8b4193cdeae5f4292dacb76a811b50",
+  "output": "slides/slides.pptx",
+  "output_sha256": "cc4de2b833abdfdece823916e9e2475484901bf90deefd5c53de7f4665903d36",
+  "slides": 33,
+  "svg_assets": 24,
+  "svg_namespace": "http://schemas.microsoft.com/office/drawing/2016/SVG/main",
+  "speaker_notes": 33,
+  "text_preserved": true,
+  "tables_and_commands_preserved": true,
+  "source_svgs_preserved": true,
+  "package_xml_checked": true,
+  "shape_bounds_checked": true,
+  "size_bytes": 2877861,
+  "slide_details": [
+    {
+      "slide": 1,
+      "title": "Geometry, symmetry, and learned representations of gait",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/01_symmetry_cycle.svg",
+          "sha256": "0bf086f093ca093c41fec87ef62f9fa59209543b24bfd8439f723610db0f9e41"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 859,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 2,
+      "title": "Movement is a relationship between body parts",
+      "illustrations": [],
+      "cards": 3,
+      "code_blocks": 0,
+      "notes_characters": 774,
+      "body_font_points": 18
+    },
+    {
+      "slide": 3,
+      "title": "Compare the same movement phase on both sides",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/01_symmetry_cycle.svg",
+          "sha256": "0bf086f093ca093c41fec87ef62f9fa59209543b24bfd8439f723610db0f9e41"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 776,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 4,
+      "title": "Start with a comparison that can disappoint us",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/02_hypothesis_loop.svg",
+          "sha256": "4ad2ff803da4e5c34a4a16fea0508b8f2717d149c23017a8c94ce3e0a821e9d6"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 767,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 5,
+      "title": "Follow the question from raw video to evaluation",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/03_notebook_map.svg",
+          "sha256": "a5cc033695f45f67ae4d1335b6f4cb11d583c1820d06981a4d00a7e51daf9513"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 786,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 6,
+      "title": "Forty-seven clips do not imply forty-seven people",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/04_dataset_counts.svg",
+          "sha256": "95e3ab73b16501a28abceabf04b16971ae6b56393ff00d0550367fa675dd4f0d"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 717,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 7,
+      "title": "Convert video frames into estimated 2D skeletons",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/05_pose_pipeline.svg",
+          "sha256": "f5571b020decb07741d1cf9220a34b2665e82c3dc5087aa1d99b848a1b8a45c3"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 712,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 8,
+      "title": "Normalize position and scale within each frame",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/06_normalization.svg",
+          "sha256": "cfbc2b00797a95d826e7cc65b52bdba03e7084c2cda5a0533d17855d69bc04fb"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 700,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 9,
+      "title": "Fixed tensor dimensions do not ensure physical fidelity",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/07_shape_contract.svg",
+          "sha256": "674f9b5abaa7574413ec924d2b10e7c878c46e0803f6d5b68006b3329348c91a"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 816,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 10,
+      "title": "Assign sources before fitting or sampling windows",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/08_source_split.svg",
+          "sha256": "0b0f828c8b3e2c912daf525adddc1591e9ede636dd118aa0c5dd26d532d2c178"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 776,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 11,
+      "title": "Give the model small, ordered joint-time patches",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/09_tensor_flow.svg",
+          "sha256": "233bc2682324f5fe95b2daa71f1203abd4b43ccb253f332b29b5c813901d1c91"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 715,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 12,
+      "title": "Let joints alternate between evidence and targets",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/10_mask_repair.svg",
+          "sha256": "15b1898aae714af958fc73664cc104ba31301e4547effbc3b369fed873329b82"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 987,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 13,
+      "title": "Tell the predictor which hidden position to fill",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/11_target_positions.svg",
+          "sha256": "fd2706c3ecfcb677430b04f5fdd81df130aa5de7d3b4093e31a4d89a0e247c94"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 806,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 14,
+      "title": "Predict a hidden part of the teacher's representation",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/12_teacher_student.svg",
+          "sha256": "9fd9d31872d0ed687d6707b4b32c200ee217a7dc9c03075da6c9fdfa8566fc6a"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 810,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 15,
+      "title": "Keep a long recording from dominating the updates",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/13_source_sampling.svg",
+          "sha256": "db725fccddb4cb59ae54674b07e9f9a72736cf11154d050358613ebf460d2650"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 739,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 16,
+      "title": "Loss falls while the representation retains variation",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/14_training_diagnostics.svg",
+          "sha256": "801c27caf106ab353525be4a8d964493b582e653a838f7f76960fe8e4ca2b06d"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 709,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 17,
+      "title": "The held-out probe stays at the same score",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/15_continuation_result.svg",
+          "sha256": "39e5ee8a2bbf59c4653c77fcfdf797a48568ed901ed7c9592de9ee2955f0de57"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 724,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 18,
+      "title": "Class separation can enter through the training objective",
+      "illustrations": [],
+      "cards": 2,
+      "code_blocks": 0,
+      "notes_characters": 747,
+      "body_font_points": 18
+    },
+    {
+      "slide": 19,
+      "title": "The retained visualization run stopped before its results",
+      "illustrations": [],
+      "cards": 2,
+      "code_blocks": 0,
+      "notes_characters": 732,
+      "body_font_points": 18
+    },
+    {
+      "slide": 20,
+      "title": "Freeze the encoder, then fit a small classifier",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/17_frozen_readout.svg",
+          "sha256": "380e87880a3cfaad034f6dee562ca38327a88ad7a593110931dbb1375e353e67"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 684,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 21,
+      "title": "Compare learned vectors with simple angle summaries",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/24_classical_features.svg",
+          "sha256": "05ea1553c6ca10e25382d1a793d90728fbc412cc277d65909fa652cec6a8565b"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 691,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 22,
+      "title": "Keep training budget and test coverage beside the score",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/16_protocol_separation.svg",
+          "sha256": "8de0380c6c93e0d3c7f69323f97f4b2ff7405e9019290df22288f5eee7d2cbee"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 634,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 23,
+      "title": "Give each label equal weight in macro F1",
+      "illustrations": [],
+      "cards": 3,
+      "code_blocks": 0,
+      "notes_characters": 689,
+      "body_font_points": 18
+    },
+    {
+      "slide": 24,
+      "title": "The retained learned representation trails the angle baseline",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/18_paired_results.svg",
+          "sha256": "5adab4918a886f50db815bed6d8f048f2be6080abd538e6422e29f04eb5c81d9"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 664,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 25,
+      "title": "The PD-labelled clips expose a large weakness",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/19_confusion_matrices.svg",
+          "sha256": "c1e7fb5122dd3a717f581b6cdc1477ebf93fde79f976ef36c73ea75101640f6b"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 644,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 26,
+      "title": "Strong predictions survive without ordered motion",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/20_shortcut_controls.svg",
+          "sha256": "f135ad33e3cf5a8e0e1440ecd49f3ffc0074ef3a39791201ce0205253a442a3f"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 797,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 27,
+      "title": "Label prediction leaves the mechanism unresolved",
+      "illustrations": [],
+      "cards": 3,
+      "code_blocks": 0,
+      "notes_characters": 738,
+      "body_font_points": 18
+    },
+    {
+      "slide": 28,
+      "title": "Grouping improves evaluation, but uncertainty remains",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/21_evaluation_units.svg",
+          "sha256": "c2efb7e647a9e02dc9bc02370541e8e1a62b97afaa6fea42c539c99bea097748"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 767,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 29,
+      "title": "Separate implementation checks from physical claims",
+      "illustrations": [],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 682,
+      "body_font_points": 23
+    },
+    {
+      "slide": 30,
+      "title": "Measure reflection, temporal order and aligned asymmetry",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/22_proposed_symmetry_tests.svg",
+          "sha256": "307b2a74abfd8888f15f2cc98671c20218439f9949d049e159f801705f7823d2"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 726,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 31,
+      "title": "Resolve input quality before expanding the claims",
+      "illustrations": [
+        {
+          "path": "images/progress-0913/23_next_experiments.svg",
+          "sha256": "372a18dc2b543d68cb0f70e9e9ae31d463b969f80c87893dbc5670c320b80d0e"
+        }
+      ],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 757,
+      "body_font_points": 17.5
+    },
+    {
+      "slide": 32,
+      "title": "Start with retained outputs, then run the intended protocol",
+      "illustrations": [],
+      "cards": 2,
+      "code_blocks": 1,
+      "notes_characters": 669,
+      "body_font_points": 18
+    },
+    {
+      "slide": 33,
+      "title": "A developing physical model needs measured physical tests",
+      "illustrations": [],
+      "cards": 0,
+      "code_blocks": 0,
+      "notes_characters": 675,
+      "body_font_points": 20
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">A small joint-time patch becomes one token</title><desc id="desc">A 32-frame window with 33 joints and three channels is grouped into eight blocks of four frames. Each joint-block has 12 values projected to 96 dimensions, yielding 264 tokens with joint and time position embeddings.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="20" y="82" width="235" height="205" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="40" y="120" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">One window</text>
+<text x="40" y="162" font-size="19.736842105263158" style="fill:#142b45" font-weight="normal" text-anchor="start">32 frames</text>
+<text x="40" y="194" font-size="19.736842105263158" style="fill:#142b45" font-weight="normal" text-anchor="start">33 joints</text>
+<text x="40" y="226" font-size="19.736842105263158" style="fill:#142b45" font-weight="normal" text-anchor="start">3 channels: x, y, v</text>
+<rect x="310" y="82" width="245" height="205" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="330" y="120" font-size="25.30864197530864" style="fill:#142b45" font-weight="bold" text-anchor="start">One local patch</text>
+<text x="330" y="162" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">4 adjacent frames</text>
+<text x="330" y="194" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">of one joint</text>
+<text x="330" y="226" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">4 × 3 = 12 values</text>
+<rect x="610" y="82" width="235" height="205" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="630" y="120" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Token vector</text>
+<text x="630" y="162" font-size="17.857142857142858" style="fill:#142b45" font-weight="normal" text-anchor="start">12 → 96 values</text>
+<text x="630" y="194" font-size="17.857142857142858" style="fill:#142b45" font-weight="normal" text-anchor="start">Learned projection</text>
+<text x="630" y="226" font-size="17.857142857142858" style="fill:#142b45" font-weight="normal" text-anchor="start">+ joint/time position</text>
+<rect x="900" y="82" width="180" height="205" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="920" y="120" font-size="23.569023569023567" style="fill:#142b45" font-weight="bold" text-anchor="start">Full window</text>
+<text x="920" y="162" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">8 × 33</text>
+<text x="920" y="194" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">264 tokens</text>
+<text x="920" y="226" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">264 × 96</text>
+<line x1="266" y1="185" x2="299" y2="185" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="565" y1="185" x2="598" y2="185" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="855" y1="185" x2="890" y2="185" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="25" y="38" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Local order is explicit before compression into a learned representation.</text>
+<text x="25" y="368" font-size="21" style="fill:#536779" font-weight="normal" text-anchor="start">The 32-frame window is roughly 2 seconds at nominal 15 fps; actual cached timing is not fully verified.</text>
+</svg>

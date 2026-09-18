@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Preservation has a precise scope</title><desc id="desc">A table distinguishes coordinate-preserving reshaping from transformations that remove information or alter coordinates. None guarantees exact preservation of the original video&#x27;s physical geometry.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<text x="25" y="32" font-size="25" style="fill:#142b45" font-weight="bold" text-anchor="start">Operation</text>
+<text x="360" y="32" font-size="25" style="fill:#142b45" font-weight="bold" text-anchor="start">What remains</text>
+<text x="740" y="32" font-size="25" style="fill:#142b45" font-weight="bold" text-anchor="start">What changes</text>
+<rect x="15" y="60" width="1070" height="56" rx="4" fill="#f0f5f8" stroke="none" stroke-width="2"/>
+<text x="27" y="95" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Reshape into tokens</text>
+<text x="360" y="95" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Same ordered input values</text>
+<text x="740" y="95" font-size="21" style="fill:#142b45" font-weight="normal" text-anchor="start">Array layout; then learned projection</text>
+<rect x="15" y="123" width="1070" height="56" rx="4" fill="#ffffff" stroke="none" stroke-width="2"/>
+<text x="27" y="158" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Center + torso scale</text>
+<text x="360" y="158" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">2D angles; distance ratios</text>
+<text x="740" y="158" font-size="21" style="fill:#142b45" font-weight="normal" text-anchor="start">Root motion; per-frame scale</text>
+<rect x="15" y="186" width="1070" height="56" rx="4" fill="#f0f5f8" stroke="none" stroke-width="2"/>
+<text x="27" y="221" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Rotate / scale / reflect</text>
+<text x="360" y="221" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">2D shape up to similarity</text>
+<text x="740" y="221" font-size="21" style="fill:#142b45" font-weight="normal" text-anchor="start">Coordinates; signed laterality</text>
+<rect x="15" y="249" width="1070" height="56" rx="4" fill="#ffffff" stroke="none" stroke-width="2"/>
+<text x="27" y="284" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Interpolate / pad</text>
+<text x="360" y="284" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Fixed input dimensions</text>
+<text x="740" y="284" font-size="21" style="fill:#142b45" font-weight="normal" text-anchor="start">Unobserved time points are filled</text>
+<rect x="15" y="312" width="1070" height="56" rx="4" fill="#f0f5f8" stroke="none" stroke-width="2"/>
+<text x="27" y="347" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">Encode + pool</text>
+<text x="360" y="347" font-size="22" style="fill:#142b45" font-weight="normal" text-anchor="start">A learned 96-value vector</text>
+<text x="740" y="347" font-size="21" style="fill:#142b45" font-weight="normal" text-anchor="start">Detailed coordinates and order</text>
+</svg>

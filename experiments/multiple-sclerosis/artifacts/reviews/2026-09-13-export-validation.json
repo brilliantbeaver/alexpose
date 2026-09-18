@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-13",
+  "slides": 33,
+  "vector_assets": 24,
+  "report_figures": 12,
+  "adversarial_review": "pass 2: approve; no material findings",
+  "checks": [
+    "Saved OOF metrics and source boundaries verified",
+    "All documentation links resolve",
+    "All 33 slide layouts and 24 SVG text bounds fit",
+    "HTML embeds 25 content SVG instances matching 24 current assets",
+    "PDF has 33 pages and zero raster image objects",
+    "PPTX has 33 slides and 33 speaker-note pages; all 24 SVG hashes and Office namespaces match",
+    "DOCX text/tables/math verified by exporter; all 12 SVG hashes match",
+    "Word rendered in Pages; PPTX rendered in LibreOffice",
+    "Notebook and experiment result files unchanged"
+  ],
+  "outputs": {
+    "slides/slides.md": {
+      "bytes": 41577,
+      "sha256": "7964bf65ff76d94e581a20cd7e1540d7de8b4193cdeae5f4292dacb76a811b50"
+    },
+    "slides/slides.html": {
+      "bytes": 443452,
+      "sha256": "f7c1069cc38a52a86d5b2ef29c24c0a723306ce630a92a1b49d78a487beda323"
+    },
+    "slides/slides.pdf": {
+      "bytes": 1137670,
+      "sha256": "1adb01ed6c9653a27c06d2ea8a8cdb57fa7817b231a15f0c9cdeb68e624955e7"
+    },
+    "slides/slides.pptx": {
+      "bytes": 2877861,
+      "sha256": "cc4de2b833abdfdece823916e9e2475484901bf90deefd5c53de7f4665903d36"
+    },
+    "docs/08-0913-PROGRESS.MD": {
+      "bytes": 51008,
+      "sha256": "a57b195ac8fb6763281deca00009e3ea596d36ceeaf54a5ceafd120bcd68c290"
+    },
+    "docs/08-0913-PROGRESS.docx": {
+      "bytes": 2730076,
+      "sha256": "41afd723cc6d9c24c07e103de482b1e8ed0dab28ac40987d927f19c7433ea32c"
+    }
+  }
+}

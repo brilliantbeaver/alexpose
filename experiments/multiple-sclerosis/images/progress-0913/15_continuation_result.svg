@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">More training did not improve this held-out demonstration</title><desc id="desc">Notebook 04 initializes from notebook 03&#x27;s 800-update weights and performs 400 updates with restarted optimizer, center and schedule. Held-out fold-zero probe macro F1 remains 0.600 before and after; final batch effective rank is 10.4.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="30" y="70" width="400" height="215" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="50" y="108" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Saved 800-update weights</text>
+<text x="50" y="150" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Held-out macro F1</text>
+<text x="50" y="182" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">0.600</text>
+<rect x="670" y="70" width="400" height="215" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="690" y="108" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">400 further updates</text>
+<text x="690" y="150" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Held-out macro F1</text>
+<text x="690" y="182" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">0.600</text>
+<line x1="445" y1="165" x2="655" y2="165" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="468" y="206" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Same sources</text>
+<text x="468" y="242" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">New optimizer</text>
+<text x="30" y="339" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">The retained continuation changed the feature spread (final rank 10.4), with no probe-score gain.</text>
+<text x="30" y="384" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="start">This is a single-fold demonstration with restarted training state, not a five-fold or continuous 1,200-step run.</text>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="400" viewBox="0 0 1100 400" role="img" aria-labelledby="title desc">
+<title id="title">Split sources before making training windows</title><desc id="desc">For fold 0, 37 clips from 29 sources train the model. Ten clips from six separate sources form the test set. Five of these test clips come from a single PD source and remain grouped together.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#536779"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#142b45} .small{font-size:19px}</style>
+<rect x="20" y="55" width="260" height="250" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="40" y="93" font-size="27" style="fill:#142b45" font-weight="bold" text-anchor="start">Original source</text>
+<text x="40" y="135" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">A long recording</text>
+<text x="40" y="167" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">may produce many</text>
+<text x="40" y="199" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">clips and windows</text>
+<rect x="40" y="241" width="32" height="38" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="83" y="241" width="32" height="38" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="126" y="241" width="32" height="38" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="169" y="241" width="32" height="38" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<rect x="212" y="241" width="32" height="38" rx="4" fill="#087e8b" stroke="#087e8b" stroke-width="2"/>
+<line x1="294" y1="180" x2="374" y2="180" stroke="#536779" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="394" y="25" width="680" height="145" rx="12" fill="#e6f2f3" stroke="#cfdae3" stroke-width="2"/>
+<text x="415" y="61" font-size="26" style="fill:#087e8b" font-weight="bold" text-anchor="start">TRAIN • fold 0</text>
+<text x="415" y="99" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">37 clips · 29 sources → training windows</text>
+<text x="415" y="132" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">Fit encoder, feature selection, scaler and classifier</text>
+<rect x="394" y="220" width="680" height="145" rx="12" fill="#fff1e4" stroke="#cfdae3" stroke-width="2"/>
+<text x="415" y="256" font-size="26" style="fill:#c66c24" font-weight="bold" text-anchor="start">TEST • fold 0</text>
+<text x="415" y="294" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">10 clips · 6 sources → held-out predictions</text>
+<text x="415" y="327" font-size="23" style="fill:#142b45" font-weight="normal" text-anchor="start">All five clips from one PD source stay here together</text>
+<line x1="406" y1="194" x2="1060" y2="194" stroke="#536779" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="20" y="385" font-size="20" style="fill:#536779" font-weight="normal" text-anchor="start">Grouping prevents this source overlap; participant identity and recording confounding remain unresolved.</text>
+</svg>
