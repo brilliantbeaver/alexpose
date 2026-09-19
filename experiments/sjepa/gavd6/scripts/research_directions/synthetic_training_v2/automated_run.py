@@ -220,7 +220,9 @@ def controller_running(work):
     """Probe the shared run lock; a saved PID may be reused or belong to another host."""
     path = Path(work) / 'locks/process/automation.lock'
     try:
-        stream = path.open('r')
+        # Linux NFS requires a writable descriptor for exclusive flock.
+        # r+ preserves the existing file without creating or truncating it.
+        stream = path.open('r+')
     except FileNotFoundError:
         return False
     with stream:
