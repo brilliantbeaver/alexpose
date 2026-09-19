@@ -34,6 +34,7 @@ def adjudicate_gate_b(metrics,cfg):
     status=str(metrics.evidence_status.iloc[0])
     pending=dict(status='insufficient_evidence',evidence_status=status)
     if status=='fixture-tested':return {**pending,'reason':'Fixtures cannot authorize a scientific advance'}
+    if status=='automated-source-screen':return {**pending,'reason':'Machine-screened development inputs and unreviewed overlays cannot authorize a scientific advance; independent review and calibrated evidence are required'}
     if not cfg.decision_spec:return {**pending,'reason':'Preservation margins/support minima need independent development calibration before adjudication'}
     spec=load_decision_spec(cfg.decision_spec)
     if metrics.seed.nunique()<spec['minimum_seeds']:return {**pending,'reason':'Decisive training-seed minimum unmet'}

@@ -181,6 +181,33 @@ class HaicShellTests(unittest.TestCase):
         self.assertIn('SHA256 mismatch', result.stderr)
         self.assertFalse(log.exists())
 
+    def test_history_only_recovery_does_not_transfer_unpublished_scientific_code(self):
+        script, env, log, frozen = self.sync_fixture()
+        # A local implementation change must never replace the pulled revision
+        # during recovery of historical evidence outside Git.
+        changed = self.repo / 'src/gavd6_sjepa/local-unpublished.py'
+        changed.write_text('unpublished scientific change\n')
+        for apply in (False, True):
+            with self.subTest(apply=apply):
+                command = ['bash', str(script), 'tester@haic.example:/hai/scratch/tester/gavd6', '--history-only']
+                if apply:
+                    command.append('--apply')
+                result = subprocess.run(command, env=env, text=True, capture_output=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                call = json.loads(log.read_text())
+                self.assertEqual(set(call['files']), set(frozen))
+                self.assertEqual('--dry-run' in call['args'], not apply)
+                self.assertIn('--backup', call['args'])
+                self.assertIn('Historical files selected:', result.stdout)
+        # Integrity checks still run before any remote call in this mode.
+        Path(self.repo / next(iter(frozen))).write_text('corrupted historical source\n')
+        log.unlink()
+        result = subprocess.run(['bash', str(script), 'tester@haic.example:/hai/scratch/tester/gavd6',
+                                 '--history-only', '--apply'], env=env, text=True, capture_output=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('SHA256 mismatch', result.stderr)
+        self.assertFalse(log.exists())
+
     def test_sync_rejects_remote_shell_expressions_and_parent_traversal(self):
         script, env, log, _ = self.sync_fixture()
         for destination in ('tester@haic.example:/hai/$(touch injected)',

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Teaching pose estimators with synthetic lessons</title><style>
+    :root { color-scheme: light; }
+    body { margin: 0; background: #f1f5f8; color: #172b40;
+           font: 17px/1.65 Arial, sans-serif; }
+    main { max-width: 1000px; margin: 32px auto; padding: 44px 52px;
+           background: white; border: 1px solid #d5dfe7; border-radius: 16px; }
+    h1 { font-size: 36px; line-height: 1.2; letter-spacing: -.7px; }
+    h2 { font-size: 25px; margin-top: 36px; }
+    a { color: #2862ba; text-underline-offset: 3px; }
+    img { display: block; width: 100%; height: auto; margin: 28px 0 12px; }
+    p:has(img) + p { font-size: 14px; color: #53677b; margin-top: 0; }
+    @media (max-width: 650px) { main { margin: 0; padding: 24px 18px; border: 0; }
+                             h1 { font-size: 29px; } }
+    @media print { body { background: white; font-size: 11pt; }
+                   main { margin: 0; padding: 0; border: 0; }
+                   img { break-inside: avoid; } h2 { break-after: avoid; } }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { padding: 9px 12px; border-bottom: 1px solid #d5dfe7; text-align: left; }
+th { background: #edf3fc; }
+</style></head><body><main><h1>Teaching pose estimators with synthetic lessons</h1>
+<p><em>Illustrated study and pilot results · 18 September 2026 · Completed synthetic development experiments; real-video transfer remains unconfirmed.</em></p>
+<h2>Introduction</h2>
+<p>A pose estimator predicts body landmarks in an image. Additional training on rendered people might improve its performance, but <strong>which synthetic examples should it receive?</strong> The original study tested whether an estimator's response to a short practice lesson helps choose its next lesson, beyond what its current predictions, source errors and scene conditions already reveal.</p>
+<p>Here, the <strong>student</strong> is a pretrained pose estimator; a <strong>lesson</strong> is labeled synthetic training data; the <strong>teacher</strong> is a learned lesson selector. The completed pilot found modest synthetic-adaptation benefits, but did not establish an added benefit from response-based personalization.</p>
+<p><img src="images/01-teaching-question.svg" alt="A pretrained student receives a common probe; its prediction changes inform a selector that chooses the next lesson." /></p>
+<p><em>Figure 1. The hypothesis concerns what prediction changes reveal about learning. A large change need not be a useful change.</em></p>
+<h2>Motivation</h2>
+<p>Two estimators can make similar errors yet react differently to additional training. One might benefit from blurred examples and another from obstruction. A common probe tests their behavior under a controlled update. A successful selector would use that response to choose helpful training before seeing real reference errors.</p>
+<p>This requires more than synthetic training working: lesson preferences must differ, the response must predict those preferences, and the rule must transfer. The study therefore included fixed lessons, pooled training, replay, scene selection and response-removed controls. It adapted image-model pose heads and used frozen V-JEPA context features; <strong>it did not train an S-JEPA model</strong>.</p>
+<h2>Methodology</h2>
+<p><strong>1. Separate training, context and reference data.</strong> Motion-capture sequences from AMASS animated textured 3D human bodies, rendered against image backgrounds. Projecting the known 3D joints through the rendering camera supplied image coordinates for six left–right pairs: shoulders, elbows, wrists, hips, knees and ankles. Eight lessons covered balanced examples, front/oblique/side views, blur, low resolution, obstruction and combined low-resolution obstruction. COCO replay supplied labeled real images during adaptation. Probe, lesson, diagnostic, context and reference roles were kept separate by construction; retained manifests are insufficient to re-audit every realized identity here. The library was not an audited walking-only subset, and lessons could use different motions.</p>
+<p>Context clips represent the observation setting. Their reference coordinates are withheld from selector inputs; person crops and coarse viewing metadata are supplied. A separate labeled synthetic diagnostic bank measures known weaknesses; separate reference images measure actual adaptation benefit. The 24 recurring conditions combine three views, two resolution levels, two visibility settings and two blur settings. They recur across fitting and validation students, so this is not a holdout of scene combinations.</p>
+<p><img src="images/02-data-roles.svg" alt="Four data roles distinguish training images, labeled source diagnostics, unlabeled context and separate reference images." /></p>
+<p><em>Figure 2. Source reference errors are supervised gain targets during selector fitting. Real reference coordinates are reserved for evaluation.</em></p>
+<p><strong>2. Measure the response to one common probe.</strong> Record predictions on the same context before and after <strong>10 probe updates</strong>. Each batch contains 18 COCO images and two synthetic probe images. Training compares predictions with known training labels and updates only the final pose-prediction head; the image feature extractor stays fixed. The response records mean signed changes, mean absolute changes, root-mean-square changes and valid-prediction fractions by joint, relative to fixed person boxes. These summaries aggregate frames; they do not retain a joint-by-time trajectory. Source diagnostic errors and training losses are also recorded. Prediction changes reveal behavior, not whether unknown target coordinates became more accurate.</p>
+<p><strong>3. Build an outcome table with matched training branches.</strong> Save the post-probe weights and buffers. Restore that state before each candidate lesson, replay-only branch or pooled-synthetic comparison, using a fresh optimizer. Test 25 and 75 additional updates. Mixed branches use 18 real and two synthetic images per update; replay uses 20 real images. Thus update counts match, while real-image exposure differs. A separate full-budget replay control starts from the original checkpoint for 10 + 75 = <strong>85 updates</strong> at the selected budget. Each adapted checkpoint is evaluated across the 24 reference conditions; these are not 24 independently adapted models.</p>
+<p><img src="images/03-matched-branches.svg" alt="The selected comparison forks from one saved probed checkpoint into eight lessons, replay and pooled training, with a separate full-budget replay control." /></p>
+<p><em>Figure 3. Independent branch resets prevent one lesson from inheriting another's training. Pooled and full-budget replay are comparators, not selector actions.</em></p>
+<p><strong>4. Learn which lessons improve on replay.</strong> For each source student, condition and budget, compute <strong>lesson gain = replay reference error − lesson reference error</strong>. Positive gain means the lesson helped. For example, hypothetical errors of 0.030 under replay and 0.028 under blur give the blur lesson a gain of 0.002. The selector learns these outcome differences, rather than assuming the largest prediction change is best.</p>
+<p>Standardize each input feature using the fitting data. Fit either a nearest-neighbor regressor, which averages gains from similar source cases, or a ridge regressor, a regularized linear predictor of gains. Predict all eight lesson gains; choose the largest positive prediction, otherwise replay. The selector chooses training data; it does not directly output corrected poses. Fit on RTMPose-M and HRNet-W32; select settings on RTMPose-S and HRNet-W48, other checkpoints from the same two families. All four trials used seed 17.</p>
+<p>The <strong>full selector</strong> uses context, post-probe predictions, prediction changes, diagnostic errors, loss history and model/budget descriptors. Its <strong>matched source-progress control</strong> removes only the prediction-change feature block while matching the regressor settings. The <strong>scene/domain selector</strong> uses simple context features, including coarse view metadata, and budget. Frozen visual descriptors do not make this a trained JEPA comparison.</p>
+<p><img src="images/04-learn-and-select.svg" alt="Source features and measured source gains train a predictor; validation selects settings, and intended real deployment chooses a lesson without reference answers." /></p>
+<p><em>Figure 4. The retained full selector used one nearest neighbor; the scene selector used three. The intended real route uses a frozen selector and independently annotated evaluation recordings.</em></p>
+<h2>Results and interpretation</h2>
+<p>The saved artifacts contain <strong>2,304 source outcome rows</strong>, <strong>6,912 selector decisions</strong> and <strong>144 evaluated configurations</strong>. Recomputed means and joined decisions agree within numerical tolerance. Validation selected 75 additional updates; each reported policy mean averages 48 student–condition outcomes from two validation estimators. These settings were selected on this panel, so the results are <strong>development evidence</strong>, not an untouched test.</p>
+<p>The metric is mean visible-joint Euclidean error divided by the reference person-box diagonal; lower is better. Missing predictions receive a one-diagonal penalty. An error near 0.027 is about 2.7% of that diagonal, not a classification error rate.</p>
+<table>
+<thead>
+<tr>
+  <th>Policy</th>
+  <th style="text-align:right">Mean normalized error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Replay after the common probe</td>
+  <td style="text-align:right">0.02732054</td>
+</tr>
+<tr>
+  <td>Full-budget replay from the original checkpoint</td>
+  <td style="text-align:right">0.02731485</td>
+</tr>
+<tr>
+  <td>Pooled synthetic lessons</td>
+  <td style="text-align:right">0.02703672</td>
+</tr>
+<tr>
+  <td>Full response selector</td>
+  <td style="text-align:right">0.02702648</td>
+</tr>
+<tr>
+  <td>Matched source-progress selector</td>
+  <td style="text-align:right">0.02702576</td>
+</tr>
+<tr>
+  <td>Fixed <code>front</code> lesson, selected on training outcomes</td>
+  <td style="text-align:right">0.02689916</td>
+</tr>
+<tr>
+  <td>Scene/domain selector</td>
+  <td style="text-align:right"><strong>0.02678074</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="images/05-pilot-results.svg" alt="Measured percentage error reductions versus post-probe replay show scene selection ahead of response-based selection and the matched control." /></p>
+<p><em>Figure 5. Computed directly from saved aggregate outcomes; higher reduction is better. This is the only empirical plot in this writeup. No confidence intervals are implied.</em></p>
+<p><strong>Synthetic adaptation helped modestly; the response feature did not add demonstrated value.</strong> The full selector reduced mean error by <strong>1.076%</strong> relative to replay, but essentially matched source-progress and lost to fixed <code>front</code> and scene selection. It changed only <strong>3 of 48</strong> choices relative to its matched control: one helped, one harmed and one tied in error. Against replay, its choices helped 37 cases, harmed ten and tied one; it never selected the replay fallback.</p>
+<p>A retrospective oracle asks what could have been chosen <em>after seeing all outcomes</em>. Choosing separately for each student improves on the best shared scene choice by only <strong>0.0406% relative error</strong> (0.02667588 versus 0.02666506). This suggests limited personalization opportunity in this particular panel and action library. It is neither an achieved deployment policy nor a universal bound.</p>
+<p>The limitations matter: two validation checkpoints, one seed, few reference motions repeatedly rendered, and selected settings cannot establish broad transfer or statistical significance. Per-frame predictions and adapted checkpoints are absent from the retained bundle, so this writeup reconstructs aggregate arithmetic rather than rerunning inference or diagnosing why individual models adapted weakly.</p>
+<p><img src="images/06-evidence-boundary.svg" alt="Completed source trials and their limited conclusion are separated from pending real-video, held-family and confirmation evidence." /></p>
+<p><em>Figure 6. Thousands of repeated measurements do not create thousands of independent people or learning behaviors.</em></p>
+<h2>Impact</h2>
+<p>The study provides a concrete way to test whether a training intervention reveals useful teaching information. Its pilot also identifies a simpler explanation for the observed benefit: scene-conditioned synthetic choices worked well without the full response mechanism. Real GAVD transfer, held ViTPose-family performance and protected confirmation are not established by these results.</p>
+<p>The practical next step is to improve and test synthetic supervision itself before enlarging the selector. This motivates the <a href="../../synthetic-training-v2/proposal/README.md">revised paired-restoration study</a>, while preserving the original negative personalization result. Better visible pose accuracy alone does not demonstrate preserved gait timing, hidden-joint accuracy or clinical benefit.</p>
+<p><em>Evidence: <a href="evidence/pilot-audit.json">recomputed audit</a> · <a href="evidence/reported-results.csv">reported numbers</a> · <a href="../../synthetic-training-v2/artifact-audit.md">detailed audit</a> · <a href="../../../../notes/research-agenda/proposals/synthetic-training-selection.md">original research proposal</a> · <a href="review.md">figure and workflow review</a>.</em></p>
+</main></body></html>

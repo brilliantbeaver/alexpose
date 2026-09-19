@@ -1,0 +1,270 @@
+{
+  "evidence_status": "retained_source_aggregate_recomputed",
+  "budget": 75,
+  "counts": {
+    "source_rows": 2304,
+    "source_duplicate_keys": 0,
+    "selector_decisions": 6912,
+    "selector_configurations": 144,
+    "validation_students": 2,
+    "scene_conditions": 24,
+    "decisions_per_configuration": 48
+  },
+  "checks": {
+    "max_source_decision_difference": 9.71445146547012e-17,
+    "max_summary_difference": 3.469446951953614e-18,
+    "max_regret_difference": 9.71445146547012e-17,
+    "comparison_tolerance": 1e-12
+  },
+  "table": [
+    {
+      "method": "replay",
+      "error": 0.027320536651784428,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "full_replay",
+      "error": 0.027314849615335837,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "pooled",
+      "error": 0.02703671740531093,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "front",
+      "error": 0.026899156973405572,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "before",
+      "error": 0.02702576238630818,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "after",
+      "error": 0.02702576238630818,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "response",
+      "error": 0.027022202270582628,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "source_progress",
+      "error": 0.02702576238630818,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "full",
+      "error": 0.02702647999854121,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "magnitude",
+      "error": 0.02702576238630818,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "weakness",
+      "error": 0.02693725698449971,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "domain",
+      "error": 0.02678073984210092,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "no_context",
+      "error": 0.026942018663320928,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "simple_context",
+      "error": 0.02684217714097911,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "image_context",
+      "error": 0.02684708370073144,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "shuffled_context",
+      "error": 0.027066670663535252,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "source_progress_matched",
+      "error": 0.02702576238630818,
+      "status": "achieved_validation_policy"
+    },
+    {
+      "method": "shared_scene_oracle",
+      "error": 0.026675882342393962,
+      "status": "retrospective_diagnostic"
+    },
+    {
+      "method": "student_specific_oracle",
+      "error": 0.026665059463932696,
+      "status": "retrospective_diagnostic"
+    }
+  ],
+  "selection": {
+    "budget": 75,
+    "primary_comparator": "domain",
+    "best_fixed": "front",
+    "methods": {
+      "before": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.027025762386308137
+      },
+      "after": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.027025762386308137
+      },
+      "response": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.02702220227058258
+      },
+      "source_progress": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.027025762386308137
+      },
+      "full": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.02702647999854117
+      },
+      "magnitude": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.027025762386308137
+      },
+      "weakness": {
+        "kind": "nearest",
+        "parameter": 5.0,
+        "validation_error": 0.026937256984499655
+      },
+      "domain": {
+        "kind": "nearest",
+        "parameter": 3.0,
+        "validation_error": 0.02678073984210087
+      },
+      "no_context": {
+        "kind": "nearest",
+        "parameter": 5.0,
+        "validation_error": 0.026942018663320872
+      },
+      "simple_context": {
+        "kind": "nearest",
+        "parameter": 3.0,
+        "validation_error": 0.026842177140979057
+      },
+      "image_context": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.026847083700731394
+      },
+      "shuffled_context": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.02706667066353521
+      },
+      "source_progress_matched": {
+        "kind": "nearest",
+        "parameter": 1.0,
+        "validation_error": 0.027025762386308137
+      }
+    },
+    "lessons": [
+      "balanced",
+      "blur",
+      "front",
+      "low_resolution",
+      "low_resolution_occlusion",
+      "oblique",
+      "occlusion",
+      "side"
+    ],
+    "context_kind": "vjepa",
+    "omitted_feature_views": [],
+    "n_train_students": 2,
+    "n_validation_students": 2
+  },
+  "oracle": {
+    "actions": [
+      "replay",
+      "balanced",
+      "blur",
+      "front",
+      "low_resolution",
+      "low_resolution_occlusion",
+      "oblique",
+      "occlusion",
+      "side"
+    ],
+    "shared_scene_error": 0.026675882342393962,
+    "student_specific_error": 0.026665059463932696,
+    "additional_absolute_reduction": 1.0822878461266144e-05,
+    "additional_relative_reduction_percent": 0.040571773118320296,
+    "shared_fraction_of_opportunity_beyond_fixed": 0.9537676479957591
+  },
+  "full_vs_matched_changes": [
+    {
+      "student_id": "hrnet_w48",
+      "domain_id": "front_low_occluded_sharp",
+      "full": "front",
+      "matched": "low_resolution_occlusion",
+      "full_minus_matched": 0.0
+    },
+    {
+      "student_id": "hrnet_w48",
+      "domain_id": "oblique_low_occluded_blur",
+      "full": "blur",
+      "matched": "balanced",
+      "full_minus_matched": 0.0005479653073724583
+    },
+    {
+      "student_id": "rtmpose_s",
+      "domain_id": "oblique_low_occluded_blur",
+      "full": "blur",
+      "matched": "low_resolution_occlusion",
+      "full_minus_matched": -0.0005135199201870624
+    }
+  ],
+  "full_vs_replay": {
+    "improved": 37,
+    "harmed": 10,
+    "tied": 1,
+    "replay_selected": 0
+  },
+  "units": "visible body-12 Euclidean distance / reference-box diagonal; equal frames within person, equal people within source outcome; equal student-scene outcomes",
+  "limitations": [
+    "Outcome CSVs are aggregated; per-frame metric reconstruction and person bootstrap require absent predictions and manifests.",
+    "Two validation students and repeated scene renders are not 48 independent experiments.",
+    "The retrospective oracle uses unavailable deployment outcomes; its gap is not a population bound.",
+    "Validation inspected during redesign is development evidence.",
+    "Features, trained heads and per-frame predictions are absent from the retained source bundle; gradient, feature-scaling and representation diagnoses are unavailable."
+  ],
+  "source_sha256": {
+    "notebook_runs/synthetic-training/run-02-v1/source/hrnet_w32/outcomes.csv": "9b604cac9677950d2743484da30034625bc4c504e3010471949248791cda44e5",
+    "notebook_runs/synthetic-training/run-02-v1/source/hrnet_w48/outcomes.csv": "731eca6a52db32f3f66c024e8a157bcfe7e4db5d3a42118ad288c3fa85adeeb5",
+    "notebook_runs/synthetic-training/run-02-v1/source/rtmpose_m/outcomes.csv": "888ae07e702e876336c9e119423664669c0577c5b2ecbcbda99094dcc03a795f",
+    "notebook_runs/synthetic-training/run-02-v1/source/rtmpose_s/outcomes.csv": "48ebbe5893bfb5534c805af3a1214948459436e4e953c3db782a165a141fe5a3",
+    "notebook_runs/synthetic-training/run-03-v1/selectors/validation_predictions.csv": "734903858fc5a0ce9b8f014e27743142bde0f54de9f2215fd21ffb6b34a9d5c6",
+    "notebook_runs/synthetic-training/run-03-v1/selectors/validation_summary.csv": "f4e602097a4d04e7566c5a00bc15546e2679ddb35e9714da150a39afe206b955",
+    "notebook_runs/synthetic-training/run-03-v1/selectors/selection.json": "ba8e4e94e0d4915ebfae539951051e541a38f3d4d991c404abe85ee3d5602297"
+  },
+  "retained_binary_inventory": {
+    "npz_files": 0,
+    "pt_files": 0
+  }
+}

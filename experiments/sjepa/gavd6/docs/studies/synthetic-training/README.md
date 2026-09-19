@@ -2,7 +2,7 @@
 
 This study tests whether an estimator's response to a short common training probe helps choose useful synthetic training lessons for real deployment. The distinctive question is whether **prediction changes on unlabeled target video** add useful information beyond the estimator's current predictions, labeled synthetic weaknesses, and source learning progress.
 
-The [proposal](../../../notes/research-agenda/proposals/synthetic-training-selection.md) explains the hypothesis and its limits. The [notebook guide](../../../notebooks/synthetic_training/README.md) is the step-by-step experiment entry point. The [HAIC guide](../../../slurm/synthetic-training/README.md) contains package/model setup, configuration, data requirements, and Slurm commands.
+The [illustrated study and pilot results](study/README.md) ([browser version](study/study.html)) explains the method and interprets the completed synthetic development experiments. The [original proposal](../../../notes/research-agenda/proposals/synthetic-training-selection.md) explains the hypothesis and its limits. The [notebook guide](../../../notebooks/synthetic_training/README.md) is the step-by-step experiment entry point. The [HAIC guide](../../../slurm/synthetic-training/README.md) contains package/model setup, configuration, data requirements, and Slurm commands.
 
 ## Experiment sequence
 
@@ -32,8 +32,8 @@ The primary real metric averages visible-landmark distance normalized by indepen
 
 The implementation is in [src/gavd6_sjepa/research_directions/synthetic_training](../../../src/gavd6_sjepa/research_directions/synthetic_training). It provides the experiment's source-data roles, trainable released pose-model adapters, feature/response comparisons, source selector fitting, explicit real deployment, and independent-reference evaluation. The [notebook builder](../../../scripts/research_directions/synthetic_training/build_notebooks.py) and [Slurm directory](../../../slurm/synthetic-training) expose these steps as research workflows.
 
-The source contains no synthetic replacement for a missing released pose model, pretrained encoder, textured rendering asset, or human real reference. A successful local code check is not evidence that adaptation improves GAVD accuracy. Real HAIC checkpoint loading, EGL rendering, throughput measurement, annotation completion, and all scientific results remain experiments to run with the actual assets.
+The source contains no synthetic replacement for a missing released pose model, pretrained encoder, textured rendering asset, or human real reference. Retained HAIC artifacts now establish completed source adaptation and synthetic selector validation; the [pilot audit](../synthetic-training-v2/artifact-audit.md) reconstructs their aggregate results. Real GAVD accuracy, held-architecture transfer and protected confirmation are not established by those artifacts. A successful local code check is not evidence of those effects.
 
 The sample configuration has only two teacher-training students and two source-validation students. It supports initial feasibility testing. A significant transfer claim requires enough independent learning behaviors and real settings to exclude simple model-family, optimization, context, and ordinary-augmentation explanations. A clean null result at an early stage should narrow the claim rather than trigger an automatic increase in training scale.
 
-The [local workflow validation record](../../../notebooks/synthetic_training/VALIDATION.md) documents the completed notebook and launcher checks separately from the unexecuted HAIC experiments.
+The [local workflow validation record](../../../notebooks/synthetic_training/VALIDATION.md) documents notebook and launcher checks separately from the empirical evidence above.
