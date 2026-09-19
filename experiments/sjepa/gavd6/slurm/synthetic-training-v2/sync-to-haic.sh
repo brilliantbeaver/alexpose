@@ -1,24 +1,27 @@
 #!/usr/bin/env bash
-# Run on the Mac before initializing a new experiment. Never copies run outputs.
+# Run on the Mac before submitting experiment jobs. Never copies run outputs.
 set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: bash slurm/synthetic-training-v2/sync-to-haic.sh USER@HOST:/absolute/checkout [--apply]
+Usage: bash slurm/synthetic-training-v2/sync-to-haic.sh USER@HOST:/absolute/checkout [--apply] [--history-only]
 
 Preview is the default. Add --apply to transfer the listed files to an existing
 HAIC checkout. Historical files are verified locally first; replaced remote
 files are backed up under outputs/synthetic-training-v2/sync-backup-<unique-id>.
 Existing study profiles, run outputs, environments, and caches are not copied.
-Run this before initialization: code updates change an experiment's identity.
+Run this before submitting jobs: code updates change an experiment's identity.
+Use --history-only to transfer just preservation-manifest files, leaving code unchanged.
 EOF
 }
 destination=''
 apply=0
+history_only=0
 for argument in "$@"; do
   case "$argument" in
     --apply) apply=1 ;;
     --dry-run) apply=0 ;;
+    --history-only) history_only=1 ;;
     -h|--help) usage; exit 0 ;;
     --*) usage >&2; exit 2 ;;
     *) [[ -z "$destination" ]] || { usage >&2; exit 2; }; destination="$argument" ;;
@@ -44,13 +47,14 @@ trap 'rm -f "$file_list"' EXIT
 
 # Validate the complete preservation manifest before making any remote call.
 # A single explicit list prevents accidental transfer of ignored output trees.
-python3 - "$stv2_checkout" "$file_list" <<'PY'
+python3 - "$stv2_checkout" "$file_list" "$history_only" <<'PY'
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import sys
 
-root, listing = map(Path, sys.argv[1:])
+root, listing = map(Path, sys.argv[1:3])
+history_only = sys.argv[3] == '1'
 manifest = root / 'docs/studies/synthetic-training-v2/preservation-manifest.json'
 frozen = json.loads(manifest.read_text())['files']
 if not isinstance(frozen, dict) or not frozen:
@@ -80,7 +84,7 @@ trees = (
     'notebooks/synthetic_training_v2',
 )
 skip_directories = {'__pycache__', 'wheels', 'outputs', 'settings', 'profiles', 'node_modules'}
-for name in trees:
+for name in (() if history_only else trees):
     folder = root / name
     if not folder.is_dir():
         raise SystemExit(f'Required study directory is missing: {name}. No files were transferred.')
@@ -95,7 +99,8 @@ for name in trees:
         if path.is_file():
             files.add(relative.as_posix())
 listing.write_bytes(b''.join(name.encode() + b'\0' for name in sorted(files)))
-print(f'Historical hashes verified: {len(frozen)}. Study files selected: {len(files)}.')
+kind = 'Historical files' if history_only else 'Study files'
+print(f'Historical hashes verified: {len(frozen)}. {kind} selected: {len(files)}.')
 PY
 
 backup_id="$(python3 -c 'from datetime import datetime, timezone; import uuid; print(datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:12])')"

@@ -170,7 +170,8 @@ def check_inputs(config: dict, held: str) -> dict:
     for spec in specifications:
         _config_files(spec["config"])
     table, excluded = audited_motion_windows(
-        config["manifest_dir"], config["amass_root"], config["locomotion_audit"], config["reservation_csv"])
+        config["manifest_dir"], config["amass_root"], config["locomotion_audit"], config["reservation_csv"],
+        review_mode=config.get("review_mode", "human_audited"))
     if not {"train", "development"} <= set(table["split"]):
         raise ValueError("Both train and development splits need reviewed, admitted windows")
     by_person = table.groupby(["split", "canonical_person_id"]).size()

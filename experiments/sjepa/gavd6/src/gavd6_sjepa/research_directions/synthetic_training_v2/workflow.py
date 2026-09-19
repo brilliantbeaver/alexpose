@@ -52,7 +52,7 @@ def initialize(cfg,repo):
         atomic_json(path,dict(signature=signature,**identity))
         atomic_json(root/'effective-config.json',cfg.as_dict())
         atomic_json(root/'environment.json',dict(interpreter=sys.executable,platform=platform.platform(),
-             python=sys.version,evidence_status='fixture-tested' if cfg.mode=='fixture' else 'source-run',
+             python=sys.version,evidence_status='fixture-tested' if cfg.mode=='fixture' else _json(Path(cfg.bundle)/'manifest.json')['evidence_status'],
              torch=__import__('importlib.metadata',fromlist=['version']).version('torch'),
              cuda_verified=False,slurm_job=os.environ.get('SLURM_JOB_ID')))
     return signature
@@ -208,7 +208,7 @@ def _stage(cfg,stage,repo,identity,*,resume=False):
     if stage=='data':
         data=fixture_bundle(cfg.seed) if cfg.mode=='fixture' else TrackBundle.load(cfg.bundle)
         counts=data.validate(cfg.held_extractor)
-        if cfg.mode=='source' and data.evidence_status!='source-run':raise ValueError('Source fitting refuses fixtures')
+        if cfg.mode=='source' and data.evidence_status not in {'source-run','automated-source-screen'}:raise ValueError('Source fitting refuses fixtures')
         (root/'data').mkdir(exist_ok=True);data.save(root/'data'/'bundle')
         _,normalization=normalize_inputs(data.inputs)
         np.savez_compressed(root/'data'/'input-normalization.npz',origin=normalization.origin,scale=normalization.scale)
@@ -253,6 +253,11 @@ def build_report(cfg):
           '| Method | Extractor | Seed | Visible normalized error | Group IDs |','|---|---|---:|---:|---:|']
     for r in table.itertuples():rows.append(f'| {r.method} | {r.extractor} | {r.seed} | {r.value:.8f} | {r.people} |')
     evidence_note='Fixture trajectories are analytic software cases; method ordering is not empirical evidence.' if cfg.mode=='fixture' else 'Source projections are synthetic anatomical proxies; they do not establish real measurement accuracy.'
+    if metrics.evidence_status.iloc[0]=='automated-source-screen':
+        evidence_note += (' This is an automated development screen: a declared kinematic heuristic selected motions; '
+                          'no human locomotion or overlay review occurred. External reservation knowledge may be unknown. '
+                          'Known protected identities and original test people are excluded. These results cannot authorize '
+                          'a scientific gate or untouched confirmation claim.')
     rows += ['',f'Errors are Euclidean pixels divided by reference-box diagonal. {evidence_note} Fixture group IDs are analytic trajectories, not sampled people. The reference scale is independent of model predictions, not an independent anatomical annotation. Intervals and paired resampling draws are in `evaluation/`. The plot includes the predeclared filter strengths; no strength is selected for confirmation.','',
              'Method key: `direct` learns coordinate restoration end to end; `coordinate` reconstructs clean coordinates before a separately fitted frozen-encoder readout; `initialized` fits only that readout; `ordinary_jepa` predicts observed-track latent targets; `paired_jepa` uses aligned clean synthetic targets; `shuffled_jepa` changes pretraining pairing only. `smoothnet` is the documented temporal MLP adaptation. `static` removes neighboring coordinates after shared whole-window normalization.','',
              'Motion quantities are 0.20-second displacement, absolute signed ankle-separation error, the RMS amplitude of that demeaned separation, and operational positive-maxima timing. They are not metric stride length, heel strikes or clinical outcomes. Missing event/trajectory support prevents preservation success.','',

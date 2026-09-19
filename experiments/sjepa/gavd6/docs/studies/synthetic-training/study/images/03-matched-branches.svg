@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="575" viewBox="0 0 1200 575" role="img" aria-labelledby="title desc">
+<title id="title">Every candidate restarts from the same probed checkpoint</title><desc id="desc">Completed pilot: 10 common updates, then 25 or 75 more; validation selected 75.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#53677b"/></marker></defs>
+<rect width="1200" height="575" fill="white"/>
+<text x="36" y="43" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="start" fill="#172b40">Every candidate restarts from the same probed checkpoint</text>
+<text x="36" y="76" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="start" fill="#53677b">Completed pilot: 10 common updates, then 25 or 75 more; validation selected 75.</text>
+<rect x="36" y="120" width="240" height="108" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="156.0" y="154" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Original checkpoint</text>
+<text x="156.0" y="185" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Same initial student</text>
+<rect x="360" y="120" width="240" height="108" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="480.0" y="154" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">10-update probe</text>
+<text x="480.0" y="185" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">18 real + 2 synthetic / batch</text>
+<rect x="684" y="120" width="340" height="108" rx="14" fill="#eaf7f3" stroke="#d5dfe7"/>
+<text x="854.0" y="154" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Save weights and buffers</text>
+<text x="854.0" y="185" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Restore this state before each branch</text>
+<polyline points="276,174 360,174" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="600,174 684,174" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="854,228 854,278 208,278 208,325" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="854,278 604,278 604,325" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="854,278 996,278 996,325" fill="none" stroke="#53677b" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="325" width="344" height="125" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="208.0" y="359" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Eight lesson branches</text>
+<text x="208.0" y="390" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">One candidate lesson per branch</text>
+<text x="208.0" y="417" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">75 updates: 18 real + 2 synthetic</text>
+<rect x="432" y="325" width="344" height="125" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="604.0" y="359" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Replay-only branch</text>
+<text x="604.0" y="390" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">No additional synthetic lesson</text>
+<text x="604.0" y="417" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">75 updates: 20 real images</text>
+<rect x="828" y="325" width="336" height="125" rx="14" fill="#edf3fc" stroke="#d5dfe7"/>
+<text x="996.0" y="359" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40">Pooled comparison</text>
+<text x="996.0" y="390" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">Sample across all lessons</text>
+<text x="996.0" y="417" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#53677b">75 updates: 18 real + 2 synthetic</text>
+<text x="600" y="495" font-family="Arial, sans-serif" font-size="19" font-weight="normal" text-anchor="middle" fill="#53677b">Fresh optimizer per branch. Each adapted checkpoint is scored across the 24 reference conditions.</text>
+<rect x="36" y="520" width="1128" height="42" rx="14" fill="#fff4e7" stroke="#d5dfe7"/>
+<text x="600.0" y="554" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#172b40"></text>
+<text x="600" y="548" font-family="Arial, sans-serif" font-size="19" font-weight="normal" text-anchor="middle" fill="#172b40">Budget check: full replay starts from the original checkpoint and receives 85 real-only updates.</text>
+</svg>

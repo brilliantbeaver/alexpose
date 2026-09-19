@@ -289,7 +289,10 @@ def prepare(state, args):
     if attempts and not args.retry:
         raise ValueError('Preparation was already submitted. Run status; use prepare --retry only after a failed attempt.')
     if attempts and snapshot[attempts[-1]['job_id']]['state'] == 'COMPLETED':
-        raise ValueError('Preparation completed. Inspect its overlays, then run source --overlays-reviewed.')
+        mode = read(Path(state['work']) / 'config/preparation.json').get('review_mode', 'human_audited')
+        next_step = ('Run source --automated-screen.' if mode == 'automated_development'
+                     else 'Inspect its overlays, then run source --overlays-reviewed.')
+        raise ValueError('Preparation completed. ' + next_step)
     entries = ledger_entries(state, snapshot)
     if remaining(state, entries) < 1:
         raise PermissionError('Less than one GPU hour remains for the preparation allocation.')
@@ -328,13 +331,39 @@ def source(state, args):
     prepared = Path(last['output'])
     if read(prepared / 'preparation-status.json')['status'] != 'source_prepared':
         raise ValueError('Preparation did not produce a successful source bundle.')
-    if not state['source_config'] and not args.overlays_reviewed:
-        raise ValueError(f'Inspect {prepared}/overlay-*.png, then use source --overlays-reviewed.')
+    automated_requested = getattr(args, 'automated_screen', False)
+    if automated_requested and args.overlays_reviewed:
+        raise ValueError('Choose automated screening or human overlay review, not both.')
+    if not state['source_config'] and not args.overlays_reviewed and not automated_requested:
+        raise ValueError(f'Inspect {prepared}/overlay-*.png for human-audited preparation, then use source --overlays-reviewed. '
+                         'Algorithmically screened development preparation instead requires source --automated-screen.')
     from gavd6_sjepa.research_directions.synthetic_training_v2.contracts import TrackBundle, verify_preservation
     verify_preservation(ROOT)
     bundle = TrackBundle.load(prepared / 'bundle')
     bundle.validate(state['held_extractor'])
-    if bundle.evidence_status != 'source-run' or not any(
+    mode = getattr(bundle, 'provenance', {}).get('configuration', {}).get('review_mode', 'human_audited')
+    automated = mode == 'automated_development'
+    if automated:
+        if bundle.evidence_status != 'automated-source-screen':
+            raise ValueError('Automated preparation requires automated-source-screen evidence status.')
+        if not automated_requested and not (args.retry and state.get('automated_screen')):
+            raise ValueError('Algorithmically screened inputs require source --automated-screen; they are not human-reviewed overlays.')
+        if args.overlays_reviewed or state.get('overlays_reviewed'):
+            raise ValueError('Automated source screening cannot be recorded as human overlay review.')
+        if not bundle.records or any(
+            row.get('review_mode') != 'automated_development'
+            or row.get('locomotion_status') != 'algorithm_screened_locomotion'
+            or (row.get('reserved') is not False and row.get('reserved') != 'unknown')
+            or row.get('split') not in {'train', 'development'}
+            for row in bundle.records
+        ):
+            raise ValueError('Automated source records lack compatible screening, reservation or development metadata.')
+    else:
+        if mode != 'human_audited' or bundle.evidence_status != 'source-run':
+            raise ValueError('Human source preparation requires human_audited mode and source-run evidence status.')
+        if automated_requested or state.get('automated_screen'):
+            raise ValueError('The automated-screen flag requires an explicitly automated development bundle.')
+    if not any(
         row['split'] == 'development' and row['extractor_family'] == state['held_extractor'] for row in bundle.records):
         raise ValueError('A real source bundle with the excluded-family development panel is required.')
     entries = ledger_entries(state, snapshot)
@@ -369,7 +398,12 @@ def source(state, args):
     if not state['source_config']:
         make_scope(state, 'source-01', prepared / 'bundle', entries)
         state['source_config'] = str(config_path)
-        state['overlays_reviewed'] = dict(preparation_job=last['job_id'], actor=os.environ.get('USER', 'unknown'))
+        if automated:
+            state['automated_screen'] = dict(preparation_job=last['job_id'], actor=os.environ.get('USER', 'unknown'),
+                                             review_mode=mode, human_reviewed=False,
+                                             evidence_status=bundle.evidence_status)
+        else:
+            state['overlays_reviewed'] = dict(preparation_job=last['job_id'], actor=os.environ.get('USER', 'unknown'))
         save(state)
     else:
         # Reconcile allocation overhead or killed attempts before reusing this immutable scope.
@@ -401,6 +435,8 @@ def status(state):
               f'log: {state["work"]}/logs/{job["stage"]}-{job["job_id"]}.out')
         if job['phase'] == 'prepare':
             print('  Paired data and overlays:', job['output'])
+        elif job['phase'] == 'automated_inputs':
+            print('  Automated screening records and playback:', job['output'])
     if state.get('pending_submission'):
         print('UNCERTAIN SUBMISSION:', json.dumps(state['pending_submission']))
     if all(snapshot.get(job['job_id'], {}).get('state') in TERMINAL for job in state['jobs']):
@@ -433,7 +469,10 @@ def main(argv=None):
         command.add_argument('--dry-run', action='store_true')
         command.add_argument('--retry', action='store_true')
         if name == 'source':
-            command.add_argument('--overlays-reviewed', action='store_true')
+            review = command.add_mutually_exclusive_group()
+            review.add_argument('--overlays-reviewed', action='store_true')
+            review.add_argument('--automated-screen', action='store_true',
+                               help='Run explicitly algorithm-screened development data without claiming human review')
     args = parser.parse_args(argv)
     if args.command == 'init':
         initialize(args)

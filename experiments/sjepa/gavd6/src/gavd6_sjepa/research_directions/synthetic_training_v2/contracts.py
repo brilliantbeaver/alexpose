@@ -69,12 +69,22 @@ def validate_records(records, *, evidence_status, held_extractor=None):
         known=raw_people.setdefault(r['person_id'],(r['canonical_person_id'],r['original_split']))
         if known!=(r['canonical_person_id'],r['original_split']):raise ValueError('Known person changed canonical identity or original split')
         if r['split'] not in {'train','development','confirmation'}: raise ValueError('Unknown split')
-        if r['locomotion_status'] not in {'audited_locomotion','fixture'}: raise ValueError('Unaudited locomotion')
-        if evidence_status != 'fixture-tested' and r['locomotion_status'] == 'fixture': raise ValueError('Fixture is not source evidence')
+        automated = evidence_status == 'automated-source-screen'
+        if automated:
+            if r.get('review_mode') != 'automated_development' or r['locomotion_status'] != 'algorithm_screened_locomotion':
+                raise ValueError('Automated source evidence requires explicit machine-screened development provenance')
+            if r.get('reserved') is not False and r.get('reserved') != 'unknown':
+                raise ValueError('Automated source reserved must be JSON false or literal unknown; protected identities are excluded')
+            if r['split'] == 'confirmation': raise ValueError('Automated development cannot contain confirmation records')
+        else:
+            if r['locomotion_status'] not in {'audited_locomotion','fixture'}: raise ValueError('Unaudited locomotion')
+            if evidence_status != 'fixture-tested' and r['locomotion_status'] == 'fixture': raise ValueError('Fixture is not source evidence')
         if r['original_split'] == 'test' and r['split'] != 'confirmation': raise ValueError('Protected test identity reassigned')
         if r['original_split'] != 'train' and r['split'] == 'train': raise ValueError('Historical nontraining identity entered fit')
         if r['split']=='confirmation' and r['exposure']!='unexposed_verified': raise ValueError('Exposed/unknown confirmation')
-        if r.get('reserved',False) and r['split']!='confirmation': raise ValueError('Reserved identity reassigned')
+        if r.get('reserved',False) == 'unknown':
+            if not automated: raise ValueError('Unknown reservation is permitted only for explicit automated development')
+        elif r.get('reserved',False) and r['split']!='confirmation': raise ValueError('Reserved identity reassigned')
         if held_extractor and held_extractor in {r['extractor'],r.get('extractor_family','')} and r['split']=='train': raise ValueError('Held extractor entered fit')
         for mapping,k in ((people,r['canonical_person_id']),(motions,r['motion_hash'])):
             if k in mapping and mapping[k] != r['split']: raise ValueError('Person/alias or motion leaks across splits')

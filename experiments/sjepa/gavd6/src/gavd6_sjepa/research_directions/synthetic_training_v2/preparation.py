@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import ast
 import importlib.metadata
+import json
 from pathlib import Path
 import time
 
@@ -22,12 +23,17 @@ def _booleans(values):
     return strings.isin(["true", "1", "yes"])
 
 
-def audited_motion_windows(manifest_dir, amass_root, audit_csv, reservation_csv=None):
+def audited_motion_windows(manifest_dir, amass_root, audit_csv, reservation_csv=None, *, review_mode="human_audited"):
     """Join locomotion audit to registry/reservation roles before motion loading.
 
     The optional reservation argument supports isolated software tests. Actual
     source preparation mandates it. No body/motion arrays are opened here.
     """
+    if review_mode not in {"human_audited", "automated_development"}:
+        raise ValueError("Unknown source review_mode")
+    automated = review_mode == "automated_development"
+    if automated and reservation_csv is None:
+        raise ValueError("Automated development requires explicit reservation/unknown records")
     from ..motion_preservation.motion_data import load_amass_manifest
     base = load_amass_manifest(manifest_dir, amass_root)
     audit = pd.read_csv(audit_csv, keep_default_na=False)
@@ -43,6 +49,7 @@ def audited_motion_windows(manifest_dir, amass_root, audit_csv, reservation_csv=
     if not joined["_merge"].eq("both").all():
         raise ValueError("Audited motion absent from approved existing identity registry")
     audit_reserved = _booleans(joined["reserved"]) if "reserved" in joined else pd.Series(False, index=joined.index)
+    reservation_unknown = np.zeros(len(joined), dtype=bool)
     if reservation_csv is not None:
         reservations = pd.read_csv(reservation_csv, keep_default_na=False)
         columns = {"person_id", "canonical_person_id", "original_split", "reserved", "exposure"}
@@ -51,12 +58,15 @@ def audited_motion_windows(manifest_dir, amass_root, audit_csv, reservation_csv=
         if reservations.person_id.duplicated().any() or reservations[list(columns)].astype(str).apply(lambda x: x.str.strip().eq("")).any().any():
             raise ValueError("Reservation requires one complete row per registry person")
         reservations = reservations[sorted(columns)].copy()
-        reservations["reserved"] = _booleans(reservations["reserved"])
+        flags = reservations["reserved"].astype(str).str.lower().str.strip()
+        reservations["reservation_unknown"] = flags.eq("unknown") if automated else False
+        reservations["reserved"] = _booleans(flags.mask(reservations["reservation_unknown"], "false"))
         for _, group in reservations.groupby("canonical_person_id"):
             if group.original_split.nunique() != 1:
                 raise ValueError("Reservation aliases cross existing registry splits")
         reservations["reserved"] = reservations.groupby("canonical_person_id").reserved.transform("any")
-        authority = reservations.rename(columns={k: f"authority_{k}" for k in columns - {"person_id"}})
+        reservations["reservation_unknown"] = reservations.groupby("canonical_person_id").reservation_unknown.transform("any")
+        authority = reservations.rename(columns={k: f"authority_{k}" for k in (columns | {"reservation_unknown"}) - {"person_id"}})
         joined = joined.merge(authority, on="person_id", how="left", validate="many_to_one")
         if joined.authority_canonical_person_id.isna().any():
             raise ValueError("Every audited registry person requires an explicit reservation/exposure record")
@@ -64,20 +74,42 @@ def audited_motion_windows(manifest_dir, amass_root, audit_csv, reservation_csv=
             if not joined[name].astype(str).eq(joined[f"authority_{name}"].astype(str)).all():
                 raise ValueError(f"Audit/registry disagrees with authoritative {name}")
         reserved = audit_reserved.to_numpy() | joined.authority_reserved.to_numpy(bool)
+        reservation_unknown = joined.authority_reservation_unknown.to_numpy(bool) & ~reserved
     else:
         if not joined.canonical_person_id.eq(joined.person_id).all():
             raise ValueError("Locomotion audit cannot override registry canonical identity")
         reserved = audit_reserved.to_numpy()
-    joined["reserved"] = reserved
+    joined["reserved"] = reserved.astype(object)
+    joined.loc[reservation_unknown, "reserved"] = "unknown"
     joined["exclusion_reason"] = np.where(reserved, "reserved_identity",
                                          np.where(joined.original_split.eq("test"), "existing_test_identity", ""))
-    usable = joined.original_split.isin(["train", "validation"]) & ~joined.reserved
+    usable = joined.original_split.isin(["train", "validation"]) & ~reserved
     allowed, rejected = joined.loc[usable].copy(), joined.loc[~usable].copy()
     for field in required - {"start_s"}:
         if allowed[field].astype(str).str.strip().eq("").any():
             raise ValueError(f"Empty audit field {field}")
-    if not allowed.locomotion_status.eq("audited_locomotion").all():
-        raise ValueError("Explicit locomotion audit required")
+    expected_status = "algorithm_screened_locomotion" if automated else "audited_locomotion"
+    if not allowed.locomotion_status.eq(expected_status).all():
+        raise ValueError(f"Explicit {expected_status} records required for {review_mode}")
+    allowed["review_mode"] = review_mode
+    if automated:
+        for row in allowed.to_dict("records"):
+            path = Path(row["audit_evidence"])
+            if not path.is_absolute() or not path.is_file():
+                raise ValueError("Automated audit_evidence must name an existing absolute evidence JSON path")
+            evidence = json.loads(path.read_text())
+            if (row["audit_reviewer"] != "stv2-kinematic-screen-v1"
+                    or evidence.get("screen_version") != row["audit_reviewer"]
+                    or evidence.get("reviewed_by") != "algorithm" or evidence.get("status") != "pass"
+                    or evidence.get("review_mode") != review_mode
+                    or evidence.get("relative_path") != row["relative_path"]
+                    or evidence.get("canonical_person_id") != row["canonical_person_id"]
+                    or not np.isclose(float(evidence.get("start_s", np.nan)), float(row["start_s"]), rtol=0, atol=1e-9)
+                    or not isinstance(evidence.get("metrics"), dict)
+                    or not isinstance(evidence.get("thresholds"), dict)
+                    or not isinstance(evidence.get("source_sha256"), str)
+                    or len(evidence["source_sha256"]) != 64):
+                raise ValueError(f"Machine evidence does not support this exact window: {path}")
     if not allowed.available.all():
         raise FileNotFoundError("Audited AMASS source files unavailable")
     allowed["split"] = allowed.original_split.map({"train": "train", "validation": "development"})
@@ -172,6 +204,16 @@ def preparation_provenance(config, table, repo):
         # Protected excluded motions are never read or hashed.
         "motions": {str(Path(path).expanduser().resolve()): _file(path)["sha256"] for path in sorted(set(table.raw_path))},
     }
+    if config.get("review_mode") == "automated_development":
+        assets["algorithm_screen_evidence"] = {
+            str(Path(path).expanduser().resolve()): _file(path)["sha256"]
+            for path in sorted(set(table.audit_evidence))
+        }
+        for row in table.to_dict("records"):
+            evidence = json.loads(Path(row["audit_evidence"]).read_text())
+            source = str(Path(row["raw_path"]).expanduser().resolve())
+            if evidence["source_sha256"] != assets["motions"][source]:
+                raise ValueError(f"Motion changed since algorithm screening: {source}")
     versions = {}
     for package in ("numpy", "scipy", "pandas", "torch", "torchvision", "mmcv", "mmengine",
                     "mmpose", "mmpretrain", "human-body-prior", "pyrender", "trimesh", "Pillow"):
@@ -222,7 +264,8 @@ def prepare_source(config, output, repo):
         raise ValueError("Body/render/extraction requires explicit CUDA scope")
     scope.require_gpu_scope()
     table, rejected = audited_motion_windows(config["manifest_dir"], config["amass_root"],
-                                             config["locomotion_audit"], config["reservation_csv"])
+                                             config["locomotion_audit"], config["reservation_csv"],
+                                             review_mode=config.get("review_mode", "human_audited"))
     output = Path(output)
     if output.exists():
         raise FileExistsError("Use a unique preparation run; finished bundles are immutable")
@@ -310,7 +353,8 @@ def prepare_source(config, output, repo):
                         "original_split", "split", "exposure", "locomotion_status", "audit_reviewer", "audit_evidence", "audit_date")},
                         "motion_id": row["relative_path"], "motion_hash": motion_hash, "window_id": window_id,
                         "variant": variant, "extractor": name, "extractor_family": family, "family": family,
-                        "box_source": track.box_source, "reserved": False, "target_kind": "synthetic_proxy", "seed": seed,
+                        "box_source": track.box_source, "reserved": row["reserved"],
+                        "review_mode": row["review_mode"], "target_kind": "synthetic_proxy", "seed": seed,
                         "start_s": float(body.timestamps[0]), "end_s": float(body.timestamps[-1]), "extraction_status": track.status_counts})
         if preparation_provenance(config, table, repo)["identity"] != provenance["identity"]:
             raise ValueError("Producer assets or code changed during source preparation")
@@ -327,12 +371,14 @@ def prepare_source(config, output, repo):
         atomic_json(output / "pairs.json", pairs)
     if not records:
         raise ValueError("No supported extracted tracks; no empty successful bundle")
+    evidence_status = "automated-source-screen" if config.get("review_mode") == "automated_development" else "source-run"
     bundle = TrackBundle({k: np.stack(v) for k, v in inputs.items()},
-                         {k: np.stack(v) for k, v in targets.items()}, records, "source-run", provenance)
+                         {k: np.stack(v) for k, v in targets.items()}, records, evidence_status, provenance)
     bundle.save(output / "bundle")
     atomic_json(output / "preparation-status.json", dict(status="source_prepared", counts=counts,
                 completed_track_rows=len(records), held_extractor_family=excluded_family,
-                landmark_claim="synthetic_proxy_only"))
+                landmark_claim="synthetic_proxy_only", evidence_status=evidence_status,
+                review_mode=config.get("review_mode", "human_audited")))
     return output / "bundle"
 
 
