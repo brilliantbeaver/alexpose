@@ -1,5 +1,6 @@
 """Adversarial controller tests use a simulated scheduler and no allocated jobs."""
 import contextlib
+import errno
 import importlib.util
 import io
 import json
@@ -223,6 +224,36 @@ class AutomatedRunTests(unittest.TestCase):
             self.assertTrue(AUTO.controller_running(self.work))
         before = path.read_bytes()
         self.assertFalse(AUTO.controller_running(self.work))
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_running_probe_supports_nfs_exclusive_locks(self):
+        # Linux NFS emulates flock with byte-range locks: LOCK_EX needs a
+        # writable descriptor even though native local flock may accept 'r'.
+        flock = AUTO.fcntl.flock
+
+        def nfs_flock(stream, operation):
+            mode = AUTO.fcntl.fcntl(stream.fileno(), AUTO.fcntl.F_GETFL) & os.O_ACCMODE
+            if operation & AUTO.fcntl.LOCK_EX and mode == os.O_RDONLY:
+                raise OSError(errno.EBADF, os.strerror(errno.EBADF))
+            return flock(stream, operation)
+
+        path = self.work / 'locks/process/automation.lock'
+        path.parent.mkdir(parents=True)
+        path.write_bytes(b'preserve existing lock contents\n')
+        before = path.read_bytes()
+        with patch.object(AUTO.fcntl, 'flock', side_effect=nfs_flock):
+            self.assertFalse(AUTO.controller_running(self.work))
+            with AUTO.haic.stage_lock(self.work, 'automation'), \
+                    patch.object(AUTO.subprocess, 'Popen') as child:
+                self.assertTrue(AUTO.controller_running(self.work))
+                AUTO.launch(self.work)
+                child.assert_not_called()
+            self.assertFalse(AUTO.controller_running(self.work))
+            with patch.object(AUTO.subprocess, 'Popen', return_value=SimpleNamespace(pid=12345)) as child:
+                AUTO.launch(self.work)
+                child.assert_called_once()
+            with patch.object(AUTO.haic, 'status'):
+                AUTO.status(self.work)
         self.assertEqual(path.read_bytes(), before)
 
     def test_launch_is_detached_noninteractive_and_preserves_retry_flag(self):
