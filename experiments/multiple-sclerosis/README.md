@@ -82,6 +82,13 @@ Some filenames retain earlier experiment names. Notebook 03 now trains on all
 three conditions in its training partition. Notebook 04 uses label-free additional
 training and supervised linear probes; it does not use class-aware VICReg.
 The model uses stochastic masks so each joint can be visible context or a target.
+That variation is across fresh mask draws; a joint may be hidden for an entire
+individual window. Notebook 02 now replays the same motion with eight sampled
+masks and reports per-joint and exact-time coverage. A static timeline shows all
+mask bits without relying on GIF playback. From this experiment directory, run
+`python scripts/scripts_mask_demo.py` to refresh all three historical GIF paths
+and the timeline, or add `--check` to detect stale/overwritten output.
+See [mask semantics and the hip audit](docs/12-mask-visualization.md).
 
 ## Run locally
 

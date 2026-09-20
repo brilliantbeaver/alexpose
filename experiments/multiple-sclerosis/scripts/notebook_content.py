@@ -278,11 +278,21 @@ def nb_02(md, code, badge, boot):
         "## Stochastic graph-time masks\n",
         "Each step we sample a per-example mask: connected groups of joints (a limb or the trunk) over "
         "a contiguous span of time. The cell below samples a few masks and shows they differ, that "
-        "every one keeps visible context, and that over a bank of masks every joint is both visible "
-        "and targeted often enough (the coverage gates).\n",
+        "every window keeps visible context somewhere, and that over a bank of masks every joint "
+        "is both visible and targeted often enough (the coverage gates). A joint can be masked in "
+        "every block of one window: overlapping regions can cover its full duration. The maximum "
+        "span applies to each sampled region, not their union. Hips belong to both trunk and leg "
+        "regions, so their target frequency can be higher. Coverage is measured across fresh "
+        "mask draws; individual frames and windows do not have a per-joint visibility guarantee. "
+        "There is also a temporal bias: intervals placed entirely inside a window cover middle "
+        "blocks more often than the ends. The exact-time table below exposes this; passing "
+        "the window-coverage gates does not establish balanced masking or optimal training.\n",
     )]
     c += [code(
         "import numpy as np",
+        "from importlib import reload",
+        "import sjepa.masking_v2 as masking",
+        "masking = reload(masking)  # pick up local edits in an existing notebook kernel",
         "from sjepa.masking_v2 import sample_mask_batch, mask_bank_stats",
         "",
         "rng = np.random.default_rng(0)",
@@ -293,9 +303,20 @@ def nb_02(md, code, badge, boot):
         "      bool((~batch).any(1).all() and batch.any(1).all()))",
         "",
         "stats = mask_bank_stats(cfg.num_joints, cfg.num_time_tokens, n_masks=512, seed=0)",
-        "print(f'over 512 masks: min joint-visible {stats.joint_visible_frac.min():.2f} '",
-        "      f'(gate >=0.20), min joint-target {stats.joint_target_frac.min():.2f} (gate >=0.10)')",
+        "print(f'over 512 masks: min visible-at-least-once/window {stats.joint_visible_frac.min():.2f} '",
+        "      f'(gate >=0.20), min targeted-at-least-once/window {stats.joint_target_frac.min():.2f} (gate >=0.10)')",
         "print(f'mean target fraction {stats.mean_target_frac:.2f}')",
+        "display(pd.DataFrame({",
+        "    'joint': MEDIAPIPE_33_NAMES,",
+        "    'visible token %': 100 * stats.joint_visible_token_frac,",
+        "    'windows with any context %': 100 * stats.joint_visible_frac,",
+        "    'windows fully masked for this joint %': 100 * stats.joint_always_target_frac,",
+        "}).round(1))",
+        "# 'Ever visible' can conceal low coverage in the middle of a window.",
+        "print('Hip context frequency at each exact time block (%):')",
+        "display(pd.DataFrame(100 * stats.token_visible_frac[:, [23, 24]],",
+        "                     columns=['left hip', 'right hip'],",
+        "                     index=np.arange(1, cfg.num_time_tokens + 1)).round(1))",
     )]
     c += [md(
         "Here is the difference drawn out: a fixed mask hides the same joints forever (left), while "
@@ -305,23 +326,51 @@ def nb_02(md, code, badge, boot):
         "display(SVG(filename=str(IMAGES_DIR / 'defect_mask_starvation.svg')))",
     )]
     c += [md(
-        "## See one mask on a real skeleton\n",
-        "The animation highlights one sampled set of masked joints in red on a real walking sequence. "
-        "Next time you sample, a different group will be hidden.\n",
+        "## See successive mask draws on the same skeleton\n",
+        "Two clocks are shown separately: **mask sample** changes the independently drawn mask, "
+        "while **time block** advances within a single model window. We replay the same motion "
+        "for eight fresh masks from one seeded RNG, without filtering or recoloring any samples. "
+        "Blue circles are visible context; red X markers are hidden prediction targets.\n",
+        "With the laptop profile, the first seed-0 sample hides both complete legs for the whole window. In later "
+        "samples the hips become visible. An entirely red time block is also valid if context "
+        "exists elsewhere in that window. The GIF repeats these eight saved samples; rerunning "
+        "with the same seed reproduces them. Change `DEMO_SEED` to explore another batch.\n",
+        "The static timeline shows **every joint and time block at once**, even if your notebook "
+        "viewer freezes the GIF. Its rows 23 and 24 show the exact hip mask bits. The helper also "
+        "refreshes both older GIF filenames and writes a manifest so stale output can be detected. "
+        "From a terminal, `python scripts/scripts_mask_demo.py` produces the same demo and "
+        "`python scripts/scripts_mask_demo.py --check` detects overwritten artifacts.\n",
     )]
     c += [code(
-        "from sjepa.masking_v2 import sample_target_mask",
-        "from sjepa.viz import skeleton_animation",
-        "from IPython.display import Image",
+        "from importlib import reload",
+        "import sjepa.masking_v2 as masking",
+        "import sjepa.viz as viz",
+        "import sjepa.mask_demo as mask_demo",
+        "masking = reload(masking); viz = reload(viz)",
+        "mask_demo = reload(mask_demo)",
+        "from sjepa.data import sliding_windows",
+        "from IPython.display import Image, display",
         "",
         "# Inspect only a training clip; no held-out motion guides the mask demo.",
-        "seq = train_recs[0].load_norm()",
-        "tgt = sample_target_mask(cfg.num_joints, cfg.num_time_tokens, np.random.default_rng(1))",
-        "masked_joints = sorted({int(i % cfg.num_joints) for i in np.nonzero(tgt)[0]})",
-        "gif = skeleton_animation(seq, ARTIFACT_DIR / 'mask_demo.gif',",
-        "                         masked_joints=masked_joints, fps=15,",
-        "                         title='red = one sampled set of masked joints')",
-        "Image(filename=str(gif))",
+        "seq = sliding_windows(train_recs[0].load_norm(),",
+        "                      cfg.window_frames, cfg.window_stride)[0]",
+        "DEMO_SEED = 0",
+        "N_MASK_SAMPLES = 8",
+        "demo = mask_demo.write_mask_demo(seq, ARTIFACT_DIR, frame_group=cfg.frame_group,",
+        "                                fps=cfg.target_fps, seed=DEMO_SEED, n_samples=N_MASK_SAMPLES)",
+        "demo_masks = demo.masks",
+        "print('Every joint appears in both roles across these samples:',",
+        "      bool(demo_masks.any((0, 1)).all() and (~demo_masks).any((0, 1)).all()))",
+        "print(f'Each sample: {cfg.window_frames} frames; each block: {cfg.frame_group} frames.')",
+        "display(pd.DataFrame({",
+        "    'mask sample': np.arange(1, N_MASK_SAMPLES + 1),",
+        "    'left hip visible blocks': (~demo_masks[:, :, 23]).sum(1),",
+        "    'right hip visible blocks': (~demo_masks[:, :, 24]).sum(1),",
+        "    'out of blocks': cfg.num_time_tokens,",
+        "}))",
+        "mask_demo.verify_mask_demo(ARTIFACT_DIR)",
+        "display(Image(filename=str(demo.timeline)))",
+        "display(Image(filename=str(demo.animation)))",
     )]
     return c
 

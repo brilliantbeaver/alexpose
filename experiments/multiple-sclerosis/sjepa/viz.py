@@ -36,6 +36,99 @@ CONNECTIONS = [
 ]
 
 
+def _temporal_target_mask(
+    num_joints: int,
+    target_mask: Optional[np.ndarray],
+    masked_joints: Optional[Sequence[int]],
+) -> np.ndarray:
+    """Normalize visualization masks to ``(time_blocks, joints)``.
+
+    ``True`` means hidden target and ``False`` means visible context. The static
+    ``masked_joints`` argument is retained for legacy diagrams, but an all-joint
+    union is rejected because it discards the temporal information and leaves no
+    visible context.
+    """
+    if target_mask is not None and masked_joints is not None:
+        raise ValueError("Pass either target_mask or masked_joints, not both")
+
+    if target_mask is not None:
+        temporal_mask = np.asarray(target_mask, dtype=bool)
+        if temporal_mask.ndim == 1:
+            if temporal_mask.size == 0 or temporal_mask.size % num_joints:
+                raise ValueError(
+                    "target_mask must contain a non-zero whole number of joint blocks"
+                )
+            temporal_mask = temporal_mask.reshape(-1, num_joints)
+        elif (
+            temporal_mask.ndim != 2
+            or temporal_mask.shape[0] == 0
+            or temporal_mask.shape[1] != num_joints
+        ):
+            raise ValueError(
+                f"target_mask must have shape (time_blocks, {num_joints})"
+            )
+    else:
+        temporal_mask = np.zeros((1, num_joints), dtype=bool)
+        if masked_joints is not None:
+            indices = np.asarray(list(masked_joints), dtype=int)
+            if ((indices < 0) | (indices >= num_joints)).any():
+                raise ValueError(f"masked_joints must be between 0 and {num_joints - 1}")
+            temporal_mask[0, indices] = True
+
+    if temporal_mask.all():
+        raise ValueError(
+            "Mask leaves no visible context anywhere. Pass the full temporal target_mask; "
+            "do not collapse it to the union of masked joints."
+        )
+    return temporal_mask
+
+
+def _target_mask_by_frame(temporal_mask: np.ndarray, num_frames: int) -> np.ndarray:
+    """Expand token-time masks to frames without stretching or interpolation."""
+    num_blocks = temporal_mask.shape[0]
+    if num_blocks == 1:
+        return np.repeat(temporal_mask, num_frames, axis=0)
+    if num_frames % num_blocks:
+        raise ValueError(
+            f"Sequence has {num_frames} frames but mask has {num_blocks} time blocks; "
+            "animate one model window so each block maps to a whole number of frames."
+        )
+    return np.repeat(temporal_mask, num_frames // num_blocks, axis=0)
+
+
+def _animation_mask_schedule(
+    target_mask: Optional[np.ndarray],
+    masked_joints: Optional[Sequence[int]],
+    num_frames: int,
+    num_joints: int,
+    frame_group: Optional[int],
+):
+    """Preserve sample, time-block and joint axes before expanding to frames."""
+    supplied = np.asarray(target_mask) if target_mask is not None else None
+    if supplied is not None and supplied.ndim == 3:
+        if supplied.shape[0] == 0:
+            raise ValueError("target_mask must contain at least one sample")
+        samples = list(supplied)
+    else:
+        samples = [supplied]
+    masks = np.stack([
+        _temporal_target_mask(num_joints, sample, masked_joints) for sample in samples
+    ])
+    num_blocks = masks.shape[1]
+    if frame_group is not None:
+        if not isinstance(frame_group, (int, np.integer)) or frame_group < 1:
+            raise ValueError("frame_group must be a positive integer")
+        if target_mask is None or num_frames != num_blocks * frame_group:
+            raise ValueError(
+                "Pass a temporal target_mask for exactly one model window: "
+                f"{num_blocks} blocks x frame_group={frame_group} != {num_frames} frames"
+            )
+    frame_masks = np.concatenate([
+        _target_mask_by_frame(sample, num_frames) for sample in masks
+    ])
+    return masks, frame_masks
+
+
 def show_video(path: str | Path, width: int = 420, max_bytes: int = 4_000_000):
     """Return an IPython Video object containing a browser-compatible MP4.
 
@@ -156,19 +249,33 @@ def skeleton_animation(
     fps: int = 15,
     invert_y: bool = True,
     title: str = "",
+    target_mask: Optional[np.ndarray] = None,
+    *,
+    frame_group: Optional[int] = None,
 ):
-    """Save a gif of the skeleton over time and return the path.
+    """Save a GIF of a BlazePose-33 skeleton and its mask over time.
 
-    ``seq`` is (T, 33, 3). If ``masked_joints`` is given, those joints are drawn in
-    a highlight colour so the anatomical mask is visible. ``invert_y`` flips the y
-    axis so the figure looks upright (image coordinates grow downward).
+    ``seq`` has shape ``(frames, 33, channels)``. A flat ``target_mask`` uses
+    token order ``time_block * joints + joint``; a 2-D mask has shape
+    ``(time_blocks, 33)``. A 3-D mask ``(samples, time_blocks, 33)`` replays this
+    same window once per supplied sample, showing stochastic variation separately
+    from motion within a window. Samples are supplied by the caller; GIF loops
+    always replay the same saved draws. Pass ``frame_group=cfg.frame_group`` to
+    enforce exact alignment with model tokens. Red X markers are hidden targets;
+    blue circles are visible context. Individual blocks may have no context.
+    ``masked_joints`` is for static masks. ``invert_y`` flips image coordinates.
     """
     import matplotlib.pyplot as plt
     from matplotlib import animation
 
     seq = np.asarray(seq)
-    T = seq.shape[0]
-    masked = set(masked_joints or [])
+    if seq.ndim != 3 or seq.shape[0] == 0 or seq.shape[1] != 33 or seq.shape[2] < 2:
+        raise ValueError("seq must have shape (non-empty frames, 33, at least 2 channels)")
+    T, num_joints = seq.shape[:2]
+    temporal_masks, frame_masks = _animation_mask_schedule(
+        target_mask, masked_joints, T, num_joints, frame_group
+    )
+    num_samples, num_blocks = temporal_masks.shape[:2]
 
     xy = seq[:, :, :2]
     xmin, xmax = np.nanmin(xy[:, :, 0]), np.nanmax(xy[:, :, 0])
@@ -176,7 +283,8 @@ def skeleton_animation(
     pad_x = 0.1 * (xmax - xmin + 1e-6)
     pad_y = 0.1 * (ymax - ymin + 1e-6)
 
-    fig, ax = plt.subplots(figsize=(3.5, 4.5))
+    fig, ax = plt.subplots(figsize=(7.0, 5.2))
+    fig.subplots_adjust(left=0.06, right=0.62, bottom=0.22, top=0.86)
     ax.set_xlim(xmin - pad_x, xmax + pad_x)
     ax.set_ylim(ymin - pad_y, ymax + pad_y)
     if invert_y:
@@ -184,28 +292,140 @@ def skeleton_animation(
     ax.set_aspect("equal")
     ax.axis("off")
     if title:
-        ax.set_title(title, fontsize=11)
+        fig.suptitle(title, fontsize=12, y=0.96)
 
     lines = [ax.plot([], [], "-", color="#9aa5b1", lw=2)[0] for _ in CONNECTIONS]
-    ctx_scatter = ax.scatter([], [], s=18, color="#4a5568", zorder=3)
-    msk_scatter = ax.scatter([], [], s=34, color="#e53e3e", zorder=4)
-
-    ctx_idx = [j for j in range(33) if j not in masked]
-    msk_idx = [j for j in range(33) if j in masked]
+    ctx_scatter = ax.scatter(
+        [], [], s=28, marker="o",
+        color="#2563eb", edgecolors="white", linewidths=0.6,
+        label="visible context", zorder=3,
+    )
+    msk_scatter = ax.scatter(
+        [], [], s=56, marker="X",
+        color="#dc2626", edgecolors="white", linewidths=0.8,
+        label="masked target", zorder=4,
+    )
+    ax.legend(
+        loc="upper left", bbox_to_anchor=(1.02, 1.0),
+        borderaxespad=0, frameon=False, fontsize=8,
+    )
+    # Explicit status stays readable even when a hand overlaps a hip in 2-D.
+    sample_label = fig.text(0.65, 0.68, "", fontsize=11, weight="bold")
+    hip_labels = [
+        fig.text(0.65, 0.60 - i * 0.07, "", fontsize=10)
+        for i in range(2)
+    ]
+    if num_samples > 1:
+        replay_note = ("Same motion window;\nnew mask at each sample.\n\n"
+                       "GIF repeats these saved\nsamples, then loops.")
+    elif target_mask is not None or masked_joints is not None:
+        replay_note = "One saved mask.\nGIF loops do not\nresample it."
+    else:
+        replay_note = "Unmasked sequence.\nAll joints are context."
+    fig.text(0.65, 0.36, replay_note, fontsize=9, color="#4a5568", va="top")
+    block_label = fig.text(
+        0.06, 0.13, "", fontsize=10, color="#4a5568"
+    )
+    context_note = fig.text(0.06, 0.08, "", fontsize=9, color="#4a5568")
 
     def update(t):
-        pts = xy[t]
+        sample, local_frame = divmod(t, T)
+        pts = xy[local_frame]
+
+        masked_now = frame_masks[t]
+        ctx_idx = np.flatnonzero(~masked_now)
+        msk_idx = np.flatnonzero(masked_now)
+        block = local_frame * num_blocks // T
+        sample_label.set_text(f"Mask sample {sample + 1}/{num_samples}")
+        for label, j, side in zip(hip_labels, (23, 24), ("L", "R")):
+            label.set_text(f"{side} hip ({j}): {'MASKED' if masked_now[j] else 'VISIBLE'}")
+            label.set_color("#dc2626" if masked_now[j] else "#2563eb")
+        block_label.set_text(
+            f"Time block {block + 1}/{num_blocks} | frame {local_frame + 1}/{T} | "
+            f"{ctx_idx.size} visible, {msk_idx.size} masked"
+        )
+        context_note.set_text(
+            "No context in this block; context is available at other times."
+            if ctx_idx.size == 0 else "Blue circle = visible context; red X = masked target."
+        )
+
         for line, (a, b) in zip(lines, CONNECTIONS):
             line.set_data([pts[a, 0], pts[b, 0]], [pts[a, 1], pts[b, 1]])
-        ctx_scatter.set_offsets(pts[ctx_idx] if ctx_idx else np.empty((0, 2)))
-        msk_scatter.set_offsets(pts[msk_idx] if msk_idx else np.empty((0, 2)))
-        return lines + [ctx_scatter, msk_scatter]
+        ctx_scatter.set_offsets(
+            pts[ctx_idx] if ctx_idx.size else np.empty((0, 2))
+        )
+        msk_scatter.set_offsets(
+            pts[msk_idx] if msk_idx.size else np.empty((0, 2))
+        )
+        return lines + [ctx_scatter, msk_scatter, block_label, sample_label,
+                        context_note, *hip_labels]
 
-    anim = animation.FuncAnimation(fig, update, frames=T, interval=1000 / fps, blit=True)
+    anim = animation.FuncAnimation(
+        # Figure-level status labels are omitted from GIF export if marked as
+        # animated by blitting. Redraw the full figure to preserve those labels.
+        fig, update, frames=T * num_samples, interval=1000 / fps, blit=False
+    )
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    anim.save(out_path, writer="pillow", fps=fps)
-    plt.close(fig)
+    try:
+        anim.save(out_path, writer="pillow", fps=fps)
+    finally:
+        plt.close(fig)
+    return out_path
+
+
+def mask_timeline(target_masks: np.ndarray, out_path: str | Path, frame_group: int = 4):
+    """Show every joint/time mask cell at once, independently of GIF playback.
+
+    Accepts ``(samples, time_blocks, 33)``. Each cell is the actual mask bit, not
+    an average or the union over time. Right-side counts expose joints that have
+    little context even if they pass an "ever visible" check.
+    """
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap
+    from matplotlib.patches import Patch
+
+    masks = np.asarray(target_masks, dtype=bool)
+    if masks.ndim != 3 or masks.shape[0] == 0 or masks.shape[1] == 0 or masks.shape[2] != 33:
+        raise ValueError("target_masks must have shape (samples, time_blocks, 33)")
+    n_samples, n_blocks, n_joints = masks.shape
+    grid = masks.reshape(n_samples * n_blocks, n_joints).T
+    visible_counts = (~grid).sum(1)
+    labels = [str(j) for j in range(n_joints)]
+    labels[23], labels[24] = "23  LEFT HIP", "24  RIGHT HIP"
+    fig, ax = plt.subplots(figsize=(12, 8.5))
+    fig.subplots_adjust(left=0.16, right=0.88, bottom=0.12, top=0.84)
+    ax.imshow(grid, cmap=ListedColormap(["#2563eb", "#dc2626"]),
+              vmin=0, vmax=1, aspect="auto", interpolation="nearest")
+    ax.set_yticks(range(n_joints), labels, fontsize=9)
+    for j in [23, 24]:
+        ax.get_yticklabels()[j].set_weight("bold")
+    ax.set_xticks(np.arange(n_samples) * n_blocks + (n_blocks - 1) / 2,
+                  [f"Sample {i + 1}" for i in range(n_samples)])
+    for boundary in range(n_blocks, n_samples * n_blocks, n_blocks):
+        ax.axvline(boundary - 0.5, color="white", lw=2)
+    for j in [22.5, 24.5]:
+        ax.axhline(j, color="#111827", lw=1.5)
+    for j, count in enumerate(visible_counts):
+        ax.text(n_samples * n_blocks + 0.4, j, f"{count}/{n_samples * n_blocks}",
+                va="center", fontsize=9, clip_on=False,
+                weight="bold" if j in [23, 24] else "normal")
+    ax.text(1.02, 1.02, "Visible blocks", transform=ax.transAxes, fontsize=9)
+    ax.set_xlabel(f"Each colored cell is one {frame_group}-frame time block; sample boundaries are white.")
+    ax.set_ylabel("BlazePose joint index")
+    fig.suptitle("All sampled masks at once: no playback or overlap ambiguity", fontsize=14, y=0.97)
+    fig.legend(handles=[Patch(color="#2563eb", label="Visible context"),
+                        Patch(color="#dc2626", label="Masked target")],
+               loc="upper center", bbox_to_anchor=(0.5, 0.935), ncol=2, frameon=False)
+    fig.text(0.16, 0.035,
+             f"Left hip visible in {visible_counts[23]} blocks; right hip in {visible_counts[24]}. "
+             "GIF loops replay these same bits.", fontsize=10)
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        fig.savefig(out_path, dpi=130)
+    finally:
+        plt.close(fig)
     return out_path
 
 

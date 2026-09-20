@@ -25,6 +25,7 @@ from sjepa.models import build_model  # noqa: E402
 from sjepa.masking_v2 import (  # noqa: E402
     sample_target_mask, sample_mask_batch, mask_bank_stats,
 )
+from sjepa.viz import _target_mask_by_frame, _temporal_target_mask  # noqa: E402
 from sjepa.data import source_id_from_name  # noqa: E402
 
 
@@ -177,6 +178,22 @@ def test_masks_are_per_example_and_diverse():
     assert len(uniq) >= 8, f"masks not diverse across examples: {len(uniq)} unique"
     # Every row has non-empty context and non-empty target.
     assert batch.any(axis=1).all() and (~batch).any(axis=1).all()
+
+
+def test_visual_mask_preserves_time_blocks_and_rejects_static_union():
+    temporal = np.zeros((2, 33), dtype=bool)
+    temporal[0, :10] = True
+    temporal[1, 10:20] = True
+    normalized = _temporal_target_mask(33, temporal.reshape(-1), None)
+    by_frame = _target_mask_by_frame(normalized, num_frames=8)
+    assert np.array_equal(by_frame[:4], np.repeat(temporal[:1], 4, axis=0))
+    assert np.array_equal(by_frame[4:], np.repeat(temporal[1:], 4, axis=0))
+
+    import pytest
+    with pytest.raises(ValueError, match="do not collapse"):
+        _temporal_target_mask(33, None, list(range(33)))
+    with pytest.raises(ValueError, match="animate one model window"):
+        _target_mask_by_frame(temporal, num_frames=9)
 
 
 def test_masks_deterministic_under_seed():
