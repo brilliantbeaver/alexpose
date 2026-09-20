@@ -1,4 +1,4 @@
-"""Run-once pose extraction over all videos in video-data/.
+"""Run-once pose extraction over all clips in video-data-full/.
 
 Notebook 01 walks a learner through this same logic cell by cell. This script is
 the batch version we run during setup so the cached .npz files exist and every
@@ -24,9 +24,9 @@ from sjepa.data import (  # noqa: E402
     save_sequence_npz, source_id_from_name,
 )
 
-VIDEO_DIR = EXP_DIR / "video-data"
-CACHE_DIR = EXP_DIR / "artifacts" / "keypoints"
-CLASSES = ["normal", "ms", "pd"]
+VIDEO_DIR = EXP_DIR / "video-data-full"
+CACHE_DIR = EXP_DIR / "artifacts" / "keypoints-full"
+CLASS_DIRS = {"normal": "Normal", "ms": "MS", "pd": "PD"}
 
 
 def main() -> int:
@@ -46,8 +46,8 @@ def main() -> int:
     rows = []
     skipped = []
 
-    for label in CLASSES:
-        folder = VIDEO_DIR / label
+    for label, dirname in CLASS_DIRS.items():
+        folder = VIDEO_DIR / dirname
         videos = sorted(folder.glob("*.mp4"))
         if args.limit:
             videos = videos[: args.limit]
@@ -77,7 +77,7 @@ def main() -> int:
             print(f"    -> {norm.shape[0]} frames cached")
 
     index = pd.DataFrame(rows)
-    index_path = EXP_DIR / "artifacts" / "keypoints_index.parquet"
+    index_path = EXP_DIR / "artifacts" / "keypoints_index_full.parquet"
     index.to_parquet(index_path, index=False)
 
     # A grouped manifest that also records the source id for split reproducibility.
@@ -85,7 +85,7 @@ def main() -> int:
     grouped.to_csv(EXP_DIR / "artifacts" / "manifest_grouped.csv", index=False)
 
     print("\n=== summary ===")
-    print(index.groupby("label").agg(videos=("clip_name", "count"),
+    print(index.groupby("label").agg(clips=("clip_name", "count"),
                                      sources=("source_id", "nunique"),
                                      total_frames=("n_frames", "sum")))
     if skipped:

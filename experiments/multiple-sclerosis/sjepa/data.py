@@ -35,7 +35,7 @@ import numpy as np
 _LEFT_HIP, _RIGHT_HIP = 23, 24
 _LEFT_SHOULDER, _RIGHT_SHOULDER = 11, 12
 
-_CLIP_SUFFIX = re.compile(r"_clip-\d+$", re.IGNORECASE)
+_CLIP_SUFFIX = re.compile(r"(?:_clip-\d+|_P\d+(?:_\d+)?)$", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -187,7 +187,13 @@ def normalize_sequence(seq: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------------------------
 
 def source_id_from_name(filename: str) -> str:
-    """Strip a ``_clip-NN`` suffix to recover the shared source id."""
+    """Recover the shared source-video id from an old or current clip name.
+
+    The legacy collection used names such as ``video_id_clip-01.mp4``.  The
+    current ``video-data-full`` collection uses ``video_id_P1.mp4`` or
+    ``video_id_P1_01.mp4``.  In every case the leading video id is the grouping
+    unit; it is a source recording, not a verified participant identifier.
+    """
     stem = Path(filename).stem
     return _CLIP_SUFFIX.sub("", stem)
 
