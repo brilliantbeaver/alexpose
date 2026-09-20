@@ -7,18 +7,19 @@ reference) with the design the audit and literature call for:
   across the whole batch.
 * **Stochastic graph-time regions**: each masked region is a connected group of
   joints (a limb or the trunk) over a contiguous span of time blocks, so the
-  mask has spatial and temporal structure instead of hiding whole joints for all
-  time.
-* **Every joint rotates** between context and target across steps, so no joint is
-  starved of context gradient (the D2 defect).
+  mask has spatial and temporal structure. Several regions can overlap and their
+  union can hide a joint throughout ONE window, even when each region is shorter.
+* **Coverage across draws**: every joint can be context or target across fresh
+  mask samples. This is checked statistically over a mask bank, not guaranteed
+  within each window. Replaying a saved animation does not sample a new mask.
 * **Clinical target bias, not motion bias.** The lower-body and shoulder joints
   are *sampled as targets a little more often* (default 1.5x). We deliberately do
   NOT bias toward high-motion regions: reduced motion (hypokinesia, short steps)
   is exactly the clinical signal in MS/PD, so a high-motion mask would hide the
   evidence (MAMP's motion-aware masking is contraindicated here).
-* **Full context coverage guaranteed**: at least one lower-body / contralateral
-  cue is kept visible, and the target fraction is bounded so context is never
-  empty.
+* **Window-level context guaranteed**: at least one clinical-set token (shoulder
+  or leg) stays visible somewhere in the window. Individual time blocks may be
+  fully masked; the model can use context at other times.
 
 Tokens are laid out as ``token index = t * V + v`` (time block ``t``, joint
 ``v``), matching the tokenizer. Functions are pure numpy and take an explicit
@@ -58,10 +59,21 @@ CLINICAL_JOINTS = frozenset(ANATOMICAL_MASK_IDX)
 class MaskBankStats:
     """Coverage accounting over a bank of sampled masks (for the gates/tests)."""
 
-    joint_visible_frac: np.ndarray   # (V,) fraction of masks where joint is context
-    joint_target_frac: np.ndarray    # (V,) fraction of masks where joint is target
+    joint_visible_frac: np.ndarray   # (V,) masks where joint is context at least once
+    joint_target_frac: np.ndarray    # (V,) masks where joint is target at least once
     mean_target_frac: float          # mean fraction of tokens masked
     n_masks: int
+    joint_target_token_frac: np.ndarray  # (V,) masked fraction across masks AND time
+    token_visible_frac: np.ndarray       # (T,V) context frequency at each exact slot
+
+    @property
+    def joint_visible_token_frac(self) -> np.ndarray:
+        return 1.0 - self.joint_target_token_frac
+
+    @property
+    def joint_always_target_frac(self) -> np.ndarray:
+        """Fraction of windows in which a joint is targeted at EVERY time block."""
+        return 1.0 - self.joint_visible_frac
 
 
 def _region_joint_pool() -> List[Tuple[str, Tuple[int, ...]]]:
@@ -75,8 +87,9 @@ def _region_weights(regions, clinical_bias: float) -> np.ndarray:
     Joints that appear in several regions (e.g. shoulders 11/12 and hips 23/24 in
     the trunk) would otherwise be over-targeted, so we down-weight each region by
     the average multiplicity of its joints. Clinical regions get a mild boost. The
-    net effect keeps per-joint target frequency roughly balanced while still
-    favouring the clinically relevant lower body a little.
+    correction is approximate: hips and shoulders still belong to two regions
+    and can be targeted more often than single-region joints. A region's 1.5x
+    selection weight does not imply a joint's final masking probability is 1.5x.
     """
     # How many regions each joint belongs to.
     mult = {}
@@ -106,7 +119,11 @@ def sample_target_mask(
     tokens are targeted, then guarantee a non-empty context by clearing targets
     if we overshot. Clinically relevant joints are chosen more often via
     ``clinical_bias``. Time spans are contiguous and bounded by
-    ``max_time_span_frac`` of the window so masks keep temporal structure.
+    ``max_time_span_frac`` per region. Overlapping regions can still target a
+    joint for the entire window; only repeated independent draws demonstrate
+    whether that joint receives context coverage during training. Uniformly
+    placing a span fully inside the window does NOT give uniform token coverage:
+    middle blocks belong to more possible spans than boundary blocks do.
     """
     V, T = num_joints, num_time_tokens
     N = V * T
@@ -129,10 +146,9 @@ def sample_target_mask(
             for j in joints:
                 target[t, j] = True
 
-    # Guarantee a clinical context cue (AR-5 P2): the module promises at least one
-    # lower-body / contralateral token stays visible. If every clinical token is
-    # targeted, free one clinical token as context (not an arbitrary head/arm one),
-    # so the encoder always has a lower-body reference to reason from.
+    # Guarantee one clinical-set context token somewhere in the window (AR-5 P2).
+    # This set includes shoulders; it does not guarantee a hip, a leg, or context
+    # in every time block. Keep the draw order stable for saved-run reproducibility.
     clinical_cols = sorted(CLINICAL_JOINTS)
     if clinical_cols and target[:, clinical_cols].all():
         j = int(rng.choice(clinical_cols))
@@ -183,13 +199,18 @@ def mask_bank_stats(
 ) -> MaskBankStats:
     """Sample a bank of masks and measure per-joint context/target coverage.
 
-    Used by the promotion-gate tests: every joint must be visible in some masks
-    and targeted in others.
+    Window coverage (visible/targeted at least once) differs from token frequency
+    (fraction of time blocks). The former two quantities need not sum to one:
+    a joint can be context and target at different times within the same window.
+    ``token_visible_frac`` retains the time axis to expose middle/boundary bias
+    that either per-joint aggregate would conceal.
     """
     rng = np.random.default_rng(seed)
     V, T = num_joints, num_time_tokens
     vis_count = np.zeros(V)
     tgt_count = np.zeros(V)
+    target_token_count = np.zeros(V)
+    target_slot_count = np.zeros((T, V))
     total_target = 0
     for _ in range(n_masks):
         m = sample_target_mask(V, T, rng, target_ratio=target_ratio,
@@ -197,10 +218,14 @@ def mask_bank_stats(
         joint_targeted = m.any(axis=0)     # (V,) targeted in at least one time block
         tgt_count += joint_targeted
         vis_count += (~m).any(axis=0)      # visible in at least one time block
+        target_token_count += m.sum(axis=0)
+        target_slot_count += m
         total_target += m.sum()
     return MaskBankStats(
         joint_visible_frac=vis_count / n_masks,
         joint_target_frac=tgt_count / n_masks,
         mean_target_frac=total_target / (n_masks * V * T),
         n_masks=n_masks,
+        joint_target_token_frac=target_token_count / (n_masks * T),
+        token_visible_frac=1.0 - target_slot_count / n_masks,
     )
