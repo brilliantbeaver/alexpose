@@ -195,6 +195,8 @@ def source_id_from_name(filename: str) -> str:
     unit; it is a source recording, not a verified participant identifier.
     """
     stem = Path(filename).stem
+    if len(stem) == 11:  # A complete YouTube ID can itself end in `_P1`.
+        return stem
     return _CLIP_SUFFIX.sub("", stem)
 
 
@@ -331,8 +333,8 @@ def grouped_train_test_split(
 ) -> Tuple[List[SequenceRecord], List[SequenceRecord]]:
     """Split records so that all clips of one source id stay together.
 
-    Uses scikit-learn's GroupShuffleSplit on the source id, stratifying loosely by
-    keeping the class balance close through the shuffle seed.
+    Uses scikit-learn's GroupShuffleSplit on the source id. This does not
+    stratify labels. Full-data notebooks use the frozen registry in splits.py.
     """
     from sklearn.model_selection import GroupShuffleSplit
 
@@ -367,7 +369,9 @@ def grouped_kfold(
     per_class_groups = {
         c: len(set(g for g, l in zip(groups, labels) if l == c)) for c in set(labels)
     }
-    max_folds = max(2, min(per_class_groups.values()))
+    if n_splits < 2 or not per_class_groups or min(per_class_groups.values()) < 2:
+        raise ValueError("Grouped cross-validation needs at least two sources per class and two folds")
+    max_folds = min(per_class_groups.values())
     k = min(n_splits, max_folds)
 
     sgkf = StratifiedGroupKFold(n_splits=k, shuffle=True, random_state=seed)

@@ -60,3 +60,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["sjepa"]
+
+[tool.pytest.ini_options]
+testpaths = ["sjepa/tests"]
+pythonpath = ["."]

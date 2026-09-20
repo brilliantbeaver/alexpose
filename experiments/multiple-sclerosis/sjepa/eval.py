@@ -36,7 +36,8 @@ class Metrics:
         }
 
 
-def evaluate(y_true: Sequence, y_pred: Sequence, labels: Sequence[str]) -> Metrics:
+def evaluate(y_true: Sequence, y_pred: Sequence, labels: Sequence[str],
+             sample_weight=None) -> Metrics:
     """Compute accuracy, macro P/R/F1, per-class scores, and a confusion matrix."""
     from sklearn.metrics import (
         accuracy_score, precision_recall_fscore_support, confusion_matrix,
@@ -44,19 +45,19 @@ def evaluate(y_true: Sequence, y_pred: Sequence, labels: Sequence[str]) -> Metri
 
     y_true = list(y_true)
     y_pred = list(y_pred)
-    acc = float(accuracy_score(y_true, y_pred))
+    acc = float(accuracy_score(y_true, y_pred, sample_weight=sample_weight))
     p, r, f1, support = precision_recall_fscore_support(
-        y_true, y_pred, labels=list(labels), average=None, zero_division=0
+        y_true, y_pred, labels=list(labels), average=None, zero_division=0, sample_weight=sample_weight
     )
     mp, mr, mf1, _ = precision_recall_fscore_support(
-        y_true, y_pred, labels=list(labels), average="macro", zero_division=0
+        y_true, y_pred, labels=list(labels), average="macro", zero_division=0, sample_weight=sample_weight
     )
     per_class = {
         lab: {"precision": float(p[i]), "recall": float(r[i]),
-              "f1": float(f1[i]), "support": int(support[i])}
+              "f1": float(f1[i]), "support": float(support[i]) if sample_weight is not None else int(support[i])}
         for i, lab in enumerate(labels)
     }
-    cm = confusion_matrix(y_true, y_pred, labels=list(labels)).tolist()
+    cm = confusion_matrix(y_true, y_pred, labels=list(labels), sample_weight=sample_weight).tolist()
     return Metrics(acc, float(mp), float(mr), float(mf1), per_class, cm, list(labels))
 
 

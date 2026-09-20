@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-20",
+  "purpose": "Validate the training, validation, and testing boundary; not estimate trained-model quality",
+  "dataset": "video-data-full",
+  "raw_clips": 91,
+  "usable_clips": 88,
+  "usable_sources": 41,
+  "reviewed_exclusions": 3,
+  "dataset_sha256": "93e3ed716d608f503b77381692f833e8b027b85d9aa6d3580fae70eebb30e75b",
+  "registry_sha256": "9496e61b050fc8b62ccbc59cb737376396205a3356b323733b9b8915d56600e1",
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.4.6",
+    "scikit_learn": "1.9.0",
+    "torch": "2.13.0",
+    "device": "cpu"
+  },
+  "registry_audit": {
+    "outer_folds": 5,
+    "all_partitions_source_disjoint": true,
+    "all_partitions_have_all_three_conditions": true,
+    "every_usable_clip_tested_exactly_once": true
+  },
+  "tests": {
+    "command": "OMP_NUM_THREADS=2 .venv/bin/python -m pytest sjepa/tests -q",
+    "passed": 38,
+    "failed": 0,
+    "new_split_regression_tests": 20
+  },
+  "notebook_generator": {
+    "command": ".venv/bin/python scripts/scripts_build_notebooks.py --check --only 02 03 04 05 06",
+    "all_five_match": true
+  },
+  "notebook_execution": {
+    "method": "Execute every ordinary Python code cell in order, with a fresh namespace per notebook in a shared Python process. Use SJEPA_SMOKE=1, CPU, and the Agg plotting backend. Symlink the real cache, registry, package, videos, and images into an isolated temporary experiment directory; write derived outputs there.",
+    "code_cells_passed": {
+      "02_anatomical_mask_and_tokenization.ipynb": 10,
+      "03_sjepa_model_and_pretrain_normal.ipynb": 7,
+      "04_progressive_finetune_ms_pd_vicreg.ipynb": 7,
+      "05_representation_visualization.ipynb": 8,
+      "06_capstone_rf_vs_sjepa.ipynb": 7
+    },
+    "total_code_cells_passed": 39,
+    "tsne_and_umap_executed": true,
+    "browser_or_colab_frontend_tested": false
+  },
+  "five_fold_smoke": {
+    "command": ".venv/bin/python scripts/scripts_full_data.py --run --smoke --device cpu --output-dir /private/tmp/ms-full-data-split-smoke-20260920",
+    "base_updates_per_fold": 4,
+    "continuation_updates_per_fold": 2,
+    "completed_folds": [0, 1, 2, 3, 4],
+    "oof_rows_per_system": 88,
+    "systems": ["rf", "sjepa", "visibility", "mean_pose", "majority"],
+    "also_completed_through_notebook_06": true,
+    "temporary_outputs_are_not_publication_results": true
+  },
+  "normal_800_plus_400_update_training_run_executed": false,
+  "clinical_or_participant_disjoint_validation_claimed": false
+}

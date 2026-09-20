@@ -339,9 +339,13 @@ def save_checkpoint_v2(path, model: SJEPA, cfg: SJEPAConfig,
     torch.save(payload, path)
 
 
-def load_checkpoint_v2(path, model: SJEPA, map_location: Optional[str] = None) -> Dict:
+def load_checkpoint_v2(path, model: SJEPA, map_location: Optional[str] = None,
+                       expected_context: Optional[Dict] = None) -> Dict:
     """Load the repaired model; returns the checkpoint dict (incl. train_state)."""
     ckpt = torch.load(path, map_location=map_location or "cpu", weights_only=False)
+    if expected_context is not None and ckpt.get("extra", {}).get("split_context") != expected_context:
+        raise ValueError("Checkpoint provenance mismatch: dataset, fold, stage, or configuration differs. "
+                         "Rerun notebook 03/04 for this partition.")
     model.view_encoder.load_state_dict(ckpt["view_encoder"])
     model.target_encoder.load_state_dict(ckpt["target_encoder"])
     model.predictor.load_state_dict(ckpt["predictor"])

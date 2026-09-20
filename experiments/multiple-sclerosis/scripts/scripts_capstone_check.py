@@ -1,10 +1,11 @@
-"""End-to-end pipeline check on the real cached data.
+"""Historical end-to-end pipeline check on the legacy keypoints cache.
 
 Runs the whole story quickly: pretrain S-JEPA on normal, fine-tune with ms+pd and
 VICReg, then compare the classical RF branch against a linear probe on frozen
 S-JEPA embeddings, using leakage-safe grouped k-fold. This is the working
-reference that notebook 06 mirrors. Keep epochs small here; the notebook uses the
-full profile.
+reference for the original notebooks. Current notebook 06 instead uses
+sjepa.full_experiment; run scripts/scripts_full_data.py for video-data-full.
+This script retains the earlier training method for historical reproduction.
 """
 
 from __future__ import annotations
