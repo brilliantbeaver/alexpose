@@ -13,13 +13,12 @@ def nb_00(md, code, badge, boot):
     c = [badge("00_overview_and_video_gallery.ipynb")]
     c += [md(
         "# 00 - Overview and video gallery\n",
-        "Welcome. This series teaches **S-JEPA**, a way for a model to learn what walking looks "
-        "like without any labels, and then uses that learned sense of motion to tell apart three "
-        "conditions from a short video of someone walking:\n",
-        "- **normal** gait\n- **ms**: multiple sclerosis\n- **pd**: Parkinson's disease\n",
-        "By the end you will have trained a small S-JEPA model on real walking clips, fine-tuned it "
-        "across the three conditions, and compared it head to head against a classical Random Forest "
-        "on the exact same videos.\n",
+        "Welcome. This series trains **S-JEPA**, a model that learns structure from walking motion "
+        "without condition labels, then tests whether that representation helps distinguish three "
+        "labels:\n",
+        "- **Normal** gait\n- **MS**: multiple sclerosis\n- **PD**: Parkinson's disease\n",
+        "These are dataset labels, not diagnoses made by this project. We compare a supervised "
+        "probe with a classical Random Forest on matched source-grouped splits.\n",
         "This first notebook sets the scene. We look at the data, count it honestly, and actually "
         "watch a few clips so the later math stays grounded in real movement.\n",
         "### How to run\n",
@@ -41,18 +40,19 @@ def nb_00(md, code, badge, boot):
     )]
     c += [md(
         "## The dataset, counted honestly\n",
-        "The videos live in `video-data/` split into `normal`, `ms`, and `pd` folders. Some clips "
-        "come from the same source video (a long YouTube clip cut into pieces). That matters a lot "
-        "for a fair test, because two clips from one source are not independent. We track the "
-        "**source id** now so later we can keep all clips of one source on the same side of a split.\n",
+        "The current `video-data-full/` collection contains **91 MP4 clips from 41 source videos**: "
+        "26 clips from 16 Normal sources, 30 from 13 MS sources, and 35 from 12 PD sources. The first "
+        "11 filename characters identify the source video; `_P...` suffixes distinguish clips. A "
+        "source ID is a conservative grouping key, not a verified participant ID.\n",
     )]
     c += [code(
         "import pandas as pd",
         "from sjepa.data import source_id_from_name",
         "",
+        "CLASS_DIRS = {'normal': 'Normal', 'ms': 'MS', 'pd': 'PD'}",
         "rows = []",
-        "for label in ['normal', 'ms', 'pd']:",
-        "    for vid in sorted((VIDEO_DIR / label).glob('*.mp4')):",
+        "for label, folder in CLASS_DIRS.items():",
+        "    for vid in sorted((VIDEO_DIR / folder).glob('*.mp4')):",
         "        rows.append(dict(label=label, clip=vid.name, source_id=source_id_from_name(vid.name)))",
         "manifest = pd.DataFrame(rows)",
         "summary = manifest.groupby('label').agg(clips=('clip', 'count'),",
@@ -62,21 +62,20 @@ def nb_00(md, code, badge, boot):
         "manifest.to_csv(ARTIFACT_DIR / 'manifest_grouped.csv', index=False)",
     )]
     c += [md(
-        "Notice that `pd` has many more clips than sources. That is the clip-splitting we will guard "
-        "against. If we split clips at random, pieces of one walk could land in both training and "
-        "testing and make the scores look better than they really are.\n",
+        "One MS source contributes 14 clips and one PD source contributes seven. We therefore split "
+        "by source, not by clip. Recording conditions also differ by label, so later notebooks compare "
+        "learned features with acquisition-related nuisance controls.\n",
         "## Watch a few walks\n",
-        "Numbers are easier to trust once you have seen what they describe. The cell below embeds one "
-        "clip per condition right in the notebook. Look for the differences the clinicians describe: "
-        "normal gait is smooth and symmetric, ms gait can be unsteady with shorter steps, and pd gait "
-        "often shows small shuffling steps and reduced arm swing.\n",
+        "The cell below embeds one clip per label. Inspect the walk and the camera angle, framing, "
+        "resolution, background, and duration. One web clip cannot establish a diagnosis or represent "
+        "its whole label.\n",
     )]
     c += [code(
         "from sjepa.viz import show_video",
         "from IPython.display import display",
         "",
-        "for label in ['normal', 'ms', 'pd']:",
-        "    clip = sorted((VIDEO_DIR / label).glob('*.mp4'))[0]",
+        "for label, folder in CLASS_DIRS.items():",
+        "    clip = sorted((VIDEO_DIR / folder).glob('*.mp4'))[0]",
         "    print(f'{label}: {clip.name}')",
         "    display(show_video(clip, width=360))",
     )]
@@ -84,13 +83,13 @@ def nb_00(md, code, badge, boot):
         "## Roadmap\n",
         "| Notebook | What you build |\n|---|---|\n"
         "| 00 overview | this tour of the data and the plan |\n"
-        "| 01 pose extraction | turn videos into skeleton sequences with MediaPipe |\n"
-        "| 02 mask and tokens | the fixed anatomical mask and how skeletons become tokens |\n"
-        "| 03 pretrain on normal | build S-JEPA and train it on normal gait |\n"
-        "| 04 progressive fine-tune | add ms and pd, add VICReg to separate the classes |\n"
-        "| 05 representations | visualize the learned features with t-SNE and UMAP |\n"
-        "| 06 capstone | Random Forest vs S-JEPA on identical, leakage-safe splits |\n",
-        "On to notebook 01, where we turn these videos into skeletons.\n",
+        "| 01 pose extraction | turn clips into skeleton sequences with MediaPipe |\n"
+        "| 02 mask and tokens | build stochastic masks and turn skeletons into tokens |\n"
+        "| 03 label-free pretraining | train S-JEPA only on each fold's training sources |\n"
+        "| 04 adaptation | compare extra label-free training with a supervised probe |\n"
+        "| 05 representations | compare learned and nuisance-feature projections |\n"
+        "| 06 capstone | compare RF, S-JEPA, and controls on source-grouped folds |\n",
+        "On to notebook 01, where we turn these clips into skeletons.\n",
     )]
     return c
 
@@ -99,20 +98,18 @@ def nb_01(md, code, badge, boot):
     c = [badge("01_pose_extraction_from_raw_video.ipynb")]
     c += [md(
         "# 01 - Pose extraction from raw video\n",
-        "A model cannot learn from pixels here; it learns from **skeletons**. In this notebook we run "
-        "MediaPipe BlazePose over each video and get 33 body landmarks per frame. We reuse the "
-        "existing `alexpose` pose code, so there is no new pose logic to trust, just a thin loop that "
-        "feeds whole frames to the detector.\n",
-        "The result for each video is an array of shape `(T, 33, 3)`: `T` frames, 33 joints, and three "
-        "numbers per joint (x, y in pixels, plus a visibility score). We clean it, normalize it, and "
-        "cache it so every later notebook opens instantly.\n",
+        "The model reads **skeleton sequences**, not image pixels directly. We run MediaPipe BlazePose "
+        "over each of the 91 clips and estimate 33 landmarks per sampled frame. Each cache record keeps "
+        "both its clip name and its source-video ID.\n",
+        "Each usable clip becomes an array of shape `(T, 33, 3)`: sampled frames, landmarks, and pixel "
+        "x, pixel y, and visibility. We clean and normalize it, then cache it for later stages.\n",
     )]
     c += boot(need_torch=False)
     c += [md(
         "## One frame at a time\n",
-        "The loader opens a video, samples it down to about 15 frames per second, and asks MediaPipe "
-        "for the pose in each sampled frame. Unlike the GAVD pipeline it needs no bounding boxes and "
-        "no annotation CSVs; it just reads the whole frame.\n",
+        "The raw collection ranges from about 24 to 60 fps and uses several resolutions. The loader "
+        "retains frames at an approximately 15 fps cadence and asks MediaPipe for a pose in each one. "
+        "Unlike the GAVD pipeline, it reads the whole frame without bounding boxes or annotation CSVs.\n",
     )]
     c += [code(
         "from ambient.pose.model_management import MediaPipeModelManager",
@@ -122,7 +119,8 @@ def nb_01(md, code, badge, boot):
         "MediaPipeModelManager().ensure_model_available()  # downloads the model once",
         "extractor = SequenceKeypointExtractor()",
         "",
-        "sample = sorted((VIDEO_DIR / 'normal').glob('*.mp4'))[0]",
+        "CLASS_DIRS = {'normal': 'Normal', 'ms': 'MS', 'pd': 'PD'}",
+        "sample = sorted((VIDEO_DIR / CLASS_DIRS['normal']).glob('*.mp4'))[0]",
         "seq = load_video_sequence(sample, target_fps=15, extractor=extractor, verbose=True)",
         "print('raw sequence shape:', seq.shape, '  (frames, joints, [x, y, visibility])')",
     )]
@@ -130,8 +128,8 @@ def nb_01(md, code, badge, boot):
         "## Clean and normalize\n",
         "Real videos have frames where the detector loses the person. We interpolate short gaps and "
         "drop videos that are mostly empty. Then we **normalize**: we move the pelvis to the origin "
-        "and scale by the torso length. This removes where the walker stood and how close the camera "
-        "was, so the model sees the shape of the motion rather than the framing.\n",
+        "and scale by the torso length. This reduces translation and apparent-size differences, but "
+        "does not remove viewpoint, frame-rate, resolution, compression, or detector-confidence cues.\n",
     )]
     c += [code(
         "cleaned = clean_sequence(seq)",
@@ -154,10 +152,10 @@ def nb_01(md, code, badge, boot):
         "Image(filename=str(gif))",
     )]
     c += [md(
-        "## Extract and cache every video\n",
-        "Now we run the same steps over all clips and cache one `.npz` file per video. This is the "
-        "slow step, a few minutes on a laptop, and only needs to run once. If the cache already "
-        "exists (it ships with the repo) this loop just confirms it.\n",
+        "## Extract and cache every clip\n",
+        "We now process all 91 raw clips and write one `.npz` per usable clip. The final count may be "
+        "smaller because clips with too little valid pose signal are skipped. The committed `g1` cache "
+        "comes from an earlier 47-clip collection and must not be mixed with this versioned full cache.\n",
     )]
     c += [code(
         "from sjepa.data import save_sequence_npz, source_id_from_name",
@@ -165,8 +163,8 @@ def nb_01(md, code, badge, boot):
         "",
         "KEYPOINTS_DIR.mkdir(parents=True, exist_ok=True)",
         "index = []",
-        "for label in ['normal', 'ms', 'pd']:",
-        "    for vid in sorted((VIDEO_DIR / label).glob('*.mp4')):",
+        "for label, folder in CLASS_DIRS.items():",
+        "    for vid in sorted((VIDEO_DIR / folder).glob('*.mp4')):",
         "        sid = source_id_from_name(vid.name)",
         "        out = KEYPOINTS_DIR / f'{label}__{sid}__{vid.stem}.npz'",
         "        if out.exists():",
@@ -184,14 +182,15 @@ def nb_01(md, code, badge, boot):
         "",
         "import pandas as pd",
         "idx = pd.DataFrame(index)",
-        "idx.to_parquet(ARTIFACT_DIR / 'keypoints_index.parquet', index=False)",
-        "print(idx.groupby('label').agg(videos=('clip_name','count'),",
+        "idx.to_parquet(ARTIFACT_DIR / 'keypoints_index_full.parquet', index=False)",
+        "print(idx.groupby('label').agg(clips=('clip_name','count'),",
         "                               sources=('source_id','nunique'),",
         "                               frames=('n_frames','sum')))",
     )]
     c += [md(
         "### Quick checks\n",
-        "A good habit: assert the shapes and ranges are what we expect before moving on.\n",
+        "Shape checks verify structure, not validity. Also report accepted and rejected clips by label "
+        "and source before training.\n",
     )]
     c += [code(
         "from sjepa.data import load_index",
@@ -209,9 +208,10 @@ def nb_02(md, code, badge, boot):
     c = [badge("02_anatomical_mask_and_tokenization.ipynb")]
     c += [md(
         "# 02 - Masking and tokenization\n",
-        "S-JEPA learns by hiding part of the skeleton and predicting the hidden part in feature space. "
-        "Two design choices drive this notebook: **how we cut the skeleton into tokens**, and "
-        "**which joints we hide**.\n",
+        "S-JEPA learns by hiding part of a skeleton sequence and predicting it in feature space. The "
+        "token and mask operations apply to either dataset version; the dataset changes the number of "
+        "windows and source groups, not the token definition. Run notebook 01 first to build the "
+        "versioned `keypoints-full/` cache.\n",
         "> **What changed, and why.** An earlier version of this project hid the *same* twelve clinical "
         "joints on every single step. That turned out to be a real bug: the encoder never saw those "
         "joints as context, so their internal position settings received no learning signal, yet the "
@@ -329,7 +329,7 @@ def nb_03(md, code, badge, boot):
     c = [badge("03_sjepa_model_and_pretrain_normal.ipynb")]
     c += [md(
         "# 03 - Build S-JEPA and pretrain (label-free)\n",
-        "Now we build the model and train it, with **no labels**, on the walking motion "
+        "Now we build the model and train it, with **no condition labels in the objective**, on walking motion "
         "itself. S-JEPA has three parts, all small transformers:\n",
         "- a **view encoder** that reads the visible joints of a slightly transformed view,\n"
         "- a **predictor** that guesses the hidden joints in feature space. Crucially, it is told "
@@ -339,12 +339,14 @@ def nb_03(md, code, badge, boot):
         "- a **target encoder** that reads the full skeleton and provides the answer. It is a slow "
         "moving average of the view encoder, which is what stops the model from collapsing every "
         "skeleton to the same features.\n",
-        "> **A note on what trains here.** For three-class classification the useful thing is to learn "
-        "from *all* the fold's unlabeled walking, so this notebook trains label-free on every training "
-        "source. Training on normal gait *only* is a different question (one-class anomaly detection); "
-        "we keep that as a separate idea, not the default.\n",
+        "> **A note on what trains here.** This notebook learns from every clip assigned to the fold's "
+        "training sources. Labels stay attached for evaluation but are not read by the S-JEPA loss. "
+        "Training only on Normal-labeled gait would answer a different anomaly-detection question.\n",
+        "> **Dataset-version note.** The committed `g1` folds and checkpoints describe the earlier "
+        "47-clip, 35-source-group benchmark. The current 91-clip, 41-source raw collection needs a "
+        "new cache, fold registry, and checkpoints before it has a full-data result.\n",
     )]
-    c += boot(need_torch=True)
+    c += boot(need_torch=True, legacy_artifacts=True)
     c += [md(
         "## The two-lane design\n",
         "The picture below is the whole idea. The top lane makes a prediction from a masked view. The "
@@ -370,13 +372,10 @@ def nb_03(md, code, badge, boot):
     )]
     c += [md(
         "## Load the training windows (fold 0's training sources, no labels)\n",
-        "We train the self-supervised encoder on the **training half of the locked fold 0** only, "
-        "never on the videos held out for testing. This matters even though the objective ignores "
-        "labels: if the encoder saw a held-out video's motion during self-supervised training, then "
-        "the probe scores that notebooks 04 and 06 report on that video would no longer be honest "
-        "held-out numbers. So we load the same `g1` fold registry the later notebooks use and cut "
-        "windows from its fold 0 training sources. The label still rides along, unused by the "
-        "objective, only so later notebooks can score.\n",
+        "For the retained benchmark, fold 0 has 37 training clips from 29 provisional source groups "
+        "and ten held-out clips from six groups. Held-out motion remains unseen even though S-JEPA "
+        "does not read labels. A full-data run needs a newly frozen registry using the updated `_P...` "
+        "source grouping, especially for the 14 MS clips from one source video.\n",
     )]
     c += [code(
         "import json",
@@ -390,8 +389,8 @@ def nb_03(md, code, badge, boot):
         "test_srcs = {by_clip[c].source_id for c in fold0['test_clips']}",
         "assert not ({r.source_id for r in train_recs} & test_srcs), 'held-out source leaked into SSL'",
         "ds_train = SequenceWindowDataset(train_recs, cfg.window_frames, cfg.window_stride)",
-        "print(f'fold 0 training half: {len(train_recs)} videos -> {len(ds_train)} windows',",
-        "      '(labels unused in SSL; held-out videos excluded)')",
+        "print(f'fold 0 training partition: {len(train_recs)} clips -> {len(ds_train)} windows',",
+        "      '(labels unused in SSL; held-out clips excluded)')",
     )]
     c += [md(
         "## Train\n",
@@ -446,9 +445,9 @@ def nb_04(md, code, badge, boot):
     c = [badge("04_progressive_finetune_ms_pd_vicreg.ipynb")]
     c += [md(
         "# 04 - Two ways to adapt the encoder: SSL continuation vs supervised adaptation\n",
-        "Notebook 03 trained the encoder with **no labels** on all the walking motion in the training "
-        "set. Now we ask a sharper question: once we do have diagnosis labels, what is the honest way "
-        "to use them, and does it actually help the three conditions separate?\n",
+        "Notebook 03 trained the encoder without condition labels in its objective, using only each "
+        "fold's training sources. Here we ask where labels may enter and whether extra label-free "
+        "training changes a supervised probe's performance.\n",
         "We compare two clearly named regimes, both starting from the same label-free checkpoint:\n",
         "1. **SSL continuation** - keep training with the *same* label-free objective for more updates. "
         "No labels touch the model.\n"
@@ -460,18 +459,19 @@ def nb_04(md, code, badge, boot):
         "claimed it 'compacts the classes'. That was a leak: the SSL objective must not see labels, and "
         "the claim was not supported. We removed it. If labels help, they help in an explicitly "
         "supervised stage that we name and measure, not smuggled into the pretext task.\n",
+        "> **Dataset-version note.** The executable example uses the earlier `g1` benchmark of 47 "
+        "clips from 35 source groups. It does not measure the expanded 91-clip raw collection.\n",
     )]
-    c += boot(need_torch=True)
+    c += boot(need_torch=True, legacy_artifacts=True)
     c += [code(
         "from IPython.display import SVG, display",
         "display(SVG(filename=str(IMAGES_DIR / 'progressive_timeline.svg')))",
     )]
     c += [md(
         "## Use the locked, leakage-safe fold registry\n",
-        "The comparison is only meaningful on a split where clips from one source never straddle "
-        "train and test. Notebook's Phase 0 froze such a split to `artifacts/eval/g1/fold_registry.json` "
-        "(source-grouped, seed 42). We load fold 0 from it here rather than inventing a fresh split, so "
-        "this notebook, notebook 05, and notebook 06 all sit on the identical partition.\n",
+        "The comparison is meaningful only when clips from one source never straddle train and test. "
+        "Phase 0 froze the earlier source-grouped benchmark in `artifacts/eval/g1/fold_registry.json`. "
+        "A current full-data analysis needs a new versioned registry rather than modifying `g1`.\n",
         "> Source grouping is **provisional**: a `source_id` is a YouTube id, not a verified person, so "
         "everything here is a development estimate, never a clinical claim.\n",
     )]
@@ -487,7 +487,7 @@ def nb_04(md, code, badge, boot):
         "test_recs  = [by_clip[c] for c in fold0['test_clips']]",
         "tr_src = {r.source_id for r in train_recs}; te_src = {r.source_id for r in test_recs}",
         "assert not (tr_src & te_src), 'source leakage across the fold'",
-        "print('fold 0:', len(train_recs), 'train videos /', len(test_recs), 'test videos')",
+        "print('fold 0:', len(train_recs), 'train clips /', len(test_recs), 'test clips')",
         "print('no source in both sides:', not (tr_src & te_src))",
     )]
     c += [md(
@@ -518,7 +518,7 @@ def nb_04(md, code, badge, boot):
     )]
     c += [md(
         "## A fixed, label-free read-out\n",
-        "To turn a video into one vector we mean-pool the frozen target encoder over a **fixed** pool "
+        "To turn a clip into one vector we mean-pool the frozen target encoder over a **fixed** pool "
         "of target tokens. The pool is chosen once from a seeded RNG and never from the test labels, so "
         "no information leaks from the evaluation into the representation. Both regimes below use this "
         "same read-out.\n",
@@ -545,7 +545,7 @@ def nb_04(md, code, badge, boot):
     c += [md(
         "## Regime 2 - balanced supervised adaptation (labels only in the head)\n",
         "Now we use the labels honestly: freeze the encoder and fit a class-balanced logistic head on "
-        "the training embeddings, then score the held-out videos. The scaler and the head are fit on "
+        "the training embeddings, then score the held-out clips. The scaler and the head are fit on "
         "**training data only**. We do this on top of both the notebook-03 checkpoint and the "
         "SSL-continued one, so we can see whether extra unlabeled training moved the probe at all.\n",
     )]
@@ -573,11 +573,9 @@ def nb_04(md, code, badge, boot):
     )]
     c += [md(
         "## Read this honestly\n",
-        "On this tiny fold the two numbers are close and noisy; do not over-read a few points either "
-        "way. The point of the notebook is the **method**: labels live only in the supervised head, the "
-        "SSL objective stays label-free, and the split is the locked, leakage-safe one. Notebook 06 "
-        "runs this over all folds and puts it beside the Random Forest and the shortcut controls, which "
-        "is where any real verdict lives. A single fold here proves nothing on its own.\n",
+        "This legacy fold has only ten held-out clips from six source groups. Its scores demonstrate "
+        "the method boundary but are not a result for the expanded collection. Notebook 06 aggregates "
+        "the five legacy folds; the full dataset still requires a complete rerun.\n",
     )]
     return c
 
@@ -586,9 +584,9 @@ def nb_05(md, code, badge, boot):
     c = [badge("05_representation_visualization.ipynb")]
     c += [md(
         "# 05 - Looking at the learned representation (diagnostics only)\n",
-        "We have a trained encoder. What did it actually learn? Here we turn each video into a single "
-        "feature vector with the frozen target encoder and project those vectors to two dimensions with "
-        "t-SNE and UMAP, to *see* whether normal, ms, and pd land in different regions.\n",
+        "We summarize each cached clip with a frozen encoder and project those vectors to two "
+        "dimensions. The plots show point arrangement; they do not identify which physical or "
+        "acquisition features created it.\n",
         "> **These pictures are diagnostics, not evidence.** Two honest cautions run through this "
         "notebook. First, t-SNE and UMAP distort distances; a clean-looking blob can be an artifact of "
         "the projection. Second, and more important, apparent separation can come from a **shortcut** "
@@ -599,15 +597,17 @@ def nb_05(md, code, badge, boot):
         "We compare the label-free checkpoint from notebook 03 against the SSL-continued one from "
         "notebook 04. No test labels are ever used to fit, select, or color anything beyond the plain "
         "class of each point.\n",
+        "> **Dataset-version note.** The committed embeddings describe the legacy 47-clip cache. The "
+        "current 91-clip raw collection needs pose extraction and retraining before it has new plots.\n",
     )]
-    c += boot(need_torch=True)
+    c += boot(need_torch=True, legacy_artifacts=True)
     c += [code(
         "from IPython.display import SVG, display",
         "display(SVG(filename=str(IMAGES_DIR / 'vicreg_clusters.svg')))",
     )]
     c += [md(
-        "## Embed every video with the frozen encoder\n",
-        "For each video we mean-pool the encoder's features over its windows and over a **fixed**, "
+        "## Embed every clip with the frozen encoder\n",
+        "For each cached clip we mean-pool the encoder's features over its windows and over a **fixed**, "
         "seeded read-out pool of target tokens (the same pool used in notebooks 04 and 06). This pool "
         "is never chosen from labels. We do it for both checkpoints.\n",
     )]
@@ -641,14 +641,15 @@ def nb_05(md, code, badge, boot):
         "E_cont, _ = embed_all(ARTIFACT_DIR / 'sjepa_ssl_continued.pt')",
         "np.savez(ARTIFACT_DIR / 'embeddings_3class.npz', E_base=E_base, E_continued=E_cont,",
         "         labels=np.array(y))",
-        "print('embedded', len(y), 'videos into', E_cont.shape[1], 'dimensions')",
+        "print('embedded', len(y), 'clips into', E_cont.shape[1], 'dimensions')",
     )]
     c += [md(
         "## A nuisance baseline to keep us honest\n",
-        "This is the cheapest possible 'representation': the per-joint mean and spread of the raw "
-        "visibility channel, which we already know tracks the acquisition domain (the MS clips were all "
-        "filmed at 60fps). If this separates the classes as cleanly as S-JEPA does, then a tidy S-JEPA "
-        "scatter is not evidence of learned gait.\n",
+        "This nuisance representation contains only the per-joint mean and spread of MediaPipe "
+        "visibility. In the current raw collection, all 30 MS clips are 30 fps landscape recordings "
+        "at two resolutions, while 30 of 35 PD clips are about 30 fps at 1280 x 720 and Normal is more "
+        "heterogeneous. The legacy benchmark had a different acquisition shortcut. A nuisance plot "
+        "that separates labels supplies a competing explanation; it does not identify S-JEPA's cause.\n",
     )]
     c += [code(
         "def nuisance_vec(r):",
@@ -698,11 +699,9 @@ def nb_05(md, code, badge, boot):
     )]
     c += [md(
         "## Put a (descriptive) number on the separation\n",
-        "The silhouette score summarizes how tight and well separated the class clusters are, from -1 "
-        "to +1. We report it for all three embeddings so the S-JEPA numbers are read *against* the "
-        "nuisance number, not in isolation. On ~47 videos this is noisy and purely descriptive: it is "
-        "computed on the whole set, so it is **not** an out-of-sample score and must not be used to "
-        "pick a model. Model selection happens only through the leakage-safe folds in notebook 06.\n",
+        "The silhouette score summarizes labeled point-cloud separation from -1 to +1. The retained "
+        "value uses 47 correlated clips and is descriptive, not out-of-sample. A full-data value would "
+        "use the usable subset of 91 raw clips after pose extraction.\n",
     )]
     c += [code(
         "from sjepa.eval import silhouette",
@@ -724,23 +723,20 @@ def nb_06(md, code, badge, boot):
     c = [badge("06_capstone_rf_vs_sjepa.ipynb")]
     c += [md(
         "# 06 - Capstone: Random Forest vs S-JEPA, on identical folds, with controls\n",
-        "This is the scientific payoff, and it comes with a result that is honest rather than "
-        "flattering. We put several systems side by side on the **same videos**, the **same locked "
-        "leakage-safe folds**, and the **same pooled out-of-fold scoring**:\n",
+        "This notebook compares several systems on the **same clips**, the **same locked "
+        "source-grouped folds**, and the **same pooled out-of-fold scoring**:\n",
         "1. a classical **Random Forest** on hand-made gait features (the exp5 recipe, three classes),\n"
         "2. the **label-free S-JEPA** with a frozen linear probe,\n"
         "3. cheap **shortcut controls** (visibility, body size, static pose) that any real "
         "representation must beat before we trust it.\n",
-        "The headline is **pooled macro-F1** over the folds (one prediction per clip, gathered across "
-        "all held-out folds), because averaging per-fold F1 on ~9 test videos is even noisier. We "
-        "report it beside the paired RF and the controls, then say plainly what it does and does not "
-        "mean.\n",
-        "> **Spoiler, stated up front.** On this tiny, already-inspected, source-grouped collection the "
-        "S-JEPA scores *below* both the Random Forest and the nuisance controls. That is the "
-        "expected, plan-anticipated outcome of removing the shortcuts and the label leak that inflated "
-        "an earlier number, and it is reported as a negative result, not hidden.\n",
+        "Pooled macro-F1 assigns one prediction to each held-out clip, pools all folds, and gives the "
+        "three labels equal weight. Clips still receive equal weight when one source contributes many.\n",
+        "> **Evidence status.** The frozen results belong to the earlier `g1` benchmark: 47 usable "
+        "clips from 35 provisional source groups. The current raw collection has 91 clips from 41 "
+        "source videos. It has no full-data model result until caches, folds, controls, and checkpoints "
+        "are rebuilt.\n",
     )]
-    c += boot(need_torch=True)
+    c += boot(need_torch=True, legacy_artifacts=True)
     c += [code(
         "from IPython.display import SVG, display",
         "display(SVG(filename=str(IMAGES_DIR / 'rf_vs_sjepa.svg')))",
@@ -749,11 +745,11 @@ def nb_06(md, code, badge, boot):
     )]
     c += [md(
         "## The frozen result is produced by a script, not the notebook\n",
-        "So the headline cannot drift as someone re-runs cells, the authoritative R1 run lives in "
+        "To preserve the earlier benchmark, its authoritative R1 run lives in "
         "`scripts/scripts_r1_repaired.py` and its output is committed under "
         "`artifacts/runs/r1_g1_1k_s42/`. That script and this notebook share the identical fold "
-        "registry, so the comparison is paired by construction. We read the frozen numbers first, then "
-        "reproduce the mechanism live at a smaller budget so you can see how it is built.\n",
+        "registry, so that comparison is paired by construction. A future full-data run should use new "
+        "artifact names and must not overwrite `g1`.\n",
     )]
     c += [code(
         "import json",
@@ -776,9 +772,9 @@ def nb_06(md, code, badge, boot):
     )]
     c += [md(
         "## Shortcut controls: the bar S-JEPA has to clear\n",
-        "Phase 0 also scored cheap nuisance features on the identical folds. If a control matches or "
-        "beats S-JEPA, then S-JEPA is not yet using gait beyond what a camera artifact already reveals. "
-        "We read those frozen control scores here.\n",
+        "Phase 0 scored nuisance features on the same legacy folds. If a control matches or beats "
+        "S-JEPA, acquisition cues are a sufficient competing explanation for the predictive score. "
+        "The expanded collection needs its own recomputed controls.\n",
     )]
     c += [code(
         "e0_path = ARTIFACT_DIR / 'eval' / 'g1' / 'E0_results.json'",
@@ -797,11 +793,9 @@ def nb_06(md, code, badge, boot):
     )]
     c += [md(
         "## Reproduce the mechanism live (one fold, small budget)\n",
-        "Now the moving parts, so nothing is a black box. For one locked fold we run the exact "
-        "pipeline: paired RF, then **label-free** S-JEPA (no diagnosis label enters the objective), a "
-        "frozen mean-pool over a fixed read-out, and a class-balanced probe fit on the training clips "
-        "only. This uses a tiny update budget to stay fast; the frozen numbers above are the ones to "
-        "cite.\n",
+        "For one locked legacy fold, we run the comparison mechanism: paired RF, label-free S-JEPA, "
+        "a fixed mean-pooled read-out, and a class-balanced probe fitted only on training clips. The "
+        "small update budget is a demonstration, not a result for all 91 current clips.\n",
     )]
     c += [code(
         "import numpy as np, torch, os",
@@ -862,8 +856,9 @@ def nb_06(md, code, badge, boot):
     )]
     c += [md(
         "## Confusion of the frozen S-JEPA run\n",
-        "Where does S-JEPA confuse the conditions across all held-out clips? The dominant "
-        "error is PD read as MS, the same failure the Random Forest also struggles with here.\n",
+        "These matrices contain one prediction for each of the 47 legacy clips. In `g1`, S-JEPA's "
+        "largest off-diagonal error was PD labeled as MS. This should not be projected onto the "
+        "expanded collection.\n",
     )]
     c += [code(
         "import numpy as np, matplotlib.pyplot as plt, seaborn as sns",
@@ -881,7 +876,8 @@ def nb_06(md, code, badge, boot):
     )]
     c += [md(
         "## A combined scoreboard\n",
-        "One table, every system on the identical g1 folds. This is the whole comparison in one place.\n",
+        "Every retained system uses the identical legacy `g1` folds and pooled macro-F1. This is not "
+        "a scoreboard for `video-data-full`.\n",
     )]
     c += [code(
         "import pandas as pd",
@@ -903,25 +899,16 @@ def nb_06(md, code, badge, boot):
     )]
     c += [md(
         "## What this does and does not show\n",
-        "**What we can say.** The comparison is fair by construction: RF, S-JEPA, and the controls all "
-        "sit on the identical locked folds, use per-clip pooled out-of-fold scoring, and fit their "
-        "scalers and heads on training data only. On this data the Random Forest is the strongest "
-        "system, and the label-free S-JEPA sits below it *and* below cheap nuisance controls.\n",
-        "**Why that is progress, not failure.** An earlier S-JEPA number looked higher partly because "
-        "it leaned on shortcuts (every MS clip was filmed at 60fps and square) and a label leak in the "
-        "objective. Removing those lowered the honest score. The representation did not collapse "
-        "(effective rank stays well above 1 on every fold), so this is a real, non-degenerate estimate, "
-        "not a broken run. Per the pre-registered rule, a mechanically valid model that does not clear "
-        "the bar tells us to **stop scaling the local network** and fix the binding constraint instead.\n",
-        "**What we cannot say.** With ~47 videos from ~35 sources that are not verified people, this is "
-        "a provisional, source-grouped **development estimate**, never a clinical result. No diagnostic, "
-        "validity, or deployment claim is warranted.\n",
-        "**The honest next step.** The evidence points at the data pipeline and the acquisition domain, "
-        "not model size: rebuild the lineage (true common frame rate, speed-preserving normalization, "
-        "validity masks, a domain de-confound) and bring in external clinical-motion pretraining, then "
-        "rerun. That completes the series: a skeleton pipeline from raw video, a label-free "
-        "S-JEPA with stochastic clinically-guided masks, and a leakage-safe comparison that reports the "
-        "result whichever way it falls.\n",
+        "**What the frozen benchmark supports.** Within `g1`, all systems used identical grouped folds "
+        "and training-only fitted transforms. RF had the highest pooled macro-F1; S-JEPA scored below "
+        "it and the nuisance controls. Effective rank above 1 rules out the simplest collapse account, "
+        "but does not prove which shortcut caused each error.\n",
+        "**What neither version establishes.** The legacy benchmark has 47 clips from 35 groups; the "
+        "expanded inventory has 91 clips from 41 sources. Neither source count is a participant count, "
+        "and neither dataset supports clinical or deployment claims.\n",
+        "**The next analysis.** Extract the 91 clips into a clean cache; report exclusions; freeze a "
+        "new `_P...`-aware source registry; rerun RF, S-JEPA, and controls; and report clip-weighted and "
+        "source-aware summaries while preserving `g1` as historical evidence.\n",
     )]
     return c
 

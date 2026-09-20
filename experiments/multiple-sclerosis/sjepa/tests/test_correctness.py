@@ -25,10 +25,22 @@ from sjepa.models import build_model  # noqa: E402
 from sjepa.masking_v2 import (  # noqa: E402
     sample_target_mask, sample_mask_batch, mask_bank_stats,
 )
+from sjepa.data import source_id_from_name  # noqa: E402
 
 
 def _cfg():
     return get_config("laptop", smoke=True)
+
+
+def test_source_id_parser_handles_legacy_and_full_dataset_names():
+    """Clips cut from one source video must remain in one split group."""
+    cases = {
+        "EHymg4AGMJs_clip-02.mp4": "EHymg4AGMJs",
+        "EHymg4AGMJs_P2.mp4": "EHymg4AGMJs",
+        "EHymg4AGMJs_P1_02.mp4": "EHymg4AGMJs",
+        "DfRhvdCiUJk.mp4": "DfRhvdCiUJk",
+    }
+    assert {name: source_id_from_name(name) for name in cases} == cases
 
 
 # ---------------------------------------------------------------------------

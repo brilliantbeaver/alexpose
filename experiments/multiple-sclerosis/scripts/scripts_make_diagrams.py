@@ -153,7 +153,7 @@ def pipeline_flowchart():
     cw, ch, gap = 172, 82, 40
     x0 = 40
     fe = []
-    for i, (t, s) in enumerate([("Walking video", "49 mp4 clips"),
+    for i, (t, s) in enumerate([("Walking video", "91 clips from 41 videos"),
                                 ("MediaPipe pose", "33 landmarks"),
                                 ("Normalize", "pelvis + torso")]):
         x = x0 + i * (cw + gap)
@@ -195,7 +195,7 @@ def pipeline_flowchart():
     comp_x = 300
     comp_y = 364
     card(svg, comp_x, comp_y, comp_w, comp_h, "Compare fairly",
-         "same test videos, same metrics", SLATE, SLATE_BG, SLATE_LN)
+         "same test clips, same metrics", SLATE, SLATE_BG, SLATE_LN)
 
     # Both branches exit their RIGHT edges into a shared vertical channel to the
     # right of the cards, drop to two separate horizontal channels below, then run
@@ -485,7 +485,7 @@ def rf_vs_sjepa():
          ORANGE, ORANGE_BG, ORANGE_LN, title_size=14)
     card(svg, 50, 236, 250, 74, "Random Forest", "82 hand-made features",
          GREEN, GREEN_BG, GREEN_LN, title_size=14)
-    card(svg, 400, 173, 170, 74, "Same test videos", None, SLATE, SLATE_BG, SLATE_LN,
+    card(svg, 400, 173, 170, 74, "Same test clips", None, SLATE, SLATE_BG, SLATE_LN,
          title_size=14)
     card(svg, 640, 173, 200, 74, "Accuracy, macro F1", "mean ± std", SLATE, SLATE_BG,
          SLATE_LN, title_size=13.5)

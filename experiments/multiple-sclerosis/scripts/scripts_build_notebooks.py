@@ -52,7 +52,7 @@ def colab_badge(nb_name: str):
     )
 
 
-def bootstrap_cells(need_torch=True):
+def bootstrap_cells(need_torch=True, legacy_artifacts=False):
     """The shared setup cells: install (Colab), import-or-vendor, paths."""
     install_lines = [
         "# --- Setup: install dependencies (Colab installs; local usually already has them) ---",
@@ -113,6 +113,8 @@ def bootstrap_cells(need_torch=True):
         "print('experiment dir:', EXP_DIR)",
         "print('repo root     :', REPO_ROOT)",
     )
+    keypoints_name = "keypoints" if legacy_artifacts else "keypoints-full"
+    keypoints_note = "  # retained g1 benchmark cache" if legacy_artifacts else ""
     paths = code(
         "# --- Paths and profile (reads the root .env if python-dotenv is present) ---",
         "import os",
@@ -122,9 +124,9 @@ def bootstrap_cells(need_torch=True):
         "except Exception:",
         "    pass",
         "",
-        "VIDEO_DIR = EXP_DIR / 'video-data'",
+        "VIDEO_DIR = EXP_DIR / 'video-data-full'",
         "ARTIFACT_DIR = EXP_DIR / 'artifacts'",
-        "KEYPOINTS_DIR = ARTIFACT_DIR / 'keypoints'",
+        f"KEYPOINTS_DIR = ARTIFACT_DIR / '{keypoints_name}'{keypoints_note}",
         "IMAGES_DIR = EXP_DIR / 'images'",
         "ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)",
         "",
