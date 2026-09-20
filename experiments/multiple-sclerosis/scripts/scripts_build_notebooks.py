@@ -24,6 +24,7 @@ COLAB_BASE = f"https://colab.research.google.com/github/{REPO_SLUG}/blob/main/ex
 # touching the canonical .ipynb files.
 _OUT_DIR = EXP
 _CHECK_ONLY = False
+_ONLY = None
 
 
 def md(*lines):
@@ -155,6 +156,8 @@ def _render_nb(cells) -> str:
 
 
 def write_nb(name: str, cells):
+    if _ONLY is not None and name[:2] not in _ONLY:
+        return True
     for i, cell in enumerate(cells):
         cell.setdefault("id", f"{Path(name).stem}-{i:02d}")
     content = _render_nb(cells)
@@ -176,11 +179,14 @@ if __name__ == "__main__":
                     help="write notebooks here instead of the experiment dir")
     ap.add_argument("--check", action="store_true",
                     help="do not write; report whether each notebook matches on disk")
+    ap.add_argument("--only", nargs="+", choices=[f"{i:02d}" for i in range(7)],
+                    help="select notebooks, for example --only 02 03 04 05 06")
     args = ap.parse_args()
     if args.output_dir:
         _OUT_DIR = Path(args.output_dir)
         _OUT_DIR.mkdir(parents=True, exist_ok=True)
     _CHECK_ONLY = args.check
+    _ONLY = set(args.only) if args.only else None
 
     import notebook_content as nc
     _results = []

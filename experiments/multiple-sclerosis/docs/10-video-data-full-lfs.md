@@ -12,6 +12,11 @@
 
 There are 91 clips in the current dataset. The directory is about 371 MB in a fully hydrated working tree.
 
+Notebooks 02–06 now use the versioned full pose cache and five source-grouped
+folds. The current cache contains 88 usable clips from 41 source videos. Read
+[the split methodology](11-full-data-splits.md) for exclusions, exact training,
+validation, and test counts, and the limits of source-video grouping.
+
 ## Storage policy
 
 The files in this directory are managed with Git Large File Storage (Git LFS). The repository stores small pointer files in Git; the binary MP4 content is held by the configured LFS remote. The rule is deliberately scoped to `video-data-full/**` in `.gitattributes`, so it does not change how other media elsewhere in the repository are handled.
