@@ -215,19 +215,9 @@ def train_sjepa_v2(
         x_view = random_view(x)
         predicted, target = model.forward_repaired(x_view, x, ctx)
 
-        # Per-example CE over each row's own target tokens. The centering EMA must
-        # move ONCE per optimizer batch, not once per example, so we score every
-        # example against the same center snapshot (update_center=False) and then
-        # update the center a single time from all masked target tokens in the batch
-        # (AR-5 P1: per-example updates applied the beta EMA B times per step).
-        losses = []
-        batch_targets = []
-        for b in range(predicted.shape[0]):
-            idx = torch.nonzero(tgt[b], as_tuple=False).squeeze(1)
-            losses.append(ce(predicted[b, idx, :], target[b, idx, :], update_center=False))
-            batch_targets.append(target[b, idx, :])
-        loss = torch.stack(losses).mean()
-        ce.update_center_from(torch.cat(batch_targets, dim=0))
+        # Equal-example CE and one token-weighted center update, without B
+        # separate GPU gathers/softmax launches. Unequal mask sizes stay valid.
+        loss = ce.masked_batch(predicted, target, tgt)
 
         opt.zero_grad(set_to_none=True)
         loss.backward()
@@ -249,7 +239,7 @@ def train_sjepa_v2(
         state.losses.append(float(loss.detach().cpu()))
         if log_every and step % log_every == 0:
             print(f"step {step:5d} loss {state.losses[-1]:.4f} lr {lr:.2e} tau {tau:.5f} "
-                  f"emb_std {state.emb_std[-1]:.4f} eff_rank {state.eff_rank[-1]:.1f}")
+                  f"emb_std {state.emb_std[-1]:.4f} eff_rank {state.eff_rank[-1]:.1f}", flush=True)
         step += 1
 
     state.total_updates = step
@@ -272,8 +262,9 @@ def _teacher_student_drift(model: SJEPA) -> float:
     for tp, sp in zip(model.target_encoder.parameters(), model.view_encoder.parameters()):
         a, b = tp.flatten(), sp.flatten()
         denom = (a.norm() * b.norm()).clamp_min(1e-9)
-        sims.append(1.0 - float((a @ b) / denom))
-    return float(np.mean(sims)) if sims else 0.0
+        sims.append(1.0 - (a @ b) / denom)
+    # Transfer once instead of synchronizing once per encoder parameter tensor.
+    return float(torch.stack(sims).mean()) if sims else 0.0
 
 
 def _device_rng_state(device) -> Optional[dict]:

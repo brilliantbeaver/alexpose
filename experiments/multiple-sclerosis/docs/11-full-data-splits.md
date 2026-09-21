@@ -195,6 +195,44 @@ training-only silhouette scores. The plots are exploratory diagnostics. They
 are not test scores. The exported embeddings include clip names, source IDs,
 the registry checksum, and an explicit training partition label.
 
+## Faster execution with the same split boundaries
+
+Notebook 06 now adds persistent caching, bounded CPU process parallelism, and
+batched calculations to this procedure. The
+[performance tutorial](15-capstone-performance.md) gives the runnable settings,
+worked examples, recovery rules, and vector diagrams. These are execution
+changes, not a new split strategy or a search for better test scores.
+
+The distinction between **calculating a clip's features** and **learning from a
+set of clips** matters here. A clip's joint-angle features, visibility statistics,
+and mean pose can be reused across folds because each depends on that clip
+alone. A scaler learns statistics from a training set, and a classifier learns
+from its training examples. They remain fold-specific. A cached feature row
+existing from another fold does not authorize fitting on that fold's test data.
+
+Completed checkpoints and training/validation embeddings can be reused only
+for the matching fold and calculation. A complete-fold cache hit reuses that
+fold's saved predictions and validation selection. It never substitutes a model
+trained on another fold, and the complete out-of-fold coverage checks still run
+before publication. On a fresh calculation, that fold's test features are still
+requested only after validation selection.
+
+Cache identity includes input-pose hashes, registry, configuration, both update
+budgets, device/environment information, and Python source hashes. Changed pose
+files that no longer match the registry stop the run. Stage and embedding
+manifests also check checkpoint identity, while completed-fold manifests check
+the saved stage checkpoint files. The
+[cache guide](15-capstone-performance.md#3-reuse-work-only-when-it-belongs-to-the-same-calculation)
+explains which entries are invalidated and why per-clip feature checks differ
+from checkpoint-manifest checks.
+
+CPU-only runs can process independent folds in separate processes. A single
+MPS/CUDA device handles one training fold at a time. Batch packing preserves the
+per-clip embedding averages; the batched masked loss preserves equal example
+weight and one center update. Small floating-point differences remain possible.
+Neither caching nor parallelism turns a rerun into an independent statistical
+experiment. Do not count a cached result as additional evidence.
+
 ## Reporting without overstating the evidence
 
 The output contains one out-of-fold prediction per usable clip for each system.
@@ -238,6 +276,12 @@ uv run --with pytest python -m pytest sjepa/tests -q
 uv run python scripts/scripts_build_notebooks.py --check --only 02 03 04 05 06
 ```
 
+The CLI commands above use `run_cross_validation`'s serial, uncached defaults;
+they have no cache or worker flags. Notebook 06 explicitly enables the reusable
+cache and chooses worker counts. For those controls outside the notebook, use
+the [Python API example](15-capstone-performance.md#2-run-with-explicit-execution-controls).
+The shared batching improvements apply to both entry points.
+
 Normal and smoke outputs live in different configuration-specific directories
 under `artifacts/runs/full-v1/`. Every evaluation gets a fresh output directory.
 Each checkpoint contains the dataset checksum, registry checksum, exact training
@@ -257,6 +301,14 @@ conflicting labels, reviewed exclusions, changed cache bytes, tampered
 registries, incompatible checkpoints, rejection of validation clips at the
 training entry point, training-only scaling, source weights, and complete OOF
 coverage. Tests should not be read as model-performance evidence.
+
+The later optimization checks additionally cover batched-loss/gradient
+equivalence, preserved clip pooling, serial/parallel CPU agreement, cache
+invalidation, and selected interruption/corruption cases. Their scope and local
+synthetic timing example are documented in the
+[performance evidence section](15-capstone-performance.md#7-read-timings-and-separate-evidence-from-expectations).
+The dated verification record below describes the earlier split-method change;
+it is not a full-budget performance benchmark of the optimized runner.
 
 ### Verification performed on September 20, 2026
 

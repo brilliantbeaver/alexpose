@@ -70,6 +70,28 @@ class CenteringSharpeningCE(nn.Module):
             self._update_center(target)
         return loss
 
+    def masked_batch(self, pred: torch.Tensor, target: torch.Tensor,
+                     mask: torch.Tensor) -> torch.Tensor:
+        """Batched (B, N, D) loss, with equal weight per example, not per token.
+
+        The sampler guarantees at least one target per row. Fixed-shape masked
+        reductions avoid a separate nonzero/gather and softmax for every example
+        (and their accelerator synchronizations). The center still moves once,
+        using the token-weighted mean of ONLY the masked targets.
+        """
+        target = target.detach()
+        weights = mask.to(pred.dtype)
+        counts = weights.sum(dim=1)
+        log_pred = F.log_softmax(pred / self.tau_pred, dim=-1)
+        with torch.no_grad():
+            p_target = F.softmax((target - self.center) / self.tau_target, dim=-1)
+        per_token = -(p_target * log_pred).sum(dim=-1)
+        loss = ((per_token * weights).sum(dim=1) / counts).mean()
+        with torch.no_grad():
+            batch_center = (target * weights.unsqueeze(-1)).sum(dim=(0, 1)) / counts.sum()
+            self.center.mul_(self.beta).add_(batch_center, alpha=1.0 - self.beta)
+        return loss
+
     @torch.no_grad()
     def update_center_from(self, target: torch.Tensor) -> None:
         """Apply one batch-level EMA center update from all masked target tokens."""

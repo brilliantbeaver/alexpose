@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="824" viewBox="0 0 1100 824" role="img" aria-labelledby="batch-title batch-desc">
+  <title id="batch-title">Fill embedding batches across clips, then average within each clip</title>
+  <desc id="batch-desc">Illustrative example, not measured experiment data: three clips named A, B, and C each contain two windows, and a model batch has room for four windows. Processing each clip separately needs three half-filled embedding calls. Filling the same batch across clip boundaries needs two calls: A1, A2, B1, B2 in the first, and C1, C2 in the second. The implementation remembers the owner of every returned vector and averages A1 with A2, B1 with B2, and C1 with C2. It never averages different clips together. The batch capacity and per-clip averaging rule are unchanged; the number of embedding calls falls from three to two in this particular example.</desc>
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #172b3a; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #526575; }
+      .heading { font-size: 22px; font-weight: 700; }
+      .label { font-size: 19px; font-weight: 650; }
+      .body { font-size: 18px; }
+      .small { font-size: 16px; fill: #526575; }
+      .slot { font-size: 19px; font-weight: 700; text-anchor: middle; }
+      .empty { fill: #ffffff; stroke: #b8c5d0; stroke-dasharray: 5 4; }
+      .arrow { fill: none; stroke: #657a89; stroke-width: 2.5; marker-end: url(#batch-arrow); }
+    </style>
+    <marker id="batch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#657a89"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="824" fill="#ffffff"/>
+  <text x="40" y="53" class="title">Fill the batch, then keep each clip's result separate</text>
+  <text x="40" y="83" class="subtitle">Illustrative example: 3 clips × 2 windows each. Each embedding call has room for 4 windows.</text>
+
+  <rect x="40" y="120" width="490" height="382" rx="18" fill="#f8fafc" stroke="#ccd8e1"/>
+  <text x="64" y="159" class="heading">Before: stop at each clip boundary</text>
+  <text x="64" y="188" class="body">Three calls, each using two of four slots.</text>
+  <text x="64" y="245" class="label">Call 1</text>
+  <rect x="157" y="214" width="74" height="48" rx="8" fill="#dfebfd" stroke="#8caed9"/>
+  <rect x="243" y="214" width="74" height="48" rx="8" fill="#dfebfd" stroke="#8caed9"/>
+  <rect x="329" y="214" width="74" height="48" rx="8" class="empty"/>
+  <rect x="415" y="214" width="74" height="48" rx="8" class="empty"/>
+  <text x="194" y="245" class="slot">A1</text><text x="280" y="245" class="slot">A2</text>
+  <text x="366" y="245" class="small" text-anchor="middle">empty</text><text x="452" y="245" class="small" text-anchor="middle">empty</text>
+
+  <text x="64" y="323" class="label">Call 2</text>
+  <rect x="157" y="292" width="74" height="48" rx="8" fill="#dbf1e9" stroke="#87bda8"/>
+  <rect x="243" y="292" width="74" height="48" rx="8" fill="#dbf1e9" stroke="#87bda8"/>
+  <rect x="329" y="292" width="74" height="48" rx="8" class="empty"/>
+  <rect x="415" y="292" width="74" height="48" rx="8" class="empty"/>
+  <text x="194" y="323" class="slot">B1</text><text x="280" y="323" class="slot">B2</text>
+  <text x="366" y="323" class="small" text-anchor="middle">empty</text><text x="452" y="323" class="small" text-anchor="middle">empty</text>
+
+  <text x="64" y="401" class="label">Call 3</text>
+  <rect x="157" y="370" width="74" height="48" rx="8" fill="#f1e7fb" stroke="#bba1d6"/>
+  <rect x="243" y="370" width="74" height="48" rx="8" fill="#f1e7fb" stroke="#bba1d6"/>
+  <rect x="329" y="370" width="74" height="48" rx="8" class="empty"/>
+  <rect x="415" y="370" width="74" height="48" rx="8" class="empty"/>
+  <text x="194" y="401" class="slot">C1</text><text x="280" y="401" class="slot">C2</text>
+  <text x="366" y="401" class="small" text-anchor="middle">empty</text><text x="452" y="401" class="small" text-anchor="middle">empty</text>
+  <text x="64" y="466" class="small">A1 means the first window from clip A.</text>
+
+  <rect x="570" y="120" width="490" height="382" rx="18" fill="#f8fafc" stroke="#ccd8e1"/>
+  <text x="594" y="159" class="heading">Now: fill slots across clip boundaries</text>
+  <text x="594" y="188" class="body">Two calls, using the same batch capacity.</text>
+  <text x="594" y="245" class="label">Call 1</text>
+  <rect x="687" y="214" width="74" height="48" rx="8" fill="#dfebfd" stroke="#8caed9"/>
+  <rect x="773" y="214" width="74" height="48" rx="8" fill="#dfebfd" stroke="#8caed9"/>
+  <rect x="859" y="214" width="74" height="48" rx="8" fill="#dbf1e9" stroke="#87bda8"/>
+  <rect x="945" y="214" width="74" height="48" rx="8" fill="#dbf1e9" stroke="#87bda8"/>
+  <text x="724" y="245" class="slot">A1</text><text x="810" y="245" class="slot">A2</text>
+  <text x="896" y="245" class="slot">B1</text><text x="982" y="245" class="slot">B2</text>
+
+  <text x="594" y="323" class="label">Call 2</text>
+  <rect x="687" y="292" width="74" height="48" rx="8" fill="#f1e7fb" stroke="#bba1d6"/>
+  <rect x="773" y="292" width="74" height="48" rx="8" fill="#f1e7fb" stroke="#bba1d6"/>
+  <rect x="859" y="292" width="74" height="48" rx="8" class="empty"/>
+  <rect x="945" y="292" width="74" height="48" rx="8" class="empty"/>
+  <text x="724" y="323" class="slot">C1</text><text x="810" y="323" class="slot">C2</text>
+  <text x="896" y="323" class="small" text-anchor="middle">empty</text><text x="982" y="323" class="small" text-anchor="middle">empty</text>
+
+  <rect x="594" y="370" width="442" height="103" rx="10" fill="#ffffff" stroke="#ccd8e1"/>
+  <text x="614" y="401" class="label">Remember who owns every vector</text>
+  <text x="614" y="430" class="body">Returned windows still belong to A, B, or C.</text>
+  <text x="614" y="455" class="small">Packing clips together does not merge their results.</text>
+
+  <path d="M 815 502 L 815 536" class="arrow"/>
+  <rect x="40" y="539" width="1020" height="169" rx="16" fill="#ffffff" stroke="#ccd8e1"/>
+  <text x="64" y="575" class="heading">Average within each clip, just as before</text>
+  <rect x="64" y="598" width="304" height="82" rx="11" fill="#dfebfd" stroke="#8caed9"/>
+  <rect x="398" y="598" width="304" height="82" rx="11" fill="#dbf1e9" stroke="#87bda8"/>
+  <rect x="732" y="598" width="304" height="82" rx="11" fill="#f1e7fb" stroke="#bba1d6"/>
+  <text x="216" y="630" class="label" text-anchor="middle">Clip A vector</text>
+  <text x="216" y="657" class="body" text-anchor="middle">mean of vectors from A1 and A2</text>
+  <text x="550" y="630" class="label" text-anchor="middle">Clip B vector</text>
+  <text x="550" y="657" class="body" text-anchor="middle">mean of vectors from B1 and B2</text>
+  <text x="884" y="630" class="label" text-anchor="middle">Clip C vector</text>
+  <text x="884" y="657" class="body" text-anchor="middle">mean of vectors from C1 and C2</text>
+
+  <rect x="40" y="739" width="1020" height="56" rx="12" fill="#f1f5f9"/>
+  <text x="64" y="774" class="body">The saving here is one embedding call. Actual runtime depends on the clips, batch size, and device.</text>
+</svg>

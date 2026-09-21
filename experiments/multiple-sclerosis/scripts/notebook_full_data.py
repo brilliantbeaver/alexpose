@@ -134,7 +134,8 @@ def nb_04(md, code, badge, boot):
         "procedure from fresh model weights inside each outer fold. Do not change the procedure "
         "after seeing its test results and then present those same results as an untouched test."
     )]
-    return c
+    from notebook_04_tutorial import add_tutorial
+    return add_tutorial(c, md)
 
 
 def nb_05(md, code, badge, boot):
@@ -203,7 +204,8 @@ def nb_05(md, code, badge, boot):
         "encoder learned a clinical feature. Keep the evaluation choices fixed before notebook 06. "
         "Changing them after exploring this collection makes the study exploratory."
     )]
-    return c
+    from notebook_05_tutorial import add_tutorial
+    return add_tutorial(c, md)
 
 
 def nb_06(md, code, badge, boot):
@@ -229,17 +231,61 @@ def nb_06(md, code, badge, boot):
         "The inner validation set is the first split of a four-fold splitter within the outer "
         "development sources. We use one inner holdout, not all four inner folds. Smoke mode "
         "still checks all five outer folds, but uses 4+2 updates and a tiny model; its scores "
-        "are execution checks. A normal run can take substantially longer."
+        "are execution checks. A normal run can take substantially longer.\n\n"
+        "### Make the same experiment faster\n\n"
+        "There are 5 × (800 + 400) = 6,000 optimizer updates in a full run. "
+        "The cell below keeps that budget and the frozen splits unchanged. It speeds up the "
+        "work in three ways:\n\n"
+        "1. **Reuse completed work.** A cache saves each completed training stage, its training "
+        "and validation embeddings, and each completed fold. For example, if a run stops in "
+        "fold 3 after folds 0–2 finish, rerunning can reuse those three folds. An unfinished "
+        "training stage restarts, but a completed stage can be loaded. The first run must still "
+        "do the calculations. Old runs without the new cache metadata are not imported automatically.\n"
+        "2. **Share independent CPU work.** A normal CPU-only run uses up to two fold processes. "
+        "Each owns a separate model and random-number stream. A single Apple MPS or CUDA device "
+        "trains one fold at a time; CPU feature extraction can use two processes. Inner worker "
+        "counts are capped to avoid having every fold compete for all CPU cores. Smoke runs "
+        "use one worker because starting processes can cost more than their tiny calculations.\n"
+        "3. **Batch small operations.** Embedding batches can contain windows from several clips, "
+        "but each clip is still averaged separately. The masked training loss is calculated in "
+        "one batched operation, and the teacher-drift diagnostic uses one device-to-CPU transfer "
+        "instead of one per parameter tensor.\n\n"
+        "The cache checks input-file hashes, the registry, configuration, training budgets, "
+        "package versions, device information, and source-code hashes. A mismatch starts a "
+        "separate cache entry. Per-clip RF and control features are reusable because they do "
+        "not fit anything across clips. Scalers, classifiers, and model selection remain "
+        "fold-specific; test features are requested only after that fold selects its stage. "
+        "Atomic writes and file checksums help reject interrupted or damaged checkpoint writes.\n\n"
+        "Read the progress lines for training updates, stage time, and `cache hit` versus "
+        "`computed`. Total wall time and per-fold times are saved in `results['execution']`. "
+        "Parallel fold times overlap, so do not add them to estimate wall time. Speed depends "
+        "on hardware and clip lengths; two workers also need more RAM. Use `FOLD_WORKERS = 1` "
+        "and `FEATURE_WORKERS = 1` if memory is tight. Numerical batching can introduce small "
+        "floating-point differences, so unchanged protocol does not mean bit-identical GPU training.\n\n"
+        "After updating the Python files, restart the kernel and run the setup cells before "
+        "this cell. If an older run is still executing, let it finish before restarting. "
+        "Keep `CACHE_DIR` unchanged between reruns; each rerun still gets its own output folder. "
+        "Use `cache_dir=None` to disable reuse. Cache files consume disk space and should be "
+        "kept in a local directory you trust."
     ), code(
+        "import os",
         "from sjepa.config import get_config",
         "from sjepa.models import pick_device",
         "from sjepa.full_experiment import run_cross_validation, new_evaluation_dir",
         "cfg = get_config(); device = pick_device()",
         "SMOKE = cfg.profile.endswith('smoke')",
         "UPDATES, MORE = (4, 2) if SMOKE else (800, 400)",
+        "CACHE_DIR = EXP_DIR / 'artifacts' / 'cache' / 'capstone'",
+        "FOLD_WORKERS = min(2, os.cpu_count() or 1) if device == 'cpu' and not SMOKE else 1",
+        "FEATURE_WORKERS = min(2, os.cpu_count() or 1) if FOLD_WORKERS == 1 and not SMOKE else 1",
         "OUTPUT_DIR = new_evaluation_dir(EXP_DIR, registry, cfg)",
         "print('output:', OUTPUT_DIR, '| smoke execution check:', SMOKE)",
-        "results = run_cross_validation(records, registry, cfg, device, UPDATES, MORE, OUTPUT_DIR)",
+        "results = run_cross_validation(",
+        "    records, registry, cfg, device, UPDATES, MORE, OUTPUT_DIR,",
+        "    cache_dir=CACHE_DIR, fold_workers=FOLD_WORKERS, feature_workers=FEATURE_WORKERS,",
+        "    cpu_threads=1, rf_jobs=1, verbose=True,",
+        ")",
+        "print(f\"Total wall time: {results['execution']['seconds']:.1f} seconds\")",
     ), md(
         "## Read both ways of weighting the test predictions\n\n"
         "Macro-F1 gives the three conditions equal importance. Clip-weighted scoring gives each "
@@ -279,4 +325,5 @@ def nb_06(md, code, badge, boot):
         "For the audit, exact counts, exclusions, commands, and statistical references, read "
         "[docs/11-full-data-splits.md](docs/11-full-data-splits.md)."
     )]
-    return c
+    from notebook_06_tutorial import add_tutorial
+    return add_tutorial(c, md)

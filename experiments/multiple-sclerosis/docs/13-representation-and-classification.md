@@ -80,6 +80,13 @@ The same experiment helpers implement notebooks 03, 04, and 06:
 The schedule is driven by optimizer updates, not the older epoch fields printed
 by `describe(cfg)`.
 
+For faster execution of that same procedure, see the
+[capstone performance tutorial](15-capstone-performance.md). It explains which
+calculations can be cached, why CPU fold workers own separate models, and how
+batching reduces overhead. These optimizations do not introduce a new learning
+objective, source-weighted classifier fitting, or supervised encoder adaptation.
+The proposed research changes later in this document remain separate decisions.
+
 ## 4. Concrete techniques already supporting representation learning
 
 The following mechanisms are **implemented**. Their intended benefit should not
@@ -132,6 +139,13 @@ input. This subset is not exclusively a list of clinically selected joints.
 The code averages the selected token features into one vector per window, then
 averages the window vectors into one vector per clip. A laptop clip therefore
 becomes a list of 96 numbers regardless of its number of windows.
+
+The optimized implementation can put windows from several clips in one
+inference batch, while tracking each window's owner. It still averages within
+each clip, using the same fixed token readout. This changes how work is packed
+for the device, not the definition of a clip's representation. The
+[batching example](15-capstone-performance.md#5-batch-calculations-while-preserving-their-meaning)
+shows the distinction with three short clips.
 
 This simple readout makes training a small classifier practical. However,
 averaging can dilute brief events and differences between body parts. The encoder

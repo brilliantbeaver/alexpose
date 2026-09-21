@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="827" viewBox="0 0 1100 827" role="img" aria-labelledby="parallel-title parallel-desc">
+  <title id="parallel-title">Choose one main level of parallel work</title>
+  <desc id="parallel-desc">A conceptual architecture comparison, not a speedup or timing chart. On CPU, two independent fold processes can run at the same time, each owning its model and random-number state; feature and random-forest worker counts inside each fold are capped at one. On a single MPS or CUDA device, folds run one at a time. Within a fold, the neural training and validation-selection phase finishes before the test and baseline phase. Two CPU feature workers can then calculate missing per-clip features. The diagram does not imply that GPU training and baseline feature extraction overlap. All folds still use the same locked splits and update budgets.</desc>
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #172b3a; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #526575; }
+      .heading { font-size: 23px; font-weight: 700; }
+      .label { font-size: 19px; font-weight: 650; }
+      .body { font-size: 18px; }
+      .small { font-size: 16px; fill: #526575; }
+      .arrow { fill: none; stroke: #657a89; stroke-width: 2.5; stroke-linejoin: round; marker-end: url(#parallel-arrow); }
+    </style>
+    <marker id="parallel-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#657a89"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="827" fill="#ffffff"/>
+  <text x="40" y="53" class="title">Choose one main level of parallel work</text>
+  <text x="40" y="83" class="subtitle">Conceptual architecture with two workers shown; box sizes do not represent runtime.</text>
+
+  <rect x="40" y="118" width="490" height="574" rx="18" fill="#f8fafc" stroke="#ccd8e1"/>
+  <text x="64" y="158" class="heading">CPU: independent folds</text>
+  <text x="64" y="188" class="body">Two fold processes can run together.</text>
+  <rect x="64" y="214" width="442" height="62" rx="12" fill="#172b3a"/>
+  <text x="285" y="252" class="label" text-anchor="middle" style="fill: #ffffff">Assign folds to independent processes</text>
+  <path d="M 285 276 L 285 297 L 169 297 L 169 320" class="arrow"/>
+  <path d="M 285 297 L 401 297 L 401 320" class="arrow"/>
+
+  <rect x="64" y="323" width="210" height="250" rx="13" fill="#edf3fc" stroke="#adc4e7"/>
+  <text x="84" y="358" class="label">Worker process 1</text>
+  <text x="84" y="389" class="body">One outer fold</text>
+  <path d="M 84 408 H 254" stroke="#adc4e7"/>
+  <text x="84" y="439" class="body">Own model</text>
+  <text x="84" y="468" class="body">Own random state</text>
+  <text x="84" y="509" class="small">Feature workers: 1</text>
+  <text x="84" y="534" class="small">Forest workers: 1</text>
+  <text x="84" y="558" class="small">Bounded CPU threads</text>
+
+  <rect x="296" y="323" width="210" height="250" rx="13" fill="#edf3fc" stroke="#adc4e7"/>
+  <text x="316" y="358" class="label">Worker process 2</text>
+  <text x="316" y="389" class="body">Another outer fold</text>
+  <path d="M 316 408 H 486" stroke="#adc4e7"/>
+  <text x="316" y="439" class="body">Own model</text>
+  <text x="316" y="468" class="body">Own random state</text>
+  <text x="316" y="509" class="small">Feature workers: 1</text>
+  <text x="316" y="534" class="small">Forest workers: 1</text>
+  <text x="316" y="558" class="small">Bounded CPU threads</text>
+
+  <text x="64" y="616" class="body">Keep each worker's inner pools small.</text>
+  <text x="64" y="645" class="small">Otherwise, every process may compete for the</text>
+  <text x="64" y="669" class="small">same CPU cores and memory at the same time.</text>
+
+  <rect x="570" y="118" width="490" height="574" rx="18" fill="#f8fafc" stroke="#ccd8e1"/>
+  <text x="594" y="158" class="heading">MPS / CUDA: one fold at a time</text>
+  <text x="594" y="188" class="body">One accelerator owns the neural-model work.</text>
+
+  <rect x="594" y="214" width="442" height="112" rx="12" fill="#edf3fc" stroke="#adc4e7"/>
+  <text x="614" y="249" class="label">Train and select within one fold</text>
+  <text x="614" y="278" class="body">Train both stages; compare validation.</text>
+  <text x="614" y="305" class="small">No second fold trains on this device in parallel.</text>
+  <path d="M 815 326 L 815 369" class="arrow"/>
+  <text x="838" y="353" class="small">after selection</text>
+
+  <rect x="594" y="372" width="442" height="216" rx="12" fill="#edf8f4" stroke="#99c7b8"/>
+  <text x="614" y="406" class="label">Evaluate the test clips and baselines</text>
+  <text x="614" y="435" class="body">CPU processes share missing feature work.</text>
+  <rect x="614" y="457" width="190" height="74" rx="9" fill="#ffffff" stroke="#99c7b8"/>
+  <rect x="826" y="457" width="190" height="74" rx="9" fill="#ffffff" stroke="#99c7b8"/>
+  <text x="709" y="486" class="label" text-anchor="middle">Feature worker 1</text>
+  <text x="709" y="512" class="small" text-anchor="middle">Some clips</text>
+  <text x="921" y="486" class="label" text-anchor="middle">Feature worker 2</text>
+  <text x="921" y="512" class="small" text-anchor="middle">Other clips</text>
+  <text x="614" y="568" class="small">They do not fit a shared model across folds.</text>
+  <path d="M 815 588 L 815 624" class="arrow"/>
+  <text x="815" y="655" class="body" text-anchor="middle">Finish this fold, then begin the next.</text>
+
+  <rect x="40" y="724" width="1020" height="73" rx="14" fill="#fff6e7" stroke="#d7bb82"/>
+  <text x="64" y="754" class="label">More workers are not automatically faster.</text>
+  <text x="64" y="780" class="body">Worker startup, memory use, and competition for hardware can outweigh the work they save.</text>
+</svg>
