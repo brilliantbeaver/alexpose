@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="990" viewBox="0 0 1100 990" role="img" aria-labelledby="cache-title cache-desc">
+  <title id="cache-title">Reuse completed work while keeping the evaluation order</title>
+  <desc id="cache-desc">First verify the input files and run identity, then resolve each locked outer fold. A valid completed-fold cache reuses its saved predictions and stage selection. Otherwise, reuse valid stage checkpoints and training and validation embeddings, or calculate missing work, and fit training-only probes. Select the training stage using validation data before evaluating held-out test clips and fitting the baselines. Raw per-clip features can be reused, while classifiers and scalers are fitted within the fold. Save the completed fold. After all folds finish, require exactly one correctly attributed test prediction per clip before writing the report.</desc>
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #172b3a; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #526575; }
+      .heading { font-size: 21px; font-weight: 650; }
+      .body { font-size: 18px; }
+      .small { font-size: 17px; fill: #526575; }
+      .arrow { fill: none; stroke: #657a89; stroke-width: 2.5; stroke-linejoin: round; marker-end: url(#cache-arrow); }
+    </style>
+    <marker id="cache-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#657a89"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="990" fill="#ffffff"/>
+  <text x="40" y="53" class="title">Reuse work without changing the experiment</text>
+  <text x="40" y="83" class="subtitle">Check the run once, resolve each fold, and combine results only after all folds finish.</text>
+
+  <rect x="40" y="113" width="1020" height="106" rx="16" fill="#f1f5f9" stroke="#ccd8e1"/>
+  <text x="64" y="147" class="heading">1. Verify the inputs and run identity</text>
+  <text x="64" y="177" class="body">Check actual input bytes, split registry, configuration, update budgets, code, and environment.</text>
+  <text x="64" y="202" class="small">A stored manifest must match this run; its saved artifacts must pass their checksum checks.</text>
+
+  <path d="M 550 219 L 550 241 L 205 241 L 205 268" class="arrow"/>
+  <path d="M 550 241 L 735 241 L 735 268" class="arrow"/>
+
+  <rect x="40" y="270" width="330" height="240" rx="16" fill="#edf8f4" stroke="#99c7b8" stroke-width="1.5"/>
+  <rect x="60" y="291" width="188" height="29" rx="14" fill="#d3eee4"/>
+  <text x="76" y="311" font-size="15" font-weight="700" fill="#245a49">COMPLETE-FOLD HIT</text>
+  <text x="60" y="354" class="heading">Reuse this fold's results</text>
+  <text x="60" y="386" class="body">Keep its saved stage selection</text>
+  <text x="60" y="412" class="body">and held-out predictions.</text>
+  <text x="60" y="454" class="small">No retraining or baseline fitting</text>
+  <text x="60" y="479" class="small">is needed for this complete fold.</text>
+
+  <rect x="410" y="270" width="650" height="522" rx="16" fill="#f8fafc" stroke="#ccd8e1"/>
+  <text x="432" y="306" class="heading">No valid complete fold? Calculate what remains.</text>
+
+  <rect x="432" y="329" width="606" height="91" rx="12" fill="#edf3fc" stroke="#adc4e7"/>
+  <text x="451" y="359" class="heading">2. Reuse or calculate both training stages</text>
+  <text x="451" y="386" class="body">Reuse or compute checkpoints and train / validation vectors.</text>
+  <text x="451" y="409" class="small">Fit training-only probes; unfinished training stages restart.</text>
+  <path d="M 735 420 L 735 441" class="arrow"/>
+
+  <rect x="432" y="444" width="606" height="76" rx="12" fill="#fff6e7" stroke="#d7bb82"/>
+  <text x="451" y="474" class="heading">3. Choose the stage using validation scores</text>
+  <text x="451" y="501" class="body">The test clips have no role in this choice.</text>
+  <path d="M 735 520 L 735 541" class="arrow"/>
+
+  <rect x="432" y="544" width="606" height="106" rx="12" fill="#edf3fc" stroke="#adc4e7"/>
+  <text x="451" y="574" class="heading">4. Evaluate the fixed choice on the test clips</text>
+  <text x="451" y="601" class="body">Reuse or compute per-clip features for the baselines.</text>
+  <text x="451" y="628" class="body">Fit baseline scalers and classifiers on this fold's training data.</text>
+  <path d="M 735 650 L 735 671" class="arrow"/>
+
+  <rect x="432" y="674" width="606" height="94" rx="12" fill="#edf8f4" stroke="#99c7b8"/>
+  <text x="451" y="704" class="heading">5. Save the completed fold</text>
+  <text x="451" y="731" class="body">Save predictions and selection; commit the manifest last.</text>
+  <text x="451" y="754" class="small">Atomic writes keep incomplete files from looking complete.</text>
+
+  <text x="60" y="594" class="small">The reused result has already</text>
+  <text x="60" y="619" class="small">passed the same validation</text>
+  <text x="60" y="644" class="small">selection and test-evaluation</text>
+  <text x="60" y="669" class="small">steps for this run identity.</text>
+  <path d="M 205 510 L 205 551 L 390 551 L 390 818 L 205 818 L 205 843" class="arrow"/>
+  <path d="M 735 792 L 735 843" class="arrow"/>
+
+  <rect x="40" y="846" width="1020" height="105" rx="16" fill="#172b3a"/>
+  <text x="64" y="882" class="heading" style="fill: #ffffff">6. Check all out-of-fold predictions, then write the report</text>
+  <text x="64" y="913" class="body" style="fill: #e2edf4">Require exactly one test prediction per clip, with the correct source, label, and locked fold.</text>
+  <text x="64" y="937" class="small" style="fill: #bfced9">Both paths produce a self-contained evaluation folder. Cache reuse does not change the split rules.</text>
+</svg>

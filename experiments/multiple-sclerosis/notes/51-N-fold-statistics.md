@@ -13,3 +13,49 @@ Ultrathink with the latest JEPA and related techniques from authoritative source
 Clearly and systematically document your updates to README.md as well as documents in "docs" folder with clear and easy-to-understand language and phrasing. Illustrate with vecotr graphics where they could make understanding easier.
 
 Fan out subagents with dynamic workflows.
+
+---
+
+Based on the results in the notebook 04, update the textual explanation, results explanations, and interpretation of how our experiments are going.
+
+---
+
+Based on the results in the notebook 05, update the textual explanation, results explanations, and interpretation of how our experiments are going.
+
+Your explanation should be easy to follow, tutorial-style so that a high school student can understand well.
+
+---
+
+Based on the results in the notebook 06, thoughtfully and systematically update the textual explanation, results descriptions, and interpretation of how our experiments are going.
+
+Be specific and clear to fully explain these 5 systems and what differentiate their setup and configurations:
+
+* rf
+* sjepa
+* visibility
+* mean_pose
+* majority
+
+Your explanation should be easy to follow, tutorial-style so that a high school student can understand well with no strong AI/ML background.
+
+Make a highly emotionally intelligent assessment if we have enough results and proven methodology to be able to write a successful worksho ppaper
+
+
+---
+
+Ultrathink on how to improve the performance of this cell of calculations so that they return faster, by leveraging parallism, caching, and more robust  algorithms:
+"""
+from sjepa.config import get_config
+from sjepa.models import pick_device
+from sjepa.full_experiment import run_cross_validation, new_evaluation_dir
+cfg = get_config(); device = pick_device()
+SMOKE = cfg.profile.endswith('smoke')
+UPDATES, MORE = (4, 2) if SMOKE else (800, 400)
+OUTPUT_DIR = new_evaluation_dir(EXP_DIR, registry, cfg)
+print('output:', OUTPUT_DIR, '| smoke execution check:', SMOKE)
+results = run_cross_validation(records, registry, cfg, device, UPDATES, MORE, OUTPUT_DIR)
+"""
+
+---
+
+Systematically and carefully document these optimization techniques in the "docs" folder' documents as well as README.md using plain, easy-to-understand, tutorial-style language and explanations.  Use clear and modern vector graphics to illustrate key ideas, concepts, workflows and architectural choices.

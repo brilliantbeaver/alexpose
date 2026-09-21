@@ -5,6 +5,10 @@ with S-JEPA, and compare those features with a Random Forest. The three dataset
 labels are normal gait, multiple sclerosis (MS), and Parkinson's disease (PD).
 They are labels supplied with the collection, not diagnoses made by this project.
 
+The [research review and next experiments](docs/17-research-review-and-directions.md)
+connect notebooks 00–06, verify the retained results, and develop a research plan
+for temporal learning, bilateral symmetry, and gait forecasting.
+
 ## The current dataset
 
 Notebooks 02–06 use `video-data-full/` through the pose cache in
@@ -76,7 +80,7 @@ configuration. An incompatible checkpoint raises an error before its weights loa
 | `03_sjepa_model_and_pretrain_normal.ipynb` | Train label-free S-JEPA on round 0's training sources |
 | `04_progressive_finetune_ms_pd_vicreg.ipynb` | Compare original and continued training using validation sources |
 | `05_representation_visualization.ipynb` | Plot training embeddings and visibility controls only |
-| `06_capstone_rf_vs_sjepa.ipynb` | Train fresh models in all five rounds; save paired test predictions |
+| `06_capstone_rf_vs_sjepa.ipynb` | Evaluate five independently trained fold models; reuse compatible work on reruns and save paired test predictions |
 
 Some filenames retain earlier experiment names. Notebook 03 now trains on all
 three conditions in its training partition. Notebook 04 uses label-free additional
@@ -123,11 +127,28 @@ reviews primary sources through September 20, 2026, including S-JEPA, GFP,
 V-JEPA 2.1, LeJEPA, LeVJEPA, and supervised contrastive learning. It explains which
 ideas could transfer to this small skeleton dataset and how to test them fairly.
 
-**Saved evidence at that review:** notebook 03's fold-0 run completed 800 updates
-and printed effective rank 12.13. Notebooks 04–06 had no saved outputs, and no
-full-v1 classification results or out-of-fold predictions were present. Rank is
-a diversity diagnostic, not accuracy. Historical `g1` scores are not results
-for the current full dataset.
+## What the completed experiment shows
+
+The subsequently saved full-budget notebook 06 run covers all **88 clips from
+41 sources**, with a fresh model in each of five folds. S-JEPA reaches pooled
+source-weighted macro-F1 **0.457**, compared with **0.452** for mean pose,
+**0.411** for the current RF, **0.318** for visibility, and **0.259** for majority.
+Mean pose leads in four of five folds and in the clip-weighted aggregate.
+**A consistent advantage from learned temporal features has not been demonstrated.**
+
+This is a useful controlled pilot, not evidence of diagnostic readiness. S-JEPA
+correctly labels 8 of 29 MS clips when counted equally. A feature review also
+found that the RF extractor duplicates the right-ankle range in its left-ankle
+field; the affected comparison needs correction and reevaluation before a strong
+paper claim. The saved predictions have not been altered.
+
+[Notebook 06](06_capstone_rf_vs_sjepa.ipynb) now explains each system, the actual
+results, and the conclusions step by step. The
+[results and contribution assessment](docs/16-capstone-results-and-contributions.md)
+distinguishes observations from unproven claims, prioritizes follow-up experiments,
+and reviews workshop fit. The strongest paper direction is a bounded empirical
+study of controls and evaluation limits, not a claim of a superior gait model.
+Historical `g1` scores remain separate from these full-dataset results.
 
 ## Run locally
 
@@ -161,6 +182,12 @@ uv run python scripts/scripts_full_data.py --run --smoke --device cpu
 uv run python scripts/scripts_full_data.py --run
 ```
 
+These commands run the same statistical procedure, but the current CLI uses
+serial, uncached execution defaults. It does not expose the notebook's cache or
+worker controls. Use notebook 06 or the explicit Python call in the
+[performance tutorial](docs/15-capstone-performance.md#2-run-with-explicit-execution-controls)
+to enable those controls.
+
 Outputs go into separate directories under `artifacts/runs/full-v1/`. Smoke
 checkpoints and results are separate from normal runs. Each completed evaluation
 saves `oof.json` (one test prediction per usable clip) and `results.json`.
@@ -168,6 +195,45 @@ Neither a short smoke run nor successful tests establish model quality.
 
 The notebooks also contain Colab setup cells. Edit the repository URL to your
 fork, obtain the full videos with Git LFS, and run extraction before training.
+
+## Make notebook 06 faster
+
+A full capstone run performs `5 × (800 + 400) = 6,000` model updates, plus
+embedding extraction, classifier fitting, and evaluation. The updated runner
+keeps those budgets and the training/validation/test boundaries unchanged. It
+reduces repeated work in four ways:
+
+- **Reuse compatible calculations.** Save per-clip features, completed training
+  stages, embeddings, and whole-fold results. A rerun checks data, configuration,
+  code, and environment before using saved work. Models remain fold-specific.
+- **Run independent CPU jobs together.** Normal CPU runs use up to two fold
+  processes. A single MPS/CUDA device trains one fold at a time, with up to two
+  CPU feature workers later in the fold. Smoke runs stay serial.
+- **Batch small calculations.** Fill embedding batches across clip boundaries,
+  then average each clip separately. Calculate masked losses together while
+  preserving each example's weight, and reduce teacher-drift synchronization.
+- **Recover completed work safely.** Atomic writes and checkpoint manifests help
+  reject partial results. A completed stage can be reused after an interruption;
+  an unfinished stage restarts from its beginning.
+
+![CPU fold processes own separate models and random states. A single MPS or CUDA device handles one fold at a time, followed by parallel CPU feature work.](images/capstone_parallelism.svg)
+
+*Worker layout, not a measured speedup chart. Each extra fold process needs
+memory for its own model and training windows.*
+
+Start with notebook 06's updated cell. Keep `CACHE_DIR` at
+`artifacts/cache/capstone/` between reruns, but let `new_evaluation_dir(...)`
+create a fresh report folder each time. For a lower-memory run, set
+`FOLD_WORKERS = 1` and `FEATURE_WORKERS = 1`. Use `cache_dir=None` to disable
+reuse without deleting saved files. Restart the kernel after Python-code
+changes and rerun setup before evaluating; let any existing run finish first.
+
+The cell reports progress and stores timings in `results['execution']`.
+A small synthetic CPU check demonstrated faster cached reruns; it did not
+establish a full-budget or GPU speedup, nor better classification. The
+[step-by-step performance guide](docs/15-capstone-performance.md) explains all
+controls, cache invalidation, recovery, the batching mathematics, measured
+evidence, and troubleshooting, with three editable vector diagrams.
 
 ## How to read the results
 
@@ -194,6 +260,9 @@ uv run python scripts/scripts_build_notebooks.py --check --only 02 03 04 05 06
 
 `sjepa/splits.py` owns the registry and partition checks.
 `sjepa/full_experiment.py` owns training, validation selection, and test scoring.
+`sjepa/experiment_cache.py` owns cache identity, atomic writes, manifests, and
+per-clip feature reuse. `sjepa/tests/test_experiment_performance.py` checks that
+the execution optimizations preserve calculations and recover compatible work.
 `scripts/notebook_content.py` and `scripts/notebook_full_data.py` generate notebook
 content. Rebuild only the requested notebooks with `--only 02 03 04 05 06` to avoid
 overwriting work in notebook 01. The detailed method lists what was actually

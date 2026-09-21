@@ -67,7 +67,7 @@ def build_feature_matrix(records: Sequence[SequenceRecord], fps: int = 15
 def train_rf_and_predict(
     X_train: np.ndarray, y_train: Sequence[str],
     X_test: np.ndarray,
-    n_estimators: int = 100, max_depth: int = 5, seed: int = 42,
+    n_estimators: int = 100, max_depth: int = 5, seed: int = 42, n_jobs: int = -1,
 ) -> np.ndarray:
     """Train a StandardScaler + RandomForest and predict test labels.
 
@@ -88,7 +88,7 @@ def train_rf_and_predict(
 
     clf = RandomForestClassifier(
         n_estimators=n_estimators, max_depth=max_depth, max_features="sqrt",
-        class_weight="balanced", random_state=seed, n_jobs=-1,
+        class_weight="balanced", random_state=seed, n_jobs=n_jobs,
     )
     clf.fit(Xtr_s, list(y_train))
     return clf.predict(Xte_s)
