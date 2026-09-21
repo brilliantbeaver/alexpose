@@ -90,6 +90,45 @@ mask bits without relying on GIF playback. From this experiment directory, run
 and the timeline, or add `--check` to detect stale/overwritten output.
 See [mask semantics and the hip audit](docs/12-mask-visualization.md).
 
+## How the features become condition predictions
+
+**The JEPA predictor and the condition classifier have different jobs.** The JEPA
+predictor practices predicting hidden skeleton **features**. A separate logistic
+regression classifier learns to predict **Normal, MS, or PD** from a frozen
+teacher-encoder representation. Condition labels currently train the classifier;
+they do not send gradients into the encoder.
+
+![Current self-supervised feature learning and separate supervised classification, with encoder adaptation clearly marked as a proposal.](images/representation_review_roles.svg)
+
+| Already implemented | Why it may help | What it does not establish |
+|---|---|---|
+| Joint/time tokens, attention, and structured random masks | Encourage learning relationships between body parts and times | That the learned differences distinguish the three conditions |
+| Full-input EMA teacher and centered, sharpened feature loss | Provide stable prediction targets and discourage collapse | That varied features encode useful gait information |
+| Source-uniform self-supervised sampling | Prevent sources with more windows from dominating training | Equal source weight when fitting the later classifier |
+| Training-only standardization and a regularized, class-balanced linear probe | Make condition information accessible to a simple classifier | Equal weighting of sources within each class |
+| Validation selection between 800 and 800+400 updates | Choose more training only when the downstream validation score improves | A final test score or proof that every longer run is better |
+| Fresh models and paired controls across five source folds | Assess the full procedure on held-out source videos | External clinical validity or verified person-disjoint evaluation |
+
+The September 20 review identified concrete experiments worth prioritizing:
+source-aware classifier weights, an untrained-encoder comparison, alternative
+feature pooling, an audit of left/right correspondence under reflection, and
+limited supervised encoder adaptation. These are **proposals**, not enabled
+features. For example, one fold-0 MS source contributes 13 of 23 MS training clips,
+or 56.5% of the MS classifier-loss weight even after class balancing.
+
+Read the [plain-language methodology review](docs/13-representation-and-classification.md)
+for the exact training flow, code references, and interpretation of each mechanism.
+The [research and experiment guide](docs/14-jepa-literature-and-experiments.md)
+reviews primary sources through September 20, 2026, including S-JEPA, GFP,
+V-JEPA 2.1, LeJEPA, LeVJEPA, and supervised contrastive learning. It explains which
+ideas could transfer to this small skeleton dataset and how to test them fairly.
+
+**Saved evidence at that review:** notebook 03's fold-0 run completed 800 updates
+and printed effective rank 12.13. Notebooks 04–06 had no saved outputs, and no
+full-v1 classification results or out-of-fold predictions were present. Rank is
+a diversity diagnostic, not accuracy. Historical `g1` scores are not results
+for the current full dataset.
+
 ## Run locally
 
 From the repository root:

@@ -1,5 +1,30 @@
 # Literature update — what transfers to a 2D, 35-source MS/PD/normal gait study
 
+## Reading this historical review — September 20, 2026
+
+The August review below is preserved as a research record. These corrections govern its
+interpretation. Read the [current representation and classification review](13-representation-and-classification.md)
+and [updated literature and experiment plan](14-jepa-literature-and-experiments.md) for the current method.
+
+- **Dataset:** the historical results concern 47 clips from 35 recording sources. The current
+  full-data registry contains 88 usable clips from 41 sources. The older camera/frame-rate
+  finding has not been established for this expanded collection.
+- **JEPA design:** EMA, stop-gradient, centering and sharpening describe the original S-JEPA
+  recipe and its evidence. They are not mandatory ingredients of every JEPA method.
+- **Masking:** emphasizing high-motion regions might neglect informative low-motion regions.
+  This is an experimental hypothesis, not evidence that motion-aware masking is clinically
+  wrong or prohibited. Test complementary masking choices.
+- **Rank:** our centered batch diagnostic has ceiling `min(batch size − 1, feature dimension)`:
+  31 for batch 32 and 96 features. Rank measures variation; it does not prove useful gait
+  features, unused model capacity, or disease separation.
+- **Scores:** a low S-JEPA score does not demonstrate shortcut avoidance. One third is not a
+  universal chance macro-F1; the value depends on class frequencies and the guessing rule.
+- **VICReg:** current notebook 04 continues label-free training and fits frozen linear probes.
+  Its historical class-centered residual penalty is inactive; removing each class mean cannot
+  itself push those class means apart.
+
+---
+
 _Compiled 2026-08-03. Decision-critical sources only (per scope). Machine-readable records:
 [`../artifacts/research/evidence_ledger.yaml`](../artifacts/research/evidence_ledger.yaml)._
 

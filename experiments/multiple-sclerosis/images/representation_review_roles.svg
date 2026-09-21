@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg role="img" aria-labelledby="diagram-title diagram-description" xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="885.6pt" viewBox="0 0 864 885.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<title id="diagram-title">The JEPA predictor and the condition classifier have different jobs</title>
+<desc id="diagram-description">Implemented: a student encoder and JEPA predictor learn hidden feature distributions from a stop-gradient, slow-moving teacher. The feature loss updates the student and predictor, while the teacher follows the student by an exponential moving average. Separately, the frozen teacher encodes full windows; token and window means yield one clip vector. Training-only StandardScaler and class-balanced logistic regression produce Normal, MS and PD predictions. Condition labels fit the classifier, not the encoder. A separate dashed amber strip marks supervised encoder adaptation as proposed, not implemented.</desc>
+ <title>The JEPA predictor and the condition classifier have different jobs</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>The JEPA predictor and the condition classifier have different jobs</dc:title>
+    <dc:description>Implemented: a student encoder and JEPA predictor learn hidden feature distributions from a stop-gradient, slow-moving teacher. The feature loss updates the student and predictor, while the teacher follows the student by an exponential moving average. Separately, the frozen teacher encodes full windows; token and window means yield one clip vector. Training-only StandardScaler and class-balanced logistic regression produce Normal, MS and PD predictions. Condition labels fit the classifier, not the encoder. A separate dashed amber strip marks supervised encoder adaptation as proposed, not implemented.</dc:description>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 885.6
+L 864 885.6
+L 864 0
+L 0 0
+z
+" style="fill: #f6f8fb"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 37.44 104.4
+L 826.56 104.4
+Q 838.08 104.4 838.08 115.92
+L 838.08 398.88
+Q 838.08 410.4 826.56 410.4
+L 37.44 410.4
+Q 25.92 410.4 25.92 398.88
+L 25.92 115.92
+Q 25.92 104.4 37.44 104.4
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #d6e1e9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 53.28 166.32
+L 180 166.32
+Q 191.52 166.32 191.52 177.84
+L 191.52 340.56
+Q 191.52 352.08 180 352.08
+L 53.28 352.08
+Q 41.76 352.08 41.76 340.56
+L 41.76 177.84
+Q 41.76 166.32 53.28 166.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #d6e1e9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 228.96 166.32
+L 376.56 166.32
+Q 388.08 166.32 388.08 177.84
+L 388.08 240.48
+Q 388.08 252 376.56 252
+L 228.96 252
+Q 217.44 252 217.44 240.48
+L 217.44 177.84
+Q 217.44 166.32 228.96 166.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ecf2ff; stroke: #c8d6f4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 428.4 166.32
+L 576 166.32
+Q 587.52 166.32 587.52 177.84
+L 587.52 240.48
+Q 587.52 252 576 252
+L 428.4 252
+Q 416.88 252 416.88 240.48
+L 416.88 177.84
+Q 416.88 166.32 428.4 166.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ecf2ff; stroke: #c8d6f4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 228.96 290.88
+L 376.56 290.88
+Q 388.08 290.88 388.08 302.4
+L 388.08 354.96
+Q 388.08 366.48 376.56 366.48
+L 228.96 366.48
+Q 217.44 366.48 217.44 354.96
+L 217.44 302.4
+Q 217.44 290.88 228.96 290.88
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #e9f6f3; stroke: #bbdeda; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 627.84 166.32
+L 810.72 166.32
+Q 822.24 166.32 822.24 177.84
+L 822.24 354.96
+Q 822.24 366.48 810.72 366.48
+L 627.84 366.48
+Q 616.32 366.48 616.32 354.96
+L 616.32 177.84
+Q 616.32 166.32 627.84 166.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #fff4e7; stroke: #e5cfb9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 191.52 262.08
+Q 202.32 247.32 211.931622 234.184117
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 206.365081 237.050059
+L 211.931622 234.184117
+L 210.884451 240.356915
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #2f5cc9; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 388.08 209.52
+Q 400.32 209.52 410.547539 209.52
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 404.947539 206.72
+L 410.547539 209.52
+L 404.947539 212.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #2f5cc9; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 587.52 209.52
+Q 599.76 209.52 609.987539 209.52
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 604.387539 206.72
+L 609.987539 209.52
+L 604.387539 212.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #2f5cc9; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 191.52 328.32
+Q 202.32 328.32 211.107539 328.32
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #08777b; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 205.507539 325.52
+L 211.107539 328.32
+L 205.507539 331.12
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #08777b; stroke: #08777b; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 303.12 252
+Q 303.12 269.28 303.12 284.547539
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #08777b; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 305.92 278.947539
+L 303.12 284.547539
+L 300.32 278.947539
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #08777b; stroke: #08777b; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 388.08 328.32
+Q 500.04 328.32 609.987539 328.32
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #08777b; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 604.387539 325.52
+L 609.987539 328.32
+L 604.387539 331.12
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #08777b; stroke: #08777b; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 37.44 428.4
+L 826.56 428.4
+Q 838.08 428.4 838.08 439.92
+L 838.08 652.32
+Q 838.08 663.84 826.56 663.84
+L 37.44 663.84
+Q 25.92 663.84 25.92 652.32
+L 25.92 439.92
+Q 25.92 428.4 37.44 428.4
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #d6e1e9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 53.28 506.88
+L 218.88 506.88
+Q 230.4 506.88 230.4 518.4
+L 230.4 585.36
+Q 230.4 596.88 218.88 596.88
+L 53.28 596.88
+Q 41.76 596.88 41.76 585.36
+L 41.76 518.4
+Q 41.76 506.88 53.28 506.88
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #e9f6f3; stroke: #bbdeda; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 268.56 506.88
+L 375.12 506.88
+Q 386.64 506.88 386.64 518.4
+L 386.64 585.36
+Q 386.64 596.88 375.12 596.88
+L 268.56 596.88
+Q 257.04 596.88 257.04 585.36
+L 257.04 518.4
+Q 257.04 506.88 268.56 506.88
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #d6e1e9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 424.8 506.88
+L 604.8 506.88
+Q 616.32 506.88 616.32 518.4
+L 616.32 585.36
+Q 616.32 596.88 604.8 596.88
+L 424.8 596.88
+Q 413.28 596.88 413.28 585.36
+L 413.28 518.4
+Q 413.28 506.88 424.8 506.88
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ecf2ff; stroke: #c8d6f4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 654.48 506.88
+L 810.72 506.88
+Q 822.24 506.88 822.24 518.4
+L 822.24 585.36
+Q 822.24 596.88 810.72 596.88
+L 654.48 596.88
+Q 642.96 596.88 642.96 585.36
+L 642.96 518.4
+Q 642.96 506.88 654.48 506.88
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #d6e1e9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 230.4 551.52
+Q 241.56 551.52 250.707539 551.52
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #53677a; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 245.107539 548.72
+L 250.707539 551.52
+L 245.107539 554.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #53677a; stroke: #53677a; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 386.64 551.52
+Q 397.8 551.52 406.947539 551.52
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #53677a; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 401.347539 548.72
+L 406.947539 551.52
+L 401.347539 554.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #53677a; stroke: #53677a; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 616.32 551.52
+Q 627.48 551.52 636.627539 551.52
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #53677a; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 631.027539 548.72
+L 636.627539 551.52
+L 631.027539 554.32
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #53677a; stroke: #53677a; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 515.52 634.32
+Q 515.52 618.12 515.52 603.932461
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 512.72 609.532461
+L 515.52 603.932461
+L 518.32 609.532461
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #2f5cc9; stroke: #2f5cc9; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_23">
+    <path d="M 37.44 681.84
+L 826.56 681.84
+Q 838.08 681.84 838.08 693.36
+L 838.08 832.32
+Q 838.08 843.84 826.56 843.84
+L 37.44 843.84
+Q 25.92 843.84 25.92 832.32
+L 25.92 693.36
+Q 25.92 681.84 37.44 681.84
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #fff4e7; stroke-dasharray: 8.4,5.6; stroke-dashoffset: 0; stroke: #a75219; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_24">
+    <path d="M 53.28 734.4
+L 328.32 734.4
+Q 339.84 734.4 339.84 745.92
+L 339.84 786.96
+Q 339.84 798.48 328.32 798.48
+L 53.28 798.48
+Q 41.76 798.48 41.76 786.96
+L 41.76 745.92
+Q 41.76 734.4 53.28 734.4
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #e5cfb9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_25">
+    <path d="M 550.08 734.4
+L 810.72 734.4
+Q 822.24 734.4 822.24 745.92
+L 822.24 786.96
+Q 822.24 798.48 810.72 798.48
+L 550.08 798.48
+Q 538.56 798.48 538.56 786.96
+L 538.56 745.92
+Q 538.56 734.4 550.08 734.4
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #ffffff; stroke: #e5cfb9; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_26">
+    <path d="M 532.8 767.52
+Q 439.2 767.52 347.612461 767.52
+" clip-path="url(#pbc3db479ff)" style="fill: none; stroke-dasharray: 9,7.2; stroke-dashoffset: 0; stroke: #a75219; stroke-width: 1.8; stroke-linecap: round"/>
+    <path d="M 353.212461 770.32
+L 347.612461 767.52
+L 353.212461 764.72
+z
+" clip-path="url(#pbc3db479ff)" style="fill: #a75219; stroke-dasharray: 9,7.2; stroke-dashoffset: 0; stroke: #a75219; stroke-width: 1.8; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #08777b" x="25.92" y="25.637422" transform="rotate(-0 25.92 25.637422)">NOTEBOOKS 03–06  /  TWO DIFFERENT PREDICTION TASKS</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 24px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #19334b" x="25.92" y="57.11625" transform="rotate(-0 25.92 57.11625)">Learn movement features, then learn condition labels</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="25.92" y="80.437969" transform="rotate(-0 25.92 80.437969)">The JEPA predictor guesses hidden features. A separate classifier predicts Normal, MS or PD.</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #19334b" x="41.76" y="133.197187" transform="rotate(-0 41.76 133.197187)">01  Learn movement features</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 11.5px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #2f5cc9" x="822.24" y="131.857305" transform="rotate(-0 822.24 131.857305)">03–04  ·  LABEL-FREE</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #19334b" x="55.44" y="189.917812" transform="rotate(-0 55.44 189.917812)">Training window</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="55.44" y="213.258047" transform="rotate(-0 55.44 213.258047)">All three conditions</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="55.44" y="232.698047" transform="rotate(-0 55.44 232.698047)">Labels withheld</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #2f5cc9" x="55.44" y="260.058047" transform="rotate(-0 55.44 260.058047)">Masked +</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #2f5cc9" x="55.44" y="276.618047" transform="rotate(-0 55.44 276.618047)">transformed view</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #08777b" x="55.44" y="316.218047" transform="rotate(-0 55.44 316.218047)">Complete original</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #08777b" x="55.44" y="332.778047" transform="rotate(-0 55.44 332.778047)">window</text>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #2f5cc9" x="231.12" y="192.1575" transform="rotate(-0 231.12 192.1575)">Student encoder</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="231.12" y="215.038125" transform="rotate(-0 231.12 215.038125)">Reads visible tokens</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="231.12" y="233.758125" transform="rotate(-0 231.12 233.758125)">Updated by gradients</text>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #2f5cc9" x="430.56" y="192.1575" transform="rotate(-0 430.56 192.1575)">JEPA predictor</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="430.56" y="215.038125" transform="rotate(-0 430.56 215.038125)">Guesses hidden features</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="430.56" y="233.758125" transform="rotate(-0 430.56 233.758125)">96 features per token*</text>
+   </g>
+   <g id="text_19">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #08777b" x="231.12" y="315.9975" transform="rotate(-0 231.12 315.9975)">Slow teacher</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="231.12" y="335.998125" transform="rotate(-0 231.12 335.998125)">Reads the full window</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="231.12" y="353.278125" transform="rotate(-0 231.12 353.278125)">No gradient from loss</text>
+   </g>
+   <g id="text_22">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a75219" x="631.44" y="195.877031" transform="rotate(-0 631.44 195.877031)">Feature loss</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="631.44" y="221.557969" transform="rotate(-0 631.44 221.557969)">Compare predictions with</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="631.44" y="241.717969" transform="rotate(-0 631.44 241.717969)">teacher targets at the</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="631.44" y="261.877969" transform="rotate(-0 631.44 261.877969)">hidden joint–time slots.</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a75219" x="631.44" y="302.196953" transform="rotate(-0 631.44 302.196953)">Cross-entropy over</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a75219" x="631.44" y="322.357969" transform="rotate(-0 631.44 322.357969)">feature dimensions;</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a75219" x="631.44" y="342.517969" transform="rotate(-0 631.44 342.517969)">no condition labels.</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #08777b" x="315.36" y="275.478281" transform="rotate(-0 315.36 275.478281)">slow weight copy (EMA)</text>
+   </g>
+   <g id="text_30">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #08777b" x="501.84" y="316.597969" transform="rotate(-0 501.84 316.597969)">Target features</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="41.76" y="394.698047" transform="rotate(-0 41.76 394.698047)">The feature loss updates the student and JEPA predictor. It does not teach three class labels.</text>
+   </g>
+   <g id="text_32">
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #19334b" x="41.76" y="457.197187" transform="rotate(-0 41.76 457.197187)">02  Train the condition classifier</text>
+   </g>
+   <g id="text_33">
+    <text style="font-weight: 700; font-size: 11.5px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #08777b" x="822.24" y="455.857305" transform="rotate(-0 822.24 455.857305)">04 + 06  ·  SUPERVISED HEAD</text>
+   </g>
+   <g id="text_34">
+    <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="41.76" y="480.757969" transform="rotate(-0 41.76 480.757969)">Reuse the learned teacher. Fit the scaler and classifier on training clips only.</text>
+   </g>
+   <g id="text_35">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #08777b" x="56.16" y="532.7175" transform="rotate(-0 56.16 532.7175)">Frozen teacher</text>
+   </g>
+   <g id="text_36">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="56.16" y="556.698047" transform="rotate(-0 56.16 556.698047)">Full windows → pooled</text>
+   </g>
+   <g id="text_37">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="56.16" y="576.138047" transform="rotate(-0 56.16 576.138047)">96-number clip vector*</text>
+   </g>
+   <g id="text_38">
+    <text style="font-weight: 700; font-size: 13.5px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #19334b" x="321.84" y="530.817891" transform="rotate(-0 321.84 530.817891)">StandardScaler</text>
+   </g>
+   <g id="text_39">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="271.44" y="556.318125" transform="rotate(-0 271.44 556.318125)">Put features on</text>
+   </g>
+   <g id="text_40">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="271.44" y="575.758125" transform="rotate(-0 271.44 575.758125)">comparable scales</text>
+   </g>
+   <g id="text_41">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #2f5cc9" x="427.68" y="532.7175" transform="rotate(-0 427.68 532.7175)">Logistic regression</text>
+   </g>
+   <g id="text_42">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="427.68" y="556.698047" transform="rotate(-0 427.68 556.698047)">Learns the class boundaries</text>
+   </g>
+   <g id="text_43">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="427.68" y="576.138047" transform="rotate(-0 427.68 576.138047)">Balanced class weights</text>
+   </g>
+   <g id="text_44">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #19334b" x="732.24" y="531.957656" transform="rotate(-0 732.24 531.957656)">Condition prediction</text>
+   </g>
+   <g id="text_45">
+    <text style="font-weight: 700; font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #08777b" x="732.24" y="565.157344" transform="rotate(-0 732.24 565.157344)">Normal · MS · PD</text>
+   </g>
+   <g id="text_46">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #2f5cc9" x="530.64" y="622.597969" transform="rotate(-0 530.64 622.597969)">Training condition labels</text>
+   </g>
+   <g id="text_47">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #19334b" x="56.16" y="628.357969" transform="rotate(-0 56.16 628.357969)">Labels fit the classifier only.</text>
+   </g>
+   <g id="text_48">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="56.16" y="647.418047" transform="rotate(-0 56.16 647.418047)">The encoder stays frozen in this step.</text>
+   </g>
+   <g id="text_49">
+    <text style="font-weight: 700; font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a75219" x="41.76" y="709.877344" transform="rotate(-0 41.76 709.877344)">03  Proposed: let labels refine the encoder</text>
+   </g>
+   <g id="text_50">
+    <text style="font-weight: 700; font-size: 11.5px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #a75219" x="822.24" y="709.297305" transform="rotate(-0 822.24 709.297305)">NOT IMPLEMENTED</text>
+   </g>
+   <g id="text_51">
+    <text style="font-weight: 700; font-size: 14.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #19334b" x="56.16" y="756.937734" transform="rotate(-0 56.16 756.937734)">Trainable encoder + class head</text>
+   </g>
+   <g id="text_52">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="56.16" y="781.338047" transform="rotate(-0 56.16 781.338047)">Adapt features using training labels</text>
+   </g>
+   <g id="text_53">
+    <text style="font-weight: 700; font-size: 14.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a75219" x="552.96" y="756.937734" transform="rotate(-0 552.96 756.937734)">Supervised classification loss</text>
+   </g>
+   <g id="text_54">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="552.96" y="781.338047" transform="rotate(-0 552.96 781.338047)">Compare class predictions with labels</text>
+   </g>
+   <g id="text_55">
+    <text style="font-weight: 700; font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a75219" x="439.2" y="755.418047" transform="rotate(-0 439.2 755.418047)">label gradients</text>
+   </g>
+   <g id="text_56">
+    <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="41.76" y="825.258047" transform="rotate(-0 41.76 825.258047)">This would directly train class-relevant features; improvement must be tested on unseen sources.</text>
+   </g>
+   <g id="text_57">
+    <text style="font-size: 10.7px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #53677a" x="25.92" y="867.810328" transform="rotate(-0 25.92 867.810328)">*Laptop configuration. Diagram 01 shows learning; diagram 02 shows fitting and using a frozen-encoder classifier.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pbc3db479ff">
+   <rect x="0" y="0" width="864" height="885.6"/>
+  </clipPath>
+ </defs>
+</svg>
