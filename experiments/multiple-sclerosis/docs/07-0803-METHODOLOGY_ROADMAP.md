@@ -1,5 +1,30 @@
 # Why the S-JEPA score is low, and how we could make it better
 
+## Reading this historical roadmap — September 20, 2026
+
+This August explanation is preserved as a record, including its historical scores. Some causal
+interpretations were stronger than the evidence supports. Use the [current methodology review](13-representation-and-classification.md)
+and [research and experiment plan](14-jepa-literature-and-experiments.md) for current decisions.
+
+- The 0.438 S-JEPA and 0.667 RF scores describe the older **47-clip, 35-source** experiment.
+  Current full-data notebooks use **88 usable clips and 41 recording sources**. Old camera/FPS
+  findings and classifier scores must not be transferred to that collection.
+- Effective rank measures directions of variation in a sampled batch. With 32 centered examples
+  and 96 features, its ceiling is **31**, not 96. Rank around 8–9 neither proves spare model
+  capacity nor identifies what was learned. It cannot establish clinically meaningful features.
+- Poor classification does not prove the model avoided camera shortcuts or learned the
+  “wrong thing.” Those are hypotheses requiring controlled comparisons. Likewise, **0.333 is
+  not a universal chance macro-F1**; specify the class distribution and prediction rule.
+- Avoiding high-motion masking is a proposed precaution to test, not a clinical prohibition.
+  EMA and centering have evidence within the original S-JEPA recipe; other JEPA objectives
+  need not use both.
+- Current notebook 04 performs additional label-free training followed by frozen supervised
+  probes. It does not run class-aware VICReg. The historical loss on embeddings minus their
+  class means is unchanged if a whole class moves together, so it cannot by itself separate
+  class centers. Direct supervised encoder adaptation remains a proposed experiment.
+
+---
+
 _Written 2026-08-03. This document is a plain-language companion to
 [`06-0803-FINAL_REPORT.md`](06-0803-FINAL_REPORT.md) (the results) and
 [`04-0803-FIXES.md`](04-0803-FIXES.md) (the repairs we already made)._

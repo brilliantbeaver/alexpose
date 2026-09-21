@@ -76,7 +76,8 @@ def nb_03(md, code, badge, boot):
         "plt.tight_layout(); plt.show()",
         "print('Saved a checkpoint tied to this cache, registry, fold, and configuration.')",
     )]
-    return c
+    from notebook_03_tutorial import add_tutorial
+    return add_tutorial(c, md, code)
 
 
 def nb_04(md, code, badge, boot):
