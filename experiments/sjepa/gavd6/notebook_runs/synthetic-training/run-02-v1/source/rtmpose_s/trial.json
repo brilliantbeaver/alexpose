@@ -1,0 +1,39 @@
+{
+  "student": {
+    "student_id": "rtmpose_s",
+    "family": "rtmpose",
+    "role": "validation",
+    "config": "/hai/scratch/tedmui/models/mmpose/configs/body_2d_keypoint/rtmpose/coco/rtmpose-s_8xb256-420e_coco-256x192.py",
+    "checkpoint": "/hai/scratch/tedmui/models/pose/rtmpose-s.pth"
+  },
+  "lessons": [
+    "balanced",
+    "blur",
+    "front",
+    "low_resolution",
+    "low_resolution_occlusion",
+    "oblique",
+    "occlusion",
+    "side"
+  ],
+  "probe_seconds": 1.792972732000635,
+  "probe_losses": [
+    0.07310093194246292,
+    0.06590806692838669,
+    0.06632518023252487,
+    0.06718071550130844,
+    0.06690724194049835,
+    0.06931330263614655,
+    0.06445731967687607,
+    0.06640145927667618,
+    0.06529838591814041,
+    0.0699322298169136
+  ],
+  "budgets": [
+    25,
+    75
+  ],
+  "seed": 17,
+  "synthetic_examples_per_batch": 2,
+  "real_examples_per_mixed_batch": 18
+}

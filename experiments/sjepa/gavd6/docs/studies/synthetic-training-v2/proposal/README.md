@@ -1,43 +1,30 @@
 # Correct pose errors without erasing gait
 
-*Short research proposal · 18 September 2026 · Prospective study; illustrations are conceptual, not results.*
+*Research proposal · Updated 20 September 2026 · Study design; all illustrations are conceptual.*
 
 ## Introduction
 
-When a camera image is blurry or someone is partly hidden, pose-tracking software can make mistakes. It may estimate that a person’s arms, legs, or other joints moved in a way they did not actually move.
+Blur and partial obstruction can make pose-tracking software report movement that did not occur. Using nearby frames can correct these errors, but excessive smoothing may erase movement amplitude, timing or left–right coordination.
 
-A method that uses information from nearby video frames—“temporal correction”—can fix some of these mistaken joint positions. But it has a risk: it may smooth the motion too much. In doing so, it could erase genuine aspects of how the person moves, such as:
+We study paired synthetic supervision: a body model supplies projected reference joints, while frozen image-based pose estimators supply imperfect tracks from matching rendered images. These references are **synthetic anatomical proxies**, not independently verified image-keypoint annotations.
 
-* timing: when a step, reach, or turn happens;
-* amplitude: how large or small the movement is;
-* left–right coordination: how the two sides of the body work together.
-
-Our research explores whether a model can be trained using pairs of synthetic motion sequences:
-
-1. one clean, accurate skeleton-motion sequence; and
-2. a matching version deliberately made imperfect, resembling errors caused by blur or obstruction.
-
-Succinctly: **can paired synthetic motion train a temporal skeleton JEPA to restore imperfect pose tracks while preserving movement better than direct denoising?**
-
-The initial task is **offline 2D sequence restoration**: every method receives the same full observed clip. It is a measurement study, with clinical utility requiring separate evidence.
+The question is: **can paired synthetic motion train a temporal skeleton JEPA to restore imperfect pose tracks while preserving movement better than direct denoising?** The task is offline 2D sequence restoration using the full observed window. Clinical utility requires separate evidence.
 
 ![Three conceptual trajectories distinguish noisy observations, faithful restoration and oversmoothing.](images/01-preserve-motion.svg)
 
 *Figure 1. A smoother trajectory can still be wrong. Restoration must retain reference movement amplitude and timing.*
 
-## Motivation
-
-The original synthetic-training pilot improved over replay in some settings, but its response-based lesson selector did not beat simpler scene selection. The extra retrospective oracle benefit of estimator-specific choices was only **0.0406%** on that small development panel. This motivates testing the quality of synthetic supervision before expanding personalization ([pilot audit](../artifact-audit.md)).
-
-Temporal refinement and masked motion learning already have strong precedents: [SmoothNet](https://arxiv.org/abs/2112.13715), [PoseBERT](https://arxiv.org/abs/2208.10211) and [S-JEPA](https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/4755_ECCV_2024_paper.php). Our proposed contribution is a controlled test of **restoration versus motion distortion**, including whether latent prediction adds value beyond equally informed coordinate learning.
+The proposed contribution is a controlled test of **restoration versus motion distortion**, including whether latent prediction adds value beyond equally informed coordinate learning. One alternative explanation to test is that fitting a coordinate readout corrects systematic differences between projected body-model joints and image-estimator landmarks. Calibration controls will help separate that possibility from the value of temporal representation learning.
 
 ## Methodology
 
-**1. Construct matched observations.** Audit walking sequences from [AMASS](https://arxiv.org/abs/1904.03278). Render identical motion, timestamps and camera geometry under clean, blurred and obstructed conditions; hold blur-plus-obstruction out from fitting. Extract 12 common body joints, native estimator scores and missing-observation flags. Use 64 samples at 25 Hz, spanning 2.52 seconds. Keep projected synthetic targets separate from inference inputs, and audit their anatomical correspondence before interpreting real accuracy.
+**1. Construct matched observations.** Screen AMASS motion using declared geometry and alternating-leg-motion heuristics, then audit locomotion, overlays and anatomical correspondence before substantive gait-preservation or transfer claims. Render the same SMPL-H motion, timestamps and frontal camera under clean, blurred and lower-body-obstructed conditions. Reserve blur-plus-obstruction for development evaluation. Use frozen HRNet-W32, RTMPose-m and ViTPose-Base estimators to extract 12 common body joints, native scores and missing-observation flags. Each window contains 64 samples at 25 Hz, spanning 2.52 seconds.
+
+Train on HRNet and RTMPose tracks from training people. Exclude ViTPose from fitting and evaluate it on development people; this exclusion does not certify its prior training exposure as untouched. Keep all windows and render variants from a person in the same split. Keep projected reference joints separate from inference inputs, and compute whole-window input normalization from observed tracks only.
 
 ![Matched renders share motion and camera; estimated tracks are inputs and projected joints are privileged targets.](images/02-paired-data.svg)
 
-*Figure 2. Change observation conditions while holding movement fixed. All windows and render variants from a person remain grouped across splits.*
+*Figure 2. Paired-data design. Change observation conditions while holding movement fixed. Automated screening supports feasibility checks; locomotion, overlay and anatomical audits are required for stronger evidence.*
 
 **2. Learn restoration representations.** An online temporal encoder processes imperfect tracks. A predictor matches masked features from an exponential-moving-average (EMA) teacher receiving same-view clean projections. This uses **privileged synthetic supervision**. After pretraining, freeze the encoder and fit a temporal coordinate readout on training pairs. Deployment uses observed tracks only; missing joints receive prediction queries without revealing target validity.
 
@@ -45,24 +32,34 @@ Temporal refinement and masked motion learning already have strong precedents: [
 
 *Figure 3. The teacher guides training; it is absent at deployment. The candidate is a local S-JEPA-inspired adaptation, not a new official S-JEPA release.*
 
-**3. Make the comparison decisive.** Compare paired JEPA with same-backbone coordinate pretraining, direct denoising, a SmoothNet-style temporal MLP, unchanged tracks and simple filters. Add initialized-encoder, ordinary masked-JEPA, shuffled-pair and non-temporal controls. Match clean-label access, encoder/readout capacity and tuning opportunities where isolating the objective. Separately compare practical methods at equal total compute, including pretraining and readout fitting.
+**3. Measure accuracy and preservation.** Coordinate error is Euclidean pixel distance divided by the reference-box diagonal, with missing predictions penalized. The scale is independent of model predictions, not an independent anatomical annotation. Motion endpoints assess 0.20-second displacement, signed horizontal ankle separation, its demeaned RMS amplitude, and supported positive-maxima timing. These are image-plane quantities, not metric stride length or heel strikes. Missing support cannot count as preservation success. Examine clean and corrupted inputs separately, and keep synthetic hidden-joint scores separate from independently annotated real-visible scores.
+
+Balance repeated variants and windows within motions, then motions within people. Estimate paired uncertainty by resampling people with motions nested within them while retaining render variants together. Report each extractor separately, and distinguish training-seed variability from sample uncertainty. Save predictions, references, masks, timestamps and group identifiers so every metric can be reconstructed.
+
+## Experiments
+
+**1. Validate the paired-data pipeline.** Use an initial feasibility configuration of two training people, two development people, two windows per person and seed 17. Evaluate four rendering conditions and three extractors on development people. The resulting 48 records per method are correlated observations from two evaluation people, not 48 independent samples. Check timing alignment, split integrity, missing-observation handling and separation of inference inputs from privileged targets. Automated screening alone cannot establish gait preservation or anatomical accuracy.
+
+**2. Compare objectives and simpler explanations.** Compare paired JEPA with coordinate pretraining followed by a separately fitted frozen-encoder readout (`coordinate`), end-to-end coordinate restoration (`direct`), and a fitted readout on an untrained frozen encoder (`initialized`). Ordinary JEPA predicts observed-track latent targets; paired JEPA uses aligned synthetic targets; shuffled JEPA changes the pretraining pairing. All three JEPA arms subsequently fit coordinate readouts. Keep shuffled donors within training people and nuisance strata, exclude the same source window, and retain natural pairs for evaluation.
+
+Include unchanged tracks, fixed filters at strengths 0, 1 and 2 (`filter0` is unchanged), a SmoothNet-style temporal MLP adaptation, and `static`. The static control removes neighboring coordinates after shared whole-window normalization while retaining auxiliary channels; it does not remove every source of cross-frame information. Treat the SmoothNet-style model as a local adaptation rather than an official reproduction.
+
+For the paired-JEPA versus coordinate-pretraining contrast, match training pairs, masks, update counts, seeds, encoder/readout capacity, clean-label access and tuning opportunities. Separately compare practical methods at equal total compute, including pretraining and readout fitting; equal update counts do not establish equal training cost.
 
 ![Coordinate pretraining, paired JEPA and practical denoisers share inputs and reference-based evaluation.](images/04-fair-comparison.svg)
 
-*Figure 4. Ordinary JEPA tests the value of clean targets; matched coordinate pretraining tests the value of latent prediction.*
+*Figure 4. Comparison design. Coordinate pretraining tests whether latent prediction adds value; the initialized readout tests whether pretraining is needed. A separate comparison matches total compute.*
 
-**4. Measure accuracy and preservation.** The primary endpoint is visible-landmark error normalized by an independent reference-box diagonal, with missing predictions penalized. Companion measurements assess fixed-time displacement, signed ankle separation, amplitude and supported event timing, plus retention on clean inputs. Synthetic hidden-joint scores remain separate from independently annotated real-visible scores. Use people or verified recording groups for paired uncertainty and report training-seed variability separately.
+**3. Test calibration.** Fit a pooled per-joint constant offset and a small affine/ridge correction using training people and training extractors only. Apply them unchanged to development people and held-family ViTPose. Compare coordinate and motion errors with initialized, coordinate, direct and paired JEPA to test how much restoration can be explained by a simple coordinate correction. Any anatomical-convention explanation requires independent validation.
 
-Run one-seed feasibility checks, then three-seed finalist comparisons and independent real development before freezing confirmation. Reserve people, nuisance combinations and an extractor family before selection. Begin dense-annotation feasibility early; sparse labeled frames cannot establish temporal preservation. Proposed 2% coordinate improvement, 5% displacement-error reduction and less than 1% clean degradation are planning targets requiring calibration, not clinical thresholds. The provisional 48 H100-hour development ceiling includes rendering and extraction; annotation effort is budgeted separately.
+**4. Establish attainable timing support.** Score reference coordinates against themselves. Separate reference-ineligible records from incomplete predictions and peak-count mismatches; report missed and extra peaks alongside timing error and coverage. Test whether the frontal view provides sufficient horizontal ankle-separation variation for the declared timing endpoint. Unsupported timing must remain missing evidence rather than being scored as zero error.
+
+**5. Inspect motion and convergence.** Plot reference, unchanged, calibrated and neural ankle trajectories for the same windows selected without looking at method performance, separating clean and corrupted conditions. Inspect displacement error, amplitude ratios, per-joint residuals and each training phase’s loss history. These checks are intended to distinguish calibration, insufficient optimization, weak observability and motion distortion.
+
+**6. Repeat and test transfer.** After validating the data and endpoints, expand the number of independent people and repeat the strongest controls and candidate with seeds 17/29/43. Use independent anatomical review and dense real-video temporal references to evaluate transfer and motion preservation. Calibrate decision margins on development data and annotation repeatability before freezing the method, metrics and protocol for independent confirmation. Unknown identity reservations or prior exposure cannot be treated as cleared. Declare any revised metric or camera design as a new development experiment.
 
 ![Evidence progresses from pair validation to method comparison, repeats, real development, protocol freezing and independent confirmation.](images/05-evidence-workflow.svg)
 
-*Figure 5. JEPA failure stops that branch; a useful direct denoiser can still proceed. Missing references leave the affected claim unresolved.*
+*Figure 5. Planned evidence sequence. Repeated-seed comparisons, real temporal validation and independent confirmation follow pair and endpoint validation. A useful simpler method can proceed even if JEPA adds no benefit.*
 
-## Impact
-
-Faithful restoration could make camera-based movement measurements more dependable under difficult observation conditions. The strongest outcome would be an accuracy gain that preserves independently measured motion and transfers across held people and pose extractors. A direct denoiser outperforming JEPA would also be useful evidence, identifying a simpler route to reliable measurement.
-
-The study will distinguish cleaner-looking output from better observation. It will retain negative results and testable limits rather than infer clinical benefit from synthetic motion. Image-estimator adaptation is a separate supporting branch; personalized teaching and video-feature extensions remain conditional on new evidence.
-
-*Study detail: [research plan](../../../../notes/prompts/03_improvement_plan.md) · [development protocol](../protocol.md) · [figure and workflow review](review.md).*
+*Study detail: [research plan](../../../../notes/prompts/03_improvement_plan.md) · [development protocol](../protocol.md) · [HAIC execution guide](../../../../slurm/synthetic-training-v2/README.md).*

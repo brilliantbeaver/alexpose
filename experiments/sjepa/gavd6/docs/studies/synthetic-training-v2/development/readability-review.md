@@ -42,11 +42,11 @@ The strongest competing explanation remains ordinary paired coordinate denoising
 
 ## Final artifact inspection
 
-The revised protocol, SHA-256 `fb9e9bac6cfd4e9236430df41d7124b5acddd32663aad8b496b6f843dcb56a33`, now defines ankle-separation amplitude/peak timing, qualifies evaluation-scale independence, and explains the static model's shared window normalization. It also distinguishes an admissible decision-specification structure from still-missing calibrated margins. The [protocol review follow-up](protocol-review.md#follow-up-inspection-of-protocol-clarifications) records exactly which specification findings are fixed and which empirical prerequisites remain pending.
+The revised protocol, SHA-256 `fb9e9bac6cfd4e9236430df41d7124b5acddd32663aad8b496b6f843dcb56a33`, now defines ankle-separation amplitude/peak timing, qualifies evaluation-scale independence, and explains the static model's shared window normalization. It also distinguishes an admissible decision-specification structure from still-missing calibrated margins. The [protocol review follow-up](../protocol-review.md#follow-up-inspection-of-protocol-clarifications) records exactly which specification findings are fixed and which empirical prerequisites remain pending.
 
 After coordinator authorization, the notebook author corrected READ-5/READ-6 in the builder and regenerated canonical notebooks. Notebook 05 also now names the actual amplitude/timing signal (READ-1), labels fixture sampling groups as analytic IDs (READ-2), and explains bootstrap conditioning (part of READ-4). All six notebook contract tests pass after regeneration. These are self-authored corrections, not independent notebook validation.
 
-The reviewer directly read the completed [fixture report](../../../outputs/synthetic-training-v2/fixture-validation-20260918-final/report.md), its [gate JSON](../../../outputs/synthetic-training-v2/fixture-validation-20260918-final/evaluation/gates.json), and visually inspected the actual [tradeoff PNG](../../../outputs/synthetic-training-v2/fixture-validation-20260918-final/evaluation/accuracy-preservation.png). Reviewed hashes:
+The reviewer directly read the completed [fixture report](../../../../outputs/synthetic-training-v2/fixture-validation-20260918-final/report.md), its [gate JSON](../../../../outputs/synthetic-training-v2/fixture-validation-20260918-final/evaluation/gates.json), and visually inspected the actual [tradeoff PNG](../../../../outputs/synthetic-training-v2/fixture-validation-20260918-final/evaluation/accuracy-preservation.png). Reviewed hashes:
 
 | Artifact | SHA-256 |
 |---|---|
@@ -81,7 +81,7 @@ The numerical tables contain one training seed and three analytic group IDs per 
 
 ## Verified follow-up: final notebook-run artifacts
 
-The reviewer directly read the new [report](../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/report.md) and [gate artifact](../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/evaluation/gates.json), and visually inspected the new [faceted plot](../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/evaluation/accuracy-preservation.png). The earlier run and its review above remain unchanged. This follow-up supersedes the earlier READ-8 disposition for the new run only.
+The reviewer directly read the new [report](../../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/report.md) and [gate artifact](../../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/evaluation/gates.json), and visually inspected the new [faceted plot](../../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/evaluation/accuracy-preservation.png). The earlier run and its review above remain unchanged. This follow-up supersedes the earlier READ-8 disposition for the new run only.
 
 | Artifact | SHA-256 |
 |---|---|

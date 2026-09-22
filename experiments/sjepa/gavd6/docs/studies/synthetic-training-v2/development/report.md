@@ -2,7 +2,7 @@
 
 The new suite is implemented and fixture-validated. It includes paired body-12 data contracts and source preparation, score-preserving pose extraction, eight learned restoration/control arms, prediction-based grouped evaluation, calibrated gate machinery, blank annotation tools, immutable receipts/resumes, notebooks and bounded HAIC commands.
 
-The [notebook guide](../../../notebooks/synthetic_training_v2/README.md) explains each stage. The [full fixture report](../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/report.md) links saved predictions, grouped summaries, uncertainty and the accuracy–preservation plot. [Review dispositions](review-dispositions.md) record independent findings and fixes.
+The [notebook guide](../../../../notebooks/synthetic_training_v2/README.md) explains each stage. The [full fixture report](../../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/report.md) links saved predictions, grouped summaries, uncertainty and the accuracy–preservation plot. [Review dispositions](../review-dispositions.md) record independent findings and fixes.
 
 Completed verification: **54 new contract tests, 37 relevant historical regression tests, and all nine notebooks executed from scratch in fresh kernels** under isolated local Torch **2.6.0 CPU**. The original project environment was not replaced. HAIC still requires **2.6.0+cu124**, Torchvision **0.21.0+cu124** and compatible MMCV **2.1.0**; no remote interpreter, allocated GPU operator or source runtime was verified.
 
@@ -64,4 +64,4 @@ PYTHONPATH=src /private/tmp/gavd6-stv2-cpu/bin/python scripts/research_direction
   --config slurm/synthetic-training-v2/source.example.json --dry-run
 ```
 
-The [HAIC runbook](../../../slurm/synthetic-training-v2/README.md) contains the explicit preflight/preparation/submission commands, resources, dependencies and resume behavior. Default GPU authorization is zero. The suggested 48-hour ceiling has not been treated as spending permission. CPU fixture throughput is not an H100 runtime estimate.
+The [HAIC runbook](../../../../slurm/synthetic-training-v2/README.md) contains the explicit preflight/preparation/submission commands, resources, dependencies and resume behavior. Default GPU authorization is zero. The suggested 48-hour ceiling has not been treated as spending permission. CPU fixture throughput is not an H100 runtime estimate.

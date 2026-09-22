@@ -2,11 +2,11 @@
 
 Review date: 18 September 2026. Scope: make the source development study easier to run without changing its empirical claims or inventing reviewed inputs. No HAIC job was submitted during this revision.
 
-The unattended workflow is reviewed in **Unattended development revision** below, followed by the latest **Git retrieval revision**. Earlier sections retain the history of the human-reviewed workflow and its checks. The [single operating guide](../../../slurm/synthetic-training-v2/README.md) is authoritative for the current command sequence.
+The unattended workflow is reviewed in **Unattended development revision** below, followed by the latest **Git retrieval revision**. Earlier sections retain the history of the human-reviewed workflow and its checks. The [single operating guide](../../../../slurm/synthetic-training-v2/README.md) is authoritative for the current command sequence.
 
 ## Workflow decisions
 
-At this implementation review, the guide introduced four steps: initialize from existing `ST_*` exports, complete/check reviewed inputs, prepare/inspect paired tracks, and train/read results. The current [HAIC guide](../../../slurm/synthetic-training-v2/README.md) leads with resuming the existing run and places new-run initialization separately. Its input instructions distinguish actual worksheet filenames, reviewed contents and configured paths. A single optional transfer helper previews and copies the required code and exact preserved evidence, backs up replacements, and keeps existing study profiles.
+At this implementation review, the guide introduced four steps: initialize from existing `ST_*` exports, complete/check reviewed inputs, prepare/inspect paired tracks, and train/read results. The current [HAIC guide](../../../../slurm/synthetic-training-v2/README.md) leads with resuming the existing run and places new-run initialization separately. Its input instructions distinguish actual worksheet filenames, reviewed contents and configured paths. A single optional transfer helper previews and copies the required code and exact preserved evidence, backs up replacements, and keeps existing study profiles.
 
 The managed `submit.sh` interface generates valid configurations, the RTMPose-m/HRNet-W32/ViTPose-Base roster, a saved session, reviewed-input worksheets, immutable per-attempt scopes, allocation ledgers and job history. CUDA checks run inside preparation. It does not generate reviewer decisions or infer that an identity is available for use from its filename.
 
