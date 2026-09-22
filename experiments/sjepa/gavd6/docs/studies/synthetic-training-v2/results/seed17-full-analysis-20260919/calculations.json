@@ -1,0 +1,1476 @@
+{
+  "scope": "Descriptive arithmetic and consistency checks on rounded Markdown tables only",
+  "source": "outputs/synthetic-training-v2/updates-2000-seed-17/report.md",
+  "source_sha256": "20256edaa8f04c0e909a980cf65a258c4f8f49e8ad39d09eb21bdc51927c8f55",
+  "seed": 17,
+  "development_people": 8,
+  "training_budget": {
+    "updates_per_phase": 2000,
+    "evidence": "User confirmed source folder updates-2000-seed-17",
+    "independently_verified_from_run_artifacts": false
+  },
+  "limitations": [
+    "No full-run per-person/per-window data or run provenance available locally",
+    "No raw-prediction reconstruction, training-completion verification or confidence intervals",
+    "Seven displayed methods are a subset of the full experiment",
+    "Timing counts are correlated records/events, not independent people"
+  ],
+  "local_code_sha256": {
+    "scripts/research_directions/synthetic_training_v2/postrun_checks.py": "fb235ddec1d7b8409703a41a030d1e798c7f9b862082f501a00967c905cf3c2a",
+    "scripts/research_directions/synthetic_training_v2/diagnostics/calibration.py": "bd8a5a65f3d725504ea6a7da8e3b1be0b4a84ae794c4920ba4c9616b46ded2fa",
+    "scripts/research_directions/synthetic_training_v2/diagnostics/timing.py": "fdd1b2008b41aee933997efaeb2eb1eff45321471c1f648dee0ccd536f1561bd",
+    "scripts/research_directions/synthetic_training_v2/expansion_results.py": "14f9f309bac91d52456da316396b5ad0e6c2445199e04038fd9d92d76abd2eea",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/evaluation.py": "3ba491c431c01aa433c3abb0d5d83f80f725fa06fbf97f5dfc2a01d848c989ac",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/training.py": "16afc56e95e3e8dc02033180ef54d667a7358bb0888dbb8e9b66ed0b979ec541",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py": "f44a4271da97a80179b28071aa003f29dc0702c01a37715aa7eb04e48a253a2b"
+  },
+  "local_code_provenance": "Reviewed current local code; matching HAIC code hashes are unavailable",
+  "metric_rows": [
+    {
+      "method": "coordinate",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01208557
+    },
+    {
+      "method": "coordinate",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01119879
+    },
+    {
+      "method": "coordinate",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01471563
+    },
+    {
+      "method": "direct",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01125687
+    },
+    {
+      "method": "direct",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01028736
+    },
+    {
+      "method": "direct",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01352905
+    },
+    {
+      "method": "initialized",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01200758
+    },
+    {
+      "method": "initialized",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01098505
+    },
+    {
+      "method": "initialized",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01490645
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01212431
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01118826
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01478676
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01218647
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01120191
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01488593
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01199737
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01103282
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01482405
+    },
+    {
+      "method": "unchanged",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.02069648
+    },
+    {
+      "method": "unchanged",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.01937844
+    },
+    {
+      "method": "unchanged",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "visible_nle",
+      "value": 0.02327473
+    },
+    {
+      "method": "coordinate",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.00969
+    },
+    {
+      "method": "coordinate",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007527
+    },
+    {
+      "method": "coordinate",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.008042
+    },
+    {
+      "method": "direct",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.008981
+    },
+    {
+      "method": "direct",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.006905
+    },
+    {
+      "method": "direct",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007322
+    },
+    {
+      "method": "initialized",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.009682
+    },
+    {
+      "method": "initialized",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007467
+    },
+    {
+      "method": "initialized",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.008143
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.009572
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007531
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007984
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.009659
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007534
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.008067
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.009671
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007474
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.008118
+    },
+    {
+      "method": "unchanged",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.009659
+    },
+    {
+      "method": "unchanged",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.007534
+    },
+    {
+      "method": "unchanged",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "metric": "displacement_nle",
+      "value": 0.008067
+    }
+  ],
+  "comparisons": [
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "joint_offset",
+      "comparator": "unchanged",
+      "candidate_value": 0.01218647,
+      "comparator_value": 0.02069648,
+      "absolute_error_reduction": 0.00851001,
+      "relative_error_reduction_percent": 41.1181514924277
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "joint_affine",
+      "comparator": "unchanged",
+      "candidate_value": 0.01212431,
+      "comparator_value": 0.02069648,
+      "absolute_error_reduction": 0.00857217,
+      "relative_error_reduction_percent": 41.418492419967066
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "unchanged",
+      "candidate_value": 0.01125687,
+      "comparator_value": 0.02069648,
+      "absolute_error_reduction": 0.00943961,
+      "relative_error_reduction_percent": 45.60973653490835
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "joint_offset",
+      "candidate_value": 0.01125687,
+      "comparator_value": 0.01218647,
+      "absolute_error_reduction": 0.0009295999999999992,
+      "relative_error_reduction_percent": 7.628131854425434
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "joint_affine",
+      "candidate_value": 0.01125687,
+      "comparator_value": 0.01212431,
+      "absolute_error_reduction": 0.0008674399999999988,
+      "relative_error_reduction_percent": 7.154551475506637
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "paired_jepa",
+      "candidate_value": 0.01125687,
+      "comparator_value": 0.01199737,
+      "absolute_error_reduction": 0.0007404999999999998,
+      "relative_error_reduction_percent": 6.17218607078051
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "coordinate",
+      "candidate_value": 0.01125687,
+      "comparator_value": 0.01208557,
+      "absolute_error_reduction": 0.0008286999999999999,
+      "relative_error_reduction_percent": 6.856937653747402
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "initialized",
+      "candidate_value": 0.01125687,
+      "comparator_value": 0.01200758,
+      "absolute_error_reduction": 0.0007507099999999999,
+      "relative_error_reduction_percent": 6.25196750719129
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "paired_jepa",
+      "comparator": "unchanged",
+      "candidate_value": 0.01199737,
+      "comparator_value": 0.02069648,
+      "absolute_error_reduction": 0.00869911,
+      "relative_error_reduction_percent": 42.03183343254505
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "paired_jepa",
+      "comparator": "coordinate",
+      "candidate_value": 0.01199737,
+      "comparator_value": 0.01208557,
+      "absolute_error_reduction": 8.820000000000008e-05,
+      "relative_error_reduction_percent": 0.7297959467364806
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "paired_jepa",
+      "comparator": "initialized",
+      "candidate_value": 0.01199737,
+      "comparator_value": 0.01200758,
+      "absolute_error_reduction": 1.021000000000008e-05,
+      "relative_error_reduction_percent": 0.0850296229548342
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "joint_offset",
+      "comparator": "unchanged",
+      "candidate_value": 0.01120191,
+      "comparator_value": 0.01937844,
+      "absolute_error_reduction": 0.00817653,
+      "relative_error_reduction_percent": 42.19395369286691
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "joint_affine",
+      "comparator": "unchanged",
+      "candidate_value": 0.01118826,
+      "comparator_value": 0.01937844,
+      "absolute_error_reduction": 0.00819018,
+      "relative_error_reduction_percent": 42.264392799420385
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "unchanged",
+      "candidate_value": 0.01028736,
+      "comparator_value": 0.01937844,
+      "absolute_error_reduction": 0.00909108,
+      "relative_error_reduction_percent": 46.913373831949315
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "joint_offset",
+      "candidate_value": 0.01028736,
+      "comparator_value": 0.01120191,
+      "absolute_error_reduction": 0.0009145500000000001,
+      "relative_error_reduction_percent": 8.16423270674376
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "joint_affine",
+      "candidate_value": 0.01028736,
+      "comparator_value": 0.01118826,
+      "absolute_error_reduction": 0.0009008999999999996,
+      "relative_error_reduction_percent": 8.052190421030613
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "paired_jepa",
+      "candidate_value": 0.01028736,
+      "comparator_value": 0.01103282,
+      "absolute_error_reduction": 0.0007454599999999999,
+      "relative_error_reduction_percent": 6.7567494076763674
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "coordinate",
+      "candidate_value": 0.01028736,
+      "comparator_value": 0.01119879,
+      "absolute_error_reduction": 0.0009114299999999995,
+      "relative_error_reduction_percent": 8.138647121697964
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "initialized",
+      "candidate_value": 0.01028736,
+      "comparator_value": 0.01098505,
+      "absolute_error_reduction": 0.0006976899999999991,
+      "relative_error_reduction_percent": 6.351268314664013
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "paired_jepa",
+      "comparator": "unchanged",
+      "candidate_value": 0.01103282,
+      "comparator_value": 0.01937844,
+      "absolute_error_reduction": 0.00834562,
+      "relative_error_reduction_percent": 43.06652135053183
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "paired_jepa",
+      "comparator": "coordinate",
+      "candidate_value": 0.01103282,
+      "comparator_value": 0.01119879,
+      "absolute_error_reduction": 0.00016596999999999966,
+      "relative_error_reduction_percent": 1.4820351127219964
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "paired_jepa",
+      "comparator": "initialized",
+      "candidate_value": 0.01103282,
+      "comparator_value": 0.01098505,
+      "absolute_error_reduction": -4.77700000000008e-05,
+      "relative_error_reduction_percent": -0.43486374663748273
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "joint_offset",
+      "comparator": "unchanged",
+      "candidate_value": 0.01488593,
+      "comparator_value": 0.02327473,
+      "absolute_error_reduction": 0.0083888,
+      "relative_error_reduction_percent": 36.04252337191451
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "joint_affine",
+      "comparator": "unchanged",
+      "candidate_value": 0.01478676,
+      "comparator_value": 0.02327473,
+      "absolute_error_reduction": 0.008487970000000001,
+      "relative_error_reduction_percent": 36.468607799102294
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "unchanged",
+      "candidate_value": 0.01352905,
+      "comparator_value": 0.02327473,
+      "absolute_error_reduction": 0.00974568,
+      "relative_error_reduction_percent": 41.87236543667746
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "joint_offset",
+      "candidate_value": 0.01352905,
+      "comparator_value": 0.01488593,
+      "absolute_error_reduction": 0.0013568799999999995,
+      "relative_error_reduction_percent": 9.115184607209622
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "joint_affine",
+      "candidate_value": 0.01352905,
+      "comparator_value": 0.01478676,
+      "absolute_error_reduction": 0.0012577099999999987,
+      "relative_error_reduction_percent": 8.505649648739809
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "paired_jepa",
+      "candidate_value": 0.01352905,
+      "comparator_value": 0.01482405,
+      "absolute_error_reduction": 0.0012949999999999993,
+      "relative_error_reduction_percent": 8.735804317983272
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "coordinate",
+      "candidate_value": 0.01352905,
+      "comparator_value": 0.01471563,
+      "absolute_error_reduction": 0.0011865799999999996,
+      "relative_error_reduction_percent": 8.06339925643686
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "initialized",
+      "candidate_value": 0.01352905,
+      "comparator_value": 0.01490645,
+      "absolute_error_reduction": 0.0013773999999999991,
+      "relative_error_reduction_percent": 9.240295308406758
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "paired_jepa",
+      "comparator": "unchanged",
+      "candidate_value": 0.01482405,
+      "comparator_value": 0.02327473,
+      "absolute_error_reduction": 0.00845068,
+      "relative_error_reduction_percent": 36.308391117748734
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "paired_jepa",
+      "comparator": "coordinate",
+      "candidate_value": 0.01482405,
+      "comparator_value": 0.01471563,
+      "absolute_error_reduction": -0.0001084199999999997,
+      "relative_error_reduction_percent": -0.7367676409368793
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "candidate": "paired_jepa",
+      "comparator": "initialized",
+      "candidate_value": 0.01482405,
+      "comparator_value": 0.01490645,
+      "absolute_error_reduction": 8.239999999999983e-05,
+      "relative_error_reduction_percent": 0.5527808431920399
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "joint_offset",
+      "comparator": "unchanged",
+      "candidate_value": 0.009659,
+      "comparator_value": 0.009659,
+      "absolute_error_reduction": 0.0,
+      "relative_error_reduction_percent": 0.0
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "joint_affine",
+      "comparator": "unchanged",
+      "candidate_value": 0.009572,
+      "comparator_value": 0.009659,
+      "absolute_error_reduction": 8.699999999999854e-05,
+      "relative_error_reduction_percent": 0.9007143596645465
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "unchanged",
+      "candidate_value": 0.008981,
+      "comparator_value": 0.009659,
+      "absolute_error_reduction": 0.0006779999999999998,
+      "relative_error_reduction_percent": 7.019360182213477
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "joint_offset",
+      "candidate_value": 0.008981,
+      "comparator_value": 0.009659,
+      "absolute_error_reduction": 0.0006779999999999998,
+      "relative_error_reduction_percent": 7.019360182213477
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "joint_affine",
+      "candidate_value": 0.008981,
+      "comparator_value": 0.009572,
+      "absolute_error_reduction": 0.0005910000000000012,
+      "relative_error_reduction_percent": 6.174258253238626
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "paired_jepa",
+      "candidate_value": 0.008981,
+      "comparator_value": 0.009671,
+      "absolute_error_reduction": 0.0006900000000000014,
+      "relative_error_reduction_percent": 7.1347327060283465
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "coordinate",
+      "candidate_value": 0.008981,
+      "comparator_value": 0.00969,
+      "absolute_error_reduction": 0.0007090000000000013,
+      "relative_error_reduction_percent": 7.31682146542829
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "direct",
+      "comparator": "initialized",
+      "candidate_value": 0.008981,
+      "comparator_value": 0.009682,
+      "absolute_error_reduction": 0.0007010000000000002,
+      "relative_error_reduction_percent": 7.240239619913244
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "paired_jepa",
+      "comparator": "unchanged",
+      "candidate_value": 0.009671,
+      "comparator_value": 0.009659,
+      "absolute_error_reduction": -1.2000000000001593e-05,
+      "relative_error_reduction_percent": -0.12423646340202499
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "paired_jepa",
+      "comparator": "coordinate",
+      "candidate_value": 0.009671,
+      "comparator_value": 0.00969,
+      "absolute_error_reduction": 1.899999999999992e-05,
+      "relative_error_reduction_percent": 0.19607843137254818
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "candidate": "paired_jepa",
+      "comparator": "initialized",
+      "candidate_value": 0.009671,
+      "comparator_value": 0.009682,
+      "absolute_error_reduction": 1.0999999999998858e-05,
+      "relative_error_reduction_percent": 0.11361288989876946
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "joint_offset",
+      "comparator": "unchanged",
+      "candidate_value": 0.007534,
+      "comparator_value": 0.007534,
+      "absolute_error_reduction": 0.0,
+      "relative_error_reduction_percent": 0.0
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "joint_affine",
+      "comparator": "unchanged",
+      "candidate_value": 0.007531,
+      "comparator_value": 0.007534,
+      "absolute_error_reduction": 2.999999999999531e-06,
+      "relative_error_reduction_percent": 0.03981948500132109
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "unchanged",
+      "candidate_value": 0.006905,
+      "comparator_value": 0.007534,
+      "absolute_error_reduction": 0.0006290000000000002,
+      "relative_error_reduction_percent": 8.348818688611631
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "joint_offset",
+      "candidate_value": 0.006905,
+      "comparator_value": 0.007534,
+      "absolute_error_reduction": 0.0006290000000000002,
+      "relative_error_reduction_percent": 8.348818688611631
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "joint_affine",
+      "candidate_value": 0.006905,
+      "comparator_value": 0.007531,
+      "absolute_error_reduction": 0.0006260000000000007,
+      "relative_error_reduction_percent": 8.312309122294526
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "paired_jepa",
+      "candidate_value": 0.006905,
+      "comparator_value": 0.007474,
+      "absolute_error_reduction": 0.0005690000000000001,
+      "relative_error_reduction_percent": 7.613058603157614
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "coordinate",
+      "candidate_value": 0.006905,
+      "comparator_value": 0.007527,
+      "absolute_error_reduction": 0.0006220000000000002,
+      "relative_error_reduction_percent": 8.26358442938754
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "direct",
+      "comparator": "initialized",
+      "candidate_value": 0.006905,
+      "comparator_value": 0.007467,
+      "absolute_error_reduction": 0.000562,
+      "relative_error_reduction_percent": 7.526449712066426
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "paired_jepa",
+      "comparator": "unchanged",
+      "candidate_value": 0.007474,
+      "comparator_value": 0.007534,
+      "absolute_error_reduction": 6.000000000000016e-05,
+      "relative_error_reduction_percent": 0.7963897000265484
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "paired_jepa",
+      "comparator": "coordinate",
+      "candidate_value": 0.007474,
+      "comparator_value": 0.007527,
+      "absolute_error_reduction": 5.3000000000000096e-05,
+      "relative_error_reduction_percent": 0.704131792214695
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "candidate": "paired_jepa",
+      "comparator": "initialized",
+      "candidate_value": 0.007474,
+      "comparator_value": 0.007467,
+      "absolute_error_reduction": -7.000000000000062e-06,
+      "relative_error_reduction_percent": -0.09374581491897767
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "joint_offset",
+      "comparator": "unchanged",
+      "candidate_value": 0.008067,
+      "comparator_value": 0.008067,
+      "absolute_error_reduction": 0.0,
+      "relative_error_reduction_percent": 0.0
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "joint_affine",
+      "comparator": "unchanged",
+      "candidate_value": 0.007984,
+      "comparator_value": 0.008067,
+      "absolute_error_reduction": 8.299999999999974e-05,
+      "relative_error_reduction_percent": 1.0288831040039637
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "unchanged",
+      "candidate_value": 0.007322,
+      "comparator_value": 0.008067,
+      "absolute_error_reduction": 0.0007449999999999991,
+      "relative_error_reduction_percent": 9.235155572083787
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "joint_offset",
+      "candidate_value": 0.007322,
+      "comparator_value": 0.008067,
+      "absolute_error_reduction": 0.0007449999999999991,
+      "relative_error_reduction_percent": 9.235155572083787
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "joint_affine",
+      "candidate_value": 0.007322,
+      "comparator_value": 0.007984,
+      "absolute_error_reduction": 0.0006619999999999994,
+      "relative_error_reduction_percent": 8.291583166332657
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "paired_jepa",
+      "candidate_value": 0.007322,
+      "comparator_value": 0.008118,
+      "absolute_error_reduction": 0.0007959999999999998,
+      "relative_error_reduction_percent": 9.805370780980533
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "coordinate",
+      "candidate_value": 0.007322,
+      "comparator_value": 0.008042,
+      "absolute_error_reduction": 0.0007200000000000002,
+      "relative_error_reduction_percent": 8.95299676697339
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "direct",
+      "comparator": "initialized",
+      "candidate_value": 0.007322,
+      "comparator_value": 0.008143,
+      "absolute_error_reduction": 0.0008209999999999988,
+      "relative_error_reduction_percent": 10.082279258258614
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "paired_jepa",
+      "comparator": "unchanged",
+      "candidate_value": 0.008118,
+      "comparator_value": 0.008067,
+      "absolute_error_reduction": -5.10000000000007e-05,
+      "relative_error_reduction_percent": -0.6322052807735304
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "paired_jepa",
+      "comparator": "coordinate",
+      "candidate_value": 0.008118,
+      "comparator_value": 0.008042,
+      "absolute_error_reduction": -7.599999999999968e-05,
+      "relative_error_reduction_percent": -0.9450385476249649
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "candidate": "paired_jepa",
+      "comparator": "initialized",
+      "candidate_value": 0.008118,
+      "comparator_value": 0.008143,
+      "absolute_error_reduction": 2.499999999999898e-05,
+      "relative_error_reduction_percent": 0.3070121576814317
+    }
+  ],
+  "rankings": [
+    {
+      "metric": "visible_nle",
+      "extractor": "hrnet_w32",
+      "methods": [
+        "direct",
+        "paired_jepa",
+        "initialized",
+        "coordinate",
+        "joint_affine",
+        "joint_offset",
+        "unchanged"
+      ]
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "rtmpose_m",
+      "methods": [
+        "direct",
+        "initialized",
+        "paired_jepa",
+        "joint_affine",
+        "coordinate",
+        "joint_offset",
+        "unchanged"
+      ]
+    },
+    {
+      "metric": "visible_nle",
+      "extractor": "vitpose_base",
+      "methods": [
+        "direct",
+        "coordinate",
+        "joint_affine",
+        "paired_jepa",
+        "joint_offset",
+        "initialized",
+        "unchanged"
+      ]
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "hrnet_w32",
+      "methods": [
+        "direct",
+        "joint_affine",
+        "unchanged",
+        "joint_offset",
+        "paired_jepa",
+        "initialized",
+        "coordinate"
+      ]
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "rtmpose_m",
+      "methods": [
+        "direct",
+        "initialized",
+        "paired_jepa",
+        "coordinate",
+        "joint_affine",
+        "unchanged",
+        "joint_offset"
+      ]
+    },
+    {
+      "metric": "displacement_nle",
+      "extractor": "vitpose_base",
+      "methods": [
+        "direct",
+        "joint_affine",
+        "coordinate",
+        "unchanged",
+        "joint_offset",
+        "paired_jepa",
+        "initialized"
+      ]
+    }
+  ],
+  "timing_eligibility": {
+    "hrnet_w32": {
+      "eligible_records": 32,
+      "all_records": 128,
+      "reference_ineligible": 96,
+      "eligible_fraction": 0.25
+    },
+    "rtmpose_m": {
+      "eligible_records": 32,
+      "all_records": 128,
+      "reference_ineligible": 96,
+      "eligible_fraction": 0.25
+    },
+    "vitpose_base": {
+      "eligible_records": 32,
+      "all_records": 128,
+      "reference_ineligible": 96,
+      "eligible_fraction": 0.25
+    }
+  },
+  "timing": [
+    {
+      "method": "coordinate",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 143,
+      "missed_events": 15,
+      "unmatched_predicted_events": 205,
+      "predicted_events": 348,
+      "event_recall": 0.9050632911392406,
+      "event_precision": 0.4109195402298851,
+      "conditional_timing_mae_s": 0.037203
+    },
+    {
+      "method": "coordinate",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 136,
+      "missed_events": 22,
+      "unmatched_predicted_events": 126,
+      "predicted_events": 262,
+      "event_recall": 0.8607594936708861,
+      "event_precision": 0.5190839694656488,
+      "conditional_timing_mae_s": 0.040588
+    },
+    {
+      "method": "coordinate",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 1,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 31,
+      "reference_events": 158,
+      "matched_events": 140,
+      "missed_events": 18,
+      "unmatched_predicted_events": 144,
+      "predicted_events": 284,
+      "event_recall": 0.8860759493670886,
+      "event_precision": 0.49295774647887325,
+      "conditional_timing_mae_s": 0.031714
+    },
+    {
+      "method": "direct",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 152,
+      "missed_events": 6,
+      "unmatched_predicted_events": 210,
+      "predicted_events": 362,
+      "event_recall": 0.9620253164556962,
+      "event_precision": 0.4198895027624309,
+      "conditional_timing_mae_s": 0.032632
+    },
+    {
+      "method": "direct",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 2,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 30,
+      "reference_events": 158,
+      "matched_events": 148,
+      "missed_events": 10,
+      "unmatched_predicted_events": 111,
+      "predicted_events": 259,
+      "event_recall": 0.9367088607594937,
+      "event_precision": 0.5714285714285714,
+      "conditional_timing_mae_s": 0.03
+    },
+    {
+      "method": "direct",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 3,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 29,
+      "reference_events": 158,
+      "matched_events": 147,
+      "missed_events": 11,
+      "unmatched_predicted_events": 107,
+      "predicted_events": 254,
+      "event_recall": 0.930379746835443,
+      "event_precision": 0.5787401574803149,
+      "conditional_timing_mae_s": 0.026395
+    },
+    {
+      "method": "initialized",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 152,
+      "missed_events": 6,
+      "unmatched_predicted_events": 182,
+      "predicted_events": 334,
+      "event_recall": 0.9620253164556962,
+      "event_precision": 0.4550898203592814,
+      "conditional_timing_mae_s": 0.031842
+    },
+    {
+      "method": "initialized",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 4,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 28,
+      "reference_events": 158,
+      "matched_events": 144,
+      "missed_events": 14,
+      "unmatched_predicted_events": 86,
+      "predicted_events": 230,
+      "event_recall": 0.9113924050632911,
+      "event_precision": 0.6260869565217392,
+      "conditional_timing_mae_s": 0.031389
+    },
+    {
+      "method": "initialized",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 5,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 27,
+      "reference_events": 158,
+      "matched_events": 143,
+      "missed_events": 15,
+      "unmatched_predicted_events": 82,
+      "predicted_events": 225,
+      "event_recall": 0.9050632911392406,
+      "event_precision": 0.6355555555555555,
+      "conditional_timing_mae_s": 0.022657
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 150,
+      "missed_events": 8,
+      "unmatched_predicted_events": 204,
+      "predicted_events": 354,
+      "event_recall": 0.9493670886075949,
+      "event_precision": 0.423728813559322,
+      "conditional_timing_mae_s": 0.029867
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 5,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 27,
+      "reference_events": 158,
+      "matched_events": 142,
+      "missed_events": 16,
+      "unmatched_predicted_events": 92,
+      "predicted_events": 234,
+      "event_recall": 0.8987341772151899,
+      "event_precision": 0.6068376068376068,
+      "conditional_timing_mae_s": 0.029296
+    },
+    {
+      "method": "joint_affine",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 6,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 26,
+      "reference_events": 158,
+      "matched_events": 144,
+      "missed_events": 14,
+      "unmatched_predicted_events": 81,
+      "predicted_events": 225,
+      "event_recall": 0.9113924050632911,
+      "event_precision": 0.64,
+      "conditional_timing_mae_s": 0.023611
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 1,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 31,
+      "reference_events": 158,
+      "matched_events": 148,
+      "missed_events": 10,
+      "unmatched_predicted_events": 170,
+      "predicted_events": 318,
+      "event_recall": 0.9367088607594937,
+      "event_precision": 0.46540880503144655,
+      "conditional_timing_mae_s": 0.035405
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 2,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 30,
+      "reference_events": 158,
+      "matched_events": 146,
+      "missed_events": 12,
+      "unmatched_predicted_events": 92,
+      "predicted_events": 238,
+      "event_recall": 0.9240506329113924,
+      "event_precision": 0.6134453781512605,
+      "conditional_timing_mae_s": 0.028767
+    },
+    {
+      "method": "joint_offset",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 3,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 29,
+      "reference_events": 158,
+      "matched_events": 144,
+      "missed_events": 14,
+      "unmatched_predicted_events": 84,
+      "predicted_events": 228,
+      "event_recall": 0.9113924050632911,
+      "event_precision": 0.631578947368421,
+      "conditional_timing_mae_s": 0.024722
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 150,
+      "missed_events": 8,
+      "unmatched_predicted_events": 163,
+      "predicted_events": 313,
+      "event_recall": 0.9493670886075949,
+      "event_precision": 0.4792332268370607,
+      "conditional_timing_mae_s": 0.030933
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 0,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 32,
+      "reference_events": 158,
+      "matched_events": 147,
+      "missed_events": 11,
+      "unmatched_predicted_events": 97,
+      "predicted_events": 244,
+      "event_recall": 0.930379746835443,
+      "event_precision": 0.6024590163934426,
+      "conditional_timing_mae_s": 0.028299
+    },
+    {
+      "method": "paired_jepa",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 7,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 25,
+      "reference_events": 158,
+      "matched_events": 143,
+      "missed_events": 15,
+      "unmatched_predicted_events": 83,
+      "predicted_events": 226,
+      "event_recall": 0.9050632911392406,
+      "event_precision": 0.6327433628318584,
+      "conditional_timing_mae_s": 0.024056
+    },
+    {
+      "method": "unchanged",
+      "extractor": "hrnet_w32",
+      "seed": 17,
+      "original_supported": 1,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 31,
+      "reference_events": 158,
+      "matched_events": 148,
+      "missed_events": 10,
+      "unmatched_predicted_events": 185,
+      "predicted_events": 333,
+      "event_recall": 0.9367088607594937,
+      "event_precision": 0.4444444444444444,
+      "conditional_timing_mae_s": 0.032703
+    },
+    {
+      "method": "unchanged",
+      "extractor": "rtmpose_m",
+      "seed": 17,
+      "original_supported": 1,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 31,
+      "reference_events": 158,
+      "matched_events": 149,
+      "missed_events": 9,
+      "unmatched_predicted_events": 101,
+      "predicted_events": 250,
+      "event_recall": 0.9430379746835443,
+      "event_precision": 0.596,
+      "conditional_timing_mae_s": 0.027919
+    },
+    {
+      "method": "unchanged",
+      "extractor": "vitpose_base",
+      "seed": 17,
+      "original_supported": 4,
+      "eligible_records": 32,
+      "all_records": 128,
+      "incomplete_predictions": 0,
+      "count_mismatch_records": 28,
+      "reference_events": 158,
+      "matched_events": 146,
+      "missed_events": 12,
+      "unmatched_predicted_events": 84,
+      "predicted_events": 230,
+      "event_recall": 0.9240506329113924,
+      "event_precision": 0.6347826086956522,
+      "conditional_timing_mae_s": 0.024932
+    }
+  ],
+  "checks": {
+    "metric_cells": 42,
+    "timing_rows": 21,
+    "oracle_rows": 3,
+    "unique_complete_method_rosters": true,
+    "timing_denominators_consistent": true,
+    "offset_displacement_matches_report": true,
+    "primary_amplitude_aggregates_unsupported": 21,
+    "source_unchanged": true
+  }
+}

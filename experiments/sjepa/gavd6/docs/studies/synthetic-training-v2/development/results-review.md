@@ -1,0 +1,69 @@
+# Independent results and workflow review — 18 September 2026
+
+Reviewer: a separate Codex worker inspected the actual `audit.py`, `evaluation.py` and `workflow.py`, retained pilot CSVs, provenance contracts and saved-prediction interfaces. The reviewer authored the new model/trainer and therefore **does not independently endorse those modules**. A subsequent requested SmoothNet-style objective change was implementation work, not independent review. Model implementation is reviewed in the separate [implementation review](implementation-review.md).
+
+The strongest competing explanation for a later paired-JEPA gain remains privileged clean-target supervision, ordinary denoising or readout capacity. A favorable fixture ranking, low latent loss, smooth output or healthy rank cannot rule out these explanations. The objective and practical contrasts must be interpreted separately, including their measured resource differences.
+
+## Findings, corrections and verification
+
+Line references in the first four findings refer to the workflow snapshot initially inspected; function names identify the corrected code when line numbers move.
+
+| Finding | Priority and direct evidence | Consequence and disposition |
+|---|---|---|
+| Receipt identity was not verified | High. Initial `workflow.py:54–60`, `_receipt`, checked artifact bytes but not the recorded run identity or stage. | A copied receipt could satisfy another run's prerequisite. Coordinator added run/stage checks. Independent foreign-run and wrong-stage tests now pass. |
+| Prerequisite verification was not transitive | High. Initial `run_stage:238–239` checked only immediate prerequisite artifacts. | Earlier prediction files could change after evaluation while a later report recomputed different means beside old gate artifacts. Coordinator added recursive dependency verification. Independent tampering of an audit artifact after the data receipt now prevents accepting the data stage. |
+| Receipt capture omitted pre-existing partial outputs | Medium. Initial `run_stage:240–244` hashed only paths that did not exist before invocation. | Files completed after partial execution could be omitted from stage provenance. Coordinator now inventories files not already owned by verified prior receipts and serializes stage execution under a run lock. This correction was inspected; it does not by itself promise automatic resume of interrupted fitting. |
+| Source report prose was unconditional fixture prose | Medium. Initial `build_report:222,227` always described analytic fixtures and pending source execution. | An eventual source report would mislabel its evidence. Coordinator branches the limitations by actual configured evidence mode; synthetic proxy and real-reference restrictions remain explicit. |
+| The first supported bootstrap contrast crashed evaluation | High. `_evaluate` assembled `dict(metric=..., comparator=..., **result)` where `result` already contained those keys. | An independent favorable-fixture test reproduced `TypeError: dict() got multiple values for keyword argument 'metric'`. Coordinator uses an explicit merged mapping. The same test now completes and still returns scientific `insufficient_evidence`. |
+| GPU cost comparisons initially failed open | High. Initial `RunConfig.require_gpu_scope` accepted nonfinite measured/projected values and a nonempty ledger path without inspecting its content. | NaN could evade a finite cap. Independently reported to coordinator; subsequent finite/nonnegative validation and ledger inspection were confirmed by the separate contract review. No GPU operation was performed by this review. |
+| A nonempty calibration hash was treated as evidence | High. First `decisions.py:14–15` checked only that `calibration_artifact_sha256` was nonempty. | A string could stand in for absent calibration evidence. Coordinator now opens the named artifact, verifies SHA256, body schema, physical grid, evidence status, reference-provenance/reviewer fields, candidate independence and exact decision values. The reviewer inspected this correction and independently reran both decision-provenance tests successfully. No actual calibration artifact was supplied for the completed run. |
+| Concurrent stages could share an unreserved GPU balance | High. First `runtime.py:49–60` read accumulated costs and yielded without a scope lock; preparation and fitting use different outer entry points. | Two overlapping attempts could each spend the same remaining balance. Coordinator added a scope-wide `gpu-budget` lock around checking and accounting. The reviewer reran the two cost tests: concurrent entry is rejected and an injected failed attempt is retained. These tests exercise bookkeeping with timers mocked, not an allocated GPU. |
+| The initial tradeoff plot obscured its methods | Medium. Visual inspection of the earlier full run showed overlapping labels extending beyond the plot's right edge. | The coordinator regenerated the final run with one panel per extractor and a shared method legend. The reviewer opened the resulting PNG and confirmed readable labels, units and fixture evidence status. Near-identical points remain honestly coincident, with exact values available in tables. |
+
+The independent workflow review tests are [test_workflow_review.py](../../../../tests/synthetic_training_v2/test_workflow_review.py). Five tests pass under the isolated Torch 2.6.0 CPU environment. They challenge receipt provenance, transitive artifact tampering, saved-prediction arithmetic/canonical grouping and fixture gate promotion. The favorable fixture test deliberately makes the candidate coordinate error much smaller than every comparator; it still cannot authorize scientific advancement.
+
+## Retained pilot arithmetic
+
+The reviewer separately read the retained CSVs using pandas pivots rather than the new audit implementation. Counts are **2,304 source rows, zero duplicate source keys, 6,912 selector decisions and 144 configurations**. The frozen full-selector error is 0.02702647999854117; the domain-selector error is 0.02678073984210087. The shared-scene oracle is 0.026675882342393917 and student-specific oracle is 0.02666505946393265. Their additional relative reduction is **0.040571773118320366%**. Differences from the audit module below approximately 1e-16 are ordinary CSV/aggregation rounding.
+
+These are saved aggregate comparisons, not raw pose-inference replay. Two validation estimators and 24 repeated scene conditions do not become 48 independent experiments. The oracle is retrospective and unavailable at deployment; the small extra oracle gap does not bound personalization in other panels. Missing per-frame prediction/feature/checkpoint artifacts prevent new gradient, scaling, teacher-collapse or person-bootstrap explanations of that pilot.
+
+The preserved-artifact verifier passes for **72 explicitly inventoried pre-existing files**. This is a content-hash check of the preservation manifest, not a claim that unlisted external assets were inspected.
+
+## Evaluation contracts inspected
+
+Visible body-12 errors use a shared independent reference scale and a fixed penalty for missing predictions. Real hidden joints are excluded from synthetic all-joint outputs. Error aggregation first balances variants within windows, then windows within motions, motions within people and people. The workflow replaces original aliases with audited canonical person IDs for this purpose while retaining original IDs in metadata.
+
+Paired uncertainty rejects mismatched evaluation keys and mixed extractor/training-seed strata. People are resampled outermost and motions within people; rendered variants remain together. Its intervals explicitly condition on fitted models and omit selection/training uncertainty. Unsupported windows propagate missing aggregate support rather than being silently dropped. Event counts and amplitude support are operational 2D trajectory measurements, not clinical gait events or metric stride length.
+
+A separate known-offset test writes predictions two pixels to the right of the targets, reloads the actual NPZ/JSON artifacts and independently computes `2 / reference_box_diagonal`. Reconstructed per-window errors and nested person-balanced means agree. No model output is substituted for an independent target in this check.
+
+## Claim verdicts
+
+| Proposed claim | Verdict |
+|---|---|
+| Historical aggregate means and oracle arithmetic reproduce | Supported at the saved aggregate level. |
+| Saved prediction artifacts support reproducible metric arithmetic | Supported by an independent known-offset export/reload test and complete fixture artifact reconstruction below. |
+| Paired JEPA improves beyond clean-coordinate training or a practical denoiser | Insufficient evidence; software fixtures do not adjudicate the research hypothesis. |
+| Pose adaptation beats augmented-real replay | Insufficient evidence; Gate A remains a separately pending branch. |
+| Real anatomical accuracy or temporal preservation improves | Insufficient evidence; independent real references and held-recording evidence are absent. |
+| Low old-panel oracle headroom justifies closing automatic personalization expansion | Supported as a development decision; reopening requires a fresh panel. |
+| A development snapshot opens protected confirmation | Rejected. The snapshot must remain explicitly distinct from confirmation authorization. |
+
+Readability check: a general technical reader can identify the question, comparator, evidence level, uncertainty unit and next empirical requirement. Keep “synthetic proxy,” “offline restoration,” “reference visibility,” “privileged clean-target supervision” and “fixture-tested” in report captions. Do not replace them with unqualified “ground truth,” “self-supervised gait,” “independent people” for unknown video identities, “clinical,” “world model” or “significant.”
+
+## Complete fixture artifacts
+
+Final reviewed run: [fixture-notebooks-20260918-final](../../../../outputs/synthetic-training-v2/fixture-notebooks-20260918-final/report.md), run identity `8e74d8dae1f51f3be72ceadb37bb613064580839ae6bd50e47442c995b8cc947`. The reviewer inspected the retained NPZ arrays, masks, physical timestamps, JSON records, per-window/per-person summaries, uncertainty draws, report, plot, receipts and executed notebook cells. The earlier partial integration directory is not treated as a completed comparison.
+
+- Twelve prediction files contain **432 correlated method-window rows**, covering **six analytic motion/window IDs**, **three analytic group IDs**, two fixture extractor labels and one training seed. These IDs are not independent sampled people or actual pose extractors.
+- Every prediction artifact retains the same target coordinates, target validity/visibility, reference scales, timestamps and input tracks. All windows have 64 samples with 0.04-second spacing; only development records are scored. Cross-method arrays were compared directly, not inferred from filenames.
+- An independent NumPy/pandas calculation, without importing the study evaluation functions, reconstructed visible coordinate error, 0.20-second displacement error, ankle-separation error, amplitude error and operational event timing. All 432 per-window rows agree with saved values within **1e-16**. The 24 primary method/extractor summary cells and rounded report entries also agree. The final fresh-kernel prediction arrays are exactly identical to those independently recalculated from the preceding full fixture run.
+- The reviewer separately reproduced all **100 saved nested bootstrap draws** for the held-fixture paired-JEPA versus coordinate contrast and its interval. The narrow interval is software arithmetic over three analytic IDs; it excludes training/selection uncertainty and has no population interpretation.
+- All **10 stage receipts and 117 distinct receipted files** matched their hashes and recorded run identity. The development snapshot's prediction hashes agree and `confirmation_opened` is false. All nine executed notebooks contain **19 executed code cells with no error outputs**. This inspects the saved execution evidence; it does not imply GPU execution.
+- Eight learned fits completed **30 optimizer updates in total**, with about **0.739 CPU seconds** reported inside their trainers and **zero GPU hours**. The complete stage receipts record about 10.173 seconds. Notebook startup and other orchestration are outside the trainer sum. These tiny width-16 CPU fits do not estimate HAIC throughput or scientific training adequacy.
+- Gate A, Gate B, real transfer and optional video remain `insufficient_evidence`. Personalization remains `fail` as a historical development expansion decision. The run has no calibrated decision specification, no opened confirmation labels and no measured source/real-data benefit. The report states these limits even when a fixture contrast is favorable.
+
+The source path now verifies exact HAIC package/runtime/operator conditions when explicitly run in an allocation; its budgeting context accounts for loading, inference, checkpoints and failed attempts and shares a scope lock across preparation and fitting. This review inspected code and bookkeeping fixtures only. **No HAIC allocation, CUDA operator, licensed render, independent annotation or calibrated empirical gate was executed here.** A Python alarm may be delivered after a native operator finishes; scheduler allocation limits remain the hard resource boundary, and actual overruns must remain in the cost ledger.
+
+No blocking defect remains in the reviewed fixture arithmetic, evidence labeling or the identified provenance fixes. This verdict is limited to these inspected contracts and artifacts. It does not endorse the research hypothesis or the model implementation authored by this reviewer.

@@ -24,6 +24,7 @@ FILES = (
     "scripts/research_directions/synthetic_training_v2/diagnostics/timing.py",
     "scripts/research_directions/synthetic_training_v2/diagnostics/plots.py",
     "scripts/research_directions/synthetic_training_v2/postrun_checks.py",
+    "scripts/research_directions/synthetic_training_v2/check_results.py",
     "slurm/synthetic-training-v2/postrun-checks.sh",
     "slurm/synthetic-training-v2/postrun-checks.sbatch",
 )

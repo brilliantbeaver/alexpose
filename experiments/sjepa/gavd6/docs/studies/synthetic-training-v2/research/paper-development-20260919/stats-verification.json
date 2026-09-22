@@ -1,0 +1,27 @@
+{
+  "status": "PLANNING_SENSITIVITY_COMPLETE",
+  "source_hashes": {
+    "person-effects.csv": "841a8e501a4873d8efc26529c015c1402742ff96c59cba65def1ebbaa701d472",
+    "per-person-metrics.csv": "1456fa7c4341758c79d4f774042f68b1179fe0b8a59a776972953beb39dc7b90",
+    "paired-comparisons.csv": "f6f758af25ab04d3ab8edc0fc3df8216fa9e9bafe9c06bd98086e69b08f4b672"
+  },
+  "reconstructed_contrasts": 60,
+  "independent_people": 8,
+  "fitted_seeds": [
+    17
+  ],
+  "alpha": 0.05,
+  "calculation": "two-sided paired t noncentral distribution",
+  "population": "inspected normal-treadmill development people; synthetic imagery",
+  "sd_95_percent_interval_multipliers_normal_assumption": [
+    0.6611741488313408,
+    2.035272090780168
+  ],
+  "limitations": [
+    "Pilot differences are not confirmatory evidence or future true effects.",
+    "Person-only normal model omits training-seed and new-dataset uncertainty.",
+    "No real-data access, usable-subject count, or 5% practical margin is validated.",
+    "A 5% true effect powered against zero does not power proof of an effect exceeding 5%.",
+    "No training or inference experiment was launched."
+  ]
+}

@@ -1,0 +1,385 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gait Fidelity — research proposal</title><meta name="description" content="A proposed study of movement-preserving pose restoration, with explicit data, methods and evaluation."><style>:root{color-scheme:light;--ink:#183247;--muted:#526675;--line:#d8e3e8;--blue:#265f9e;--teal:#087e78;--pale:#f0f6fa}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:#f4f7f9;color:var(--ink);font:18px/1.72 Georgia,'Times New Roman',serif}a{color:var(--blue);text-underline-offset:3px}a:hover{color:#094b68}button,input,select{font:inherit}button,a,input{touch-action:manipulation}:focus-visible{outline:3px solid #ae7120;outline-offset:4px}.skip{position:fixed;left:20px;top:-100px;z-index:10;background:white;padding:10px}.skip:focus{top:10px}
+.paper-shell{display:grid;grid-template-columns:230px minmax(0,1030px);gap:34px;max-width:1334px;margin:auto;padding:32px 20px 70px}.sidebar{position:sticky;top:28px;align-self:start;max-height:calc(100vh - 56px);overflow-y:auto;padding-right:6px;font:14px/1.6 Arial,sans-serif}.brand{font-size:20px;font-weight:700;color:var(--ink);text-decoration:none}.sidebar p{color:var(--muted);margin:8px 0 22px}.toc{border-top:1px solid var(--line);padding-top:14px}.toc a{display:block;border-left:3px solid transparent;text-decoration:none;padding:7px 10px;margin:2px 0;color:var(--muted)}.toc a[aria-current],.toc a:hover{border-color:var(--teal);color:var(--ink);background:#e8f2f3}.sidebar .resources{margin-top:22px;padding:14px;border:1px solid var(--line);border-radius:8px;background:white}.resources a{display:block;padding:4px 0}.mobile-nav{display:none}
+main{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:44px 48px;box-shadow:0 4px 22px #18324706}h1,h2,h3,h4{font-family:Arial,sans-serif;line-height:1.28;color:var(--ink)}h1{font-size:45px;letter-spacing:-1px;margin:0 0 10px}h2{font-size:28px;margin:52px 0 22px;padding-top:18px;border-top:1px solid var(--line)}h3{font-size:22px;margin:32px 0 14px}h2:first-of-type{font-size:26px;color:var(--muted);font-weight:400;border:0;margin:0 0 24px;padding:0}p{margin:18px 0}strong{font-weight:700}li{margin:8px 0}code{font:0.88em/1.5 Menlo,Consolas,monospace;background:#f0f4f7;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{padding:20px;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:8px;overflow:auto;background:#f7fafb}pre code{background:none;padding:0;font-size:15px;white-space:pre}
+.table-wrap{overflow-x:auto;margin:24px 0;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;font:15px/1.55 Arial,sans-serif}th,td{text-align:left;vertical-align:top;padding:14px 15px;border-bottom:1px solid var(--line);min-width:130px}th{background:#edf4f7;font-weight:700}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fbfdfe}p:has(>em:only-child){font:15px/1.6 Arial,sans-serif;color:var(--muted);margin-top:10px}.figure-link{display:block;cursor:zoom-in;border:1px solid var(--line);border-radius:8px;margin:28px -12px 10px;background:white}.figure-link img{display:block;width:100%;height:auto;border-radius:8px}.figure-hint{font:13px/1.5 Arial,sans-serif;color:var(--muted);margin:0 0 6px;text-align:right}.reading-note{font:15px/1.6 Arial,sans-serif;border-left:4px solid var(--teal);background:var(--pale);padding:14px 18px;margin:26px 0}
+.explorer{font:16px/1.55 Arial,sans-serif;margin:30px 0;padding:24px;border:1px solid #bfd3df;border-radius:10px;background:#f4f9fc}.explorer h3{margin:0 0 12px;font-size:23px}.explorer .teaching{color:var(--muted);font-size:14px}.presets{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.presets button{border:1px solid #b7cad5;background:white;border-radius:6px;padding:8px 12px;font-size:14px;color:var(--ink);cursor:pointer}.presets button:hover{background:#e4f0f6}.controls{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;margin:22px 0}.controls label{display:block;font-weight:700;font-size:14px}.controls output{float:right;color:var(--teal);margin-left:8px}.controls input{display:block;width:100%;margin:14px 0;accent-color:var(--teal)}.grid-explanation{font-size:14px}.explorer .cell{min-width:90px;text-align:center}.explorer .cell span{display:block}.reference{color:var(--muted);font-size:14px}.estimate{color:var(--blue);font-size:19px;font-weight:700;margin:4px 0}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.metric{background:white;border:1px solid var(--line);border-radius:7px;padding:12px}.metric span{display:block;font-size:13px;color:var(--muted)}.metric output{font-size:22px;color:var(--ink);font-weight:700}.metric.wide{grid-column:1/-1}.explorer details{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}.explorer summary{cursor:pointer;font-weight:700}.explorer details p{font-size:14px}.explorer code{font-size:13px}
+dialog{width:min(96vw,1400px);max-height:94vh;border:1px solid var(--line);border-radius:10px;padding:20px;background:white;color:var(--ink)}dialog::backdrop{background:#122331bb}dialog img{display:block;width:100%;height:auto}dialog p{font:15px/1.5 Arial,sans-serif}dialog button{display:block;margin-left:auto;padding:8px 15px;border:1px solid #b7cad5;background:#edf4f7;border-radius:6px;cursor:pointer;font:15px Arial,sans-serif}
+@media(max-width:1050px){.paper-shell{grid-template-columns:190px minmax(0,1fr);gap:20px;padding:20px 14px}main{padding:32px}.sidebar{font-size:13px}}
+@media(max-width:760px){html{scroll-padding-top:80px}body{font-size:17px}.paper-shell{display:block;padding:0}.sidebar{display:none}.mobile-nav{display:block;position:sticky;top:0;background:#edf4f7;border-bottom:1px solid var(--line);padding:12px 18px;z-index:3;font:15px/1.6 Arial,sans-serif}.mobile-nav summary{cursor:pointer;font-weight:700}.mobile-nav nav{max-height:65vh;overflow:auto}.mobile-nav a{display:block;padding:5px 0}main{border:0;border-radius:0;padding:26px 20px}h1{font-size:37px}h2{font-size:26px}.figure-link{margin-left:0;margin-right:0}.controls,.metric-grid{grid-template-columns:1fr}.metric.wide{grid-column:auto}.explorer{padding:16px}th,td{padding:10px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white;font-size:11pt}.paper-shell{display:block;padding:0}.sidebar,.mobile-nav,.presets,.controls,.figure-hint,.skip{display:none}main{border:0;padding:0;box-shadow:none}h2{break-after:avoid}img,.explorer{break-inside:avoid}a{color:inherit}.table-wrap{overflow:visible}table{font-size:9pt}th,td{min-width:0}.explorer{background:white}.figure-link{margin:20px 0 8px}dialog{display:none}}
+
+.presets button:disabled{cursor:not-allowed;opacity:.6}
+</style></head><body><a class="skip" href="#paper">Skip to the proposal</a><details class="mobile-nav"><summary>Gait Fidelity · contents</summary><nav aria-label="Mobile contents"><a href="#abstract">Abstract</a><a href="#1-motivation">1. Motivation</a><a href="#2-research-question-and-proposed-contribution">2. Research question and proposed contribution</a><a href="#3-data-and-reference-measurements">3. Data and reference measurements</a><a href="#4-experimental-design">4. Experimental design</a><a href="#5-method">5. Method</a><a href="#6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</a><a href="#7-reproducibility-and-execution">7. Reproducibility and execution</a><a href="#8-related-work-and-references">8. Related work and references</a><a href="#file-guide">File guide</a></nav></details><div class="paper-shell"><aside class="sidebar"><a class="brand" href="#gait-fidelity">Gait Fidelity</a><p>A research proposal<br>New experiments pending</p><nav class="toc" aria-label="Paper contents"><a href="#abstract">Abstract</a><a href="#1-motivation">1. Motivation</a><a href="#2-research-question-and-proposed-contribution">2. Research question and proposed contribution</a><a href="#3-data-and-reference-measurements">3. Data and reference measurements</a><a href="#4-experimental-design">4. Experimental design</a><a href="#5-method">5. Method</a><a href="#6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</a><a href="#7-reproducibility-and-execution">7. Reproducibility and execution</a><a href="#8-related-work-and-references">8. Related work and references</a><a href="#file-guide">File guide</a></nav><div class="resources"><strong>Supporting material</strong><a href="data/README.md">Data specification</a><a href="data/video-gallery.html">Local video viewer</a><a href="methods/README.md">Method protocols</a><a href="images/gallery.html">All vector figures</a><a href="reviews/README.md">Independent reviews</a><a href="README.md">Markdown source</a></div></aside><main id="paper"><h1 id="gait-fidelity">Gait Fidelity</h1>
+<h2 id="preserving-bilateral-movement-through-pose-restoration">Preserving bilateral movement through pose restoration</h2>
+<p><strong>Research proposal · 21 September 2026 · New experiments pending</strong></p>
+<p><a href="proposal.html">Read the interactive paper</a> · <a href="data/README.md">Inspect the data</a> · <a href="data/video-gallery.html">Browse local videos</a> · <a href="images/gallery.html">Open the figure gallery</a></p>
+<p>This page presents the scientific argument and planned experiments. The linked protocols retain implementation detail; completed source audits and earlier drafts are organized separately so that they do not interrupt the proposal.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Reading goal</th>
+  <th>Start here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Understand the question and method</td>
+  <td>Read Sections 1–5 below, or use the illustrated <a href="proposal.html">interactive paper</a>.</td>
+</tr>
+<tr>
+  <td>Know exactly which data will be used</td>
+  <td>Read <a href="data/README.md">Data and references</a>, then inspect the <a href="data/video-gallery.html">local footage</a>.</td>
+</tr>
+<tr>
+  <td>Prepare or review an experiment</td>
+  <td>Use the <a href="methods/README.md">method protocols</a>, <a href="evidence/README.md">source evidence</a>, and <a href="scripts/README.md">reproduction instructions</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Contents:</strong> <a href="#abstract">Abstract</a> · <a href="#1-motivation">1. Motivation</a> · <a href="#2-research-question-and-proposed-contribution">2. Research question</a> · <a href="#3-data-and-reference-measurements">3. Data</a> · <a href="#4-experimental-design">4. Experimental design</a> · <a href="#5-method">5. Method</a> · <a href="#6-evaluation-and-statistical-analysis">6. Evaluation</a> · <a href="#7-reproducibility-and-execution">7. Reproducibility</a> · <a href="#8-related-work-and-references">8. References</a> · <a href="#file-guide">File guide</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>Video-based gait measurements depend on pose estimators that locate a person's joints in each frame. Restoration models can correct these estimates, but they may also alter differences between the legs or changes in movement that the measurement is intended to capture. Gait Fidelity studies whether restoration can reduce observation errors while preserving the size and direction of bilateral movement changes. We propose a controlled experiment that crosses reference-verified changes in motion with changes in image quality or estimated joint assignment. The initial outcome is a signed difference in projected knee excursion, supported by the existing hip, knee and ankle representation. Synthetic motion and rendered images supply matched inputs and references; independently annotated real videos provide a separate observation-recovery test. We compare direct coordinate training with a joint-embedding predictive architecture that learns to predict reference motion features, and evaluate stochastic anatomical masking as a distinct training intervention. A proposed paired-change constraint penalizes distortion of the reference movement change. Evaluation combines response error with observation-error and position-accuracy requirements, retaining missing predictions and unsupported references in coverage reports. Clinical measurements form a later, conditional stage requiring independent events, anatomical side labels and adequate synchronization. The study is designed to determine which training choices preserve useful movement information and where the available observations cannot support recovery.</p>
+<h2 id="1-motivation">1. Motivation</h2>
+<h3 id="11-why-position-accuracy-is-not-enough">1.1 Why position accuracy is not enough</h3>
+<p>A pose estimator converts a video into a trajectory: the position of each joint as it changes over time. Those trajectories can then be used to measure movement, such as the amount a knee bends or the interval between steps. Errors arise when a limb is obscured, a person becomes small in the image, or the estimator exchanges the names of the left and right joints. A restoration model uses the surrounding observations to correct the estimated trajectory.</p>
+<p>The difficulty is that genuine movement can resemble an estimation error. Reduced excursion of one knee, a brief hesitation or a difference between the legs may be meaningful features of the recording. A model trained to produce common, smooth walking patterns could weaken those features while improving its average joint-position score. Conversely, a model that preserves every irregularity may also preserve tracking noise. A useful evaluation must measure both tendencies on the same reference population.</p>
+<a class="figure-link" href="images/01-research-question.svg" aria-label="Enlarge diagram: Movement differences, observation errors and uncertain anatomical names require different model behavior."><img src="images/01-research-question.svg" alt="Movement differences, observation errors and uncertain anatomical names require different model behavior." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 1. The desired response depends on what changed. Genuine movement should remain measurable; observation error should decrease; unresolved anatomical assignment should remain explicit.</em></p>
+<h3 id="12-why-laterality-matters">1.2 Why laterality matters</h3>
+<p><strong>Laterality</strong> means identifying the anatomical left and right sides. It determines the sign of a bilateral measurement: “right minus left” reverses if joint names are exchanged. Anatomical side, movement asymmetry and the clinically affected side are separate quantities. A larger excursion on the right does not, by itself, identify which side is impaired.</p>
+<p>Reliable bilateral measurements could help clinicians describe a person's movement and follow changes over time. That motivation requires accurate measurement rather than a preference for symmetry. Symmetric step lengths can coexist with asymmetric mechanics, and neurological gait patterns vary across people. Independent clinical studies already measure gait from video and assess within-person changes; the proposed contribution concerns whether restoration preserves those changes under difficult observations. <a href="https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0000467">Clinical video validation</a>, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5243179/">asymmetry and walking mechanics</a>.</p>
+<p>The predecessor <a href="../synthetic-training-v2/writeups/README.md">synthetic-training study</a> motivates a closer examination of movement fidelity and strong controls for feature pretraining. The earlier <a href="../synthetic-training-v2/manuscript/abstract-laterality-audit-20260919-v01.md">laterality evidence audit</a> explains why those experiments must remain distinct. This proposal makes neither a clinical efficacy claim nor an assumption that JEPA will be the best method.</p>
+<h2 id="2-research-question-and-proposed-contribution">2. Research question and proposed contribution</h2>
+<p><strong>Can pose restoration reduce errors caused by observation and tracking while preserving the size and direction of reference-verified changes in bilateral movement?</strong></p>
+<p>The main hypothesis is that explicitly supervising movement change can reduce distortion of that change while retaining useful resistance to observation errors. The reference supplies the actual change, including any legitimate effects on other joints. The model is not asked to make every movement symmetric or to make every image-plane quantity invariant to the camera.</p>
+<p>The intended contribution has three connected parts:</p>
+<ol>
+<li>A controlled evaluation that separates a real movement change from a change in how the same movement is observed.</li>
+<li>A matched test of direct coordinate learning, paired feature prediction and anatomical masking, showing which component contributes any improvement.</li>
+<li>A reference-based account of the conditions under which restoration preserves a useful measurement, together with a clearly bounded real-video validation.</li>
+</ol>
+<p>Each part is prospective. Graph masking, synthetic gait and feature prediction have substantial prior art. The scientific value must come from a consequential, reproducible preservation finding and an interpretable remedy or failure boundary, assessed against credible alternatives. The <a href="literature/novelty.md">novelty audit</a> retains the detailed comparisons and secondary ideas.</p>
+<p>This question determines the next dependency: the study needs data that distinguish motion from observation and a measurement that the available references can actually support.</p>
+<h2 id="3-data-and-reference-measurements">3. Data and reference measurements</h2>
+<h3 id="31-which-data-will-be-used">3.1 Which data will be used</h3>
+<p><strong>Already in your HAIC setup:</strong> AMASS motion files, GAVD videos, COCO images/annotations and the previous synthetic-training assets. The 91 MS/PD/Normal clips are verified on your Mac; their HAIC copy has not been established. Stroke motion capture, LIVE-GaitNeuroKids and the full MoVi video/reference release are <strong>optional additions that have not yet been acquired for this study</strong>. Their acquisition does not block synthetic development with the existing HAIC assets.</p>
+<p>The <a href="data/availability.md">availability inventory</a> records the exact paths and the evidence for these statuses. It distinguishes your reported HAIC setup and completed runs from a fresh remote file audit, which was not performed here. The roles below depend on reference quality as well as file availability.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Data source</th>
+  <th>What will enter the experiment</th>
+  <th>Role and readiness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AMASS-derived synthetic pairs — existing on HAIC</strong></td>
+  <td>Reviewed motion, rendered RGB, fixed pose-estimator outputs and projected body-model joints</td>
+  <td>Primary controlled development and training. Reuse the existing AMASS/rendering assets and verify the selected files; new intervention pairs are pending.</td>
+</tr>
+<tr>
+  <td><strong>Local MS/PD/Normal videos — available on Mac</strong></td>
+  <td>91 clips from 41 filename-derived sources; new physical-time pose extraction and independent visible-joint/side annotations</td>
+  <td>Real-image development and controlled observation-recovery testing. HAIC copy is unconfirmed; the new cache and annotations are pending.</td>
+</tr>
+<tr>
+  <td><strong>GAVD — existing on HAIC</strong></td>
+  <td>Selected videos with checked source reservations and independent annotations for the chosen endpoint</td>
+  <td>Optional real-image evaluation pool. Prior exposure and overlap with the local collection must be resolved. Existing labels do not supply the required motion references.</td>
+</tr>
+<tr>
+  <td><strong>Stroke motion-capture release — optional; not acquired</strong></td>
+  <td>Raw time-indexed trajectories, with compatible side and event metadata where available</td>
+  <td>Additional source of recorded asymmetric movement. Retargeting must preserve the source measurements; public synchronized RGB is unverified.</td>
+</tr>
+<tr>
+  <td><strong>LIVE-GaitNeuroKids — optional; not acquired</strong></td>
+  <td>Same-trial video, wearable references and participant/visit records</td>
+  <td>Clinical evaluation candidate. Access, video alignment, reference accuracy and usable sample size remain admission gates.</td>
+</tr>
+<tr>
+  <td><strong>MoVi video/reference release — optional; not acquired</strong></td>
+  <td>Compatible calibrated video/motion-capture trials</td>
+  <td>Healthy-reference evaluation fallback if identity separation can be established. AMASS motion from BMLmovi does not supply this full video release.</td>
+</tr>
+</tbody>
+</table></div>
+<p>COCO is available for an optional image-adaptation comparison; its still-image annotations do not provide temporal gait references. The focused pose-trajectory experiment can proceed without that branch.</p>
+<a class="figure-link" href="images/13-data-to-claims.svg" aria-label="Enlarge diagram: Synthetic pairs, local annotated footage and conditional clinical references support different experiments and claims."><img src="images/13-data-to-claims.svg" alt="Synthetic pairs, local annotated footage and conditional clinical references support different experiments and claims." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 2. The synthetic branch reuses HAIC assets, the audited local-video branch starts on your Mac, and new clinical data remain optional acquisitions. Inputs, references and supported claims remain linked; a diagnostic label does not supply a joint trajectory or an independently measured movement change.</em></p>
+<p>The <a href="data/README.md">data specification</a> explains acquisition, representation, inclusion checks and the exact role of each source. The current synthetic study uses normal treadmill walking from 24 training people and eight already inspected development people. These identities are useful for implementation and development; a new confirmation roster is still to be allocated. The existing four 64-frame windows per person are a starting point for mask checks, without assuming that their duration or frontal view is adequate for the new measurement.</p>
+<p>The local real-video collection also remains development material. Twenty-eight of its 41 source IDs occur in GAVD manifests, covering 61 clips; source IDs are not verified independent people. Existing pose caches omit original timestamps and imputation flags and therefore need replacement for physical-time measurement. The <a href="data/local-videos.md">local-video audit</a> records these issues and the source overlap. All clips can be inspected in the <a href="data/video-gallery.html">local gallery</a>.</p>
+<h3 id="32-the-first-measurement">3.2 The first measurement</h3>
+<p>The initial engineering endpoint is the <strong>signed projected knee-excursion difference</strong>. For each leg, compute the image-plane angle formed by hip, knee and ankle across one fixed reviewed interval. Define its excursion as the 95th percentile minus the 5th percentile of that angle, then subtract the left excursion from the right:</p>
+<pre><code class="language-text">theta(t) = angle(hip(t) − knee(t), ankle(t) − knee(t))
+q = P95(theta) − P5(theta)
+A = q_right − q_left
+</code></pre>
+<p><code>A</code> is measured in image-plane degrees. Its sign identifies which leg has greater projected angular excursion. It does not identify an affected limb, anatomical three-dimensional range of motion, or clinical impairment. The percentile definition limits the influence of isolated extremes, while deliberately discounting brief genuine extremes; full waveforms and a prespecified full-range sensitivity analysis remain necessary.</p>
+<p>For the first synthetic comparison, use a common physical-time grid and the same reference-defined eligible frames across the paired movement/observation cells, both limbs and every method. Require sufficient support for the complete contrast so that differing phase coverage cannot masquerade as movement change. Specify the percentile interpolation rule, interval duration, minimum projected segment length and completeness thresholds before comparing models. Compute angles in the original image geometry or after a shared isotropic transform: resizing horizontal and vertical coordinates by different factors changes an angle. Missing or degenerate predictions count as failures rather than changing the eligible reference population. The <a href="methods/evaluation.md">evaluation protocol</a> gives the complete contract.</p>
+<h3 id="33-what-real-videos-add">3.3 What real videos add</h3>
+<p>On the local videos, the first reference task is independent annotation of originally visible joint positions and resolvable anatomical side. Add blur or obstruction to those same frames, re-run pose extraction and evaluate restoration against the retained original annotations. This creates a known observation change on real imagery. It does not reveal joints that were already hidden in the original video.</p>
+<p>Clinical step-time asymmetry is a subsequent endpoint, conditional on independently side-labelled initial contacts, appropriate temporal resolution and valid event coverage. Contact labels must be used for evaluation rather than supplied to a deployed timing estimator. The <a href="data/clinical-candidates.md">clinical-candidate audit</a> distinguishes these requirements from the references presently available.</p>
+<h2 id="4-experimental-design">4. Experimental design</h2>
+<h3 id="41-cross-movement-with-observation">4.1 Cross movement with observation</h3>
+<p>For each source family, construct two movement states and two observation conditions. A movement pair changes the reference trajectory; an observation pair changes image degradation or estimated joint naming while retaining the relevant physical motion. Keep camera, appearance and random nuisance realization matched within the appropriate comparison.</p>
+<a class="figure-link" href="images/02-crossed-design.svg" aria-label="Enlarge diagram: The same source family contributes a two-by-two movement-by-observation panel."><img src="images/02-crossed-design.svg" alt="The same source family contributes a two-by-two movement-by-observation panel." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 3. Compare motion A with motion B under each observation condition, then compare observation conditions within each motion. Every output has its own valid projected reference.</em></p>
+<p>A physical reflection is useful for testing sign and transformation rules. A graded response experiment additionally needs recorded or reference-verified movement changes beyond reflection, including a zero-change control and changes in both directions. Constrained edits without dynamic validation are kinematic stress tests; they are not simulated patient counterfactuals. The reference must retain legitimate coupled changes in other joints.</p>
+<p>The compact sign-control panel crosses two mirror states, three estimated-naming states, two occlusion states and two cameras. It produces 24 track conditions from eight RGB renderings per source window when naming errors are applied after extraction. These repeated conditions remain one source family. The graded-response panel is additional work.</p>
+<h3 id="42-measure-the-error-in-a-change">4.2 Measure the error in a change</h3>
+<p>Let <code>A_an</code> denote the reference measurement for movement state <code>a</code> and observation condition <code>n</code>, and let <code>Ahat_an</code> denote the restored measurement. The <strong>response error</strong> is the difference between the predicted movement change and the reference movement change:</p>
+<pre><code class="language-text">R(n) = (Ahat_1n − Ahat_0n) − (A_1n − A_0n)
+</code></pre>
+<p>The <strong>observation-induced error change</strong> asks how the measurement error changes when the observation changes:</p>
+<pre><code class="language-text">N(a) = (Ahat_a1 − Ahat_a0) − (A_a1 − A_a0)
+</code></pre>
+<p>For image blur at a fixed camera, the reference change in the second expression is zero. For a camera change, a projected reference may legitimately change, so retain that term. The interaction <code>I = R(1) − R(0)</code> measures whether the observation condition changes sensitivity to the real movement change.</p>
+<a class="figure-link" href="images/16-response-estimand.svg" aria-label="Enlarge diagram: Illustrative values show how a predicted movement change can differ from the reference change, even with plausible individual measurements."><img src="images/16-response-estimand.svg" alt="Illustrative values show how a predicted movement change can differ from the reference change, even with plausible individual measurements." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 4. These are teaching values, not measured results. The <a href="proposal.html#response-explorer">interactive paper</a> lets the reader vary movement change and observation distortion and inspect the paired contrasts.</em></p>
+<section class="explorer" id="response-explorer" aria-labelledby="explorer-title">
+<h3 id="explorer-title">Explore the error in a movement change</h3>
+<p class="teaching">Illustration only. These controls define a hypothetical measurement rule; they are not model settings or experiment results. The camera stays fixed, so observation degradation does not change the reference.</p>
+<div class="presets" aria-label="Teaching examples"><button disabled data-preset="faithful">Preserved change</button><button disabled data-preset="attenuated">Attenuated change</button><button disabled data-preset="sensitive">Observation-sensitive</button></div>
+<div class="controls">
+<label>True movement change <output id="true-change-value" for="true-change">+4.00°</output><input disabled id="true-change" type="range" min="-8" max="8" step="0.5" value="4"></label>
+<label>Change retained: clean view <output id="clean-gain-value" for="clean-gain">100%</output><input disabled id="clean-gain" type="range" min="0" max="150" step="5" value="100"></label>
+<label>Change retained: degraded view <output id="degraded-gain-value" for="degraded-gain">50%</output><input disabled id="degraded-gain" type="range" min="0" max="150" step="5" value="50"></label>
+<label>Observation-only offset <output id="observation-shift-value" for="observation-shift">+1.00°</output><input disabled id="observation-shift" type="range" min="-3" max="3" step="0.25" value="1"></label>
+</div>
+<p class="grid-explanation">Each cell is a signed knee-excursion difference, right minus left, in image-plane degrees. Motion A starts at +2°; the first control determines the true change to motion B.</p>
+<div class="table-wrap"><table><thead><tr><th>Movement</th><th>Clean observation</th><th>Degraded observation</th></tr></thead><tbody>
+<tr><th>Motion A</th><td class="cell"><span class="reference">Reference <output id="reference-0">+2.00°</output></span><span class="estimate">Estimate <output id="estimate-0">+2.00°</output></span></td><td class="cell"><span class="reference">Reference <output id="reference-1">+2.00°</output></span><span class="estimate">Estimate <output id="estimate-1">+3.00°</output></span></td></tr>
+<tr><th>Motion B</th><td class="cell"><span class="reference">Reference <output id="reference-2">+6.00°</output></span><span class="estimate">Estimate <output id="estimate-2">+6.00°</output></span></td><td class="cell"><span class="reference">Reference <output id="reference-3">+6.00°</output></span><span class="estimate">Estimate <output id="estimate-3">+5.00°</output></span></td></tr>
+</tbody></table></div>
+<div class="metric-grid"><div class="metric"><span>Response error · clean</span><output id="clean-response">0.00°</output></div><div class="metric"><span>Response error · degraded</span><output id="degraded-response">−2.00°</output></div><div class="metric"><span>Observation error change · motion A</span><output id="observation-a">+1.00°</output></div><div class="metric"><span>Observation error change · motion B</span><output id="observation-b">−1.00°</output></div><div class="metric wide"><span>Interaction: degraded response error minus clean response error</span><output id="interaction">−2.00°</output></div></div>
+<p id="explorer-description" aria-live="polite">The reference changes by +4°, while the degraded estimate changes by +2°.</p>
+<details><summary>Read the calculation and its limits</summary><p>The estimated change equals the true change multiplied by the selected retained fraction. Degraded estimates also receive the selected observation offset. Response error subtracts the reference change; observation error subtracts the reference difference between views. The interaction checks whether the response error depends on observation quality.</p><p>A shared constant offset could leave both response errors unchanged while making both measurements inaccurate. These contrasts therefore accompany level/position accuracy and waveform checks. The illustration has complete observations and fixed geometry; it does not model uncertainty, missing predictions or camera changes.</p></details>
+<noscript><p>JavaScript is disabled. The displayed values illustrate the default case; the equations and static figures remain readable.</p></noscript></section>
+
+<p>Response error alone permits a constant measurement offset, and a single excursion value can agree despite an incorrect waveform. This is why the evaluation also requires position/level accuracy, observation-error control and trajectory measures.</p>
+<h2 id="5-method">5. Method</h2>
+<h3 id="51-restore-coordinates-from-observed-trajectories">5.1 Restore coordinates from observed trajectories</h3>
+<p>All deployed restoration arms receive estimated joint coordinates, confidence, detection availability and timestamps under a declared anatomical convention. Independent reference coordinates are available only for permitted training and evaluation. The first shared representation is body12: paired shoulders, elbows, wrists, hips, knees and ankles. Heel or toe measurements require an explicitly validated schema extension.</p>
+<p>A direct model learns corrected coordinates from the estimated tracks. Temporal context allows it to use neighboring observations, while a position-and-motion objective discourages both location errors and errors in displacement over time. Calibration and temporal filters provide simpler comparisons. Their preprocessing, tuning population and missing-output treatment must be documented alongside the neural models.</p>
+<h3 id="52-predict-reference-features-with-paired-jepa">5.2 Predict reference features with paired JEPA</h3>
+<p>A joint-embedding predictive architecture, or <strong>JEPA</strong>, learns to predict numerical features rather than predicting every target coordinate during pretraining. Here an encoder turns an imperfect pose sequence into features that summarize joint motion, and a predictor estimates the features of corresponding reference poses at hidden positions. “Paired” means that estimated and reference poses describe the same source movement at aligned times.</p>
+<a class="figure-link" href="images/14-paired-jepa-method.svg" aria-label="Enlarge diagram: Masked observed tracks feed the student, valid reference tracks feed a training-only teacher, and a later coordinate readout converts frozen features into restored poses."><img src="images/14-paired-jepa-method.svg" alt="Masked observed tracks feed the student, valid reference tracks feed a training-only teacher, and a later coordinate readout converts frozen features into restored poses." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 5. The inherited recipe uses a reference teacher whose weights are an exponential moving average of the encoder weights: a slowly changing copy, updated without back-propagating the target loss through it. A separate readout then learns coordinates while the encoder is fixed.</em></p>
+<p>The rationale is that predicting reference motion features may help an encoder use temporal and anatomical context when observations are incomplete. A learned prior may also weaken uncommon but genuine movements. The experiment therefore compares the final restored trajectories, with aligned, shuffled-reference and untrained-encoder controls. Low feature-prediction loss does not establish movement fidelity.</p>
+<h3 id="53-vary-which-joints-provide-context">5.3 Vary which joints provide context</h3>
+<p><strong>Stochastic graph-time masking</strong> selects a connected anatomical region, such as hip–knee–ankle, and hides it for a sampled time span. Another draw can expose that region and hide a different one. A token is one joint over a short block of frames; the graph specifies anatomical connections, without requiring a graph neural-network encoder.</p>
+<a class="figure-link" href="images/15-graph-time-mask.svg" aria-label="Enlarge diagram: A connected anatomical region is hidden over time, while later draws allow those same joints to provide context."><img src="images/15-graph-time-mask.svg" alt="A connected anatomical region is hidden over time, while later draws allow those same joints to provide context." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 6. Joint connectivity and temporal persistence are separate factors. Artificial hiding is distinct from a detector's missing observation and from reference validity.</em></p>
+<p>The existing synthetic pipeline already varies its masks and often hides whole-body time blocks on complete input. The proposed study compares that policy with uniform joint-time masking and connected-region masking. Match achieved mask budgets and audit context/target coverage at every joint-time slot. The MS notebook's BlazePose-33 groups require a named-joint adapter for body12. The <a href="methods/masking.md">masking protocol</a> retains coverage, preprocessing-information and gradient checks.</p>
+<h3 id="54-preserve-a-supervised-movement-change">5.4 Preserve a supervised movement change</h3>
+<p>The proposed added constraint penalizes the mismatch between a predicted change in <code>A</code> and its reference change on a matched pair. Apply it to restored coordinates during the same frozen-encoder readout stage for both JEPA and coordinate-pretrained models; initialized and shuffled-feature controls receive the same selected readout objective. Direct end-to-end models with and without the constraint provide a separate practical comparison using the same labels. Keep the coordinate and trajectory objectives alongside it. The new constraint has not been implemented or validated in the predecessor training path.</p>
+<p>Quantile differences can concentrate gradients on a few order statistics, and nearly degenerate projected limbs make angle derivatives unstable. Before training, test the exact implementation or an explicitly declared differentiable surrogate on tied angles, nearly straight knees, small segment lengths and missing data. Do not infer a trainable, stable loss merely because the evaluation quantity has a formula. A direct model given per-example <code>A</code> labels is an additional control for the information supplied by the paired constraint.</p>
+<h3 id="55-attribute-each-improvement">5.5 Attribute each improvement</h3>
+<p>Run the comparisons in stages so that a change in data, mask policy or objective can be interpreted.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Stage</th>
+  <th>Comparison</th>
+  <th>Question answered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Establish practical headroom</td>
+  <td>Unchanged input, affine calibration, temporal filtering, a verified learned refiner, direct coordinate-and-motion training</td>
+  <td>Is there a meaningful restoration problem beyond simple controls?</td>
+</tr>
+<tr>
+  <td>Screen masking policies</td>
+  <td>Coordinate pretraining and paired JEPA, each with time blocks, uniform tokens and graph-time regions</td>
+  <td>Does a policy help, and does that depend on feature prediction?</td>
+</tr>
+<tr>
+  <td>Isolate anatomical structure</td>
+  <td>Selected graph policy versus shuffled topology and matched temporal-duration controls</td>
+  <td>Does connectivity contribute beyond mask amount and gap length?</td>
+</tr>
+<tr>
+  <td>Test change supervision</td>
+  <td>Coordinate-pretrained and JEPA frozen-readout arms, each with and without the term; separate direct end-to-end ±term comparison</td>
+  <td>Does the constraint help within each training stage, and does feature prediction contribute under matched trainable parameters?</td>
+</tr>
+<tr>
+  <td>Check pretraining information</td>
+  <td>Selected JEPA versus initialized and shuffled-reference controls</td>
+  <td>Does aligned feature learning explain the difference?</td>
+</tr>
+</tbody>
+</table></div>
+<p>Coordinate pretraining is the stage-matched comparator for JEPA; direct end-to-end training is a separate practical comparator. Share source windows, query locations, target eligibility, mask receipts, readout protocol and downstream labels where applicable. Contextual feature targets and raw-coordinate targets differ by design. Report both update counts and compute, with equal development tuning allowances.</p>
+<p>Direct training with versus without the term tests its practical contribution. JEPA versus coordinate pretraining under the same frozen readout and constraint tests the representation choice more closely. JEPA versus end-to-end direct training assesses overall utility; an interaction between those differently trainable recipes cannot by itself isolate feature prediction.</p>
+<p>Only candidates with a meaningful development effect proceed to the later stages. A broad refinement claim requires a credible contemporary refiner with compatible joints and a verified implementation; an adapted SmoothNet-style model must be labelled as an adaptation. The <a href="methods/README.md">methods index</a> points to the full attribution and measurement protocols.</p>
+<h2 id="6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</h2>
+<h3 id="61-define-success-before-confirmation">6.1 Define success before confirmation</h3>
+<p>The primary contrast is person-level absolute response error against the strongest prespecified, equally supervised direct control. A preservation claim also requires acceptable observation-induced error and clean-input position accuracy on the same population. Select meaningful margins from reference precision, repeatability and intended use before opening confirmation outputs. A smaller p-value cannot substitute for a useful effect size.</p>
+<p>Retain signed bias, the two limb measurements, full angle waveforms, coordinate/displacement error and at least one prespecified outcome excluded from the training constraint. Report comparisons by camera, corruption and reference support without selecting only favorable cells. Fixed reference eligibility determines the attempted population. Before ranking models, choose an all-attempted failure score or a joint coverage-and-error rule with explicit confidence criteria; a mean that silently drops missing predictions cannot determine success. Missing predictions, failed event detection and unsupported references remain visible in failure and coverage accounting.</p>
+<p>Some occlusions leave enough temporal or appearance evidence for recovery; others admit different true movements with identical supplied inputs. Evaluate the latter with calibrated uncertainty or abstention rather than requiring a deterministic answer to distinguish indistinguishable inputs. A verified limb label can resolve side assignment while leaving hidden motion unknown. The <a href="methods/evaluation.md#a-falsifiable-mechanism-uncertainty-can-appear-as-symmetry">uncertainty analysis</a> explains the measurement consequences of retaining several hypotheses.</p>
+<h3 id="62-match-uncertainty-to-the-independent-units">6.2 Match uncertainty to the independent units</h3>
+<p>Keep all windows, cameras, mirrored motions and corruption siblings from a person in one partition. Where person identity is unverified, report source-group analyses and the unresolved cross-source dependence. Model seeds are crossed with people: one fitted model is evaluated on every person. Confidence intervals must reflect the declared target population and training variation rather than treating frames or rendered conditions as independent samples.</p>
+<p>Use development data to estimate variance for the new paired endpoint, determine a justified sample/resource bound and freeze the primary comparison, margins, exclusions and analysis. The existing eight development people and inspected local videos remain development. Repartitioning familiar recordings cannot create untouched confirmation. Do not add seeds or participants until significance appears, and do not interpret an inconclusive difference as proof of equivalence.</p>
+<p>Clinical validation requires agreement against independent measurements, including reference uncertainty, repeatability, event coverage and anatomical side. Following movement changes accurately would support measurement validity; a claim about rehabilitation benefit would require a separate clinical study.</p>
+<h2 id="7-reproducibility-and-execution">7. Reproducibility and execution</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Gate</th>
+  <th>Deliverable before advancing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Data and reference admission</td>
+  <td>Verified source/identity roster, timing and anatomy checks, intended-use records, exclusions and reviewed example segments</td>
+</tr>
+<tr>
+  <td>Measurement and masking checks</td>
+  <td>Frozen excursion calculation, mask coverage bank, input/target isolation, tested missingness and gradient behavior</td>
+</tr>
+<tr>
+  <td>Development comparison</td>
+  <td>Matched practical baselines and staged ablations, complete prediction artifacts and source-level reports</td>
+</tr>
+<tr>
+  <td>Independent confirmation</td>
+  <td>Frozen method, endpoint, margins, seed set and fresh reference population admitted before evaluation</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <a href="scripts/README.md">scripts guide</a> reproduces the documentation and existing source audits. The <a href="evidence/README.md">evidence folder</a> contains measured sampler/video metadata; it supplies preparation evidence, without implying completed restoration experiments. The <a href="reviews/README.md">review index</a> separates scientific and visual review from historical receipts.</p>
+<p>Use a synchronized review display linking original frames, input/reference/restored skeletons and bilateral traces on one physical time axis. The current <a href="data/video-gallery.html">video gallery</a> provides raw-video playback and exportable notes; reference overlays and model traces remain implementation work. Select ordinary examples by metadata or a frozen random sample before viewing method rankings, and independently review a fixed share plus all flagged cases.</p>
+<h2 id="8-related-work-and-references">8. Related work and references</h2>
+<p>The proposal builds on four bodies of work. Synthetic musculoskeletal gait and clinical representation learning are established by <a href="https://www.nature.com/articles/s41467-025-61292-1">Yamada et al. (2025)</a>, while <a href="https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0000467">Stenum et al. (2024)</a> provide direct precedent for video-based clinical measurements and within-person change. Their scope makes an additional accuracy table insufficient motivation for this study.</p>
+<p><a href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf">S-JEPA (ECCV 2024)</a>, <a href="https://arxiv.org/abs/2308.07092">MAMP (ICCV 2023)</a>, <a href="https://arxiv.org/abs/2307.08476">SkeletonMAE (ICCV 2023)</a> and <a href="https://www.nature.com/articles/s41598-026-39330-9">Hui et al. (2026)</a> establish related feature-prediction and structured-masking approaches. Their reported representation tasks do not by themselves establish preservation of gait measurements.</p>
+<p><a href="https://arxiv.org/abs/2112.13715">SmoothNet</a>, <a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Wang_SynSP_Synergy_of_Smoothness_and_Precision_in_Pose_Sequences_Refinement_CVPR_2024_paper.pdf">SynSP</a> and <a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Dong_PS-Mamba_Spatial-Temporal_Graph_Mamba_for_Pose_Sequence_Refinement_ICCV_2025_paper.pdf">PS-Mamba</a> provide temporal-refinement context and candidate comparisons. <a href="https://openaccess.thecvf.com/content/ICCV2023/papers/Holmquist_DiffPose_Multi-hypothesis_Human_Pose_Estimation_using_Diffusion_Models_ICCV_2023_paper.pdf">DiffPose</a> is relevant to ambiguous pose hypotheses. The full <a href="literature/README.md">literature guide</a> records closer clinical preprints, transformation-aware methods and the limits of any novelty claim.</p>
+<h2 id="file-guide">File guide</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Location</th>
+  <th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="README.md">README.md</a> / <a href="proposal.html">proposal.html</a></td>
+  <td>The current scientific proposal in text and interactive form</td>
+</tr>
+<tr>
+  <td><a href="data/README.md">data/</a></td>
+  <td>Committed and conditional data sources, detailed audits and local-video viewer</td>
+</tr>
+<tr>
+  <td><a href="methods/README.md">methods/</a></td>
+  <td>Measurement definitions, controls and masking implementation protocol</td>
+</tr>
+<tr>
+  <td><a href="literature/README.md">literature/</a></td>
+  <td>Prior-art comparison, alternative hypotheses and search coverage</td>
+</tr>
+<tr>
+  <td><a href="evidence/README.md">evidence/</a></td>
+  <td>Retained source inventories, hashes and preparation diagnostics</td>
+</tr>
+<tr>
+  <td><a href="images/gallery.html">images/</a></td>
+  <td>Editable SVGs, review previews and the visual index</td>
+</tr>
+<tr>
+  <td><a href="scripts/README.md">scripts/</a></td>
+  <td>Reproducible figure, viewer and audit builders</td>
+</tr>
+<tr>
+  <td><a href="reviews/README.md">reviews/</a></td>
+  <td>Independent critiques, corrections and current acceptance records</td>
+</tr>
+<tr>
+  <td><a href="records/README.md">records/</a></td>
+  <td>File-move provenance and dated historical snapshots</td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../README.md">All studies</a> · <a href="../synthetic-training-v2/README.md">Predecessor study</a></p>
+</main></div><dialog id="figure-dialog" aria-labelledby="figure-description"><button id="close-figure" type="button">Close figure</button><img id="large-figure" alt=""><p id="figure-description"></p></dialog><script>/* Illustrative arithmetic only. No experiment files or network requests are used. */
+(function () {
+  'use strict';
+  function contrasts(delta, cleanGain, degradedGain, observationShift) {
+    const reference = [2, 2, 2 + delta, 2 + delta]; // A00, A01, A10, A11
+    const estimate = [2, 2 + observationShift, 2 + cleanGain * delta,
+      2 + degradedGain * delta + observationShift];
+    const error = estimate.map((x, i) => x - reference[i]);
+    return { reference, estimate,
+      cleanResponse: error[2] - error[0], degradedResponse: error[3] - error[1],
+      observationA: error[1] - error[0], observationB: error[3] - error[2],
+      interaction: error[3] - error[1] - error[2] + error[0] };
+  }
+  if (typeof module !== 'undefined' && module.exports) module.exports = { contrasts };
+  if (typeof document === 'undefined') return;
+  const ids = ['true-change', 'clean-gain', 'degraded-gain', 'observation-shift'];
+  const signed = x => (x > 0 ? '+' : '') + (Math.abs(x) < 0.00001 ? 0 : x).toFixed(2) + '°';
+  function update() {
+    const values = ids.map(id => Number(document.getElementById(id).value));
+    const c = contrasts(values[0], values[1] / 100, values[2] / 100, values[3]);
+    ids.forEach((id, i) => {
+      document.getElementById(id + '-value').textContent = i === 1 || i === 2 ? values[i] + '%' : signed(values[i]);
+    });
+    c.reference.forEach((v, i) => {
+      document.getElementById('reference-' + i).textContent = signed(v);
+      document.getElementById('estimate-' + i).textContent = signed(c.estimate[i]);
+    });
+    [['clean-response', c.cleanResponse], ['degraded-response', c.degradedResponse],
+     ['observation-a', c.observationA], ['observation-b', c.observationB],
+     ['interaction', c.interaction]].forEach(([id, value]) => {
+      document.getElementById(id).textContent = signed(value);
+    });
+    document.getElementById('explorer-description').textContent =
+      'The reference change is ' + signed(values[0]) + '. The estimated change is ' +
+      signed(values[0] * values[1] / 100) + ' under clean observation and ' +
+      signed(values[0] * values[2] / 100) + ' under degraded observation. The difference between their response errors is ' +
+      signed(c.interaction) + '.';
+  }
+  ids.forEach(id => document.getElementById(id).addEventListener('input', update));
+  const presets = { faithful: [4, 100, 100, 0], attenuated: [4, 50, 50, 0], sensitive: [4, 100, 50, 1] };
+  document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => {
+    presets[button.dataset.preset].forEach((v, i) => { document.getElementById(ids[i]).value = v; }); update();
+  }));
+  update();
+  document.querySelectorAll('.explorer input, .explorer button').forEach(control => { control.disabled = false; });
+  document.querySelectorAll('.mobile-nav a').forEach(link => link.addEventListener('click', () => {
+    document.querySelector('.mobile-nav').open = false;
+  }));
+
+  const modal = document.getElementById('figure-dialog');
+  if (modal && typeof modal.showModal === 'function') {
+    document.querySelectorAll('a.figure-link').forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      document.getElementById('large-figure').src = link.href;
+      document.getElementById('large-figure').alt = link.querySelector('img').alt;
+      document.getElementById('figure-description').textContent = link.querySelector('img').alt;
+      modal.showModal();
+    }));
+    document.getElementById('close-figure').addEventListener('click', () => modal.close());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
+  }
+  if (typeof IntersectionObserver !== 'undefined') {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        document.querySelectorAll('.toc a').forEach(a => {
+          if (a.hash === '#' + entry.target.id) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        });
+      }
+    }, { rootMargin: '0px 0px -65% 0px' });
+    document.querySelectorAll('main h2[id]').forEach(h => observer.observe(h));
+  }
+})();
+</script></body></html>

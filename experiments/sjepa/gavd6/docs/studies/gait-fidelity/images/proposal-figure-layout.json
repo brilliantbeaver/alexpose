@@ -1,0 +1,3193 @@
+[
+  {
+    "file": "13-data-to-claims.svg",
+    "title": "Connect each data source to the evidence it can supply",
+    "subtitle": "Dataset role follows reference quality; every comparison remains within its declared evidence boundary.",
+    "width": 1200,
+    "height": 820,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Connect each data source to the evidence it can supply",
+        "size": 30,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          21,
+          828,
+          49
+        ]
+      },
+      {
+        "x": 36,
+        "y": 78,
+        "text": "Dataset role follows reference quality; every comparison remains within its declared evidence boundary.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          64,
+          907,
+          82
+        ]
+      },
+      {
+        "x": 36,
+        "y": 131,
+        "text": "Data and current access",
+        "size": 23,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          114,
+          302,
+          131
+        ]
+      },
+      {
+        "x": 444,
+        "y": 131,
+        "text": "Reference evidence",
+        "size": 23,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          444,
+          114,
+          660,
+          131
+        ]
+      },
+      {
+        "x": 848,
+        "y": 131,
+        "text": "Evaluation enabled",
+        "size": 23,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          848,
+          114,
+          1058,
+          131
+        ]
+      },
+      {
+        "x": 54,
+        "y": 192,
+        "text": "AMASS synthetic pairs",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          49,
+          170,
+          389,
+          298
+        ],
+        "measured_bounds": [
+          54,
+          176,
+          295,
+          196
+        ]
+      },
+      {
+        "x": 54,
+        "y": 226,
+        "text": "Recorded motion \u2192 rendered video",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          170,
+          389,
+          298
+        ],
+        "measured_bounds": [
+          54,
+          212,
+          355,
+          226
+        ]
+      },
+      {
+        "x": 54,
+        "y": 255,
+        "text": "Estimated tracks + source identity",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          170,
+          389,
+          298
+        ],
+        "measured_bounds": [
+          54,
+          241,
+          339,
+          259
+        ]
+      },
+      {
+        "x": 462,
+        "y": 192,
+        "text": "Projected body-model joints",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          457,
+          170,
+          793,
+          298
+        ],
+        "measured_bounds": [
+          462,
+          177,
+          744,
+          196
+        ]
+      },
+      {
+        "x": 462,
+        "y": 226,
+        "text": "Known image geometry and time",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          457,
+          170,
+          793,
+          298
+        ],
+        "measured_bounds": [
+          462,
+          212,
+          740,
+          230
+        ]
+      },
+      {
+        "x": 462,
+        "y": 255,
+        "text": "Visibility and validity kept apart",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          457,
+          170,
+          793,
+          298
+        ],
+        "measured_bounds": [
+          462,
+          241,
+          721,
+          259
+        ]
+      },
+      {
+        "x": 866,
+        "y": 192,
+        "text": "Controlled restoration",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          861,
+          170,
+          1151,
+          298
+        ],
+        "measured_bounds": [
+          866,
+          177,
+          1086,
+          192
+        ]
+      },
+      {
+        "x": 866,
+        "y": 226,
+        "text": "Position and movement error",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          861,
+          170,
+          1151,
+          298
+        ],
+        "measured_bounds": [
+          866,
+          212,
+          1111,
+          226
+        ]
+      },
+      {
+        "x": 866,
+        "y": 255,
+        "text": "Known motion / image changes",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          861,
+          170,
+          1151,
+          298
+        ],
+        "measured_bounds": [
+          866,
+          241,
+          1131,
+          259
+        ]
+      },
+      {
+        "x": 54,
+        "y": 378,
+        "text": "Local real videos",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          49,
+          356,
+          389,
+          484
+        ],
+        "measured_bounds": [
+          54,
+          362,
+          233,
+          378
+        ]
+      },
+      {
+        "x": 54,
+        "y": 412,
+        "text": "91 clips; 41 filename source IDs",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          356,
+          389,
+          484
+        ],
+        "measured_bounds": [
+          54,
+          398,
+          323,
+          416
+        ]
+      },
+      {
+        "x": 54,
+        "y": 441,
+        "text": "Development collection; GAVD overlap",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          356,
+          389,
+          484
+        ],
+        "measured_bounds": [
+          54,
+          427,
+          381,
+          445
+        ]
+      },
+      {
+        "x": 462,
+        "y": 378,
+        "text": "Visible-joint annotations",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          457,
+          356,
+          793,
+          484
+        ],
+        "measured_bounds": [
+          461,
+          363,
+          705,
+          382
+        ]
+      },
+      {
+        "x": 462,
+        "y": 412,
+        "text": "To be created by independent review",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          457,
+          356,
+          793,
+          484
+        ],
+        "measured_bounds": [
+          462,
+          398,
+          773,
+          416
+        ]
+      },
+      {
+        "x": 462,
+        "y": 441,
+        "text": "Hidden real joints stay unknown",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          457,
+          356,
+          793,
+          484
+        ],
+        "measured_bounds": [
+          462,
+          427,
+          730,
+          445
+        ]
+      },
+      {
+        "x": 866,
+        "y": 378,
+        "text": "Real-image stress tests",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          861,
+          356,
+          1151,
+          484
+        ],
+        "measured_bounds": [
+          866,
+          363,
+          1101,
+          382
+        ]
+      },
+      {
+        "x": 866,
+        "y": 412,
+        "text": "Reviewed positions and side",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          861,
+          356,
+          1151,
+          484
+        ],
+        "measured_bounds": [
+          866,
+          398,
+          1107,
+          416
+        ]
+      },
+      {
+        "x": 866,
+        "y": 441,
+        "text": "Blur / occlusion; time preserved",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          861,
+          356,
+          1151,
+          484
+        ],
+        "measured_bounds": [
+          866,
+          427,
+          1131,
+          445
+        ]
+      },
+      {
+        "x": 54,
+        "y": 564,
+        "text": "Independent clinical data",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          49,
+          542,
+          389,
+          670
+        ],
+        "measured_bounds": [
+          54,
+          548,
+          317,
+          568
+        ]
+      },
+      {
+        "x": 54,
+        "y": 598,
+        "text": "Candidate access is conditional",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          542,
+          389,
+          670
+        ],
+        "measured_bounds": [
+          54,
+          584,
+          320,
+          598
+        ]
+      },
+      {
+        "x": 54,
+        "y": 627,
+        "text": "Fresh participants not yet allocated",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          542,
+          389,
+          670
+        ],
+        "measured_bounds": [
+          54,
+          613,
+          349,
+          631
+        ]
+      },
+      {
+        "x": 462,
+        "y": 564,
+        "text": "Synchronized references",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          457,
+          542,
+          793,
+          670
+        ],
+        "measured_bounds": [
+          462,
+          549,
+          712,
+          568
+        ]
+      },
+      {
+        "x": 462,
+        "y": 598,
+        "text": "Verify contacts / motion and alignment",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          457,
+          542,
+          793,
+          670
+        ],
+        "measured_bounds": [
+          462,
+          584,
+          784,
+          602
+        ]
+      },
+      {
+        "x": 462,
+        "y": 627,
+        "text": "Clinical side needs a separate record",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          457,
+          542,
+          793,
+          670
+        ],
+        "measured_bounds": [
+          462,
+          613,
+          775,
+          631
+        ]
+      },
+      {
+        "x": 866,
+        "y": 564,
+        "text": "Clinical change agreement",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          861,
+          542,
+          1151,
+          670
+        ],
+        "measured_bounds": [
+          866,
+          549,
+          1132,
+          568
+        ]
+      },
+      {
+        "x": 866,
+        "y": 598,
+        "text": "Only after endpoint validation",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          861,
+          542,
+          1151,
+          670
+        ],
+        "measured_bounds": [
+          866,
+          584,
+          1112,
+          602
+        ]
+      },
+      {
+        "x": 866,
+        "y": 627,
+        "text": "Needs a fresh participant cohort",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          861,
+          542,
+          1151,
+          670
+        ],
+        "measured_bounds": [
+          866,
+          613,
+          1136,
+          631
+        ]
+      },
+      {
+        "x": 36,
+        "y": 730,
+        "text": "Solid: existing pairing pipeline; new intervention pairs are pending. Dashed: annotation or access work required.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          716,
+          975,
+          734
+        ]
+      },
+      {
+        "x": 600,
+        "y": 784,
+        "text": "Training references fit models; held-out references score outputs. Deployment uses observations only.",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          111.09375,
+          769,
+          1089.09375,
+          788
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          402,
+          236
+        ],
+        [
+          444,
+          236
+        ]
+      ],
+      [
+        [
+          806,
+          236
+        ],
+        [
+          848,
+          236
+        ]
+      ],
+      [
+        [
+          402,
+          422
+        ],
+        [
+          444,
+          422
+        ]
+      ],
+      [
+        [
+          806,
+          422
+        ],
+        [
+          848,
+          422
+        ]
+      ],
+      [
+        [
+          402,
+          608
+        ],
+        [
+          444,
+          608
+        ]
+      ],
+      [
+        [
+          806,
+          608
+        ],
+        [
+          848,
+          608
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "14-paired-jepa-method.svg",
+    "title": "Predict reference features, then learn coordinate corrections",
+    "subtitle": "Paired JEPA is a proposed mechanism to test against matched coordinate training and simpler controls.",
+    "width": 1200,
+    "height": 992,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Predict reference features, then learn coordinate corrections",
+        "size": 30,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          21,
+          900,
+          48
+        ]
+      },
+      {
+        "x": 36,
+        "y": 78,
+        "text": "Paired JEPA is a proposed mechanism to test against matched coordinate training and simpler controls.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          64,
+          907,
+          82
+        ]
+      },
+      {
+        "x": 42,
+        "y": 142,
+        "text": "1. Pretraining: learn from paired observations and synthetic references",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          42,
+          125,
+          852,
+          147
+        ]
+      },
+      {
+        "x": 60,
+        "y": 218,
+        "text": "Observed pose track",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          55,
+          196,
+          269,
+          312
+        ],
+        "measured_bounds": [
+          60,
+          203,
+          268,
+          222
+        ]
+      },
+      {
+        "x": 60,
+        "y": 252,
+        "text": "Hide sampled tokens",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          55,
+          196,
+          269,
+          312
+        ],
+        "measured_bounds": [
+          60,
+          238,
+          237,
+          256
+        ]
+      },
+      {
+        "x": 60,
+        "y": 281,
+        "text": "Separate missingness",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          55,
+          196,
+          269,
+          312
+        ],
+        "measured_bounds": [
+          60,
+          267,
+          247,
+          285
+        ]
+      },
+      {
+        "x": 358,
+        "y": 218,
+        "text": "Student encoder",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          353,
+          196,
+          541,
+          312
+        ],
+        "measured_bounds": [
+          358,
+          203,
+          524,
+          218
+        ]
+      },
+      {
+        "x": 358,
+        "y": 252,
+        "text": "Turns context into",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          353,
+          196,
+          541,
+          312
+        ],
+        "measured_bounds": [
+          358,
+          238,
+          508,
+          252
+        ]
+      },
+      {
+        "x": 358,
+        "y": 281,
+        "text": "numerical features",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          353,
+          196,
+          541,
+          312
+        ],
+        "measured_bounds": [
+          358,
+          267,
+          514,
+          281
+        ]
+      },
+      {
+        "x": 632,
+        "y": 218,
+        "text": "Predictor",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          627,
+          196,
+          813,
+          312
+        ],
+        "measured_bounds": [
+          632,
+          203,
+          725,
+          218
+        ]
+      },
+      {
+        "x": 632,
+        "y": 252,
+        "text": "Estimates reference",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          627,
+          196,
+          813,
+          312
+        ],
+        "measured_bounds": [
+          632,
+          238,
+          801,
+          252
+        ]
+      },
+      {
+        "x": 632,
+        "y": 281,
+        "text": "features at queries",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          627,
+          196,
+          813,
+          312
+        ],
+        "measured_bounds": [
+          632,
+          267,
+          789,
+          285
+        ]
+      },
+      {
+        "x": 902,
+        "y": 218,
+        "text": "Predicted features",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          897,
+          196,
+          1143,
+          312
+        ],
+        "measured_bounds": [
+          902,
+          203,
+          1085,
+          218
+        ]
+      },
+      {
+        "x": 902,
+        "y": 252,
+        "text": "No reference coordinates",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          897,
+          196,
+          1143,
+          312
+        ],
+        "measured_bounds": [
+          902,
+          238,
+          1115,
+          252
+        ]
+      },
+      {
+        "x": 902,
+        "y": 281,
+        "text": "enter the student",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          897,
+          196,
+          1143,
+          312
+        ],
+        "measured_bounds": [
+          902,
+          267,
+          1045,
+          281
+        ]
+      },
+      {
+        "x": 60,
+        "y": 431,
+        "text": "Projected reference",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          55,
+          409,
+          269,
+          527
+        ],
+        "measured_bounds": [
+          60,
+          416,
+          256,
+          435
+        ]
+      },
+      {
+        "x": 60,
+        "y": 465,
+        "text": "Valid joints; paired time",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          55,
+          409,
+          269,
+          527
+        ],
+        "measured_bounds": [
+          60,
+          451,
+          255,
+          469
+        ]
+      },
+      {
+        "x": 60,
+        "y": 494,
+        "text": "Training input only",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          55,
+          409,
+          269,
+          527
+        ],
+        "measured_bounds": [
+          60,
+          480,
+          215,
+          498
+        ]
+      },
+      {
+        "x": 358,
+        "y": 431,
+        "text": "Teacher encoder",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          353,
+          409,
+          541,
+          527
+        ],
+        "measured_bounds": [
+          358,
+          416,
+          525,
+          431
+        ]
+      },
+      {
+        "x": 358,
+        "y": 465,
+        "text": "Slow copy of student",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          353,
+          409,
+          541,
+          527
+        ],
+        "measured_bounds": [
+          358,
+          451,
+          534,
+          469
+        ]
+      },
+      {
+        "x": 358,
+        "y": 494,
+        "text": "No loss gradient",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          353,
+          409,
+          541,
+          527
+        ],
+        "measured_bounds": [
+          358,
+          480,
+          496,
+          498
+        ]
+      },
+      {
+        "x": 632,
+        "y": 431,
+        "text": "Target features",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          627,
+          409,
+          813,
+          527
+        ],
+        "measured_bounds": [
+          632,
+          416,
+          782,
+          435
+        ]
+      },
+      {
+        "x": 632,
+        "y": 465,
+        "text": "Summaries of valid",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          627,
+          409,
+          813,
+          527
+        ],
+        "measured_bounds": [
+          632,
+          451,
+          794,
+          465
+        ]
+      },
+      {
+        "x": 632,
+        "y": 494,
+        "text": "reference sequences",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          627,
+          409,
+          813,
+          527
+        ],
+        "measured_bounds": [
+          632,
+          480,
+          809,
+          498
+        ]
+      },
+      {
+        "x": 902,
+        "y": 431,
+        "text": "Feature prediction loss",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          897,
+          409,
+          1143,
+          527
+        ],
+        "measured_bounds": [
+          902,
+          416,
+          1133,
+          435
+        ]
+      },
+      {
+        "x": 902,
+        "y": 465,
+        "text": "Compare eligible queries",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          897,
+          409,
+          1143,
+          527
+        ],
+        "measured_bounds": [
+          902,
+          451,
+          1112,
+          469
+        ]
+      },
+      {
+        "x": 902,
+        "y": 494,
+        "text": "Scale by valid target count",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          897,
+          409,
+          1143,
+          527
+        ],
+        "measured_bounds": [
+          902,
+          480,
+          1126,
+          498
+        ]
+      },
+      {
+        "x": 470,
+        "y": 355,
+        "text": "EMA: gradual",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          470,
+          342,
+          579,
+          359
+        ]
+      },
+      {
+        "x": 470,
+        "y": 380,
+        "text": "weight update",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          470,
+          366,
+          582,
+          384
+        ]
+      },
+      {
+        "x": 42,
+        "y": 560,
+        "text": "EMA means exponential moving average: gradual teacher weight updates with no loss gradient.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          42,
+          546,
+          805,
+          564
+        ]
+      },
+      {
+        "x": 42,
+        "y": 588,
+        "text": "Queries are locations to predict. A token is one joint over a short time block; invalid targets are excluded.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          42,
+          574,
+          872,
+          592
+        ]
+      },
+      {
+        "x": 42,
+        "y": 672,
+        "text": "2. Coordinate fitting and deployment",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          42,
+          655,
+          459,
+          677
+        ]
+      },
+      {
+        "x": 42,
+        "y": 709,
+        "text": "Fix the learned encoder; reference coordinates supervise the output network during training only.",
+        "size": 20,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          42,
+          694,
+          897,
+          713
+        ]
+      },
+      {
+        "x": 60,
+        "y": 784,
+        "text": "Observed pose track",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          55,
+          762,
+          269,
+          872
+        ],
+        "measured_bounds": [
+          60,
+          769,
+          268,
+          788
+        ]
+      },
+      {
+        "x": 60,
+        "y": 818,
+        "text": "Coordinates + times",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          55,
+          762,
+          269,
+          872
+        ],
+        "measured_bounds": [
+          60,
+          804,
+          229,
+          818
+        ]
+      },
+      {
+        "x": 60,
+        "y": 847,
+        "text": "Availability indicators",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          55,
+          762,
+          269,
+          872
+        ],
+        "measured_bounds": [
+          59,
+          833,
+          236,
+          851
+        ]
+      },
+      {
+        "x": 358,
+        "y": 784,
+        "text": "Frozen encoder",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          353,
+          762,
+          541,
+          872
+        ],
+        "measured_bounds": [
+          358,
+          769,
+          515,
+          784
+        ]
+      },
+      {
+        "x": 358,
+        "y": 818,
+        "text": "Weights remain fixed",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          353,
+          762,
+          541,
+          872
+        ],
+        "measured_bounds": [
+          358,
+          804,
+          535,
+          822
+        ]
+      },
+      {
+        "x": 358,
+        "y": 847,
+        "text": "Produces features",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          353,
+          762,
+          541,
+          872
+        ],
+        "measured_bounds": [
+          358,
+          833,
+          512,
+          847
+        ]
+      },
+      {
+        "x": 632,
+        "y": 784,
+        "text": "Coordinate readout",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          627,
+          762,
+          841,
+          872
+        ],
+        "measured_bounds": [
+          632,
+          769,
+          826,
+          784
+        ]
+      },
+      {
+        "x": 632,
+        "y": 818,
+        "text": "Learns joint corrections",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          627,
+          762,
+          841,
+          872
+        ],
+        "measured_bounds": [
+          632,
+          804,
+          828,
+          822
+        ]
+      },
+      {
+        "x": 632,
+        "y": 847,
+        "text": "from those features",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          627,
+          762,
+          841,
+          872
+        ],
+        "measured_bounds": [
+          632,
+          833,
+          796,
+          847
+        ]
+      },
+      {
+        "x": 932,
+        "y": 784,
+        "text": "Restored trajectory",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          927,
+          762,
+          1143,
+          872
+        ],
+        "measured_bounds": [
+          932,
+          769,
+          1125,
+          788
+        ]
+      },
+      {
+        "x": 932,
+        "y": 818,
+        "text": "Return to input units",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          927,
+          762,
+          1143,
+          872
+        ],
+        "measured_bounds": [
+          932,
+          804,
+          1102,
+          822
+        ]
+      },
+      {
+        "x": 932,
+        "y": 847,
+        "text": "Measure gait afterward",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          927,
+          762,
+          1143,
+          872
+        ],
+        "measured_bounds": [
+          932,
+          833,
+          1126,
+          851
+        ]
+      },
+      {
+        "x": 600,
+        "y": 929,
+        "text": "Deployment follows this lower row without reference inputs or teacher features.",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          202.1953125,
+          914,
+          998.1953125,
+          933
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          282,
+          255
+        ],
+        [
+          340,
+          255
+        ]
+      ],
+      [
+        [
+          554,
+          255
+        ],
+        [
+          614,
+          255
+        ]
+      ],
+      [
+        [
+          826,
+          255
+        ],
+        [
+          884,
+          255
+        ]
+      ],
+      [
+        [
+          282,
+          468
+        ],
+        [
+          340,
+          468
+        ]
+      ],
+      [
+        [
+          554,
+          468
+        ],
+        [
+          614,
+          468
+        ]
+      ],
+      [
+        [
+          826,
+          468
+        ],
+        [
+          884,
+          468
+        ]
+      ],
+      [
+        [
+          1018,
+          324
+        ],
+        [
+          1018,
+          397
+        ]
+      ],
+      [
+        [
+          447,
+          324
+        ],
+        [
+          447,
+          397
+        ]
+      ],
+      [
+        [
+          282,
+          815
+        ],
+        [
+          340,
+          815
+        ]
+      ],
+      [
+        [
+          554,
+          815
+        ],
+        [
+          614,
+          815
+        ]
+      ],
+      [
+        [
+          854,
+          815
+        ],
+        [
+          914,
+          815
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "15-graph-time-mask.svg",
+    "title": "Change both the anatomical region and the time interval",
+    "subtitle": "Two illustrative presentations of the same input; cells are joint \u00d7 time-block tokens, not measured results.",
+    "width": 1200,
+    "height": 780,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Change both the anatomical region and the time interval",
+        "size": 30,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          21,
+          838,
+          49
+        ]
+      },
+      {
+        "x": 36,
+        "y": 78,
+        "text": "Two illustrative presentations of the same input; cells are joint \u00d7 time-block tokens, not measured results.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          64,
+          915,
+          82
+        ]
+      },
+      {
+        "x": 175,
+        "y": 145,
+        "text": "Schematic body graph",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          57.0390625,
+          129,
+          293.0390625,
+          149
+        ]
+      },
+      {
+        "x": 175,
+        "y": 475,
+        "text": "Left hip \u2192 knee \u2192 ankle",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          70.984375,
+          461,
+          278.984375,
+          479
+        ]
+      },
+      {
+        "x": 175,
+        "y": 504,
+        "text": "L / R name anatomical sides.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          59.25,
+          490,
+          291.25,
+          504
+        ]
+      },
+      {
+        "x": 175,
+        "y": 530,
+        "text": "No camera view is implied.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          67.9375,
+          517,
+          281.9375,
+          534
+        ]
+      },
+      {
+        "x": 577,
+        "y": 163,
+        "text": "Draw 1: left leg hidden",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          459.6640625,
+          147,
+          694.6640625,
+          167
+        ]
+      },
+      {
+        "x": 577,
+        "y": 195,
+        "text": "Time blocks \u2192",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          514.5390625,
+          181,
+          639.5390625,
+          195
+        ]
+      },
+      {
+        "x": 455,
+        "y": 228,
+        "text": "1",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          449.9921875,
+          215,
+          459.9921875,
+          228
+        ]
+      },
+      {
+        "x": 489,
+        "y": 228,
+        "text": "2",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          483.9921875,
+          215,
+          493.9921875,
+          228
+        ]
+      },
+      {
+        "x": 523,
+        "y": 228,
+        "text": "3",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          517.9921875,
+          215,
+          527.9921875,
+          228
+        ]
+      },
+      {
+        "x": 557,
+        "y": 228,
+        "text": "4",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          551.9921875,
+          215,
+          561.9921875,
+          228
+        ]
+      },
+      {
+        "x": 591,
+        "y": 228,
+        "text": "5",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          585.9921875,
+          215,
+          595.9921875,
+          228
+        ]
+      },
+      {
+        "x": 625,
+        "y": 228,
+        "text": "6",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          619.9921875,
+          215,
+          629.9921875,
+          228
+        ]
+      },
+      {
+        "x": 659,
+        "y": 228,
+        "text": "7",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          653.9921875,
+          215,
+          663.9921875,
+          228
+        ]
+      },
+      {
+        "x": 693,
+        "y": 228,
+        "text": "8",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          687.9921875,
+          215,
+          697.9921875,
+          228
+        ]
+      },
+      {
+        "x": 428,
+        "y": 267,
+        "text": "L hip",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          387.515625,
+          253,
+          427.515625,
+          271
+        ]
+      },
+      {
+        "x": 428,
+        "y": 309,
+        "text": "R hip",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          383.65625,
+          295,
+          427.65625,
+          313
+        ]
+      },
+      {
+        "x": 428,
+        "y": 351,
+        "text": "L knee",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          371.671875,
+          337,
+          427.671875,
+          351
+        ]
+      },
+      {
+        "x": 428,
+        "y": 393,
+        "text": "R knee",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          367.8125,
+          379,
+          427.8125,
+          393
+        ]
+      },
+      {
+        "x": 428,
+        "y": 435,
+        "text": "L ankle",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          367.453125,
+          421,
+          428.453125,
+          435
+        ]
+      },
+      {
+        "x": 428,
+        "y": 477,
+        "text": "R ankle",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          363.59375,
+          463,
+          427.59375,
+          477
+        ]
+      },
+      {
+        "x": 1017,
+        "y": 163,
+        "text": "Draw 2: right leg hidden",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          891.7265625,
+          147,
+          1142.7265625,
+          167
+        ]
+      },
+      {
+        "x": 1017,
+        "y": 195,
+        "text": "Time blocks \u2192",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          954.5390625,
+          181,
+          1079.5390625,
+          195
+        ]
+      },
+      {
+        "x": 895,
+        "y": 228,
+        "text": "1",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          889.9921875,
+          215,
+          899.9921875,
+          228
+        ]
+      },
+      {
+        "x": 929,
+        "y": 228,
+        "text": "2",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          923.9921875,
+          215,
+          933.9921875,
+          228
+        ]
+      },
+      {
+        "x": 963,
+        "y": 228,
+        "text": "3",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          957.9921875,
+          215,
+          967.9921875,
+          228
+        ]
+      },
+      {
+        "x": 997,
+        "y": 228,
+        "text": "4",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          991.9921875,
+          215,
+          1001.9921875,
+          228
+        ]
+      },
+      {
+        "x": 1031,
+        "y": 228,
+        "text": "5",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          1025.9921875,
+          215,
+          1035.9921875,
+          228
+        ]
+      },
+      {
+        "x": 1065,
+        "y": 228,
+        "text": "6",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          1059.9921875,
+          215,
+          1069.9921875,
+          228
+        ]
+      },
+      {
+        "x": 1099,
+        "y": 228,
+        "text": "7",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          1093.9921875,
+          215,
+          1103.9921875,
+          228
+        ]
+      },
+      {
+        "x": 1133,
+        "y": 228,
+        "text": "8",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          1127.9921875,
+          215,
+          1137.9921875,
+          228
+        ]
+      },
+      {
+        "x": 868,
+        "y": 267,
+        "text": "L hip",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          827.515625,
+          253,
+          867.515625,
+          271
+        ]
+      },
+      {
+        "x": 868,
+        "y": 309,
+        "text": "R hip",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          823.65625,
+          295,
+          867.65625,
+          313
+        ]
+      },
+      {
+        "x": 868,
+        "y": 351,
+        "text": "L knee",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          811.671875,
+          337,
+          867.671875,
+          351
+        ]
+      },
+      {
+        "x": 868,
+        "y": 393,
+        "text": "R knee",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          807.8125,
+          379,
+          867.8125,
+          393
+        ]
+      },
+      {
+        "x": 868,
+        "y": 435,
+        "text": "L ankle",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          807.453125,
+          421,
+          868.453125,
+          435
+        ]
+      },
+      {
+        "x": 868,
+        "y": 477,
+        "text": "R ankle",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          803.59375,
+          463,
+          867.59375,
+          477
+        ]
+      },
+      {
+        "x": 585,
+        "y": 514,
+        "text": "Leg rows shown; arm rows omitted.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          443.40625,
+          500,
+          726.40625,
+          518
+        ]
+      },
+      {
+        "x": 1010,
+        "y": 514,
+        "text": "Left leg supplies context again.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          886.3828125,
+          500,
+          1133.3828125,
+          518
+        ]
+      },
+      {
+        "x": 600,
+        "y": 620,
+        "text": "Across advancing random draws, audit every eligible joint at every time position.",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          195.78125,
+          605,
+          1003.78125,
+          624
+        ]
+      },
+      {
+        "x": 600,
+        "y": 649,
+        "text": "A changing mask alone does not guarantee that hips or ankles receive enough context.",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          233.078125,
+          635,
+          966.078125,
+          653
+        ]
+      },
+      {
+        "x": 86,
+        "y": 719,
+        "text": "Available context",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          85,
+          705,
+          230,
+          719
+        ]
+      },
+      {
+        "x": 389,
+        "y": 719,
+        "text": "Artificially hidden",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          388,
+          705,
+          532,
+          723
+        ]
+      },
+      {
+        "x": 707,
+        "y": 719,
+        "text": "Naturally missing input",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          707,
+          705,
+          899,
+          723
+        ]
+      },
+      {
+        "x": 36,
+        "y": 759,
+        "text": "Artificial masks select available inputs. Reference-valid training targets are tracked in a separate array.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          35,
+          745,
+          896,
+          763
+        ]
+      }
+    ],
+    "connectors": []
+  },
+  {
+    "file": "16-response-estimand.svg",
+    "title": "Separate distortion of movement change from observation sensitivity",
+    "subtitle": "Illustrative arithmetic only: signed right-minus-left knee excursion in the image plane, measured in degrees.",
+    "width": 1200,
+    "height": 950,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Separate distortion of movement change from observation sensitivity",
+        "size": 30,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          21,
+          1026,
+          49
+        ]
+      },
+      {
+        "x": 36,
+        "y": 78,
+        "text": "Illustrative arithmetic only: signed right-minus-left knee excursion in the image plane, measured in degrees.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          64,
+          935,
+          82
+        ]
+      },
+      {
+        "x": 52,
+        "y": 157,
+        "text": "A. Change the motion; keep the observation condition fixed",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          52,
+          140,
+          732,
+          162
+        ]
+      },
+      {
+        "x": 56,
+        "y": 248,
+        "text": "Reference",
+        "size": 20,
+        "color": "#057b75",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          233,
+          153,
+          248
+        ]
+      },
+      {
+        "x": 319,
+        "y": 218,
+        "text": "2\u00b0",
+        "size": 20,
+        "color": "#057b75",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          309.4375,
+          203,
+          328.4375,
+          218
+        ]
+      },
+      {
+        "x": 607,
+        "y": 218,
+        "text": "6\u00b0",
+        "size": 20,
+        "color": "#057b75",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          597.4375,
+          203,
+          616.4375,
+          218
+        ]
+      },
+      {
+        "x": 319,
+        "y": 275,
+        "text": "Motion A",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          283.9765625,
+          261,
+          354.9765625,
+          275
+        ]
+      },
+      {
+        "x": 607,
+        "y": 275,
+        "text": "Motion B",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          571.4765625,
+          261,
+          642.4765625,
+          275
+        ]
+      },
+      {
+        "x": 737,
+        "y": 249,
+        "text": "\u0394 = +4\u00b0",
+        "size": 20,
+        "color": "#057b75",
+        "anchor": "end",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          669.0,
+          234,
+          737.0,
+          249
+        ]
+      },
+      {
+        "x": 56,
+        "y": 378,
+        "text": "Estimate",
+        "size": 20,
+        "color": "#2866a8",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          363,
+          139,
+          378
+        ]
+      },
+      {
+        "x": 355.0,
+        "y": 348,
+        "text": "2.5\u00b0",
+        "size": 20,
+        "color": "#2866a8",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          337.09375,
+          333,
+          373.09375,
+          348
+        ]
+      },
+      {
+        "x": 499.0,
+        "y": 348,
+        "text": "4.5\u00b0",
+        "size": 20,
+        "color": "#2866a8",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          481.09375,
+          333,
+          517.09375,
+          348
+        ]
+      },
+      {
+        "x": 355.0,
+        "y": 405,
+        "text": "Motion A",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          319.9765625,
+          391,
+          390.9765625,
+          405
+        ]
+      },
+      {
+        "x": 499.0,
+        "y": 405,
+        "text": "Motion B",
+        "size": 18,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          463.4765625,
+          391,
+          534.4765625,
+          405
+        ]
+      },
+      {
+        "x": 737,
+        "y": 379,
+        "text": "\u0394 = +2\u00b0",
+        "size": 20,
+        "color": "#2866a8",
+        "anchor": "end",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          669.0,
+          364,
+          737.0,
+          379
+        ]
+      },
+      {
+        "x": 823,
+        "y": 232,
+        "text": "Response distortion",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          818,
+          210,
+          1134,
+          377
+        ],
+        "measured_bounds": [
+          823,
+          216,
+          1036,
+          236
+        ]
+      },
+      {
+        "x": 823,
+        "y": 266,
+        "text": "Estimated change \u2212 true change",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          818,
+          210,
+          1134,
+          377
+        ],
+        "measured_bounds": [
+          823,
+          252,
+          1097,
+          270
+        ]
+      },
+      {
+        "x": 823,
+        "y": 295,
+        "text": "+2\u00b0 \u2212 (+4\u00b0) = \u22122\u00b0",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          818,
+          210,
+          1134,
+          377
+        ],
+        "measured_bounds": [
+          823,
+          281,
+          967,
+          299
+        ]
+      },
+      {
+        "x": 823,
+        "y": 324,
+        "text": "The change is underestimated.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          818,
+          210,
+          1134,
+          377
+        ],
+        "measured_bounds": [
+          823,
+          310,
+          1084,
+          328
+        ]
+      },
+      {
+        "x": 52,
+        "y": 449,
+        "text": "Baseline measurement error alone cannot describe this loss of movement response.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          52,
+          435,
+          761,
+          453
+        ]
+      },
+      {
+        "x": 52,
+        "y": 547,
+        "text": "B. Keep motion B fixed; add image occlusion at the same camera",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          52,
+          530,
+          796,
+          552
+        ]
+      },
+      {
+        "x": 56,
+        "y": 615,
+        "text": "Reference",
+        "size": 20,
+        "color": "#057b75",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          600,
+          153,
+          615
+        ]
+      },
+      {
+        "x": 276,
+        "y": 615,
+        "text": "6\u00b0",
+        "size": 22,
+        "color": "#057b75",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          265.484375,
+          599,
+          286.484375,
+          615
+        ]
+      },
+      {
+        "x": 546,
+        "y": 615,
+        "text": "6\u00b0",
+        "size": 22,
+        "color": "#057b75",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          535.484375,
+          599,
+          556.484375,
+          615
+        ]
+      },
+      {
+        "x": 737,
+        "y": 615,
+        "text": "\u0394 = 0\u00b0",
+        "size": 20,
+        "color": "#057b75",
+        "anchor": "end",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          680.6875,
+          600,
+          736.6875,
+          615
+        ]
+      },
+      {
+        "x": 56,
+        "y": 709,
+        "text": "Estimate",
+        "size": 20,
+        "color": "#2866a8",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          694,
+          139,
+          709
+        ]
+      },
+      {
+        "x": 276,
+        "y": 709,
+        "text": "4.5\u00b0",
+        "size": 22,
+        "color": "#2866a8",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          256.3125,
+          693,
+          295.3125,
+          709
+        ]
+      },
+      {
+        "x": 546,
+        "y": 709,
+        "text": "5.5\u00b0",
+        "size": 22,
+        "color": "#2866a8",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          526.3125,
+          693,
+          565.3125,
+          709
+        ]
+      },
+      {
+        "x": 737,
+        "y": 709,
+        "text": "\u0394 = +1\u00b0",
+        "size": 20,
+        "color": "#2866a8",
+        "anchor": "end",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          669.0,
+          694,
+          737.0,
+          709
+        ]
+      },
+      {
+        "x": 276,
+        "y": 750,
+        "text": "Clean image",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          222.6796875,
+          736,
+          329.6796875,
+          754
+        ]
+      },
+      {
+        "x": 546,
+        "y": 750,
+        "text": "Added occlusion",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          475.3046875,
+          736,
+          615.3046875,
+          750
+        ]
+      },
+      {
+        "x": 823,
+        "y": 615,
+        "text": "Observation-only error",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          818,
+          593,
+          1134,
+          760
+        ],
+        "measured_bounds": [
+          823,
+          599,
+          1062,
+          619
+        ]
+      },
+      {
+        "x": 823,
+        "y": 649,
+        "text": "Estimated change \u2212 true change",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          818,
+          593,
+          1134,
+          760
+        ],
+        "measured_bounds": [
+          823,
+          635,
+          1097,
+          653
+        ]
+      },
+      {
+        "x": 823,
+        "y": 678,
+        "text": "+1\u00b0 \u2212 0\u00b0 = +1\u00b0",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          818,
+          593,
+          1134,
+          760
+        ],
+        "measured_bounds": [
+          823,
+          664,
+          943,
+          678
+        ]
+      },
+      {
+        "x": 823,
+        "y": 707,
+        "text": "The observation changes error.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          818,
+          593,
+          1134,
+          760
+        ],
+        "measured_bounds": [
+          823,
+          693,
+          1086,
+          711
+        ]
+      },
+      {
+        "x": 52,
+        "y": 801,
+        "text": "If the camera changes, use its own projected reference; a 2D quantity may legitimately change.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          52,
+          787,
+          851,
+          805
+        ]
+      },
+      {
+        "x": 36,
+        "y": 874,
+        "text": "Knee excursion = 95th \u2212 5th percentile of the 2D hip\u2013knee\u2013ankle angle over a fixed reviewed interval.",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          860,
+          890,
+          878
+        ]
+      },
+      {
+        "x": 36,
+        "y": 910,
+        "text": "These image-plane quantities do not establish clinical 3D range of motion or a meaningful treatment effect.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          896,
+          931,
+          914
+        ]
+      }
+    ],
+    "connectors": []
+  }
+]
