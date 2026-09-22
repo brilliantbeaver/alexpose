@@ -1,0 +1,63 @@
+{
+  "scope": "Executable expansion of synthetic development comparison; no new empirical results",
+  "matrix": {
+    "train_people": 24,
+    "development_people": 8,
+    "windows_per_person": 4,
+    "phase_updates": [
+      200,
+      2000
+    ],
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "neural_arms": 8,
+    "neural_fits": 48,
+    "train_tracks": 576,
+    "development_tracks": 384
+  },
+  "remote_jobs_submitted": false,
+  "licensed_assets_or_H100_executed": false,
+  "validation": {
+    "new_selector_tests": 12,
+    "new_controller_tests": 22,
+    "new_numeric_analysis_tests": 8,
+    "new_installer_tests": 12,
+    "new_worker_sequence_tests": 2,
+    "readme_bash_blocks": 16,
+    "full_suite": "277 tests: 276 passed in combined run; one pre-existing temporary-Git installer fixture hit macOS OpenMP SIGABRT. Its complete module was rerun in a fresh process; see test output.",
+    "fixture_evidence": "Analytic software fixtures only, not empirical source evidence"
+  },
+  "independent_review": {
+    "reviewers": [
+      "expansion_design",
+      "expansion_feasibility",
+      "expansion_review"
+    ],
+    "resolved_findings": [
+      "Immutable summary snapshots for all six scopes",
+      "Account for earlier failed and successful allocations without double counting",
+      "Serialize launches across expansion names",
+      "Pin submitted request digest and verify allocation identity",
+      "Carry historical reservation sources and reject lost protection",
+      "Validate generic and typed GPU resource counts consistently",
+      "Installer rejects active diagnostics and unsafe symlink paths",
+      "Transfer artifact works without Git publication"
+    ]
+  },
+  "files": {
+    "scripts/research_directions/synthetic_training_v2/full_experiment.py": "f9fae2f0aadde45684debb9f1428f30a628337b467c4b7c6bc91bdba8bd21d0a",
+    "scripts/research_directions/synthetic_training_v2/expanded_inputs.py": "c804e24b58b50b18c57988fa08a918ad53f6ca58b41831140af5c6b378fbe3fd",
+    "scripts/research_directions/synthetic_training_v2/expansion_results.py": "14f9f309bac91d52456da316396b5ad0e6c2445199e04038fd9d92d76abd2eea",
+    "scripts/research_directions/synthetic_training_v2/package_full_experiment.py": "893cdeedf9702da5d645a7dd46ba6988bb0abc6eff5b6a372a92b36846c48ef2",
+    "slurm/synthetic-training-v2/full-experiment.sh": "e4b5335f488be6fd9843281270f535edb376ec9f8b3098d0e547f4e3c2d3a6ec",
+    "slurm/synthetic-training-v2/full-experiment.sbatch": "5f078f042c0d3c05298af34d6d30880572878bb649b2d165f930e3a1b3484983",
+    "slurm/synthetic-training-v2/README.md": "a07a646c14f5d785572778053eec921e357e09e98bf30a0878ad30c8eb19d0e3"
+  },
+  "installer": {
+    "path": "artifacts/synthetic-training-v2/full-experiment-install-20260919.sh",
+    "sha256": "c9998d34a328cc062560f94ca9ed780f5b119f8f65774c0a499012639322fb3f"
+  }
+}
