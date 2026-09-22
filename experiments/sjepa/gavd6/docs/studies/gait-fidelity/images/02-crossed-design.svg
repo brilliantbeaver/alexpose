@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+<title id="title">Separate movement change from observation change</title><desc id="desc">Each four-cell family comes from one source identity. This is a proposed design.</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
+<rect width="1000" height="500" fill="white"/>
+<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">Separate movement change from observation change</text>
+<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">Each four-cell family comes from one source identity. This is a proposed design.</text>
+<text x="417" y="124" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Clean observation</text>
+<text x="795" y="124" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Degraded observation</text>
+<text x="32" y="221" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="start" font-weight="bold">Motion A</text>
+<text x="32" y="374" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="start" font-weight="bold">Motion B</text>
+<rect x="265" y="148" width="305" height="116" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
+<text x="417.5" y="180" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">A · clean</text>
+<text x="417.5" y="212" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Reference Y00</text>
+<text x="417.5" y="239" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Restored estimate</text>
+<rect x="643" y="148" width="305" height="116" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="795.5" y="180" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">A · degraded</text>
+<text x="795.5" y="212" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Reference Y01</text>
+<text x="795.5" y="239" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Restored estimate</text>
+<rect x="265" y="300" width="305" height="116" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
+<text x="417.5" y="332" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">B · clean</text>
+<text x="417.5" y="364" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Reference Y10</text>
+<text x="417.5" y="391" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Restored estimate</text>
+<rect x="643" y="300" width="305" height="116" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="795.5" y="332" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">B · degraded</text>
+<text x="795.5" y="364" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Reference Y11</text>
+<text x="795.5" y="391" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Restored estimate</text>
+<polyline points="570,205 643,205" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="570,357 643,357" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="417,264 417,300" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="795,264 795,300" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="500" y="465" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="normal">Score changes in error; projected references can change with the camera.</text>
+</svg>

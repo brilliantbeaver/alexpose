@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="title desc">
+<title id="title">Keep artificial masks separate from missing detections</title><desc id="desc">The following contract is proposed for the new masking experiment.</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
+<rect width="1000" height="430" fill="white"/>
+<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">Keep artificial masks separate from missing detections</text>
+<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">The following contract is proposed for the new masking experiment.</text>
+<rect x="32" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="128.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Retain raw input</text>
+<text x="128.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Coordinates + times</text>
+<text x="128.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Detection validity</text>
+<rect x="280" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="376.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Draw a mask</text>
+<text x="376.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Graph region + span</text>
+<text x="376.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Independent RNG</text>
+<rect x="528" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="624.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Encode context</text>
+<text x="624.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">No hidden-coordinate</text>
+<text x="624.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">features or shortcuts</text>
+<rect x="776" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="872.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Score targets</text>
+<text x="872.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Reference validity</text>
+<text x="872.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Normalize loss count</text>
+<polyline points="224,200 280,200" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="472,200 528,200" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="720,200 776,200" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="500" y="326" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Training target mask ≠ detector missingness ≠ image visibility.</text>
+<text x="500" y="370" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="middle" font-weight="normal">Deployment receives observed tracks and validity; references are evaluator-only.</text>
+</svg>

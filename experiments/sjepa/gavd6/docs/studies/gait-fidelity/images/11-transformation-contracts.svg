@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="406" viewBox="0 0 1000 406" role="img" aria-labelledby="title desc">
+<title id="title">An image transform and a joint-label error are different</title><desc id="desc">Keep coordinates, anatomical names and validity aligned under every operation.</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
+<rect width="1000" height="406" fill="white"/>
+<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">An image transform and a joint-label error are different</text>
+<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">Keep coordinates, anatomical names and validity aligned under every operation.</text>
+<rect x="32" y="124" width="296" height="151" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="180.0" y="156" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Camera / image</text>
+<text x="180.0" y="188" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Update the projection</text>
+<text x="180.0" y="215" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Use same-view references</text>
+<rect x="352" y="124" width="296" height="151" rx="12" fill="#fff5e6" stroke="#d5e0e7"/>
+<text x="500.0" y="156" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Joint-slot exchange</text>
+<text x="500.0" y="188" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Permute input metadata</text>
+<text x="500.0" y="215" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Keep anatomical truth fixed</text>
+<rect x="672" y="124" width="296" height="151" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
+<text x="820.0" y="156" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Physical movement</text>
+<text x="820.0" y="188" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Retain its actual change</text>
+<text x="820.0" y="215" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Check coupled joint effects</text>
+<text x="500" y="338" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Do not force equal left–right motion or identical pixels across cameras.</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="440" viewBox="0 0 1000 440" role="img" aria-labelledby="title desc">
+<title id="title">Test masking and prediction objectives separately</title><desc id="desc">Six pretraining arms share the same new data, mask budget and coordinate readout.</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
+<rect width="1000" height="440" fill="white"/>
+<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">Test masking and prediction objectives separately</text>
+<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">Six pretraining arms share the same new data, mask budget and coordinate readout.</text>
+<text x="82" y="163" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="start" font-weight="bold">Objective</text>
+<text x="340" y="123" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Current blocks</text>
+<text x="586" y="123" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Random tokens</text>
+<text x="832" y="123" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Graph + time</text>
+<text x="32" y="213" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="bold">Coordinates</text>
+<rect x="229" y="166" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="340.0" y="198" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
+<text x="340.0" y="230" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
+<rect x="475" y="166" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="586.0" y="198" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
+<text x="586.0" y="230" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
+<rect x="721" y="166" width="222" height="90" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
+<text x="832.0" y="198" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
+<text x="832.0" y="230" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
+<text x="32" y="324" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="bold">Paired JEPA</text>
+<rect x="229" y="277" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="340.0" y="309" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
+<text x="340.0" y="341" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
+<rect x="475" y="277" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
+<text x="586.0" y="309" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
+<text x="586.0" y="341" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
+<rect x="721" y="277" width="222" height="90" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
+<text x="832.0" y="309" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
+<text x="832.0" y="341" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
+<text x="500" y="410" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="middle" font-weight="normal">Also retain direct end-to-end, no-pretraining, calibration and smoothing controls.</text>
+</svg>

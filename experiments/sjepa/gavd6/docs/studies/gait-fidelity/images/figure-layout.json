@@ -1,0 +1,2459 @@
+[
+  {
+    "file": "01-research-question.svg",
+    "title": "Preserve the movement being measured",
+    "subtitle": "Three different causes of an unusual pose trace require different responses.",
+    "height": 390,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Preserve the movement being measured",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Three different causes of an unusual pose trace require different responses.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 180.0,
+        "y": 158,
+        "text": "Real movement",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          134,
+          320,
+          264
+        ]
+      },
+      {
+        "x": 180.0,
+        "y": 190,
+        "text": "Unequal left / right steps",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          134,
+          320,
+          264
+        ]
+      },
+      {
+        "x": 180.0,
+        "y": 217,
+        "text": "Retain the difference",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          134,
+          320,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 158,
+        "text": "Observation error",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          360,
+          134,
+          640,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 190,
+        "text": "Blur, gaps or jitter",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          360,
+          134,
+          640,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 217,
+        "text": "Reduce estimation error",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          360,
+          134,
+          640,
+          264
+        ]
+      },
+      {
+        "x": 820.0,
+        "y": 158,
+        "text": "Uncertain side",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          680,
+          134,
+          960,
+          264
+        ]
+      },
+      {
+        "x": 820.0,
+        "y": 190,
+        "text": "Left / right assignment",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          680,
+          134,
+          960,
+          264
+        ]
+      },
+      {
+        "x": 820.0,
+        "y": 217,
+        "text": "Resolve or report uncertainty",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          680,
+          134,
+          960,
+          264
+        ]
+      },
+      {
+        "x": 500,
+        "y": 332,
+        "text": "Judge restoration against an independent reference for the named outcome.",
+        "size": 19,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": []
+  },
+  {
+    "file": "02-crossed-design.svg",
+    "title": "Separate movement change from observation change",
+    "subtitle": "Each four-cell family comes from one source identity. This is a proposed design.",
+    "height": 500,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Separate movement change from observation change",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Each four-cell family comes from one source identity. This is a proposed design.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 417,
+        "y": 124,
+        "text": "Clean observation",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 795,
+        "y": 124,
+        "text": "Degraded observation",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 221,
+        "text": "Motion A",
+        "size": 21,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 374,
+        "text": "Motion B",
+        "size": 21,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 417.5,
+        "y": 180,
+        "text": "A \u00b7 clean",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          273,
+          156,
+          562,
+          256
+        ]
+      },
+      {
+        "x": 417.5,
+        "y": 212,
+        "text": "Reference Y00",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          273,
+          156,
+          562,
+          256
+        ]
+      },
+      {
+        "x": 417.5,
+        "y": 239,
+        "text": "Restored estimate",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          273,
+          156,
+          562,
+          256
+        ]
+      },
+      {
+        "x": 795.5,
+        "y": 180,
+        "text": "A \u00b7 degraded",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          651,
+          156,
+          940,
+          256
+        ]
+      },
+      {
+        "x": 795.5,
+        "y": 212,
+        "text": "Reference Y01",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          651,
+          156,
+          940,
+          256
+        ]
+      },
+      {
+        "x": 795.5,
+        "y": 239,
+        "text": "Restored estimate",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          651,
+          156,
+          940,
+          256
+        ]
+      },
+      {
+        "x": 417.5,
+        "y": 332,
+        "text": "B \u00b7 clean",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          273,
+          308,
+          562,
+          408
+        ]
+      },
+      {
+        "x": 417.5,
+        "y": 364,
+        "text": "Reference Y10",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          273,
+          308,
+          562,
+          408
+        ]
+      },
+      {
+        "x": 417.5,
+        "y": 391,
+        "text": "Restored estimate",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          273,
+          308,
+          562,
+          408
+        ]
+      },
+      {
+        "x": 795.5,
+        "y": 332,
+        "text": "B \u00b7 degraded",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          651,
+          308,
+          940,
+          408
+        ]
+      },
+      {
+        "x": 795.5,
+        "y": 364,
+        "text": "Reference Y11",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          651,
+          308,
+          940,
+          408
+        ]
+      },
+      {
+        "x": 795.5,
+        "y": 391,
+        "text": "Restored estimate",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          651,
+          308,
+          940,
+          408
+        ]
+      },
+      {
+        "x": 500,
+        "y": 465,
+        "text": "Score changes in error; projected references can change with the camera.",
+        "size": 19,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": [
+      [
+        [
+          570,
+          205
+        ],
+        [
+          643,
+          205
+        ]
+      ],
+      [
+        [
+          570,
+          357
+        ],
+        [
+          643,
+          357
+        ]
+      ],
+      [
+        [
+          417,
+          264
+        ],
+        [
+          417,
+          300
+        ]
+      ],
+      [
+        [
+          795,
+          264
+        ],
+        [
+          795,
+          300
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "03-changing-graph-masks.svg",
+    "title": "Give each joint opportunities to supply context",
+    "subtitle": "Illustrative body12 masks at one time block; each draw hides a different connected region.",
+    "height": 480,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Give each joint opportunities to supply context",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Illustrative body12 masks at one time block; each draw hides a different connected region.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 180,
+        "y": 124,
+        "text": "Draw 1: left leg",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 143,
+        "y": 411,
+        "text": "L",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 217,
+        "y": 411,
+        "text": "R",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 500,
+        "y": 124,
+        "text": "Draw 2: right arm",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 463,
+        "y": 411,
+        "text": "L",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 537,
+        "y": 411,
+        "text": "R",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 820,
+        "y": 124,
+        "text": "Draw 3: trunk",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 783,
+        "y": 411,
+        "text": "L",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 857,
+        "y": 411,
+        "text": "R",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 236,
+        "y": 457,
+        "text": "Context",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 406,
+        "y": 457,
+        "text": "Training mask",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 685,
+        "y": 457,
+        "text": "L / R are anatomical labels",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      }
+    ],
+    "lines": []
+  },
+  {
+    "file": "04-mask-contract.svg",
+    "title": "Keep artificial masks separate from missing detections",
+    "subtitle": "The following contract is proposed for the new masking experiment.",
+    "height": 430,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Keep artificial masks separate from missing detections",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "The following contract is proposed for the new masking experiment.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 128.0,
+        "y": 162,
+        "text": "Retain raw input",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          138,
+          216,
+          262
+        ]
+      },
+      {
+        "x": 128.0,
+        "y": 194,
+        "text": "Coordinates + times",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          138,
+          216,
+          262
+        ]
+      },
+      {
+        "x": 128.0,
+        "y": 221,
+        "text": "Detection validity",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          138,
+          216,
+          262
+        ]
+      },
+      {
+        "x": 376.0,
+        "y": 162,
+        "text": "Draw a mask",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          288,
+          138,
+          464,
+          262
+        ]
+      },
+      {
+        "x": 376.0,
+        "y": 194,
+        "text": "Graph region + span",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          288,
+          138,
+          464,
+          262
+        ]
+      },
+      {
+        "x": 376.0,
+        "y": 221,
+        "text": "Independent RNG",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          288,
+          138,
+          464,
+          262
+        ]
+      },
+      {
+        "x": 624.0,
+        "y": 162,
+        "text": "Encode context",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          536,
+          138,
+          712,
+          262
+        ]
+      },
+      {
+        "x": 624.0,
+        "y": 194,
+        "text": "No hidden-coordinate",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          536,
+          138,
+          712,
+          262
+        ]
+      },
+      {
+        "x": 624.0,
+        "y": 221,
+        "text": "features or shortcuts",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          536,
+          138,
+          712,
+          262
+        ]
+      },
+      {
+        "x": 872.0,
+        "y": 162,
+        "text": "Score targets",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          784,
+          138,
+          960,
+          262
+        ]
+      },
+      {
+        "x": 872.0,
+        "y": 194,
+        "text": "Reference validity",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          784,
+          138,
+          960,
+          262
+        ]
+      },
+      {
+        "x": 872.0,
+        "y": 221,
+        "text": "Normalize loss count",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          784,
+          138,
+          960,
+          262
+        ]
+      },
+      {
+        "x": 500,
+        "y": 326,
+        "text": "Training target mask \u2260 detector missingness \u2260 image visibility.",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 500,
+        "y": 370,
+        "text": "Deployment receives observed tracks and validity; references are evaluator-only.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": [
+      [
+        [
+          224,
+          200
+        ],
+        [
+          280,
+          200
+        ]
+      ],
+      [
+        [
+          472,
+          200
+        ],
+        [
+          528,
+          200
+        ]
+      ],
+      [
+        [
+          720,
+          200
+        ],
+        [
+          776,
+          200
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "05-coverage-audit.svg",
+    "title": "Audit every joint at every time position",
+    "subtitle": "A changing mask can still leave the same central tokens rarely visible.",
+    "height": 445,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Audit every joint at every time position",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "A changing mask can still leave the same central tokens rarely visible.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 172.0,
+        "y": 162,
+        "text": "Window-level count",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          138,
+          304,
+          258
+        ]
+      },
+      {
+        "x": 172.0,
+        "y": 194,
+        "text": "\u201cHip seen at least once\u201d",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          138,
+          304,
+          258
+        ]
+      },
+      {
+        "x": 172.0,
+        "y": 221,
+        "text": "Can hide central starvation",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          138,
+          304,
+          258
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 162,
+        "text": "Joint \u00d7 time coverage",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          368,
+          138,
+          632,
+          258
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 194,
+        "text": "Count context and targets",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          368,
+          138,
+          632,
+          258
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 221,
+        "text": "Across an advancing RNG",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          368,
+          138,
+          632,
+          258
+        ]
+      },
+      {
+        "x": 828.0,
+        "y": 162,
+        "text": "Accept the sampler",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          696,
+          138,
+          960,
+          258
+        ]
+      },
+      {
+        "x": 828.0,
+        "y": 194,
+        "text": "Both roles if eligible",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          696,
+          138,
+          960,
+          258
+        ]
+      },
+      {
+        "x": 828.0,
+        "y": 221,
+        "text": "Check paired-side balance",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          696,
+          138,
+          960,
+          258
+        ]
+      },
+      {
+        "x": 500,
+        "y": 320,
+        "text": "Retain achieved mask rate, span lengths, rejection rate and natural missingness.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 500,
+        "y": 390,
+        "text": "No permanent hip or ankle mask. Verify this empirically before training.",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      }
+    ],
+    "lines": [
+      [
+        [
+          312,
+          198
+        ],
+        [
+          360,
+          198
+        ]
+      ],
+      [
+        [
+          640,
+          198
+        ],
+        [
+          688,
+          198
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "06-matched-mask-experiment.svg",
+    "title": "Test masking and prediction objectives separately",
+    "subtitle": "Six pretraining arms share the same new data, mask budget and coordinate readout.",
+    "height": 440,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Test masking and prediction objectives separately",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Six pretraining arms share the same new data, mask budget and coordinate readout.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 82,
+        "y": 163,
+        "text": "Objective",
+        "size": 18,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 340,
+        "y": 123,
+        "text": "Current blocks",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 586,
+        "y": 123,
+        "text": "Random tokens",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 832,
+        "y": 123,
+        "text": "Graph + time",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 213,
+        "text": "Coordinates",
+        "size": 20,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 340.0,
+        "y": 198,
+        "text": "Matched arm",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          237,
+          174,
+          443,
+          248
+        ]
+      },
+      {
+        "x": 340.0,
+        "y": 230,
+        "text": "Same target exposure",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          237,
+          174,
+          443,
+          248
+        ]
+      },
+      {
+        "x": 586.0,
+        "y": 198,
+        "text": "Matched arm",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          483,
+          174,
+          689,
+          248
+        ]
+      },
+      {
+        "x": 586.0,
+        "y": 230,
+        "text": "Same target exposure",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          483,
+          174,
+          689,
+          248
+        ]
+      },
+      {
+        "x": 832.0,
+        "y": 198,
+        "text": "Matched arm",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          729,
+          174,
+          935,
+          248
+        ]
+      },
+      {
+        "x": 832.0,
+        "y": 230,
+        "text": "Same target exposure",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          729,
+          174,
+          935,
+          248
+        ]
+      },
+      {
+        "x": 32,
+        "y": 324,
+        "text": "Paired JEPA",
+        "size": 20,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 340.0,
+        "y": 309,
+        "text": "Matched arm",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          237,
+          285,
+          443,
+          359
+        ]
+      },
+      {
+        "x": 340.0,
+        "y": 341,
+        "text": "Same target exposure",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          237,
+          285,
+          443,
+          359
+        ]
+      },
+      {
+        "x": 586.0,
+        "y": 309,
+        "text": "Matched arm",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          483,
+          285,
+          689,
+          359
+        ]
+      },
+      {
+        "x": 586.0,
+        "y": 341,
+        "text": "Same target exposure",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          483,
+          285,
+          689,
+          359
+        ]
+      },
+      {
+        "x": 832.0,
+        "y": 309,
+        "text": "Matched arm",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          729,
+          285,
+          935,
+          359
+        ]
+      },
+      {
+        "x": 832.0,
+        "y": 341,
+        "text": "Same target exposure",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          729,
+          285,
+          935,
+          359
+        ]
+      },
+      {
+        "x": 500,
+        "y": 410,
+        "text": "Also retain direct end-to-end, no-pretraining, calibration and smoothing controls.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": []
+  },
+  {
+    "file": "07-video-evidence.svg",
+    "title": "Use the local videos for the claims they can support",
+    "subtitle": "Footage and folder labels are available; independent gait references remain to be established.",
+    "height": 470,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Use the local videos for the claims they can support",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Footage and folder labels are available; independent gait references remain to be established.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 178.0,
+        "y": 158,
+        "text": "Available now",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          134,
+          316,
+          257
+        ]
+      },
+      {
+        "x": 178.0,
+        "y": 190,
+        "text": "Natural imaging challenges",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          134,
+          316,
+          257
+        ]
+      },
+      {
+        "x": 178.0,
+        "y": 217,
+        "text": "Qualitative failure review",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          134,
+          316,
+          257
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 158,
+        "text": "After annotation",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          362,
+          134,
+          638,
+          257
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 190,
+        "text": "Visible joint / side checks",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          362,
+          134,
+          638,
+          257
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 217,
+        "text": "Reviewer disagreement",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          362,
+          134,
+          638,
+          257
+        ]
+      },
+      {
+        "x": 822.0,
+        "y": 158,
+        "text": "Needs added reference",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          684,
+          134,
+          960,
+          257
+        ]
+      },
+      {
+        "x": 822.0,
+        "y": 190,
+        "text": "Clinical measurement error",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          684,
+          134,
+          960,
+          257
+        ]
+      },
+      {
+        "x": 822.0,
+        "y": 217,
+        "text": "Affected side or real change",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          684,
+          134,
+          960,
+          257
+        ]
+      },
+      {
+        "x": 500,
+        "y": 326,
+        "text": "An MS or PD folder label does not identify an affected limb.",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold"
+      },
+      {
+        "x": 500,
+        "y": 366,
+        "text": "Another pose estimator supplies a comparison, not independent ground truth.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 500,
+        "y": 414,
+        "text": "Keep this collection as development until source overlap and rights are reviewed.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": []
+  },
+  {
+    "file": "08-data-review-view.svg",
+    "title": "Review footage together with the quantities being measured",
+    "subtitle": "Viewer design: the local gallery currently plays raw video and retains review metadata.",
+    "height": 520,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Review footage together with the quantities being measured",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Viewer design: the local gallery currently plays raw video and retains review metadata.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 192.0,
+        "y": 170,
+        "text": "Original video",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          60,
+          146,
+          324,
+          264
+        ]
+      },
+      {
+        "x": 192.0,
+        "y": 202,
+        "text": "Native timestamps",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          60,
+          146,
+          324,
+          264
+        ]
+      },
+      {
+        "x": 192.0,
+        "y": 229,
+        "text": "View, cut and visibility",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          60,
+          146,
+          324,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 170,
+        "text": "Overlay comparison",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          368,
+          146,
+          632,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 202,
+        "text": "Input / restored skeleton",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          368,
+          146,
+          632,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 229,
+        "text": "Reference if available",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          368,
+          146,
+          632,
+          264
+        ]
+      },
+      {
+        "x": 808.0,
+        "y": 170,
+        "text": "Left / right traces",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          676,
+          146,
+          940,
+          264
+        ]
+      },
+      {
+        "x": 808.0,
+        "y": 202,
+        "text": "Shared physical time",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          676,
+          146,
+          940,
+          264
+        ]
+      },
+      {
+        "x": 808.0,
+        "y": 229,
+        "text": "Fixed axes and units",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          676,
+          146,
+          940,
+          264
+        ]
+      },
+      {
+        "x": 500,
+        "y": 355,
+        "text": "One linked time cursor; no independent warping of the two legs.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 500,
+        "y": 398,
+        "text": "Annotate: visible \u00b7 uncertain side \u00b7 cut \u00b7 missing output \u00b7 reference unavailable",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 500,
+        "y": 485,
+        "text": "Synchronized overlays and quantitative traces are planned work, not generated results.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": [
+      [
+        [
+          62,
+          316
+        ],
+        [
+          938,
+          316
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "09-source-splits.svg",
+    "title": "Split source families before extracting windows",
+    "subtitle": "The current 41 filename-derived sources are not verified independent people.",
+    "height": 470,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Split source families before extracting windows",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "The current 41 filename-derived sources are not verified independent people.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 166.0,
+        "y": 158,
+        "text": "Audit original sources",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          134,
+          292,
+          264
+        ]
+      },
+      {
+        "x": 166.0,
+        "y": 190,
+        "text": "Across GAVD and MS / PD",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          134,
+          292,
+          264
+        ]
+      },
+      {
+        "x": 166.0,
+        "y": 217,
+        "text": "Link duplicate people if known",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          134,
+          292,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 158,
+        "text": "Assign one partition",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          373,
+          134,
+          627,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 190,
+        "text": "All clips from that group",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          373,
+          134,
+          627,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 217,
+        "text": "All derived versions",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          373,
+          134,
+          627,
+          264
+        ]
+      },
+      {
+        "x": 834.0,
+        "y": 158,
+        "text": "Then create windows",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          708,
+          134,
+          960,
+          264
+        ]
+      },
+      {
+        "x": 834.0,
+        "y": 190,
+        "text": "Overlaps stay together",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          708,
+          134,
+          960,
+          264
+        ]
+      },
+      {
+        "x": 834.0,
+        "y": 217,
+        "text": "No split by frame or clip",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          708,
+          134,
+          960,
+          264
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 362,
+        "text": "Report uncertainty by source family",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          206,
+          338,
+          794,
+          419
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 394,
+        "text": "Person identity and cross-source dependence remain unverified",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          206,
+          338,
+          794,
+          419
+        ]
+      }
+    ],
+    "lines": [
+      [
+        [
+          300,
+          199
+        ],
+        [
+          365,
+          199
+        ]
+      ],
+      [
+        [
+          635,
+          199
+        ],
+        [
+          700,
+          199
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "10-assignment-uncertainty.svg",
+    "title": "Retain plausible side assignments before measuring gait",
+    "subtitle": "Illustrative case: two equally plausible assignments imply opposite signed differences.",
+    "height": 450,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Retain plausible side assignments before measuring gait",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Illustrative case: two equally plausible assignments imply opposite signed differences.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 161.0,
+        "y": 167,
+        "text": "Assignment 1",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          143,
+          282,
+          263
+        ]
+      },
+      {
+        "x": 161.0,
+        "y": 199,
+        "text": "Signed difference: +a",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          143,
+          282,
+          263
+        ]
+      },
+      {
+        "x": 161.0,
+        "y": 226,
+        "text": "Probability: 0.5",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          143,
+          282,
+          263
+        ]
+      },
+      {
+        "x": 161.0,
+        "y": 326,
+        "text": "Assignment 2",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          302,
+          282,
+          422
+        ]
+      },
+      {
+        "x": 161.0,
+        "y": 358,
+        "text": "Signed difference: \u2212a",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          302,
+          282,
+          422
+        ]
+      },
+      {
+        "x": 161.0,
+        "y": 385,
+        "text": "Probability: 0.5",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          302,
+          282,
+          422
+        ]
+      },
+      {
+        "x": 677.0,
+        "y": 170,
+        "text": "Signed mean is zero",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          394,
+          146,
+          960,
+          234
+        ]
+      },
+      {
+        "x": 677.0,
+        "y": 202,
+        "text": "This alone cannot establish a symmetric movement.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          394,
+          146,
+          960,
+          234
+        ]
+      },
+      {
+        "x": 677.0,
+        "y": 330,
+        "text": "Magnitude is a in both assignments",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          394,
+          306,
+          960,
+          394
+        ]
+      },
+      {
+        "x": 677.0,
+        "y": 362,
+        "text": "Measure each hypothesis, then summarize uncertainty.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          394,
+          306,
+          960,
+          394
+        ]
+      }
+    ],
+    "lines": [
+      [
+        [
+          290,
+          203
+        ],
+        [
+          337,
+          203
+        ]
+      ],
+      [
+        [
+          337,
+          203
+        ],
+        [
+          337,
+          282
+        ]
+      ],
+      [
+        [
+          290,
+          362
+        ],
+        [
+          337,
+          362
+        ]
+      ],
+      [
+        [
+          337,
+          362
+        ],
+        [
+          337,
+          282
+        ]
+      ],
+      [
+        [
+          337,
+          282
+        ],
+        [
+          360,
+          282
+        ]
+      ],
+      [
+        [
+          360,
+          282
+        ],
+        [
+          360,
+          190
+        ]
+      ],
+      [
+        [
+          360,
+          190
+        ],
+        [
+          386,
+          190
+        ]
+      ],
+      [
+        [
+          337,
+          282
+        ],
+        [
+          360,
+          282
+        ]
+      ],
+      [
+        [
+          360,
+          282
+        ],
+        [
+          360,
+          350
+        ]
+      ],
+      [
+        [
+          360,
+          350
+        ],
+        [
+          386,
+          350
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "11-transformation-contracts.svg",
+    "title": "An image transform and a joint-label error are different",
+    "subtitle": "Keep coordinates, anatomical names and validity aligned under every operation.",
+    "height": 406,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "An image transform and a joint-label error are different",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "Keep coordinates, anatomical names and validity aligned under every operation.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 180.0,
+        "y": 156,
+        "text": "Camera / image",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          132,
+          320,
+          267
+        ]
+      },
+      {
+        "x": 180.0,
+        "y": 188,
+        "text": "Update the projection",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          132,
+          320,
+          267
+        ]
+      },
+      {
+        "x": 180.0,
+        "y": 215,
+        "text": "Use same-view references",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          132,
+          320,
+          267
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 156,
+        "text": "Joint-slot exchange",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          360,
+          132,
+          640,
+          267
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 188,
+        "text": "Permute input metadata",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          360,
+          132,
+          640,
+          267
+        ]
+      },
+      {
+        "x": 500.0,
+        "y": 215,
+        "text": "Keep anatomical truth fixed",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          360,
+          132,
+          640,
+          267
+        ]
+      },
+      {
+        "x": 820.0,
+        "y": 156,
+        "text": "Physical movement",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          680,
+          132,
+          960,
+          267
+        ]
+      },
+      {
+        "x": 820.0,
+        "y": 188,
+        "text": "Retain its actual change",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          680,
+          132,
+          960,
+          267
+        ]
+      },
+      {
+        "x": 820.0,
+        "y": 215,
+        "text": "Check coupled joint effects",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          680,
+          132,
+          960,
+          267
+        ]
+      },
+      {
+        "x": 500,
+        "y": 338,
+        "text": "Do not force equal left\u2013right motion or identical pixels across cameras.",
+        "size": 20,
+        "anchor": "middle",
+        "weight": "bold"
+      }
+    ],
+    "lines": []
+  },
+  {
+    "file": "12-evidence-workflow.svg",
+    "title": "Advance from verified inputs to a frozen comparison",
+    "subtitle": "New masks and real-video references must pass their checks before any new efficacy claim.",
+    "height": 440,
+    "labels": [
+      {
+        "x": 32,
+        "y": 40,
+        "text": "Advance from verified inputs to a frozen comparison",
+        "size": 27,
+        "anchor": "start",
+        "weight": "bold"
+      },
+      {
+        "x": 32,
+        "y": 72,
+        "text": "New masks and real-video references must pass their checks before any new efficacy claim.",
+        "size": 18,
+        "anchor": "start",
+        "weight": "normal"
+      },
+      {
+        "x": 128.0,
+        "y": 167,
+        "text": "Audit inputs",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          40,
+          143,
+          216,
+          278
+        ]
+      },
+      {
+        "x": 128.0,
+        "y": 199,
+        "text": "Anatomy + time",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          143,
+          216,
+          278
+        ]
+      },
+      {
+        "x": 128.0,
+        "y": 226,
+        "text": "Groups + rights",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          40,
+          143,
+          216,
+          278
+        ]
+      },
+      {
+        "x": 376.0,
+        "y": 167,
+        "text": "Check masks",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          288,
+          143,
+          464,
+          278
+        ]
+      },
+      {
+        "x": 376.0,
+        "y": 199,
+        "text": "Coverage audit",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          288,
+          143,
+          464,
+          278
+        ]
+      },
+      {
+        "x": 376.0,
+        "y": 226,
+        "text": "Gradient check",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          288,
+          143,
+          464,
+          278
+        ]
+      },
+      {
+        "x": 624.0,
+        "y": 167,
+        "text": "Compare on dev",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          536,
+          143,
+          712,
+          278
+        ]
+      },
+      {
+        "x": 624.0,
+        "y": 199,
+        "text": "Position + response",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          536,
+          143,
+          712,
+          278
+        ]
+      },
+      {
+        "x": 624.0,
+        "y": 226,
+        "text": "Matched controls",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          536,
+          143,
+          712,
+          278
+        ]
+      },
+      {
+        "x": 872.0,
+        "y": 167,
+        "text": "Confirm once",
+        "size": 21,
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          784,
+          143,
+          960,
+          278
+        ]
+      },
+      {
+        "x": 872.0,
+        "y": 199,
+        "text": "Freeze protocol",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          784,
+          143,
+          960,
+          278
+        ]
+      },
+      {
+        "x": 872.0,
+        "y": 226,
+        "text": "Fresh source groups",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          784,
+          143,
+          960,
+          278
+        ]
+      },
+      {
+        "x": 500,
+        "y": 346,
+        "text": "Choose useful margins from reference precision; repeated renders are not new people.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      },
+      {
+        "x": 500,
+        "y": 394,
+        "text": "If references cannot resolve the endpoint, retain a bounded engineering conclusion.",
+        "size": 18,
+        "anchor": "middle",
+        "weight": "normal"
+      }
+    ],
+    "lines": [
+      [
+        [
+          224,
+          211
+        ],
+        [
+          280,
+          211
+        ]
+      ],
+      [
+        [
+          472,
+          211
+        ],
+        [
+          528,
+          211
+        ]
+      ],
+      [
+        [
+          720,
+          211
+        ],
+        [
+          776,
+          211
+        ]
+      ]
+    ]
+  }
+]
