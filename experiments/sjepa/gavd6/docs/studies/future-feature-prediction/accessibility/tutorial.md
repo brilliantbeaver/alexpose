@@ -30,7 +30,7 @@ from the third category into the first.
 
 Read this document alongside the [laterality paper](../../../../../gavd5-drift/neurips-laterality/docs/fmts_revisions/paper_v8.pdf),
 the [direct-v3 repair assessment](../gate/results.md),
-and the [prospective cached-panel protocol](../../iclr/02_cached_panel_protocol.md). The
+and the [prospective cached-panel protocol](../../../neurips-workshop/02_cached_panel_protocol.md). The
 new notebooks follow the laterality suite's sequence, starting at 19, and live
 in [notebooks/target_accessibility](../../../../notebooks/target_accessibility/).
 
@@ -448,7 +448,7 @@ From the repository root, the workflow is:
 .venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py freeze \
   --source-run outputs/future-innovation-direct-v3-dev-20260911 \
   --output-root outputs/iclr-bridge-cached-20260911 \
-  --protocol-document docs/studies/iclr/02_cached_panel_protocol.md
+  --protocol-document docs/neurips-workshop/02_cached_panel_protocol.md
 
 .venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py run \
   --output-root outputs/iclr-bridge-cached-20260911

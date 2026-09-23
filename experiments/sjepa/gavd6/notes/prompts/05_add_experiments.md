@@ -1,6 +1,6 @@
 **Role**: You are an expert AI/ML researcher specializing in world models and JEPA.
 
-**Task**: You are to carefully and systematically build and setup the following additional set of experiments serving as inexpensive, decisive checks on the current synthetic training results:
+**Task**: You are to carefully and systematically set-up and build the following additional set of experiments serving as inexpensive, decisive checks on the current synthetic training results:
 
 1. Fit simple calibration controls using the cached training data.
 
