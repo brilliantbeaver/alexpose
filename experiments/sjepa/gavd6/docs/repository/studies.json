@@ -5,13 +5,21 @@
   "studies": [
     {
       "id": "gait-fidelity",
-      "title": "Gait Fidelity",
-      "status": "proposed follow-on study; new experiments not yet implemented or validated",
-      "code": [],
-      "notebooks": [],
+      "title": "Gait Fidelity: preserving bilateral movement through pose restoration",
+      "status": "implemented; local software validation complete; HAIC source run pending",
+      "code": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity"
+      ],
+      "notebooks": [
+        "notebooks/gait_fidelity"
+      ],
       "scripts": [],
-      "slurm": [],
-      "tests": [],
+      "slurm": [
+        "slurm/gait-fidelity"
+      ],
+      "tests": [
+        "tests/gait_fidelity/**/test_*.py"
+      ],
       "documentation": "docs/studies/gait-fidelity",
       "overview": "docs/studies/gait-fidelity/README.md"
     },
@@ -19,11 +27,21 @@
       "id": "temporal-gait",
       "title": "Source-aware temporal gait JEPA and observable forecasting",
       "status": "E0-E2 implemented; local software verification; real HAIC evidence pending",
-      "code": ["src/gavd6_sjepa/research_directions/temporal_gait"],
-      "notebooks": ["notebooks/temporal_gait"],
-      "scripts": ["scripts/research_directions/temporal_gait"],
-      "slurm": ["slurm/temporal-gait"],
-      "tests": ["tests/temporal_gait/**/test_*.py"],
+      "code": [
+        "src/gavd6_sjepa/research_directions/temporal_gait"
+      ],
+      "notebooks": [
+        "notebooks/temporal_gait"
+      ],
+      "scripts": [
+        "scripts/research_directions/temporal_gait"
+      ],
+      "slurm": [
+        "slurm/temporal-gait"
+      ],
+      "tests": [
+        "tests/temporal_gait/**/test_*.py"
+      ],
       "documentation": "docs/studies/temporal-gait",
       "overview": "docs/studies/temporal-gait/README.md"
     },
@@ -31,11 +49,21 @@
       "id": "synthetic-training",
       "title": "Response-conditioned synthetic training selection",
       "status": "implemented; CPU validation complete; real HAIC experiments pending",
-      "code": ["src/gavd6_sjepa/research_directions/synthetic_training"],
-      "notebooks": ["notebooks/synthetic_training"],
-      "scripts": ["scripts/research_directions/synthetic_training"],
-      "slurm": ["slurm/synthetic-training"],
-      "tests": ["tests/synthetic_training/**/test_*.py"],
+      "code": [
+        "src/gavd6_sjepa/research_directions/synthetic_training"
+      ],
+      "notebooks": [
+        "notebooks/synthetic_training"
+      ],
+      "scripts": [
+        "scripts/research_directions/synthetic_training"
+      ],
+      "slurm": [
+        "slurm/synthetic-training"
+      ],
+      "tests": [
+        "tests/synthetic_training/**/test_*.py"
+      ],
       "documentation": "docs/studies/synthetic-training",
       "overview": "docs/studies/synthetic-training/README.md"
     },
@@ -175,6 +203,28 @@
       "tests": [],
       "documentation": "docs/studies/perturbation-response",
       "overview": "docs/studies/perturbation-response/README.md"
+    },
+    {
+      "id": "synthetic-training-v2",
+      "title": "Synthetic training v2",
+      "status": "implemented; retained development results; new confirmation remains separate",
+      "code": [
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2"
+      ],
+      "notebooks": [
+        "notebooks/synthetic_training_v2"
+      ],
+      "scripts": [
+        "scripts/research_directions/synthetic_training_v2"
+      ],
+      "slurm": [
+        "slurm/synthetic-training-v2"
+      ],
+      "tests": [
+        "tests/synthetic_training_v2/**/test_*.py"
+      ],
+      "documentation": "docs/studies/synthetic-training-v2",
+      "overview": "docs/studies/synthetic-training-v2/README.md"
     }
   ],
   "shared": {

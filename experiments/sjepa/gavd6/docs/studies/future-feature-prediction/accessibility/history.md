@@ -16,7 +16,7 @@ verification; publication documents stay here independently of artifact storage.
 | Read in order | Purpose |
 |---|---|
 | [01 — Critique and detailed tutorial](tutorial.md) | Explains both studies, missed opportunities, mathematical distinctions, close prior work and the next experiments, with vector illustrations. |
-| [02 — Frozen cached-panel protocol](../../iclr/02_cached_panel_protocol.md) | Records the prospective design copied and hashed before new real-data fitting. |
+| [02 — Frozen cached-panel protocol](../../../neurips-workshop/02_cached_panel_protocol.md) | Records the prospective design copied and hashed before new real-data fitting. |
 | [03 — Implementation and validation](results.md) | Reports measured results, commands, tests, preservation, review fixes and remaining empirical work. |
 | [04 — Paper draft](../manuscript/paper.md), [typeset PDF](../manuscript/paper.pdf) | Develops an eight-main-page scientific argument with evidence and explicit limitations. |
 | [05 — Extended abstract](../manuscript/abstract.md), [PDF](../manuscript/abstract.pdf) | Summarizes the proposed contribution and actual evidence without claiming unperformed experiments. |

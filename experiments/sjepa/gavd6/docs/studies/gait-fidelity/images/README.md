@@ -2,7 +2,7 @@
 
 [Current proposal](../README.md) · [Interactive paper](../proposal.html) · [Open all figures](gallery.html)
 
-The gallery displays all sixteen editable vector diagrams. The proposal uses six of them to explain its main argument; the others support the detailed data and method protocols. Diagrams describe proposed experiments or explicitly illustrative calculations, rather than new experimental results.
+The gallery displays all seventeen editable vector diagrams. The proposal uses seven to explain its main argument and execution plan; the others support the detailed data and method protocols. Diagrams describe proposed experiments or explicitly illustrative calculations, rather than new experimental results.
 
 | Concept | Figures |
 | --- | --- |
@@ -10,6 +10,7 @@ The gallery displays all sixteen editable vector diagrams. The proposal uses six
 | Data, references and permitted claims | [07 · Video evidence](07-video-evidence.svg), [09 · Source partitions](09-source-splits.svg), [13 · Data to claims](13-data-to-claims.svg) |
 | Feature prediction and masking | [03 · Changing graph masks](03-changing-graph-masks.svg), [04 · Mask contract](04-mask-contract.svg), [05 · Coverage audit](05-coverage-audit.svg), [06 · Matched masking experiment](06-matched-mask-experiment.svg), [14 · Paired JEPA](14-paired-jepa-method.svg), [15 · Graph-time mask](15-graph-time-mask.svg) |
 | Inspection, ambiguity and validation | [08 · Data review display](08-data-review-view.svg), [10 · Assignment uncertainty](10-assignment-uncertainty.svg), [11 · Transformation contracts](11-transformation-contracts.svg), [12 · Evidence workflow](12-evidence-workflow.svg) |
+| Compute and deadline | [17 · Eight-H100 parallel execution](17-parallel-execution.svg), with a dated capacity budget and shared-data dependencies |
 
 `previews/` contains native-size and 900-pixel PNG renders for each SVG. `local-video-review/` contains local thumbnails used by the [video viewer](../data/video-gallery.html); these are inspection frames, not reference annotations.
 

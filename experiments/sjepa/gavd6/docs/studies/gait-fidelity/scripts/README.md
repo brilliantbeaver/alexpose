@@ -4,6 +4,8 @@
 
 Run these commands from the gavd6 repository root. They rebuild documentation or inspect source files; they do not train a restoration model. The existing `.venv` supplies Pillow, CairoSVG, Mistune and the audit dependencies. On this Mac, CairoSVG also uses the Homebrew Cairo library and local Arial fonts.
 
+For GPU experiments, read the [eight-H100 execution specification](../methods/execution.md). Its 102-fit manifest is a plan; the builders below do not implement the parallel training coordinator or certify the one-hour setup assumption.
+
 ## Rebuild the complete reading experience
 
 ```bash
@@ -11,6 +13,8 @@ DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib \
   .venv/bin/python docs/studies/gait-fidelity/scripts/build_figures.py
 DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib \
   .venv/bin/python docs/studies/gait-fidelity/scripts/build_proposal_figures.py
+DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib \
+  .venv/bin/python docs/studies/gait-fidelity/scripts/build_execution_figure.py
 .venv/bin/python docs/studies/gait-fidelity/scripts/build_paper.py
 .venv/bin/python docs/studies/gait-fidelity/scripts/build_video_gallery.py --thumbnails
 ```

@@ -1,0 +1,942 @@
+[
+  {
+    "file": "17-parallel-execution.svg",
+    "title": "Share prepared data across independent one-GPU experiments",
+    "subtitle": "Eight available H100s provide up to eight concurrent jobs; each small model uses one GPU.",
+    "width": 1200,
+    "height": 1036,
+    "labels": [
+      {
+        "x": 36,
+        "y": 43,
+        "text": "Share prepared data across independent one-GPU experiments",
+        "size": 30,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          21,
+          940,
+          49
+        ]
+      },
+      {
+        "x": 36,
+        "y": 78,
+        "text": "Eight available H100s provide up to eight concurrent jobs; each small model uses one GPU.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          64,
+          809,
+          82
+        ]
+      },
+      {
+        "x": 36,
+        "y": 125,
+        "text": "1. Prepare and review shared data once",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          108,
+          487,
+          130
+        ]
+      },
+      {
+        "x": 54,
+        "y": 185,
+        "text": "Reviewed source data",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          49,
+          163,
+          328,
+          262
+        ],
+        "measured_bounds": [
+          54,
+          169,
+          285,
+          185
+        ]
+      },
+      {
+        "x": 54,
+        "y": 219,
+        "text": "People, references and splits",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          163,
+          328,
+          262
+        ],
+        "measured_bounds": [
+          54,
+          205,
+          299,
+          223
+        ]
+      },
+      {
+        "x": 54,
+        "y": 248,
+        "text": "Shared by matched methods",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          163,
+          328,
+          262
+        ],
+        "measured_bounds": [
+          54,
+          234,
+          297,
+          252
+        ]
+      },
+      {
+        "x": 467,
+        "y": 185,
+        "text": "Render and extract once",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          462,
+          163,
+          740,
+          262
+        ],
+        "measured_bounds": [
+          467,
+          169,
+          724,
+          185
+        ]
+      },
+      {
+        "x": 467,
+        "y": 219,
+        "text": "Per frozen dataset version",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          462,
+          163,
+          740,
+          262
+        ],
+        "measured_bounds": [
+          467,
+          205,
+          689,
+          219
+        ]
+      },
+      {
+        "x": 467,
+        "y": 248,
+        "text": "Retain timestamps and validity",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          462,
+          163,
+          740,
+          262
+        ],
+        "measured_bounds": [
+          467,
+          234,
+          725,
+          252
+        ]
+      },
+      {
+        "x": 874,
+        "y": 185,
+        "text": "Immutable shared cache",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          869,
+          163,
+          1151,
+          262
+        ],
+        "measured_bounds": [
+          874,
+          169,
+          1131,
+          185
+        ]
+      },
+      {
+        "x": 874,
+        "y": 219,
+        "text": "Hash inputs; record settings",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          869,
+          163,
+          1151,
+          262
+        ],
+        "measured_bounds": [
+          874,
+          205,
+          1109,
+          223
+        ]
+      },
+      {
+        "x": 874,
+        "y": 248,
+        "text": "Read-only inputs for every job",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          869,
+          163,
+          1151,
+          262
+        ],
+        "measured_bounds": [
+          874,
+          234,
+          1126,
+          252
+        ]
+      },
+      {
+        "x": 56,
+        "y": 368,
+        "text": "2. Run a stage in waves of up to eight independent jobs",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          351,
+          689,
+          373
+        ]
+      },
+      {
+        "x": 56,
+        "y": 399,
+        "text": "Stages cover matched masking, paired-change loss comparisons and required controls.",
+        "size": 20,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          56,
+          384,
+          833,
+          403
+        ]
+      },
+      {
+        "x": 114.0,
+        "y": 465,
+        "text": "GPU 1",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          63,
+          437,
+          165,
+          527
+        ],
+        "measured_bounds": [
+          80.9921875,
+          449,
+          146.9921875,
+          465
+        ]
+      },
+      {
+        "x": 114.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          63,
+          437,
+          165,
+          527
+        ],
+        "measured_bounds": [
+          78.96875,
+          491,
+          148.96875,
+          510
+        ]
+      },
+      {
+        "x": 254.0,
+        "y": 465,
+        "text": "GPU 2",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          203,
+          437,
+          305,
+          527
+        ],
+        "measured_bounds": [
+          220.9921875,
+          449,
+          286.9921875,
+          465
+        ]
+      },
+      {
+        "x": 254.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          203,
+          437,
+          305,
+          527
+        ],
+        "measured_bounds": [
+          218.96875,
+          491,
+          288.96875,
+          510
+        ]
+      },
+      {
+        "x": 394.0,
+        "y": 465,
+        "text": "GPU 3",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          343,
+          437,
+          445,
+          527
+        ],
+        "measured_bounds": [
+          360.9921875,
+          449,
+          426.9921875,
+          465
+        ]
+      },
+      {
+        "x": 394.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          343,
+          437,
+          445,
+          527
+        ],
+        "measured_bounds": [
+          358.96875,
+          491,
+          428.96875,
+          510
+        ]
+      },
+      {
+        "x": 534.0,
+        "y": 465,
+        "text": "GPU 4",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          483,
+          437,
+          585,
+          527
+        ],
+        "measured_bounds": [
+          500.9921875,
+          449,
+          566.9921875,
+          465
+        ]
+      },
+      {
+        "x": 534.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          483,
+          437,
+          585,
+          527
+        ],
+        "measured_bounds": [
+          498.96875,
+          491,
+          568.96875,
+          510
+        ]
+      },
+      {
+        "x": 674.0,
+        "y": 465,
+        "text": "GPU 5",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          623,
+          437,
+          725,
+          527
+        ],
+        "measured_bounds": [
+          640.9921875,
+          449,
+          706.9921875,
+          465
+        ]
+      },
+      {
+        "x": 674.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          623,
+          437,
+          725,
+          527
+        ],
+        "measured_bounds": [
+          638.96875,
+          491,
+          708.96875,
+          510
+        ]
+      },
+      {
+        "x": 814.0,
+        "y": 465,
+        "text": "GPU 6",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          763,
+          437,
+          865,
+          527
+        ],
+        "measured_bounds": [
+          780.9921875,
+          449,
+          846.9921875,
+          465
+        ]
+      },
+      {
+        "x": 814.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          763,
+          437,
+          865,
+          527
+        ],
+        "measured_bounds": [
+          778.96875,
+          491,
+          848.96875,
+          510
+        ]
+      },
+      {
+        "x": 954.0,
+        "y": 465,
+        "text": "GPU 7",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          903,
+          437,
+          1005,
+          527
+        ],
+        "measured_bounds": [
+          920.9921875,
+          449,
+          986.9921875,
+          465
+        ]
+      },
+      {
+        "x": 954.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          903,
+          437,
+          1005,
+          527
+        ],
+        "measured_bounds": [
+          918.96875,
+          491,
+          988.96875,
+          510
+        ]
+      },
+      {
+        "x": 1094.0,
+        "y": 465,
+        "text": "GPU 8",
+        "size": 22,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": [
+          1043,
+          437,
+          1145,
+          527
+        ],
+        "measured_bounds": [
+          1060.9921875,
+          449,
+          1126.9921875,
+          465
+        ]
+      },
+      {
+        "x": 1094.0,
+        "y": 506,
+        "text": "One job",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": [
+          1043,
+          437,
+          1145,
+          527
+        ],
+        "measured_bounds": [
+          1058.96875,
+          491,
+          1128.96875,
+          510
+        ]
+      },
+      {
+        "x": 600,
+        "y": 573,
+        "text": "One H100 per job; unique run / attempt paths and resumable checkpoints.",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          248.75,
+          558,
+          951.75,
+          577
+        ]
+      },
+      {
+        "x": 600,
+        "y": 600,
+        "text": "Start each wave only after its required data and comparison dependencies are ready.",
+        "size": 19,
+        "color": "#536879",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          242.7265625,
+          586,
+          957.7265625,
+          604
+        ]
+      },
+      {
+        "x": 56,
+        "y": 705,
+        "text": "3. Evaluate the frozen configuration and assemble the paper",
+        "size": 24,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          688,
+          743,
+          710
+        ]
+      },
+      {
+        "x": 63,
+        "y": 758,
+        "text": "Retained predictions",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          63,
+          743,
+          271,
+          762
+        ]
+      },
+      {
+        "x": 63,
+        "y": 792,
+        "text": "Run receipts + checkpoint hashes",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          63,
+          778,
+          334,
+          796
+        ]
+      },
+      {
+        "x": 415,
+        "y": 758,
+        "text": "Frozen reference scoring",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          415,
+          743,
+          666,
+          762
+        ]
+      },
+      {
+        "x": 415,
+        "y": 792,
+        "text": "Same people and eligibility rules",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          415,
+          778,
+          673,
+          796
+        ]
+      },
+      {
+        "x": 836,
+        "y": 758,
+        "text": "Tables, figures and writing",
+        "size": 21,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          836,
+          743,
+          1100,
+          762
+        ]
+      },
+      {
+        "x": 836,
+        "y": 792,
+        "text": "Uncertainty and bounded claims",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          836,
+          778,
+          1093,
+          796
+        ]
+      },
+      {
+        "x": 36,
+        "y": 861,
+        "text": "Resource budget: planning assumptions, not measured throughput",
+        "size": 23,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          844,
+          775,
+          866
+        ]
+      },
+      {
+        "x": 56,
+        "y": 914,
+        "text": "GPU window: Tue 22 Sep 00:00 \u2192 Thu 24 Sep 12:00 PDT (60 h).",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          49,
+          895,
+          1151,
+          1005
+        ],
+        "measured_bounds": [
+          56,
+          899,
+          656,
+          918
+        ]
+      },
+      {
+        "x": 56,
+        "y": 944,
+        "text": "8 H100s \u00d7 60 h = 480 H100-hours: 360 planned + 120 reserve.",
+        "size": 20,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          49,
+          895,
+          1151,
+          1005
+        ],
+        "measured_bounds": [
+          56,
+          929,
+          633,
+          948
+        ]
+      },
+      {
+        "x": 56,
+        "y": 972,
+        "text": "Setup precedes this window: Mon 21 Sep 23:00 \u2192 Tue 22 Sep 00:00 PDT (\u22641 h assumed).",
+        "size": 19,
+        "color": "#173247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          895,
+          1151,
+          1005
+        ],
+        "measured_bounds": [
+          56,
+          958,
+          823,
+          976
+        ]
+      },
+      {
+        "x": 56,
+        "y": 1001,
+        "text": "Capacity is a planning ceiling; preparation, queueing and measured runtime determine completed work.",
+        "size": 18,
+        "color": "#536879",
+        "anchor": "start",
+        "weight": "normal",
+        "container": [
+          49,
+          895,
+          1151,
+          1005
+        ],
+        "measured_bounds": [
+          56,
+          987,
+          880,
+          1005
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          341,
+          213
+        ],
+        [
+          449,
+          213
+        ]
+      ],
+      [
+        [
+          753,
+          213
+        ],
+        [
+          856,
+          213
+        ]
+      ],
+      [
+        [
+          1010,
+          274
+        ],
+        [
+          1010,
+          299
+        ]
+      ],
+      [
+        [
+          1010,
+          299
+        ],
+        [
+          600,
+          299
+        ]
+      ],
+      [
+        [
+          600,
+          299
+        ],
+        [
+          600,
+          328
+        ]
+      ],
+      [
+        [
+          600,
+          618
+        ],
+        [
+          600,
+          664
+        ]
+      ],
+      [
+        [
+          286,
+          751
+        ],
+        [
+          390,
+          751
+        ]
+      ],
+      [
+        [
+          713,
+          751
+        ],
+        [
+          812,
+          751
+        ]
+      ]
+    ]
+  }
+]

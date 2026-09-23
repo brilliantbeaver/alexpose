@@ -2,9 +2,15 @@
 
 ## Preserving bilateral movement through pose restoration
 
-**Research proposal · 21 September 2026 · New experiments pending**
+**Research proposal and implementation · 22 September 2026 · HAIC results pending**
 
 [Read the interactive paper](proposal.html) · [Inspect the data](data/README.md) · [Browse local videos](data/video-gallery.html) · [Open the figure gallery](images/gallery.html)
+
+**Run the study:** the [HAIC guide](../../../slurm/gait-fidelity/README.md) and [notebook tutorials](../../../notebooks/gait_fidelity/README.md) use one saved configuration and the same experiment runner. The [implementation guide](methods/running.md) explains the five experiment groups, reference checks and retained outputs. The implemented source study remains a development comparison on the existing 24 training and eight inspected development people; a fresh confirmation population and independent clinical references are still separate admission requirements.
+
+The [implementation validation record](records/implementation-validation-20260922.json) and [independent reviews](reviews/README.md) document local software checks and tutorial execution. CUDA rendering, pose extraction and measured throughput for the expanded dataset still require the HAIC run.
+
+**Execution plan:** eight H100 GPUs, with experiment setup assumed to take at most one hour. The [parallel execution plan](methods/execution.md) schedules both masking and change supervision with their controls: 34 recipe cells, three seeds and 102 final model fits. Its dated midnight-to-Thursday-noon example provides 480 H100-hours, split into 360 planned hours and 120 reserved for recovery. This is planned capacity, not measured runtime or completed experiments.
 
 This page presents the scientific argument and planned experiments. The linked protocols retain implementation detail; completed source audits and earlier drafts are organized separately so that they do not interrupt the proposal.
 
@@ -13,6 +19,8 @@ This page presents the scientific argument and planned experiments. The linked p
 | Understand the question and method | Read Sections 1–5 below, or use the illustrated [interactive paper](proposal.html). |
 | Know exactly which data will be used | Read [Data and references](data/README.md), then inspect the [local footage](data/video-gallery.html). |
 | Prepare or review an experiment | Use the [method protocols](methods/README.md), [source evidence](evidence/README.md), and [reproduction instructions](scripts/README.md). |
+| Execute and inspect the experiments | Start with the [HAIC commands](../../../slurm/gait-fidelity/README.md), then follow the [notebooks](../../../notebooks/gait_fidelity/README.md). |
+| Schedule the study before the ICLR deadline | Use the [eight-H100 execution plan](methods/execution.md) for the exact matrix, resource forecast, dependencies and paper milestones. |
 
 **Contents:** [Abstract](#abstract) · [1. Motivation](#1-motivation) · [2. Research question](#2-research-question-and-proposed-contribution) · [3. Data](#3-data-and-reference-measurements) · [4. Experimental design](#4-experimental-design) · [5. Method](#5-method) · [6. Evaluation](#6-evaluation-and-statistical-analysis) · [7. Reproducibility](#7-reproducibility-and-execution) · [8. References](#8-related-work-and-references) · [File guide](#file-guide)
 
@@ -147,7 +155,7 @@ Response error alone permits a constant measurement offset, and a single excursi
 
 All deployed restoration arms receive estimated joint coordinates, confidence, detection availability and timestamps under a declared anatomical convention. Independent reference coordinates are available only for permitted training and evaluation. The first shared representation is body12: paired shoulders, elbows, wrists, hips, knees and ankles. Heel or toe measurements require an explicitly validated schema extension.
 
-A direct model learns corrected coordinates from the estimated tracks. Temporal context allows it to use neighboring observations, while a position-and-motion objective discourages both location errors and errors in displacement over time. Calibration and temporal filters provide simpler comparisons. Their preprocessing, tuning population and missing-output treatment must be documented alongside the neural models.
+A direct model learns corrected coordinates from the estimated tracks. Temporal context allows it to use neighboring observations. The inherited recipe uses a coordinate loss; the movement metrics separately test whether those corrections preserve displacement and bilateral measurements. The proposed change-supervision term is an explicit additional objective. Calibration and temporal filters provide simpler comparisons. Their preprocessing, tuning population and missing-output treatment must be documented alongside the neural models.
 
 ### 5.2 Predict reference features with paired JEPA
 
@@ -177,21 +185,24 @@ Quantile differences can concentrate gradients on a few order statistics, and ne
 
 ### 5.5 Attribute each improvement
 
-Run the comparisons in stages so that a change in data, mask policy or objective can be interpreted.
+Run the complete registered comparisons, sharing reviewed data and identical pretraining where permitted. Eight H100s allow independent jobs to proceed together once their prerequisites are ready; the scientific comparisons remain separate so that a change in data, mask policy or objective can be interpreted.
 
 | Stage | Comparison | Question answered |
 | --- | --- | --- |
-| Establish practical headroom | Unchanged input, affine calibration, temporal filtering, a verified learned refiner, direct coordinate-and-motion training | Is there a meaningful restoration problem beyond simple controls? |
-| Screen masking policies | Coordinate pretraining and paired JEPA, each with time blocks, uniform tokens and graph-time regions | Does a policy help, and does that depend on feature prediction? |
-| Isolate anatomical structure | Selected graph policy versus shuffled topology and matched temporal-duration controls | Does connectivity contribute beyond mask amount and gap length? |
+| Establish practical headroom | Unchanged input, affine calibration, temporal filtering, static and learned temporal refiners, direct coordinate training | Is there a meaningful restoration problem beyond simple controls? |
+| Compare masking policies | Coordinate pretraining and paired JEPA × time blocks, uniform tokens and graph-time regions × base or paired-change readout | How do mask policy, feature prediction and change supervision interact? |
+| Isolate anatomical structure | Shuffled-topology and matched-duration random-joint controls under both objectives and both readout losses | Does connectivity contribute beyond mask amount and gap length? |
 | Test change supervision | Coordinate-pretrained and JEPA frozen-readout arms, each with and without the term; separate direct end-to-end ±term comparison | Does the constraint help within each training stage, and does feature prediction contribute under matched trainable parameters? |
-| Check pretraining information | Selected JEPA versus initialized and shuffled-reference controls | Does aligned feature learning explain the difference? |
+| Check pretraining information | Initialized and shuffled-reference controls with and without the term, using the graph policy fixed in advance | Does aligned feature learning explain the difference under that policy? |
+| Check the extra supervision | Coordinate-pretrained, JEPA and direct models with per-example measurement or valid re-paired-change supervision | Does the pairing contribute beyond additional labels and endpoint exposure? |
 
 Coordinate pretraining is the stage-matched comparator for JEPA; direct end-to-end training is a separate practical comparator. Share source windows, query locations, target eligibility, mask receipts, readout protocol and downstream labels where applicable. Contextual feature targets and raw-coordinate targets differ by design. Report both update counts and compute, with equal development tuning allowances.
 
 Direct training with versus without the term tests its practical contribution. JEPA versus coordinate pretraining under the same frozen readout and constraint tests the representation choice more closely. JEPA versus end-to-end direct training assesses overall utility; an interaction between those differently trainable recipes cannot by itself isolate feature prediction.
 
-Only candidates with a meaningful development effect proceed to the later stages. A broad refinement claim requires a credible contemporary refiner with compatible joints and a verified implementation; an adapted SmoothNet-style model must be labelled as an adaptation. The [methods index](methods/README.md) points to the full attribution and measurement protocols.
+The [execution matrix](methods/execution.md#3-run-the-complete-matched-matrix) contains 102 final fits across seeds 17, 29 and 43. Run its controls regardless of whether an early graph or JEPA result is favorable. Development selects any declared tuning choices and the primary comparator before confirmation; it does not authorize dropping unfavorable registered cells. If measured cost exceeds capacity, choose a lower common update budget before ranking outputs and retain the complete comparison matrix.
+
+A broad refinement claim requires a credible contemporary refiner with compatible joints and a verified implementation; an adapted SmoothNet-style model must be labelled as an adaptation. The inherited direct trainer uses coordinate MSE. Any added motion term must be explicit and shared by matched controls, rather than inferred from a motion evaluation metric. The [methods index](methods/README.md) points to the full attribution and measurement protocols.
 
 ## 6. Evaluation and statistical analysis
 
@@ -213,16 +224,32 @@ Clinical validation requires agreement against independent measurements, includi
 
 ## 7. Reproducibility and execution
 
+### 7.1 Use eight H100s for the complete synthetic comparison
+
+The current plan assumes setup within one hour and eight continuously available H100s. The dated schedule starts GPU work on **September 22 at 00:00 PDT** and freezes results on **September 24 at 12:00 PDT**, giving **60 hours × eight GPUs = 480 H100-hours**. Allocate 360 hours to preparation, training, evaluation and reconstruction, with 120 hours reserved for recovery. Recalculate these numbers if the start changes. Historical short-run receipts are not H100 throughput measurements.
+
+![Shared preparation supplies eight independent GPU workers, with frozen evaluation and a dated compute budget.](images/17-parallel-execution.svg)
+
+*Figure 7. Eight GPUs support concurrent independent jobs. Shared data and checkpoints are reused only when their complete specifications match; job dependencies still determine when work can start.*
+
+The [execution guide](methods/execution.md) specifies all 34 recipes, the 102 final fits, and the 135 optimization phases after valid checkpoint reuse. It also separates measured cost from resource allowances and describes unique run directories with study-wide accounting. The existing launcher does not acquire this parallel behavior merely by requesting eight GPUs; the assumed setup includes the coordinator and validated configuration changes.
+
+### 7.2 Retain the scientific admission requirements
+
 | Gate | Deliverable before advancing |
 | --- | --- |
 | Data and reference admission | Verified source/identity roster, timing and anatomy checks, intended-use records, exclusions and reviewed example segments |
 | Measurement and masking checks | Frozen excursion calculation, mask coverage bank, input/target isolation, tested missingness and gradient behavior |
-| Development comparison | Matched practical baselines and staged ablations, complete prediction artifacts and source-level reports |
+| Development comparison | Complete matched matrix, practical baselines, retained predictions and source-level reports |
 | Independent confirmation | Frozen method, endpoint, margins, seed set and fresh reference population admitted before evaluation |
 
 The [scripts guide](scripts/README.md) reproduces the documentation and existing source audits. The [evidence folder](evidence/README.md) contains measured sampler/video metadata; it supplies preparation evidence, without implying completed restoration experiments. The [review index](reviews/README.md) separates scientific and visual review from historical receipts.
 
 Use a synchronized review display linking original frames, input/reference/restored skeletons and bilateral traces on one physical time axis. The current [video gallery](data/video-gallery.html) provides raw-video playback and exportable notes; reference overlays and model traces remain implementation work. Select ordinary examples by metadata or a frozen random sample before viewing method rankings, and independently review a fixed share plus all flagged cases.
+
+### 7.3 Write while the experiments run
+
+Prepare the manuscript and fixed result-table structure during setup; complete the methods while shared data and training jobs run. Write from verified outputs on September 23, freeze the numerical results Thursday at noon, and reserve Thursday afternoon and Friday for independent review and submission. The internal upload target is **September 25 at 18:00 PDT**. Optional clinical data remain conditional on acquisition and independent references, so the synthetic schedule has no dependency on those downloads. The [dated timeline](methods/execution.md#6-run-experiments-and-write-in-parallel) links each compute milestone to a paper deliverable.
 
 ## 8. Related work and references
 

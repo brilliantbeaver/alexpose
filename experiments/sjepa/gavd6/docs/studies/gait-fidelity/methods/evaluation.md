@@ -2,6 +2,8 @@
 
 19 September 2026. This is a proposed measurement and experimental design, based on the retained laterality summaries, the complete seed-17 restoration diagnostics, and primary methodological and gait studies. No additional training, data collection or result analysis was performed.
 
+**Execution update, 21 September:** the [eight-H100 plan](execution.md) assumes setup within one hour and schedules the full matched matrix across three seeds. It changes available compute and parallelism; the reference, eligibility and confirmation requirements below still apply. The numerical outcomes remain prospective.
+
 The strongest opportunity is to show that a restoration method removes errors introduced by observation and naming while preserving a person's actual left–right differences and changes in movement. That requires separate tests for anatomical assignment, measurement preservation and uncertainty. A lower coordinate error or a more symmetric output cannot establish all three.
 
 ## What the existing evidence can motivate

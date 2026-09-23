@@ -11,10 +11,13 @@ dialog{width:min(96vw,1400px);max-height:94vh;border:1px solid var(--line);borde
 @media print{body{background:white;font-size:11pt}.paper-shell{display:block;padding:0}.sidebar,.mobile-nav,.presets,.controls,.figure-hint,.skip{display:none}main{border:0;padding:0;box-shadow:none}h2{break-after:avoid}img,.explorer{break-inside:avoid}a{color:inherit}.table-wrap{overflow:visible}table{font-size:9pt}th,td{min-width:0}.explorer{background:white}.figure-link{margin:20px 0 8px}dialog{display:none}}
 
 .presets button:disabled{cursor:not-allowed;opacity:.6}
-</style></head><body><a class="skip" href="#paper">Skip to the proposal</a><details class="mobile-nav"><summary>Gait Fidelity · contents</summary><nav aria-label="Mobile contents"><a href="#abstract">Abstract</a><a href="#1-motivation">1. Motivation</a><a href="#2-research-question-and-proposed-contribution">2. Research question and proposed contribution</a><a href="#3-data-and-reference-measurements">3. Data and reference measurements</a><a href="#4-experimental-design">4. Experimental design</a><a href="#5-method">5. Method</a><a href="#6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</a><a href="#7-reproducibility-and-execution">7. Reproducibility and execution</a><a href="#8-related-work-and-references">8. Related work and references</a><a href="#file-guide">File guide</a></nav></details><div class="paper-shell"><aside class="sidebar"><a class="brand" href="#gait-fidelity">Gait Fidelity</a><p>A research proposal<br>New experiments pending</p><nav class="toc" aria-label="Paper contents"><a href="#abstract">Abstract</a><a href="#1-motivation">1. Motivation</a><a href="#2-research-question-and-proposed-contribution">2. Research question and proposed contribution</a><a href="#3-data-and-reference-measurements">3. Data and reference measurements</a><a href="#4-experimental-design">4. Experimental design</a><a href="#5-method">5. Method</a><a href="#6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</a><a href="#7-reproducibility-and-execution">7. Reproducibility and execution</a><a href="#8-related-work-and-references">8. Related work and references</a><a href="#file-guide">File guide</a></nav><div class="resources"><strong>Supporting material</strong><a href="data/README.md">Data specification</a><a href="data/video-gallery.html">Local video viewer</a><a href="methods/README.md">Method protocols</a><a href="images/gallery.html">All vector figures</a><a href="reviews/README.md">Independent reviews</a><a href="README.md">Markdown source</a></div></aside><main id="paper"><h1 id="gait-fidelity">Gait Fidelity</h1>
+</style></head><body><a class="skip" href="#paper">Skip to the proposal</a><details class="mobile-nav"><summary>Gait Fidelity · contents</summary><nav aria-label="Mobile contents"><a href="#abstract">Abstract</a><a href="#1-motivation">1. Motivation</a><a href="#2-research-question-and-proposed-contribution">2. Research question and proposed contribution</a><a href="#3-data-and-reference-measurements">3. Data and reference measurements</a><a href="#4-experimental-design">4. Experimental design</a><a href="#5-method">5. Method</a><a href="#6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</a><a href="#7-reproducibility-and-execution">7. Reproducibility and execution</a><a href="#8-related-work-and-references">8. Related work and references</a><a href="#file-guide">File guide</a></nav></details><div class="paper-shell"><aside class="sidebar"><a class="brand" href="#gait-fidelity">Gait Fidelity</a><p>A research proposal<br>New experiments pending</p><nav class="toc" aria-label="Paper contents"><a href="#abstract">Abstract</a><a href="#1-motivation">1. Motivation</a><a href="#2-research-question-and-proposed-contribution">2. Research question and proposed contribution</a><a href="#3-data-and-reference-measurements">3. Data and reference measurements</a><a href="#4-experimental-design">4. Experimental design</a><a href="#5-method">5. Method</a><a href="#6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</a><a href="#7-reproducibility-and-execution">7. Reproducibility and execution</a><a href="#8-related-work-and-references">8. Related work and references</a><a href="#file-guide">File guide</a></nav><div class="resources"><strong>Supporting material</strong><a href="methods/execution.md">Eight-H100 execution plan</a><a href="data/README.md">Data specification</a><a href="data/video-gallery.html">Local video viewer</a><a href="methods/README.md">Method protocols</a><a href="images/gallery.html">All vector figures</a><a href="reviews/README.md">Independent reviews</a><a href="README.md">Markdown source</a></div></aside><main id="paper"><h1 id="gait-fidelity">Gait Fidelity</h1>
 <h2 id="preserving-bilateral-movement-through-pose-restoration">Preserving bilateral movement through pose restoration</h2>
-<p><strong>Research proposal · 21 September 2026 · New experiments pending</strong></p>
+<p><strong>Research proposal and implementation · 22 September 2026 · HAIC results pending</strong></p>
 <p><a href="proposal.html">Read the interactive paper</a> · <a href="data/README.md">Inspect the data</a> · <a href="data/video-gallery.html">Browse local videos</a> · <a href="images/gallery.html">Open the figure gallery</a></p>
+<p><strong>Run the study:</strong> the <a href="../../../slurm/gait-fidelity/README.md">HAIC guide</a> and <a href="../../../notebooks/gait_fidelity/README.md">notebook tutorials</a> use one saved configuration and the same experiment runner. The <a href="methods/running.md">implementation guide</a> explains the five experiment groups, reference checks and retained outputs. The implemented source study remains a development comparison on the existing 24 training and eight inspected development people; a fresh confirmation population and independent clinical references are still separate admission requirements.</p>
+<p>The <a href="records/implementation-validation-20260922.json">implementation validation record</a> and <a href="reviews/README.md">independent reviews</a> document local software checks and tutorial execution. CUDA rendering, pose extraction and measured throughput for the expanded dataset still require the HAIC run.</p>
+<p><strong>Execution plan:</strong> eight H100 GPUs, with experiment setup assumed to take at most one hour. The <a href="methods/execution.md">parallel execution plan</a> schedules both masking and change supervision with their controls: 34 recipe cells, three seeds and 102 final model fits. Its dated midnight-to-Thursday-noon example provides 480 H100-hours, split into 360 planned hours and 120 reserved for recovery. This is planned capacity, not measured runtime or completed experiments.</p>
 <p>This page presents the scientific argument and planned experiments. The linked protocols retain implementation detail; completed source audits and earlier drafts are organized separately so that they do not interrupt the proposal.</p>
 <div class="table-wrap"><table>
 <thead>
@@ -35,6 +38,14 @@ dialog{width:min(96vw,1400px);max-height:94vh;border:1px solid var(--line);borde
 <tr>
   <td>Prepare or review an experiment</td>
   <td>Use the <a href="methods/README.md">method protocols</a>, <a href="evidence/README.md">source evidence</a>, and <a href="scripts/README.md">reproduction instructions</a>.</td>
+</tr>
+<tr>
+  <td>Execute and inspect the experiments</td>
+  <td>Start with the <a href="../../../slurm/gait-fidelity/README.md">HAIC commands</a>, then follow the <a href="../../../notebooks/gait_fidelity/README.md">notebooks</a>.</td>
+</tr>
+<tr>
+  <td>Schedule the study before the ICLR deadline</td>
+  <td>Use the <a href="methods/execution.md">eight-H100 execution plan</a> for the exact matrix, resource forecast, dependencies and paper milestones.</td>
 </tr>
 </tbody>
 </table></div>
@@ -164,7 +175,7 @@ A = q_right − q_left
 <h2 id="5-method">5. Method</h2>
 <h3 id="51-restore-coordinates-from-observed-trajectories">5.1 Restore coordinates from observed trajectories</h3>
 <p>All deployed restoration arms receive estimated joint coordinates, confidence, detection availability and timestamps under a declared anatomical convention. Independent reference coordinates are available only for permitted training and evaluation. The first shared representation is body12: paired shoulders, elbows, wrists, hips, knees and ankles. Heel or toe measurements require an explicitly validated schema extension.</p>
-<p>A direct model learns corrected coordinates from the estimated tracks. Temporal context allows it to use neighboring observations, while a position-and-motion objective discourages both location errors and errors in displacement over time. Calibration and temporal filters provide simpler comparisons. Their preprocessing, tuning population and missing-output treatment must be documented alongside the neural models.</p>
+<p>A direct model learns corrected coordinates from the estimated tracks. Temporal context allows it to use neighboring observations. The inherited recipe uses a coordinate loss; the movement metrics separately test whether those corrections preserve displacement and bilateral measurements. The proposed change-supervision term is an explicit additional objective. Calibration and temporal filters provide simpler comparisons. Their preprocessing, tuning population and missing-output treatment must be documented alongside the neural models.</p>
 <h3 id="52-predict-reference-features-with-paired-jepa">5.2 Predict reference features with paired JEPA</h3>
 <p>A joint-embedding predictive architecture, or <strong>JEPA</strong>, learns to predict numerical features rather than predicting every target coordinate during pretraining. Here an encoder turns an imperfect pose sequence into features that summarize joint motion, and a predictor estimates the features of corresponding reference poses at hidden positions. “Paired” means that estimated and reference poses describe the same source movement at aligned times.</p>
 <a class="figure-link" href="images/14-paired-jepa-method.svg" aria-label="Enlarge diagram: Masked observed tracks feed the student, valid reference tracks feed a training-only teacher, and a later coordinate readout converts frozen features into restored poses."><img src="images/14-paired-jepa-method.svg" alt="Masked observed tracks feed the student, valid reference tracks feed a training-only teacher, and a later coordinate readout converts frozen features into restored poses." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
@@ -179,7 +190,7 @@ A = q_right − q_left
 <p>The proposed added constraint penalizes the mismatch between a predicted change in <code>A</code> and its reference change on a matched pair. Apply it to restored coordinates during the same frozen-encoder readout stage for both JEPA and coordinate-pretrained models; initialized and shuffled-feature controls receive the same selected readout objective. Direct end-to-end models with and without the constraint provide a separate practical comparison using the same labels. Keep the coordinate and trajectory objectives alongside it. The new constraint has not been implemented or validated in the predecessor training path.</p>
 <p>Quantile differences can concentrate gradients on a few order statistics, and nearly degenerate projected limbs make angle derivatives unstable. Before training, test the exact implementation or an explicitly declared differentiable surrogate on tied angles, nearly straight knees, small segment lengths and missing data. Do not infer a trainable, stable loss merely because the evaluation quantity has a formula. A direct model given per-example <code>A</code> labels is an additional control for the information supplied by the paired constraint.</p>
 <h3 id="55-attribute-each-improvement">5.5 Attribute each improvement</h3>
-<p>Run the comparisons in stages so that a change in data, mask policy or objective can be interpreted.</p>
+<p>Run the complete registered comparisons, sharing reviewed data and identical pretraining where permitted. Eight H100s allow independent jobs to proceed together once their prerequisites are ready; the scientific comparisons remain separate so that a change in data, mask policy or objective can be interpreted.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -191,17 +202,17 @@ A = q_right − q_left
 <tbody>
 <tr>
   <td>Establish practical headroom</td>
-  <td>Unchanged input, affine calibration, temporal filtering, a verified learned refiner, direct coordinate-and-motion training</td>
+  <td>Unchanged input, affine calibration, temporal filtering, static and learned temporal refiners, direct coordinate training</td>
   <td>Is there a meaningful restoration problem beyond simple controls?</td>
 </tr>
 <tr>
-  <td>Screen masking policies</td>
-  <td>Coordinate pretraining and paired JEPA, each with time blocks, uniform tokens and graph-time regions</td>
-  <td>Does a policy help, and does that depend on feature prediction?</td>
+  <td>Compare masking policies</td>
+  <td>Coordinate pretraining and paired JEPA × time blocks, uniform tokens and graph-time regions × base or paired-change readout</td>
+  <td>How do mask policy, feature prediction and change supervision interact?</td>
 </tr>
 <tr>
   <td>Isolate anatomical structure</td>
-  <td>Selected graph policy versus shuffled topology and matched temporal-duration controls</td>
+  <td>Shuffled-topology and matched-duration random-joint controls under both objectives and both readout losses</td>
   <td>Does connectivity contribute beyond mask amount and gap length?</td>
 </tr>
 <tr>
@@ -211,14 +222,20 @@ A = q_right − q_left
 </tr>
 <tr>
   <td>Check pretraining information</td>
-  <td>Selected JEPA versus initialized and shuffled-reference controls</td>
-  <td>Does aligned feature learning explain the difference?</td>
+  <td>Initialized and shuffled-reference controls with and without the term, using the graph policy fixed in advance</td>
+  <td>Does aligned feature learning explain the difference under that policy?</td>
+</tr>
+<tr>
+  <td>Check the extra supervision</td>
+  <td>Coordinate-pretrained, JEPA and direct models with per-example measurement or valid re-paired-change supervision</td>
+  <td>Does the pairing contribute beyond additional labels and endpoint exposure?</td>
 </tr>
 </tbody>
 </table></div>
 <p>Coordinate pretraining is the stage-matched comparator for JEPA; direct end-to-end training is a separate practical comparator. Share source windows, query locations, target eligibility, mask receipts, readout protocol and downstream labels where applicable. Contextual feature targets and raw-coordinate targets differ by design. Report both update counts and compute, with equal development tuning allowances.</p>
 <p>Direct training with versus without the term tests its practical contribution. JEPA versus coordinate pretraining under the same frozen readout and constraint tests the representation choice more closely. JEPA versus end-to-end direct training assesses overall utility; an interaction between those differently trainable recipes cannot by itself isolate feature prediction.</p>
-<p>Only candidates with a meaningful development effect proceed to the later stages. A broad refinement claim requires a credible contemporary refiner with compatible joints and a verified implementation; an adapted SmoothNet-style model must be labelled as an adaptation. The <a href="methods/README.md">methods index</a> points to the full attribution and measurement protocols.</p>
+<p>The <a href="methods/execution.md#3-run-the-complete-matched-matrix">execution matrix</a> contains 102 final fits across seeds 17, 29 and 43. Run its controls regardless of whether an early graph or JEPA result is favorable. Development selects any declared tuning choices and the primary comparator before confirmation; it does not authorize dropping unfavorable registered cells. If measured cost exceeds capacity, choose a lower common update budget before ranking outputs and retain the complete comparison matrix.</p>
+<p>A broad refinement claim requires a credible contemporary refiner with compatible joints and a verified implementation; an adapted SmoothNet-style model must be labelled as an adaptation. The inherited direct trainer uses coordinate MSE. Any added motion term must be explicit and shared by matched controls, rather than inferred from a motion evaluation metric. The <a href="methods/README.md">methods index</a> points to the full attribution and measurement protocols.</p>
 <h2 id="6-evaluation-and-statistical-analysis">6. Evaluation and statistical analysis</h2>
 <h3 id="61-define-success-before-confirmation">6.1 Define success before confirmation</h3>
 <p>The primary contrast is person-level absolute response error against the strongest prespecified, equally supervised direct control. A preservation claim also requires acceptable observation-induced error and clean-input position accuracy on the same population. Select meaningful margins from reference precision, repeatability and intended use before opening confirmation outputs. A smaller p-value cannot substitute for a useful effect size.</p>
@@ -229,6 +246,12 @@ A = q_right − q_left
 <p>Use development data to estimate variance for the new paired endpoint, determine a justified sample/resource bound and freeze the primary comparison, margins, exclusions and analysis. The existing eight development people and inspected local videos remain development. Repartitioning familiar recordings cannot create untouched confirmation. Do not add seeds or participants until significance appears, and do not interpret an inconclusive difference as proof of equivalence.</p>
 <p>Clinical validation requires agreement against independent measurements, including reference uncertainty, repeatability, event coverage and anatomical side. Following movement changes accurately would support measurement validity; a claim about rehabilitation benefit would require a separate clinical study.</p>
 <h2 id="7-reproducibility-and-execution">7. Reproducibility and execution</h2>
+<h3 id="71-use-eight-h100s-for-the-complete-synthetic-comparison">7.1 Use eight H100s for the complete synthetic comparison</h3>
+<p>The current plan assumes setup within one hour and eight continuously available H100s. The dated schedule starts GPU work on <strong>September 22 at 00:00 PDT</strong> and freezes results on <strong>September 24 at 12:00 PDT</strong>, giving <strong>60 hours × eight GPUs = 480 H100-hours</strong>. Allocate 360 hours to preparation, training, evaluation and reconstruction, with 120 hours reserved for recovery. Recalculate these numbers if the start changes. Historical short-run receipts are not H100 throughput measurements.</p>
+<a class="figure-link" href="images/17-parallel-execution.svg" aria-label="Enlarge diagram: Shared preparation supplies eight independent GPU workers, with frozen evaluation and a dated compute budget."><img src="images/17-parallel-execution.svg" alt="Shared preparation supplies eight independent GPU workers, with frozen evaluation and a dated compute budget." /></a><p class="figure-hint">Select the diagram to enlarge it.</p>
+<p><em>Figure 7. Eight GPUs support concurrent independent jobs. Shared data and checkpoints are reused only when their complete specifications match; job dependencies still determine when work can start.</em></p>
+<p>The <a href="methods/execution.md">execution guide</a> specifies all 34 recipes, the 102 final fits, and the 135 optimization phases after valid checkpoint reuse. It also separates measured cost from resource allowances and describes unique run directories with study-wide accounting. The existing launcher does not acquire this parallel behavior merely by requesting eight GPUs; the assumed setup includes the coordinator and validated configuration changes.</p>
+<h3 id="72-retain-the-scientific-admission-requirements">7.2 Retain the scientific admission requirements</h3>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -247,7 +270,7 @@ A = q_right − q_left
 </tr>
 <tr>
   <td>Development comparison</td>
-  <td>Matched practical baselines and staged ablations, complete prediction artifacts and source-level reports</td>
+  <td>Complete matched matrix, practical baselines, retained predictions and source-level reports</td>
 </tr>
 <tr>
   <td>Independent confirmation</td>
@@ -257,6 +280,8 @@ A = q_right − q_left
 </table></div>
 <p>The <a href="scripts/README.md">scripts guide</a> reproduces the documentation and existing source audits. The <a href="evidence/README.md">evidence folder</a> contains measured sampler/video metadata; it supplies preparation evidence, without implying completed restoration experiments. The <a href="reviews/README.md">review index</a> separates scientific and visual review from historical receipts.</p>
 <p>Use a synchronized review display linking original frames, input/reference/restored skeletons and bilateral traces on one physical time axis. The current <a href="data/video-gallery.html">video gallery</a> provides raw-video playback and exportable notes; reference overlays and model traces remain implementation work. Select ordinary examples by metadata or a frozen random sample before viewing method rankings, and independently review a fixed share plus all flagged cases.</p>
+<h3 id="73-write-while-the-experiments-run">7.3 Write while the experiments run</h3>
+<p>Prepare the manuscript and fixed result-table structure during setup; complete the methods while shared data and training jobs run. Write from verified outputs on September 23, freeze the numerical results Thursday at noon, and reserve Thursday afternoon and Friday for independent review and submission. The internal upload target is <strong>September 25 at 18:00 PDT</strong>. Optional clinical data remain conditional on acquisition and independent references, so the synthetic schedule has no dependency on those downloads. The <a href="methods/execution.md#6-run-experiments-and-write-in-parallel">dated timeline</a> links each compute milestone to a paper deliverable.</p>
 <h2 id="8-related-work-and-references">8. Related work and references</h2>
 <p>The proposal builds on four bodies of work. Synthetic musculoskeletal gait and clinical representation learning are established by <a href="https://www.nature.com/articles/s41467-025-61292-1">Yamada et al. (2025)</a>, while <a href="https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0000467">Stenum et al. (2024)</a> provide direct precedent for video-based clinical measurements and within-person change. Their scope makes an additional accuracy table insufficient motivation for this study.</p>
 <p><a href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf">S-JEPA (ECCV 2024)</a>, <a href="https://arxiv.org/abs/2308.07092">MAMP (ICCV 2023)</a>, <a href="https://arxiv.org/abs/2307.08476">SkeletonMAE (ICCV 2023)</a> and <a href="https://www.nature.com/articles/s41598-026-39330-9">Hui et al. (2026)</a> establish related feature-prediction and structured-masking approaches. Their reported representation tasks do not by themselves establish preservation of gait measurements.</p>
