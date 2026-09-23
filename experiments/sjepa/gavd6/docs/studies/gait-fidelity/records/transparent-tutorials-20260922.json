@@ -1,0 +1,237 @@
+{
+  "schema": "gait-fidelity-transparent-tutorials-v1",
+  "completed_utc": "2026-09-22T20:47:13.097605+00:00",
+  "scope": "Local CPU tutorial and exact fixture preservation validation; HAIC/H100 runtime not assessed",
+  "execution": {
+    "status": "TUTORIAL_EXECUTION_PASSED",
+    "scope": "CPU software fixture; no HAIC validation",
+    "completed_utc": "2026-09-22T20:46:03.309499+00:00",
+    "work": "/private/tmp/gf-transparent-tutorials-20260922/work",
+    "notebooks": [
+      {
+        "notebook": "00_start_here.ipynb",
+        "status": "passed",
+        "seconds": 3.0,
+        "source_sha256": "a4b3ea9ca98ef417aadf3efee86669eda30f8006b35078e3dbbb3154984b88fd",
+        "code_cells": 4,
+        "image_outputs": 0,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "01_data_and_references.ipynb",
+        "status": "passed",
+        "seconds": 3.385,
+        "source_sha256": "564e65fb2e3f923226809cb1ebd380b997dada242245fdc1480d3238c8fc245e",
+        "code_cells": 9,
+        "image_outputs": 2,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "02_masking_and_controls.ipynb",
+        "status": "passed",
+        "seconds": 2.704,
+        "source_sha256": "3d5c0f3df496286be6b03e894d9f501e8be7c917539d893f4e1dee7b000a85cb",
+        "code_cells": 8,
+        "image_outputs": 1,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "03_experiment_matrix.ipynb",
+        "status": "passed",
+        "seconds": 3.378,
+        "source_sha256": "1a77ab455b1cb627e3616282e67c62f21e306be503ac9ab779a6b3303aa75f81",
+        "code_cells": 9,
+        "image_outputs": 1,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "04_run_and_monitor.ipynb",
+        "status": "passed",
+        "seconds": 64.982,
+        "source_sha256": "f92367130bdd0d1fc167e44e57eb2178fd19928e5940519bc26ed7fa6efa75d3",
+        "code_cells": 13,
+        "image_outputs": 0,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "05_evaluate_and_visualize.ipynb",
+        "status": "passed",
+        "seconds": 57.923,
+        "source_sha256": "ca5c41c538dbb42aaf34a521bf735c0fd7a199e7caa30a2f65165d90bd86a291",
+        "code_cells": 11,
+        "image_outputs": 1,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "06_verify_and_write.ipynb",
+        "status": "passed",
+        "seconds": 22.693,
+        "source_sha256": "1eb34abb1c383a3b4cb87d466ac476ae7c0e1fc317c71c042265fa695d0a532d",
+        "code_cells": 8,
+        "image_outputs": 1,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "experiments/A_masking_and_change.ipynb",
+        "status": "passed",
+        "seconds": 0.908,
+        "source_sha256": "37f0e7e366c3d3b49f35cba64e5c9b0ae4cd972d718c1d4fe6895d49e8e08f15",
+        "code_cells": 6,
+        "image_outputs": 0,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "experiments/B_mask_structure_controls.ipynb",
+        "status": "passed",
+        "seconds": 1.81,
+        "source_sha256": "21fdc4add530906d2f401e4a447a9841cf102ee89feb9a94ccd2bbdc0809de14",
+        "code_cells": 6,
+        "image_outputs": 0,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "experiments/C_practical_benchmarks.ipynb",
+        "status": "passed",
+        "seconds": 2.381,
+        "source_sha256": "227d2dd2db9755b3a21bd5f09f054067344cf7487e20e441dab57b7460cbf718",
+        "code_cells": 7,
+        "image_outputs": 1,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "experiments/D_pretraining_information.ipynb",
+        "status": "passed",
+        "seconds": 1.619,
+        "source_sha256": "b3a347c550f2f8a30ad0d967eab893e3def98178dd7ae9c128505cfd701f7e55",
+        "code_cells": 6,
+        "image_outputs": 0,
+        "error_outputs": 0
+      },
+      {
+        "notebook": "experiments/E_pairing_and_label_controls.ipynb",
+        "status": "passed",
+        "seconds": 1.608,
+        "source_sha256": "e28bf00b7651aa19108bd87b6db78bdc8be17c283e73d6e145c715f660be8f44",
+        "code_cells": 7,
+        "image_outputs": 0,
+        "error_outputs": 0
+      }
+    ],
+    "validation_sequence": "Complete twelve-notebook kernel run, then targeted 01/03/04 kernel rerun after preview clarification and CPU-only RNG correction; canonical launch/status cells executed normally."
+  },
+  "code_cells": 94,
+  "error_outputs": 0,
+  "verification": {
+    "status": "GAIT_FIDELITY_VERIFIED",
+    "artifacts_checked": 915,
+    "reconstructed_rows": 39168,
+    "evidence_status": "fixture-tested",
+    "cuda_verified_here": false
+  },
+  "scientific_output_preservation": {
+    "status": "EXACT_SCIENTIFIC_OUTPUT_PARITY",
+    "unchanged_source_files": 161,
+    "identical_model_states": 135,
+    "identical_final_prediction_exports": 102,
+    "identical_csv_tables": [
+      "by-condition.csv",
+      "coverage.csv",
+      "interaction.csv",
+      "nuisance.csv",
+      "per-person.csv",
+      "per-window.csv",
+      "responses.csv"
+    ],
+    "identical_json_tables": [
+      "calibration.json",
+      "comparisons.json"
+    ],
+    "preserved_recipe_plan": true,
+    "baseline": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-fidelity-readiness-tv0j306g/work",
+    "revised": "/private/tmp/gf-transparent-tutorials-20260922/work",
+    "excluded_from_equality": "Run paths, timestamps, elapsed time and checkpoint container metadata"
+  },
+  "tests": {
+    "study_tests": 50,
+    "layout_tests": 6,
+    "final_structure_check": "passed",
+    "notebook_schema_and_empty_outputs": "passed"
+  },
+  "additional_checks": {
+    "mask_arrays_compared_bitwise_per_window_length": 60,
+    "data_mask_window_lengths": [
+      32,
+      128
+    ],
+    "source_architecture_cpu_shape": "[B,128,12,2] -> [B,384,96] -> [B,128,12,2]",
+    "sparse_control_audit_cases": [
+      "empty observations",
+      "one eligible token"
+    ],
+    "scratch_rng": "CPU generator seeded inside fork_rng; no accelerator seeding"
+  },
+  "review": {
+    "cross_reviews": "Data/mask, model/training, evaluation and experimental controls independently cross-reviewed",
+    "final_independent_review": "No outstanding findings after CPU-only RNG correction",
+    "record": "../reviews/transparent-tutorials-20260922.md"
+  },
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "torch": "2.13.0",
+    "device": "cpu"
+  },
+  "source_hashes": {
+    "notebooks/gait_fidelity/00_start_here.ipynb": "a4b3ea9ca98ef417aadf3efee86669eda30f8006b35078e3dbbb3154984b88fd",
+    "notebooks/gait_fidelity/01_data_and_references.ipynb": "564e65fb2e3f923226809cb1ebd380b997dada242245fdc1480d3238c8fc245e",
+    "notebooks/gait_fidelity/02_masking_and_controls.ipynb": "3d5c0f3df496286be6b03e894d9f501e8be7c917539d893f4e1dee7b000a85cb",
+    "notebooks/gait_fidelity/03_experiment_matrix.ipynb": "1a77ab455b1cb627e3616282e67c62f21e306be503ac9ab779a6b3303aa75f81",
+    "notebooks/gait_fidelity/04_run_and_monitor.ipynb": "f92367130bdd0d1fc167e44e57eb2178fd19928e5940519bc26ed7fa6efa75d3",
+    "notebooks/gait_fidelity/05_evaluate_and_visualize.ipynb": "ca5c41c538dbb42aaf34a521bf735c0fd7a199e7caa30a2f65165d90bd86a291",
+    "notebooks/gait_fidelity/06_verify_and_write.ipynb": "1eb34abb1c383a3b4cb87d466ac476ae7c0e1fc317c71c042265fa695d0a532d",
+    "notebooks/gait_fidelity/build_notebooks.py": "8e4cdcb4aa66cfc72b092da40a1a2484a070e34ba15f411bb5516c1d770323dd",
+    "notebooks/gait_fidelity/execute_tutorials.py": "4e399a643145034a8acee7cdcdc8a5e4e6eacc90dd32a5f276220c80136bf88b",
+    "notebooks/gait_fidelity/experiments/A_masking_and_change.ipynb": "37f0e7e366c3d3b49f35cba64e5c9b0ae4cd972d718c1d4fe6895d49e8e08f15",
+    "notebooks/gait_fidelity/experiments/B_mask_structure_controls.ipynb": "21fdc4add530906d2f401e4a447a9841cf102ee89feb9a94ccd2bbdc0809de14",
+    "notebooks/gait_fidelity/experiments/C_practical_benchmarks.ipynb": "227d2dd2db9755b3a21bd5f09f054067344cf7487e20e441dab57b7460cbf718",
+    "notebooks/gait_fidelity/experiments/D_pretraining_information.ipynb": "b3a347c550f2f8a30ad0d967eab893e3def98178dd7ae9c128505cfd701f7e55",
+    "notebooks/gait_fidelity/experiments/E_pairing_and_label_controls.ipynb": "e28bf00b7651aa19108bd87b6db78bdc8be17c283e73d6e145c715f660be8f44",
+    "notebooks/gait_fidelity/lesson_data.py": "07ab2ce880d641809707b2aecc2cdab37f3ac35fd0619b789808a6546bf624cb",
+    "notebooks/gait_fidelity/lesson_evaluation.py": "4ae433f9c27a6bc367e90ce6212240262cd07776173de5407ce04fe0ac03ffc3",
+    "notebooks/gait_fidelity/lesson_experiments.py": "04407bd6e82f93dc0666a87e48e34df8f00297de712c47299371554612f84fae",
+    "notebooks/gait_fidelity/lesson_model.py": "98557c4f701231519a9e3aaa7edcf74f418297edd6f5d017b70773e7f494d5bd",
+    "notebooks/gait_fidelity/lesson_start.py": "c3de291d73185ed0fccfe04587310b2e93ea95548efe0e9c1f587384cac68b5f",
+    "notebooks/gait_fidelity/tutorial_helpers.py": "1260efacc38286dee9b7aaf02379309a1cfb2f60873e44ec2a1c999830c3cd4e"
+  },
+  "logs": {
+    "study-tests.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/study-tests.log",
+      "sha256": "4e31d7d318ad02739cb5187e2856f7c9293364a16c029447864d6bdf2a9b2745"
+    },
+    "layout-tests.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/layout-tests.log",
+      "sha256": "85ca21847aa04b3d841c8a3a1c8252bb48135cf895fd6db4a45f1ea10532b584"
+    },
+    "final-structure.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/final-structure.log",
+      "sha256": "a146ffbdf9b07bb226ef66ce59c2a411149b39de43ba5ad86bc5ec9e95a7fb61"
+    },
+    "execution.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/execution.log",
+      "sha256": "018815f5947545fa23d9ee1099584f3cef2cba5fd97c501d088c7b1f7c42a3a0"
+    },
+    "execution-final.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/execution-final.log",
+      "sha256": "4da05328953304066b56d2130843c46fdabdd7aae23b6a556f029c93f3ed248d"
+    },
+    "rerun-model.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/rerun-model.log",
+      "sha256": "5f03e7bc9716a4aa655ffac1bed1712badaf09cdccd42dd2ced145ee195f3872"
+    },
+    "parity-final.log": {
+      "path": "/private/tmp/gf-transparent-tutorials-20260922/parity-final.log",
+      "sha256": "c1f887475fea23f6dc022a45f66c097dcd4a948a38dcd20b65ad4304e3987d18"
+    }
+  }
+}

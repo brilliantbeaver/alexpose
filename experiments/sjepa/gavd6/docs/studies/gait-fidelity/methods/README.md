@@ -4,8 +4,12 @@
 
 Read the main proposal for the scientific argument, then use these protocols to make each comparison reproducible. They describe proposed experiments, with completed implementation audits identified separately.
 
+The current execution assumption is **eight H100s and at most one hour of setup**. Both masking and paired-change supervision enter the complete three-seed matrix, rather than competing for a single development slot. Start with the execution plan to see the dated resource budget and what the existing launcher still needs.
+
 | Protocol | Question it resolves | Read before |
 | --- | --- | --- |
+| [Implemented experiments](running.md) | How do I run and inspect each experiment? | Using the HAIC guide and notebook tutorials |
+| [Eight-H100 execution plan](execution.md) | How do 34 recipes and 102 final fits share data, GPU capacity and deadlines? | Profiling the new data, implementing the parallel coordinator or queuing jobs |
 | [Evaluation and measurement](evaluation.md) | What is the signed measurement, how is change distortion scored, and which references/populations support a claim? | Freezing data eligibility, losses, primary comparisons or statistical analysis |
 | [Anatomical masking](masking.md) | How are graph/time masks sampled, matched and audited without hiding the same evidence repeatedly? | Implementing the body12 adapter or launching pretraining |
 | [Data and references](../data/README.md) | Which observed tracks, reference labels and identities belong in each experiment? | Selecting or rendering source windows |
@@ -15,4 +19,4 @@ The first endpoint is the right-minus-left difference in projected knee excursio
 
 Keep two comparisons distinct when introducing the change constraint. Direct end-to-end training with and without the constraint measures practical benefit. Coordinate-pretrained and JEPA encoders with the same frozen-encoder readout stage, each with and without the constraint, isolate representation choice more closely. The initialized/shuffled feature controls receive the same selected readout objective. A contrast between differently trainable recipes alone cannot attribute an interaction specifically to feature prediction.
 
-Proceed from data/reference checks to mask and gradient smoke checks, then the staged development comparisons in the [proposal](../README.md#55-attribute-each-improvement). Fresh confirmation starts only after the method, endpoint, margins and sample/resource bound are frozen.
+Proceed from data/reference checks to mask and gradient smoke checks, then run all registered cells in dependency-respecting parallel jobs. A short execution check does not select scientific winners. Fresh confirmation starts only after the method/comparison, endpoint, margins and sample/resource bound are frozen.
