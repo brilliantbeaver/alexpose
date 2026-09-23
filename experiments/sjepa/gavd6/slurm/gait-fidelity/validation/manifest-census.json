@@ -1,0 +1,202 @@
+{
+  "scope": "Local manifest audit only; raw HAIC media availability and quality are unverified",
+  "presets": {
+    "named_walking": {
+      "identity": "d6ddcd02243d47721b9d2b1a6c0f9708b5d12270c546adfe201fb0092d1fa84f",
+      "summary": {
+        "eligible_inventory_motions": 8854,
+        "planned_motions": 1133,
+        "planned_windows": 2584,
+        "roles": {
+          "confirmation": {
+            "people": 14,
+            "motions": 97,
+            "windows": 199
+          },
+          "development": {
+            "people": 15,
+            "motions": 102,
+            "windows": 214
+          },
+          "train": {
+            "people": 113,
+            "motions": 934,
+            "windows": 2171
+          }
+        },
+        "candidates_missing_on_disk": 2584,
+        "motion_labels": {
+          "named_walking": 819,
+          "treadmill_fast": 102,
+          "treadmill_normal": 107,
+          "treadmill_slow": 105
+        },
+        "preparation_estimates": {
+          "confirmation": {
+            "rendered_clips": 6368,
+            "rendered_frames": 815104,
+            "derived_track_rows": 71640,
+            "array_bytes_one_copy": 2640936960,
+            "array_bytes_three_retained_copies": 7922810880,
+            "uncompressed_rgb_bytes_generated_not_retained": 751199846400
+          },
+          "development": {
+            "rendered_clips": 6848,
+            "rendered_frames": 876544,
+            "derived_track_rows": 77040,
+            "array_bytes_one_copy": 2840002560,
+            "array_bytes_three_retained_copies": 8520007680,
+            "uncompressed_rgb_bytes_generated_not_retained": 807822950400
+          },
+          "train": {
+            "rendered_clips": 52104,
+            "rendered_frames": 6669312,
+            "derived_track_rows": 416832,
+            "array_bytes_one_copy": 15366094848,
+            "array_bytes_three_retained_copies": 46098284544,
+            "uncompressed_rgb_bytes_generated_not_retained": 6146437939200
+          }
+        },
+        "independent_confirmation": false,
+        "limitation": "Filename labels are candidates; geometry checks do not validate gait or clinical status"
+      },
+      "authorities": {
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_raw_inventory_eligible.csv": "c6ae957ee2090a0785fe1a937abd87336d56fd3a47a197b62bffc5cf81a91288",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_subject_registry.csv": "0983da26ced80a20e7fe4140a3ec645c79876e6e7591ffacfafb785cd22b0465",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_subject_splits.csv": "ec1fbec0b478e509e10a458c7e9532fabaa5b9043575e0fc4bafd81c298fcef7"
+      }
+    },
+    "treadmill_walking": {
+      "identity": "21767f69ed09c3aa87dd90858186d3ac775fa2d1807cee71c90b48f07ed116c1",
+      "summary": {
+        "eligible_inventory_motions": 8854,
+        "planned_motions": 314,
+        "planned_windows": 1115,
+        "roles": {
+          "confirmation": {
+            "people": 11,
+            "motions": 31,
+            "windows": 111
+          },
+          "development": {
+            "people": 12,
+            "motions": 36,
+            "windows": 130
+          },
+          "train": {
+            "people": 86,
+            "motions": 247,
+            "windows": 874
+          }
+        },
+        "candidates_missing_on_disk": 1115,
+        "motion_labels": {
+          "treadmill_fast": 102,
+          "treadmill_normal": 107,
+          "treadmill_slow": 105
+        },
+        "preparation_estimates": {
+          "confirmation": {
+            "rendered_clips": 3552,
+            "rendered_frames": 454656,
+            "derived_track_rows": 39960,
+            "array_bytes_one_copy": 1473085440,
+            "array_bytes_three_retained_copies": 4419256320,
+            "uncompressed_rgb_bytes_generated_not_retained": 419010969600
+          },
+          "development": {
+            "rendered_clips": 4160,
+            "rendered_frames": 532480,
+            "derived_track_rows": 46800,
+            "array_bytes_one_copy": 1725235200,
+            "array_bytes_three_retained_copies": 5175705600,
+            "uncompressed_rgb_bytes_generated_not_retained": 490733568000
+          },
+          "train": {
+            "rendered_clips": 20976,
+            "rendered_frames": 2684928,
+            "derived_track_rows": 167808,
+            "array_bytes_one_copy": 6186074112,
+            "array_bytes_three_retained_copies": 18558222336,
+            "uncompressed_rgb_bytes_generated_not_retained": 2474429644800
+          }
+        },
+        "independent_confirmation": false,
+        "limitation": "Filename labels are candidates; geometry checks do not validate gait or clinical status"
+      },
+      "authorities": {
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_raw_inventory_eligible.csv": "c6ae957ee2090a0785fe1a937abd87336d56fd3a47a197b62bffc5cf81a91288",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_subject_registry.csv": "0983da26ced80a20e7fe4140a3ec645c79876e6e7591ffacfafb785cd22b0465",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_subject_splits.csv": "ec1fbec0b478e509e10a458c7e9532fabaa5b9043575e0fc4bafd81c298fcef7"
+      }
+    },
+    "all_eligible": {
+      "identity": "1d685e2ab4406a6d236ec0701ac843e7813586af372d0f8dc5daae3410512c21",
+      "summary": {
+        "eligible_inventory_motions": 8854,
+        "planned_motions": 5830,
+        "planned_windows": 15793,
+        "roles": {
+          "confirmation": {
+            "people": 18,
+            "motions": 527,
+            "windows": 1347
+          },
+          "development": {
+            "people": 19,
+            "motions": 429,
+            "windows": 933
+          },
+          "train": {
+            "people": 150,
+            "motions": 4874,
+            "windows": 13513
+          }
+        },
+        "candidates_missing_on_disk": 15793,
+        "motion_labels": {
+          "acted_limb_condition_candidate": 20,
+          "named_walking": 819,
+          "other_or_unresolved": 4581,
+          "treadmill_fast": 102,
+          "treadmill_jog_or_run": 96,
+          "treadmill_normal": 107,
+          "treadmill_slow": 105
+        },
+        "preparation_estimates": {
+          "confirmation": {
+            "rendered_clips": 43104,
+            "rendered_frames": 5517312,
+            "derived_track_rows": 484920,
+            "array_bytes_one_copy": 17876090880,
+            "array_bytes_three_retained_copies": 53628272640,
+            "uncompressed_rgb_bytes_generated_not_retained": 5084754739200
+          },
+          "development": {
+            "rendered_clips": 29856,
+            "rendered_frames": 3821568,
+            "derived_track_rows": 335880,
+            "array_bytes_one_copy": 12381880320,
+            "array_bytes_three_retained_copies": 37145640960,
+            "uncompressed_rgb_bytes_generated_not_retained": 3521957068800
+          },
+          "train": {
+            "rendered_clips": 324312,
+            "rendered_frames": 41511936,
+            "derived_track_rows": 2594496,
+            "array_bytes_one_copy": 95643500544,
+            "array_bytes_three_retained_copies": 286930501632,
+            "uncompressed_rgb_bytes_generated_not_retained": 38257400217600
+          }
+        },
+        "independent_confirmation": false,
+        "limitation": "Filename labels are candidates; geometry checks do not validate gait or clinical status"
+      },
+      "authorities": {
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_raw_inventory_eligible.csv": "c6ae957ee2090a0785fe1a937abd87336d56fd3a47a197b62bffc5cf81a91288",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_subject_registry.csv": "0983da26ced80a20e7fe4140a3ec645c79876e6e7591ffacfafb785cd22b0465",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/manifests/amass/amass_subject_splits.csv": "ec1fbec0b478e509e10a458c7e9532fabaa5b9043575e0fc4bafd81c298fcef7"
+      }
+    }
+  }
+}
