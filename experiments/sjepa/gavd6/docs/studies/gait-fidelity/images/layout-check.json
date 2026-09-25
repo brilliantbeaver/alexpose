@@ -1,13 +1,237 @@
 {
-  "figure_count": 12,
-  "preview_count": 24,
+  "figure_count": 18,
+  "preview_count": 36,
   "findings": [],
-  "checks": [
-    "SVG XML parses",
-    "Arial text bounds",
-    "assigned-box text containment",
-    "text intersections",
-    "orthogonal connector/text intersections"
+  "assets": [
+    {
+      "path": "images/previews/01-research-question.png",
+      "sha256": "8a29c533a9884b5a5ca8b65f0ccc3bf270b2649f6d4f20f9e8279ba4fa08b34c"
+    },
+    {
+      "path": "images/previews/01-research-question-900.png",
+      "sha256": "ffd17aaf7d75e8afbb7e5003f2176dfab2859264e36f1ee5671ce0fdc3e8aec1"
+    },
+    {
+      "path": "images/01-research-question.svg",
+      "sha256": "7ad21c2c57ef8a9e93c1ad746c2e359aba221182efd48da577d45ed523263591"
+    },
+    {
+      "path": "images/previews/02-crossed-design.png",
+      "sha256": "64d2ecaadc7842751deea4ea1b2a5ead34c6a897139f7cefca5e4b9c5c7c55d0"
+    },
+    {
+      "path": "images/previews/02-crossed-design-900.png",
+      "sha256": "b1266fafcb0a70b54633cea7acdb7eae0506bbf9c97a106fb37ae4e788c1e05c"
+    },
+    {
+      "path": "images/02-crossed-design.svg",
+      "sha256": "df08006654ed15c5fb4b8af01ec56cedbeefb6e4220d424712209db48d5b6d27"
+    },
+    {
+      "path": "images/previews/03-changing-graph-masks.png",
+      "sha256": "08167d17d6afc38b513e398b4a53ac59d21c902dbb63899b2fcfa5149150e2a0"
+    },
+    {
+      "path": "images/previews/03-changing-graph-masks-900.png",
+      "sha256": "3d2d5dc4ee288c9cd3d5f1aa7563324282a8655e2709fd395cad996fae4aa7dc"
+    },
+    {
+      "path": "images/03-changing-graph-masks.svg",
+      "sha256": "bb3bcff93e3cbae17865341244d9f46fd2ce0926c42f19080320cb994ccaf4c8"
+    },
+    {
+      "path": "images/previews/04-mask-contract.png",
+      "sha256": "30da5c108fff978e983a44d78a0c1e42817dacb6b05423f514784cd48a1d5074"
+    },
+    {
+      "path": "images/previews/04-mask-contract-900.png",
+      "sha256": "686a3933ec9457c6ff9377ab835e9a9817bff44ee212b912648315af979a7e2b"
+    },
+    {
+      "path": "images/04-mask-contract.svg",
+      "sha256": "9e6d5f984eff317775ff2dfa293bcfde6644d7f2b35f32a020f689adb0ea126c"
+    },
+    {
+      "path": "images/previews/05-coverage-audit.png",
+      "sha256": "59be35d068c5559f1582196d6dbb8f0d52d9fd13075b99dc05986688aa871784"
+    },
+    {
+      "path": "images/previews/05-coverage-audit-900.png",
+      "sha256": "03ac6689c9a916656520879750c50cde3bf0d27bb405e49de8a15f7031cf3015"
+    },
+    {
+      "path": "images/05-coverage-audit.svg",
+      "sha256": "7d046fd65cc1a202c69f51b65dacde3280940ef12b37f46d6709236154697122"
+    },
+    {
+      "path": "images/previews/06-matched-mask-experiment.png",
+      "sha256": "369204baad1c9e23b5638cd4a4114b51b4af95c949dfd7a368ab03defc4f218a"
+    },
+    {
+      "path": "images/previews/06-matched-mask-experiment-900.png",
+      "sha256": "21f75a28f7137a315876cfaa3a5b088caa40b94c6e03f763b479c14625529d68"
+    },
+    {
+      "path": "images/06-matched-mask-experiment.svg",
+      "sha256": "531234bbf463b56829b5e77279886bb0770958254a0ed3cf618b80c4efeaeb31"
+    },
+    {
+      "path": "images/previews/07-video-evidence.png",
+      "sha256": "befd98c21273f0db1e7d178473f360979f8d2e0649f7e6a83e38ef92ebdc9be1"
+    },
+    {
+      "path": "images/previews/07-video-evidence-900.png",
+      "sha256": "00612552158823237b4316161f576cf9e491184ee223caa2c394c23a1d245553"
+    },
+    {
+      "path": "images/07-video-evidence.svg",
+      "sha256": "b19c460fa124b6fe39a56a98883d5fc7195ff05cf3daf2d475a1e3c580fd1927"
+    },
+    {
+      "path": "images/previews/08-data-review-view.png",
+      "sha256": "84b2bb0cd12b623b96f2ae67681e6acfe50e2a2fa6fc13e593cc9043fc4cffaf"
+    },
+    {
+      "path": "images/previews/08-data-review-view-900.png",
+      "sha256": "d3b4cd3d833dcc65641111dbf1a66d0022dcab88f8cc4da34b158a8b06f04dfb"
+    },
+    {
+      "path": "images/08-data-review-view.svg",
+      "sha256": "08b14d2a25573a55d5f37f1ebe335279b1516102c8c041721bf9c7a0327113ad"
+    },
+    {
+      "path": "images/previews/09-source-splits.png",
+      "sha256": "8c89afb5158dc9b6ae07dc5cd08afa26fb9460042abd1700fd2c028730c0cb86"
+    },
+    {
+      "path": "images/previews/09-source-splits-900.png",
+      "sha256": "80b6fbe0b1a34a1fe6fa646867e8714fe8a8e50496442db9b64600db899f45ab"
+    },
+    {
+      "path": "images/09-source-splits.svg",
+      "sha256": "c8a830345297fd9008af1e1b0b81be026c4fd3bb4bb1eeff058296c3013967c6"
+    },
+    {
+      "path": "images/previews/10-assignment-uncertainty.png",
+      "sha256": "ae278545a71f5b40b593c6b246607b89842ae57a54de5f04f700cc9e72c23059"
+    },
+    {
+      "path": "images/previews/10-assignment-uncertainty-900.png",
+      "sha256": "1386439a1aca542cca00299f3b1b854f9e8dce75b8b2933eeb0457f93624a6ce"
+    },
+    {
+      "path": "images/10-assignment-uncertainty.svg",
+      "sha256": "710f6a284e9dc2f06b46066e0d780816d96be4e06627b05f8b51b587caddbbc9"
+    },
+    {
+      "path": "images/previews/11-transformation-contracts.png",
+      "sha256": "fdf3476e7e2fa9a7468f38c324ed39f8953baa70df8754d4cb9f0db6dfe343bc"
+    },
+    {
+      "path": "images/previews/11-transformation-contracts-900.png",
+      "sha256": "7f9c479b7f83074f1418bb834017841a646c83a6276d07f1d410ddf189bf5950"
+    },
+    {
+      "path": "images/11-transformation-contracts.svg",
+      "sha256": "6caaadb9602bef29b74f8387dc665ea7f5deec2423f6618e194a84b9663e2ab5"
+    },
+    {
+      "path": "images/previews/12-evidence-workflow.png",
+      "sha256": "f3b8a14ba127bf2b6778be1611b66fdfd7a08dc37ea79ef8512e0ca4591fc229"
+    },
+    {
+      "path": "images/previews/12-evidence-workflow-900.png",
+      "sha256": "55d5f2364dbb90098dcfe342d68109072405414827038e344bab763043ceb986"
+    },
+    {
+      "path": "images/12-evidence-workflow.svg",
+      "sha256": "a083685ecc11f3ead85d83b093fb3942b451c605ebe0cf97dffcd484d2a161f4"
+    },
+    {
+      "path": "images/previews/13-data-to-claims.png",
+      "sha256": "2e606f9bb62e99574cc4b300996b48c55f9b56eb444750fe3c8e7f4c6643e432"
+    },
+    {
+      "path": "images/previews/13-data-to-claims-900.png",
+      "sha256": "3ee8a5a9c2876aba15abde204fdf13181cbe28e860f4f68fd9569018144e1989"
+    },
+    {
+      "path": "images/13-data-to-claims.svg",
+      "sha256": "6fbedb8fbd0a6439372b493030754af89ed553e541444f0d80518456f0482208"
+    },
+    {
+      "path": "images/previews/14-paired-jepa-method.png",
+      "sha256": "acdcfe59033ac8c9be6c46e8c84b8ee99047902f50dc9cae6819c60f3c6e6bfd"
+    },
+    {
+      "path": "images/previews/14-paired-jepa-method-900.png",
+      "sha256": "08429458ec0834ecf6d0eb28ef04dce35d3aa9d3e8952d17ecb4be4bbcc72fbc"
+    },
+    {
+      "path": "images/14-paired-jepa-method.svg",
+      "sha256": "69f58fa238815f6cda471a015b4e62aac6bab3b982bedcd83f83d9cc0c78e40c"
+    },
+    {
+      "path": "images/previews/15-graph-time-mask.png",
+      "sha256": "05635dfe2fa2e65846fca79f5f436c1b2b8ac13577701ecacd44eef825493523"
+    },
+    {
+      "path": "images/previews/15-graph-time-mask-900.png",
+      "sha256": "180c0a4ab7f24ffc8036b2e3116e9edd6efe65830df2e0444b75b07a2857fc9d"
+    },
+    {
+      "path": "images/15-graph-time-mask.svg",
+      "sha256": "9b816e2a6e51e8c2891fbcfd989f2ee671ed440d414e87200c3b501bbb243f2c"
+    },
+    {
+      "path": "images/previews/16-response-estimand.png",
+      "sha256": "d15d8fd8236e955e6dac1678e79c974c443b3d37d59e942e213ba43e05bef250"
+    },
+    {
+      "path": "images/previews/16-response-estimand-900.png",
+      "sha256": "661f150b109bd641280bc4917e3ffa5191f0792107ce0109f1b781f61516f86d"
+    },
+    {
+      "path": "images/16-response-estimand.svg",
+      "sha256": "116161dd95b14a6c5681a4a5500fe711149c180e81317e836bd9313f4e845e67"
+    },
+    {
+      "path": "images/previews/17-parallel-execution.png",
+      "sha256": "760ef258cd9dc1e846483f2e199c45c3cda0e3931a9adeb46d86ca813fe93d06"
+    },
+    {
+      "path": "images/previews/17-parallel-execution-900.png",
+      "sha256": "b1c41772be87f35dffda7da3915e71732ddaf976f805622446cdb500f5a86e8c"
+    },
+    {
+      "path": "images/17-parallel-execution.svg",
+      "sha256": "aa2eb7519f36b19ead040302c1c81632fc0e6df31a213a884ea4fa9be84267e5"
+    },
+    {
+      "path": "images/previews/jepa-response.png",
+      "sha256": "94bb61c65ba50fa6b9a38f11eb49512d5c1ffde679b8c0e177f86e89042437df"
+    },
+    {
+      "path": "images/previews/jepa-response-900.png",
+      "sha256": "f28cdaf04e472e7d0f72811f3f4b060a6a8edacc18c4fd3de63c7f3094d39c7f"
+    },
+    {
+      "path": "images/jepa-response.svg",
+      "sha256": "b4aaaafdf5739feffd30e7bf9e0a3920c7e05fa74a12ab10bea0d8048b4f31b6"
+    }
   ],
-  "limit": "Geometry checks supplement independent visual review; they do not establish scientific correctness."
+  "checks": [
+    "SVG XML parsing",
+    "18px minimum font",
+    "Pillow text bounds",
+    "panel containment",
+    "canvas safe area",
+    "text intersections",
+    "connector/text intersections"
+  ],
+  "fonts": {
+    "normal": "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "bold": "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  },
+  "limitation": "Schematic artwork is excluded from connector checks. Geometry checks supplement rendered visual review and scientific review."
 }

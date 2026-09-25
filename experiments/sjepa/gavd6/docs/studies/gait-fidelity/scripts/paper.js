@@ -11,7 +11,10 @@
       observationA: error[1] - error[0], observationB: error[3] - error[2],
       interaction: error[3] - error[1] - error[2] + error[0] };
   }
-  if (typeof module !== 'undefined' && module.exports) module.exports = { contrasts };
+  function coupling(u, v) {
+    return { delta: (v-u)*(v-u)/2, endpoint: (u*u+v*v)/2, cross: -u*v };
+  }
+  if (typeof module !== 'undefined' && module.exports) module.exports = { contrasts, coupling };
   if (typeof document === 'undefined') return;
   const ids = ['true-change', 'clean-gain', 'degraded-gain', 'observation-shift'];
   const signed = x => (x > 0 ? '+' : '') + (Math.abs(x) < 0.00001 ? 0 : x).toFixed(2) + '°';
@@ -30,10 +33,12 @@
      ['interaction', c.interaction]].forEach(([id, value]) => {
       document.getElementById(id).textContent = signed(value);
     });
+    document.getElementById('clean-absolute').textContent = Math.abs(c.cleanResponse).toFixed(2) + '°';
+    document.getElementById('degraded-absolute').textContent = Math.abs(c.degradedResponse).toFixed(2) + '°';
     document.getElementById('explorer-description').textContent =
       'The reference change is ' + signed(values[0]) + '. The estimated change is ' +
       signed(values[0] * values[1] / 100) + ' under clean observation and ' +
-      signed(values[0] * values[2] / 100) + ' under degraded observation. The difference between their response errors is ' +
+      signed(values[0] * values[2] / 100) + ' under degraded observation. The difference between their signed response biases is ' +
       signed(c.interaction) + '.';
   }
   ids.forEach(id => document.getElementById(id).addEventListener('input', update));
@@ -42,6 +47,35 @@
     presets[button.dataset.preset].forEach((v, i) => { document.getElementById(ids[i]).value = v; }); update();
   }));
   update();
+  function updateCoupling() {
+    const u = Number(document.getElementById('residual-a').value);
+    const v = Number(document.getElementById('residual-b').value);
+    const c = coupling(u, v);
+    [['a', u], ['b', v]].forEach(([endpoint, value]) => {
+      document.getElementById('residual-' + endpoint + '-value').textContent = value.toFixed(2);
+      [['x', value], ['y', -value]].forEach(([channel, residual]) => {
+        const bar = document.getElementById('residual-' + endpoint + '-' + channel);
+        bar.setAttribute('x', 300 + Math.min(0, residual) * 40);
+        bar.setAttribute('width', Math.abs(residual) * 40);
+      });
+    });
+    document.getElementById('delta-loss').textContent = c.delta.toFixed(2);
+    document.getElementById('endpoint-loss').textContent = c.endpoint.toFixed(2);
+    document.getElementById('coupling-term').textContent = c.cross.toFixed(2);
+    document.getElementById('coupling-description').textContent =
+      c.delta === 0 && c.endpoint > 0 ? 'Both states have the same nonzero error. Coupling permits this shared bias, so its loss is zero while endpoint regression still penalizes it.' :
+      c.endpoint === 0 ? 'Both endpoint errors are zero. Both auxiliary losses are zero.' :
+      'The error difference contributes ' + c.delta.toFixed(2) + ' to the coupled loss; the independent endpoint errors contribute ' + c.endpoint.toFixed(2) + '. These are illustrative feature units.';
+  }
+  ['residual-a', 'residual-b'].forEach(id => document.getElementById(id).addEventListener('input', updateCoupling));
+  const couplingPresets = { shared: [2, 2], opposed: [2, -2], zero: [0, 0] };
+  document.querySelectorAll('[data-coupling-preset]').forEach(button => button.addEventListener('click', () => {
+    const values = couplingPresets[button.dataset.couplingPreset];
+    document.getElementById('residual-a').value = values[0];
+    document.getElementById('residual-b').value = values[1];
+    updateCoupling();
+  }));
+  updateCoupling();
   document.querySelectorAll('.explorer input, .explorer button').forEach(control => { control.disabled = false; });
   document.querySelectorAll('.mobile-nav a').forEach(link => link.addEventListener('click', () => {
     document.querySelector('.mobile-nav').open = false;

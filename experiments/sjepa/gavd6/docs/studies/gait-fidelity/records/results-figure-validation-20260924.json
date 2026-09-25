@@ -1,0 +1,76 @@
+{
+  "date": "2026-09-24",
+  "scope": "Matplotlib presentation of completed core; full and compact figures",
+  "independent_reviews": [
+    "evidence_narrative: statistical/technical pass",
+    "research_visuals: final rendered figure/PDF visual pass"
+  ],
+  "figure_checks": {
+    "research-core-results": {
+      "text_elements": 37,
+      "text_overlaps": [],
+      "text_outside_figure": [],
+      "value_labels_intersected_by_lines": [],
+      "smallest_font_pt": 10.5
+    },
+    "research-core-results-compact": {
+      "text_elements": 29,
+      "text_overlaps": [],
+      "text_outside_figure": [],
+      "value_labels_intersected_by_lines": [],
+      "smallest_font_pt": 9.5
+    }
+  },
+  "csv_values_and_paired_interval_signs": "verified",
+  "source_data_unchanged": true,
+  "html": {
+    "proposal.html": {
+      "figures": 37,
+      "local_targets": "pass"
+    },
+    "proposal-brief.html": {
+      "figures": 4,
+      "local_targets": "pass"
+    },
+    "images/gallery.html": {
+      "figures": 23,
+      "local_targets": "pass"
+    }
+  },
+  "browser": {
+    "viewport": [
+      1440,
+      1000
+    ],
+    "page_overflow": false,
+    "displayed_graphs_loaded": true,
+    "screenshots_visually_inspected": true
+  },
+  "pdf": {
+    "pages": 2,
+    "all_overview_paragraphs_present": true,
+    "raster_images_per_page": [
+      1,
+      1
+    ],
+    "plots_remain_vector": true,
+    "final_pages_rendered_and_inspected": true
+  },
+  "sha256": {
+    "README.md": "e00c7c5b97044fd45e8d689c2cd8d6868be6f4eadce5390586de5671caf7c70e",
+    "proposal.html": "79608b1e6ad58fd60321a9ce5ff236a17f68191d83b19c515cfbbd3d9f2d949d",
+    "proposal-brief.md": "5aafbb8a7dc96e4c1a75d44c5863623d412d79b5f9f1d40dcf1bbf369b4fd258",
+    "proposal-brief.html": "c19deddee8897af9d1445566dfca02fe6fff155d28d33244febc12bda887fc3d",
+    "proposal-brief.pdf": "d9f9cbe8ae4b1bbc733eca6a58cbac6001805aa2b6cd3289976f4ce39cb236ba",
+    "images/research-core-results.svg": "a2e5c21e2a4b55199c440a81562607de25351a04e0ef681e33587b371fb8f409",
+    "images/research-core-results-compact.svg": "db1cf39dddb187f321c9b4c23c4254d3febd5536d744cb93606414903c6f9a68",
+    "images/previews/research-core-results.png": "bb7b1af014c9fec4e63253a18c76105f96e2486b27251eeeb873fb0c3db49026",
+    "images/previews/research-core-results-compact.png": "69495c94da4fe2cc85650dc39e788b941c1cfbd2984bff8075cc49bebfdec230",
+    "images/previews/proposal-brief-page-1.png": "7dbb7b3c3307ad7f63f36c0c41d25e07097879c72a3dd9f3f36dae59d68e4297",
+    "images/previews/proposal-brief-page-2.png": "26878f59c4f6c285ed5c743b012e7a70b63c397ebc2ac15e354e501d316b901d",
+    "scripts/build_results_figure.py": "015552e6a1615501d57d352a06a595cc32f760776e476f7c5191be5f8c7d5744",
+    "scripts/build_research_visuals.py": "c36757bda9b2f61eef0312e6b16684d35e7eb172a89da1b8c6a23230b4afcb4b",
+    "records/results-figure-build.json": "9a32ae4ebb8e304da43006c9805259c830a5a1064cf153874bd86ff40d9dafb2",
+    "reviews/results-figures-matplotlib-20260924.md": "f219edc350cb01b36c90caa0edbcaf1aa1c86a1fc9264b4eb74c2ea092cdc9f4"
+  }
+}

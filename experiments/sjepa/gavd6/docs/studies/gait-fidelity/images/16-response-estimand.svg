@@ -1,55 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="950" viewBox="0 0 1200 950" role="img" aria-labelledby="title desc">
-<title id="title">Separate distortion of movement change from observation sensitivity</title><desc id="desc">Illustrative arithmetic only: signed right-minus-left knee excursion in the image plane, measured in degrees.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536879"/></marker></defs>
-<rect width="1200" height="950" fill="white"/>
-<text x="36" y="43" font-family="Arial, sans-serif" font-size="30" fill="#173247" text-anchor="start" font-weight="bold">Separate distortion of movement change from observation sensitivity</text>
-<text x="36" y="78" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Illustrative arithmetic only: signed right-minus-left knee excursion in the image plane, measured in degrees.</text>
-<rect x="30" y="117" width="1140" height="359" rx="12" fill="#f7fafc" stroke="#cfdce5"/>
-<text x="52" y="157" font-family="Arial, sans-serif" font-size="24" fill="#173247" text-anchor="start" font-weight="bold">A. Change the motion; keep the observation condition fixed</text>
-<text x="56" y="248" font-family="Arial, sans-serif" font-size="20" fill="#057b75" text-anchor="start" font-weight="bold">Reference</text>
-<polyline points="319,242 607,242" fill="none" stroke="#057b75" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<circle cx="319" cy="242" r="8" fill="#057b75" stroke="white" stroke-width="2"/>
-<circle cx="607" cy="242" r="8" fill="#057b75" stroke="white" stroke-width="2"/>
-<text x="319" y="218" font-family="Arial, sans-serif" font-size="20" fill="#057b75" text-anchor="middle" font-weight="bold">2°</text>
-<text x="607" y="218" font-family="Arial, sans-serif" font-size="20" fill="#057b75" text-anchor="middle" font-weight="bold">6°</text>
-<text x="319" y="275" font-family="Arial, sans-serif" font-size="18" fill="#173247" text-anchor="middle" font-weight="normal">Motion A</text>
-<text x="607" y="275" font-family="Arial, sans-serif" font-size="18" fill="#173247" text-anchor="middle" font-weight="normal">Motion B</text>
-<text x="737" y="249" font-family="Arial, sans-serif" font-size="20" fill="#057b75" text-anchor="end" font-weight="bold">Δ = +4°</text>
-<text x="56" y="378" font-family="Arial, sans-serif" font-size="20" fill="#2866a8" text-anchor="start" font-weight="bold">Estimate</text>
-<polyline points="355.0,372 499.0,372" fill="none" stroke="#2866a8" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<circle cx="355.0" cy="372" r="8" fill="#2866a8" stroke="white" stroke-width="2"/>
-<circle cx="499.0" cy="372" r="8" fill="#2866a8" stroke="white" stroke-width="2"/>
-<text x="355.0" y="348" font-family="Arial, sans-serif" font-size="20" fill="#2866a8" text-anchor="middle" font-weight="bold">2.5°</text>
-<text x="499.0" y="348" font-family="Arial, sans-serif" font-size="20" fill="#2866a8" text-anchor="middle" font-weight="bold">4.5°</text>
-<text x="355.0" y="405" font-family="Arial, sans-serif" font-size="18" fill="#173247" text-anchor="middle" font-weight="normal">Motion A</text>
-<text x="499.0" y="405" font-family="Arial, sans-serif" font-size="18" fill="#173247" text-anchor="middle" font-weight="normal">Motion B</text>
-<text x="737" y="379" font-family="Arial, sans-serif" font-size="20" fill="#2866a8" text-anchor="end" font-weight="bold">Δ = +2°</text>
-<rect x="805" y="198" width="342" height="191" rx="12" fill="#fff4e5" stroke="#cfdce5"/>
-<text x="823" y="232" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Response distortion</text>
-<text x="823" y="266" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Estimated change − true change</text>
-<text x="823" y="295" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">+2° − (+4°) = −2°</text>
-<text x="823" y="324" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">The change is underestimated.</text>
-<text x="52" y="449" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Baseline measurement error alone cannot describe this loss of movement response.</text>
-<rect x="30" y="507" width="1140" height="323" rx="12" fill="#f7fafc" stroke="#cfdce5"/>
-<text x="52" y="547" font-family="Arial, sans-serif" font-size="24" fill="#173247" text-anchor="start" font-weight="bold">B. Keep motion B fixed; add image occlusion at the same camera</text>
-<text x="56" y="615" font-family="Arial, sans-serif" font-size="20" fill="#057b75" text-anchor="start" font-weight="bold">Reference</text>
-<text x="276" y="615" font-family="Arial, sans-serif" font-size="22" fill="#057b75" text-anchor="middle" font-weight="bold">6°</text>
-<polyline points="305,608 516,608" fill="none" stroke="#057b75" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<text x="546" y="615" font-family="Arial, sans-serif" font-size="22" fill="#057b75" text-anchor="middle" font-weight="bold">6°</text>
-<text x="737" y="615" font-family="Arial, sans-serif" font-size="20" fill="#057b75" text-anchor="end" font-weight="bold">Δ = 0°</text>
-<text x="56" y="709" font-family="Arial, sans-serif" font-size="20" fill="#2866a8" text-anchor="start" font-weight="bold">Estimate</text>
-<text x="276" y="709" font-family="Arial, sans-serif" font-size="22" fill="#2866a8" text-anchor="middle" font-weight="bold">4.5°</text>
-<polyline points="312,702 510,702" fill="none" stroke="#2866a8" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<text x="546" y="709" font-family="Arial, sans-serif" font-size="22" fill="#2866a8" text-anchor="middle" font-weight="bold">5.5°</text>
-<text x="737" y="709" font-family="Arial, sans-serif" font-size="20" fill="#2866a8" text-anchor="end" font-weight="bold">Δ = +1°</text>
-<text x="276" y="750" font-family="Arial, sans-serif" font-size="19" fill="#173247" text-anchor="middle" font-weight="normal">Clean image</text>
-<text x="546" y="750" font-family="Arial, sans-serif" font-size="19" fill="#173247" text-anchor="middle" font-weight="normal">Added occlusion</text>
-<rect x="805" y="581" width="342" height="191" rx="12" fill="#fff4e5" stroke="#cfdce5"/>
-<text x="823" y="615" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Observation-only error</text>
-<text x="823" y="649" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Estimated change − true change</text>
-<text x="823" y="678" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">+1° − 0° = +1°</text>
-<text x="823" y="707" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">The observation changes error.</text>
-<text x="52" y="801" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">If the camera changes, use its own projected reference; a 2D quantity may legitimately change.</text>
-<text x="36" y="874" font-family="Arial, sans-serif" font-size="19" fill="#173247" text-anchor="start" font-weight="normal">Knee excursion = 95th − 5th percentile of the 2D hip–knee–ankle angle over a fixed reviewed interval.</text>
-<text x="36" y="910" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">These image-plane quantities do not establish clinical 3D range of motion or a meaningful treatment effect.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="730" viewBox="0 0 1200 730" role="img" aria-labelledby="title desc">
+<title id="title">Measure restored change against the projected reference</title><desc id="desc">FOLLOW-UP. Illustrative arithmetic: state b − state a at the same observation condition.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="730" fill="#fcfcf9"/>
+<rect x="36" y="18" width="158" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Measure restored change against the projected reference</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Illustrative arithmetic: state b − state a at the same observation condition.</text>
+<rect x="36" y="168" width="361" height="466" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="56" y="202" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Measure knee excursion</text>
+<text x="217" y="242" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Knee angle over time</text>
+<polyline points="77.00,312.00 80.44,305.90 83.88,299.92 87.31,294.17 90.75,288.75 94.19,283.77 97.62,279.32 101.06,275.49 104.50,272.35 107.94,269.96 111.38,268.36 114.81,267.58 118.25,267.64 121.69,268.53 125.12,270.25 128.56,272.75 132.00,276.00 135.44,279.92 138.88,284.45 142.31,289.50 145.75,294.97 149.19,300.76 152.62,306.77 156.06,312.87 159.50,318.96 162.94,324.92 166.38,330.63 169.81,335.99 173.25,340.90 176.69,345.26 180.12,349.00 183.56,352.04 187.00,354.32 190.44,355.81 193.88,356.47 197.31,356.29 200.75,355.27 204.19,353.44 207.62,350.83 211.06,347.48 214.50,343.47 217.94,338.86 221.38,333.74 224.81,328.22 228.25,322.39 231.69,316.36 235.12,310.25 238.56,304.18 242.00,298.25 245.44,292.58 248.88,287.28 252.31,282.44 255.75,278.16 259.19,274.52 262.62,271.59 266.06,269.42 269.50,268.05 272.94,267.51 276.38,267.81 279.81,268.94 283.25,270.89 286.69,273.61 290.12,277.05 293.56,281.16 297.00,285.84 300.44,291.02 303.88,296.60 307.31,302.46 310.75,308.51 314.19,314.62 317.62,320.68 321.06,326.58 324.50,332.20 327.94,337.44 331.38,342.21 334.81,346.40 338.25,349.94 341.69,352.77 345.12,354.83 348.56,356.08 352.00,356.50" fill="none" stroke="#007f79" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="76.00,267.00 352.00,267.00" fill="none" stroke="#d9e2e5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 6"/>
+<polyline points="76.00,357.00 352.00,357.00" fill="none" stroke="#d9e2e5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 6"/>
+<text x="217" y="419" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="middle" font-weight="bold">q = 95th − 5th percentile</text>
+<text x="217" y="482" font-family="Arial, sans-serif" font-size="26" fill="#183247" text-anchor="middle" font-weight="bold">A = q right − q left</text>
+<text x="217" y="548" font-family="Arial, sans-serif" font-size="21" fill="#566978" text-anchor="middle" font-weight="normal">Image-plane degrees</text>
+<rect x="438" y="168" width="726" height="466" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="458" y="202" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Illustration: attenuated movement response</text>
+<text x="468" y="264" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="start" font-weight="bold">Reference</text>
+<polyline points="734.00,256.00 1059.00,256.00" fill="none" stroke="#007f79" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="734" cy="256" r="9" fill="#007f79" stroke="white" stroke-width="2"/>
+<text x="734" y="303" font-family="Arial, sans-serif" font-size="24" fill="#007f79" text-anchor="middle" font-weight="bold">2°</text>
+<circle cx="1059" cy="256" r="9" fill="#007f79" stroke="white" stroke-width="2"/>
+<text x="1059" y="303" font-family="Arial, sans-serif" font-size="24" fill="#007f79" text-anchor="middle" font-weight="bold">6°</text>
+<text x="468" y="368" font-family="Arial, sans-serif" font-size="22" fill="#4c60af" text-anchor="start" font-weight="bold">Restored</text>
+<polyline points="774.00,360.00 937.00,360.00" fill="none" stroke="#4c60af" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="774" cy="360" r="9" fill="#4c60af" stroke="white" stroke-width="2"/>
+<text x="774" y="407" font-family="Arial, sans-serif" font-size="24" fill="#4c60af" text-anchor="middle" font-weight="bold">2.5°</text>
+<circle cx="937" cy="360" r="9" fill="#4c60af" stroke="white" stroke-width="2"/>
+<text x="937" y="407" font-family="Arial, sans-serif" font-size="24" fill="#4c60af" text-anchor="middle" font-weight="bold">4.5°</text>
+<text x="805" y="476" font-family="Arial, sans-serif" font-size="25" fill="#183247" text-anchor="middle" font-weight="bold">Δrestored − Δreference = 2° − 4° = −2°</text>
+<text x="805" y="526" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Signed error = −2°; absolute response error = 2°</text>
+<text x="805" y="574" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Also report each leg, joint positions and motion traces</text>
+<polyline points="36.00,673.00 1164.00,673.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="704" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Main contrast: delta vs endpoint JEPA, balanced by person and seed. Missing predictions remain failures.</text>
 </svg>

@@ -1,24 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="445" viewBox="0 0 1000 445" role="img" aria-labelledby="title desc">
-<title id="title">Audit every joint at every time position</title><desc id="desc">A changing mask can still leave the same central tokens rarely visible.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
-<rect width="1000" height="445" fill="white"/>
-<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">Audit every joint at every time position</text>
-<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">A changing mask can still leave the same central tokens rarely visible.</text>
-<rect x="32" y="130" width="280" height="136" rx="12" fill="#fff5e6" stroke="#d5e0e7"/>
-<text x="172.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Window-level count</text>
-<text x="172.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">“Hip seen at least once”</text>
-<text x="172.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Can hide central starvation</text>
-<rect x="360" y="130" width="280" height="136" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
-<text x="500.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Joint × time coverage</text>
-<text x="500.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Count context and targets</text>
-<text x="500.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Across an advancing RNG</text>
-<rect x="688" y="130" width="280" height="136" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="828.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Accept the sampler</text>
-<text x="828.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Both roles if eligible</text>
-<text x="828.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Check paired-side balance</text>
-<polyline points="312,198 360,198" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="640,198 688,198" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<text x="500" y="320" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="middle" font-weight="normal">Retain achieved mask rate, span lengths, rejection rate and natural missingness.</text>
-<rect x="95" y="354" width="810" height="57" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
-<text x="500" y="390" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">No permanent hip or ankle mask. Verify this empirically before training.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+<title id="title">Check what hidden input and scaling change</title><desc id="desc">DIAGNOSTIC. The left schematic tracks how often each joint and time block is available. The right control repeats identical raw observations and references with independent hidden-input patterns and input-derived normalization. Teacher feature differences then isolate normalization, while student differences also include hidden context. No measured results are shown.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="675" fill="#fcfcf9"/>
+<rect x="36" y="18" width="168" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">DIAGNOSTIC</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Check what hidden input and scaling change</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Diagnostic examples show available context and a control with no real movement change.</text>
+<rect x="36" y="166" width="584" height="354" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="56" y="200" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">How often is each input available?</text>
+<text x="63" y="255" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="normal">Shoulder</text>
+<rect x="200" y="229" width="38" height="32" rx="3" fill="rgb(192,228,221)" stroke="white"/>
+<rect x="247" y="229" width="38" height="32" rx="3" fill="rgb(154,211,205)" stroke="white"/>
+<rect x="294" y="229" width="38" height="32" rx="3" fill="rgb(117,193,189)" stroke="white"/>
+<rect x="341" y="229" width="38" height="32" rx="3" fill="rgb(192,228,221)" stroke="white"/>
+<rect x="388" y="229" width="38" height="32" rx="3" fill="rgb(154,211,205)" stroke="white"/>
+<rect x="435" y="229" width="38" height="32" rx="3" fill="rgb(117,193,189)" stroke="white"/>
+<rect x="482" y="229" width="38" height="32" rx="3" fill="rgb(192,228,221)" stroke="white"/>
+<rect x="529" y="229" width="38" height="32" rx="3" fill="rgb(154,211,205)" stroke="white"/>
+<text x="63" y="298" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="normal">Elbow</text>
+<rect x="200" y="272" width="38" height="32" rx="3" fill="rgb(104,187,183)" stroke="white"/>
+<rect x="247" y="272" width="38" height="32" rx="3" fill="rgb(179,222,216)" stroke="white"/>
+<rect x="294" y="272" width="38" height="32" rx="3" fill="rgb(142,205,200)" stroke="white"/>
+<rect x="341" y="272" width="38" height="32" rx="3" fill="rgb(104,187,183)" stroke="white"/>
+<rect x="388" y="272" width="38" height="32" rx="3" fill="rgb(179,222,216)" stroke="white"/>
+<rect x="435" y="272" width="38" height="32" rx="3" fill="rgb(142,205,200)" stroke="white"/>
+<rect x="482" y="272" width="38" height="32" rx="3" fill="rgb(104,187,183)" stroke="white"/>
+<rect x="529" y="272" width="38" height="32" rx="3" fill="rgb(179,222,216)" stroke="white"/>
+<text x="63" y="341" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="normal">Hip</text>
+<rect x="200" y="315" width="38" height="32" rx="3" fill="rgb(129,199,194)" stroke="white"/>
+<rect x="247" y="315" width="38" height="32" rx="3" fill="rgb(92,181,178)" stroke="white"/>
+<rect x="294" y="315" width="38" height="32" rx="3" fill="rgb(167,216,210)" stroke="white"/>
+<rect x="341" y="315" width="38" height="32" rx="3" fill="rgb(129,199,194)" stroke="white"/>
+<rect x="388" y="315" width="38" height="32" rx="3" fill="rgb(92,181,178)" stroke="white"/>
+<rect x="435" y="315" width="38" height="32" rx="3" fill="rgb(167,216,210)" stroke="white"/>
+<rect x="482" y="315" width="38" height="32" rx="3" fill="rgb(129,199,194)" stroke="white"/>
+<rect x="529" y="315" width="38" height="32" rx="3" fill="rgb(92,181,178)" stroke="white"/>
+<text x="63" y="384" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="normal">Knee</text>
+<rect x="200" y="358" width="38" height="32" rx="3" fill="rgb(154,211,205)" stroke="white"/>
+<rect x="247" y="358" width="38" height="32" rx="3" fill="rgb(117,193,189)" stroke="white"/>
+<rect x="294" y="358" width="38" height="32" rx="3" fill="rgb(192,228,221)" stroke="white"/>
+<rect x="341" y="358" width="38" height="32" rx="3" fill="rgb(154,211,205)" stroke="white"/>
+<rect x="388" y="358" width="38" height="32" rx="3" fill="rgb(117,193,189)" stroke="white"/>
+<rect x="435" y="358" width="38" height="32" rx="3" fill="rgb(192,228,221)" stroke="white"/>
+<rect x="482" y="358" width="38" height="32" rx="3" fill="rgb(154,211,205)" stroke="white"/>
+<rect x="529" y="358" width="38" height="32" rx="3" fill="rgb(117,193,189)" stroke="white"/>
+<text x="63" y="427" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="normal">Ankle</text>
+<rect x="200" y="401" width="38" height="32" rx="3" fill="rgb(179,222,216)" stroke="white"/>
+<rect x="247" y="401" width="38" height="32" rx="3" fill="rgb(142,205,200)" stroke="white"/>
+<rect x="294" y="401" width="38" height="32" rx="3" fill="rgb(104,187,183)" stroke="white"/>
+<rect x="341" y="401" width="38" height="32" rx="3" fill="rgb(179,222,216)" stroke="white"/>
+<rect x="388" y="401" width="38" height="32" rx="3" fill="rgb(142,205,200)" stroke="white"/>
+<rect x="435" y="401" width="38" height="32" rx="3" fill="rgb(104,187,183)" stroke="white"/>
+<rect x="482" y="401" width="38" height="32" rx="3" fill="rgb(179,222,216)" stroke="white"/>
+<rect x="529" y="401" width="38" height="32" rx="3" fill="rgb(142,205,200)" stroke="white"/>
+<text x="328" y="466" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Time-block position →</text>
+<text x="328" y="500" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="middle" font-weight="normal">Darker = more retained context (schematic)</text>
+<rect x="664" y="166" width="500" height="354" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="684" y="200" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Control: no movement change</text>
+<text x="914" y="257" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Same raw reference + validity</text>
+<polyline points="914.00,274.00 914.00,295.00 797.00,295.00 797.00,326.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="914.00,295.00 1030.00,295.00 1030.00,326.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="711" y="333" width="172" height="47" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="797" y="363" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Shift / scale a</text>
+<polyline points="797.00,387.00 797.00,413.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="944" y="333" width="172" height="47" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="1030" y="363" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Shift / scale b</text>
+<polyline points="1030.00,387.00 1030.00,413.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="735" y="431" width="23" height="23" rx="4" fill="#007f79" stroke="#007f79"/>
+<rect x="766" y="431" width="23" height="23" rx="4" fill="#007f79" stroke="#007f79"/>
+<rect x="797" y="431" width="23" height="23" rx="4" fill="white" stroke="#007f79"/>
+<rect x="828" y="431" width="23" height="23" rx="4" fill="#007f79" stroke="#007f79"/>
+<rect x="968" y="431" width="23" height="23" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="999" y="431" width="23" height="23" rx="4" fill="white" stroke="#4c60af"/>
+<rect x="1030" y="431" width="23" height="23" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="1061" y="431" width="23" height="23" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<text x="914" y="488" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Teacher features can differ after scaling</text>
+<text x="36" y="568" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="start" font-weight="normal">Features = learned numbers. Measure their variation at fixed joint / time positions.</text>
+<polyline points="36.00,618.00 1164.00,618.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="649" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Schematic only. Hidden inputs also affect the student; the unchanged teacher reference isolates shift / scale effects.</text>
 </svg>

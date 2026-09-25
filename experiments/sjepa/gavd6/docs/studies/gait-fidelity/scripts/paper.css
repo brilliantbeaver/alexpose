@@ -11,3 +11,20 @@ dialog{width:min(96vw,1400px);max-height:94vh;border:1px solid var(--line);borde
 @media print{body{background:white;font-size:11pt}.paper-shell{display:block;padding:0}.sidebar,.mobile-nav,.presets,.controls,.figure-hint,.skip{display:none}main{border:0;padding:0;box-shadow:none}h2{break-after:avoid}img,.explorer{break-inside:avoid}a{color:inherit}.table-wrap{overflow:visible}table{font-size:9pt}th,td{min-width:0}.explorer{background:white}.figure-link{margin:20px 0 8px}dialog{display:none}}
 
 .presets button:disabled{cursor:not-allowed;opacity:.6}
+
+/* Photographs retain their source aspect and are never stretched to chart width. */
+.figure-link.photograph{width:100%;max-width:var(--photo-max-width);margin:28px auto 10px}
+.figure-link.photograph img{width:100%;height:auto;object-fit:contain}
+.figure-hint.photograph-hint{width:100%;max-width:var(--photo-max-width);margin:0 auto 6px}
+dialog img[src$="opencap-capture.jpg"]{max-width:362px;margin:16px auto}
+dialog img[src$="ambient-walking.jpg"]{max-width:600px;margin:16px auto}
+
+/* Mathematical figures keep their intrinsic proportions and scroll at narrow widths. */
+.equation{overflow-x:auto;overflow-y:hidden;text-align:center;padding:18px 12px;margin:24px 0;background:#f7fafb;border:1px solid var(--line);border-radius:8px;font-size:21px}
+.math-image{display:inline-block;max-width:none;object-fit:contain}
+.inline-math{white-space:nowrap}
+.technical-details{border:1px solid var(--line);border-radius:8px;padding:18px 22px;background:#fbfcfd}
+.technical-details summary{font:600 17px/1.5 Arial,sans-serif;cursor:pointer}
+.technical-details[open] summary{margin-bottom:24px}
+@media(max-width:760px){.equation{text-align:left;padding:14px 10px;font-size:18px}.technical-details{padding:15px}}
+@media print{.equation{background:white;border:0;padding:10px 0;break-inside:avoid}.math-image{max-width:100%;height:auto!important}}

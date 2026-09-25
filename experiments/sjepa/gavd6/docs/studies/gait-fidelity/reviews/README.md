@@ -2,10 +2,15 @@
 
 [Research proposal](../README.md) · [Evidence](../evidence/README.md) · [Historical records](../records/README.md)
 
-Reviews are organized by the work they assessed. An accepted diagram or document is evidence of review at that version; it is not a completed experiment or clinical validation.
+The active proposal describes the [core-informed JEPA response amendment](../methods/core-to-followup-20260924.md). Reviews are organized by the work they assessed; earlier masking, compute and figure approvals refer to their dated versions. An accepted diagram or document is evidence of review at that version; it is not a completed experiment or clinical validation.
 
 | Review | Scope |
 | --- | --- |
+| [Matplotlib results graphs](results-figures-matplotlib-20260924.md) | Independent statistical and visual review, common scales, separate paired uncertainty, and final print/browser inspection |
+| [Full proposal and two-page overview](proposal-overview-20260924.md) | Independent narrative, source, technical, evidence, adversarial and rendered-page review of the two coordinated documents |
+| [Proposal narrative and mathematics](proposal-revision-20260924.md) | Independent scientific, technical, Stanford-source and adversarial reviews; amended design and offline mathematical rendering |
+| [Focused-study documents and figures](response-documents-20260923.md) | Independent scientific, first-principles readability and rendered-figure review; current controls, data roles and uncertainty limits |
+| [JEPA response follow-up](jepa-response-20260923.md) | Independent loss/gradient and runtime review, parent immutability, cutoff supervision, matched controls and metric reconstruction |
 | [Transparent tutorial review](transparent-tutorials-20260922.md) | Equations and executable model/data/metric calculations, independent cross-review, sparse-input fixes and preservation of experiment outputs |
 | [Implementation workflow review](workflow-implementation-20260922.md) | Slurm submission and recovery, saved configuration, all twelve executed tutorials and rendered outputs |
 | [Implementation scientific review](implementation-science.md) | Training controls, exact endpoint exposure and independent measurement checks |

@@ -1,0 +1,146 @@
+{
+  "schema": "gf-repair-implementation-validation-v1",
+  "recorded_utc": "2026-09-25T05:10:29.949948+00:00",
+  "status": "LOCAL_IMPLEMENTATION_VALIDATED",
+  "scientific_results": false,
+  "source_jobs_submitted": 0,
+  "tests": {
+    "passed": 217,
+    "failed": 0,
+    "elapsed_seconds": 54.473,
+    "command": "GF_REPAIR_INTEGRATION_WORK=$PWD/outputs/gait-fidelity-repair-validation-20260924 MPLCONFIGDIR=/private/tmp/gf-repair-mpl XDG_CACHE_HOME=/private/tmp/gf-repair-cache OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m unittest discover -s tests/gait_fidelity -p 'test_*.py' -t . -q",
+    "log": "/private/tmp/gf-repair-final-tests.log",
+    "log_sha256": "531b73a64a95ca377710112c5488e04a3e4b61c8eb83cd8a280ddf635238c290",
+    "integration": "Three assertions reverified the completed retained real-model fixture; no additional source training"
+  },
+  "full_fixture": {
+    "receipt": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/fixture-complete.json",
+    "sha256": "23a1b6255cd4a8fc5064f4184ff04dc1b42e722f2312596d5de29b796faa4377",
+    "result": {
+      "schema": "gf-repair-software-fixture-v1",
+      "status": "REPAIR_SOFTWARE_FIXTURE_COMPLETE",
+      "fixture": true,
+      "scientific_results": false,
+      "independent_confirmation": false,
+      "clinical_validation": false,
+      "evidence_boundary": "Analytic software fixture only; no result about people, GPU throughput or statistical power",
+      "work": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924",
+      "completed_utc": "2026-09-25T05:07:44.518945+00:00",
+      "elapsed_seconds": 182.54859533300623,
+      "core_fits": 30,
+      "response_fits": 18,
+      "new_readouts": 12,
+      "calibrations": 6,
+      "evaluation_methods": 9,
+      "evaluation_fits": 27,
+      "seeds": [
+        17,
+        29,
+        43
+      ],
+      "development_people": 2,
+      "generated_confirmation_people": 3,
+      "generated_confirmation_windows": 6,
+      "response_verification": {
+        "status": "FOLLOWUP_ARTIFACTS_VERIFIED",
+        "parent_unchanged": true,
+        "parent_files_checked": 334,
+        "child_artifacts_checked": 378,
+        "completed_phases": 30,
+        "evidence_status": "fixture-tested",
+        "metric_reconstruction": {
+          "status": "RESPONSE_METRICS_RECOMPUTED",
+          "recomputed": true,
+          "checked": [
+            "coverage-per-person.csv",
+            "coverage.csv",
+            "interaction.csv",
+            "nuisance.csv",
+            "per-family.csv",
+            "per-person.csv",
+            "per-window.csv",
+            "response-by-condition-person.csv",
+            "response-by-condition.csv",
+            "response-calibration-per-family.csv",
+            "response-curves-person.csv",
+            "response-no-change-person.csv",
+            "responses.csv",
+            "comparisons.json",
+            "response-comparisons.json",
+            "readout-control-comparisons.json"
+          ],
+          "published_outputs_unchanged": true,
+          "tolerance": {
+            "relative": 1e-10,
+            "absolute": 1e-10
+          },
+          "independent_confirmation": false,
+          "clinical_validation": false
+        },
+        "cuda_verified_here": false
+      },
+      "verification": {
+        "status": "REPAIR_ARTIFACTS_VERIFIED",
+        "completed_worker_receipts": 24,
+        "evaluation_artifacts": 30,
+        "scientific_results": false
+      },
+      "summary_hashes": {
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/core/evaluation/summary.json": "c630874b6130d7e6ba9721e288d8c9fbb67e97279b00d35d578bce16ac1ee7d2",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/response/evaluation/response-summary.json": "7436f511df7c9b4e48d67ca50364e808651b3b0e2acf88b845967d7e12489cc7",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/repair/development/evaluation/summary.json": "9b2a395bb03b4aa413957112853c5a7e15945a6f456593ca2259c8f514411795",
+        "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/repair/confirmation/evaluation/summary.json": "cf89ebaecb4e648074003ad792f383165151d4950b26f3e2405807458663de1f"
+      },
+      "reports": {
+        "development": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/repair/development/evaluation/report.md",
+        "confirmation": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity-repair-validation-20260924/repair/confirmation/evaluation/report.md"
+      }
+    }
+  },
+  "launch_checks": {
+    "shell_syntax": "passed",
+    "python_compilation": "passed",
+    "cli_help": "passed",
+    "release_packaging": "dry_run_passed",
+    "packaged_files": 756,
+    "release_transferred": false
+  },
+  "independent_review": {
+    "status": "no_material_unresolved_blocker_in_reviewed_scope",
+    "record": "docs/studies/gait-fidelity/reviews/repair-implementation-20260924.md",
+    "domains": [
+      "objective_and_calibration_control",
+      "unused_person_confirmation_and_method_attribution",
+      "person_level_inference_and_failure_decomposition",
+      "resource_admission_deadline_and_resume",
+      "actual_legacy_checkpoint_compatibility"
+    ]
+  },
+  "implementation_files": {
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair.py": "0442ce4e127d1b61d2e5c5dd0011254df58e9ce38565fa041934847dbb716066",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_cohort.py": "f30c3063b63fe3e328b2667e4192d01667ef98ce1d719d19d96049a6e0bc71d1",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_evaluation.py": "ac32976177bf64b5c8fd03f2a7f4a926335d8daf946422390704f4107a5745db",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_execution.py": "956914e978bf8111d486d8316fa1029fbcb3ed7eb2f4c2543d0ed044f8a176e8",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_fixture.py": "bbcbdc2c9e7f410cb81d52eba3d14c4686ef330c8ae14f6e6e294ce3cb9b0732",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_objectives.py": "17d132679e64bc50d3afd697de2d62c9d2f4649d252e0148ee6a2b75759ceb1f",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_profile.py": "a093df85272d7b0d1791e27c3751cd4e5b615d3f2ccd386db0ab312d1aa1e2be",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_training.py": "7be694ad4421d5c6ee04fa8bfc670a67afa085870489102271c69352b78a0374",
+    "slurm/gait-fidelity/repair-coordinator.sbatch": "77e5c678f2915cc707599bc8a2616e9c9d1323bd9c20c806c150ff08a2f43f1b",
+    "slurm/gait-fidelity/repair-worker.py": "69a5bddbe5d61ed591e134bddfccf41082b8f876378c3a1ecbd30478463be630",
+    "slurm/gait-fidelity/repair-worker.sbatch": "a510b93618fd6864324a1f07afc4e9c04e4a036ef6bb2e706beda53a4ce59cf6",
+    "slurm/gait-fidelity/repair.sh": "c7366f2f0a9657512abb0101ffc05d78d9f2852bf1f957563a839a9048a7392a",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/preparation.py": "b506d61c8b841510316cdf94a677ded65e22fbe74846480794e80fd0d76262fe"
+  },
+  "full_project_code_identity": "69727420b3ad00a736f56ddcd0fcb5c732e044c166cbcb686cf058d19c9a771e",
+  "source_execution": {
+    "status": "NOT_LAUNCHED",
+    "ssh_result": "Permission denied (keyboard-interactive)",
+    "cutoff_utc": "2026-09-25T15:00:00Z",
+    "reviewed_exposure_ledger_verified_here": false,
+    "source_throughput_verified_here": false,
+    "source_qc_verified_here": false,
+    "next_steps": "New immutable HAIC release, setup/preflight, development, benchmark, exposure review, confirmation lock and admitted confirmation",
+    "guide": "slurm/gait-fidelity/START_REPAIR_03.md"
+  },
+  "evidence_boundary": "The CPU fixture tests executable software and artifact contracts only. It provides no human effect, clinical validity, statistical power, or GPU throughput evidence."
+}

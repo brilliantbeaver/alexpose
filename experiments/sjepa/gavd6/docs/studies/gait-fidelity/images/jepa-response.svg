@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1010" viewBox="0 0 1200 1010" role="img" aria-labelledby="title desc">
+<title id="title">Train on the difference between two prediction errors</title><desc id="desc">FOLLOW-UP. An error, also called a residual, is predicted minus reference features after fixed scaling and removal of the channel mean. Delta JEPA couples the errors; endpoint JEPA scores them separately. The exact difference is a residual cross term. A coordinate control expresses position errors in a shared pair scale. Calibration uses 32 training batches, followed by fresh pretraining. All variants then fix encoder weights and train a new coordinate output network.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="1010" fill="#fcfcf9"/>
+<rect x="36" y="18" width="158" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Train on the difference between two prediction errors</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Features are learned numbers. Compare their scaled errors across two movement states.</text>
+<rect x="36" y="163" width="1128" height="151" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="600" y="207" font-family="Arial, sans-serif" font-size="29" fill="#183247" text-anchor="middle" font-weight="bold">e(i) = H[p(i) / 0.1 − stopgrad((t(i) − c) / 0.06)]</text>
+<text x="600" y="248" font-family="Arial, sans-serif" font-size="21" fill="#566978" text-anchor="middle" font-weight="normal">e = error (residual) · p = prediction · t = teacher reference · c = teacher average</text>
+<text x="600" y="287" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">H subtracts the mean across features; stopgrad holds the reference target fixed for this update.</text>
+<rect x="36" y="345" width="550" height="266" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="56" y="379" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Delta JEPA: compare the errors</text>
+<rect x="614" y="345" width="550" height="266" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="634" y="379" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Endpoint JEPA: score each error</text>
+<circle cx="180" cy="445" r="30" fill="white" stroke="#007f79" stroke-width="2"/>
+<text x="180" y="456" font-family="Arial, sans-serif" font-size="28" fill="#007f79" text-anchor="middle" font-weight="bold">e(a)</text>
+<circle cx="440" cy="445" r="30" fill="white" stroke="#4c60af" stroke-width="2"/>
+<text x="440" y="456" font-family="Arial, sans-serif" font-size="28" fill="#4c60af" text-anchor="middle" font-weight="bold">e(b)</text>
+<circle cx="738" cy="445" r="30" fill="white" stroke="#007f79" stroke-width="2"/>
+<text x="738" y="456" font-family="Arial, sans-serif" font-size="28" fill="#007f79" text-anchor="middle" font-weight="bold">e(a)</text>
+<circle cx="1038" cy="445" r="30" fill="white" stroke="#4c60af" stroke-width="2"/>
+<text x="1038" y="456" font-family="Arial, sans-serif" font-size="28" fill="#4c60af" text-anchor="middle" font-weight="bold">e(b)</text>
+<polyline points="211.00,445.00 286.00,445.00" fill="none" stroke="#007f79" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="334.00,445.00 409.00,445.00" fill="none" stroke="#007f79" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="310" cy="445" r="21" fill="#e7f4ef" stroke="#007f79" stroke-width="2"/>
+<text x="310" y="453" font-family="Arial, sans-serif" font-size="27" fill="#007f79" text-anchor="middle" font-weight="bold">−</text>
+<text x="310" y="546" font-family="Arial, sans-serif" font-size="28" fill="#183247" text-anchor="middle" font-weight="bold">LΔ = ‖e(b) − e(a)‖² / (2D)</text>
+<text x="889" y="546" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="middle" font-weight="bold">LE = (‖e(a)‖² + ‖e(b)‖²) / (2D)</text>
+<text x="600" y="652" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="middle" font-weight="bold">LΔ = LE − e(a)ᵀe(b) / D</text>
+<text x="600" y="693" font-family="Arial, sans-serif" font-size="21" fill="#566978" text-anchor="middle" font-weight="normal">D = number of learned features · a and b = two movement states</text>
+<text x="600" y="731" font-family="Arial, sans-serif" font-size="22" fill="#566978" text-anchor="middle" font-weight="normal">Equal errors can cancel; check restored joint positions and motion traces too.</text>
+<rect x="36" y="769" width="1128" height="109" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="57" y="808" font-family="Arial, sans-serif" font-size="18" fill="#986325" text-anchor="start" font-weight="bold">COORDINATE CONTROL</text>
+<text x="57" y="851" font-family="Arial, sans-serif" font-size="25" fill="#183247" text-anchor="start" font-weight="bold">Compare changes in position errors</text>
+<text x="916" y="815" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Use one common pair scale</text>
+<text x="916" y="852" font-family="Arial, sans-serif" font-size="23" fill="#566978" text-anchor="middle" font-weight="normal">s pair = (s a + s b) / 2</text>
+<text x="600" y="902" font-family="Arial, sans-serif" font-size="21" fill="#566978" text-anchor="middle" font-weight="normal">Both JEPA variants share the added-loss weight and keep the original losses.</text>
+<polyline points="36.00,916.00 1164.00,916.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="600" y="951" font-family="Arial, sans-serif" font-size="22" fill="#566978" text-anchor="middle" font-weight="normal">32 training batches set loss weights → Pretrain the encoder</text>
+<text x="600" y="986" font-family="Arial, sans-serif" font-size="22" fill="#566978" text-anchor="middle" font-weight="normal">→ Fix encoder weights → Train a new coordinate output network</text>
+</svg>

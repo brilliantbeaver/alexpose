@@ -1,69 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1036" viewBox="0 0 1200 1036" role="img" aria-labelledby="title desc">
-<title id="title">Share prepared data across independent one-GPU experiments</title><desc id="desc">Eight available H100s provide up to eight concurrent jobs; each small model uses one GPU.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536879"/></marker></defs>
-<rect width="1200" height="1036" fill="white"/>
-<text x="36" y="43" font-family="Arial, sans-serif" font-size="30" fill="#173247" text-anchor="start" font-weight="bold">Share prepared data across independent one-GPU experiments</text>
-<text x="36" y="78" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Eight available H100s provide up to eight concurrent jobs; each small model uses one GPU.</text>
-<text x="36" y="125" font-family="Arial, sans-serif" font-size="24" fill="#173247" text-anchor="start" font-weight="bold">1. Prepare and review shared data once</text>
-<rect x="36" y="151" width="305" height="123" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="54" y="185" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Reviewed source data</text>
-<text x="54" y="219" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">People, references and splits</text>
-<text x="54" y="248" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Shared by matched methods</text>
-<rect x="449" y="151" width="304" height="123" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="467" y="185" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Render and extract once</text>
-<text x="467" y="219" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Per frozen dataset version</text>
-<text x="467" y="248" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Retain timestamps and validity</text>
-<rect x="856" y="151" width="308" height="123" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="874" y="185" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Immutable shared cache</text>
-<text x="874" y="219" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Hash inputs; record settings</text>
-<text x="874" y="248" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Read-only inputs for every job</text>
-<polyline points="341,213 449,213" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="753,213 856,213" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="1010,274 1010,299 600,299 600,328" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<rect x="36" y="328" width="1128" height="290" rx="12" fill="#f7fafc" stroke="#cfdce5"/>
-<text x="56" y="368" font-family="Arial, sans-serif" font-size="24" fill="#173247" text-anchor="start" font-weight="bold">2. Run a stage in waves of up to eight independent jobs</text>
-<text x="56" y="399" font-family="Arial, sans-serif" font-size="20" fill="#536879" text-anchor="start" font-weight="normal">Stages cover matched masking, paired-change loss comparisons and required controls.</text>
-<rect x="54" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="114.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 1</text>
-<text x="114.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="194" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="254.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 2</text>
-<text x="254.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="334" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="394.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 3</text>
-<text x="394.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="474" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="534.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 4</text>
-<text x="534.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="614" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="674.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 5</text>
-<text x="674.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="754" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="814.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 6</text>
-<text x="814.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="894" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="954.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 7</text>
-<text x="954.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<rect x="1034" y="428" width="120" height="108" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="1094.0" y="465" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="middle" font-weight="bold">GPU 8</text>
-<text x="1094.0" y="506" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="normal">One job</text>
-<text x="600" y="573" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="bold">One H100 per job; unique run / attempt paths and resumable checkpoints.</text>
-<text x="600" y="600" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="middle" font-weight="normal">Start each wave only after its required data and comparison dependencies are ready.</text>
-<polyline points="600,618 600,664" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<rect x="36" y="664" width="1128" height="152" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="56" y="705" font-family="Arial, sans-serif" font-size="24" fill="#173247" text-anchor="start" font-weight="bold">3. Evaluate the frozen configuration and assemble the paper</text>
-<text x="63" y="758" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Retained predictions</text>
-<text x="63" y="792" font-family="Arial, sans-serif" font-size="18" fill="#536879" text-anchor="start" font-weight="normal">Run receipts + checkpoint hashes</text>
-<text x="415" y="758" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Frozen reference scoring</text>
-<text x="415" y="792" font-family="Arial, sans-serif" font-size="18" fill="#536879" text-anchor="start" font-weight="normal">Same people and eligibility rules</text>
-<text x="836" y="758" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Tables, figures and writing</text>
-<text x="836" y="792" font-family="Arial, sans-serif" font-size="18" fill="#536879" text-anchor="start" font-weight="normal">Uncertainty and bounded claims</text>
-<polyline points="286,751 390,751" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="713,751 812,751" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<text x="36" y="861" font-family="Arial, sans-serif" font-size="23" fill="#173247" text-anchor="start" font-weight="bold">Resource budget: planning assumptions, not measured throughput</text>
-<rect x="36" y="883" width="1128" height="131" rx="12" fill="#fff4e5" stroke="#cfdce5"/>
-<text x="56" y="914" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="start" font-weight="bold">GPU window: Tue 22 Sep 00:00 → Thu 24 Sep 12:00 PDT (60 h).</text>
-<text x="56" y="944" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="start" font-weight="bold">8 H100s × 60 h = 480 H100-hours: 360 planned + 120 reserve.</text>
-<text x="56" y="972" font-family="Arial, sans-serif" font-size="19" fill="#173247" text-anchor="start" font-weight="normal">Setup precedes this window: Mon 21 Sep 23:00 → Tue 22 Sep 00:00 PDT (≤1 h assumed).</text>
-<text x="56" y="1001" font-family="Arial, sans-serif" font-size="18" fill="#536879" text-anchor="start" font-weight="normal">Capacity is a planning ceiling; preparation, queueing and measured runtime determine completed work.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="title desc">
+<title id="title">A separate follow-up within 48 additional H100-hours</title><desc id="desc">FOLLOW-UP. Admission preserves all controls and the parent&#x27;s actual selected update budget.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="740" fill="#fcfcf9"/>
+<rect x="36" y="18" width="158" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">A separate follow-up within 48 additional H100-hours</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Admission preserves all controls and the parent&#x27;s actual selected update budget.</text>
+<rect x="36" y="168" width="510" height="286" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="56" y="202" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">3 variants × 3 seeds → 9 models</text>
+<rect x="72" y="235" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="135" y="262" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="230" y="235" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="293" y="262" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="388" y="235" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="451" y="262" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="72" y="295" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="135" y="322" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="230" y="295" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="293" y="322" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="388" y="295" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="451" y="322" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="72" y="355" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="135" y="382" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="230" y="355" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="293" y="382" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<rect x="388" y="355" width="126" height="40" rx="5" fill="white" stroke="#007f79"/>
+<text x="451" y="382" font-family="Arial, sans-serif" font-size="22" fill="#007f79" text-anchor="middle" font-weight="bold">P → R</text>
+<text x="291" y="427" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">18 phases · P: learn features · R: train output</text>
+<rect x="586" y="168" width="578" height="286" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="606" y="202" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Reserved GPU time</text>
+<rect x="615" y="246" width="389.25" height="50" rx="0" fill="#007f79" stroke="none"/>
+<rect x="1004.25" y="246" width="21.625" height="50" rx="0" fill="#4c60af" stroke="none"/>
+<rect x="1025.875" y="246" width="43.25" height="50" rx="0" fill="#986325" stroke="none"/>
+<rect x="1069.125" y="246" width="64.875" height="50" rx="0" fill="#b44c58" stroke="none"/>
+<circle cx="621" cy="337" r="6" fill="#007f79" stroke="white" stroke-width="2"/>
+<text x="636" y="343" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">36 h  Fits</text>
+<circle cx="891" cy="337" r="6" fill="#4c60af" stroke="white" stroke-width="2"/>
+<text x="906" y="343" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">2 h  Calibrate / profile</text>
+<circle cx="621" cy="387" r="6" fill="#986325" stroke="white" stroke-width="2"/>
+<text x="636" y="393" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">4 h  Diagnostics</text>
+<circle cx="891" cy="387" r="6" fill="#b44c58" stroke="white" stroke-width="2"/>
+<text x="906" y="393" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">6 h  Recovery</text>
+<rect x="36" y="493" width="1128" height="151" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="61" y="535" font-family="Arial, sans-serif" font-size="18" fill="#4c60af" text-anchor="start" font-weight="bold">RESULTS CUTOFF</text>
+<text x="61" y="584" font-family="Arial, sans-serif" font-size="31" fill="#183247" text-anchor="start" font-weight="bold">24 September 2026 · 18:00 Pacific</text>
+<text x="898" y="544" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="middle" font-weight="bold">2 hours reserved</text>
+<text x="898" y="583" font-family="Arial, sans-serif" font-size="22" fill="#566978" text-anchor="middle" font-weight="normal">for queue uncertainty</text>
+<polyline points="36.00,683.00 1164.00,683.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="714" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Measured profiling decides admission. Allowances are not measured throughput or completed fits.</text>
 </svg>

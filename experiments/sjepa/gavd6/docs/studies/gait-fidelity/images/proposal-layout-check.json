@@ -5,60 +5,65 @@
   "assets": [
     {
       "path": "images/previews/13-data-to-claims.png",
-      "sha256": "bb79e2058701f029b0532e39908069c119e1217004ab3740a07466df9eec0111"
+      "sha256": "2e606f9bb62e99574cc4b300996b48c55f9b56eb444750fe3c8e7f4c6643e432"
     },
     {
       "path": "images/previews/13-data-to-claims-900.png",
-      "sha256": "19ac70dea204ade898934afd6254158bb237efb759f7e1e17e0be4379879f232"
+      "sha256": "3ee8a5a9c2876aba15abde204fdf13181cbe28e860f4f68fd9569018144e1989"
     },
     {
       "path": "images/13-data-to-claims.svg",
-      "sha256": "2e6966cd5ed8a476e1f1bbf3a3890760208172c1259d05ee1126cf98fe6ef9d2"
+      "sha256": "6fbedb8fbd0a6439372b493030754af89ed553e541444f0d80518456f0482208"
     },
     {
       "path": "images/previews/14-paired-jepa-method.png",
-      "sha256": "3f8583fd4147e585cda5c9a3a65a9812cd914e5f80199e277cd8969d265a2b71"
+      "sha256": "acdcfe59033ac8c9be6c46e8c84b8ee99047902f50dc9cae6819c60f3c6e6bfd"
     },
     {
       "path": "images/previews/14-paired-jepa-method-900.png",
-      "sha256": "d4f2c30a284c9493ab9e797a1be5367ac97e7089f0fdfceeb68ea43fc7bc534c"
+      "sha256": "08429458ec0834ecf6d0eb28ef04dce35d3aa9d3e8952d17ecb4be4bbcc72fbc"
     },
     {
       "path": "images/14-paired-jepa-method.svg",
-      "sha256": "e6bf4f020533460e7cbbc6dc3c1689109128c22b426c620179866f386abc277f"
+      "sha256": "69f58fa238815f6cda471a015b4e62aac6bab3b982bedcd83f83d9cc0c78e40c"
     },
     {
       "path": "images/previews/15-graph-time-mask.png",
-      "sha256": "ed786cb0d869a87183609aa4bf0243c1f51e33e1fb6482b364b51faaa6c98216"
+      "sha256": "05635dfe2fa2e65846fca79f5f436c1b2b8ac13577701ecacd44eef825493523"
     },
     {
       "path": "images/previews/15-graph-time-mask-900.png",
-      "sha256": "8d7221fc4b1987e2b74d8c33eb24329c5fbf464b956c4bc461dd6bd340b34338"
+      "sha256": "180c0a4ab7f24ffc8036b2e3116e9edd6efe65830df2e0444b75b07a2857fc9d"
     },
     {
       "path": "images/15-graph-time-mask.svg",
-      "sha256": "cec0c10caa9318e3ae17a19ad62fc89526b689aa72fc75e3d40c65c968d78035"
+      "sha256": "9b816e2a6e51e8c2891fbcfd989f2ee671ed440d414e87200c3b501bbb243f2c"
     },
     {
       "path": "images/previews/16-response-estimand.png",
-      "sha256": "226ffa34250540879ea2bb9b25a8cf499d0ad70f4989394e56922571a9f0e86f"
+      "sha256": "d15d8fd8236e955e6dac1678e79c974c443b3d37d59e942e213ba43e05bef250"
     },
     {
       "path": "images/previews/16-response-estimand-900.png",
-      "sha256": "6affa7b66ce45751b136f410aeb3fa74e488171ccdeefef831ebb8483bce8b17"
+      "sha256": "661f150b109bd641280bc4917e3ffa5191f0792107ce0109f1b781f61516f86d"
     },
     {
       "path": "images/16-response-estimand.svg",
-      "sha256": "cdb651e2b396c31241af6cfdfa277644f846b1741d71eb09b65870bf3919ffe1"
+      "sha256": "116161dd95b14a6c5681a4a5500fe711149c180e81317e836bd9313f4e845e67"
     }
   ],
   "checks": [
     "SVG XML parsing",
     "18px minimum font",
-    "measured text bounds",
-    "card containment",
-    "text-to-text intersections",
-    "orthogonal connector/text intersections"
+    "Pillow text bounds",
+    "panel containment",
+    "canvas safe area",
+    "text intersections",
+    "connector/text intersections"
   ],
-  "limitation": "Geometry checks supplement actual image review; they do not establish scientific correctness."
+  "fonts": {
+    "normal": "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "bold": "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  },
+  "limitation": "Schematic artwork is excluded from connector checks. Geometry checks supplement rendered visual review and scientific review."
 }

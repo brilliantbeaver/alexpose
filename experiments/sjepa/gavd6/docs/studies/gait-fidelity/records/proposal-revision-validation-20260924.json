@@ -1,0 +1,114 @@
+{
+  "date": "2026-09-24",
+  "scope": "Proposal narrative, math rendering, and browser behavior; no training or scientific-result validation beyond exported core table checks",
+  "independent_review": [
+    "scientific narrative and adversarial interpretations",
+    "implementation and mathematics",
+    "Stanford primary sources and readability"
+  ],
+  "structural_checks": {
+    "proposal.html": {
+      "local_links_resolve": true,
+      "unique_ids": true
+    },
+    "images/gallery.html": {
+      "local_links_resolve": true,
+      "unique_ids": true
+    }
+  },
+  "reproducible_build": true,
+  "display_equations": 8,
+  "mathematical_instances": 31,
+  "math_assets": 29,
+  "all_equations_rendered": true,
+  "prohibited_macro_absent": true,
+  "external_runtime_dependencies": false,
+  "browser": {
+    "engine": "headless Chromium via browse",
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "content_images_loaded": 33,
+    "broken_images": 0,
+    "page_horizontal_overflow": false,
+    "long_mobile_equations": "scroll within keyboard-focusable equation containers",
+    "console_errors": 0,
+    "mobile_navigation_opens_and_closes": true,
+    "figure_dialog_opens_and_closes": true,
+    "interactive_controls_enabled": true,
+    "coupling_opposed": [
+      8,
+      4,
+      4
+    ],
+    "coupling_zero": [
+      0,
+      0,
+      0
+    ],
+    "attenuated_signed_bias_degrees": [
+      -2,
+      -2,
+      0
+    ],
+    "visual_inspection": [
+      "desktop reading layout",
+      "mobile reading layout",
+      "main equations",
+      "expanded technical appendix",
+      "amended readout figure"
+    ]
+  },
+  "sha256": {
+    "proposal.html": "68fa4947911a8ac83c5f1de9b32debd394f9ccceead89c086a5a247526d88821",
+    "README.md": "51319e1b891cdeb9c64a56e74b39cb3b6862318db249dc5029a30ba0374502e5",
+    "scripts/build_paper.py": "ebfaf10cbffc278ae8bb332f8bed16a3e29b150d25829edb8f67ee5d77b5f08d",
+    "scripts/paper.css": "d130d462cd2a70e6e10b4c0ac04a3f8f7f9a50d22c26b02e6a1c38dd65c67f3b",
+    "scripts/paper.js": "49d62554c447466c5eff16c95576dbffee1b59556607173e3743e1ecde6689e3",
+    "scripts/build_readout_figure.py": "8bef2b686b338b3aa8c1380015e62ed9038a6a9ea06075ef3682820e2f4e0de8",
+    "scripts/README.md": "b281e52056527333905c94af77099520f1f073506459e1e461758db01c797db5",
+    "images/proposal-readout-design.svg": "8e05107d043dcb52c8755b725a457232fe729d7d5fa3da5b7106394e34adc72a",
+    "images/previews/proposal-readout-design.png": "e9028aedc8110fe7136a5602ee38c174e4d13902a0864d936f7c26d9198673bd",
+    "images/gallery.html": "0bb327b9472c68f92f6e47bc69ce9c062d63054e92eb32cc67e8aac3ab4ebbca",
+    "images/README.md": "ce71b655a0a40ed405682c93edc46a0d45480b6653156b40b613ec4ee86eea8d",
+    "reviews/proposal-revision-20260924.md": "d1a30d3c6f08839476d9cf63a25c51502b88253e5a4864e6f04b878495422988",
+    "reviews/README.md": "80d8922910a5c3ab2e3705469134e45b5b99c70b5111c67500646e7d3367c94a",
+    "records/paper-build.json": "408c8785f8a0587489881313b73e13aedc178ae9372cb21d80399cee40f8eb71",
+    "images/equations/095b0058991af682.svg": "efb02414dedb4705e1d2414fde4c173d3fb0ad6531445a6caf566aa688f3e986",
+    "images/equations/0e812f55d9407893.svg": "a831cf643fc75cdc35bf6db57941ccafbf04fb358a75326aaab1d6fd2014d986",
+    "images/equations/1100b0d28d93b494.svg": "5b7c5e2f94e5afcf701698b90301c7acfa191e43a4aead8c435d19575c1f695a",
+    "images/equations/14b6c6d324e51a51.svg": "ba8447142ee8c9148a4826b69f9059f091371fe47d8ea7f597675b241ddbef25",
+    "images/equations/14cce00daf72a60f.svg": "7db2fcec5d70d9b34f75d0cf1ff746e94a72454c45cb9b53f5c4aa2d14e9bb59",
+    "images/equations/197fd0da0f97c3ff.svg": "11e53483cf4ec92384459b54179b74a0db8535f87b09294d3601e5581f5c188f",
+    "images/equations/2e7d2c03a9507ae2.svg": "3d298034c8d2880b456269779cb20e4a3e53512376a8c1255cbb37a2d148670e",
+    "images/equations/383152dd4f4fb973.svg": "5b5b0c4295df777016b0e80cfcf5af8f703c5d3bd2c55710ac916eb73689c167",
+    "images/equations/394d26781bcec67d.svg": "060db513182be443944e3dee8e43ea26a13d80d05f859a4ba4b87cc7cab4e7e3",
+    "images/equations/3e23e8160039594a.svg": "eca87cf2f356bd4cdafe033e9bcb9883e1ed39f48d26f004abf01aa1855a5d4a",
+    "images/equations/3f39d5c348e5b79d.svg": "1ee3bdf71bf0770f48d99fc38837d8b581e586d4880bf9bf205a654b2a3d7c30",
+    "images/equations/44af376275b5a2a6.svg": "81a31551d79ec4fc2ad9048e86f9632e3f3ac75314c3fcdb07dec30062d1469c",
+    "images/equations/54973d23787208ab.svg": "979cedbdd66e66f94453ae01d7965fdd7f1214250f002642c5b5baa5f839a304",
+    "images/equations/559aead08264d579.svg": "79b359039740e144e6610f74cdcd68fa2db1afa13e1dc1d5f41aa29545cfed4e",
+    "images/equations/5b86eb1897c44804.svg": "4c7540a55a0a36aa434a3bb8f4752586346be06bd6f408a88c7aa0d824e4cf7c",
+    "images/equations/5e209fa968d96638.svg": "96bfe7a9bee6811ac0ee9c1b4becd8b67ceccbed3cde0671558d3df02f7643f9",
+    "images/equations/6158f77c3833268f.svg": "0376f529a2cde61e733ff26d52ee9eee3402f6c87f733d233d9ad6035214edbb",
+    "images/equations/7b33d202fde2b080.svg": "44e19ee0a0d590ff24a2d969f3e56e26db67d2107023811a88743a69a073adaa",
+    "images/equations/83eac3d7f0891f4a.svg": "42271e1f33c3b124a22669d97ac1a42c74a5c5657de870ca9168ffbaaf877eaa",
+    "images/equations/8be7126884c163d2.svg": "078674153f000f6d4c572fb0594ec6388e320a1126ccef7b8292e3ce7ebdad16",
+    "images/equations/9eacfecc7954faa4.svg": "b87e25e190b0fe0f594cafa236705c5955f9af3f122079af0ca922d207964e88",
+    "images/equations/9f2d731c507b468b.svg": "87eed24f758601c6e8043ddfbb4f73ab9d5ba8400c3cf42c99ff857f71793606",
+    "images/equations/b223d43788c703fd.svg": "144ccf093454cec0eb0d9c3dba323e8891fb43a3868f2356463dec5c9113e2f1",
+    "images/equations/c8ea458b12d6729a.svg": "be26d74f4b01c33ee86e07fac5f53ddf9b931c949df42e9e848718fa960ecd07",
+    "images/equations/ca978112ca1bbdca.svg": "802f51a02dcc64400a686af524e56e506a1987a16223b950884a608968e27785",
+    "images/equations/d96bb550e211787f.svg": "a1d474c970ad7b46c85058394abd86f4c2d69386fb567a1f901685d331feb94e",
+    "images/equations/de0bad5f8f33721c.svg": "a2d06f5eefe6f1fdef0446b8da72b76c3738e9728de83c80dd017f5bb8154b0b",
+    "images/equations/de7d1b721a1e0632.svg": "e6f11f0afb6a05cc25f3fae196008262eaa8a3459c9580155f1d2c406b1792e2",
+    "images/equations/e66912912a808b24.svg": "5c21b3508302aa6c73bec10dad6b3e930f36b99a064b76c4962d7f76e5d9a836"
+  }
+}

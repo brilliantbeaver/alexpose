@@ -5,24 +5,29 @@
   "assets": [
     {
       "path": "images/previews/17-parallel-execution.png",
-      "sha256": "9fc64c632345d5a24b12507bc57ce2097015f5fc50b8405732858b3c8b149162"
+      "sha256": "760ef258cd9dc1e846483f2e199c45c3cda0e3931a9adeb46d86ca813fe93d06"
     },
     {
       "path": "images/previews/17-parallel-execution-900.png",
-      "sha256": "ab38a3725966a41870803840614db65600cae57242d3640f541e2ec9c3b5cf65"
+      "sha256": "b1c41772be87f35dffda7da3915e71732ddaf976f805622446cdb500f5a86e8c"
     },
     {
       "path": "images/17-parallel-execution.svg",
-      "sha256": "e2a735ca3a8f54b3b28118d96e2f8c8933a529ed9131407fb646d7379018f1f7"
+      "sha256": "aa2eb7519f36b19ead040302c1c81632fc0e6df31a213a884ea4fa9be84267e5"
     }
   ],
   "checks": [
     "SVG XML parsing",
     "18px minimum font",
-    "measured text bounds",
-    "card containment",
-    "text-to-text intersections",
-    "orthogonal connector/text intersections"
+    "Pillow text bounds",
+    "panel containment",
+    "canvas safe area",
+    "text intersections",
+    "connector/text intersections"
   ],
-  "limitation": "Geometry checks supplement actual image review; capacity is assumed, not measured throughput."
+  "fonts": {
+    "normal": "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "bold": "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  },
+  "limitation": "Schematic artwork is excluded from connector checks. Geometry checks supplement rendered visual review and scientific review."
 }

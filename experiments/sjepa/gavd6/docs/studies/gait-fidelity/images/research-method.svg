@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="762" viewBox="0 0 1000 762" role="img" aria-labelledby="title desc">
+<title id="title">Learn paired movement features, then test a frozen encoder</title>
+<desc id="desc">Proposed follow-up design, not a result. Each original and altered walking state has estimated poses and a clean reference. A masked student encoder and predictor predict the clean-reference features of an exponential-moving-average teacher. Compare feature-difference matching with independent-state regression while keeping the original JEPA objective. Freeze each resulting encoder and fit a coordinate-only readout and a separate change-supervised readout. Both receive the same frozen checkpoint. Evaluate movement-response error and the restored trajectories. Deployment uses a single observed sequence and no reference or paired state.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#536575"/></marker></defs>
+<rect width="1000" height="762" fill="#ffffff"/>
+<text x="26" y="36" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#183247" text-anchor="start">Can predictive features preserve a movement change?</text>
+<text x="26" y="71" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#536575" text-anchor="start">The follow-up places change supervision before the encoder is frozen.</text>
+<rect x="20" y="91" width="960" height="252" rx="9" fill="#ffffff" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="38" y="123" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" fill="#183247" text-anchor="start">1  Pretrain on both states: original and altered walking</text>
+<rect x="40" y="147" width="228" height="75" rx="9" fill="#eff5fc" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="154.0" y="177" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Estimated poses</text>
+<text x="154.0" y="205" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Some tokens hidden</text>
+<rect x="350" y="147" width="276" height="75" rx="9" fill="#eff5fc" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="488.0" y="177" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Student encoder</text>
+<text x="488.0" y="205" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">+ predictor</text>
+<rect x="708" y="147" width="252" height="75" rx="9" fill="#eff5fc" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="834.0" y="177" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Predicted features</text>
+<text x="834.0" y="205" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">At masked positions</text>
+<rect x="40" y="249" width="228" height="75" rx="9" fill="#edf8f5" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="154.0" y="279" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Reference poses</text>
+<text x="154.0" y="307" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Training only</text>
+<rect x="350" y="249" width="276" height="75" rx="9" fill="#edf8f5" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="488.0" y="279" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Teacher encoder</text>
+<text x="488.0" y="307" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Moving-average weights</text>
+<rect x="708" y="249" width="252" height="75" rx="9" fill="#edf8f5" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="834.0" y="279" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Reference features</text>
+<text x="834.0" y="307" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">No target gradients</text>
+<polyline points="270,184.5 340,184.5" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="628,184.5 698,184.5" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="270,286.5 340,286.5" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="628,286.5 698,286.5" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="20" y="363" width="960" height="163" rx="9" fill="#ffffff" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="38" y="395" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" fill="#183247" text-anchor="start">2  Compare added losses at matched joint–time positions</text>
+<rect x="40" y="411" width="445" height="73" rx="9" fill="#edf8f5" stroke="#087e78" stroke-width="1.4"/>
+<text x="60" y="440" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#087e78" text-anchor="start">Feature-difference matching</text>
+<text x="60" y="469" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#183247" text-anchor="start">Predicted change ≈ reference change</text>
+<rect x="515" y="411" width="445" height="73" rx="9" fill="#eff5fc" stroke="#265f9e" stroke-width="1.4"/>
+<text x="535" y="440" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#265f9e" text-anchor="start">Independent-state regression</text>
+<text x="535" y="469" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#183247" text-anchor="start">Predict each reference state separately</text>
+<text x="500" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Both keep the original JEPA objective and feature regularization.</text>
+<rect x="20" y="546" width="960" height="156" rx="9" fill="#ffffff" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="38" y="578" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" fill="#183247" text-anchor="start">3  Test what each frozen encoder supports</text>
+<rect x="40" y="598" width="221" height="85" rx="9" fill="#f6f8fa" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="150.5" y="630" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" fill="#183247" text-anchor="middle">Frozen encoder</text>
+<text x="150.5" y="659" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Predictor discarded</text>
+<polyline points="263,640.5 302,640.5" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="302,618 302,662" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="302,618 334,618" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="302,662 334,662" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="344" y="598" width="285" height="39" rx="9" fill="#eff5fc" stroke="#dbe4e9" stroke-width="1.4"/>
+<rect x="344" y="644" width="285" height="39" rx="9" fill="#edf8f5" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="486.5" y="625" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#265f9e" text-anchor="middle">Coordinate-only readout</text>
+<text x="486.5" y="671" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#087e78" text-anchor="middle">Change-supervised readout</text>
+<polyline points="631,618 662,618 662,641" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="631,664 662,664 662,641" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="662,641 698,641" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="708" y="598" width="252" height="85" rx="9" fill="#f6f8fa" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="834" y="628" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#183247" text-anchor="middle">Evaluate each readout</text>
+<text x="834" y="657" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Response + trajectories</text>
+<text x="500" y="740" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#536575" text-anchor="middle">Deployment: one observed sequence; no partner or clean reference is required.</text>
+</svg>

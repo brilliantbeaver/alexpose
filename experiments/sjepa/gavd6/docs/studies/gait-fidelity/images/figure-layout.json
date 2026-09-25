@@ -1,2457 +1,6583 @@
 [
   {
     "file": "01-research-question.svg",
-    "title": "Preserve the movement being measured",
-    "subtitle": "Three different causes of an unusual pose trace require different responses.",
-    "height": 390,
+    "title": "Can learning movement changes improve pose restoration?",
+    "subtitle": "Compare errors across two movement states, then test the same type of output network.",
+    "description": "FOLLOW-UP. Two reference-verified movement states feed a residual-coupling pretraining test. A frozen encoder and matched fresh coordinate readout are evaluated for restored movement response and coordinate error. This is a planned comparison, not a result.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 630,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Preserve the movement being measured",
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Can learning movement changes improve pose restoration?",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          950,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Compare errors across two movement states, then test the same type of output network.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          819,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 200,
+        "text": "1  Two movement states",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          176,
+          350,
+          519
+        ],
+        "measured_bounds": [
+          56,
+          183,
+          320,
+          200
+        ]
+      },
+      {
+        "x": 116,
+        "y": 409,
+        "text": "State a",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          81.578125,
+          394,
+          150.578125,
+          409
+        ]
+      },
+      {
+        "x": 279,
+        "y": 409,
+        "text": "State b",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          244.0,
+          394,
+          314.0,
+          409
+        ]
+      },
+      {
+        "x": 199,
+        "y": 473,
+        "text": "Same source + view",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          108.671875,
+          458,
+          289.671875,
+          473
+        ]
+      },
+      {
+        "x": 428,
+        "y": 200,
+        "text": "2  Train on error changes",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          420,
+          176,
+          736,
+          519
+        ],
+        "measured_bounds": [
+          428,
+          183,
+          703,
+          205
+        ]
+      },
+      {
+        "x": 486,
+        "y": 270,
+        "text": "Error a",
         "size": 27,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          444.75,
+          250,
+          527.75,
+          270
+        ]
+      },
+      {
+        "x": 671,
+        "y": 270,
+        "text": "Error b",
+        "size": 27,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          629.75,
+          250,
+          712.75,
+          270
+        ]
+      },
+      {
+        "x": 578,
+        "y": 265,
+        "text": "\u2212",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          571.28125,
+          255,
+          584.28125,
+          265
+        ]
+      },
+      {
+        "x": 578,
+        "y": 336,
+        "text": "Difference of errors",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          466.625,
+          319,
+          689.625,
+          336
+        ]
+      },
+      {
+        "x": 578,
+        "y": 378,
+        "text": "vs separate errors",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          497.40625,
+          363,
+          658.40625,
+          382
+        ]
+      },
+      {
+        "x": 578,
+        "y": 473,
+        "text": "Same model + hidden inputs",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          450.953125,
+          458,
+          704.953125,
+          477
+        ]
+      },
+      {
+        "x": 814,
+        "y": 200,
+        "text": "3  Test restored response",
+        "size": 23,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 72,
-        "text": "Three different causes of an unusual pose trace require different responses.",
-        "size": 18,
-        "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 180.0,
-        "y": 158,
-        "text": "Real movement",
-        "size": 21,
-        "anchor": "middle",
         "weight": "bold",
         "container": [
-          40,
-          134,
-          320,
-          264
+          806,
+          176,
+          1152,
+          519
+        ],
+        "measured_bounds": [
+          814,
+          183,
+          1092,
+          205
         ]
       },
       {
-        "x": 180.0,
-        "y": 190,
-        "text": "Unequal left / right steps",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          134,
-          320,
-          264
-        ]
-      },
-      {
-        "x": 180.0,
-        "y": 217,
-        "text": "Retain the difference",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          134,
-          320,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 158,
-        "text": "Observation error",
-        "size": 21,
+        "x": 979,
+        "y": 263,
+        "text": "Encoder weights fixed",
+        "size": 24,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          360,
-          134,
-          640,
-          264
+        "container": null,
+        "measured_bounds": [
+          851.640625,
+          246,
+          1106.640625,
+          268
         ]
       },
       {
-        "x": 500.0,
-        "y": 190,
-        "text": "Blur, gaps or jitter",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          360,
-          134,
-          640,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 217,
-        "text": "Reduce estimation error",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          360,
-          134,
-          640,
-          264
-        ]
-      },
-      {
-        "x": 820.0,
-        "y": 158,
-        "text": "Uncertain side",
-        "size": 21,
+        "x": 979,
+        "y": 352,
+        "text": "New output network",
+        "size": 23,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          680,
-          134,
-          960,
-          264
+        "container": null,
+        "measured_bounds": [
+          869.1171875,
+          335,
+          1089.1171875,
+          357
         ]
       },
       {
-        "x": 820.0,
-        "y": 190,
-        "text": "Left / right assignment",
-        "size": 18,
+        "x": 979,
+        "y": 415,
+        "text": "Movement response",
+        "size": 22,
+        "color": "#007f79",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          680,
-          134,
-          960,
-          264
+        "container": null,
+        "measured_bounds": [
+          879.34375,
+          399,
+          1078.34375,
+          419
         ]
       },
       {
-        "x": 820.0,
-        "y": 217,
-        "text": "Resolve or report uncertainty",
-        "size": 18,
+        "x": 979,
+        "y": 449,
+        "text": "+ coordinate accuracy",
+        "size": 20,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          680,
-          134,
-          960,
-          264
+        "container": null,
+        "measured_bounds": [
+          880.875,
+          434,
+          1076.875,
+          453
         ]
       },
       {
-        "x": 500,
-        "y": 332,
-        "text": "Judge restoration against an independent reference for the named outcome.",
+        "x": 36,
+        "y": 604,
+        "text": "Movement states are paired intervals, not adjacent frames. No paired input is added at deployment.",
         "size": 19,
-        "anchor": "middle",
-        "weight": "normal"
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          590,
+          871,
+          608
+        ]
       }
     ],
-    "lines": []
+    "connectors": [
+      [
+        [
+          151,
+          345
+        ],
+        [
+          240,
+          345
+        ]
+      ],
+      [
+        [
+          539,
+          258
+        ],
+        [
+          556,
+          258
+        ]
+      ],
+      [
+        [
+          600,
+          258
+        ],
+        [
+          619,
+          258
+        ]
+      ],
+      [
+        [
+          979,
+          281
+        ],
+        [
+          979,
+          316
+        ]
+      ],
+      [
+        [
+          362,
+          348
+        ],
+        [
+          408,
+          348
+        ]
+      ],
+      [
+        [
+          748,
+          348
+        ],
+        [
+          794,
+          348
+        ]
+      ]
+    ]
   },
   {
     "file": "02-crossed-design.svg",
-    "title": "Separate movement change from observation change",
-    "subtitle": "Each four-cell family comes from one source identity. This is a proposed design.",
-    "height": 500,
+    "title": "Separate movement from how it is observed",
+    "subtitle": "Reuse the parent's crossed families, references and physical-time grid.",
+    "description": "INHERITED DESIGN. The inherited experiment crosses paired movement states with observation conditions. Drawn skeletons and tracks are illustrative, not measured results.",
+    "scope": "INHERITED DESIGN",
+    "width": 1200,
+    "height": 680,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Separate movement change from observation change",
-        "size": 27,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 72,
-        "text": "Each four-cell family comes from one source identity. This is a proposed design.",
+        "text": "INHERITED DESIGN",
         "size": 18,
+        "color": "#4c60af",
         "anchor": "start",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          219,
+          40
+        ]
       },
       {
-        "x": 417,
+        "x": 1164,
+        "y": 40,
+        "text": "SCHEMATIC",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          1058.015625,
+          27,
+          1164.015625,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Separate movement from how it is observed",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          714,
+          97
+        ]
+      },
+      {
+        "x": 36,
         "y": 124,
-        "text": "Clean observation",
+        "text": "Reuse the parent's crossed families, references and physical-time grid.",
         "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          666,
+          128
+        ]
       },
       {
-        "x": 795,
-        "y": 124,
+        "x": 445,
+        "y": 178,
+        "text": "Cleaner observation",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          341.0,
+          162,
+          549.0,
+          178
+        ]
+      },
+      {
+        "x": 925,
+        "y": 178,
         "text": "Degraded observation",
-        "size": 20,
+        "size": 22,
+        "color": "#183247",
         "anchor": "middle",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          811.0,
+          162,
+          1039.0,
+          182
+        ]
       },
       {
-        "x": 32,
-        "y": 221,
-        "text": "Motion A",
-        "size": 21,
+        "x": 42,
+        "y": 283,
+        "text": "State a",
+        "size": 25,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          42,
+          265,
+          124,
+          283
+        ]
       },
       {
-        "x": 32,
-        "y": 374,
-        "text": "Motion B",
-        "size": 21,
+        "x": 510,
+        "y": 348,
+        "text": "Observed track",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          449.0,
+          334,
+          571.0,
+          348
+        ]
+      },
+      {
+        "x": 990,
+        "y": 348,
+        "text": "Observed track",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          929.0,
+          334,
+          1051.0,
+          348
+        ]
+      },
+      {
+        "x": 42,
+        "y": 486,
+        "text": "State b",
+        "size": 25,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 417.5,
-        "y": 180,
-        "text": "A \u00b7 clean",
-        "size": 21,
-        "anchor": "middle",
         "weight": "bold",
-        "container": [
-          273,
-          156,
-          562,
-          256
+        "container": null,
+        "measured_bounds": [
+          42,
+          468,
+          125,
+          486
         ]
       },
       {
-        "x": 417.5,
-        "y": 212,
-        "text": "Reference Y00",
+        "x": 510,
+        "y": 551,
+        "text": "Observed track",
         "size": 18,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          273,
-          156,
-          562,
-          256
+        "container": null,
+        "measured_bounds": [
+          449.0,
+          537,
+          571.0,
+          551
         ]
       },
       {
-        "x": 417.5,
-        "y": 239,
-        "text": "Restored estimate",
+        "x": 990,
+        "y": 551,
+        "text": "Observed track",
         "size": 18,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          273,
-          156,
-          562,
-          256
+        "container": null,
+        "measured_bounds": [
+          929.0,
+          537,
+          1051.0,
+          551
         ]
       },
       {
-        "x": 795.5,
-        "y": 180,
-        "text": "A \u00b7 degraded",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          651,
-          156,
-          940,
-          256
-        ]
-      },
-      {
-        "x": 795.5,
-        "y": 212,
-        "text": "Reference Y01",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          651,
-          156,
-          940,
-          256
-        ]
-      },
-      {
-        "x": 795.5,
-        "y": 239,
-        "text": "Restored estimate",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          651,
-          156,
-          940,
-          256
-        ]
-      },
-      {
-        "x": 417.5,
-        "y": 332,
-        "text": "B \u00b7 clean",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          273,
-          308,
-          562,
-          408
-        ]
-      },
-      {
-        "x": 417.5,
-        "y": 364,
-        "text": "Reference Y10",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          273,
-          308,
-          562,
-          408
-        ]
-      },
-      {
-        "x": 417.5,
-        "y": 391,
-        "text": "Restored estimate",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          273,
-          308,
-          562,
-          408
-        ]
-      },
-      {
-        "x": 795.5,
-        "y": 332,
-        "text": "B \u00b7 degraded",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          651,
-          308,
-          940,
-          408
-        ]
-      },
-      {
-        "x": 795.5,
-        "y": 364,
-        "text": "Reference Y11",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          651,
-          308,
-          940,
-          408
-        ]
-      },
-      {
-        "x": 795.5,
-        "y": 391,
-        "text": "Restored estimate",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          651,
-          308,
-          940,
-          408
-        ]
-      },
-      {
-        "x": 500,
-        "y": 465,
-        "text": "Score changes in error; projected references can change with the camera.",
+        "x": 36,
+        "y": 654,
+        "text": "Movement contrasts stay within an observation condition. Each camera uses its own projected 2D reference.",
         "size": 19,
-        "anchor": "middle",
-        "weight": "normal"
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          640,
+          966,
+          658
+        ]
       }
     ],
-    "lines": [
+    "connectors": [
       [
         [
-          570,
-          205
+          632,
+          288
         ],
         [
-          643,
-          205
+          738,
+          288
         ]
       ],
       [
         [
-          570,
-          357
+          632,
+          491
         ],
         [
-          643,
-          357
+          738,
+          491
         ]
       ],
       [
         [
-          417,
-          264
+          445,
+          374
         ],
         [
-          417,
-          300
+          445,
+          405
         ]
       ],
       [
         [
-          795,
-          264
+          925,
+          374
         ],
         [
-          795,
-          300
+          925,
+          405
         ]
       ]
     ]
   },
   {
     "file": "03-changing-graph-masks.svg",
-    "title": "Give each joint opportunities to supply context",
-    "subtitle": "Illustrative body12 masks at one time block; each draw hides a different connected region.",
-    "height": 480,
+    "title": "Hide joint regions using the existing body graph",
+    "subtitle": "Masking hides part of the observed input during training. All variants use the same policy.",
+    "description": "INHERITED CORE. Masking hides part of the observed input during training. All variants use the same policy.",
+    "scope": "INHERITED CORE",
+    "width": 1200,
+    "height": 635,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Give each joint opportunities to supply context",
-        "size": 27,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 72,
-        "text": "Illustrative body12 masks at one time block; each draw hides a different connected region.",
+        "text": "INHERITED CORE",
         "size": 18,
+        "color": "#4c60af",
         "anchor": "start",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          202,
+          40
+        ]
       },
       {
-        "x": 180,
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Hide joint regions using the existing body graph",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          770,
+          97
+        ]
+      },
+      {
+        "x": 36,
         "y": 124,
-        "text": "Draw 1: left leg",
+        "text": "Masking hides part of the observed input during training. All variants use the same policy.",
         "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          823,
+          128
+        ]
       },
       {
-        "x": 143,
-        "y": 411,
-        "text": "L",
+        "x": 216,
+        "y": 204,
+        "text": "Leg region",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          157.21875,
+          187,
+          275.21875,
+          209
+        ]
+      },
+      {
+        "x": 600,
+        "y": 204,
+        "text": "Arm region",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          538.65625,
+          187,
+          661.65625,
+          209
+        ]
+      },
+      {
+        "x": 984,
+        "y": 204,
+        "text": "Trunk region",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          914.3515625,
+          187,
+          1053.3515625,
+          209
+        ]
+      },
+      {
+        "x": 120,
+        "y": 552,
+        "text": "Visible context",
         "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          120,
+          538,
+          236,
+          552
+        ]
       },
       {
-        "x": 217,
-        "y": 411,
-        "text": "R",
+        "x": 330,
+        "y": 552,
+        "text": "Hidden for training",
         "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          330,
+          538,
+          477,
+          556
+        ]
       },
       {
-        "x": 500,
-        "y": 124,
-        "text": "Draw 2: right arm",
+        "x": 715,
+        "y": 552,
+        "text": "Same masking policy in all three variants",
         "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 463,
-        "y": 411,
-        "text": "L",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 537,
-        "y": 411,
-        "text": "R",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 820,
-        "y": 124,
-        "text": "Draw 3: trunk",
-        "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 783,
-        "y": 411,
-        "text": "L",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 857,
-        "y": 411,
-        "text": "R",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 236,
-        "y": 457,
-        "text": "Context",
-        "size": 18,
+        "color": "#566978",
         "anchor": "start",
-        "weight": "normal"
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          715,
+          537,
+          1077,
+          556
+        ]
       },
       {
-        "x": 406,
-        "y": 457,
-        "text": "Training mask",
-        "size": 18,
+        "x": 36,
+        "y": 609,
+        "text": "The follow-up tests auxiliary losses. It introduces no graph, mask-rate or target-exposure ablation.",
+        "size": 19,
+        "color": "#566978",
         "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 685,
-        "y": 457,
-        "text": "L / R are anatomical labels",
-        "size": 18,
-        "anchor": "start",
-        "weight": "normal"
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          595,
+          856,
+          613
+        ]
       }
     ],
-    "lines": []
+    "connectors": []
   },
   {
     "file": "04-mask-contract.svg",
-    "title": "Keep artificial masks separate from missing detections",
-    "subtitle": "The following contract is proposed for the new masking experiment.",
-    "height": 430,
+    "title": "Keep three kinds of availability separate",
+    "subtitle": "Training queries include deliberately hidden blocks and blocks with missing detections.",
+    "description": "INHERITED CORE. Training queries include deliberately hidden blocks and blocks with missing detections.",
+    "scope": "INHERITED CORE",
+    "width": 1200,
+    "height": 610,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Keep artificial masks separate from missing detections",
-        "size": 27,
+        "text": "INHERITED CORE",
+        "size": 18,
+        "color": "#4c60af",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          202,
+          40
+        ]
       },
       {
-        "x": 32,
-        "y": 72,
-        "text": "The following contract is proposed for the new masking experiment.",
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
         "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Keep three kinds of availability separate",
+        "size": 32,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          646,
+          97
+        ]
       },
       {
-        "x": 128.0,
-        "y": 162,
-        "text": "Retain raw input",
-        "size": 21,
+        "x": 36,
+        "y": 124,
+        "text": "Training queries include deliberately hidden blocks and blocks with missing detections.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          801,
+          128
+        ]
+      },
+      {
+        "x": 476,
+        "y": 190,
+        "text": "Block 1",
+        "size": 19,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          40,
-          138,
-          216,
-          262
+        "container": null,
+        "measured_bounds": [
+          442.2109375,
+          176,
+          510.2109375,
+          190
         ]
       },
       {
-        "x": 128.0,
-        "y": 194,
-        "text": "Coordinates + times",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          138,
-          216,
-          262
-        ]
-      },
-      {
-        "x": 128.0,
-        "y": 221,
-        "text": "Detection validity",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          138,
-          216,
-          262
-        ]
-      },
-      {
-        "x": 376.0,
-        "y": 162,
-        "text": "Draw a mask",
-        "size": 21,
+        "x": 595,
+        "y": 190,
+        "text": "Block 2",
+        "size": 19,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          288,
-          138,
-          464,
-          262
+        "container": null,
+        "measured_bounds": [
+          561.2109375,
+          176,
+          629.2109375,
+          190
         ]
       },
       {
-        "x": 376.0,
-        "y": 194,
-        "text": "Graph region + span",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          288,
-          138,
-          464,
-          262
-        ]
-      },
-      {
-        "x": 376.0,
-        "y": 221,
-        "text": "Independent RNG",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          288,
-          138,
-          464,
-          262
-        ]
-      },
-      {
-        "x": 624.0,
-        "y": 162,
-        "text": "Encode context",
-        "size": 21,
+        "x": 714,
+        "y": 190,
+        "text": "Block 3",
+        "size": 19,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          536,
-          138,
-          712,
-          262
+        "container": null,
+        "measured_bounds": [
+          680.2109375,
+          176,
+          748.2109375,
+          190
         ]
       },
       {
-        "x": 624.0,
-        "y": 194,
-        "text": "No hidden-coordinate",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          536,
-          138,
-          712,
-          262
-        ]
-      },
-      {
-        "x": 624.0,
-        "y": 221,
-        "text": "features or shortcuts",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          536,
-          138,
-          712,
-          262
-        ]
-      },
-      {
-        "x": 872.0,
-        "y": 162,
-        "text": "Score targets",
-        "size": 21,
+        "x": 833,
+        "y": 190,
+        "text": "Block 4",
+        "size": 19,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          784,
-          138,
-          960,
-          262
+        "container": null,
+        "measured_bounds": [
+          799.2109375,
+          176,
+          867.2109375,
+          190
         ]
       },
       {
-        "x": 872.0,
-        "y": 194,
-        "text": "Reference validity",
-        "size": 18,
+        "x": 952,
+        "y": 190,
+        "text": "Block 5",
+        "size": 19,
+        "color": "#183247",
         "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          918.2109375,
+          176,
+          986.2109375,
+          190
+        ]
+      },
+      {
+        "x": 1071,
+        "y": 190,
+        "text": "Block 6",
+        "size": 19,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1037.2109375,
+          176,
+          1105.2109375,
+          190
+        ]
+      },
+      {
+        "x": 56,
+        "y": 254,
+        "text": "Detector found joint",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          237,
+          284,
+          259
+        ]
+      },
+      {
+        "x": 476,
+        "y": 253,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          469.28125,
+          240,
+          482.28125,
+          253
+        ]
+      },
+      {
+        "x": 595,
+        "y": 253,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          588.28125,
+          240,
+          601.28125,
+          253
+        ]
+      },
+      {
+        "x": 833,
+        "y": 253,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          826.28125,
+          240,
+          839.28125,
+          253
+        ]
+      },
+      {
+        "x": 1071,
+        "y": 253,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1064.28125,
+          240,
+          1077.28125,
+          253
+        ]
+      },
+      {
+        "x": 56,
+        "y": 336,
+        "text": "Training query",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          319,
+          221,
+          341
+        ]
+      },
+      {
+        "x": 595,
+        "y": 335,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          588.28125,
+          322,
+          601.28125,
+          335
+        ]
+      },
+      {
+        "x": 714,
+        "y": 335,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          707.28125,
+          322,
+          720.28125,
+          335
+        ]
+      },
+      {
+        "x": 833,
+        "y": 335,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          826.28125,
+          322,
+          839.28125,
+          335
+        ]
+      },
+      {
+        "x": 952,
+        "y": 335,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          945.28125,
+          322,
+          958.28125,
+          335
+        ]
+      },
+      {
+        "x": 56,
+        "y": 418,
+        "text": "Reference available",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          56,
+          401,
+          280,
+          418
+        ]
+      },
+      {
+        "x": 476,
+        "y": 417,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          469.28125,
+          404,
+          482.28125,
+          417
+        ]
+      },
+      {
+        "x": 595,
+        "y": 417,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          588.28125,
+          404,
+          601.28125,
+          417
+        ]
+      },
+      {
+        "x": 714,
+        "y": 417,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          707.28125,
+          404,
+          720.28125,
+          417
+        ]
+      },
+      {
+        "x": 952,
+        "y": 417,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          945.28125,
+          404,
+          958.28125,
+          417
+        ]
+      },
+      {
+        "x": 1071,
+        "y": 417,
+        "text": "+",
+        "size": 23,
+        "color": "white",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1064.28125,
+          404,
+          1077.28125,
+          417
+        ]
+      },
+      {
+        "x": 600,
+        "y": 511,
+        "text": "Added loss: queried in both states + reference available in all four frames",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          198.9296875,
+          494,
+          1000.9296875,
+          516
+        ]
+      },
+      {
+        "x": 36,
+        "y": 584,
+        "text": "One block = one joint over four frames. Pairs excluded from the added loss still receive the original loss.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
         "weight": "normal",
-        "container": [
-          784,
-          138,
-          960,
-          262
+        "container": null,
+        "measured_bounds": [
+          36,
+          570,
+          908,
+          588
         ]
-      },
-      {
-        "x": 872.0,
-        "y": 221,
-        "text": "Normalize loss count",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          784,
-          138,
-          960,
-          262
-        ]
-      },
-      {
-        "x": 500,
-        "y": 326,
-        "text": "Training target mask \u2260 detector missingness \u2260 image visibility.",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 500,
-        "y": 370,
-        "text": "Deployment receives observed tracks and validity; references are evaluator-only.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
       }
     ],
-    "lines": [
-      [
-        [
-          224,
-          200
-        ],
-        [
-          280,
-          200
-        ]
-      ],
-      [
-        [
-          472,
-          200
-        ],
-        [
-          528,
-          200
-        ]
-      ],
-      [
-        [
-          720,
-          200
-        ],
-        [
-          776,
-          200
-        ]
-      ]
-    ]
+    "connectors": []
   },
   {
     "file": "05-coverage-audit.svg",
-    "title": "Audit every joint at every time position",
-    "subtitle": "A changing mask can still leave the same central tokens rarely visible.",
-    "height": 445,
+    "title": "Check what hidden input and scaling change",
+    "subtitle": "Diagnostic examples show available context and a control with no real movement change.",
+    "description": "DIAGNOSTIC. The left schematic tracks how often each joint and time block is available. The right control repeats identical raw observations and references with independent hidden-input patterns and input-derived normalization. Teacher feature differences then isolate normalization, while student differences also include hidden context. No measured results are shown.",
+    "scope": "DIAGNOSTIC",
+    "width": 1200,
+    "height": 675,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Audit every joint at every time position",
-        "size": 27,
+        "text": "DIAGNOSTIC",
+        "size": 18,
+        "color": "#007f79",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          161,
+          40
+        ]
       },
       {
-        "x": 32,
-        "y": 72,
-        "text": "A changing mask can still leave the same central tokens rarely visible.",
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
         "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Check what hidden input and scaling change",
+        "size": 32,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 172.0,
-        "y": 162,
-        "text": "Window-level count",
-        "size": 21,
-        "anchor": "middle",
         "weight": "bold",
-        "container": [
-          40,
-          138,
-          304,
-          258
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          721,
+          97
         ]
       },
       {
-        "x": 172.0,
-        "y": 194,
-        "text": "\u201cHip seen at least once\u201d",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          138,
-          304,
-          258
-        ]
-      },
-      {
-        "x": 172.0,
-        "y": 221,
-        "text": "Can hide central starvation",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          138,
-          304,
-          258
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 162,
-        "text": "Joint \u00d7 time coverage",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          368,
-          138,
-          632,
-          258
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 194,
-        "text": "Count context and targets",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          368,
-          138,
-          632,
-          258
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 221,
-        "text": "Across an advancing RNG",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          368,
-          138,
-          632,
-          258
-        ]
-      },
-      {
-        "x": 828.0,
-        "y": 162,
-        "text": "Accept the sampler",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          696,
-          138,
-          960,
-          258
-        ]
-      },
-      {
-        "x": 828.0,
-        "y": 194,
-        "text": "Both roles if eligible",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          696,
-          138,
-          960,
-          258
-        ]
-      },
-      {
-        "x": 828.0,
-        "y": 221,
-        "text": "Check paired-side balance",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          696,
-          138,
-          960,
-          258
-        ]
-      },
-      {
-        "x": 500,
-        "y": 320,
-        "text": "Retain achieved mask rate, span lengths, rejection rate and natural missingness.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 500,
-        "y": 390,
-        "text": "No permanent hip or ankle mask. Verify this empirically before training.",
+        "x": 36,
+        "y": 124,
+        "text": "Diagnostic examples show available context and a control with no real movement change.",
         "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          832,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 200,
+        "text": "How often is each input available?",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          176,
+          608,
+          508
+        ],
+        "measured_bounds": [
+          56,
+          183,
+          432,
+          205
+        ]
+      },
+      {
+        "x": 63,
+        "y": 255,
+        "text": "Shoulder",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          63,
+          240,
+          143,
+          255
+        ]
+      },
+      {
+        "x": 63,
+        "y": 298,
+        "text": "Elbow",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          63,
+          283,
+          118,
+          298
+        ]
+      },
+      {
+        "x": 63,
+        "y": 341,
+        "text": "Hip",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          63,
+          326,
+          93,
+          345
+        ]
+      },
+      {
+        "x": 63,
+        "y": 384,
+        "text": "Knee",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          63,
+          369,
+          110,
+          384
+        ]
+      },
+      {
+        "x": 63,
+        "y": 427,
+        "text": "Ankle",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          62,
+          412,
+          113,
+          427
+        ]
+      },
+      {
+        "x": 328,
+        "y": 466,
+        "text": "Time-block position \u2192",
+        "size": 20,
+        "color": "#566978",
         "anchor": "middle",
-        "weight": "bold"
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          229.4453125,
+          451,
+          426.4453125,
+          470
+        ]
+      },
+      {
+        "x": 328,
+        "y": 500,
+        "text": "Darker = more retained context (schematic)",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          145.078125,
+          486,
+          511.078125,
+          504
+        ]
+      },
+      {
+        "x": 684,
+        "y": 200,
+        "text": "Control: no movement change",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          676,
+          176,
+          1152,
+          508
+        ],
+        "measured_bounds": [
+          684,
+          183,
+          1016,
+          205
+        ]
+      },
+      {
+        "x": 914,
+        "y": 257,
+        "text": "Same raw reference + validity",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          759.625,
+          241,
+          1068.625,
+          261
+        ]
+      },
+      {
+        "x": 797,
+        "y": 363,
+        "text": "Shift / scale a",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          733.0625,
+          348,
+          861.0625,
+          363
+        ]
+      },
+      {
+        "x": 1030,
+        "y": 363,
+        "text": "Shift / scale b",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          965.515625,
+          348,
+          1094.515625,
+          363
+        ]
+      },
+      {
+        "x": 914,
+        "y": 488,
+        "text": "Teacher features can differ after scaling",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          739.0546875,
+          473,
+          1089.0546875,
+          492
+        ]
+      },
+      {
+        "x": 36,
+        "y": 568,
+        "text": "Features = learned numbers. Measure their variation at fixed joint / time positions.",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          552,
+          831,
+          572
+        ]
+      },
+      {
+        "x": 36,
+        "y": 649,
+        "text": "Schematic only. Hidden inputs also affect the student; the unchanged teacher reference isolates shift / scale effects.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          635,
+          1008,
+          653
+        ]
       }
     ],
-    "lines": [
+    "connectors": [
       [
         [
-          312,
-          198
+          914,
+          274
         ],
         [
-          360,
-          198
+          914,
+          295
         ]
       ],
       [
         [
-          640,
-          198
+          914,
+          295
         ],
         [
-          688,
-          198
+          797,
+          295
+        ]
+      ],
+      [
+        [
+          797,
+          295
+        ],
+        [
+          797,
+          326
+        ]
+      ],
+      [
+        [
+          914,
+          295
+        ],
+        [
+          1030,
+          295
+        ]
+      ],
+      [
+        [
+          1030,
+          295
+        ],
+        [
+          1030,
+          326
+        ]
+      ],
+      [
+        [
+          797,
+          387
+        ],
+        [
+          797,
+          413
+        ]
+      ],
+      [
+        [
+          1030,
+          387
+        ],
+        [
+          1030,
+          413
         ]
       ]
     ]
   },
   {
     "file": "06-matched-mask-experiment.svg",
-    "title": "Test masking and prediction objectives separately",
-    "subtitle": "Six pretraining arms share the same new data, mask budget and coordinate readout.",
-    "height": 440,
+    "title": "Three variants separate three kinds of training",
+    "subtitle": "Features are learned numbers. First learn them; fix encoder weights; then train a new output network.",
+    "description": "FOLLOW-UP. Features are learned numbers. First learn them; fix encoder weights; then train a new output network.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 700,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Test masking and prediction objectives separately",
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Three variants separate three kinds of training",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          740,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Features are learned numbers. First learn them; fix encoder weights; then train a new output network.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          933,
+          128
+        ]
+      },
+      {
+        "x": 480,
+        "y": 185,
+        "text": "Seed 17",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          440.328125,
+          170,
+          519.328125,
+          185
+        ]
+      },
+      {
+        "x": 716,
+        "y": 185,
+        "text": "Seed 29",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          676.328125,
+          170,
+          755.328125,
+          185
+        ]
+      },
+      {
+        "x": 952,
+        "y": 185,
+        "text": "Seed 43",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          912.328125,
+          170,
+          991.328125,
+          185
+        ]
+      },
+      {
+        "x": 36,
+        "y": 254,
+        "text": "JEPA error change",
+        "size": 25,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          236,
+          258,
+          259
+        ]
+      },
+      {
+        "x": 36,
+        "y": 286,
+        "text": "difference of feature errors",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          272,
+          248,
+          286
+        ]
+      },
+      {
+        "x": 480,
+        "y": 248,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          407.65625,
+          233,
+          552.65625,
+          248
+        ]
+      },
+      {
+        "x": 480,
+        "y": 291,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          426.9921875,
+          276,
+          532.9921875,
+          295
+        ]
+      },
+      {
+        "x": 716,
+        "y": 248,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          643.65625,
+          233,
+          788.65625,
+          248
+        ]
+      },
+      {
+        "x": 716,
+        "y": 291,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          662.9921875,
+          276,
+          768.9921875,
+          295
+        ]
+      },
+      {
+        "x": 952,
+        "y": 248,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          879.65625,
+          233,
+          1024.65625,
+          248
+        ]
+      },
+      {
+        "x": 952,
+        "y": 291,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          898.9921875,
+          276,
+          1004.9921875,
+          295
+        ]
+      },
+      {
+        "x": 36,
+        "y": 365,
+        "text": "JEPA separate errors",
+        "size": 25,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          347,
+          288,
+          370
+        ]
+      },
+      {
+        "x": 36,
+        "y": 397,
+        "text": "independent feature errors",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          383,
+          248,
+          401
+        ]
+      },
+      {
+        "x": 480,
+        "y": 359,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          407.65625,
+          344,
+          552.65625,
+          359
+        ]
+      },
+      {
+        "x": 480,
+        "y": 402,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          426.9921875,
+          387,
+          532.9921875,
+          406
+        ]
+      },
+      {
+        "x": 716,
+        "y": 359,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          643.65625,
+          344,
+          788.65625,
+          359
+        ]
+      },
+      {
+        "x": 716,
+        "y": 402,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          662.9921875,
+          387,
+          768.9921875,
+          406
+        ]
+      },
+      {
+        "x": 952,
+        "y": 359,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          879.65625,
+          344,
+          1024.65625,
+          359
+        ]
+      },
+      {
+        "x": 952,
+        "y": 402,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          898.9921875,
+          387,
+          1004.9921875,
+          406
+        ]
+      },
+      {
+        "x": 36,
+        "y": 476,
+        "text": "Coordinate error change",
+        "size": 25,
+        "color": "#986325",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          458,
+          328,
+          481
+        ]
+      },
+      {
+        "x": 36,
+        "y": 508,
+        "text": "difference of position errors",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          494,
+          254,
+          512
+        ]
+      },
+      {
+        "x": 480,
+        "y": 470,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#986325",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          407.65625,
+          455,
+          552.65625,
+          470
+        ]
+      },
+      {
+        "x": 480,
+        "y": 513,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          426.9921875,
+          498,
+          532.9921875,
+          517
+        ]
+      },
+      {
+        "x": 716,
+        "y": 470,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#986325",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          643.65625,
+          455,
+          788.65625,
+          470
+        ]
+      },
+      {
+        "x": 716,
+        "y": 513,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          662.9921875,
+          498,
+          768.9921875,
+          517
+        ]
+      },
+      {
+        "x": 952,
+        "y": 470,
+        "text": "Learn features",
+        "size": 21,
+        "color": "#986325",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          879.65625,
+          455,
+          1024.65625,
+          470
+        ]
+      },
+      {
+        "x": 952,
+        "y": 513,
+        "text": "Train output",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          898.9921875,
+          498,
+          1004.9921875,
+          517
+        ]
+      },
+      {
+        "x": 36,
+        "y": 594,
+        "text": "3 variants \u00d7 3 seeds = 9 models \u00b7 18 fitting phases",
         "size": 27,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          574,
+          677,
+          599
+        ]
       },
       {
-        "x": 32,
-        "y": 72,
-        "text": "Six pretraining arms share the same new data, mask budget and coordinate readout.",
-        "size": 18,
+        "x": 36,
+        "y": 674,
+        "text": "Reuse parent baselines: plain JEPA, coordinate, direct, initialized and shuffled-reference controls.",
+        "size": 19,
+        "color": "#566978",
         "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 82,
-        "y": 163,
-        "text": "Objective",
-        "size": 18,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 340,
-        "y": 123,
-        "text": "Current blocks",
-        "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 586,
-        "y": 123,
-        "text": "Random tokens",
-        "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 832,
-        "y": 123,
-        "text": "Graph + time",
-        "size": 20,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 213,
-        "text": "Coordinates",
-        "size": 20,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 340.0,
-        "y": 198,
-        "text": "Matched arm",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          237,
-          174,
-          443,
-          248
-        ]
-      },
-      {
-        "x": 340.0,
-        "y": 230,
-        "text": "Same target exposure",
-        "size": 18,
-        "anchor": "middle",
         "weight": "normal",
-        "container": [
-          237,
-          174,
-          443,
-          248
+        "container": null,
+        "measured_bounds": [
+          36,
+          660,
+          855,
+          678
         ]
-      },
-      {
-        "x": 586.0,
-        "y": 198,
-        "text": "Matched arm",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          483,
-          174,
-          689,
-          248
-        ]
-      },
-      {
-        "x": 586.0,
-        "y": 230,
-        "text": "Same target exposure",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          483,
-          174,
-          689,
-          248
-        ]
-      },
-      {
-        "x": 832.0,
-        "y": 198,
-        "text": "Matched arm",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          729,
-          174,
-          935,
-          248
-        ]
-      },
-      {
-        "x": 832.0,
-        "y": 230,
-        "text": "Same target exposure",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          729,
-          174,
-          935,
-          248
-        ]
-      },
-      {
-        "x": 32,
-        "y": 324,
-        "text": "Paired JEPA",
-        "size": 20,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 340.0,
-        "y": 309,
-        "text": "Matched arm",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          237,
-          285,
-          443,
-          359
-        ]
-      },
-      {
-        "x": 340.0,
-        "y": 341,
-        "text": "Same target exposure",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          237,
-          285,
-          443,
-          359
-        ]
-      },
-      {
-        "x": 586.0,
-        "y": 309,
-        "text": "Matched arm",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          483,
-          285,
-          689,
-          359
-        ]
-      },
-      {
-        "x": 586.0,
-        "y": 341,
-        "text": "Same target exposure",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          483,
-          285,
-          689,
-          359
-        ]
-      },
-      {
-        "x": 832.0,
-        "y": 309,
-        "text": "Matched arm",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          729,
-          285,
-          935,
-          359
-        ]
-      },
-      {
-        "x": 832.0,
-        "y": 341,
-        "text": "Same target exposure",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          729,
-          285,
-          935,
-          359
-        ]
-      },
-      {
-        "x": 500,
-        "y": 410,
-        "text": "Also retain direct end-to-end, no-pretraining, calibration and smoothing controls.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
       }
     ],
-    "lines": []
-  },
-  {
-    "file": "07-video-evidence.svg",
-    "title": "Use the local videos for the claims they can support",
-    "subtitle": "Footage and folder labels are available; independent gait references remain to be established.",
-    "height": 470,
-    "labels": [
-      {
-        "x": 32,
-        "y": 40,
-        "text": "Use the local videos for the claims they can support",
-        "size": 27,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 72,
-        "text": "Footage and folder labels are available; independent gait references remain to be established.",
-        "size": 18,
-        "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 178.0,
-        "y": 158,
-        "text": "Available now",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          40,
-          134,
-          316,
-          257
-        ]
-      },
-      {
-        "x": 178.0,
-        "y": 190,
-        "text": "Natural imaging challenges",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          134,
-          316,
-          257
-        ]
-      },
-      {
-        "x": 178.0,
-        "y": 217,
-        "text": "Qualitative failure review",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          134,
-          316,
-          257
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 158,
-        "text": "After annotation",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          362,
-          134,
-          638,
-          257
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 190,
-        "text": "Visible joint / side checks",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          362,
-          134,
-          638,
-          257
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 217,
-        "text": "Reviewer disagreement",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          362,
-          134,
-          638,
-          257
-        ]
-      },
-      {
-        "x": 822.0,
-        "y": 158,
-        "text": "Needs added reference",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          684,
-          134,
-          960,
-          257
-        ]
-      },
-      {
-        "x": 822.0,
-        "y": 190,
-        "text": "Clinical measurement error",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          684,
-          134,
-          960,
-          257
-        ]
-      },
-      {
-        "x": 822.0,
-        "y": 217,
-        "text": "Affected side or real change",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          684,
-          134,
-          960,
-          257
-        ]
-      },
-      {
-        "x": 500,
-        "y": 326,
-        "text": "An MS or PD folder label does not identify an affected limb.",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold"
-      },
-      {
-        "x": 500,
-        "y": 366,
-        "text": "Another pose estimator supplies a comparison, not independent ground truth.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 500,
-        "y": 414,
-        "text": "Keep this collection as development until source overlap and rights are reviewed.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      }
-    ],
-    "lines": []
-  },
-  {
-    "file": "08-data-review-view.svg",
-    "title": "Review footage together with the quantities being measured",
-    "subtitle": "Viewer design: the local gallery currently plays raw video and retains review metadata.",
-    "height": 520,
-    "labels": [
-      {
-        "x": 32,
-        "y": 40,
-        "text": "Review footage together with the quantities being measured",
-        "size": 27,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 72,
-        "text": "Viewer design: the local gallery currently plays raw video and retains review metadata.",
-        "size": 18,
-        "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 192.0,
-        "y": 170,
-        "text": "Original video",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          60,
-          146,
-          324,
-          264
-        ]
-      },
-      {
-        "x": 192.0,
-        "y": 202,
-        "text": "Native timestamps",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          60,
-          146,
-          324,
-          264
-        ]
-      },
-      {
-        "x": 192.0,
-        "y": 229,
-        "text": "View, cut and visibility",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          60,
-          146,
-          324,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 170,
-        "text": "Overlay comparison",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          368,
-          146,
-          632,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 202,
-        "text": "Input / restored skeleton",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          368,
-          146,
-          632,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 229,
-        "text": "Reference if available",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          368,
-          146,
-          632,
-          264
-        ]
-      },
-      {
-        "x": 808.0,
-        "y": 170,
-        "text": "Left / right traces",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          676,
-          146,
-          940,
-          264
-        ]
-      },
-      {
-        "x": 808.0,
-        "y": 202,
-        "text": "Shared physical time",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          676,
-          146,
-          940,
-          264
-        ]
-      },
-      {
-        "x": 808.0,
-        "y": 229,
-        "text": "Fixed axes and units",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          676,
-          146,
-          940,
-          264
-        ]
-      },
-      {
-        "x": 500,
-        "y": 355,
-        "text": "One linked time cursor; no independent warping of the two legs.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 500,
-        "y": 398,
-        "text": "Annotate: visible \u00b7 uncertain side \u00b7 cut \u00b7 missing output \u00b7 reference unavailable",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      },
-      {
-        "x": 500,
-        "y": 485,
-        "text": "Synchronized overlays and quantitative traces are planned work, not generated results.",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal"
-      }
-    ],
-    "lines": [
+    "connectors": [
       [
         [
-          62,
-          316
+          480,
+          256
         ],
         [
-          938,
-          316
+          480,
+          266
+        ]
+      ],
+      [
+        [
+          716,
+          256
+        ],
+        [
+          716,
+          266
+        ]
+      ],
+      [
+        [
+          952,
+          256
+        ],
+        [
+          952,
+          266
+        ]
+      ],
+      [
+        [
+          480,
+          367
+        ],
+        [
+          480,
+          377
+        ]
+      ],
+      [
+        [
+          716,
+          367
+        ],
+        [
+          716,
+          377
+        ]
+      ],
+      [
+        [
+          952,
+          367
+        ],
+        [
+          952,
+          377
+        ]
+      ],
+      [
+        [
+          480,
+          478
+        ],
+        [
+          480,
+          488
+        ]
+      ],
+      [
+        [
+          716,
+          478
+        ],
+        [
+          716,
+          488
+        ]
+      ],
+      [
+        [
+          952,
+          478
+        ],
+        [
+          952,
+          488
         ]
       ]
     ]
   },
   {
-    "file": "09-source-splits.svg",
-    "title": "Split source families before extracting windows",
-    "subtitle": "The current 41 filename-derived sources are not verified independent people.",
-    "height": 470,
+    "file": "07-video-evidence.svg",
+    "title": "Real-video transfer needs its own reference study",
+    "subtitle": "These extensions remain outside the focused synthetic follow-up.",
+    "description": "DEFERRED. These extensions remain outside the focused synthetic follow-up.",
+    "scope": "DEFERRED",
+    "width": 1200,
+    "height": 630,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Split source families before extracting windows",
-        "size": 27,
+        "text": "DEFERRED",
+        "size": 18,
+        "color": "#986325",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          147,
+          40
+        ]
       },
       {
-        "x": 32,
-        "y": 72,
-        "text": "The current 41 filename-derived sources are not verified independent people.",
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
         "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Real-video transfer needs its own reference study",
+        "size": 32,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 166.0,
-        "y": 158,
-        "text": "Audit original sources",
-        "size": 21,
-        "anchor": "middle",
         "weight": "bold",
-        "container": [
-          40,
-          134,
-          292,
-          264
-        ]
-      },
-      {
-        "x": 166.0,
-        "y": 190,
-        "text": "Across GAVD and MS / PD",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          134,
-          292,
-          264
-        ]
-      },
-      {
-        "x": 166.0,
-        "y": 217,
-        "text": "Link duplicate people if known",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          134,
-          292,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 158,
-        "text": "Assign one partition",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          373,
-          134,
-          627,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 190,
-        "text": "All clips from that group",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          373,
-          134,
-          627,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 217,
-        "text": "All derived versions",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          373,
-          134,
-          627,
-          264
-        ]
-      },
-      {
-        "x": 834.0,
-        "y": 158,
-        "text": "Then create windows",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          708,
-          134,
-          960,
-          264
-        ]
-      },
-      {
-        "x": 834.0,
-        "y": 190,
-        "text": "Overlaps stay together",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          708,
-          134,
-          960,
-          264
-        ]
-      },
-      {
-        "x": 834.0,
-        "y": 217,
-        "text": "No split by frame or clip",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          708,
-          134,
-          960,
-          264
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 362,
-        "text": "Report uncertainty by source family",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          206,
-          338,
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
           794,
-          419
+          97
         ]
       },
       {
-        "x": 500.0,
-        "y": 394,
-        "text": "Person identity and cross-source dependence remain unverified",
-        "size": 18,
+        "x": 36,
+        "y": 124,
+        "text": "These extensions remain outside the focused synthetic follow-up.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          614,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 202,
+        "text": "Original footage",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          178,
+          372,
+          514
+        ],
+        "measured_bounds": [
+          56,
+          185,
+          232,
+          207
+        ]
+      },
+      {
+        "x": 446,
+        "y": 202,
+        "text": "Independent annotation",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          438,
+          178,
+          762,
+          514
+        ],
+        "measured_bounds": [
+          446,
+          185,
+          707,
+          207
+        ]
+      },
+      {
+        "x": 836,
+        "y": 202,
+        "text": "Supported comparison",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          828,
+          178,
+          1152,
+          514
+        ],
+        "measured_bounds": [
+          836,
+          185,
+          1088,
+          207
+        ]
+      },
+      {
+        "x": 210,
+        "y": 464,
+        "text": "Local videos / GAVD",
+        "size": 21,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          206,
-          338,
-          794,
-          419
+        "container": null,
+        "measured_bounds": [
+          113.9375,
+          449,
+          305.9375,
+          464
+        ]
+      },
+      {
+        "x": 637,
+        "y": 290,
+        "text": "Visible",
+        "size": 20,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          637,
+          275,
+          696,
+          290
+        ]
+      },
+      {
+        "x": 637,
+        "y": 327,
+        "text": "joints",
+        "size": 20,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          636,
+          312,
+          684,
+          331
+        ]
+      },
+      {
+        "x": 600,
+        "y": 464,
+        "text": "Side + time + provenance",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          480.3828125,
+          449,
+          719.3828125,
+          468
+        ]
+      },
+      {
+        "x": 987,
+        "y": 317,
+        "text": "?",
+        "size": 43,
+        "color": "#986325",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          975.0390625,
+          286,
+          999.0390625,
+          317
+        ]
+      },
+      {
+        "x": 990,
+        "y": 395,
+        "text": "Observation recovery",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          871.7265625,
+          378,
+          1108.7265625,
+          400
+        ]
+      },
+      {
+        "x": 990,
+        "y": 462,
+        "text": "Clinical claims need more",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          876.078125,
+          447,
+          1104.078125,
+          462
+        ]
+      },
+      {
+        "x": 36,
+        "y": 604,
+        "text": "No new dataset, GAVD evaluation or clinical reference enters this run. Folder labels are not motion truth.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          590,
+          913,
+          607
         ]
       }
     ],
-    "lines": [
+    "connectors": [
       [
         [
-          300,
-          199
+          384,
+          342
         ],
         [
-          365,
-          199
+          426,
+          342
         ]
       ],
       [
         [
-          635,
-          199
+          774,
+          342
         ],
         [
-          700,
-          199
+          816,
+          342
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "08-data-review-view.svg",
+    "title": "A later viewer would align video and measurements",
+    "subtitle": "Proposed inspection display for a separately admitted real-video extension.",
+    "description": "DEFERRED. Proposed inspection display for a separately admitted real-video extension.",
+    "scope": "DEFERRED",
+    "width": 1200,
+    "height": 665,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "DEFERRED",
+        "size": 18,
+        "color": "#986325",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          147,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "A later viewer would align video and measurements",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          821,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Proposed inspection display for a separately admitted real-video extension.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          701,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 201,
+        "text": "Video + reference overlays",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          177,
+          474,
+          493
+        ],
+        "measured_bounds": [
+          55,
+          184,
+          348,
+          206
+        ]
+      },
+      {
+        "x": 546,
+        "y": 201,
+        "text": "Left / right traces on one clock",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          538,
+          177,
+          1152,
+          493
+        ],
+        "measured_bounds": [
+          546,
+          184,
+          880,
+          206
+        ]
+      },
+      {
+        "x": 553,
+        "y": 267,
+        "text": "L",
+        "size": 23,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          553,
+          250,
+          567,
+          267
+        ]
+      },
+      {
+        "x": 553,
+        "y": 381,
+        "text": "R",
+        "size": 23,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          553,
+          364,
+          570,
+          381
+        ]
+      },
+      {
+        "x": 600,
+        "y": 594,
+        "text": "One physical-time cursor \u00b7 fixed units \u00b7 visible missingness",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          289.5,
+          578,
+          910.5,
+          598
+        ]
+      },
+      {
+        "x": 36,
+        "y": 639,
+        "text": "Schematic only: synchronized overlays and annotated references are not produced by the current follow-up.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          625,
+          942,
+          643
+        ]
+      }
+    ],
+    "connectors": []
+  },
+  {
+    "file": "09-source-splits.svg",
+    "title": "Inherit the parent population and its split roles",
+    "subtitle": "Bind the completed walking-core-01 bundle and receipts; do not rebuild or resplit it.",
+    "description": "INHERITED CORE. Bind the completed walking-core-01 bundle and receipts; do not rebuild or resplit it.",
+    "scope": "INHERITED CORE",
+    "width": 1200,
+    "height": 635,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "INHERITED CORE",
+        "size": 18,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          202,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Inherit the parent population and its split roles",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          742,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Bind the completed walking-core-01 bundle and receipts; do not rebuild or resplit it.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          770,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 206,
+        "text": "Completed parent",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          182,
+          344,
+          498
+        ],
+        "measured_bounds": [
+          56,
+          189,
+          252,
+          211
+        ]
+      },
+      {
+        "x": 196,
+        "y": 420,
+        "text": "Manifest + admissions",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          78.3359375,
+          404,
+          313.3359375,
+          420
+        ]
+      },
+      {
+        "x": 196,
+        "y": 461,
+        "text": "Actual counts + updates",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          87.953125,
+          446,
+          302.953125,
+          465
+        ]
+      },
+      {
+        "x": 428,
+        "y": 206,
+        "text": "Bound follow-up",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          420,
+          182,
+          734,
+          498
+        ],
+        "measured_bounds": [
+          428,
+          189,
+          609,
+          211
+        ]
+      },
+      {
+        "x": 577,
+        "y": 277,
+        "text": "Training",
+        "size": 25,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          528.3828125,
+          259,
+          625.3828125,
+          282
+        ]
+      },
+      {
+        "x": 577,
+        "y": 311,
+        "text": "Calibrate / fit / diagnose",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          471.921875,
+          296,
+          681.921875,
+          315
+        ]
+      },
+      {
+        "x": 577,
+        "y": 396,
+        "text": "Development",
+        "size": 25,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          498.5078125,
+          378,
+          656.5078125,
+          401
+        ]
+      },
+      {
+        "x": 577,
+        "y": 433,
+        "text": "Frozen comparison",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          491.40625,
+          418,
+          662.40625,
+          437
+        ]
+      },
+      {
+        "x": 818,
+        "y": 206,
+        "text": "Confirmation stays closed",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          810,
+          182,
+          1152,
+          498
+        ],
+        "measured_bounds": [
+          818,
+          189,
+          1106,
+          211
+        ]
+      },
+      {
+        "x": 981,
+        "y": 428,
+        "text": "No new people",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          903.390625,
+          412,
+          1058.390625,
+          432
+        ]
+      },
+      {
+        "x": 981,
+        "y": 461,
+        "text": "No confirmation inference",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          867.046875,
+          446,
+          1095.046875,
+          461
+        ]
+      },
+      {
+        "x": 36,
+        "y": 609,
+        "text": "All derived windows retain their source roles. Historical pilot sizes do not describe this bound population.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          35,
+          595,
+          910,
+          613
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          356,
+          342
+        ],
+        [
+          408,
+          342
         ]
       ]
     ]
   },
   {
     "file": "10-assignment-uncertainty.svg",
-    "title": "Retain plausible side assignments before measuring gait",
-    "subtitle": "Illustrative case: two equally plausible assignments imply opposite signed differences.",
-    "height": 450,
+    "title": "Uncertain anatomical side can reverse a signed measure",
+    "subtitle": "A bilateral interpretation extension requires independent side evidence.",
+    "description": "DEFERRED. A bilateral interpretation extension requires independent side evidence.",
+    "scope": "DEFERRED",
+    "width": 1200,
+    "height": 620,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Retain plausible side assignments before measuring gait",
-        "size": 27,
-        "anchor": "start",
-        "weight": "bold"
-      },
-      {
-        "x": 32,
-        "y": 72,
-        "text": "Illustrative case: two equally plausible assignments imply opposite signed differences.",
+        "text": "DEFERRED",
         "size": 18,
+        "color": "#986325",
         "anchor": "start",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          147,
+          40
+        ]
       },
       {
-        "x": 161.0,
-        "y": 167,
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Uncertain anatomical side can reverse a signed measure",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          899,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "A bilateral interpretation extension requires independent side evidence.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          35,
+          109,
+          664,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 201,
+        "text": "Two plausible assignments",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          177,
+          480,
+          508
+        ],
+        "measured_bounds": [
+          56,
+          184,
+          353,
+          206
+        ]
+      },
+      {
+        "x": 73,
+        "y": 265,
         "text": "Assignment 1",
-        "size": 21,
-        "anchor": "middle",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "start",
         "weight": "bold",
-        "container": [
-          40,
-          143,
-          282,
-          263
+        "container": null,
+        "measured_bounds": [
+          73,
+          249,
+          217,
+          269
         ]
       },
       {
-        "x": 161.0,
-        "y": 199,
-        "text": "Signed difference: +a",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          143,
-          282,
-          263
-        ]
-      },
-      {
-        "x": 161.0,
-        "y": 226,
-        "text": "Probability: 0.5",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          143,
-          282,
-          263
-        ]
-      },
-      {
-        "x": 161.0,
-        "y": 326,
+        "x": 73,
+        "y": 393,
         "text": "Assignment 2",
-        "size": 21,
+        "size": 22,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          73,
+          377,
+          217,
+          397
+        ]
+      },
+      {
+        "x": 383,
+        "y": 271,
+        "text": "+a",
+        "size": 31,
+        "color": "#007f79",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          40,
-          302,
-          282,
-          422
+        "container": null,
+        "measured_bounds": [
+          365.328125,
+          252,
+          400.328125,
+          271
         ]
       },
       {
-        "x": 161.0,
-        "y": 358,
-        "text": "Signed difference: \u2212a",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          302,
-          282,
-          422
-        ]
-      },
-      {
-        "x": 161.0,
-        "y": 385,
-        "text": "Probability: 0.5",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          302,
-          282,
-          422
-        ]
-      },
-      {
-        "x": 677.0,
-        "y": 170,
-        "text": "Signed mean is zero",
-        "size": 21,
+        "x": 383,
+        "y": 399,
+        "text": "\u2212a",
+        "size": 31,
+        "color": "#4c60af",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          394,
-          146,
-          960,
-          234
+        "container": null,
+        "measured_bounds": [
+          365.328125,
+          383,
+          400.328125,
+          399
         ]
       },
       {
-        "x": 677.0,
-        "y": 202,
-        "text": "This alone cannot establish a symmetric movement.",
-        "size": 18,
+        "x": 264,
+        "y": 475,
+        "text": "Illustrative equal probabilities",
+        "size": 20,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          394,
-          146,
-          960,
-          234
+        "container": null,
+        "measured_bounds": [
+          135.59375,
+          460,
+          392.59375,
+          479
         ]
       },
       {
-        "x": 677.0,
-        "y": 330,
-        "text": "Magnitude is a in both assignments",
-        "size": 21,
-        "anchor": "middle",
+        "x": 593,
+        "y": 201,
+        "text": "A zero average can hide ambiguity",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
         "weight": "bold",
         "container": [
-          394,
-          306,
-          960,
-          394
+          585,
+          177,
+          1152,
+          508
+        ],
+        "measured_bounds": [
+          593,
+          184,
+          971,
+          206
         ]
       },
       {
-        "x": 677.0,
-        "y": 362,
-        "text": "Measure each hypothesis, then summarize uncertainty.",
-        "size": 18,
+        "x": 731,
+        "y": 374,
+        "text": "\u2212a",
+        "size": 25,
+        "color": "#4c60af",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          394,
-          306,
-          960,
-          394
+        "container": null,
+        "measured_bounds": [
+          716.75,
+          361,
+          745.75,
+          374
+        ]
+      },
+      {
+        "x": 868,
+        "y": 374,
+        "text": "0",
+        "size": 25,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          861.046875,
+          356,
+          875.046875,
+          374
+        ]
+      },
+      {
+        "x": 1004,
+        "y": 374,
+        "text": "+a",
+        "size": 25,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          989.75,
+          359,
+          1018.75,
+          374
+        ]
+      },
+      {
+        "x": 869,
+        "y": 444,
+        "text": "Magnitude a in both hypotheses",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          685.671875,
+          427,
+          1052.671875,
+          449
+        ]
+      },
+      {
+        "x": 36,
+        "y": 594,
+        "text": "The synthetic follow-up uses the parent's anatomical references; it adds no side-assignment model.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          580,
+          871,
+          598
         ]
       }
     ],
-    "lines": [
+    "connectors": [
       [
         [
-          290,
-          203
+          492,
+          342
         ],
         [
-          337,
-          203
-        ]
-      ],
-      [
-        [
-          337,
-          203
-        ],
-        [
-          337,
-          282
-        ]
-      ],
-      [
-        [
-          290,
-          362
-        ],
-        [
-          337,
-          362
-        ]
-      ],
-      [
-        [
-          337,
-          362
-        ],
-        [
-          337,
-          282
-        ]
-      ],
-      [
-        [
-          337,
-          282
-        ],
-        [
-          360,
-          282
-        ]
-      ],
-      [
-        [
-          360,
-          282
-        ],
-        [
-          360,
-          190
-        ]
-      ],
-      [
-        [
-          360,
-          190
-        ],
-        [
-          386,
-          190
-        ]
-      ],
-      [
-        [
-          337,
-          282
-        ],
-        [
-          360,
-          282
-        ]
-      ],
-      [
-        [
-          360,
-          282
-        ],
-        [
-          360,
-          350
-        ]
-      ],
-      [
-        [
-          360,
-          350
-        ],
-        [
-          386,
-          350
+          573,
+          342
         ]
       ]
     ]
   },
   {
     "file": "11-transformation-contracts.svg",
-    "title": "An image transform and a joint-label error are different",
-    "subtitle": "Keep coordinates, anatomical names and validity aligned under every operation.",
-    "height": 406,
+    "title": "Separate movement, camera view and joint names",
+    "subtitle": "The parent transformation rules and projected references stay fixed.",
+    "description": "INHERITED CORE. The parent transformation rules and projected references stay fixed.",
+    "scope": "INHERITED CORE",
+    "width": 1200,
+    "height": 635,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "An image transform and a joint-label error are different",
-        "size": 27,
+        "text": "INHERITED CORE",
+        "size": 18,
+        "color": "#4c60af",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          202,
+          40
+        ]
       },
       {
-        "x": 32,
-        "y": 72,
-        "text": "Keep coordinates, anatomical names and validity aligned under every operation.",
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
         "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Separate movement, camera view and joint names",
+        "size": 32,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "normal"
-      },
-      {
-        "x": 180.0,
-        "y": 156,
-        "text": "Camera / image",
-        "size": 21,
-        "anchor": "middle",
         "weight": "bold",
-        "container": [
-          40,
-          132,
-          320,
-          267
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          801,
+          97
         ]
       },
       {
-        "x": 180.0,
-        "y": 188,
-        "text": "Update the projection",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          132,
-          320,
-          267
-        ]
-      },
-      {
-        "x": 180.0,
-        "y": 215,
-        "text": "Use same-view references",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          132,
-          320,
-          267
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 156,
-        "text": "Joint-slot exchange",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          360,
-          132,
-          640,
-          267
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 188,
-        "text": "Permute input metadata",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          360,
-          132,
-          640,
-          267
-        ]
-      },
-      {
-        "x": 500.0,
-        "y": 215,
-        "text": "Keep anatomical truth fixed",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          360,
-          132,
-          640,
-          267
-        ]
-      },
-      {
-        "x": 820.0,
-        "y": 156,
-        "text": "Physical movement",
-        "size": 21,
-        "anchor": "middle",
-        "weight": "bold",
-        "container": [
-          680,
-          132,
-          960,
-          267
-        ]
-      },
-      {
-        "x": 820.0,
-        "y": 188,
-        "text": "Retain its actual change",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          680,
-          132,
-          960,
-          267
-        ]
-      },
-      {
-        "x": 820.0,
-        "y": 215,
-        "text": "Check coupled joint effects",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          680,
-          132,
-          960,
-          267
-        ]
-      },
-      {
-        "x": 500,
-        "y": 338,
-        "text": "Do not force equal left\u2013right motion or identical pixels across cameras.",
+        "x": 36,
+        "y": 124,
+        "text": "The parent transformation rules and projected references stay fixed.",
         "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          638,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 205,
+        "text": "Movement change",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          181,
+          384,
+          503
+        ],
+        "measured_bounds": [
+          56,
+          188,
+          257,
+          210
+        ]
+      },
+      {
+        "x": 440,
+        "y": 205,
+        "text": "Camera change",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          432,
+          181,
+          768,
+          503
+        ],
+        "measured_bounds": [
+          440,
+          188,
+          611,
+          210
+        ]
+      },
+      {
+        "x": 824,
+        "y": 205,
+        "text": "Joint-slot exchange",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          816,
+          181,
+          1152,
+          503
+        ],
+        "measured_bounds": [
+          824,
+          188,
+          1040,
+          210
+        ]
+      },
+      {
+        "x": 216,
+        "y": 452,
+        "text": "Retain actual response",
+        "size": 21,
+        "color": "#183247",
         "anchor": "middle",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          101.078125,
+          437,
+          331.078125,
+          456
+        ]
+      },
+      {
+        "x": 600,
+        "y": 452,
+        "text": "Reference from same view",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          467.5625,
+          437,
+          733.5625,
+          452
+        ]
+      },
+      {
+        "x": 872,
+        "y": 279,
+        "text": "L",
+        "size": 35,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          872,
+          254,
+          893,
+          279
+        ]
+      },
+      {
+        "x": 1083,
+        "y": 279,
+        "text": "R",
+        "size": 35,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1083,
+          254,
+          1109,
+          279
+        ]
+      },
+      {
+        "x": 872,
+        "y": 383,
+        "text": "R",
+        "size": 35,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          872,
+          358,
+          898,
+          383
+        ]
+      },
+      {
+        "x": 1083,
+        "y": 383,
+        "text": "L",
+        "size": 35,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1083,
+          358,
+          1104,
+          383
+        ]
+      },
+      {
+        "x": 984,
+        "y": 452,
+        "text": "Anatomical truth stays fixed",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          843.4140625,
+          437,
+          1124.4140625,
+          456
+        ]
+      },
+      {
+        "x": 36,
+        "y": 609,
+        "text": "Projected quantities may change with camera geometry. Image coordinates are not clinical 3D angles.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          595,
+          892,
+          613
+        ]
       }
     ],
-    "lines": []
+    "connectors": [
+      [
+        [
+          174,
+          326
+        ],
+        [
+          250,
+          326
+        ]
+      ],
+      [
+        [
+          584,
+          317
+        ],
+        [
+          610,
+          317
+        ]
+      ]
+    ]
   },
   {
     "file": "12-evidence-workflow.svg",
-    "title": "Advance from verified inputs to a frozen comparison",
-    "subtitle": "New masks and real-video references must pass their checks before any new efficacy claim.",
-    "height": 440,
+    "title": "Set loss weights on training data, then run the comparison",
+    "subtitle": "Calibration sets one fixed weight for each added loss; model weights do not update during this step.",
+    "description": "FOLLOW-UP. Calibration sets one fixed weight for each added loss; model weights do not update during this step.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 685,
     "labels": [
       {
-        "x": 32,
+        "x": 48,
         "y": 40,
-        "text": "Advance from verified inputs to a frozen comparison",
-        "size": 27,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
         "anchor": "start",
-        "weight": "bold"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
       },
       {
-        "x": 32,
-        "y": 72,
-        "text": "New masks and real-video references must pass their checks before any new efficacy claim.",
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
         "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Set loss weights on training data, then run the comparison",
+        "size": 32,
+        "color": "#183247",
         "anchor": "start",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          929,
+          97
+        ]
       },
       {
-        "x": 128.0,
-        "y": 167,
-        "text": "Audit inputs",
-        "size": 21,
+        "x": 36,
+        "y": 124,
+        "text": "Calibration sets one fixed weight for each added loss; model weights do not update during this step.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          918,
+          128
+        ]
+      },
+      {
+        "x": 161,
+        "y": 227,
+        "text": "1",
+        "size": 23,
+        "color": "#007f79",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          40,
-          143,
-          216,
-          278
+        "container": null,
+        "measured_bounds": [
+          154.6015625,
+          210,
+          167.6015625,
+          227
         ]
       },
       {
-        "x": 128.0,
-        "y": 199,
-        "text": "Anatomy + time",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          143,
-          216,
-          278
-        ]
-      },
-      {
-        "x": 128.0,
-        "y": 226,
-        "text": "Groups + rights",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          40,
-          143,
-          216,
-          278
-        ]
-      },
-      {
-        "x": 376.0,
-        "y": 167,
-        "text": "Check masks",
-        "size": 21,
+        "x": 161,
+        "y": 293,
+        "text": "Reuse",
+        "size": 26,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          288,
-          143,
-          464,
-          278
+        "container": null,
+        "measured_bounds": [
+          121.9921875,
+          274,
+          199.9921875,
+          293
         ]
       },
       {
-        "x": 376.0,
-        "y": 199,
-        "text": "Coverage audit",
-        "size": 18,
+        "x": 161,
+        "y": 332,
+        "text": "Completed parent",
+        "size": 20,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          288,
-          143,
-          464,
-          278
+        "container": null,
+        "measured_bounds": [
+          81.5,
+          317,
+          240.5,
+          336
         ]
       },
       {
-        "x": 376.0,
-        "y": 226,
-        "text": "Gradient check",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          288,
-          143,
-          464,
-          278
-        ]
-      },
-      {
-        "x": 624.0,
-        "y": 167,
-        "text": "Compare on dev",
-        "size": 21,
+        "x": 451,
+        "y": 227,
+        "text": "2",
+        "size": 23,
+        "color": "#007f79",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          536,
-          143,
-          712,
-          278
+        "container": null,
+        "measured_bounds": [
+          444.6015625,
+          210,
+          457.6015625,
+          227
         ]
       },
       {
-        "x": 624.0,
-        "y": 199,
-        "text": "Position + response",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          536,
-          143,
-          712,
-          278
-        ]
-      },
-      {
-        "x": 624.0,
-        "y": 226,
-        "text": "Matched controls",
-        "size": 18,
-        "anchor": "middle",
-        "weight": "normal",
-        "container": [
-          536,
-          143,
-          712,
-          278
-        ]
-      },
-      {
-        "x": 872.0,
-        "y": 167,
-        "text": "Confirm once",
-        "size": 21,
+        "x": 451,
+        "y": 293,
+        "text": "Set loss weights",
+        "size": 26,
+        "color": "#183247",
         "anchor": "middle",
         "weight": "bold",
-        "container": [
-          784,
-          143,
-          960,
-          278
+        "container": null,
+        "measured_bounds": [
+          349.1796875,
+          274,
+          553.1796875,
+          298
         ]
       },
       {
-        "x": 872.0,
-        "y": 199,
-        "text": "Freeze protocol",
-        "size": 18,
+        "x": 451,
+        "y": 332,
+        "text": "32 training batches",
+        "size": 20,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          784,
-          143,
-          960,
-          278
+        "container": null,
+        "measured_bounds": [
+          366.484375,
+          317,
+          535.484375,
+          336
         ]
       },
       {
-        "x": 872.0,
-        "y": 226,
-        "text": "Fresh source groups",
-        "size": 18,
+        "x": 741,
+        "y": 227,
+        "text": "3",
+        "size": 23,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          734.6015625,
+          210,
+          747.6015625,
+          227
+        ]
+      },
+      {
+        "x": 741,
+        "y": 293,
+        "text": "Train",
+        "size": 26,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          709.9453125,
+          274,
+          771.9453125,
+          293
+        ]
+      },
+      {
+        "x": 741,
+        "y": 332,
+        "text": "18 phases",
+        "size": 20,
+        "color": "#566978",
         "anchor": "middle",
         "weight": "normal",
-        "container": [
-          784,
-          143,
-          960,
-          278
+        "container": null,
+        "measured_bounds": [
+          694.84375,
+          317,
+          786.84375,
+          336
         ]
       },
       {
-        "x": 500,
-        "y": 346,
-        "text": "Choose useful margins from reference precision; repeated renders are not new people.",
-        "size": 18,
+        "x": 1031,
+        "y": 227,
+        "text": "4",
+        "size": 23,
+        "color": "#007f79",
         "anchor": "middle",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1024.6015625,
+          210,
+          1037.6015625,
+          227
+        ]
       },
       {
-        "x": 500,
-        "y": 394,
-        "text": "If references cannot resolve the endpoint, retain a bounded engineering conclusion.",
-        "size": 18,
+        "x": 1031,
+        "y": 293,
+        "text": "Evaluate",
+        "size": 26,
+        "color": "#183247",
         "anchor": "middle",
-        "weight": "normal"
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          977.546875,
+          274,
+          1084.546875,
+          293
+        ]
+      },
+      {
+        "x": 1031,
+        "y": 332,
+        "text": "Same people + seeds",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          933.96875,
+          317,
+          1127.96875,
+          336
+        ]
+      },
+      {
+        "x": 56,
+        "y": 420,
+        "text": "One shared weight for the JEPA losses",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          396,
+          577,
+          578
+        ],
+        "measured_bounds": [
+          56,
+          403,
+          482,
+          425
+        ]
+      },
+      {
+        "x": 60,
+        "y": 466,
+        "text": "Original gradient",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          60,
+          451,
+          228,
+          470
+        ]
+      },
+      {
+        "x": 60,
+        "y": 518,
+        "text": "Added gradient (max)",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          60,
+          503,
+          276,
+          522
+        ]
+      },
+      {
+        "x": 335,
+        "y": 518,
+        "text": "10% initial gradient scale",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          335,
+          504,
+          545,
+          522
+        ]
+      },
+      {
+        "x": 60,
+        "y": 565,
+        "text": "Gradient = how a loss pushes model weights",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          60,
+          550,
+          458,
+          569
+        ]
+      },
+      {
+        "x": 637,
+        "y": 420,
+        "text": "Check what the model learns",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          629,
+          396,
+          1152,
+          578
+        ],
+        "measured_bounds": [
+          637,
+          403,
+          954,
+          420
+        ]
+      },
+      {
+        "x": 642,
+        "y": 468,
+        "text": "Training-only checks; people kept separate",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          642,
+          452,
+          1093,
+          472
+        ]
+      },
+      {
+        "x": 642,
+        "y": 509,
+        "text": "Hide input / full input / unchanged motion",
+        "size": 21,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          642,
+          494,
+          1022,
+          513
+        ]
+      },
+      {
+        "x": 642,
+        "y": 550,
+        "text": "Feature variation + error fit + training traces",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          642,
+          535,
+          1027,
+          554
+        ]
+      },
+      {
+        "x": 36,
+        "y": 659,
+        "text": "Use all trainable parameters for gradient energy. Coordinate units get separate calibration; final fits start afresh.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          645,
+          969,
+          663
+        ]
       }
     ],
-    "lines": [
+    "connectors": [
       [
         [
+          202,
+          219
+        ],
+        [
+          411,
+          219
+        ]
+      ],
+      [
+        [
+          492,
+          219
+        ],
+        [
+          701,
+          219
+        ]
+      ],
+      [
+        [
+          782,
+          219
+        ],
+        [
+          991,
+          219
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "13-data-to-claims.svg",
+    "title": "Existing synthetic data support a limited claim",
+    "subtitle": "No new data acquisition enters the focused response follow-up.",
+    "description": "FOLLOW-UP. No new data acquisition enters the focused response follow-up.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 700,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Existing synthetic data support a limited claim",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          742,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "No new data acquisition enters the focused response follow-up.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          598,
+          128
+        ]
+      },
+      {
+        "x": 59,
+        "y": 209,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          196,
+          168,
+          209
+        ]
+      },
+      {
+        "x": 59,
+        "y": 259,
+        "text": "Completed parent",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          242,
+          263,
+          264
+        ]
+      },
+      {
+        "x": 574,
+        "y": 234,
+        "text": "Projected 2D reference",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          454.171875,
+          218,
+          694.171875,
+          238
+        ]
+      },
+      {
+        "x": 990,
+        "y": 234,
+        "text": "Response preservation",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          868.3515625,
+          218,
+          1111.3515625,
+          238
+        ]
+      },
+      {
+        "x": 990,
+        "y": 269,
+        "text": "Evaluate; do not assume",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          890.9140625,
+          255,
+          1088.9140625,
+          271
+        ]
+      },
+      {
+        "x": 59,
+        "y": 368,
+        "text": "DEFERRED",
+        "size": 18,
+        "color": "#986325",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          355,
+          158,
+          368
+        ]
+      },
+      {
+        "x": 59,
+        "y": 418,
+        "text": "Real video",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          401,
+          179,
+          418
+        ]
+      },
+      {
+        "x": 574,
+        "y": 393,
+        "text": "Independent annotation",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          449.3515625,
+          377,
+          698.3515625,
+          397
+        ]
+      },
+      {
+        "x": 990,
+        "y": 393,
+        "text": "Observation recovery",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          876.8984375,
+          377,
+          1102.8984375,
+          397
+        ]
+      },
+      {
+        "x": 990,
+        "y": 428,
+        "text": "Separate admission needed",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          877.8828125,
+          414,
+          1101.8828125,
+          432
+        ]
+      },
+      {
+        "x": 59,
+        "y": 527,
+        "text": "DEFERRED",
+        "size": 18,
+        "color": "#986325",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          514,
+          158,
+          527
+        ]
+      },
+      {
+        "x": 59,
+        "y": 577,
+        "text": "Clinical extension",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          560,
+          263,
+          577
+        ]
+      },
+      {
+        "x": 574,
+        "y": 552,
+        "text": "Events + side + synchronization",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          406.5234375,
+          536,
+          741.5234375,
+          556
+        ]
+      },
+      {
+        "x": 990,
+        "y": 552,
+        "text": "Clinical measurement",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          876.296875,
+          536,
+          1104.296875,
+          552
+        ]
+      },
+      {
+        "x": 990,
+        "y": 587,
+        "text": "Separate admission needed",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          877.8828125,
+          573,
+          1101.8828125,
+          591
+        ]
+      },
+      {
+        "x": 36,
+        "y": 674,
+        "text": "Distance between learned features is not a physical gait measure. Real-video and clinical claims need new evidence.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          660,
+          1019,
+          678
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          312,
+          227
+        ],
+        [
+          357,
+          227
+        ]
+      ],
+      [
+        [
+          801,
+          227
+        ],
+        [
+          835,
+          227
+        ]
+      ],
+      [
+        [
+          312,
+          386
+        ],
+        [
+          357,
+          386
+        ]
+      ],
+      [
+        [
+          801,
+          386
+        ],
+        [
+          835,
+          386
+        ]
+      ],
+      [
+        [
+          312,
+          545
+        ],
+        [
+          357,
+          545
+        ]
+      ],
+      [
+        [
+          801,
+          545
+        ],
+        [
+          835,
+          545
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "14-paired-jepa-method.svg",
+    "title": "Compare prediction errors while the encoder is learning",
+    "subtitle": "Features are learned numbers. The student predicts them from observed poses; the teacher uses references.",
+    "description": "FOLLOW-UP. Features are learned numbers. The student predicts them from observed poses; the teacher uses references.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 755,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Compare prediction errors while the encoder is learning",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          888,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Features are learned numbers. The student predicts them from observed poses; the teacher uses references.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          1004,
+          128
+        ]
+      },
+      {
+        "x": 131,
+        "y": 230,
+        "text": "State a",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          91.640625,
+          213,
+          170.640625,
+          230
+        ]
+      },
+      {
+        "x": 416,
+        "y": 240,
+        "text": "Encoder + predictor",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          311.7890625,
           224,
-          211
+          520.7890625,
+          244
+        ]
+      },
+      {
+        "x": 416,
+        "y": 275,
+        "text": "Some input is hidden",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          331.921875,
+          261,
+          499.921875,
+          279
+        ]
+      },
+      {
+        "x": 702,
+        "y": 239,
+        "text": "Error a",
+        "size": 32,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          649.53125,
+          216,
+          754.53125,
+          239
+        ]
+      },
+      {
+        "x": 702,
+        "y": 276,
+        "text": "Prediction \u2212 reference",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          613.671875,
+          262,
+          790.671875,
+          276
+        ]
+      },
+      {
+        "x": 131,
+        "y": 372,
+        "text": "State b",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          90.984375,
+          355,
+          170.984375,
+          372
+        ]
+      },
+      {
+        "x": 416,
+        "y": 382,
+        "text": "Encoder + predictor",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          311.7890625,
+          366,
+          520.7890625,
+          386
+        ]
+      },
+      {
+        "x": 416,
+        "y": 417,
+        "text": "Some input is hidden",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          331.921875,
+          403,
+          499.921875,
+          421
+        ]
+      },
+      {
+        "x": 702,
+        "y": 381,
+        "text": "Error b",
+        "size": 32,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          648.65625,
+          358,
+          755.65625,
+          381
+        ]
+      },
+      {
+        "x": 702,
+        "y": 418,
+        "text": "Prediction \u2212 reference",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          613.671875,
+          404,
+          790.671875,
+          418
+        ]
+      },
+      {
+        "x": 416,
+        "y": 325,
+        "text": "Shared weights for both states",
+        "size": 19,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          287.6953125,
+          311,
+          544.6953125,
+          329
+        ]
+      },
+      {
+        "x": 886,
+        "y": 231,
+        "text": "Reference teacher",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          878,
+          207,
+          1152,
+          431
+        ],
+        "measured_bounds": [
+          886,
+          214,
+          1087,
+          231
+        ]
+      },
+      {
+        "x": 1015,
+        "y": 284,
+        "text": "Reference for each state",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          893.0625,
+          269,
+          1137.0625,
+          284
+        ]
+      },
+      {
+        "x": 1015,
+        "y": 326,
+        "text": "Learned numbers",
+        "size": 23,
+        "color": "#986325",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          924.8359375,
+          309,
+          1104.8359375,
+          326
+        ]
+      },
+      {
+        "x": 1015,
+        "y": 392,
+        "text": "Targets fixed per step",
+        "size": 21,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          914.65625,
+          377,
+          1115.65625,
+          396
+        ]
+      },
+      {
+        "x": 700,
+        "y": 478,
+        "text": "Moving average of encoder weights",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          557.8671875,
+          464,
+          841.8671875,
+          482
+        ]
+      },
+      {
+        "x": 58,
+        "y": 568,
+        "text": "PRETRAIN",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          58,
+          555,
+          150,
+          568
+        ]
+      },
+      {
+        "x": 58,
+        "y": 614,
+        "text": "Original loss + added error term",
+        "size": 25,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          58,
+          596,
+          438,
+          619
+        ]
+      },
+      {
+        "x": 886,
+        "y": 568,
+        "text": "THEN FIX ENCODER WEIGHTS",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          753.0078125,
+          555,
+          1019.0078125,
+          568
+        ]
+      },
+      {
+        "x": 886,
+        "y": 614,
+        "text": "New coordinate output network",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          721.6171875,
+          598,
+          1051.6171875,
+          618
+        ]
+      },
+      {
+        "x": 36,
+        "y": 729,
+        "text": "Each reference uses its input-derived shift and scale. Deployment keeps only the encoder and output network.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          715,
+          962,
+          733
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          226,
+          248
         ],
         [
-          280,
-          211
+          285,
+          248
         ]
       ],
       [
         [
-          472,
-          211
+          548,
+          248
         ],
         [
-          528,
-          211
+          607,
+          248
         ]
       ],
       [
         [
-          720,
-          211
+          226,
+          390
         ],
         [
-          776,
-          211
+          285,
+          390
+        ]
+      ],
+      [
+        [
+          548,
+          390
+        ],
+        [
+          607,
+          390
+        ]
+      ],
+      [
+        [
+          866,
+          247
+        ],
+        [
+          797,
+          247
+        ]
+      ],
+      [
+        [
+          866,
+          391
+        ],
+        [
+          797,
+          391
+        ]
+      ],
+      [
+        [
+          416,
+          443
+        ],
+        [
+          416,
+          487
+        ]
+      ],
+      [
+        [
+          416,
+          487
+        ],
+        [
+          1015,
+          487
+        ]
+      ],
+      [
+        [
+          1015,
+          487
+        ],
+        [
+          1015,
+          443
+        ]
+      ],
+      [
+        [
+          636,
+          599
+        ],
+        [
+          694,
+          599
+        ]
+      ]
+    ]
+  },
+  {
+    "file": "15-graph-time-mask.svg",
+    "title": "Compare errors where both movement states have references",
+    "subtitle": "A target block is one joint over four frames; each reference frame must be available.",
+    "description": "FOLLOW-UP. A target block is one joint over four frames; each reference frame must be available.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 685,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Compare errors where both movement states have references",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          979,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "A target block is one joint over four frames; each reference frame must be available.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          35,
+          109,
+          778,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 203,
+        "text": "State a",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          179,
+          540,
+          450
+        ],
+        "measured_bounds": [
+          56,
+          186,
+          132,
+          203
+        ]
+      },
+      {
+        "x": 59,
+        "y": 246,
+        "text": "Target blocks",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          231,
+          188,
+          250
+        ]
+      },
+      {
+        "x": 59,
+        "y": 322,
+        "text": "Reference frames",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          59,
+          307,
+          227,
+          322
+        ]
+      },
+      {
+        "x": 294,
+        "y": 421,
+        "text": "Same joint / time block order",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          167.265625,
+          406,
+          421.265625,
+          425
+        ]
+      },
+      {
+        "x": 668,
+        "y": 203,
+        "text": "State b",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          660,
+          179,
+          1152,
+          450
+        ],
+        "measured_bounds": [
+          668,
+          186,
+          745,
+          203
+        ]
+      },
+      {
+        "x": 671,
+        "y": 246,
+        "text": "Target blocks",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          671,
+          231,
+          800,
+          250
+        ]
+      },
+      {
+        "x": 671,
+        "y": 322,
+        "text": "Reference frames",
+        "size": 20,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          671,
+          307,
+          839,
+          322
+        ]
+      },
+      {
+        "x": 906,
+        "y": 421,
+        "text": "Same joint / time block order",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          779.265625,
+          406,
+          1033.265625,
+          425
+        ]
+      },
+      {
+        "x": 600,
+        "y": 307,
+        "text": "\u2229",
+        "size": 36,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          587.0,
+          281,
+          613.0,
+          307
+        ]
+      },
+      {
+        "x": 39,
+        "y": 535,
+        "text": "Eligible blocks",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          39,
+          518,
+          207,
+          540
+        ]
+      },
+      {
+        "x": 609,
+        "y": 590,
+        "text": "Average blocks within pairs, then eligible pairs equally",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          323.359375,
+          574,
+          894.359375,
+          594
+        ]
+      },
+      {
+        "x": 36,
+        "y": 659,
+        "text": "Illustrative intersection. Other pairs keep the original loss and remain in reports of available targets.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          645,
+          867,
+          663
+        ]
+      }
+    ],
+    "connectors": []
+  },
+  {
+    "file": "16-response-estimand.svg",
+    "title": "Measure restored change against the projected reference",
+    "subtitle": "Illustrative arithmetic: state b \u2212 state a at the same observation condition.",
+    "description": "FOLLOW-UP. Illustrative arithmetic: state b \u2212 state a at the same observation condition.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 730,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Measure restored change against the projected reference",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          907,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Illustrative arithmetic: state b \u2212 state a at the same observation condition.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          683,
+          124
+        ]
+      },
+      {
+        "x": 56,
+        "y": 202,
+        "text": "Measure knee excursion",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          178,
+          385,
+          622
+        ],
+        "measured_bounds": [
+          56,
+          185,
+          323,
+          202
+        ]
+      },
+      {
+        "x": 217,
+        "y": 242,
+        "text": "Knee angle over time",
+        "size": 21,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          111.4140625,
+          227,
+          322.4140625,
+          246
+        ]
+      },
+      {
+        "x": 217,
+        "y": 419,
+        "text": "q = 95th \u2212 5th percentile",
+        "size": 24,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          79.6171875,
+          402,
+          354.6171875,
+          424
+        ]
+      },
+      {
+        "x": 217,
+        "y": 482,
+        "text": "A = q right \u2212 q left",
+        "size": 26,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          107.0078125,
+          463,
+          327.0078125,
+          487
+        ]
+      },
+      {
+        "x": 217,
+        "y": 548,
+        "text": "Image-plane degrees",
+        "size": 21,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          117.8046875,
+          533,
+          315.8046875,
+          552
+        ]
+      },
+      {
+        "x": 458,
+        "y": 202,
+        "text": "Illustration: attenuated movement response",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          450,
+          178,
+          1152,
+          622
+        ],
+        "measured_bounds": [
+          458,
+          185,
+          936,
+          207
+        ]
+      },
+      {
+        "x": 468,
+        "y": 264,
+        "text": "Reference",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          468,
+          248,
+          574,
+          264
+        ]
+      },
+      {
+        "x": 734,
+        "y": 303,
+        "text": "2\u00b0",
+        "size": 24,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          722.53125,
+          286,
+          745.53125,
+          303
+        ]
+      },
+      {
+        "x": 1059,
+        "y": 303,
+        "text": "6\u00b0",
+        "size": 24,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1047.53125,
+          286,
+          1070.53125,
+          303
+        ]
+      },
+      {
+        "x": 468,
+        "y": 368,
+        "text": "Restored",
+        "size": 22,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          468,
+          352,
+          563,
+          368
+        ]
+      },
+      {
+        "x": 774,
+        "y": 407,
+        "text": "2.5\u00b0",
+        "size": 24,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          752.5234375,
+          390,
+          795.5234375,
+          407
+        ]
+      },
+      {
+        "x": 937,
+        "y": 407,
+        "text": "4.5\u00b0",
+        "size": 24,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          915.5234375,
+          390,
+          958.5234375,
+          407
+        ]
+      },
+      {
+        "x": 805,
+        "y": 476,
+        "text": "\u0394restored \u2212 \u0394reference = 2\u00b0 \u2212 4\u00b0 = \u22122\u00b0",
+        "size": 25,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          580.5546875,
+          458,
+          1029.5546875,
+          476
+        ]
+      },
+      {
+        "x": 805,
+        "y": 526,
+        "text": "Signed error = \u22122\u00b0; absolute response error = 2\u00b0",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          591.0,
+          511,
+          1019.0,
+          530
+        ]
+      },
+      {
+        "x": 805,
+        "y": 574,
+        "text": "Also report each leg, joint positions and motion traces",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          566.609375,
+          559,
+          1042.609375,
+          578
+        ]
+      },
+      {
+        "x": 36,
+        "y": 704,
+        "text": "Main contrast: delta vs endpoint JEPA, balanced by person and seed. Missing predictions remain failures.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          690,
+          923,
+          708
+        ]
+      }
+    ],
+    "connectors": []
+  },
+  {
+    "file": "17-parallel-execution.svg",
+    "title": "A separate follow-up within 48 additional H100-hours",
+    "subtitle": "Admission preserves all controls and the parent's actual selected update budget.",
+    "description": "FOLLOW-UP. Admission preserves all controls and the parent's actual selected update budget.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 740,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "A separate follow-up within 48 additional H100-hours",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          840,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Admission preserves all controls and the parent's actual selected update budget.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          35,
+          109,
+          749,
+          128
+        ]
+      },
+      {
+        "x": 56,
+        "y": 202,
+        "text": "3 variants \u00d7 3 seeds \u2192 9 models",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          178,
+          534,
+          442
+        ],
+        "measured_bounds": [
+          56,
+          185,
+          410,
+          202
+        ]
+      },
+      {
+        "x": 135,
+        "y": 262,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          102.8046875,
+          246,
+          167.8046875,
+          262
+        ]
+      },
+      {
+        "x": 293,
+        "y": 262,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          260.8046875,
+          246,
+          325.8046875,
+          262
+        ]
+      },
+      {
+        "x": 451,
+        "y": 262,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          418.8046875,
+          246,
+          483.8046875,
+          262
+        ]
+      },
+      {
+        "x": 135,
+        "y": 322,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          102.8046875,
+          306,
+          167.8046875,
+          322
+        ]
+      },
+      {
+        "x": 293,
+        "y": 322,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          260.8046875,
+          306,
+          325.8046875,
+          322
+        ]
+      },
+      {
+        "x": 451,
+        "y": 322,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          418.8046875,
+          306,
+          483.8046875,
+          322
+        ]
+      },
+      {
+        "x": 135,
+        "y": 382,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          102.8046875,
+          366,
+          167.8046875,
+          382
+        ]
+      },
+      {
+        "x": 293,
+        "y": 382,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          260.8046875,
+          366,
+          325.8046875,
+          382
+        ]
+      },
+      {
+        "x": 451,
+        "y": 382,
+        "text": "P \u2192 R",
+        "size": 22,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          418.8046875,
+          366,
+          483.8046875,
+          382
+        ]
+      },
+      {
+        "x": 291,
+        "y": 427,
+        "text": "18 phases \u00b7 P: learn features \u00b7 R: train output",
+        "size": 19,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          88.296875,
+          413,
+          494.296875,
+          431
+        ]
+      },
+      {
+        "x": 606,
+        "y": 202,
+        "text": "Reserved GPU time",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          598,
+          178,
+          1152,
+          442
+        ],
+        "measured_bounds": [
+          606,
+          185,
+          820,
+          202
+        ]
+      },
+      {
+        "x": 636,
+        "y": 343,
+        "text": "36 h  Fits",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          636,
+          329,
+          710,
+          343
+        ]
+      },
+      {
+        "x": 906,
+        "y": 343,
+        "text": "2 h  Calibrate / profile",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          906,
+          329,
+          1077,
+          347
+        ]
+      },
+      {
+        "x": 636,
+        "y": 393,
+        "text": "4 h  Diagnostics",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          636,
+          379,
+          764,
+          397
+        ]
+      },
+      {
+        "x": 906,
+        "y": 393,
+        "text": "6 h  Recovery",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          906,
+          380,
+          1017,
+          397
+        ]
+      },
+      {
+        "x": 61,
+        "y": 535,
+        "text": "RESULTS CUTOFF",
+        "size": 18,
+        "color": "#4c60af",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          61,
+          522,
+          221,
+          535
+        ]
+      },
+      {
+        "x": 61,
+        "y": 584,
+        "text": "24 September 2026 \u00b7 18:00 Pacific",
+        "size": 31,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          61,
+          562,
+          557,
+          590
+        ]
+      },
+      {
+        "x": 898,
+        "y": 544,
+        "text": "2 hours reserved",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          805.296875,
+          527,
+          990.296875,
+          544
+        ]
+      },
+      {
+        "x": 898,
+        "y": 583,
+        "text": "for queue uncertainty",
+        "size": 22,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          794.6640625,
+          567,
+          1001.6640625,
+          587
+        ]
+      },
+      {
+        "x": 36,
+        "y": 714,
+        "text": "Measured profiling decides admission. Allowances are not measured throughput or completed fits.",
+        "size": 19,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          700,
+          860,
+          718
+        ]
+      }
+    ],
+    "connectors": []
+  },
+  {
+    "file": "jepa-response.svg",
+    "title": "Train on the difference between two prediction errors",
+    "subtitle": "Features are learned numbers. Compare their scaled errors across two movement states.",
+    "description": "FOLLOW-UP. An error, also called a residual, is predicted minus reference features after fixed scaling and removal of the channel mean. Delta JEPA couples the errors; endpoint JEPA scores them separately. The exact difference is a residual cross term. A coordinate control expresses position errors in a shared pair scale. Calibration uses 32 training batches, followed by fresh pretraining. All variants then fix encoder weights and train a new coordinate output network.",
+    "scope": "FOLLOW-UP",
+    "width": 1200,
+    "height": 1010,
+    "labels": [
+      {
+        "x": 48,
+        "y": 40,
+        "text": "FOLLOW-UP",
+        "size": 18,
+        "color": "#007f79",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          48,
+          27,
+          157,
+          40
+        ]
+      },
+      {
+        "x": 1164,
+        "y": 40,
+        "text": "CONCEPTUAL \u00b7 RESULTS PENDING",
+        "size": 18,
+        "color": "#566978",
+        "anchor": "end",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          856.96875,
+          27,
+          1163.96875,
+          40
+        ]
+      },
+      {
+        "x": 36,
+        "y": 91,
+        "text": "Train on the difference between two prediction errors",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          36,
+          68,
+          845,
+          97
+        ]
+      },
+      {
+        "x": 36,
+        "y": 124,
+        "text": "Features are learned numbers. Compare their scaled errors across two movement states.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "start",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          36,
+          109,
+          829,
+          128
+        ]
+      },
+      {
+        "x": 600,
+        "y": 207,
+        "text": "e(i) = H[p(i) / 0.1 \u2212 stopgrad((t(i) \u2212 c) / 0.06)]",
+        "size": 29,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          305.5,
+          186,
+          894.5,
+          213
+        ]
+      },
+      {
+        "x": 600,
+        "y": 248,
+        "text": "e = error (residual) \u00b7 p = prediction \u00b7 t = teacher reference \u00b7 c = teacher average",
+        "size": 21,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          231.8515625,
+          233,
+          967.8515625,
+          252
+        ]
+      },
+      {
+        "x": 600,
+        "y": 287,
+        "text": "H subtracts the mean across features; stopgrad holds the reference target fixed for this update.",
+        "size": 20,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          179.671875,
+          272,
+          1020.671875,
+          291
+        ]
+      },
+      {
+        "x": 56,
+        "y": 379,
+        "text": "Delta JEPA: compare the errors",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          48,
+          355,
+          574,
+          599
+        ],
+        "measured_bounds": [
+          56,
+          362,
+          401,
+          384
+        ]
+      },
+      {
+        "x": 634,
+        "y": 379,
+        "text": "Endpoint JEPA: score each error",
+        "size": 23,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": [
+          626,
+          355,
+          1152,
+          599
+        ],
+        "measured_bounds": [
+          634,
+          362,
+          994,
+          384
+        ]
+      },
+      {
+        "x": 180,
+        "y": 456,
+        "text": "e(a)",
+        "size": 28,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          155.09375,
+          436,
+          205.09375,
+          462
+        ]
+      },
+      {
+        "x": 440,
+        "y": 456,
+        "text": "e(b)",
+        "size": 28,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          414.328125,
+          436,
+          465.328125,
+          462
+        ]
+      },
+      {
+        "x": 738,
+        "y": 456,
+        "text": "e(a)",
+        "size": 28,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          713.09375,
+          436,
+          763.09375,
+          462
+        ]
+      },
+      {
+        "x": 1038,
+        "y": 456,
+        "text": "e(b)",
+        "size": 28,
+        "color": "#4c60af",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          1012.328125,
+          436,
+          1063.328125,
+          462
+        ]
+      },
+      {
+        "x": 310,
+        "y": 453,
+        "text": "\u2212",
+        "size": 27,
+        "color": "#007f79",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          302.1171875,
+          441,
+          318.1171875,
+          453
+        ]
+      },
+      {
+        "x": 310,
+        "y": 546,
+        "text": "L\u0394 = \u2016e(b) \u2212 e(a)\u2016\u00b2 / (2D)",
+        "size": 28,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          151.3828125,
+          526,
+          468.3828125,
+          552
+        ]
+      },
+      {
+        "x": 889,
+        "y": 546,
+        "text": "LE = (\u2016e(a)\u2016\u00b2 + \u2016e(b)\u2016\u00b2) / (2D)",
+        "size": 27,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          709.8984375,
+          526,
+          1067.8984375,
+          551
+        ]
+      },
+      {
+        "x": 600,
+        "y": 652,
+        "text": "L\u0394 = LE \u2212 e(a)\u1d40e(b) / D",
+        "size": 32,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          432.2109375,
+          629,
+          768.2109375,
+          658
+        ]
+      },
+      {
+        "x": 600,
+        "y": 693,
+        "text": "D = number of learned features \u00b7 a and b = two movement states",
+        "size": 21,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          298.9609375,
+          678,
+          900.9609375,
+          693
+        ]
+      },
+      {
+        "x": 600,
+        "y": 731,
+        "text": "Equal errors can cancel; check restored joint positions and motion traces too.",
+        "size": 22,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          224.609375,
+          715,
+          975.609375,
+          735
+        ]
+      },
+      {
+        "x": 57,
+        "y": 808,
+        "text": "COORDINATE CONTROL",
+        "size": 18,
+        "color": "#986325",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          57,
+          795,
+          271,
+          808
+        ]
+      },
+      {
+        "x": 57,
+        "y": 851,
+        "text": "Compare changes in position errors",
+        "size": 25,
+        "color": "#183247",
+        "anchor": "start",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          57,
+          833,
+          486,
+          856
+        ]
+      },
+      {
+        "x": 916,
+        "y": 815,
+        "text": "Use one common pair scale",
+        "size": 22,
+        "color": "#183247",
+        "anchor": "middle",
+        "weight": "bold",
+        "container": null,
+        "measured_bounds": [
+          770.515625,
+          799,
+          1061.515625,
+          819
+        ]
+      },
+      {
+        "x": 916,
+        "y": 852,
+        "text": "s pair = (s a + s b) / 2",
+        "size": 23,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          807.328125,
+          835,
+          1024.328125,
+          857
+        ]
+      },
+      {
+        "x": 600,
+        "y": 902,
+        "text": "Both JEPA variants share the added-loss weight and keep the original losses.",
+        "size": 21,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          240.796875,
+          887,
+          958.796875,
+          906
+        ]
+      },
+      {
+        "x": 600,
+        "y": 951,
+        "text": "32 training batches set loss weights \u2192 Pretrain the encoder",
+        "size": 22,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          309.5859375,
+          935,
+          891.5859375,
+          955
+        ]
+      },
+      {
+        "x": 600,
+        "y": 986,
+        "text": "\u2192 Fix encoder weights \u2192 Train a new coordinate output network",
+        "size": 22,
+        "color": "#566978",
+        "anchor": "middle",
+        "weight": "normal",
+        "container": null,
+        "measured_bounds": [
+          284.5234375,
+          970,
+          915.5234375,
+          990
+        ]
+      }
+    ],
+    "connectors": [
+      [
+        [
+          211,
+          445
+        ],
+        [
+          286,
+          445
+        ]
+      ],
+      [
+        [
+          334,
+          445
+        ],
+        [
+          409,
+          445
         ]
       ]
     ]
