@@ -1,20 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="406" viewBox="0 0 1000 406" role="img" aria-labelledby="title desc">
-<title id="title">An image transform and a joint-label error are different</title><desc id="desc">Keep coordinates, anatomical names and validity aligned under every operation.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
-<rect width="1000" height="406" fill="white"/>
-<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">An image transform and a joint-label error are different</text>
-<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">Keep coordinates, anatomical names and validity aligned under every operation.</text>
-<rect x="32" y="124" width="296" height="151" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="180.0" y="156" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Camera / image</text>
-<text x="180.0" y="188" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Update the projection</text>
-<text x="180.0" y="215" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Use same-view references</text>
-<rect x="352" y="124" width="296" height="151" rx="12" fill="#fff5e6" stroke="#d5e0e7"/>
-<text x="500.0" y="156" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Joint-slot exchange</text>
-<text x="500.0" y="188" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Permute input metadata</text>
-<text x="500.0" y="215" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Keep anatomical truth fixed</text>
-<rect x="672" y="124" width="296" height="151" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
-<text x="820.0" y="156" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Physical movement</text>
-<text x="820.0" y="188" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Retain its actual change</text>
-<text x="820.0" y="215" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Check coupled joint effects</text>
-<text x="500" y="338" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Do not force equal left–right motion or identical pixels across cameras.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="635" viewBox="0 0 1200 635" role="img" aria-labelledby="title desc">
+<title id="title">Separate movement, camera view and joint names</title><desc id="desc">INHERITED CORE. The parent transformation rules and projected references stay fixed.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="635" fill="#fcfcf9"/>
+<rect x="36" y="18" width="216" height="30" rx="5" fill="#edf0fa" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#4c60af" text-anchor="start" font-weight="bold">INHERITED CORE</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Separate movement, camera view and joint names</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">The parent transformation rules and projected references stay fixed.</text>
+<rect x="36" y="171" width="360" height="344" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="56" y="205" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Movement change</text>
+<rect x="420" y="171" width="360" height="344" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="440" y="205" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Camera change</text>
+<rect x="804" y="171" width="360" height="344" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="824" y="205" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Joint-slot exchange</text>
+<polyline points="99.32,253.00 146.68,253.00" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="99.32,253.00 81.40,285.00" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="81.40,285.00 66.68,313.80" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="146.68,253.00 164.60,285.00" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="164.60,285.00 179.32,313.80" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="99.32,253.00 107.00,309.32" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="146.68,253.00 139.00,309.32" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="107.00,309.32 139.00,309.32" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="107.00,309.32 103.16,347.72" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="103.16,347.72 98.68,386.12" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="139.00,309.32 142.84,347.72" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="142.84,347.72 147.32,386.12" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="99.32" cy="253.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="146.68" cy="253.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="81.4" cy="285.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="164.6" cy="285.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="66.68" cy="313.8" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="179.32" cy="313.8" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="107.0" cy="309.32" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="139.0" cy="309.32" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="103.16" cy="347.72" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="142.84" cy="347.72" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="98.68" cy="386.12" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="147.32" cy="386.12" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<polyline points="279.32,253.00 326.68,253.00" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="279.32,253.00 261.40,285.00" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="261.40,285.00 246.68,313.80" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="326.68,253.00 344.60,285.00" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="344.60,285.00 359.32,313.80" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="279.32,253.00 287.00,309.32" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="326.68,253.00 319.00,309.32" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="287.00,309.32 319.00,309.32" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="287.00,309.32 283.16,347.72" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="283.16,347.72 278.68,386.12" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="319.00,309.32 336.92,342.60" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="336.92,342.60 310.68,377.80" fill="none" stroke="#a5b8bf" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="279.32" cy="253.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="326.68" cy="253.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="261.4" cy="285.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="344.6" cy="285.0" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="246.68" cy="313.8" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="359.32" cy="313.8" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="287.0" cy="309.32" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="319.0" cy="309.32" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="283.16" cy="347.72" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="336.92" cy="342.6" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="278.68" cy="386.12" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<circle cx="310.68" cy="377.8" r="4.48" fill="#007f79" stroke="white" stroke-width="2"/>
+<polyline points="174.00,326.00 250.00,326.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="216" y="452" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Retain actual response</text>
+<rect x="475" y="261" width="98" height="116" rx="4" fill="white" stroke="#4c60af"/>
+<path d="M620 277L731 253L731 383L620 362Z" fill="white" stroke="#4c60af" stroke-width="2"/>
+<polyline points="584.00,317.00 610.00,317.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="600" y="452" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Reference from same view</text>
+<text x="872" y="279" font-family="Arial, sans-serif" font-size="35" fill="#4c60af" text-anchor="start" font-weight="bold">L</text>
+<text x="1083" y="279" font-family="Arial, sans-serif" font-size="35" fill="#007f79" text-anchor="start" font-weight="bold">R</text>
+<text x="872" y="383" font-family="Arial, sans-serif" font-size="35" fill="#007f79" text-anchor="start" font-weight="bold">R</text>
+<text x="1083" y="383" font-family="Arial, sans-serif" font-size="35" fill="#4c60af" text-anchor="start" font-weight="bold">L</text>
+<polyline points="917.00,270.00 1059.00,367.00" fill="none" stroke="#4c60af" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1066.00,270.00 916.00,367.00" fill="none" stroke="#007f79" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="984" y="452" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Anatomical truth stays fixed</text>
+<polyline points="36.00,578.00 1164.00,578.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="609" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Projected quantities may change with camera geometry. Image coordinates are not clinical 3D angles.</text>
 </svg>

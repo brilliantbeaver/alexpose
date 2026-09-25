@@ -1,14 +1,14 @@
 # Literature and scientific positioning
 
-[Research proposal](../README.md) · [Data specification](../data/README.md) · [Methods](../methods/README.md)
+[Current proposal](../README.md#8-related-work-and-references) · [Data specification](../data/README.md) · [Methods](../methods/README.md)
 
-The proposal uses established ingredients to investigate a specific measurement problem: whether restoring poses preserves genuine bilateral movement and change. These documents retain the broader search and alternatives without turning the main paper into a catalogue of possible projects.
+The active study tests whether coupling feature prediction errors across movement states during pretraining improves a frozen encoder's restored movement response. Its closest methodological precedents include derivative supervision, augmentation-aware representation learning and predictive skeleton features. Pose refinement and synthetic clinical gait learning define the application context.
 
 | Document | Purpose |
 | --- | --- |
-| [Novelty and method audit](novelty.md) | Closest prior art, distinct transformation contracts, ranked secondary hypotheses and attribution controls |
-| [Search map](search-map.md) | Search families, authoritative sources and limits of coverage |
-| [Clinical candidates](../data/clinical-candidates.md) | Dataset papers, actual reference modalities and unresolved access/synchronization |
-| [Earlier full synthesis](../records/history/proposal-before-organization-20260921.md) | Preserved exploratory ranking and research history before the focused paper structure |
+| [Current positioning](novelty.md) | Specific comparison, primary precedents, interpretable outcomes and limits of novelty claims |
+| [Search scope](search-map.md) | Focused sources checked for this revision and the scope of the earlier broad search |
+| [Clinical candidates](../data/clinical-candidates.md) | Dated feasibility review of optional, unacquired or unadmitted data; excluded from this child |
+| [Earlier hypothesis audit](../records/history/novelty-before-response-20260923.md) | Preserved 19 September literature review and ranked alternatives, before the current pretraining experiment |
 
-Use the [current proposal](../README.md#8-related-work-and-references) for the selected argument. Historical rankings remain exploratory; they do not add experiment commitments or establish a first-of-its-kind claim. Preprints and access statements retain their qualifications in the detailed audits.
+The broader alternatives remain useful research context. They do not add datasets, architecture branches or promises of clinical validity to the registered 18-phase follow-up.

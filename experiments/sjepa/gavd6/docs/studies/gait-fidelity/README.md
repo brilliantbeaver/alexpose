@@ -1,276 +1,252 @@
 # Gait Fidelity
 
-## Preserving bilateral movement through pose restoration
+## Preserving movement changes in learned pose restoration
 
-**Research proposal and implementation · 22 September 2026 · HAIC results pending**
+**Research proposal · 24 September 2026.** Completed synthetic core results motivate a controlled JEPA follow-up. Follow-up results are not yet available in the supplied evidence.
 
-[Read the interactive paper](proposal.html) · [Inspect the data](data/README.md) · [Browse local videos](data/video-gallery.html) · [Open the figure gallery](images/gallery.html)
-
-**Run the study:** the [HAIC guide](../../../slurm/gait-fidelity/README.md) and [notebook tutorials](../../../notebooks/gait_fidelity/README.md) use one saved configuration and the same experiment runner. The [implementation guide](methods/running.md) explains the five experiment groups, reference checks and retained outputs. The implemented source study remains a development comparison on the existing 24 training and eight inspected development people; a fresh confirmation population and independent clinical references are still separate admission requirements.
-
-The [implementation validation record](records/implementation-validation-20260922.json) and [independent reviews](reviews/README.md) document local software checks and tutorial execution. CUDA rendering, pose extraction and measured throughput for the expanded dataset still require the HAIC run.
-
-**Execution plan:** eight H100 GPUs, with experiment setup assumed to take at most one hour. The [parallel execution plan](methods/execution.md) schedules both masking and change supervision with their controls: 34 recipe cells, three seeds and 102 final model fits. Its dated midnight-to-Thursday-noon example provides 480 H100-hours, split into 360 planned hours and 120 reserved for recovery. This is planned capacity, not measured runtime or completed experiments.
-
-This page presents the scientific argument and planned experiments. The linked protocols retain implementation detail; completed source audits and earlier drafts are organized separately so that they do not interrupt the proposal.
-
-| Reading goal | Start here |
-| --- | --- |
-| Understand the question and method | Read Sections 1–5 below, or use the illustrated [interactive paper](proposal.html). |
-| Know exactly which data will be used | Read [Data and references](data/README.md), then inspect the [local footage](data/video-gallery.html). |
-| Prepare or review an experiment | Use the [method protocols](methods/README.md), [source evidence](evidence/README.md), and [reproduction instructions](scripts/README.md). |
-| Execute and inspect the experiments | Start with the [HAIC commands](../../../slurm/gait-fidelity/README.md), then follow the [notebooks](../../../notebooks/gait_fidelity/README.md). |
-| Schedule the study before the ICLR deadline | Use the [eight-H100 execution plan](methods/execution.md) for the exact matrix, resource forecast, dependencies and paper milestones. |
-
-**Contents:** [Abstract](#abstract) · [1. Motivation](#1-motivation) · [2. Research question](#2-research-question-and-proposed-contribution) · [3. Data](#3-data-and-reference-measurements) · [4. Experimental design](#4-experimental-design) · [5. Method](#5-method) · [6. Evaluation](#6-evaluation-and-statistical-analysis) · [7. Reproducibility](#7-reproducibility-and-execution) · [8. References](#8-related-work-and-references) · [File guide](#file-guide)
+[Two-page overview](proposal-brief.html) · [Printable overview](proposal-brief.pdf) · [Core analysis](results/core-analysis-20260924/README.md) · [Amended experiment](methods/core-to-followup-20260924.md)
 
 ## Abstract
 
-Video-based gait measurements depend on pose estimators that locate a person's joints in each frame. Restoration models can correct these estimates, but they may also alter differences between the legs or changes in movement that the measurement is intended to capture. Gait Fidelity studies whether restoration can reduce observation errors while preserving the size and direction of bilateral movement changes. We propose a controlled experiment that crosses reference-verified changes in motion with changes in image quality or estimated joint assignment. The initial outcome is a signed difference in projected knee excursion, supported by the existing hip, knee and ankle representation. Synthetic motion and rendered images supply matched inputs and references; independently annotated real videos provide a separate observation-recovery test. We compare direct coordinate training with a joint-embedding predictive architecture that learns to predict reference motion features, and evaluate stochastic anatomical masking as a distinct training intervention. A proposed paired-change constraint penalizes distortion of the reference movement change. Evaluation combines response error with observation-error and position-accuracy requirements, retaining missing predictions and unsupported references in coverage reports. Clinical measurements form a later, conditional stage requiring independent events, anatomical side labels and adequate synchronization. The study is designed to determine which training choices preserve useful movement information and where the available observations cannot support recovery.
+When video is used to compare how someone moves across conditions, an apparent change can come from the movement, the observation, or the algorithm that processes it. Gait Fidelity investigates whether learned pose restoration preserves the magnitude, direction, and side-specific structure of a defined movement change. A synthetic walking experiment showed that direct coordinate training improved the measured response, but adding explicit change supervision worsened angular trajectories across five model families. The tested JEPA procedure did not establish a response advantage. These results motivate a follow-up that adds feature-difference supervision during predictive pretraining and tests each frozen encoder with two downstream objectives. Matched controls distinguish a benefit of learning differences from additional regression supervision and dependence on the readout. The aim is to understand which training procedures support reliable movement measurement, a prerequisite for interpreting video-derived changes in biomechanics and ambient monitoring.
 
-## 1. Motivation
+## 1. When a movement estimate becomes a scientific measurement
 
-### 1.1 Why position accuracy is not enough
+Suppose a person appears to bend one knee less after a change in their walking condition. Before interpreting that observation, we need to know whether the movement changed, the leg became harder to see, or a processing model altered the estimated trajectory. This is a measurement problem: the output must support the comparison we intend to make, with enough fidelity to distinguish movement from observation error.
 
-A pose estimator converts a video into a trajectory: the position of each joint as it changes over time. Those trajectories can then be used to measure movement, such as the amount a knee bends or the interval between steps. Errors arise when a limb is obscured, a person becomes small in the image, or the estimator exchanges the names of the left and right joints. A restoration model uses the surrounding observations to correct the estimated trajectory.
+In biomechanics, joint trajectories contribute to estimates of motion and, through additional modeling, forces and joint loading. Scott Delp and colleagues' **OpenCap** combines smartphone-video pose estimates, learned marker augmentation, musculoskeletal modeling, and physics-based simulation. Its evaluation includes changes between movement conditions. That use illustrates why accuracy at a single condition and accuracy of a between-condition change are related but distinct requirements. [Uhlrich et al., 2023](https://doi.org/10.1371/journal.pcbi.1011462).
 
-The difficulty is that genuine movement can resemble an estimation error. Reduced excursion of one knee, a brief hesitation or a difference between the legs may be meaningful features of the recording. A model trained to produce common, smooth walking patterns could weaken those features while improving its average joint-position score. Conversely, a model that preserves every irregularity may also preserve tracking noise. A useful evaluation must measure both tendencies on the same reference population.
+![Real smartphone movement capture from the OpenCap study, shown as context for video-based biomechanical measurement.](images/context/opencap-capture.jpg)
 
-![Movement differences, observation errors and uncertain anatomical names require different model behavior.](images/01-research-question.svg)
+*Figure 1. What must the observation support? OpenCap provides a real example of video feeding a biomechanical measurement pipeline. Two smartphone video views from Uhlrich et al. (2023), Fig. 2; cropped, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). These recordings are not part of Gait Fidelity. [Image provenance](images/context/README.md).*
 
-*Figure 1. The desired response depends on what changed. Genuine movement should remain measurable; observation error should decrease; unresolved anatomical assignment should remain explicit.*
+A related problem arises in **James Landay and colleagues' ambient intelligence research at Stanford HAI**. The lab describes planned studies of older adults' natural mobility alongside clinical balance tests, and field studies of sensing in everyday environments. An unobtrusive system must work with the views and walking episodes that daily life provides. In such a deployment, furniture, other people, walking aids, and changing orientation can make observations incomplete or inconsistent. Tracking a trend over time therefore requires knowing how much the sensing and processing pipeline can change the measurement. [Stanford AmI projects](https://ami.stanford.edu/).
 
-### 1.2 Why laterality matters
+Our study examines **pose restoration**, the learned correction of joint trajectories estimated from video. Conventional coordinate and smoothness objectives describe aspects of reconstruction quality, but do not by themselves guarantee preservation of a particular gait measurement. A correction can attenuate the size of a change, reverse its direction, or attribute it to the wrong leg. These possibilities matter when comparing movement across conditions: the apparent improvement may differ from what the person did. They must be tested, rather than inferred from a visually plausible skeleton or a smaller average position error.
 
-**Laterality** means identifying the anatomical left and right sides. It determines the sign of a bilateral measurement: “right minus left” reverses if joint names are exchanged. Anatomical side, movement asymmetry and the clinically affected side are separate quantities. A larger excursion on the right does not, by itself, identify which side is impaired.
+Gait Fidelity makes this requirement explicit for a bounded measurement. It evaluates the change alongside the trajectory and observation errors, then asks whether predictive representation learning can improve the information available for that measurement. This complements movement-analysis and ambient-sensing research; it does not assume that either Stanford program uses this method or exhibits the particular failure under investigation.
 
-Reliable bilateral measurements could help clinicians describe a person's movement and follow changes over time. That motivation requires accurate measurement rather than a preference for symmetry. Symmetric step lengths can coexist with asymmetric mechanics, and neurological gait patterns vary across people. Independent clinical studies already measure gait from video and assess within-person changes; the proposed contribution concerns whether restoration preserves those changes under difficult observations. [Clinical video validation](https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0000467), [asymmetry and walking mechanics](https://pmc.ncbi.nlm.nih.gov/articles/PMC5243179/).
+## 2. A controlled test of movement fidelity
 
-The predecessor [synthetic-training study](../synthetic-training-v2/writeups/README.md) motivates a closer examination of movement fidelity and strong controls for feature pretraining. The earlier [laterality evidence audit](../synthetic-training-v2/manuscript/abstract-laterality-audit-20260919-v01.md) explains why those experiments must remain distinct. This proposal makes neither a clinical efficacy claim nor an assumption that JEPA will be the best method.
+### Change the movement while controlling its observation
 
-## 2. Research question and proposed contribution
+Real recordings are essential for eventual validation, but they rarely provide a clean reference for a hidden joint or a precisely matched alternative movement. We begin with recorded AMASS motions driving a three-dimensional body model. For each walking interval, we retain the original motion and generate an altered version with a controlled knee-flexion edit. The model renders images for fixed pose estimators and projects its joints into the same images to provide reference trajectories.
 
-**Can pose restoration reduce errors caused by observation and tracking while preserving the size and direction of reference-verified changes in bilateral movement?**
+These are **paired movement states**: two complete versions of the same walking interval, not adjacent frames. Both retain the same source motion and camera. Related versions vary camera angle, occlusion, and left–right labeling errors. This crossed design separates the intended movement change from errors in how it is observed. It is a kinematic stress test with known projected geometry; a body-model edit does not establish a physiologically valid impairment or treatment effect.
 
-The main hypothesis is that explicitly supervising movement change can reduce distortion of that change while retaining useful resistance to observation errors. The reference supplies the actual change, including any legitimate effects on other joints. The model is not asked to make every movement symmetric or to make every image-plane quantity invariant to the camera.
+The core uses 128-frame intervals at 25 Hz, three fixed pose estimators, and 45° and 90° camera views. Commanded knee-flexion edits are 0°, 5°, 10°, and 15°; the 15° edit is excluded from training to test a larger intervention. A commanded edit is a body-model parameter, distinct from the measured change in projected knee excursion.
 
-The intended contribution has three connected parts:
+![Original and altered walking sequences are observed under clear and degraded conditions, with a separately projected reference for each camera.](images/02-crossed-design.svg)
 
-1. A controlled evaluation that separates a real movement change from a change in how the same movement is observed.
-2. A matched test of direct coordinate learning, paired feature prediction and anatomical masking, showing which component contributes any improvement.
-3. A reference-based account of the conditions under which restoration preserves a useful measurement, together with a clearly bounded real-video validation.
+*Figure 2. What must be held fixed? Compare movement states within the same observation condition; compare observation conditions at fixed movement. Changing the camera can change a two-dimensional angle even when the physical motion is unchanged, so each view has its own reference.*
 
-Each part is prospective. Graph masking, synthetic gait and feature prediction have substantial prior art. The scientific value must come from a consequential, reproducible preservation finding and an interpretable remedy or failure boundary, assessed against credible alternatives. The [novelty audit](literature/novelty.md) retains the detailed comparisons and secondary ideas.
+### Define what must survive restoration
 
-This question determines the next dependency: the study needs data that distinguish motion from observation and a measurement that the available references can actually support.
+For each leg, we measure one knee angle per eligible video frame. Draw two lines in the image: one from the knee to the hip and one from the knee to the ankle. The angle between them is the **image-plane knee angle**; a straight projected leg gives 180°. Repeating this calculation across the walking interval produces a sequence of angles describing how that leg's projected configuration changes over time.
 
-## 3. Data and reference measurements
+**Knee excursion** summarizes the range of those angles. The 5th-percentile angle is the value below which approximately 5% of the framewise angles fall; the 95th-percentile angle is the value below which approximately 95% fall. Subtracting the former from the latter gives the span of the central 90% of observed angles. For illustration, a 5th percentile of 110° and a 95th percentile of 170° give an excursion of 60°. Using these percentiles instead of the absolute minimum and maximum reduces the influence of a few extreme frames, although it can also omit brief, real movement extremes.
 
-### 3.1 Which data will be used
+We calculate this quantity separately for the left and right legs, on the same reference-selected frames used to evaluate the restored trajectories. The right-minus-left excursion difference is
 
-**Already in your HAIC setup:** AMASS motion files, GAVD videos, COCO images/annotations and the previous synthetic-training assets. The 91 MS/PD/Normal clips are verified on your Mac; their HAIC copy has not been established. Stroke motion capture, LIVE-GaitNeuroKids and the full MoVi video/reference release are **optional additions that have not yet been acquired for this study**. Their acquisition does not block synthetic development with the existing HAIC assets.
+$$
+q_{\ell}=P_{95}(\theta_{\ell})-P_{5}(\theta_{\ell}),\qquad A=q_R-q_L.
+$$
 
-The [availability inventory](data/availability.md) records the exact paths and the evidence for these statuses. It distinguishes your reported HAIC setup and completed runs from a fresh remote file audit, which was not performed here. The roles below depend on reference quality as well as file availability.
+Here, $\ell$ denotes a leg and the percentiles are taken over the fixed reference-supported interval. For original state $a$ and altered state $b$, define the reference change and its reconstruction error by
 
-| Data source | What will enter the experiment | Role and readiness |
-| --- | --- | --- |
-| **AMASS-derived synthetic pairs — existing on HAIC** | Reviewed motion, rendered RGB, fixed pose-estimator outputs and projected body-model joints | Primary controlled development and training. Reuse the existing AMASS/rendering assets and verify the selected files; new intervention pairs are pending. |
-| **Local MS/PD/Normal videos — available on Mac** | 91 clips from 41 filename-derived sources; new physical-time pose extraction and independent visible-joint/side annotations | Real-image development and controlled observation-recovery testing. HAIC copy is unconfirmed; the new cache and annotations are pending. |
-| **GAVD — existing on HAIC** | Selected videos with checked source reservations and independent annotations for the chosen endpoint | Optional real-image evaluation pool. Prior exposure and overlap with the local collection must be resolved. Existing labels do not supply the required motion references. |
-| **Stroke motion-capture release — optional; not acquired** | Raw time-indexed trajectories, with compatible side and event metadata where available | Additional source of recorded asymmetric movement. Retargeting must preserve the source measurements; public synchronized RGB is unverified. |
-| **LIVE-GaitNeuroKids — optional; not acquired** | Same-trial video, wearable references and participant/visit records | Clinical evaluation candidate. Access, video alignment, reference accuracy and usable sample size remain admission gates. |
-| **MoVi video/reference release — optional; not acquired** | Compatible calibrated video/motion-capture trials | Healthy-reference evaluation fallback if identity separation can be established. AMASS motion from BMLmovi does not supply this full video release. |
+$$
+\Delta A=A_b-A_a,\qquad E_{\Delta}=\left|\left(\widehat A_b-\widehat A_a\right)-\Delta A\right|.
+$$
 
-COCO is available for an optional image-adaptation comparison; its still-image annotations do not provide temporal gait references. The focused pose-trajectory experiment can proceed without that branch.
+Hats denote measurements from restored trajectories. We call $\Delta A$ the **movement response**, meaning the difference in this measurement across the two conditions. If the reference changes from +5° to 0°, its response is −5°. A reconstructed response of −2° attenuates the change; +2° reverses it. These are illustrative numbers, not experimental results.
 
-![Synthetic pairs, local annotated footage and conditional clinical references support different experiments and claims.](images/13-data-to-claims.svg)
+The sign retains the right–left ordering instead of discarding it through an absolute asymmetry score. Nevertheless, this scalar cannot describe all gait changes: equal reductions in both legs can cancel, and equal errors at the two states can conceal inaccurate measurements. We therefore evaluate each leg's excursion, the full angle trajectories, coordinate accuracy, and a geometric side-assignment diagnostic as well. That diagnostic does not independently establish anatomical identity or identify a clinically affected leg.
 
-*Figure 2. The synthetic branch reuses HAIC assets, the audited local-video branch starts on your Mac, and new clinical data remain optional acquisitions. Inputs, references and supported claims remain linked; a diagnostic label does not supply a joint trajectory or an independently measured movement change.*
+All angles in this study are projected two-dimensional measurements. They are neither anatomical three-dimensional range of motion nor validated fall-risk indicators. This limited scope makes the first question testable: can a processing model preserve a known movement response under the declared observation conditions?
 
-The [data specification](data/README.md) explains acquisition, representation, inclusion checks and the exact role of each source. The current synthetic study uses normal treadmill walking from 24 training people and eight already inspected development people. These identities are useful for implementation and development; a new confirmation roster is still to be allocated. The existing four 64-frame windows per person are a starting point for mask checks, without assuming that their duration or frontal view is adequate for the new measurement.
-
-The local real-video collection also remains development material. Twenty-eight of its 41 source IDs occur in GAVD manifests, covering 61 clips; source IDs are not verified independent people. Existing pose caches omit original timestamps and imputation flags and therefore need replacement for physical-time measurement. The [local-video audit](data/local-videos.md) records these issues and the source overlap. All clips can be inspected in the [local gallery](data/video-gallery.html).
-
-### 3.2 The first measurement
-
-The initial engineering endpoint is the **signed projected knee-excursion difference**. For each leg, compute the image-plane angle formed by hip, knee and ankle across one fixed reviewed interval. Define its excursion as the 95th percentile minus the 5th percentile of that angle, then subtract the left excursion from the right:
-
-```text
-theta(t) = angle(hip(t) − knee(t), ankle(t) − knee(t))
-q = P95(theta) − P5(theta)
-A = q_right − q_left
-```
-
-`A` is measured in image-plane degrees. Its sign identifies which leg has greater projected angular excursion. It does not identify an affected limb, anatomical three-dimensional range of motion, or clinical impairment. The percentile definition limits the influence of isolated extremes, while deliberately discounting brief genuine extremes; full waveforms and a prespecified full-range sensitivity analysis remain necessary.
-
-For the first synthetic comparison, use a common physical-time grid and the same reference-defined eligible frames across the paired movement/observation cells, both limbs and every method. Require sufficient support for the complete contrast so that differing phase coverage cannot masquerade as movement change. Specify the percentile interpolation rule, interval duration, minimum projected segment length and completeness thresholds before comparing models. Compute angles in the original image geometry or after a shared isotropic transform: resizing horizontal and vertical coordinates by different factors changes an angle. Missing or degenerate predictions count as failures rather than changing the eligible reference population. The [evaluation protocol](methods/evaluation.md) gives the complete contract.
-
-### 3.3 What real videos add
-
-On the local videos, the first reference task is independent annotation of originally visible joint positions and resolvable anatomical side. Add blur or obstruction to those same frames, re-run pose extraction and evaluate restoration against the retained original annotations. This creates a known observation change on real imagery. It does not reveal joints that were already hidden in the original video.
-
-Clinical step-time asymmetry is a subsequent endpoint, conditional on independently side-labelled initial contacts, appropriate temporal resolution and valid event coverage. Contact labels must be used for evaluation rather than supplied to a deployed timing estimator. The [clinical-candidate audit](data/clinical-candidates.md) distinguishes these requirements from the references presently available.
-
-## 4. Experimental design
-
-### 4.1 Cross movement with observation
-
-For each source family, construct two movement states and two observation conditions. A movement pair changes the reference trajectory; an observation pair changes image degradation or estimated joint naming while retaining the relevant physical motion. Keep camera, appearance and random nuisance realization matched within the appropriate comparison.
-
-![The same source family contributes a two-by-two movement-by-observation panel.](images/02-crossed-design.svg)
-
-*Figure 3. Compare motion A with motion B under each observation condition, then compare observation conditions within each motion. Every output has its own valid projected reference.*
-
-A physical reflection is useful for testing sign and transformation rules. A graded response experiment additionally needs recorded or reference-verified movement changes beyond reflection, including a zero-change control and changes in both directions. Constrained edits without dynamic validation are kinematic stress tests; they are not simulated patient counterfactuals. The reference must retain legitimate coupled changes in other joints.
-
-The compact sign-control panel crosses two mirror states, three estimated-naming states, two occlusion states and two cameras. It produces 24 track conditions from eight RGB renderings per source window when naming errors are applied after extraction. These repeated conditions remain one source family. The graded-response panel is additional work.
-
-### 4.2 Measure the error in a change
-
-Let `A_an` denote the reference measurement for movement state `a` and observation condition `n`, and let `Ahat_an` denote the restored measurement. The **response error** is the difference between the predicted movement change and the reference movement change:
-
-```text
-R(n) = (Ahat_1n − Ahat_0n) − (A_1n − A_0n)
-```
-
-The **observation-induced error change** asks how the measurement error changes when the observation changes:
-
-```text
-N(a) = (Ahat_a1 − Ahat_a0) − (A_a1 − A_a0)
-```
-
-For image blur at a fixed camera, the reference change in the second expression is zero. For a camera change, a projected reference may legitimately change, so retain that term. The interaction `I = R(1) − R(0)` measures whether the observation condition changes sensitivity to the real movement change.
-
-![Illustrative values show how a predicted movement change can differ from the reference change, even with plausible individual measurements.](images/16-response-estimand.svg)
-
-*Figure 4. These are teaching values, not measured results. The [interactive paper](proposal.html#response-explorer) lets the reader vary movement change and observation distortion and inspect the paired contrasts.*
+<details class="technical-details">
+<summary>Explore a numerical example of preserved and distorted movement change</summary>
 
 <!-- INTERACTIVE:response -->
 
-Response error alone permits a constant measurement offset, and a single excursion value can agree despite an incorrect waveform. This is why the evaluation also requires position/level accuracy, observation-error control and trajectory measures.
+</details>
 
-## 5. Method
+## 3. The representation-learning hypothesis
 
-### 5.1 Restore coordinates from observed trajectories
+### What predictive pretraining is asked to learn
 
-All deployed restoration arms receive estimated joint coordinates, confidence, detection availability and timestamps under a declared anatomical convention. Independent reference coordinates are available only for permitted training and evaluation. The first shared representation is body12: paired shoulders, elbows, wrists, hips, knees and ankles. Heel or toe measurements require an explicitly validated schema extension.
+The completed core, detailed in Section 5, found that direct coordinate restoration improved measurements, while explicit movement-change supervision introduced trajectory tradeoffs. Those findings motivate a hypothesis about *where* supervision enters: perhaps a representation will better support movement measurement if it learns the relation between states before its encoder is frozen. The core does not establish that the encoder has lost that information, or that pretraining is the cause of the observed errors.
 
-A direct model learns corrected coordinates from the estimated tracks. Temporal context allows it to use neighboring observations. The inherited recipe uses a coordinate loss; the movement metrics separately test whether those corrections preserve displacement and bilateral measurements. The proposed change-supervision term is an explicit additional objective. Calibration and temporal filters provide simpler comparisons. Their preprocessing, tuning population and missing-output treatment must be documented alongside the neural models.
+The tested model is inspired by **JEPA**, a joint-embedding predictive architecture. A student encoder processes noisy estimated joint trajectories with some joint–time regions masked. A predictor maps its features toward target features computed from the clean reference trajectory by a teacher network. The teacher follows the encoder through an exponential moving average of its parameters, and its outputs are treated as fixed targets during gradient calculation. The clean reference supplies privileged training supervision.
 
-### 5.2 Predict reference features with paired JEPA
+![The model predicts reference features from masked observed poses, compares supervision across paired states, and tests each frozen encoder through two coordinate readouts.](images/research-method.svg)
 
-A joint-embedding predictive architecture, or **JEPA**, learns to predict numerical features rather than predicting every target coordinate during pretraining. Here an encoder turns an imperfect pose sequence into features that summarize joint motion, and a predictor estimates the features of corresponding reference poses at hidden positions. “Paired” means that estimated and reference poses describe the same source movement at aligned times.
+*Figure 3. Where could movement information be preserved or lost? Pretraining updates the student and predictor using teacher targets. Evaluation retains the frozen encoder and a newly trained coordinate readout; the predictor and reference teacher are absent from deployment. See the controls below before interpreting a good reconstructed trajectory as evidence of useful pretraining.*
 
-![Masked observed tracks feed the student, valid reference tracks feed a training-only teacher, and a later coordinate readout converts frozen features into restored poses.](images/14-paired-jepa-method.svg)
+After pretraining, the predictor is discarded and the encoder is **frozen**, so its learned parameters no longer adapt. A fresh coordinate **readout** learns to convert its features into corrections. On observed joints, the model can also add those corrections to the input coordinates through a direct residual connection. This makes an initialized-encoder control necessary: a trained readout and the observed coordinates may support useful output even without learned pretraining.
 
-*Figure 5. The inherited recipe uses a reference teacher whose weights are an exponential moving average of the encoder weights: a slowly changing copy, updated without back-propagating the target loss through it. A separate readout then learns coordinates while the encoder is fixed.*
+The connection to world-model research is predictive learning of representations that may retain useful physical information. This experiment predicts clean-reference features from partial observations. It does not predict future physical states, learn action-conditioned dynamics, or perform planning. At deployment it processes a single observed sequence, without the paired sequence or reference targets used during training.
 
-The rationale is that predicting reference motion features may help an encoder use temporal and anatomical context when observations are incomplete. A learned prior may also weaken uncommon but genuine movements. The experiment therefore compares the final restored trajectories, with aligned, shuffled-reference and untrained-encoder controls. Low feature-prediction loss does not establish movement fidelity.
+### Match feature changes, with a control for added supervision
 
-### 5.3 Vary which joints provide context
+The central question is: **Does adding feature-difference supervision during JEPA pretraining improve the movement change recovered from the frozen encoder, beyond adding independent regression targets for each state?**
 
-**Stochastic graph-time masking** selects a connected anatomical region, such as hip–knee–ankle, and hides it for a sampled time span. Another draw can expose that region and hide a different one. A token is one joint over a short block of frames; the graph specifies anatomical connections, without requiring a graph neural-network encoder.
+Let $\widetilde p_i$ and $\widetilde t_i$ denote the scaled, channel-centered predictor and teacher features at a matched joint–time position in state $i$. Their residual is $e_i$:
 
-![A connected anatomical region is hidden over time, while later draws allow those same joints to provide context.](images/15-graph-time-mask.svg)
+$$
+e_i=\widetilde p_i-\widetilde t_i,\qquad e_b-e_a=(\widetilde p_b-\widetilde p_a)-(\widetilde t_b-\widetilde t_a).
+$$
 
-*Figure 6. Joint connectivity and temporal persistence are separate factors. Artificial hiding is distinct from a detector's missing observation and from reference validity.*
+Thus, minimizing the difference between the residuals encourages the predicted feature change to match the teacher's feature change. For feature width $D$, we compare two additional losses:
 
-The existing synthetic pipeline already varies its masks and often hides whole-body time blocks on complete input. The proposed study compares that policy with uniform joint-time masking and connected-region masking. Match achieved mask budgets and audit context/target coverage at every joint-time slot. The MS notebook's BlazePose-33 groups require a named-joint adapter for body12. The [masking protocol](methods/masking.md) retains coverage, preprocessing-information and gradient checks.
+$$
+\mathcal{L}_{\Delta}=\frac{\|e_b-e_a\|_2^2}{2D},\qquad \mathcal{L}_E=\frac{\|e_a\|_2^2+\|e_b\|_2^2}{2D}.
+$$
 
-### 5.4 Preserve a supervised movement change
+The first couples prediction errors across states; the second regresses each state's target independently and is called **endpoint regression** in the implementation. Both retain the original JEPA loss and feature regularization. Their relationship on the same feature tensors is
 
-The proposed added constraint penalizes the mismatch between a predicted change in `A` and its reference change on a matched pair. Apply it to restored coordinates during the same frozen-encoder readout stage for both JEPA and coordinate-pretrained models; initialized and shuffled-feature controls receive the same selected readout objective. Direct end-to-end models with and without the constraint provide a separate practical comparison using the same labels. Keep the coordinate and trajectory objectives alongside it. The new constraint has not been implemented or validated in the predecessor training path.
+$$
+\mathcal{L}_{\Delta}=\mathcal{L}_E-\frac{e_a^{\mathsf{T}}e_b}{D}.
+$$
 
-Quantile differences can concentrate gradients on a few order statistics, and nearly degenerate projected limbs make angle derivatives unstable. Before training, test the exact implementation or an explicitly declared differentiable surrogate on tied angles, nearly straight knees, small segment lengths and missing data. Do not infer a trainable, stable loss merely because the evaluation quantity has a formula. A direct model given per-example `A` labels is an additional control for the information supplied by the paired constraint.
+This control matters because a gain over ordinary JEPA could come from the extra continuous feature targets, without requiring difference supervision. The comparison holds their support and coefficient procedure fixed to isolate the objective change. Separately trained teachers evolve differently, so this algebra does not imply that targets remain numerically identical throughout training.
 
-### 5.5 Attribute each improvement
+A feature-difference loss permits shared nonzero errors to cancel. Furthermore, learned feature distances have no physical units, so matching them need not preserve a knee measurement. The downstream experiments determine whether the additional constraint is useful.
 
-Run the complete registered comparisons, sharing reviewed data and identical pretraining where permitted. Eight H100s allow independent jobs to proceed together once their prerequisites are ready; the scientific comparisons remain separate so that a change in data, mask policy or objective can be interpreted.
+<details class="technical-details">
+<summary>Explore why shared feature errors can cancel</summary>
 
-| Stage | Comparison | Question answered |
-| --- | --- | --- |
-| Establish practical headroom | Unchanged input, affine calibration, temporal filtering, static and learned temporal refiners, direct coordinate training | Is there a meaningful restoration problem beyond simple controls? |
-| Compare masking policies | Coordinate pretraining and paired JEPA × time blocks, uniform tokens and graph-time regions × base or paired-change readout | How do mask policy, feature prediction and change supervision interact? |
-| Isolate anatomical structure | Shuffled-topology and matched-duration random-joint controls under both objectives and both readout losses | Does connectivity contribute beyond mask amount and gap length? |
-| Test change supervision | Coordinate-pretrained and JEPA frozen-readout arms, each with and without the term; separate direct end-to-end ±term comparison | Does the constraint help within each training stage, and does feature prediction contribute under matched trainable parameters? |
-| Check pretraining information | Initialized and shuffled-reference controls with and without the term, using the graph policy fixed in advance | Does aligned feature learning explain the difference under that policy? |
-| Check the extra supervision | Coordinate-pretrained, JEPA and direct models with per-example measurement or valid re-paired-change supervision | Does the pairing contribute beyond additional labels and endpoint exposure? |
+<!-- INTERACTIVE:coupling -->
 
-Coordinate pretraining is the stage-matched comparator for JEPA; direct end-to-end training is a separate practical comparator. Share source windows, query locations, target eligibility, mask receipts, readout protocol and downstream labels where applicable. Contextual feature targets and raw-coordinate targets differ by design. Report both update counts and compute, with equal development tuning allowances.
+</details>
 
-Direct training with versus without the term tests its practical contribution. JEPA versus coordinate pretraining under the same frozen readout and constraint tests the representation choice more closely. JEPA versus end-to-end direct training assesses overall utility; an interaction between those differently trainable recipes cannot by itself isolate feature prediction.
+## 4. Experiments that make the hypothesis interpretable
 
-The [execution matrix](methods/execution.md#3-run-the-complete-matched-matrix) contains 102 final fits across seeds 17, 29 and 43. Run its controls regardless of whether an early graph or JEPA result is favorable. Development selects any declared tuning choices and the primary comparator before confirmation; it does not authorize dropping unfavorable registered cells. If measured cost exceeds capacity, choose a lower common update budget before ranking outputs and retain the complete comparison matrix.
+### Separate pretraining from readout supervision
 
-A broad refinement claim requires a credible contemporary refiner with compatible joints and a verified implementation; an adapted SmoothNet-style model must be labelled as an adaptation. The inherited direct trainer uses coordinate MSE. Any added motion term must be explicit and shared by matched controls, rather than inferred from a motion evaluation metric. The [methods index](methods/README.md) points to the full attribution and measurement protocols.
+The follow-up compares feature-difference JEPA with independent-state JEPA, plus an analogous difference objective for coordinate pretraining. The coordinate model tests whether the benefit extends beyond latent-feature prediction. It is compared with ordinary coordinate pretraining before drawing any cross-family conclusion.
 
-## 6. Evaluation and statistical analysis
+Each variant is trained at three seeds. Each of the resulting nine encoders then receives **two readouts from the same frozen checkpoint**: one uses coordinate supervision alone; the other adds the inherited paired-change objective and its short-segment penalty. Their initialization and training exposure are matched. This produces eighteen final models through nine pretraining and eighteen readout phases.
 
-### 6.1 Define success before confirmation
+![Nine pretrained encoders are each tested with coordinate-only and change-supervised readouts; the retained primary comparison uses the change-supervised readouts.](images/proposal-readout-design.svg)
 
-The primary contrast is person-level absolute response error against the strongest prespecified, equally supervised direct control. A preservation claim also requires acceptable observation-induced error and clean-input position accuracy on the same population. Select meaningful margins from reference precision, repeatability and intended use before opening confirmation outputs. A smaller p-value cannot substitute for a useful effect size.
+*Figure 4. Why two readouts? The core shows that downstream change supervision can alter the result substantially. Testing both objectives asks whether a pretraining benefit persists or depends on that supervision.*
 
-Retain signed bias, the two limb measurements, full angle waveforms, coordinate/displacement error and at least one prespecified outcome excluded from the training constraint. Report comparisons by camera, corruption and reference support without selecting only favorable cells. Fixed reference eligibility determines the attempted population. Before ranking models, choose an all-attempted failure score or a joint coverage-and-error rule with explicit confidence criteria; a mean that silently drops missing predictions cannot determine success. Missing predictions, failed event detection and unsupported references remain visible in failure and coverage accounting.
+The primary comparison remains feature-difference versus independent-state JEPA **with the change-supervised readout**. The coordinate-only contrast and the interaction between pretraining and readout objectives are secondary analyses. The interaction compares the two effect estimates directly; an apparent benefit under one readout and an uncertain effect under the other does not establish an interaction. This two-readout amendment was made after examining the core and before inspecting new follow-up results.
 
-Some occlusions leave enough temporal or appearance evidence for recovery; others admit different true movements with identical supplied inputs. Evaluate the latter with calibrated uncertainty or abstention rather than requiring a deterministic answer to distinguish indistinguishable inputs. A verified limb label can resolve side assignment while leaving hidden motion unknown. The [uncertainty analysis](methods/evaluation.md#a-falsifiable-mechanism-uncertainty-can-appear-as-symmetry) explains the measurement consequences of retaining several hypotheses.
+Imported core predictions supply ordinary JEPA, coordinate pretraining, initialized encoders, shuffled-reference JEPA, and direct training under both objectives. The strongest observed baseline, direct coordinate training, remains the practical comparator. Direct training can adapt its encoder throughout fitting, whereas frozen-readout models cannot; matching nominal update counts does not equalize their optimization opportunities.
 
-### 6.2 Match uncertainty to the independent units
+### Match the data and account for alternative explanations
 
-Keep all windows, cameras, mirrored motions and corruption siblings from a person in one partition. Where person identity is unverified, report source-group analyses and the unresolved cross-source dependence. Model seeds are crossed with people: one fitted model is evaluated on every person. Confidence intervals must reflect the declared target population and training variation rather than treating frames or rendered conditions as independent samples.
+The new fits inherit the core's admitted AMASS walking cohort, person splits, architecture, masks, optimizer, and actual update schedule. Both JEPA losses use only joint–time patches queried in both states with complete reference support, preventing one from receiving more targets. A fixed training-only calibration sets one shared coefficient from initial gradient magnitudes; the coordinate model is calibrated separately. Its errors are converted to a common pair scale before subtraction. These decisions reduce differences in data access and initial loss scale; they do not equalize the objectives' influence throughout training.
 
-Use development data to estimate variance for the new paired endpoint, determine a justified sample/resource bound and freeze the primary comparison, margins, exclusions and analysis. The existing eight development people and inspected local videos remain development. Repartitioning familiar recordings cannot create untouched confirmation. Do not add seeds or participants until significance appears, and do not interpret an inconclusive difference as proof of equivalence.
+The evaluation retains four complementary questions:
 
-Clinical validation requires agreement against independent measurements, including reference uncertainty, repeatability, event coverage and anatomical side. Following movement changes accurately would support measurement validity; a claim about rehabilitation benefit would require a separate clinical study.
-
-## 7. Reproducibility and execution
-
-### 7.1 Use eight H100s for the complete synthetic comparison
-
-The current plan assumes setup within one hour and eight continuously available H100s. The dated schedule starts GPU work on **September 22 at 00:00 PDT** and freezes results on **September 24 at 12:00 PDT**, giving **60 hours × eight GPUs = 480 H100-hours**. Allocate 360 hours to preparation, training, evaluation and reconstruction, with 120 hours reserved for recovery. Recalculate these numbers if the start changes. Historical short-run receipts are not H100 throughput measurements.
-
-![Shared preparation supplies eight independent GPU workers, with frozen evaluation and a dated compute budget.](images/17-parallel-execution.svg)
-
-*Figure 7. Eight GPUs support concurrent independent jobs. Shared data and checkpoints are reused only when their complete specifications match; job dependencies still determine when work can start.*
-
-The [execution guide](methods/execution.md) specifies all 34 recipes, the 102 final fits, and the 135 optimization phases after valid checkpoint reuse. It also separates measured cost from resource allowances and describes unique run directories with study-wide accounting. The existing launcher does not acquire this parallel behavior merely by requesting eight GPUs; the assumed setup includes the coordinator and validated configuration changes.
-
-### 7.2 Retain the scientific admission requirements
-
-| Gate | Deliverable before advancing |
+| Question | Measurement and reason |
 | --- | --- |
-| Data and reference admission | Verified source/identity roster, timing and anatomy checks, intended-use records, exclusions and reviewed example segments |
-| Measurement and masking checks | Frozen excursion calculation, mask coverage bank, input/target isolation, tested missingness and gradient behavior |
-| Development comparison | Complete matched matrix, practical baselines, retained predictions and source-level reports |
-| Independent confirmation | Frozen method, endpoint, margins, seed set and fresh reference population admitted before evaluation |
+| Is the intended change recovered? | Person-balanced response error, signed response curves, direction accuracy, and a zero-change benchmark distinguish preserved change from attenuation, reversal, or low error on small reference changes. |
+| Is the underlying motion still accurate? | Individual limb excursions, angular waveforms, and coordinates reveal shared endpoint bias or a scalar improvement purchased through trajectory distortion. |
+| Does observation quality determine the answer? | Occlusion and labeling contrasts at fixed movement and camera measure sensitivity to observation error. Low sensitivity alone could also arise from an insensitive model. |
+| Is the representation useful to the deployed model? | Fixed linear probes of encoder, predictor, and teacher features examine where reference movement change is accessible, and whether accessibility survives the transition from masked training to unmasked deployment inputs. |
 
-The [scripts guide](scripts/README.md) reproduces the documentation and existing source audits. The [evidence folder](evidence/README.md) contains measured sampler/video metadata; it supplies preparation evidence, without implying completed restoration experiments. The [review index](reviews/README.md) separates scientific and visual review from historical receipts.
+The primary score includes all reference-eligible responses except the designated no-change state, which remains a diagnostic. Actual small changes in altered states stay included. Failed predictions receive the inherited 720° scoring penalty, a fixed cost rather than a measured knee response; the amendment separately reports successful-error and failure contributions with the same denominator. A gain from fewer failures is a reliability gain and must be distinguished from greater accuracy among successful outputs.
 
-Use a synchronized review display linking original frames, input/reference/restored skeletons and bilateral traces on one physical time axis. The current [video gallery](data/video-gallery.html) provides raw-video playback and exportable notes; reference overlays and model traces remain implementation work. Select ordinary examples by metadata or a frozen random sample before viewing method rankings, and independently review a fixed share plus all flagged cases.
+Correlated views and corruptions are aggregated within windows, motions, and people. A crossed bootstrap resamples people and fitted seeds while keeping methods paired. Repeated renderings do not create more participants. The reused development population and three seeds support a development comparison, not independent confirmation. The [evaluation contract](methods/evaluation.md) and technical appendix specify the remaining procedures.
 
-### 7.3 Write while the experiments run
+## 5. Results: restoration helps, but the training objective matters
 
-Prepare the manuscript and fixed result-table structure during setup; complete the methods while shared data and training jobs run. Write from verified outputs on September 23, freeze the numerical results Thursday at noon, and reserve Thursday afternoon and Friday for independent review and submission. The internal upload target is **September 25 at 18:00 PDT**. Optional clinical data remain conditional on acquisition and independent references, so the synthetic schedule has no dependency on those downloads. The [dated timeline](methods/execution.md#6-run-experiments-and-write-in-parallel) links each compute milestone to a paper deliverable.
+### What has been demonstrated
 
-## 8. Related work and references
+The completed core export contains 14 development participants evaluated across three seeds. **Direct coordinate training had the lowest mean on all nine exported metrics.** Relative to unchanged pose estimates, it reduced mean movement-response error from 12.688° to 7.544°, a 40.5% reduction, and angular-waveform error from 18.571° to 12.073°. The response improvement was 5.144°, with a descriptive 95% crossed person/seed interval of [2.152°, 8.651°]; this contrast was selected after inspection and is exploratory. The result demonstrates improvement under the tested synthetic conditions; it does not establish clinical adequacy or a benefit for every participant.
 
-The proposal builds on four bodies of work. Synthetic musculoskeletal gait and clinical representation learning are established by [Yamada et al. (2025)](https://www.nature.com/articles/s41467-025-61292-1), while [Stenum et al. (2024)](https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0000467) provide direct precedent for video-based clinical measurements and within-person change. Their scope makes an additional accuracy table insufficient motivation for this study.
+![Completed-core mean errors for direct and JEPA restoration under two losses, followed by the declared JEPA-minus-direct differences and their uncertainty intervals.](images/research-core-results.svg)
 
-[S-JEPA (ECCV 2024)](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf), [MAMP (ICCV 2023)](https://arxiv.org/abs/2308.07092), [SkeletonMAE (ICCV 2023)](https://arxiv.org/abs/2307.08476) and [Hui et al. (2026)](https://www.nature.com/articles/s41598-026-39330-9) establish related feature-prediction and structured-masking approaches. Their reported representation tasks do not by themselves establish preservation of gait measurements.
+*Figure 5. Completed core: 14 development participants, three seeds. Upper panels show mean errors on identical scales; connectors join the two restoration losses within each family, and dashed lines mark unchanged pose estimates. For JEPA, these losses train the readout after pretraining. Direct coordinate training has the lowest means. The lower panel shows the declared JEPA-minus-direct contrast, both with change loss, and descriptive 95% intervals resampling people and seeds. Negative values favor JEPA; its response interval crosses zero, while its trajectory error is higher. These are core findings; follow-up results remain pending.*
 
-[SmoothNet](https://arxiv.org/abs/2112.13715), [SynSP](https://openaccess.thecvf.com/content/CVPR2024/papers/Wang_SynSP_Synergy_of_Smoothness_and_Precision_in_Pose_Sequences_Refinement_CVPR_2024_paper.pdf) and [PS-Mamba](https://openaccess.thecvf.com/content/ICCV2025/papers/Dong_PS-Mamba_Spatial-Temporal_Graph_Mamba_for_Pose_Sequence_Refinement_ICCV_2025_paper.pdf) provide temporal-refinement context and candidate comparisons. [DiffPose](https://openaccess.thecvf.com/content/ICCV2023/papers/Holmquist_DiffPose_Multi-hypothesis_Human_Pose_Estimation_using_Diffusion_Models_ICCV_2023_paper.pdf) is relevant to ambiguous pose hypotheses. The full [literature guide](literature/README.md) records closer clinical preprints, transformation-aware methods and the limits of any novelty claim.
+The core's declared comparison was JEPA versus direct training, **both with change supervision**. JEPA had 0.688° lower mean response error, but its descriptive 95% crossed person/seed interval was **[−0.640°, +1.977°]** for direct-minus-JEPA error. Superiority remains unresolved. JEPA reduced observation-induced error in that comparison, but increased waveform error by 3.272°. The improvement in one endpoint therefore does not establish general gait fidelity.
 
-## File guide
+Across all five neural families, adding the change objective worsened mean waveform error. Four also worsened in mean response error. JEPA's response advantage over the matched initialized-encoder control remained uncertain: 0.093°, with interval [−1.394°, +1.393°]. This provides no clear response-error advantage from the tested JEPA pretraining over the initialized-encoder control.
 
-| Location | Purpose |
+### What remains unresolved
+
+The observed tradeoffs could arise from objective balance, readout optimization, reference support, prediction failures, or the information exposed by the representation. The aggregate export cannot identify a cause. In particular, a response improvement can reflect cancellation of endpoint errors or fewer failed measurements. The follow-up's response curves, failure decomposition, and feature probes can help distinguish these explanations.
+
+The direct-versus-unchanged comparison and additional contrasts selected after inspection are exploratory. The available export supports reconstruction of the reported person-level summaries, but does not contain raw predictions or the complete cohort and fit receipts. No feature-difference, endpoint-regression, or coordinate-difference follow-up results are available here. The new experiment tests an unresolved hypothesis; it does not confirm a remedy suggested by the core. Full numbers, uncertainty, and reconstruction limits are retained in the [core analysis](results/core-analysis-20260924/README.md).
+
+## 6. Discussion: from reconstruction accuracy to measurement validity
+
+The core establishes a practical benefit from restoration and a caution about training for a single measurement. Direct coordinate learning improved response and trajectory accuracy together. Explicit supervision of the scalar change did not reliably improve that combination. A movement-analysis system therefore needs evaluation at the level of its intended inference: which change occurred, how large it was, and whether the reconstructed trajectory supports that interpretation.
+
+![An older adult walking while a depth camera records movement, reproduced as a real-world context for independently validating measurements.](images/context/ambient-walking.jpg)
+
+*Figure 6. What evidence is needed beyond simulation? A structured residential walking test recorded with a portable depth camera in the Rush study. Independent references are needed to assess restoration in these settings. Dawe et al. (2019), Fig. 1; cropped, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). This is prior research, not passive Stanford monitoring or the Gait Fidelity cohort. [Image provenance](images/context/README.md).*
+
+For representation learning, the proposed contribution is a controlled test of whether supervising feature differences helps a frozen encoder support a defined physical measurement. A benefit over independent-state regression under both readouts would suggest broader utility within the tested procedures. A benefit restricted to one readout would motivate examining the estimated interaction. Similar gains from both JEPA variants would make additional continuous supervision a plausible explanation. A gain dominated by fewer failures would support a reliability explanation. Uncertain contrasts would leave the hypothesis unresolved rather than establish equivalence.
+
+The study cannot uniquely identify a causal mechanism. Teachers evolve separately, feature differences can cancel shared bias, and no new arm re-pairs movement states during auxiliary pretraining. The shuffled-reference control tests observation–reference correspondence, not that distinct pairing question. Linear probe failure likewise does not prove the absence of nonlinear information. Related work such as [Sobolev training](https://proceedings.neurips.cc/paper/2017/file/758a06618c69880a6cee5314ee42d52f-Paper.pdf) supervises derivatives; here we match paired feature differences without estimating derivatives. The scientific value would lie in the controlled finding and its limits, rather than in the existence of a difference loss.
+
+For **biomechanics**, the framework offers a way to test learned processing before interpreting between-condition movement changes or feeding trajectories into further models. Transfer would require synchronized observations and independent references using an appropriate anatomical convention. For **ambient intelligence**, the corresponding question is whether a measured mobility change survives realistic changes in visibility and observation quality. That requires repeated measurements in the relevant people and environments, including coverage and failure analysis. Camera placement, longitudinal health inference, and clinical risk prediction remain separate validation questions.
+
+The next useful step is thus an independent measurement study: hold out people and conditions, compare reconstructed changes with reference changes, and report repeatability as well as mean error. It should evaluate waveform and laterality alongside the chosen scalar. A synthetic improvement would justify that test; independent movement references are needed to establish whether the benefit transfers.
+
+## Technical details and supporting material
+
+
+<details class="technical-details">
+<summary>Exact feature residuals and common-scale coordinate errors</summary>
+
+The main text uses scaled, channel-centered features. In the implementation, $p_i$ is the predictor output, $t_i$ is the teacher output, $c$ is the running teacher center, and $D$ is feature width. Subtracting the mean across channels defines
+
+$$
+H(v)=v-\left(\frac{1}{D}\sum_{d=1}^{D}v_d\right)\mathbf{1}.
+$$
+
+With fixed temperatures $\tau_s=0.1$ and $\tau_t=0.06$, the two features and their residual are
+
+$$
+\widetilde p_i=H(p_i/\tau_s),\qquad \widetilde t_i=H\!\left[\mathrm{sg}\!\left((t_i-c)/\tau_t\right)\right],\qquad e_i=\widetilde p_i-\widetilde t_i.
+$$
+
+The stop-gradient operation $\mathrm{sg}$ treats the teacher target and center as constants during gradient calculation. Channel centering removes the additive offset that the base softmax comparison cannot identify; it does not assign physical meaning to a feature distance. Both auxiliaries retain the original cross-entropy objective and variance/covariance regularization. Supported joint–time positions are averaged within each pair, then supported pairs are weighted equally. The [full protocol](methods/jepa-response.md) specifies query support and calibration, including the shared coefficient and training-only batches.
+
+For the coordinate variant, $s_i$ is the positive scale used to normalize state $i$ from its observed context. Convert its normalized coordinate residual to the common scale $s_{ab}$ before taking a difference:
+
+$$
+s_{ab}=\frac{s_a+s_b}{2},\qquad r_i=\frac{s_i}{s_{ab}}\left(\widehat x_i^{\mathrm{norm}}-y_i^{\mathrm{norm}}\right).
+$$
+
+The coordinate auxiliary is $\|r_b-r_a\|_2^2/4$ per joint and frame, averaged over the four frames in a token and then over supported positions and pairs. The divisor accounts for two coordinate dimensions and two states. This scale conversion is part of the loss only.
+
+</details>
+
+
+<details class="technical-details">
+<summary>Calibration, diagnostic probes, and execution scope</summary>
+
+Calibration uses 32 fixed training batches at seed-17 initialization, without fitting or development selection. If $G$ denotes the sum of squared gradient norms across these batches over all trainable parameters, the two JEPA arms share
+
+$$
+\lambda_J=0.1\sqrt{\frac{G_{\mathrm{base}}}{\max(G_{\Delta},G_E)}}.
+$$
+
+The coordinate arm uses its own base and auxiliary gradient energies. Zero or nonfinite calibration quantities stop the calculation. Random states are restored before fresh training. This controls the initial gradient scale; later component gradients and clipping are logged because their relative influence can change.
+
+The diagnostic panel selects at most three metadata-chosen source families per training person and one eligible movement pair per family. Ridge probes use three person-separated folds with fixed mean-loss penalty 0.01; standardization is fitted only within each fold's training people. They compare encoder, predictor, and teacher features, masked and unmasked inputs, and independently masked identical movements. Across-example variance is measured at fixed token positions to avoid confusing positional variation with movement information. The probes do not tune coefficients, choose variants, or stop fitting.
+
+The amended run is `jepa-response-02`: nine pretraining and eighteen readout phases, eighteen final models, seeds 17, 29, and 43. It preserves the original primary comparison and imports both objectives of the five core model families. It introduces no new rendering, pose extraction, GAVD processing, expanded AMASS admission, or confirmation-set access. The recorded allowance is 48 H100-hours and the recorded cutoff is 25 September 2026 at 8 AM Pacific. Profiling must admit the complete matrix at the parent's actual update schedule; the cap is not a measured runtime. Original `jepa-response-01` runs retain their earlier settings.
+
+Local tests and CPU fixtures establish software behavior. Completed HAIC predictions and evaluation are required for follow-up scientific claims. The launch guide and amendment retain the full resource and provenance requirements.
+
+</details>
+
+| Supporting document | Purpose |
 | --- | --- |
-| [README.md](README.md) / [proposal.html](proposal.html) | The current scientific proposal in text and interactive form |
-| [data/](data/README.md) | Committed and conditional data sources, detailed audits and local-video viewer |
-| [methods/](methods/README.md) | Measurement definitions, controls and masking implementation protocol |
-| [literature/](literature/README.md) | Prior-art comparison, alternative hypotheses and search coverage |
-| [evidence/](evidence/README.md) | Retained source inventories, hashes and preparation diagnostics |
-| [images/](images/gallery.html) | Editable SVGs, review previews and the visual index |
-| [scripts/](scripts/README.md) | Reproducible figure, viewer and audit builders |
-| [reviews/](reviews/README.md) | Independent critiques, corrections and current acceptance records |
-| [records/](records/README.md) | File-move provenance and dated historical snapshots |
-
-[All studies](../README.md) · [Predecessor study](../synthetic-training-v2/README.md)
+| [Two-page overview](proposal-brief.html) / [PDF](proposal-brief.pdf) | A focused account of the question, approach, evidence, and implications. |
+| [Core results and reconstruction](results/core-analysis-20260924/README.md) | Numerical results, uncertainty, exploratory comparisons, and evidence limits. |
+| [Amended protocol](methods/core-to-followup-20260924.md) | Two-readout design, retained primary, interaction, and failure decomposition. |
+| [JEPA methods](methods/jepa-response.md) / [evaluation contract](methods/evaluation.md) | Exact objectives, calibration, support, diagnostics, and aggregation. |
+| [Data specification](data/README.md) | Motion sources, projected references, and limitations. |
+| [HAIC launch](../../../slurm/gait-fidelity/START_RESPONSE_02.md) | Initialize the amended experiment without changing the parent. |
+| [Image provenance](images/context/README.md) | Real-world photographs, licenses, and credited modifications. |
+| [Independent review](reviews/proposal-overview-20260924.md) | Scientific, technical, visual, and adversarial review of both versions. |
+| [Document builders](scripts/README.md) | Reproduce the full proposal, overview, and vector figures. |

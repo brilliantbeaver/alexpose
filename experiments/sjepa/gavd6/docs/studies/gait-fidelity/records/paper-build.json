@@ -1,22 +1,144 @@
 {
   "sections": [
     "abstract",
-    "1-motivation",
-    "2-research-question-and-proposed-contribution",
-    "3-data-and-reference-measurements",
-    "4-experimental-design",
-    "5-method",
-    "6-evaluation-and-statistical-analysis",
-    "7-reproducibility-and-execution",
-    "8-related-work-and-references",
-    "file-guide"
+    "1-when-a-movement-estimate-becomes-a-scientific-measurement",
+    "2-a-controlled-test-of-movement-fidelity",
+    "3-the-representation-learning-hypothesis",
+    "4-experiments-that-make-the-hypothesis-interpretable",
+    "5-results-restoration-helps-but-the-training-objective-matters",
+    "6-discussion-from-reconstruction-accuracy-to-measurement-validity",
+    "technical-details-and-supporting-material"
   ],
-  "figures": 17,
+  "figures": 23,
   "interactive_components": [
-    "response contrast explorer",
+    "centered residual coupling explorer",
+    "signed and absolute response explorer",
     "section navigation",
     "figure enlargement"
   ],
   "scientific_source": "README.md",
+  "math_rendering": "offline SVG from LaTeX with Matplotlib MathText",
+  "equations": [
+    {
+      "latex": "q_{\\ell}=P_{95}(\\theta_{\\ell})-P_{5}(\\theta_{\\ell}),\\qquad A=q_R-q_L.",
+      "display": true
+    },
+    {
+      "latex": "\\ell",
+      "display": false
+    },
+    {
+      "latex": "a",
+      "display": false
+    },
+    {
+      "latex": "b",
+      "display": false
+    },
+    {
+      "latex": "\\Delta A=A_b-A_a,\\qquad E_{\\Delta}=\\left|\\left(\\widehat A_b-\\widehat A_a\\right)-\\Delta A\\right|.",
+      "display": true
+    },
+    {
+      "latex": "\\Delta A",
+      "display": false
+    },
+    {
+      "latex": "\\widetilde p_i",
+      "display": false
+    },
+    {
+      "latex": "\\widetilde t_i",
+      "display": false
+    },
+    {
+      "latex": "i",
+      "display": false
+    },
+    {
+      "latex": "e_i",
+      "display": false
+    },
+    {
+      "latex": "e_i=\\widetilde p_i-\\widetilde t_i,\\qquad e_b-e_a=(\\widetilde p_b-\\widetilde p_a)-(\\widetilde t_b-\\widetilde t_a).",
+      "display": true
+    },
+    {
+      "latex": "D",
+      "display": false
+    },
+    {
+      "latex": "\\mathcal{L}_{\\Delta}=\\frac{\\|e_b-e_a\\|_2^2}{2D},\\qquad \\mathcal{L}_E=\\frac{\\|e_a\\|_2^2+\\|e_b\\|_2^2}{2D}.",
+      "display": true
+    },
+    {
+      "latex": "\\mathcal{L}_{\\Delta}=\\mathcal{L}_E-\\frac{e_a^{\\mathsf{T}}e_b}{D}.",
+      "display": true
+    },
+    {
+      "latex": "p_i",
+      "display": false
+    },
+    {
+      "latex": "t_i",
+      "display": false
+    },
+    {
+      "latex": "c",
+      "display": false
+    },
+    {
+      "latex": "D",
+      "display": false
+    },
+    {
+      "latex": "H(v)=v-\\left(\\frac{1}{D}\\sum_{d=1}^{D}v_d\\right)\\mathbf{1}.",
+      "display": true
+    },
+    {
+      "latex": "\\tau_s=0.1",
+      "display": false
+    },
+    {
+      "latex": "\\tau_t=0.06",
+      "display": false
+    },
+    {
+      "latex": "\\widetilde p_i=H(p_i/\\tau_s),\\qquad \\widetilde t_i=H\\!\\left[\\mathrm{sg}\\!\\left((t_i-c)/\\tau_t\\right)\\right],\\qquad e_i=\\widetilde p_i-\\widetilde t_i.",
+      "display": true
+    },
+    {
+      "latex": "\\mathrm{sg}",
+      "display": false
+    },
+    {
+      "latex": "s_i",
+      "display": false
+    },
+    {
+      "latex": "i",
+      "display": false
+    },
+    {
+      "latex": "s_{ab}",
+      "display": false
+    },
+    {
+      "latex": "s_{ab}=\\frac{s_a+s_b}{2},\\qquad r_i=\\frac{s_i}{s_{ab}}\\left(\\widehat x_i^{\\mathrm{norm}}-y_i^{\\mathrm{norm}}\\right).",
+      "display": true
+    },
+    {
+      "latex": "\\|r_b-r_a\\|_2^2/4",
+      "display": false
+    },
+    {
+      "latex": "G",
+      "display": false
+    },
+    {
+      "latex": "\\lambda_J=0.1\\sqrt{\\frac{G_{\\mathrm{base}}}{\\max(G_{\\Delta},G_E)}}.",
+      "display": true
+    }
+  ],
   "no_external_runtime_dependencies": true
 }

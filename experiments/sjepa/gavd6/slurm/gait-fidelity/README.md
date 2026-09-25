@@ -2,6 +2,17 @@
 
 Use this guide to prepare data, submit training through Slurm and inspect the results. The notebook guide explains how to use the same saved run interactively. GPU work runs in allocated workers; setup and ordinary preflight run on CPU.
 
+**JEPA response follow-up:** after `walking-core-01` completes, use the separate
+[four-step follow-up guide](JEPA_RESPONSE.md). It reuses the prepared cohort and
+baseline predictions in `jepa-response-01`, with nine new models and a 48
+H100-hour limit. Copy a new immutable release; do not update the active core
+checkout or repeat its preparation.
+
+**Readout repair and protected confirmation:** after the completed 27-phase
+`jepa-response-02`, use [START_REPAIR_03.md](START_REPAIR_03.md). It runs twelve
+matched readouts, a measured preparation benchmark, and separately gated AMASS
+confirmation from a new immutable release.
+
 ## Start here: set or unset these variables on HAIC
 
 Run this section in a **HAIC shell**, not on your Mac. Run one block at a time and resolve any error before continuing. Mac commands are labelled separately.
@@ -151,6 +162,8 @@ bash "$GF_ROOT/slurm/gait-fidelity/run.sh" preflight "$GF_WORK"
 
 Expect `fixture` to be false and preflight to finish with `CPU_PREFLIGHT_PASSED`. The source environment must contain Torch `2.6.0+cu124`, Torchvision `0.21.0+cu124`, compatible MMCV/MMPose/MMEngine, rendering/body-model dependencies and FFmpeg. Preflight reports missing assets or import/version failures. Resolve those before launching; passing this CPU check does not yet certify EGL rendering or CUDA operators on a worker.
 
+On the login node, preflight checks that `pyrender` is installed and records its version without importing it. That import also loads Pyglet's desktop viewer, which can fail with `Library "GLU" not found` even though the launcher selects EGL for offscreen rendering. The `deferred_checks` field explicitly records the pending renderer import and EGL render. Preparation workers import the renderer in their GPU preflight and render the actual source data during preparation; those failures still stop the run. If the GLU traceback occurs during ordinary CPU preflight, update `src/gavd6_sjepa/research_directions/gait_fidelity/config.py` before the first launch and repeat preflight with the same saved session. If it occurs inside a GPU worker, the worker's native library availability must be checked separately. Do not remove a run's existing `frozen.json` to apply a code update after launch.
+
 The saved account/partition are used by both coordinator and workers. `launch --account ... --partition ...` overrides the coordinator only, so it is not a way to change the whole run's allocation settings. If initialization captured unwanted settings, use a new correctly initialized run rather than editing a frozen one.
 
 ## 4. Prepare the shared data, then wait and review it
@@ -167,6 +180,34 @@ The first command submits a CPU coordinator and returns a job ID; it does **not*
 Wait for the coordinator log to report `PREPARATION_COMPLETE`, for `status` to contain the preparation result, and for that coordinator job to finish. Open the viewer reported by status and inspect anatomical sides, camera projection, timestamps, visibility and the movement interventions. Notebook 01 can help with this inspection. A successful automated screen does not replace review of the references.
 
 A resumed run with completed preparation can reuse it. Do not launch the full stage while the preparation coordinator is still active: the launcher returns the existing job and does not queue the new stage. Wait for it to finish, then issue the next command.
+
+### Recovery when screening leaves a training person with one window
+
+The shuffled-reference control needs a different accepted window from the same person. A candidate can have two windows before rendering and only one after reference-geometry checks. All shards can therefore finish successfully while the combined merge stops with `Reference screening left fewer than two training source families per person`.
+
+Before any profiling or training, inspect the affected identities and record a common eligibility decision. The standalone [training-cohort recovery tool](../../tools/gait-fidelity/admit_training_cohort.py) can exclude every such person from **all** training methods. This is an explicit post-screening amendment: disclose its timing and removed people/windows in the paper. It preserves all development records, original shard files, and frozen code/configuration. It does not weaken the same-person, different-window requirement or create replacement examples.
+
+Copy only this standalone tool into `$GF_WORK/tools/admit_training_cohort.py`. Do not update the frozen source checkout. Preview the population change on HAIC:
+
+```bash
+"$GF_PYTHON" "$GF_WORK/tools/admit_training_cohort.py" --work "$GF_WORK"
+```
+
+For the verified `walking-core-01` case, `KIT::291` has one accepted training window. The preview must show 113 → 112 training people and 1,646 → 1,645 training windows, with development unchanged. Apply that reviewed decision through a CPU-only batch job:
+
+```bash
+sbatch --parsable --account=mind --partition=hai \
+  --cpus-per-task=4 --mem=64G --time=04:00:00 --export=ALL \
+  --output="$GF_WORK/logs/training-admission-%j.out" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+"$GF_PYTHON" "$GF_WORK/tools/admit_training_cohort.py" \
+  --work "$GF_WORK" --expected-singleton 'KIT::291' --apply
+bash "$GF_ROOT/slurm/gait-fidelity/run.sh" launch "$GF_WORK" --prepare-only
+SH
+```
+
+The tool refuses an active coordinator, unresolved workers, a changed frozen source, an unexpected excluded identity, or a run that has started profiling/training. It verifies the completed parent artifacts, saves the admission decision and tool hash under `admissions/training-min-two-windows/`, and creates the filtered combined bundle in bounded array batches. Only a shard containing an excluded person needs a derived shard copy. The published bundle records both original parent receipts and direct merge inputs. The original coordinator then validates those parents, builds the viewer, and records normal preparation completion without submitting new rendering jobs. Check both the recovery log and the new coordinator status; the batch job returning only means the follow-on coordinator was submitted. Inspect the references before continuing to step 5.
 
 ## 5. Launch the selected comparison
 

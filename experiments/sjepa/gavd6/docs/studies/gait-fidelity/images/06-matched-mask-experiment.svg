@@ -1,32 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="440" viewBox="0 0 1000 440" role="img" aria-labelledby="title desc">
-<title id="title">Test masking and prediction objectives separately</title><desc id="desc">Six pretraining arms share the same new data, mask budget and coordinate readout.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
-<rect width="1000" height="440" fill="white"/>
-<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">Test masking and prediction objectives separately</text>
-<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">Six pretraining arms share the same new data, mask budget and coordinate readout.</text>
-<text x="82" y="163" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="start" font-weight="bold">Objective</text>
-<text x="340" y="123" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Current blocks</text>
-<text x="586" y="123" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Random tokens</text>
-<text x="832" y="123" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="middle" font-weight="bold">Graph + time</text>
-<text x="32" y="213" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="bold">Coordinates</text>
-<rect x="229" y="166" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="340.0" y="198" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
-<text x="340.0" y="230" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
-<rect x="475" y="166" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="586.0" y="198" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
-<text x="586.0" y="230" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
-<rect x="721" y="166" width="222" height="90" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
-<text x="832.0" y="198" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
-<text x="832.0" y="230" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
-<text x="32" y="324" font-family="Arial, sans-serif" font-size="20" fill="#183247" text-anchor="start" font-weight="bold">Paired JEPA</text>
-<rect x="229" y="277" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="340.0" y="309" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
-<text x="340.0" y="341" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
-<rect x="475" y="277" width="222" height="90" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="586.0" y="309" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
-<text x="586.0" y="341" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
-<rect x="721" y="277" width="222" height="90" rx="12" fill="#eaf6f3" stroke="#d5e0e7"/>
-<text x="832.0" y="309" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Matched arm</text>
-<text x="832.0" y="341" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Same target exposure</text>
-<text x="500" y="410" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="middle" font-weight="normal">Also retain direct end-to-end, no-pretraining, calibration and smoothing controls.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+<title id="title">Three variants separate three kinds of training</title><desc id="desc">FOLLOW-UP. Features are learned numbers. First learn them; fix encoder weights; then train a new output network.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="700" fill="#fcfcf9"/>
+<rect x="36" y="18" width="158" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Three variants separate three kinds of training</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Features are learned numbers. First learn them; fix encoder weights; then train a new output network.</text>
+<text x="480" y="185" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Seed 17</text>
+<text x="716" y="185" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Seed 29</text>
+<text x="952" y="185" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Seed 43</text>
+<text x="36" y="254" font-family="Arial, sans-serif" font-size="25" fill="#007f79" text-anchor="start" font-weight="bold">JEPA error change</text>
+<text x="36" y="286" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">difference of feature errors</text>
+<rect x="376" y="219" width="208" height="86" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="480" y="248" font-family="Arial, sans-serif" font-size="21" fill="#007f79" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="480.00,256.00 480.00,266.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="480" y="291" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<rect x="612" y="219" width="208" height="86" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="716" y="248" font-family="Arial, sans-serif" font-size="21" fill="#007f79" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="716.00,256.00 716.00,266.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="716" y="291" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<rect x="848" y="219" width="208" height="86" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="952" y="248" font-family="Arial, sans-serif" font-size="21" fill="#007f79" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="952.00,256.00 952.00,266.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="952" y="291" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<text x="36" y="365" font-family="Arial, sans-serif" font-size="25" fill="#4c60af" text-anchor="start" font-weight="bold">JEPA separate errors</text>
+<text x="36" y="397" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">independent feature errors</text>
+<rect x="376" y="330" width="208" height="86" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="480" y="359" font-family="Arial, sans-serif" font-size="21" fill="#4c60af" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="480.00,367.00 480.00,377.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="480" y="402" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<rect x="612" y="330" width="208" height="86" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="716" y="359" font-family="Arial, sans-serif" font-size="21" fill="#4c60af" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="716.00,367.00 716.00,377.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="716" y="402" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<rect x="848" y="330" width="208" height="86" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="952" y="359" font-family="Arial, sans-serif" font-size="21" fill="#4c60af" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="952.00,367.00 952.00,377.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="952" y="402" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<text x="36" y="476" font-family="Arial, sans-serif" font-size="25" fill="#986325" text-anchor="start" font-weight="bold">Coordinate error change</text>
+<text x="36" y="508" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="start" font-weight="normal">difference of position errors</text>
+<rect x="376" y="441" width="208" height="86" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="480" y="470" font-family="Arial, sans-serif" font-size="21" fill="#986325" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="480.00,478.00 480.00,488.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="480" y="513" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<rect x="612" y="441" width="208" height="86" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="716" y="470" font-family="Arial, sans-serif" font-size="21" fill="#986325" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="716.00,478.00 716.00,488.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="716" y="513" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<rect x="848" y="441" width="208" height="86" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="952" y="470" font-family="Arial, sans-serif" font-size="21" fill="#986325" text-anchor="middle" font-weight="bold">Learn features</text>
+<polyline points="952.00,478.00 952.00,488.00" fill="none" stroke="#566978" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="952" y="513" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="middle" font-weight="normal">Train output</text>
+<text x="36" y="594" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">3 variants × 3 seeds = 9 models · 18 fitting phases</text>
+<polyline points="36.00,643.00 1164.00,643.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="674" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Reuse parent baselines: plain JEPA, coordinate, direct, initialized and shuffled-reference controls.</text>
 </svg>

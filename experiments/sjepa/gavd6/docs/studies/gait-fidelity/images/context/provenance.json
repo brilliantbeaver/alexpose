@@ -1,0 +1,78 @@
+{
+  "retrieved_on": "2026-09-24",
+  "purpose": "Real-world photographic context for the gait-fidelity proposal. Both images are published prior work, not empirical evidence from gait-fidelity.",
+  "assets": [
+    {
+      "file": "opencap-capture.jpg",
+      "original": "opencap-2023-figure2-original.png",
+      "source_figure": "Figure 2 (smartphone video capture panel)",
+      "title": "OpenCap: Human movement dynamics from smartphone videos",
+      "authors": "Uhlrich SD, Falisse A, Kidziński Ł, Muccini J, Ko M, Chaudhari AS, Hicks JL, Delp SL",
+      "year": 2023,
+      "doi": "10.1371/journal.pcbi.1011462",
+      "source_url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011462",
+      "image_url": "https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1011462.g002",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "crop_pixels_left_top_right_bottom": [
+        219,
+        0,
+        581,
+        349
+      ],
+      "modifications": "Cropped to the two smartphone views in the published figure; converted to JPEG. Existing face blur retained. No generative edits.",
+      "alt": "Two smartphone views of a person walking indoors, cropped from the OpenCap system figure.",
+      "caption": "Smartphone views used by OpenCap illustrate movement measurement beyond a motion-capture laboratory. Cropped from Uhlrich et al. (2023), Fig. 2, CC BY 4.0. Contextual prior work; not gait-fidelity study data.",
+      "use_scope": "A photograph-based illustration of Stanford OpenCap, a system coauthored by Scott Delp. It does not depict this gait-fidelity study or imply endorsement or collaboration.",
+      "file_sha256": "a5970c3cd405d0713ab943e63f75e3b79ea074acd6e7f18f1c529e2f1b0fe311",
+      "file_size_pixels": [
+        362,
+        349
+      ],
+      "original_sha256": "6fc076ebc47697d49aae9ff4471b7b2c6cb74557dae133138dda0976ae203152",
+      "original_size_pixels": [
+        2100,
+        1187
+      ]
+    },
+    {
+      "file": "ambient-walking.jpg",
+      "original": "community-gait-2019-figure1-original.png",
+      "source_figure": "Figure 1 (color frames C and D)",
+      "title": "Expanding instrumented gait testing in the community setting: A portable, depth-sensing camera captures joint motion in older adults",
+      "authors": "Dawe RJ, Yu L, Leurgans SE, Truty T, Curran T, Hausdorff JM, Wimmer MA, Block JA, Bennett DA, Buchman AS",
+      "year": 2019,
+      "doi": "10.1371/journal.pone.0215995",
+      "source_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0215995",
+      "image_url": "https://journals.plos.org/plosone/article/figure/image?size=large&id=10.1371/journal.pone.0215995.g001",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "crop_pixels_left_top_right_bottom": [
+        773,
+        143,
+        1460,
+        532
+      ],
+      "modifications": "Cropped to the color video regions of frames C and D, removing surrounding text, ceiling area and depth panels; converted to JPEG. Existing face pixelation retained. No generative edits.",
+      "alt": "Two published video frames show an older adult walking through a furnished room during structured mobility testing.",
+      "caption": "Published recordings of structured mobility testing in a residence illustrate the observation conditions that movement analysis must handle. Cropped from Dawe et al. (2019), Fig. 1, CC BY 4.0. Rush study; not Stanford or gait-fidelity study data.",
+      "use_scope": "Contextual example of recorded mobility outside a laboratory, from the Rush Memory and Aging Project. This was structured testing at participants’ residences, not passive longitudinal ambient monitoring. The paper states that the illustrated participant consented to publication of the video frames.",
+      "file_sha256": "594bc0acb7bdf070b881f3031fff1ac6a34475bde3a0ab6fc338968a96de2d69",
+      "file_size_pixels": [
+        687,
+        389
+      ],
+      "original_sha256": "f6b8dc6d48fc05fb7ea0015d7935a2b0dcd14a0784c4d101ffddc3d84d42f4a1",
+      "original_size_pixels": [
+        1820,
+        1037
+      ]
+    }
+  ],
+  "stanford_ambient_intelligence_connection": {
+    "source_url": "https://ami.stanford.edu/",
+    "verified_on": "2026-09-24",
+    "supported_description": "The lab describes privacy-preserving multimodal sensing for everyday mobility and aging in place; a planned living lab pairs natural movement with balance tests, and its home study combines cameras with other sensors and assessments.",
+    "image_decision": "The Stanford site did not display a reusable image license; no photographs were copied from that site. The Rush image is a separately credited contextual illustration."
+  }
+}

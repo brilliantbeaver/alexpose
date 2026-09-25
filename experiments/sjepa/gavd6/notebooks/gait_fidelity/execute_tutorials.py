@@ -18,7 +18,7 @@ def main():
     parser.add_argument('--work', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--through', type=int, choices=range(7), default=6,
-                        help='Run the numbered notebooks up to this stage; default also runs all five experiment tutorials.')
+                        help='Run the numbered notebooks up to this stage; default also runs all six experiment tutorials (F uses mathematical examples without a child run).')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     work, output = args.work.resolve(), args.output.resolve()

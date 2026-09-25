@@ -1,55 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
-<title id="title">Connect each data source to the evidence it can supply</title><desc id="desc">Dataset role follows reference quality; every comparison remains within its declared evidence boundary.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536879"/></marker></defs>
-<rect width="1200" height="820" fill="white"/>
-<text x="36" y="43" font-family="Arial, sans-serif" font-size="30" fill="#173247" text-anchor="start" font-weight="bold">Connect each data source to the evidence it can supply</text>
-<text x="36" y="78" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Dataset role follows reference quality; every comparison remains within its declared evidence boundary.</text>
-<text x="36" y="131" font-family="Arial, sans-serif" font-size="23" fill="#173247" text-anchor="start" font-weight="bold">Data and current access</text>
-<text x="444" y="131" font-family="Arial, sans-serif" font-size="23" fill="#173247" text-anchor="start" font-weight="bold">Reference evidence</text>
-<text x="848" y="131" font-family="Arial, sans-serif" font-size="23" fill="#173247" text-anchor="start" font-weight="bold">Evaluation enabled</text>
-<rect x="36" y="158" width="366" height="152" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="54" y="192" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">AMASS synthetic pairs</text>
-<text x="54" y="226" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Recorded motion → rendered video</text>
-<text x="54" y="255" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Estimated tracks + source identity</text>
-<rect x="444" y="158" width="362" height="152" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="462" y="192" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Projected body-model joints</text>
-<text x="462" y="226" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Known image geometry and time</text>
-<text x="462" y="255" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Visibility and validity kept apart</text>
-<rect x="848" y="158" width="316" height="152" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="866" y="192" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Controlled restoration</text>
-<text x="866" y="226" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Position and movement error</text>
-<text x="866" y="255" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Known motion / image changes</text>
-<polyline points="402,236 444,236" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="806,236 848,236" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<rect x="36" y="344" width="366" height="152" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="54" y="378" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Local real videos</text>
-<text x="54" y="412" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">91 clips; 41 filename source IDs</text>
-<text x="54" y="441" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Development collection; GAVD overlap</text>
-<rect x="444" y="344" width="362" height="152" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="462" y="378" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Visible-joint annotations</text>
-<text x="462" y="412" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">To be created by independent review</text>
-<text x="462" y="441" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Hidden real joints stay unknown</text>
-<rect x="848" y="344" width="316" height="152" rx="12" fill="#edf3fb" stroke="#cfdce5"/>
-<text x="866" y="378" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Real-image stress tests</text>
-<text x="866" y="412" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Reviewed positions and side</text>
-<text x="866" y="441" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Blur / occlusion; time preserved</text>
-<polyline points="402,422 444,422" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
-<polyline points="806,422 848,422" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
-<rect x="36" y="530" width="366" height="152" rx="12" fill="#fff4e5" stroke="#cfdce5"/>
-<text x="54" y="564" font-family="Arial, sans-serif" font-size="22" fill="#173247" text-anchor="start" font-weight="bold">Independent clinical data</text>
-<text x="54" y="598" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Candidate access is conditional</text>
-<text x="54" y="627" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Fresh participants not yet allocated</text>
-<rect x="444" y="530" width="362" height="152" rx="12" fill="#fff4e5" stroke="#cfdce5"/>
-<text x="462" y="564" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Synchronized references</text>
-<text x="462" y="598" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Verify contacts / motion and alignment</text>
-<text x="462" y="627" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Clinical side needs a separate record</text>
-<rect x="848" y="530" width="316" height="152" rx="12" fill="#fff4e5" stroke="#cfdce5"/>
-<text x="866" y="564" font-family="Arial, sans-serif" font-size="21" fill="#173247" text-anchor="start" font-weight="bold">Clinical change agreement</text>
-<text x="866" y="598" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Only after endpoint validation</text>
-<text x="866" y="627" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Needs a fresh participant cohort</text>
-<polyline points="402,608 444,608" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
-<polyline points="806,608 848,608" fill="none" stroke="#536879" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
-<text x="36" y="730" font-family="Arial, sans-serif" font-size="19" fill="#536879" text-anchor="start" font-weight="normal">Solid: existing pairing pipeline; new intervention pairs are pending. Dashed: annotation or access work required.</text>
-<rect x="36" y="756" width="1128" height="42" rx="12" fill="#e9f5f1" stroke="#cfdce5"/>
-<text x="600" y="784" font-family="Arial, sans-serif" font-size="20" fill="#173247" text-anchor="middle" font-weight="bold">Training references fit models; held-out references score outputs. Deployment uses observations only.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+<title id="title">Existing synthetic data support a limited claim</title><desc id="desc">FOLLOW-UP. No new data acquisition enters the focused response follow-up.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="700" fill="#fcfcf9"/>
+<rect x="36" y="18" width="158" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Existing synthetic data support a limited claim</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">No new data acquisition enters the focused response follow-up.</text>
+<rect x="36" y="173" width="1128" height="128" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="59" y="209" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="59" y="259" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="start" font-weight="bold">Completed parent</text>
+<text x="574" y="234" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Projected 2D reference</text>
+<text x="990" y="234" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Response preservation</text>
+<polyline points="312.00,227.00 357.00,227.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="801.00,227.00 835.00,227.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="990" y="269" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Evaluate; do not assume</text>
+<rect x="36" y="332" width="1128" height="128" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="59" y="368" font-family="Arial, sans-serif" font-size="18" fill="#986325" text-anchor="start" font-weight="bold">DEFERRED</text>
+<text x="59" y="418" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="start" font-weight="bold">Real video</text>
+<text x="574" y="393" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Independent annotation</text>
+<text x="990" y="393" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Observation recovery</text>
+<polyline points="312.00,386.00 357.00,386.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<polyline points="801.00,386.00 835.00,386.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<text x="990" y="428" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Separate admission needed</text>
+<rect x="36" y="491" width="1128" height="128" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="59" y="527" font-family="Arial, sans-serif" font-size="18" fill="#986325" text-anchor="start" font-weight="bold">DEFERRED</text>
+<text x="59" y="577" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="start" font-weight="bold">Clinical extension</text>
+<text x="574" y="552" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Events + side + synchronization</text>
+<text x="990" y="552" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Clinical measurement</text>
+<polyline points="312.00,545.00 357.00,545.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<polyline points="801.00,545.00 835.00,545.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<text x="990" y="587" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Separate admission needed</text>
+<polyline points="36.00,643.00 1164.00,643.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="674" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Distance between learned features is not a physical gait measure. Real-video and clinical claims need new evidence.</text>
 </svg>

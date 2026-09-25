@@ -1,6 +1,8 @@
 # Audit evidence and reproduction
 
-These files record the 21 September 2026 development audit. They contain metadata and code checks, not new restoration-performance results.
+The active JEPA response study is described in the [current proposal](../README.md) and [implementation record](../records/jepa-response-validation-20260923.json). It adds no local-video extraction or masking search.
+
+The files below record the 21 September 2026 development audit and retain their original contents. They contain metadata and code checks, not new restoration-performance results.
 
 | Artifact | Contents |
 | --- | --- |
@@ -14,6 +16,6 @@ These files record the 21 September 2026 development audit. They contain metadat
 | [gavd-source-overlap.json](gavd-source-overlap.json) | Exact source-ID intersection with local GAVD manifests |
 | [visual-selection.json](visual-selection.json) / [temporal-selection.json](temporal-selection.json) | Metadata-selected visual-review scope |
 
-For reproduction, use the [scripts guide](../scripts/README.md). It writes fresh audit outputs to a separate directory and rebuilds both the interactive paper and the complete figure gallery. The underlying source audits remain development evidence; reference annotations and new model comparisons are still pending.
+For reproduction, use the [scripts guide](../scripts/README.md). It writes fresh audit outputs to a separate directory and rebuilds both the interactive paper and the complete figure gallery. The underlying source audits remain development evidence; real-video reference annotations remain pending, while the implemented response comparison still requires HAIC source results.
 
 The original visual samples are specified in the selection JSON files. Open the [local gallery](../data/video-gallery.html) for the current footage review, and read the [data specification](../data/README.md) before treating a source as suitable for a measurement.

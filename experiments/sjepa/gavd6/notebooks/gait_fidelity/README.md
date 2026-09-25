@@ -1,6 +1,6 @@
 # Gait Fidelity tutorials
 
-These twelve notebooks derive the calculations used by the HAIC implementation, then run the registered study. Equations lead into small NumPy and PyTorch examples, with assertions that compare the visible calculation against production code or retained results. Start with the [HAIC guide](../../slurm/gait-fidelity/README.md) for a source experiment, or open notebook 00 locally to create a small CPU software fixture.
+These thirteen notebooks derive the calculations used by the HAIC implementation. Seven numbered tutorials and experiments A–E cover the core/full study; experiment F covers the separate JEPA response follow-up. Equations lead into small NumPy and PyTorch examples, with assertions that compare the visible calculation against production code or retained results. Start with the [HAIC guide](../../slurm/gait-fidelity/README.md) for a source experiment, or open notebook 00 locally to create a small CPU software fixture.
 
 See [environment and readiness](ENVIRONMENT.md) for all required and automatically supplied variables, compatible interpreters, source-data prerequisites and the points where HAIC notebook execution must wait for Slurm jobs.
 
@@ -23,6 +23,14 @@ Read the five experiment tutorials after 00–06. Each contains a worked calcula
 | [C · Practical benchmarks](experiments/C_practical_benchmarks.ipynb) | Training-only offset/affine fitting and interpolation/triangular filtering | 12 |
 | [D · Pretraining information](experiments/D_pretraining_information.ipynb) | A matched, bijective shuffled-reference assignment | 12 |
 | [E · Pairing and label controls](experiments/E_pairing_and_label_controls.ipynb) | Recomputed change labels and complete-cycle minibatches | 18 |
+
+The separate [F · JEPA response coupling](experiments/F_jepa_response.ipynb)
+tutorial derives the new feature and coordinate residual losses, checks their
+gradients and reads the child run's results. Its mathematical examples run
+without a source run and do not train models. The [follow-up HAIC guide](../../slurm/gait-fidelity/JEPA_RESPONSE.md)
+creates nine new final models across three seeds, after the core finishes.
+Source the child's session before starting its kernel; keep A–E attached to the
+parent core/full session.
 
 By default the notebooks create `outputs/gait-fidelity/tutorial-fixture`. Its generated data and tiny training budget check software execution; they are excluded from scientific conclusions. When `GF_WORK` names an initialized source run, the notebooks use that saved configuration and route GPU work through Slurm. An explicitly requested but missing run stops rather than silently creating a fixture in its place.
 

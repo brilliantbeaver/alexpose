@@ -102,3 +102,60 @@ def profile_training(bundle,cfg,output,spent_gpu_hours,*,worker_setup_seconds=0.
     # An over-budget profile completes as a measurement; the coordinator stops
     # before all final fits without throwing away the allocation receipt.
     return dict(profile=str(output/'profile.json'),budget=result)
+
+
+def profile_response(bundle, cfg, output, *, worker_setup_seconds=0.):
+    """Calibrate once, then admit the complete matrix at the parent's update count."""
+    from .response_calibration import calibrate_response
+    from .training import train_phase
+    from .followup import admit_matrix, response_timing_key
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=True)
+    calibration = calibrate_response(bundle, cfg, output/'calibration')
+    calibration_path = str((output/'calibration/calibration.json').resolve())
+    if not Path(calibration_path).is_file():
+        raise RuntimeError('Calibration did not publish its required receipt')
+    local = copy.deepcopy(cfg)
+    local['response'].update(calibration_receipt=calibration_path, timing_probe=True)
+    local['training'].update(pretraining_updates=min(20, cfg['training']['pretraining_updates']),
+                             readout_updates=min(20, cfg['training']['readout_updates']))
+    timings, receipts = {}, {}
+    for recipe in read_json(Path(cfg['work'])/'plan.json')['recipes']:
+        upstream = None
+        for phase in ('pretrain', 'readout'):
+            key = response_timing_key(recipe, phase)
+            if key in receipts:
+                upstream = Path(receipts[key]['checkpoint'])
+                continue
+            folder = output/key.replace(':', '-')
+            start = time.monotonic()
+            result = train_phase(bundle, recipe, phase, 17, local, folder, upstream)
+            elapsed = time.monotonic()-start
+            optimization = min(elapsed, float(result['elapsed_seconds']))
+            hash_start = time.monotonic()
+            for path in folder.rglob('*'):
+                if path.is_file():
+                    sha256(path)
+            timings[key] = dict(profile_updates=result['updates'], optimization_seconds=optimization,
+                                fixed_seconds=max(0., elapsed-optimization)+2*worker_setup_seconds+time.monotonic()-hash_start)
+            receipts[key] = result
+            upstream = Path(result['checkpoint'])
+    verification_started = time.monotonic()
+    for path in sorted(output.rglob('*')):
+        if path.is_file():
+            sha256(path)
+    profile_verification_seconds = time.monotonic()-verification_started
+    for measured in timings.values():
+        # A pretraining worker verifies its profile dependency and then the
+        # explicit calibration/profile authority. Include both complete trees,
+        # including probe development predictions, as recurring fixed cost.
+        measured['profile_verification_seconds'] = profile_verification_seconds
+        measured['fixed_seconds'] += 2*profile_verification_seconds
+    admission = admit_matrix(cfg, timings)
+    result = dict(status=admission['status'], calibration_receipt=calibration_path,
+                  calibration=calibration, timings=timings, admission=admission,
+                  profile_receipts=receipts, profile_verification_seconds=profile_verification_seconds,
+                  checkpoint_reuse='Timing-probe checkpoints are never reused by final phases')
+    atomic_json(output/'profile.json', result)
+    return dict(profile=str(output/'profile.json'), calibration_receipt=calibration_path,
+                timings=timings, admission=admission)

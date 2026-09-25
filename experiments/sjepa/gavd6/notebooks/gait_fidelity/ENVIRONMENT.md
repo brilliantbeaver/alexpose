@@ -132,7 +132,7 @@ Open the files under **`$GF_ROOT/notebooks/gait_fidelity`**, so notebook code an
 
 Use `bash "$GF_ROOT/slurm/gait-fidelity/run.sh" status "$GF_WORK"` in the HAIC shell to monitor progress. The source workflow cannot proceed from start to finish with unattended “Run All” while Slurm prerequisites are pending. If a preparation coordinator is still active, a full launch returns that existing job and does not queue the next stage; wait for exit and launch again.
 
-A new source run defaults to **full-manifest AMASS selection, `named_walking`, eight preparation shards and the `core` experiment set**. Core has 30 final models and 39 optimization phases; full has 102 and 135. The HAIC walkthrough explicitly selects full to cover all five experiment groups. Read your saved plan rather than assuming historical 24/8-person or 102-model counts apply. Confirmation remains separately reserved.
+A new source run defaults to **full-manifest AMASS selection, `named_walking`, eight preparation shards and the `core` experiment set**. Core has 30 final models and 39 optimization phases; full has 102 and 135. The HAIC walkthrough selects core. Read your saved plan rather than assuming historical 24/8-person or 102-model counts apply. Confirmation remains separately reserved. The separate JEPA response follow-up adds nine models; notebook F reads its child session and does not launch work.
 
 ## Run the CPU tutorials on your Mac
 
@@ -144,7 +144,7 @@ unset GF_ROOT GF_WORK GF_PYTHON STV2_PYTHON
 unset PYTHONHOME PYTHONPATH
 ```
 
-For a fresh, automated execution of all twelve notebooks:
+For a fresh, automated execution of all thirteen notebooks (F runs its software illustrations when no response child is selected):
 
 ```bash
 gf_cpu_check="$(mktemp -d /tmp/gait-fidelity-cpu.XXXXXX)"

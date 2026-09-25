@@ -1,28 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="title desc">
-<title id="title">Keep artificial masks separate from missing detections</title><desc id="desc">The following contract is proposed for the new masking experiment.</desc>
-<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#536777"/></marker></defs>
-<rect width="1000" height="430" fill="white"/>
-<text x="32" y="40" font-family="Arial, sans-serif" font-size="27" fill="#183247" text-anchor="start" font-weight="bold">Keep artificial masks separate from missing detections</text>
-<text x="32" y="72" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="start" font-weight="normal">The following contract is proposed for the new masking experiment.</text>
-<rect x="32" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="128.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Retain raw input</text>
-<text x="128.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Coordinates + times</text>
-<text x="128.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Detection validity</text>
-<rect x="280" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="376.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Draw a mask</text>
-<text x="376.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Graph region + span</text>
-<text x="376.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Independent RNG</text>
-<rect x="528" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="624.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Encode context</text>
-<text x="624.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">No hidden-coordinate</text>
-<text x="624.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">features or shortcuts</text>
-<rect x="776" y="130" width="192" height="140" rx="12" fill="#edf3fb" stroke="#d5e0e7"/>
-<text x="872.0" y="162" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Score targets</text>
-<text x="872.0" y="194" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Reference validity</text>
-<text x="872.0" y="221" font-family="Arial, sans-serif" font-size="18" fill="#536777" text-anchor="middle" font-weight="normal">Normalize loss count</text>
-<polyline points="224,200 280,200" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="472,200 528,200" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<polyline points="720,200 776,200" fill="none" stroke="#536777" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<text x="500" y="326" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Training target mask ≠ detector missingness ≠ image visibility.</text>
-<text x="500" y="370" font-family="Arial, sans-serif" font-size="18" fill="#183247" text-anchor="middle" font-weight="normal">Deployment receives observed tracks and validity; references are evaluator-only.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="610" viewBox="0 0 1200 610" role="img" aria-labelledby="title desc">
+<title id="title">Keep three kinds of availability separate</title><desc id="desc">INHERITED CORE. Training queries include deliberately hidden blocks and blocks with missing detections.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="610" fill="#fcfcf9"/>
+<rect x="36" y="18" width="216" height="30" rx="5" fill="#edf0fa" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#4c60af" text-anchor="start" font-weight="bold">INHERITED CORE</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Keep three kinds of availability separate</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Training queries include deliberately hidden blocks and blocks with missing detections.</text>
+<text x="476" y="190" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">Block 1</text>
+<text x="595" y="190" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">Block 2</text>
+<text x="714" y="190" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">Block 3</text>
+<text x="833" y="190" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">Block 4</text>
+<text x="952" y="190" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">Block 5</text>
+<text x="1071" y="190" font-family="Arial, sans-serif" font-size="19" fill="#183247" text-anchor="middle" font-weight="bold">Block 6</text>
+<text x="56" y="254" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="start" font-weight="bold">Detector found joint</text>
+<circle cx="476" cy="246" r="18" fill="#4c60af" stroke="#4c60af" stroke-width="2"/>
+<text x="476" y="253" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="595" cy="246" r="18" fill="#4c60af" stroke="#4c60af" stroke-width="2"/>
+<text x="595" y="253" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="714" cy="246" r="18" fill="white" stroke="#4c60af" stroke-width="2"/>
+<polyline points="707.00,246.00 721.00,246.00" fill="none" stroke="#4c60af" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="833" cy="246" r="18" fill="#4c60af" stroke="#4c60af" stroke-width="2"/>
+<text x="833" y="253" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="952" cy="246" r="18" fill="white" stroke="#4c60af" stroke-width="2"/>
+<polyline points="945.00,246.00 959.00,246.00" fill="none" stroke="#4c60af" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1071" cy="246" r="18" fill="#4c60af" stroke="#4c60af" stroke-width="2"/>
+<text x="1071" y="253" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<text x="56" y="336" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="start" font-weight="bold">Training query</text>
+<circle cx="476" cy="328" r="18" fill="white" stroke="#b44c58" stroke-width="2"/>
+<polyline points="469.00,328.00 483.00,328.00" fill="none" stroke="#b44c58" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="595" cy="328" r="18" fill="#b44c58" stroke="#b44c58" stroke-width="2"/>
+<text x="595" y="335" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="714" cy="328" r="18" fill="#b44c58" stroke="#b44c58" stroke-width="2"/>
+<text x="714" y="335" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="833" cy="328" r="18" fill="#b44c58" stroke="#b44c58" stroke-width="2"/>
+<text x="833" y="335" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="952" cy="328" r="18" fill="#b44c58" stroke="#b44c58" stroke-width="2"/>
+<text x="952" y="335" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="1071" cy="328" r="18" fill="white" stroke="#b44c58" stroke-width="2"/>
+<polyline points="1064.00,328.00 1078.00,328.00" fill="none" stroke="#b44c58" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="56" y="418" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="start" font-weight="bold">Reference available</text>
+<circle cx="476" cy="410" r="18" fill="#007f79" stroke="#007f79" stroke-width="2"/>
+<text x="476" y="417" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="595" cy="410" r="18" fill="#007f79" stroke="#007f79" stroke-width="2"/>
+<text x="595" y="417" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="714" cy="410" r="18" fill="#007f79" stroke="#007f79" stroke-width="2"/>
+<text x="714" y="417" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="833" cy="410" r="18" fill="white" stroke="#007f79" stroke-width="2"/>
+<polyline points="826.00,410.00 840.00,410.00" fill="none" stroke="#007f79" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="952" cy="410" r="18" fill="#007f79" stroke="#007f79" stroke-width="2"/>
+<text x="952" y="417" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<circle cx="1071" cy="410" r="18" fill="#007f79" stroke="#007f79" stroke-width="2"/>
+<text x="1071" y="417" font-family="Arial, sans-serif" font-size="23" fill="white" text-anchor="middle" font-weight="bold">+</text>
+<rect x="36" y="470" width="1128" height="66" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="600" y="511" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="middle" font-weight="bold">Added loss: queried in both states + reference available in all four frames</text>
+<polyline points="36.00,553.00 1164.00,553.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="584" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">One block = one joint over four frames. Pairs excluded from the added loss still receive the original loss.</text>
 </svg>

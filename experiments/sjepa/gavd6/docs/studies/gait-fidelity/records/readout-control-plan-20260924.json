@@ -1,0 +1,566 @@
+{
+  "schema": "gait-fidelity-response-plan-v2",
+  "experiment_set": "response_followup_readout_control",
+  "recipes": [
+    {
+      "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+      "group": "F",
+      "encoder": "paired_jepa",
+      "representation_variant": "jepa_delta_v1",
+      "pretraining_mask": "graph_time",
+      "mode": "frozen_readout",
+      "readout_or_training_objective": "paired_change",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+      "group": "F",
+      "encoder": "paired_jepa",
+      "representation_variant": "jepa_endpoint_v1",
+      "pretraining_mask": "graph_time",
+      "mode": "frozen_readout",
+      "readout_or_training_objective": "paired_change",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+      "group": "F",
+      "encoder": "coordinate",
+      "representation_variant": "coordinate_delta_v1",
+      "pretraining_mask": "graph_time",
+      "mode": "frozen_readout",
+      "readout_or_training_objective": "paired_change",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "F-response-jepa_delta_v1-graph_time-base",
+      "group": "F",
+      "encoder": "paired_jepa",
+      "representation_variant": "jepa_delta_v1",
+      "pretraining_mask": "graph_time",
+      "mode": "frozen_readout",
+      "readout_or_training_objective": "base",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "F-response-jepa_endpoint_v1-graph_time-base",
+      "group": "F",
+      "encoder": "paired_jepa",
+      "representation_variant": "jepa_endpoint_v1",
+      "pretraining_mask": "graph_time",
+      "mode": "frozen_readout",
+      "readout_or_training_objective": "base",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "F-response-coordinate_delta_v1-graph_time-base",
+      "group": "F",
+      "encoder": "coordinate",
+      "representation_variant": "coordinate_delta_v1",
+      "pretraining_mask": "graph_time",
+      "mode": "frozen_readout",
+      "readout_or_training_objective": "base",
+      "comparator_policy": null
+    }
+  ],
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "phases": [
+    {
+      "phase_id": "pretrain-response-jepa_delta_v1-graph_time-seed-17",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_delta_v1-graph_time-paired_change-seed-17",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "pretrain-response-jepa_delta_v1-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-jepa_delta_v1-graph_time-seed-29",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_delta_v1-graph_time-paired_change-seed-29",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "pretrain-response-jepa_delta_v1-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-jepa_delta_v1-graph_time-seed-43",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_delta_v1-graph_time-paired_change-seed-43",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "pretrain-response-jepa_delta_v1-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-jepa_endpoint_v1-graph_time-seed-17",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-17",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-jepa_endpoint_v1-graph_time-seed-29",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-29",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-jepa_endpoint_v1-graph_time-seed-43",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-43",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-coordinate_delta_v1-graph_time-seed-17",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-coordinate_delta_v1-graph_time-paired_change-seed-17",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-coordinate_delta_v1-graph_time-seed-29",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-coordinate_delta_v1-graph_time-paired_change-seed-29",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "pretrain-response-coordinate_delta_v1-graph_time-seed-43",
+      "phase": "pretrain",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "followup-profile"
+      ]
+    },
+    {
+      "phase_id": "F-response-coordinate_delta_v1-graph_time-paired_change-seed-43",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-paired_change",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "paired_change",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_delta_v1-graph_time-base-seed-17",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-base",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "pretrain-response-jepa_delta_v1-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_delta_v1-graph_time-base-seed-29",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-base",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "pretrain-response-jepa_delta_v1-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_delta_v1-graph_time-base-seed-43",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_delta_v1-graph_time-base",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "pretrain-response-jepa_delta_v1-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_endpoint_v1-graph_time-base-seed-17",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-base",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_endpoint_v1-graph_time-base-seed-29",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-base",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "F-response-jepa_endpoint_v1-graph_time-base-seed-43",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-jepa_endpoint_v1-graph_time-base",
+        "group": "F",
+        "encoder": "paired_jepa",
+        "representation_variant": "jepa_endpoint_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "F-response-coordinate_delta_v1-graph_time-base-seed-17",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-base",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 17,
+      "depends_on": [
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "F-response-coordinate_delta_v1-graph_time-base-seed-29",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-base",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 29,
+      "depends_on": [
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "F-response-coordinate_delta_v1-graph_time-base-seed-43",
+      "phase": "readout",
+      "recipe": {
+        "recipe_id": "F-response-coordinate_delta_v1-graph_time-base",
+        "group": "F",
+        "encoder": "coordinate",
+        "representation_variant": "coordinate_delta_v1",
+        "pretraining_mask": "graph_time",
+        "mode": "frozen_readout",
+        "readout_or_training_objective": "base",
+        "comparator_policy": null
+      },
+      "seed": 43,
+      "depends_on": [
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-43"
+      ]
+    }
+  ],
+  "counts": {
+    "recipes": 6,
+    "final_fits": 18,
+    "pretraining_phases": 9,
+    "optimization_phases": 27
+  },
+  "identity": "e9eca27f7fe43bd819714166438511b25fc7dde897a31c60b1239a167900c259"
+}

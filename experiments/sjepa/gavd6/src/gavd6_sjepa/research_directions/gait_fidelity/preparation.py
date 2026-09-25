@@ -272,6 +272,12 @@ def _render_fixed(renderer, body, recipe, seed, camera, original_faces):
 
 
 def _source_rows(config):
+    if config.get('data', {}).get('source_selection') == 'repair_benchmark':
+        from .repair_profile import load_benchmark_cohort
+        return load_benchmark_cohort(config)
+    if config.get('data', {}).get('source_selection') == 'repair_confirmation':
+        from .repair_cohort import load_slim_cohort
+        return load_slim_cohort(config)
     if config.get('data', {}).get('source_selection', 'legacy_roster') == 'full_manifest':
         from .cohort import load_cohort
         return load_cohort(config, partition=config['data'].get('partition', 'development'))
@@ -310,7 +316,7 @@ def prepare(config, output):
     if output.exists(): raise FileExistsError("Preparation outputs are immutable; choose a fresh attempt directory")
     output.mkdir(parents=True)
     options = config.get("data", {})
-    full_manifest = options.get('source_selection', 'legacy_roster') == 'full_manifest'
+    full_manifest = options.get('source_selection', 'legacy_roster') in {'full_manifest', 'repair_confirmation', 'repair_benchmark'}
     confirmation = options.get('partition', 'development') == 'confirmation'
     samples, hz = int(options.get("samples", 128)), float(options.get("hz", 25.))
     if config.get("mode") == "fixture":
@@ -357,7 +363,7 @@ def prepare(config, output):
                    assigned_windows=len(rows), total_windows=len(candidates), frozen_people=sorted(roster),
                    historical_manifest_sha256=None if full_manifest else old_hash,
                    cohort_identity=old_hash if full_manifest else None,
-                   source_selection='full_manifest' if full_manifest else 'legacy_roster',
+                   source_selection=options.get('source_selection', 'full_manifest') if full_manifest else 'legacy_roster',
                    confirmation_admitted=confirmation, exclusions=exclusions)
     if full_manifest:
         receipt['cohort_exclusions'] = protected
@@ -411,6 +417,9 @@ def prepare(config, output):
         estimators = {s["student_id"]: (s["family"], load_estimator(StudentSpec(**s), device="cuda")) for s in prep["estimators"]}
         fixed_assets = dict(assets)
         for row in rows:
+            if options.get('source_selection') in {'repair_confirmation', 'repair_benchmark'}:
+                from .repair_cohort import _check_deadline
+                _check_deadline(config.get('_repair_lock_config', config.get('_repair_benchmark_config', config)))
             family_started = time.perf_counter()
             motion_hash = sha256_file(row["raw_path"])
             if motion_hash != row["historical_motion_sha256"]:
@@ -603,7 +612,7 @@ def merge_datasets(paths, output, *, allow_confirmation=False):
     provenance["source_families"] = sorted({r["source_family_id"] for b in bundles for r in b.records})
     records = [r for b in bundles for r in b.records]
     actual_people = {r["canonical_person_id"] for r in records}
-    if actual_people != set(provenance["frozen_people"]) and provenance.get('source_selection') != 'full_manifest':
+    if actual_people != set(provenance["frozen_people"]) and provenance.get('source_selection') not in {'full_manifest', 'repair_confirmation', 'repair_benchmark'}:
         raise ValueError("Reference screening removed a frozen roster person; review coverage before fitting")
     provenance['coverage'] = dict(planned_people=sorted(provenance['frozen_people']),
         admitted_people=sorted(actual_people), people_without_admitted_families=sorted(set(provenance['frozen_people'])-actual_people),
@@ -613,9 +622,10 @@ def merge_datasets(paths, output, *, allow_confirmation=False):
         if r["split"] == "train": training_families.setdefault(r["canonical_person_id"], set()).add(r["source_family_id"])
     if any(len(families) < 2 for families in training_families.values()):
         raise ValueError("Reference screening left fewer than two training source families per person; shuffled-reference controls cannot run")
-    if not allow_confirmation and {r['split'] for r in records} != {'train', 'development'}:
+    benchmark_only = provenance.get('source_selection') == 'repair_benchmark' and {r['split'] for r in records} == {'development'}
+    if not allow_confirmation and {r['split'] for r in records} != {'train', 'development'} and not benchmark_only:
         raise ValueError('Preparation must retain both training and development populations')
-    if provenance.get('source_selection') == 'full_manifest':
+    if provenance.get('source_selection') in {'full_manifest', 'repair_confirmation', 'repair_benchmark'}:
         return merge_disk_datasets(bundle_paths, output, provenance=provenance)
     bundle = TrackBundle({k:np.concatenate([b.inputs[k] for b in bundles]) for k in bundles[0].inputs},
         {k:np.concatenate([b.targets[k] for b in bundles]) for k in bundles[0].targets},
