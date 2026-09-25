@@ -35,6 +35,7 @@ from lesson_data import build_data_cells, build_mask_cells
 from lesson_model import build_architecture_cells, build_training_cells
 from lesson_evaluation import build_evaluation_cells, build_verification_cells
 from lesson_experiments import build_experiment_cells
+from lesson_response import build_response_cells
 
 LESSONS = [
     ('00_start_here.ipynb', 'Start the Gait Fidelity study', build_start_cells),
@@ -147,6 +148,7 @@ def main():
     notebooks = dict(NOTEBOOKS)
     for group in GROUPS:
         notebooks['experiments/' + group[0]] = group_notebook(*group)
+    notebooks['experiments/F_jepa_response.ipynb'] = build_response_cells(md, code)
     for name, cells in notebooks.items():
         for index, cell in enumerate(cells):
             cell['id'] = f'cell-{index:03d}'

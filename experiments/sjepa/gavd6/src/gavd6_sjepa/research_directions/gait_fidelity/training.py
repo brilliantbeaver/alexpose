@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from contextlib import nullcontext
 from dataclasses import asdict
+from datetime import datetime, timezone
 import hashlib
 import heapq
 import json
@@ -29,6 +30,10 @@ from .measurements import knee_excursion, reference_support, measurement_loss
 FORMAT = "gait-fidelity-training-v1"
 ENCODERS = {"coordinate", "paired_jepa", "shuffled_jepa", "initialized", "direct", "static", "temporal_refiner"}
 OBJECTIVES = {"base", "paired_change", "per_example_measurement", "repaired_change"}
+
+
+class ResponseDeadlineReached(RuntimeError):
+    """The response run saved an interrupted checkpoint before its deadline."""
 
 
 def _records(bundle):
@@ -370,10 +375,15 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
     """Train exactly one declared phase and retain a resumable, hashed receipt."""
     phase = _phase_name(phase)
     encoder = recipe["encoder"]
+    variant = recipe.get("representation_variant")
     policy = recipe.get("pretraining_mask", recipe.get("mask"))
     objective = recipe.get("readout_or_training_objective", "base")
     if phase not in {"pretrain", "readout", "end_to_end"} or encoder not in ENCODERS or objective not in OBJECTIVES:
         raise ValueError("Unknown gait-fidelity phase, encoder or objective")
+    if variant is not None:
+        from .response_objectives import VARIANTS
+        if variant not in VARIANTS or encoder != VARIANTS[variant] or phase == "end_to_end" or policy != "graph_time":
+            raise ValueError("Response representation, encoder, phase and graph_time policy must agree")
     if phase == "pretrain":
         # A shared representation has no downstream loss identity. It can feed
         # base/change/per-example readouts without a representative recipe name
@@ -451,6 +461,13 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
         batch_cycles_sha256=digest([cycle.tolist() for cycle in cycles]),
         upstream_sha256=sha256(upstream) if upstream is not None else None)
     signature["training"].pop("resume_from", None)
+    response_identity = None
+    if variant is not None:
+        from .response_calibration import verified_response_identity
+        response_identity = verified_response_identity(config, variant, data_identity)
+        signature.update(representation_variant=variant, response=response_identity)
+        code.update({name: sha256(Path(__file__).with_name(name))
+                     for name in ("response_objectives.py", "response_calibration.py")})
     torch.manual_seed(seed)
     if device.startswith("cuda"):
         torch.cuda.manual_seed_all(seed)
@@ -463,6 +480,9 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
             raise ValueError("Upstream is not a complete Gait Fidelity pretraining checkpoint")
         for key in ("encoder", "policy", "seed", "model", "training", "data_sha256", "code", "normalization"):
             if pre["signature"].get(key) != signature[key]:
+                raise ValueError(f"Upstream pretraining mismatch: {key}")
+        for key in ("representation_variant", "response"):
+            if pre["signature"].get(key) != signature.get(key):
                 raise ValueError(f"Upstream pretraining mismatch: {key}")
         model.load_state_dict(pre["model"], strict=True)
     model.requires_grad_(False)
@@ -527,6 +547,13 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
         return elapsed
 
     for step in range(start_step, updates):
+        if variant is not None and not config.get("fixture", False):
+            deadline = response_identity.get("deadline_utc")
+            if deadline is not None:
+                remaining = (datetime.fromisoformat(deadline.replace("Z", "+00:00")) - datetime.now(timezone.utc)).total_seconds()
+                if remaining <= response_identity["checkpoint_grace_seconds"]:
+                    save("interrupted")
+                    raise ResponseDeadlineReached(f"Response deadline reached; interrupted checkpoint saved at {output / 'checkpoint.pt'}")
         pair_draw = (draw_hierarchical_pairs(hierarchy, batch_size // 2, generators['batch']) if sampling == 'person_motion'
                      else draw_pair_batch(cycles, batch_size // 2, generators["batch"]))
         selected = active_pairs[pair_draw].reshape(-1)
@@ -551,7 +578,20 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
             if phase == "pretrain":
                 missing = (~inputs["observed"]).reshape(actual_batch, cfg.window_size // cfg.patch_size, cfg.patch_size, 12).any(2)
                 queries = hidden_tensor | missing
-            if phase == "pretrain" and arm in LATENT_ARMS:
+            response_result = None
+            if phase == "pretrain" and variant is not None:
+                from .response_calibration import response_forward_losses
+                response_result = response_forward_losses(model, dict(inputs=inputs, target=target, valid=valid,
+                    queries=queries, hidden=hidden_tensor, scale=scale), tc, variant)
+                loss = response_result["base_loss"] + response_identity["coefficient"] * response_result["auxiliary_loss"]
+                supported, query_valid = response_result["supported"], response_result["query_valid"]
+                extra.update(response_result["extra"])
+                extra["response_coefficient"] = response_identity["coefficient"]
+                if arm in LATENT_ARMS:
+                    teacher_tokens = response_result["teacher_tokens"]
+                else:
+                    predicted = response_result["predicted"]
+            elif phase == "pretrain" and arm in LATENT_ARMS:
                 predicted_tokens = model.predictor(model.encoder(inputs, hidden_tensor))
                 target_rows = selected if donors is None else donors[selected]
                 donor_raw = _take(bundle.inputs, target_rows)
@@ -617,12 +657,21 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
         for group in optimizer.param_groups:
             group["lr"] = scheduled_lr
         optimizer.zero_grad(set_to_none=True)
+        if response_result is not None and (step == 0 or step + 1 == updates or (step + 1) % int(tc.get("log_every", 100)) == 0):
+            from .response_calibration import gradient_statistics
+            extra["response_gradients"] = {
+                "base": gradient_statistics(response_result["base_loss"], parameters),
+                "auxiliary_unweighted": gradient_statistics(response_result["auxiliary_loss"], parameters),
+                "auxiliary_coefficient": response_identity["coefficient"]}
         loss.backward()
         if hasattr(model, "teacher") and any(p.grad is not None for p in model.teacher.parameters()):
             raise AssertionError("Privileged teacher received gradients")
         if phase == "readout" and any(p.grad is not None for p in model.encoder.parameters()):
             raise AssertionError("Frozen encoder received readout gradients")
         norm = torch.nn.utils.clip_grad_norm_(parameters, float(tc.get("gradient_clip", 1.)), error_if_nonfinite=True)
+        if variant is not None:
+            extra.update(gradient_clip=float(tc.get("gradient_clip", 1.)),
+                         gradient_was_clipped=bool(float(norm) > float(tc.get("gradient_clip", 1.))))
         optimizer.step()
         if phase == "pretrain" and arm in LATENT_ARMS:
             momentum = .999 - (.999 - .99) * .5 * (1 + math.cos(math.pi * step / max(1, updates - 1)))
@@ -692,6 +741,22 @@ def train_phase(bundle, recipe: dict, phase: str, seed: int, config: dict, outpu
         precision=precision, normalization="input-only; context-only before artificial masking",
         objective_detail="centered_ce_v1+VICReg" if phase == "pretrain" and arm in LATENT_ARMS else
                          "SmoothNet-style L1+reference acceleration adaptation" if arm == "smoothnet" else "coordinate_MSE" + ("+" + objective if objective != "base" else ""))
+    if variant is not None:
+        report.update(representation_variant=variant, response=response_identity)
+        report["gradient_clipping"] = dict(updates=len(history), clipped_updates=sum(row["gradient_was_clipped"] for row in history))
+        if phase == "pretrain":
+            report["objective_detail"] += "+" + variant
+            support_summary = {key: {} for key in ("canonical_person_id", "physical_state", "camera_id", "naming",
+                                                   "observation", "extractor", "movement_state", "movement_magnitude")}
+            for entry in history:
+                for right, tokens in zip(entry["endpoint_indices"][1::2], entry["response_auxiliary"]["tokens_per_pair"]):
+                    for field, values in support_summary.items():
+                        row = values.setdefault(str(records[right].get(field)), dict(pairs=0, supported_pairs=0, supported_tokens=0))
+                        row["pairs"] += 1
+                        row["supported_pairs"] += int(tokens > 0)
+                        row["supported_tokens"] += tokens
+            atomic_json(output / "response-support.json", support_summary)
+            report["response_support"] = support_summary
     if phase != "pretrain":
         from types import SimpleNamespace
         development = np.flatnonzero([row["split"] == "development" for row in records])

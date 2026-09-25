@@ -35,7 +35,7 @@ class TutorialStructureTests(unittest.TestCase):
         for index, path in enumerate(notebooks):
             self.assertTrue(path.name.startswith(f'{index:02d}_'))
         experiments = sorted((NOTEBOOKS / 'experiments').glob('*.ipynb'))
-        self.assertEqual(len(experiments), 5)
+        self.assertEqual(len(experiments), 6)
         for index, path in enumerate(experiments):
             self.assertTrue(path.name.startswith(chr(ord('A') + index) + '_'))
         for path in notebooks + experiments:
@@ -71,7 +71,9 @@ class TutorialStructureTests(unittest.TestCase):
             spool.write_text((SLURM / 'worker.sbatch').read_text())
             subprocess.run(['bash', str(spool), str(work), 'phase-1', str(folder / 'attempt-1')],
                            env=env, check=True, capture_output=True, text=True)
-            self.assertIn('--phase-id\nphase-1\n--attempt\n', captured.read_text())
+            worker_args = captured.read_text().splitlines()
+            self.assertEqual(worker_args[1], str(SLURM / 'worker.py'))
+            self.assertEqual(worker_args[2:], [str(work), 'phase-1', str(folder / 'attempt-1')])
             spool.write_text((SLURM / 'coordinator.sbatch').read_text())
             subprocess.run(['bash', str(spool), str(work), '8', 'prepare-only'],
                            env=env, check=True, capture_output=True, text=True)

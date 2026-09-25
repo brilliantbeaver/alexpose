@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import importlib
+import importlib.metadata
+import importlib.util
 import math
 import os
 from pathlib import Path
@@ -217,22 +219,33 @@ def load_config(work):
         raise ValueError('Ordinary runs cannot open confirmation; use the separate locked evaluation workflow')
     if read_json(Path(work)/'plan.json')!=build_plan(cfg['seeds'], experiment_set=cfg.get('experiment_set', 'full')):
         raise ValueError('Saved phase plan differs from configured seed set and registered recipes')
+    if cfg.get('study_kind') == 'jepa_response_followup':
+        from .followup import validate_followup
+        validate_followup(cfg)
     return cfg
 
 
 def preflight(cfg, *, gpu=False):
-    """Imports and asset reads only on login; real GPU kernels on a worker."""
+    """Check assets on login; import the native renderer only on a GPU worker."""
     import torch
+    followup = cfg.get('study_kind') == 'jepa_response_followup'
     packages = {}
     names = ['numpy','pandas','scipy','matplotlib','torch','nbformat']
-    if not cfg['fixture']:
+    if not cfg['fixture'] and not followup:
         if shutil.which('ffmpeg') is None:
             raise RuntimeError('ffmpeg is required for review videos; make the existing HAIC FFmpeg executable available before launch')
         names += ['torchvision','mmcv','mmpose','mmengine','pyrender','trimesh','cv2','human_body_prior']
     for name in names:
+        if name == 'pyrender' and not gpu:
+            # Importing pyrender also imports its desktop viewer and pyglet's
+            # native GLU dependency, which may be absent on a login node.
+            if importlib.util.find_spec(name) is None:
+                raise ModuleNotFoundError('pyrender is missing from the saved interpreter')
+            packages[name] = importlib.metadata.version(name)
+            continue
         module = importlib.import_module(name)
         packages[name] = getattr(module,'__version__','imported')
-    if not cfg['fixture']:
+    if not cfg['fixture'] and not followup:
         if packages['torch'] != '2.6.0+cu124' or packages['torchvision'] != '0.21.0+cu124':
             raise RuntimeError('Use the working synthetic-training-cu124 interpreter (Torch2.6/Torchvision0.21).')
         p = cfg['preparation']
@@ -257,8 +270,20 @@ def preflight(cfg, *, gpu=False):
             torch.cuda.synchronize()
             from mmcv.ops import nms
             nms(torch.tensor([[0.,0.,10.,10.]],device='cuda'),torch.ones(1,device='cuda'),.5)
+    if followup:
+        from .followup import verify_parent
+        verify_parent(cfg)
+        if not cfg['fixture'] and packages['torch'] != '2.6.0+cu124':
+            raise RuntimeError('Use the working synthetic-training-cu124 interpreter (Torch2.6).')
+        if gpu and not cfg['fixture']:
+            if not torch.cuda.is_available():
+                raise RuntimeError('CUDA is unavailable in the allocated follow-up worker')
+            x = torch.ones(16, 16, device='cuda', requires_grad=True)
+            (x @ x).sum().backward()
+            torch.cuda.synchronize()
     return dict(status='GPU_PREFLIGHT_PASSED' if gpu else 'CPU_PREFLIGHT_PASSED',
                 packages=packages, cuda_tested=gpu and not cfg['fixture'],
+                deferred_checks=[] if cfg['fixture'] or followup else (['egl_render'] if gpu else ['pyrender_import','egl_render']),
                 device_name=torch.cuda.get_device_name(0) if gpu and not cfg['fixture'] else None)
 
 

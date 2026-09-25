@@ -8,6 +8,9 @@ usage() {
 Usage: bash slurm/gait-fidelity/run.sh COMMAND [WORK] [OPTIONS]
 
 setup       Initialize a full-manifest AMASS cohort and saved HAIC asset paths.
+setup-followup CHILD --parent-work PARENT
+            Bind a completed parent from a new immutable code release.
+            Optional: --deadline-utc TIMESTAMP --include-base-readouts (27 phases).
 preflight   Check the saved paths, dependencies and source identity on CPU.
 cohort      Read the frozen AMASS selection, exclusions and locked test inventory.
 plan        Read the selected core/full experiment plan and shared dependencies.
@@ -37,6 +40,13 @@ gf_asset_root="${GAVD6_ROOT:-/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6
 gf_work="${GF_WORK:-$gf_asset_root/outputs/gait-fidelity/study-01}"
 gf_explicit_work=0
 if [[ $# -gt 0 && "$1" != --* ]]; then gf_work="$1"; shift; gf_explicit_work=1; fi
+if [[ "$gf_action" == setup-followup ]]; then
+  [[ "$gf_explicit_work" == 1 ]] || { echo 'setup-followup requires an explicit CHILD directory.' >&2; exit 2; }
+  gf_python="${GF_PYTHON:-/hai/scratch/$USER/envs/synthetic-training-cu124/bin/python}"
+  [[ -x "$gf_python" ]] || { printf 'Interpreter missing: %s\nSet GF_PYTHON to the existing study interpreter.\n' "$gf_python" >&2; exit 1; }
+  export PYTHONPATH="$gf_code_root/src" PYTHONNOUSERSITE=1
+  exec "$gf_python" -m gavd6_sjepa.research_directions.gait_fidelity setup-followup --work "$gf_work" "$@"
+fi
 if [[ "$gf_action" == setup ]]; then
   gf_fixture=0
   for gf_arg in "$@"; do [[ "$gf_arg" != --fixture ]] || gf_fixture=1; done

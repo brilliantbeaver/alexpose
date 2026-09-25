@@ -10,8 +10,50 @@ CORE_RECIPE_IDS = frozenset(
     for objective in ('base', 'paired_change')
 )
 
+RESPONSE_VARIANTS = ('jepa_delta_v1', 'jepa_endpoint_v1', 'coordinate_delta_v1')
+
+
+def build_response_plan(seeds=(17, 29, 43), *, include_base_readouts=False):
+    """A separate, collision-proof extension; historical plan identities do not change."""
+    if list(seeds) != [17, 29, 43]:
+        raise ValueError('The response follow-up requires the registered seeds 17, 29, 43')
+    recipes, phases = [], []
+    for variant in RESPONSE_VARIANTS:
+        recipe = dict(recipe_id=f'F-response-{variant}-graph_time-paired_change',
+                      group='F', encoder='coordinate' if variant.startswith('coordinate') else 'paired_jepa',
+                      representation_variant=variant, pretraining_mask='graph_time',
+                      mode='frozen_readout', readout_or_training_objective='paired_change', comparator_policy=None)
+        recipes.append(recipe)
+        for seed in seeds:
+            upstream = f'pretrain-response-{variant}-graph_time-seed-{seed}'
+            phases.append(dict(phase_id=upstream, phase='pretrain', recipe=recipe,
+                               seed=seed, depends_on=['followup-profile']))
+            phases.append(dict(phase_id=f"{recipe['recipe_id']}-seed-{seed}", phase='readout',
+                               recipe=recipe, seed=seed, depends_on=[upstream]))
+    plan = dict(schema='gait-fidelity-response-plan-v1', experiment_set='response_followup',
+                recipes=recipes, seeds=list(seeds), phases=phases,
+                counts=dict(recipes=3, final_fits=9, pretraining_phases=9, optimization_phases=18))
+    if include_base_readouts:
+        # One additional readout per frozen encoder; never repeat pretraining.
+        for original in list(recipes):
+            recipe = dict(original, recipe_id=original['recipe_id'].replace('-paired_change', '-base'),
+                          readout_or_training_objective='base')
+            recipes.append(recipe)
+            for seed in seeds:
+                upstream = f"pretrain-response-{recipe['representation_variant']}-graph_time-seed-{seed}"
+                phases.append(dict(phase_id=f"{recipe['recipe_id']}-seed-{seed}", phase='readout',
+                                   recipe=recipe, seed=seed, depends_on=[upstream]))
+        plan.update(schema='gait-fidelity-response-plan-v2', experiment_set='response_followup_readout_control',
+                    counts=dict(recipes=6, final_fits=18, pretraining_phases=9, optimization_phases=27))
+    plan['identity'] = digest(plan)
+    return plan
+
 
 def build_plan(seeds=(17, 29, 43), experiment_set='full'):
+    if experiment_set == 'response_followup':
+        return build_response_plan(seeds)
+    if experiment_set == 'response_followup_readout_control':
+        return build_response_plan(seeds, include_base_readouts=True)
     source = read_json(Path(__file__).with_name('recipes.json'))
     if not seeds or len(set(seeds)) != len(seeds) or any(type(s) is not int or not 0 <= s < 2**32 for s in seeds):
         raise ValueError('Seeds must be distinct nonnegative integers')

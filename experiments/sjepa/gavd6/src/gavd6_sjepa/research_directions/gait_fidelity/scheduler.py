@@ -34,7 +34,7 @@ def _state(work):
     return read_json(path) if path.exists() else dict(schema='gait-fidelity-ledger-v1', attempts=[], completed={}, created_utc=utc_now())
 
 
-def reserve(work, phase_id, gpu_hours, *, limit, max_jobs):
+def reserve(work, phase_id, gpu_hours, *, limit, max_jobs, budget_category=None, category_limits=None):
     """Commit before sbatch. Unresolved submissions remain charged, preventing duplicates."""
     if not math.isfinite(gpu_hours) or gpu_hours < 0:
         raise ValueError('Finite nonnegative allocation reservation required')
@@ -48,10 +48,19 @@ def reserve(work, phase_id, gpu_hours, *, limit, max_jobs):
         used = sum(a.get('allocated_gpu_hours',a['reserved_gpu_hours']) for a in state['attempts'])
         if used + gpu_hours > limit + 1e-8:
             raise RuntimeError(f'Study allocation budget exhausted: {used:.3f}+{gpu_hours:.3f}>{limit:.3f}')
+        if category_limits is not None:
+            if budget_category not in category_limits:
+                raise ValueError('A registered follow-up accounting category is required')
+            category_used = sum(a.get('allocated_gpu_hours', a['reserved_gpu_hours']) for a in state['attempts']
+                                if a.get('budget_category') == budget_category)
+            if category_used + gpu_hours > category_limits[budget_category] + 1e-8:
+                raise RuntimeError(f'Follow-up {budget_category} allocation allowance exhausted')
         identifier = uuid.uuid4().hex[:16]
         attempt = dict(id=identifier,phase_id=phase_id,job_id=None,status='reserved',
                        reserved_gpu_hours=gpu_hours,path=str(Path(work)/'attempts'/phase_id/identifier),
                        submitted_utc=utc_now(),job_name='gf-'+identifier)
+        if budget_category is not None:
+            attempt['budget_category'] = budget_category
         state['attempts'].append(attempt)
         atomic_json(Path(work)/'ledger.json',state)
         return attempt
@@ -170,11 +179,18 @@ def _reconcile(cfg):
 def _submit(cfg, phase_id):
     work=Path(cfg['work']);r=cfg['resources']
     minutes=r['prepare_wall_minutes'] if phase_id.startswith(('prepare','confirmation','gavd-')) else r['phase_wall_minutes']
-    attempt=reserve(work,phase_id,minutes/60,limit=r['gpu_hours'],max_jobs=r['max_jobs'])
+    kwargs = {}
+    if cfg.get('study_kind') == 'jepa_response_followup':
+        from .followup import allocation_minutes, category
+        previous = sum(a['phase_id'] == phase_id for a in _state(work)['attempts'])
+        minutes = allocation_minutes(cfg, phase_id, previous)
+        kwargs = dict(budget_category=category(phase_id, previous), category_limits=cfg['followup']['budgets_gpu_hours'])
+    attempt=reserve(work,phase_id,minutes/60,limit=r['gpu_hours'],max_jobs=r['max_jobs'], **kwargs)
     Path(attempt['path']).mkdir(parents=True)
+    wall_minutes = minutes-1 if cfg.get('study_kind') == 'jepa_response_followup' else minutes
     command=['sbatch','--parsable',f"--job-name={attempt['job_name']}",f"--account={r['account']}",
              '--nodes=1','--ntasks=1','--export=ALL','--no-requeue',
-             f"--partition={r['partition']}",f"--gres=gpu:{r['gpu']}",f'--time={minutes}',
+             f"--partition={r['partition']}",f"--gres=gpu:{r['gpu']}",f'--time={wall_minutes}',
              f"--cpus-per-task={r['cpu_workers']}",f"--mem={r['memory']}",
              f"--output={attempt['path']}/slurm-%j.out",f"--chdir={cfg['code_root']}",
              str(Path(cfg['code_root'])/'slurm/gait-fidelity/worker.sbatch'),str(work),phase_id,attempt['path']]
@@ -212,7 +228,11 @@ def execute_worker(cfg, phase_id, attempt_path):
         if (attempt_path/'complete.json').exists():
             raise FileExistsError('Completed attempts are immutable')
         started=time.monotonic()
-        if phase_id.startswith('gavd-'):
+        if cfg.get('study_kind') == 'jepa_response_followup':
+            from .followup import execute_followup_phase
+            result, artifact_root = execute_followup_phase(cfg, phase_id, attempt_path, started=started)
+            artifacts = {str(p):sha256(p) for p in artifact_root.rglob('*') if p.is_file() and p.suffix != '.lock'}
+        elif phase_id.startswith('gavd-'):
             from argparse import Namespace
             from .gavd import run_command
             atomic_json(attempt_path/'preflight.json',preflight(cfg,gpu=True))
@@ -379,6 +399,11 @@ def run(cfg, *, local=False, max_jobs=8, prepare_only=False, gavd_only=False,gav
         raise ValueError('Concurrency exceeds frozen study cap')
     freeze(cfg)
     with locked(work/'locks/controller.lock',nonblocking=True):
+        if cfg.get('study_kind') == 'jepa_response_followup':
+            if prepare_only or gavd_only or gavd_confirmation or confirmation_only:
+                raise ValueError('The follow-up uses its bound parent; preparation/confirmation/GAVD branches are disabled')
+            from .followup import run_followup
+            return run_followup(cfg, local=local, max_jobs=max_jobs)
         if gavd_only or gavd_confirmation:
             return _run_gavd(cfg,max_jobs,'confirmation' if gavd_confirmation else 'development')
         if confirmation_only:
@@ -433,7 +458,7 @@ def run(cfg, *, local=False, max_jobs=8, prepare_only=False, gavd_only=False,gav
 
 def status(cfg):
     state=_state(cfg['work']);phases=read_json(Path(cfg['work'])/'plan.json')['phases']
-    return dict(work=cfg['work'],fixture=cfg['fixture'],completed_fits=sum(p['phase']!='pretrain' and p['phase_id'] in state['completed'] for p in phases),
+    result = dict(work=cfg['work'],fixture=cfg['fixture'],completed_fits=sum(p['phase']!='pretrain' and p['phase_id'] in state['completed'] for p in phases),
                 completed_phases=sum(p['phase_id'] in state['completed'] for p in phases),total_phases=len(phases),
                 active=[dict(phase=a['phase_id'],job_id=a['job_id'],status=a['status']) for a in state['attempts'] if a['status'] not in {'complete','failed'}],
                 failed=[a['phase_id'] for a in state['attempts'] if a['status']=='failed'],
@@ -441,3 +466,13 @@ def status(cfg):
                 preparation=state['completed'].get('prepare',{}).get('result'),viewer=str(Path(cfg['work'])/'data/viewer.html'),
                 gavd_completed_shards=sum(key.startswith('gavd-') for key in state['completed']),
                 report=str(Path(cfg['work'])/'report.md'),report_available=(Path(cfg['work'])/'report.md').is_file())
+    if cfg.get('study_kind') == 'jepa_response_followup':
+        from .followup import budget_usage
+        result.update(study_kind=cfg['study_kind'], parent_work=cfg['followup']['parent_binding']['parent_work'],
+                      deadline_utc=cfg['followup']['deadline_utc'], budget_categories=budget_usage(state),
+                      admission=state['completed'].get('followup-profile',{}).get('result',{}).get('admission'),
+                      parent_bundle=cfg['followup']['parent_binding']['bundle'],
+                      viewer=str(Path(cfg['followup']['parent_binding']['parent_work'])/'data/viewer.html'))
+        if (Path(cfg['work'])/'followup-status.json').is_file():
+            result['execution_result'] = read_json(Path(cfg['work'])/'followup-status.json')
+    return result

@@ -11,6 +11,9 @@ from .config import initialize, load_config, preflight
 
 
 def verify_study(cfg):
+    if cfg.get('study_kind') == 'jepa_response_followup':
+        from .followup import verify_followup
+        return verify_followup(cfg)
     from .scheduler import _verify_frozen
     from .data import load_dataset,select_rows
     import numpy as np
@@ -78,9 +81,14 @@ def verify_study(cfg):
 def parser():
     p=argparse.ArgumentParser(description=__doc__)
     commands=p.add_subparsers(dest='command',required=True)
-    for command in ('init','preflight','prepare','validate','plan','cohort','run','worker','evaluate','status','report','verify','lock-confirmation','evaluate-confirmation'):
+    for command in ('init','setup-followup','preflight','prepare','validate','plan','cohort','run','worker','evaluate','status','report','verify','lock-confirmation','evaluate-confirmation'):
         sub=commands.add_parser(command)
         sub.add_argument('--work',type=Path,required=True)
+        if command=='setup-followup':
+            sub.add_argument('--parent-work',type=Path,required=True)
+            sub.add_argument('--deadline-utc',help='Explicit offset-aware cutoff for a new child; saved cutoffs cannot be edited.')
+            sub.add_argument('--include-base-readouts',action='store_true',default=None,
+                             help='Add nine coordinate-only readouts using the same frozen encoders; 27 optimization phases.')
         if command=='init':
             sub.add_argument('--root',type=Path)
             sub.add_argument('--fixture',action='store_true')
@@ -125,13 +133,29 @@ def main(argv=None):
         result=run_command(args)
         print(json.dumps(result,indent=2,allow_nan=False))
         return result
-    if args.command=='init':
+    if args.command=='setup-followup':
+        from .followup import initialize_followup
+        cfg=initialize_followup(args.work,parent_work=args.parent_work,deadline_utc=args.deadline_utc,
+                                include_base_readouts=args.include_base_readouts)
+        counts=read_json(Path(cfg['work'])/'plan.json')['counts']
+        result=dict(status='RESPONSE_FOLLOWUP_CONFIGURED', work=cfg['work'],
+                    parent_work=cfg['followup']['parent_binding']['parent_work'],
+                    prepared_bundle=cfg['followup']['parent_binding']['bundle'],
+                    actual_updates=cfg['followup']['parent_binding']['actual_updates'],
+                    optimization_phases=counts['optimization_phases'], final_models=counts['final_fits'], seeds=cfg['seeds'],
+                    deadline_utc=cfg['followup']['deadline_utc'],
+                    maximum_gpu_hours=cfg['resources']['gpu_hours'],
+                    session=str(Path(cfg['work'])/'session.env'), parent_modified=False)
+    elif args.command=='init':
         result=initialize(args.work,root=args.root,fixture=args.fixture,source_config=args.source_config,source_bundle=args.source_bundle,
                           source_selection=args.source_selection,cohort_preset=args.cohort_preset,
                           reservation_csv=args.reservation_csv,motion_review_csv=args.motion_review_csv,
                           num_shards=args.num_shards,experiment_set=args.experiment_set)
     else:
         cfg=load_config(args.work)
+        followup=cfg.get('study_kind')=='jepa_response_followup'
+        if followup and args.command in {'prepare','lock-confirmation','evaluate-confirmation'}:
+            raise ValueError('The response follow-up uses only its bound prepared parent; confirmation is excluded')
         if args.command=='preflight':
             if args.gpu and not cfg['fixture']:
                 import os
@@ -142,7 +166,10 @@ def main(argv=None):
         elif args.command=='plan':
             result=read_json(args.work/'plan.json')
         elif args.command=='cohort':
-            if cfg['fixture']:
+            if followup:
+                result=dict(status='READ_ONLY_PARENT_DEPENDENCY',parent=cfg['followup']['parent_binding']['parent_work'],
+                            bundle=cfg['followup']['parent_binding']['bundle'])
+            elif cfg['fixture']:
                 result={'status':'SOFTWARE_FIXTURE','message':'No AMASS source cohort is used by the fixture.'}
             elif cfg['data'].get('source_selection','legacy_roster')=='legacy_roster':
                 result={'status':'LEGACY_ROSTER','source_bundle':cfg['source_bundle']}
@@ -175,15 +202,23 @@ def main(argv=None):
             result=execute_worker(cfg,args.phase_id,args.attempt)
         elif args.command=='validate':
             from .data import load_dataset,validate_bundle
-            state=read_json(args.work/'ledger.json')
-            path=state['completed']['prepare']['result']['bundle']
+            if followup:
+                from .followup import verify_parent
+                path=verify_parent(cfg)['bundle']
+            else:
+                state=read_json(args.work/'ledger.json')
+                path=state['completed']['prepare']['result']['bundle']
             result=dict(bundle=path,**validate_bundle(load_dataset(path)))
         elif args.command=='status':
             from .scheduler import status
             result=status(cfg)
         elif args.command=='evaluate':
-            from .evaluation import evaluate_study
-            result=evaluate_study(cfg)
+            if followup:
+                from .response_evaluation import evaluate_response_followup
+                result=evaluate_response_followup(cfg)
+            else:
+                from .evaluation import evaluate_study
+                result=evaluate_study(cfg)
         elif args.command=='verify':
             result=verify_study(cfg)
         else:
