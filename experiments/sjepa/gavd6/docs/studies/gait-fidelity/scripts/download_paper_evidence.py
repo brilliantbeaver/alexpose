@@ -99,21 +99,32 @@ destinations = [entry['destination'] for entry in entries]
 if len(destinations) != len(set(destinations)):
     raise SystemExit('Duplicate evidence destination; nothing downloaded.')
 total = sum(item['bytes'] for _, item in selected)
-blocked = total > p['max_total_bytes'] or any(
-    item['required'] and item['status'] in ('oversized', 'rejected') for item in entries)
+blocking_reasons = []
+for item in entries:
+    if not item['required']:
+        continue
+    if item['status'] == 'oversized':
+        blocking_reasons.append(
+            f"{item['destination']}: {item['bytes']:,} bytes exceeds the per-file limit "
+            f"of {p['max_file_bytes']:,} bytes")
+    elif item['status'] == 'rejected':
+        blocking_reasons.append(f"{item['destination']}: {item['reason']}")
+if total > p['max_total_bytes']:
+    blocking_reasons.append(
+        f"Selected total {total:,} bytes exceeds the total limit of {p['max_total_bytes']:,} bytes")
+if not selected:
+    blocking_reasons.append('No eligible files were found; check source paths and file statuses below.')
+blocked = bool(blocking_reasons)
 inventory = dict(schema='gait-fidelity-paper-transfer-v1',
     created_utc=datetime.now(timezone.utc).isoformat(), source_asset_root=str(base),
     selected_files=len(selected), selected_bytes=total,
     max_file_bytes=p['max_file_bytes'], max_total_bytes=p['max_total_bytes'],
     missing_required=[e['destination'] for e in entries if e['required'] and e['status']=='missing'],
-    transfer_blocked=blocked, files=entries,
+    transfer_blocked=blocked, blocking_reasons=blocking_reasons, files=entries,
     scope='Development results and compact provenance; not raw data or a full rerun package.')
-if not p['apply']:
+if not p['apply'] or blocked:
     print(json.dumps(inventory, indent=2))
-    raise SystemExit(0)
-if blocked or not selected:
-    print(json.dumps(inventory, indent=2), file=sys.stderr)
-    raise SystemExit('Evidence exceeds limits or has rejected paths; preview and resolve before transfer.')
+    raise SystemExit(2 if blocked else 0)
 
 # Stream only explicit regular files. Nothing is staged or modified on HAIC.
 with tarfile.open(fileobj=sys.stdout.buffer, mode='w|gz') as archive:
@@ -131,6 +142,31 @@ with tarfile.open(fileobj=sys.stdout.buffer, mode='w|gz') as archive:
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def save_inventory(inventory, destination, prefix):
+    destination = destination.expanduser().resolve()
+    destination.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    record = destination/f'{prefix}-{stamp}.json'
+    with record.open('x') as output:
+        output.write(json.dumps(inventory, indent=2)+'\n')
+    return record
+
+
+def show_inventory(inventory):
+    if inventory['transfer_blocked']:
+        print('TRANSFER BLOCKED; no evidence files downloaded. Reasons:')
+        for reason in inventory['blocking_reasons']:
+            print('  - '+reason)
+    print(f"\nLimits: {inventory['max_file_bytes']/1024**2:g} MiB per file; "
+          f"{inventory['max_total_bytes']/1024**2:g} MiB total uncompressed content")
+    for item in inventory['files']:
+        reason = f" — {item['reason']}" if item.get('reason') else ''
+        print(f"{item['status']:10} {item.get('bytes',0)/1024:10.1f} KiB  {item['destination']}{reason}")
+    print(f"\nSelected: {inventory['selected_files']} files, {inventory['selected_bytes']/1024**2:.2f} MiB "
+          '(excludes oversized, rejected and missing files)')
+    print(f"Missing required: {len(inventory['missing_required'])}; transfer blocked: {inventory['transfer_blocked']}")
 
 
 def unpack_verified(archive, staging, max_file_bytes, max_total_bytes):
@@ -192,13 +228,23 @@ def main():
     with tempfile.TemporaryDirectory(prefix='gait-paper-download-') as temporary:
         temporary = Path(temporary); received = temporary/'received'
         with received.open('wb') as output:
-            subprocess.run(command, input=REMOTE_CODE.encode(), stdout=output, check=True)
-        if not args.apply:
+            result = subprocess.run(command, input=REMOTE_CODE.encode(), stdout=output, check=False)
+        # A policy refusal returns an inventory, never a partial evidence archive.
+        # Other SSH/remote failures retain their stderr, without echoing the payload.
+        if result.returncode not in (0, 2):
+            raise RuntimeError(f'SSH or remote exporter exited with status {result.returncode}; '
+                               'see the remote error above. No evidence files installed.')
+        if not args.apply or result.returncode == 2:
+            if received.read_bytes()[:1] != b'{':
+                raise RuntimeError(f'Remote exporter returned no valid inventory '
+                                   f'(exit {result.returncode}); see the remote error above.')
             inventory = json.loads(received.read_text())
-            for item in inventory['files']:
-                print(f"{item['status']:10} {item.get('bytes',0)/1024:10.1f} KiB  {item['destination']}")
-            print(f"\nSelected: {inventory['selected_files']} files, {inventory['selected_bytes']/1024**2:.2f} MiB")
-            print(f"Missing required: {len(inventory['missing_required'])}; transfer blocked: {inventory['transfer_blocked']}")
+            if (inventory.get('schema') != 'gait-fidelity-paper-transfer-v1'
+                    or (result.returncode == 2 and not inventory.get('transfer_blocked'))):
+                raise ValueError('Remote exporter returned an unexpected inventory')
+            show_inventory(inventory)
+            record = save_inventory(inventory, args.output, 'transfer-preview')
+            print(f'Inventory: {record}')
             return 2 if inventory['transfer_blocked'] else 0
         staging = temporary/'verified'; staging.mkdir()
         inventory = unpack_verified(received, staging, payload['max_file_bytes'], payload['max_total_bytes'])
@@ -215,9 +261,7 @@ def main():
             if not target.exists():
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(staging/entry['destination'], target)
-        stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-        record = destination/f'transfer-inventory-{stamp}.json'
-        record.write_text(json.dumps(inventory, indent=2)+'\n')
+        record = save_inventory(inventory, destination, 'transfer-inventory')
         print(f"Downloaded and SHA-256 verified {len(selected)} files ({inventory['selected_bytes']/1024**2:.2f} MiB) into {destination}")
         print(f'Inventory: {record}')
         if inventory['missing_required']:
@@ -230,6 +274,6 @@ def main():
 if __name__ == '__main__':
     try:
         raise SystemExit(main())
-    except (OSError, ValueError, subprocess.CalledProcessError, tarfile.TarError) as error:
+    except (OSError, ValueError, RuntimeError, tarfile.TarError) as error:
         print(f'Evidence download failed: {error}', file=sys.stderr)
         raise SystemExit(1)

@@ -1,0 +1,160 @@
+{
+  "status": "TARGETED_VALIDATION_PASSED_FULL_FIXTURE_BLOCKED",
+  "recorded_utc": "2026-09-25T23:48:08.513843+00:00",
+  "notebook_count": 15,
+  "code_cells": 141,
+  "notebooks": [
+    {
+      "path": "notebooks/gait_fidelity/00_start_here.ipynb",
+      "sha256": "5d7fb7e336602afcaf544213c7f1354c27fd4dab1be30c86d82a00a3816aad30",
+      "code_cells": 4,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/01_data_and_references.ipynb",
+      "sha256": "3d076f6af4396fbfef1d0fda0b995bb008fc387700847aaf70e50e8cfe6c0d71",
+      "code_cells": 14,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/02_masking_and_controls.ipynb",
+      "sha256": "3d5c0f3df496286be6b03e894d9f501e8be7c917539d893f4e1dee7b000a85cb",
+      "code_cells": 8,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/03_experiment_matrix.ipynb",
+      "sha256": "abf8f477a0bc17d1f920e68bcd3a28d1c9b04df43727619ba889003ade095217",
+      "code_cells": 10,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/04_run_and_monitor.ipynb",
+      "sha256": "a7ba52cf52ff3fde87be67efc46339e072bf2ce1805839eec870c84bebe8eeae",
+      "code_cells": 14,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/05_evaluate_and_visualize.ipynb",
+      "sha256": "2fab7dce4866db2b7db6a7071fb9b275fd9ccd133f9b61e3d018ba6183436672",
+      "code_cells": 15,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/06_verify_and_write.ipynb",
+      "sha256": "7d2299daca64e080889a0db3d2ba37dc448319fa6939e3a5fef186f080464857",
+      "code_cells": 9,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/07_completed_study_walkthrough.ipynb",
+      "sha256": "d3bcf13641b19b93c8d0b4ac17fbfa00ac15ce9b860377bc8a6a939a67d7c308",
+      "code_cells": 15,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/A_masking_and_change.ipynb",
+      "sha256": "39a70f7c373590981b8beac1bbc2bdd7c9dcb80ab8bc85be5adf369f359ebdb6",
+      "code_cells": 6,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/B_mask_structure_controls.ipynb",
+      "sha256": "e59b1cb185f9b85e787a793478107928bd20fdb475498f9d9d0e0fc4fe563e8d",
+      "code_cells": 6,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/C_practical_benchmarks.ipynb",
+      "sha256": "eda2a0917b0d5c21d8c0dbc3041b7124de0ac4f1d21998b8d00a14016885bf54",
+      "code_cells": 7,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/D_pretraining_information.ipynb",
+      "sha256": "ec1529819321e17fc8ca694723d06c2fc74d2be87bbef2e585658ebf938188ba",
+      "code_cells": 6,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/E_pairing_and_label_controls.ipynb",
+      "sha256": "dbf5cae719c4c8419bf094c450311b8e7bdba7d3eafe41cc2d1f55c1b8ece278",
+      "code_cells": 7,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/F_jepa_response.ipynb",
+      "sha256": "a4428aa0c80e5849415360a5c9e8e85956cdb360dad377bf165bc602f065a091",
+      "code_cells": 11,
+      "source_outputs_cleared": true
+    },
+    {
+      "path": "notebooks/gait_fidelity/experiments/G_readout_repair.ipynb",
+      "sha256": "a8f12841986ce1d317189940c91559fa788b50c8fdf66ce1555a8435c020ea49",
+      "code_cells": 9,
+      "source_outputs_cleared": true
+    }
+  ],
+  "tests": {
+    "count": 64,
+    "status": "passed",
+    "modules": [
+      "test_tutorials",
+      "test_measurements",
+      "test_masking",
+      "test_response_training",
+      "test_response_evaluation",
+      "test_repair_training",
+      "test_repair_evaluation"
+    ]
+  },
+  "response_calculation": {
+    "code_cells": 11,
+    "status": "passed"
+  },
+  "repair_calculation": {
+    "code_cells": 9,
+    "status": "passed",
+    "checks": [
+      "values",
+      "coordinate gradients",
+      "gradient energy calibration",
+      "model state",
+      "AdamW state",
+      "frozen encoder",
+      "input-only deployment",
+      "six retained calibration coefficients"
+    ]
+  },
+  "completed_evidence_walkthrough": {
+    "status": "PASS",
+    "mode": "downloaded-development-evidence",
+    "source_sha256": "d3bcf13641b19b93c8d0b4ac17fbfa00ac15ce9b860377bc8a6a939a67d7c308",
+    "python": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/.venv/bin/python",
+    "evidence": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/iclr",
+    "elapsed_seconds": 5.38,
+    "notebook": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity/notebook-walkthrough-20260925/07_completed_study_walkthrough.ipynb",
+    "html": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/outputs/gait-fidelity/notebook-walkthrough-20260925/index.html",
+    "training_or_cluster_work": false,
+    "code_cells": 15,
+    "figure_outputs": 11,
+    "error_outputs": 0
+  },
+  "visual_review": {
+    "walkthrough_figures": 11,
+    "repair_gradient_support": true
+  },
+  "full_fixture_execution": {
+    "status": "blocked",
+    "reason": "ENOSPC: local disk full during checkpoint or prediction writes",
+    "attempts": 2,
+    "scientific_run_started": false,
+    "temporary_failed_fixtures_removed": true
+  },
+  "protected_source_and_evidence": {
+    "files": 139,
+    "changed": []
+  },
+  "no_new_scientific_training": true,
+  "haic_validation": false
+}

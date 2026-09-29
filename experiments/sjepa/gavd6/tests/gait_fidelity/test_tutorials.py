@@ -31,11 +31,11 @@ submit = import_file('gait_fidelity_slurm_submit', SLURM / 'submit.py')
 class TutorialStructureTests(unittest.TestCase):
     def test_notebooks_are_ordered_and_code_compiles(self):
         notebooks = sorted(NOTEBOOKS.glob('*.ipynb'))
-        self.assertEqual(len(notebooks), 7)
+        self.assertEqual(len(notebooks), 8)
         for index, path in enumerate(notebooks):
             self.assertTrue(path.name.startswith(f'{index:02d}_'))
         experiments = sorted((NOTEBOOKS / 'experiments').glob('*.ipynb'))
-        self.assertEqual(len(experiments), 6)
+        self.assertEqual(len(experiments), 7)
         for index, path in enumerate(experiments):
             self.assertTrue(path.name.startswith(chr(ord('A') + index) + '_'))
         for path in notebooks + experiments:

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="432" viewBox="0 0 1020 432"><title>JEPA-inspired pose restoration: training and deployment</title><desc>Observed poses train a student encoder and predictor against a reference-pose teacher. The teacher follows student parameters. Deployment uses a frozen encoder and readout, with an observed-coordinate residual.</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526571"/></marker></defs><rect width="1020" height="432" fill="white"/>
+<text x="14" y="23" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#1c2c37" text-anchor="start">A  PREDICTIVE PRETRAINING</text>
+<rect x="14" y="46" width="215" height="70" rx="4" fill="#f0f5f8" stroke="#becbd4"/>
+<text x="121.5" y="73" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Estimated poses</text>
+<text x="121.5" y="98" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">artificially masked</text>
+<rect x="280" y="46" width="170" height="70" rx="4" fill="#f0f5f8" stroke="#becbd4"/>
+<text x="365.0" y="73" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Student encoder</text>
+<text x="365.0" y="98" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">trainable features</text>
+<rect x="502" y="46" width="170" height="70" rx="4" fill="#f0f5f8" stroke="#becbd4"/>
+<text x="587.0" y="73" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Predictor</text>
+<text x="587.0" y="98" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">trainable</text>
+<polyline points="229,81 280,81" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<polyline points="450,81 502,81" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="14" y="175" width="215" height="70" rx="4" fill="#edf6f2" stroke="#becbd4"/>
+<text x="121.5" y="202" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Reference poses</text>
+<text x="121.5" y="227" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">projected body joints</text>
+<rect x="280" y="175" width="170" height="70" rx="4" fill="#edf6f2" stroke="#becbd4"/>
+<text x="365.0" y="202" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Teacher encoder</text>
+<text x="365.0" y="227" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">targets; no gradient</text>
+<polyline points="229,210 280,210" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<polyline points="365,116 365,175" fill="none" stroke="#526571" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="380" y="149" font-family="Arial,sans-serif" font-size="14" font-weight="normal" fill="#1c2c37" text-anchor="start">moving average</text>
+<rect x="745" y="46" width="260" height="199" rx="4" fill="#faf7ef" stroke="#cfc5ad"/>
+<text x="875" y="76" font-family="Arial,sans-serif" font-size="20" font-weight="bold" fill="#1c2c37" text-anchor="middle">Supervision</text>
+<text x="875" y="108" font-family="Arial,sans-serif" font-size="17" font-weight="normal" fill="#1c2c37" text-anchor="middle">Match reference features</text>
+<text x="875" y="147" font-family="Arial,sans-serif" font-size="17" font-weight="normal" fill="#1c2c37" text-anchor="middle">Plus matched auxiliary:</text>
+<text x="875" y="177" font-family="Arial,sans-serif" font-size="17" font-weight="normal" fill="#1c2c37" text-anchor="middle">each state independently</text>
+<text x="875" y="205" font-family="Arial,sans-serif" font-size="17" font-weight="normal" fill="#1c2c37" text-anchor="middle">or the difference of states</text>
+<polyline points="672,81 745,81" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<polyline points="450,210 745,210" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<text x="14" y="284" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#1c2c37" text-anchor="start">B  RESTORATION AFTER READOUT FITTING</text>
+<rect x="14" y="304" width="215" height="70" rx="4" fill="#f0f5f8" stroke="#becbd4"/>
+<text x="121.5" y="331" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Estimated poses</text>
+<text x="121.5" y="356" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">no artificial masking</text>
+<rect x="280" y="304" width="170" height="70" rx="4" fill="#f0f5f8" stroke="#becbd4"/>
+<text x="365.0" y="331" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Frozen encoder</text>
+<text x="365.0" y="356" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">learned features</text>
+<rect x="502" y="304" width="170" height="70" rx="4" fill="#f0f5f8" stroke="#becbd4"/>
+<text x="587.0" y="331" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Fitted readout</text>
+<text x="587.0" y="356" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">coordinate output</text>
+<rect x="745" y="304" width="260" height="70" rx="4" fill="#edf6f2" stroke="#becbd4"/>
+<text x="875.0" y="331" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1c2c37" text-anchor="middle">Restored trajectory</text>
+<text x="875.0" y="356" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">12 joints × 128 frames</text>
+<polyline points="229,339 280,339" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<polyline points="450,339 502,339" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<polyline points="672,339 745,339" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<polyline points="120,374 120,408 875,408 875,374" fill="none" stroke="#526571" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="287" y="395" width="425" height="24" fill="white"/>
+<text x="500" y="414" font-family="Arial,sans-serif" font-size="16" font-weight="normal" fill="#1c2c37" text-anchor="middle">Add observed coordinates where available</text>
+</svg>
