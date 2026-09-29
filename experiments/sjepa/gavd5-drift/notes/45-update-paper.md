@@ -5,7 +5,7 @@
 * https://physworld-org.github.io/physworld.github.io/cfp/
 
 
-Iteratively create 7 versions of the paper without overriding by thoughtfully incorporating each of the successive versions' critique and suggestions. Each version must improve upon previous versions by carefully reviewing and selecting the most appropriate results, inferences, and findings from the notebook results, as well as any relevant literature from authoritative sources such as ArXiv, along with this summary document: neurips-laterality\docs\TUTORIAL.md.  Be thoughtful and strategic in what to select and what to ignore in order to create an ever more compelling, cogent, and intellectually relevant paper for the above workshop.
+Iteratively create 7 versions of the paper without overriding by thou3ghtfully incorporating each of the successive versions' critique and suggestions. Each version must improve upon previous versions by carefully reviewing and selecting the most appropriate results, inferences, and findings from the notebook results, as well as any relevant literature from authoritative sources such as ArXiv, along with this summary document: neurips-laterality\docs\TUTORIAL.md.  Be thoughtful and strategic in what to select and what to ignore in order to create an ever more compelling, cogent, and intellectually relevant paper for the above workshop.
 
 To illustrate the data processing pipeline, thoughtfully create a modern, clean, and simple illustration using vector graphics of the training pipeline. Specifically, highlight how laterality is explicitly introduced into the training of the encoder. Use best UI/UX design skills for your vector graphics.
 
