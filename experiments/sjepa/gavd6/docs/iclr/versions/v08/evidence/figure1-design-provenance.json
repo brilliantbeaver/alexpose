@@ -1,0 +1,64 @@
+{
+  "scope": "Original vector workflow schematic with hand-designed twelve-joint gait icons; no empirical pose data, reconstructed predictions, or imported artwork.",
+  "figure": "method",
+  "physical_size_inches": [
+    5.5,
+    3.15
+  ],
+  "implementation": "scripts/build_figures.py:schematic",
+  "design_precedents": [
+    {
+      "paper": "I-JEPA",
+      "url": "https://arxiv.org/pdf/2301.08243",
+      "figure": "3, page 3",
+      "design_lesson": "Separate student/predictor and target-encoder paths; transfer no architecture claims or artwork."
+    },
+    {
+      "paper": "MotionBERT",
+      "url": "https://arxiv.org/pdf/2210.06551",
+      "figure": "1, page 1",
+      "design_lesson": "Separate representation training from downstream use; retain this study's 2D restoration task."
+    }
+  ],
+  "semantic_contract": [
+    "The icons are explicitly illustrative; the drawing-only joint rotation is not an experimental edit magnitude or prediction.",
+    "Original and edited icons represent complete128-frame,12-joint motion windows. Actual synthetic edits precede projection.",
+    "Person-disjoint fitting uses112training people; scoring uses14reused development people and3fitted seeds.",
+    "Clean projected references provide teacher targets and coordinate supervision during training.",
+    "Endpoint and delta use alternative auxiliaries in separately fitted runs with the same base objective; exact transformed-score losses remain in Equation2.",
+    "The encoder stays fixed while a fresh coordinate-supervised readout is fitted; direct fitting is a separate jointly adapted control.",
+    "Each development window is restored independently; references connect only to scoring, not model input.",
+    "Evaluation distinguishes asymmetry-change error, knee-trajectory error, and posthoc anatomical assignment; support and failure accounting remain in methods.",
+    "EMA, masking/query support, and teacher detachment remain in the methods rather than the workflow graphic.",
+    "Independent restoration is distinct from paired response scoring: both restored windows and both references determine the asymmetry-change error."
+  ],
+  "assets": {
+    "scripts/build_figures.py": {
+      "sha256": "06f42606c966d85fc7e47acf6115d5de53590ae29f3e3cf82e4d7d339dde90ba",
+      "bytes": 15830
+    },
+    "figures/method.pdf": {
+      "sha256": "f8d6ed4f2203ec9f097bdf6b988cecc5d1db0bf519c98224d0968afb53816c44",
+      "bytes": 28180
+    },
+    "figures/method.svg": {
+      "sha256": "b3a75bd29a1c5770e6d9b0e217d645c67e3db2c1a39a37d58134d76d072c583a",
+      "bytes": 29868
+    },
+    "figures/method.png": {
+      "sha256": "2e7ba763009078a37f3d7ea94103e8af90e7b4b4c148327f701d2371170d222a",
+      "bytes": 127279
+    },
+    "figures/method-gray.png": {
+      "sha256": "508757ac04e693e83fb45e67e295b9ceb0b2ce53945a83448e9fa0ae01a43f0f",
+      "bytes": 65125
+    }
+  },
+  "icon_specification": {
+    "joint_count": 12,
+    "joints": "bilateral shoulders, elbows, wrists, hips, knees, ankles",
+    "source": "Hand-designed schematic coordinates inside schematic(); not motion-capture or prediction arrays.",
+    "stacked_frames": "Visual cue for a complete motion window; not an assertion of a three-frame input.",
+    "highlight": "Green marks the illustrative edited leg, without a clinical label."
+  }
+}

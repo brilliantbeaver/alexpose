@@ -1,0 +1,15 @@
+{
+  "inputs_sha256": {
+    "outputs/iclr/walking-core/evaluation/per-person.csv": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+    "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv": "890fe865fcbd1ce20ccf8a3e82534854a9b5f82fce4a346e01ac26172e0a7290",
+    "outputs/iclr/walking-core/evaluation/comparisons.json": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+    "outputs/iclr/jepa-response/evaluation/comparisons.json": "f22fe912d0b79876843810e5cea714895943f3fbc686047d54fd89f9599a8ce6",
+    "outputs/iclr/readout-repair/development/evaluation/comparisons.json": "abaae8403ef37899fbf8933163fe9b05d2b23dfc0838a30263ba17631873983e"
+  },
+  "aggregation": "Equal seeds within person, then equal people; input person CSVs already apply nested window/motion/condition weights.",
+  "n_people": 14,
+  "n_seeds": 3,
+  "illustration": "laterality-contract is algebraic example, not observed measurements.",
+  "uncertainty": "Only failures-and-intervals panel B has intervals; others descriptive means."
+}

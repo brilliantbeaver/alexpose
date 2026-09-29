@@ -1,0 +1,153 @@
+{
+  "status": "passed",
+  "main_pages": 9,
+  "total_pages": 16,
+  "disclosure_page": 10,
+  "appendix_start_page": 12,
+  "cited_primary_sources": 18,
+  "historical_files_preserved": 212,
+  "official_template_files_unchanged": [
+    "iclr2027_conference.bib",
+    "math_commands.tex",
+    "fancyhdr.sty",
+    "iclr2027_conference.bst",
+    "iclr2027_conference.tex",
+    "natbib.sty",
+    "iclr2027_conference.sty"
+  ],
+  "fonts": {
+    "paper-v08.pdf": {
+      "all_embedded": true,
+      "font_count": 44,
+      "times_family": true
+    },
+    "figures/cases.pdf": {
+      "all_embedded": true,
+      "font_count": 3,
+      "times_family": false
+    },
+    "figures/laterality.pdf": {
+      "all_embedded": true,
+      "font_count": 2,
+      "times_family": false
+    },
+    "figures/method.pdf": {
+      "all_embedded": true,
+      "font_count": 5,
+      "times_family": false
+    },
+    "figures/protocol.pdf": {
+      "all_embedded": true,
+      "font_count": 5,
+      "times_family": false
+    },
+    "figures/reliability.pdf": {
+      "all_embedded": true,
+      "font_count": 3,
+      "times_family": false
+    },
+    "figures/repair.pdf": {
+      "all_embedded": true,
+      "font_count": 2,
+      "times_family": false
+    },
+    "figures/restoration.pdf": {
+      "all_embedded": true,
+      "font_count": 4,
+      "times_family": false
+    },
+    "figures/study-questions.pdf": {
+      "all_embedded": true,
+      "font_count": 4,
+      "times_family": false
+    }
+  },
+  "evidence_input_hashes_verified": 11,
+  "saved_comparisons_reproduced": [
+    {
+      "run": "walking-core",
+      "metric": "response_error",
+      "passed": true
+    },
+    {
+      "run": "walking-core",
+      "metric": "nuisance_error",
+      "passed": true
+    },
+    {
+      "run": "walking-core",
+      "metric": "A_error",
+      "passed": true
+    },
+    {
+      "run": "walking-core",
+      "metric": "waveform_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "response_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "nuisance_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "A_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "waveform_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "waveform_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "response_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "synthetic_all_nle",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "response_failure_contribution",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "response_success_contribution",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "zero_response_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "waveform_failure_contribution",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "waveform_success_contribution",
+      "passed": true
+    }
+  ],
+  "paper_sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+  "source_sha256": "85b08ea58f95be0384244aa3848bf23fb77a4ac5c64ae7f32e723d2d1a523e68",
+  "appendix_sha256": "6dde88735f69940dbcb2ed69d8c686a1d8db2ff23588de7363c61279410c8e50",
+  "reader_facing_local_setup_scan": "passed",
+  "visual_review": "qa/portable-manuscript-review.json; reviews/portable-manuscript-methods-review.md and reviews/portable-manuscript-evidence-review.md. Earlier figure and comparison reviews remain historical; visual inspection is separate from these structural assertions."
+}

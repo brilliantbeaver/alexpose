@@ -1,0 +1,51 @@
+{
+  "source": "/Users/theodoremui/dev/alexpose/experiments/sjepa/gavd6/docs/iclr/versions/v08/evidence/summary-figure-provenance.json",
+  "source_sha256": "aedb5bda28b0829fd3f74a81334d8ecf98c6bb7f0260f73592ff6d7789af8713",
+  "width_inches": 7,
+  "height_inches": 2.35,
+  "new_inference": false,
+  "plotted_values": [
+    {
+      "id": "core",
+      "source": "outputs/iclr/walking-core/evaluation/comparisons.json",
+      "selection": "response_error",
+      "candidate": "M-paired_jepa-graph_time-paired_change",
+      "comparator": "P-direct-none-paired_change",
+      "metric": "response_error",
+      "gain_deg": 0.6880836675524532,
+      "ci95_low_deg": -0.6402124308922824,
+      "ci95_high_deg": 1.976709265818937,
+      "interval_key": "crossed_person_seed_ci95",
+      "people": 14,
+      "fitted_seeds": 3
+    },
+    {
+      "id": "difference",
+      "source": "outputs/iclr/jepa-response/evaluation/comparisons.json",
+      "selection": "response_error",
+      "candidate": "F-response-jepa_delta_v1-graph_time-paired_change",
+      "comparator": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+      "metric": "response_error",
+      "gain_deg": 0.3730535042445884,
+      "ci95_low_deg": -1.1102719742482026,
+      "ci95_high_deg": 1.7603366113367258,
+      "interval_key": "crossed_person_seed_ci95",
+      "people": 14,
+      "fitted_seeds": 3
+    },
+    {
+      "id": "repair",
+      "source": "outputs/iclr/readout-repair/development/evaluation/comparisons.json",
+      "selection": "primary.waveform_error",
+      "candidate": "R-repair-jepa_delta_v1-dense_change",
+      "comparator": "R-repair-jepa_delta_v1-scalar_low",
+      "metric": "waveform_error",
+      "gain_deg": 0.2788559690664355,
+      "ci95_low_deg": -0.19491350692604092,
+      "ci95_high_deg": 0.7526254450589119,
+      "interval_key": "person_averaged_t_ci95",
+      "people": 14,
+      "fitted_seeds": 3
+    }
+  ]
+}

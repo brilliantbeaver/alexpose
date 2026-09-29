@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{template/iclr2027_conference,times}
+\usepackage{amsmath,amssymb,graphicx,booktabs,hyperref,url}
+\title{Evaluating Feature Prediction for 2D Pose Trajectory Restoration with Paired Synthetic Supervision}
+\author{Anonymous authors}
+\begin{document}\maketitle
+\begin{abstract}
+We examine whether predicting reference features improves the restoration of side-sensitive movement changes from noisy pose observations. This figure prototype checks scientific relationships and actual reading size in the official manuscript template.
+\end{abstract}
+\section{Controlled restoration}
+States $a$ and $b$ share a source movement window. Physical mirroring changes both reference and rendered observation; naming corruption changes the observation alone. The model processes one state at inference. The mathematical schematic represents executed relationships and contains no synthetic example presented as a model result.
+\begin{figure}[h]\centering
+\includegraphics[width=\linewidth]{figures/method.pdf}
+\caption{Paired supervision with single-state inference. $M_i$ is body-model motion, $T_m$ the physical mirror, $\pi_c$ the fixed-camera projection, and $N_n$ an input naming transformation. Occlusion enters rendering. Feature residuals compare student predictions with privileged reference-teacher targets at common queries. The teacher is updated by exponential moving average of student weights; target gradients stop. Direct fitting instead updates the encoder and readout jointly.}
+\end{figure}
+\clearpage
+\section{Does restoration recover movement change?}
+Lower response error relative to observed coordinates does not establish useful change recovery. The zero-response benchmark is lower than every neural method in the pooled export. The next figure distinguishes jointly trained direct fitting from frozen-encoder readouts, and separates absolute scores from the paired effect of supervision.
+\begin{figure}[h]\centering
+\includegraphics[width=\linewidth]{figures/restoration.pdf}
+\caption{Restoration and supervision tradeoffs. A--B: descriptive hierarchical means over 14 development people and three fitted seeds, pooled over all estimators. Circles use coordinate supervision; open triangles add the original scalar-plus-geometry package. The zero-response reference has no waveform. C: change minus coordinate waveform error, with paired crossed-person/seed 95\% bootstrap intervals (2,000 draws); positive values indicate deterioration. These are exploratory contrasts across correlated families. Scores retain failed measurements at 720$^\circ$ for response and 180$^\circ$ for waveform.}
+\end{figure}
+\end{document}

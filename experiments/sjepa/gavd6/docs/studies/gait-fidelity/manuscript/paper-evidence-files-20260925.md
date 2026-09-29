@@ -38,13 +38,41 @@ Run from the local repository, where SSH can request the usual HAIC login:
 .venv/bin/python docs/studies/gait-fidelity/scripts/download_paper_evidence.py --apply
 ```
 
-The first command inventories remote files without downloading their contents.
+The first command inventories remote files without downloading their contents
+and saves `outputs/iclr/transfer-preview-<timestamp>.json` locally.
 The second streams a compressed packet over one SSH connection, verifies SHA-256
 hashes, and preserves a timestamped transfer inventory. No files are written on
 HAIC. Defaults enforce 10 MiB per source file and 50 MiB total selected content.
 Missing required files are reported; an applied partial packet exits with status
 3. Oversized required files or a total over the cap block transfer. Existing
 different local files are preserved and require a fresh `--output` directory.
+Rejected required paths and an empty selection also block transfer. Both preview
+and blocked `--apply` print the blocking filenames/reasons and save the inventory;
+they exit with status 2 without installing evidence files. Selected totals exclude
+oversized, rejected, and missing files.
+
+The HAIC preview supplied on September 25 measured two required tables above
+the initial per-file limit: core `evaluation/by-condition-person.csv` at
+17,940.2 KiB (17.52 MiB) and response
+`evaluation/response-by-condition-person.csv` at 50,499.5 KiB (49.32 MiB).
+The other 67 selected files totaled 9.34 MiB. Thus the complete 69-file packet
+is approximately **76.18 MiB uncompressed**, and fits these explicit, bounded
+limits:
+
+```bash
+.venv/bin/python docs/studies/gait-fidelity/scripts/download_paper_evidence.py \
+  --max-file-mib 50 --max-total-mib 80
+.venv/bin/python docs/studies/gait-fidelity/scripts/download_paper_evidence.py \
+  --max-file-mib 50 --max-total-mib 80 --apply
+```
+
+These limits apply to the fixed evidence allowlists and successful diagnostic
+paths, not entire directories. The transfer is gzip-compressed; installed files
+occupy their original sizes. Temporary archive and verification staging require
+additional local space during transfer. The three missing release provenance
+files were optional; no required file was missing in that preview. They remain
+recorded as missing in the inventory, so the packet does not establish those
+release metadata files were available or verified.
 
 For all three runs, retain `config.json`, `plan.json`, `frozen.json`, and
 `ledger.json`. Together they record architecture/loss settings, declared method

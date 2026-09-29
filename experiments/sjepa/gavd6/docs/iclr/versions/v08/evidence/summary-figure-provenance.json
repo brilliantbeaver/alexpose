@@ -1,0 +1,169 @@
+{
+  "source_sha256": {
+    "outputs/iclr/walking-core/evaluation/comparisons.json": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+    "outputs/iclr/jepa-response/evaluation/comparisons.json": "f22fe912d0b79876843810e5cea714895943f3fbc686047d54fd89f9599a8ce6",
+    "outputs/iclr/readout-repair/development/evaluation/comparisons.json": "abaae8403ef37899fbf8933163fe9b05d2b23dfc0838a30263ba17631873983e",
+    "evidence/framing-claims.json": "19cb63cda8d2d15ce2ebdd23d9dd91033c6f0c80868518bd50647399efe52b73",
+    "outputs/iclr/walking-core/config.json": "19a1b14477f6dfa9d39ccd64e997726b750cf74341dfac62c8ccec098bf865dd",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py": "f44a4271da97a80179b28071aa003f29dc0702c01a37715aa7eb04e48a253a2b",
+    "outputs/iclr/jepa-response/config.json": "96cdf5fd61127cf68161a4f01b2377d37d88fe63fed95994a5e086744f09b6ca",
+    "outputs/iclr/readout-repair/config.json": "93d36e801fadff45e7e39b7380dcca66b82ddd825ef3b829333f8c2eae3fdb15",
+    "notebooks/gait_fidelity/03_experiment_matrix.ipynb": "ec554ffd720559ead4f0cf00c8e3dd7d0ed9be196a259b25d24f13208ef61ddf",
+    "notebooks/gait_fidelity/02_masking_and_controls.ipynb": "9d64799dc5bf373a9fe7294b17dd5c9ef6b36e1e162b331a0f112773182bb4d7",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/cohort.py": "59acd8b40ef2118ad5e4c11b62a75858634ea24d35bfa3c0ce96f8305877611c",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/data.py": "26b7ae0b12f7a99c3ec075a40d55a3e43ddea0e285a972c1dfa574b309b63c27",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/contracts.py": "58c4938d2d81b404e3574c659ea608a120d8c753d6ec261a112a684265554ec3",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/preparation.py": "b506d61c8b841510316cdf94a677ded65e22fbe74846480794e80fd0d76262fe",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/training.py": "b73b7d11eb0f2ddeb43738e49e24296cc329fb9289a57701c81eace8067327f1",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/response_calibration.py": "faf6a810ddf0a3ecc2bdb4045291586331e2c9d02ec94d3935d319b3424bd896",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_training.py": "7be694ad4421d5c6ee04fa8bfc670a67afa085870489102271c69352b78a0374",
+    "outputs/iclr/jepa-response/ledger.json": "b348371bb62583164c1373b6264096f36573551fbddc25b9794967afa1d496be",
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+    "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv": "e10243ca08f1098e33db463fec359015fdf6630ffdd5634d33b288d1f37f57f3"
+  },
+  "selected_comparisons": [
+    {
+      "id": "core",
+      "source": "outputs/iclr/walking-core/evaluation/comparisons.json",
+      "selection": "response_error",
+      "candidate": "M-paired_jepa-graph_time-paired_change",
+      "comparator": "P-direct-none-paired_change",
+      "metric": "response_error",
+      "gain_deg": 0.6880836675524532,
+      "ci95_low_deg": -0.6402124308922824,
+      "ci95_high_deg": 1.976709265818937,
+      "interval_key": "crossed_person_seed_ci95",
+      "people": 14,
+      "fitted_seeds": 3
+    },
+    {
+      "id": "difference",
+      "source": "outputs/iclr/jepa-response/evaluation/comparisons.json",
+      "selection": "response_error",
+      "candidate": "F-response-jepa_delta_v1-graph_time-paired_change",
+      "comparator": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+      "metric": "response_error",
+      "gain_deg": 0.3730535042445884,
+      "ci95_low_deg": -1.1102719742482026,
+      "ci95_high_deg": 1.7603366113367258,
+      "interval_key": "crossed_person_seed_ci95",
+      "people": 14,
+      "fitted_seeds": 3
+    },
+    {
+      "id": "repair",
+      "source": "outputs/iclr/readout-repair/development/evaluation/comparisons.json",
+      "selection": "primary.waveform_error",
+      "candidate": "R-repair-jepa_delta_v1-dense_change",
+      "comparator": "R-repair-jepa_delta_v1-scalar_low",
+      "metric": "waveform_error",
+      "gain_deg": 0.2788559690664355,
+      "ci95_low_deg": -0.19491350692604092,
+      "ci95_high_deg": 0.7526254450589119,
+      "interval_key": "person_averaged_t_ci95",
+      "people": 14,
+      "fitted_seeds": 3
+    }
+  ],
+  "protocol_claims": [
+    {
+      "id": "F03",
+      "claim": "Coordinate input/output grid is [B,128,12,2]; channels [B,128,12,5] regroup into [B,32,12,20] then [B,384,96], and decode through [B,384,8] back to the coordinate grid.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py",
+        "outputs/iclr/walking-core/config.json",
+        "outputs/iclr/jepa-response/config.json",
+        "outputs/iclr/readout-repair/config.json",
+        "notebooks/gait_fidelity/03_experiment_matrix.ipynb"
+      ],
+      "limits": "Preserves joint-index slots and timestamp order, not raw data values or anatomical correctness of corrupted names. B counts endpoint rows, not independent people."
+    },
+    {
+      "id": "F04",
+      "claim": "All token slots persist; artificial hiding zeroes xy/confidence/usability while retaining positional/time identifiers; natural missingness keeps safe xy and can retain finite native confidence.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py",
+        "notebooks/gait_fidelity/02_masking_and_controls.ipynb",
+        "notebooks/gait_fidelity/03_experiment_matrix.ipynb"
+      ],
+      "limits": "Availability masking does not delete time/joint slots or prove successful imputation."
+    },
+    {
+      "id": "F06",
+      "claim": "Canonical people inherit train/development/locked-confirmation assignments before derived variants; duplicate motion hashes cannot cross known identities/splits; windows and variants retain provenance.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity/cohort.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/data.py",
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/contracts.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/preparation.py"
+      ],
+      "limits": "Relies on audited known identities; does not exclude unknown aliases or prior upstream estimator exposure. Full original arrays are not in the compact packet."
+    },
+    {
+      "id": "F07",
+      "claim": "Training and calibration losses select training-person pairs; development references may be read during ordinary bundle validation; repair validates a lazy training-only view.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity/training.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/response_calibration.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/repair_training.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/data.py"
+      ],
+      "limits": "Do not claim development references are never opened. Later design choices reuse development outcomes, so loss separation does not imply untouched evaluation."
+    },
+    {
+      "id": "F09",
+      "claim": "Completed training uses112people,692motions,1645windows and315840endpointrecords; development uses14people,155windows,55800records; leading record counts differ because held conditions are excluded in fitting.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/ledger.json",
+        "outputs/iclr/jepa-response/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv"
+      ],
+      "limits": "Record counts remain nested within people; the larger candidate cohort plan is not the admitted cohort."
+    },
+    {
+      "id": "F10",
+      "claim": "H0 mean comparator-minus-candidate gain\u22640 versus gain>0 retrospectively formalizes the three recorded primary comparisons; original two-sided intervals and no-margin status are retained.",
+      "source_paths": [
+        "outputs/iclr/walking-core/config.json",
+        "outputs/iclr/jepa-response/config.json",
+        "outputs/iclr/readout-repair/config.json",
+        "outputs/iclr/walking-core/evaluation/comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/comparisons.json",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "limits": "No explicit original notebook H0/H1 was found; no preregistration, new one-sided test, null acceptance, equivalence, or response noninferiority is asserted."
+    }
+  ],
+  "protocol_values": {
+    "training_people": 112,
+    "development_people": 14,
+    "fitted_seeds": [
+      17,
+      29,
+      43
+    ],
+    "samples": 128,
+    "joints": 12,
+    "coordinates": 2,
+    "patch_frames": 4,
+    "tokens": 384
+  },
+  "scope": "Explanatory protocol and three separately reported declared primary estimates; no new data, fitting, tests, pooled effect, or confirmation outcomes.",
+  "gain_definition": "Comparator error minus candidate error; positive favors the named candidate.",
+  "interval_definition": "First two rows: original crossed person/seed 95% intervals. Third row: original person-averaged Student-t 95% interval conditional on three fitted seeds; ViTPose waveform outcome, not response error.",
+  "display": "Three decimal places only for visible labels; all plotted positions and saved selections use the original unrounded values.",
+  "protocol_limits": "B counts endpoint rows, not people. Missing slots retained does not establish correct imputation. Training-only fitting/calibration does not assert development data were never read for bundle validation. No locked-cohort count or result is plotted.",
+  "portability": "Run with --from-audit using this JSON, the script, and paper_style.py; no original comparison files or machine-specific ledgers required.",
+  "script_sha256": "4b4de8b7d201cb1c33f07b24afdbaea6816df10777d7ad937ff8baaf0ab046a6",
+  "shared_style_sha256": "a73b381d4a8fa235486f2dd51e938cff228f794a3e5c61983711eb9e53e899e4",
+  "outputs_sha256": {
+    "figures/protocol.pdf": "855da0812a1d56029494a8c714ca799bac2562c05b6e4fd847f827c94729b3e0",
+    "figures/protocol.svg": "2ed88fc9164f2af1ddfee65ae75f78939d16f83bbad4861e5f64c9b8ec96dba7",
+    "figures/protocol.png": "3af524049abd6d9ed5b4a591a2364c2de0eaf07b274d2a83c2a5e50a00432c43",
+    "figures/protocol-gray.png": "9f9af2b3029e8b71b650d467db84ed7b24ec5c2c52ddca50c9c82f399d175653",
+    "figures/study-questions.pdf": "d171802c5d8d9de9dbcf9c57758e827176d7fe0a2711d7ba6b6ea91ac1ff634d",
+    "figures/study-questions.svg": "a41becec4c7647c3aa20e2daa8634d2463bb6f1fd94521723d36a6a12ab6381a",
+    "figures/study-questions.png": "6224ab1cab31b314ad7d797d5fcf66f8e7de2c9e5c5dfbc4cf108e9d74e7d426",
+    "figures/study-questions-gray.png": "0eb1d63a7f83ccc36e36900ec7ea6368950d5fb14abd7a37edec2ed700c28afc"
+  }
+}

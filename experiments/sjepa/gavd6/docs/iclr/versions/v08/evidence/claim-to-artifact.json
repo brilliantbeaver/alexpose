@@ -1,0 +1,60 @@
+[
+  {
+    "claim": "Pooled zero-response benchmark and all 16 learned variants",
+    "source": "outputs/iclr/jepa-response/evaluation/per-person.csv",
+    "derived": "method_summary.csv",
+    "fields": [
+      "response_error",
+      "zero_response_error"
+    ],
+    "status": "Reproduced completed result"
+  },
+  {
+    "claim": "Delta and endpoint failure rates and unconditional score decomposition",
+    "source": "outputs/iclr/jepa-response/evaluation/per-person.csv",
+    "derived": "method_summary.csv",
+    "fields": [
+      "response_failure_rate",
+      "response_success_contribution",
+      "response_failure_contribution",
+      "response_error"
+    ],
+    "status": "New descriptive presentation of existing metrics"
+  },
+  {
+    "claim": "Sensitivity to all fixed failure costs",
+    "source": "outputs/iclr/jepa-response/evaluation/per-person.csv",
+    "derived": "penalty_sensitivity.csv; penalty_effects.csv",
+    "status": "New exploratory reanalysis; original primary unchanged"
+  },
+  {
+    "claim": "Delta and endpoint exceed zero response even at the zero-cost accounting lower bound, so their observed pooled ranking holds for every nonnegative failure cost",
+    "source": "outputs/iclr/jepa-response/evaluation/per-person.csv",
+    "derived": "method_summary.csv; penalty_effects.csv; provenance.json",
+    "status": "New exploratory lower-bound argument about observed means; not a success-only accuracy comparison or general population theorem"
+  },
+  {
+    "claim": "All observation/intervention and observation/extractor groups",
+    "source": "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv",
+    "derived": "condition_summary.csv; condition_effects.csv",
+    "status": "New exploratory strata; true magnitude bins unavailable"
+  },
+  {
+    "claim": "Original package effects across eight families",
+    "source": "outputs/iclr/jepa-response/evaluation/per-person.csv",
+    "derived": "restoration_means.csv; restoration_effects.csv",
+    "status": "Existing completed comparisons with new descriptive plot intervals"
+  },
+  {
+    "claim": "Original, low-scalar and dense repair on ViTPose",
+    "source": "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv",
+    "derived": "repair_means.csv; repair_effects.csv",
+    "status": "Original declared primary and secondary contrasts retained; new mean intervals descriptive"
+  },
+  {
+    "claim": "Initial feature-auxiliary influence asymmetry",
+    "source": "outputs/iclr/jepa-response/diagnostics/loss-calibration.json",
+    "derived": "provenance.json",
+    "status": "Verified initialization-only calculation"
+  }
+]

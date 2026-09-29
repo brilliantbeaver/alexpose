@@ -1,0 +1,27 @@
+{
+  "review_status": "No unresolved material evidence or statistical misstatement found within the stated exported-development-evidence scope.",
+  "manuscript_sha256": "eb05eea1a00f6a1bdf4341916187eecf2f10485a017471102ffd2d40cf3bd6be",
+  "empirical_inventory_hashes_reverified": 69,
+  "numerical_sweep": "docs/iclr/evidence/v06-numerical-check.json; all results unchanged in v07 apart from explicitly added calibration percentages",
+  "calibration_source": "outputs/iclr/jepa-response/diagnostics/loss-calibration.json",
+  "calibration_source_sha256": "3c00e2931bfa3a8cc7e4d94616774b81a066e60a0aabc3aa22a303a0266620d5",
+  "calibration_weighted_endpoint_percent_of_base": 10.0,
+  "calibration_weighted_delta_percent_of_base": 0.001303713963443308,
+  "calibration_is_initial_only": true,
+  "figure_sha256": {
+    "docs/iclr/figures/v04/laterality-contract.pdf": "16751677eb0a6c4961505ffcc96acc06f88c7a5cc3f3c2e0a1bf871716e7de59",
+    "docs/iclr/figures/v04/model-flow.pdf": "b7b404d4e6166656f919b873376964f8ddc2ddab4e29883223c44ccd01d59a18",
+    "docs/iclr/figures/v04/objective-tradeoff.pdf": "2f8286d38a76e97c9af4229f77b6049696bb0d5bb802c54499c8747bd788ccd4",
+    "docs/iclr/figures/v04/failures-and-intervals.pdf": "2d6947bd37d848f26956e55ffe520e8ee28077201f7a8e7ddcaa82d05fc1b2e3",
+    "docs/iclr/figures/laterality-naming.pdf": "f054a1fa868967961c57ec50a70b3c80e8f89e92496960a61f4bc7a576403202"
+  },
+  "new_experimental_evidence": false,
+  "empirical_limitations_remain": [
+    "14 reused development people",
+    "three fitted seeds",
+    "post hoc laterality analysis and unadjusted secondary comparisons",
+    "no independent confirmation or clinical evaluation",
+    "no matched external neural baseline or full convergence study",
+    "raw rendered data and checkpoints absent from compact packet"
+  ]
+}

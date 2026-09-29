@@ -2,7 +2,7 @@
 
 ## Preserving movement changes in learned pose restoration
 
-**Research proposal · 24 September 2026.** Completed synthetic core results motivate a controlled JEPA follow-up. Follow-up results are not yet available in the supplied evidence.
+**Research proposal · 24 September 2026.** This page records the proposal that followed the synthetic core. The [completed three-experiment analysis](results/iclr-analysis-20260925/README.md), dated 25 September, now interprets the walking core, JEPA response, and readout repair results with figures and independent review.
 
 [Two-page overview](proposal-brief.html) · [Printable overview](proposal-brief.pdf) · [Core analysis](results/core-analysis-20260924/README.md) · [Amended experiment](methods/core-to-followup-20260924.md)
 

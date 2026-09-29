@@ -249,7 +249,7 @@ Verification checks retained artifacts and recomputes metrics in bounded batches
 | `evaluation/responses.csv`, `evaluation/comparisons.json` | Response preservation and declared comparisons. |
 | `report.md` | Summary with the supported evidence scope. |
 
-For notebook use, continue with the [environment and walkthrough guide](../../notebooks/gait_fidelity/ENVIRONMENT.md). Notebook 04 submits jobs asynchronously; wait for the source run before running evaluation notebooks 05–06.
+For notebook use, continue with the [environment and walkthrough guide](../../notebooks/gait_fidelity/docs/ENVIRONMENT.md). Notebook 04 submits jobs asynchronously; wait for the source run before running evaluation notebooks 05–06.
 
 ## 7. Download results to your Mac
 
@@ -273,7 +273,7 @@ Read downloaded Markdown/HTML and CSVs directly. **Do not source the downloaded 
 
 ## Asset overrides and optional GAVD work
 
-Your existing `AMASS_ROOT` and `GAVD_FULL_ROOT` values can remain set throughout. A discovered or explicitly supplied preparation configuration takes precedence over the environment fallback. Changing a variable afterward does not update a saved run. The [complete variable reference](../../notebooks/gait_fidelity/ENVIRONMENT.md#optional-asset-overrides-and-precedence) explains the `ST_*` fallback paths.
+Your existing `AMASS_ROOT` and `GAVD_FULL_ROOT` values can remain set throughout. A discovered or explicitly supplied preparation configuration takes precedence over the environment fallback. Changing a variable afterward does not update a saved run. The [complete variable reference](../../notebooks/gait_fidelity/docs/ENVIRONMENT.md#optional-asset-overrides-and-precedence) explains the `ST_*` fallback paths.
 
 GAVD is a separate, optional stage. Merely exporting `GAVD_FULL_ROOT` does not start it. With the correct source session loaded, `gavd-plan` reads `$GAVD_FULL_ROOT/youtube/all`, `$GAVD_FULL_ROOT/annotations/GAVD/data` and the manifests under `$GAVD6_ROOT/manifests/gavd`. Explicit CLI paths can override those defaults. Planning hashes the referenced files and writes an immutable plan; it can take time on a large collection.
 
@@ -286,7 +286,7 @@ Use these only when adding that stage deliberately, after reviewing its data res
 
 ## Local CPU check and resource limits
 
-For a local software check, follow the [Mac CPU instructions](../../notebooks/gait_fidelity/ENVIRONMENT.md#run-the-cpu-tutorials-on-your-mac). They clear HAIC run selectors and use local Python with generated data.
+For a local software check, follow the [Mac CPU instructions](../../notebooks/gait_fidelity/docs/ENVIRONMENT.md#run-the-cpu-tutorials-on-your-mac). They clear HAIC run selectors and use local Python with generated data.
 
 The historical [compute plan](../../docs/studies/gait-fidelity/methods/execution.md) allocated 360 H100-hours plus 120 hours of reserve. The default saved runner limit is **360 GPU-hours**; the historical reserve is not automatically added. Inspect the current cohort, plan and measured profile rather than treating those allowances as runtime estimates.
 
