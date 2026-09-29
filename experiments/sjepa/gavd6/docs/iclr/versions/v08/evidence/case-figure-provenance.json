@@ -1,0 +1,68 @@
+{
+  "scope": "Exploratory participant-level illustration of saved development response errors; all 14 people shown, no selection.",
+  "source_sha256": {
+    "outputs/iclr/walking-core/evaluation/per-person.csv": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+    "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv": "f5968617a29e2adf80fe2574ebea21cbb18bd3aedbce3c59ee2f8e68a4490f55",
+    "evidence/condition_person.csv": "bd3be7e0dffd132099fe6ed2abe1bc829cdcb96a97aa756f66137f523333551e"
+  },
+  "definitions": {
+    "selection": "Every development person, ordered lexicographically by canonical person ID; display codes P01\u2013P14 preserve this fixed order across panels.",
+    "unit": "One mean per person across seeds17/29/43. Small marks and horizontal ranges show those three fitted values, not confidence intervals or additional independent participants.",
+    "gain": "Comparator response MAE minus jointly fitted direct-coordinate response MAE; positive favors direct. Success/failure here means relative error improvement/deterioration, not a binary valid/invalid prediction event or clinical outcome.",
+    "aggregation": "Original conditions/windows/source motions/person hierarchy retained. Clear and occluded response conditions use nonheld:held2:1 weights. All three pose estimators, cameras, naming conditions and physical orientations are pooled.",
+    "cost": "All response scores retain the original720-degree cost for eligible measurement failures. Zero response produces no restored coordinates.",
+    "panels": "A compares unchanged observations with direct after pooling clear/occluded; B and C compare zero response with direct within clear and occluded observations. Comparators and x-axis ranges differ and are explicitly labeled.",
+    "clinical_scope": "Recorded source identifiers and synthetic development results do not establish disease, clinical affected side, healthy/diseased pairing, treatment effect, or biomechanical-world-model validity."
+  },
+  "panels": {
+    "pooled_noisy": {
+      "people": 14,
+      "fitted_seeds": 3,
+      "mean_gain_deg": 5.143928416150191,
+      "person_means_favoring_direct": 10,
+      "person_means_favoring_comparator": 4,
+      "x_axis_limits": [
+        -5,
+        25
+      ]
+    },
+    "clear_zero": {
+      "people": 14,
+      "fitted_seeds": 3,
+      "mean_gain_deg": 1.9135102457354336,
+      "person_means_favoring_direct": 14,
+      "person_means_favoring_comparator": 0,
+      "x_axis_limits": [
+        -0.2,
+        2.8
+      ]
+    },
+    "occluded_zero": {
+      "people": 14,
+      "fitted_seeds": 3,
+      "mean_gain_deg": -5.380160926768499,
+      "person_means_favoring_direct": 1,
+      "person_means_favoring_comparator": 13,
+      "x_axis_limits": [
+        -22,
+        2
+      ]
+    }
+  },
+  "checks": {
+    "all_people_retained": true,
+    "paired_seeds_retained": true,
+    "observation_reaggregation_matches_core_direct": true,
+    "condition_rows_match_previous_independent_audit": true,
+    "no_confidence_intervals_invented": true
+  },
+  "script_sha256": "06a5925f6aa9753ca021c087396aceb64c9c29d1ef194c8d3e44b16c2f582f6c",
+  "shared_style_sha256": "a73b381d4a8fa235486f2dd51e938cff228f794a3e5c61983711eb9e53e899e4",
+  "outputs_sha256": {
+    "evidence/case-figure-seeds.csv": "45aa52689b7b3c19dbadb035a020ae4cc69423ca0112cf4311c40362c2a283ca",
+    "evidence/case-figure-person.csv": "70b98da343ea1488c3ce2fe89af63e609f1cd7d4ac3147e429d3a62db685e87f",
+    "figures/cases.pdf": "5d8345845493d8ff9f33e19f9ea51452981a7c3c9dd2e4fcbc27dc898defc982",
+    "figures/cases.svg": "2a1a157e479e4ee7df767679d58b413837af4d52597967ebcbf6f67336774b35",
+    "figures/cases.png": "9dfcb103816c682b3350e217a3f633cb76d35b4647dfb04c99bdf847776c9a4c"
+  }
+}

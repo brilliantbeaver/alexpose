@@ -1,0 +1,800 @@
+{
+  "scope": "Independent numerical/evidence audit of final v08 source and PDF snapshot; no new training or external empirical confirmation.",
+  "snapshot_status": "Current standalone manuscript: nine main pages and five appendix pages (16 total). Main paper and both appendix versions describe the scientific experiments without local setup references. Three primary comparisons, seven numerical tables, all figures and evidence CSVs are preserved; no archive or manifest hashes are bound.",
+  "primary_interval_contract": "Core/response crossed person-seed percentile bootstrap; repair person-t after seed averaging; new analyses exploratory and unadjusted.",
+  "claims": [
+    {
+      "id": "M01",
+      "manuscript_location": "Abstract; Section 4.1; Appendix C",
+      "claim": "Zero-response mean 5.810830 is below all 16 pooled learned response means at cost720; direct-coordinate mean7.544155; zero-predictor advantage (direct error minus zero error)1.733325 [0.528417,3.149885] after negating and reversing the direct-versus-zero interval.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/method_summary.csv",
+        "docs/iclr/versions/v08/evidence/penalty_effects.csv"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/restoration.pdf"
+      ],
+      "analysis_status": "completed means; newly exploratory paired benchmark interval"
+    },
+    {
+      "id": "M02",
+      "manuscript_location": "Section 4.1; Appendix C",
+      "claim": "Unchanged/direct response12.688083/7.544155, waveform18.570833/12.073284, NLE.071772/.029791; response improves10/14 people and waveform/NLE14/14.",
+      "source_paths": [
+        "outputs/iclr/walking-core/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/final-numerical-checks.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M03",
+      "manuscript_location": "Abstract; Section 4.2; Appendix C",
+      "claim": "Response declared primary endpoint-minus-delta0.373054 [-1.110272,1.760337]; core declared primary direct-change-minus-core-JEPA-change0.688084 [-.640212,1.976709].",
+      "source_paths": [
+        "outputs/iclr/walking-core/evaluation/comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/comparisons.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/provenance.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M04",
+      "manuscript_location": "Section 4.2",
+      "claim": "Coordinate-only delta/endpoint means10.944775/10.232657 reverse point-estimate ordering; response readout interaction1.085171 [-.651744,2.847543] remains uncertain.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/readout-control-comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/final-numerical-checks.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M05",
+      "manuscript_location": "Section 4.2; Appendix B; full technical A.5 calibration table",
+      "claim": "Shared coefficient.01264681117658 produces endpoint10% and delta.001303714% of base gradient RMS at initialization; 32 batches,702624 coordinates; all eight bound code hashes match.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/diagnostics/loss-calibration.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/provenance.json",
+        "docs/iclr/versions/v08/evidence/final-numerical-checks.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M06",
+      "manuscript_location": "Section 4.2; Appendix B; full technical A.5",
+      "claim": "Six feature pretrains clip11999/12000 updates; coordinate-delta pretrains0/6000. These are combined-gradient counts, not convergence or persistent influence evidence.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/ledger.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/provenance.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M07",
+      "manuscript_location": "Section 4.3; Appendix D; reliability A-B; full technical E",
+      "claim": "Endpoint/delta/direct weighted response failure rates .563210/.524783/.343762%; successful U6.305974/6.209596/5.069067 and failure costs4.055115/3.778439/2.475088; conditional U/(1-f) differs from nested conditional export.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/method_summary.csv"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/reliability.pdf"
+      ],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M08",
+      "manuscript_location": "Section 4.3; Appendix D; full technical E",
+      "claim": "Failure-cost difference .276675 is74.16509% of total .373054 contrast; arithmetic accounting, not causation or failure frequency.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/method_summary.csv"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M09",
+      "manuscript_location": "Section 4.3; Appendix D; reliability C; full technical E",
+      "claim": "Fixed cost0/180/360/720 yields endpoint-minus-delta .096378/.165547/.234716/.373054, all crossed intervals span0; complete16method sweep retained; zero beats14/15/16/16neural means respectively.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/penalty_sensitivity.csv",
+        "docs/iclr/versions/v08/evidence/penalty_effects.csv"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/reliability.pdf"
+      ],
+      "analysis_status": "new exploratory fixed-cost reanalysis"
+    },
+    {
+      "id": "M10",
+      "manuscript_location": "Section 4.3",
+      "claim": "At C=0 both delta and endpoint U already exceed zero5.810830, so no nonnegative cost reverses their observed pooled mean ranking with fixed predictions and weights.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/method_summary.csv",
+        "docs/iclr/versions/v08/evidence/provenance.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "new exploratory accounting lower bound, not success-conditional accuracy"
+    },
+    {
+      "id": "M11",
+      "manuscript_location": "Section 4.1; Table2; Appendix D",
+      "claim": "All four clear/occluded-by-seen5/10-or-held15 groups retained. Direct beats zero in clear groups, loses in occluded groups; delta/endpoint lose in all4; all6 observation-by-estimator groups and16methods retained.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/condition_person.csv",
+        "docs/iclr/versions/v08/evidence/condition_summary.csv",
+        "docs/iclr/versions/v08/evidence/condition_effects.csv"
+      ],
+      "figure_paths": [],
+      "analysis_status": "new exploratory strata, original hierarchy and penalty retained"
+    },
+    {
+      "id": "M12",
+      "manuscript_location": "Section 4.1; Appendix D; full technical D",
+      "claim": "True per-pair response-magnitude bins cannot be reconstructed from signed source-window/motion/condition/seed averages; nominal intervention levels are not such bins.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/response-curves-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/provenance.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "documented artifact limitation"
+    },
+    {
+      "id": "M13",
+      "manuscript_location": "Section 4.4; Figure2; Appendix C",
+      "claim": "Original scalar-plus-geometry change package worsens all8waveform means; fivecore families worsen all14person-averaged and3seed-averaged means; no isolated scalar-causation claim.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv",
+        "outputs/iclr/walking-core/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/restoration_means.csv",
+        "docs/iclr/versions/v08/evidence/restoration_effects.csv",
+        "docs/iclr/versions/v08/evidence/final-numerical-checks.json"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/restoration.pdf"
+      ],
+      "analysis_status": "completed means; new exploratory paired intervals"
+    },
+    {
+      "id": "M14",
+      "manuscript_location": "Section 4.4; Figure4; Appendix C; full technical F",
+      "claim": "ViTPose delta original/low/dense waveform23.170916/19.473519/19.194663; low gain3.697397[2.584569,4.810225]; primary dense-versus-low .278856[-.194914,.752625] conditionalperson-t; crossed sensitivity[-.436648,.857563].",
+      "source_paths": [
+        "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/repair_means.csv",
+        "docs/iclr/versions/v08/evidence/repair_effects.csv"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/repair.pdf"
+      ],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M15",
+      "manuscript_location": "Section 4.4; full technical F",
+      "claim": "Endpoint secondary dense-versus-low waveform.718163[.387453,1.048872]; delta response gain.129110[-2.686467,2.944686] does not establish preservation;93% ratio descriptive; direct differs in encoder adaptation.",
+      "source_paths": [
+        "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/repair_means.csv",
+        "docs/iclr/versions/v08/evidence/repair_effects.csv"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/repair.pdf"
+      ],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M16",
+      "manuscript_location": "Section 4.5; Figure5",
+      "claim": "Naming strata correct/global/temporary retain all estimators/cameras/orientations/observations with4:1endpoint weighting; global endpoint81.1231%,delta83.3991%,direct23.2857%; meanintervals are crossed and exploratory.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/condition_summary.csv",
+        "docs/iclr/versions/v08/evidence/condition_person.csv"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/laterality.pdf"
+      ],
+      "analysis_status": "post hoc geometric diagnostic"
+    },
+    {
+      "id": "M17",
+      "manuscript_location": "Section 4.5",
+      "claim": "Pooled delta50.4567% versus endpoint49.6879% assignment failure; delta excess.768812pp[.173766,1.527897]; combinedwrong/ambiguous/missing with separate support, no50%chance baseline.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/restoration_means.csv",
+        "docs/iclr/versions/v08/evidence/final-numerical-checks.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "post hoc unadjusted paired crossed contrast"
+    },
+    {
+      "id": "M18",
+      "manuscript_location": "Section 4.5",
+      "claim": "Direct left/right excursion17.943965/17.186723 versus delta15.697426/15.292931 degrees;180degreefailures retained; direct not universally best.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/method_summary.csv"
+      ],
+      "figure_paths": [],
+      "analysis_status": "completed export, audited"
+    },
+    {
+      "id": "M19",
+      "manuscript_location": "Section 3; Appendix A-B; method and protocol figures; full technical A-B",
+      "claim": "Fitted configuration, masking/normalization/loss definitions,112trainingpeople/692motions/1645windows;14developmentpeople/155windows;12NTroje2KIT; fittedseeds17/29/43; sequential stages and methods are not independent populations.",
+      "source_paths": [
+        "outputs/iclr/walking-core/config.json",
+        "outputs/iclr/walking-core/ledger.json",
+        "outputs/iclr/jepa-response/config.json",
+        "outputs/iclr/jepa-response/ledger.json",
+        "outputs/iclr/readout-repair/config.json",
+        "outputs/iclr/readout-repair/ledger.json",
+        "outputs/iclr/jepa-response/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/provenance.json"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/method.pdf"
+      ],
+      "analysis_status": "executed configuration and ledger, distinguished from larger unexecuted plan"
+    },
+    {
+      "id": "M20",
+      "manuscript_location": "Section 3.3; captions; Appendix A; full technical B",
+      "claim": "Person/motion/window/condition hierarchy; endpoint4:1,response2:1seen/heldweights; crossed2000drawsRNG731; repairperson-tconditionalon3fits; declared does not assert preregistration.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv",
+        "outputs/iclr/walking-core/evaluation/comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/comparisons.json",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/provenance.json",
+        "docs/iclr/versions/v08/evidence/final-numerical-checks.json"
+      ],
+      "figure_paths": [],
+      "analysis_status": "inferential contract and documented adaptation limits"
+    },
+    {
+      "id": "M21",
+      "manuscript_location": "Discussion; Appendix D; full technical G",
+      "claim": "Local packet supports recalculating exported summaries, not raw rendering/training or verified qualitative reconstruction; no protected-person, GAVD, natural-video, clinical, externaltrainedbaseline, or convergence result asserted.",
+      "source_paths": [
+        "outputs/iclr/walking-core/ledger.json",
+        "outputs/iclr/jepa-response/ledger.json",
+        "outputs/iclr/readout-repair/ledger.json"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/audit.md"
+      ],
+      "figure_paths": [],
+      "analysis_status": "reproduction boundary; absence of new experiments"
+    },
+    {
+      "id": "M22",
+      "manuscript_location": "Section4.1; Appendix E; Figure8",
+      "claim": "All14developmentpeople in fixed canonical order;126panel/person/seedrows and42means. Pooled unchanged\u2212direct response gain5.143928degrees favors10/14; clear zero\u2212direct1.913510degrees favors14/14; occluded zero\u2212direct\u22125.380161degrees favors1/14. Everyseed is retained; ranges are not CIs; cost720 and response2:1weights unchanged.",
+      "source_paths": [
+        "outputs/iclr/walking-core/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv"
+      ],
+      "derived_paths": [
+        "docs/iclr/versions/v08/evidence/case-figure-seeds.csv",
+        "docs/iclr/versions/v08/evidence/case-figure-person.csv",
+        "docs/iclr/versions/v08/evidence/case-figure-provenance.json"
+      ],
+      "figure_paths": [
+        "docs/iclr/versions/v08/figures/cases.pdf"
+      ],
+      "analysis_status": "New exploratory participant illustration; everyperson included, not clinical or reconstructed-pose cases."
+    },
+    {
+      "id": "M23",
+      "manuscript_location": "Abstract; Introduction; Section3; Appendices question sequence and data integrity",
+      "claim": "Motivation, retrospective null notation, completed experimental sequence, tensor shapes, participant splits and training-only losses are bounded as documented in framing-claims.json.",
+      "source_paths": [
+        "docs/iclr/versions/v08/evidence/framing-claims.json"
+      ],
+      "derived_paths": [],
+      "figure_paths": [],
+      "analysis_status": "Qualitative methods and evidence audit; not new empirical confirmation."
+    }
+  ],
+  "artifacts": {
+    "docs/iclr/versions/v08/appendix.tex": {
+      "sha256": "6dde88735f69940dbcb2ed69d8c686a1d8db2ff23588de7363c61279410c8e50",
+      "bytes": 15458
+    },
+    "docs/iclr/versions/v08/evidence/audit.md": {
+      "sha256": "3d85adfa28217ce1b381f2d692ed96679994d7b6cf7df2d903caabaca5bfc451",
+      "bytes": 6113
+    },
+    "docs/iclr/versions/v08/evidence/condition_effects.csv": {
+      "sha256": "629226720f2bf40d93ea8632ddaaa9960fd3e05dd7b5945151ab57ffd2e9d638",
+      "bytes": 138534
+    },
+    "docs/iclr/versions/v08/evidence/condition_person.csv": {
+      "sha256": "bd3be7e0dffd132099fe6ed2abe1bc829cdcb96a97aa756f66137f523333551e",
+      "bytes": 3457025
+    },
+    "docs/iclr/versions/v08/evidence/condition_summary.csv": {
+      "sha256": "ea299cf19e0841bda0039bbe9fd7e7a4d1e6a1eecb38d892e04c2db108554a76",
+      "bytes": 815641
+    },
+    "docs/iclr/versions/v08/evidence/final-numerical-checks.json": {
+      "sha256": "8cb21b2f5db22f67b803f64f02abee17b2b4e9a757974a2859fb3fb25624d932",
+      "bytes": 2781
+    },
+    "docs/iclr/versions/v08/evidence/method_summary.csv": {
+      "sha256": "07ac0131ae19fd10faeeef640f29eba7353097d29e37626f539edafc98f20fd7",
+      "bytes": 6287
+    },
+    "docs/iclr/versions/v08/evidence/penalty_effects.csv": {
+      "sha256": "1b1d84d4c15536ac1ff89d06975f1beac8d61fce93497dba9f09d6cd584536f9",
+      "bytes": 25326
+    },
+    "docs/iclr/versions/v08/evidence/penalty_sensitivity.csv": {
+      "sha256": "93191dc19f29f61d4112234c2747203089cd96a6ae8ee482107e2e14461a4d46",
+      "bytes": 18518
+    },
+    "docs/iclr/versions/v08/evidence/provenance.json": {
+      "sha256": "a4e7664dcf422f2aa5508207adaa405b31a35bb018383eae9ea34f7c92cd1b96",
+      "bytes": 12351
+    },
+    "docs/iclr/versions/v08/evidence/repair_effects.csv": {
+      "sha256": "1118f1e9c5e5c73fc11e0e2c46665f406277190aebf313dac5345ee6f49f2625",
+      "bytes": 8537
+    },
+    "docs/iclr/versions/v08/evidence/repair_means.csv": {
+      "sha256": "d20bf280916f6e808c6a3adf474ee69194af678006619deee2cce5c37dc0c4dd",
+      "bytes": 9406
+    },
+    "docs/iclr/versions/v08/evidence/restoration_effects.csv": {
+      "sha256": "d7a41b7450b3ee71f8538df4bb0fd5e3fb8a8c6ffca635994106914460b8f7e6",
+      "bytes": 14225
+    },
+    "docs/iclr/versions/v08/evidence/restoration_means.csv": {
+      "sha256": "bd0c494ba026b763e40b8056aa72d444319677b13496c07e6435d901762467c3",
+      "bytes": 51748
+    },
+    "docs/iclr/versions/v08/figures/laterality-gray.png": {
+      "sha256": "c30d537fa8f1263e06df0988da70f0421caaf578dc5ec664739b3044805cc669",
+      "bytes": 19723
+    },
+    "docs/iclr/versions/v08/figures/laterality.pdf": {
+      "sha256": "58792986105b0d31b291e08b6db4b54d7eb348d74c1002cacae628407c272975",
+      "bytes": 13700
+    },
+    "docs/iclr/versions/v08/figures/laterality.png": {
+      "sha256": "813b8fa97bc943fafe1c1d502849645f58388427af89238db7cee2b24248f885",
+      "bytes": 37365
+    },
+    "docs/iclr/versions/v08/figures/laterality.svg": {
+      "sha256": "1f045cdd7334eda978af337be914ee9727a9f0e2ea5464b4ef3dc67c0a41f5b6",
+      "bytes": 18630
+    },
+    "docs/iclr/versions/v08/figures/method-gray.png": {
+      "sha256": "508757ac04e693e83fb45e67e295b9ceb0b2ce53945a83448e9fa0ae01a43f0f",
+      "bytes": 65125
+    },
+    "docs/iclr/versions/v08/figures/method.pdf": {
+      "sha256": "f8d6ed4f2203ec9f097bdf6b988cecc5d1db0bf519c98224d0968afb53816c44",
+      "bytes": 28180
+    },
+    "docs/iclr/versions/v08/figures/method.png": {
+      "sha256": "2e7ba763009078a37f3d7ea94103e8af90e7b4b4c148327f701d2371170d222a",
+      "bytes": 127279
+    },
+    "docs/iclr/versions/v08/figures/method.svg": {
+      "sha256": "b3a75bd29a1c5770e6d9b0e217d645c67e3db2c1a39a37d58134d76d072c583a",
+      "bytes": 29868
+    },
+    "docs/iclr/versions/v08/figures/provenance.json": {
+      "sha256": "b2e9793e1543637099b0a6b46d7355062d7a947c1d66d6c435291d687c8ba989",
+      "bytes": 2580
+    },
+    "docs/iclr/versions/v08/figures/reliability-gray.png": {
+      "sha256": "3fb9c40c61f99aa5283113e5cd7b8963988fb90add722fa81bcd7f825cdfbbc4",
+      "bytes": 27065
+    },
+    "docs/iclr/versions/v08/figures/reliability.pdf": {
+      "sha256": "dba9f5cacf29e30018f098eb8e20e20dc9a37a84e8c4d9ff7614290a24f479e1",
+      "bytes": 19473
+    },
+    "docs/iclr/versions/v08/figures/reliability.png": {
+      "sha256": "1109e359d63fb6db52501f7e88c53b42da27c549454197ba39e3e3cb629bcdc8",
+      "bytes": 52350
+    },
+    "docs/iclr/versions/v08/figures/reliability.svg": {
+      "sha256": "7dcf5e9a7d0dfbe3937a1f7b62fd8d435b2e174f2371d29580dcb3cbf31fd744",
+      "bytes": 21692
+    },
+    "docs/iclr/versions/v08/figures/repair-gray.png": {
+      "sha256": "c45a86324fcde0e0e1654a0c9e6f976909a0ff14297463ee4d9b2bbbaea0e3af",
+      "bytes": 37755
+    },
+    "docs/iclr/versions/v08/figures/repair.pdf": {
+      "sha256": "7587845bcf3a408cfdde8579ad18761cc738cab4f1fdf8060702fa37170c4c5c",
+      "bytes": 17635
+    },
+    "docs/iclr/versions/v08/figures/repair.png": {
+      "sha256": "f575487ff3c74fba83fded037b4308d68abef0b52f596850d6cbb73ebeb0e8ae",
+      "bytes": 74630
+    },
+    "docs/iclr/versions/v08/figures/repair.svg": {
+      "sha256": "104db22f2735d869f2b35908777f3cc11ebf3ed913bfb0f4ee718108a07961ab",
+      "bytes": 33064
+    },
+    "docs/iclr/versions/v08/figures/restoration-gray.png": {
+      "sha256": "22456d710342b6e231810b989227bf918618c6122bd0a6d79b2d52c0934c9b95",
+      "bytes": 32987
+    },
+    "docs/iclr/versions/v08/figures/restoration.pdf": {
+      "sha256": "6a0d8327cb6376ce84a82dc3478e9dac882886c82f0389aee50ab8877074c9af",
+      "bytes": 23075
+    },
+    "docs/iclr/versions/v08/figures/restoration.png": {
+      "sha256": "442e1686a07bb64eaabfe9a3bff11848f41d90061c2b632e9608172ff5af9ddc",
+      "bytes": 63857
+    },
+    "docs/iclr/versions/v08/figures/restoration.svg": {
+      "sha256": "b3a3c3cacc88ed49568b48fc66f972712d0a33a8a8e95378adfc3d01a8c647fe",
+      "bytes": 35413
+    },
+    "docs/iclr/versions/v08/paper-v08.pdf": {
+      "sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+      "bytes": 270857
+    },
+    "docs/iclr/versions/v08/paper-v08.tex": {
+      "sha256": "85b08ea58f95be0384244aa3848bf23fb77a4ac5c64ae7f32e723d2d1a523e68",
+      "bytes": 34601
+    },
+    "docs/iclr/versions/v08/references.bib": {
+      "sha256": "ab9ef4cc6c72f4a4e456748615c42219415e7bba2d222411e60f49a6d5f41cd8",
+      "bytes": 10277
+    },
+    "docs/iclr/versions/v08/scripts/analyze_evidence.py": {
+      "sha256": "8443e100f2325a69413eaa4444e5237e67166899ea6bd180062970f8265432f6",
+      "bytes": 27410
+    },
+    "docs/iclr/versions/v08/scripts/build_figures.py": {
+      "sha256": "06f42606c966d85fc7e47acf6115d5de53590ae29f3e3cf82e4d7d339dde90ba",
+      "bytes": 15830
+    },
+    "docs/iclr/versions/v08/scripts/build_tables.py": {
+      "sha256": "ab864a198844c1f763310a558cdbbb82034cd705f2ad453864afc5f442eee765",
+      "bytes": 4735
+    },
+    "docs/iclr/versions/v08/scripts/paper_style.py": {
+      "sha256": "a73b381d4a8fa235486f2dd51e938cff228f794a3e5c61983711eb9e53e899e4",
+      "bytes": 1849
+    },
+    "docs/iclr/versions/v08/tables/failure-inventory.tex": {
+      "sha256": "22538ff0d16fe42729c9d50bef57f35d410da168c41ffe3a3ceda9f61728b4c7",
+      "bytes": 1205
+    },
+    "docs/iclr/versions/v08/tables/inventory.tex": {
+      "sha256": "42f5c937cc6df9e35a6cf6343b90986add4f7a16fbe69d92f743a34778a7fa80",
+      "bytes": 1208
+    },
+    "docs/iclr/versions/v08/tables/penalties.tex": {
+      "sha256": "27a65d46f9bfa1ba02e516d8964a0c5d580f3b098707c0d4c545bf5149868b83",
+      "bytes": 1117
+    },
+    "docs/iclr/versions/v08/tables/repair-inventory.tex": {
+      "sha256": "f4473b7cd400eb38d9aa81bc5b575cb23f1402e0e88a3abdfc4910c692eb527e",
+      "bytes": 652
+    },
+    "docs/iclr/versions/v08/tables/strata-extractors.tex": {
+      "sha256": "be682373c3d783b43c0bc4d96e5823895dcafeefd9692d0756e129a2bdaa9cb0",
+      "bytes": 1329
+    },
+    "docs/iclr/versions/v08/tables/strata-levels.tex": {
+      "sha256": "1bee9206c5f3beb223cd2ced30fa7a594f7d2d340ead97719a281907159172d0",
+      "bytes": 1077
+    },
+    "docs/iclr/versions/v08/tables/strata-main.tex": {
+      "sha256": "a9140de159974c88fc0661f20ea75bcf1bb8f1900547a3159e05324c417d7660",
+      "bytes": 443
+    },
+    "outputs/iclr/jepa-response/config.json": {
+      "sha256": "96cdf5fd61127cf68161a4f01b2377d37d88fe63fed95994a5e086744f09b6ca",
+      "bytes": 338359
+    },
+    "outputs/iclr/jepa-response/diagnostics/loss-calibration.json": {
+      "sha256": "3c00e2931bfa3a8cc7e4d94616774b81a066e60a0aabc3aa22a303a0266620d5",
+      "bytes": 16130
+    },
+    "outputs/iclr/jepa-response/evaluation/comparisons.json": {
+      "sha256": "f22fe912d0b79876843810e5cea714895943f3fbc686047d54fd89f9599a8ce6",
+      "bytes": 3098
+    },
+    "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv": {
+      "sha256": "e10243ca08f1098e33db463fec359015fdf6630ffdd5634d33b288d1f37f57f3",
+      "bytes": 71154
+    },
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": {
+      "sha256": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+      "bytes": 343288
+    },
+    "outputs/iclr/jepa-response/evaluation/readout-control-comparisons.json": {
+      "sha256": "86d8fecb65713b9849a1de6727e7c18ca285120dcb0ac6f5e2c48a3464e3ddc6",
+      "bytes": 176268
+    },
+    "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv": {
+      "sha256": "f5968617a29e2adf80fe2574ebea21cbb18bd3aedbce3c59ee2f8e68a4490f55",
+      "bytes": 51711505
+    },
+    "outputs/iclr/jepa-response/evaluation/response-curves-person.csv": {
+      "sha256": "e5b97a0afb53b43c1d4dd95bcd6a5ac3c4e2bb7de8346e8c7e7fc74388ac5af1",
+      "bytes": 1234675
+    },
+    "outputs/iclr/jepa-response/ledger.json": {
+      "sha256": "b348371bb62583164c1373b6264096f36573551fbddc25b9794967afa1d496be",
+      "bytes": 352165
+    },
+    "outputs/iclr/readout-repair/config.json": {
+      "sha256": "93d36e801fadff45e7e39b7380dcca66b82ddd825ef3b829333f8c2eae3fdb15",
+      "bytes": 110379
+    },
+    "outputs/iclr/readout-repair/development/evaluation/comparisons.json": {
+      "sha256": "abaae8403ef37899fbf8933163fe9b05d2b23dfc0838a30263ba17631873983e",
+      "bytes": 405295
+    },
+    "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv": {
+      "sha256": "890fe865fcbd1ce20ccf8a3e82534854a9b5f82fce4a346e01ac26172e0a7290",
+      "bytes": 464337
+    },
+    "outputs/iclr/readout-repair/ledger.json": {
+      "sha256": "e61dd24e873f0ca4a6227e7b872162e934436de866fe5cff5bdbfc5e609de18f",
+      "bytes": 646583
+    },
+    "outputs/iclr/walking-core/config.json": {
+      "sha256": "19a1b14477f6dfa9d39ccd64e997726b750cf74341dfac62c8ccec098bf865dd",
+      "bytes": 5163
+    },
+    "outputs/iclr/walking-core/evaluation/comparisons.json": {
+      "sha256": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+      "bytes": 2950
+    },
+    "outputs/iclr/walking-core/evaluation/per-person.csv": {
+      "sha256": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+      "bytes": 150336
+    },
+    "outputs/iclr/walking-core/ledger.json": {
+      "sha256": "c32e73871af59f5db646ec851f8e0b0fc5565a35eb90b41e7b936d165c869059",
+      "bytes": 203910
+    },
+    "docs/iclr/versions/v08/evidence/evidence-statistics-final.md": {
+      "sha256": "c17e3c842d3924f0e41ab71bc21e118e18d6965cc667a0ca4485a7fc7b61b8a1",
+      "bytes": 13697
+    },
+    "docs/iclr/versions/v08/evidence/claim-to-artifact.json": {
+      "sha256": "2600550d66360e56638f95fb7ee5ef5ef4c453c3fae7d61984b0f6a14ab1daab",
+      "bytes": 2650
+    },
+    "docs/iclr/versions/v08/evidence/case-figure-person.csv": {
+      "sha256": "70b98da343ea1488c3ce2fe89af63e609f1cd7d4ac3147e429d3a62db685e87f",
+      "bytes": 9178
+    },
+    "docs/iclr/versions/v08/evidence/case-figure-provenance.json": {
+      "sha256": "94be0be1cb5d5b067fec4671a1c332c3a5ef5ce0419196dd53be7d545ddebdfe",
+      "bytes": 3775
+    },
+    "docs/iclr/versions/v08/evidence/case-figure-seeds.csv": {
+      "sha256": "45aa52689b7b3c19dbadb035a020ae4cc69423ca0112cf4311c40362c2a283ca",
+      "bytes": 18188
+    },
+    "docs/iclr/versions/v08/evidence/framing-claims.json": {
+      "sha256": "3a768d28d2ffe0fad2e652eba722ca4b6a6b54d0dba053e63720c64ff78c1c7c",
+      "bytes": 25649
+    },
+    "docs/iclr/versions/v08/figures/cases.pdf": {
+      "sha256": "5d8345845493d8ff9f33e19f9ea51452981a7c3c9dd2e4fcbc27dc898defc982",
+      "bytes": 34785
+    },
+    "docs/iclr/versions/v08/figures/cases.png": {
+      "sha256": "9dfcb103816c682b3350e217a3f633cb76d35b4647dfb04c99bdf847776c9a4c",
+      "bytes": 78214
+    },
+    "docs/iclr/versions/v08/figures/cases.svg": {
+      "sha256": "2a1a157e479e4ee7df767679d58b413837af4d52597967ebcbf6f67336774b35",
+      "bytes": 51425
+    },
+    "docs/iclr/versions/v08/reviews/case-figure-evidence.md": {
+      "sha256": "f4a24357e94a1c04dae77efb5adefd3d750b79a786bc4c233bbe0cd6dc58ac5a",
+      "bytes": 7371
+    },
+    "docs/iclr/versions/v08/reviews/evidence-framing-final.md": {
+      "sha256": "da57d548c6de3d70248459925837b8c483516fcc75fee2b5607903ca3e06bb51",
+      "bytes": 8797
+    },
+    "docs/iclr/versions/v08/reviews/framing-literature-and-guidelines.md": {
+      "sha256": "c6671b647800105257b298869cb74af8b804f7cfd6fd6b42d8abd671fd0f4a6c",
+      "bytes": 12860
+    },
+    "docs/iclr/versions/v08/reviews/methods-framing-audit.md": {
+      "sha256": "60c0cf0526c9c707f4fbce16135c87af1ab995ce0280b7f621b2120d3cb2e892",
+      "bytes": 18485
+    },
+    "docs/iclr/versions/v08/scripts/build_case_figure.py": {
+      "sha256": "06a5925f6aa9753ca021c087396aceb64c9c29d1ef194c8d3e44b16c2f582f6c",
+      "bytes": 12524
+    },
+    "docs/iclr/versions/v08/supplement/technical-details.tex": {
+      "sha256": "53c9b4b711f00d555bbddd561da51b04dc76568e5e0b671157b879ccddc7517e",
+      "bytes": 35512
+    },
+    "docs/iclr/versions/v08/supplement/README.md": {
+      "sha256": "8ebd2b0c39ffa8f2271c4188f331ee5bd0f96183c2d954d83bf05251bb7508ed",
+      "bytes": 2156
+    },
+    "docs/iclr/versions/v08/scripts/build_summary_figures.py": {
+      "sha256": "4b4de8b7d201cb1c33f07b24afdbaea6816df10777d7ad937ff8baaf0ab046a6",
+      "bytes": 10581
+    },
+    "docs/iclr/versions/v08/evidence/summary-figure-provenance.json": {
+      "sha256": "aedb5bda28b0829fd3f74a81334d8ecf98c6bb7f0260f73592ff6d7789af8713",
+      "bytes": 10825
+    },
+    "docs/iclr/versions/v08/figures/protocol.pdf": {
+      "sha256": "855da0812a1d56029494a8c714ca799bac2562c05b6e4fd847f827c94729b3e0",
+      "bytes": 23426
+    },
+    "docs/iclr/versions/v08/figures/study-questions.pdf": {
+      "sha256": "d171802c5d8d9de9dbcf9c57758e827176d7fe0a2711d7ba6b6ea91ac1ff634d",
+      "bytes": 21204
+    },
+    "docs/iclr/versions/v08/reviews/comparison-selection-review.md": {
+      "sha256": "dabb533e32696b186ec7379690fca1a4b0e74cefc9f5574087710af717e5cd3b",
+      "bytes": 15996
+    },
+    "docs/iclr/versions/v08/reviews/appendix-simplification-review.md": {
+      "sha256": "c72ef5bc20e6d9fec68efdab7694afeef71b41be03ef459fe8aae425b5442f82",
+      "bytes": 23052
+    },
+    "docs/iclr/versions/v08/evidence/figure1-design-provenance.json": {
+      "sha256": "34156366559b8a7939a602496be81b82c9cfad1262397ebf7d78c127a7b5442d",
+      "bytes": 3319
+    },
+    "docs/iclr/versions/v08/reviews/figure1-methods-review.md": {
+      "sha256": "baf411b6e274d47c58904f16788fe9ba1ecd922272d0c3da6290909cb534099b",
+      "bytes": 14899
+    },
+    "docs/iclr/versions/v08/reviews/figure1-evidence-review.md": {
+      "sha256": "3ea567de7ea8a6e633840939c70cf149757756206369c9744344c346d177a8b7",
+      "bytes": 5904
+    },
+    "docs/iclr/versions/v08/reviews/portable-manuscript-methods-review.md": {
+      "sha256": "59375893f61da71ea61ff298da64ce4ce037d2be252c2f254d182be2cbd6af77",
+      "bytes": 7430
+    },
+    "docs/iclr/versions/v08/reviews/portable-manuscript-evidence-review.md": {
+      "sha256": "0361538bb7e3be6144e3bdbad29bea2f097203d652c4e73b38dbde14d2dabfe1",
+      "bytes": 7326
+    }
+  },
+  "table_checks": "All seven generated numerical tables (96 result rows) exactly checked at printed precision in final-numerical-checks.json.",
+  "review": "evidence/evidence-statistics-final.md",
+  "weighted_score_v07": 72.75,
+  "weighted_score_v08": 77.25,
+  "human_authorship_attestation": {
+    "path": "docs/iclr/versions/v08/reviews/human-authorship-attestation.json",
+    "basis": "Explicit user confirmation of completed human contributions; distinct from empirical artifact verification."
+  },
+  "disclosure_update": "The prior human-authorship update changed only the AI-use disclosure. That disclosure remains byte-identical during the later title/abstract editorial update recorded below.",
+  "editorial_update": {
+    "date": "2026-09-26",
+    "scope": "Title, abstract and selected prose only; empirical claims and numbers preserved. World-model references reduced to one each in abstract, introduction and discussion.",
+    "review": "reviews/title-abstract-review.md",
+    "prior_snapshot": "history/v08-before-title-abstract-20260926.zip",
+    "new_training_runs": 0
+  },
+  "clarity_update": {
+    "date": "2026-09-26",
+    "scope": "Plain-language revision of abstract, introduction and selected main/appendix prose; empirical results unchanged.",
+    "reviews": [
+      "reviews/clarity-evidence-review.md",
+      "reviews/clarity-appendix-review.md"
+    ],
+    "prior_snapshot": "history/v08-before-clarity-20260926.zip",
+    "new_training_runs": 0
+  },
+  "simplification_update": {
+    "date": "2026-09-26",
+    "main_table_rows": 3,
+    "appendix_pages_before": 12,
+    "appendix_pages_after": 5,
+    "default_appendix_sections": 5,
+    "full_technical_source": "supplement/technical-details.tex",
+    "source_snapshot": "history/v08-before-comparison-simplification-20260926.zip",
+    "new_figures": [
+      "protocol",
+      "study-questions"
+    ],
+    "numerical_results_changed": false,
+    "new_fits_or_hypothesis_tests": false,
+    "human_disclosure_preserved": true,
+    "reviews": [
+      "reviews/comparison-selection-review.md",
+      "reviews/appendix-simplification-review.md"
+    ]
+  },
+  "figure1_revision": {
+    "figure": "Experimental workflow with illustrative keypoints",
+    "no_new_empirical_data_or_fits": true,
+    "numerical_results_unchanged": true,
+    "caption_simplified_and_pair_scoring_explicit": true,
+    "design_provenance": "evidence/figure1-design-provenance.json",
+    "review_paths": [
+      "reviews/figure1-methods-review.md",
+      "reviews/figure1-evidence-review.md"
+    ]
+  },
+  "portability_update": {
+    "date": "2026-09-26",
+    "scope": "Main paper and concise/full appendices rewritten to remove workspace-specific assumptions. The first human-authorship paragraph is unchanged; the AI-assistance paragraph uses general analysis terminology.",
+    "prior_snapshot": "history/v08-before-local-reference-cleanup-20260926.zip",
+    "reviews": [
+      "reviews/portable-manuscript-methods-review.md",
+      "reviews/portable-manuscript-evidence-review.md"
+    ],
+    "numerical_results_changed": false,
+    "new_training_runs": 0,
+    "new_human_verification_event_claimed": false
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "status": "passed",
+  "checked_utc": "2026-09-26T09:19:15.878745+00:00",
+  "paper_sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+  "main_pages": 9,
+  "total_pages": 16,
+  "dpi": 110,
+  "validation_engine": "Tectonic 0.17.0",
+  "source": {
+    "clean_compile": true,
+    "total_pages": 16,
+    "main_pages": 9,
+    "pdf_sha256": "e91ad471187f72a0cab96cd7e2340596ef497d0d5d33b50f04598682ad4fba5a",
+    "final_log_checks": {
+      "undefined_references_or_citations": [],
+      "overfull_boxes": [],
+      "missing_assets": []
+    },
+    "title_metadata": "Evaluating JEPA-Inspired Motion Representations through Geometry and Gait Asymmetry",
+    "author_metadata": null,
+    "final_log_sha256": "8e55032c7cde37d17f94cb58e2af9bbccde0091e3f60769e78df3c46b4705cc5",
+    "rendered_local_reference_scan": {
+      "passed": true,
+      "pages_scanned": 16,
+      "findings": [],
+      "scope": "Text extracted from compiled PDF pages; checks machine paths, repository paths, local artifact filenames and known machine identifiers. Ordinary prose references to notebooks or data are not flagged.",
+      "patterns": {
+        "machine_paths_or_file_uris": "(?:/(?:Users|home|hai|tmp|private|var/folders)/[^\\s]+|file://[^\\s]+|[A-Za-z]:\\\\[^\\s]+)",
+        "repository_paths": "\\b(?:outputs|docs|src|notebooks|scripts|qa|evidence)/[A-Za-z0-9_.\\-/]+",
+        "local_artifact_filenames": "\\b[A-Za-z0-9_][A-Za-z0-9_.\\-]*\\.(?:csv|json|ipynb|py|tex|md|zip)\\b",
+        "machine_identifiers": "\\b(?:theodoremui|tedmui|haic\\.stanford\\.edu)\\b"
+      }
+    },
+    "status": "passed",
+    "archive": "paper-v08-source.zip",
+    "archive_sha256": "33c0fde61123bf300b3849c0d8f98fac2c26494bf1077d0575562f5159be7bf6",
+    "archive_entries": 58,
+    "archive_bytes": 1627659,
+    "paper_sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+    "all_page_text_identical": true,
+    "all_page_renders_pixel_identical_at_110_dpi": true,
+    "per_page_text_identical": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "per_page_renders_pixel_identical_at_110_dpi": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "clean_extraction_and_compile": true,
+    "validation_engine": "Tectonic 0.17.0",
+    "overleaf_service_compile_performed": false,
+    "author_attested_disclosure_preserved": true,
+    "main_document": "paper-v08.tex",
+    "builder_checks": [
+      {
+        "script": "scripts/build_figures.py",
+        "arguments": [],
+        "status": "passed"
+      },
+      {
+        "script": "scripts/build_tables.py",
+        "arguments": [],
+        "status": "passed"
+      },
+      {
+        "script": "scripts/build_case_figure.py",
+        "arguments": [
+          "--from-audit"
+        ],
+        "status": "passed"
+      },
+      {
+        "script": "scripts/build_summary_figures.py",
+        "arguments": [
+          "--from-audit"
+        ],
+        "status": "passed"
+      }
+    ],
+    "original_archive_unchanged": true
+  },
+  "overleaf": {
+    "clean_compile": true,
+    "total_pages": 16,
+    "main_pages": 9,
+    "pdf_sha256": "366b43bc3749be6b3fa868f66f78bf8ec92a56e614f676f1c248637161c85f51",
+    "final_log_checks": {
+      "undefined_references_or_citations": [],
+      "overfull_boxes": [],
+      "missing_assets": []
+    },
+    "title_metadata": "Evaluating JEPA-Inspired Motion Representations through Geometry and Gait Asymmetry",
+    "author_metadata": null,
+    "final_log_sha256": "262899502c9bfce5efb69691e7ab64addd015b59cb473d0b1f437daa3c83317a",
+    "rendered_local_reference_scan": {
+      "passed": true,
+      "pages_scanned": 16,
+      "findings": [],
+      "scope": "Text extracted from compiled PDF pages; checks machine paths, repository paths, local artifact filenames and known machine identifiers. Ordinary prose references to notebooks or data are not flagged.",
+      "patterns": {
+        "machine_paths_or_file_uris": "(?:/(?:Users|home|hai|tmp|private|var/folders)/[^\\s]+|file://[^\\s]+|[A-Za-z]:\\\\[^\\s]+)",
+        "repository_paths": "\\b(?:outputs|docs|src|notebooks|scripts|qa|evidence)/[A-Za-z0-9_.\\-/]+",
+        "local_artifact_filenames": "\\b[A-Za-z0-9_][A-Za-z0-9_.\\-]*\\.(?:csv|json|ipynb|py|tex|md|zip)\\b",
+        "machine_identifiers": "\\b(?:theodoremui|tedmui|haic\\.stanford\\.edu)\\b"
+      }
+    },
+    "status": "passed",
+    "archive": "paper-v08-overleaf.zip",
+    "archive_sha256": "44d59ed219cc28d140f173862ac421c6092d3ef66a19b2e355ca624e76b8c20b",
+    "archive_entries": 24,
+    "archive_bytes": 195298,
+    "paper_sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+    "all_page_text_identical": true,
+    "all_page_renders_pixel_identical_at_110_dpi": true,
+    "per_page_text_identical": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "per_page_renders_pixel_identical_at_110_dpi": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "clean_extraction_and_compile": true,
+    "validation_engine": "Tectonic 0.17.0",
+    "overleaf_service_compile_performed": false,
+    "author_attested_disclosure_preserved": true,
+    "main_document": "main.tex",
+    "builder_checks": [],
+    "original_archive_unchanged": true,
+    "bundle_manifest_hashes_verified": true,
+    "recommended_overleaf_compiler": "XeLaTeX",
+    "optional_full_technical_reference": {
+      "clean_compile": true,
+      "total_pages": 23,
+      "main_pages": 9,
+      "pdf_sha256": "5b878233d3bfacb285e5c3a41750921ad16c46a1ee758a1e80c1ee76a2831a0b",
+      "final_log_checks": {
+        "undefined_references_or_citations": [],
+        "overfull_boxes": [],
+        "missing_assets": []
+      },
+      "title_metadata": "Evaluating JEPA-Inspired Motion Representations through Geometry and Gait Asymmetry",
+      "author_metadata": null,
+      "final_log_sha256": "797de45cee1c32bf3745437f0aee5548a761a5706d6d3df3a59330bfd706241a",
+      "rendered_local_reference_scan": {
+        "passed": true,
+        "pages_scanned": 23,
+        "findings": [],
+        "scope": "Text extracted from compiled PDF pages; checks machine paths, repository paths, local artifact filenames and known machine identifiers. Ordinary prose references to notebooks or data are not flagged.",
+        "patterns": {
+          "machine_paths_or_file_uris": "(?:/(?:Users|home|hai|tmp|private|var/folders)/[^\\s]+|file://[^\\s]+|[A-Za-z]:\\\\[^\\s]+)",
+          "repository_paths": "\\b(?:outputs|docs|src|notebooks|scripts|qa|evidence)/[A-Za-z0-9_.\\-/]+",
+          "local_artifact_filenames": "\\b[A-Za-z0-9_][A-Za-z0-9_.\\-]*\\.(?:csv|json|ipynb|py|tex|md|zip)\\b",
+          "machine_identifiers": "\\b(?:theodoremui|tedmui|haic\\.stanford\\.edu)\\b"
+        }
+      },
+      "status": "passed",
+      "temporary_copy_only": true,
+      "main_document": "main.tex",
+      "appendix_input": "supplement/technical-details.tex",
+      "compared_with_old_reference": false
+    }
+  },
+  "elapsed_seconds": 17.35,
+  "temporary_validation_directory": "/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/v08-portable-manuscript-rebuild-sjulo1ao",
+  "delivered_archives_and_manuscript_modified": false,
+  "scope": "Manuscript portability cleanup: clean archive extraction and rendered local-reference scan; all four source builders; default source and Overleaf compilation; every-page text/pixel comparison; optional full technical appendix compilation."
+}
