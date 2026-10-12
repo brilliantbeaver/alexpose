@@ -1,0 +1,1483 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <style>html { scroll-padding-top: 70px; /* height of sticky header plus extra */ }</style>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/virtual/js/virtual.js"></script>
+    <meta name="google-site-verification" content="0jwPnVXIAk4FvFdT37dwMmd-kjHF86e5DKwvqlStUW0">
+
+
+    
+    <link rel="stylesheet" href="/static/core/css/core.css" type="text/css">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css" type="text/css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/static/core/css/custom.css" type="text/css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+        window.MathJax = {
+          tex: {
+            // Workshop/competition imports store inline formulas with doubled dollars.
+            inlineMath: [['$$', '$$'], ['$', '$'], ['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+          },
+          options: {
+            ignoreHtmlClass: 'no-mathjax',
+          }
+        };
+    </script>
+
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+            nonce="vCLqRKrDZAegJkTy5hjJEw==" >
+    </script>
+
+    <!--This script keeps local links inside the web app rather than opening them
+in Safari, and has nothing to do with editing or Aloha.-->
+
+<script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+    (function (document, navigator, standalone) {
+
+        if ((standalone in navigator) && navigator[standalone]) {
+            var curnode, location = document.location, stop = /^(a|html)$/i;
+            document.addEventListener('click', function (e) {
+                curnode = e.target;
+                while (!(stop).test(curnode.nodeName)) {
+                    curnode = curnode.parentNode;
+                }
+
+                if (
+                    'href' in curnode && // is a link
+                    (chref = curnode.href).replace(location.href, '').indexOf('#') && // is not an anchor
+                    (!(/^[a-z\+\.\-]+:/i).test(chref) ||                       // either does not have a proper scheme (relative links)
+                        chref.indexOf(location.protocol + '//' + location.host) === 0) // or is in the same protocol and domain
+                ) {
+                    e.preventDefault();
+                    location.href = curnode.href;
+                }
+            }, false);
+        }
+    })(document, window.navigator, 'standalone');
+</script>
+
+
+<style>
+
+    @media screen and (min-width: 767px) {
+        .blurb {
+            min-height: 260px;
+        }
+    }
+</style>
+    
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
+</script>
+
+<script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+    if (typeof jQuery === 'undefined') {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = "/static/core/js/jquery-3.6.1.min.js";
+        document.head.appendChild(script);
+    }
+</script>
+
+    
+    <script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+        var $ = jQuery;
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <script src="/static/core/js/ajax-csrf-snippet.js"></script>
+    
+    <link rel="stylesheet" href="/static/fontawesomefree/css/all.min.css">
+    <script src="/static/fontawesomefree/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+
+    <style nonce="vCLqRKrDZAegJkTy5hjJEw==">
+        body {
+            font-family: Exo;}
+    </style>
+
+
+
+
+
+
+
+
+        
+
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js" integrity="sha512-lEb9Vp/rkl9g2E/LdHIMFTqz21+LA79f84gqP75fbimHqVTu6483JG1AwJlWLLQ8ezTehty78fObKupq3HSHPQ==" crossorigin="anonymous"></script>
+    <script src="/static/core/js/moment/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/static/core/js/ajax-csrf-snippet.js" ></script>
+    <script src="/static/virtual/js/virtual.js"></script>
+    
+
+    
+
+    
+    <link rel="canonical" href="https://wacv.thecvf.com/Conferences/2027/AuthorGuides">
+
+    <title>WACV 2027 Author Guides</title>
+</head>
+
+<body>
+<!-- <h1><a href="#" onclick="alert('CSP Test');">CSP Test</a></h1> -->
+
+
+
+
+<div class="noprint">
+    
+        
+            <!--Navbar start-->
+<header>
+    <a href="#child-menu" class="off-screen">Skip to yearly menu bar</a>
+    <a href="#main" class="off-screen">Skip to main content</a>
+    <div id="id_navbar" class="navbar navbar-expand-sm navbar-dark" aria-label="Main Navigation"
+         style="background-color:#212529">
+        <h2 class="off-screen">Main Navigation</h2>
+        <div class="container-fluid">
+            <div><a class="navbar-brand" href="/" aria-label="Home">
+
+                <img src="/static/core/img/wacv-navbar-logo.svg" alt="conference_logo" height="40"></a></div>
+
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggler1"
+                    aria-expanded="false" aria-label="Toggle main navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarToggler1">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            WACV
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="https://support.conferences.computer.org/wacv/help-desk/">
+                    <span >
+                        Contact Us
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/MyStuff">
+                    <span >
+                        My Stuff
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Profile/create">
+                    <span >
+                        Create Profile
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/resetpassword">
+                    <span >
+                        Reset Password
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+                    
+                </ul>
+
+                
+                <form class="d-flex mx-2" aria-label="Search" role="search" action="/search">
+                    <div class="input-group" role="search" style="outline-color:green;">
+                        <input type="text" class="form-control" placeholder="Search" name="q"
+                               value=""
+                               aria-label="Search" aria-describedby="btnGroupAddon"
+                                id="navbar-search">
+                        <div class="input-group-text btn-primary" id="btnGroupAddon">
+                            <button style="border: none; background-color: transparent; padding: 0;" type="submit" aria-label="execute search">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+
+                
+                    <a href="/accounts/login?nextp=/set_timezone " class="navbar-brand"><span
+                            class="fa-solid fa-right-to-bracket"></span> Login</a>
+                
+
+            </div>
+        </div>
+    </div>
+</header>
+<!--Navbar end-->
+        
+    
+</div><!--noprint div-->
+
+<!--This holds the whole page including the navbar-->
+<main id="main">
+    
+        
+            <div class="container-fluid">
+                
+<!--Navbar start-->
+
+
+
+
+<div class="container-fluid">
+
+    <div class="dropdown" id="child-menu">
+        <nav class="align-middle navbar navbar-expand-md mx-4 border border-3 border-top-0 rounded-bottom"
+             style="min-height: 57px; background-color: #F6f6f6;">
+            <div class="container-fluid">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler93"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarToggler93">
+                    <ul class="navbar-nav me-auto mb-lg-0">
+                        
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle border-3  btn btn-primary text-white p-1" style= "background-color: #070bff; font-size: 1.2 em;"
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Year: (2027)
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2027/index.html">2027
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2026">2026
+                </a>
+                
+            </li>
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Dates">
+                    <span >
+                        Dates
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="/Conferences/2027/CallForPapers"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Calls
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CallForPapers">
+                    <span >
+                        WACV 2027 Call for Papers
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CallForTutorials">
+                    <span >
+                        WACV 2027 Call For Tutorials
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CallForWorkshops">
+                    <span >
+                        WACV 2027 Call for Workshops
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Attend
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Pricing2">
+                    <span >
+                        Register
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Hotels">
+                    <span >
+                        Venue &amp; Hotel Information
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Author & Reviewer Guides
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CompleteYourORProfile">
+                    <span >
+                        Complete Your Open Review Profile
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/AuthorGuides">
+                    <span >
+                        Author Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/LiabilityWaiver">
+                    <span >
+                        Liability Waiver
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/ReviewerGuidelines">
+                    <span >
+                        Reviewer Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/ACGuides">
+                    <span >
+                        Area Chair Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/SACGuides">
+                    <span >
+                        Senior Area Chair Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2026/LiabilityWaiver">
+                    <span >
+                        Liability Waiver
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Expo
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="https://join.computer.org/wacv-partners/?source=website">
+                    <span >
+                        Prospectus
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Organization
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Organizers">
+                    <span >
+                        Organizing Committee
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Navbar end-->
+
+            </div>
+            <br><br>
+        
+    
+    
+        
+        <div class="container">
+    
+    
+    
+
+    
+    <div class="container">
+        
+            <!--JUst above the HTML in document-snippet.html-->
+            <div> <div>
+<h1>WACV 2027 Author Guidelines</h1>
+
+<p><strong>Round 1 Submission Site:</strong> <a href="https://openreview.net/group?id=thecvf.com/WACV/2027/Conference_Round_1#tab-recent-activity">https://openreview.net/group?id=thecvf.com/WACV/2027/Conference_Round_1#tab-recent-activity</a><br>
+<strong>Round 2 Submission Site: </strong><a href="https://openreview.net/group?id=thecvf.com/WACV/2027/Conference_Round_2#tab-recent-activity">https://openreview.net/group?id=thecvf.com/WACV/2027/Conference_Round_2#tab-recent-activity</a></p>
+
+<h2>Deadlines</h2>
+
+<h4>Round 1:</h4>
+
+<ul>
+	<li><strong>Paper enrollment:</strong> June 19, 2026 Anywhere on Earth (AoE)</li>
+	<li><strong>Paper submission deadline:</strong> June 26, 2026, AoE</li>
+	<li><strong>Supplementary material submission deadline:</strong> June 28, 2026 AoE</li>
+	<li><strong>Reviews and decisions released to authors:</strong> August 7, 2026</li>
+	<li><strong>Rebuttal and Revision submission:</strong> August 28, 2026</li>
+	<li><strong>Final Decision Released to author:</strong> October 9, 2026</li>
+	<li><strong>Camera-ready paper due for accepted round 1 papers:</strong> November 2, 2026, AoE</li>
+</ul>
+
+<h4>Round 2:</h4>
+
+<ul>
+	<li><strong>Paper enrollment:</strong> August 21, 2026 AoE</li>
+	<li><strong>Paper submission deadline:</strong> August 28, 2026, AoE</li>
+	<li><strong>Supplementary material submission deadline:</strong> August 30, 2026 AoE</li>
+	<li><strong>Reviews and decisions released to authors:</strong> October 9, 2026</li>
+	<li><strong>Camera-ready paper due for accepted round 2 papers:</strong> November 2, 2026, AoE</li>
+	<li><strong>Conference registration deadline:</strong> November 2, 2026, AoE. Papers will be omitted from proceedings if an Author registration hasn't recorded a paper by November 17th.</li>
+</ul>
+
+<p>As in previous years, WACV 2027 will employ a two-round review process. New papers can be submitted in either the first or the second round. Papers must be enrolled at least one week before the submission deadline for each round (deadlines above). The primary benefit of submitting in Round 1 is that submissions can be invited for resubmission to Round 2, enabling authors to address reviewer concerns and significantly improve their work. Round 2 submissions do not have a rebuttal.</p>
+
+<h2>Call for Papers</h2>
+
+<p>WACV provides a forum for computer vision researchers working on practical applications and innovative algorithms to share their latest developments. Papers can be submitted to: (A) Applications Track, (B) Algorithms Track, and (C) Evaluations &amp; Dataset Track.</p>
+
+<p>Application papers will be evaluated on systems-level innovation, novelty of the domain, and comparative assessment. Recent examples of WACV application-track papers:</p>
+
+<ul>
+	<li>CharacterGAN: Few-Shot Keypoint Character Animation and Reposing</li>
+	<li>DeepCSR: A 3D Deep Learning Approach For Cortical Surface Reconstruction</li>
+	<li>OpenFace: An open source facial behavior analysis toolkit</li>
+	<li>FuturePose - Mixed Reality Martial Arts Training Using Real-Time 3D Human Pose Forecasting With a RGB Camera</li>
+</ul>
+
+<p>Algorithms papers will be evaluated according to the standard conference criteria including algorithmic novelty and quantified evaluation against current, alternative approaches. Algorithms papers will be similar in style to other major computer vision conferences (e.g., CVPR, ICCV, and ECCV). Recent examples include:</p>
+
+<ul>
+	<li>Hole-robust wireframe Detection</li>
+	<li>Agree to Disagree: When Deep Learning Models With Identical Architectures Produce Distinct Explanations</li>
+	<li>Understanding Convolution for Semantic Segmentation</li>
+</ul>
+
+<p>Evaluation &amp; Dataset track papers will be evaluated similarly to NeurIPS Evaluations &amp; Dataset Track. Papers in this category should propose tools, datasets, benchmarks, and practices for testing, stress-testing, auditing, comparing, and interpreting AI/ML systems throughout their lifecycle. Authors are encouraged to follow NeurIPS 2026 guidelines on Evaluations &amp; Dataset Track. While this is the 1st time WACV is introducing the Evaluation &amp; Dataset Track, the following recent papers published in WACV are examples of this track:</p>
+
+<ul>
+	<li>MEVID: Multi-view Extended Videos with Identities for Video Person Re-Identification</li>
+	<li>WildlifeDatasets: An open-source toolkit for animal re-identification</li>
+	<li>DD-3D: Indian Driving Dataset for 3D Unstructured Road Scenes</li>
+	<li>TalkingHeadBench: A Multi-Modal Benchmark &amp; Analysis of Talking-Head DeepFake Detection</li>
+</ul>
+
+<p>The tracks will have different review criteria. Authors will have the opportunity to select A) Applications Track, B) Algorithms Track, and C) Evaluations &amp; Dataset Track by following the instructions in the LaTeX template and selecting a corresponding primary subject area in the submission process. More details below.</p>
+
+<h2>Submission Policies</h2>
+
+<p>All authors should carefully review the following policies that govern the submission and review process, as failure to comply with these policies may result in the rejection of your submission as well as possible additional sanctions in the case of dual submissions and plagiarism. In addition, authors are urged to consult the ethics guidelines and the FAQs.</p>
+
+<p><strong>Paper formatting:</strong> Papers are limited to eight pages, including figures and tables, in the WACV style. Additional pages containing only cited references are allowed. Please download the <a href="/static/wacv-2027-author-kit-template.zip" target="_blank">WACV 2027 Author Kit</a> for detailed formatting instructions.</p>
+
+<p>Papers that are not properly anonymized, or do not use the template, or have more than eight pages (excluding references) will be rejected without review.</p>
+
+<p><strong>Submission and review process:</strong> WACV 2027 will be using OpenReview to manage submissions. Consistent with the review process for previous WACV conferences, submissions under review will be visible only to their assigned members of the program committee (area chairs and reviewers). The reviews and author responses will never be made public, and we will not be soliciting comments from the general public during the reviewing process.</p>
+
+<p>Anyone who plans to submit a paper as an author or a co-author will need to create (or update) their OpenReview profile by the full paper submission deadline. Please note that if you use a non-institutional email address such as gmail.com, it can take up to two weeks to approve your OpenReview profile. Profiles tied to institutional email addresses are generally approved automatically. Plan accordingly. By submitting a paper to WACV, the authors agree to the review process and understand that papers are processed by the OpenReview system to match each manuscript to the best possible area chairs and reviewers.</p>
+
+<p>OpenReview author instructions can be found here.</p>
+
+<p><strong>Exceptions and Accommodations:</strong> Due to the large number of submissions, deadlines and policies will be strictly enforced. There will be no exceptions or accommodations for:</p>
+
+<ul>
+	<li>late submissions;</li>
+	<li>misconfigured author or co-author accounts on OpenReview; and/or</li>
+	<li>changes to the author lists after the paper submission deadline.</li>
+</ul>
+
+<p>You should not expect a response or detailed explanation of any policies from the PCs for any of these issues no matter the reason. If there is a large-scale technical catastrophe affecting the entire community, the PCs will be aware of the issue and communicate the resolution to the entire community.</p>
+
+<p><strong>Review Process:</strong> By submitting a paper to WACV, the authors agree to the review process.  All authors are obligated to serve as reviewers when submitting a paper,  Papers may be matched to reviewers and ACs through automated or semi-automated means.</p>
+
+<p><strong>Confidentiality:</strong> The review process of WACV is confidential. Reviewers are volunteers; they are not part of the WACV organization, and their efforts are greatly appreciated. The practice of keeping all information confidential during the review is part of the standard communication to all reviewers. Misuse of confidential information is a severe professional failure, and appropriate measures will be taken when brought to the attention of the WACV organizers. It should be noted, however, that the organization of WACV is not and cannot be held responsible for the consequences when reviewers break confidentiality.</p>
+
+<p><strong>Conflict Responsibilities:</strong> Anyone who plans to submit a paper as an author or a co-author will need to create or update their OpenReview profile. You will be asked to declare two types of conflicts – domain and personal conflicts – by filling out appropriate sections of your OpenReview profile, as described on the OpenReview author instructions page. It is the primary author's responsibility to ensure that all authors on their paper have registered their institutional conflicts into the submission system – OpenReview (see details under Domain Conflicts below).</p>
+
+<p>If any author of a submission is found to have incomplete or inaccurate conflict information, the submission may be summarily rejected. To avoid undeclared conflicts, authors cannot be added or deleted after the paper enrollment deadlines, but only reordered. Papers that were submitted in round 1 may not have authors added or removed in round 2. Submitting a paper in round 2 as if it is new, when it is substantially the same as a round 1 submission is grounds for desk rejection. The author list is considered final after the paper's earliest submission deadline and no changes are allowed thereafter, including for accepted papers. Moreover, all authors of a paper must have a valid OpenReview profile by the submission deadline to avoid desk rejection.</p>
+
+<p><strong>Double blind review:</strong> WACV reviewing is double blind, in that authors do not know the names of the area chair/reviewers of their papers, and the area chairs/reviewers cannot, beyond reasonable doubt, infer the names of the authors from the submission and the additional material. Do not provide information that may identify the authors in the acknowledgments (e.g., co-workers and grant IDs) and in the supplemental material (e.g., titles in the movies, or attached papers). Also do not provide links to websites that identify the authors. Violation of any of these guidelines may lead to desk rejection.</p>
+
+<p><strong>Plagiarism:</strong> Plagiarism consists of appropriating the words or results of another, without credit. WACV 2027's policy on plagiarism is to refer suspected cases to the IEEE Intellectual Property office, which has an established mechanism for dealing with plagiarism and wide powers of excluding offending authors from future conferences and from IEEE journals. You can find information on this office, their procedures, and their definitions of five levels of plagiarism at this webpage. We will be actively checking for plagiarism. Furthermore, the paper matching system is quite accurate. As a result, it regularly happens that a paper containing plagiarized material goes to a reviewer from whom material was plagiarized; experience shows that such reviewers pursue plagiarism cases enthusiastically.</p>
+
+<p><strong>Dual/Double Submissions:</strong> The goals of WACV are to publish exciting new work for the first time and to avoid duplicating the effort of reviewers. By submitting a manuscript to WACV, the authors acknowledge that it has not been previously published or accepted for publication in substantially similar form in any peer-reviewed venue including journal, conference or workshop, or archival forum. Furthermore, no publication substantially similar in content (defined as having 20 percent or more overlap) has been or will be registered or submitted to this or another conference, workshop, or journal during the review period. Violation of any of these conditions will lead to rejection, and will be reported to the other venue to which the submission was sent.</p>
+
+<p>A publication, for the purposes of this policy, is defined to be a written work longer than four pages (excluding references) that was submitted for review by peers for either acceptance or rejection, and, after review, was accepted. In particular, this definition of publication does not depend upon whether such an accepted written work appears in a formal proceedings or whether the organizers declare that such work "counts as a publication." Under the above definition, arXiv preprints and university technical reports are not considered as publications. However, peer-reviewed workshop papers are considered as publications if their length is more than four pages (excluding references), even if they do not appear in a proceedings.</p>
+
+<p>Note that a technical report (departmental, arXiv, etc.) version of the submission that is put up without any form of direct peer-review is NOT considered prior art and does NOT NEED to be cited in the submission; authors may cite such material, but cannot be penalized for not citing it.</p>
+
+<p><strong>Personal and human subjects data:</strong> If a paper makes use of personal data and/or data from human subjects, including personally identifiable information or offensive content, we expect that the collection and use of such data has been conducted carefully in accordance with the ethics guidelines (see below). In many countries and institutions, the collection and use of personally identifiable data or data from human subjects is subject to approval from an Institutional Review Board (IRB, or equivalent). If the use of such data was approved by an IRB, stating this is sufficient. If the use of such data has not (yet) been approved by an IRB, authors should provide information on any pending approval process, how the data was obtained, as well as discuss if and how consent was obtained (or why it, perhaps, could not be obtained). This discussion can be included either in the main paper or in the supplementary material. If the authors use an existing, published dataset, we encourage (but do not require) them to check how data was collected and whether consent was obtained.</p>
+
+<p><strong>Attendance responsibilities:</strong> The authors agree that if the paper is accepted, at least one of the authors must register for the conference at the full, in-person Author Registration rate no matter the presentation format.</p>
+
+<p><strong>Publication:</strong> All accepted papers will be made publicly available by the Computer Vision Foundation (CVF) two weeks before the conference. Authors wishing to submit a patent understand that the paper's official public disclosure is two weeks before the conference or whenever the authors make it publicly available, whichever is first. The conference considers papers confidential until published two weeks before the conference but notes that multiple organizations will have access during the review and production processes, so those seeking patents should discuss filing dates with their IP counsel. The conference assumes no liability for early disclosures. More information about CVF is available at <a href="http://www.cv-foundation.org/">http://www.cv-foundation.org/</a>.</p>
+
+<p><strong>Authors acting as reviewers:</strong> We expect all authors to be willing to serve as reviewers or area chairs (ACs) as well. With a large enough pool of reviewers, we expect that reviewers will be sent 3-4 papers to review each round and approximately 6-7 papers total, and that area chairs will be assigned 6-8 papers per round and approximately 10-14 papers total. To help us identify qualified reviewers, and to match submissions to reviewers, all authors are required to have an up-to-date OpenReview profile (see OpenReview profile instructions). Reviewers and ACs are obliged to provide timely and quality reviews or metareviews. Authors who are assigned reviews or metareviews and who do not complete timely, quality reviews or metareviews (as judged by their Area Chairs for reviewers and ultimately the PCs) may have their submitted papers desk rejected.</p>
+
+<p><strong>Use of Large Language Models (LLMs):</strong> Our LLM policy follows the NeurIPS 2025 guidelines, slightly modified for WACV. "We welcome authors to use any tool that is suitable for preparing high-quality papers and research. However, we ask authors to keep in mind two important criteria. First, we expect papers to fully describe their methodology, and any tool that is important to that methodology, including the use of LLMs, should be described also. For example, authors should mention tools (including LLMs) that were used for data processing or filtering, visualization, facilitating or running experiments, and proving theorems. It may also be advisable to describe the use of LLMs in implementing the method (if this corresponds to an important, original, or non-standard component of the approach). Second, authors are responsible for the entire content of the paper, including all text and figures, so while authors are welcome to use any tool they wish for writing the paper, they must ensure that all text is correct and original." All text will be subjected to the plagiarism checker.</p>
+
+<h2>Submission Guidelines</h2>
+
+<p>All submissions will be handled electronically via OpenReview. By submitting a paper, the authors agree to the policies stipulated in this website. WACV follows a two-round submission process. Please check the conference web pages for the most up-to-date deadlines. Papers are limited to eight pages, including figures and tables, in the WACV style. Additional pages containing only cited references are allowed. Please refer to the <a href="/static/wacv-2027-author-kit-template.zip" target="_blank">WACV Author Kit</a>. Papers that are not properly anonymized, or do not use the template, or have more than eight pages (excluding references) will be rejected without review.</p>
+
+<p><strong>Paper submission and review site: </strong><br>
+<a href="https://openreview.net/group?id=thecvf.com/WACV/2027/Conference">https://openreview.net/group?id=thecvf.com/WACV/2027/Conference_Round_1#tab-recent-activity</a></p>
+
+<p>Please follow the instructions here to register for OpenReview.</p>
+
+<h4>Other Submission Details:</h4>
+
+<ul>
+	<li><strong>Authorship Changes:</strong> After the paper enrollment deadline, authors cannot be added or removed, just reordered; after the paper submission deadline.</li>
+	<li><strong>Submission Requirements:</strong>
+	<ul>
+		<li>The maximum size of the abstract is 5000 characters.</li>
+		<li>The paper must be PDF only (maximum 50MB). Make sure your paper meets the formatting and anonymity requirements described above.</li>
+		<li>The supplementary material can be either PDF or ZIP only (maximum 200MB).</li>
+	</ul>
+	</li>
+</ul>
+
+<h4>Supplementary Material</h4>
+
+<ul>
+	<li>By the supplementary material deadline, the authors may optionally submit code and/or additional material. The authors should refer to the contents of the supplementary material appropriately in the paper.</li>
+	<li>Reviewers will be encouraged to look at supplementary material, but are not obligated to do so.</li>
+	<li>Supplementary material may include videos, proofs, additional figures or tables, more detailed analysis of experiments presented in the paper, or code.</li>
+	<li>Supplementary material may not include results on additional datasets, results obtained with an improved version of the method (e.g., following additional parameter tuning or training), or an updated or corrected version of the submission PDF.</li>
+	<li>Make sure the supplementary material does not reveal author identity. Take particular care to check submitted source code, which often accidentally includes author identities and leads to desk rejections.</li>
+	<li>Papers with supplementary materials violating the guidelines may be summarily rejected.</li>
+</ul>
+
+<h4>Code Submission and Reproducibility:</h4>
+
+<ul>
+	<li>To improve reproducibility in AI research, we highly encourage authors to voluntarily submit their code as part of the supplementary material. Authors should also use the Reproducibility Checklist as a guide for writing reproducible papers.</li>
+	<li>Reviewers are encouraged to check the submitted code to ensure that the paper's results are trustworthy and reproducible.</li>
+	<li>The code should be anonymized, e.g., author names and institutions (e.g. also in license / copyright statements) should be removed.</li>
+	<li>The authors should include instructions for how to set up the environment and run the code.</li>
+	<li>The code does not need to cover all experiments, but should aim to cover the main results and as many of the minor experiments as possible.</li>
+	<li>All code/data will be reviewed confidentially and kept private.</li>
+</ul>
+
+<h2>Ethics Guidelines for Authors</h2>
+
+<p><em>These guidelines have been adapted from the ICCV 2025 Ethics Guidelines.</em></p>
+
+<p>As Computer Vision research and applications have increasing real-world impact, the likelihood of meaningful social benefit increases, but so does the attendant risk of harm. The research community should consider not only the potential benefits but also the potential negative societal impacts of CV research, and adopt measures that enable positive trajectories to unfold while mitigating risk of harm.</p>
+
+<p>During the WACV review process, reviewers will have the ability to flag papers with significant ethical concerns for the program chairs' review. The program chairs reserve the right to reject papers with grave ethical issues, but expect this to occur only in exceptional circumstances.</p>
+
+<h3>Potential Negative Societal Impacts</h3>
+
+<p>WACV authors are invited to think about the potential negative societal impacts of their proposed research artifact or application. The ethics consequences of a paper can stem from either the methodology or the application. On the methodology side, for example, a new adversarial attack might give unbalanced power to malicious entities; in this case, defences and other mitigation strategies would be expected, as is standard in computer security. On the application side, in some cases, the choice of application is incidental to the core contribution of the paper, and a potentially harmful application should be swapped out (as an extreme example, replacing ethnicity classification with bird classification), but the potential misuses should be still noted. In other cases, the core contribution might be inseparable from a questionable application (e.g., reconstructing a face given speech). In such cases, one should critically examine whether the scientific (and ethical) merits really outweigh the potential ethical harms.</p>
+
+<p>A non-exhaustive list of potential negative societal impacts is included below. Consider whether the proposed methods and applications can:</p>
+
+<ol>
+	<li>Directly facilitate injury to living beings. For example: could it be integrated into weapons or weapons systems?</li>
+	<li>Raise safety, privacy, or security concerns. For example: is there a risk that applications could cause serious accidents or open security vulnerabilities when deployed in real-world environments? Would they make public people's identity or other personal information without their consent?</li>
+	<li>Raise human rights concerns. For example: could the technology be used to discriminate, exclude, or otherwise negatively impact people, including impacts on the provision of vital services, such as healthcare and education, or limit access to opportunities like employment? Please consult the Toronto Declaration for further details.</li>
+	<li>Have a detrimental effect on people's livelihood or economic security. For example: Have a detrimental effect on people's autonomy, dignity, or privacy at work? Could it be used to increase worker surveillance, or impose conditions that present a risk to the health and safety of employees?</li>
+	<li>Develop or extend harmful forms of surveillance. For example: could it be used to collect or analyze bulk surveillance data to predict immigration status or other protected categories, or be used in any kind of criminal profiling?</li>
+	<li>Severely damage the environment. For example: would the application incentivize significant environmental harms such as deforestation, hunting of endangered species, or pollution?</li>
+	<li>Deceive people in ways that cause harm. For example: could the approach be used to facilitate deceptive interactions that would cause harms such as theft, fraud, or harassment? Could it be used to impersonate public figures to influence political processes, or as a tool of hate speech or abuse?</li>
+</ol>
+
+<p>Whenever a work is associated with significant potential negative impacts (or can be perceived that way by reviewers), submissions should include a discussion of these impacts. Such discussion should consider different stakeholders that could be impacted, paying special attention to vulnerable or marginalized communities. It should also include possible mitigation strategies (e.g., gated release of models, providing defences in addition to attacks, mechanisms for monitoring misuse, mechanisms to monitor how a system learns from feedback over time, improving the efficiency and accessibility of CV models, etc.).</p>
+
+<p>Grappling with ethics is a difficult problem for our field, and thinking about ethics is still relatively new to many authors. A common difficulty with assessing ethical impact is its indirectness: most papers focus on general-purpose methodologies (e.g., object recognition algorithms), whereas ethical concerns are more apparent when considering deployed applications (e.g., surveillance systems). Also, real-world impact (both positive and negative) often emerges from the cumulative progress of many papers, so it is difficult to attribute the impact to an individual paper. In certain cases, the applications can have both significant risks and benefits, or it may not be possible to draw a bright line between ethical and unethical. Authors should not hesitate to acknowledge such ambiguities and err on the side of transparency.</p>
+
+<h3>General Ethical Conduct</h3>
+
+<p>We assume that all submissions adhere to ethical standards for responsible research practice and due diligence in the conduct.</p>
+
+<p>If the research uses human-derived data, consider whether that data might:</p>
+
+<ol>
+	<li>Contain any personally identifiable information or sensitive personally identifiable information. For instance, does the dataset use features or label information about individual names? Did people provide their consent on the collection of such data? Could the use of the data be degrading or embarrassing for some people?</li>
+	<li>Contain information that could be deduced about individuals that they have not consented to share. For instance, a dataset with medical image annotations by experts could inadvertently disclose user information such as their name, depending on the features provided.</li>
+	<li>Encode, contain, or potentially exacerbate bias against people of a certain gender, race, sexuality, or who have other protected characteristics. For instance, does the dataset represent the diversity of the community where the approach is intended to be deployed?</li>
+	<li>Contain human subject experimentation and whether it has been reviewed and approved by a relevant oversight board. For instance, studies predicting characteristics (e.g., mental health status) from human data (e.g., performance of everyday activities) are expected to have their studies reviewed by an ethical board (IRB or equivalent).</li>
+	<li>Have been discredited by the creators. For instance, the DukeMTMC-ReID dataset has been taken down and it should not be used in WACV submissions.</li>
+</ol>
+
+<p>In general, there are other issues related to data that are worthy of consideration and review. These include:</p>
+
+<ol>
+	<li>Consent to use or share the data. Explain whether you have asked the data owner's permission to use or share data and what the outcome was. Even if you did not receive consent, explain why this might be appropriate from an ethical standpoint. For instance, if the data was collected from a public forum, were its users asked consent to use the data they produced, and if not, why?</li>
+	<li>Domain specific considerations when working with high-risk groups. For example, if the research involves work with minors or vulnerable adults, have the relevant safeguards been put in place?</li>
+	<li>Filtering of offensive content. For instance, when collecting a dataset, how are the authors filtering offensive content such as pornographic or violent images?</li>
+	<li>Compliance with GDPR and other data-related regulations. For instance, if the authors collect human-derived data, what is the mechanism to guarantee individuals' right to be forgotten (removed from the dataset)?</li>
+</ol>
+
+<p>This list is not intended to be exhaustive — it is included here as a prompt for author and reviewer reflection.</p>
+
+<h2>Review Process</h2>
+
+<p>Like previous years, WACV 2027 will follow a two-round review process that is similar to journal submissions to provide the authors with an additional chance to defend and/or revise their submissions.</p>
+
+<p>For Round 1, submissions will be reviewed by at least three reviewers. A group of area chairs will consolidate the reviews and make one of the following recommendations:</p>
+
+<ul>
+	<li><strong>Accept:</strong> The submission has been accepted to WACV 2027.</li>
+	<li><strong>Revise and Resubmit:</strong> The submission has not been accepted to WACV 2027, but may be made acceptable after some revisions. If the submission is invited for resubmission, a revised version and a rebuttal can be uploaded. The authors may choose to withdraw the paper as well.</li>
+	<li><strong>Reject:</strong> The submission has been rejected from WACV 2027. ACs will make this recommendation when the reviews raise substantial revisions required that cannot be reasonably addressed in a short time frame. Rejected round 1 papers which are submitted to round 2 as new papers will be desk rejected.</li>
+</ul>
+
+<p>"Revised" Round 1 submissions should include:</p>
+
+<ul>
+	<li>A revised version of the original paper (required).</li>
+	<li>A 1-page rebuttal (using the provided template) addressing the reviewers' concerns and highlighting what changes were made since the original submission (required).</li>
+	<li>Revised supplementary material (optional).</li>
+</ul>
+
+<p>The revised version will be sent to the same reviewers and ACs, after which the final decisions will be made.</p>
+
+<p>Completely new Round 2 submissions will follow a similar review process as Round 1, with the crucial difference that Round 2 papers will not have a rebuttal and revision step. In other words, the ACs will provide their final decisions based on the reviews directly without any additional author feedback.</p>
+
+<p>At the end of the review process the ACs will consolidate the reviews and make one of the following recommendations for both the Round 1 revisions and new Round 2 submissions:</p>
+
+<ul>
+	<li><strong>Accept:</strong> The submission has been accepted to WACV 2027.</li>
+	<li><strong>Reject:</strong> The submission has been rejected from WACV 2027.</li>
+</ul>
+
+<p>Accepted papers will be asked to submit the final version by the Round 2 camera ready deadline.</p>
+
+<h3>Rebuttal Policies</h3>
+
+<p>After receiving the round 1 reviews, the authors may optionally submit a rebuttal to address the reviewers' comments. The rebuttal is limited to a one-page PDF file using the rebuttal template included in the <a href="/static/wacv-2027-author-kit-template.zip" target="_blank">WACV 2027 Author Kit</a>. Responses longer than one page will not be reviewed. This includes responses where the margins and formatting are deemed to have been significantly altered from those specified by the style guide.</p>
+
+<p>The rebuttal must maintain anonymity. It cannot include links, even anonymous ones, to external material such as code, videos, etc.</p>
+
+<p>Authors also have the possibility to submit a separate confidential comment to the area chair. Please do so only in exceptional circumstances.</p>
+
+<hr>
+<p>Thank you for your interest in submitting to WACV</p>
+
+<p>For additional questions, contact the WACV 2027 Program Chairs at <a href="mailto:wacv_2027_pcs@computer.org" target="_blank">wacv_2027_pcs@computer.org</a></p>
+
+<hr>
+<h2>Author FAQs</h2>
+
+<h3>About Submitting Papers and Supplementary Material</h3>
+
+<p><strong>Q. What does paper enrollment deadline mean? What do I need to do until then?</strong><br>
+A. Until the paper enrollment deadline, you need to create a submission in openreview, add a title and an abstract for your paper, add all your co-authors (make sure that all authors' OpenReview profiles are created two weeks prior to the enrollment deadline. It can take up to two weeks for OpenReview profiles to be approved, if non-institutional emails are used, e.g. gmail.com).</p>
+
+<p><strong>Q. Can we please have an extension on the paper enrollment</strong><strong> or submission deadline?</strong><br>
+A. NO. And any incomplete submission or a submission not meeting required criteria will be deleted.</p>
+
+<p><strong>Q. Can I update my paper's information (e.g., title, abstract, author list) after the paper enrollment</strong><strong> deadline?</strong><br>
+A. You can update the title and abstract until the paper submission deadline. You can also reorder the author list until the paper submission deadline. However, after the paper enrollment deadline, you can no longer create new paper submissions or add/delete authors of your submission(s).</p>
+
+<p><strong>Q. May I submit a round 1 paper that was not accepted as a new round 2 paper?</strong><br>
+A. NO. Submitting a paper in round 2 as a new paper that is substantially the same as a round 1 paper is grounds for desk rejection.</p>
+
+<p><strong>Q. Can I add/remove authors after my paper has been accepted?</strong><br>
+A. NO. After each paper enrollment deadline, the author list is considered final. Changes to the authorship order following acceptance are allowed.</p>
+
+<p><strong>Q. Are there any formatting requirements for PDFs in the supplementary material?</strong><br>
+A. No. The important thing is that supplementary PDFs are legible and neatly formatted. Many authors choose to use the official WACV style for any supplementary PDFs as well, but this is not a must. Formatting supplementary documents in a single-column layout is permitted.</p>
+
+<p><strong>Q. Can I link to an external webpage from my WACV submission?</strong><br>
+A. This is strongly discouraged because it runs a high risk of violating anonymity, or circumventing length or deadline restrictions. If you feel you absolutely must link to external materials, see the next question.</p>
+
+<p><strong>Q. Can I link to additional image or video material from the supplementary material?</strong><br>
+A. Only if absolutely necessary and as long as the double-blind review process and deadline integrity are preserved. To that end, authors need to ensure the following conditions: (1) The image and video material is too large to include in the supplementary file size limit. (2) The hosting site and the linked material does not reveal the identity and affiliation of the authors. (3) The hosting site or apps do not track or identify who viewed the materials. (4) The authors provide a smaller-sized version of their image or video material in the submitted supplementary material.</p>
+
+<p>Condition 4 ensures that reviewers have a direct way of viewing the material (albeit at a lower quality) and are also able to verify that the externally hosted material has not been modified since the supplementary material deadline.</p>
+
+<p>Authors bear the responsibility and are advised to proceed with caution not to break the double-blind review process. Note, not all hosting services are available in all regions. Authors should also note that, just like for the supplementary material itself, reviewers are under no obligation to review such additional image or video material.</p>
+
+<h3>About Preprints, Anonymity, and Media Promotion</h3>
+
+<p><strong>Q. Does a Technical Report (departmental, arXiv, etc.) available online count as a prior publication, and therefore is that work ineligible for review and publication at WACV 2027?</strong><br>
+A. Please read the dual submission policy above.</p>
+
+<p><strong>Q. Does a document on GitHub or other open repositories count as a publication, and therefore is ineligible for review and publication at WACV 2027?</strong><br>
+A. Submissions to GitHub and similar repositories cannot be rejected and are accepted by default before any "review" that can take place on such platforms. Given definitions in the dual submission paragraph above, GitHub documents are not publications and won't be treated as such. To preserve anonymity, you should not cite your public codebase. You can say that the code will be made publicly available.</p>
+
+<p><strong>Q. Does a presentation at a departmental seminar during the review period violate the anonymity policy?</strong><br>
+A. It does not. Presentation of material at an academic talk, without mentioning it as being in submission to WACV, is acceptable.</p>
+
+<p><strong>Q. Can I list my WACV submission in an application for a job or graduate program?</strong><br>
+A. Yes. As long as you communicate this information confidentially and to a small group of people, it is OK. However, you should not list WACV submissions on public websites or on media (see below).</p>
+
+<p><strong>Q. Can I post my submission on arXiv?</strong><br>
+A. Yes.</p>
+
+<p><strong>Q. Can I have a video link in my arXiv paper?</strong><br>
+A. Yes, you may.</p>
+
+<p><strong>Q. Can I build a project website related to my arXiv paper?</strong><br>
+A. Yes, you may.</p>
+
+<p><strong>Q. How do I cite my results reported in open challenges?</strong><br>
+A. To conform with the double blind review policy, you can report results of other challenge participants together with your results in your paper. For your results, however, you should not identify yourself and should not mention your participation in the challenge. Instead present your results referring to the method proposed in your paper and draw conclusions based on the experimental comparison to other results.</p>
+
+<p><strong>Q. Does my submission need to cite arXiv papers that are related to my work?</strong><br>
+A. Consistent with good academic practice, you need to cite all sources that inspired and informed your own work. This said, asking authors to thoroughly compare their work with arXiv reports that appeared shortly before the submission deadline imposes an unreasonable burden. We also do not wish to discourage the publication of similar ideas that have been developed independently and concurrently. Authors and reviewers should keep the following guidelines in mind:</p>
+
+<ul>
+	<li>Authors are not required to discuss and compare their work with recent arXiv reports, although they must properly cite those that inspired them.</li>
+	<li>To reduce confusion, whenever citing papers that initially appeared on arXiv, the authors should check whether those papers had subsequently been published in a peer-reviewed venue, and to cite those versions accordingly.</li>
+	<li>Failing to cite an arXiv paper or failing to beat its performance SHOULD NOT be sole grounds for rejection.</li>
+	<li>Reviewers SHOULD NOT reject a paper solely because another paper with a similar idea has already appeared on arXiv. If the reviewer suspects plagiarism or academic dishonesty, they are encouraged to bring these concerns to the attention of area and program chairs.</li>
+	<li>It is acceptable for a reviewer to suggest that an author should acknowledge or be aware of something on arXiv.</li>
+</ul>
+
+<h3>About Datasets</h3>
+
+<p><strong>Q. My research uses datasets that have been withdrawn by their creators, such as DukeMTMC-ReID or MS-Celeb-1M. What should I do?</strong><br>
+A. Generally, papers should not use datasets that have been withdrawn by their creators, as doing so may involve ethical violations or even legal complications. Under some circumstances, authors may feel they need to use such datasets — for example, if fair comparison is impossible in any other way. However, authors who use such datasets should always explain the need to do so carefully and in some detail as such claims will be carefully scrutinized. Note that in many cases alternative datasets exist. The recommended course should be to not use the dataset, and (if necessary) explain that this may affect certain comparisons with prior art. It is a violation of policy for a referee or area chair to require comparison on a dataset that has been withdrawn.</p>
+
+<p><strong>Q. My research relies on broadly used public datasets of others, which have not been withdrawn, but for which it is unclear if they have been approved by an IRB. Is this allowed?</strong><br>
+A. In the case of broadly used datasets that are still offered by their creators, for which IRB approval status is unclear, authors are encouraged to discuss the situation, e.g., why no better alternatives are available.</p>
+
+<p><strong>Q. I wish to claim a dataset contribution in my paper, but I either cannot release the data publicly, or am not sure I will be able to do so by the time of publication. Is this an issue?</strong><br>
+A. YES. If you wish to claim a dataset as one of your contributions, it is expected that your dataset will be ready and available at the time you will be submitting the camera ready paper. If you cannot ensure that you can meet this deadline, then the release of the dataset should not be one of the major scientific contributions of your paper. Note that it is still acceptable to submit work relying on a non-public dataset – you just cannot claim that dataset as one of your contributions, and the paper will have to be evaluated based on its other merits.</p>
+
+<h3>About LLMs</h3>
+
+<p><strong>Q. What is the LLM policy for authors in WACV 2027?</strong><br>
+A. Authors may use any tools they find productive in preparing a paper, but must be aware that they are responsible for any misrepresentation, factual inaccuracy or plagiarism in their paper. Papers containing citations of non-existent material will be rejected when found, and may be rejected without review. Similarly, papers containing obvious factual inaccuracies will be rejected when found and may be rejected without review. It is not a defense to a charge of plagiarism or of inaccuracy to argue that "an LLM did it". You are responsible for what you submit.</p>
+
+<p><strong>Q. How will the LLM policy be implemented?</strong><br>
+A. Referees who find inaccuracies should act as they usually would; as should AC's. Glaring examples of citations to non-existent material can be desk-rejected.</p>
+
+<p><strong>Q. May program chairs submit papers to WACV?</strong><br>
+A. In keeping with many past WACV conferences, program chairs will be allowed to submit papers as authors. OpenReview manages conflicts for the submissions of program chairs as it does for those of reviewers and ACs.</p>
+</div>
+</div>
+        
+    </div>
+
+
+
+    
+        </div>
+    
+
+</main>
+<!--END BLOCK CONTENT-->
+
+
+<!--Footer for the edit button-->
+
+
+<script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+
+    $(function () {
+        if ($(".editable").length == 0) {
+            $("#editFooter").hide();
+        }
+
+        // Event bindings for edit buttons
+        $('.startEditBtn').on('click', function() {
+            start_edit();
+        });
+        
+        $('.stopEditBtn').on('click', function() {
+            stop_edit();
+        });
+        $('#id_accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.workshopstatus').on('change', function() {
+            changeStatus(this);
+        });
+        $('.action-select').on('change', function() {
+            actionChanged(this);
+        });
+        $('.extra').on('change', function() {
+            extraChanged(this);
+        });
+        $('.filter_workshop').on('change', function() {
+            this.form.submit();
+        });
+        $('.volunteer-status, .recommendation-letter-status').on('change', function() {
+            setStatus(this);
+        });
+        $('.status-form-show').on('change', function() {
+            this.form.submit();
+        });
+        $('.download-form-download').on('change', function() {
+            this.form.submit();
+        });
+        $('.presentation-type-form-presentation-type').on('change', function() {
+            this.form.submit();
+        });
+        $('.export-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.import-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.vol-email-form-to, .vol-email-form-template').on('change', function() {
+            this.form.submit();
+        });
+        $('.organizer-alert').on('click', function() {
+            getUserCreateForm(this.href);
+        });
+    })
+</script>
+
+<script src="/static/core/js/fastclick.min.js" ></script>
+
+<!--We don't know if there are editable tags on the page until after the django template engine has rendered the page. So,
+test in javascript for "editable" tags and if present, load the ckeditor engine dynamically. -->
+
+<script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+    if (document.getElementsByClassName('editable').length > 0) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "/static/core/ckeditor/4.18/ckeditor.js";    // use this for linked script
+      script.onload = function () {
+        console.log("ckeditor loaded");
+        // Initial setup when each editor is ready
+        CKEDITOR.on("instanceReady", function (e) {
+          updateToggleDocName(e.editor);
+        });
+
+        // React to any editor entering/leaving read-only
+        CKEDITOR.on("readOnly", function (e) {
+          updateToggleDocName(e.editor);
+        });
+      };
+        document.body.appendChild(script);
+    }
+
+    function updateToggleDocName(editor) {
+      var id = editor && editor.name;
+      if (!id || id.indexOf("id_") !== 0) return;
+
+      var doc_name_element = document.getElementById("document_name_" + id.slice(3));
+      console.log(doc_name_element);
+      if (!doc_name_element) return;
+
+      doc_name_element.style.display = editor.readOnly ? "none" : "block";
+    }
+
+</script>
+
+
+<script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+    function fetchContent() {
+        $(".editable").each(function (index) {
+            var myself = this;
+            var docvID = this.getAttribute('id').replace("id_", "");
+            var blurbtext = this.getAttribute("blurbtext");
+            $.ajax({
+                url: "/Admin/RetrieveDocumentVersion",
+                type: "POST",
+                data: {
+                    docvID: docvID,
+                    blurbtext: blurbtext,
+                    csrfmiddlewaretoken: csrftoken,
+                },
+                success: function (data, textStatus, jqXHR) {
+                    myself.setAttribute("contenteditable", "true");
+                    myself.innerHTML = data;
+                    CKEDITOR.inline(myself.id);
+                },
+            });
+        })
+    }
+
+    $("#nopageedit").hide();
+
+    function start_edit() {
+
+        $(".editable").addClass("warning-ring");
+
+        //At the beginning of an edit, we need to replace the content of the
+        //editable div with it's databased content in order to preserve the
+        //template tags. We want the tag, not the rendered tag.
+
+        /* You must remove any countdown.js timers on the page before replacing the page with it's
+        document version otherwise, Javascript will throw an exception.  */
+
+
+        $("[class$='-countdown']").parent().remove();
+        fetchContent();
+        $(".editable").attr("onblur", "ckeditorsave(this)");
+        window.status.bold();
+        window.status = "Click outside the editable area to save. Changes are LIVE!! Refresh page to discard changes.";
+        $("#editpage").hide();
+        $("#noeditpage").show();
+    }
+
+
+    function stop_edit() {
+        ckeditorsave();
+        $("#noeditpage").hide();
+        $("#editpage").show();
+        window.location.reload();
+    }
+
+    function ckeditorsave(event) {
+        for (var name in CKEDITOR.instances) {
+            if (CKEDITOR.instances[name].checkDirty()) {
+                editor = CKEDITOR.instances[name];
+                saveEditable(editor);
+            }
+        }
+    }
+
+    function saveEditable(editor) {
+        var content = editor.getData();
+        var contentId = editor.name;
+        var pageId = window.location.pathname;
+        var originalContent = "N/A";
+        var documentversion = editor.container.getAttribute("id").replace("id_", "");
+        var blurbtext = editor.container.getAttribute("blurbtext");
+        if (contentId.match(/-aloha$/gi)) {
+            contentId = contentId.replace(/-aloha/gi, '');
+        }  /*I'm not sure what this does but it seems like it would matter*/
+        var request = jQuery.ajax({
+            url: "/Admin/SaveDocument",
+            type: "POST",
+            async: false,
+            data: {
+                content: content,
+                originalContent: originalContent,
+                contentId: contentId,
+                pageId: pageId,
+                documentversion: documentversion,
+                blurbtext: blurbtext,
+                csrfmiddlewaretoken: csrftoken
+            },
+            success: function (data) {
+                if (data['message']) {
+                    alert(data['message']);
+                }
+            },
+            error: function (xqXHR, textStatus) {
+                window.status = textStatus;
+                debugger;
+            }
+
+        });
+
+    };
+
+
+</script>
+
+<script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+    jQuery(document).ajaxSend(function (event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+</script>
+
+
+
+
+
+<div id="successful-page-load" class='hidden'>Successful Page Load</div>
+
+
+
+
+    <!-- v ieee cookie banner v -->
+    <script
+            nonce="vCLqRKrDZAegJkTy5hjJEw=="
+            src="https://cmp.osano.com/AzyzptTmRlqVd2LRf/5160c710-0794-4bc5-88f4-2d0eb0eae122/osano.js"></script>
+    <link rel="stylesheet" href="https://cookie-consent.ieee.org/ieee-cookie-banner.css" type="text/css"/>
+    <!-- ^ ieee cookie banner ^ -->
+
+    
+    
+        
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWN9G1QN9J"></script>
+            <script nonce="vCLqRKrDZAegJkTy5hjJEw==">
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-RWN9G1QN9J');
+            </script>
+        
+    
+
+
+
+
+
+
+
+
+<br>
+
+<div class="noprint">
+    <footer id="bootstrap-footer" class="text-center text-lg-start bg-light text-muted">
+
+        <div class="text-center p-1 border-top border-dark">
+        </div>
+        <!-- Section: Links  -->
+        <section class="pt-1">
+            <div class="container text-center text-md-start mt-2">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mb-6">
+                        <!-- Content -->
+                        <h3>Contact Us</h3>
+                        <p><a href="https://support.conferences.computer.org/wacv/help-desk/">WACV Help Desk</a></p>
+                        <p>
+                            Please contact us with questions
+                             about the following topics:
+                        </p>
+                         <p>
+                            Author - Paper Submission,
+                            Author - Open Review Issues,
+                            Author - Camera-Ready Paper,
+                            Registration - General,
+                            Registration - Cancellation,
+                            Childcare/Guests,
+                            Expo/Guests,
+                            Lodging,
+                            Visa Letter,
+                            Reviewer - Open Review Issues,
+                            Reviewer - General Issues,
+                            Area Chair Issues,
+                        </p>
+
+                    </div>
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-5 col-lg-4 col-xl-3 mx-auto mb-4" style="max-width: 300px;">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4 text-center">
+                            Useful links
+                        </h6>
+                        <div>
+             <div><hr>
+<ul>
+	<li><a href="https://www.computer.org/csdl/proceedings/1000040">WACV Proceedings</a></li>
+<li><a href="/Conferences/2026/CodeOfConduct">Code of Conduct</a></li>
+</ul>
+
+<hr></div>
+            </div>
+                    </div>
+
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <div>
+             <table class="table table-borderless">
+	<tbody>
+		<tr>
+			<td><img alt="IEEE Logo" src="https://media.icml.cc/Conferences/CVPR2023/img/ieee_cs_.svg" style="height:20px; width:66px" /></td>
+			<td><a href="https://www.computer.org/">IEEE Computer Society</a></td>
+		</tr>
+		<tr>
+			<td><img alt="" src="https://media.icml.cc/Conferences/CVPR2023/img/CVF-transparent-background.svg" style="height:20px; width:31px" /></td>
+			<td><a href="https://www.thecvf.com/">The Computer Vision Foundation</a></td>
+		</tr>
+	</tbody>
+</table>
+            </div>
+        </div>
+        <!-- Copyright -->
+
+        <script src="/static/core/js/linkedin_tracker_part1.js"></script>
+        <script src="/static/core/js/linkedin_tracker_part2.js"></script>
+        <noscript>
+            <img height="1" width="1" style="display:none;" alt=""
+                 src="https://px.ads.linkedin.com/collect/?pid=2001612&fmt=gif"/>
+        </noscript>
+    </footer>
+</div>
+<!-- Footer -->
+
+
+<!-- Footer -->
+
+</body>
+</html>

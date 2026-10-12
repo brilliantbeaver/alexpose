@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="450" viewBox="0 0 1100 450" role="img" aria-labelledby="title desc">
+<title id="title">An augmentation declares which differences should matter less</title><desc id="desc">Small translation and rotation are view augmentations in training; body-width scaling occurs during input preparation. Horizontal flipping is disabled because left-right laterality may matter. Transformations must be checked for preservation of movement information.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/></marker></defs>
+<rect width="1100" height="450" fill="white"/>
+<text x="32" y="47" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">An augmentation declares which differences should matter less</text>
+<line x1="32" y1="68" x2="1068" y2="68" stroke="#CCD6DE" stroke-width="1"/>
+<rect x="32" y="104" width="500" height="248" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="32" y="104" width="7" height="248" rx="3" fill="#157B78" stroke="#157B78" stroke-width="2"/>
+<text x="52" y="137" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">View changes and preparation</text>
+<text x="52" y="169" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Small translation: position in the image</text>
+<text x="52" y="198" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Small rotation: slight orientation change</text>
+<text x="52" y="227" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Body-width scaling: input preparation</text>
+<text x="52" y="256" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Aim: reduce dependence on recording setup</text>
+<rect x="567" y="104" width="501" height="248" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="567" y="104" width="7" height="248" rx="3" fill="#9C681C" stroke="#9C681C" stroke-width="2"/>
+<text x="587" y="137" fill="#9C681C" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Preserve meaningful differences</text>
+<text x="587" y="169" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Left/right laterality may be informative</text>
+<text x="587" y="198" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Horizontal flipping is disabled</text>
+<text x="587" y="227" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Check effects on motion and visibility</text>
+<text x="587" y="256" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">A transformation can remove useful signal</text>
+<text x="32" y="430" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">A design choice needs evaluation; its motivation does not establish that it improves the result.</text>
+</svg>

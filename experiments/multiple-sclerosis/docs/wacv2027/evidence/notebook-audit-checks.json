@@ -1,0 +1,197 @@
+{
+  "audit_type": "read_only_deterministic_diagnostic_no_training",
+  "cell_indexing": "zero_based_including_markdown",
+  "notebook_source_of_truth": "Historical numerical Markdown in notebook06, verified against capstone-20260921T011305448893Z; no code cells in notebook06 have saved execution outputs",
+  "notebooks": {
+    "00_overview_and_video_gallery.ipynb": {
+      "sha256": "dc5e657887d09abf5cb1160c0f2d21d0ce6cbff5b221373e98cd1189bec5afaa",
+      "cells": 12,
+      "code_cells": 6,
+      "executed_code_cells": 6
+    },
+    "01_pose_extraction_from_raw_video.ipynb": {
+      "sha256": "8e6545638a9976b1372a925ffa7c4f3fc27e90f0f92b09400da3c91cd2adb6ab",
+      "cells": 16,
+      "code_cells": 9,
+      "executed_code_cells": 9
+    },
+    "02_anatomical_mask_and_tokenization.ipynb": {
+      "sha256": "2c6c5c7a2c5bc776fa3e85f654e53c962779c3e2f44ab181be527583251d34d1",
+      "cells": 18,
+      "code_cells": 10,
+      "executed_code_cells": 10
+    },
+    "03_sjepa_model_and_pretrain_normal.ipynb": {
+      "sha256": "8907eebfa53c8cd223be9937cd40fbfcc8ebb021103cebe65aa1d66b88c4a48a",
+      "cells": 20,
+      "code_cells": 8,
+      "executed_code_cells": 8
+    },
+    "04_progressive_finetune_ms_pd_vicreg.ipynb": {
+      "sha256": "7002adc86615299a121a152719b9d0cc0221193400e76f2b7b642402516f83f2",
+      "cells": 17,
+      "code_cells": 7,
+      "executed_code_cells": 7
+    },
+    "05_representation_visualization.ipynb": {
+      "sha256": "a0f6f8f7d9b4522b8eae0e5044932c4481db03f3ddafc33c87bf15464d8b1d47",
+      "cells": 21,
+      "code_cells": 8,
+      "executed_code_cells": 8
+    },
+    "06_capstone_rf_vs_sjepa.ipynb": {
+      "sha256": "5547d761a220f990ff8be7a79819a9b873e91f74f50c61b9ac05351441554c4c",
+      "cells": 20,
+      "code_cells": 7,
+      "executed_code_cells": 0
+    }
+  },
+  "mask_diagnostic": {
+    "seed": 0,
+    "n_masks": 5000,
+    "target_fraction": 0.6331606060606061,
+    "per_joint_target_fraction": [
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5965,
+      0.5218,
+      0.5218,
+      0.778425,
+      0.7831,
+      0.63605,
+      0.643,
+      0.63605,
+      0.643,
+      0.63605,
+      0.643,
+      0.63605,
+      0.643,
+      0.63605,
+      0.643,
+      0.772625,
+      0.7687,
+      0.625375,
+      0.62065,
+      0.6254,
+      0.620625,
+      0.6254,
+      0.620625,
+      0.6254,
+      0.620625
+    ],
+    "region_probabilities": {
+      "head": 0.1278538812785388,
+      "mouth": 0.1278538812785388,
+      "left_arm": 0.1643835616438356,
+      "right_arm": 0.1643835616438356,
+      "trunk": 0.09589041095890412,
+      "left_leg": 0.15981735159817353,
+      "right_leg": 0.15981735159817353
+    },
+    "reflected_windows_with_some_target_exposed": 0.9986,
+    "reflected_mean_exposed_tokens": 35.3856,
+    "reflected_pooled_target_exposure_fraction": 0.21169409839047013,
+    "expected_exposure_with_half_reflected": 0.10584704919523506,
+    "not_a_realized_training_log": true
+  },
+  "readout": {
+    "seed": 0,
+    "selected_tokens": 161,
+    "total_tokens": 264,
+    "per_joint_counts": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      4,
+      7,
+      7,
+      3,
+      7,
+      3,
+      7,
+      3,
+      7,
+      3,
+      7,
+      3,
+      7,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8
+    ],
+    "input_hidden": false,
+    "encoder": "EMA target",
+    "pooling": "arithmetic token mean, then arithmetic window mean"
+  },
+  "registry_sha256": "9496e61b050fc8b62ccbc59cb737376396205a3356b323733b9b8915d56600e1",
+  "dataset": {
+    "normal": {
+      "clips": 24,
+      "sources": 16,
+      "frames": 1427,
+      "padded": 5,
+      "windows": 59
+    },
+    "ms": {
+      "clips": 29,
+      "sources": 13,
+      "frames": 3450,
+      "padded": 0,
+      "windows": 171
+    },
+    "pd": {
+      "clips": 35,
+      "sources": 12,
+      "frames": 2766,
+      "padded": 10,
+      "windows": 128
+    }
+  },
+  "fold_windows": {
+    "0": {
+      "train": 207,
+      "validation": 56,
+      "test": 95
+    },
+    "1": {
+      "train": 226,
+      "validation": 55,
+      "test": 77
+    },
+    "2": {
+      "train": 238,
+      "validation": 83,
+      "test": 37
+    },
+    "3": {
+      "train": 224,
+      "validation": 79,
+      "test": 55
+    },
+    "4": {
+      "train": 190,
+      "validation": 74,
+      "test": 94
+    }
+  }
+}

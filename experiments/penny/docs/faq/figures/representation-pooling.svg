@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="460" viewBox="0 0 1100 460" role="img" aria-labelledby="title desc">
+<title id="title">One sequence becomes a 384-number representation</title><desc id="desc">The frozen target encoder produces 96-dimensional token features. Means and standard deviations are pooled over all valid tokens and over the selected landmark tokens. Four 96-dimensional summaries concatenate into 384 features.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/></marker></defs>
+<rect width="1100" height="460" fill="white"/>
+<text x="32" y="47" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">One sequence becomes a 384-number representation</text>
+<line x1="32" y1="68" x2="1068" y2="68" stroke="#CCD6DE" stroke-width="1"/>
+<rect x="32" y="125" width="232" height="160" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="32" y="125" width="7" height="160" rx="3" fill="#157B78" stroke="#157B78" stroke-width="2"/>
+<text x="52" y="158" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Frozen encoder</text>
+<text x="52" y="190" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">96 values</text>
+<text x="52" y="219" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">per valid token</text>
+<text x="52" y="248" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Weights stay fixed</text>
+<rect x="315" y="96" width="330" height="65" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="315" y="96" width="7" height="65" rx="3" fill="#285A91" stroke="#285A91" stroke-width="2"/>
+<text x="335" y="129" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">All landmarks</text>
+<text x="625" y="139" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="end">Mean: 96</text>
+<line x1="270" y1="205" x2="306" y2="128" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="650" y1="128" x2="709" y2="241" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="315" y="172" width="330" height="65" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="315" y="172" width="7" height="65" rx="3" fill="#285A91" stroke="#285A91" stroke-width="2"/>
+<text x="335" y="205" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">All landmarks</text>
+<text x="625" y="215" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="end">Std. dev.: 96</text>
+<line x1="270" y1="205" x2="306" y2="204" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="650" y1="204" x2="709" y2="241" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="315" y="248" width="330" height="65" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="315" y="248" width="7" height="65" rx="3" fill="#78558F" stroke="#78558F" stroke-width="2"/>
+<text x="335" y="281" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Selected ten</text>
+<text x="625" y="291" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="end">Mean: 96</text>
+<line x1="270" y1="205" x2="306" y2="280" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="650" y1="280" x2="709" y2="241" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="315" y="324" width="330" height="65" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="315" y="324" width="7" height="65" rx="3" fill="#78558F" stroke="#78558F" stroke-width="2"/>
+<text x="335" y="357" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Selected ten</text>
+<text x="625" y="367" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="end">Std. dev.: 96</text>
+<line x1="270" y1="205" x2="306" y2="356" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="650" y1="356" x2="709" y2="241" stroke="#526579" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="723" y="156" width="345" height="161" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="723" y="156" width="7" height="161" rx="3" fill="#9C681C" stroke="#9C681C" stroke-width="2"/>
+<text x="743" y="189" fill="#9C681C" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Concatenate</text>
+<text x="743" y="221" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">96 + 96 + 96 + 96 = 384</text>
+<text x="743" y="250" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">One vector per sequence</text>
+<text x="743" y="279" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Then fit the classifier</text>
+<text x="32" y="440" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">A latent dimension is a learned feature, without a guaranteed clinical interpretation.</text>
+</svg>
