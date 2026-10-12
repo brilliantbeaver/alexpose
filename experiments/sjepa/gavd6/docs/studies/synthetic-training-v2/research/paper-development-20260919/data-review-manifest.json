@@ -1,0 +1,250 @@
+{
+  "source": "outputs/full-updates-2000-seed-17/updates-2000-seed-17",
+  "generator_sha256": "a3ebf608c1f14dbb65de99af9e29c39a135990f799129924ed31e81c019a5737",
+  "html_sha256": "643af1337299dba11cea792d7278601052c5be6a1310e1084e7d900dd900c16c",
+  "selected_windows_sha256": "921c1ef6cd9c9298ca85e9e751d46d6e5f7a172dcefa8e5f8eb9e527b2c3f373",
+  "trajectory_figures": 48,
+  "training_figures": 8,
+  "summary_figures": 2,
+  "displayed_people": 4,
+  "evaluated_people": 8,
+  "displayed_physical_windows": 4,
+  "evaluated_physical_windows": 32,
+  "seed": 17,
+  "selection_policy": "Sorted people, one sorted window per person before second windows; metadata only, before calibration/scoring.",
+  "limitations": "Retained diagnostic plots only; RGB clips, raw neural arrays and human quality decisions are not supplied.",
+  "source_images": [
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-hrnet_w32-clean-ab99982f33.png",
+      "sha256": "af6b7b80ae489979ddf53112562d0632c6f556f02a2894beacff693a4befd671"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-hrnet_w32-blur-c15711b81c.png",
+      "sha256": "bfcd19488acb72fc461bb00ccf511c413239d738265b648f6e091b62219b1fe4"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-hrnet_w32-obstruction-b2515eebc7.png",
+      "sha256": "52c69d803c4865ddf77d89d489833bc9b70340acf845db7776687a66045697b9"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-hrnet_w32-blur_obstruction-741f028b62.png",
+      "sha256": "f066378d3fd4e45c2c02dc1a1a1b90ee32ed128c0921579253e060881c0d8321"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-rtmpose_m-clean-45b2343a28.png",
+      "sha256": "7b0440b66ab888a8fe271245baf8690e9a82dcb60784b430788cb8edd790822d"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-rtmpose_m-blur-3bb2f8bac7.png",
+      "sha256": "d41e306362b1ff43acb09b83cdf1e6c92df4a6cb5ef3fb305b6bbfda54d4e890"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-rtmpose_m-obstruction-f08b285407.png",
+      "sha256": "602eff995ac25e63603e9fb83f72f723a65ed5438c7bf971f8cf9b086a266142"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-rtmpose_m-blur_obstruction-443592a064.png",
+      "sha256": "b72b2f025bb5696c810f5df3e43a44ac189ee0cba52f7ac818b1d2334d0934f7"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-vitpose_base-clean-e21b20652e.png",
+      "sha256": "4a6a6171e9bbc734719e1213a30bb9ab882490616f2710ffab9eca3e8c645962"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-vitpose_base-blur-ee09e21578.png",
+      "sha256": "7598ab5d2c1400f869fa9c3d17f6042a2ad4568bc98cb22eaf2c66b26ce7aa6c"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-vitpose_base-obstruction-8096cbd960.png",
+      "sha256": "899d066b3e5ce7ef5f70993e5d49b6214531058f1f0633fcf525d4c74d3d7c49"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub053-38757073f6855070eff7-vitpose_base-blur_obstruction-35b2f974b8.png",
+      "sha256": "329f4193649d4ea81c17d0aa268e3a875e6f331cf53d8809a22c3ce46e944c27"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-hrnet_w32-clean-4f561681d4.png",
+      "sha256": "e7c5f4e385f87ae4b3b78e645212a9d24541eabfac0467f33c976f920c06874f"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-hrnet_w32-blur-44f7eb20b5.png",
+      "sha256": "68f86a3f597cb114819b797c7c4b6753f2f47fb59fe8bd91f8d21ad73d4c0e66"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-hrnet_w32-obstruction-755265fdda.png",
+      "sha256": "b57053d39e8618e56dd418b437ca27214723c711bfcb574eaaa19663d1cf599f"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-hrnet_w32-blur_obstruction-5a0c305832.png",
+      "sha256": "fd3073e8b9acebc88367ae2f6f301a62cbd0424269b8ddfefdf730a7649a762e"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-rtmpose_m-clean-0b9c29c8f0.png",
+      "sha256": "c6dcb3c346b7b629c069554b8c30b0928f7eb72c90fcabecc59bbf304def7c65"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-rtmpose_m-blur-35ae5e54fd.png",
+      "sha256": "34493d5faae935013c536fe292590cc4c237623a364ce08db3846157f9f4318d"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-rtmpose_m-obstruction-318d5673fc.png",
+      "sha256": "83bd2afb2777b5337028265f05ee016cd79de707197a4b7f05a9fad78d0de498"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-rtmpose_m-blur_obstruction-a2e096efb4.png",
+      "sha256": "c9946b10f78cb6e1d1369448921140e068ddd71d44f24af832723a40a4a65b19"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-vitpose_base-clean-24798ca6ca.png",
+      "sha256": "2386284d2f30950265df1573f0e77699cd32c3de2c86ba9ed8b30ef5ad9c9787"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-vitpose_base-blur-bb5a6d0e87.png",
+      "sha256": "e949f94b5b5e8737c95c678a9035359fefe189fde16530249a6bfe6679dd64ba"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-vitpose_base-obstruction-7cca172e5f.png",
+      "sha256": "a1013c3f4e3e798618c12f688dbf716eb8b45cf16bd0d4be4eb10a4a90957469"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub054-8939c196fe3ef77be5e4-vitpose_base-blur_obstruction-5a42e4d0e0.png",
+      "sha256": "9aaeb2fbff10d21905be684bafcff57d671f5dc6e3c012116c68565ac986e4cb"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-hrnet_w32-clean-1428f0aa1e.png",
+      "sha256": "56b630c6d804f9d3f4718d85ca84765968837a2b226c0a282f34417a2bbf1fa8"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-hrnet_w32-blur-4ef93908c4.png",
+      "sha256": "faf4e9b6ff48b9829696c19560c44299b501de7153a276f0dbd3f651d8c570e8"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-hrnet_w32-obstruction-8c2e490572.png",
+      "sha256": "5ca5f589aaefc244707c3d69947009fafba73b7ac4339a46486dedac7a655f2f"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-hrnet_w32-blur_obstruction-04f5c050de.png",
+      "sha256": "72cf2dd4efe66d6aa5c78dab96c663ce539ae44127b70cc38aa435d65f1d452b"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-rtmpose_m-clean-73b7234ad0.png",
+      "sha256": "72972cfdb313a15916867260b184d4b01a35edb0ccb3ed030a9bd52afd1c7f7e"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-rtmpose_m-blur-79457b69cf.png",
+      "sha256": "6fea5644230f077ce857a2678d359e37510ee43ce9c81e41b0c4c4cea4001e69"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-rtmpose_m-obstruction-3f44f9ccf2.png",
+      "sha256": "8421757eae71693b7ec73836730c9f130617f2f49011136284675880829eafbc"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-rtmpose_m-blur_obstruction-7760cf4854.png",
+      "sha256": "fdc3ca2d2034387f4a05acd8586d4288c97dba533cf55d42fcdc8be7374fe8d5"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-vitpose_base-clean-cb1e25f441.png",
+      "sha256": "6bdb2e58264603eab7fbb3e6b680286b54eb556d8504fa9928959c22e3a484d8"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-vitpose_base-blur-f9d1e4070b.png",
+      "sha256": "15c55a4903793a5cb63db314be3834578687731298f1f6a52f8b24f5a23f6732"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-vitpose_base-obstruction-9031ca7e62.png",
+      "sha256": "8a821cebcb211c1b8462172f073322ef3ae69ed0886c10fe339003b78ae01aa9"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub070-0950ed4076ce2f83dfb6-vitpose_base-blur_obstruction-adac4f9532.png",
+      "sha256": "b88d55709746d8f0df71ed515be1dd4921b80e84d43128a217168ed3e39eefc3"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-hrnet_w32-clean-677c658a0f.png",
+      "sha256": "b6c05c40d846b424a56bac335b088997aabd65abbe40eab9c151bc26e0f8ed82"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-hrnet_w32-blur-f9a0cb4f0b.png",
+      "sha256": "733639f24cacea8a57c9d8f80a4a94c855683c39e90d334cd16c7c50b4f49e1d"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-hrnet_w32-obstruction-23ba6f6ff8.png",
+      "sha256": "c8cddc01ffc3314de3a21f6a8691995c8bcfe491fd8ff2c7c82830ef1fde716b"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-hrnet_w32-blur_obstruction-33c23b1c45.png",
+      "sha256": "32a14ac1505c219fda78bb6b045522e7e5abf565b52d4189d9792dd6e712d940"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-rtmpose_m-clean-7a44fdaddb.png",
+      "sha256": "87768b25d15941ca79538dc70e64811b3c486adb6b5087e99ef5f993f973ec90"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-rtmpose_m-blur-6ffc1c30de.png",
+      "sha256": "605bfc611d2058ce732629b22f34fa8340b3bc6ac06150d7df2607256d9a17e3"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-rtmpose_m-obstruction-bad17758f1.png",
+      "sha256": "c65ffc5d736135746ed36ebd6984686e55b6ab1cc90c205627068298acbdd7d9"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-rtmpose_m-blur_obstruction-b666ff63fd.png",
+      "sha256": "7ec786e7bf54b019a6e98a7b55fef6ffb7d0fee57654470eb96cf30b06171bf8"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-vitpose_base-clean-f239ee25f5.png",
+      "sha256": "5798071fabd54177df9f818b27131e644761374a9ea2a82e572978fc4533b5aa"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-vitpose_base-blur-ea18d6ce2c.png",
+      "sha256": "ee1a13b7d3105a4b19a25be8ba7e2c1dee9322a7762e750226e2d1a29157b6e7"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-vitpose_base-obstruction-cd0311cbad.png",
+      "sha256": "ec15060510b2a277b24f6f35d5192ce3fd908e62a44cbba3f80d73db6b80ecf8"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/trajectory-BioMotionLab_NTroje-rub072-10182d8310f65038f923-vitpose_base-blur_obstruction-4025285238.png",
+      "sha256": "b1391b120ab6802c35ee5f95fa2fb9c657385d162c53da1eaa85b631cb4ad4ab"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-coordinate-17-d5e44f52b6.png",
+      "sha256": "c330dd90e22833f5407c1e8ff739453610ab980663e70c6a1762dd0470a5b8b0"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-direct-17-ebcf31eea5.png",
+      "sha256": "223d2eaf99acd184f16084e81afaac15a69579af33dd13ebec61e7a749c99db6"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-initialized-17-ad28bc9f61.png",
+      "sha256": "142b3d0c5f286d5772c7368863b1cbaff420234dd9159cf45c67506ee00654c0"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-ordinary_jepa-17-4a92cea780.png",
+      "sha256": "80d95b4f68ef54d6ce9a5aa08a4b7ccea448c0088f9f88d3e793f110aa39b2fe"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-paired_jepa-17-1dbd9f3c24.png",
+      "sha256": "08305adbdf20b6beae9315980c9ee63d53cb2555ce2aa4013ad2d6724f7e59c1"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-shuffled_jepa-17-ede8ab6c26.png",
+      "sha256": "671119da1cad958f20d2fc3ca2d845443fd705da0d63b8bbda2b42f98dc83d7c"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-smoothnet-17-d810d43abb.png",
+      "sha256": "c54716d5766f107ada6de8e0672ab4e6055d3e1af4a5ae1ecfffef9c84ad1311"
+    },
+    {
+      "path": "../../../../outputs/full-updates-2000-seed-17/updates-2000-seed-17/images/training-static-17-1756469af4.png",
+      "sha256": "01bb479a7cce1058d21fdd3ca55aaa6018aec50645f71306245c84ffbfc6213f"
+    },
+    {
+      "path": "../seed17-complete-analysis-20260919/paired-effects.png",
+      "sha256": "4d9963bcce46a4a43232e412da7a573916898d6f269d019e48a0a0c37a593572"
+    },
+    {
+      "path": "../seed17-complete-analysis-20260919/amplitude-diagnostics.png",
+      "sha256": "3b0ca8618501a945bf60b84b21a759c98d8ae7e853a79014a44bbd7fdec689d2"
+    }
+  ]
+}

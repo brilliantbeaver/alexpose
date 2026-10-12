@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="744" viewBox="0 0 1200 744" role="img" aria-labelledby="title desc">
+<title id="title">Test each frozen encoder with two readout objectives</title>
+<desc id="desc">Three pretraining variants are each trained at three seeds, giving nine encoders. Every frozen encoder checkpoint feeds two separately trained readouts: coordinate-only and change-supervised. The primary comparison is feature-difference versus independent-state JEPA with change-supervised readouts. The coordinate-only comparison and interaction with readout objective are secondary analyses. Nine pretraining fits plus eighteen readout fits yield eighteen final models through twenty-seven optimization phases. This diagram describes the design, not a result.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#526675"/></marker></defs>
+<rect width="1200" height="744" fill="#ffffff"/>
+<text x="32" y="49" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="bold" fill="#183247" text-anchor="start">Test each encoder with both readout objectives</text>
+<text x="32" y="85" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="normal" fill="#526675" text-anchor="start">3 pretraining variants × 3 seeds = 9 encoders; every checkpoint is tested twice.</text>
+<text x="32" y="135" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="bold" fill="#526675" text-anchor="start">PRETRAINING VARIANT</text>
+<text x="550" y="135" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="bold" fill="#526675" text-anchor="middle">FREEZE THE ENCODER</text>
+<text x="974" y="135" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="bold" fill="#526675" text-anchor="middle">TRAIN TWO READOUTS</text>
+<rect x="32" y="164" width="350" height="108" rx="10" fill="#edf8f5" stroke="#d8e3e8" stroke-width="1.5"/>
+<rect x="32" y="179" width="4" height="78" rx="2" fill="#087e78"/>
+<text x="49" y="206" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#087e78" text-anchor="start">Feature-difference JEPA</text>
+<text x="49" y="241" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" fill="#526675" text-anchor="start">Coupled feature residuals</text>
+<polyline points="384,218 420,218" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="424" y="164" width="252" height="108" rx="10" fill="#f7f9fb" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="550" y="207" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="bold" fill="#183247" text-anchor="middle">Frozen encoder</text>
+<text x="550" y="242" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="normal" fill="#526675" text-anchor="middle">One checkpoint per seed</text>
+<polyline points="678,218 730,218" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="730,186.5 730,249.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="730,186.5 784,186.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="730,249.5 784,249.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<circle cx="730" cy="218" r="3.5" fill="#526675"/>
+<rect x="788" y="164" width="380" height="45" rx="10" fill="#f5f8fa" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="978" y="194" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#183247" text-anchor="middle">Coordinate-only</text>
+<rect x="788" y="227" width="380" height="45" rx="10" fill="#edf8f5" stroke="#087e78" stroke-width="2.5"/>
+<text x="978" y="257" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#087e78" text-anchor="middle">Change-supervised</text>
+<rect x="32" y="296" width="350" height="108" rx="10" fill="#eff5fc" stroke="#d8e3e8" stroke-width="1.5"/>
+<rect x="32" y="311" width="4" height="78" rx="2" fill="#265f9e"/>
+<text x="49" y="338" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#265f9e" text-anchor="start">Independent-state JEPA</text>
+<text x="49" y="373" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" fill="#526675" text-anchor="start">Separate feature residuals</text>
+<polyline points="384,350 420,350" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="424" y="296" width="252" height="108" rx="10" fill="#f7f9fb" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="550" y="339" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="bold" fill="#183247" text-anchor="middle">Frozen encoder</text>
+<text x="550" y="374" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="normal" fill="#526675" text-anchor="middle">One checkpoint per seed</text>
+<polyline points="678,350 730,350" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="730,318.5 730,381.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="730,318.5 784,318.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="730,381.5 784,381.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<circle cx="730" cy="350" r="3.5" fill="#526675"/>
+<rect x="788" y="296" width="380" height="45" rx="10" fill="#f5f8fa" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="978" y="326" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#183247" text-anchor="middle">Coordinate-only</text>
+<rect x="788" y="359" width="380" height="45" rx="10" fill="#edf8f5" stroke="#087e78" stroke-width="2.5"/>
+<text x="978" y="389" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#087e78" text-anchor="middle">Change-supervised</text>
+<rect x="32" y="428" width="350" height="108" rx="10" fill="#fcf7ec" stroke="#d8e3e8" stroke-width="1.5"/>
+<rect x="32" y="443" width="4" height="78" rx="2" fill="#805b25"/>
+<text x="49" y="470" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#805b25" text-anchor="start">Coordinate-difference model</text>
+<text x="49" y="505" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" fill="#526675" text-anchor="start">Common-scale coordinate errors</text>
+<polyline points="384,482 420,482" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="424" y="428" width="252" height="108" rx="10" fill="#f7f9fb" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="550" y="471" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="bold" fill="#183247" text-anchor="middle">Frozen encoder</text>
+<text x="550" y="506" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="normal" fill="#526675" text-anchor="middle">One checkpoint per seed</text>
+<polyline points="678,482 730,482" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="730,450.5 730,513.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="730,450.5 784,450.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="730,513.5 784,513.5" fill="none" stroke="#526675" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<circle cx="730" cy="482" r="3.5" fill="#526675"/>
+<rect x="788" y="428" width="380" height="45" rx="10" fill="#f5f8fa" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="978" y="458" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#183247" text-anchor="middle">Coordinate-only</text>
+<rect x="788" y="491" width="380" height="45" rx="10" fill="#f5f8fa" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="978" y="521" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#183247" text-anchor="middle">Change-supervised</text>
+<rect x="32" y="573" width="668" height="93" rx="10" fill="#edf8f5" stroke="#087e78" stroke-width="2"/>
+<text x="49" y="601" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#087e78" text-anchor="start">Primary comparison</text>
+<text x="49" y="629" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="normal" fill="#183247" text-anchor="start">Feature-difference vs independent-state JEPA</text>
+<text x="49" y="654" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" fill="#526675" text-anchor="start">Compare their change-supervised readouts.</text>
+<rect x="724" y="573" width="444" height="93" rx="10" fill="#f5f8fa" stroke="#d8e3e8" stroke-width="1.5"/>
+<text x="743" y="601" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#183247" text-anchor="start">Secondary analyses</text>
+<text x="743" y="629" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="normal" fill="#183247" text-anchor="start">Coordinate-only comparison</text>
+<text x="743" y="654" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" fill="#526675" text-anchor="start">and pretraining × readout interaction</text>
+<polyline points="32,688 1168,688" fill="none" stroke="#d8e3e8" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="600" y="720" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#183247" text-anchor="middle">9 pretraining fits + 18 readout fits = 27 optimization phases · 18 final models</text>
+</svg>

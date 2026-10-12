@@ -1,0 +1,129 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand*\HyPL@Entry[1]{}
+\citation{padmanabhan2020symmetry}
+\citation{seuthe2024laterality}
+\citation{creaby2012gait}
+\citation{assran2023ijepa,bardes2024vjepa}
+\citation{lecun2022path}
+\HyPL@Entry{0<</S/D>>}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{abdelfattah2024sjepa}
+\citation{sun2025gfp}
+\citation{baradel2022posebert}
+\citation{zhu2023motionbert}
+\citation{zeng2022smoothnet}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related representation and restoration methods}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Paired movement restoration}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}States, projected targets, and anatomical names}{2}{subsection.3.1}\protected@file@percent }
+\newlabel{eq:measurement}{{1}{2}{States, projected targets, and anatomical names}{equation.3.1}{}}
+\citation{caron2021dino}
+\citation{bardes2022vicreg}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Experimental workflow, with illustrative keypoints showing a synthetic 3D knee edit. Endpoint and delta learn from noisy poses and clean projected references in separate runs, then fit a reference-supervised readout. Equation\nobreakspace  {}\ref  {eq:feature} defines the feature losses. Each development window is restored independently. Paired outputs and references determine asymmetry-change error; knee-angle trajectories and post hoc naming are scored per window. The development cohort is reused across studies. This diagram shows the frozen-encoder procedures; direct fitting jointly trains encoder and readout.}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:method}{{1}{3}{Experimental workflow, with illustrative keypoints showing a synthetic 3D knee edit. Endpoint and delta learn from noisy poses and clean projected references in separate runs, then fit a reference-supervised readout. Equation~\ref {eq:feature} defines the feature losses. Each development window is restored independently. Paired outputs and references determine asymmetry-change error; knee-angle trajectories and post hoc naming are scored per window. The development cohort is reused across studies. This diagram shows the frozen-encoder procedures; direct fitting jointly trains encoder and readout}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Representations, readouts, and comparison logic}{3}{subsection.3.2}\protected@file@percent }
+\newlabel{eq:feature}{{2}{3}{Representations, readouts, and comparison logic}{equation.3.2}{}}
+\citation{mahmood2019amass}
+\citation{jiang2023rtmpose,sun2019hrnet,xu2022vitpose}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Three questions organize the completed experiments. Each row shows the primary comparison recorded for that study. ``Change'' combines coordinate, scalar-response, and geometry losses. These stages reuse the same development people; they are not independent replications.}}{4}{table.1}\protected@file@percent }
+\newlabel{tab:design}{{1}{4}{Three questions organize the completed experiments. Each row shows the primary comparison recorded for that study. ``Change'' combines coordinate, scalar-response, and geometry losses. These stages reuse the same development people; they are not independent replications}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Data, outcomes, and inferential scope}{4}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results: what supports faithful restoration?}{5}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Coordinate restoration helps, but pooled response recovery is limited}{5}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:restoration}{{4.1}{5}{Coordinate restoration helps, but pooled response recovery is limited}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}The incremental feature-prediction benefit remains unresolved}{5}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:feature}{{4.2}{5}{The incremental feature-prediction benefit remains unresolved}{subsection.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Restoration quality and supervision tradeoffs. A--B: all eight families and both objectives, as hierarchical means over 14 people and three seeds, pooled over estimators. Circles use coordinate supervision; open triangles add scalar and geometry terms. Direct fitting adapts its encoder; all other encoders are frozen. Zero response (5.81$^{\circ }$) appears only in A. C: paired change-minus-coordinate waveform effects with crossed-person/seed 95\% intervals (2,000 draws), newly computed and exploratory; positive values indicate deterioration. Responses and waveforms retain failures at 720$^{\circ }$ and 180$^{\circ }$, respectively. Families share the development cohort and are not independent replications.}}{6}{figure.2}\protected@file@percent }
+\newlabel{fig:restoration}{{2}{6}{Restoration quality and supervision tradeoffs. A--B: all eight families and both objectives, as hierarchical means over 14 people and three seeds, pooled over estimators. Circles use coordinate supervision; open triangles add scalar and geometry terms. Direct fitting adapts its encoder; all other encoders are frozen. Zero response (5.81$\dg $) appears only in A. C: paired change-minus-coordinate waveform effects with crossed-person/seed 95\% intervals (2,000 draws), newly computed and exploratory; positive values indicate deterioration. Responses and waveforms retain failures at 720$\dg $ and 180$\dg $, respectively. Families share the development cohort and are not independent replications}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Exploratory response errors by observation and nominal edit, in degrees. Direct uses coordinate supervision and joint fitting; endpoint and delta use frozen encoders with the original change readout. All groups contain the same 14 people and three seeds. The last column is a paired zero-minus-direct effect with crossed 95\% interval; positive favors direct. Original 720$^{\circ }$ failure scoring is retained.}}{6}{table.2}\protected@file@percent }
+\newlabel{tab:strata}{{2}{6}{Exploratory response errors by observation and nominal edit, in degrees. Direct uses coordinate supervision and joint fitting; endpoint and delta use frozen encoders with the original change readout. All groups contain the same 14 people and three seeds. The last column is a paired zero-minus-direct effect with crossed 95\% interval; positive favors direct. Original 720$\dg $ failure scoring is retained}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Rare failures materially affect the response contrast}{6}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:failure}{{4.3}{6}{Rare failures materially affect the response contrast}{subsection.4.3}{}}
+\newlabel{eq:cost}{{3}{6}{Rare failures materially affect the response contrast}{equation.4.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Reliability and uncertainty have different denominators. A: descriptive person-balanced response failure percentages for three fitted procedures. B: unconditional successful-error and 720$^{\circ }$ failure-cost contributions, whose sum is the response score. Bars are not conditional success-only errors. C: paired endpoint-minus-delta response effects at four fixed costs, with crossed-person/seed 95\% intervals over 14 people and three seeds; positive favors delta. The filled point retains the declared 720$^{\circ }$ comparison. Costs 360$^{\circ }$ and 180$^{\circ }$ are exploratory stress tests; zero is an accounting lower bound assigning failures no error. All four intervals cross zero. Methods in A--B are grouped by their named supervision, not matched encoder adaptation.}}{7}{figure.3}\protected@file@percent }
+\newlabel{fig:reliability}{{3}{7}{Reliability and uncertainty have different denominators. A: descriptive person-balanced response failure percentages for three fitted procedures. B: unconditional successful-error and 720$\dg $ failure-cost contributions, whose sum is the response score. Bars are not conditional success-only errors. C: paired endpoint-minus-delta response effects at four fixed costs, with crossed-person/seed 95\% intervals over 14 people and three seeds; positive favors delta. The filled point retains the declared 720$\dg $ comparison. Costs 360$\dg $ and 180$\dg $ are exploratory stress tests; zero is an accounting lower bound assigning failures no error. All four intervals cross zero. Methods in A--B are grouped by their named supervision, not matched encoder adaptation}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Readout weighting substantially changes waveform fidelity}{7}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:repair}{{4.4}{7}{Readout weighting substantially changes waveform fidelity}{subsection.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Readout repair on ViTPose. A--B: waveform means and person-$t$ 95\% intervals after averaging three seeds within each of 14 people. The direct-coordinate row is jointly trained; the three repair rows share a frozen encoder. C--D: paired comparator-minus-candidate waveform gains using the same person-$t$ procedure, positive favoring the first named arm. Delta dense versus low scalar is the declared primary; endpoint is secondary. Other displayed intervals are exploratory and unadjusted, and are conditional on the three fitted seeds. All waveform scores include 180$^{\circ }$ failures. Marginal intervals in A--B do not substitute for paired contrasts in C--D.}}{8}{figure.4}\protected@file@percent }
+\newlabel{fig:repair}{{4}{8}{Readout repair on ViTPose. A--B: waveform means and person-$t$ 95\% intervals after averaging three seeds within each of 14 people. The direct-coordinate row is jointly trained; the three repair rows share a frozen encoder. C--D: paired comparator-minus-candidate waveform gains using the same person-$t$ procedure, positive favoring the first named arm. Delta dense versus low scalar is the declared primary; endpoint is secondary. Other displayed intervals are exploratory and unadjusted, and are conditional on the three fitted seeds. All waveform scores include 180$\dg $ failures. Marginal intervals in A--B do not substitute for paired contrasts in C--D}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Response ranking does not establish anatomical naming fidelity}{8}{subsection.4.5}\protected@file@percent }
+\newlabel{sec:naming}{{4.5}{8}{Response ranking does not establish anatomical naming fidelity}{subsection.4.5}{}}
+\citation{uhlrich2023opencap}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Post hoc geometric assignment diagnostic. Points show failure means for every naming condition; intervals are exploratory crossed-person/seed 95\% intervals over 14 people and three seeds. Each estimates its method mean, not a pairwise effect. Failure combines wrong, ambiguous, and missing predictions on separately eligible bilateral hip/knee/ankle pairs. Endpoint strata retain the executed 4:1 nonheld/held weighting. All estimators, cameras, physical orientations, and observation conditions are pooled. Direct uses joint coordinate fitting; endpoint and delta use frozen encoders and the original change readout. No categorical lines or chance baseline are implied.}}{9}{figure.5}\protected@file@percent }
+\newlabel{fig:laterality}{{5}{9}{Post hoc geometric assignment diagnostic. Points show failure means for every naming condition; intervals are exploratory crossed-person/seed 95\% intervals over 14 people and three seeds. Each estimates its method mean, not a pairwise effect. Failure combines wrong, ambiguous, and missing predictions on separately eligible bilateral hip/knee/ankle pairs. Endpoint strata retain the executed 4:1 nonheld/held weighting. All estimators, cameras, physical orientations, and observation conditions are pooled. Direct uses joint coordinate fitting; endpoint and delta use frozen encoders and the original change readout. No categorical lines or chance baseline are implied}{figure.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion and limitations}{9}{section.5}\protected@file@percent }
+\newlabel{maintextend}{{5}{9}{Discussion and limitations}{section.5}{}}
+\bibdata{references}
+\bibcite{abdelfattah2024sjepa}{{1}{2024}{{Abdelfattah \& Alahi}}{{Abdelfattah and Alahi}}}
+\bibcite{assran2023ijepa}{{2}{2023}{{Assran et~al.}}{{Assran, Duval, Misra, Bojanowski, Vincent, Rabbat, LeCun, and Ballas}}}
+\bibcite{baradel2022posebert}{{3}{2022}{{Baradel et~al.}}{{Baradel, Br{\'e}gier, Groueix, Weinzaepfel, Kalantidis, and Rogez}}}
+\bibcite{bardes2022vicreg}{{4}{2022}{{Bardes et~al.}}{{Bardes, Ponce, and LeCun}}}
+\bibcite{bardes2024vjepa}{{5}{2024}{{Bardes et~al.}}{{Bardes, Garrido, Ponce, Chen, Rabbat, LeCun, Assran, and Ballas}}}
+\bibcite{caron2021dino}{{6}{2021}{{Caron et~al.}}{{Caron, Touvron, Misra, J{\'e}gou, Mairal, Bojanowski, and Joulin}}}
+\bibcite{creaby2012gait}{{7}{2012}{{Creaby et~al.}}{{Creaby, Bennell, and Hunt}}}
+\bibcite{jiang2023rtmpose}{{8}{2023}{{Jiang et~al.}}{{Jiang, Lu, Zhang, Ma, Han, Lyu, Li, and Chen}}}
+\bibcite{lecun2022path}{{9}{2022}{{LeCun}}{{}}}
+\bibcite{mahmood2019amass}{{10}{2019}{{Mahmood et~al.}}{{Mahmood, Ghorbani, Troje, Pons-Moll, and Black}}}
+\bibcite{padmanabhan2020symmetry}{{11}{2020}{{Padmanabhan et~al.}}{{Padmanabhan, Rao, Gulhar, Cherry-Allen, Leech, and Roemmich}}}
+\bibcite{seuthe2024laterality}{{12}{2024}{{Seuthe et~al.}}{{Seuthe, Hermanns, Hulzinga, D'Cruz, Deuschl, Ginis, Nieuwboer, and Schlenstedt}}}
+\bibcite{sun2019hrnet}{{13}{2019}{{Sun et~al.}}{{Sun, Xiao, Liu, and Wang}}}
+\bibcite{sun2025gfp}{{14}{2025}{{Sun et~al.}}{{Sun, Zhang, Dong, Cheng, Chang, and Wang}}}
+\bibcite{uhlrich2023opencap}{{15}{2023}{{Uhlrich et~al.}}{{Uhlrich, Falisse, Kidzi{\'n}ski, Muccini, Ko, Chaudhari, Hicks, and Delp}}}
+\bibcite{xu2022vitpose}{{16}{2022}{{Xu et~al.}}{{Xu, Zhang, Zhang, and Tao}}}
+\bibcite{zeng2022smoothnet}{{17}{2022}{{Zeng et~al.}}{{Zeng, Yang, Ju, Li, Wang, and Xu}}}
+\bibcite{zhu2023motionbert}{{18}{2023}{{Zhu et~al.}}{{Zhu, Ma, Liu, Liu, Wu, and Wang}}}
+\bibstyle{template/iclr2027_conference}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Data integrity and evaluation}{12}{appendix.A}\protected@file@percent }
+\newlabel{app:integrity}{{A}{12}{Data integrity and evaluation}{appendix.A}{}}
+\newlabel{app:evaluation}{{A}{12}{Data integrity and evaluation}{appendix.A}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Data preparation and evaluation protocol. Source-person identity determines the split before variants are created. Four-frame patches regroup the fixed joint/time array without dropping missing slots. Fitting and loss calibration use training pairs; evaluation retains reference-eligible failures and averages repeated observations before people. The development cohort is reused across all stages.}}{12}{figure.6}\protected@file@percent }
+\newlabel{fig:protocol}{{6}{12}{Data preparation and evaluation protocol. Source-person identity determines the split before variants are created. Four-frame patches regroup the fixed joint/time array without dropping missing slots. Fitting and loss calibration use training pairs; evaluation retains reference-eligible failures and averages repeated observations before people. The development cohort is reused across all stages}{figure.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{What stays fixed.}{12}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What fitting can access.}{12}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What counts in evaluation.}{12}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{How uncertainty is calculated.}{12}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Reproducible training specification}{13}{appendix.B}\protected@file@percent }
+\newlabel{app:methods}{{B}{13}{Reproducible training specification}{appendix.B}{}}
+\newlabel{app:optimization}{{B}{13}{Reproducible training specification}{appendix.B}{}}
+\@writefile{toc}{\contentsline {paragraph}{Observations and geometry.}{13}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Model and masking.}{13}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Losses and support.}{13}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Updates and calibration.}{13}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Primary questions and supporting comparisons}{14}{appendix.C}\protected@file@percent }
+\newlabel{app:inventory}{{C}{14}{Primary questions and supporting comparisons}{appendix.C}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Three sequential questions, with their recorded primary gains and 95\% intervals. The first two concern pooled response error and use crossed person/seed bootstraps. The third concerns ViTPose waveform error and uses a person-$t$ interval after seed averaging. Positive values favor the candidate. Different outcomes and inference procedures are separated; there is no pooled effect. Every interval spans zero, leaving each primary benefit unresolved. All comparisons reuse 14 development people and three fitted seeds.}}{14}{figure.7}\protected@file@percent }
+\newlabel{fig:questions}{{7}{14}{Three sequential questions, with their recorded primary gains and 95\% intervals. The first two concern pooled response error and use crossed person/seed bootstraps. The third concerns ViTPose waveform error and uses a person-$t$ interval after seed averaging. Positive values favor the candidate. Different outcomes and inference procedures are separated; there is no pooled effect. Every interval spans zero, leaving each primary benefit unresolved. All comparisons reuse 14 development people and three fitted seeds}{figure.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Baselines establish the scale.}{14}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Controls constrain the feature claim.}{14}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Follow-ups change the interpretation.}{14}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {D}Diagnostics and reproducibility}{15}{appendix.D}\protected@file@percent }
+\newlabel{app:strata}{{D}{15}{Diagnostics and reproducibility}{appendix.D}{}}
+\newlabel{app:cost}{{D}{15}{Diagnostics and reproducibility}{appendix.D}{}}
+\newlabel{app:failures}{{D}{15}{Diagnostics and reproducibility}{appendix.D}{}}
+\newlabel{app:repair}{{D}{15}{Diagnostics and reproducibility}{appendix.D}{}}
+\newlabel{app:reproduction}{{D}{15}{Diagnostics and reproducibility}{appendix.D}{}}
+\newlabel{app:journey}{{D}{15}{Diagnostics and reproducibility}{appendix.D}{}}
+\@writefile{toc}{\contentsline {paragraph}{Observation conditions.}{15}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Failure costs and denominators.}{15}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Anatomical assignment.}{15}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Experimental sequence.}{15}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility scope.}{15}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {E}Participant profiles of response improvement and deterioration}{16}{appendix.E}\protected@file@percent }
+\newlabel{app:cases}{{E}{16}{Participant profiles of response improvement and deterioration}{appendix.E}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Participant response profiles, with all 14 development people shown without selection. A: unchanged-minus-direct error, pooled over observations. B--C: zero-minus-direct error for clear and occluded images. Positive values favor jointly fitted direct coordinate restoration. Diamonds average seeds 17, 29, and 43; gray points and horizontal ranges show those fitted values, not confidence intervals. The original 720$^{\circ }$ failure cost and hierarchical aggregation are retained; nonheld/held response strata have 2:1 weighting. Estimators, cameras, naming conditions and physical orientations are pooled. P01--P14 refer to the same people in every panel. Axis ranges differ. These exploratory summaries are not reconstructed poses or clinical examples.}}{16}{figure.8}\protected@file@percent }
+\newlabel{fig:cases}{{8}{16}{Participant response profiles, with all 14 development people shown without selection. A: unchanged-minus-direct error, pooled over observations. B--C: zero-minus-direct error for clear and occluded images. Positive values favor jointly fitted direct coordinate restoration. Diamonds average seeds 17, 29, and 43; gray points and horizontal ranges show those fitted values, not confidence intervals. The original 720$\dg $ failure cost and hierarchical aggregation are retained; nonheld/held response strata have 2:1 weighting. Estimators, cameras, naming conditions and physical orientations are pooled. P01--P14 refer to the same people in every panel. Axis ranges differ. These exploratory summaries are not reconstructed poses or clinical examples}{figure.8}{}}
+\gdef \@abspage@last{16}

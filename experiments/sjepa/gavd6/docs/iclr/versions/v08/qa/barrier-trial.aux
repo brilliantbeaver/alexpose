@@ -1,0 +1,117 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand*\HyPL@Entry[1]{}
+\HyPL@Entry{0<</S/D>>}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{assran2023ijepa,bardes2024vjepa}
+\citation{abdelfattah2024sjepa}
+\citation{sun2025gfp}
+\citation{baradel2022posebert}
+\citation{zhu2023motionbert}
+\citation{zeng2022smoothnet}
+\citation{caron2021dino}
+\citation{bardes2022vicreg}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Positioning relative to skeletal prediction and restoration}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Paired movement restoration}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}States, projected targets, and anatomical names}{2}{subsection.3.1}\protected@file@percent }
+\newlabel{eq:measurement}{{1}{2}{States, projected targets, and anatomical names}{equation.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Representations, readouts, and comparison logic}{2}{subsection.3.2}\protected@file@percent }
+\citation{mahmood2019amass}
+\citation{jiang2023rtmpose,sun2019hrnet,xu2022vitpose}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Paired supervision and single-state inference. A: $T_m$ acts on 3D motion before fixed-camera projection; $N_n$ exchanges input names while leaving reference names unchanged. Occlusion enters rendering. B: student predictor logits $p_i$ and detached reference-teacher logits $t_i$ define residuals at common masked queries; $H$ removes the channel mean, $c$ is the teacher center, and $D=96$. Both auxiliaries add to the same base objective; their coefficient and reductions are defined in the text and Appendix\nobreakspace  {}\ref  {app:methods}. EMA denotes exponential moving average of student weights. C: pretraining's teacher and predictor are discarded. The frozen path fits a residual readout; direct coordinate training instead updates encoder and readout jointly. No reconstructed pose examples are implied.}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:method}{{1}{3}{Paired supervision and single-state inference. A: $T_m$ acts on 3D motion before fixed-camera projection; $N_n$ exchanges input names while leaving reference names unchanged. Occlusion enters rendering. B: student predictor logits $p_i$ and detached reference-teacher logits $t_i$ define residuals at common masked queries; $H$ removes the channel mean, $c$ is the teacher center, and $D=96$. Both auxiliaries add to the same base objective; their coefficient and reductions are defined in the text and Appendix~\ref {app:methods}. EMA denotes exponential moving average of student weights. C: pretraining's teacher and predictor are discarded. The frozen path fits a residual readout; direct coordinate training instead updates encoder and readout jointly. No reconstructed pose examples are implied}{figure.1}{}}
+\newlabel{eq:feature}{{2}{3}{Representations, readouts, and comparison logic}{equation.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Data, outcomes, and inferential scope}{3}{subsection.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces What each comparison changes. Every frozen family fits a fresh residual readout. All coordinate targets are projected references. ``Change'' means the original scalar-plus-geometry package. Equal update totals do not match encoder adaptation or coordinate-supervised exposure.}}{4}{table.1}\protected@file@percent }
+\newlabel{tab:design}{{1}{4}{What each comparison changes. Every frozen family fits a fresh residual readout. All coordinate targets are projected references. ``Change'' means the original scalar-plus-geometry package. Equal update totals do not match encoder adaptation or coordinate-supervised exposure}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results: what supports faithful restoration?}{4}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Coordinate restoration helps, but pooled response recovery is limited}{4}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:restoration}{{4.1}{4}{Coordinate restoration helps, but pooled response recovery is limited}{subsection.4.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Restoration quality and supervision tradeoffs. A--B: all eight families and both objectives, as hierarchical means over 14 people and three seeds, pooled over estimators. Circles use coordinate supervision; open triangles add scalar and geometry terms. Direct fitting adapts its encoder; all other encoders are frozen. Zero response (5.81$^{\circ }$) appears only in A. C: paired change-minus-coordinate waveform effects with crossed-person/seed 95\% intervals (2,000 draws), newly computed and exploratory; positive values indicate deterioration. Responses and waveforms retain failures at 720$^{\circ }$ and 180$^{\circ }$, respectively. Families share the development cohort and are not independent replications.}}{5}{figure.2}\protected@file@percent }
+\newlabel{fig:restoration}{{2}{5}{Restoration quality and supervision tradeoffs. A--B: all eight families and both objectives, as hierarchical means over 14 people and three seeds, pooled over estimators. Circles use coordinate supervision; open triangles add scalar and geometry terms. Direct fitting adapts its encoder; all other encoders are frozen. Zero response (5.81$\dg $) appears only in A. C: paired change-minus-coordinate waveform effects with crossed-person/seed 95\% intervals (2,000 draws), newly computed and exploratory; positive values indicate deterioration. Responses and waveforms retain failures at 720$\dg $ and 180$\dg $, respectively. Families share the development cohort and are not independent replications}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}The incremental feature-prediction benefit remains unresolved}{5}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:feature}{{4.2}{5}{The incremental feature-prediction benefit remains unresolved}{subsection.4.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Exploratory response errors by observation and nominal edit, in degrees. Direct uses coordinate supervision and joint fitting; endpoint and delta use frozen encoders with the original change readout. All groups contain the same 14 people and three seeds. The last column is a paired zero-minus-direct effect with crossed 95\% interval; positive favors direct. Original 720$^{\circ }$ failure scoring is retained.}}{6}{table.2}\protected@file@percent }
+\newlabel{tab:strata}{{2}{6}{Exploratory response errors by observation and nominal edit, in degrees. Direct uses coordinate supervision and joint fitting; endpoint and delta use frozen encoders with the original change readout. All groups contain the same 14 people and three seeds. The last column is a paired zero-minus-direct effect with crossed 95\% interval; positive favors direct. Original 720$\dg $ failure scoring is retained}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Rare failures materially affect the response contrast}{6}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:failure}{{4.3}{6}{Rare failures materially affect the response contrast}{subsection.4.3}{}}
+\newlabel{eq:cost}{{3}{6}{Rare failures materially affect the response contrast}{equation.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Readout weighting substantially changes waveform fidelity}{6}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:repair}{{4.4}{6}{Readout weighting substantially changes waveform fidelity}{subsection.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Reliability and uncertainty have different denominators. A: descriptive person-balanced response failure percentages for three fitted procedures. B: unconditional successful-error and 720$^{\circ }$ failure-cost contributions, whose sum is the response score. Bars are not conditional success-only errors. C: paired endpoint-minus-delta response effects at four fixed costs, with crossed-person/seed 95\% intervals over 14 people and three seeds; positive favors delta. The filled point retains the declared 720$^{\circ }$ comparison. Costs 360$^{\circ }$ and 180$^{\circ }$ are exploratory stress tests; zero is an accounting lower bound assigning failures no error. All four intervals cross zero. Methods in A--B are grouped by their named supervision, not matched encoder adaptation.}}{7}{figure.3}\protected@file@percent }
+\newlabel{fig:reliability}{{3}{7}{Reliability and uncertainty have different denominators. A: descriptive person-balanced response failure percentages for three fitted procedures. B: unconditional successful-error and 720$\dg $ failure-cost contributions, whose sum is the response score. Bars are not conditional success-only errors. C: paired endpoint-minus-delta response effects at four fixed costs, with crossed-person/seed 95\% intervals over 14 people and three seeds; positive favors delta. The filled point retains the declared 720$\dg $ comparison. Costs 360$\dg $ and 180$\dg $ are exploratory stress tests; zero is an accounting lower bound assigning failures no error. All four intervals cross zero. Methods in A--B are grouped by their named supervision, not matched encoder adaptation}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Readout repair on ViTPose. A--B: waveform means and person-$t$ 95\% intervals after averaging three seeds within each of 14 people. The direct-coordinate row is jointly trained; the three repair rows share a frozen encoder. C--D: paired comparator-minus-candidate waveform gains using the same person-$t$ procedure, positive favoring the first named arm. Delta dense versus low scalar is the declared primary; endpoint is secondary. Other displayed intervals are exploratory and unadjusted, and are conditional on the three fitted seeds. All waveform scores include 180$^{\circ }$ failures. Marginal intervals in A--B do not substitute for paired contrasts in C--D.}}{8}{figure.4}\protected@file@percent }
+\newlabel{fig:repair}{{4}{8}{Readout repair on ViTPose. A--B: waveform means and person-$t$ 95\% intervals after averaging three seeds within each of 14 people. The direct-coordinate row is jointly trained; the three repair rows share a frozen encoder. C--D: paired comparator-minus-candidate waveform gains using the same person-$t$ procedure, positive favoring the first named arm. Delta dense versus low scalar is the declared primary; endpoint is secondary. Other displayed intervals are exploratory and unadjusted, and are conditional on the three fitted seeds. All waveform scores include 180$\dg $ failures. Marginal intervals in A--B do not substitute for paired contrasts in C--D}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Response ranking does not establish anatomical naming fidelity}{8}{subsection.4.5}\protected@file@percent }
+\newlabel{sec:naming}{{4.5}{8}{Response ranking does not establish anatomical naming fidelity}{subsection.4.5}{}}
+\citation{uhlrich2023opencap}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Post hoc geometric assignment diagnostic. Points show failure means for every naming condition; intervals are exploratory crossed-person/seed 95\% intervals over 14 people and three seeds. Each estimates its method mean, not a pairwise effect. Failure combines wrong, ambiguous, and missing predictions on separately eligible bilateral hip/knee/ankle pairs. Endpoint strata retain the executed 4:1 nonheld/held weighting. All estimators, cameras, physical orientations, and observation conditions are pooled. Direct uses joint coordinate fitting; endpoint and delta use frozen encoders and the original change readout. No categorical lines or chance baseline are implied.}}{9}{figure.5}\protected@file@percent }
+\newlabel{fig:laterality}{{5}{9}{Post hoc geometric assignment diagnostic. Points show failure means for every naming condition; intervals are exploratory crossed-person/seed 95\% intervals over 14 people and three seeds. Each estimates its method mean, not a pairwise effect. Failure combines wrong, ambiguous, and missing predictions on separately eligible bilateral hip/knee/ankle pairs. Endpoint strata retain the executed 4:1 nonheld/held weighting. All estimators, cameras, physical orientations, and observation conditions are pooled. Direct uses joint coordinate fitting; endpoint and delta use frozen encoders and the original change readout. No categorical lines or chance baseline are implied}{figure.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion and limitations}{9}{section.5}\protected@file@percent }
+\newlabel{maintextend}{{5}{10}{Discussion and limitations}{section.5}{}}
+\bibdata{references}
+\bibcite{abdelfattah2024sjepa}{{1}{2024}{{Abdelfattah \& Alahi}}{{Abdelfattah and Alahi}}}
+\bibcite{assran2023ijepa}{{2}{2023}{{Assran et~al.}}{{Assran, Duval, Misra, Bojanowski, Vincent, Rabbat, LeCun, and Ballas}}}
+\bibcite{baradel2022posebert}{{3}{2022}{{Baradel et~al.}}{{Baradel, Br{\'e}gier, Groueix, Weinzaepfel, Kalantidis, and Rogez}}}
+\bibcite{bardes2022vicreg}{{4}{2022}{{Bardes et~al.}}{{Bardes, Ponce, and LeCun}}}
+\bibcite{bardes2024vjepa}{{5}{2024}{{Bardes et~al.}}{{Bardes, Garrido, Ponce, Chen, Rabbat, LeCun, Assran, and Ballas}}}
+\bibcite{caron2021dino}{{6}{2021}{{Caron et~al.}}{{Caron, Touvron, Misra, J{\'e}gou, Mairal, Bojanowski, and Joulin}}}
+\bibcite{jiang2023rtmpose}{{7}{2023}{{Jiang et~al.}}{{Jiang, Lu, Zhang, Ma, Han, Lyu, Li, and Chen}}}
+\bibcite{mahmood2019amass}{{8}{2019}{{Mahmood et~al.}}{{Mahmood, Ghorbani, Troje, Pons-Moll, and Black}}}
+\bibcite{sun2019hrnet}{{9}{2019}{{Sun et~al.}}{{Sun, Xiao, Liu, and Wang}}}
+\bibcite{sun2025gfp}{{10}{2025}{{Sun et~al.}}{{Sun, Zhang, Dong, Cheng, Chang, and Wang}}}
+\bibcite{uhlrich2023opencap}{{11}{2023}{{Uhlrich et~al.}}{{Uhlrich, Falisse, Kidzi{\'n}ski, Muccini, Ko, Chaudhari, Hicks, and Delp}}}
+\bibcite{xu2022vitpose}{{12}{2022}{{Xu et~al.}}{{Xu, Zhang, Zhang, and Tao}}}
+\bibcite{zeng2022smoothnet}{{13}{2022}{{Zeng et~al.}}{{Zeng, Yang, Ju, Li, Wang, and Xu}}}
+\bibcite{zhu2023motionbert}{{14}{2023}{{Zhu et~al.}}{{Zhu, Ma, Liu, Liu, Wu, and Wang}}}
+\bibstyle{template/iclr2027_conference}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Implementation and reconstruction contract}{13}{appendix.A}\protected@file@percent }
+\newlabel{app:methods}{{A}{13}{Implementation and reconstruction contract}{appendix.A}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Movement generation, observations, and normalization}{13}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Tokens, masking, and readout}{13}{subsection.A.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Coordinate and base feature objectives}{14}{subsection.A.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Angular losses and repair}{14}{subsection.A.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Optimization and calibration audit}{15}{subsection.A.5}\protected@file@percent }
+\newlabel{app:optimization}{{A.5}{15}{Optimization and calibration audit}{subsection.A.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Verified feature calibration at initialization. The percentage is $100\lambda _J R_j/R_{\rm  base}$ for each auxiliary. Source: the retained loss-calibration receipt; all eight bound source-code hashes match the audited checkout.}}{15}{table.3}\protected@file@percent }
+\newlabel{tab:calibration}{{3}{15}{Verified feature calibration at initialization. The percentage is $100\lambda _J R_j/R_{\rm base}$ for each auxiliary. Source: the retained loss-calibration receipt; all eight bound source-code hashes match the audited checkout}{table.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Completed design, measurement, and inference}{16}{appendix.B}\protected@file@percent }
+\newlabel{app:evaluation}{{B}{16}{Completed design, measurement, and inference}{appendix.B}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Completed fits across the three sequential stages. Counts include all three seeds, not independent populations. Repairs reuse the six retained feature encoders. The larger 102-fit tutorial recipe is not executed evidence.}}{16}{table.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Complete pooled response-study inventory}{17}{appendix.C}\protected@file@percent }
+\newlabel{app:inventory}{{C}{17}{Complete pooled response-study inventory}{appendix.C}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces All 16 neural variants. Response and waveform are in degrees, NLE is dimensionless, Fail is the weighted response failure percentage, and Assign is geometric assignment failure percentage. Means use 14 people and three seeds. All are lower-is-better outcomes, but they have different support and cannot be combined into an unspecified overall ranking.}}{17}{table.5}\protected@file@percent }
+\newlabel{tab:inventory}{{5}{17}{All 16 neural variants. Response and waveform are in degrees, NLE is dimensionless, Fail is the weighted response failure percentage, and Assign is geometric assignment failure percentage. Means use 14 people and three seeds. All are lower-is-better outcomes, but they have different support and cannot be combined into an unspecified overall ranking}{table.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}All selected observation strata}{18}{appendix.D}\protected@file@percent }
+\newlabel{app:strata}{{D}{18}{All selected observation strata}{appendix.D}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Response error ($^{\circ }$) in all observation-by-nominal-edit groups, retaining the original 720$^{\circ }$ failure cost. Clear/occluded describe image observations. The 15$^{\circ }$ edit was excluded from fitting.}}{18}{table.6}\protected@file@percent }
+\newlabel{tab:levelinventory}{{6}{18}{Response error ($\dg $) in all observation-by-nominal-edit groups, retaining the original 720$\dg $ failure cost. Clear/occluded describe image observations. The 15$\dg $ edit was excluded from fitting}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Response error ($^{\circ }$) in all observation-by-estimator groups, with 2:1 seen/held nonzero-response weights. R: RTMPose-M; H: HRNet-W32; V: ViTPose-base. ViTPose was excluded from fitting. Original failure costs remain.}}{18}{table.7}\protected@file@percent }
+\newlabel{tab:extractorinventory}{{7}{18}{Response error ($\dg $) in all observation-by-estimator groups, with 2:1 seen/held nonzero-response weights. R: RTMPose-M; H: HRNet-W32; V: ViTPose-base. ViTPose was excluded from fitting. Original failure costs remain}{table.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {E}Failure accounting and all fixed-cost sensitivities}{19}{appendix.E}\protected@file@percent }
+\newlabel{app:failures}{{E}{19}{Failure accounting and all fixed-cost sensitivities}{appendix.E}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Response reliability for all variants. Fail is a person-balanced percentage. Success is $U$, Cost is $720f$, Total is their sum, and Conditional is $U/(1-f)$, all in degrees. Raw failed-pair counts across seeds are retained in the audit and are not substituted for weighted rates.}}{19}{table.8}\protected@file@percent }
+\newlabel{tab:failureinventory}{{8}{19}{Response reliability for all variants. Fail is a person-balanced percentage. Success is $U$, Cost is $720f$, Total is their sum, and Conditional is $U/(1-f)$, all in degrees. Raw failed-pair counts across seeds are retained in the audit and are not substituted for weighted rates}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces All rescored response means ($^{\circ }$) with unchanged predictions and failure indicators. Costs 180 and 360 are quarter/half-cost stress tests; zero is an accounting lower bound; 720 is the original maximum valid-response-error bound. All new sensitivities are exploratory.}}{20}{table.9}\protected@file@percent }
+\newlabel{tab:penaltyinventory}{{9}{20}{All rescored response means ($\dg $) with unchanged predictions and failure indicators. Costs 180 and 360 are quarter/half-cost stress tests; zero is an accounting lower bound; 720 is the original maximum valid-response-error bound. All new sensitivities are exploratory}{table.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {F}Repair inventory and interpretation}{21}{appendix.F}\protected@file@percent }
+\newlabel{app:repair}{{F}{21}{Repair inventory and interpretation}{appendix.F}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Every retained ViTPose method in the repair export. Waveform and response are degrees; NLE is dimensionless; response failures are weighted percentages. Direct is jointly fitted; all other methods use frozen encoders. This table preserves the coordinate-only references in addition to the three plotted repair arms.}}{21}{table.10}\protected@file@percent }
+\newlabel{tab:repairinventory}{{10}{21}{Every retained ViTPose method in the repair export. Waveform and response are degrees; NLE is dimensionless; response failures are weighted percentages. Direct is jointly fitted; all other methods use frozen encoders. This table preserves the coordinate-only references in addition to the three plotted repair arms}{table.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {G}Artifact map and reproduction boundary}{21}{appendix.G}\protected@file@percent }
+\newlabel{app:reproduction}{{G}{21}{Artifact map and reproduction boundary}{appendix.G}{}}
+\gdef \@abspage@last{21}

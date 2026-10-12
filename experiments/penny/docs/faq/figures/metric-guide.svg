@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="445" viewBox="0 0 1100 445" role="img" aria-labelledby="title desc">
+<title id="title">Different scores reveal different parts of performance</title><desc id="desc">Accuracy counts all correctly classified clips, balanced accuracy averages recall across classes, and macro F1 averages per-class F1. These metrics have different weighting and cannot be treated as interchangeable.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/></marker></defs>
+<rect width="1100" height="445" fill="white"/>
+<text x="32" y="47" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">Different scores reveal different parts of performance</text>
+<line x1="32" y1="68" x2="1068" y2="68" stroke="#CCD6DE" stroke-width="1"/>
+<rect x="32" y="112" width="328" height="232" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="32" y="112" width="7" height="232" rx="3" fill="#285A91" stroke="#285A91" stroke-width="2"/>
+<text x="52" y="145" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Accuracy</text>
+<text x="52" y="177" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Correct clips ÷ all test clips</text>
+<text x="52" y="206" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Every clip has equal weight</text>
+<text x="52" y="235" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Frequent classes can dominate</text>
+<rect x="386" y="112" width="328" height="232" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="386" y="112" width="7" height="232" rx="3" fill="#157B78" stroke="#157B78" stroke-width="2"/>
+<text x="406" y="145" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Balanced accuracy</text>
+<text x="406" y="177" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Average recall over classes</text>
+<text x="406" y="206" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Each class has equal weight</text>
+<text x="406" y="235" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Checks class recovery</text>
+<rect x="740" y="112" width="328" height="232" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="740" y="112" width="7" height="232" rx="3" fill="#78558F" stroke="#78558F" stroke-width="2"/>
+<text x="760" y="145" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Macro F1</text>
+<text x="760" y="177" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Average class-specific F1</text>
+<text x="760" y="206" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Balances precision and recall</text>
+<text x="760" y="235" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Each class has equal weight</text>
+<text x="32" y="425" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">Read these with the confusion matrix, class counts, and uncertainty from the actual test set.</text>
+</svg>

@@ -1,0 +1,285 @@
+{
+  "scope": "Exploratory reanalysis of completed synthetic development exports; no new training or confirmation.",
+  "people": [
+    "BioMotionLab_NTroje::rub002",
+    "BioMotionLab_NTroje::rub023",
+    "BioMotionLab_NTroje::rub044",
+    "BioMotionLab_NTroje::rub053",
+    "BioMotionLab_NTroje::rub054",
+    "BioMotionLab_NTroje::rub070",
+    "BioMotionLab_NTroje::rub072",
+    "BioMotionLab_NTroje::rub075",
+    "BioMotionLab_NTroje::rub086",
+    "BioMotionLab_NTroje::rub098",
+    "BioMotionLab_NTroje::rub106",
+    "BioMotionLab_NTroje::rub115",
+    "KIT::348",
+    "KIT::6"
+  ],
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "input_sha256": {
+    "outputs/iclr/walking-core/evaluation/per-person.csv": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+    "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv": "f5968617a29e2adf80fe2574ebea21cbb18bd3aedbce3c59ee2f8e68a4490f55",
+    "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv": "e10243ca08f1098e33db463fec359015fdf6630ffdd5634d33b288d1f37f57f3",
+    "outputs/iclr/jepa-response/evaluation/response-curves-person.csv": "e5b97a0afb53b43c1d4dd95bcd6a5ac3c4e2bb7de8346e8c7e7fc74388ac5af1",
+    "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv": "890fe865fcbd1ce20ccf8a3e82534854a9b5f82fce4a346e01ac26172e0a7290",
+    "outputs/iclr/walking-core/evaluation/comparisons.json": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+    "outputs/iclr/jepa-response/evaluation/comparisons.json": "f22fe912d0b79876843810e5cea714895943f3fbc686047d54fd89f9599a8ce6",
+    "outputs/iclr/readout-repair/development/evaluation/comparisons.json": "abaae8403ef37899fbf8933163fe9b05d2b23dfc0838a30263ba17631873983e",
+    "outputs/iclr/jepa-response/diagnostics/loss-calibration.json": "3c00e2931bfa3a8cc7e4d94616774b81a066e60a0aabc3aa22a303a0266620d5",
+    "outputs/iclr/jepa-response/ledger.json": "b348371bb62583164c1373b6264096f36573551fbddc25b9794967afa1d496be"
+  },
+  "saved_comparisons_reproduced": [
+    {
+      "run": "walking-core",
+      "metric": "response_error",
+      "passed": true
+    },
+    {
+      "run": "walking-core",
+      "metric": "nuisance_error",
+      "passed": true
+    },
+    {
+      "run": "walking-core",
+      "metric": "A_error",
+      "passed": true
+    },
+    {
+      "run": "walking-core",
+      "metric": "waveform_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "response_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "nuisance_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "A_error",
+      "passed": true
+    },
+    {
+      "run": "jepa-response",
+      "metric": "waveform_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "waveform_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "response_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "synthetic_all_nle",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "response_failure_contribution",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "response_success_contribution",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "zero_response_error",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "waveform_failure_contribution",
+      "passed": true
+    },
+    {
+      "run": "readout-repair",
+      "metric": "waveform_success_contribution",
+      "passed": true
+    }
+  ],
+  "definitions": {
+    "canonical_primary_penalty_deg": 720,
+    "penalty_derivation": "Interior projected angles are in [0,180], per-leg excursion in [0,180], A in [-180,180], response in [-360,360], and a valid prediction's absolute response error is bounded by 720 degrees.",
+    "penalty_choices": {
+      "0": "Accounting lower bound assigning zero error to failures; not a useful operating score and not a conditional-success mean.",
+      "180": "Supplementary quarter-cost stress test; 180 is an angle-error bound, not a response-error bound.",
+      "360": "Half-cost stress test and worst-case zero-response error; not the maximum error of a valid restored response.",
+      "720": "Inherited canonical maximum response-error bound; original declared analysis unchanged."
+    },
+    "unconditional_response": "E_w[absolute response error times successful indicator] + penalty * P_w(failure), with reference eligibility and original hierarchy fixed.",
+    "conditional_error_under_original_weights": "E_w[absolute error times successful indicator] / P_w(success). Conditioning can change population weights; this is not the independently averaged per-family conditional export.",
+    "exported_nested_success_conditional_error": "Existing exporter averages successful errors within each source family before the motion/person hierarchy. Retained separately; it is not additive with the failure contribution.",
+    "failure_rate": "Person-balanced, seed-averaged probability under the same hierarchical weights as the unconditional score. Raw failure counts and raw pair rates are separate columns.",
+    "condition_weighting": "Nonheld:held 4:1 for endpoint metrics (baseline plus duplicate zero, 5 and 10 versus 15); 2:1 for response metrics (5 and 10 versus 15). No no-change contrast enters primary response.",
+    "true_magnitude_bins": "Not reconstructable from the compact exports: signed reference_change in response-curves-person.csv is already averaged across source windows/motions, naming, extractor and seeds. abs(mean reference_change) is not mean(abs(reference_change)). No per-pair magnitude-bin analysis is manufactured.",
+    "alternative_scale_analysis": "Report all clear/occluded by seen (5 and 10) or held (15) intervention groups, each with its saved zero-response MAE. Nominal edits are never labeled true response magnitudes.",
+    "intervals": "All new crossed intervals are exploratory, unadjusted person/seed percentile bootstrap with 2000 draws and RNG731; contrasts retain pairing. Repair mean and effect CSVs also provide person-t intervals after averaging seeds within each person, conditional on three fits. Only the retained delta dense-versus-low-scalar ViTPose waveform contrast is the repair's declared primary. New mean intervals do not imply new independent samples.",
+    "effect_direction": "All contrast CSVs use comparator minus candidate. Positive favors the candidate for error metrics. Restoration effects choose coordinate-only as candidate and original change as comparator, so positive is deterioration from adding the package.",
+    "laterality_components": "Wrong/ambiguous/missing counts are not available in the compact condition exports. Only the combined geometric assignment failure rate can be plotted."
+  },
+  "weighted_initial_auxiliary_to_base_gradient_rms": {
+    "jepa_delta_v1": 1.3037139634433077e-05,
+    "jepa_endpoint_v1": 0.10000000000000002
+  },
+  "clipping_fields_from_saved_ledger": [
+    {
+      "path": "/pretrain-response-jepa_delta_v1-graph_time-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 2000
+    },
+    {
+      "path": "/pretrain-response-jepa_delta_v1-graph_time-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 2000
+    },
+    {
+      "path": "/pretrain-response-jepa_delta_v1-graph_time-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 1999
+    },
+    {
+      "path": "/pretrain-response-jepa_endpoint_v1-graph_time-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 2000
+    },
+    {
+      "path": "/pretrain-response-jepa_endpoint_v1-graph_time-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 2000
+    },
+    {
+      "path": "/pretrain-response-jepa_endpoint_v1-graph_time-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 2000
+    },
+    {
+      "path": "/pretrain-response-coordinate_delta_v1-graph_time-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/pretrain-response-coordinate_delta_v1-graph_time-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_delta_v1-graph_time-paired_change-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 5
+    },
+    {
+      "path": "/F-response-jepa_delta_v1-graph_time-paired_change-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 5
+    },
+    {
+      "path": "/F-response-jepa_delta_v1-graph_time-paired_change-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 4
+    },
+    {
+      "path": "/F-response-jepa_endpoint_v1-graph_time-paired_change-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 4
+    },
+    {
+      "path": "/F-response-jepa_endpoint_v1-graph_time-paired_change-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 1
+    },
+    {
+      "path": "/F-response-jepa_endpoint_v1-graph_time-paired_change-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 5
+    },
+    {
+      "path": "/F-response-coordinate_delta_v1-graph_time-paired_change-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 6
+    },
+    {
+      "path": "/F-response-coordinate_delta_v1-graph_time-paired_change-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 6
+    },
+    {
+      "path": "/pretrain-response-coordinate_delta_v1-graph_time-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_delta_v1-graph_time-base-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_delta_v1-graph_time-base-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_delta_v1-graph_time-base-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_endpoint_v1-graph_time-base-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_endpoint_v1-graph_time-base-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-jepa_endpoint_v1-graph_time-base-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-coordinate_delta_v1-graph_time-base-seed-17/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-coordinate_delta_v1-graph_time-paired_change-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 7
+    },
+    {
+      "path": "/F-response-coordinate_delta_v1-graph_time-base-seed-29/result/gradient_clipping/clipped_updates",
+      "value": 0
+    },
+    {
+      "path": "/F-response-coordinate_delta_v1-graph_time-base-seed-43/result/gradient_clipping/clipped_updates",
+      "value": 0
+    }
+  ],
+  "all_selected_groups_reported": true,
+  "true_magnitude_reanalysis_supported": false,
+  "observed_nonnegative_penalty_lower_bounds": {
+    "P-direct-none-base": {
+      "unconditional_success_contribution": 5.069066691118205,
+      "zero_response_mean": 5.8108295340231875,
+      "all_nonnegative_cost_scores_exceed_zero_mean": false
+    },
+    "F-response-jepa_delta_v1-graph_time-paired_change": {
+      "unconditional_success_contribution": 6.209595695710696,
+      "zero_response_mean": 5.8108295340231875,
+      "all_nonnegative_cost_scores_exceed_zero_mean": true
+    },
+    "F-response-jepa_endpoint_v1-graph_time-paired_change": {
+      "unconditional_success_contribution": 6.305973714946467,
+      "zero_response_mean": 5.8108295340231875,
+      "all_nonnegative_cost_scores_exceed_zero_mean": true
+    }
+  },
+  "outputs": [
+    "condition_effects.csv",
+    "condition_person.csv",
+    "condition_summary.csv",
+    "method_summary.csv",
+    "penalty_effects.csv",
+    "penalty_sensitivity.csv",
+    "penalty_sensitivity_person.csv",
+    "repair_effects.csv",
+    "repair_means.csv",
+    "restoration_effects.csv",
+    "restoration_means.csv"
+  ]
+}

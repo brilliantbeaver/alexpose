@@ -1,0 +1,1381 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <style>html { scroll-padding-top: 70px; /* height of sticky header plus extra */ }</style>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/virtual/js/virtual.js"></script>
+    <meta name="google-site-verification" content="0jwPnVXIAk4FvFdT37dwMmd-kjHF86e5DKwvqlStUW0">
+
+
+    
+    <link rel="stylesheet" href="/static/core/css/core.css" type="text/css">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css" type="text/css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/static/core/css/custom.css" type="text/css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+        window.MathJax = {
+          tex: {
+            // Workshop/competition imports store inline formulas with doubled dollars.
+            inlineMath: [['$$', '$$'], ['$', '$'], ['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+          },
+          options: {
+            ignoreHtmlClass: 'no-mathjax',
+          }
+        };
+    </script>
+
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+            nonce="ZSbKvo8V0PCYoPZShOLvpw==" >
+    </script>
+
+    <!--This script keeps local links inside the web app rather than opening them
+in Safari, and has nothing to do with editing or Aloha.-->
+
+<script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+    (function (document, navigator, standalone) {
+
+        if ((standalone in navigator) && navigator[standalone]) {
+            var curnode, location = document.location, stop = /^(a|html)$/i;
+            document.addEventListener('click', function (e) {
+                curnode = e.target;
+                while (!(stop).test(curnode.nodeName)) {
+                    curnode = curnode.parentNode;
+                }
+
+                if (
+                    'href' in curnode && // is a link
+                    (chref = curnode.href).replace(location.href, '').indexOf('#') && // is not an anchor
+                    (!(/^[a-z\+\.\-]+:/i).test(chref) ||                       // either does not have a proper scheme (relative links)
+                        chref.indexOf(location.protocol + '//' + location.host) === 0) // or is in the same protocol and domain
+                ) {
+                    e.preventDefault();
+                    location.href = curnode.href;
+                }
+            }, false);
+        }
+    })(document, window.navigator, 'standalone');
+</script>
+
+
+<style>
+
+    @media screen and (min-width: 767px) {
+        .blurb {
+            min-height: 260px;
+        }
+    }
+</style>
+    
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
+</script>
+
+<script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+    if (typeof jQuery === 'undefined') {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = "/static/core/js/jquery-3.6.1.min.js";
+        document.head.appendChild(script);
+    }
+</script>
+
+    
+    <script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+        var $ = jQuery;
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <script src="/static/core/js/ajax-csrf-snippet.js"></script>
+    
+    <link rel="stylesheet" href="/static/fontawesomefree/css/all.min.css">
+    <script src="/static/fontawesomefree/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+
+    <style nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+        body {
+            font-family: Exo;}
+    </style>
+
+
+
+
+
+
+
+
+        
+
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js" integrity="sha512-lEb9Vp/rkl9g2E/LdHIMFTqz21+LA79f84gqP75fbimHqVTu6483JG1AwJlWLLQ8ezTehty78fObKupq3HSHPQ==" crossorigin="anonymous"></script>
+    <script src="/static/core/js/moment/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/static/core/js/ajax-csrf-snippet.js" ></script>
+    <script src="/static/virtual/js/virtual.js"></script>
+    
+
+    
+
+    
+    <link rel="canonical" href="https://wacv.thecvf.com/Conferences/2027/ReviewerGuidelines">
+
+    <title>WACV 2027 Reviewer Guidelines</title>
+</head>
+
+<body>
+<!-- <h1><a href="#" onclick="alert('CSP Test');">CSP Test</a></h1> -->
+
+
+
+
+<div class="noprint">
+    
+        
+            <!--Navbar start-->
+<header>
+    <a href="#child-menu" class="off-screen">Skip to yearly menu bar</a>
+    <a href="#main" class="off-screen">Skip to main content</a>
+    <div id="id_navbar" class="navbar navbar-expand-sm navbar-dark" aria-label="Main Navigation"
+         style="background-color:#212529">
+        <h2 class="off-screen">Main Navigation</h2>
+        <div class="container-fluid">
+            <div><a class="navbar-brand" href="/" aria-label="Home">
+
+                <img src="/static/core/img/wacv-navbar-logo.svg" alt="conference_logo" height="40"></a></div>
+
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggler1"
+                    aria-expanded="false" aria-label="Toggle main navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarToggler1">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            WACV
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="https://support.conferences.computer.org/wacv/help-desk/">
+                    <span >
+                        Contact Us
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/MyStuff">
+                    <span >
+                        My Stuff
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Profile/create">
+                    <span >
+                        Create Profile
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/resetpassword">
+                    <span >
+                        Reset Password
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+                    
+                </ul>
+
+                
+                <form class="d-flex mx-2" aria-label="Search" role="search" action="/search">
+                    <div class="input-group" role="search" style="outline-color:green;">
+                        <input type="text" class="form-control" placeholder="Search" name="q"
+                               value=""
+                               aria-label="Search" aria-describedby="btnGroupAddon"
+                                id="navbar-search">
+                        <div class="input-group-text btn-primary" id="btnGroupAddon">
+                            <button style="border: none; background-color: transparent; padding: 0;" type="submit" aria-label="execute search">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+
+                
+                    <a href="/accounts/login?nextp=/set_timezone " class="navbar-brand"><span
+                            class="fa-solid fa-right-to-bracket"></span> Login</a>
+                
+
+            </div>
+        </div>
+    </div>
+</header>
+<!--Navbar end-->
+        
+    
+</div><!--noprint div-->
+
+<!--This holds the whole page including the navbar-->
+<main id="main">
+    
+        
+            <div class="container-fluid">
+                
+<!--Navbar start-->
+
+
+
+
+<div class="container-fluid">
+
+    <div class="dropdown" id="child-menu">
+        <nav class="align-middle navbar navbar-expand-md mx-4 border border-3 border-top-0 rounded-bottom"
+             style="min-height: 57px; background-color: #F6f6f6;">
+            <div class="container-fluid">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler93"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarToggler93">
+                    <ul class="navbar-nav me-auto mb-lg-0">
+                        
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle border-3  btn btn-primary text-white p-1" style= "background-color: #070bff; font-size: 1.2 em;"
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Year: (2027)
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2027/index.html">2027
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2026">2026
+                </a>
+                
+            </li>
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Dates">
+                    <span >
+                        Dates
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="/Conferences/2027/CallForPapers"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Calls
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CallForPapers">
+                    <span >
+                        WACV 2027 Call for Papers
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CallForTutorials">
+                    <span >
+                        WACV 2027 Call For Tutorials
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CallForWorkshops">
+                    <span >
+                        WACV 2027 Call for Workshops
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Attend
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Pricing2">
+                    <span >
+                        Register
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Hotels">
+                    <span >
+                        Venue &amp; Hotel Information
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Author & Reviewer Guides
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/CompleteYourORProfile">
+                    <span >
+                        Complete Your Open Review Profile
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/AuthorGuides">
+                    <span >
+                        Author Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/LiabilityWaiver">
+                    <span >
+                        Liability Waiver
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/ReviewerGuidelines">
+                    <span >
+                        Reviewer Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/ACGuides">
+                    <span >
+                        Area Chair Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/SACGuides">
+                    <span >
+                        Senior Area Chair Guidelines
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2026/LiabilityWaiver">
+                    <span >
+                        Liability Waiver
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Expo
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="https://join.computer.org/wacv-partners/?source=website">
+                    <span >
+                        Prospectus
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Organization
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2027/Organizers">
+                    <span >
+                        Organizing Committee
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Navbar end-->
+
+            </div>
+            <br><br>
+        
+    
+    
+        
+        <div class="container">
+    
+    
+    
+
+    
+    <div class="container">
+        
+            <!--JUst above the HTML in document-snippet.html-->
+            <div> <div>
+<h1><strong><span><span><span><span><span><span>WACV 2027</span></span></span></span></span></span><span><span><span><span><span><span> Reviewer Guidelines </span></span></span></span></span></span></strong></h1>
+
+<p><span><span><span><span><span><span>Thank you for volunteering your time to review for WACV 2027! To maintain a high-quality technical program, we rely very much on the time and expertise of our reviewers. This document explains what is expected of all members of the Reviewing Committee for WACV 2027.</span></span></span></span></span></span></p>
+
+<h2><span><span><span><strong><span><span>The WACV 2027 Reviewing Timeline</span></span></strong></span></span></span></h2>
+
+<p> </p>
+
+<p><span><span><span><strong><span><span>Round 1</span></span></strong></span></span></span></p>
+
+<p><span><span><span><span><span><span>Paper submission deadline: </span></span></span></span></span></span><span><span><span><span><span><span>June 26, 2026</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Papers assigned to reviewers: </span></span></span></span></span></span><span><span><span><span><span><span>July 3, 2026</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Reviews due: </span></span></span></span></span></span><span><span><span><span><span><span>July 24, 2026</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Decisions released to authors: </span></span></span></span></span></span><span><span><span><span><span><span>August 7, 2026</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<p><span><span><span><strong><span><span>Round 2</span></span></strong></span></span></span></p>
+
+<p><span><span><span><span><span><span>Paper and supplementary submission deadline: </span></span></span></span></span></span><span><span><span><span><span><span>August 28, 2026</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Papers assigned to reviewers: </span></span></span></span></span></span><span><span><span><span><span><span>September 4, 2026</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Reviews due: </span></span></span></span></span></span><span><span><span><span><span><span>September 25, 2026</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Decisions released to authors: </span></span></span></span></span></span><span><span><span><span><span><span>October 9, 2026</span></span></span></span></span></span></p>
+
+<h2><span><span><span><strong><span><span>What’s New for Reviewers at WACV 2027?</span></span></strong></span></span></span></h2>
+
+<p><span><span><span><span><span><span>To improve the review process and uphold the conference’s high standards, WACV will strictly enforce a Responsible Reviewing Policy and a Reviewing Deadline Policy. Any reviewer whose review fail to comply with these policies may will face a possible desk rejection of all papers on which they are an author per the discretion of the PCs. Please see the sections (below) on Responsible Reviewing Policy and Reviewing Deadline Policy for more details.</span></span></span></span></span></span></p>
+
+<h3><span><span><span><strong><span><span>Responsible Reviewing Policy</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>At WACV, reviewers are expected to provide fair and thoughtful reviews. Examples of highly irresponsible behavior include: one-sentence reviews, reviews generated by Large Language Models (LLMs), reviews that are irrelevant to the paper, or reviews that overlook substantial portions of the paper, but not cases where reviewers merely exhibit misunderstandings, miss small details of the paper, or hold differing opinions from other reviewers or the AC. If a review is flagged as highly irresponsible, it will undergo an oversight process managed by the Program Chairs (PCs). Any reviewer whose review is deemed to be “highly irresponsible” will face a desk rejection of all papers on which they are an author per the discretion of the PCs.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Reviewing Deadline Policy</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>At WACV, reviewers are also expected to provide timely reviews. Historically, previous WACV conferences (and CVPR, ICCV, ECCV and NeurIPS, amongst others) faced challenges with some reviewers failing to meet the review submission deadlines. It came to be accepted that there was an unofficial grace period after the reviewing deadline. In some cases, reviewers failed to respond to multiple reminders and did not submit their reviews at all. This necessitated Area Chairs (ACs) to follow up diligently with late reviewers, as well as assign emergency reviewers to ensure each paper received the minimum of three reviews. Over the years, this has added to the already large workload and stress of the conference organizers. To improve the review process and uphold the conference’s high standards, WACV will strictly enforce the reviewing deadline. This policy aims to ensure fairness and accountability across the reviewing process while reducing the burden on ACs and other conference organizers.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>There will be multiple emails sent out to all reviewers as a reminder to submit reviews in a timely manner. </span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Application vs Algorithms vs Evaluations &amp; Datasets</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>WACV papers can either be “application”, “algorithms”, or "evaluations &amp; dataset" papers, and have different reviewing criteria. Please read these instructions carefully and apply the appropriate criteria based on the paper type indicated in the submission.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<p><span><span><span><span><span><span>Application papers must be evaluated on </span></span></span></span></span></span><span><span><span><span><span><u><span><span>systems-level innovation, novelty of the domain and comparative assessment</span></span></u></span></span></span></span></span><span><span><span><span><span><span>. They should not be evaluated solely on the basis of algorithmic novelty (i.e, it is okay to have algorithmic novelty, but it is also okay not to have it). Examples of systems-level innovation are: 1) A new task, i.e., does this paper deliver an interesting application of computer vision that the community has never seen before?  </span></span></span></span></span></span><span><span><span><span><span><span>2) A new formulation of an existing application;</span></span></span></span></span></span><span><span><span><span><span><span>  3) A new way of benchmarking performance of existing methods. Recent examples of WACV application-track papers:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><a href="https://openaccess.thecvf.com/content/WACV2022/papers/Hinz_CharacterGAN_Few-Shot_Keypoint_Character_Animation_and_Reposing_WACV_2022_paper.pdf"><span><span><span><span><span><u><span><span>CharacterGAN: Few-Shot Keypoint Character Animation and Reposing</span></span></u></span></span></span></span></span></a></li>
+	<li><a href="https://openaccess.thecvf.com/content/WACV2021/papers/Santa_Cruz_DeepCSR_A_3D_Deep_Learning_Approach_for_Cortical_Surface_Reconstruction_WACV_2021_paper.pdf"><span><span><span><span><span><u><span><span>DeepCSR: A 3D Deep Learning Approach For Cortical Surface Reconstruction</span></span></u></span></span></span></span></span></a></li>
+	<li><a href="https://www.cl.cam.ac.uk/research/rainbow/projects/openface/wacv2016.pdf"><span><span><span><span><span><u><span><span>OpenFace: An open source facial behavior analysis toolkit</span></span></u></span></span></span></span></span></a></li>
+	<li><a href="https://ieeexplore.ieee.org/document/8658594"><span><span><span><span><span><u><span><span>FuturePose - Mixed Reality Martial Arts Training Using Real-Time 3D Human Pose Forecasting With a RGB Camera</span></span></u></span></span></span></span></span></a></li>
+</ul>
+
+<p> </p>
+
+<p><span><span><span><span><span><span>Algorithms papers must be evaluated according to the standard conference criteria including </span></span></span></span></span></span><span><span><span><span><span><u><span><span>algorithmic novelty and quantified evaluation against current, alternative approaches</span></span></u></span></span></span></span></span><span><span><span><span><span><span>. They should not be evaluated solely on the basis of systems-level innovation (i.e, it is okay to have systems-level novelty, but it is also okay not to have it). Algorithms papers will be similar in style to other major computer vision conferences (e.g., CVPR, ICCV, ECCV). Recent examples include:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><a href="https://openaccess.thecvf.com/content/WACV2022/papers/Kong_Hole-Robust_Wireframe_Detection_WACV_2022_paper.pdf"><span><span><span><span><span><u><span><span>Hole-robust wireframe Detection</span></span></u></span></span></span></span></span></a></li>
+	<li><a href="https://openaccess.thecvf.com/content/WACV2022/papers/Watson_Agree_To_Disagree_When_Deep_Learning_Models_With_Identical_Architectures_WACV_2022_paper.pdf"><span><span><span><span><span><u><span><span>Agree to Disagree: When Deep Learning Models With Identical Architectures Produce Distinct Explanations</span></span></u></span></span></span></span></span></a></li>
+	<li><a href="https://cseweb.ucsd.edu/~gary/pubs/panqu-wacv-2018.pdf"><span><span><span><span><span><u><span><span>Understanding Convolution for Semantic Segmentation</span></span></u></span></span></span></span></span></a></li>
+</ul>
+
+<p><br>
+ </p>
+
+<p><span><span><span><span><span><span><span>Evaluation &amp; Dataset track papers must be evaluated similarly to NeurIPS Evaluations &amp; Dataset Track. Papers in this category </span></span></span></span></span></span></span><span><span><span><span><span><span><u><span><span>should propose tools, datasets, benchmarks, and practices </span></span></u></span></span></span></span></span></span><span><span><span><span><span><span><span>for testing, stress-testing, auditing, comparing, and interpreting AI/ML systems throughout their lifecycle. The reviewers should ask whether this dataset will meaningfully advance any particular sub-areas in Computer Vision, and if the proposed dataset and benchmarking efforts are scientifically correct. While this is the 1st time WACV is introducing the Evaluation &amp; Dataset Track, the following recent papers published in WACV are examples of this track:</span></span></span></span></span></span></span></p>
+
+<ul>
+	<li><a href="https://openaccess.thecvf.com/content/WACV2023/papers/Davila_MEVID_Multi-View_Extended_Videos_With_Identities_for_Video_Person_Re-Identification_WACV_2023_paper.pdf"><span><span><span><span><span><span><u><span><span>MEVID: Multi-view Extended Videos with Identities for Video Person Re-Identification</span></span></u></span></span></span></span></span></span></a></li>
+	<li><a href="https://openaccess.thecvf.com/content/WACV2024/papers/Cermak_WildlifeDatasets_An_Open-Source_Toolkit_for_Animal_Re-Identification_WACV_2024_paper.pdf"><span><span><span><span><span><span><u><span><span>WildlifeDatasets: An open-source toolkit for animal re-identification</span></span></u></span></span></span></span></span></span></a></li>
+	<li><a href="https://idd3d.github.io/"><span><span><span><span><span><span><u><span><span>DD-3D: Indian Driving Dataset for 3D Unstructured Road Scenes</span></span></u></span></span></span></span></span></span></a></li>
+	<li><a href="https://anaxqx.github.io/talkingheadbench.github.io/"><span><span><span><span><span><span><u><span><span>TalkingHeadBench: A Multi-Modal Benchmark &amp; Analysis of Talking-Head DeepFake Detection</span></span></u></span></span></span></span></span></span></a></li>
+</ul>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Blind Reviews</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>Reviewers should make all efforts to keep their identity invisible to the authors, including omitting names and affiliations.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>With the increase in popularity of arXiv preprints, sometimes the authors of a paper may be known to the reviewer. Posting to arXiv is NOT considered a violation of anonymity on the part of the authors, and in most cases, reviewers who happen to know (or suspect) the authors’ identity can still review the paper as long as they feel that they can do an impartial job. An important general principle is to make every effort to treat papers fairly whether or not you know (or suspect) who wrote them. If you do not know the identity of the authors at the start of the process, DO NOT attempt to discover them by searching the Web for preprints.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Please read the FAQ at the end of this document for further guidelines on how arXiv prior work should be handled.</span></span></span></span></span></span></p>
+
+<h3><span><span><span><strong><span><span>Check your papers</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>As soon as you get your reviewing assignment, please go through all the papers to make sure that (a) there is no obvious conflict with you (e.g., a paper authored by your recent collaborator from a different institution in the past 3 years; see more examples under “Avoid Conflict of Interest” below) and (b) you feel comfortable to review the paper assigned. If issues with either of these points arise, please let us know right away by emailing the Program Chairs (</span></span></span></span></span></span><a href="mailto:wacv_2027_pcs@computer.org" target="_blank">wacv_2027_pcs@computer.org</a><span><span><span><span><span><span>).</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Please read the [Author Guidelines] carefully to familiarize yourself with all official policies (such as dual submission and plagiarism). If you think a paper may be in violation of one of these policies, please contact the Area Chair and Program Chairs. In the meantime, proceed to review the paper assuming no violation has taken place.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>What to Look For</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>Each paper that is accepted should be technically sound and make an </span></span></span></span></span></span><span><span><span><span><em><span>application or algorithmic</span></em></span></span></span></span><span><span><span><span><span><span> contribution to the field. Look for what is good or stimulating in the paper. In particular, look for what new application or knowledge advancement the paper made. We recommend that you embrace novel, brave applications and concepts, even if they have not been tested on many datasets. For example, the fact that a proposed method does not exceed the state-of-the-art accuracy on an existing benchmark dataset is not grounds for rejection by itself. Rather, it is important to weigh both the novelty and potential impact of the work alongside the reported performance. Minor flaws that can be easily corrected should not be a reason to reject a paper.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Check for Reproducibility</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>To improve reproducibility in AI research, we highly encourage authors to voluntarily submit their code as part of supplementary material, especially if they plan to release it upon acceptance. Reviewers may optionally check this code to ensure the paper’s results are reproducible and trustworthy, but are not required to. Reviewers are also encouraged to use the </span></span></span></span></span></span><a href="https://www.cs.mcgill.ca/~jpineau/ReproducibilityChecklist.pdf"><span><span><span><span><span><u><span><span>Reproducibility Checklist</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> as a guide for assessing whether a paper is reproducible or not. All code/data should be reviewed confidentially and kept private, and deleted after the review process is complete. We expect (but do not require) that the accompanying code will be submitted with accepted papers. </span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Check for Attribution of Data Assets</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>Authors are advised that they need to cite data assets used (e.g., datasets or code) much like papers. As a reviewer, please carefully check if a paper has adequately cited data assets used in the paper, and comment in the corresponding field in the review form.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Check for Use of Personal Data and Human Subjects</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>If a paper is using personal data or data from human subjects, the authors must have an ethics clearance from an institutional review board (IRB, or equivalent) or clearly describe that ethical principles have been followed. If there is no description of how ethical principles were ensured or GLARING violations of ethics (regardless of whether discussed or not), please inform the Area Chairs and the Program Chairs, who will follow on each specific case. Reviewers shall avoid dealing with such issues by themselves directly. </span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>IRB reviews for the US or the appropriate local ethics approvals are typically required for new datasets in most countries. It is the dataset creators' responsibility to obtain them. If the authors use an existing, published dataset, we encourage, but do not require them to check how data was collected and whether consent was obtained. Our goal is to raise awareness of possible issues that might be ingrained in our community. Thus, we would like to encourage dataset creators to provide this information to the public. </span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>In this regard, if a paper uses an existing public dataset that is released by other researchers/research organizations, we encourage, but not require them to include a discussion of IRB related issues in the paper. Reviewers hence should not penalize a paper if such a discussion is NOT included.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Be Specific</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><span><span>Please be specific and detailed in your reviews. Your main critique of the paper should be written in terms of a list of strengths and weaknesses. You can use bullet points here, but also explain your arguments. A single short sentence or a few words do NOT suffice. Your discussion, more than your score, will help the authors, fellow reviewers, and Area Chairs understand the basis for your recommendation, so please be thorough. You should include specific feedback on ways the authors can improve their papers.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>In the discussion of related work and references, simply saying “this is well known” or “this has been common practice in the industry for years” is not sufficient: You MUST cite specific publications, including books or public disclosures of techniques. If you do not provide references to support your claim, the Area Chairs are forced to discount it.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Ethics for Reviewing Papers</span></span></strong></span></span></span></h3>
+
+<p> </p>
+
+<p><span><span><span><span><span><span>1. Protect Ideas</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>As a reviewer for WACV, you have the responsibility to protect the confidentiality of the ideas represented in the papers you review. WACV submissions are not published documents. The work is considered new or proprietary by the authors; otherwise they would not have submitted it. Of course, their intent is to ultimately publish to the world, but most of the submitted papers will not appear in the WACV proceedings. Thus, it is likely that the paper you have in your hands will be refined further and submitted to some other journal or conference. Sometimes the work is still considered confidential by the authors' employers. These organizations do not consider sending a paper to WACV for review to constitute a public disclosure. Protection of the ideas in the papers you receive means:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><span><span><span><span><span><span>If you have asked a colleague or student to help in writing a review, you must acknowledge them.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You should not show any results, videos/images, code or any of the supplementary material to non-reviewers.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You should not use ideas/code from papers you review to develop your own ideas/code.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>After the review process, you should destroy all copies of papers and supplementary material and erase any code that the authors submitted as part of the supplementary.</span></span></span></span></span></span></li>
+</ul>
+
+<p><span><span><span><span><span><span>2. Avoid Conflict of Interest</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>As a reviewer of a WACV paper, it is important for you to avoid any conflict of interest. There should be absolutely no question about the impartiality of any review. Thus, if you are assigned a paper where your review would create a possible conflict of interest, you should return the paper and not submit a review. Conflicts of interest include (but are not limited to) situations in which:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><span><span><span><span><span><span>You work at the same institution as one of the authors.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You have been directly involved in the work and will be receiving credit in some way. If you're a member of an author's thesis committee, and the paper is about his or her thesis work, then you were involved.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You suspect that others might perceive a conflict of interest in your involvement (e.g., the author is your friend).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You have collaborated with one of the authors in the past three years (more or less). Collaboration is usually defined as having written a paper or funded grant proposal together, although you should use your judgment.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You were the MS/PhD advisor or advisee of one of the authors. Like most funding agencies and publications, we consider advisees to represent a lifetime conflict of interest. </span></span></span></span></span></span></li>
+</ul>
+
+<p><span><span><span><span><span><span>While the organizers make every effort to avoid such conflicts in the review assignments, they may nonetheless occasionally arise. If you recognize the work or the author and feel it could present a conflict of interest, email the Program Chairs (</span></span></span></span></span></span><a href="mailto:wacv2026-pcs@googlegroups.com"><span><span><span><span><span><u><span><span>wacv2027-pcs@googlegroups.com</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>) as soon as possible so they can find someone else to review it.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<p><span><span><span><span><span><span>3. Be Professional</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Belittling or sarcastic comments have no place in the reviewing process. The most valuable comments in a review are those that help the authors understand the shortcomings of their work and how they might improve it. Write a courteous, informative, incisive, and helpful review that you would be proud to sign with your name (were it not anonymous).</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Additional Tips for Writing Good Reviews</span></span></span></span></span></span></p>
+
+<ul>
+	<li><span><span><span><span><span><span>Take the time to write good reviews. </span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Short reviews are unhelpful to authors, other reviewers, and Area Chairs. If you have agreed to review a paper, you should take enough time to write </span></span></span></span></span></span><span><span><span><strong><span><span>a thoughtful and detailed review</span></span></strong></span></span></span><span><span><span><span><span><span>. </span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Be specific when you suggest that the writing needs to be improved. If there is a particular section that is unclear, point it out and give suggestions for how it can be clarified.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Be specific about novelty. Claims in a review that the submitted work “has been done before” MUST be backed up with specific references and an explanation of how closely they are related. At the same time, for a positive review, be sure to summarize what novel aspects are most interesting in the Strengths section.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Do not reject papers solely because they are missing citations or comparisons to prior work that has only been published without review (e.g., arXiv or technical reports). Refer to the FAQ below for more details on handling arXiv prior art.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Do not give away your identity by asking the authors to cite several of your own papers.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>If you think the paper is out of scope for WACV's subject areas, clearly explain why in the review. Then suggest other publication possibilities (journals, conferences, workshops) that would be a better match for the paper. However, unless the area mismatch is extreme, you should keep an open mind, because we want a diverse set of good papers at the conference.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The tone of your review is important. A harshly written review will be resented by the authors, regardless of whether your criticisms are true. If you take care, it is always possible to word your review constructively while staying true to your thoughts about the paper.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Avoid referring to the authors in the second person (“you”). It is best to avoid the term “the authors” as well, because you are reviewing their work and not the person. Instead, use the third person (“the paper”). Referring to the authors as “you” can be perceived as being confrontational, even though you may not mean it this way.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Use Neutral Pronouns: If it is necessary to refer to authors or reviewers directly, use neutral pronouns or names, for example, you could say “the authors” or “they” and “R1” or “the reviewer” rather than “he” or “she”.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Be generous about giving the authors new ideas for how they can improve their work. You might suggest a new technical tool that could help, a dataset that could be tried, an application area that might benefit from their work, or a way to generalize their idea to increase its impact.</span></span></span></span></span></span></li>
+</ul>
+
+<p><span><span><span><span><span><span>Finally, keep in mind that a thoughtful review not only benefits the authors, but also yourself. Your reviews are read by other reviewers and especially the Area Chairs, in addition to the authors. Unlike the authors, the Area Chairs know your identity. Being a helpful reviewer will generate good will towards you in the research community.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<h3><span><span><span><strong><span><span>Reviewer FAQs</span></span></strong></span></span></span></h3>
+
+<p><span><span><span><span><em><span>Q. How should code submission be handled?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. Please read the Author FAQ regarding code submission.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Code submissions should be anonymized (e.g., </span></span></span></span></span></span><a href="https://github.com/tdurieux/anonymous_github"><span><span><span><span><span><u><span><span>anonymous_github</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>). If there is any information that may reveal the identity of the authors, please notify the program chairs </span></span></span></span></span></span><span><span><span><span><span><span>(</span></span></span></span></span></span><a href="mailto:wacv2026-pcs@googlegroups.com"><span><span><span><span><span><u><span><span>wacv2027-pcs@googlegroups.com</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>), </span></span></span></span></span></span><span><span><span><span><span><span>but otherwise review the paper as if the code were properly anonymized.</span></span></span></span></span></span></p>
+
+<p> </p>
+
+<p><span><span><span><span><em><span>Q. Is there a minimum number of papers I should accept or reject?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. No. Each paper should be evaluated in its own right. If you feel that most of the papers assigned to you have value, you should accept them. It is unlikely that most papers are bad enough to justify rejecting them all. However, if that is the case, provide clear and very specific comments in each review. Do NOT assume that your stack of papers necessarily should have the same acceptance rate as the entire conference ultimately will.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. Can I review a paper I already saw on arXiv and hence know who the authors are?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. In general, yes, unless you are conflicted with one of the authors. See next question below for guidelines.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. How should I treat papers for which I know the authors?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. Reviewers should make every effort to treat each paper impartially, whether or not they know who wrote the paper. For example: It is not OK for a reviewer to read a paper, think “I know who wrote this; it's on arXiv; they are usually quite good” and accept the paper based on that reasoning. Conversely, it is also not OK for a reviewer to read a paper, think “I know who wrote this; it's on arXiv; they are no good” and reject the paper based on that reasoning.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. Should authors be expected to cite related arXiv papers or compare to their results?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. Consistent with good academic practice, the authors should cite all sources that inspired and informed their work. This said, asking authors to thoroughly compare their work with arXiv reports that appeared shortly before the submission deadline imposes an unreasonable burden. We also do not wish to discourage the publication of similar ideas that have been developed independently and concurrently. Reviewers should keep the following guidelines in mind:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><span><span><span><span><span><span>Authors are not required to discuss and compare their work with recent arXiv reports, although they should properly acknowledge those that directly and obviously inspired them.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Failing to cite an arXiv paper or failing to beat its performance SHOULD NOT be SOLE grounds for rejection.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Reviewers SHOULD NOT reject a paper solely because another paper with a similar idea has already appeared on arXiv. If the reviewer suspects plagiarism or academic dishonesty, they are encouraged to bring these concerns to the attention of the Program Chairs.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>It is acceptable for a reviewer to suggest that an author should acknowledge or be aware of something on arXiv.</span></span></span></span></span></span></li>
+</ul>
+
+<p><span><span><span><span><em><span>Q. How should I treat the supplementary material?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. The supplementary material is intended to provide details of derivations and results that do not fit within the paper format or space limit. Ideally, the paper should indicate when to refer to the supplementary material, and you need to consult the supplementary material only if you think it is helpful in understanding the paper and its contribution. According to the Author Guidelines, the supplementary material MAY NOT include results obtained with an improved version of the method (e.g., following additional parameter tuning or training), or an updated or corrected version of the submission PDF. If you find that the supplementary material violates these guidelines, please contact the Program Chairs.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. What about arXiv papers?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. The field has decided that dissemination on arXiv facilitates the rapid spread of information within the field. arXiv papers are not “published” but are understood to be “pre-publications.” This open pre-publication process provides a form of community review where problems can be detected (much like formal peer review). arXiv papers are often corrected and modified; the site is set up to support this scientific process of revision. </span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. May the authors build a project website related to their arXiv paper?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. Yes, the authors may, as long as the project website itself does not contain any information that would otherwise link it to your WACV submission.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. A paper is using a withdrawn dataset, such as DukeMTMC-ReID or MS-Celeb-1M. How should I handle this?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. Reviewers are advised that the choice to use a withdrawn dataset, while not in itself grounds for rejection, should invite very close scrutiny.  Reviewers should flag such cases in the review form for further consideration by ACs and PCs. Consider questions such as: Do the authors explain why they had to do this? Is this explanation compelling? Is there really no alternative dataset that could have been used? Remember, authors might simply not know the dataset had been withdrawn. If you believe the paper could be accepted without the authors’ use of a withdrawn dataset, then it is natural to advise the authors to remove the experiments associated with this dataset.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><em><span>Q. If a paper did not evaluate on a withdrawn dataset, can I request authors that they do?</span></em></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>A. It is a violation of policy for a reviewer or area chair to require comparison on a dataset that has been withdrawn without a detailed consultation with PCs.</span></span></span></span></span></span></p>
+
+<p> </p>
+</div>
+</div>
+        
+    </div>
+
+
+
+    
+        </div>
+    
+
+</main>
+<!--END BLOCK CONTENT-->
+
+
+<!--Footer for the edit button-->
+
+
+<script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+
+    $(function () {
+        if ($(".editable").length == 0) {
+            $("#editFooter").hide();
+        }
+
+        // Event bindings for edit buttons
+        $('.startEditBtn').on('click', function() {
+            start_edit();
+        });
+        
+        $('.stopEditBtn').on('click', function() {
+            stop_edit();
+        });
+        $('#id_accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.workshopstatus').on('change', function() {
+            changeStatus(this);
+        });
+        $('.action-select').on('change', function() {
+            actionChanged(this);
+        });
+        $('.extra').on('change', function() {
+            extraChanged(this);
+        });
+        $('.filter_workshop').on('change', function() {
+            this.form.submit();
+        });
+        $('.volunteer-status, .recommendation-letter-status').on('change', function() {
+            setStatus(this);
+        });
+        $('.status-form-show').on('change', function() {
+            this.form.submit();
+        });
+        $('.download-form-download').on('change', function() {
+            this.form.submit();
+        });
+        $('.presentation-type-form-presentation-type').on('change', function() {
+            this.form.submit();
+        });
+        $('.export-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.import-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.vol-email-form-to, .vol-email-form-template').on('change', function() {
+            this.form.submit();
+        });
+        $('.organizer-alert').on('click', function() {
+            getUserCreateForm(this.href);
+        });
+    })
+</script>
+
+<script src="/static/core/js/fastclick.min.js" ></script>
+
+<!--We don't know if there are editable tags on the page until after the django template engine has rendered the page. So,
+test in javascript for "editable" tags and if present, load the ckeditor engine dynamically. -->
+
+<script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+    if (document.getElementsByClassName('editable').length > 0) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "/static/core/ckeditor/4.18/ckeditor.js";    // use this for linked script
+      script.onload = function () {
+        console.log("ckeditor loaded");
+        // Initial setup when each editor is ready
+        CKEDITOR.on("instanceReady", function (e) {
+          updateToggleDocName(e.editor);
+        });
+
+        // React to any editor entering/leaving read-only
+        CKEDITOR.on("readOnly", function (e) {
+          updateToggleDocName(e.editor);
+        });
+      };
+        document.body.appendChild(script);
+    }
+
+    function updateToggleDocName(editor) {
+      var id = editor && editor.name;
+      if (!id || id.indexOf("id_") !== 0) return;
+
+      var doc_name_element = document.getElementById("document_name_" + id.slice(3));
+      console.log(doc_name_element);
+      if (!doc_name_element) return;
+
+      doc_name_element.style.display = editor.readOnly ? "none" : "block";
+    }
+
+</script>
+
+
+<script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+    function fetchContent() {
+        $(".editable").each(function (index) {
+            var myself = this;
+            var docvID = this.getAttribute('id').replace("id_", "");
+            var blurbtext = this.getAttribute("blurbtext");
+            $.ajax({
+                url: "/Admin/RetrieveDocumentVersion",
+                type: "POST",
+                data: {
+                    docvID: docvID,
+                    blurbtext: blurbtext,
+                    csrfmiddlewaretoken: csrftoken,
+                },
+                success: function (data, textStatus, jqXHR) {
+                    myself.setAttribute("contenteditable", "true");
+                    myself.innerHTML = data;
+                    CKEDITOR.inline(myself.id);
+                },
+            });
+        })
+    }
+
+    $("#nopageedit").hide();
+
+    function start_edit() {
+
+        $(".editable").addClass("warning-ring");
+
+        //At the beginning of an edit, we need to replace the content of the
+        //editable div with it's databased content in order to preserve the
+        //template tags. We want the tag, not the rendered tag.
+
+        /* You must remove any countdown.js timers on the page before replacing the page with it's
+        document version otherwise, Javascript will throw an exception.  */
+
+
+        $("[class$='-countdown']").parent().remove();
+        fetchContent();
+        $(".editable").attr("onblur", "ckeditorsave(this)");
+        window.status.bold();
+        window.status = "Click outside the editable area to save. Changes are LIVE!! Refresh page to discard changes.";
+        $("#editpage").hide();
+        $("#noeditpage").show();
+    }
+
+
+    function stop_edit() {
+        ckeditorsave();
+        $("#noeditpage").hide();
+        $("#editpage").show();
+        window.location.reload();
+    }
+
+    function ckeditorsave(event) {
+        for (var name in CKEDITOR.instances) {
+            if (CKEDITOR.instances[name].checkDirty()) {
+                editor = CKEDITOR.instances[name];
+                saveEditable(editor);
+            }
+        }
+    }
+
+    function saveEditable(editor) {
+        var content = editor.getData();
+        var contentId = editor.name;
+        var pageId = window.location.pathname;
+        var originalContent = "N/A";
+        var documentversion = editor.container.getAttribute("id").replace("id_", "");
+        var blurbtext = editor.container.getAttribute("blurbtext");
+        if (contentId.match(/-aloha$/gi)) {
+            contentId = contentId.replace(/-aloha/gi, '');
+        }  /*I'm not sure what this does but it seems like it would matter*/
+        var request = jQuery.ajax({
+            url: "/Admin/SaveDocument",
+            type: "POST",
+            async: false,
+            data: {
+                content: content,
+                originalContent: originalContent,
+                contentId: contentId,
+                pageId: pageId,
+                documentversion: documentversion,
+                blurbtext: blurbtext,
+                csrfmiddlewaretoken: csrftoken
+            },
+            success: function (data) {
+                if (data['message']) {
+                    alert(data['message']);
+                }
+            },
+            error: function (xqXHR, textStatus) {
+                window.status = textStatus;
+                debugger;
+            }
+
+        });
+
+    };
+
+
+</script>
+
+<script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+    jQuery(document).ajaxSend(function (event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+</script>
+
+
+
+
+
+<div id="successful-page-load" class='hidden'>Successful Page Load</div>
+
+
+
+
+    <!-- v ieee cookie banner v -->
+    <script
+            nonce="ZSbKvo8V0PCYoPZShOLvpw=="
+            src="https://cmp.osano.com/AzyzptTmRlqVd2LRf/5160c710-0794-4bc5-88f4-2d0eb0eae122/osano.js"></script>
+    <link rel="stylesheet" href="https://cookie-consent.ieee.org/ieee-cookie-banner.css" type="text/css"/>
+    <!-- ^ ieee cookie banner ^ -->
+
+    
+    
+        
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWN9G1QN9J"></script>
+            <script nonce="ZSbKvo8V0PCYoPZShOLvpw==">
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-RWN9G1QN9J');
+            </script>
+        
+    
+
+
+
+
+
+
+
+
+<br>
+
+<div class="noprint">
+    <footer id="bootstrap-footer" class="text-center text-lg-start bg-light text-muted">
+
+        <div class="text-center p-1 border-top border-dark">
+        </div>
+        <!-- Section: Links  -->
+        <section class="pt-1">
+            <div class="container text-center text-md-start mt-2">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mb-6">
+                        <!-- Content -->
+                        <h3>Contact Us</h3>
+                        <p><a href="https://support.conferences.computer.org/wacv/help-desk/">WACV Help Desk</a></p>
+                        <p>
+                            Please contact us with questions
+                             about the following topics:
+                        </p>
+                         <p>
+                            Author - Paper Submission,
+                            Author - Open Review Issues,
+                            Author - Camera-Ready Paper,
+                            Registration - General,
+                            Registration - Cancellation,
+                            Childcare/Guests,
+                            Expo/Guests,
+                            Lodging,
+                            Visa Letter,
+                            Reviewer - Open Review Issues,
+                            Reviewer - General Issues,
+                            Area Chair Issues,
+                        </p>
+
+                    </div>
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-5 col-lg-4 col-xl-3 mx-auto mb-4" style="max-width: 300px;">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4 text-center">
+                            Useful links
+                        </h6>
+                        <div>
+             <div><hr>
+<ul>
+	<li><a href="https://www.computer.org/csdl/proceedings/1000040">WACV Proceedings</a></li>
+<li><a href="/Conferences/2026/CodeOfConduct">Code of Conduct</a></li>
+</ul>
+
+<hr></div>
+            </div>
+                    </div>
+
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <div>
+             <table class="table table-borderless">
+	<tbody>
+		<tr>
+			<td><img alt="IEEE Logo" src="https://media.icml.cc/Conferences/CVPR2023/img/ieee_cs_.svg" style="height:20px; width:66px" /></td>
+			<td><a href="https://www.computer.org/">IEEE Computer Society</a></td>
+		</tr>
+		<tr>
+			<td><img alt="" src="https://media.icml.cc/Conferences/CVPR2023/img/CVF-transparent-background.svg" style="height:20px; width:31px" /></td>
+			<td><a href="https://www.thecvf.com/">The Computer Vision Foundation</a></td>
+		</tr>
+	</tbody>
+</table>
+            </div>
+        </div>
+        <!-- Copyright -->
+
+        <script src="/static/core/js/linkedin_tracker_part1.js"></script>
+        <script src="/static/core/js/linkedin_tracker_part2.js"></script>
+        <noscript>
+            <img height="1" width="1" style="display:none;" alt=""
+                 src="https://px.ads.linkedin.com/collect/?pid=2001612&fmt=gif"/>
+        </noscript>
+    </footer>
+</div>
+<!-- Footer -->
+
+
+<!-- Footer -->
+
+</body>
+</html>

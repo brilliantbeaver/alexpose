@@ -6,6 +6,7 @@ The repository is organized by **scientific study within conventional file roles
 
 ```text
 docs/studies/
+  gait-fidelity/                proposed preservation of side-specific gait measurements
   motion-preservation/          current tracking-repair experiment
   future-feature-prediction/    gate, scaling, accessibility, manuscript
   latent-laterality/            unknown left/right correspondence

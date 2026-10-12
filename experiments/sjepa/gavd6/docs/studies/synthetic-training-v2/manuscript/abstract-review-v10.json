@@ -1,0 +1,201 @@
+{
+  "date": "2026-09-19",
+  "scope": "Independent adversarial authoring review; no new experiment or acceptance forecast",
+  "rubric": [
+    {
+      "dimension": "Relevance and contribution to the conference",
+      "weight_percent": 20
+    },
+    {
+      "dimension": "Claim accuracy and evidence support",
+      "weight_percent": 20
+    },
+    {
+      "dimension": "Evaluation and statistical rigor",
+      "weight_percent": 15
+    },
+    {
+      "dimension": "Scientific insight and positioning against related work",
+      "weight_percent": 15
+    },
+    {
+      "dimension": "Reproducibility",
+      "weight_percent": 10
+    },
+    {
+      "dimension": "Clarity and narrative",
+      "weight_percent": 10
+    },
+    {
+      "dimension": "Figures",
+      "weight_percent": 5
+    },
+    {
+      "dimension": "Submission fit",
+      "weight_percent": 5
+    }
+  ],
+  "anchors": {
+    "5": "Substantial unresolved weakness",
+    "8": "Strong treatment with remaining limits",
+    "10": "No material weakness within the stated claim scope"
+  },
+  "evidence": {
+    "analysis": "seed17-complete-analysis-20260919/README.md",
+    "verification": "seed17-complete-analysis-20260919/verification.json",
+    "figures": [
+      "seed17-complete-analysis-20260919/paired-effects.png",
+      "seed17-complete-analysis-20260919/amplitude-diagnostics.png"
+    ],
+    "fixed_across_rounds": true
+  },
+  "candidates": {
+    "A": {
+      "title": "Predictive Feature Learning for Pose Restoration: Position Accuracy and Motion Preservation",
+      "abstract": "Pose estimators convert video into sequences of joint positions used to measure movement, making motion preservation important when correcting their errors. We investigate whether a joint-embedding predictive architecture (JEPA), which predicts learned numerical descriptions of reference poses, improves two-dimensional pose restoration beyond direct coordinate supervision. We render videos from recorded human movement and pair estimated poses with body-model joint positions projected into the images as synthetic references. JEPA predicts reference features from partially hidden estimated poses, then a separate output network learns coordinate corrections while the feature extractor remains fixed. Comparisons include direct supervision, simple spatial corrections fitted on training data, and controls with untrained features or shuffled reference windows. In an initial development evaluation on eight people excluded from training, using one training run per method, direct supervision improves joint positions and their changes over 0.20 seconds beyond spatial calibration. Paired JEPA provides little additional benefit over the untrained-feature and shuffled-reference controls. Evaluation including occluded synthetic joints reveals distorted horizontal ankle-separation amplitude and extra predicted peaks despite improved coordinate accuracy. Further experiments examine consistency across repeated training runs and training budgets, with uncertainty assessed across people.",
+      "word_count": 187
+    },
+    "B": {
+      "title": "Predictive Feature Learning for Pose Restoration: Position Accuracy and Motion Preservation",
+      "abstract": "Pose estimators turn video into sequences of joint positions used to measure movement, so correcting position errors should also preserve motion. We investigate whether predicting learned numerical features of reference poses improves two-dimensional pose restoration beyond direct training on joint coordinates. We render videos from recorded human movement and pair estimated poses with body-model joints projected into the images, including versions with blur and obstruction. A joint-embedding predictive architecture (JEPA) predicts reference features from partially hidden estimated poses; its feature extractor is then fixed while an output network learns coordinate corrections. An initial development evaluation of treadmill walking includes eight people excluded from training and three pose estimators, with one training run per neural method. Direct training reduces position error and error in position changes over 0.20 seconds relative to simple spatial corrections fitted on training data, although smoothing across neighboring frames sometimes achieves lower movement error. Paired JEPA adds little over controls with untrained features or reference sequences from different time windows. Exploratory evaluation including synthetic joints hidden from view shows amplified variation in horizontal ankle separation and extra predicted peaks despite improved coordinate accuracy. Planned experiments will assess consistency across training runs and budgets, with uncertainty estimated across people.",
+      "word_count": 201
+    }
+  },
+  "reviews": {
+    "science": {
+      "A": {
+        "scores": [
+          6.5,
+          8,
+          6,
+          7,
+          8,
+          7.5,
+          7.5,
+          8
+        ],
+        "weighted_total": 71.75
+      },
+      "B": {
+        "scores": [
+          6.5,
+          9,
+          6,
+          7.5,
+          8,
+          8.5,
+          7.5,
+          8.5
+        ],
+        "weighted_total": 75.75
+      },
+      "evidence_scores_fixed_across_rounds": true,
+      "candidate_b_verdict": "No essential wording correction remaining"
+    },
+    "contribution": {
+      "A": {
+        "scores": [
+          6.5,
+          8.5,
+          6,
+          7,
+          8,
+          8,
+          8,
+          8
+        ],
+        "weighted_total": 73.5
+      },
+      "B": {
+        "scores": [
+          6.5,
+          9,
+          6,
+          7,
+          8,
+          8.5,
+          8,
+          8
+        ],
+        "weighted_total": 75.0
+      },
+      "evidence_scores_fixed_across_rounds": true,
+      "candidate_b_verdict": "No essential wording correction remaining"
+    },
+    "editor": {
+      "A": {
+        "scores": [
+          7,
+          8.5,
+          6.5,
+          7,
+          8,
+          7.5,
+          8,
+          8
+        ],
+        "weighted_total": 74.75
+      },
+      "B": {
+        "scores": [
+          7,
+          9,
+          6.5,
+          7.5,
+          8,
+          8.5,
+          8,
+          8.5
+        ],
+        "weighted_total": 77.75
+      },
+      "evidence_scores_fixed_across_rounds": true,
+      "candidate_b_verdict": "No essential wording correction remaining"
+    }
+  },
+  "final": {
+    "file": "abstract-v10-expanded-results.md",
+    "word_count": 203,
+    "change_from_reviewed_candidate": "Added the suggested on-average qualification to ankle-separation variation and changed the following conjunction; no separate rescore",
+    "candidate_b_mean_score": 76.17,
+    "candidate_b_score_range": [
+      75,
+      77.75
+    ]
+  },
+  "validation": {
+    "status": "passed",
+    "weighted_totals_recomputed": true,
+    "fixed_evidence_scores_verified": true,
+    "prior_versions_unchanged": [
+      "abstract-v01-pilot.md",
+      "abstract-v02-preservation.md",
+      "abstract-v03-jepa-vs-coordinates.md",
+      "abstract-v04-baselines.md",
+      "abstract-v05-encoder-readout.md",
+      "abstract-v06-iclr.md",
+      "abstract-v07-pre-diagnostics.md",
+      "abstract-v08-calibration-motion.md",
+      "abstract-v09-study-scope.md"
+    ],
+    "prior_versions_sha256": {
+      "abstract-v01-pilot.md": "51e5d83ef0577cd0c5c522c5ea27e805b823863cdbff5fc1665e9e40ca3fd34d",
+      "abstract-v02-preservation.md": "ad85cc22d36239024832436a1c246236832e62ce749d92d2a71cb91c3b15024a",
+      "abstract-v03-jepa-vs-coordinates.md": "ea9c82e013dc472e8b26edccaccbccc4b4ca67ff1ce50fa2c22c4c8a08197107",
+      "abstract-v04-baselines.md": "8b4ebd21dee96edcdca37d3adc4e234a451ccb19dbcedd67008dd9e1ec9fe466",
+      "abstract-v05-encoder-readout.md": "98cfd2a060748f1df04903e28c3511eec072753177ccee3dac6e2a398f8831b3",
+      "abstract-v06-iclr.md": "b7e75e4ec06b9432eeb53bfffedcfb45c6ff437f1bfa54b36cfb7a28b2138224",
+      "abstract-v07-pre-diagnostics.md": "54a44c0dba5a3acfc9819464343972b03028c8c6ec491619b794611cffc01ef8",
+      "abstract-v08-calibration-motion.md": "0ed433147aaf6fb6657a4be4ef4b6f06d2aceb81f3e5e32e86bd0f951d51c8da",
+      "abstract-v09-study-scope.md": "e4c147d37d222ef0c3574a5beff7e44043207721ebbdba507ab2c384be9078ec"
+    },
+    "local_links_checked": 142,
+    "source_hashes_reverified": 135,
+    "word_count_method": "Whitespace-separated tokens; title and notes excluded",
+    "artifacts_sha256": {
+      "abstract-v10-expanded-results.md": "dd2a8be6cf1299406b35efdae978f93f598e400f7e7bd75c151e7fec485f9936",
+      "abstract-review-v10.md": "69e00202b39b908fb934f63b3129a0961d0ffe8d6e869c44e7f064cb79277e47",
+      "abstract-versions.md": "41f8092a6aae67adfecc5945a6d38eea90f7ad2b5874bb45022d7f46b8f5ccde"
+    }
+  }
+}

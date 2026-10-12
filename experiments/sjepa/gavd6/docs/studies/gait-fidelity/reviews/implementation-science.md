@@ -1,0 +1,38 @@
+# Scientific implementation review
+
+This review records implementation findings from an agent responsible for the training, masking and measurement modules, followed by its independent inspection of the data and evaluation modules. The author is not an independent reviewer of its own training code. The coordinating agent and a separate workflow/data reviewer inspect those components in return. This record is a review of software and scientific contracts; it is not evidence that the HAIC experiments have completed or that the proposed method works.
+
+## Training and measurement checks
+
+The implementation retains the established body12 encoder, coordinate output network and centered feature-prediction objective from synthetic training v2. It separates pretraining from frozen-encoder readout and end-to-end training so the registered shared dependencies can be executed once. Readouts use a separately created network and optimizer, with a matched seed stream across objectives. Initialized controls do not receive pretraining, and all readout inputs are unmasked apart from their original missing observations.
+
+The primary measurement is computed from original pixel geometry after inverting the input-derived isotropic transform. Its evaluator uses linear-interpolated 5th and 95th percentiles. The differentiable implementation uses the same percentiles and a protected `atan2` angle calculation, retaining the coordinate objective because percentile gradients reach only selected samples. Tests compare NumPy and Torch values and check finite gradients at tied, straight and collapsed limb configurations. Degenerate predictions fail evaluation on reference-eligible frames; training retains their reference support and adds an explicit short-segment penalty.
+
+Artificially hidden values are removed from the observations used to calculate the pretraining origin and scale. Perturbing those values does not change the context transform. Reference coordinates and validity reach only supervision and the privileged teacher. A separate test changes the invalid numerical content of teacher references and verifies that its output features do not change.
+
+Every coordinate-loss regime receives two endpoints from the same marginal batch design. The original pairing repeats a baseline once per movement/no-change endpoint, and this exposure is identical across loss regimes. The re-pairing control permutes right endpoints bijectively across source families within endpoint and nuisance strata, recalculates the true difference, and reports reference-distribution mismatch. A failed tolerance remains a pairing confound rather than becoming a silently omitted control.
+
+An additional review found that a bijection of the complete dataset was insufficient to guarantee identical exposure in a finite minibatch run. The implementation now constructs two-endpoint cycles, with one three-cycle in an odd stratum, and samples complete cycles for every phase. Base and re-paired objectives therefore receive exactly the same endpoint multiset at each corresponding update. A three-cycle can enlarge a nominal batch by up to four endpoints; receipts record the actual presentations and batch-size range. A regression test checks three complete updates across all four direct-training objectives and separately checks odd-stratum cycles.
+
+Checkpoint identity includes source training arrays and records, model and training settings, seed, mask policy, inherited/local code hashes and the upstream checkpoint hash. A pretraining checkpoint has a neutral downstream objective identity. Frozen-readout gradient checks and before/after encoder hashes detect accidental encoder updates. Prediction exports include only development records; the ordinary trainer never opens confirmation references.
+
+## Independent findings in data preparation and evaluation
+
+| Finding | Scientific consequence | Required resolution |
+| --- | --- | --- |
+| Extending an old 64-frame interval to 128 frames can make two formerly adjacent source windows overlap. Dropping the overlap may leave one window per training person. | A same-person, different-window shuffled-reference control would be impossible, and discovering this after rendering would waste GPU time. | Check at least two admissible training source families per person before rendering and after geometric admission. Preserve the person/window matching rule or revise the declared roster before fitting. |
+| Evaluation initially included movement-response and observation-error contrasts, but did not export their interaction. | The crossed design could not directly establish whether observation changes alter movement-response fidelity. | Export the difference in signed response errors between the declared nuisance conditions, retaining the complete reference support and failed predictions. |
+| Evaluation initially lacked a naming-error diagnostic. | Coordinate improvement alone could conceal failure to repair imposed left/right swaps. | Retain reference-resolvable named-versus-exchanged distance diagnostics, ambiguity and failure counts; distinguish global and temporary swaps, and avoid calling geometric assignment a clinical anatomical annotation. |
+| Prediction files were hashed for the output report but were not initially checked against their retained training receipt before scoring. | Changed predictions could receive a new hash without a detected provenance violation. | Compare each prediction hash with the phase receipt before evaluation. |
+
+These findings were sent to the data and coordinating agents for correction. Their final validation record establishes which corrections were subsequently exercised; this review does not certify changes that were not yet tested when the findings were issued.
+
+The interval correction was subsequently inspected: it shifts a conflicting extended start forward within the same frozen raw motion, preserves its parent audited start, and freshly screens every 64-frame portion. It verifies two training source families per person before rendering and after merge. This creates a new explicitly machine-screened interval; it does not inherit human review of a shorter parent interval.
+
+## Remaining interpretation boundaries
+
+Graph regions, a shuffled anatomical topology and random-joint intervals enforce the same hidden-token budget. Overlap and truncation can still change joint exposure and the lengths of the final visible/hidden runs. The implementation therefore measures both joint-by-time masking frequencies and realized crop run lengths. The registered matching tolerances determine whether a comparison can isolate anatomical connectivity; a failure leaves exposure or temporal persistence as an alternative explanation. The controls are retained regardless of the result.
+
+The physical edits are bounded kinematic stress tests whose actual projected responses must be measured from the references. A nominal edit angle does not establish the same physiological change in every person or view. Mirroring supplies a transformation check and changes anatomical side, while camera-dependent projected angles retain their own camera-dependent references. Low-foot geometry checks are proxies for contact, and human overlay review remains separate from an automated geometry screen.
+
+Software fixtures verify execution, gradients, data separation and artifact reconstruction. They do not validate MMPose accuracy, renderer/body-model compatibility on the installed HAIC assets, clinical gait measurements, convergence or an improvement from JEPA. The source GPU preflight and reference/media admission remain necessary steps in the runnable workflow.

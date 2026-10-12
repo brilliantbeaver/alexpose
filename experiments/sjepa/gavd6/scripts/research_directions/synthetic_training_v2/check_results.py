@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 from pathlib import Path
@@ -22,16 +23,35 @@ def require(condition, message):
         raise ValueError(message)
 
 
+def assert_saved_metrics_match(path, metrics):
+    """Compare CSV results with reconstruction, decoding nested source metadata.
+
+    Pandas writes dict-valued extraction_status cells as Python literals. Its
+    CSV reader otherwise returns strings, which only *look* like the original
+    dictionaries in an assertion message. Decode without evaluating code;
+    retain every column and the existing numeric comparison tolerances.
+    """
+    import pandas as pd
+    from gavd6_sjepa.research_directions.synthetic_training_v2.evaluation import KEYS
+
+    saved = pd.read_csv(path, converters={"extraction_status": ast.literal_eval})
+    require(set(saved.columns) == set(metrics.columns), "Saved per-window metric columns differ from reconstruction.")
+    keys = ["method", *KEYS]
+    pd.testing.assert_frame_equal(
+        saved[metrics.columns].sort_values(keys).reset_index(drop=True),
+        metrics.sort_values(keys).reset_index(drop=True),
+        check_dtype=False, check_exact=False, rtol=1e-9, atol=1e-12,
+    )
+
+
 def check_results(work):
     """Verify scheduler completion and retained evidence without fitting or writing."""
     import numpy as np
-    import pandas as pd
     from haic import settled, state_for
     from gavd6_sjepa.research_directions.synthetic_training_v2.config import RunConfig, STAGES
     from gavd6_sjepa.research_directions.synthetic_training_v2.contracts import (
         TrackBundle, array_digest, code_identity, digest, sha256_file,
     )
-    from gavd6_sjepa.research_directions.synthetic_training_v2.evaluation import KEYS
     from gavd6_sjepa.research_directions.synthetic_training_v2.workflow import (
         _receipt, _record_groups, reconstruct_metrics,
     )
@@ -122,14 +142,7 @@ def check_results(work):
     require(len(metrics) == expected_rows and set(metrics.method) == methods
             and set(metrics.seed) == set(cfg.seeds) and set(metrics.evidence_status) == {evidence_status},
             "Reconstructed prediction metrics do not cover the complete configured comparison.")
-    saved = pd.read_csv(cfg.root / "evaluation/per-window.csv")
-    require(set(saved.columns) == set(metrics.columns), "Saved per-window metric columns differ from reconstruction.")
-    keys = ["method", *KEYS]
-    pd.testing.assert_frame_equal(
-        saved[metrics.columns].sort_values(keys).reset_index(drop=True),
-        metrics.sort_values(keys).reset_index(drop=True),
-        check_dtype=False, check_exact=False, rtol=1e-9, atol=1e-12,
-    )
+    assert_saved_metrics_match(cfg.root / "evaluation/per-window.csv", metrics)
     required = ("report.md", "data/achieved-size.json", "development-snapshot.json",
                 "evaluation/per-person-balanced-summary.csv", "evaluation/per-person.csv",
                 "evaluation/nuisance-strata.csv", "evaluation/training-seed-variability.csv",

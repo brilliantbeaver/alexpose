@@ -12,7 +12,7 @@ The laterality study tests access to a signed movement observable after skeleton
 |---|---|
 | New finite-family measurement | `src/gavd6_sjepa/research_directions/target_accessibility/cached_panel.py`, version `student-accessibility-v1`; 331/397-dimensional references and unchanged 924-dimensional history summaries. |
 | Safe fitting and controls | Reuses direct-v3 float64 joint ridge, input-support masks, separate target scaling, source partitions, raw controls, exact baseline option and paired score/bootstrap calculations. Historical FI code was not changed by this bridge. |
-| Frozen design | [Prospective protocol](../../iclr/02_cached_panel_protocol.md), copied into [frozen-protocol.md (unavailable here)](../../../repository/evidence-availability.md#target-accessibility) before fitting. SHA-256 `f91181e1b3a13a1d7f121052f9e650fa5a36bf67ecbed596e41f39780dbc70e3`. |
+| Frozen design | [Prospective protocol](../../../neurips-workshop/02_cached_panel_protocol.md), copied into [frozen-protocol.md (unavailable here)](../../../repository/evidence-availability.md#target-accessibility) before fitting. SHA-256 `f91181e1b3a13a1d7f121052f9e650fa5a36bf67ecbed596e41f39780dbc70e3`. |
 | Symmetry and order calibration | `symmetry.py`: complete channel reflection, physical-interval reversal, four parity classes, zero-feature control, paired pooled-teacher arithmetic and a source-held constructed continuation fixture. |
 | Additional numerical verification | `verification.py` adds metadata, exact inventory, displayed candidate and outer training-diagnostic checks after adversarial review. It changes no fitting decision or sealed artifact. |
 | Tutorial implementation | Canonical `scripts/research_directions/target_accessibility/build_notebooks.py` generates notebooks 19–22 in `notebooks/target_accessibility/`. All 23 code cells executed successfully. Notebook 21 defaults to CPU reconstruction refits without artifact writes; its explicit no-fit mode checks file integrity only. No notebook starts a new real comparison. |
@@ -51,7 +51,7 @@ The real fitting/report stage took **13.17 seconds** on the local CPU. The machi
 
 ```bash
 .venv/bin/python -m unittest discover -s tests -p 'test_iclr_bridge*.py' -v
-.venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py freeze --source-run outputs/future-innovation-direct-v3-dev-20260911 --output-root outputs/iclr-bridge-cached-20260911 --protocol-document docs/studies/iclr/02_cached_panel_protocol.md
+.venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py freeze --source-run outputs/future-innovation-direct-v3-dev-20260911 --output-root outputs/iclr-bridge-cached-20260911 --protocol-document docs/neurips-workshop/02_cached_panel_protocol.md
 .venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py run --output-root outputs/iclr-bridge-cached-20260911
 .venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py verify --output-root outputs/iclr-bridge-cached-20260911
 ```

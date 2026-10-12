@@ -1,0 +1,104 @@
+{
+  "clean_compile": true,
+  "total_pages": 16,
+  "main_pages": 9,
+  "pdf_sha256": "e91ad471187f72a0cab96cd7e2340596ef497d0d5d33b50f04598682ad4fba5a",
+  "final_log_checks": {
+    "undefined_references_or_citations": [],
+    "overfull_boxes": [],
+    "missing_assets": []
+  },
+  "title_metadata": "Evaluating JEPA-Inspired Motion Representations through Geometry and Gait Asymmetry",
+  "author_metadata": null,
+  "final_log_sha256": "8e55032c7cde37d17f94cb58e2af9bbccde0091e3f60769e78df3c46b4705cc5",
+  "rendered_local_reference_scan": {
+    "passed": true,
+    "pages_scanned": 16,
+    "findings": [],
+    "scope": "Text extracted from compiled PDF pages; checks machine paths, repository paths, local artifact filenames and known machine identifiers. Ordinary prose references to notebooks or data are not flagged.",
+    "patterns": {
+      "machine_paths_or_file_uris": "(?:/(?:Users|home|hai|tmp|private|var/folders)/[^\\s]+|file://[^\\s]+|[A-Za-z]:\\\\[^\\s]+)",
+      "repository_paths": "\\b(?:outputs|docs|src|notebooks|scripts|qa|evidence)/[A-Za-z0-9_.\\-/]+",
+      "local_artifact_filenames": "\\b[A-Za-z0-9_][A-Za-z0-9_.\\-]*\\.(?:csv|json|ipynb|py|tex|md|zip)\\b",
+      "machine_identifiers": "\\b(?:theodoremui|tedmui|haic\\.stanford\\.edu)\\b"
+    }
+  },
+  "status": "passed",
+  "archive": "paper-v08-source.zip",
+  "archive_sha256": "33c0fde61123bf300b3849c0d8f98fac2c26494bf1077d0575562f5159be7bf6",
+  "archive_entries": 58,
+  "archive_bytes": 1627659,
+  "paper_sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+  "all_page_text_identical": true,
+  "all_page_renders_pixel_identical_at_110_dpi": true,
+  "per_page_text_identical": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "per_page_renders_pixel_identical_at_110_dpi": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "clean_extraction_and_compile": true,
+  "validation_engine": "Tectonic 0.17.0",
+  "overleaf_service_compile_performed": false,
+  "author_attested_disclosure_preserved": true,
+  "main_document": "paper-v08.tex",
+  "builder_checks": [
+    {
+      "script": "scripts/build_figures.py",
+      "arguments": [],
+      "status": "passed"
+    },
+    {
+      "script": "scripts/build_tables.py",
+      "arguments": [],
+      "status": "passed"
+    },
+    {
+      "script": "scripts/build_case_figure.py",
+      "arguments": [
+        "--from-audit"
+      ],
+      "status": "passed"
+    },
+    {
+      "script": "scripts/build_summary_figures.py",
+      "arguments": [
+        "--from-audit"
+      ],
+      "status": "passed"
+    }
+  ],
+  "original_archive_unchanged": true,
+  "checked_utc": "2026-09-26T09:19:15.878745+00:00",
+  "scope": "Manuscript portability cleanup: clean archive extraction and rendered local-reference scan; all four source builders; default source and Overleaf compilation; every-page text/pixel comparison; optional full technical appendix compilation."
+}

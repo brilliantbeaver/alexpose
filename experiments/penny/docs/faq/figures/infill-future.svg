@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="455" viewBox="0 0 1100 455" role="img" aria-labelledby="title desc">
+<title id="title">Hidden-position prediction and future prediction ask different questions</title><desc id="desc">Infill predicts masked representations using available surrounding time patches. Future prediction supplies only earlier patches and hides the entire suffix. Showing future context would invalidate a forecasting claim.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/></marker></defs>
+<rect width="1100" height="455" fill="white"/>
+<text x="32" y="47" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">Hidden-position prediction and future prediction ask different questions</text>
+<line x1="32" y1="68" x2="1068" y2="68" stroke="#CCD6DE" stroke-width="1"/>
+<text x="32" y="143" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Infill</text>
+<rect x="308" y="118" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="344" y="154" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">1</text>
+<rect x="399" y="118" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="435" y="154" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">2</text>
+<rect x="490" y="118" width="73" height="54" rx="7" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="526" y="154" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">?</text>
+<rect x="581" y="118" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="617" y="154" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">4</text>
+<rect x="672" y="118" width="73" height="54" rx="7" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="708" y="154" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">?</text>
+<rect x="763" y="118" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="799" y="154" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">6</text>
+<rect x="854" y="118" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="890" y="154" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">7</text>
+<rect x="945" y="118" width="73" height="54" rx="7" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="981" y="154" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">?</text>
+<text x="308" y="208" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Context may occur before and after a target.</text>
+<text x="32" y="299" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Future prediction</text>
+<rect x="308" y="274" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="344" y="310" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">1</text>
+<rect x="399" y="274" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="435" y="310" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">2</text>
+<rect x="490" y="274" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="526" y="310" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">3</text>
+<rect x="581" y="274" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="617" y="310" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">4</text>
+<rect x="672" y="274" width="73" height="54" rx="7" fill="#E2F1EF" stroke="#157B78" stroke-width="2"/>
+<text x="708" y="310" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">5</text>
+<rect x="763" y="274" width="73" height="54" rx="7" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="799" y="310" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">?</text>
+<rect x="854" y="274" width="73" height="54" rx="7" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="890" y="310" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">?</text>
+<rect x="945" y="274" width="73" height="54" rx="7" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="981" y="310" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="middle">?</text>
+<text x="308" y="364" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">The entire suffix is hidden; no later context is visible.</text>
+<text x="32" y="435" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">These timelines explain tasks; forecasting needs an unseen sequence and unseen-source test.</text>
+</svg>

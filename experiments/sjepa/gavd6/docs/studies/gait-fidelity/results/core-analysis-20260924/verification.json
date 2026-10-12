@@ -1,0 +1,64 @@
+{
+  "analysis_date": "2026-09-24",
+  "inputs": {
+    "config.json": "19a1b14477f6dfa9d39ccd64e997726b750cf74341dfac62c8ccec098bf865dd",
+    "report.md": "839c8fe8186e3a09d49ed25d2867f93c81bd917037432271d663ebc245c2b7f5",
+    "evaluation/comparisons.json": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+    "evaluation/summary.json": "54900db077b27fdcc45d5d32ff793db2b3446dc52e0bf50fac42b28f68eb69a1",
+    "evaluation/per-person.csv": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+    "evaluation/coverage.csv": "f28be939a551e95a17a6c15ea7285ff031eecd7779844b5818d4fc8e405290fb"
+  },
+  "script_sha256": "5ffd040ed26ff68177ca2ec788dcc82be581e9b973407522dbf8d298443a8ea4",
+  "python": "3.12.10 (main, Apr  9 2025, 03:49:38) [Clang 20.1.0 ]",
+  "numpy": "2.5.2",
+  "pandas": "3.0.5",
+  "matplotlib": "3.11.1",
+  "source_directory": "outputs/gait-fidelity",
+  "rows": 672,
+  "methods": 16,
+  "people": 14,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "bootstrap_draws": 2000,
+  "bootstrap_seed": 731,
+  "registered_reconstruction": {
+    "A_error": {
+      "max_absolute_reconstruction_difference": 1.7763568394002505e-15
+    },
+    "waveform_error": {
+      "max_absolute_reconstruction_difference": 6.661338147750939e-16
+    },
+    "response_error": {
+      "max_absolute_reconstruction_difference": 6.661338147750939e-16
+    },
+    "nuisance_error": {
+      "max_absolute_reconstruction_difference": 4.440892098500626e-16
+    }
+  },
+  "report_rows_verified": 16,
+  "maximum_report_rounding_difference": 4.9712302342186376e-05,
+  "all_metrics_finite": true,
+  "complete_person_seed_panel": true,
+  "reference_eligible_records_per_method_seed": 55800,
+  "source_people": {
+    "BioMotionLab_NTroje": 12,
+    "KIT": 2
+  },
+  "unavailable_local_artifacts": [
+    "ledger.json",
+    "plan.json",
+    "cohort/manifest.json",
+    "evaluation/per-window.csv",
+    "evaluation/responses.csv",
+    "evaluation/nuisance.csv",
+    "evaluation/interaction.csv",
+    "evaluation/per-family.csv",
+    "evaluation/by-condition-person.csv",
+    "evaluation/coverage-per-person.csv"
+  ],
+  "scope": "Person-table reconstruction only; no raw-prediction, cohort-admission, or failure-penalty reconstruction.",
+  "secondary_comparisons": "Exploratory; descriptive intervals without multiplicity adjustment; no clinical margin or independent confirmation."
+}

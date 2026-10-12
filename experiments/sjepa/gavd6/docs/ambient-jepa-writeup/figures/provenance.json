@@ -1,0 +1,125 @@
+{
+  "source": "paper-v08, unchanged audited estimates",
+  "no_new_training": true,
+  "no_new_inference": true,
+  "sha256": {
+    "docs/iclr/versions/v08/evidence/restoration_means.csv": "bd0c494ba026b763e40b8056aa72d444319677b13496c07e6435d901762467c3",
+    "docs/iclr/versions/v08/evidence/restoration_effects.csv": "d7a41b7450b3ee71f8538df4bb0fd5e3fb8a8c6ffca635994106914460b8f7e6",
+    "docs/iclr/versions/v08/evidence/method_summary.csv": "07ac0131ae19fd10faeeef640f29eba7353097d29e37626f539edafc98f20fd7",
+    "docs/iclr/versions/v08/evidence/summary-figure-provenance.json": "aedb5bda28b0829fd3f74a81334d8ecf98c6bb7f0260f73592ff6d7789af8713",
+    "docs/iclr/versions/v08/evidence/penalty_effects.csv": "1b1d84d4c15536ac1ff89d06975f1beac8d61fce93497dba9f09d6cd584536f9",
+    "docs/iclr/versions/v08/evidence/repair_means.csv": "d20bf280916f6e808c6a3adf474ee69194af678006619deee2cce5c37dc0c4dd",
+    "docs/iclr/versions/v08/evidence/repair_effects.csv": "1118f1e9c5e5c73fc11e0e2c46665f406277190aebf313dac5345ee6f49f2625",
+    "docs/iclr/versions/v08/evidence/condition_summary.csv": "ea299cf19e0841bda0039bbe9fd7e7a4d1e6a1eecb38d892e04c2db108554a76",
+    "docs/iclr/versions/v08/evidence/case-figure-person.csv": "70b98da343ea1488c3ce2fe89af63e609f1cd7d4ac3147e429d3a62db685e87f",
+    "docs/iclr/versions/v08/evidence/case-figure-seeds.csv": "45aa52689b7b3c19dbadb035a020ae4cc69423ca0112cf4311c40362c2a283ca",
+    "docs/iclr/versions/v08/paper-v08.pdf": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+    "docs/iclr/versions/v08/paper-v08.tex": "85b08ea58f95be0384244aa3848bf23fb77a4ac5c64ae7f32e723d2d1a523e68",
+    "docs/iclr/versions/v08/appendix.tex": "6dde88735f69940dbcb2ed69d8c686a1d8db2ff23588de7363c61279410c8e50",
+    "docs/ambient-jepa-writeup/scripts/build_figures.py": "51b9becb8d5248e8e52b6b113147a747068c50c1873befe030c3bfddd51308be"
+  },
+  "figures": [
+    {
+      "name": "01-workflow",
+      "kind": "conceptual: completed workflow; invented teaching arithmetic",
+      "sources": [
+        "paper-v08.tex, sections 3.1\u20133.3",
+        "appendix.tex, A\u2013B"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 5.7,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "02-restoration",
+      "kind": "empirical",
+      "sources": [
+        "restoration_means.csv",
+        "restoration_effects.csv",
+        "method_summary.csv"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 4.65,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "03-primary-questions",
+      "kind": "empirical",
+      "sources": [
+        "summary-figure-provenance.json"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 4.55,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "04-reliability",
+      "kind": "empirical",
+      "sources": [
+        "method_summary.csv",
+        "penalty_effects.csv"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 4.5,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "05-readout-repair",
+      "kind": "empirical",
+      "sources": [
+        "repair_means.csv",
+        "repair_effects.csv"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 5.9,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "06-anatomical-naming",
+      "kind": "empirical",
+      "sources": [
+        "condition_summary.csv"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 3.75,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "07-participants",
+      "kind": "empirical",
+      "sources": [
+        "case-figure-person.csv",
+        "case-figure-seeds.csv"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 5.5,
+      "text_outside_canvas": []
+    },
+    {
+      "name": "08-research-roadmap",
+      "kind": "proposed conceptual research architecture; no results",
+      "sources": [
+        "PLAN.md, sections 7\u20138"
+      ],
+      "width_inches": 7.0,
+      "height_inches": 5.5,
+      "text_outside_canvas": []
+    }
+  ],
+  "validation": {
+    "all_16_trained_variants_worse_than_zero_pooled": true,
+    "three_primary_intervals_span_zero": true,
+    "response_score_components_add": true,
+    "participant_favorable_counts_pooled_clear_occluded": [
+      10,
+      14,
+      1
+    ]
+  },
+  "libraries": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "note": "Teaching arithmetic in Figure 1 is invented and labeled. Figure 8 is proposed. All statistical marks use retained audit values."
+}

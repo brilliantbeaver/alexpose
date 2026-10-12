@@ -1,0 +1,63 @@
+{
+  "inputs_sha256": {
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+    "docs/iclr/versions/v08/evidence/penalty_effects.csv": "1b1d84d4c15536ac1ff89d06975f1beac8d61fce93497dba9f09d6cd584536f9",
+    "docs/iclr/versions/v08/evidence/repair_means.csv": "d20bf280916f6e808c6a3adf474ee69194af678006619deee2cce5c37dc0c4dd",
+    "docs/iclr/versions/v08/evidence/repair_effects.csv": "1118f1e9c5e5c73fc11e0e2c46665f406277190aebf313dac5345ee6f49f2625",
+    "docs/iclr/versions/v08/evidence/condition_summary.csv": "ea299cf19e0841bda0039bbe9fd7e7a4d1e6a1eecb38d892e04c2db108554a76"
+  },
+  "derived": {
+    "restoration_waveform_effects": [
+      {
+        "family": "P-direct-none",
+        "change_minus_coordinate_waveform": 7.207554868221944,
+        "ci_low": 6.604419596859334,
+        "ci_high": 7.870978330369682
+      },
+      {
+        "family": "I-initialized-none",
+        "change_minus_coordinate_waveform": 4.988111228256512,
+        "ci_low": 4.135021694904154,
+        "ci_high": 6.110178444096327
+      },
+      {
+        "family": "I-shuffled_jepa-graph_time",
+        "change_minus_coordinate_waveform": 4.632102861033712,
+        "ci_low": 3.646025905867375,
+        "ci_high": 5.852615948471462
+      },
+      {
+        "family": "M-coordinate-graph_time",
+        "change_minus_coordinate_waveform": 5.52483207316469,
+        "ci_low": 4.741138745146452,
+        "ci_high": 6.347959954616968
+      },
+      {
+        "family": "M-paired_jepa-graph_time",
+        "change_minus_coordinate_waveform": 5.100110267326885,
+        "ci_low": 3.696860929187224,
+        "ci_high": 6.543756465301512
+      },
+      {
+        "family": "F-response-coordinate_delta_v1-graph_time",
+        "change_minus_coordinate_waveform": 4.863936809064112,
+        "ci_low": 3.6064485976888894,
+        "ci_high": 6.197534123914029
+      },
+      {
+        "family": "F-response-jepa_endpoint_v1-graph_time",
+        "change_minus_coordinate_waveform": 5.132271254472704,
+        "ci_low": 3.6345068046809295,
+        "ci_high": 7.049782759899904
+      },
+      {
+        "family": "F-response-jepa_delta_v1-graph_time",
+        "change_minus_coordinate_waveform": 4.38784059052076,
+        "ci_low": 2.7640095439426173,
+        "ci_high": 5.922411965517145
+      }
+    ]
+  },
+  "population": "14 development people, three fitted seeds; paired hierarchical exported cells",
+  "intervals": "Crossed bootstrap: 2000 draws seed731 unless caption explicitly says person-t conditional on three fitted seeds."
+}

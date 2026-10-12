@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="755" viewBox="0 0 1200 755" role="img" aria-labelledby="title desc">
+<title id="title">Compare prediction errors while the encoder is learning</title><desc id="desc">FOLLOW-UP. Features are learned numbers. The student predicts them from observed poses; the teacher uses references.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#566978"/></marker></defs>
+<rect width="1200" height="755" fill="#fcfcf9"/>
+<rect x="36" y="18" width="158" height="30" rx="5" fill="#e7f4ef" stroke="none"/>
+<text x="48" y="40" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">FOLLOW-UP</text>
+<text x="1164" y="40" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="end" font-weight="normal">CONCEPTUAL · RESULTS PENDING</text>
+<text x="36" y="91" font-family="Arial, sans-serif" font-size="32" fill="#183247" text-anchor="start" font-weight="bold">Compare prediction errors while the encoder is learning</text>
+<text x="36" y="124" font-family="Arial, sans-serif" font-size="20" fill="#566978" text-anchor="start" font-weight="normal">Features are learned numbers. The student predicts them from observed poses; the teacher uses references.</text>
+<rect x="36" y="197" width="190" height="104" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="131" y="230" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="middle" font-weight="bold">State a</text>
+<rect x="63" y="253" width="21" height="21" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="92" y="253" width="21" height="21" rx="4" fill="white" stroke="#4c60af"/>
+<rect x="121" y="253" width="21" height="21" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="150" y="253" width="21" height="21" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="179" y="253" width="21" height="21" rx="4" fill="white" stroke="#4c60af"/>
+<rect x="285" y="197" width="263" height="104" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="416" y="240" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Encoder + predictor</text>
+<text x="416" y="275" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Some input is hidden</text>
+<rect x="607" y="197" width="190" height="104" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="702" y="239" font-family="Arial, sans-serif" font-size="32" fill="#007f79" text-anchor="middle" font-weight="bold">Error a</text>
+<text x="702" y="276" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Prediction − reference</text>
+<polyline points="226.00,248.00 285.00,248.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="548.00,248.00 607.00,248.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="36" y="339" width="190" height="104" rx="12" fill="white" stroke="#d9e2e5"/>
+<text x="131" y="372" font-family="Arial, sans-serif" font-size="24" fill="#183247" text-anchor="middle" font-weight="bold">State b</text>
+<rect x="63" y="395" width="21" height="21" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="92" y="395" width="21" height="21" rx="4" fill="white" stroke="#4c60af"/>
+<rect x="121" y="395" width="21" height="21" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="150" y="395" width="21" height="21" rx="4" fill="#4c60af" stroke="#4c60af"/>
+<rect x="179" y="395" width="21" height="21" rx="4" fill="white" stroke="#4c60af"/>
+<rect x="285" y="339" width="263" height="104" rx="12" fill="#edf0fa" stroke="#d9e2e5"/>
+<text x="416" y="382" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">Encoder + predictor</text>
+<text x="416" y="417" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Some input is hidden</text>
+<rect x="607" y="339" width="190" height="104" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="702" y="381" font-family="Arial, sans-serif" font-size="32" fill="#007f79" text-anchor="middle" font-weight="bold">Error b</text>
+<text x="702" y="418" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Prediction − reference</text>
+<polyline points="226.00,390.00 285.00,390.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="548.00,390.00 607.00,390.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="416" y="325" font-family="Arial, sans-serif" font-size="19" fill="#4c60af" text-anchor="middle" font-weight="normal">Shared weights for both states</text>
+<rect x="866" y="197" width="298" height="246" rx="12" fill="#fbf1de" stroke="#d9e2e5"/>
+<text x="886" y="231" font-family="Arial, sans-serif" font-size="23" fill="#183247" text-anchor="start" font-weight="bold">Reference teacher</text>
+<text x="1015" y="284" font-family="Arial, sans-serif" font-size="21" fill="#183247" text-anchor="middle" font-weight="bold">Reference for each state</text>
+<text x="1015" y="326" font-family="Arial, sans-serif" font-size="23" fill="#986325" text-anchor="middle" font-weight="normal">Learned numbers</text>
+<text x="1015" y="392" font-family="Arial, sans-serif" font-size="21" fill="#566978" text-anchor="middle" font-weight="normal">Targets fixed per step</text>
+<polyline points="866.00,247.00 797.00,247.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="866.00,391.00 797.00,391.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="416.00,443.00 416.00,487.00 1015.00,487.00 1015.00,443.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="7 6"/>
+<text x="700" y="478" font-family="Arial, sans-serif" font-size="18" fill="#566978" text-anchor="middle" font-weight="normal">Moving average of encoder weights</text>
+<rect x="36" y="525" width="1128" height="131" rx="12" fill="#e7f4ef" stroke="#d9e2e5"/>
+<text x="58" y="568" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="start" font-weight="bold">PRETRAIN</text>
+<text x="58" y="614" font-family="Arial, sans-serif" font-size="25" fill="#183247" text-anchor="start" font-weight="bold">Original loss + added error term</text>
+<text x="886" y="568" font-family="Arial, sans-serif" font-size="18" fill="#007f79" text-anchor="middle" font-weight="bold">THEN FIX ENCODER WEIGHTS</text>
+<text x="886" y="614" font-family="Arial, sans-serif" font-size="22" fill="#183247" text-anchor="middle" font-weight="bold">New coordinate output network</text>
+<polyline points="636.00,599.00 694.00,599.00" fill="none" stroke="#566978" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="36.00,698.00 1164.00,698.00" fill="none" stroke="#d9e2e5" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="36" y="729" font-family="Arial, sans-serif" font-size="19" fill="#566978" text-anchor="start" font-weight="normal">Each reference uses its input-derived shift and scale. Deployment keeps only the encoder and output network.</text>
+</svg>

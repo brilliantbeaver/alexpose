@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="225" viewBox="0 0 1000 225" role="img" aria-labelledby="title desc">
+<title id="title">Paired pretraining and a controlled frozen-encoder comparison</title>
+<desc id="desc">Proposed follow-up. Matched original and altered walking sequences provide noisy observations and clean references. Three pretraining objectives produce encoders: feature-difference JEPA, independent-state JEPA, and a coordinate-difference control. Each encoder is frozen, then evaluated with separately trained coordinate-only and change-supervised readouts. Three variants at three seeds with two readouts give eighteen final models. Assess movement response, trajectory accuracy and failures.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#536575"/></marker></defs>
+<rect width="1000" height="225" fill="#ffffff"/>
+<text x="18" y="28" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#183247" text-anchor="start">Learn from paired movement states; test both downstream objectives</text>
+<rect x="18" y="48" width="210" height="132" rx="9" fill="#eff5fc" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="123.0" y="76" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#183247" text-anchor="middle">Paired walking</text>
+<text x="123.0" y="107" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Original and altered</text>
+<text x="123.0" y="134" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Noisy observations</text>
+<text x="123.0" y="161" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">+ clean references</text>
+<polyline points="231,114 250,114" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="258" y="48" width="243" height="132" rx="9" fill="#edf8f5" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="379.5" y="76" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#183247" text-anchor="middle">JEPA and control</text>
+<text x="379.5" y="107" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Feature difference</text>
+<text x="379.5" y="134" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">vs independent states</text>
+<text x="379.5" y="161" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Coordinate control</text>
+<polyline points="504,114 523,114" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="531" y="48" width="217" height="132" rx="9" fill="#eff5fc" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="639.5" y="76" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#183247" text-anchor="middle">Freeze encoder</text>
+<text x="639.5" y="107" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Train two readouts:</text>
+<text x="639.5" y="134" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">coordinates only</text>
+<text x="639.5" y="161" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">or + change loss</text>
+<polyline points="751,114 770,114" fill="none" stroke="#536575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="778" y="48" width="204" height="132" rx="9" fill="#f6f8fa" stroke="#dbe4e9" stroke-width="1.4"/>
+<text x="880.0" y="76" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#183247" text-anchor="middle">Evaluate</text>
+<text x="880.0" y="107" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Response error</text>
+<text x="880.0" y="134" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Trajectory error</text>
+<text x="880.0" y="161" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#536575" text-anchor="middle">Failures + side errors</text>
+<text x="500" y="211" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#536575" text-anchor="middle">3 pretraining variants × 3 seeds × 2 readouts = 18 final models</text>
+</svg>

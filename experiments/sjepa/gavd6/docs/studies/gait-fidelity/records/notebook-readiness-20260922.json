@@ -1,0 +1,119 @@
+{
+  "schema": "gait-fidelity-notebook-readiness-v1",
+  "scope": "Fresh local CPU fixture and local packaging preview; HAIC runtime unverified",
+  "execution": {
+    "status": "TUTORIAL_EXECUTION_PASSED",
+    "scope": "CPU software fixture; no HAIC validation",
+    "completed_utc": "2026-09-22T18:43:02.553249+00:00",
+    "work": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-fidelity-readiness-tv0j306g/work",
+    "notebooks": [
+      {
+        "notebook": "00_start_here.ipynb",
+        "status": "passed",
+        "seconds": 2.966
+      },
+      {
+        "notebook": "01_data_and_references.ipynb",
+        "status": "passed",
+        "seconds": 4.564
+      },
+      {
+        "notebook": "02_masking_and_controls.ipynb",
+        "status": "passed",
+        "seconds": 7.993
+      },
+      {
+        "notebook": "03_experiment_matrix.ipynb",
+        "status": "passed",
+        "seconds": 0.868
+      },
+      {
+        "notebook": "04_run_and_monitor.ipynb",
+        "status": "passed",
+        "seconds": 110.28
+      },
+      {
+        "notebook": "05_evaluate_and_visualize.ipynb",
+        "status": "passed",
+        "seconds": 61.984
+      },
+      {
+        "notebook": "06_verify_and_write.ipynb",
+        "status": "passed",
+        "seconds": 22.187
+      },
+      {
+        "notebook": "experiments/A_masking_and_change.ipynb",
+        "status": "passed",
+        "seconds": 0.995
+      },
+      {
+        "notebook": "experiments/B_mask_structure_controls.ipynb",
+        "status": "passed",
+        "seconds": 0.776
+      },
+      {
+        "notebook": "experiments/C_practical_benchmarks.ipynb",
+        "status": "passed",
+        "seconds": 0.757
+      },
+      {
+        "notebook": "experiments/D_pretraining_information.ipynb",
+        "status": "passed",
+        "seconds": 0.725
+      },
+      {
+        "notebook": "experiments/E_pairing_and_label_controls.ipynb",
+        "status": "passed",
+        "seconds": 0.884
+      }
+    ]
+  },
+  "code_cells": 53,
+  "error_outputs": 0,
+  "verification": {
+    "status": "GAIT_FIDELITY_VERIFIED",
+    "artifacts_checked": 915,
+    "reconstructed_rows": 39168,
+    "evidence_status": "fixture-tested",
+    "cuda_verified_here": false
+  },
+  "complete_optimization_phases": 135,
+  "final_models": 102,
+  "failed_attempts": 0,
+  "tests": {
+    "command": ".venv/bin/python -m unittest discover -s tests/gait_fidelity",
+    "passed": 50,
+    "log_sha256": "22ae2e2a9608e95dc9d991dd1898ee23f7b44aa803f177bb2b3324dd220e5165"
+  },
+  "release_preview": {
+    "passed": true,
+    "files_packaged": 607,
+    "transferred": false
+  },
+  "haic_check": {
+    "status": "authentication_unavailable",
+    "attempts": [
+      "haic",
+      "tedmui@haic.stanford.edu"
+    ],
+    "gpu_jobs_submitted": false
+  },
+  "notebook_sources": {
+    "notebooks/gait_fidelity/00_start_here.ipynb": "68ed4abcbb5e1f5198d29fa3459f686fc042e2626d6dcbfc7e70aa500a2122d1",
+    "notebooks/gait_fidelity/01_data_and_references.ipynb": "c81b28a0b5243c6b41a619d7c25da53a4481358f189ae634cb1c8ff812a2e3cf",
+    "notebooks/gait_fidelity/02_masking_and_controls.ipynb": "c754bc494d4397eec6f49704b3954f66535fdef4640ecdcb0842f27557101f9d",
+    "notebooks/gait_fidelity/03_experiment_matrix.ipynb": "5a54f444b5ade5470133a2e2ed298a00c47a009be46b6ad5c18e5dc2f64ff951",
+    "notebooks/gait_fidelity/04_run_and_monitor.ipynb": "69c300424d19133815c5e354d123130d684779f4c5bb7c273b358a19dd8ba07f",
+    "notebooks/gait_fidelity/05_evaluate_and_visualize.ipynb": "fe23439b742e2d67663cd01fcb37f1fe8fd5dca9684db2e8827bb6d7e2428e19",
+    "notebooks/gait_fidelity/06_verify_and_write.ipynb": "6589f07b84f5344620d738242930fb64391a037370754e1bc9c6c512209d344e",
+    "notebooks/gait_fidelity/build_notebooks.py": "b84eb32c91360aa8fa4a61c0d1d6fb5963ca1a356221ef1f20c88906ec0d9641",
+    "notebooks/gait_fidelity/execute_tutorials.py": "7ad1b2f0bd2694f8111ba35d0a49ba71b4d20bc9da1075d344954469e44c0daa",
+    "notebooks/gait_fidelity/experiments/A_masking_and_change.ipynb": "d6219fa1172a33b166d7d50265a17c738a95ec7d33bef72845942703673781a1",
+    "notebooks/gait_fidelity/experiments/B_mask_structure_controls.ipynb": "24584ef743557425dd19042362e228d1a731d593a8863679ebe4930d6911fbf0",
+    "notebooks/gait_fidelity/experiments/C_practical_benchmarks.ipynb": "82ff78502a78300ede87daadc7a17bfca4027ab9800f92a32a84109599c92e99",
+    "notebooks/gait_fidelity/experiments/D_pretraining_information.ipynb": "6a318edbfd1a4761f249c6439b1a29cb4e81442a8bbdafd6994d046c57e0a36d",
+    "notebooks/gait_fidelity/experiments/E_pairing_and_label_controls.ipynb": "a68766e136e53cda3e8f2f5d4beaffd2ece71b2ea2bbc4e4aa1a133053281c9b",
+    "notebooks/gait_fidelity/tutorial_helpers.py": "1260efacc38286dee9b7aaf02379309a1cfb2f60873e44ec2a1c999830c3cd4e"
+  }
+}

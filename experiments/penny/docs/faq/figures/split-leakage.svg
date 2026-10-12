@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="500" viewBox="0 0 1100 500" role="img" aria-labelledby="title desc">
+<title id="title">A sequence split can reuse the same source video</title><desc id="desc">A sequence split places clips from a single source video in both train and test. A source-disjoint split keeps each source in one partition. Pretraining on test-source normal clips is transductive exposure even without labels.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/></marker></defs>
+<rect width="1100" height="500" fill="white"/>
+<text x="32" y="47" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">A sequence split can reuse the same source video</text>
+<line x1="32" y1="68" x2="1068" y2="68" stroke="#CCD6DE" stroke-width="1"/>
+<rect x="32" y="100" width="487" height="324" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="32" y="100" width="7" height="324" rx="3" fill="#9C681C" stroke="#9C681C" stroke-width="2"/>
+<text x="52" y="133" fill="#9C681C" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Sequence split</text>
+<text x="52" y="165" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Different clips; sources may overlap</text>
+<rect x="555" y="100" width="513" height="324" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="555" y="100" width="7" height="324" rx="3" fill="#157B78" stroke="#157B78" stroke-width="2"/>
+<text x="575" y="133" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Source-disjoint split</text>
+<text x="575" y="165" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Each video belongs to one partition</text>
+<text x="86" y="220" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="start">Train</text>
+<text x="337" y="220" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="start">Test</text>
+<rect x="84" y="242" width="178" height="30" rx="4" fill="#E6EFF8" stroke="#285A91" stroke-width="2"/>
+<rect x="335" y="242" width="178" height="30" rx="4" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="98" y="264" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video A · clip</text>
+<text x="349" y="264" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video A · clip</text>
+<rect x="84" y="284" width="178" height="30" rx="4" fill="#E6EFF8" stroke="#285A91" stroke-width="2"/>
+<rect x="335" y="284" width="178" height="30" rx="4" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="98" y="306" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video B · clip</text>
+<text x="349" y="306" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video B · clip</text>
+<rect x="84" y="326" width="178" height="30" rx="4" fill="#E6EFF8" stroke="#285A91" stroke-width="2"/>
+<rect x="335" y="326" width="178" height="30" rx="4" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="98" y="348" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video C · clip</text>
+<text x="349" y="348" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video C · clip</text>
+<text x="609" y="220" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="start">Train</text>
+<text x="860" y="220" fill="#78558F" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="start">Test</text>
+<rect x="607" y="242" width="178" height="30" rx="4" fill="#E6EFF8" stroke="#285A91" stroke-width="2"/>
+<rect x="858" y="242" width="178" height="30" rx="4" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="621" y="264" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video A · clip</text>
+<text x="872" y="264" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video D · clip</text>
+<rect x="607" y="284" width="178" height="30" rx="4" fill="#E6EFF8" stroke="#285A91" stroke-width="2"/>
+<rect x="858" y="284" width="178" height="30" rx="4" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="621" y="306" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video B · clip</text>
+<text x="872" y="306" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video E · clip</text>
+<rect x="607" y="326" width="178" height="30" rx="4" fill="#E6EFF8" stroke="#285A91" stroke-width="2"/>
+<rect x="858" y="326" width="178" height="30" rx="4" fill="#F0EAF5" stroke="#78558F" stroke-width="2"/>
+<text x="621" y="348" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video C · clip</text>
+<text x="872" y="348" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Video F · clip</text>
+<text x="32" y="480" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">Unlabeled pretraining exposure to a test source is transductive; audit it separately.</text>
+</svg>

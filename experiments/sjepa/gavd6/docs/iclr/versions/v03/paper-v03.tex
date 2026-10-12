@@ -1,0 +1,177 @@
+\documentclass{article}
+\usepackage{template/iclr2027/iclr2027_conference,times}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,hyperref,url}
+\graphicspath{{figures/v03/}}
+\hypersetup{colorlinks=true,citecolor=blue,urlcolor=blue,linkcolor=blue,pdfauthor={},pdftitle={Evaluating Feature Prediction for 2D Pose Trajectory Restoration with Paired Synthetic Supervision}}
+\newcommand{\degunit}{^{\circ}}
+\newcommand{\fig}[3]{\begin{figure}[h]\centering\includegraphics[width=\linewidth]{#1}\caption{#2}\label{#3}\end{figure}}
+\title{Evaluating Feature Prediction for 2D Pose Trajectory Restoration with Paired Synthetic Supervision}
+\author{Anonymous authors}
+\begin{document}
+\maketitle
+\begin{abstract}
+Pose restoration for movement analysis must retain side-sensitive measurements as well as the underlying trajectory. We evaluate feature prediction under paired synthetic supervision using a signed difference in left and right knee excursion. Recorded motion is rendered with controlled knee edits, physical mirroring, occlusion, and joint-label corruption; image-based poses are restored against projected references. Three sequential experiments train on 112 people and reuse 14 development people across three seeds. Direct coordinate training reduces response error from 12.69$\degunit$ to 7.54$\degunit$ and waveform error from 18.57$\degunit$ to 12.07$\degunit$. Adding the original change-supervised objective worsens waveforms across eight model families. Feature-difference pretraining has a mean response advantage of 0.37$\degunit$ relative to endpoint-feature supervision, with a 95\% interval of [$-1.11$, 1.76]$\degunit$. Reducing the scalar-loss weight accounts for most of the subsequent mean waveform recovery. Failure costs materially affect response scores, and zero-response prediction beats all 16 neural variants in the pooled response experiment. These results support evaluating predictive representations through complementary trajectory, laterality, and failure measurements; they leave an incremental JEPA benefit unresolved under the tested protocol.
+\end{abstract}
+
+\section{Introduction}
+A pose trajectory can look plausible while changing the movement measurement extracted from it. This matters when a video system compares walking across conditions: a reconstruction may attenuate an angular change or assign it to the other leg. Coordinate accuracy alone does not establish that such a comparison survives restoration. We study this issue through \emph{laterality}, meaning anatomical left--right labeling, through a signed bilateral measurement and a geometric assignment diagnostic. The signed measurement alone does not identify which leg changed.
+
+Predicting a reference representation may help an encoder retain movement structure that is difficult to infer from noisy joints. Joint-embedding predictive architectures (JEPAs) motivate this possibility \citep{assran2023ijepa,bardes2024vjepa}, but a feature-prediction objective does not directly guarantee accurate downstream angular measurements. Moreover, a supervised coordinate readout can exploit observed-coordinate shortcuts, and a loss on a single movement summary can leave much of a trajectory unconstrained.
+
+Our research question is whether reference-feature prediction improves recovery of a controlled laterality-sensitive response beyond coordinate learning, and whether explicitly supervising change helps without degrading its supporting trajectories. We test the hypothesis using matched endpoint-feature supervision, two readouts of each frozen encoder, and initialized and shuffled-reference controls. The contribution is a controlled evaluation of these relationships, including a subsequent readout-weight control and explicit failure accounting. Its findings concern a compact, privileged-supervision restoration system and a repeatedly inspected synthetic development population. They do not establish a general ranking of JEPA methods or validity for clinical movement assessment.
+
+\clearpage
+\section{A laterality-sensitive restoration target}
+For each leg $\ell\in\{L,R\}$, let $\theta_{\ell,t}$ be the image-plane angle between knee-to-hip and knee-to-ankle vectors. We define angular excursion and its signed bilateral difference by
+\begin{equation}
+q_\ell=P_{95}(\theta_\ell)-P_5(\theta_\ell),\quad A=q_R-q_L,\quad \Delta A=A_b-A_a.
+\label{eq:measurement}
+\end{equation}
+Here $a$ and $b$ are complete movement states of the same source window; $\Delta A$ is a between-state contrast, not a time derivative. Percentiles reduce dependence on isolated extremes. The primary response error is $E_\Delta=|\Delta\widehat A-\Delta A|$, in degrees. A hat denotes a value computed from restored coordinates. Camera and observation conditions are held fixed within a movement contrast, and each camera has its own projected reference.
+
+\fig{laterality-contract.pdf}{Why must physical mirroring and label corruption have different targets? The numerical excursions are an algebraic illustration, not experimental observations. Panel A exchanges already-computed left and right excursion values, which reverses $A$ algebraically. The executed three-dimensional mirror is reprojected through a fixed camera and need not exchange projected excursions or reverse $A$. In panel B, a naming error changes only the estimated input; the anatomically named reference remains fixed. Solid arrows describe transformations, not learned model operations. This target distinction motivates the laterality-sensitive evaluation without imposing learned equivariance.}{fig:laterality}
+
+The distinction in Figure~\ref{fig:laterality} prevents a left--right naming error from being interpreted as a movement response. Physical mirroring changes reference anatomy and observation together, with projected measurements recomputed for each camera. A global or temporary input-label exchange instead creates an observation error to be repaired. These transformations are crossed with movement edits; pooling them supplies a stress test, while condition-specific analysis is needed to diagnose its failures.
+
+A favorable response score has important ambiguities. If $e_i=\widehat A_i-A_i$, then $E_\Delta=|e_b-e_a|$: identical nonzero endpoint errors cancel. Different trajectories can also have the same percentile excursion. We therefore retain full knee-angle waveform error, normalized coordinate error, response-direction accuracy, and geometric left--right assignment failure. None can substitute for the others. Predicting zero response supplies an additional measurement baseline: it can score well when true projected changes are small, despite recovering no change.
+
+This focus complements temporal pose refinement such as SmoothNet \citep{zeng2022smoothnet}, which motivates attention to trajectory quality. Our finite-difference losses also have conceptual precedent in supervision beyond target values, including Sobolev training \citep{czarnecki2017sobolev}. We use paired state differences rather than physical derivatives; the existence of such a loss is not the novelty claim.
+
+\clearpage
+\section{Controlled motion and observation data}
+The source is AMASS \citep{mahmood2019amass}, which brings recorded motion-capture collections into a common body-model representation. No new participants were recruited. Walking candidates are selected from the eligible manifest, divided into nonoverlapping windows, and screened for usable projected geometry. Filename-based selection and geometry screening do not establish clinical status or validate every retained interval as natural gait.
+
+Each window contains 128 timestamps at 25 Hz, about 5.1 seconds. A local right-knee rotation is composed with the recorded motion, gated by an ankle-height proxy and tapered to vanish at window boundaries. Nominal edit levels are 0, 5, 10, and 15 degrees. The edit is applied before physical mirroring, which reflects geometry and exchanges anatomical sides. A nominal edit is a body-model operation; its magnitude need not equal the resulting projected $\Delta A$. These interventions do not simulate disease or treatment response.
+
+Rendered images are processed by fixed RTMPose-M, HRNet-W32, and ViTPose-base estimators \citep{jiang2023rtmpose,sun2019hrnet,xu2022vitpose}. The restoration input includes bilateral shoulders, elbows, wrists, hips, knees, and ankles, for 12 two-dimensional joints. Projected body-model joints provide reference coordinates even when hidden in the image. Two cameras (45$\degunit$ oblique and 90$\degunit$ side), original and mirrored physical states, and clear or added-occlusion observations are crossed with correct, globally swapped, or temporarily swapped joint names. The temporary swap covers the middle third of a window. Coordinates, confidence, and observed indicators are swapped together; reference names remain fixed.
+
+\begin{table}[h]\centering
+\caption{Completed population and training exposure. Counts describe admitted people and source windows, before repeated rendering, estimator, and naming conditions. The development cohort is reused by all three stages. The protected-person confirmation has no completed result in this evidence packet.}
+\label{tab:data}
+\begin{tabular}{lrrl}\toprule
+Population & People & Windows & Role \\\midrule
+Training &112&1,645& Fitting and calibration\\
+Development &14&155& Reused evaluation\\\bottomrule
+\end{tabular}
+\end{table}
+
+Training comprises 692 raw motions. Development includes 12 people from BioMotionLab\_NTroje and two from KIT. Its 155 windows expand to 55,800 endpoint records, including a duplicated zero-level endpoint for a no-change diagnostic. Repeated renderings and endpoints do not add independent people. The 15$\degunit$ edit and ViTPose observations are excluded from restoration fitting and included in development evaluation. Generalization to these conditions is distinct from independent-population confirmation. GAVD supplies no examples to the completed experiments reported here.
+
+The reference is exact for the chosen synthetic projection, subject to the body model and geometry conventions; it is not an independent anatomical or clinical measurement. View-dependent 2D angles can change with camera placement even when 3D motion is unchanged. Systems such as OpenCap \citep{uhlrich2023opencap} illustrate the importance of independent movement validation when converting video landmarks into biomechanical estimates. The present experiment addresses an earlier question: what information survives the restoration of controlled projected observations?
+
+\clearpage
+\section{Predictive representations and paired supervision}
+Our skeleton predictor is inspired by S-JEPA \citep{abdelfattah2024sjepa}, adapted from action recognition to paired estimated-input/reference-target restoration. Features are numerical vectors representing joint--time tokens. The encoder consumes observed coordinates, confidence, availability, and timestamps. Coordinates are centered and scaled from retained observations, excluding artificially hidden values during pretraining. Four successive frames at one joint form a token: 128 frames and 12 joints give 384 tokens with width 96. A four-layer, four-head transformer processes the full window. During pretraining, connected joint regions and time intervals hide approximately half the available tokens. This artificial graph--time mask is separate from image occlusion. Other implemented mask policies are not completed experimental comparisons here.
+
+\fig{model-flow.pdf}{What is trained and what is deployed? Solid arrows carry data or targets; the dashed arrow updates teacher weights by exponential moving average (EMA). Estimated poses enter the student, while projected references enter the teacher in the student's observation-derived coordinate normalization. Paired auxiliaries compare states $a,b$ at shared queried tokens. The deployment path uses a frozen encoder and a separately trained coordinate readout with access to observed coordinates; the predictor and teacher are discarded. Direct coordinate training instead adapts encoder and readout jointly.}{fig:model}
+
+A two-layer predictor maps student features to teacher targets. The base JEPA objective matches temperature-scaled distributions over feature channels using cross-entropy, with a translated-view variance/covariance regularizer. This implementation draws on centered, sharpened teacher targets and noncollapse regularization \citep{caron2021dino,bardes2022vicreg}; it differs from I-JEPA's feature-regression objective. The reference teacher receives privileged projected coordinates. The model is a full-window restorer and does not forecast future dynamics or perform world-model planning.
+
+For a common queried token, write $H(v)=v-\mathbf1(\sum_d v_d)/D$ and
+\begin{equation}
+e_i=H\left[p_i/0.1-\mathrm{sg}\{(t_i-c)/0.06\}\right],\quad
+L_\Delta=\frac{\|e_b-e_a\|^2}{2D},\quad
+L_E=\frac{\|e_a\|^2+\|e_b\|^2}{2D}.
+\label{eq:feature}
+\end{equation}
+The predictor output is $p_i$, teacher output $t_i$, running center $c$, and $\mathrm{sg}$ stops target gradients. Both auxiliaries retain the base loss and use common support and a shared training-calibrated weight. On identical tensors, $L_\Delta=L_E-e_a^\top e_b/D$: difference supervision permits shared residuals to cancel. Separately trained teachers evolve differently, so this identity does not isolate a unique mechanism for a downstream difference. A coordinate-difference pretraining control converts coordinate residuals into a common observation-derived scale before differencing.
+
+\clearpage
+\section{Readouts, experimental design, and inference}
+The readout is a small network converting encoder features into coordinate corrections. It adds a predicted correction at observed positions and predicts missing coordinates directly. Frozen initialized features and a shuffled-reference JEPA control test whether useful restoration requires learned observation--reference correspondence. Shuffling assigns a different accepted window from the same person while retaining endpoint role and observation conditions. It does not randomize the paired movement states in the new feature-difference auxiliary.
+
+The base readout minimizes coordinate error $L_{\rm coord}$. The original change objective adds $L_{\rm scalar}=\mathbb E[((\Delta\widehat A-\Delta A)/180)^2]$ and a short-segment geometry penalty $L_{\rm geom}$, both at unit weight. Comparing it with base therefore tests a package of two additions. The repair experiment keeps $L_{\rm coord}+L_{\rm geom}$ fixed and compares $0.1L_{\rm scalar}$ against a calibrated dense term
+\begin{equation}
+L_{\rm dense}=\mathbb E_{(a,b)}\left[\frac{1}{|S_{ab}|}\sum_{(\ell,t)\in S_{ab}}
+\left[\frac{(\widehat\theta_{b,\ell,t}-\widehat\theta_{a,\ell,t})-(\theta_{b,\ell,t}-\theta_{a,\ell,t})}{180}\right]^2\right].
+\end{equation}
+$S_{ab}$ is common reference support for a pair; supported pairs receive equal weight. The new term constrains change at each leg and timestamp rather than only its excursion summary. Its initial auxiliary gradient energy is matched to the low-scalar arm using 32 training-only batches for each encoder and seed. This controls initial scale, not the complete optimization trajectory.
+
+\begin{table}[h]\centering\small
+\caption{Completed sequential experiments. Each uses seeds 17, 29, and 43. Final counts include the three seeds, not three independent populations. Core baselines also include six deterministic controls.}
+\label{tab:matrix}
+\begin{tabular}{p{.85in}p{3.0in}rr}\toprule
+Stage & Controlled question & Pretrain & Final\\\midrule
+Core & Five families, each with base and original change objectives &9&30\\
+Response & Delta features, endpoint features, coordinate differences; two readouts each &9&18\\
+Repair & Delta and endpoint encoders; dense versus low scalar &0&12\\\bottomrule
+\end{tabular}\end{table}
+
+Pretraining and readout fitting each use 2,000 updates; direct end-to-end fitting uses 4,000. Batch size is 16 and learning rate $3\times10^{-4}$. Equal update totals do not match coordinate-supervised exposure or encoder adaptation. Training samples hierarchically by person, motion, window, and pair. No broad coefficient or convergence study is available.
+
+Evaluation fixes reference support before examining predictions, using a common intersection across source-family variants. At least 16 frames and 80\% coverage must satisfy finite-angle and two-pixel segment checks. Nonfinite predictions or predicted segments below two pixels invalidate the measurement on admitted support. Failures remain in the denominator, with waveform cost 180$\degunit$ and response cost 720$\degunit$. Coordinate error divides joint distance by the rendered person-box diagonal. Direction accuracy requires $|\Delta A|>1\degunit$ and counts failures as wrong. Geometric assignment uses reference-valid hip, knee, and ankle pairs separated by at least four pixels: swapped distance better by over two pixels is wrong, a difference within two pixels is ambiguous, and nonfinite output is missing. All count as failures, independently of angular support.
+
+Means average conditions within windows, windows within motions, motions within people, and seeds. Core and response primary intervals use 2,000 crossed bootstrap draws, resampling people and seeds independently while preserving method pairing (seed 731). Repair's declared interval first averages seeds within each person and uses a paired-person $t$ interval over 14 people; it is conditional on the fitted seeds. All are development estimates. Later stages followed inspection of earlier results, and secondary comparisons are unadjusted for multiplicity.
+
+\clearpage
+\section{Results}
+\subsection{Coordinate restoration helps; the original change objective damages trajectories}
+Direct coordinate fitting reduces response error from 12.69$\degunit$ for unchanged observations to 7.54$\degunit$, waveform error from 18.57$\degunit$ to 12.07$\degunit$, and all-joint normalized landmark error (NLE) from 0.0718 to 0.0298. The exploratory response improvement is 5.14$\degunit$ with crossed 95\% interval [2.15, 8.65]$\degunit$. Every person's seed-averaged waveform and coordinate scores improve, whereas response improves for 10 of 14 people.
+
+\fig{objective-tradeoff.pdf}{How does the original change objective affect response and trajectory error? Each line joins two readouts within a model family: blue circles use coordinate supervision and orange triangles add the original scalar-change and geometry terms. Points are descriptive hierarchical means over the same 14 development people and three seeds, pooled over estimators. All eight waveform means deteriorate, while response effects vary. The dotted line in A is zero-response prediction (5.81$\degunit$), which has no corresponding waveform. Scores include failures; no uncertainty bars are implied.}{fig:tradeoff}
+
+The core shows waveform deterioration for all five families, every person's seed-averaged score, and every seed's population mean. Mean increases span 4.63--7.21$\degunit$. The three response families extend the mean pattern to eight, with a minimum increase of 4.39$\degunit$. These correlated comparisons describe one development population, rather than eight replications. Core paired JEPA illustrates why response alone is insufficient: its score improves from 10.69$\degunit$ to 10.07$\degunit$, while waveform error rises from 17.45$\degunit$ to 22.55$\degunit$.
+
+\begin{table}[h]\centering\small
+\caption{Selected pooled means under the completed protocol. Base is coordinate-only supervision; change is the original compound objective. NLE is dimensionless and includes all valid synthetic joints. Lower is better in every column. These are descriptive means, not a claim of statistically ordered methods.}
+\label{tab:results}
+\begin{tabular}{lrrr}\toprule
+Method / objective & Response ($\degunit$)& Waveform ($\degunit$)& NLE\\\midrule
+Unchanged observations &12.69&18.57&.0718\\
+Direct / base &7.54&12.07&.0298\\
+Initialized / base &9.43&16.97&.0687\\
+Shuffled JEPA / base &9.35&16.74&.0676\\
+Coordinate pretraining / base &10.25&15.88&.0487\\
+Endpoint JEPA / change &10.36&22.03&.0704\\
+Delta JEPA / change &9.99&21.76&.0699\\\bottomrule
+\end{tabular}\end{table}
+
+\clearpage
+\subsection{Primary contrasts remain uncertain, and failures affect their interpretation}
+The declared core primary compares JEPA with direct fitting under the original change objective, not the stronger direct/base model. Its response gain is 0.69$\degunit$ [${-0.64}$, 1.98]$\degunit$. The response follow-up compares delta with endpoint JEPA under that same readout: 9.99$\degunit$ versus 10.36$\degunit$, a gain of 0.37$\degunit$ [${-1.11}$, 1.76]$\degunit$. Neither establishes an incremental benefit. The corresponding base-readout means reverse the ordering, 10.94$\degunit$ versus 10.23$\degunit$. The secondary interaction is 1.09$\degunit$ [${-0.65}$, 2.85]$\degunit$, leaving the apparent readout dependence unresolved.
+
+\fig{failures-and-intervals.pdf}{What supports the apparent gains? A: response error separates into successful-output contribution (solid blue) and failure-cost contribution (hatched orange) at identical population weights. The dotted line is zero-response prediction. The successful contribution assigns zero to failures and is not a conditional success-only mean. B: comparator-minus-candidate effects; positive favors the candidate. Core and feature-response circles show crossed people/seed 95\% intervals, pooled over estimators. The repair square shows a person-$t$ 95\% interval for ViTPose-only waveform error, conditional on three seeds. The rows have different estimands and cannot be pooled. All use 14 people.}{fig:failure}
+
+Writing $F$ for prediction failure and $w$ for the hierarchical weights, the response score decomposes as
+\begin{equation}
+\overline E_\Delta=\mathbb E_w[\mathbf1_{\neg F}|\Delta\widehat A-\Delta A|]+720\,\Pr_w(F).
+\label{eq:failure}
+\end{equation}
+Delta and endpoint JEPA have failure contributions 3.778$\degunit$ and 4.055$\degunit$ and successful contributions 6.210$\degunit$ and 6.306$\degunit$. Thus 0.277$\degunit$, about 74\% of their 0.373$\degunit$ mean contrast, comes from the penalty term. This is score accounting, not a causal decomposition; the total remains uncertain. Direct/base has contributions 2.475$\degunit$ and 5.069$\degunit$, respectively.
+
+Zero-response prediction achieves 5.811$\degunit$, below all 16 neural variants in the response export. Improving on noisy input therefore does not establish useful recovery under the pooled metric. Direct/base still contains response information: direction accuracy is 66.1\%, and clear-observation response error is 3.90$\degunit$ versus 11.19$\degunit$ under occlusion. Zero prediction scores 5.81$\degunit$ in both strata. These descriptive results identify observation sensitivity without establishing natural-video calibration. A 50\% direction score would not itself establish chance performance without the sign distribution and a corresponding baseline.
+
+\clearpage
+\subsection{Readout repair and geometric laterality}
+On held-out-estimator ViTPose observations, delta JEPA's waveform error falls from 23.17$\degunit$ with the original change objective to 19.47$\degunit$ with its scalar coefficient reduced tenfold, and 19.19$\degunit$ with dense angular-change supervision. Reducing the weight recovers about 93\% of the dense arm's mean improvement over the original objective. This ratio describes mean gains and does not allocate causal credit.
+
+\fig{readout-repair.pdf}{Does dense supervision improve on a lower scalar weight? Delta JEPA readout means on ViTPose only, over the same 14 development people and three seeds. Original scalar, low scalar, and dense retain the same geometry term; the horizontal direct/base reference omits it. The low-scalar and dense arms are the matched repair comparison. Waveform recovery accompanies higher response error than the original scalar arm. All axes start at zero and all means include failure penalties. Intervals for the primary contrast appear in Figure~\ref{fig:failure}; no intervals are implied for these means.}{fig:repair}
+
+Dense versus low scalar has primary waveform gain 0.28$\degunit$ [${-0.19}$, 0.75]$\degunit$ under the person-$t$ interval; a crossed-bootstrap sensitivity interval is [${-0.44}$, 0.86]$\degunit$. Its response gain is 0.13$\degunit$ [${-2.69}$, 2.94]$\degunit$. These intervals establish neither superiority nor preserved response accuracy. Endpoint JEPA has a favorable secondary waveform gain of 0.72$\degunit$ [0.39, 1.05]$\degunit$; it is unadjusted and cannot replace the delta primary. Both dense arms remain roughly six degrees above direct/base waveform error on ViTPose.
+
+A post hoc laterality analysis of the completed exports provides a separate diagnostic; its comparisons are exploratory and unadjusted. Direct/base has mean failure 20.95\%, compared with 50.46\% for delta/change and 49.69\% for endpoint/change. Under global input renaming, the respective scores are 23.29\%, 83.40\%, and 81.12\%. These are geometric stress-test outcomes, not affected-side diagnostic accuracy; 50\% is not a calibrated chance baseline. Delta has 0.77 percentage points more assignment failure than endpoint, despite its lower response point estimate. Direct is not best on every outcome: its left/right excursion errors are 17.94/17.19$\degunit$, versus 15.70/15.29$\degunit$ for delta/change. These complementary measurements prevent a single-metric ranking.
+
+Training-population feature probes supply only limited mechanistic information. On 333 diagnostic pairs with person-separated probe fitting, the deployed delta encoder has mean squared response error 47.87 deg$^2$, against 20.82 deg$^2$ for zero prediction. Its reference-input teacher reaches 6.71 deg$^2$. Favorable teacher information is unavailable at deployment, and one regularized linear probe's failure does not show that all useful information is absent.
+
+\clearpage
+\section{Discussion, reproducibility, and limitations}
+The experiments support a bounded scientific claim: evaluating reference-feature prediction for restoration requires separating a signed movement response from trajectory quality and prediction reliability. Direct coordinate training improves the observed poses under this protocol. The original change-supervised package can reduce a scalar response error while worsening its supporting trajectory, and the low-weight readout control recovers most of the primary repair arm's mean recovery. The uncertain primary contrasts leave the incremental value of the tested feature-prediction modifications unresolved.
+
+The laterality construction makes this an informative structured-output problem. Physical side exchange changes a reference target, whereas corrupted input names should be corrected to the unchanged target. A restoration system must preserve that distinction while handling missing or noisy coordinates. This creates a concrete downstream test of what a predictive representation retains. It does not establish that the encoder is equivariant: the experiment uses augmentation and anatomically labeled supervision, without an architectural equivariance constraint or a completed direct equivariance test.
+
+S-JEPA \citep{abdelfattah2024sjepa} and general feature prediction in masked skeleton modeling \citep{sun2025gfp} already investigate skeletal latent targets for action recognition. S-JEPA uses its target encoder downstream; our deployed encoder processes estimated coordinates, while reference coordinates supply privileged teacher targets during training. PoseBERT \citep{baradel2022posebert} learns temporal pose reconstruction from motion-capture data, and MotionBERT \citep{zhu2023motionbert} learns motion representations through masked and noisy 2D-to-3D lifting. Our contribution is the controlled evaluation of a signed paired response, its geometric side assignment, and its downstream loss tradeoffs. These works and SmoothNet were not fitted as external baselines, so the results rank only the implemented procedures.
+
+The empirical limitations are substantial. Fourteen development people from two collections provide modest independent evidence despite many rendered conditions. The same cohort informed the sequential experiments, and three seeds give coarse information about training variability. There is no completed protected-person confirmation, GAVD evaluation, or clinical reference study. Two-dimensional angles are view-dependent, and synthetic edits do not reproduce natural pathology or acquisition errors. The zero-response result further limits any claim of reliable measurement recovery.
+
+Optimization also constrains interpretation. The fixed budgets, weights, and compact residual readout leave convergence and hyperparameter sensitivity unresolved. Gradients in the six new feature-prediction pretraining fits were clipped on nearly every update. Initial gradient matching does not keep subsequent gradients matched. Dense supervision changes temporal information and gradient locations, so the repair cannot identify percentile-gradient sparsity as its sole mechanism. Separate teachers and the absence of a new movement-pair randomization control prevent unique attribution to feature-difference coupling.
+
+For reproducibility, the study retains configuration, fitting ledgers, person-level scores, condition-level exports, comparisons, and diagnostic receipts for each stage. The accompanying audit links every numerical claim and vector plot to these artifacts; raw-data training is distinct from recomputing published summaries. The local transferred packet does not include raw rendered frames, per-example coordinate reconstructions, or complete checkpoints, so it cannot support a verified qualitative reconstruction panel or an end-to-end rerun on its own. Tutorial fixtures demonstrate calculations and are excluded from scientific results.
+
+A decisive next study would freeze the response and waveform comparisons before evaluating uninspected people, retain zero-response and direct-coordinate controls, and vary loss weight and training budget. It would separately assess anatomical naming under natural observations with synchronized references. Until then, the evidence is useful as an account of measurement and objective sensitivity under paired synthetic supervision, with the limits of the representation hypothesis exposed by its controls.
+
+\clearpage
+\section*{AI use disclosure}
+AI assistants helped inspect source code, notebooks, and saved experiment exports; formulate and critique the scientific framing; search primary literature; draft and revise the manuscript; create plotting and document-build code; and check numerical summaries and rendered pages. Independent assistant review considered scientific scope, evidence, statistics, and writing. The assistants did not collect participants, run the source training experiments, or provide independent empirical validation. Human authors remain responsible for verifying the complete manuscript, references, disclosure, and submission metadata before submission; this draft does not assert that such verification has occurred.
+\bibliography{references}
+\bibliographystyle{template/iclr2027/iclr2027_conference}
+\end{document}

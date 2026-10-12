@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1250" viewBox="0 0 1400 1250" role="img" aria-labelledby="title description">
+<title id="title">Paired synthetic supervision for 2D pose restoration</title>
+<desc id="description">Conceptual training pipeline. Rendered observations and projected joint references share motion and camera. A student predicts the slowly updated teacher features during pretraining. A separately trained coordinate readout uses the frozen encoder. Evaluation separates coordinates, movement and timing support. Calibration and real-video validation are pending.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#53677a"/></marker></defs>
+<rect width="1400" height="1250" fill="#ffffff"/>
+<text x="44" y="51" font-family="Arial, sans-serif" font-size="29" font-weight="700" text-anchor="start" fill="#182c42">Paired synthetic supervision for 2D pose restoration</text>
+<text x="44" y="83" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start" fill="#53677a">Conceptual design · projected references guide training, never inference</text>
+<text x="44" y="129" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#285aa4">1   Prepare matched observations and reference targets</text>
+<rect x="44" y="182" width="250" height="110" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="169.0" y="214" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">AMASS motion</text>
+<text x="169.0" y="241" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Body-model animation</text>
+<text x="169.0" y="264" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Person-separated splits</text>
+<rect x="357" y="157" width="270" height="108" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="492.0" y="189" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Matched renders</text>
+<text x="492.0" y="216" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Fixed motion and camera</text>
+<text x="492.0" y="239" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Clean / blur / obstruction</text>
+<rect x="692" y="157" width="268" height="108" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="826.0" y="189" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Frozen pose estimators</text>
+<text x="826.0" y="216" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">HRNet · RTMPose · ViTPose</text>
+<text x="826.0" y="239" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Extract 12 body joints</text>
+<rect x="1023" y="157" width="333" height="108" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="1189.5" y="189" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Observed tracks</text>
+<text x="1189.5" y="216" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Coordinates, scores, missingness</text>
+<text x="1189.5" y="239" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">64 samples at 25 Hz</text>
+<polyline points="294,211 357,211" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="627,211 692,211" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="960,211 1023,211" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="357" y="306" width="603" height="88" rx="12" fill="#e8f5f0" stroke="#d1dde6"/>
+<text x="658.5" y="338" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Same-view projected joints</text>
+<text x="658.5" y="365" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Synthetic anatomical proxies; training and scoring only</text>
+<polyline points="294,265 322,265 322,350 357,350" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1023" y="329" font-family="Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#53677a">Fit on HRNet + RTMPose;</text>
+<text x="1023" y="355" font-family="Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#53677a">evaluate ViTPose without fitting</text>
+<text x="1023" y="381" font-family="Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#53677a">its development labels.</text>
+<text x="44" y="445" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#285aa4">2   Pretrain by predicting reference features</text>
+<rect x="44" y="479" width="240" height="92" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="164.0" y="511" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Masked observations</text>
+<text x="164.0" y="538" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Estimated tracks only</text>
+<rect x="344" y="479" width="255" height="92" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="471.5" y="511" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Online encoder</text>
+<text x="471.5" y="538" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Learn temporal features</text>
+<rect x="659" y="479" width="246" height="92" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="782.0" y="511" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Predictor</text>
+<text x="782.0" y="538" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Predict masked features</text>
+<rect x="997" y="553" width="359" height="112" rx="12" fill="#fff1e3" stroke="#d1dde6"/>
+<text x="1176.5" y="585" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Feature-matching loss</text>
+<text x="1176.5" y="612" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Gradients update the online branch</text>
+<text x="1176.5" y="635" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Reference branch is detached</text>
+<polyline points="284,525 344,525" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="599,525 659,525" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="905,525 950,525 950,582 997,582" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="44" y="653" width="240" height="92" rx="12" fill="#e8f5f0" stroke="#d1dde6"/>
+<text x="164.0" y="685" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Projected references</text>
+<text x="164.0" y="712" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Same motion and times</text>
+<rect x="344" y="653" width="255" height="92" rx="12" fill="#e8f5f0" stroke="#d1dde6"/>
+<text x="471.5" y="685" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Teacher encoder</text>
+<text x="471.5" y="712" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Slow average of online weights</text>
+<rect x="659" y="653" width="246" height="92" rx="12" fill="#e8f5f0" stroke="#d1dde6"/>
+<text x="782.0" y="685" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Target features</text>
+<text x="782.0" y="712" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Training supervision</text>
+<polyline points="284,699 344,699" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="599,699 659,699" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="905,699 950,699 950,632 997,632" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="471,571 471,653" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="489" y="617" font-family="Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start" fill="#53677a">Weight average</text>
+<text x="44" y="799" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#285aa4">3   Fit a coordinate readout; restore tracks using observed inputs</text>
+<rect x="44" y="831" width="240" height="91" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="164.0" y="863" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Observed tracks</text>
+<text x="164.0" y="890" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Full window at inference</text>
+<rect x="344" y="831" width="255" height="91" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="471.5" y="863" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Frozen encoder</text>
+<text x="471.5" y="890" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Retain pretrained features</text>
+<rect x="659" y="831" width="246" height="91" rx="12" fill="#eaf1fb" stroke="#d1dde6"/>
+<text x="782.0" y="863" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Coordinate readout</text>
+<text x="782.0" y="890" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Fit on training pairs only</text>
+<rect x="997" y="831" width="359" height="91" rx="12" fill="#e8f5f0" stroke="#d1dde6"/>
+<text x="1176.5" y="863" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Restored 2D trajectories</text>
+<text x="1176.5" y="890" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Teacher and targets absent at inference</text>
+<polyline points="284,877 344,877" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="599,877 659,877" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="905,877 997,877" fill="none" stroke="#53677a" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="44" y="957" font-family="Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#53677a">Controls: coordinate pretraining, direct restoration, initialized readout, shuffled pairing.</text>
+<text x="44" y="1008" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#285aa4">4   Evaluate different people and the held extractor family</text>
+<rect x="44" y="1038" width="410" height="94" rx="12" fill="#f0f3f6" stroke="#d1dde6"/>
+<text x="249.0" y="1070" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Coordinate agreement</text>
+<text x="249.0" y="1097" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Error relative to proxy references</text>
+<rect x="488" y="1038" width="430" height="94" rx="12" fill="#f0f3f6" stroke="#d1dde6"/>
+<text x="703.0" y="1070" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Movement fidelity</text>
+<text x="703.0" y="1097" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Displacement, amplitude, L/R separation</text>
+<rect x="953" y="1038" width="403" height="94" rx="12" fill="#f0f3f6" stroke="#d1dde6"/>
+<text x="1154.5" y="1070" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#182c42">Timing and support</text>
+<text x="1154.5" y="1097" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#53677a">Peak error plus eligible-record counts</text>
+<rect x="44" y="1164" width="1312" height="59" rx="10" fill="#fffaf4" stroke="#c2935d" stroke-dasharray="7 5"/>
+<text x="65" y="1201" font-family="Arial, sans-serif" font-size="19" font-weight="400" text-anchor="start" fill="#85541e">Pending: calibration controls, reference timing self-check and independent real-video validation.</text>
+</svg>

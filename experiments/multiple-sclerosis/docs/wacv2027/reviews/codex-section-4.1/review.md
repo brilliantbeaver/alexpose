@@ -1,0 +1,15 @@
+1. **HOLDS — Numerical claims.** `section-4.1-refined.md:20`, `:36`, `:44` and `:50` match the sampler’s budget, weights and retained diagnostics. The notebook defines **512 masks** at `02_anatomical_mask_and_tokenization.txt:194`; saved coverage values appear at `:210`. The retained recalculation supports **63.3%** (`notebook-audit.md:59`). The separate **5,000-mask** percentages and **58.29%** pooled facial average agree with `notebook-audit-checks.json:49`. Window, token and exact-time denominators match `sjepa/masking_v2.py:225`.
+
+2. **HOLDS — Sampling and guarantees.** `section-4.1-refined.md:20`, `:24` and `:48` correctly distinguish the 158-token stopping budget, 36-draw limit, whole-region overshoot, per-draw six-block limit and possible eight-block joint coverage. The guarantee preserves one selected-set context token somewhere, without guaranteeing hip, leg or per-block context (`sjepa/masking_v2.py:135`, `:149`). Masks are drawn per example (`sjepa/masking_v2.py:184`; `sjepa/train_v2.py:205`).
+
+3. **HOLDS — Scientific scope and attribution.** `section-4.1-refined.md:26`, `:52` and `:76` bound clinical motivation and explicitly leave masking benefit unmeasured. Original S-JEPA receives attribution, with motion-aware selection described probabilistically. This matches the retained primary-source verification at `section-4.1-verification.md:69` and literature records at `venue-and-literature.md:52`. No unperformed comparison or demonstrated temporal benefit is claimed. I performed no new external verification.
+
+4. **HOLDS — Reflection and readout.** `section-4.1-refined.md:60` accurately describes the unchanged mask applied after bilateral input permutation (`sjepa/train_v2.py:213`; `sjepa/augment.py:85`), without equating it with held-out leakage or claiming measured accuracy effects. The **161-position output readout** at `section-4.1-refined.md:62` matches `notebook-audit-checks.json:103`; full-input encoding precedes output selection (`sjepa/models.py:308`; `sjepa/full_experiment.py:26`).
+
+5. **HOLDS — Accessibility and visibility terminology.** `section-4.1-refined.md:18` explains masks and tokens before introducing sampling details. `:24` describes “availability as context,” and `:48` explains the coverage denominators. These describe mask availability without implying detector confidence or observed physical visibility.
+
+**Findings:** None meeting the reporting threshold. Confidence is high in the source/record correspondence; deterministic calculations were checked against retained records, not rerun. Disclosed, unmeasured limitations are not new findings.
+
+Reading anchor: the complete `section-4.1-refined.md` has **78 lines**. Its final line ends: “Determining whether the anatomical weights improve learning would require a new, matched experiment.” Both added files were absent at the base commit; the complete 105-line verification note was also read.
+
+Verdict: approve

@@ -1,0 +1,325 @@
+{
+  "scope": "Development evidence; no clinical or independent confirmation.",
+  "date": "2026-09-25",
+  "figures": {
+    "actual-response-example": {
+      "size_inches": [
+        6.8,
+        2.22
+      ],
+      "caption": "Actual aggregate measurement example, not a raw pose sequence. The displayed person is BioMotionLab_NTroje::rub002, selected as the first canonical ID in lexicographic order, in a clear side view with original physical orientation. A is right-minus-left image-plane knee excursion; \u0394A compares the edited and original motion. Curves are published person means across source motions, naming conditions, three pose estimators and three fitted seeds. Each dose contains 135 repeated contrasts per method, all with successful predictions, not 135 people. The 15\u00b0 edit was excluded from training. The nominal body-model edit on the horizontal axis is different from the measured reference change on the vertical axis. This single-person example illustrates attenuation and does not estimate population accuracy. Raw frames, reference trajectories and restored trajectories are absent from the local evidence transfer.",
+      "source_files": [
+        "outputs/iclr/jepa-response/evaluation/response-curves-person.csv"
+      ],
+      "text_outside_canvas": []
+    },
+    "actual-response-example-compact": {
+      "size_inches": [
+        6.8,
+        1.72
+      ],
+      "caption": "Actual aggregate measurement example, not a raw pose sequence. The displayed person is BioMotionLab_NTroje::rub002, selected as the first canonical ID in lexicographic order, in a clear side view with original physical orientation. A is right-minus-left image-plane knee excursion; \u0394A compares the edited and original motion. Curves are published person means across source motions, naming conditions, three pose estimators and three fitted seeds. Each dose contains 135 repeated contrasts per method, all with successful predictions, not 135 people. The 15\u00b0 edit was excluded from training. The nominal body-model edit on the horizontal axis is different from the measured reference change on the vertical axis. This single-person example illustrates attenuation and does not estimate population accuracy. Raw frames, reference trajectories and restored trajectories are absent from the local evidence transfer.",
+      "source_files": [
+        "outputs/iclr/jepa-response/evaluation/response-curves-person.csv"
+      ],
+      "text_outside_canvas": []
+    },
+    "response-benchmarks": {
+      "size_inches": [
+        6.8,
+        2.75
+      ],
+      "caption": "Selected restoration benchmarks on the same 14 development people and three fitted seeds. Dots are descriptive means with equal weight per person and seed; no error bars are implied. Base denotes coordinate-supervised restoration, and change denotes the original paired-change readout objective. The direct model trains end to end; the other learned representations are frozen during readout training, so these are practical benchmarks rather than a pure pretraining ablation. Both angular errors include declared measurement-failure penalties. The dotted line is the 5.81\u00b0 response error obtained by always predicting \u0394A = 0; it is a diagnostic of response recovery, not a pose-restoration model and has no waveform score. The six selected rows do not replace the complete method table.",
+      "source_files": [
+        "outputs/iclr/walking-core/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/per-person.csv"
+      ],
+      "text_outside_canvas": []
+    },
+    "primary-contrasts": {
+      "size_inches": [
+        6.8,
+        2.4
+      ],
+      "caption": "The three declared primary comparisons, each on the same 14 development people and three fitted seeds. Core and response-pretraining arms both use the original paired-change readout; their bars are 95% crossed person/seed bootstrap intervals. The repair fixes the delta-JEPA encoder; its bar is a 95% Student-t interval over 14 paired person effects after averaging the three fitted seeds, conditional on those fits; it uses the held-out ViTPose extractor and waveform error, while the first two use movement-response error pooled across three extractors. Positive values favor the candidate named first. All intervals span zero. These are successive development comparisons on reused participants, not independent replications, and the three effects must not be pooled.",
+      "source_files": [
+        "outputs/iclr/walking-core/evaluation/comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/comparisons.json",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "text_outside_canvas": []
+    },
+    "primary-contrasts-compact": {
+      "size_inches": [
+        6.8,
+        1.88
+      ],
+      "caption": "The three declared primary comparisons, each on the same 14 development people and three fitted seeds. Core and response-pretraining arms both use the original paired-change readout; their bars are 95% crossed person/seed bootstrap intervals. The repair fixes the delta-JEPA encoder; its bar is a 95% Student-t interval over 14 paired person effects after averaging the three fitted seeds, conditional on those fits; it uses the held-out ViTPose extractor and waveform error, while the first two use movement-response error pooled across three extractors. Positive values favor the candidate named first. All intervals span zero. These are successive development comparisons on reused participants, not independent replications, and the three effects must not be pooled.",
+      "source_files": [
+        "outputs/iclr/walking-core/evaluation/comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/comparisons.json",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "text_outside_canvas": []
+    },
+    "readout-repair": {
+      "size_inches": [
+        6.8,
+        2.45
+      ],
+      "caption": "Readout repair with the same frozen delta-JEPA encoder and held-out ViTPose inputs. Dots are descriptive means over 14 people and three seeds; lower is better. The original scalar paired-change loss produces greater trajectory error than the reduced-weight scalar loss or dense angular-change alternative. The declared dense-versus-low-scalar advantage is only 0.28\u00b0 (Figure primary contrasts); this controlled comparison does not establish a benefit from dense supervision. The base readout uses no change loss. Response error retains the 720\u00b0 penalty for failed eligible measurement pairs, and waveform error retains its 180\u00b0 penalty, so numerical improvements may combine successful-output accuracy with fewer failures. This plot does not mix the ViTPose primary population with all-extractor summaries.",
+      "source_files": [
+        "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv"
+      ],
+      "text_outside_canvas": []
+    },
+    "core-objective-tradeoff": {
+      "size_inches": [
+        6.8,
+        2.6
+      ],
+      "caption": "Matched downstream objectives in all five walking-core model families, with 14 development people and three fitted seeds. Each connector joins descriptive means for the same model family; circles use the base coordinate objective and diamonds add the original scalar paired-change and short-segment geometry terms. All five families have greater trajectory error after the addition, whereas response error moves in both directions. Core reference-paired JEPA slightly improves the scalar response while its trajectory worsens. This identifies a tradeoff in the tested objective package; it does not by itself isolate the scalar weight, quantile differentiation or geometry penalty as the mechanism.",
+      "source_files": [
+        "outputs/iclr/walking-core/evaluation/per-person.csv"
+      ],
+      "text_outside_canvas": []
+    }
+  },
+  "values": {
+    "actual_measurement_example": {
+      "selection_rule": "Lexicographically first canonical person; side camera, clear observation, original physical state.",
+      "person": "BioMotionLab_NTroje::rub002",
+      "camera": "side",
+      "observation": "clear",
+      "physical_state": "original",
+      "aggregation": "Published person curves average naming/extractor conditions and windows within raw motions, raw motions within person, then three fitted seeds.",
+      "is_raw_sample": false,
+      "records": [
+        {
+          "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": false,
+          "movement_level_deg": 0.0,
+          "movement_state": "no_change",
+          "reference_change": 0.0,
+          "predicted_change": 0.0,
+          "response_error": 0.0,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": false,
+          "movement_level_deg": 5.0,
+          "movement_state": "knee_flexion",
+          "reference_change": 2.609631927382708,
+          "predicted_change": 0.266260133914257,
+          "response_error": 2.7205252526718264,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": false,
+          "movement_level_deg": 10.0,
+          "movement_state": "knee_flexion",
+          "reference_change": 6.248531934443103,
+          "predicted_change": 0.4625513388853084,
+          "response_error": 5.9401092571198335,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": true,
+          "movement_level_deg": 15.0,
+          "movement_state": "knee_flexion",
+          "reference_change": 9.509274181011577,
+          "predicted_change": 0.5448847438230094,
+          "response_error": 9.075887168376113,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "P-direct-none-base",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": false,
+          "movement_level_deg": 0.0,
+          "movement_state": "no_change",
+          "reference_change": 0.0,
+          "predicted_change": 0.0,
+          "response_error": 0.0,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "P-direct-none-base",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": false,
+          "movement_level_deg": 5.0,
+          "movement_state": "knee_flexion",
+          "reference_change": 2.609631927382708,
+          "predicted_change": 1.3740243557297644,
+          "response_error": 1.5561715327578645,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "P-direct-none-base",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": false,
+          "movement_level_deg": 10.0,
+          "movement_state": "knee_flexion",
+          "reference_change": 6.248531934443103,
+          "predicted_change": 2.796894345815667,
+          "response_error": 3.552097116455812,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        },
+        {
+          "method": "P-direct-none-base",
+          "canonical_person_id": "BioMotionLab_NTroje::rub002",
+          "camera_id": "side",
+          "observation": "clear",
+          "physical_state": "original",
+          "held_intervention": true,
+          "movement_level_deg": 15.0,
+          "movement_state": "knee_flexion",
+          "reference_change": 9.509274181011577,
+          "predicted_change": 4.108069068574736,
+          "response_error": 5.488375157898453,
+          "reference_eligible": 135,
+          "prediction_success": 135,
+          "prediction_coverage": 1.0
+        }
+      ]
+    },
+    "benchmark_means": [
+      {
+        "method": "unchanged",
+        "response_error": 12.688083290689914,
+        "waveform_error": 18.570832667880868
+      },
+      {
+        "method": "P-direct-none-base",
+        "response_error": 7.544154874539721,
+        "waveform_error": 12.073284438956005
+      },
+      {
+        "method": "I-initialized-none-base",
+        "response_error": 9.433068166592536,
+        "waveform_error": 16.96852060975935
+      },
+      {
+        "method": "M-coordinate-graph_time-base",
+        "response_error": 10.24727103476282,
+        "waveform_error": 15.880002713673658
+      },
+      {
+        "method": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+        "response_error": 10.361088353394438,
+        "waveform_error": 22.03110336675964
+      },
+      {
+        "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "response_error": 9.98803484914985,
+        "waveform_error": 21.764814075398224
+      }
+    ],
+    "zero_response_error": 5.8108295340231875,
+    "primary_contrasts": [
+      {
+        "stage": "A  Walking core",
+        "metric": "response_error",
+        "improvement": 0.6880836675524532,
+        "interval": [
+          -0.6402124308922824,
+          1.976709265818937
+        ],
+        "interval_key": "crossed_person_seed_ci95"
+      },
+      {
+        "stage": "B  Response pretraining",
+        "metric": "response_error",
+        "improvement": 0.3730535042445884,
+        "interval": [
+          -1.1102719742482026,
+          1.7603366113367258
+        ],
+        "interval_key": "crossed_person_seed_ci95"
+      },
+      {
+        "stage": "C  Delta-JEPA repair",
+        "metric": "waveform_error",
+        "improvement": 0.2788559690664355,
+        "interval": [
+          -0.19491350692604092,
+          0.7526254450589119
+        ],
+        "interval_key": "person_averaged_t_ci95"
+      }
+    ],
+    "repair_means": [
+      {
+        "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+        "waveform_error": 23.17091632374132,
+        "response_error": 11.927948822108302
+      },
+      {
+        "method": "R-repair-jepa_delta_v1-scalar_low",
+        "waveform_error": 19.473519143585268,
+        "response_error": 13.107513139592587
+      },
+      {
+        "method": "R-repair-jepa_delta_v1-dense_change",
+        "waveform_error": 19.194663174518833,
+        "response_error": 12.978403451197792
+      },
+      {
+        "method": "F-response-jepa_delta_v1-graph_time-base",
+        "waveform_error": 19.12569970146412,
+        "response_error": 14.549152161559208
+      }
+    ]
+  },
+  "sources_sha256": {
+    "outputs/iclr/walking-core/evaluation/per-person.csv": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+    "outputs/iclr/jepa-response/evaluation/response-curves-person.csv": "e5b97a0afb53b43c1d4dd95bcd6a5ac3c4e2bb7de8346e8c7e7fc74388ac5af1",
+    "outputs/iclr/readout-repair/development/evaluation/per-person-by-extractor.csv": "890fe865fcbd1ce20ccf8a3e82534854a9b5f82fce4a346e01ac26172e0a7290",
+    "outputs/iclr/walking-core/evaluation/comparisons.json": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+    "outputs/iclr/jepa-response/evaluation/comparisons.json": "f22fe912d0b79876843810e5cea714895943f3fbc686047d54fd89f9599a8ce6",
+    "outputs/iclr/readout-repair/development/evaluation/comparisons.json": "abaae8403ef37899fbf8933163fe9b05d2b23dfc0838a30263ba17631873983e"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "main_pages": 9,
+  "total_pages": 23,
+  "independent_reviews": [
+    "reviews/clarity-evidence-review.md",
+    "reviews/clarity-appendix-review.md"
+  ],
+  "reported_results_unchanged": true,
+  "equations_citations_and_main_tables_unchanged": true,
+  "figure_table_template_and_bibliography_assets_verified": 40,
+  "human_attested_disclosure_byte_identical": true,
+  "world_model_references_by_section": {
+    "abstract": 1,
+    "introduction": 1,
+    "discussion": 1
+  },
+  "numeric_token_changes": {
+    "paper-v08.tex": {
+      "added": {
+        "95": 1,
+        "0": 1,
+        "5": 1
+      },
+      "removed": {
+        "2": 1,
+        "74": 1
+      }
+    },
+    "appendix.tex": {
+      "added": {},
+      "removed": {}
+    }
+  },
+  "numeric_token_change_explanation": "Added5and95 explicitly define existing fifth/ninety-fifth percentile excursion; added0defines zero predictor. Removed repeated2Dmention in abstract and redundant74percent-failure-rate contrast. No reported value changed.",
+  "visual_review": "All23renderedpages inspected through contact sheets, with full-resolution review of abstract/introduction/discussion and key methods/results pages. No clipping, overlaps or missing content found. Fonts, page boundaries and citations pass structural checks.",
+  "changed_rendered_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    21,
+    22
+  ],
+  "paper_sha256": "48c65dedd88de1fd17e7acce3db232e352fd5c395847aca8bfdcd248605a0735",
+  "source_sha256": "00f2570880b6d8b76c03bd7b074f43b170280794fcabcaa477bf2f7e79b6f975",
+  "appendix_sha256": "13b06b4f8faadfdc362e624b49cb56356ad7288acd3fd86333290f4972408b12",
+  "rebuild_receipt": "qa/clarity-rebuild.json"
+}

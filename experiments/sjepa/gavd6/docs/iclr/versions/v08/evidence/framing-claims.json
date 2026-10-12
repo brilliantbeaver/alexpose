@@ -1,0 +1,398 @@
+{
+  "scope": "Added qualitative framing and participant illustration; no new fitting, data transformation, or statistical hypothesis test. Paths are repository-relative.",
+  "status": "Current manuscript describes the experiments independently of local setup. Main paper and both appendix versions remove notebook routes, workspace paths, and machine execution details; quantitative results and scientific limits are preserved. Earlier support hashes describe their dated review snapshots.",
+  "claims": [
+    {
+      "id": "F01",
+      "location": "Abstract and Introduction",
+      "claim": "JEPA/SSL and world-model research motivate measuring what predictive movement representations preserve; this completed system restores a full observed window using privileged projected references and does not test future dynamics or planning.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/training.py",
+        "notebooks/gait_fidelity/00_start_here.ipynb"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/framing-literature-and-guidelines.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "A conceptual connection does not establish a learned biomechanical world model, purely unlabelled-observation SSL, or general ineffectiveness of predictive representations.",
+      "primary_source_urls": [
+        "https://openreview.net/forum?id=BZ5a1r-kVsf",
+        "https://openaccess.thecvf.com/content/CVPR2023/html/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.html"
+      ]
+    },
+    {
+      "id": "F02",
+      "location": "Introduction clinical motivation",
+      "claim": "Stroke symmetry/mechanics, Parkinson symptom laterality, and unilateral/bilateral OA evidence motivate retaining measurements and anatomical names without defining healthy gait by symmetry.",
+      "source_paths": [
+        "docs/iclr/versions/v08/references.bib",
+        "docs/studies/gait-fidelity/data/clinical-candidates.md"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/framing-literature-and-guidelines.md",
+        "docs/iclr/versions/v08/reviews/case-figure-evidence.md"
+      ],
+      "limits": "Primary literature is audited by the literature reviewer; these populations and clinical endpoints were not evaluated in this experiment. No synthetic disease label, affected-side classifier, or treatment effect follows.",
+      "primary_source_urls": [
+        "https://link.springer.com/article/10.1186/s12984-020-00732-z",
+        "https://link.springer.com/article/10.1007/s00415-024-12379-0",
+        "https://pubmed.ncbi.nlm.nih.gov/22385873/"
+      ]
+    },
+    {
+      "id": "F03",
+      "location": "Section3.1 and Appendix data integrity",
+      "claim": "Coordinate input/output grid is [B,128,12,2]; channels [B,128,12,5] regroup into [B,32,12,20] then [B,384,96], and decode through [B,384,8] back to the coordinate grid.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py",
+        "outputs/iclr/walking-core/config.json",
+        "outputs/iclr/jepa-response/config.json",
+        "outputs/iclr/readout-repair/config.json",
+        "notebooks/gait_fidelity/03_experiment_matrix.ipynb"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Preserves joint-index slots and timestamp order, not raw data values or anatomical correctness of corrupted names. B counts endpoint rows, not independent people.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F04",
+      "location": "Section3.2 and Appendix tensor contract",
+      "claim": "All token slots persist; artificial hiding zeroes xy/confidence/usability while retaining positional/time identifiers; natural missingness keeps safe xy and can retain finite native confidence.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py",
+        "notebooks/gait_fidelity/02_masking_and_controls.ipynb",
+        "notebooks/gait_fidelity/03_experiment_matrix.ipynb"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Availability masking does not delete time/joint slots or prove successful imputation.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F05",
+      "location": "Section3.2 and Appendix normalization",
+      "claim": "Origin and shared isotropic scale depend only on observed artificially unhidden context; targets share that transform; inference normalization uses the observed window.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity/training.py",
+        "notebooks/gait_fidelity/01_data_and_references.ipynb"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "This is an implemented normalization boundary, not a claim that preprocessing leaves the original coordinates or motion unchanged.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F06",
+      "location": "Section3.3 and Appendix data integrity",
+      "claim": "Canonical people inherit train/development/locked-confirmation assignments before derived variants; duplicate motion hashes cannot cross known identities/splits; windows and variants retain provenance.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity/cohort.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/data.py",
+        "src/gavd6_sjepa/research_directions/synthetic_training_v2/contracts.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/preparation.py"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Relies on audited known identities; does not exclude unknown aliases or prior upstream estimator exposure. Full original arrays are not in the compact packet.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F07",
+      "location": "Section3.3 and Appendix data integrity",
+      "claim": "Training and calibration losses select training-person pairs; development references may be read during ordinary bundle validation; repair validates a lazy training-only view.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity/training.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/response_calibration.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/repair_training.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/data.py"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Do not claim development references are never opened. Later design choices reuse development outcomes, so loss separation does not imply untouched evaluation.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F08",
+      "location": "Section3.3 and Appendix data integrity",
+      "claim": "15degree edits and ViTPose are held out of fitting/calibration; ordinary fitting/loading excludes locked confirmation; executed configurations record confirmation_admitted false.",
+      "source_paths": [
+        "src/gavd6_sjepa/research_directions/gait_fidelity/data.py",
+        "src/gavd6_sjepa/research_directions/gait_fidelity/preparation.py",
+        "outputs/iclr/walking-core/config.json",
+        "outputs/iclr/jepa-response/config.json",
+        "outputs/iclr/readout-repair/config.json"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Held conditions within development are not independent-person confirmation; no completed protected-person outcome exists.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F09",
+      "location": "Section3.3; Appendix A; full technical Appendix I record counts",
+      "claim": "Completed training uses112people,692motions,1645windows and315840endpointrecords; development uses14people,155windows,55800records; leading record counts differ because held conditions are excluded in fitting.",
+      "source_paths": [
+        "outputs/iclr/jepa-response/ledger.json",
+        "outputs/iclr/jepa-response/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Record counts remain nested within people; the larger candidate cohort plan is not the admitted cohort.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F10",
+      "location": "Section3.3 and Appendix question sequence",
+      "claim": "H0 mean comparator-minus-candidate gain\u22640 versus gain>0 retrospectively formalizes the three recorded primary comparisons; original two-sided intervals and no-margin status are retained.",
+      "source_paths": [
+        "outputs/iclr/walking-core/config.json",
+        "outputs/iclr/jepa-response/config.json",
+        "outputs/iclr/readout-repair/config.json",
+        "outputs/iclr/walking-core/evaluation/comparisons.json",
+        "outputs/iclr/jepa-response/evaluation/comparisons.json",
+        "outputs/iclr/readout-repair/development/evaluation/comparisons.json"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "No explicit original notebook H0/H1 was found; no preregistration, new one-sided test, null acceptance, equivalence, or response noninferiority is asserted.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F11",
+      "location": "Introduction and experimental-sequence appendix (D concise; H technical)",
+      "claim": "The completed sequence tests core reference-feature learning, endpoint versus feature-difference supervision, and readout repair; later analyses reuse development results. Alternative masking, external refiners, and movement re-pairing remain untested.",
+      "source_paths": [
+        "notebooks/gait_fidelity/README.md",
+        "notebooks/gait_fidelity/07_completed_study_walkthrough.ipynb",
+        "notebooks/gait_fidelity/experiments/A_masking_and_change.ipynb",
+        "notebooks/gait_fidelity/experiments/B_mask_structure_controls.ipynb",
+        "notebooks/gait_fidelity/experiments/C_practical_benchmarks.ipynb",
+        "notebooks/gait_fidelity/experiments/D_pretraining_information.ipynb",
+        "notebooks/gait_fidelity/experiments/E_pairing_and_label_controls.ipynb",
+        "notebooks/gait_fidelity/experiments/F_jepa_response.ipynb",
+        "notebooks/gait_fidelity/experiments/G_readout_repair.ipynb",
+        "docs/studies/gait-fidelity/methods/core-to-followup-20260924.md"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Only completed study experiments supply reported empirical evidence; proposed alternatives do not provide independent confirmation.",
+      "primary_source_urls": [],
+      "historical_claim_before_portability_cleanup": {
+        "location": "Introduction and Appendix notebook map",
+        "claim": "Notebooks00\u201307/A\u2013G reconstruct definitions, algorithm and completed-study questions while distinguishing source results, small teaching calculations and unexecuted controls.",
+        "limits": "15notebooks are not15completed scientific experiments. Alternative masks, learned external refiners, and movement re-pairing are not completed evidence; only source ledgers support fitted results."
+      }
+    },
+    {
+      "id": "F12",
+      "location": "Historical review records and snapshots; no current manuscript location.",
+      "claim": "The retained receipt reports targeted checks, F/G calculations, and completed evidence walkthrough; full fixture execution blocked on disk exhaustion and HAIC validation false.",
+      "source_paths": [
+        "docs/studies/gait-fidelity/records/tutorial-refresh-20260925.json",
+        "notebooks/gait_fidelity/scripts/execute_tutorials.py",
+        "notebooks/gait_fidelity/scripts/execute_walkthrough.py"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/methods-framing-audit.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "The current source notebooks are not claimed to have all freshly executed; recorded notebook hashes and later edits are not conflated. No training was run for this framing review.",
+      "primary_source_urls": [],
+      "status": "Historical audit only; removed from both manuscript appendix versions during the portability cleanup."
+    },
+    {
+      "id": "F13",
+      "location": "Appendix E, Figure8 and main restoration cross-reference",
+      "claim": "All14people in canonical order,3seeds,126panel/person/seedrows and42means; pooled noisy\u2212direct favors10/14, clear zero\u2212direct14/14, occluded zero\u2212direct1/14.",
+      "source_paths": [
+        "docs/iclr/versions/v08/evidence/case-figure-seeds.csv",
+        "docs/iclr/versions/v08/evidence/case-figure-person.csv",
+        "docs/iclr/versions/v08/evidence/case-figure-provenance.json",
+        "outputs/iclr/walking-core/evaluation/per-person.csv",
+        "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/case-figure-evidence.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Exploratory profiles, no selected participant examples, no pose reconstructions, no clinical status, no binary-validity interpretation. Seed ranges are not CIs; x-axis ranges/comparators differ.",
+      "primary_source_urls": []
+    },
+    {
+      "id": "F14",
+      "location": "Appendix interpretation of participant profiles",
+      "claim": "Higher error than zero prediction under occlusion describes the measured error ranking, not proof that a model contains no response information.",
+      "source_paths": [
+        "docs/iclr/versions/v08/evidence/case-figure-person.csv",
+        "docs/iclr/versions/v08/evidence/method_summary.csv"
+      ],
+      "audit_paths": [
+        "docs/iclr/versions/v08/reviews/case-figure-evidence.md",
+        "docs/iclr/versions/v08/reviews/evidence-framing-final.md"
+      ],
+      "limits": "Avoid categorical failure-to-recover wording. Outcome-conditioned summaries cannot establish absence of information or clinical utility.",
+      "primary_source_urls": []
+    }
+  ],
+  "support_file_sha256_at_review": {
+    "docs/iclr/versions/v08/evidence/case-figure-person.csv": "70b98da343ea1488c3ce2fe89af63e609f1cd7d4ac3147e429d3a62db685e87f",
+    "docs/iclr/versions/v08/evidence/case-figure-provenance.json": "94be0be1cb5d5b067fec4671a1c332c3a5ef5ce0419196dd53be7d545ddebdfe",
+    "docs/iclr/versions/v08/evidence/case-figure-seeds.csv": "45aa52689b7b3c19dbadb035a020ae4cc69423ca0112cf4311c40362c2a283ca",
+    "docs/iclr/versions/v08/evidence/method_summary.csv": "07ac0131ae19fd10faeeef640f29eba7353097d29e37626f539edafc98f20fd7",
+    "docs/iclr/versions/v08/references.bib": "ab9ef4cc6c72f4a4e456748615c42219415e7bba2d222411e60f49a6d5f41cd8",
+    "docs/iclr/versions/v08/reviews/case-figure-evidence.md": "f4a24357e94a1c04dae77efb5adefd3d750b79a786bc4c233bbe0cd6dc58ac5a",
+    "docs/iclr/versions/v08/reviews/evidence-framing-final.md": "da57d548c6de3d70248459925837b8c483516fcc75fee2b5607903ca3e06bb51",
+    "docs/iclr/versions/v08/reviews/framing-literature-and-guidelines.md": "c6671b647800105257b298869cb74af8b804f7cfd6fd6b42d8abd671fd0f4a6c",
+    "docs/iclr/versions/v08/reviews/methods-framing-audit.md": "60c0cf0526c9c707f4fbce16135c87af1ab995ce0280b7f621b2120d3cb2e892",
+    "docs/studies/gait-fidelity/data/clinical-candidates.md": "4151755b1046a1e2b735a0fa59ee73f2251c447239739e431d432ee06aff8a17",
+    "docs/studies/gait-fidelity/methods/core-to-followup-20260924.md": "092475c82bce1fe86b475dfbdedc43c21eaff8b42a6e172cdb073a29254e9c5b",
+    "docs/studies/gait-fidelity/records/tutorial-refresh-20260925.json": "8f1b3e6977621ae03487789db1d64fa48492372ef496a2af171e20c650787744",
+    "notebooks/gait_fidelity/00_start_here.ipynb": "b7289e2f8528fb776939d28e767d004b450e0916ca26facab81435de99ab0380",
+    "notebooks/gait_fidelity/01_data_and_references.ipynb": "a934d21da2be50f5fa8379cb76732ea751f11f426cb0890b36bff4e7108d8e7c",
+    "notebooks/gait_fidelity/02_masking_and_controls.ipynb": "9d64799dc5bf373a9fe7294b17dd5c9ef6b36e1e162b331a0f112773182bb4d7",
+    "notebooks/gait_fidelity/03_experiment_matrix.ipynb": "ec554ffd720559ead4f0cf00c8e3dd7d0ed9be196a259b25d24f13208ef61ddf",
+    "notebooks/gait_fidelity/07_completed_study_walkthrough.ipynb": "242dcf9c50c7a7764600b02a8332359ac1d27cee30ec4ea8d95b24a3e59efb9f",
+    "notebooks/gait_fidelity/README.md": "ab826a6896f5eac7167facab25e0c4e82039341cbb0c5c2993d62421dfba373b",
+    "notebooks/gait_fidelity/experiments/A_masking_and_change.ipynb": "2b6e561cf4bd3fef48c02df529f7ba2b2018a165e1e97ddbcf97bd4e16af0fd9",
+    "notebooks/gait_fidelity/experiments/B_mask_structure_controls.ipynb": "8b043cf1184a6dce588a2af0deada944cba51ec450ea2aec741ac0eee17cf477",
+    "notebooks/gait_fidelity/experiments/C_practical_benchmarks.ipynb": "7f20a6e65f217ac1cac84c2e4db58c8ede5eb2cc6b47e26df49d58a800f8ec82",
+    "notebooks/gait_fidelity/experiments/D_pretraining_information.ipynb": "9acda7e7ba0a91cc7168abf3a5da6457930cea8bab08bd4abf11bfd49602d489",
+    "notebooks/gait_fidelity/experiments/E_pairing_and_label_controls.ipynb": "c4ee64c48cd9f32d05bd04b1dc47b9ba96a7e8b9cfe0b39343e886ba3d876f9e",
+    "notebooks/gait_fidelity/experiments/F_jepa_response.ipynb": "a4428aa0c80e5849415360a5c9e8e85956cdb360dad377bf165bc602f065a091",
+    "notebooks/gait_fidelity/experiments/G_readout_repair.ipynb": "a8f12841986ce1d317189940c91559fa788b50c8fdf66ce1555a8435c020ea49",
+    "notebooks/gait_fidelity/scripts/execute_tutorials.py": "2a81fd3b49da5e10c35e8d96c56ac1b0445106d2db7b0ed564b03144b887eeec",
+    "notebooks/gait_fidelity/scripts/execute_walkthrough.py": "04e7ca5e602c75e164dfcf403dc2ace1b28673267f6e9570cfa2296e27ce6615",
+    "outputs/iclr/jepa-response/config.json": "96cdf5fd61127cf68161a4f01b2377d37d88fe63fed95994a5e086744f09b6ca",
+    "outputs/iclr/jepa-response/evaluation/comparisons.json": "f22fe912d0b79876843810e5cea714895943f3fbc686047d54fd89f9599a8ce6",
+    "outputs/iclr/jepa-response/evaluation/coverage-per-person.csv": "e10243ca08f1098e33db463fec359015fdf6630ffdd5634d33b288d1f37f57f3",
+    "outputs/iclr/jepa-response/evaluation/per-person.csv": "6c4413a298114a93b9b0ffb2f7a1abaa526967fb0be909f945b1bf5b940d6e61",
+    "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv": "f5968617a29e2adf80fe2574ebea21cbb18bd3aedbce3c59ee2f8e68a4490f55",
+    "outputs/iclr/jepa-response/ledger.json": "b348371bb62583164c1373b6264096f36573551fbddc25b9794967afa1d496be",
+    "outputs/iclr/readout-repair/config.json": "93d36e801fadff45e7e39b7380dcca66b82ddd825ef3b829333f8c2eae3fdb15",
+    "outputs/iclr/readout-repair/development/evaluation/comparisons.json": "abaae8403ef37899fbf8933163fe9b05d2b23dfc0838a30263ba17631873983e",
+    "outputs/iclr/walking-core/config.json": "19a1b14477f6dfa9d39ccd64e997726b750cf74341dfac62c8ccec098bf865dd",
+    "outputs/iclr/walking-core/evaluation/comparisons.json": "9d6fad75d6e3cbd1d1f71d0ede1862f097fc92af76696f20b215b3e0bbdccd99",
+    "outputs/iclr/walking-core/evaluation/per-person.csv": "a8f84f3ed1dcab84bad418260b383c9b49986ba58d93db863752176e7d973099",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/cohort.py": "59acd8b40ef2118ad5e4c11b62a75858634ea24d35bfa3c0ce96f8305877611c",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/data.py": "26b7ae0b12f7a99c3ec075a40d55a3e43ddea0e285a972c1dfa574b309b63c27",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/preparation.py": "b506d61c8b841510316cdf94a677ded65e22fbe74846480794e80fd0d76262fe",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/repair_training.py": "7be694ad4421d5c6ee04fa8bfc670a67afa085870489102271c69352b78a0374",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/response_calibration.py": "faf6a810ddf0a3ecc2bdb4045291586331e2c9d02ec94d3935d319b3424bd896",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/training.py": "b73b7d11eb0f2ddeb43738e49e24296cc329fb9289a57701c81eace8067327f1",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/contracts.py": "58c4938d2d81b404e3574c659ea608a120d8c753d6ec261a112a684265554ec3",
+    "src/gavd6_sjepa/research_directions/synthetic_training_v2/models.py": "f44a4271da97a80179b28071aa003f29dc0702c01a37715aa7eb04e48a253a2b"
+  },
+  "manuscript_paths": [
+    "docs/iclr/versions/v08/paper-v08.tex",
+    "docs/iclr/versions/v08/appendix.tex"
+  ],
+  "open_precision_items": [],
+  "rubric_total_unchanged": 77.25,
+  "closed_precision_items": {
+    "F-E01": "Main source now says coordinate-array shape and joint-slot order, preserving the distinction from anatomical identity under naming corruption.",
+    "F-E02": "Appendix now says higher error than zero prediction for most people under occlusion, preserving the distinction from binary failure or absence of information."
+  },
+  "final_document_bindings": {
+    "docs/iclr/versions/v08/paper-v08.tex": {
+      "sha256": "85b08ea58f95be0384244aa3848bf23fb77a4ac5c64ae7f32e723d2d1a523e68",
+      "bytes": 34601
+    },
+    "docs/iclr/versions/v08/appendix.tex": {
+      "sha256": "6dde88735f69940dbcb2ed69d8c686a1d8db2ff23588de7363c61279410c8e50",
+      "bytes": 15458
+    },
+    "docs/iclr/versions/v08/paper-v08.pdf": {
+      "sha256": "cbcffb29e2825bf9103cc4a69297f3d48373bcaf66854eea7c7b6f79a946d5bc",
+      "bytes": 270857
+    },
+    "docs/iclr/versions/v08/references.bib": {
+      "sha256": "ab9ef4cc6c72f4a4e456748615c42219415e7bba2d222411e60f49a6d5f41cd8",
+      "bytes": 10277
+    },
+    "docs/iclr/versions/v08/supplement/technical-details.tex": {
+      "sha256": "53c9b4b711f00d555bbddd561da51b04dc76568e5e0b671157b879ccddc7517e",
+      "bytes": 35512
+    },
+    "docs/iclr/versions/v08/reviews/portable-manuscript-methods-review.md": {
+      "sha256": "59375893f61da71ea61ff298da64ce4ce037d2be252c2f254d182be2cbd6af77",
+      "bytes": 7430
+    },
+    "docs/iclr/versions/v08/reviews/portable-manuscript-evidence-review.md": {
+      "sha256": "0361538bb7e3be6144e3bdbad29bea2f097203d652c4e73b38dbde14d2dabfe1",
+      "bytes": 7326
+    }
+  },
+  "disclosure_update": "Human author completion is now attested explicitly. Scientific framing/measurement claims are unchanged; see reviews/human-authorship-attestation.json and qa/disclosure-review.json.",
+  "editorial_update": {
+    "date": "2026-09-26",
+    "scope": "Title, abstract and selected prose only; empirical claims and numbers preserved. World-model references reduced to one each in abstract, introduction and discussion.",
+    "review": "reviews/title-abstract-review.md",
+    "prior_snapshot": "history/v08-before-title-abstract-20260926.zip",
+    "new_training_runs": 0
+  },
+  "clarity_update": {
+    "date": "2026-09-26",
+    "scope": "Plain-language revision of abstract, introduction and selected main/appendix prose; empirical results unchanged.",
+    "reviews": [
+      "reviews/clarity-evidence-review.md",
+      "reviews/clarity-appendix-review.md"
+    ],
+    "prior_snapshot": "history/v08-before-clarity-20260926.zip",
+    "new_training_runs": 0
+  },
+  "simplification_update": {
+    "new_review_paths": [
+      "reviews/comparison-selection-review.md",
+      "reviews/appendix-simplification-review.md"
+    ],
+    "earlier_support_hashes_are_historical": true,
+    "full_technical_source_sha256": "13b06b4f8faadfdc362e624b49cb56356ad7288acd3fd86333290f4972408b12",
+    "unchanged_figure_case_data": true,
+    "primary_effects_unchanged": true
+  },
+  "figure1_revision": {
+    "figure": "Experimental workflow with illustrative keypoints",
+    "no_new_empirical_data_or_fits": true,
+    "numerical_results_unchanged": true,
+    "caption_simplified_and_pair_scoring_explicit": true,
+    "design_provenance": "evidence/figure1-design-provenance.json",
+    "review_paths": [
+      "reviews/figure1-methods-review.md",
+      "reviews/figure1-evidence-review.md"
+    ]
+  },
+  "portability_update": {
+    "date": "2026-09-26",
+    "scope": "Standalone descriptions of experiments, methodology, analysis and results in the main text and both appendix versions.",
+    "prior_snapshot": "history/v08-before-local-reference-cleanup-20260926.zip",
+    "reviews": [
+      "reviews/portable-manuscript-methods-review.md",
+      "reviews/portable-manuscript-evidence-review.md"
+    ],
+    "numerical_results_changed": false,
+    "new_training_runs": 0,
+    "historical_support_hashes_preserved": true
+  }
+}

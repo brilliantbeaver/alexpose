@@ -909,7 +909,7 @@ class GaitFeatureVector:
             ankle_asymmetry=ankle_asymmetry,
             left_hip_range=safe_get(left_hip_stats, "range"),
             left_knee_range=safe_get(left_knee_stats, "range"),
-            left_ankle_range=safe_get(right_ankle_stats, "range"),
+            left_ankle_range=safe_get(left_ankle_stats, "range"),
             right_hip_range=safe_get(right_hip_stats, "range"),
             right_knee_range=safe_get(right_knee_stats, "range"),
             right_ankle_range=safe_get(right_ankle_stats, "range"),

@@ -1,0 +1,207 @@
+{
+  "provenance": "Author-supplied rounded follow-up table; not independently reconstructed",
+  "metrics": [
+    "response_error",
+    "nuisance_error",
+    "synthetic_all_nle",
+    "waveform_error",
+    "direction_accuracy"
+  ],
+  "objective_order": [
+    "base",
+    "paired_change"
+  ],
+  "family_means": {
+    "Direct": [
+      [
+        7.5442,
+        10.4929,
+        0.0298,
+        12.0733,
+        0.6609
+      ],
+      [
+        10.7543,
+        16.6262,
+        0.0518,
+        19.2808,
+        0.5638
+      ]
+    ],
+    "Coordinate": [
+      [
+        10.2473,
+        11.125,
+        0.0487,
+        15.88,
+        0.5019
+      ],
+      [
+        11.1743,
+        12.4444,
+        0.0561,
+        21.4048,
+        0.4904
+      ]
+    ],
+    "Paired JEPA": [
+      [
+        10.6914,
+        14.1674,
+        0.0626,
+        17.4532,
+        0.4932
+      ],
+      [
+        10.0662,
+        12.7601,
+        0.07,
+        22.5533,
+        0.4894
+      ]
+    ],
+    "Initialized": [
+      [
+        9.4331,
+        13.9304,
+        0.0687,
+        16.9685,
+        0.473
+      ],
+      [
+        10.1591,
+        14.3239,
+        0.0718,
+        21.9566,
+        0.4705
+      ]
+    ],
+    "Shuffled JEPA": [
+      [
+        9.345,
+        13.4056,
+        0.0676,
+        16.7352,
+        0.4797
+      ],
+      [
+        11.7461,
+        14.8242,
+        0.0718,
+        21.3673,
+        0.4842
+      ]
+    ],
+    "Coordinate delta": [
+      [
+        10.1773,
+        10.5416,
+        0.055,
+        16.2209,
+        0.5028
+      ],
+      [
+        14.5198,
+        15.0029,
+        0.0617,
+        21.0849,
+        0.4865
+      ]
+    ],
+    "JEPA endpoint": [
+      [
+        10.2327,
+        13.561,
+        0.0632,
+        16.8988,
+        0.4753
+      ],
+      [
+        10.3611,
+        14.1406,
+        0.0704,
+        22.0311,
+        0.4784
+      ]
+    ],
+    "JEPA delta": [
+      [
+        10.9448,
+        14.3844,
+        0.0628,
+        17.377,
+        0.4931
+      ],
+      [
+        9.988,
+        12.2297,
+        0.0699,
+        21.7648,
+        0.4844
+      ]
+    ]
+  },
+  "paired_change_minus_base": {
+    "Direct": {
+      "response_error": 3.2101,
+      "nuisance_error": 6.1333,
+      "synthetic_all_nle": 0.022,
+      "waveform_error": 7.2075,
+      "direction_accuracy": -0.0971
+    },
+    "Coordinate": {
+      "response_error": 0.927,
+      "nuisance_error": 1.3194,
+      "synthetic_all_nle": 0.0074,
+      "waveform_error": 5.5248,
+      "direction_accuracy": -0.0115
+    },
+    "Paired JEPA": {
+      "response_error": -0.6252,
+      "nuisance_error": -1.4073,
+      "synthetic_all_nle": 0.0074,
+      "waveform_error": 5.1001,
+      "direction_accuracy": -0.0038
+    },
+    "Initialized": {
+      "response_error": 0.726,
+      "nuisance_error": 0.3935,
+      "synthetic_all_nle": 0.0031,
+      "waveform_error": 4.9881,
+      "direction_accuracy": -0.0025
+    },
+    "Shuffled JEPA": {
+      "response_error": 2.4011,
+      "nuisance_error": 1.4186,
+      "synthetic_all_nle": 0.0042,
+      "waveform_error": 4.6321,
+      "direction_accuracy": 0.0045
+    },
+    "Coordinate delta": {
+      "response_error": 4.3425,
+      "nuisance_error": 4.4613,
+      "synthetic_all_nle": 0.0067,
+      "waveform_error": 4.864,
+      "direction_accuracy": -0.0163
+    },
+    "JEPA endpoint": {
+      "response_error": 0.1284,
+      "nuisance_error": 0.5796,
+      "synthetic_all_nle": 0.0072,
+      "waveform_error": 5.1323,
+      "direction_accuracy": 0.0031
+    },
+    "JEPA delta": {
+      "response_error": -0.9568,
+      "nuisance_error": -2.1547,
+      "synthetic_all_nle": 0.0071,
+      "waveform_error": 4.3878,
+      "direction_accuracy": -0.0087
+    }
+  },
+  "response_endpoint_minus_delta": {
+    "base": -0.7121,
+    "paired_change": 0.3731,
+    "interaction": 1.0852
+  }
+}

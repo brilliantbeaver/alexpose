@@ -1,0 +1,39 @@
+{
+  "student": {
+    "student_id": "hrnet_w48",
+    "family": "hrnet",
+    "role": "validation",
+    "config": "/hai/scratch/tedmui/models/mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py",
+    "checkpoint": "/hai/scratch/tedmui/models/pose/hrnet-w48.pth"
+  },
+  "lessons": [
+    "balanced",
+    "blur",
+    "front",
+    "low_resolution",
+    "low_resolution_occlusion",
+    "oblique",
+    "occlusion",
+    "side"
+  ],
+  "probe_seconds": 1.766345201060176,
+  "probe_losses": [
+    0.0003937516885343939,
+    0.00032194433151744306,
+    0.00035995410871692,
+    0.0003959564201068133,
+    0.00031360695720650256,
+    0.00034157815389335155,
+    0.00033526113838888705,
+    0.0002898345410358161,
+    0.00034336006501689553,
+    0.00043315376387909055
+  ],
+  "budgets": [
+    25,
+    75
+  ],
+  "seed": 17,
+  "synthetic_examples_per_batch": 2,
+  "real_examples_per_mixed_batch": 18
+}

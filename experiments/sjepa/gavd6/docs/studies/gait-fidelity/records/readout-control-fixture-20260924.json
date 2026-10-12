@@ -1,0 +1,173 @@
+{
+  "schema": "gait-fidelity-readout-control-software-validation-v1",
+  "created_utc": "2026-09-24T17:36:37.500648+00:00",
+  "evidence_status": "software-validation-only",
+  "source_results": false,
+  "cuda_verified": false,
+  "parent": "/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/parent",
+  "child": "/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/child",
+  "elapsed_seconds": 108.64084083298803,
+  "parent_unchanged": true,
+  "parent_files": 381,
+  "shared_encoder_readout_pairs": [
+    {
+      "base_phase": "F-response-jepa_delta_v1-graph_time-base-seed-17",
+      "paired_change_phase": "F-response-jepa_delta_v1-graph_time-paired_change-seed-17",
+      "shared_encoder_sha256": "7e7b158051226ffb23874df3e3f16f9e9a9718e25084492c33508180cda705b0"
+    },
+    {
+      "base_phase": "F-response-jepa_delta_v1-graph_time-base-seed-29",
+      "paired_change_phase": "F-response-jepa_delta_v1-graph_time-paired_change-seed-29",
+      "shared_encoder_sha256": "7c31b3a4395a6c15b6d7622f2b3455c65af223d88ca75f8054170a5f16bfa1a4"
+    },
+    {
+      "base_phase": "F-response-jepa_delta_v1-graph_time-base-seed-43",
+      "paired_change_phase": "F-response-jepa_delta_v1-graph_time-paired_change-seed-43",
+      "shared_encoder_sha256": "e5a381930626f6f9ecae642329d62c43be920e261607711b9c27fcd7b6ad7724"
+    },
+    {
+      "base_phase": "F-response-jepa_endpoint_v1-graph_time-base-seed-17",
+      "paired_change_phase": "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-17",
+      "shared_encoder_sha256": "a122ab98b0cd4a08e607d653cbf655b09ec71da9ae9f0d2ecbbbbf53a9e84a16"
+    },
+    {
+      "base_phase": "F-response-jepa_endpoint_v1-graph_time-base-seed-29",
+      "paired_change_phase": "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-29",
+      "shared_encoder_sha256": "a2086d0a821ac7ebdfe2959594884c534fd01f273ba628066426b5dbc23f4567"
+    },
+    {
+      "base_phase": "F-response-jepa_endpoint_v1-graph_time-base-seed-43",
+      "paired_change_phase": "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-43",
+      "shared_encoder_sha256": "a0ea340ac661f539d5d7bd4f5562cf26d75c2572071e641b544af437e7c8e059"
+    },
+    {
+      "base_phase": "F-response-coordinate_delta_v1-graph_time-base-seed-17",
+      "paired_change_phase": "F-response-coordinate_delta_v1-graph_time-paired_change-seed-17",
+      "shared_encoder_sha256": "923ab2d3482a919404f445475d506a66c1783f17fd9c6f5def2a34f488bfb68b"
+    },
+    {
+      "base_phase": "F-response-coordinate_delta_v1-graph_time-base-seed-29",
+      "paired_change_phase": "F-response-coordinate_delta_v1-graph_time-paired_change-seed-29",
+      "shared_encoder_sha256": "e407dadf1fbc9028abce45ac382a7ea1525b8bac1b97d86e63fa1a10e5d4a0d5"
+    },
+    {
+      "base_phase": "F-response-coordinate_delta_v1-graph_time-base-seed-43",
+      "paired_change_phase": "F-response-coordinate_delta_v1-graph_time-paired_change-seed-43",
+      "shared_encoder_sha256": "b6a57a823ca06e36f1b9c4e3b5c86c69f85e47fce56038c7259b25ab7fe59a19"
+    }
+  ],
+  "status": {
+    "work": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/child",
+    "fixture": true,
+    "completed_fits": 18,
+    "completed_phases": 27,
+    "total_phases": 27,
+    "active": [],
+    "failed": [],
+    "charged_or_reserved_gpu_hours": 0.0,
+    "preparation": null,
+    "viewer": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/parent/data/viewer.html",
+    "gavd_completed_shards": 0,
+    "report": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/child/report.md",
+    "report_available": true,
+    "study_kind": "jepa_response_followup",
+    "parent_work": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/parent",
+    "deadline_utc": "2026-09-25T15:00:00Z",
+    "budget_categories": {
+      "profile": 0.0,
+      "fits": 0.0,
+      "diagnostics": 0.0,
+      "recovery": 0.0
+    },
+    "admission": {
+      "status": "FOLLOWUP_MATRIX_ADMITTED",
+      "admitted": true,
+      "actual_updates": {
+        "pretraining_updates": 1,
+        "readout_updates": 1,
+        "end_to_end_updates": 2
+      },
+      "projected_fit_gpu_hours": 0.003107005810306873,
+      "projected_fit_wall_hours": 0.0005624202964908262,
+      "required_wall_hours": 14.00056242029649,
+      "remaining_wall_hours": 21.410161940555554,
+      "predicted_phase_seconds": {
+        "pretrain-response-jepa_delta_v1-graph_time-seed-17": 0.3412851549728657,
+        "F-response-jepa_delta_v1-graph_time-paired_change-seed-17": 0.4523994262126507,
+        "pretrain-response-jepa_delta_v1-graph_time-seed-29": 0.3412851549728657,
+        "F-response-jepa_delta_v1-graph_time-paired_change-seed-29": 0.4523994262126507,
+        "pretrain-response-jepa_delta_v1-graph_time-seed-43": 0.3412851549728657,
+        "F-response-jepa_delta_v1-graph_time-paired_change-seed-43": 0.4523994262126507,
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-17": 0.339944374973129,
+        "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-17": 0.45610947876411956,
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-29": 0.339944374973129,
+        "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-29": 0.45610947876411956,
+        "pretrain-response-jepa_endpoint_v1-graph_time-seed-43": 0.339944374973129,
+        "F-response-jepa_endpoint_v1-graph_time-paired_change-seed-43": 0.45610947876411956,
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-17": 0.3290723949976382,
+        "F-response-coordinate_delta_v1-graph_time-paired_change-seed-17": 0.4482340612230473,
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-29": 0.3290723949976382,
+        "F-response-coordinate_delta_v1-graph_time-paired_change-seed-29": 0.4482340612230473,
+        "pretrain-response-coordinate_delta_v1-graph_time-seed-43": 0.3290723949976382,
+        "F-response-coordinate_delta_v1-graph_time-paired_change-seed-43": 0.4482340612230473,
+        "F-response-jepa_delta_v1-graph_time-base-seed-17": 0.4533399475258193,
+        "F-response-jepa_delta_v1-graph_time-base-seed-29": 0.4533399475258193,
+        "F-response-jepa_delta_v1-graph_time-base-seed-43": 0.4533399475258193,
+        "F-response-jepa_endpoint_v1-graph_time-base-seed-17": 0.4543001037382055,
+        "F-response-jepa_endpoint_v1-graph_time-base-seed-29": 0.4543001037382055,
+        "F-response-jepa_endpoint_v1-graph_time-base-seed-43": 0.4543001037382055,
+        "F-response-coordinate_delta_v1-graph_time-base-seed-17": 0.4537220299607725,
+        "F-response-coordinate_delta_v1-graph_time-base-seed-29": 0.4537220299607725,
+        "F-response-coordinate_delta_v1-graph_time-base-seed-43": 0.4537220299607725
+      },
+      "timing_safety_factor": 1.25,
+      "allocation_reservation_minutes": 120,
+      "slurm_workload_minutes": 119,
+      "deadline_utc": "2026-09-25T15:00:00Z",
+      "evaluated_utc": "2026-09-24T17:35:23.417014+00:00",
+      "criterion": "All 27 phases at inherited updates; timing only; 4h diagnostics, 6h recovery, 2h queue and 2h evaluation held aside"
+    },
+    "parent_bundle": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/gait-readout-control-verified-ir0fgd0h/parent/attempts/prepare/d609e8431b9d4b48/bundle"
+  },
+  "verification": {
+    "status": "FOLLOWUP_ARTIFACTS_VERIFIED",
+    "parent_unchanged": true,
+    "parent_files_checked": 334,
+    "child_artifacts_checked": 378,
+    "completed_phases": 30,
+    "evidence_status": "fixture-tested",
+    "metric_reconstruction": {
+      "status": "RESPONSE_METRICS_RECOMPUTED",
+      "recomputed": true,
+      "checked": [
+        "coverage-per-person.csv",
+        "coverage.csv",
+        "interaction.csv",
+        "nuisance.csv",
+        "per-family.csv",
+        "per-person.csv",
+        "per-window.csv",
+        "response-by-condition-person.csv",
+        "response-by-condition.csv",
+        "response-calibration-per-family.csv",
+        "response-curves-person.csv",
+        "response-no-change-person.csv",
+        "responses.csv",
+        "comparisons.json",
+        "response-comparisons.json",
+        "readout-control-comparisons.json"
+      ],
+      "published_outputs_unchanged": true,
+      "tolerance": {
+        "relative": 1e-10,
+        "absolute": 1e-10
+      },
+      "independent_confirmation": false,
+      "clinical_validation": false
+    },
+    "cuda_verified_here": false
+  },
+  "plan_identity": "e9eca27f7fe43bd819714166438511b25fc7dde897a31c60b1239a167900c259",
+  "primary_candidate": "F-response-jepa_delta_v1-graph_time-paired_change",
+  "primary_comparator": "F-response-jepa_endpoint_v1-graph_time-paired_change"
+}

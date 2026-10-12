@@ -1,0 +1,71 @@
+{
+  "job": {
+    "createdAt": "2026-09-26T07:54:30.005Z",
+    "updatedAt": "2026-09-26T07:58:14.137Z",
+    "id": "review-mui3ga9g-1my0v3",
+    "kind": "adversarial-review",
+    "kindLabel": "adversarial-review",
+    "title": "Codex Adversarial Review",
+    "workspaceRoot": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/iclr-v08-adversarial-6duf5beo",
+    "jobClass": "review",
+    "summary": "No material blocker found after reviewing the complete manuscript, bibliography, audits, and source evidence. The revision preserves privileged supervision, offline restoration, retrospective hypotheses, development-only inference, unresolved JEPA benefit, and notebook-validation limits. All 126 participant-figure rows match the original exports.",
+    "write": false,
+    "status": "completed",
+    "startedAt": "2026-09-26T07:54:30.030Z",
+    "phase": "done",
+    "pid": null,
+    "logFile": "/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/codex-companion/iclr-v08-adversarial-6duf5beo-402ec5fe8175f901/jobs/review-mui3ga9g-1my0v3.log",
+    "threadId": "01a0dcb5-674a-7090-926b-35b413d9d9d9",
+    "turnId": "01a0dcb5-6879-7fc2-b3e7-f1f77fea5034",
+    "completedAt": "2026-09-26T07:58:14.106Z"
+  },
+  "storedJob": {
+    "id": "review-mui3ga9g-1my0v3",
+    "kind": "adversarial-review",
+    "kindLabel": "adversarial-review",
+    "title": "Codex Adversarial Review",
+    "workspaceRoot": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/iclr-v08-adversarial-6duf5beo",
+    "jobClass": "review",
+    "summary": "Adversarial Review working tree diff",
+    "write": false,
+    "createdAt": "2026-09-26T07:54:30.005Z",
+    "status": "completed",
+    "startedAt": "2026-09-26T07:54:30.030Z",
+    "phase": "done",
+    "pid": null,
+    "logFile": "/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/codex-companion/iclr-v08-adversarial-6duf5beo-402ec5fe8175f901/jobs/review-mui3ga9g-1my0v3.log",
+    "threadId": "01a0dcb5-674a-7090-926b-35b413d9d9d9",
+    "turnId": "01a0dcb5-6879-7fc2-b3e7-f1f77fea5034",
+    "completedAt": "2026-09-26T07:58:14.106Z",
+    "result": {
+      "review": "Adversarial Review",
+      "target": {
+        "mode": "working-tree",
+        "label": "working tree diff",
+        "explicit": true
+      },
+      "threadId": "01a0dcb5-674a-7090-926b-35b413d9d9d9",
+      "context": {
+        "repoRoot": "/private/var/folders/b_/yqwhs_nd49x6qb8ypck81_n00000gn/T/iclr-v08-adversarial-6duf5beo",
+        "branch": "main",
+        "summary": "Reviewing 0 staged, 3 unstaged, and 4 untracked file(s)."
+      },
+      "codex": {
+        "status": 0,
+        "stderr": "",
+        "stdout": "{\"verdict\":\"approve\",\"summary\":\"No material blocker found after reviewing the complete manuscript, bibliography, audits, and source evidence. The revision preserves privileged supervision, offline restoration, retrospective hypotheses, development-only inference, unresolved JEPA benefit, and notebook-validation limits. All 126 participant-figure rows match the original exports.\",\"findings\":[],\"next_steps\":[]}",
+        "reasoning": []
+      },
+      "result": {
+        "verdict": "approve",
+        "summary": "No material blocker found after reviewing the complete manuscript, bibliography, audits, and source evidence. The revision preserves privileged supervision, offline restoration, retrospective hypotheses, development-only inference, unresolved JEPA benefit, and notebook-validation limits. All 126 participant-figure rows match the original exports.",
+        "findings": [],
+        "next_steps": []
+      },
+      "rawOutput": "{\"verdict\":\"approve\",\"summary\":\"No material blocker found after reviewing the complete manuscript, bibliography, audits, and source evidence. The revision preserves privileged supervision, offline restoration, retrospective hypotheses, development-only inference, unresolved JEPA benefit, and notebook-validation limits. All 126 participant-figure rows match the original exports.\",\"findings\":[],\"next_steps\":[]}",
+      "parseError": null,
+      "reasoningSummary": []
+    },
+    "rendered": "# Codex Adversarial Review\n\nTarget: working tree diff\nVerdict: approve\n\nNo material blocker found after reviewing the complete manuscript, bibliography, audits, and source evidence. The revision preserves privileged supervision, offline restoration, retrospective hypotheses, development-only inference, unresolved JEPA benefit, and notebook-validation limits. All 126 participant-figure rows match the original exports.\n\nNo material findings.\n"
+  }
+}

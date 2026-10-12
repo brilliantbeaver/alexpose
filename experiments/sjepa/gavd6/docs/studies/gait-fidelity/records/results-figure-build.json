@@ -1,0 +1,193 @@
+{
+  "renderer": "Matplotlib",
+  "version": "3.11.1",
+  "source_sha256": {
+    "method-means.csv": "92460251373aec744f034512227b6761672f44dacd9431e2155be7b2a0775097",
+    "paired-contrasts.csv": "b3ccf8ea0e954adc8fc92c06bc71755b0f58f03c860956c0734b3c0aec2b8cb5"
+  },
+  "figures": {
+    "research-core-results": {
+      "size_inches": [
+        8.6,
+        5.0
+      ],
+      "mean_axis_limits": [
+        0,
+        25
+      ],
+      "layout": {
+        "text_elements": 37,
+        "text_overlaps": [],
+        "text_outside_figure": [],
+        "value_labels_intersected_by_lines": [],
+        "smallest_font_pt": 10.5
+      },
+      "points": [
+        {
+          "family": "Direct",
+          "method": "P-direct-none-base",
+          "metric": "response_error",
+          "value": 7.54415487454,
+          "display": "7.5",
+          "y": 1.18
+        },
+        {
+          "family": "Direct",
+          "method": "P-direct-none-paired_change",
+          "metric": "response_error",
+          "value": 10.7543174398,
+          "display": "10.8",
+          "y": 0.8200000000000001
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-base",
+          "metric": "response_error",
+          "value": 10.6914085615,
+          "display": "10.7",
+          "y": 0.18
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-paired_change",
+          "metric": "response_error",
+          "value": 10.0662337722,
+          "display": "10.1",
+          "y": -0.18
+        },
+        {
+          "family": "Direct",
+          "method": "P-direct-none-base",
+          "metric": "waveform_error",
+          "value": 12.073284439,
+          "display": "12.1",
+          "y": 1.18
+        },
+        {
+          "family": "Direct",
+          "method": "P-direct-none-paired_change",
+          "metric": "waveform_error",
+          "value": 19.2808393072,
+          "display": "19.3",
+          "y": 0.8200000000000001
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-base",
+          "metric": "waveform_error",
+          "value": 17.4532025482,
+          "display": "17.5",
+          "y": 0.18
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-paired_change",
+          "metric": "waveform_error",
+          "value": 22.5533128156,
+          "display": "22.6",
+          "y": -0.18
+        }
+      ],
+      "paired_contrasts": [
+        {
+          "metric": "response_error",
+          "jepa_minus_direct": -0.688083667552,
+          "crossed_95_low": -1.97670926582,
+          "crossed_95_high": 0.640212430892
+        },
+        {
+          "metric": "waveform_error",
+          "jepa_minus_direct": 3.27247350838,
+          "crossed_95_low": 1.94436438834,
+          "crossed_95_high": 4.69939534547
+        }
+      ],
+      "sha256": "a2e5c21e2a4b55199c440a81562607de25351a04e0ef681e33587b371fb8f409"
+    },
+    "research-core-results-compact": {
+      "size_inches": [
+        7.5,
+        2.5
+      ],
+      "mean_axis_limits": [
+        0,
+        25
+      ],
+      "layout": {
+        "text_elements": 29,
+        "text_overlaps": [],
+        "text_outside_figure": [],
+        "value_labels_intersected_by_lines": [],
+        "smallest_font_pt": 9.5
+      },
+      "points": [
+        {
+          "family": "Direct",
+          "method": "P-direct-none-base",
+          "metric": "response_error",
+          "value": 7.54415487454,
+          "display": "7.5",
+          "y": 1.18
+        },
+        {
+          "family": "Direct",
+          "method": "P-direct-none-paired_change",
+          "metric": "response_error",
+          "value": 10.7543174398,
+          "display": "10.8",
+          "y": 0.8200000000000001
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-base",
+          "metric": "response_error",
+          "value": 10.6914085615,
+          "display": "10.7",
+          "y": 0.18
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-paired_change",
+          "metric": "response_error",
+          "value": 10.0662337722,
+          "display": "10.1",
+          "y": -0.18
+        },
+        {
+          "family": "Direct",
+          "method": "P-direct-none-base",
+          "metric": "waveform_error",
+          "value": 12.073284439,
+          "display": "12.1",
+          "y": 1.18
+        },
+        {
+          "family": "Direct",
+          "method": "P-direct-none-paired_change",
+          "metric": "waveform_error",
+          "value": 19.2808393072,
+          "display": "19.3",
+          "y": 0.8200000000000001
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-base",
+          "metric": "waveform_error",
+          "value": 17.4532025482,
+          "display": "17.5",
+          "y": 0.18
+        },
+        {
+          "family": "JEPA",
+          "method": "M-paired_jepa-graph_time-paired_change",
+          "metric": "waveform_error",
+          "value": 22.5533128156,
+          "display": "22.6",
+          "y": -0.18
+        }
+      ],
+      "paired_contrasts": [],
+      "sha256": "db1cf39dddb187f321c9b4c23c4254d3febd5536d744cb93606414903c6f9a68"
+    }
+  }
+}

@@ -444,7 +444,7 @@ def panel_notebook():
     .venv/bin/python scripts/research_directions/target_accessibility/run_cached_panel.py verify --output-root outputs/iclr-bridge-cached-20260911
     ```
 
-    The [frozen protocol](../../docs/studies/iclr/02_cached_panel_protocol.md) specifies
+    The [frozen protocol](../../docs/neurips-workshop/02_cached_panel_protocol.md) specifies
     the construction and the [validation report](../../docs/studies/future-feature-prediction/accessibility/results.md)
     records what actually ran. Continue with notebook **22** to design the
     next target and student study.

@@ -4,6 +4,7 @@ The current study is **motion preservation during tracking repair**. Historical 
 
 | Study | State | Read next |
 | --- | --- | --- |
+| [Gait Fidelity](gait-fidelity/README.md) | Proposed follow-on research; new experiments pending | Illustrated paper and interactive explanation, explicit data plan, method protocols, source evidence and independent reviews. |
 | [Synthetic training selection](synthetic-training/README.md) | Implemented source trials and real evaluation; CPU checks complete, HAIC results pending | Nine notebooks, released pose models, full-body rendering, and independent annotations. |
 | [Motion preservation](motion-preservation/README.md) | Current implementation; CPU/demo checks, real model experiment pending | Protocol, frozen-model load and small pilot. |
 | [Future feature prediction](future-feature-prediction/README.md) | Completed negative development gates and expanded scaling inspection; accessibility uncertainty remains | Separate gate, scaling, accessibility and manuscript sections. |

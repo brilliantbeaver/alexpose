@@ -1,0 +1,33 @@
+{
+  "figure_count": 1,
+  "preview_count": 2,
+  "findings": [],
+  "assets": [
+    {
+      "path": "images/previews/17-parallel-execution.png",
+      "sha256": "760ef258cd9dc1e846483f2e199c45c3cda0e3931a9adeb46d86ca813fe93d06"
+    },
+    {
+      "path": "images/previews/17-parallel-execution-900.png",
+      "sha256": "b1c41772be87f35dffda7da3915e71732ddaf976f805622446cdb500f5a86e8c"
+    },
+    {
+      "path": "images/17-parallel-execution.svg",
+      "sha256": "aa2eb7519f36b19ead040302c1c81632fc0e6df31a213a884ea4fa9be84267e5"
+    }
+  ],
+  "checks": [
+    "SVG XML parsing",
+    "18px minimum font",
+    "Pillow text bounds",
+    "panel containment",
+    "canvas safe area",
+    "text intersections",
+    "connector/text intersections"
+  ],
+  "fonts": {
+    "normal": "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "bold": "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+  },
+  "limitation": "Schematic artwork is excluded from connector checks. Geometry checks supplement rendered visual review and scientific review."
+}

@@ -490,7 +490,7 @@ selected-model artifacts and numerical verification. Teacher-cache reuse is
 read-only. The current laterality check covers retained aggregate arithmetic;
 the repaired future-innovation check reconstructs predictions and paired scores.
 The accompanying [tutorial](../accessibility/tutorial.md) and
-[panel protocol](../../iclr/02_cached_panel_protocol.md) document those boundaries and
+[panel protocol](../../../neurips-workshop/02_cached_panel_protocol.md) document those boundaries and
 execution commands. The prospective selective student experiment has no reported
 real-data performance.
 

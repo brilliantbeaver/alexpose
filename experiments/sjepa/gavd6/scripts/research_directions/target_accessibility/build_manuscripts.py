@@ -103,7 +103,7 @@ def build_paper() -> Path:
     # Internal file links belong in the reproducibility bundle, not anonymous
     # conference citations. The draft states their role without broken PDF links.
     statements = statements.replace("[tutorial](../accessibility/tutorial.md)", "tutorial")
-    statements = statements.replace("[panel protocol](../../iclr/02_cached_panel_protocol.md)", "panel protocol")
+    statements = statements.replace("[panel protocol](../../../neurips-workshop/02_cached_panel_protocol.md)", "panel protocol")
     statements += "\nThis draft still requires complete human author verification before submission.\n"
     body = figures(scholarly_links(clean_headings(body)))
     # Source headings start at level two because level one is the document title.

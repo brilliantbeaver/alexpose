@@ -1,0 +1,187 @@
+{
+  "rubric": [
+    {
+      "dimension": "Conference relevance and contribution",
+      "weight_percent": 20
+    },
+    {
+      "dimension": "Claim accuracy and evidence support",
+      "weight_percent": 20
+    },
+    {
+      "dimension": "Evaluation and statistical rigor",
+      "weight_percent": 15
+    },
+    {
+      "dimension": "Scientific insight and related-work positioning",
+      "weight_percent": 15
+    },
+    {
+      "dimension": "Reproducibility",
+      "weight_percent": 10
+    },
+    {
+      "dimension": "Clarity and narrative",
+      "weight_percent": 10
+    },
+    {
+      "dimension": "Figures",
+      "weight_percent": 5
+    },
+    {
+      "dimension": "Submission fit",
+      "weight_percent": 5
+    }
+  ],
+  "versions": [
+    {
+      "version": 1,
+      "file": "abstract-v01-pilot.md",
+      "title": "Does Paired Synthetic Supervision Preserve Movement in 2D Pose Trajectories?",
+      "abstract": "Pose trajectories support measurements of movement amplitude, timing and left\u2013right joint relationships, but improved coordinate accuracy does not by itself establish that these measurements are preserved. We investigate whether paired synthetic supervision helps a joint-embedding predictive architecture (JEPA), which learns by predicting hidden features, restore estimated 2D trajectories. Two earlier studies motivate the comparison. A reported AMASS laterality experiment found that a uniform-uncertainty control reproduced the gain of a probability-aware model, while a retained synthetic-adaptation experiment found no added benefit from response-based lesson selection over simpler scene choices. We render matching observations with blur and obstruction, pair estimated tracks with projected body-model joints, and compare latent prediction with coordinate pretraining, direct restoration, an initialized encoder with a fitted readout, and shuffled pairing. Training excludes development people and one pose-extractor family. In a reported synthetic pilot with two development people and one seed, paired JEPA reduces normalized coordinate error by 35.6\u201345.3% relative to unchanged tracks across three extractors. Against coordinate pretraining, it improves two extractors by less than 1% and worsens the third by 14.0%; initialized and shuffled controls are also competitive. Amplitude evaluation is supported on 12 of 48 correlated records, and paired JEPA has no supported timing records under the current peak-matching metric. These results motivate testing calibration and reference observability before attributing improvement to temporal representations. The laterality result and restoration pilot remain available as summaries in this manuscript audit; real-video preservation and a repeatable advantage for paired JEPA require further evidence.",
+      "word_count": 244,
+      "scores": [
+        6.5,
+        8.0,
+        3.5,
+        5.5,
+        5.5,
+        6.0,
+        7.5,
+        7.0
+      ],
+      "weighted_total": 61.25,
+      "preserved_draft_errata": [
+        "Initial total62.0 corrected to61.25 in appended note; components unchanged.",
+        "Early rounded upper endpoint45.3 corrected to45.2 at one decimal in appended note."
+      ],
+      "sha256": "51e5d83ef0577cd0c5c522c5ea27e805b823863cdbff5fc1665e9e40ca3fd34d"
+    },
+    {
+      "version": 2,
+      "file": "abstract-v02-preservation.md",
+      "title": "Paired Synthetic Supervision for 2D Pose Restoration: Accuracy and Movement Preservation",
+      "abstract": "We ask whether paired synthetic supervision improves 2D pose trajectories while preserving movement amplitude, timing and left\u2013right joint relationships. Earlier controlled laterality experiments showed why exchanges of joint names matter for side-sensitive measurements, although a uniform-uncertainty control reproduced the proposed model\u2019s gain. In a separate synthetic-adaptation study, response-based lesson selection did not improve on its matched response-free control. These findings motivate testing the contribution of learned representations against simpler explanations. We pair pose estimates from rendered observations with same-view projected body-model joints, used as anatomical proxies, and compare predicting target features with reconstructing target coordinates. Each pretrained encoder receives a separately fitted coordinate readout; additional controls include direct restoration, an initialized encoder and shuffled pretraining pairs. A reported one-seed pilot evaluates two development people and three pose extractors, including one excluded from fitting. Paired JEPA lowers normalized coordinate error by 35.6\u201345.3% relative to unchanged tracks, but improves only two extractors by less than 1% over coordinate pretraining and worsens the third by 14.0%. The initialized readout and shuffled pairing are competitive. Amplitude evaluation is supported on 12 of 48 correlated records; none satisfies the reference/prediction peak requirements for paired-JEPA timing evaluation. Thus coordinate gains leave motion preservation unresolved. Planned calibration and reference self-comparison checks will test whether systematic correction or weak observability explains these findings. The laterality and restoration results are summary-reported here, and real-video preservation remains untested.",
+      "word_count": 228,
+      "scores": [
+        6.5,
+        8.5,
+        3.5,
+        6.0,
+        5.5,
+        7.0,
+        7.5,
+        7.5
+      ],
+      "weighted_total": 64.25,
+      "preserved_draft_errata": [
+        "Early rounded upper endpoint45.3 corrected to45.2 at one decimal in appended note."
+      ],
+      "sha256": "ad85cc22d36239024832436a1c246236832e62ce749d92d2a71cb91c3b15024a"
+    },
+    {
+      "version": 3,
+      "file": "abstract-v03-jepa-vs-coordinates.md",
+      "title": "Testing Latent Prediction for Paired Synthetic Pose Restoration",
+      "abstract": "Can paired synthetic supervision improve estimated 2D pose trajectories while preserving movement amplitude, timing and left\u2013right relationships? We examine what predicting learned target features adds when coordinate-based methods receive the same synthetic targets. Two earlier studies motivate the controls: summary-reported laterality experiments found that artificial joint-name swaps affected side-sensitive measurements without demonstrating a benefit from informative uncertainty, and retained synthetic-adaptation outcomes showed no benefit from response personalization over a matched ablation. Our pipeline pairs pose estimates from controlled renders with projected anatomical proxies. A joint-embedding predictive architecture (JEPA) predicts the reference encoder\u2019s features; a separate readout converts its frozen representation into coordinates. Comparisons include coordinate pretraining, direct restoration, an initialized encoder with a fitted readout, and shuffled pretraining pairs. In a summary-reported synthetic pilot with two development people and one seed, paired JEPA reduces normalized coordinate error by 35.6\u201345.3% across three extractors, one held from fitting. Relative to coordinate pretraining, gains are below 1% on two extractors and error increases by 14.0% on the third. Initialized and shuffled controls yield similar coordinate-error point estimates. The movement evaluation includes signed image-plane ankle separation, but amplitude is supported on only 12 of 48 correlated records and paired JEPA has no eligible timing comparisons under the current peak rules. Calibration controls are planned to assess coordinate gains, while reference self-comparison will distinguish reference ineligibility from prediction failures. Motion preservation and transfer to real video remain unestablished.",
+      "word_count": 233,
+      "scores": [
+        7.0,
+        8.5,
+        3.5,
+        7.0,
+        5.5,
+        7.0,
+        7.5,
+        7.5
+      ],
+      "weighted_total": 66.75,
+      "preserved_draft_errata": [
+        "Early rounded upper endpoint45.3 corrected to45.2 at one decimal in appended note."
+      ],
+      "sha256": "ea9c82e013dc472e8b26edccaccbccc4b4ca67ff1ce50fa2c22c4c8a08197107"
+    },
+    {
+      "version": 4,
+      "file": "abstract-v04-baselines.md",
+      "title": "Coordinate Gains and Motion Fidelity in Paired Synthetic Pose Restoration",
+      "abstract": "We investigate whether paired synthetic supervision improves 2D pose trajectories while preserving amplitude, timing and left\u2013right relationships, and whether latent prediction adds value beyond learning coordinates from the same targets. Earlier controlled laterality reports found sensitivity to joint-name swaps without an advantage for informative uncertainty; an audited synthetic-adaptation study likewise found no benefit from response personalization over a matched control. Our pipeline pairs image-estimator tracks with same-view projected anatomical proxies. A joint-embedding predictive architecture learns to predict reference features, after which a separately trained coordinate readout reconstructs trajectories from a frozen encoder. Comparisons include coordinate pretraining, direct restoration, initialized encoders and shuffled pairs. In a summary-reported synthetic pilot with two development people and one seed, paired JEPA improves coordinate error by less than 1% over coordinate pretraining on two extractors, with both reported paired intervals including zero, and worsens the third by 14.0%. One extractor is excluded from fitting. Error reductions of 35.6\u201345.3% relative to unchanged tracks therefore do not establish a latent-prediction benefit. Movement evaluation uses image-plane ankle separation: amplitude is supported on 12 of 48 correlated records, while no paired-JEPA record satisfies the joint reference-and-prediction timing criteria. Reference self-comparison is needed to locate this support limitation; calibration controls will test a simpler explanation for coordinate gains. These pilot findings leave movement preservation and real-video transfer unresolved, while identifying the comparisons required to attribute restoration gains to learned representations.",
+      "word_count": 230,
+      "scores": [
+        7.0,
+        9.0,
+        3.5,
+        7.0,
+        5.5,
+        7.5,
+        7.5,
+        8.0
+      ],
+      "weighted_total": 68.5,
+      "preserved_draft_errata": [
+        "Early rounded upper endpoint45.3 corrected to45.2 at one decimal in appended note."
+      ],
+      "sha256": "8b4ebd21dee96edcdca37d3adc4e234a451ccb19dbcedd67008dd9e1ec9fe466"
+    },
+    {
+      "version": 5,
+      "file": "abstract-v05-encoder-readout.md",
+      "title": "Evaluating Paired Synthetic Supervision for Movement-Preserving Pose Restoration",
+      "abstract": "Pose restoration for movement analysis needs to retain amplitude, event timing and left\u2013right joint relationships as it corrects coordinates. Reported laterality experiments show how temporary joint-name swaps distort side-sensitive summaries; their uniform control and an earlier synthetic study\u2019s response-free selector reproduced gains attributed to more elaborate mechanisms. We therefore evaluate paired synthetic supervision with controls for the contribution of encoder pretraining. Our pipeline aligns image-estimator tracks from rendered clips with projected body-model joints used as anatomical proxies. A joint-embedding predictive architecture (JEPA) predicts reference features, then uses a separately fitted coordinate readout on its frozen encoder. Coordinate pretraining and direct restoration receive the same targets; further controls use an untrained frozen encoder or shuffled pretraining pairs. Fitting excludes development people and ViTPose. In a summary-reported pilot with two development people and one seed, paired JEPA improves coordinate error over coordinate pretraining by less than 1% for HRNet and ViTPose, with reported intervals including zero, but worsens RTMPose by 14.0%. Fitted readouts on untrained encoders also substantially improve agreement with synthetic coordinates, weakening attribution to encoder pretraining. For signed image-plane ankle separation, amplitude is supported on 12 of 48 correlated records; no paired-JEPA record satisfies the joint reference-and-prediction timing criteria. Calibration and reference self-comparison remain necessary to distinguish coordinate correction from representation gains and to locate the timing limitation. These checks, repeated-seed evaluation and independent real-video references are future work; movement preservation is unresolved.",
+      "word_count": 233,
+      "scores": [
+        7.0,
+        9.0,
+        3.5,
+        7.5,
+        5.5,
+        8.0,
+        7.5,
+        8.0
+      ],
+      "weighted_total": 69.75,
+      "preserved_draft_errata": [],
+      "sha256": "98cfd2a060748f1df04903e28c3511eec072753177ccee3dac6e2a398f8831b3"
+    },
+    {
+      "version": 6,
+      "file": "abstract-v06-iclr.md",
+      "title": "What Does Latent Prediction Add to Paired Synthetic Pose Restoration?",
+      "abstract": "We study whether paired synthetic supervision improves 2D pose trajectories while preserving movement, and whether latent prediction adds value beyond learning coordinates from the same targets. Earlier controlled laterality summaries show that joint-name swaps distort side-sensitive measurements, while setting naming probabilities to 50/50 matched the proposed model\u2019s gain. Audited synthetic-adaptation outcomes likewise found no added benefit from choosing lessons using a model\u2019s learning response. We pair image-estimator tracks from controlled renders with projected anatomical proxies. A joint-embedding predictive architecture (JEPA) predicts reference features; a separately fitted coordinate readout uses its frozen encoder. Comparisons include coordinate pretraining, direct restoration, a fitted readout on an untrained encoder and shuffled pretraining pairs. Training excludes development people and ViTPose. In a summary-reported pilot with two development people and one seed, paired JEPA improves coordinate error by less than 1% over coordinate pretraining on HRNet and ViTPose, with both reported intervals including zero, and worsens RTMPose by 14.0%. Untrained-encoder readouts yield similar coordinate gains. Preservation remains unresolved: amplitude of signed image-plane ankle separation is supported on 12 of 48 correlated records, and no paired-JEPA record meets the joint reference-and-prediction peak-timing criteria. Planned calibration and reference self-checks will measure how much improvement simple corrections recover and how many records can support timing. Independent real-video evaluation is needed before extending these synthetic coordinate results to preserved movement.",
+      "word_count": 220,
+      "scores": [
+        7.0,
+        9.0,
+        3.5,
+        7.5,
+        5.5,
+        8.5,
+        7.5,
+        8.5
+      ],
+      "weighted_total": 70.5,
+      "preserved_draft_errata": [],
+      "sha256": "b7e75e4ec06b9432eeb53bfffedcfb45c6ff437f1bfa54b36cfb7a28b2138224"
+    },
+    {
+      "version": 7,
+      "file": "abstract-v07-pre-diagnostics.md",
+      "title": "Paired Synthetic Pose Restoration: Testing Accuracy and Movement Preservation",
+      "abstract": "We investigate paired synthetic supervision for correcting 2D pose trajectories while preserving movement amplitude, timing and left\u2013right relationships. Earlier reported motion-capture experiments with imposed joint-name swaps showed side-sensitive measurement errors, while setting naming probabilities to 50/50 matched the proposed laterality model\u2019s gain. An audited synthetic-adaptation study found no added benefit from response-based lesson selection over a matched selector without that response. We pair image-estimator tracks from controlled renders with projected anatomical proxies. A joint-embedding predictive architecture (JEPA) predicts reference features, then uses a separately fitted coordinate readout on its frozen encoder. Controls include coordinate pretraining, direct restoration and shuffled pretraining pairs; development people and ViTPose are excluded from fitting. In a summary-reported pilot with two development people and one seed, paired JEPA improves coordinate error over coordinate pretraining by less than 1% on HRNet and ViTPose, with both reported 95% intervals including zero, and worsens RTMPose by 14.0%. A fitted temporal readout on an untrained frozen encoder yields similar or lower coordinate-error point estimates than paired JEPA. For signed horizontal image-plane ankle separation, amplitude is supported on 12 of 48 correlated records; no paired-JEPA record satisfies the joint reference-and-prediction peak-timing criteria. Planned calibration and reference self-checks will measure how much improvement simple corrections recover and how many records can support timing. Synthetic movement preservation remains unresolved, and real-video transfer is untested.",
+      "word_count": 221,
+      "scores": [
+        7.0,
+        9.0,
+        3.5,
+        7.5,
+        5.5,
+        8.5,
+        7.5,
+        8.5
+      ],
+      "weighted_total": 70.5,
+      "preserved_draft_errata": [],
+      "sha256": "54a44c0dba5a3acfc9819464343972b03028c8c6ec491619b794611cffc01ef8"
+    }
+  ]
+}

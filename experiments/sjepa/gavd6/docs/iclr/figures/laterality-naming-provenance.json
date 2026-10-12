@@ -1,0 +1,102 @@
+{
+  "question": "Does the scalar response point advantage imply better geometric naming under input label corruption?",
+  "input_files": [
+    {
+      "path": "docs/iclr/evidence/laterality-condition-person.csv",
+      "sha256": "bd847b2dd98a3bca855c49f65e8031fe66ce5b098e6cc435e772c43761c3ea9a"
+    },
+    {
+      "path": "outputs/iclr/jepa-response/evaluation/response-by-condition-person.csv",
+      "sha256": "f5968617a29e2adf80fe2574ebea21cbb18bd3aedbce3c59ee2f8e68a4490f55"
+    }
+  ],
+  "aggregation": "Audited endpoint strata use nonheld:held weight 4:1, then mean across three seeds within each person and equal mean across 14 people.",
+  "conditions": [
+    "correct",
+    "global_swap",
+    "temporary_swap"
+  ],
+  "means": [
+    {
+      "method": "P-direct-none-base",
+      "label": "Direct / base",
+      "naming": "correct",
+      "assignment_failure_percent": 18.612078064753575,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "P-direct-none-base",
+      "label": "Direct / base",
+      "naming": "global_swap",
+      "assignment_failure_percent": 23.285664320786697,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "P-direct-none-base",
+      "label": "Direct / base",
+      "naming": "temporary_swap",
+      "assignment_failure_percent": 20.966664831178182,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+      "label": "Delta JEPA / change",
+      "naming": "correct",
+      "assignment_failure_percent": 24.14929669022357,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+      "label": "Delta JEPA / change",
+      "naming": "global_swap",
+      "assignment_failure_percent": 83.3991070844169,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "F-response-jepa_delta_v1-graph_time-paired_change",
+      "label": "Delta JEPA / change",
+      "naming": "temporary_swap",
+      "assignment_failure_percent": 43.82180767948359,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+      "label": "Endpoint JEPA / change",
+      "naming": "correct",
+      "assignment_failure_percent": 24.70220699760648,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+      "label": "Endpoint JEPA / change",
+      "naming": "global_swap",
+      "assignment_failure_percent": 81.12314144284134,
+      "people": 14,
+      "seeds": 3
+    },
+    {
+      "method": "F-response-jepa_endpoint_v1-graph_time-paired_change",
+      "label": "Endpoint JEPA / change",
+      "naming": "temporary_swap",
+      "assignment_failure_percent": 43.23842704659116,
+      "people": 14,
+      "seeds": 3
+    }
+  ],
+  "inference": "Post hoc descriptive development means, selected after completed experiments; no error bars or confidence intervals. No calibrated chance line.",
+  "metric": "Reference-valid hip/knee/ankle pairs separated by at least 4 pixels; swapped sum-of-distance better by >2 pixels is wrong, absolute named-swapped difference <=2 pixels is ambiguous, nonfinite predictions are missing; all fail.",
+  "scope": "Projected geometric naming diagnostic, not anatomical affected-side accuracy. Direct trains encoder and readout jointly; JEPA readouts use frozen encoders.",
+  "figure_size_inches": [
+    5.5,
+    1.9
+  ],
+  "font_points": 8,
+  "source_script": "docs/iclr/scripts/build_laterality_figure.py"
+}

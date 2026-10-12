@@ -1,0 +1,9 @@
+# This data directory contains documentation, not experiment arrays.
+# Override the repository-wide data/ rule for these reviewed text files only.
+!/data/
+/data/*
+!/data/README.md
+!/data/availability.md
+!/data/local-videos.md
+!/data/clinical-candidates.md
+!/data/video-gallery.html

@@ -1,0 +1,2374 @@
+{
+  "status": "proposed_not_launched",
+  "scope": "documentation plan; not a trainer configuration or Slurm launcher",
+  "assumptions": {
+    "setup_hours_at_most": 1,
+    "setup_time_basis": "user premise, not measured",
+    "available_h100s": 8,
+    "continuous_availability": true,
+    "timezone": "America/Los_Angeles",
+    "date_note": "dated scenario; recalculate for actual GPU start"
+  },
+  "schedule": {
+    "setup_start": "2026-09-21T23:00:00-07:00",
+    "gpu_start": "2026-09-22T00:00:00-07:00",
+    "results_freeze": "2026-09-24T12:00:00-07:00",
+    "internal_upload": "2026-09-25T18:00:00-07:00",
+    "official_deadline_aoe": "2026-09-25T23:59:00-12:00",
+    "official_deadline_pdt": "2026-09-26T04:59:00-07:00"
+  },
+  "capacity_h100_hours": {
+    "to_results_freeze": 480.0,
+    "to_internal_upload": 720.0,
+    "planned": 360,
+    "reserve": 120
+  },
+  "planned_allocations_h100_hours": {
+    "preparation": 90,
+    "training": 210,
+    "evaluation": 40,
+    "reconstruction": 20
+  },
+  "cost_rules": [
+    "allocations are planning ceilings, not forecasts",
+    "benchmark, smoke, tuning and retry costs are included",
+    "charge allocated GPUs times allocation elapsed once per allocation",
+    "atomically reserve active job caps against the shared study balance",
+    "elapsed feasibility depends on data/phase critical path as well as total GPU-hours"
+  ],
+  "base_objective": "coordinate loss by default; any extra motion term must be explicit and shared by matched controls",
+  "readout_inputs": "same observed deployment-style inputs; no artificial pretraining mask at frozen readout",
+  "default_update_budget": {
+    "pretraining": 2000,
+    "readout": 2000,
+    "direct_end_to_end": 4000,
+    "scope": "profile and freeze shared supported budgets for other recipe types before final fitting"
+  },
+  "resource_fallback": {
+    "policy": "halve common update schedule from timing feasibility before outcome ranking; retain all recipes and seeds",
+    "pretraining": 1000,
+    "readout": 1000,
+    "direct_end_to_end": 2000
+  },
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "counts": {
+    "recipes": 34,
+    "final_fits": 102,
+    "pretraining_phases": 33,
+    "readout_phases": 84,
+    "end_to_end_phases": 18,
+    "optimization_phases": 135
+  },
+  "optional_five_seed_counts": {
+    "final_fits": 170,
+    "pretraining_phases": 55,
+    "readout_phases": 140,
+    "end_to_end_phases": 30,
+    "optimization_phases": 225,
+    "condition": "declare before confirmation outputs and use same five seeds for every recipe"
+  },
+  "required_before_launch": [
+    "data/code/checkpoint hashes",
+    "reference admission and confirmation roster or development-only scope",
+    "measurement and failure policy",
+    "loss coefficients and matched endpoint exposure",
+    "re-pairing rule and tolerance",
+    "actual H100 stage timing and complete dependency forecast",
+    "primary contrast and secondary comparison hierarchy",
+    "concurrency-safe scheduler and global accounting"
+  ],
+  "recipe_groups": {
+    "M": 12,
+    "T": 8,
+    "P": 4,
+    "I": 4,
+    "L": 6
+  },
+  "recipes": [
+    {
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "group": "M",
+      "encoder": "coordinate",
+      "pretraining_mask": "time_blocks",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "group": "M",
+      "encoder": "coordinate",
+      "pretraining_mask": "time_blocks",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "group": "M",
+      "encoder": "coordinate",
+      "pretraining_mask": "uniform_tokens",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "group": "M",
+      "encoder": "coordinate",
+      "pretraining_mask": "uniform_tokens",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-coordinate-graph_time-base",
+      "group": "M",
+      "encoder": "coordinate",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "group": "M",
+      "encoder": "coordinate",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "group": "T",
+      "encoder": "coordinate",
+      "pretraining_mask": "shuffled_topology",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "group": "T",
+      "encoder": "coordinate",
+      "pretraining_mask": "shuffled_topology",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "group": "T",
+      "encoder": "coordinate",
+      "pretraining_mask": "random_joint_intervals",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "group": "T",
+      "encoder": "coordinate",
+      "pretraining_mask": "random_joint_intervals",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "group": "M",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "time_blocks",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "group": "M",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "time_blocks",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "group": "M",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "uniform_tokens",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "group": "M",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "uniform_tokens",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "group": "M",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "group": "M",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "group": "T",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "shuffled_topology",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "group": "T",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "shuffled_topology",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "group": "T",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "random_joint_intervals",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "group": "T",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "random_joint_intervals",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "P-direct-none-base",
+      "group": "P",
+      "encoder": "direct",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "base",
+      "mode": "end_to_end",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "P-direct-none-paired_change",
+      "group": "P",
+      "encoder": "direct",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "paired_change",
+      "mode": "end_to_end",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "P-static-none-base",
+      "group": "P",
+      "encoder": "static",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "base",
+      "mode": "end_to_end",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "P-temporal_refiner-none-base",
+      "group": "P",
+      "encoder": "temporal_refiner",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "base",
+      "mode": "end_to_end",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "I-initialized-none-base",
+      "group": "I",
+      "encoder": "initialized",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "I-initialized-none-paired_change",
+      "group": "I",
+      "encoder": "initialized",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "group": "I",
+      "encoder": "shuffled_jepa",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "base",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "group": "I",
+      "encoder": "shuffled_jepa",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "paired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "group": "L",
+      "encoder": "coordinate",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "per_example_measurement",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "group": "L",
+      "encoder": "coordinate",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "repaired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "group": "L",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "per_example_measurement",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "group": "L",
+      "encoder": "paired_jepa",
+      "pretraining_mask": "graph_time",
+      "readout_or_training_objective": "repaired_change",
+      "mode": "frozen_readout",
+      "comparator_policy": "graph_time"
+    },
+    {
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "group": "L",
+      "encoder": "direct",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "per_example_measurement",
+      "mode": "end_to_end",
+      "comparator_policy": null
+    },
+    {
+      "recipe_id": "L-direct-none-repaired_change",
+      "group": "L",
+      "encoder": "direct",
+      "pretraining_mask": null,
+      "readout_or_training_objective": "repaired_change",
+      "mode": "end_to_end",
+      "comparator_policy": null
+    }
+  ],
+  "pretraining_phases": [
+    {
+      "phase_id": "pretrain-coordinate-time_blocks-seed-17",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "time_blocks",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-time_blocks-seed-29",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "time_blocks",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-time_blocks-seed-43",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "time_blocks",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-uniform_tokens-seed-17",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "uniform_tokens",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-uniform_tokens-seed-29",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "uniform_tokens",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-uniform_tokens-seed-43",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "uniform_tokens",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-graph_time-seed-17",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "graph_time",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-graph_time-seed-29",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "graph_time",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-graph_time-seed-43",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "graph_time",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-shuffled_topology-seed-17",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "shuffled_topology",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-shuffled_topology-seed-29",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "shuffled_topology",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-shuffled_topology-seed-43",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "shuffled_topology",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-random_joint_intervals-seed-17",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "random_joint_intervals",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-random_joint_intervals-seed-29",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "random_joint_intervals",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-coordinate-random_joint_intervals-seed-43",
+      "phase": "pretraining",
+      "encoder": "coordinate",
+      "mask": "random_joint_intervals",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-time_blocks-seed-17",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "time_blocks",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-time_blocks-seed-29",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "time_blocks",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-time_blocks-seed-43",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "time_blocks",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-uniform_tokens-seed-17",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "uniform_tokens",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-uniform_tokens-seed-29",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "uniform_tokens",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-uniform_tokens-seed-43",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "uniform_tokens",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-graph_time-seed-17",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "graph_time",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-graph_time-seed-29",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "graph_time",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-graph_time-seed-43",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "graph_time",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-shuffled_topology-seed-17",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "shuffled_topology",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-shuffled_topology-seed-29",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "shuffled_topology",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-shuffled_topology-seed-43",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "shuffled_topology",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-random_joint_intervals-seed-17",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "random_joint_intervals",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-random_joint_intervals-seed-29",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "random_joint_intervals",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-paired_jepa-random_joint_intervals-seed-43",
+      "phase": "pretraining",
+      "encoder": "paired_jepa",
+      "mask": "random_joint_intervals",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-shuffled_jepa-graph_time-seed-17",
+      "phase": "pretraining",
+      "encoder": "shuffled_jepa",
+      "mask": "graph_time",
+      "seed": 17,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-shuffled_jepa-graph_time-seed-29",
+      "phase": "pretraining",
+      "encoder": "shuffled_jepa",
+      "mask": "graph_time",
+      "seed": 29,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "pretrain-shuffled_jepa-graph_time-seed-43",
+      "phase": "pretraining",
+      "encoder": "shuffled_jepa",
+      "mask": "graph_time",
+      "seed": 43,
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    }
+  ],
+  "final_phases": [
+    {
+      "phase_id": "M-coordinate-time_blocks-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "requires": [
+        "pretrain-coordinate-time_blocks-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-time_blocks-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "requires": [
+        "pretrain-coordinate-time_blocks-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-time_blocks-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "requires": [
+        "pretrain-coordinate-time_blocks-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-time_blocks-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "requires": [
+        "pretrain-coordinate-time_blocks-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-time_blocks-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "requires": [
+        "pretrain-coordinate-time_blocks-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-time_blocks-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "requires": [
+        "pretrain-coordinate-time_blocks-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-uniform_tokens-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "requires": [
+        "pretrain-coordinate-uniform_tokens-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-uniform_tokens-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "requires": [
+        "pretrain-coordinate-uniform_tokens-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-uniform_tokens-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "requires": [
+        "pretrain-coordinate-uniform_tokens-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-uniform_tokens-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "requires": [
+        "pretrain-coordinate-uniform_tokens-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-uniform_tokens-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "requires": [
+        "pretrain-coordinate-uniform_tokens-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-uniform_tokens-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "requires": [
+        "pretrain-coordinate-uniform_tokens-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-graph_time-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-coordinate-graph_time-base",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-graph_time-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-coordinate-graph_time-base",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-graph_time-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-coordinate-graph_time-base",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-graph_time-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-graph_time-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-coordinate-graph_time-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-shuffled_topology-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "requires": [
+        "pretrain-coordinate-shuffled_topology-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-shuffled_topology-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "requires": [
+        "pretrain-coordinate-shuffled_topology-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-shuffled_topology-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "requires": [
+        "pretrain-coordinate-shuffled_topology-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-shuffled_topology-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "requires": [
+        "pretrain-coordinate-shuffled_topology-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-shuffled_topology-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "requires": [
+        "pretrain-coordinate-shuffled_topology-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-shuffled_topology-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "requires": [
+        "pretrain-coordinate-shuffled_topology-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-random_joint_intervals-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "requires": [
+        "pretrain-coordinate-random_joint_intervals-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-random_joint_intervals-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "requires": [
+        "pretrain-coordinate-random_joint_intervals-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-random_joint_intervals-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "requires": [
+        "pretrain-coordinate-random_joint_intervals-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-random_joint_intervals-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "requires": [
+        "pretrain-coordinate-random_joint_intervals-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-random_joint_intervals-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "requires": [
+        "pretrain-coordinate-random_joint_intervals-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-coordinate-random_joint_intervals-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "requires": [
+        "pretrain-coordinate-random_joint_intervals-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-time_blocks-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "requires": [
+        "pretrain-paired_jepa-time_blocks-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-time_blocks-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "requires": [
+        "pretrain-paired_jepa-time_blocks-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-time_blocks-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "requires": [
+        "pretrain-paired_jepa-time_blocks-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-time_blocks-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-time_blocks-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-time_blocks-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-time_blocks-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-time_blocks-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-time_blocks-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-uniform_tokens-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "requires": [
+        "pretrain-paired_jepa-uniform_tokens-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-uniform_tokens-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "requires": [
+        "pretrain-paired_jepa-uniform_tokens-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-uniform_tokens-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "requires": [
+        "pretrain-paired_jepa-uniform_tokens-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-uniform_tokens-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-uniform_tokens-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-uniform_tokens-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-uniform_tokens-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-uniform_tokens-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-uniform_tokens-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-graph_time-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-graph_time-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-graph_time-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-graph_time-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-graph_time-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "M-paired_jepa-graph_time-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-shuffled_topology-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "requires": [
+        "pretrain-paired_jepa-shuffled_topology-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-shuffled_topology-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "requires": [
+        "pretrain-paired_jepa-shuffled_topology-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-shuffled_topology-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "requires": [
+        "pretrain-paired_jepa-shuffled_topology-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-shuffled_topology-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-shuffled_topology-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-shuffled_topology-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-shuffled_topology-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-shuffled_topology-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-shuffled_topology-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-random_joint_intervals-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "requires": [
+        "pretrain-paired_jepa-random_joint_intervals-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-random_joint_intervals-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "requires": [
+        "pretrain-paired_jepa-random_joint_intervals-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-random_joint_intervals-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "requires": [
+        "pretrain-paired_jepa-random_joint_intervals-seed-43"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-random_joint_intervals-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-random_joint_intervals-seed-17"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-random_joint_intervals-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-random_joint_intervals-seed-29"
+      ]
+    },
+    {
+      "phase_id": "T-paired_jepa-random_joint_intervals-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "requires": [
+        "pretrain-paired_jepa-random_joint_intervals-seed-43"
+      ]
+    },
+    {
+      "phase_id": "P-direct-none-base-seed-17",
+      "phase": "end_to_end",
+      "seed": 17,
+      "recipe_id": "P-direct-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-direct-none-base-seed-29",
+      "phase": "end_to_end",
+      "seed": 29,
+      "recipe_id": "P-direct-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-direct-none-base-seed-43",
+      "phase": "end_to_end",
+      "seed": 43,
+      "recipe_id": "P-direct-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-direct-none-paired_change-seed-17",
+      "phase": "end_to_end",
+      "seed": 17,
+      "recipe_id": "P-direct-none-paired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-direct-none-paired_change-seed-29",
+      "phase": "end_to_end",
+      "seed": 29,
+      "recipe_id": "P-direct-none-paired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-direct-none-paired_change-seed-43",
+      "phase": "end_to_end",
+      "seed": 43,
+      "recipe_id": "P-direct-none-paired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-static-none-base-seed-17",
+      "phase": "end_to_end",
+      "seed": 17,
+      "recipe_id": "P-static-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-static-none-base-seed-29",
+      "phase": "end_to_end",
+      "seed": 29,
+      "recipe_id": "P-static-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-static-none-base-seed-43",
+      "phase": "end_to_end",
+      "seed": 43,
+      "recipe_id": "P-static-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-temporal_refiner-none-base-seed-17",
+      "phase": "end_to_end",
+      "seed": 17,
+      "recipe_id": "P-temporal_refiner-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-temporal_refiner-none-base-seed-29",
+      "phase": "end_to_end",
+      "seed": 29,
+      "recipe_id": "P-temporal_refiner-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "P-temporal_refiner-none-base-seed-43",
+      "phase": "end_to_end",
+      "seed": 43,
+      "recipe_id": "P-temporal_refiner-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-initialized-none-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "I-initialized-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-initialized-none-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "I-initialized-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-initialized-none-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "I-initialized-none-base",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-initialized-none-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "I-initialized-none-paired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-initialized-none-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "I-initialized-none-paired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-initialized-none-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "I-initialized-none-paired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "I-shuffled_jepa-graph_time-base-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "requires": [
+        "pretrain-shuffled_jepa-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "I-shuffled_jepa-graph_time-base-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "requires": [
+        "pretrain-shuffled_jepa-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "I-shuffled_jepa-graph_time-base-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "requires": [
+        "pretrain-shuffled_jepa-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "I-shuffled_jepa-graph_time-paired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "requires": [
+        "pretrain-shuffled_jepa-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "I-shuffled_jepa-graph_time-paired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "requires": [
+        "pretrain-shuffled_jepa-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "I-shuffled_jepa-graph_time-paired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "requires": [
+        "pretrain-shuffled_jepa-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "L-coordinate-graph_time-per_example_measurement-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "L-coordinate-graph_time-per_example_measurement-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "L-coordinate-graph_time-per_example_measurement-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "L-coordinate-graph_time-repaired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "L-coordinate-graph_time-repaired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "L-coordinate-graph_time-repaired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "requires": [
+        "pretrain-coordinate-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "L-paired_jepa-graph_time-per_example_measurement-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "L-paired_jepa-graph_time-per_example_measurement-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "L-paired_jepa-graph_time-per_example_measurement-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "L-paired_jepa-graph_time-repaired_change-seed-17",
+      "phase": "frozen_readout",
+      "seed": 17,
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-17"
+      ]
+    },
+    {
+      "phase_id": "L-paired_jepa-graph_time-repaired_change-seed-29",
+      "phase": "frozen_readout",
+      "seed": 29,
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-29"
+      ]
+    },
+    {
+      "phase_id": "L-paired_jepa-graph_time-repaired_change-seed-43",
+      "phase": "frozen_readout",
+      "seed": 43,
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "requires": [
+        "pretrain-paired_jepa-graph_time-seed-43"
+      ]
+    },
+    {
+      "phase_id": "L-direct-none-per_example_measurement-seed-17",
+      "phase": "end_to_end",
+      "seed": 17,
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "L-direct-none-per_example_measurement-seed-29",
+      "phase": "end_to_end",
+      "seed": 29,
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "L-direct-none-per_example_measurement-seed-43",
+      "phase": "end_to_end",
+      "seed": 43,
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "L-direct-none-repaired_change-seed-17",
+      "phase": "end_to_end",
+      "seed": 17,
+      "recipe_id": "L-direct-none-repaired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "L-direct-none-repaired_change-seed-29",
+      "phase": "end_to_end",
+      "seed": 29,
+      "recipe_id": "L-direct-none-repaired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    },
+    {
+      "phase_id": "L-direct-none-repaired_change-seed-43",
+      "phase": "end_to_end",
+      "seed": 43,
+      "recipe_id": "L-direct-none-repaired_change",
+      "requires": [
+        "frozen_training_development_bundle"
+      ]
+    }
+  ],
+  "final_fits": [
+    {
+      "fit_id": "M-coordinate-time_blocks-base-seed-17",
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-time_blocks-seed-17",
+      "final_phase": "M-coordinate-time_blocks-base-seed-17"
+    },
+    {
+      "fit_id": "M-coordinate-time_blocks-base-seed-29",
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-time_blocks-seed-29",
+      "final_phase": "M-coordinate-time_blocks-base-seed-29"
+    },
+    {
+      "fit_id": "M-coordinate-time_blocks-base-seed-43",
+      "recipe_id": "M-coordinate-time_blocks-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-time_blocks-seed-43",
+      "final_phase": "M-coordinate-time_blocks-base-seed-43"
+    },
+    {
+      "fit_id": "M-coordinate-time_blocks-paired_change-seed-17",
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-time_blocks-seed-17",
+      "final_phase": "M-coordinate-time_blocks-paired_change-seed-17"
+    },
+    {
+      "fit_id": "M-coordinate-time_blocks-paired_change-seed-29",
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-time_blocks-seed-29",
+      "final_phase": "M-coordinate-time_blocks-paired_change-seed-29"
+    },
+    {
+      "fit_id": "M-coordinate-time_blocks-paired_change-seed-43",
+      "recipe_id": "M-coordinate-time_blocks-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-time_blocks-seed-43",
+      "final_phase": "M-coordinate-time_blocks-paired_change-seed-43"
+    },
+    {
+      "fit_id": "M-coordinate-uniform_tokens-base-seed-17",
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-uniform_tokens-seed-17",
+      "final_phase": "M-coordinate-uniform_tokens-base-seed-17"
+    },
+    {
+      "fit_id": "M-coordinate-uniform_tokens-base-seed-29",
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-uniform_tokens-seed-29",
+      "final_phase": "M-coordinate-uniform_tokens-base-seed-29"
+    },
+    {
+      "fit_id": "M-coordinate-uniform_tokens-base-seed-43",
+      "recipe_id": "M-coordinate-uniform_tokens-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-uniform_tokens-seed-43",
+      "final_phase": "M-coordinate-uniform_tokens-base-seed-43"
+    },
+    {
+      "fit_id": "M-coordinate-uniform_tokens-paired_change-seed-17",
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-uniform_tokens-seed-17",
+      "final_phase": "M-coordinate-uniform_tokens-paired_change-seed-17"
+    },
+    {
+      "fit_id": "M-coordinate-uniform_tokens-paired_change-seed-29",
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-uniform_tokens-seed-29",
+      "final_phase": "M-coordinate-uniform_tokens-paired_change-seed-29"
+    },
+    {
+      "fit_id": "M-coordinate-uniform_tokens-paired_change-seed-43",
+      "recipe_id": "M-coordinate-uniform_tokens-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-uniform_tokens-seed-43",
+      "final_phase": "M-coordinate-uniform_tokens-paired_change-seed-43"
+    },
+    {
+      "fit_id": "M-coordinate-graph_time-base-seed-17",
+      "recipe_id": "M-coordinate-graph_time-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-17",
+      "final_phase": "M-coordinate-graph_time-base-seed-17"
+    },
+    {
+      "fit_id": "M-coordinate-graph_time-base-seed-29",
+      "recipe_id": "M-coordinate-graph_time-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-29",
+      "final_phase": "M-coordinate-graph_time-base-seed-29"
+    },
+    {
+      "fit_id": "M-coordinate-graph_time-base-seed-43",
+      "recipe_id": "M-coordinate-graph_time-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-43",
+      "final_phase": "M-coordinate-graph_time-base-seed-43"
+    },
+    {
+      "fit_id": "M-coordinate-graph_time-paired_change-seed-17",
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-17",
+      "final_phase": "M-coordinate-graph_time-paired_change-seed-17"
+    },
+    {
+      "fit_id": "M-coordinate-graph_time-paired_change-seed-29",
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-29",
+      "final_phase": "M-coordinate-graph_time-paired_change-seed-29"
+    },
+    {
+      "fit_id": "M-coordinate-graph_time-paired_change-seed-43",
+      "recipe_id": "M-coordinate-graph_time-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-43",
+      "final_phase": "M-coordinate-graph_time-paired_change-seed-43"
+    },
+    {
+      "fit_id": "T-coordinate-shuffled_topology-base-seed-17",
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-shuffled_topology-seed-17",
+      "final_phase": "T-coordinate-shuffled_topology-base-seed-17"
+    },
+    {
+      "fit_id": "T-coordinate-shuffled_topology-base-seed-29",
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-shuffled_topology-seed-29",
+      "final_phase": "T-coordinate-shuffled_topology-base-seed-29"
+    },
+    {
+      "fit_id": "T-coordinate-shuffled_topology-base-seed-43",
+      "recipe_id": "T-coordinate-shuffled_topology-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-shuffled_topology-seed-43",
+      "final_phase": "T-coordinate-shuffled_topology-base-seed-43"
+    },
+    {
+      "fit_id": "T-coordinate-shuffled_topology-paired_change-seed-17",
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-shuffled_topology-seed-17",
+      "final_phase": "T-coordinate-shuffled_topology-paired_change-seed-17"
+    },
+    {
+      "fit_id": "T-coordinate-shuffled_topology-paired_change-seed-29",
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-shuffled_topology-seed-29",
+      "final_phase": "T-coordinate-shuffled_topology-paired_change-seed-29"
+    },
+    {
+      "fit_id": "T-coordinate-shuffled_topology-paired_change-seed-43",
+      "recipe_id": "T-coordinate-shuffled_topology-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-shuffled_topology-seed-43",
+      "final_phase": "T-coordinate-shuffled_topology-paired_change-seed-43"
+    },
+    {
+      "fit_id": "T-coordinate-random_joint_intervals-base-seed-17",
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-random_joint_intervals-seed-17",
+      "final_phase": "T-coordinate-random_joint_intervals-base-seed-17"
+    },
+    {
+      "fit_id": "T-coordinate-random_joint_intervals-base-seed-29",
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-random_joint_intervals-seed-29",
+      "final_phase": "T-coordinate-random_joint_intervals-base-seed-29"
+    },
+    {
+      "fit_id": "T-coordinate-random_joint_intervals-base-seed-43",
+      "recipe_id": "T-coordinate-random_joint_intervals-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-random_joint_intervals-seed-43",
+      "final_phase": "T-coordinate-random_joint_intervals-base-seed-43"
+    },
+    {
+      "fit_id": "T-coordinate-random_joint_intervals-paired_change-seed-17",
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-random_joint_intervals-seed-17",
+      "final_phase": "T-coordinate-random_joint_intervals-paired_change-seed-17"
+    },
+    {
+      "fit_id": "T-coordinate-random_joint_intervals-paired_change-seed-29",
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-random_joint_intervals-seed-29",
+      "final_phase": "T-coordinate-random_joint_intervals-paired_change-seed-29"
+    },
+    {
+      "fit_id": "T-coordinate-random_joint_intervals-paired_change-seed-43",
+      "recipe_id": "T-coordinate-random_joint_intervals-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-random_joint_intervals-seed-43",
+      "final_phase": "T-coordinate-random_joint_intervals-paired_change-seed-43"
+    },
+    {
+      "fit_id": "M-paired_jepa-time_blocks-base-seed-17",
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-time_blocks-seed-17",
+      "final_phase": "M-paired_jepa-time_blocks-base-seed-17"
+    },
+    {
+      "fit_id": "M-paired_jepa-time_blocks-base-seed-29",
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-time_blocks-seed-29",
+      "final_phase": "M-paired_jepa-time_blocks-base-seed-29"
+    },
+    {
+      "fit_id": "M-paired_jepa-time_blocks-base-seed-43",
+      "recipe_id": "M-paired_jepa-time_blocks-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-time_blocks-seed-43",
+      "final_phase": "M-paired_jepa-time_blocks-base-seed-43"
+    },
+    {
+      "fit_id": "M-paired_jepa-time_blocks-paired_change-seed-17",
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-time_blocks-seed-17",
+      "final_phase": "M-paired_jepa-time_blocks-paired_change-seed-17"
+    },
+    {
+      "fit_id": "M-paired_jepa-time_blocks-paired_change-seed-29",
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-time_blocks-seed-29",
+      "final_phase": "M-paired_jepa-time_blocks-paired_change-seed-29"
+    },
+    {
+      "fit_id": "M-paired_jepa-time_blocks-paired_change-seed-43",
+      "recipe_id": "M-paired_jepa-time_blocks-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-time_blocks-seed-43",
+      "final_phase": "M-paired_jepa-time_blocks-paired_change-seed-43"
+    },
+    {
+      "fit_id": "M-paired_jepa-uniform_tokens-base-seed-17",
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-uniform_tokens-seed-17",
+      "final_phase": "M-paired_jepa-uniform_tokens-base-seed-17"
+    },
+    {
+      "fit_id": "M-paired_jepa-uniform_tokens-base-seed-29",
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-uniform_tokens-seed-29",
+      "final_phase": "M-paired_jepa-uniform_tokens-base-seed-29"
+    },
+    {
+      "fit_id": "M-paired_jepa-uniform_tokens-base-seed-43",
+      "recipe_id": "M-paired_jepa-uniform_tokens-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-uniform_tokens-seed-43",
+      "final_phase": "M-paired_jepa-uniform_tokens-base-seed-43"
+    },
+    {
+      "fit_id": "M-paired_jepa-uniform_tokens-paired_change-seed-17",
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-uniform_tokens-seed-17",
+      "final_phase": "M-paired_jepa-uniform_tokens-paired_change-seed-17"
+    },
+    {
+      "fit_id": "M-paired_jepa-uniform_tokens-paired_change-seed-29",
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-uniform_tokens-seed-29",
+      "final_phase": "M-paired_jepa-uniform_tokens-paired_change-seed-29"
+    },
+    {
+      "fit_id": "M-paired_jepa-uniform_tokens-paired_change-seed-43",
+      "recipe_id": "M-paired_jepa-uniform_tokens-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-uniform_tokens-seed-43",
+      "final_phase": "M-paired_jepa-uniform_tokens-paired_change-seed-43"
+    },
+    {
+      "fit_id": "M-paired_jepa-graph_time-base-seed-17",
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-17",
+      "final_phase": "M-paired_jepa-graph_time-base-seed-17"
+    },
+    {
+      "fit_id": "M-paired_jepa-graph_time-base-seed-29",
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-29",
+      "final_phase": "M-paired_jepa-graph_time-base-seed-29"
+    },
+    {
+      "fit_id": "M-paired_jepa-graph_time-base-seed-43",
+      "recipe_id": "M-paired_jepa-graph_time-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-43",
+      "final_phase": "M-paired_jepa-graph_time-base-seed-43"
+    },
+    {
+      "fit_id": "M-paired_jepa-graph_time-paired_change-seed-17",
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-17",
+      "final_phase": "M-paired_jepa-graph_time-paired_change-seed-17"
+    },
+    {
+      "fit_id": "M-paired_jepa-graph_time-paired_change-seed-29",
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-29",
+      "final_phase": "M-paired_jepa-graph_time-paired_change-seed-29"
+    },
+    {
+      "fit_id": "M-paired_jepa-graph_time-paired_change-seed-43",
+      "recipe_id": "M-paired_jepa-graph_time-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-43",
+      "final_phase": "M-paired_jepa-graph_time-paired_change-seed-43"
+    },
+    {
+      "fit_id": "T-paired_jepa-shuffled_topology-base-seed-17",
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-shuffled_topology-seed-17",
+      "final_phase": "T-paired_jepa-shuffled_topology-base-seed-17"
+    },
+    {
+      "fit_id": "T-paired_jepa-shuffled_topology-base-seed-29",
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-shuffled_topology-seed-29",
+      "final_phase": "T-paired_jepa-shuffled_topology-base-seed-29"
+    },
+    {
+      "fit_id": "T-paired_jepa-shuffled_topology-base-seed-43",
+      "recipe_id": "T-paired_jepa-shuffled_topology-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-shuffled_topology-seed-43",
+      "final_phase": "T-paired_jepa-shuffled_topology-base-seed-43"
+    },
+    {
+      "fit_id": "T-paired_jepa-shuffled_topology-paired_change-seed-17",
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-shuffled_topology-seed-17",
+      "final_phase": "T-paired_jepa-shuffled_topology-paired_change-seed-17"
+    },
+    {
+      "fit_id": "T-paired_jepa-shuffled_topology-paired_change-seed-29",
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-shuffled_topology-seed-29",
+      "final_phase": "T-paired_jepa-shuffled_topology-paired_change-seed-29"
+    },
+    {
+      "fit_id": "T-paired_jepa-shuffled_topology-paired_change-seed-43",
+      "recipe_id": "T-paired_jepa-shuffled_topology-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-shuffled_topology-seed-43",
+      "final_phase": "T-paired_jepa-shuffled_topology-paired_change-seed-43"
+    },
+    {
+      "fit_id": "T-paired_jepa-random_joint_intervals-base-seed-17",
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-random_joint_intervals-seed-17",
+      "final_phase": "T-paired_jepa-random_joint_intervals-base-seed-17"
+    },
+    {
+      "fit_id": "T-paired_jepa-random_joint_intervals-base-seed-29",
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-random_joint_intervals-seed-29",
+      "final_phase": "T-paired_jepa-random_joint_intervals-base-seed-29"
+    },
+    {
+      "fit_id": "T-paired_jepa-random_joint_intervals-base-seed-43",
+      "recipe_id": "T-paired_jepa-random_joint_intervals-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-random_joint_intervals-seed-43",
+      "final_phase": "T-paired_jepa-random_joint_intervals-base-seed-43"
+    },
+    {
+      "fit_id": "T-paired_jepa-random_joint_intervals-paired_change-seed-17",
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-random_joint_intervals-seed-17",
+      "final_phase": "T-paired_jepa-random_joint_intervals-paired_change-seed-17"
+    },
+    {
+      "fit_id": "T-paired_jepa-random_joint_intervals-paired_change-seed-29",
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-random_joint_intervals-seed-29",
+      "final_phase": "T-paired_jepa-random_joint_intervals-paired_change-seed-29"
+    },
+    {
+      "fit_id": "T-paired_jepa-random_joint_intervals-paired_change-seed-43",
+      "recipe_id": "T-paired_jepa-random_joint_intervals-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-random_joint_intervals-seed-43",
+      "final_phase": "T-paired_jepa-random_joint_intervals-paired_change-seed-43"
+    },
+    {
+      "fit_id": "P-direct-none-base-seed-17",
+      "recipe_id": "P-direct-none-base",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "P-direct-none-base-seed-17"
+    },
+    {
+      "fit_id": "P-direct-none-base-seed-29",
+      "recipe_id": "P-direct-none-base",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "P-direct-none-base-seed-29"
+    },
+    {
+      "fit_id": "P-direct-none-base-seed-43",
+      "recipe_id": "P-direct-none-base",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "P-direct-none-base-seed-43"
+    },
+    {
+      "fit_id": "P-direct-none-paired_change-seed-17",
+      "recipe_id": "P-direct-none-paired_change",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "P-direct-none-paired_change-seed-17"
+    },
+    {
+      "fit_id": "P-direct-none-paired_change-seed-29",
+      "recipe_id": "P-direct-none-paired_change",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "P-direct-none-paired_change-seed-29"
+    },
+    {
+      "fit_id": "P-direct-none-paired_change-seed-43",
+      "recipe_id": "P-direct-none-paired_change",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "P-direct-none-paired_change-seed-43"
+    },
+    {
+      "fit_id": "P-static-none-base-seed-17",
+      "recipe_id": "P-static-none-base",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "P-static-none-base-seed-17"
+    },
+    {
+      "fit_id": "P-static-none-base-seed-29",
+      "recipe_id": "P-static-none-base",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "P-static-none-base-seed-29"
+    },
+    {
+      "fit_id": "P-static-none-base-seed-43",
+      "recipe_id": "P-static-none-base",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "P-static-none-base-seed-43"
+    },
+    {
+      "fit_id": "P-temporal_refiner-none-base-seed-17",
+      "recipe_id": "P-temporal_refiner-none-base",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "P-temporal_refiner-none-base-seed-17"
+    },
+    {
+      "fit_id": "P-temporal_refiner-none-base-seed-29",
+      "recipe_id": "P-temporal_refiner-none-base",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "P-temporal_refiner-none-base-seed-29"
+    },
+    {
+      "fit_id": "P-temporal_refiner-none-base-seed-43",
+      "recipe_id": "P-temporal_refiner-none-base",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "P-temporal_refiner-none-base-seed-43"
+    },
+    {
+      "fit_id": "I-initialized-none-base-seed-17",
+      "recipe_id": "I-initialized-none-base",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "I-initialized-none-base-seed-17"
+    },
+    {
+      "fit_id": "I-initialized-none-base-seed-29",
+      "recipe_id": "I-initialized-none-base",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "I-initialized-none-base-seed-29"
+    },
+    {
+      "fit_id": "I-initialized-none-base-seed-43",
+      "recipe_id": "I-initialized-none-base",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "I-initialized-none-base-seed-43"
+    },
+    {
+      "fit_id": "I-initialized-none-paired_change-seed-17",
+      "recipe_id": "I-initialized-none-paired_change",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "I-initialized-none-paired_change-seed-17"
+    },
+    {
+      "fit_id": "I-initialized-none-paired_change-seed-29",
+      "recipe_id": "I-initialized-none-paired_change",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "I-initialized-none-paired_change-seed-29"
+    },
+    {
+      "fit_id": "I-initialized-none-paired_change-seed-43",
+      "recipe_id": "I-initialized-none-paired_change",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "I-initialized-none-paired_change-seed-43"
+    },
+    {
+      "fit_id": "I-shuffled_jepa-graph_time-base-seed-17",
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "seed": 17,
+      "pretraining_phase": "pretrain-shuffled_jepa-graph_time-seed-17",
+      "final_phase": "I-shuffled_jepa-graph_time-base-seed-17"
+    },
+    {
+      "fit_id": "I-shuffled_jepa-graph_time-base-seed-29",
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "seed": 29,
+      "pretraining_phase": "pretrain-shuffled_jepa-graph_time-seed-29",
+      "final_phase": "I-shuffled_jepa-graph_time-base-seed-29"
+    },
+    {
+      "fit_id": "I-shuffled_jepa-graph_time-base-seed-43",
+      "recipe_id": "I-shuffled_jepa-graph_time-base",
+      "seed": 43,
+      "pretraining_phase": "pretrain-shuffled_jepa-graph_time-seed-43",
+      "final_phase": "I-shuffled_jepa-graph_time-base-seed-43"
+    },
+    {
+      "fit_id": "I-shuffled_jepa-graph_time-paired_change-seed-17",
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-shuffled_jepa-graph_time-seed-17",
+      "final_phase": "I-shuffled_jepa-graph_time-paired_change-seed-17"
+    },
+    {
+      "fit_id": "I-shuffled_jepa-graph_time-paired_change-seed-29",
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-shuffled_jepa-graph_time-seed-29",
+      "final_phase": "I-shuffled_jepa-graph_time-paired_change-seed-29"
+    },
+    {
+      "fit_id": "I-shuffled_jepa-graph_time-paired_change-seed-43",
+      "recipe_id": "I-shuffled_jepa-graph_time-paired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-shuffled_jepa-graph_time-seed-43",
+      "final_phase": "I-shuffled_jepa-graph_time-paired_change-seed-43"
+    },
+    {
+      "fit_id": "L-coordinate-graph_time-per_example_measurement-seed-17",
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-17",
+      "final_phase": "L-coordinate-graph_time-per_example_measurement-seed-17"
+    },
+    {
+      "fit_id": "L-coordinate-graph_time-per_example_measurement-seed-29",
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-29",
+      "final_phase": "L-coordinate-graph_time-per_example_measurement-seed-29"
+    },
+    {
+      "fit_id": "L-coordinate-graph_time-per_example_measurement-seed-43",
+      "recipe_id": "L-coordinate-graph_time-per_example_measurement",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-43",
+      "final_phase": "L-coordinate-graph_time-per_example_measurement-seed-43"
+    },
+    {
+      "fit_id": "L-coordinate-graph_time-repaired_change-seed-17",
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-17",
+      "final_phase": "L-coordinate-graph_time-repaired_change-seed-17"
+    },
+    {
+      "fit_id": "L-coordinate-graph_time-repaired_change-seed-29",
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-29",
+      "final_phase": "L-coordinate-graph_time-repaired_change-seed-29"
+    },
+    {
+      "fit_id": "L-coordinate-graph_time-repaired_change-seed-43",
+      "recipe_id": "L-coordinate-graph_time-repaired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-coordinate-graph_time-seed-43",
+      "final_phase": "L-coordinate-graph_time-repaired_change-seed-43"
+    },
+    {
+      "fit_id": "L-paired_jepa-graph_time-per_example_measurement-seed-17",
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-17",
+      "final_phase": "L-paired_jepa-graph_time-per_example_measurement-seed-17"
+    },
+    {
+      "fit_id": "L-paired_jepa-graph_time-per_example_measurement-seed-29",
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-29",
+      "final_phase": "L-paired_jepa-graph_time-per_example_measurement-seed-29"
+    },
+    {
+      "fit_id": "L-paired_jepa-graph_time-per_example_measurement-seed-43",
+      "recipe_id": "L-paired_jepa-graph_time-per_example_measurement",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-43",
+      "final_phase": "L-paired_jepa-graph_time-per_example_measurement-seed-43"
+    },
+    {
+      "fit_id": "L-paired_jepa-graph_time-repaired_change-seed-17",
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "seed": 17,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-17",
+      "final_phase": "L-paired_jepa-graph_time-repaired_change-seed-17"
+    },
+    {
+      "fit_id": "L-paired_jepa-graph_time-repaired_change-seed-29",
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "seed": 29,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-29",
+      "final_phase": "L-paired_jepa-graph_time-repaired_change-seed-29"
+    },
+    {
+      "fit_id": "L-paired_jepa-graph_time-repaired_change-seed-43",
+      "recipe_id": "L-paired_jepa-graph_time-repaired_change",
+      "seed": 43,
+      "pretraining_phase": "pretrain-paired_jepa-graph_time-seed-43",
+      "final_phase": "L-paired_jepa-graph_time-repaired_change-seed-43"
+    },
+    {
+      "fit_id": "L-direct-none-per_example_measurement-seed-17",
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "L-direct-none-per_example_measurement-seed-17"
+    },
+    {
+      "fit_id": "L-direct-none-per_example_measurement-seed-29",
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "L-direct-none-per_example_measurement-seed-29"
+    },
+    {
+      "fit_id": "L-direct-none-per_example_measurement-seed-43",
+      "recipe_id": "L-direct-none-per_example_measurement",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "L-direct-none-per_example_measurement-seed-43"
+    },
+    {
+      "fit_id": "L-direct-none-repaired_change-seed-17",
+      "recipe_id": "L-direct-none-repaired_change",
+      "seed": 17,
+      "pretraining_phase": null,
+      "final_phase": "L-direct-none-repaired_change-seed-17"
+    },
+    {
+      "fit_id": "L-direct-none-repaired_change-seed-29",
+      "recipe_id": "L-direct-none-repaired_change",
+      "seed": 29,
+      "pretraining_phase": null,
+      "final_phase": "L-direct-none-repaired_change-seed-29"
+    },
+    {
+      "fit_id": "L-direct-none-repaired_change-seed-43",
+      "recipe_id": "L-direct-none-repaired_change",
+      "seed": 43,
+      "pretraining_phase": null,
+      "final_phase": "L-direct-none-repaired_change-seed-43"
+    }
+  ],
+  "deterministic_baselines": [
+    "unchanged",
+    "joint_offset",
+    "joint_affine",
+    "fixed_temporal_filters"
+  ],
+  "profile_scope_note": "135 optimization phases cover final models only; additional attempts must be charged separately without double-counting allocation time"
+}

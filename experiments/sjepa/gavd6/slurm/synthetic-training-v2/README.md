@@ -1,12 +1,81 @@
-# Synthetic training v2: automated HAIC run
+# Synthetic training v2: HAIC experiments
 
-**Your source experiment has produced its report: continue directly to Step 4 for the three CPU checks.** Steps 1–3 remain the instructions for starting or monitoring the original run. This is the complete operating guide for `source-smoke-01`; no CSV edits, notebook runs or additional environment variables are required. The saved session supplies the interpreter, asset paths, scheduler account and partition.
+**Your pilot and its three post-run checks have completed. Start with the expanded experiment below.** The later numbered steps retain the original pilot and diagnostic instructions for reference. This is the single operating guide; the saved `source-smoke-01/session.env` supplies your interpreter, checkout and pilot location. No CSV edits, notebook runs or new environment variables are needed.
 
-**Publication prerequisite:** Step 1 installs only changes already committed and pushed or merged into `origin/main`. Editing this guide or the local launcher does not publish them. Step 1 stops if the required scripts are absent from Git. It does not commit, push, stash or discard changes.
+## Run the expanded experiment now
+
+The completed pilot suggests that simple calibration explains much of the coordinate improvement: the affine correction beats the neural methods on that endpoint, while paired JEPA slightly worsens displacement error. The expanded experiment tests whether these findings persist across more people, seeds and training budgets. It also measures movement and reference eligibility separately, so unsupported timing records cannot appear as successful preservation.
+
+| Setting | Expanded experiment |
+| --- | --- |
+| People | 24 training and 8 development people; excludes every pilot person, original test people and known protected aliases |
+| Motion | One recording per person; four nonoverlapping 64-frame windows, sampled at 25 Hz, starting at 5, 8, 11 and 14 seconds |
+| Rendered conditions | Training: clean, blur, obstruction. Development also includes combined blur and obstruction. Original frontal camera retained. |
+| Extractors | HRNet-W32 and RTMPose-m for fitting; ViTPose-Base held out of fitting and calibration |
+| Training | 200 and 2,000 updates **per phase**, each from scratch with seeds 17, 29 and 43: six complete comparison runs |
+| Methods | All eight learned arms, unchanged tracks and three fixed filters; pooled joint-offset and affine calibration fitted only to training data |
+| Endpoints | Original coordinate/motion metrics; calibration, timing eligibility/coverage, trajectories and losses; exploratory hip/knee/ankle left–right vector errors and occluded-joint motion |
+
+The expected bundle contains **576 training tracks and 384 development tracks**, derived from 128 physical windows. There are **8 independent development people**. Conditions, extractors and training seeds do not increase that sample size. The 200-versus-2,000 comparison also changes the cosine learning-rate schedule; it is a training-budget comparison from scratch, not continuation of one learning curve.
+
+**A. From the local checkout on your Mac, copy the supplied installer to HAIC:**
+
+```bash
+scp artifacts/synthetic-training-v2/full-experiment-install-20260919.sh haic:~/stv2-full-install.sh
+```
+
+The installer is a self-contained artifact produced with this revision. It works without a Git commit, push or pull. If you have subsequently edited the expansion scripts, regenerate it before copying with `.venv/bin/python scripts/research_directions/synthetic_training_v2/package_full_experiment.py`. The builder does not submit jobs.
+
+**B. In your HAIC shell, install and launch:**
+
+```bash
+(
+set -euo pipefail
+bash "$HOME/stv2-full-install.sh"
+source "/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2/source-smoke-01/session.env"
+bash "$STV2_ROOT/slurm/synthetic-training-v2/full-experiment.sh" launch --name full-01 --gpu-hours 12
+)
+```
+
+The installer checks the required scientific revision and dependencies, backs up changed helper files, and installs the expansion and compatible diagnostic checker. It preserves scientific source files, the frozen protocol and pilot results. Installation stops if a conflicting experiment is active. **Do not pull or edit this checkout while the expansion is pending or running.**
+
+The launch command authorizes **at most 12 additional H100 allocation-hours** and requests one H100, 8 CPUs and 96 GB RAM. It imports the pilot's recorded costs and any earlier expansion allocations, including failures, and enforces the 48-hour cumulative ceiling. A conservative projection from your measured pilot preparation and fitting times must fit the requested cap before submission. Twelve hours is a hard limit, not an expected runtime; the job releases its allocation when finished. CPU screening and analysis within this allocation count toward that limit.
+
+Expect `FULL_EXPERIMENT_SUBMITTED`, one job ID and its log path. You may disconnect. The job automatically validates the allocated environment, screens the new people, prepares the paired tracks once, and executes each seed's short and long training comparisons. After each comparison it verifies predictions and receipts, runs all three post-run checks, adds the exploratory movement analyses, and writes an updated report. A repeated launch with `--name full-01` does not submit a duplicate.
+
+Selection carries forward the original reservation records and requires the requested panel exactly. Missing assets, changed protected-identity records, insufficient eligible people or exhausted time produce an explicit failure; the job never silently substitutes a smaller experiment. Successful earlier comparisons remain readable. No automatic paid retries are submitted.
+
+**C. Check progress and read available results:**
+
+```bash
+source "/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2/source-smoke-01/session.env" &&
+bash "$STV2_ROOT/slurm/synthetic-training-v2/full-experiment.sh" status --name full-01
+```
+
+All new files are under `$STV2_ROOT/outputs/synthetic-training-v2/full-01/`:
+
+| Path | Meaning |
+| --- | --- |
+| `request.json`, `submission.json`, `status.json`, `slurm-JOB_ID.out` | Frozen settings, allocation and progress/failure details |
+| `inputs/screen.json` | Requested/achieved people, exclusions and every screening attempt |
+| `panel-verification.json`, `paired/bundle/` | Verified panel counts and reusable paired tracks |
+| `runs/updates-0200-seed-17/report.md` | First completed comparison; analogous paths for 2,000 updates and seeds 29/43 |
+| `diagnostics/updates-0200-seed-17/` | Calibration, timing, trajectories, residuals, learning curves and exploratory movement checks for that comparison |
+| `report.md`, `latest-summary.json`, `summaries/completed-06/` | Progress-labelled overview, latest immutable summary, and final six-run tables |
+
+The top-level `report.md` appears after the first completed comparison and states how many of the six are complete. Final success requires **`FULL_EXPERIMENT_COMPLETE`** from status: all six analyses finished and Slurm reports `COMPLETED`, exit `0:0`. `worker_complete` alone still awaits that scheduler check. `allocation_failed` means inspect `status.json` and the log; it can coexist with usable completed comparisons. An uncertain submission retains its unique job name in `submission.json`; resolve it with Slurm before creating another run name. Earlier allocation costs are imported before a later expansion can start.
+
+Interpret the original visible-reference metrics first, by clean/corrupted condition and extractor. The additional **all-valid synthetic** endpoint uses available synthetic references even for occluded joints. A separate **fixed window scale** uses the median reference-box diagonal to check whether framewise scaling changes amplitude or peaks. Both are labelled exploratory and leave the original masks, scales and metrics intact. Read timing error with oracle eligibility, missed/extra peaks and coverage. Left–right vector error measures the geometry between paired joints; it is not a clinical asymmetry measure.
+
+This completes the planned core synthetic development comparisons. Inputs remain machine-screened, targets remain projected anatomical proxies, and the camera and short observation window are inherited from the pilot. Scientific Gate B remains `insufficient_evidence`; independent anatomical review and real-video temporal annotations are still required for real-transfer or confirmation claims. The installer, selection, scheduler control and complete analysis path are tested locally; H100 rendering/training of this larger panel has not been executed by the assistant.
+
+## Original pilot and diagnostic commands
+
+**Publication prerequisite for the original pilot's Git route:** Step 1 below installs only changes already committed and pushed or merged into `origin/main`. The self-contained expansion installer above does not require publication. Step 1 stops if the required scripts are absent from Git; it does not commit, push, stash or discard changes.
 
 Your reported environment and historical checks passed; the audit had zero rows and all 189 reservation decisions were blank. Automation leaves those worksheets intact. It creates a small **machine-screened development experiment**, prepares data, trains all comparisons, evaluates them and verifies the results. It does not invent human reviews or declare unknown reservations cleared.
 
-The first run uses two training people and two validation people, two windows each, with the saved seed/update recipe. It delivers preliminary numerical comparisons for all eight learned methods and four baselines. Independent anatomical validation, larger samples, repeated seeds and real-video transfer remain separate research work.
+The first run uses two training people and two validation people, two windows each, with the saved seed/update recipe. It delivers preliminary numerical comparisons for all eight learned methods and four baselines. The expansion above adds people and repeated seeds; independent anatomical validation and real-video transfer remain separate research work.
 
 **1. On HAIC: pull the published revision, before starting any jobs.**
 
@@ -112,7 +181,7 @@ cat "$STV2_WORK/source-01/report.md"
 
 **4. On HAIC: run the three checks on the completed source results.**
 
-Run this block once **after the diagnostic files have been published to `origin/main`**. It backs up any existing diagnostic scripts, installs only the new diagnostic files, and submits one CPU job for all three checks. The original scientific code, protocol, controller, source results and GPU ledger stay unchanged. Do not repeat the installation while a diagnostic job is pending or running; submitted jobs verify their diagnostic code hashes.
+Run this block once **after the diagnostic files have been published to `origin/main`**. It backs up existing diagnostic scripts and their result checker, installs those files, and submits one CPU job for all three checks. The original scientific code, protocol, controller, source results and GPU ledger stay unchanged. Do not repeat the installation while a diagnostic job is pending or running; submitted jobs verify their diagnostic code hashes.
 
 ```bash
 (
@@ -126,6 +195,7 @@ stv2_diag_paths=(
   scripts/research_directions/synthetic_training_v2/diagnostics/timing.py
   scripts/research_directions/synthetic_training_v2/diagnostics/plots.py
   scripts/research_directions/synthetic_training_v2/postrun_checks.py
+  scripts/research_directions/synthetic_training_v2/check_results.py
   slurm/synthetic-training-v2/postrun-checks.sh
   slurm/synthetic-training-v2/postrun-checks.sbatch
 )
@@ -175,6 +245,48 @@ bash "$STV2_ROOT/slurm/synthetic-training-v2/postrun-checks.sh" curves
 ```
 
 Each alternative is a separate CPU submission. Timing and curve checks also fit the inexpensive calibrations because those comparisons are needed. Repeating a submission creates a new attempt; `status` only inspects the latest attempt. If source verification fails, preserve the original artifacts and read the named mismatch; do not regenerate receipts or rerun paid source stages merely to make diagnostics pass. If a diagnostic job times out, runs out of memory or is canceled, status reports the scheduler failure even if its saved Python state still says `running`. An uncertain `sbatch` response is recorded in that attempt's `submission.json`; inspect its unique job name with the scheduler commands below before resubmitting. These post-hoc checks retain `automated-source-screen` evidence and cannot open a scientific gate or confirmation claim.
+
+<a id="repair-extraction-status-verification"></a>
+
+**If diagnostics fail on apparently identical `extraction_status` values.** The older checker compares a CSV string with a reconstructed dictionary. `100.0 %` means every cell in that metadata column differs by representation; it does not measure pose error. This fails before calibration, timing or plotting. Decode the dictionary with `ast.literal_eval` while preserving all comparisons. Do not edit the saved CSV, drop the column, loosen tolerances or regenerate source receipts.
+
+After the failed diagnostic job has ended, run this block on HAIC. It backs up and repairs only the checker, verifies the existing source results on CPU, then submits a new diagnostic attempt. It works before the repair is published; an already repaired checker is left intact. Other verification failures stop the block before submission.
+
+```bash
+(
+set -euo pipefail
+source "/hai/scratch/$USER/alexpose/experiments/sjepa/gavd6/outputs/synthetic-training-v2/source-smoke-01/session.env"
+cd "$STV2_ROOT"
+"$STV2_PYTHON" - <<'PY'
+import os, shutil, tempfile
+from pathlib import Path
+
+script = Path('scripts/research_directions/synthetic_training_v2/check_results.py')
+before = script.read_text()
+old = 'saved = pd.read_csv(cfg.root / "evaluation/per-window.csv")'
+converter = 'converters={"extraction_status": ast.literal_eval}'
+if before.count(old) == 1 and converter not in before:
+    after = before.replace(old, old[:-1] + ', ' + converter + ')', 1)
+    if '\nimport ast\n' not in after:
+        if after.count('\nimport argparse\n') != 1:
+            raise SystemExit('Unexpected checker imports; no files changed.')
+        after = after.replace('\nimport argparse\n', '\nimport argparse\nimport ast\n', 1)
+    compile(after, str(script), 'exec')
+    backup = Path(tempfile.mkdtemp(prefix='metric-checker-backup-', dir=os.environ['STV2_WORK'])) / script.name
+    shutil.copy2(script, backup)
+    script.write_text(after)
+    print(f'Metadata decoding repaired. Backup: {backup}')
+elif converter in before and '\nimport ast\n' in before:
+    print('Metadata decoding repair already installed.')
+else:
+    raise SystemExit('Unexpected checker version; no files changed.')
+PY
+"$STV2_PYTHON" scripts/research_directions/synthetic_training_v2/check_results.py
+bash slurm/synthetic-training-v2/postrun-checks.sh all
+)
+```
+
+Expect `SOURCE_RESULTS_COMPLETE`, then a new CPU job ID. Use the Step 4 `status` command. The old failed attempt remains available; the new attempt must finish with `POSTRUN_CHECKS_COMPLETE` and Slurm `COMPLETED`, exit `0:0`.
 
 **What trains and what the budget covers.**
 

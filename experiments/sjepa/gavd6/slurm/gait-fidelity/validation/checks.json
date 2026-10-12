@@ -1,0 +1,57 @@
+{
+  "status": "LOCAL_PIPELINE_VALIDATION_PASSED",
+  "completed_utc": "2026-09-23T02:43:32.747438+00:00",
+  "scope": "CPU software validation; mocked expensive source body/render/pose backends, actual tiny GAVD video decoding; HAIC source execution remains unverified",
+  "unit_tests": {
+    "passed": 85,
+    "seconds": 20.551,
+    "log": "unit-tests.log",
+    "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m unittest discover -s tests/gait_fidelity -v"
+  },
+  "tutorials": {
+    "passed": 12,
+    "code_cells": 98,
+    "image_outputs": 6,
+    "error_outputs": 0,
+    "elapsed_seconds": 223.643,
+    "receipt": "tutorial-execution.json",
+    "command": ".venv/bin/python notebooks/gait_fidelity/execute_tutorials.py --work NEW_FIXTURE_PATH --output EXECUTED_NOTEBOOK_PATH"
+  },
+  "fixture_matrix": {
+    "recipes": 34,
+    "final_fits": 102,
+    "pretraining_phases": 33,
+    "optimization_phases": 135
+  },
+  "verification": {
+    "status": "GAIT_FIDELITY_VERIFIED",
+    "artifacts_checked": 1071,
+    "reconstructed_rows": 39168,
+    "evidence_status": "fixture-tested",
+    "cuda_verified_here": false
+  },
+  "code_identity": {
+    "files": 164,
+    "manifest": "frozen-code.json",
+    "sha256": "d6dc901f8a46066b485bd6ffbce9036fff66b5808972e8fab603818771de6105"
+  },
+  "manifest_census": "manifest-census.json",
+  "independent_review": "workflow-adversarial-review.md; final reservation/split and runtime-accounting reviews summarized in README.md",
+  "remaining_checks": [
+    "HAIC asset availability and exposure histories",
+    "CUDA/MMCV/EGL body rendering and MMPose extraction",
+    "Reference video and locomotion-candidate review",
+    "Full-cohort memory, throughput and allocation measurements",
+    "Source training results and prespecified statistical interpretation"
+  ],
+  "visual_review": {
+    "status": "passed",
+    "reviewer": "independent final_adversarial agent",
+    "figures": [
+      "05_evaluate_and_visualize",
+      "06_verify_and_write",
+      "C_practical_benchmarks"
+    ],
+    "finding": "Readable labels, units and legends; no clipping or problematic overlap; Software fixture appears prominently in titles"
+  }
+}

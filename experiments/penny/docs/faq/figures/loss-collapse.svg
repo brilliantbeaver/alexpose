@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="450" viewBox="0 0 1100 450" role="img" aria-labelledby="title desc">
+<title id="title">Prediction loss needs a second check: feature diversity</title><desc id="desc">Schematic feature points show how nearly constant embeddings can match without preserving useful variation. Centering, teacher and predictor temperatures, and collapse diagnostics accompany the loss. The dots are illustrative, not experiment results.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526579"/></marker></defs>
+<rect width="1100" height="450" fill="white"/>
+<text x="32" y="47" fill="#183247" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start">Prediction loss needs a second check: feature diversity</text>
+<line x1="32" y1="68" x2="1068" y2="68" stroke="#CCD6DE" stroke-width="1"/>
+<rect x="32" y="102" width="420" height="276" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="32" y="102" width="7" height="276" rx="3" fill="#285A91" stroke="#285A91" stroke-width="2"/>
+<text x="52" y="135" fill="#285A91" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Latent cross-entropy</text>
+<text x="52" y="167" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Center target channels</text>
+<text x="52" y="196" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Apply target / predictor temperatures</text>
+<text x="52" y="225" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Convert channels to distributions</text>
+<text x="52" y="254" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Compare the two distributions</text>
+<text x="52" y="283" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="start">Monitor more than the loss</text>
+<rect x="490" y="102" width="268" height="276" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<rect x="786" y="102" width="282" height="276" rx="12" fill="#F4F7FA" stroke="#CCD6DE" stroke-width="2"/>
+<text x="512" y="136" fill="#9C681C" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Collapsed features</text>
+<text x="808" y="136" fill="#157B78" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="start">Varied features</text>
+<circle cx="634.0" cy="246.0" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="630.3224184469451" cy="251.89029689365526" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="622.6708253076229" cy="252.36508198777977" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="618.0800600271964" cy="246.98784005641906" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="620.770851033091" cy="240.7023825328445" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="628.2692974837058" cy="239.28753007735804" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="633.6813622932029" cy="244.0440915126075" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="632.0312180347464" cy="250.59890619103152" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="624.8359997295311" cy="252.92550772636366" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="618.7109579049226" cy="248.88482939669228" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="619.2874277673884" cy="242.19185222377442" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="626.0354055839044" cy="239.0000685541451" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="632.75083166986" cy="242.24398957399694" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="633.2595742516015" cy="248.9411692577865" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="627.0938977456626" cy="252.9342514898641" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="619.9224966971294" cy="250.5520148810998" r="6" fill="#9C681C" stroke="none" stroke-width="2"/>
+<circle cx="815" cy="179" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="868" cy="216" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="921" cy="253" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="974" cy="290" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="1027" cy="327" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="856" cy="213" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="909" cy="250" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="962" cy="287" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="1015" cy="324" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="844" cy="210" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="897" cy="247" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="950" cy="284" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="1003" cy="321" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="832" cy="207" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="885" cy="244" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<circle cx="938" cy="281" r="6" fill="#157B78" stroke="none" stroke-width="2"/>
+<text x="512" y="339" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">Different inputs look alike</text>
+<text x="808" y="339" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">Variation is preserved</text>
+<text x="32" y="430" fill="#526579" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">Schematic only. Diversity is necessary; it does not establish a health-specific representation.</text>
+</svg>

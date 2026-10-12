@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Movement fidelity in pose restoration — two-page overview</title><meta name="description" content="Evidence-grounded gait fidelity study: completed synthetic experiments on predictive representations, loss weighting and measurement reliability."><style>
+:root{color-scheme:light;--ink:#1c2c37;--muted:#53636d;--blue:#245c83;--line:#d5dfe5}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:#edf1f4;color:var(--ink);font:18px/1.62 Georgia,'Times New Roman',serif}
+a{color:var(--blue);text-decoration-thickness:1px;text-underline-offset:3px;overflow-wrap:anywhere}
+a:focus-visible{outline:3px solid #a96b20;outline-offset:3px}
+.toolbar{max-width:1000px;margin:20px auto;display:flex;gap:24px;flex-wrap:wrap;padding:0 28px;font:14px/1.5 Arial,sans-serif}
+main{max-width:1000px;margin:0 auto 48px;padding:48px 64px;background:#fff;border:1px solid var(--line)}
+h1,h2,h3{font-family:Arial,sans-serif;line-height:1.25;font-weight:650;color:#192e3f}
+h1{font-size:39px;letter-spacing:-.6px;margin:0 0 14px}
+.subtitle{font:21px/1.4 Arial,sans-serif;color:var(--muted);margin:0 0 12px}
+.dateline{font:12px/1.5 Arial,sans-serif;letter-spacing:.25px;color:var(--muted);margin:12px 0 30px}
+h2{font-size:26px;margin:38px 0 16px;padding-top:18px;border-top:1px solid var(--line)}
+h3{font-size:20px;margin:27px 0 12px}p{margin:13px 0}strong{font-weight:700}
+.contents{font:14px/1.7 Arial,sans-serif;border-left:3px solid #d5e4ed;padding:9px 0 9px 17px;margin:20px 0 26px}
+.contents a{display:block;text-decoration:none}.contents a:hover{text-decoration:underline}
+figure{margin:24px 0;break-inside:avoid}figure img{width:100%;height:auto;display:block}
+figcaption{font:13px/1.5 Arial,sans-serif;color:var(--muted);margin-top:10px}
+table{width:100%;border-collapse:collapse;margin:22px 0 8px;font:14px/1.45 Arial,sans-serif;font-variant-numeric:tabular-nums}
+th{border-top:1.4px solid #556a77;border-bottom:1px solid #aebdc6;text-align:left;font-weight:700;color:#263e4d}
+td{border-bottom:1px solid #dce3e8}th,td{padding:9px 10px;vertical-align:top}th:first-child,td:first-child{padding-left:0}
+td.numeric,th.numeric{text-align:right}td.numeric{white-space:nowrap}td:last-child,th:last-child{padding-right:0}
+.table-caption{font:13px/1.5 Arial,sans-serif;color:var(--muted);margin:8px 0 24px}
+.table-caption em{font-style:normal}.equation{text-align:center;margin:22px 0;overflow-x:auto;break-inside:avoid}
+.table-block{break-inside:avoid;max-width:100%;overflow-x:auto}
+.equation img{display:block;margin:auto;max-width:100%;height:auto}
+.references{font:14px/1.55 Arial,sans-serif}.references li{margin:8px 0}
+code{font:0.86em Menlo,monospace;overflow-wrap:anywhere}.brief-references{font:12px/1.45 Arial,sans-serif;border-top:1px solid var(--line);padding-top:10px;margin-top:15px;color:var(--muted)}
+.brief main{max-width:1000px}.brief h2{font-size:23px;margin:24px 0 10px;padding:0;border:0}
+.brief figure{margin:16px 0}.brief .dateline{margin-bottom:20px}
+@media(max-width:700px){body{font-size:17px}main{padding:26px 22px;border:0}h1{font-size:32px}.subtitle{font-size:18px}.toolbar{gap:12px;margin:15px auto;padding:0 22px}h2{font-size:23px}th,td{font-size:11px;padding:7px 5px}.references{font-size:13px}.equation img{min-width:480px}figcaption{font-size:12px}}
+@media print{
+ @page{size:letter;margin:.65in .65in .65in .65in}
+ body{font-family:'Times New Roman',Times,serif;font-size:11pt;line-height:1.38;background:#fff;color:#152631}
+ main,.brief main{max-width:none;margin:0;padding:0;border:0}
+ .toolbar,.contents{display:none}h1{font-size:25pt;margin:0 0 10pt;letter-spacing:-.3pt}
+ .subtitle{font-size:12pt;margin-bottom:8pt}.dateline{font-size:8.5pt;margin:7pt 0 18pt}
+ h2{font-size:15pt;margin:20pt 0 10pt;padding-top:10pt;break-after:avoid}
+ h3{font-size:12pt;margin:14pt 0 7pt;break-after:avoid}p{margin:8pt 0;orphans:3;widows:3}
+ figure{margin:15pt 0;break-inside:avoid}figcaption,.table-caption{font-size:8.8pt;line-height:1.35;margin-top:7pt}
+ table{font-size:9pt;line-height:1.33;margin-top:14pt}th,td{padding:7pt 6pt}thead{display:table-header-group}tr{break-inside:avoid}.table-block{overflow:visible}
+ a{color:inherit;text-decoration:none}.equation{margin:14pt 0}.equation img{max-width:100%;min-width:0}
+ .references{font-size:9pt;line-height:1.4}.references li{margin:5pt 0}
+ .brief{font-size:11pt;line-height:1.32}.brief h1{font-size:22pt;margin-bottom:6pt}
+ .brief .subtitle{font-size:10.8pt;line-height:1.3;margin-bottom:5pt}.brief .dateline{font-size:8pt;margin:5pt 0 12pt}
+ .brief h2{font-size:12.2pt;margin:11pt 0 5pt;padding:0;border:0}.brief p{margin:5pt 0;orphans:2;widows:2}
+ .brief figure{margin:9pt 0}.brief figcaption{font-size:8.3pt;line-height:1.28;margin-top:5pt}
+ .brief #s5-experiments{margin-top:11pt}
+ .brief-references{font-size:8pt;line-height:1.3;margin-top:9pt;padding-top:6pt}
+}
+</style></head><body class="brief"><nav class="toolbar" aria-label="Document versions"><a href="full-writeup.html">Full scientific draft</a><a href="research-overview.pdf">Print PDF</a><a href="research-overview.md">Editable source</a><a href="proposal.html">Original proposal</a></nav><main><h1>Movement fidelity in pose restoration</h1>
+<p class="subtitle">Three synthetic experiments on predictive representations and gait measurement</p>
+<p class="dateline">Research overview · 25 September 2026 · Development evidence, not independent confirmation</p>
+<h2 id="s1-introduction">1. Introduction</h2>
+<p>Video-based biomechanics and ambient sensing need reliable movement measurements [1,2]. A plausible pose reconstruction can still alter how much a knee moves or which leg changed. We ask whether <strong>predicting reference-motion features helps restoration preserve movement changes beyond direct coordinate training</strong>, and whether supervising change improves the measurement without damaging its trajectory.</p>
+<h2 id="s2-data-collection">2. Data collection</h2>
+<p>The study reuses AMASS (Archive of Motion Capture as Surface Shapes), rendered through a body model [3]. Pose estimators locate joints in rendered images; projected model joints supply references. Each sample contains <strong>128 timestamps at 25 Hz</strong>, 12 joints' two-dimensional coordinates, confidence, and availability. Knee edits are crossed with side-exchanging mirrors, camera view, occlusion, and left–right labeling errors.</p>
+<p>Training uses <strong>112 people and 1,645 windows</strong>. All experiments reuse <strong>14 development people and 155 windows</strong>, with three random training seeds. ViTPose observations and the 15° edit are withheld from restoration training. No real-video results are included. [E]</p>
+<figure id="brief-sample"><a aria-label="Open full-size figure: Actual participant-aggregated reference and restored movement responses across intervention levels." href="images/iclr-draft-20260925/actual-response-example-compact.svg"><img alt="Actual participant-aggregated reference and restored movement responses across intervention levels." src="images/iclr-draft-20260925/actual-response-example-compact.svg"/></a><figcaption><strong>Actual aggregate, not a raw trajectory.</strong> Participant rub002, selected by sorted identifier; clear side view, original orientation, averaging motions, estimators, naming conditions, and seeds. All contributing contrasts succeeded. Raw frames and pose arrays are unavailable locally, preventing a verified reconstruction example. [E]</figcaption></figure>
+<h2 id="s3-methodology">3. Methodology</h2>
+<p>Each hip–knee–ankle triplet defines a projected angle. A leg's <strong>excursion</strong> is its 95th-percentile minus 5th-percentile angle. Define <i>A</i> = right excursion − left excursion and Δ<i>A</i> = <i>A</i><sub>b</sub> − <i>A</i><sub>a</sub> between original and edited motions. Illustratively, equal 50° excursions followed by a left excursion of 40° produce +10°; recovering +4° attenuates the change, while −10° reverses it. The reference response is measured after projection, not assumed equal to the body-model edit.</p>
+<p>Absolute response error is checked against <strong>waveform error</strong>, the mean absolute error in both legs' angle-over-time sequences, and coordinate error. Matching one scalar response can conceal incorrect trajectories.</p>
+<h2 id="s4-ai-models-and-techniques">4. AI models and techniques</h2>
+<p>Our <strong>joint-embedding predictive architecture (JEPA)</strong> learns numerical features by predicting a training-only reference-pose teacher's features [4]. A four-layer transformer encodes observed joint–time patches, half artificially hidden during pretraining. A small <strong>readout</strong> then learns coordinate restoration while the encoder stays fixed. Direct restoration trains both together; neither approach forecasts future motion.</p>
+<h2 id="s5-experiments">5. Experiments</h2>
+<p>The <strong>core</strong> compares direct training, coordinate/JEPA pretraining, and controls testing untrained-feature capacity and correct reference pairing. Each receives coordinate-only or change supervision. The <strong>response follow-up</strong> compares predicting feature differences between movement states (delta JEPA) with independently predicting each state's features. The <strong>repair</strong> compares a tenfold smaller scalar-loss weight with supervision of angular changes at every supported frame and leg, holding coordinate and geometry terms fixed. Each pretraining/readout phase uses 2,000 updates; direct training uses 4,000 jointly trainable updates. These schedules do not equalize optimization opportunities. [E]</p>
+<h2 id="s6-results">6. Results</h2>
+<p>Relative to unchanged estimated poses, direct coordinate training reduces response error from <strong>12.69° to 7.54°</strong> and waveform error from <strong>18.57° to 12.07°</strong>. Adding the original change-supervised objective worsens mean waveform error in all five core families and all three follow-up variants. For delta JEPA on held-out ViTPose, waveform error is <strong>23.17°</strong> with the original scalar objective, <strong>19.47°</strong> with lower scalar weight, and <strong>19.19°</strong> with dense supervision. Lowering the weight recovers about 93% of the dense arm's mean improvement over the original objective. [E]</p>
+<figure id="brief-primary"><a aria-label="Open full-size figure: Three declared primary improvement estimates with intervals spanning zero." href="images/iclr-draft-20260925/primary-contrasts-compact.svg"><img alt="Three declared primary improvement estimates with intervals spanning zero." src="images/iclr-draft-20260925/primary-contrasts-compact.svg"/></a><figcaption><strong>Primary comparisons remain uncertain.</strong> Positive favors the candidate; all reuse 14 people. First two panels compare models with original change supervision in both arms: response error over three estimators; 95% intervals resampling people and seeds. Repair: paired-person t interval after averaging seeds, waveform error on ViTPose only. Spanning zero does not establish equivalence. [E]</figcaption></figure>
+<p>Nonfinite joints or degenerate segments can invalidate a response, incurring a <strong>720° scoring penalty</strong>. About 74% of delta JEPA's 0.37° mean advantage comes from fewer penalized failures. Predicting Δ<i>A</i> = 0 gives <strong>5.81°</strong> pooled error, below all 16 learned variants in the response experiment. Direct restoration retains conditional sensitivity: error is 3.90° in clear observations versus 11.19° under occlusion. [E]</p>
+<h2 id="s7-discussion">7. Discussion</h2>
+<p>The readout objective and its weight materially change the apparent value of predictive features; a JEPA benefit remains unestablished. Biomechanical interpretation needs valid movement changes and side assignments; ambient sensing needs measurements that remain reliable as visibility changes. These experiments motivate evaluating the measurement, trajectory, and failure rate together, without validating either application.</p>
+<p>Projected angles and synthetic edits are not clinical measurements. The small cohort is repeatedly reused, with no completed independent confirmation or real-video reference evaluation. Next tests should freeze comparisons on uninspected people and retain direct-training and zero-response controls while checking optimization sensitivity.</p>
+<div class="brief-references"><strong>Sources.</strong> [E] <a href="full-writeup.html#evidence-and-references">Full draft, evidence links and methods</a>; exports in <code>outputs/iclr</code>, verified 25 September 2026. [1] Uhlrich et al., <a href="https://doi.org/10.1371/journal.pcbi.1011462">OpenCap</a>, 2023. [2] Haque et al., <a href="https://doi.org/10.1038/s41586-020-2669-y">Ambient intelligence in healthcare</a>, 2020. [3] Mahmood et al., <a href="https://openaccess.thecvf.com/content_ICCV_2019/html/Mahmood_AMASS_Archive_of_Motion_Capture_As_Surface_Shapes_ICCV_2019_paper.html">AMASS</a>, 2019. [4] Assran et al., <a href="https://openaccess.thecvf.com/content/CVPR2023/html/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.html">I-JEPA</a>, 2023.</div>
+</main></body></html>

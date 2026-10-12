@@ -1,0 +1,67 @@
+{
+  "schema": "gait-fidelity-core-informed-launch-readiness-v1",
+  "created_utc": "2026-09-24T17:37:16.926577+00:00",
+  "recommended_run": "jepa-response-02",
+  "deadline_utc": "2026-09-25T15:00:00Z",
+  "deadline_local": "2026-09-25 08:00 America/Los_Angeles; explicitly supplied by user",
+  "status": "LOCAL_VALIDATION_COMPLETE_REMOTE_AUTHENTICATION_REQUIRED",
+  "remote_submitted": false,
+  "remote_parent_verified": false,
+  "source_cuda_profile_verified": false,
+  "remote_access_result": "SSH batch-mode connection reached HAIC but returned Permission denied (keyboard-interactive).",
+  "primary": "Delta JEPA versus endpoint JEPA, paired_change readout, person-balanced response_error",
+  "secondary": "Base readout contrast, coupling-by-readout interaction, matching parent/initialized controls, direct/base practical comparator, failure decomposition and zero-response benchmark",
+  "plan_counts": {
+    "recipes": 6,
+    "final_fits": 18,
+    "pretraining_phases": 9,
+    "optimization_phases": 27
+  },
+  "plan_identity": "e9eca27f7fe43bd819714166438511b25fc7dde897a31c60b1239a167900c259",
+  "imported_parent_methods": 10,
+  "imported_parent_prediction_exports": 30,
+  "total_gpu_hours_cap": 48,
+  "category_caps": {
+    "profile": 2,
+    "fits": 36,
+    "diagnostics": 4,
+    "recovery": 6
+  },
+  "fixed_wall_reserve_hours": 14,
+  "original_response_plan_identity": "1dd3ca548bb7afec15e107e224b9347090e7134f5a2e4b7cbadc0bd438549fcb",
+  "original_core_plan_identity": "e542099c5df1924b32870b6cdc700d78f6dc9d3f10f72aa7bfd08892c1e7166a",
+  "original_full_plan_identity": "f4e3f3e502cf8cb2c83ed4433abca856e1fc92048510b44c943cb595eb86beec",
+  "original_core_inputs_unchanged": true,
+  "tests": {
+    "passed": 148,
+    "seconds": 40.841,
+    "log": "/tmp/gait-followup-readout-tests.log"
+  },
+  "fixture": {
+    "record": "readout-control-fixture-20260924.json",
+    "elapsed_seconds": 108.64084083298803,
+    "parent_unchanged": true,
+    "shared_encoder_pairs": 9,
+    "completed_fits": 18,
+    "completed_phases": 27,
+    "verification": "RESPONSE_METRICS_RECOMPUTED"
+  },
+  "release_packaging": "Dry run passed; 663 files hashed at preview; no transfer performed. Final release may contain added validation records.",
+  "code_sha256": {
+    "src/gavd6_sjepa/research_directions/gait_fidelity/spec.py": "fe67fb4ed95d9a0893623c289d19ecc9ad48ce96a2943ec6116c8b091fc26ebb",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/followup.py": "246aa0069345b903cb12c91fbd7f99d6f88abe943e5585a35fdef04cafff511c",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/cli.py": "7fe939348dd990df6eeefc1eea5920fc572a5a3f7ed6dc83bcadf9150dd7beae",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/profiling.py": "0cc86f2bb1dcbb419779be1514db866e2de993193128247749325b31b7e42903",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/response_evaluation.py": "adb020ee45ad273ba7c123be217713e7641a167ab34baa967218ed5fd39b62a4",
+    "src/gavd6_sjepa/research_directions/gait_fidelity/response_diagnostics.py": "eb98965dcadf582ba0e150d9eadc8afb4f277764cb55a29748b68b8bae6793b5",
+    "slurm/gait-fidelity/run.sh": "8e5404d3ab2e3895210eec5eacc96fa5d6288d0ecd6154ad248840ebf5659196",
+    "tests/gait_fidelity/test_followup_readout_control.py": "4feac2ff1ad095143c6cf4b0b1348dbd7ded565e64bc64acae2f39eb2faa4726",
+    "tests/gait_fidelity/test_response_training.py": "db27facb68d6c3b35feff4fb09be1bdfabc71ae22acb636b6c630a6eb9102232",
+    "docs/studies/gait-fidelity/scripts/validate_readout_control.py": "f2649f4808677bca5ac8d5de2fd127807dba2d55d00990353e63d2c13feed648"
+  },
+  "limitations": [
+    "CPU fixtures validate software only.",
+    "Complete parent arrays and receipts reside on HAIC and were not available in the local six-file export.",
+    "Source profiling must admit all 27 phases before fitting; no selective smaller matrix."
+  ]
+}

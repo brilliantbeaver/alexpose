@@ -1,0 +1,221 @@
+{
+  "source": "writeup/WRITEUP.md",
+  "source_sha256": "697cf29085225c68ee9274d03b4598583a15a2da290a8bff7414e3673b7a7506",
+  "pdf_sha256": "70ab96c4314ecc64b9ca7693e77041d0bb5082491853aa0c6b6c99ab8472f9b0",
+  "pages": 17,
+  "figures": [
+    {
+      "number": "Figure 1",
+      "asset": "01-workflow.pdf",
+      "sha256": "3aeff69f4f22ef6c389e8a6c2a129139a8aeafc21b47808ef81c339f304b53d2"
+    },
+    {
+      "number": "Figure 2",
+      "asset": "02-restoration.pdf",
+      "sha256": "fb906ca9e4a4e01f7b1497734cba9b2dde7f7e7ac3b918a203a12a9b1a8b675c"
+    },
+    {
+      "number": "Figure 3",
+      "asset": "03-primary-questions.pdf",
+      "sha256": "47ba0d5a39e8c0d8aa76db3773e1955acc554b1382a62ab0162585f5752b6775"
+    },
+    {
+      "number": "Figure 4",
+      "asset": "05-readout-repair.pdf",
+      "sha256": "ac90d1a6f54b3b20a0e8f55d6c7ea08c5bba0c2ac83faeb0a739bc2135d5907c"
+    },
+    {
+      "number": "Figure 5",
+      "asset": "06-anatomical-naming.pdf",
+      "sha256": "0605740d226994a36159c6bf8ecc6591591bc0f5871a08a0295584650b901c37"
+    },
+    {
+      "number": "Figure 6",
+      "asset": "08-research-roadmap.pdf",
+      "sha256": "e7edc1c67dd02dd400d0dfc4bb8125417894a1786fa5bf04ea8ae49689643cb6"
+    },
+    {
+      "number": "Figure A1",
+      "asset": "04-reliability.pdf",
+      "sha256": "ac04584a2a3c41354dd30d7db396c839804aa597ad30f681006b3e40c68f2903"
+    },
+    {
+      "number": "Figure A2",
+      "asset": "07-participants.pdf",
+      "sha256": "d35e973a090ca03a779f4d8b679bb0f5b2b5c7e85ed80fa84d547c991f411cb7"
+    }
+  ],
+  "locations": [
+    {
+      "type": "heading",
+      "title": "Can a motion model preserve how someone walks?",
+      "page": 1
+    },
+    {
+      "type": "heading",
+      "title": "Overview",
+      "page": 1
+    },
+    {
+      "type": "heading",
+      "title": "What the experiment measures",
+      "page": 1
+    },
+    {
+      "type": "heading",
+      "title": "Building a controlled movement experiment",
+      "page": 2
+    },
+    {
+      "type": "figure",
+      "asset": "01-workflow.pdf",
+      "page": 3,
+      "width_pt": 504,
+      "height_pt": 410.4,
+      "alt": "A workflow separates synthetic motion preparation, training on 112 people, and independent restoration on 14 development people. Reference joints supervise fitting and later score outputs. An explicitly illustrative arithmetic example explains the paired response."
+    },
+    {
+      "type": "heading",
+      "title": "What the model learns",
+      "page": 3
+    },
+    {
+      "type": "heading",
+      "title": "How success is evaluated",
+      "page": 4
+    },
+    {
+      "type": "heading",
+      "title": "What the experiments found",
+      "page": 5
+    },
+    {
+      "type": "heading",
+      "title": "Better coordinates can still give the wrong movement response",
+      "page": 5
+    },
+    {
+      "type": "figure",
+      "asset": "02-restoration.pdf",
+      "page": 5,
+      "width_pt": 504,
+      "height_pt": 334.8,
+      "alt": "Three aligned panels compare all eight model families under coordinate-only and original change supervision. Every response mean exceeds the zero-response baseline. The change package increases trajectory error in every family; paired intervals show the uncertainty of those increases."
+    },
+    {
+      "type": "heading",
+      "title": "The primary incremental benefits remain uncertain",
+      "page": 6
+    },
+    {
+      "type": "figure",
+      "asset": "03-primary-questions.pdf",
+      "page": 7,
+      "width_pt": 504,
+      "height_pt": 327.6,
+      "alt": "Three primary contrasts show gains with intervals crossing zero. Two concern response error and use a crossed-person/seed bootstrap. The third concerns ViTPose trajectory error and uses a person-t interval."
+    },
+    {
+      "type": "heading",
+      "title": "Loss balance matters more clearly than dense supervision",
+      "page": 7
+    },
+    {
+      "type": "figure",
+      "asset": "05-readout-repair.pdf",
+      "page": 8,
+      "width_pt": 504,
+      "height_pt": 424.8,
+      "alt": "Readout-repair panels show original, low-scalar, and dense trajectory means, followed by paired gains. Most of the delta improvement occurs when scalar weight is reduced. The delta dense-versus-low-scalar primary interval crosses zero."
+    },
+    {
+      "type": "heading",
+      "title": "Anatomical identity is a separate failure mode",
+      "page": 8
+    },
+    {
+      "type": "figure",
+      "asset": "06-anatomical-naming.pdf",
+      "page": 9,
+      "width_pt": 504,
+      "height_pt": 270.0,
+      "alt": "Assignment failures are shown separately for correct, globally exchanged, and temporarily exchanged input names. Feature methods exceed eighty percent combined failure under global exchanges; direct fitting is near twenty-three percent."
+    },
+    {
+      "type": "heading",
+      "title": "Toward movement understanding grounded in evidence",
+      "page": 9
+    },
+    {
+      "type": "figure",
+      "asset": "08-research-roadmap.pdf",
+      "page": 11,
+      "width_pt": 504,
+      "height_pt": 396.0,
+      "alt": "A proposed architecture combines calibrated visual evidence, body and object estimates, and an uncertain metric state. Independent measurement validation comes before future prediction, conditional generation, and selective tool use."
+    },
+    {
+      "type": "heading",
+      "title": "Technical companion",
+      "page": 12
+    },
+    {
+      "type": "heading",
+      "title": "A. Completed representation and readout training",
+      "page": 12
+    },
+    {
+      "type": "heading",
+      "title": "B. Completed evaluation, failures, and participant variation",
+      "page": 13
+    },
+    {
+      "type": "figure",
+      "asset": "04-reliability.pdf",
+      "page": 14,
+      "width_pt": 504,
+      "height_pt": 324.0,
+      "alt": "Failure rates below one percent contribute several degrees to the score at a cost of 720 degrees. Score components and the endpoint-minus-delta contrast are shown across all four examined costs; every interval includes zero."
+    },
+    {
+      "type": "figure",
+      "asset": "07-participants.pdf",
+      "page": 15,
+      "width_pt": 504,
+      "height_pt": 396.0,
+      "alt": "Every development person appears in fixed order in three panels. Direct coordinates improve pooled response over unchanged inputs for ten people, beat zero response in clear images for fourteen, and beat it under occlusion for only one. Individual fitted seeds are also shown."
+    },
+    {
+      "type": "heading",
+      "title": "C. Proposed confirmation and physical-grounding studies",
+      "page": 15
+    },
+    {
+      "type": "heading",
+      "title": "References and source notes",
+      "page": 17
+    }
+  ],
+  "page_words": [
+    478,
+    545,
+    428,
+    572,
+    332,
+    425,
+    326,
+    307,
+    425,
+    457,
+    328,
+    505,
+    518,
+    412,
+    369,
+    405,
+    471
+  ],
+  "figure_width_inches": 7.0,
+  "empirical_figures_recomputed": false,
+  "new_model_fitting": false
+}

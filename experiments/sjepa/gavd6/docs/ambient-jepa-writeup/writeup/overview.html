@@ -1,0 +1,420 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Preserving gait measurements in ambient mobility assessment</title><link rel="stylesheet" href="overview.css"></head><body><nav aria-label="Document formats"><a href="../output/pdf/jepa-gait-overview.pdf">Overview and continuation PDF</a><a href="OVERVIEW.md">Overview source</a><a href="RESEARCH_DIRECTION.md">Continuation source</a><a href="writeup.html">Detailed report</a></nav><main><h1
+id="preserving-gait-measurements-in-ambient-mobility-assessment">Preserving
+gait measurements in ambient mobility assessment</h1>
+<p>Theodore Mui · Research overview · September 2026</p>
+<p>A possible application for older adults in Stanford HAI’s Sequoias
+study is an ambient mobility tool that distinguishes changes in walking
+from changes in how well a sensor observes them. Consider a camera view
+in which a chair briefly hides one leg. A pose estimator may place the
+knee incorrectly or exchange the left and right joint labels. A model
+that repairs these estimates could make the reconstructed walk look
+smoother while removing a real difference between the legs. If that
+reconstruction informed a mobility report, the resident and the person
+reviewing it could receive a misleading account of what changed.</p>
+<p><em>Evaluating JEPA-Inspired Motion Representations Through Geometry
+and Gait Asymmetry</em> examines this measurement problem before
+attempting a downstream assessment. [1] It asks whether learned motion
+features can restore noisy two-dimensional poses while preserving a
+controlled change in knee-motion asymmetry. The potential benefit is
+more dependable observation of a person’s movement across imperfect
+recordings, which could eventually support everyday mobility monitoring
+or comparison between biomechanics assessment sessions. The experiments
+use synthetic observations derived from motion capture; they do not
+evaluate Sequoias residents, balance outcomes, or fall prediction.</p>
+<p>An unusual movement may be meaningful for the person being assessed.
+Making a reconstruction more symmetric could obscure a difference that
+an assessor needs to track. Biomechanics research has shown that more
+symmetric step lengths can coexist with asymmetric joint mechanics. [2]
+Preserving the relevant measurement, including its anatomical side, is
+therefore important before interpreting its implications for
+mobility.</p>
+<h2 id="separating-movement-changes-from-observation-errors">Separating
+movement changes from observation errors</h2>
+<p>The study starts with walking candidates from AMASS, a motion-capture
+archive. Each approximately five-second window is paired with a version
+containing a synthetic right-knee edit. Fixed cameras project both
+motions into images, and three pose estimators produce the noisy joint
+observations. The experiment varies viewpoint and occlusion and
+deliberately exchanges input joint names. Clean projected joints remain
+available as references. This construction lets the researchers
+distinguish a change in movement from an error introduced while
+observing it, a distinction that would be difficult to establish from an
+uncalibrated home recording alone.</p>
+<p>Training uses 1,645 windows from 112 people; evaluation uses 155
+windows from fourteen different people. Each person’s edited, mirrored,
+and corrupted variants stay in the same split, reducing the risk that
+familiarity with an individual’s motion inflates performance. One pose
+estimator and the largest knee edit are withheld from fitting to probe
+transfer beyond the training inputs. These choices approximate parts of
+the variation an ambient system would encounter, while the synthetic
+setting leaves everyday clothing, walking aids, and clinical movement
+differences for later validation.</p>
+<p>The target is a change in projected knee-motion asymmetry. For each
+leg, knee excursion is the ninety-fifth-percentile angle minus the
+fifth-percentile angle over a window. Asymmetry is right excursion minus
+left excursion; the response is how that difference changes between the
+original and edited motions. The reference is recomputed after
+projection because a three-dimensional knee edit need not produce the
+same angular change in the image. This outcome provides a controlled
+test of measurement preservation, although its clinical meaning has not
+been established.</p>
+<!-- PAGEBREAK -->
+<h2 id="learning-a-representation-that-supports-measurement">Learning a
+representation that supports measurement</h2>
+<p>A joint-embedding predictive architecture, or JEPA, learns features
+by predicting a target’s numerical representation. Here, a student
+transformer receives noisy joint sequences with some joint-time regions
+masked, while a slowly updated teacher receives clean projected
+references during training. Matching the teacher’s features is intended
+to capture motion structure that helps recover obscured observations.
+The clean references provide privileged supervision, so the results
+concern this specific adaptation of JEPA to pose restoration.</p>
+<p>The transformer uses the full observed window. A coordinate readout
+converts the resulting features back into joint positions. Each
+evaluation window is restored independently, so the completed task
+concerns recovering observed movement rather than forecasting it. Two
+additional training objectives compare matching each motion’s features
+separately with matching the feature difference between paired motions.
+The latter targets the change relevant to a repeated assessment, but
+shared errors can cancel across a pair while leaving either
+reconstructed movement inaccurate.</p>
+<p>Controls compare unchanged poses, direct training on reference
+coordinates, and always predicting no asymmetry change. Feature-based
+readouts generally freeze their encoders; direct training updates both
+encoder and readout. The evaluation checks response error alongside
+knee-angle trajectories and anatomical naming because a single summary
+can hide incorrect timing or side assignment. Failed predictions remain
+in the scores, with fixed costs of 720° for response and 180° for
+trajectories. Results average within each person before combining people
+and training seeds, so extra rendered views do not count as extra
+participants.</p>
+<h2 id="what-the-comparisons-showed">What the comparisons showed</h2>
+<p>Direct coordinate training improves the noisy observations: mean
+knee-trajectory error falls from 18.57° to 12.07°, and
+asymmetry-response error falls from 12.69° to 7.54°. Yet always
+predicting no change scores 5.81°, below every one of the sixteen
+trained variants on the pooled response measure. Direct restoration
+beats that baseline in clear images but loses under occlusion. For a
+future Sequoias mobility report, this would make visibility a relevant
+condition for interpreting a measurement, even when processing returns a
+complete-looking skeleton.</p>
+<p><img src="../figures/09-overview-results.svg"
+alt="Three recorded primary gains have 95 percent intervals spanning zero: core JEPA versus direct training with the change objective, delta versus endpoint feature training, and dense versus low-scalar readout supervision." /></p>
+<p><strong>Figure 1. Uncertain benefits in the three primary
+comparisons.</strong> Gains are comparator-minus-candidate errors. The
+first two concern response error and resample people and seeds; the
+third concerns ViTPose trajectories and uses a person-t interval after
+seed averaging. All reuse fourteen development people and three seeds.
+The core comparison uses the change objective for both methods, unlike
+the direct-coordinate result in the text.</p>
+<!-- PAGEBREAK -->
+<p>The three primary comparisons leave the incremental benefits
+uncertain (Figure 1). Unequal initial gradient influence and the
+different adaptation permitted by frozen and jointly trained encoders
+further limit attribution to the learned representation.</p>
+<p>Adding scalar-response and short-segment geometry penalties increases
+knee-trajectory error in every model family. Reducing the scalar penalty
+lowers this error from 23.17° to 19.47° for the delta model on the
+withheld pose estimator; supervising angular changes throughout the
+sequence yields a further, uncertain 0.28° improvement. For
+balance-assessment research, this supports inspecting trajectories
+alongside the reported summary, because agreement on an excursion change
+can conceal errors in how the knee moved through time.</p>
+<p>Anatomical naming introduces a further concern for side-specific
+interpretation. When input leg names are globally exchanged, the
+combined rate of wrong, ambiguous, or missing assignments is
+approximately 81-83% for the endpoint and delta feature models, compared
+with 23% for direct coordinate training. These geometric checks use
+different eligibility rules from angular scoring. They show why a
+plausible reconstruction cannot by itself establish which leg changed, a
+distinction that matters when an assessor compares sides or discusses a
+change with a participant.</p>
+<h2 id="implications-for-sequoias-and-balance-assessment">Implications
+for Sequoias and balance assessment</h2>
+<p>The paper’s contribution is an evaluation that exposes where pose
+restoration can misrepresent a movement measurement. A future mobility
+interface could attach visibility information to an estimate and let an
+assessor inspect the relevant recording. It would also need to
+distinguish an unsupported measurement from an unchanged gait. Whether
+these choices improve understanding or reduce unnecessary concern would
+require evaluation with residents and assessors.</p>
+<p>A practical next study would fix the comparisons before evaluating
+new people, then test natural recordings against independent
+three-dimensional motion references. It should separate repeated views
+of the same movement with added occlusion from paired trials in which
+movement genuinely changes. Each leg’s trajectory and excursion change
+would need checking so that improved reconstruction does not erase an
+individual difference. Including walking aids and atypical gait would
+help determine when the method is useful to the intended participants.
+The current evidence comes from one repeatedly used development cohort
+and cannot establish performance in those settings.</p>
+<p>For Sequoias, measurement validation would need to accompany resident
+control over sensing and a clear account of how estimates are used. A
+separate Stanford HCI participatory study with older adults in the
+Tenderloin documents concerns about surveillance and stigma. [3] A
+follow-up could examine how residents understand missing or uncertain
+measurements, and how assessors use that information when deciding
+whether to review a recording or repeat an assessment. This would
+connect the technical evaluation to decisions people make while living
+with and using an ambient system.</p>
+<h3 id="sources">Sources</h3>
+<ol type="1">
+<li><em>Evaluating JEPA-Inspired Motion Representations Through Geometry
+and Gait Asymmetry.</em> <a
+href="../../iclr/versions/v08/paper-v08.pdf">Version 08 manuscript and
+evidence</a>, 2026. All experimental results above come from this
+paper.</li>
+<li>Padmanabhan et al. <em>Persons post-stroke improve step length
+symmetry by walking asymmetrically.</em> <a
+href="https://doi.org/10.1186/s12984-020-00732-z">Journal of
+NeuroEngineering and Rehabilitation</a>, 2020.</li>
+<li>So et al. <em>“They Make Us Old Before We’re Old”: Designing Ethical
+Health Technology with and for Older Adults.</em> <a
+href="https://doi.org/10.1145/3687017">CSCW</a>, 2024. This was a
+separate participatory study, not the Sequoias evaluation.</li>
+</ol>
+<!-- PAGEBREAK -->
+<h1
+id="recommended-continuation-determining-when-a-gait-change-can-be-measured">Recommended
+continuation: determining when a gait change can be measured</h1>
+<p>Proposed research · Literature checked 28 September 2026</p>
+<p>The strongest continuation is to study whether a change in each leg’s
+movement remains measurable when visibility deteriorates. A future
+Sequoias mobility report might compare recordings taken days apart, with
+one leg partly hidden in the later recording. The useful output would
+include an estimate of change and evidence that the comparison is
+supported. An unsupported comparison should remain distinguishable from
+an unchanged movement, especially when an assessor is deciding whether
+another observation would justify the burden of repeating an
+assessment.</p>
+<p>The asymmetry study gives this question a concrete starting point.
+Direct coordinate supervision improves reconstruction, yet an
+always-zero response performs better on the pooled change measure. The
+exploratory visibility analysis locates an important failure under
+occlusion, while anatomical naming errors undermine side-specific
+interpretation. These findings motivate testing the reliability of a
+reported change. They provide limited support for choosing JEPA as the
+preferred architecture, so its contribution should remain an
+experimental question.</p>
+<h2 id="what-would-distinguish-this-study-from-existing-work">What would
+distinguish this study from existing work?</h2>
+<p>Several close precedents substantially narrow the opportunity. Stenum
+et al. already validate within-person, speed-related gait changes
+against motion capture in stroke and Parkinson’s disease. [4]
+DeepGaitLab evaluates baseline-adjusted step-length asymmetry during
+split-belt walking. [5] Cotton and Sinz reconstruct biomechanical
+trajectories with uncertainty, including asymmetric stroke gait and
+occlusion; their calibration uses detected keypoints because independent
+reference poses are unavailable. [6] Pace et al. evaluate
+uncertainty-based retention of reconstructed anatomical landmarks. [7]
+Repeatability and minimal detectable change are also established topics
+in smartphone biomechanics. [8]</p>
+<p>The September 2026 SynthGait-19K preprint is especially relevant. Its
+GaitXFormer uses V-JEPA2 initialization, and its evaluations include
+controlled occlusion and within-patient directional changes associated
+with clinical scores. [9] Consequently, JEPA-based gait estimation,
+sensitivity to occlusion, and detecting movement change each have
+substantial precedent. OpenCap Monocular also already combines WHAM,
+pose refinement, and biomechanical modeling. [10]</p>
+<p>The proposed contribution would be a method and evaluation for
+<strong>preserving independently measured changes in each leg while
+identifying comparisons that admit conflicting explanations under
+occlusion</strong>. The evaluation would test real movement changes and
+observation-only changes together. A new technical component would
+search for alternative trajectories that fit the landmark observations
+but imply a different knee-excursion change. Its value would depend on
+detecting misleading comparisons better than existing uncertainty
+estimates or simple visibility rules.</p>
+<p>This is a plausible, bounded originality claim. The search found
+close work on every component, but did not identify a study
+demonstrating this complete measurement-specific test. That finding
+supports investigating the direction; it cannot establish that the idea
+has never appeared elsewhere. The independent novelty audit records the
+closest overlaps and the limits of this assessment.</p>
+<!-- PAGEBREAK -->
+<h2 id="an-experiment-that-separates-movement-from-visibility">An
+experiment that separates movement from visibility</h2>
+<p>Begin with synchronized video and an independent marker-based motion
+reference. For each person, select two prespecified walking trials, A
+and B, and derive each leg’s change from the reference measurements. The
+target is the observed difference between these trials; an instruction
+to walk differently does not establish its magnitude or a causal
+treatment effect. Knee excursion would retain the percentile definition
+used in v08, now applied to explicitly defined anatomical 3D flexion
+angles. This would be a new outcome, requiring its own repeatability
+assessment.</p>
+<p><img src="../figures/10-research-design.svg"
+alt="Proposed crossed experiment: each of two reference-measured trials is observed clearly and with digital occlusion. Within-trial comparisons should preserve the same measurement; between-trial comparisons should preserve the reference-defined change." /></p>
+<p><strong>Figure 2. Proposed experiment; no results are shown.</strong>
+Digital masks change the target camera’s evidence while leaving the
+recorded movement and independent reference unchanged. Every
+clear/occluded combination of the two trials tests the same
+reference-defined change. A separate natural-occlusion evaluation would
+assess transfer beyond this controlled manipulation.</p>
+<p>For the observation-only test, compare a recording with an occluded
+copy of itself. Any reconstructed change is an observation error. For
+the movement test, compare A with B under each visibility combination. A
+method that always returns zero can pass the first test while failing
+the second. Each leg must be scored separately because errors can cancel
+in a right-minus-left asymmetry summary. The full knee trajectories and
+anatomical assignment remain necessary checks.</p>
+<p>Keep all variants from one person together, with separate people for
+fitting, calibration, and final evaluation. Fix trial support, pairing,
+camera conventions, and failure handling before testing. Occlusion
+should vary in duration and gait phase, including the period of greatest
+knee flexion. The reference cameras must remain unaffected by the
+digital masks. Marker placement, soft-tissue motion, and the reference
+body model introduce their own errors, so reference agreement must be
+interpreted alongside repeatability and model sensitivity.</p>
+<p>Start with a small public-data pilot, verifying access to
+synchronized RGB, calibration, participant identifiers, and pairs with
+reference-resolvable knee changes. Public OpenCap data from ten healthy
+adults offer a starting point, although trunk-sway trials may provide
+insufficient knee variation. Its monocular refinement was tuned using
+these data, so final comparative claims require independent data. [10]
+Prespecify the balance of null and changed pairs and the change
+magnitudes evaluated. Later testing would need actual atypical gait and
+assistance, with natural occlusion held out from development; this pilot
+cannot establish performance for Sequoias residents.</p>
+<!-- PAGEBREAK -->
+<h2 id="searching-for-a-conflicting-explanation">Searching for a
+conflicting explanation</h2>
+<p>The method would start from a reconstruction and search for
+alternative lower-limb trajectories that agree with visible 2D landmark
+detections within calibrated tolerances, while increasing or decreasing
+each leg’s excursion change. Estimated hidden landmarks would remain
+unobserved. These alternatives test ambiguity under the landmark model;
+silhouettes might rule them out. The tolerances and smallest resolvable
+change would be fixed from a separate pilot and reference repeatability,
+without assuming a clinical threshold.</p>
+<p>This search should begin offline with short sequences, known cameras,
+and independently calibrated body dimensions. It would retain consistent
+dimensions across trials while allowing session-specific camera
+parameters where appropriate. Joint limits and continuity would
+constrain the alternatives without requiring symmetric walking or
+similarity to a healthy gait template. These conditions establish
+limited kinematic admissibility. Claims about balance, joint loading, or
+muscle forces would require additional measurements and assumptions.</p>
+<p>A local search explores only part of the possible movement space. A
+found alternative can demonstrate ambiguity under the stated
+constraints; an unsuccessful search cannot establish that the reported
+change is identifiable. Every candidate must pass an independent
+constraint check, and the exact percentile outcome must be recomputed if
+optimization uses a smooth approximation. Tests should record whether
+the reference trajectory is excluded by the assumptions, as well as
+sensitivity to initialization, camera uncertainty, and computation
+budget. Rigid-object methods such as CLOSURE and SLUE provide precedent
+for pose uncertainty sets and clarify the distinction between explored
+solutions and outer bounds. [11,12]</p>
+<p>A small temporal refiner could combine a fixed 3D initialization with
+2D pose features. Both versions would share a compatible 2D encoder and
+3D readout, varying JEPA pretraining before identical supervised
+adaptation; pretraining data and compute would be reported separately.
+Supervision would cover each leg’s trajectory and excursion change, with
+occluded copies providing consistency examples. Geometry and ambiguity
+search would be separate ablations. The v08 loss results make matched
+loss-weight selection and checks for erased changes essential.</p>
+<p>The reporting rule would retain or decline an entire trial pair;
+removing uncertain frames could erase peak flexion. Intervals would be
+calibrated jointly for both legs on independent people, accounting for
+repeated pairs and following task-level uncertainty methods. [13] An
+interval wholly beyond the resolution band around zero supports a
+change; one wholly inside supports a change smaller than that
+resolution. Other cases remain inconclusive. Coverage must be checked
+after selection and within gait and visibility groups, without a
+guarantee for each resident.</p>
+<p>On all reference-eligible pairs, first test noninferiority on per-leg
+change error against the locked baseline using the pilot-derived margin,
+then test trajectory superiority. Include failures under a prespecified
+rule and retain zero-response and interpolation controls. Separately
+compare search flags with visibility thresholds, calibrated intervals,
+and ensemble disagreement at matched retention: the proportion of
+complete comparisons reported. Count false changes, missed changes, and
+wrong-side reports, and audit retention across difficult cases.
+Confidence intervals would resample people with all their pairs. A
+simple rule performing equally well would remove the case for the extra
+search cost.</p>
+<!-- PAGEBREAK -->
+<h2 id="feasibility-scientific-value-and-later-extensions">Feasibility,
+scientific value, and later extensions</h2>
+<p>The first deliverable should be a locked evaluation protocol and
+baseline audit, followed by a limited feasibility test of the ambiguity
+search. The v08 checkpoints and full prediction artifacts would need
+recovery or regeneration before claiming a direct replication. Existing
+reconstruction tools and a small refiner keep the new study within reach
+without training a foundation model. The main dependencies are suitable
+reference data and a biomechanics collaborator to establish measurement
+conventions. Sample size should follow pilot estimates of between-person
+variation and the chosen preservation margin.</p>
+<p>Among the directions in the plan, calibrated 3D observation and
+transparent biomechanical constraints most directly support this
+experiment. Depth or an additional view could then be evaluated by
+whether it resolves an ambiguous comparison. OpenSim-derived training
+losses deserve a later ablation once their assumptions can be checked
+independently. Robot dynamics, full movement generation, and joint
+human-object generation add substantial modeling requirements before the
+present measurement problem is resolved. A Qwen agent trained with
+reinforcement learning would be justified in this project after a fixed
+tool pipeline demonstrates which additional observations improve the
+comparison and what they cost the participant.</p>
+<p>The scientific value would come from establishing when restoration
+preserves a meaningful individual difference and when the available
+evidence is insufficient. A well-controlled negative result could
+identify failure conditions and provide a reusable test for future
+representations. For HCI, a subsequent study could examine how residents
+and assessors interpret a qualified measurement, an unavailable
+comparison, or a request for another observation, while respecting
+residents’ control over sensing. Those studies would determine whether
+the technical gains improve decisions or reduce unnecessary effort; the
+proposed knee measurements alone would not establish fall risk or
+clinical benefit.</p>
+<h3 id="sources-for-the-proposed-direction">Sources for the proposed
+direction</h3>
+<ol start="4" type="1">
+<li>Stenum et al. <em>Clinical gait analysis using video-based pose
+estimation: Multiple perspectives, clinical populations, and measuring
+change.</em> <a href="https://doi.org/10.1371/journal.pdig.0000467">PLOS
+Digital Health</a>, 2024.</li>
+<li>Shin et al. <em>DeepGaitLab: Accurate and Flexible Markerless Motion
+Tracking Powered by Synthetic Data.</em> <a
+href="https://doi.org/10.21203/rs.3.rs-8998239/v1">Research Square
+preprint</a>, July 2026.</li>
+<li>Cotton and Sinz. <em>Biomechanical Reconstruction with Confidence
+Intervals from Multiview Markerless Motion Capture.</em> <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13188178/">EMBC</a>,
+2025.</li>
+<li>Pace et al. <em>Uncertainty-Aware Mapping from 3D Keypoints to
+Anatomical Landmarks for Markerless Biomechanics.</em> <a
+href="https://arxiv.org/abs/2603.26844">arXiv preprint</a>, March
+2026.</li>
+<li>Horsak, Kainz, and Dumphart. <em>Repeatability and minimal
+detectable change including clothing effects for smartphone-based 3D
+markerless motion capture.</em> <a
+href="https://doi.org/10.1016/j.jbiomech.2024.112281">Journal of
+Biomechanics</a>, 2024.</li>
+<li>Mehraban et al. <em>SynthGait-19K: A Physically Grounded Synthetic
+Video Dataset for Gait Parameter Estimation.</em> <a
+href="https://arxiv.org/pdf/2609.08108">arXiv preprint, including
+Appendices E.2 and F.4</a>, September 2026.</li>
+<li>Gilon, Miller, and Uhlrich. <em>OpenCap Monocular: 3D Human
+Kinematics and Musculoskeletal Dynamics from a Single Smartphone
+Video.</em> <a href="https://arxiv.org/abs/2603.24733">arXiv
+preprint</a>, March 2026.</li>
+<li>Gao et al. <em>CLOSURE: Fast Quantification of Pose Uncertainty
+Sets.</em> <a
+href="https://www.roboticsproceedings.org/rss20/p072.pdf">Robotics:
+Science and Systems</a>, 2024.</li>
+<li>Shaikewitz, Georgiou, and Carlone. <em>Uncertainty Quantification
+for Visual Object Pose Estimation: S-Lemma Ellipsoidal Bounds.</em> <a
+href="https://doi.org/10.1109/TRO.2026.3717258">IEEE Transactions on
+Robotics</a>, 2026.</li>
+<li>Wen, Ahmad, and Schniter. <em>Task-Driven Uncertainty Quantification
+in Inverse Problems via Conformal Prediction.</em> <a
+href="https://arxiv.org/abs/2405.18527">ECCV</a>, 2024.</li>
+</ol>
+<p>The supporting <a
+href="../reviews/research-direction-novelty-audit.md">independent
+novelty audit</a> and <a href="../reviews/RESEARCH-SEARCH.md">search
+record</a> document additional precedents, design objections, and
+source-access limits. All experiments in this section are proposed.</p>
+</main></body></html>

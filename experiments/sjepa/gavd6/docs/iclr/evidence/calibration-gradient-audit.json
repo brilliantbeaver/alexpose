@@ -1,0 +1,9 @@
+{
+  "source": "outputs/iclr/jepa-response/diagnostics/loss-calibration.json",
+  "source_sha256": "3c00e2931bfa3a8cc7e4d94616774b81a066e60a0aabc3aa22a303a0266620d5",
+  "shared_lambda": 0.012646811176583523,
+  "weighted_initial_delta_to_base_gradient_rms": 1.3037139634433077e-05,
+  "weighted_initial_endpoint_to_base_gradient_rms": 0.10000000000000002,
+  "delta_to_endpoint_initial_gradient_rms": 0.00013037139634433076,
+  "interpretation": "Training-only seed-17 initialization; the shared coefficient makes the largest auxiliary 10% of the base gradient. The two auxiliaries have different initial influence. This does not establish their later gradients or a causal explanation of performance."
+}
