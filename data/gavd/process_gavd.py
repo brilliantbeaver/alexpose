@@ -1,131 +1,158 @@
 #!/usr/bin/env python3
-"""
-Script to process GAVD_Clinical_Annotations_1.csv and organize data by gait patterns.
+"""Losslessly split the five pinned GAVD CSV parts into gait_pat/seq.csv.
 
-This script:
-1. Analyzes the CSV file to find unique gait patterns and sequences
-2. Creates a folder structure with subfolders for each gait pattern
-3. Splits the data by sequence ID into separate CSV files within appropriate gait pattern folders
-4. Preserves the original column structure in all output files
-
-Usage: python process_gavd.py
+All fields remain strings. Parts are read in numeric order, including sequences
+that cross part boundaries. Outputs are staged before publication; existing
+CSV rows must be a subset of the source, and unexpected CSVs cause refusal.
+Publication is atomic per file, not a transaction over the entire directory.
 """
 
+import argparse
+from collections import Counter, OrderedDict
 import csv
+import hashlib
+import json
 import os
-from collections import defaultdict
+from pathlib import Path
+import re
 import sys
+import tempfile
 
-def analyze_csv_structure(csv_file):
-    """Analyze the CSV file to understand unique gait patterns and sequences."""
-    gait_patterns = set()
-    sequences = set()
-    seq_to_gait_pat = {}
-    
-    print(f"Analyzing {csv_file}...")
-    
-    with open(csv_file, 'r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        
-        for i, row in enumerate(reader):
-            if i % 10000 == 0:
-                print(f"Processed {i} rows...")
-            
-            seq = row['seq']
-            gait_pat = row['gait_pat']
-            
-            gait_patterns.add(gait_pat)
-            sequences.add(seq)
-            seq_to_gait_pat[seq] = gait_pat
-    
-    print(f"\nAnalysis complete:")
-    print(f"Total unique gait patterns: {len(gait_patterns)}")
-    print(f"Total unique sequences: {len(sequences)}")
-    print(f"Gait patterns found: {sorted(gait_patterns)}")
-    
-    return gait_patterns, sequences, seq_to_gait_pat
+ROOT = Path(__file__).resolve().parent
+HEADER = 'seq,frame_num,cam_view,gait_event,dataset,gait_pat,bbox,vid_info,id,url'.split(',')
+SOURCE_NAMES = [f'GAVD_Clinical_Annotations_{i}.csv' for i in range(1, 6)]
+PATTERNS = {'abnormal', 'antalgic', 'cerebral palsy', 'exercise', 'inebriated',
+            'myopathic', 'normal', 'parkinsons', 'pregnant', 'prosthetic', 'stroke', 'style'}
 
-def create_folder_structure(base_path, gait_patterns):
-    """Create the folder structure for organizing CSV files."""
-    gavd_path = os.path.join(base_path, 'gavd')
-    
-    # Create main gavd folder
-    os.makedirs(gavd_path, exist_ok=True)
-    print(f"Created directory: {gavd_path}")
-    
-    # Create subfolders for each gait pattern
-    for pattern in gait_patterns:
-        pattern_path = os.path.join(gavd_path, pattern)
-        os.makedirs(pattern_path, exist_ok=True)
-        print(f"Created directory: {pattern_path}")
-    
-    return gavd_path
 
-def process_and_split_csv(csv_file, gavd_path, seq_to_gait_pat):
-    """Process the CSV file and split it by sequences into appropriate gait pattern folders."""
-    
-    # Dictionary to store data for each sequence
-    sequence_data = defaultdict(list)
-    
-    print(f"Reading and organizing data from {csv_file}...")
-    
-    # Read the CSV file and organize data by sequence
-    with open(csv_file, 'r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        header = reader.fieldnames
-        
-        for i, row in enumerate(reader):
-            if i % 10000 == 0:
-                print(f"Processed {i} rows...")
-            
-            seq = row['seq']
-            sequence_data[seq].append(row)
-    
-    print(f"Writing individual CSV files for {len(sequence_data)} sequences...")
-    
-    # Write each sequence to its appropriate CSV file
-    for seq, rows in sequence_data.items():
-        gait_pat = seq_to_gait_pat[seq]
-        
-        # Create the file path
-        csv_filename = f"{seq}.csv"
-        csv_filepath = os.path.join(gavd_path, gait_pat, csv_filename)
-        
-        # Write the CSV file
-        with open(csv_filepath, 'w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=header)
-            writer.writeheader()
-            writer.writerows(rows)
-        
-        print(f"Created: {csv_filepath} with {len(rows)} rows")
+def source_files(source_dir):
+    """Require the complete source inventory and verify manifest byte digests."""
+    manifest = json.loads((source_dir / 'manifest.json').read_text(encoding='utf-8'))
+    entries = manifest['files']
+    if len(entries) != 5 or {entry['name'] for entry in entries} != set(SOURCE_NAMES):
+        raise ValueError('Manifest must contain exactly the five numbered CSV parts')
+    actual = {p.relative_to(source_dir).as_posix() for p in source_dir.rglob('*.csv')}
+    if actual != set(SOURCE_NAMES):
+        raise ValueError('Source CSV inventory differs from the five numbered parts')
+    by_name = {entry['name']: entry for entry in entries}
+    for name in SOURCE_NAMES:
+        path = source_dir / name
+        entry = by_name[name]
+        content = path.read_bytes()
+        blob = hashlib.sha1(b'blob ' + str(len(content)).encode('ascii') + b'\0' + content).hexdigest()
+        if (len(content) != entry['bytes'] or
+                hashlib.sha256(content).hexdigest() != entry['sha256'] or
+                blob != entry['git_blob_sha']):
+            raise ValueError(f'Source checksum mismatch: {path}')
+        yield path, entry
+
+
+def rows(path):
+    with path.open(encoding='utf-8', newline='') as stream:
+        reader = csv.reader(stream, strict=True)
+        if next(reader, None) != HEADER:
+            raise ValueError(f'Incorrect CSV header: {path}')
+        for line, row in enumerate(reader, 2):
+            if len(row) != len(HEADER):
+                raise ValueError(f'{path}:{line}: expected ten fields')
+            yield tuple(row)
+
+
+def process(source_dir, output_dir):
+    source_dir, output_dir = source_dir.resolve(), output_dir.resolve()
+    if source_dir == output_dir or output_dir.is_relative_to(source_dir):
+        raise ValueError('Output must not be inside the source directory')
+    output_dir.mkdir(parents=True, exist_ok=True)
+    # The staging directory is outside the output tree to keep discovery unambiguous.
+    with tempfile.TemporaryDirectory(prefix='.gavd-stage-', dir=output_dir.parent) as temp:
+        stage = Path(temp)
+        handles = OrderedDict()
+        paths = set()
+        seq_patterns = {}
+        keys = set()
+        total_rows = 0
+        try:
+            for path, entry in source_files(source_dir):
+                count = 0
+                for row in rows(path):
+                    seq, frame, pattern = row[0], row[1], row[5]
+                    if not re.fullmatch(r'[A-Za-z0-9_-]+', seq) or pattern not in PATTERNS:
+                        raise ValueError(f'Unsafe/unknown sequence or gait pattern in {path}: {seq!r}, {pattern!r}')
+                    if not frame.isdecimal():
+                        raise ValueError(f'Invalid frame number in {path}: {frame!r}')
+                    if seq_patterns.setdefault(seq, pattern) != pattern:
+                        raise ValueError(f'Sequence {seq} has multiple gait labels')
+                    key = (seq, int(frame))
+                    if key in keys:
+                        raise ValueError(f'Duplicate sequence/frame key: {key}')
+                    keys.add(key)
+                    relative = Path(pattern) / f'{seq}.csv'
+                    if relative in handles:
+                        stream, writer = handles.pop(relative)
+                    else:
+                        staged_path = stage / relative
+                        staged_path.parent.mkdir(parents=True, exist_ok=True)
+                        stream = staged_path.open('a', encoding='utf-8', newline='')
+                        writer = csv.writer(stream, lineterminator="\n")
+                        if relative not in paths:
+                            writer.writerow(HEADER)
+                            paths.add(relative)
+                    handles[relative] = (stream, writer)
+                    writer.writerow(row)
+                    if len(handles) > 32:
+                        _, (old_stream, _) = handles.popitem(last=False)
+                        old_stream.close()
+                    count += 1
+                if count != entry['rows']:
+                    raise ValueError(f'Source row count mismatch: {path}')
+                total_rows += count
+                print(f'Read {path.name}: {count:,} rows')
+        finally:
+            for stream, _ in handles.values():
+                stream.close()
+        if not total_rows:
+            raise ValueError('No source rows')
+        # Validate every existing CSV before changing any annotation files.
+        existing = set()
+        for path in output_dir.rglob('*.csv'):
+            if path.is_relative_to(source_dir):
+                continue
+            relative = path.relative_to(output_dir)
+            if relative not in paths:
+                raise ValueError(f'Unexpected CSV (move it outside the output tree): {path}')
+            if path.is_symlink() or path.parent.is_symlink():
+                raise ValueError(f'Refusing symlink output: {path}')
+            if Counter(rows(path)) - Counter(rows(stage / relative)):
+                raise ValueError(f'Existing CSV has rows absent from source; preserve/reconcile it first: {path}')
+            existing.add(relative)
+        for relative in paths:
+            if (output_dir / relative.parent).is_symlink():
+                raise ValueError(f'Refusing symlink category: {relative.parent}')
+        changed = 0
+        for relative in sorted(paths):
+            destination = output_dir / relative
+            staged_path = stage / relative
+            if destination.exists() and destination.read_bytes() == staged_path.read_bytes():
+                continue
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(staged_path, destination)
+            changed += 1
+        print(f'Complete: {len(paths):,} sequences, {len(set(seq_patterns.values()))} gait patterns, '
+              f'{total_rows:,} rows; {len(paths - existing):,} new CSVs, {changed:,} written')
+
 
 def main():
-    """Main function to process the GAVD CSV file."""
-    csv_file = 'data/GAVD_Clinical_Annotations_1.csv'
-    base_path = 'data'
-    
-    # Check if input file exists
-    if not os.path.exists(csv_file):
-        print(f"Error: {csv_file} not found!")
-        sys.exit(1)
-    
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source-dir', type=Path, default=ROOT / 'source')
+    parser.add_argument('--output-dir', type=Path, default=ROOT)
+    args = parser.parse_args()
     try:
-        # Step 1: Analyze the CSV structure
-        gait_patterns, sequences, seq_to_gait_pat = analyze_csv_structure(csv_file)
-        
-        # Step 2: Create folder structure
-        gavd_path = create_folder_structure(base_path, gait_patterns)
-        
-        # Step 3: Process and split the CSV file
-        process_and_split_csv(csv_file, gavd_path, seq_to_gait_pat)
-        
-        print(f"\nProcessing complete!")
-        print(f"Created {len(gait_patterns)} gait pattern folders")
-        print(f"Generated {len(sequences)} individual CSV files")
-        
-    except Exception as e:
-        print(f"Error during processing: {e}")
-        sys.exit(1)
+        process(args.source_dir, args.output_dir)
+    except (OSError, ValueError, KeyError, TypeError, csv.Error) as exc:
+        print(f'Processing failed: {exc}', file=sys.stderr)
+        return 1
+    return 0
 
-if __name__ == "__main__":
-    main()
+
+if __name__ == '__main__':
+    raise SystemExit(main())
