@@ -1,0 +1,5 @@
+source,fold,stage,pooling,diagnostic,first_50_updates_mean,last_50_updates_mean,final_point
+notebook03c18,0,initial_800_updates,masked-target cross-entropy: mean within each window then mean across batch,feature_prediction_loss,3.858368,1.022220,1.097049
+notebook03c18,0,initial_800_updates,all-token teacher pool per window after EMA; singular values of centered batch,effective_rank,8.132109,10.939291,12.134889
+notebook03c18,0,initial_800_updates,all-token teacher pool per window after EMA; mean dimension-wise sample standard deviation,mean_embedding_standard_deviation,0.153868,0.525584,0.549869
+notebook03c18,0,initial_800_updates,no feature pooling; mean tensor-wise 1-cosine of student and teacher parameters after optimizer before EMA,teacher_student_drift,0.022306,0.019918,0.019944

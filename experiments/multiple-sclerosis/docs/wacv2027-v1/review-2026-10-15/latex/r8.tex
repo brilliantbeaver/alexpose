@@ -1,0 +1,5 @@
+% R8 — Source-grouped evaluation
+\subsection{Source-grouped evaluation}
+We divide the 41 source videos into five test folds, keeping the proportions of the three collection labels approximately balanced. Within the remaining sources, the first split of a stratified four-fold partition defines the training and validation sets. Each encoder and classifier is fitted using 24 source videos, comprising 45--58 clips depending on the fold (Table~\ref{tab:source_partitions}).
+
+All clips and windows from a source remain in the same partition. Across the five test folds, every usable clip receives one prediction from a model that excluded its source from training and validation. This procedure separates identified source recordings; it cannot establish separation of participants who may appear in more than one source video.

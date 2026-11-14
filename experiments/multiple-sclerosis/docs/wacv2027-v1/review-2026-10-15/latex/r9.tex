@@ -1,0 +1,5 @@
+% R9 — Evaluation measures
+\subsection{Evaluation measures}
+We report macro-F1, which combines precision and recall separately for each collection label and then averages the three scores. Its range is zero to one, with larger values indicating better classification. The main score gives every source video equal total weight: a clip from a source containing $n$ usable clips receives weight $1/n$. Weighted prediction counts are combined across the five test folds before F1 is calculated. This prevents a recording with many clips from dominating the result.
+
+We also report scores giving every clip equal weight and the number of correctly classified clips. These answer a different question because recordings contribute different numbers of clips. Fold results show how performance changes with the held-out recordings. Classes with undefined precision or F1 receive a value of zero. Supplementary material reports the resampling analysis and its scope.

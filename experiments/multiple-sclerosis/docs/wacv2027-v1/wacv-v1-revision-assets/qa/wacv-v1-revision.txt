@@ -1,0 +1,557 @@
+ WACV                                                                                                                                          WACV
+#DRAFT                                                                                                                                        #DRAFT
+                  WACV 2027 Submission #DRAFT.       Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+
+                                       Learning Skeleton Representations
+                               from a Small Collection of Neurological Gait Videos
+
+
+                                       Anonymous WACV Applications Track submission
+
+                                                             Paper ID DRAFT
+
+
+                                 Abstract                                        Markerless pose estimation converts video into trajecto-      036
+                                                                             ries of estimated body landmarks. Comparisons with refer-         037
+ 001     Learning useful descriptions of movement from limited               ence measurements show that video-derived gait measures           038
+ 002     video data could broaden access to quantitative behavioral          can be useful under speciﬁed recording and analysis condi-        039
+ 003     analysis. We evaluate a compact Skeleton Joint Embedding            tions [11, 12]. A common next step is to summarize these          040
+ 004     Predictive Architecture (S-JEPA) on gait videos labeled             trajectories using quantities chosen in advance, such as joint    041
+ 005     Normal, multiple sclerosis, or Parkinson’s disease. In each         angles and their ranges. Learning a representation directly       042
+ 006     split, the encoder learns from 24 source videos, comprising         from pose sequences offers another way to describe move-          043
+ 007     45–58 clips, by predicting hidden skeleton features without         ment, without specifying every potentially useful relation-       044
+ 008     condition labels. A separate linear classiﬁer uses its frozen       ship between landmarks.                                           045
+ 009     features to predict collection labels for recordings excluded           Self-supervised methods create a training task from the       046
+ 010     from training. Evaluation across ﬁve source-grouped folds           observations themselves, allowing a model to learn features       047
+ 011     covers 88 usable clips from 41 videos. S-JEPA achieves              before condition labels are used. S-JEPA, introduced by Ab-       048
+ 012     source-weighted macro-F1 of 0.457, compared with 0.325              delfattah and Alahi, predicts features of hidden skeleton re-     049
+ 013     for a Random Forest using handcrafted joint-angle features          gions from visible context [1]. Applying this framework to        050
+ 014     and 0.452 for mean pose. With equal weight per clip, S-             a small, heterogeneous gait-video collection tests whether        051
+ 015     JEPA also exceeds the Random Forest, scoring 0.397 ver-             the resulting features can be useful when few study-speciﬁc       052
+ 016     sus 0.321. These results show that a compact predictive             recordings are available.                                         053
+ 017     skeleton model trained on a small video collection can pro-             We investigate whether a compact predictive skeleton          054
+ 018     duce useful features for held-out label prediction. Mean            model can produce useful representations from a small col-        055
+ 019     pose remains a strong comparison, and further controls are          lection of gait videos. The model learns to predict hidden        056
+ 020     needed to isolate the contribution of pretraining and tempo-        features of pose sequences without condition labels; a sepa-      057
+ 021     ral information. The study supports representation learning         rate linear classiﬁer then tests whether the frozen features      058
+ 022     for markerless behavioral analysis, with clinical interpreta-       contain information associated with the collection labels.        059
+ 023     tion requiring recordings with veriﬁed diagnoses and par-           Each encoder is trained on only 24 source recordings. Keep-       060
+ 024     ticipant identities.                                                ing all clips from a source together allows us to evaluate        061
+                                                                             recordings that were excluded from both encoder and clas-         062
+                                                                             siﬁer ﬁtting.                                                     063
+ 025     1. Introduction
+                                                                                 The main contribution is an empirical demonstration           064
+ 026     Walking provides an observable expression of motor func-            of useful trained features in this limited-data setting. S-       065
+ 027     tion, making gait a useful subject for behavioral and clini-        JEPA exceeds a corrected Random Forest using handcrafted          066
+ 028     cal neuroscience. Multiple sclerosis (MS) can affect joint          joint-angle summaries under both source-weighted and clip-        067
+ 029     movement, stability and coordination in different combina-          weighted scoring. A mean-pose comparison helps assess             068
+ 030     tions across individuals [7, 9]. Video-based gait measure-          how much can already be predicted from average pose with-         069
+ 031     ments have also been investigated in Parkinson’s disease            out frame order, while a visibility-only comparison exam-         070
+ 032     (PD) [10]. These ﬁndings motivate the analysis of move-             ines information available in the pose detector’s outputs.        071
+ 033     ment from ordinary recordings, where camera position, vis-          These comparisons provide a case study of representation          072
+ 034     ibility and recording conditions accompany the movement             learning for markerless behavioral analysis and identify          073
+ 035     of interest.                                                        what remains to be tested before clinical interpretation.         074
+
+
+                                                                         1
+ WACV                                                                                                                                              WACV
+#DRAFT                                                                                                                                            #DRAFT
+                  WACV 2027 Submission #DRAFT.        Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+ 075     2. Related work                                                           Label     Raw Usable Sources Padded Windows
+
+ 076     2.1. Video-based gait analysis                                            Normal      26       24        16        5         59
+                                                                                   MS          30       29        13        0        171
+ 077     Pose estimators such as BlazePose provide body landmarks                  PD          35       35        12       10        128
+ 078     from ordinary video [4]. Stenum et al. evaluated OpenPose-
+                                                                                   Total       91       88        41       15        358
+ 079     derived gait measures against reference measurements and
+ 080     extended this work across camera perspectives and clinical
+                                                                              Table 1. Dataset composition by collection label. Raw, usable and
+ 081     populations [11, 12]. These studies establish the potential of
+                                                                              padded counts refer to clips. Sources are recordings, not veriﬁed
+ 082     video-based gait measurement while showing why the pose              participants. Windows contain 32 sampled frames and may over-
+ 083     estimator, recording conditions, and intended measurement            lap.
+ 084     require validation. Their ﬁndings do not independently val-
+ 085     idate the BlazePose processing used in the present collec-
+ 086     tion.                                                                tector visibility, with stochastic masks over anatomical re-         125
+ 087        Shin et al. investigated quantitative gait analysis from          gions. The experiment examines this trained representation           126
+ 088     single-camera videos of people with PD [10]. Such studies            in a small neurological gait-video collection; it does not           127
+ 089     connect deﬁned video measurements to clinical or biome-              compare the anatomical sampler with the original motion-             128
+ 090     chanical references. The present collection instead supports         based sampler.                                                       129
+ 091     a study of label prediction, because independently veriﬁed
+ 092     diagnoses and reference gait measurements are unavailable.           3. Dataset and preprocessing                                         130
+
+ 093     2.2. Learning representations of movement                            Figure 1 summarizes the procedure. We compiled 91                    131
+
+ 094     SkeletonMAE learns representations by reconstructing                 gait clips from 41 YouTube source videos found through               132
+
+ 095     masked skeleton information [15]. MotionBERT learns mo-              searches for normal, MS and PD gait. Labels were as-                 133
+
+ 096     tion representations by recovering 3D motion from partial            signed from video titles without independent clinical ver-           134
+
+ 097     or corrupted 2D observations [16]. These methods motivate            iﬁcation. Walking segments were selected manually: for-              135
+
+ 098     learning relationships among landmarks rather than relying           ward and return walks, or segments with different walking            136
+
+ 099     exclusively on predeﬁned summary features.                           directions, could form separate clips. Footage with multiple         137
+
+ 100         Kaur et al. used multi-view video and estimated 3D               people was cropped where needed to emphasize one person.             138
+
+ 101     joints to classify gait from people with MS, PD, and                 Source-video identiﬁers retained in ﬁlenames group clips             139
+
+ 102     matched older adults, including evaluations across partici-          from the same recording.                                             140
+
+ 103     pants and walking tasks [8]. GaitForeMer combined motion                 The pretrained MediaPipe pose landmarker from the                141
+
+ 104     forecasting with activity classiﬁcation during pretraining           BlazePose family [4] extracts 33 landmarks per sampled               142
+
+ 105     and then adapted its representations to PD gait-impairment           frame. Image coordinates are converted to pixels; horizon-           143
+
+ 106     severity [6]. These studies place the present work within an         tal and vertical coordinates and detector visibility are re-         144
+
+ 107     existing line of learned neurological gait analysis. Our ex-         tained, while depth is discarded. Frame selection uses in-           145
+
+ 108     periment examines a small collection of heterogeneous 2D             teger stride max(1, round(fsrc /15)), where fsrc is the orig-        146
+
+ 109     web videos through a frozen-feature classiﬁer; differences           inal frame rate. The target cadence is approximately 15 Hz,          147
+
+ 110     in labels, inputs, and evaluation designs prevent direct com-        but the actual cadence depends on the original frame rate            148
+
+ 111     parison of the reported scores.                                      and integer sampling stride.                                         149
+                                                                                  A clip is retained if at least 30% of its sampled frames         150
+ 112     2.3. Predicting hidden features                                      contain ﬁnite horizontal coordinates for every landmark and          151
+                                                                              at least eight frames remain after cleaning. Empty ends are          152
+ 113     Wei et al. explored predicting features of masked image or
+                                                                              trimmed. Missing values are interpolated independently for           153
+ 114     video regions, including handcrafted image descriptors, as a
+                                                                              each landmark and channel, boundary gaps receive the near-           154
+ 115     way to learn visual representations without class labels [14].
+                                                                              est observed value, and channels without observations are            155
+ 116        Joint-embedding predictive architectures learn by pre-
+                                                                              ﬁlled with zero. No maximum interpolation gap is imposed.            156
+ 117     dicting feature vectors for hidden parts of an input from the
+                                                                              Three clips are excluded, leaving 88 usable clips and all 41         157
+ 118     visible context, as developed for images [2], video [3] and
+                                                                              sources (Table 1).                                                   158
+ 119     skeletons [1]. In S-JEPA, a second encoder supplies target
+                                                                                  Let ht and st denote the hip and shoulder midpoints in           159
+ 120     features and is updated gradually from the context encoder.
+                                                                              frame t. For S-JEPA and mean pose, landmark position xtj             160
+ 121     Prediction takes place in feature space, without reconstruct-
+                                                                              is normalized as                                                     161
+ 122     ing raw joint coordinates.
+ 123        The original S-JEPA samples higher-motion tokens for                                           xtj − ht
+                                                                                             etj =
+                                                                                             x                                .            (1)     162
+ 124     hiding. Our compact adaptation uses 2D landmarks and de-                                    max(∥st − ht ∥2 , 10−3 )
+
+                                                                          2
+ WACV                                                                                                                                                   WACV
+#DRAFT                                                                                                                                                 #DRAFT
+                   WACV 2027 Submission #DRAFT.          Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+
+            1 Gait clips                                  2 Pose extraction                             3 Partition by source
+            91 clips / 41 source videos                   33 landmarks: x, y, visibility                Five held-out test folds
+            Normal, MS and PD labels                      88 usable clips after cleaning                Separate training and validation
+
+
+
+                                             Encoder learns without condition labels; the classifier uses them.
+
+            4 Windows and tokens                          5 Feature learning                            6 Held-out classification
+            32 frames; stride 16                          800 + restarted 400 updates                   Frozen encoder + linear classifier
+            264 landmark–time tokens                      Select stage using validation                 Compare RF and simple summaries
+
+
+
+         Figure 1. From gait clips to held-out label prediction. All clips from one source recording remain in the same training, validation or test
+         partition before windows are constructed. Each encoder is ﬁtted on 24 source videos. The frozen-feature classiﬁer uses collection labels,
+         while the encoder’s feature-learning objective does not. Validation selects between the two executed training stages. Baseline methods use
+         the same source partitions.
+
+
+ 163     Visibility is unchanged. The RF branch calculates joint an-             4.2. Anatomical masking                                                195
+ 164     gles from cleaned pixel coordinates before this spatial nor-
+                                                                                 For each training window, the model predicts hidden fea-               196
+ 165     malization.
+                                                                                 tures from the visible parts of the skeleton sequence. We              197
+ 166        After source partitioning, each cleaned clip is divided              sample masks over seven body regions: the head, mouth,                 198
+ 167     into 32-frame windows with a stride of 16 frames; incom-                left and right arms, trunk, and left and right legs. A se-             199
+ 168     plete trailing windows are omitted. Window duration there-              lected region is hidden across one to six consecutive time             200
+ 169     fore varies across recordings. Clips shorter than 32 frames             blocks, and regions are added until approximately 60% of               201
+ 170     repeat their ﬁnal frame to form one window, giving 15                   the landmark–time tokens are hidden. Adding a whole ﬁnal               202
+ 171     padded clips in total. Padding does not add observed move-              region can take the hidden fraction above 60%; a check of              203
+ 172     ment.                                                                   5,000 sampled masks gave an average of 63.2%.                          204
+                                                                                     Regions containing any of 12 gait-relevant landmarks               205
+ 173     4. Methodology                                                          (Figure 2)—both shoulders, hips, knees, ankles, heels, and             206
+                                                                                 foot indices—receive a 1.5-fold multiplier in their selection          207
+ 174     4.1. S-JEPA architecture                                                weights, with an adjustment for overlapping region mem-                208
+
+ 175     An encoder converts the skeleton sequence into feature vec-             bership. The multiplier also affects the arm regions because           209
+
+ 176     tors. Four consecutive frames for one landmark form a                   they contain shoulders; it does not mean that every land-              210
+
+ 177     token containing 12 values: horizontal position, vertical               mark in the selected set is hidden 1.5 times as often. All             211
+
+ 178     position and visibility in each frame. The 32-frame win-                33 landmarks can serve as visible context or hidden targets            212
+
+ 179     dow therefore gives eight time blocks and 8 × 33 = 264                  across successive masks. At least one token from the se-               213
+
+ 180     landmark–time tokens. A linear projection maps each to-                 lected landmark set remains visible somewhere in each win-             214
+
+ 181     ken to 96 features, and learned landmark and time-position              dow.                                                                   215
+
+ 182     vectors identify its location in the sequence.                              This anatomical preference is motivated by the role of             216
+
+ 183         The context encoder combines information across visi-               lower-limb movement and body coordination in gait [7,                  217
+
+ 184     ble tokens using three transformer layers with four attention           9]. The sampling checks verify how the masks are con-                  218
+
+ 185     heads. A two-layer transformer predictor, with separate po-             structed; a separate comparison would be needed to deter-              219
+
+ 186     sitional vectors, estimates features at hidden positions. A             mine whether the preference improves classiﬁcation.                    220
+
+ 187     target encoder with the same structure as the context en-
+                                                                                 4.3. Training strategy                                                 221
+ 188     coder supplies the features to predict. It starts as a copy
+ 189     of the context encoder and processes the complete, untrans-             The encoder is trained on the Normal-, MS-, and PD-labeled             222
+ 190     formed training window. It receives no loss gradients; a                videos in the training partition, without using their labels in        223
+ 191     moving average updates its weights from the context en-                 the feature-learning objective. Each batch samples source              224
+ 192     coder. The skeleton model starts from fresh weights in each             videos with equal probability and then samples windows                 225
+ 193     fold, while the upstream MediaPipe pose estimator is pre-               within those sources. This prevents recordings with more               226
+ 194     trained.                                                                windows from dominating encoder training. Batches con-                 227
+
+
+                                                                             3
+ WACV                                                                                                                                                WACV
+#DRAFT                                                                                                                                              #DRAFT
+                   WACV 2027 Submission #DRAFT.          Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+                                                                                  4.4. Frozen representation and classiﬁer                           257
+
+                                                                                  After training, the target encoder’s weights are ﬁxed. Each        258
+                                                                                  complete, unmasked window is passed through this encoder,          259
+                                             Selected landmarks                   and features at positions selected by one ﬁxed sampled             260
+                                                                                  mask are averaged into a 96-dimensional vector. The mask           261
+                                             Shoulders                            selects outputs for averaging; it does not hide input land-        262
+                                             Hips                                 marks during classiﬁcation. Window vectors are then aver-          263
+                                             Knees                                aged to give one vector per clip. The same readout mask is         264
+
+                                             Ankles
+                                                                                  used for all clips and folds, and sensitivity to that mask was     265
+                                                                                  not tested.                                                        266
+                                             Heels
+                                                                                     A scaler ﬁtted on training clips standardizes the features,     267
+                                             Foot indices
+                                                                                  and logistic regression with C = 1 and inverse-frequency           268
+                                                                                  class weights predicts the three collection labels. Each train-    269
+                 12 selected        21 remaining                                  ing clip contributes one observation. Thus, sources with           270
+                                                                                  more clips contribute more observations to classiﬁer ﬁtting,       271
+         Figure 2. BlazePose landmarks deﬁning the anatomical sampling            even though source videos are sampled equally during en-           272
+         preference. Both shoulders, hips, knees, ankles, heels and foot          coder training. Validation and test clips contribute to neither    273
+         indices belong to the selected set. Regions containing these land-       feature scaling nor classiﬁer ﬁtting.                              274
+         marks receive increased selection weight, with an overlap adjust-
+         ment; this does not prescribe a ﬁxed hiding probability for indi-        5. Experimental setup                                              275
+         vidual landmarks. All 33 landmarks remain available. Schematic
+         front view, with connections following BlazePose [4].                    5.1. Comparison methods                                            276
+
+                                                                                  The handcrafted Random Forest (RF) uses summaries of               277
+                                                                                  left and right hip, knee, and ankle angles, including mean         278
+ 228     tain 32 windows.                                                         angles, bilateral differences, and ranges of movement. The         279
+ 229        The context encoder receives an augmented view with                   feature vector has 82 available ﬁelds, of which 15 angle           280
+ 230     parts of the skeleton hidden, and the predictor estimates the            statistics vary in this collection; the remaining ﬁelds are un-    281
+ 231     target encoder’s features at the hidden positions. Training              populated or constant. Columns with no variation in the            282
+ 232     compares distributions over feature dimensions using cross-              training partition are removed. A training-ﬁtted scaler pre-       283
+ 233     entropy with centering and sharpening [5]. These distribu-               cedes an RF with 100 trees, maximum depth ﬁve, square-             284
+ 234     tions describe learned features, rather than the three collec-           root feature subsampling, and balanced class weights. We           285
+ 235     tion labels. Spatial augmentation uses rotation within ±15◦ ,            use the corrected extractor with separate left- and right-         286
+ 236     scaling from 0.9 to 1.1, translation within ±0.1 normalized              ankle range features. An earlier implementation duplicated         287
+ 237     units, and horizontal reﬂection with probability 0.5. A sin-             the right-ankle range, and its result is reported separately       288
+ 238     gle transformation is applied throughout each window. Re-                for transparency. This baseline summarizes lower-limb an-          289
+ 239     ﬂection exchanges left and right landmark slots and visibil-             gles, whereas S-JEPA uses all 33 landmarks and visibility          290
+ 240     ity values, while the target window and target-mask posi-                values, so the comparison evaluates these particular analy-        291
+ 241     tions remain unchanged. Its effect on side correspondence                sis pipelines.                                                     292
+ 242     and useful gait asymmetry was not separately evaluated.                      Mean pose averages the normalized horizontal and verti-        293
+ 243        We train for 800 updates and evaluate a further 400-                  cal coordinates of all 33 landmarks across the full clip, giv-     294
+ 244     update continuation from the learned weights using the                   ing 66 features without retaining frame order. The visibil-        295
+ 245     same training sources and objective. The continuation                    ity baseline uses the mean and standard deviation of each          296
+ 246     restarts the optimizer, running center, random-number gen-               landmark’s visibility, also giving 66 features. Both use the       297
+ 247     erators and schedules. It therefore differs from uninter-                same scaler and logistic-regression settings as the S-JEPA         298
+ 248     rupted training for 1,200 updates. For each stage, a lin-                readout, ﬁtted separately on the training clips. A majority-       299
+ 249     ear classiﬁer is ﬁtted to the frozen features. The stage with            class baseline predicts the most frequent training-clip label.     300
+ 250     higher source-weighted validation macro-F1 is selected, re-              Mean pose uses coordinates alone, whereas S-JEPA also re-          301
+ 251     taining the initial stage on a tie. Validation videos are ex-            ceives visibility.                                                 302
+ 252     cluded from encoder and classiﬁer ﬁtting, and test predic-
+ 253     tions are generated only after stage selection. The selected             5.2. Source-grouped evaluation                                     303
+ 254     model is not reﬁtted using the validation videos.                        We divide the 41 source videos into ﬁve test folds, keeping        304
+ 255        The supplementary material gives the loss equation, op-               the proportions of the three collection labels approximately       305
+ 256     timization settings and exact masking procedure.                         balanced. Within the remaining sources, the ﬁrst split of          306
+
+
+                                                                              4
+ WACV                                                                                                                                                   WACV
+#DRAFT                                                                                                                                                 #DRAFT
+                   WACV 2027 Submission #DRAFT.          Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+
+                       Fold   Training    Validation    Test                      Method                        Source F1 Clip F1 Correct clips
+                                                                                  S-JEPA + linear classiﬁer         0.457 0.397          36/88
+                       0        24 / 51       8 / 19   9 / 18                     Joint angles + corrected RF       0.325 0.321          30/88
+                       1        24 / 58       9 / 17   8 / 13                     Mean pose + linear classiﬁer      0.452 0.410          37/88
+                       2        24 / 54       9 / 17   8 / 17                     Visibility + linear classiﬁer     0.318 0.318          29/88
+                       3        24 / 53       9 / 21   8 / 14                     Majority class                    0.259 0.202          23/88
+                       4        24 / 45       9 / 17   8 / 26                     Earlier RF (duplicate)            0.411 0.397          37/88
+
+         Table 2. Sources / clips in each partition. Folds are numbered 0–4       Table 3. Held-out classiﬁcation of the collection labels. Macro-
+         throughout the paper and supplement.                                     F1 combines predictions across all ﬁve test folds, weighting each
+                                                                                  source equally (Source F1) or each clip equally (Clip F1). Correct
+                                                                                  clips are unweighted counts. The ﬁnal row records the earlier RF
+ 307     a stratiﬁed four-fold partition deﬁnes the training and vali-            implementation with a duplicated ankle-range ﬁeld; it is separate
+ 308     dation sets. Each encoder and classiﬁer is ﬁtted using 24                from the corrected main comparison.
+ 309     source videos, comprising 45–58 clips depending on the
+ 310     fold (Table 2).
+ 311         All clips and windows from a source remain in the same               0.131 on the F1 scale. With equal weight per clip, S-JEPA             347
+ 312     partition. Across the ﬁve test folds, every usable clip re-              also exceeds RF, scoring 0.397 versus 0.321 and correctly             348
+ 313     ceives one prediction from a model that excluded its source              classifying 36 of 88 clips compared with 30 for RF. Each              349
+ 314     from training and validation. This procedure separates iden-             encoder was trained on only 24 source videos.                         350
+ 315     tiﬁed source recordings; it cannot establish separation of                  Mean pose is a strong comparison, with source-weighted             351
+ 316     participants who may appear in more than one source video.               macro-F1 of 0.452. It exceeds S-JEPA with equal clip                  352
+ 317         An additional 8–9 sources per fold are used for valida-              weighting (0.410 versus 0.397) and correctly classiﬁes 37             353
+ 318     tion, so ﬁtting and stage selection together use 32–33 de-               clips. The small difference under source weighting there-             354
+ 319     velopment sources. All methods share the same source par-                fore provides little basis for attributing S-JEPA’s predic-           355
+ 320     titions. The experiment uses training seed 42; it does not               tions speciﬁcally to temporal information. One MS-labeled             356
+ 321     average multiple initializations. Keeping model selection                source contributes 13 clips, illustrating why the two weight-         357
+ 322     separate from test evaluation follows the distinction empha-             ing schemes can produce different rankings.                           358
+ 323     sized by Varma and Simon [13].                                              The earlier RF implementation scores 0.411 with source             359
+                                                                                  weighting. S-JEPA also exceeds that result, by 0.045, al-             360
+ 324     5.3. Evaluation measures                                                 though the two clip-weighted scores round to 0.397 and the            361
+ 325     We report macro-F1, which combines precision and recall                  earlier RF is slightly higher before rounding. Correcting             362
+ 326     separately for each collection label and then averages the               the ankle feature changes 12 RF predictions and lowers its            363
+ 327     three scores. Its range is zero to one, with larger values in-           score. The earlier and corrected executions use the same col-         364
+ 328     dicating better classiﬁcation. The main score gives every                lection, partitions and seed, and produce identical S-JEPA            365
+ 329     source video equal total weight: a clip from a source con-               predicted labels. They do not provide independent evidence            366
+ 330     taining n usable clips receives weight 1/n. Weighted pre-                across training seeds or datasets.                                    367
+ 331     diction counts are combined across the ﬁve test folds before
+                                                                                  6.2. Variation across recordings and labels                           368
+ 332     F1 is calculated. This prevents a recording with many clips
+ 333     from dominating the result.                                              S-JEPA exceeds corrected RF in three of ﬁve test folds,               369
+ 334        We also report scores giving every clip equal weight and              with fold macro-F1 ranging from 0.217 to 0.780 (Figure 3).            370
+ 335     the number of correctly classiﬁed clips. These answer a dif-             Mean pose exceeds S-JEPA in four folds. The higher pooled             371
+ 336     ferent question because recordings contribute different num-             S-JEPA score reﬂects performance across all held-out pre-             372
+ 337     bers of clips. Fold results show how performance changes                 dictions, including its strong result in fold 2, rather than a        373
+ 338     with the held-out recordings. Classes with undeﬁned preci-               consistent advantage in every partition.                              374
+ 339     sion or F1 receive a value of zero. Supplementary material                  With equal source weighting, S-JEPA correctly identiﬁes            375
+ 340     reports the resampling analysis and its scope.                           39.6% of Normal-, 42.9% of MS-, and 56.9% of PD-labeled               376
+                                                                                  examples, compared with 27.1%, 23.1%, and 51.0% for cor-              377
+ 341     6. Results                                                               rected RF. PD predictions also include many examples from             378
+                                                                                  the other labels: their source-weighted precision is 38.6%.           379
+ 342     6.1. Classiﬁcation using learned representations                         In raw clip counts, S-JEPA correctly classiﬁes 10 of 24 Nor-          380
+ 343     S-JEPA’s frozen features support prediction of collection                mal clips, 8 of 29 MS clips and 18 of 35 PD clips; 13 MS              381
+ 344     labels on recordings excluded from training. The pooled                  clips are assigned to PD. The source-weighted percentages             382
+ 345     source-weighted macro-F1 is 0.457, compared with 0.325                   and raw counts use different weights. These errors limit              383
+ 346     for the corrected handcrafted RF (Table 3), a difference of              clinical interpretation even though the features support use-         384
+
+
+                                                                              5
+ WACV                                                                                                                                                                                       WACV
+#DRAFT                                                                                                                                                                                     #DRAFT
+                                           WACV 2027 Submission #DRAFT.                  Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+                                              S-JEPA        Corrected RF                       Mean pose
+
+                                           (a) Variation across folds
+                                                                                                         (b) S-JEPA                   (c) Corrected RF                 (d) Mean pose
+
+
+
+
+         Source-weighted macro-F1
+                                    1.00
+
+
+
+
+                                                                            Collection label
+                                    0.75                                                        N   39.6    27.1   33.3               27.1   49.0   24.0              43.8   25.0   31.2
+
+
+                                    0.50                                                       MS   14.5    42.9   42.6               15.4   23.1   61.5              12.1   36.4   51.5
+
+
+                                    0.25                                                       PD   24.4    18.7   56.9               24.1   24.9   51.0              21.9   20.7   57.4
+
+
+                                    0.00                                                             N      MS         PD              N     MS     PD                 N     MS     PD
+                                             0     1    2      3        4                           Predicted label                    Predicted label                Predicted label
+                                                   Held-out fold
+                                                                                                                        N: Normal   Cell values: row percentage (%)
+
+
+         Figure 3. Held-out classiﬁcation with equal total weight per source video. (a) Each fold uses the same test sources for all three methods;
+         higher macro-F1 indicates better classiﬁcation. The horizontal offsets separate the markers and do not represent additional folds. (b–d)
+         Confusion matrices show the percentage assigned to each predicted label within each collection label. Every panel uses the same 0–100%
+         color scale; rows may not sum to 100 after rounding. RF uses the corrected bilateral ankle-range features.
+
+
+ 385     ful prediction within this collection.                                                                         vide complementary evidence. The model ﬁts its feature-             415
+                                                                                                                        prediction objective without reducing all inputs to a con-          416
+ 386     6.3. Learning during training                                                                                  stant representation, while the frozen-feature classiﬁer mea-       417
+ 387     The training records show that the model ﬁts the hidden-                                                       sures information associated with the collection labels. A          418
+ 388     feature prediction task while retaining variation across in-                                                   matched untrained encoder would establish how much of               419
+ 389     puts. In the saved fold-0 training history, the ﬁrst and last                                                  that information is gained through pretraining. Mean pose’s         420
+ 390     50 updates of the initial stage have mean losses of 3.858 and                                                  similar performance also leaves open the contribution of            421
+ 391     1.022, respectively. At the end of that stage, effective rank—                                                 temporal order, as S-JEPA differs from that baseline in vis-        422
+ 392     a measure of how varied a batch of features is—is 12.13;                                                       ibility inputs, feature dimension and the frames included in        423
+ 393     the corresponding values across folds range from 10.90 to                                                      its window averages.                                                424
+ 394     12.13. Together with the held-out classiﬁer results, these
+ 395     observations support the practical usefulness of the trained                                                   7.2. Scope of the evidence                                          425
+
+ 396     representation. They do not measure how much classiﬁca-                                                        The collection was assembled from publicly accessible gait          426
+ 397     tion improved relative to an untrained encoder.                                                                videos, and its Normal, MS and PD labels were not inde-             427
+ 398         The continuation stage lowers the ﬁnal training-batch                                                      pendently clinically veriﬁed. Grouping by source video pre-         428
+ 399     loss in every fold, but validation selects it only in folds 3                                                  vents clips from one identiﬁed recording from crossing par-         429
+ 400     and 4. The initial stage is retained in folds 0–2. Further op-                                                 titions, but the same participant could appear in different         430
+ 401     timization of the training objective therefore does not con-                                                   recordings. Camera viewpoint, occlusion, pose-estimation            431
+ 402     sistently improve label prediction; the validation step deter-                                                 errors and other recording characteristics may also con-            432
+ 403     mines which stage is used for each test fold.                                                                  tribute to prediction. The visibility-only score of 0.318           433
+                                                                                                                        shows that detector outputs contain label-associated infor-         434
+ 404     7. Discussion                                                                                                  mation; it does not identify whether that information arises        435
+                                                                                                                        from gait or recording conditions.                                  436
+ 405     7.1. What the trained representation contributes
+                                                                                                                            The RF comparison uses a speciﬁc set of lower-limb an-          437
+ 406     The central ﬁnding is that a compact S-JEPA trained on a                                                       gle summaries, while S-JEPA uses all 33 landmarks and               438
+ 407     small collection of pose sequences produces features that                                                      visibility. It therefore supports a comparison of these imple-      439
+ 408     support label prediction on held-out source recordings. A                                                      mented pipelines, without establishing an advantage over            440
+ 409     linear classiﬁer using these features exceeds the evaluated                                                    every handcrafted gait analysis. The small number of train-         441
+ 410     handcrafted joint-angle RF under both source-weighted and                                                      ing recordings also limits how conﬁdently performance can           442
+ 411     clip-weighted scoring. This makes predictive skeleton learn-                                                   be extended to new settings. Although the S-JEPA encoder            443
+ 412     ing a useful approach to investigate when large, clinically                                                    is ﬁtted on these recordings, its MediaPipe pose-estimation         444
+ 413     annotated movement datasets are unavailable.                                                                   front end is pretrained; this is a small-data representation-       445
+ 414        The training history and downstream predictions pro-                                                        learning experiment rather than a measurement of the full           446
+
+
+                                                                                                                   6
+ WACV                                                                                                                                        WACV
+#DRAFT                                                                                                                                      #DRAFT
+                  WACV 2027 Submission #DRAFT.       Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+ 447     pipeline’s data requirements.                                            on Computer Vision and Pattern Recognition, pages          495
+ 448         Preprocessing further limits biomechanical interpreta-               15619–15629, 2023. 2                                       496
+ 449     tion. Centering on the hips and scaling by torso length re-          [3] Adrien Bardes, Quentin Garrido, Jean Ponce, Xinlei         497
+ 450     move absolute position and apparent body size, so the out-               Chen, Michael Rabbat, Yann LeCun, Mahmoud Ass-             498
+ 451     puts are not calibrated measurements of walking speed or                 ran, and Nicolas Ballas. Revisiting feature prediction     499
+ 452     stride length. Missing detections are interpolated without               for learning visual representations from video. Trans-     500
+ 453     a maximum gap length. Fifteen short clips are padded by                  actions on Machine Learning Research, 2024. 2              501
+ 454     repeating their ﬁnal frame—ﬁve Normal and ten PD clips,              [4] Valentin Bazarevsky, Ivan Grishchenko, Karthik             502
+ 455     with none from the MS collection—which can introduce                     Raveendran, Tyler Zhu, Fan Zhang, and Matthias             503
+ 456     label-associated temporal patterns. The minimum accepted                 Grundmann. BlazePose: On-device real-time body             504
+ 457     clip length is eight sampled frames, so a clip need not con-             pose tracking, 2020. arXiv:2006.10204. 2, 4                505
+ 458     tain a full gait cycle.
+                                                                              [5] Mathilde Caron, Hugo Touvron, Ishan Misra, Hervé           506
+                                                                                  Jégou, Julien Mairal, Piotr Bojanowski, and Armand         507
+ 459     7.3. Next comparisons
+                                                                                  Joulin. Emerging properties in self-supervised vision      508
+ 460     The most informative next comparison would use the same                  transformers. In Proceedings of the IEEE/CVF Inter-        509
+ 461     architecture and readout with a randomly initialized en-                 national Conference on Computer Vision, pages 9650–        510
+ 462     coder, followed by a supervised model trained on the same                9660, 2021. 4                                              511
+ 463     sources. Training and evaluating a matched model with                [6] Mark Endo, Kathleen L. Poston, Edith V. Sullivan,          512
+ 464     shufﬂed frame order, while holding frames and visibility                 Li Fei-Fei, Kilian M. Pohl, and Ehsan Adeli. Gait-         513
+ 465     inputs ﬁxed, would test whether temporal structure con-                  ForeMer: Self-supervised pre-training of transformers      514
+ 466     tributes to prediction. Comparing anatomical, unbiased re-               via human motion forecasting for few-shot gait im-         515
+ 467     gional and motion-based masking would assess the masking                 pairment severity estimation. In Medical Image Com-        516
+ 468     choice directly. Evaluation on recordings with veriﬁed di-               puting and Computer Assisted Intervention—MICCAI           517
+ 469     agnoses, participant identities and new acquisition settings             2022, pages 130–139, 2022. 2                               518
+ 470     would then test whether the learned features support reliable        [7] Linard Filli, Tabea Sutter, Christopher S. Easthope,       519
+ 471     behavioral or clinical measurements.                                     Tim Killeen, Christian Meyer, Katja Reuter, Lilla          520
+                                                                                  Lörincz, Marc Bolliger, Michael Weller, Armin Curt,        521
+ 472     8. Conclusion                                                            Dominik Straumann, Michael Linnebank, and Björn            522
+                                                                                  Zörner. Proﬁling walking dysfunction in multiple scle-     523
+ 473     S-JEPA produced useful features for gait-video label pre-                rosis: characterisation, classiﬁcation and progression     524
+ 474     diction after training on 24 source recordings per fold. Its             over time. Scientiﬁc Reports, 8:4984, 2018. 1, 3           525
+ 475     frozen features, paired with a linear classiﬁer, achieved
+                                                                              [8] Rachneet Kaur, Robert W. Motl, Richard Sowers, and         526
+ 476     source-weighted macro-F1 of 0.457, exceeding the cor-
+                                                                                  Manuel E. Hernandez. A vision-based framework for          527
+ 477     rected handcrafted joint-angle RF at 0.325 with perfor-
+                                                                                  predicting multiple sclerosis and parkinson’s disease      528
+ 478     mance close to the mean-pose comparison under both re-
+                                                                                  gait dysfunctions—a deep learning approach. IEEE           529
+ 479     ported weighting schemes. This study establishes a prac-
+                                                                                  Journal of Biomedical and Health Informatics, 27(1):       530
+ 480     tical small-data example of predictive representation learn-
+                                                                                  190–201, 2023. 2                                           531
+ 481     ing for markerless behavioral analysis. Comparisons with
+ 482     untrained encoders and clinically veriﬁed recordings would           [9] Meir Plotnik, Joanne M. Wagner, Gautam Adusumilli,         532
+ 483     clarify the contribution of pretraining and the relevance of             Amihai Gottlieb, and Robert T. Naismith. Gait asym-        533
+ 484     these features to neurological movement assessment.                      metry, and bilateral coordination of gait during a six-    534
+                                                                                  minute walk test in persons with multiple sclerosis.       535
+                                                                                  Scientiﬁc Reports, 10:12382, 2020. 1, 3                    536
+ 485     References
+                                                                             [10] Jung Hwan Shin, Ri Yu, Jed Noel Ong, Chan Young            537
+ 486      [1] Mohamed Abdelfattah and Alexandre Alahi. S-JEPA:                    Lee, Seung Ho Jeon, Hwanpil Park, Han-Joon Kim, Je-        538
+ 487          A joint embedding predictive architecture for skeletal              hee Lee, and Beomseok Jeon. Quantitative gait anal-        539
+ 488          action recognition. In Computer Vision – ECCV 2024,                 ysis using a pose-estimation algorithm with a single       540
+ 489          pages 367–384, 2024. 1, 2                                           2D-video of Parkinson’s disease patients. Journal of       541
+ 490      [2] Mahmoud Assran, Quentin Duval, Ishan Misra, Piotr                   Parkinson’s Disease, 11(3):1271–1283, 2021. 1, 2           542
+ 491          Bojanowski, Pascal Vincent, Michael Rabbat, Yann               [11] Jan Stenum, Cristina Rossi, and Ryan T. Roemmich.          543
+ 492          LeCun, and Nicolas Ballas. Self-supervised learning                 Two-dimensional video-based analysis of human gait         544
+ 493          from images with a joint-embedding predictive archi-                using pose estimation. PLOS Computational Biology,         545
+ 494          tecture. In Proceedings of the IEEE/CVF Conference                  17(4):e1008935, 2021. 1, 2                                 546
+
+
+                                                                         7
+ WACV                                                                                                                    WACV
+#DRAFT                                                                                                                  #DRAFT
+                  WACV 2027 Submission #DRAFT.       Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+ 547     [12] Jan Stenum, Melody M. Hsu, Alexander Y. Pantelyat,
+ 548          and Ryan T. Roemmich. Clinical gait analysis using
+ 549          video-based pose estimation: Multiple perspectives,
+ 550          clinical populations, and measuring change. PLOS
+ 551          Digital Health, 3(3):e0000467, 2024. 1, 2
+ 552     [13] Sudhir Varma and Richard Simon. Bias in error es-
+ 553          timation when using cross-validation for model selec-
+ 554          tion. BMC Bioinformatics, 7:91, 2006. 5
+ 555     [14] Chen Wei, Haoqi Fan, Saining Xie, Chao-Yuan Wu,
+ 556          Alan Yuille, and Christoph Feichtenhofer. Masked fea-
+ 557          ture prediction for self-supervised visual pre-training.
+ 558          In Proceedings of the IEEE/CVF Conference on Com-
+ 559          puter Vision and Pattern Recognition, pages 14668–
+ 560          14678, 2022. 2
+ 561     [15] Hong Yan, Yang Liu, Yushen Wei, Zhen Li, Guan-
+ 562          bin Li, and Liang Lin.         SkeletonMAE: Graph-
+ 563          based masked autoencoder for skeleton sequence pre-
+ 564          training. In Proceedings of the IEEE/CVF Interna-
+ 565          tional Conference on Computer Vision, pages 5606–
+ 566          5618, 2023. 2
+ 567     [16] Wentao Zhu, Xiaoxuan Ma, Zhaoyang Liu, Libin Liu,
+ 568          Wayne Wu, and Yizhou Wang. MotionBERT: A uni-
+ 569          ﬁed perspective on learning human motion representa-
+ 570          tions. In Proceedings of the IEEE/CVF International
+ 571          Conference on Computer Vision, pages 15085–15099,
+ 572          2023. 2
+
+
+
+
+                                                                         8
+

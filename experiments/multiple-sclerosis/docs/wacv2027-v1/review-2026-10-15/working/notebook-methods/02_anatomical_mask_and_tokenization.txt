@@ -1,0 +1,1226 @@
+
+===== CELL 1 markdown EXEC=None =====
+
+<a href="https://colab.research.google.com/github/your-org/alexpose/blob/main/experiments/multiple-sclerosis/02_anatomical_mask_and_tokenization.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+===== CELL 2 markdown EXEC=None =====
+
+# 02 - Masking and tokenization
+
+S-JEPA learns by hiding part of a skeleton sequence and predicting it in feature space. The token and mask operations apply to either dataset version; the dataset changes the number of windows and source groups, not the token definition. Run notebook 01 first to build the versioned `keypoints-full/` cache.
+
+> **What changed, and why.** An earlier version of this project hid the *same* twelve clinical joints on every single step. That turned out to be a real bug: the encoder never saw those joints as context, so their internal position settings received no learning signal, yet the classifier then pooled exactly those joints. We now use **stochastic graph-time masks**: a different connected group of joints is hidden each step, so every joint is sometimes context and sometimes a target. Clinical knowledge still guides us, but gently, by choosing the leg and shoulder joints as targets a bit more often. We also do **not** bias toward the busiest joints (the paper's motion-aware masking), because in MS and PD the telling sign is often *reduced* motion, which a high-motion mask would hide.
+
+
+===== CELL 3 code EXEC=1 =====
+
+# --- Setup: install dependencies (Colab installs; local usually already has them) ---
+import importlib, importlib.util, subprocess, sys, os
+
+IN_COLAB = 'google.colab' in sys.modules
+
+def _need(mod):
+    return importlib.util.find_spec(mod) is None
+
+# Light deps used by every notebook.
+_pkgs = []
+for mod, pip_name in [('cv2','opencv-python'), ('mediapipe','mediapipe'),
+                      ('sklearn','scikit-learn'), ('pandas','pandas'),
+                      ('matplotlib','matplotlib'), ('tqdm','tqdm')]:
+    if _need(mod):
+        _pkgs.append(pip_name)
+if _pkgs:
+    print('installing:', _pkgs)
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', *_pkgs])
+else:
+    print('all light dependencies already present')
+
+--- OUTPUT 1 stream ---
+
+all light dependencies already present
+
+
+===== CELL 4 code EXEC=2 =====
+
+# --- Make `sjepa` and `ambient` importable, locally and in Colab ---
+from pathlib import Path
+import sys, subprocess
+
+def _find_exp_dir():
+    # Local run: this notebook sits in experiments/multiple-sclerosis.
+    here = Path.cwd()
+    for p in [here, *here.parents]:
+        if (p / 'sjepa' / '__init__.py').exists():
+            return p
+    return None
+
+EXP_DIR = _find_exp_dir()
+if EXP_DIR is None:
+    # Colab: clone the repo, then point at the experiment folder.
+    REPO = 'https://github.com/your-org/alexpose.git'  # <-- edit to your fork
+    if not Path('alexpose').exists():
+        subprocess.check_call(['git', 'clone', '--depth', '1', REPO])
+    EXP_DIR = Path('alexpose') / 'experiments' / 'multiple-sclerosis'
+
+REPO_ROOT = EXP_DIR.parents[1]
+for p in (str(EXP_DIR), str(REPO_ROOT)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+print('experiment dir:', EXP_DIR)
+print('repo root     :', REPO_ROOT)
+
+--- OUTPUT 1 stream ---
+
+experiment dir: /Users/pmui/dev/alexpose/experiments/multiple-sclerosis
+repo root     : /Users/pmui/dev/alexpose
+
+
+===== CELL 5 code EXEC=3 =====
+
+# --- Paths and profile (reads the root .env if python-dotenv is present) ---
+import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv(REPO_ROOT / '.env')
+except Exception:
+    pass
+
+VIDEO_DIR = EXP_DIR / 'video-data-full'
+ARTIFACT_DIR = EXP_DIR / 'artifacts'
+KEYPOINTS_DIR = ARTIFACT_DIR / 'keypoints-full'
+IMAGES_DIR = EXP_DIR / 'images'
+ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Pick the model size profile. 'laptop' is the fast default; set SJEPA_PROFILE=gpu
+# in your .env for a larger model, or SJEPA_SMOKE=1 for a near-instant test run.
+os.environ.setdefault('SJEPA_PROFILE', 'laptop')
+print('SJEPA_PROFILE =', os.environ['SJEPA_PROFILE'],
+      '| SJEPA_SMOKE =', os.environ.get('SJEPA_SMOKE', '0'))
+
+--- OUTPUT 1 stream ---
+
+SJEPA_PROFILE = laptop | SJEPA_SMOKE = 0
+
+
+===== CELL 6 markdown EXEC=None =====
+
+## Keep each source video together
+
+We use the same frozen five-fold registry in notebooks 02–06. A source video may have several clips; each clip may yield overlapping windows. All of those relatives stay together. Each round uses about 60% of sources for training, 20% for validation, and 20% for testing. Only notebook 06 evaluates test clips.
+
+The splitter runs on one row per source, with condition labels used to balance source counts. It never splits windows. The loader checks the full cache, reviewed exclusions, and registry checksum. A changed cache requires a new registry and new checkpoints. See [the full method](docs/11-full-data-splits.md).
+
+===== CELL 7 code EXEC=4 =====
+
+from IPython.display import display
+import pandas as pd
+from sjepa.splits import load_full_registry, partition_records, split_summary
+records, registry = load_full_registry(EXP_DIR)
+FOLD = 0  # teaching example; notebook 06 independently trains all five folds
+train_recs, val_recs, test_recs = partition_records(records, registry, FOLD)
+display(pd.DataFrame(split_summary(records, registry)))
+print('usable clips:', len(records), '| excluded raw clips:', len(registry['inventory']['exclusions']))
+print('registry:', registry['registry_sha256'])
+
+--- OUTPUT 1 display_data ---
+
+text/html: <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>fold</th>
+      <th>partition</th>
+      <th>clips</th>
+      <th>sources</th>
+      <th>normal_clips</th>
+      <th>normal_sources</th>
+      <th>ms_clips</th>
+      <th>ms_sources</th>
+      <th>pd_clips</th>
+      <th>pd_sources</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>train</td>
+      <td>51</td>
+      <td>24</td>
+      <td>15</td>
+      <td>9</td>
+      <td>23</td>
+      <td>8</td>
+      <td>13</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>validation</td>
+      <td>19</td>
+      <td>8</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>14</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>test</td>
+      <td>18</td>
+      <td>9</td>
+      <td>6</td>
+      <td>4</td>
+      <td>4</td>
+      <td>3</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>train</td>
+      <td>58</td>
+      <td>24</td>
+      <td>12</td>
+      <td>9</td>
+      <td>22</td>
+      <td>8</td>
+      <td>24</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>validation</td>
+      <td>17</td>
+      <td>9</td>
+      <td>7</td>
+      <td>4</td>
+      <td>4</td>
+      <td>3</td>
+      <td>6</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>1</td>
+      <td>test</td>
+      <td>13</td>
+      <td>8</td>
+      <td>5</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2</td>
+      <td>train</td>
+      <td>54</td>
+      <td>24</td>
+      <td>15</td>
+      <td>9</td>
+      <td>21</td>
+      <td>8</td>
+      <td>18</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2</td>
+      <td>validation</td>
+      <td>17</td>
+      <td>9</td>
+      <td>6</td>
+      <td>4</td>
+      <td>5</td>
+      <td>3</td>
+      <td>6</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2</td>
+      <td>test</td>
+      <td>17</td>
+      <td>8</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>11</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>3</td>
+      <td>train</td>
+      <td>53</td>
+      <td>24</td>
+      <td>13</td>
+      <td>9</td>
+      <td>23</td>
+      <td>8</td>
+      <td>17</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>3</td>
+      <td>validation</td>
+      <td>21</td>
+      <td>9</td>
+      <td>5</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>14</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>3</td>
+      <td>test</td>
+      <td>14</td>
+      <td>8</td>
+      <td>6</td>
+      <td>3</td>
+      <td>4</td>
+      <td>3</td>
+      <td>4</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>4</td>
+      <td>train</td>
+      <td>45</td>
+      <td>24</td>
+      <td>14</td>
+      <td>9</td>
+      <td>9</td>
+      <td>7</td>
+      <td>22</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>4</td>
+      <td>validation</td>
+      <td>17</td>
+      <td>9</td>
+      <td>6</td>
+      <td>4</td>
+      <td>5</td>
+      <td>3</td>
+      <td>6</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>4</td>
+      <td>test</td>
+      <td>26</td>
+      <td>8</td>
+      <td>4</td>
+      <td>3</td>
+      <td>15</td>
+      <td>3</td>
+      <td>7</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+text/plain:     fold   partition  clips  sources  normal_clips  normal_sources  ms_clips  \
+0      0       train     51       24            15               9        23   
+1      0  validation     19        8             3               3         2   
+2      0        test     18        9             6               4         4   
+3      1       train     58       24            12               9        22   
+4      1  validation     17        9             7               4         4   
+5      1        test     13        8             5               3         3   
+6      2       train     54       24            15               9        21   
+7      2  validation     17        9             6               4         5   
+8      2        test     17        8             3               3         3   
+9      3       train     53       24            13               9        23   
+10     3  validation     21        9             5               4         2   
+11     3        test     14        8             6               3         4   
+12     4       train     45       24            14               9         9   
+13     4  validation     17        9             6               4         5   
+14     4        test     26        8             4               3        15   
+
+    ms_sources  pd_clips  pd_sources  
+0            8        13           7  
+1            2        14           3  
+2            3         8           2  
+3            8        24           7  
+4            3         6           2  
+5            2         5           3  
+6            8        18           7  
+7            3         6           2  
+8            2        11           3  
+9            8        17           7  
+10           2        14           3  
+11           3         4           2  
+12           7        22           8  
+13           3         6           2  
+14           3         7           2  
+
+--- OUTPUT 2 stream ---
+
+usable clips: 88 | excluded raw clips: 3
+registry: 9496e61b050fc8b62ccbc59cb737376396205a3356b323733b9b8915d56600e1
+
+
+===== CELL 8 markdown EXEC=None =====
+
+## Tokenizing a window
+
+A training window is a short movie of stick figures. We group `l = 4` adjacent frames of one joint into a single token, so each token summarizes how that joint moved over a moment. With 32 frames and 33 joints that gives `(32 / 4) x 33 = 264` tokens. Token index is `t * V + v` (time block `t`, joint `v`).
+
+
+===== CELL 9 code EXEC=5 =====
+
+from IPython.display import SVG, display
+display(SVG(filename=str(IMAGES_DIR / 'tokenization.svg')))
+
+--- OUTPUT 1 display_data ---
+
+image/svg+xml: [binary image omitted]
+text/plain: <IPython.core.display.SVG object>
+
+===== CELL 10 code EXEC=6 =====
+
+from sjepa.config import get_config, describe
+cfg = get_config()  # honours SJEPA_PROFILE
+print(describe(cfg))
+print('tokens per window N =', cfg.num_tokens,
+      f'= {cfg.num_time_tokens} time blocks x {cfg.num_joints} joints')
+
+--- OUTPUT 1 stream ---
+
+profile=laptop | window=32f @ 15fps | tokens N=264 (8 time x 33 joints) | encoder 3L x 96d x 4h | predictor 2L x 96d | pretrain 40ep, finetune 30ep
+tokens per window N = 264 = 8 time blocks x 33 joints
+
+
+===== CELL 11 markdown EXEC=None =====
+
+## The clinical joints (domain context, not a permanent mask)
+
+The file `mapping-data/ms-pd-mapping.md` lists the joints clinicians care about for ms and pd. After removing duplicates and sorting, we get exactly twelve BlazePose landmarks: both shoulders and both complete legs. We keep this table as **domain knowledge** that biases how often a joint is chosen as a target, but every joint can still be both context and target.
+
+
+===== CELL 12 code EXEC=7 =====
+
+from sjepa.masking_v2 import CLINICAL_JOINTS
+from ambient.pose.keypoint_data import MEDIAPIPE_33_NAMES
+import pandas as pd
+
+features_for = {
+    11: 'shoulder_symmetry_index, trunk_lean_angle',
+    12: 'shoulder_symmetry_index, trunk_lean_angle',
+    23: 'walking_speed_ms, hip_asymmetry, knee_range, trunk_lean_angle',
+    24: 'walking_speed_ms, hip_asymmetry, knee_range, trunk_lean_angle',
+    25: 'knee_range, ankle_range', 26: 'knee_range, ankle_range',
+    27: 'knee_range, ankle_range, step_width_m', 28: 'knee_range, ankle_range, step_width_m',
+    29: 'stride_length_m, double_support_pct, stride_time_cv, ankle_range',
+    30: 'stride_length_m, double_support_pct, stride_time_cv, ankle_range',
+    31: 'stride_length_m, double_support_pct, stride_time_cv, ankle_range',
+    32: 'stride_length_m, double_support_pct, stride_time_cv, ankle_range',
+}
+table = pd.DataFrame([
+    {'BLAZEPOSE_33 index': j, 'Keypoint name': MEDIAPIPE_33_NAMES[j],
+     'Features involved': features_for[j]}
+    for j in sorted(CLINICAL_JOINTS)
+])
+table
+
+--- OUTPUT 1 execute_result ---
+
+text/html: <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>BLAZEPOSE_33 index</th>
+      <th>Keypoint name</th>
+      <th>Features involved</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>11</td>
+      <td>LEFT_SHOULDER</td>
+      <td>shoulder_symmetry_index, trunk_lean_angle</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>12</td>
+      <td>RIGHT_SHOULDER</td>
+      <td>shoulder_symmetry_index, trunk_lean_angle</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>23</td>
+      <td>LEFT_HIP</td>
+      <td>walking_speed_ms, hip_asymmetry, knee_range, t...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>24</td>
+      <td>RIGHT_HIP</td>
+      <td>walking_speed_ms, hip_asymmetry, knee_range, t...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>25</td>
+      <td>LEFT_KNEE</td>
+      <td>knee_range, ankle_range</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>26</td>
+      <td>RIGHT_KNEE</td>
+      <td>knee_range, ankle_range</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>27</td>
+      <td>LEFT_ANKLE</td>
+      <td>knee_range, ankle_range, step_width_m</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>28</td>
+      <td>RIGHT_ANKLE</td>
+      <td>knee_range, ankle_range, step_width_m</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>29</td>
+      <td>LEFT_HEEL</td>
+      <td>stride_length_m, double_support_pct, stride_ti...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>30</td>
+      <td>RIGHT_HEEL</td>
+      <td>stride_length_m, double_support_pct, stride_ti...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>31</td>
+      <td>LEFT_FOOT_INDEX</td>
+      <td>stride_length_m, double_support_pct, stride_ti...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>32</td>
+      <td>RIGHT_FOOT_INDEX</td>
+      <td>stride_length_m, double_support_pct, stride_ti...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+text/plain:     BLAZEPOSE_33 index     Keypoint name  \
+0                   11     LEFT_SHOULDER   
+1                   12    RIGHT_SHOULDER   
+2                   23          LEFT_HIP   
+3                   24         RIGHT_HIP   
+4                   25         LEFT_KNEE   
+5                   26        RIGHT_KNEE   
+6                   27        LEFT_ANKLE   
+7                   28       RIGHT_ANKLE   
+8                   29         LEFT_HEEL   
+9                   30        RIGHT_HEEL   
+10                  31   LEFT_FOOT_INDEX   
+11                  32  RIGHT_FOOT_INDEX   
+
+                                    Features involved  
+0           shoulder_symmetry_index, trunk_lean_angle  
+1           shoulder_symmetry_index, trunk_lean_angle  
+2   walking_speed_ms, hip_asymmetry, knee_range, t...  
+3   walking_speed_ms, hip_asymmetry, knee_range, t...  
+4                             knee_range, ankle_range  
+5                             knee_range, ankle_range  
+6               knee_range, ankle_range, step_width_m  
+7               knee_range, ankle_range, step_width_m  
+8   stride_length_m, double_support_pct, stride_ti...  
+9   stride_length_m, double_support_pct, stride_ti...  
+10  stride_length_m, double_support_pct, stride_ti...  
+11  stride_length_m, double_support_pct, stride_ti...  
+
+===== CELL 13 markdown EXEC=None =====
+
+## Stochastic graph-time masks
+
+Each step we sample a per-example mask: connected groups of joints (a limb or the trunk) over a contiguous span of time. The cell below samples a few masks and shows they differ, that every window keeps visible context somewhere, and that over a bank of masks every joint is both visible and targeted often enough (the coverage gates). A joint can be masked in every block of one window: overlapping regions can cover its full duration. The maximum span applies to each sampled region, not their union. Hips belong to both trunk and leg regions, so their target frequency can be higher. Coverage is measured across fresh mask draws; individual frames and windows do not have a per-joint visibility guarantee. There is also a temporal bias: intervals placed entirely inside a window cover middle blocks more often than the ends. The exact-time table below exposes this; passing the window-coverage gates does not establish balanced masking or optimal training.
+
+
+===== CELL 14 code EXEC=8 =====
+
+import numpy as np
+from importlib import reload
+import sjepa.masking_v2 as masking
+masking = reload(masking)  # pick up local edits in an existing notebook kernel
+from sjepa.masking_v2 import sample_mask_batch, mask_bank_stats
+
+rng = np.random.default_rng(0)
+batch = sample_mask_batch(6, cfg.num_joints, cfg.num_time_tokens, rng)
+print('mask batch shape (B, N):', batch.shape)
+print('unique masks in the batch:', len({row.tobytes() for row in batch}), 'of 6')
+print('every row has context and target:',
+      bool((~batch).any(1).all() and batch.any(1).all()))
+
+stats = mask_bank_stats(cfg.num_joints, cfg.num_time_tokens, n_masks=512, seed=0)
+print(f'over 512 masks: min visible-at-least-once/window {stats.joint_visible_frac.min():.2f} '
+      f'(gate >=0.20), min targeted-at-least-once/window {stats.joint_target_frac.min():.2f} (gate >=0.10)')
+print(f'mean target fraction {stats.mean_target_frac:.2f}')
+display(pd.DataFrame({
+    'joint': MEDIAPIPE_33_NAMES,
+    'visible token %': 100 * stats.joint_visible_token_frac,
+    'windows with any context %': 100 * stats.joint_visible_frac,
+    'windows fully masked for this joint %': 100 * stats.joint_always_target_frac,
+}).round(1))
+# 'Ever visible' can conceal low coverage in the middle of a window.
+print('Hip context frequency at each exact time block (%):')
+display(pd.DataFrame(100 * stats.token_visible_frac[:, [23, 24]],
+                     columns=['left hip', 'right hip'],
+                     index=np.arange(1, cfg.num_time_tokens + 1)).round(1))
+
+--- OUTPUT 1 stream ---
+
+mask batch shape (B, N): (6, 264)
+unique masks in the batch: 6 of 6
+every row has context and target: True
+over 512 masks: min visible-at-least-once/window 0.74 (gate >=0.20), min targeted-at-least-once/window 0.81 (gate >=0.10)
+mean target fraction 0.63
+
+
+--- OUTPUT 2 display_data ---
+
+text/html: <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>joint</th>
+      <th>visible token %</th>
+      <th>windows with any context %</th>
+      <th>windows fully masked for this joint %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NOSE</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LEFT_EYE_INNER</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>LEFT_EYE</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>LEFT_EYE_OUTER</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>RIGHT_EYE_INNER</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>RIGHT_EYE</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>RIGHT_EYE_OUTER</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>LEFT_EAR</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>RIGHT_EAR</td>
+      <td>40.3</td>
+      <td>95.5</td>
+      <td>4.5</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>MOUTH_LEFT</td>
+      <td>49.0</td>
+      <td>93.4</td>
+      <td>6.6</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>MOUTH_RIGHT</td>
+      <td>49.0</td>
+      <td>93.4</td>
+      <td>6.6</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>LEFT_SHOULDER</td>
+      <td>22.3</td>
+      <td>77.5</td>
+      <td>22.5</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>RIGHT_SHOULDER</td>
+      <td>20.2</td>
+      <td>74.0</td>
+      <td>26.0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>LEFT_ELBOW</td>
+      <td>37.5</td>
+      <td>90.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>RIGHT_ELBOW</td>
+      <td>34.3</td>
+      <td>88.1</td>
+      <td>11.9</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>LEFT_WRIST</td>
+      <td>37.5</td>
+      <td>90.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>RIGHT_WRIST</td>
+      <td>34.3</td>
+      <td>88.1</td>
+      <td>11.9</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>LEFT_PINKY</td>
+      <td>37.5</td>
+      <td>90.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>RIGHT_PINKY</td>
+      <td>34.3</td>
+      <td>88.1</td>
+      <td>11.9</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>LEFT_INDEX</td>
+      <td>37.5</td>
+      <td>90.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>RIGHT_INDEX</td>
+      <td>34.3</td>
+      <td>88.1</td>
+      <td>11.9</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>LEFT_THUMB</td>
+      <td>37.5</td>
+      <td>90.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>RIGHT_THUMB</td>
+      <td>34.3</td>
+      <td>88.1</td>
+      <td>11.9</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>LEFT_HIP</td>
+      <td>22.8</td>
+      <td>78.5</td>
+      <td>21.5</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>RIGHT_HIP</td>
+      <td>23.0</td>
+      <td>77.1</td>
+      <td>22.9</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>LEFT_KNEE</td>
+      <td>38.9</td>
+      <td>90.2</td>
+      <td>9.8</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>RIGHT_KNEE</td>
+      <td>37.1</td>
+      <td>89.6</td>
+      <td>10.4</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>LEFT_ANKLE</td>
+      <td>38.9</td>
+      <td>90.2</td>
+      <td>9.8</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>RIGHT_ANKLE</td>
+      <td>37.1</td>
+      <td>89.6</td>
+      <td>10.4</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>LEFT_HEEL</td>
+      <td>38.9</td>
+      <td>90.2</td>
+      <td>9.8</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>RIGHT_HEEL</td>
+      <td>37.1</td>
+      <td>89.6</td>
+      <td>10.4</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>LEFT_FOOT_INDEX</td>
+      <td>38.9</td>
+      <td>90.2</td>
+      <td>9.8</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>RIGHT_FOOT_INDEX</td>
+      <td>37.1</td>
+      <td>89.6</td>
+      <td>10.4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+text/plain:                joint  visible token %  windows with any context %  \
+0               NOSE             40.3                        95.5   
+1     LEFT_EYE_INNER             40.3                        95.5   
+2           LEFT_EYE             40.3                        95.5   
+3     LEFT_EYE_OUTER             40.3                        95.5   
+4    RIGHT_EYE_INNER             40.3                        95.5   
+5          RIGHT_EYE             40.3                        95.5   
+6    RIGHT_EYE_OUTER             40.3                        95.5   
+7           LEFT_EAR             40.3                        95.5   
+8          RIGHT_EAR             40.3                        95.5   
+9         MOUTH_LEFT             49.0                        93.4   
+10       MOUTH_RIGHT             49.0                        93.4   
+11     LEFT_SHOULDER             22.3                        77.5   
+12    RIGHT_SHOULDER             20.2                        74.0   
+13        LEFT_ELBOW             37.5                        90.0   
+14       RIGHT_ELBOW             34.3                        88.1   
+15        LEFT_WRIST             37.5                        90.0   
+16       RIGHT_WRIST             34.3                        88.1   
+17        LEFT_PINKY             37.5                        90.0   
+18       RIGHT_PINKY             34.3                        88.1   
+19        LEFT_INDEX             37.5                        90.0   
+20       RIGHT_INDEX             34.3                        88.1   
+21        LEFT_THUMB             37.5                        90.0   
+22       RIGHT_THUMB             34.3                        88.1   
+23          LEFT_HIP             22.8                        78.5   
+24         RIGHT_HIP             23.0                        77.1   
+25         LEFT_KNEE             38.9                        90.2   
+26        RIGHT_KNEE             37.1                        89.6   
+27        LEFT_ANKLE             38.9                        90.2   
+28       RIGHT_ANKLE             37.1                        89.6   
+29         LEFT_HEEL             38.9                        90.2   
+30        RIGHT_HEEL             37.1                        89.6   
+31   LEFT_FOOT_INDEX             38.9                        90.2   
+32  RIGHT_FOOT_INDEX             37.1                        89.6   
+
+    windows fully masked for this joint %  
+0                                     4.5  
+1                                     4.5  
+2                                     4.5  
+3                                     4.5  
+4                                     4.5  
+5                                     4.5  
+6                                     4.5  
+7                                     4.5  
+8                                     4.5  
+9                                     6.6  
+10                                    6.6  
+11                                   22.5  
+12                                   26.0  
+13                                   10.0  
+14                                   11.9  
+15                                   10.0  
+16                                   11.9  
+17                                   10.0  
+18                                   11.9  
+19                                   10.0  
+20                                   11.9  
+21                                   10.0  
+22                                   11.9  
+23                                   21.5  
+24                                   22.9  
+25                                    9.8  
+26                                   10.4  
+27                                    9.8  
+28                                   10.4  
+29                                    9.8  
+30                                   10.4  
+31                                    9.8  
+32                                   10.4  
+
+--- OUTPUT 3 stream ---
+
+Hip context frequency at each exact time block (%):
+
+
+--- OUTPUT 4 display_data ---
+
+text/html: <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>left hip</th>
+      <th>right hip</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>51.6</td>
+      <td>45.5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>22.7</td>
+      <td>22.7</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>10.4</td>
+      <td>9.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9.6</td>
+      <td>8.2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>7.0</td>
+      <td>7.6</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>9.8</td>
+      <td>12.7</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>22.5</td>
+      <td>26.8</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>49.2</td>
+      <td>52.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+text/plain:    left hip  right hip
+1      51.6       45.5
+2      22.7       22.7
+3      10.4        9.0
+4       9.6        8.2
+5       7.0        7.6
+6       9.8       12.7
+7      22.5       26.8
+8      49.2       52.0
+
+===== CELL 15 markdown EXEC=None =====
+
+Here is the difference drawn out: a fixed mask hides the same joints forever (left), while stochastic masks rotate which joints are hidden (right).
+
+
+===== CELL 16 code EXEC=9 =====
+
+display(SVG(filename=str(IMAGES_DIR / 'defect_mask_starvation.svg')))
+
+--- OUTPUT 1 display_data ---
+
+image/svg+xml: [binary image omitted]
+text/plain: <IPython.core.display.SVG object>
+
+===== CELL 17 markdown EXEC=None =====
+
+## See successive mask draws on the same skeleton
+
+Two clocks are shown separately: **mask sample** changes the independently drawn mask, while **time block** advances within a single model window. We replay the same motion for eight fresh masks from one seeded RNG, without filtering or recoloring any samples. Blue circles are visible context; red X markers are hidden prediction targets.
+
+With the laptop profile, the first seed-0 sample hides both complete legs for the whole window. In later samples the hips become visible. An entirely red time block is also valid if context exists elsewhere in that window. The GIF repeats these eight saved samples; rerunning with the same seed reproduces them. Change `DEMO_SEED` to explore another batch.
+
+The static timeline shows **every joint and time block at once**, even if your notebook viewer freezes the GIF. Its rows 23 and 24 show the exact hip mask bits. The helper also refreshes both older GIF filenames and writes a manifest so stale output can be detected. From a terminal, `python scripts/scripts_mask_demo.py` produces the same demo and `python scripts/scripts_mask_demo.py --check` detects overwritten artifacts.
+
+
+===== CELL 18 code EXEC=10 =====
+
+from importlib import reload
+import sjepa.masking_v2 as masking
+import sjepa.viz as viz
+import sjepa.mask_demo as mask_demo
+masking = reload(masking); viz = reload(viz)
+mask_demo = reload(mask_demo)
+from sjepa.data import sliding_windows
+from IPython.display import Image, display
+
+# Inspect only a training clip; no held-out motion guides the mask demo.
+seq = sliding_windows(train_recs[0].load_norm(),
+                      cfg.window_frames, cfg.window_stride)[0]
+DEMO_SEED = 0
+N_MASK_SAMPLES = 8
+demo = mask_demo.write_mask_demo(seq, ARTIFACT_DIR, frame_group=cfg.frame_group,
+                                fps=cfg.target_fps, seed=DEMO_SEED, n_samples=N_MASK_SAMPLES)
+demo_masks = demo.masks
+print('Every joint appears in both roles across these samples:',
+      bool(demo_masks.any((0, 1)).all() and (~demo_masks).any((0, 1)).all()))
+print(f'Each sample: {cfg.window_frames} frames; each block: {cfg.frame_group} frames.')
+display(pd.DataFrame({
+    'mask sample': np.arange(1, N_MASK_SAMPLES + 1),
+    'left hip visible blocks': (~demo_masks[:, :, 23]).sum(1),
+    'right hip visible blocks': (~demo_masks[:, :, 24]).sum(1),
+    'out of blocks': cfg.num_time_tokens,
+}))
+mask_demo.verify_mask_demo(ARTIFACT_DIR)
+display(Image(filename=str(demo.timeline)))
+display(Image(filename=str(demo.animation)))
+
+--- OUTPUT 1 stream ---
+
+Every joint appears in both roles across these samples: True
+Each sample: 32 frames; each block: 4 frames.
+
+
+--- OUTPUT 2 display_data ---
+
+text/html: <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mask sample</th>
+      <th>left hip visible blocks</th>
+      <th>right hip visible blocks</th>
+      <th>out of blocks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>4</td>
+      <td>3</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>2</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>2</td>
+      <td>1</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>4</td>
+      <td>2</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>3</td>
+      <td>1</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+text/plain:    mask sample  left hip visible blocks  right hip visible blocks  \
+0            1                        0                         0   
+1            2                        4                         3   
+2            3                        2                         3   
+3            4                        2                         0   
+4            5                        2                         1   
+5            6                        0                         0   
+6            7                        4                         2   
+7            8                        3                         1   
+
+   out of blocks  
+0              8  
+1              8  
+2              8  
+3              8  
+4              8  
+5              8  
+6              8  
+7              8  
+
+--- OUTPUT 3 display_data ---
+
+image/png: [binary image omitted]
+text/plain: <IPython.core.display.Image object>
+
+--- OUTPUT 4 display_data ---
+
+image/gif: [binary image omitted]
+text/plain: <IPython.core.display.Image object>

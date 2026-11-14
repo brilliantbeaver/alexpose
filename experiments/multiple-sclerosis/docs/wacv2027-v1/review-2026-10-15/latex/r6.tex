@@ -1,0 +1,5 @@
+% R6 — Frozen representation and classifier
+\subsection{Frozen representation and classifier}
+After training, the target encoder's weights are fixed. Each complete, unmasked window is passed through this encoder, and features at positions selected by one fixed sampled mask are averaged into a 96-dimensional vector. The mask selects outputs for averaging; it does not hide input landmarks during classification. Window vectors are then averaged to give one vector per clip. The same readout mask is used for all clips and folds, and sensitivity to that mask was not tested.
+
+A scaler fitted on training clips standardizes the features, and logistic regression with $C=1$ and inverse-frequency class weights predicts the three collection labels. Each training clip contributes one observation. Thus, sources with more clips contribute more observations to classifier fitting, even though source videos are sampled equally during encoder training. Validation and test clips contribute to neither feature scaling nor classifier fitting.

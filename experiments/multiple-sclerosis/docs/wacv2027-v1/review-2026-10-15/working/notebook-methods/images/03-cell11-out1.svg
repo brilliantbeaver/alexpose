@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="470" viewBox="0 0 940 470">
+<rect width="940" height="470" fill="#ffffff"/>
+<defs>
+<marker id="arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#94a3b8"/></marker>
+<marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#2563eb"/></marker>
+<marker id="arrowOrange" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#ea7317"/></marker>
+<marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#16a34a"/></marker>
+<marker id="arrowSlate" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#475569"/></marker>
+<marker id="arrowMute" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#64748b"/></marker>
+<marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0.5,0.5 L8,4 L0.5,7.5 z" fill="#7c3aed"/></marker>
+</defs>
+<text x="470.0" y="34" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" fill="#1a2733" font-weight="700" text-anchor="middle">How S-JEPA learns: predict hidden joints in feature space</text>
+<text x="40" y="100" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#ea7317" font-weight="700" text-anchor="start">Prediction lane</text>
+<text x="40" y="300" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#2563eb" font-weight="700" text-anchor="start">Target lane  (slow teacher, no gradient)</text>
+<rect x="41.5" y="122.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="40" y="120" width="150" height="66" rx="14" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5"/>
+<text x="115.0" y="149.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#ea7317" font-weight="700" text-anchor="middle">Masked view</text>
+<text x="115.0" y="168.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">visible joints</text>
+<rect x="217.5" y="122.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="216" y="120" width="150" height="66" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+<text x="291.0" y="158.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#ea7317" font-weight="700" text-anchor="middle">View encoder</text>
+<rect x="393.5" y="122.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="392" y="120" width="150" height="66" rx="14" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+<text x="467.0" y="158.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#ea7317" font-weight="700" text-anchor="middle">Predictor</text>
+<rect x="569.5" y="122.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="568" y="120" width="150" height="66" rx="14" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5"/>
+<text x="643.0" y="149.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#ea7317" font-weight="700" text-anchor="middle">Predicted</text>
+<text x="643.0" y="168.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">features</text>
+<rect x="41.5" y="322.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="40" y="320" width="150" height="66" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+<text x="115.0" y="349.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#2563eb" font-weight="700" text-anchor="middle">Full skeleton</text>
+<text x="115.0" y="368.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">all joints</text>
+<rect x="217.5" y="322.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="216" y="320" width="150" height="66" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+<text x="291.0" y="349.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#2563eb" font-weight="700" text-anchor="middle">Target encoder</text>
+<text x="291.0" y="368.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">EMA copy</text>
+<rect x="393.5" y="322.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="392" y="320" width="150" height="66" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+<text x="467.0" y="358.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#2563eb" font-weight="700" text-anchor="middle">Mask output</text>
+<rect x="569.5" y="322.5" width="150" height="66" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="568" y="320" width="150" height="66" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+<text x="643.0" y="349.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" fill="#2563eb" font-weight="700" text-anchor="middle">Target</text>
+<text x="643.0" y="368.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">center + sharpen</text>
+<path d="M 190 153.0 H 214" fill="none" stroke="#ea7317" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowOrange)"/>
+<path d="M 190 353.0 H 214" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowBlue)"/>
+<path d="M 366 153.0 H 390" fill="none" stroke="#ea7317" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowOrange)"/>
+<path d="M 366 353.0 H 390" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowBlue)"/>
+<path d="M 542 153.0 H 566" fill="none" stroke="#ea7317" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowOrange)"/>
+<path d="M 542 353.0 H 566" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowBlue)"/>
+<rect x="749.5" y="210.5" width="120" height="90" rx="14" fill="#0f172a" opacity="0.06"/>
+<rect x="748" y="208.0" width="120" height="90" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="808.0" y="249.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" fill="#475569" font-weight="700" text-anchor="middle">Latent</text>
+<text x="808.0" y="268.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#64748b" font-weight="400" text-anchor="middle">cross-entropy</text>
+<path d="M 718 153.0 H 734 V 245.0 H 746" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowMute)"/>
+<path d="M 718 353.0 H 734 V 261.0 H 746" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowMute)"/>
+<path d="M 291.0 186 V 220.0 H 199.0 V 318" fill="none" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4" marker-end="url(#arrowMute)"/>
+<text x="303.0" y="210.0" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#64748b" font-weight="400" text-anchor="start">EMA update (slow copy)</text>
+</svg>

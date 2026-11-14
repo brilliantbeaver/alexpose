@@ -1,0 +1,243 @@
+
+===== CELL 1 markdown EXEC=None =====
+
+<a href="https://colab.research.google.com/github/your-org/alexpose/blob/main/experiments/multiple-sclerosis/00_overview_and_video_gallery.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+===== CELL 2 markdown EXEC=None =====
+
+# 00 - Overview and video gallery
+
+Welcome. This series trains **S-JEPA**, a model that learns structure from walking motion without condition labels, then tests whether that representation helps distinguish three labels:
+
+- **Normal** gait
+- **MS**: multiple sclerosis
+- **PD**: Parkinson's disease
+
+These are dataset labels, not diagnoses made by this project. We compare a supervised probe with a classical Random Forest on matched source-grouped splits.
+
+This first notebook sets the scene. We look at the data, count it honestly, and actually watch a few clips so the later math stays grounded in real movement.
+
+### How to run
+
+You can run every notebook two ways:
+
+1. **Locally** with `uv`. From the repo root: `cd experiments/multiple-sclerosis && uv sync`, then open the notebooks in Jupyter or VS Code.
+
+2. **In Google Colab** by clicking the badge at the top. The setup cells install what is missing and clone the repo so `import sjepa` works.
+
+
+===== CELL 3 code EXEC=1 =====
+
+# --- Setup: install dependencies (Colab installs; local usually already has them) ---
+import importlib, importlib.util, subprocess, sys, os
+
+IN_COLAB = 'google.colab' in sys.modules
+
+def _need(mod):
+    return importlib.util.find_spec(mod) is None
+
+# Light deps used by every notebook.
+_pkgs = []
+for mod, pip_name in [('cv2','opencv-python'), ('mediapipe','mediapipe'),
+                      ('sklearn','scikit-learn'), ('pandas','pandas'),
+                      ('matplotlib','matplotlib'), ('tqdm','tqdm')]:
+    if _need(mod):
+        _pkgs.append(pip_name)
+if _pkgs:
+    print('installing:', _pkgs)
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', *_pkgs])
+else:
+    print('all light dependencies already present')
+
+--- OUTPUT 1 stream ---
+
+all light dependencies already present
+
+
+===== CELL 4 code EXEC=2 =====
+
+# --- Make `sjepa` and `ambient` importable, locally and in Colab ---
+from pathlib import Path
+import sys, subprocess
+
+def _find_exp_dir():
+    # Local run: this notebook sits in experiments/multiple-sclerosis.
+    here = Path.cwd()
+    for p in [here, *here.parents]:
+        if (p / 'sjepa' / '__init__.py').exists():
+            return p
+    return None
+
+EXP_DIR = _find_exp_dir()
+if EXP_DIR is None:
+    # Colab: clone the repo, then point at the experiment folder.
+    REPO = 'https://github.com/your-org/alexpose.git'  # <-- edit to your fork
+    if not Path('alexpose').exists():
+        subprocess.check_call(['git', 'clone', '--depth', '1', REPO])
+    EXP_DIR = Path('alexpose') / 'experiments' / 'multiple-sclerosis'
+
+REPO_ROOT = EXP_DIR.parents[1]
+for p in (str(EXP_DIR), str(REPO_ROOT)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+print('experiment dir:', EXP_DIR)
+print('repo root     :', REPO_ROOT)
+
+--- OUTPUT 1 stream ---
+
+experiment dir: /Users/pmui/dev/alexpose/experiments/multiple-sclerosis
+repo root     : /Users/pmui/dev/alexpose
+
+
+===== CELL 5 code EXEC=3 =====
+
+# --- Paths and profile (reads the root .env if python-dotenv is present) ---
+import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv(REPO_ROOT / '.env')
+except Exception:
+    pass
+
+VIDEO_DIR = EXP_DIR / 'video-data-full'
+ARTIFACT_DIR = EXP_DIR / 'artifacts'
+KEYPOINTS_DIR = ARTIFACT_DIR / 'keypoints-full'
+IMAGES_DIR = EXP_DIR / 'images'
+ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Pick the model size profile. 'laptop' is the fast default; set SJEPA_PROFILE=gpu
+# in your .env for a larger model, or SJEPA_SMOKE=1 for a near-instant test run.
+os.environ.setdefault('SJEPA_PROFILE', 'laptop')
+print('SJEPA_PROFILE =', os.environ['SJEPA_PROFILE'],
+      '| SJEPA_SMOKE =', os.environ.get('SJEPA_SMOKE', '0'))
+
+--- OUTPUT 1 stream ---
+
+SJEPA_PROFILE = laptop | SJEPA_SMOKE = 0
+
+
+===== CELL 6 markdown EXEC=None =====
+
+## The pipeline at a glance
+
+Both the learned approach and the classical baseline start from the same pose front-end, then split into two branches, and finally meet again for a fair comparison.
+
+
+===== CELL 7 code EXEC=4 =====
+
+from IPython.display import SVG, display
+display(SVG(filename=str(IMAGES_DIR / 'pipeline_flowchart.svg')))
+
+--- OUTPUT 1 display_data ---
+
+image/svg+xml: [binary image omitted]
+text/plain: <IPython.core.display.SVG object>
+
+===== CELL 8 markdown EXEC=None =====
+
+## The dataset, counted honestly
+
+The current `video-data-full/` collection contains **91 MP4 clips from 41 source videos**: 26 clips from 16 Normal sources, 30 from 13 MS sources, and 35 from 12 PD sources. The first 11 filename characters identify the source video; `_P...` suffixes distinguish clips. A source ID is a conservative grouping key, not a verified participant ID.
+
+
+===== CELL 9 code EXEC=5 =====
+
+import pandas as pd
+from sjepa.data import source_id_from_name
+
+CLASS_DIRS = {'normal': 'Normal', 'ms': 'MS', 'pd': 'PD'}
+rows = []
+for label, folder in CLASS_DIRS.items():
+    for vid in sorted((VIDEO_DIR / folder).glob('*.mp4')):
+        rows.append(dict(label=label, clip=vid.name, source_id=source_id_from_name(vid.name)))
+manifest = pd.DataFrame(rows)
+summary = manifest.groupby('label').agg(clips=('clip', 'count'),
+                                        sources=('source_id', 'nunique'))
+print(summary)
+print('\ntotal clips:', len(manifest), '| total sources:', manifest.source_id.nunique())
+manifest.to_csv(ARTIFACT_DIR / 'manifest_grouped.csv', index=False)
+
+--- OUTPUT 1 stream ---
+
+        clips  sources
+label                 
+ms         30       13
+normal     26       16
+pd         35       12
+
+total clips: 91 | total sources: 41
+
+
+===== CELL 10 markdown EXEC=None =====
+
+One MS source contributes 14 clips and one PD source contributes seven. We therefore split by source, not by clip. Recording conditions also differ by label, so later notebooks compare learned features with acquisition-related nuisance controls.
+
+## Watch a few walks
+
+The cell below embeds one clip per label. Inspect the walk and the camera angle, framing, resolution, background, and duration. One web clip cannot establish a diagnosis or represent its whole label.
+
+
+===== CELL 11 code EXEC=6 =====
+
+from sjepa.viz import show_video
+from IPython.display import display
+
+for label, folder in CLASS_DIRS.items():
+    clip = sorted((VIDEO_DIR / folder).glob('*.mp4'))[0]
+    print(f'{label}: {clip.name}')
+    display(show_video(clip, width=360))
+
+--- OUTPUT 1 stream ---
+
+normal: -0wbleNgAwg_P1_01.mp4
+
+
+--- OUTPUT 2 display_data ---
+
+text/html: <video controls playsinline preload="metadata"  width="360" >
+ <source src="data:video/mp4;base64,[OMITTED]" type="video/mp4">
+ Your browser does not support the video tag.
+ </video>
+text/plain: <IPython.core.display.Video object>
+
+--- OUTPUT 3 stream ---
+
+ms: 0ecDhEQFrx4.mp4
+
+
+--- OUTPUT 4 display_data ---
+
+text/html: <video controls playsinline preload="metadata"  width="360" >
+ <source src="data:video/mp4;base64,[OMITTED]" type="video/mp4">
+ Your browser does not support the video tag.
+ </video>
+text/plain: <IPython.core.display.Video object>
+
+--- OUTPUT 5 stream ---
+
+pd: -oJM2wUUjws_P1_01.mp4
+
+
+--- OUTPUT 6 display_data ---
+
+text/html: <video controls playsinline preload="metadata"  width="360" >
+ <source src="data:video/mp4;base64,[OMITTED]" type="video/mp4">
+ Your browser does not support the video tag.
+ </video>
+text/plain: <IPython.core.display.Video object>
+
+===== CELL 12 markdown EXEC=None =====
+
+## Roadmap
+
+| Notebook | What you build |
+|---|---|
+| 00 overview | this tour of the data and the plan |
+| 01 pose extraction | turn clips into skeleton sequences with MediaPipe |
+| 02 mask and tokens | build stochastic masks and turn skeletons into tokens |
+| 03 label-free pretraining | train S-JEPA only on each fold's training sources |
+| 04 adaptation | compare extra label-free training with a supervised probe |
+| 05 representations | compare learned and nuisance-feature projections |
+| 06 capstone | compare RF, S-JEPA, and controls on source-grouped folds |
+
+On to notebook 01, where we turn these clips into skeletons.
