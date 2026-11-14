@@ -1,1 +1,0 @@
-Setup instructions are consolidated in the [synthetic-training README](../../../slurm/synthetic-training/README.md). It covers the saved environment profile, rendering assets, configuration, preflight, source training, and real evaluation.

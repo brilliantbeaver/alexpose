@@ -1,0 +1,135 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[review,applications]{wacv}
+\usepackage{graphicx,booktabs,amsmath,amssymb,microtype}
+\definecolor{wacvblue}{rgb}{0.13,0.34,0.54}
+\usepackage[breaklinks,colorlinks,allcolors=wacvblue]{hyperref}
+\def\wacvPaperID{DRAFT}
+\def\confName{WACV}
+\def\confYear{2027}
+\title{Supplementary Material\\Learning Skeleton Representations from a Small Collection of Neurological Gait Videos}
+\author{Anonymous submission}
+\begin{document}
+\maketitle
+
+\section{Scope and retained evidence}
+This supplement records implementation details and the identity of the saved results used in the paper. It accompanies a small metric-reproduction packet. The packet allows the tables and fold comparisons to be recalculated from held-out predictions without machine-learning libraries, model checkpoints, or source videos. It does not reproduce pose extraction or model training, and it does not provide new clinical validation.
+
+The primary execution is dated 9 October 2026, 06:09:55.236580 UTC. The earlier RF comparison is dated 21 September 2026, 01:13:05.448893 UTC. Both use the same 88 usable clips and fixed source partitions. Their full dataset, registry, and original prediction-file hashes are recorded in \path{reproducibility/provenance.json}. The registry hash begins \texttt{9496e61b050f}; the dataset hash begins \texttt{93e3ed716d60}. These identifiers distinguish the experiment from an earlier, smaller collection that is not pooled into the reported results.
+
+Source and clip identifiers in the packet are replaced by neutral codes. They denote recording groups and clip rows, not independently verified individuals. The packet contains no source-video links, video frames, or mapping back to the original identifiers. Availability of this local manuscript package should not be interpreted as an established public dataset release or permission to redistribute the videos.
+
+\section{Exact source partitions}
+Table~\ref{tab:split} records each outer fold. The five-way split operates on one row per source, stratified by collection label. For each outer fold, the first split of a four-way stratified split of the remaining sources defines the validation set. The registry records outer seed 42, inner seeds 43--47 for folds 1--5, and scikit-learn 1.9.0. This is one validation holdout within each outer fold, not an average over four inner evaluations. The saved partition assignment is authoritative if a different software version generates different splits.
+
+\begin{table}[t]
+\centering
+\caption{Training, validation, and test counts as clips/sources. Display folds 1--5 correspond to stored indices 0--4.}
+\label{tab:split}
+\small\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Fold & Train & Validation & Test & Train windows\\
+\midrule
+1 &51/24&19/8&18/9&207\\
+2 &58/24&17/9&13/8&226\\
+3 &54/24&17/9&17/8&238\\
+4 &53/24&21/9&14/8&224\\
+5 &45/24&17/9&26/8&190\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All clips and their windows follow their source assignment. Encoder training samples windows with replacement using probability inversely proportional to the number of windows from their source. This gives every source equal total sampling probability; realized counts need not be identical. The downstream classifiers instead use one training observation per clip, with class weights inversely proportional to training-label frequency. Class balancing and source balancing are different operations.
+
+The 800-update and continued checkpoints each receive a separately fitted, training-only StandardScaler and logistic-regression classifier. Validation compares source-weighted macro-F1 and selects continuation only if it is strictly higher. The initial stage is selected in folds 1--3 and continuation in folds 4--5. Test features are extracted after this choice, with no refit on validation data.
+
+\section{Pose and masking details}
+The pose front end uses the pretrained full MediaPipe pose landmarker in per-frame image mode, with one pose and default detection and presence thresholds of 0.5. It uses full frames of the supplied clips; any manual crop belongs to collection preparation. Image-normalized coordinates are converted to pixels before cleaning. Only $x$, $y$, and visibility are retained. The processing code then applies the main paper's hip-centering and torso-scaling rule for S-JEPA and mean pose. RF angles use the cleaned pixel coordinates.
+
+Frame selection uses an integer stride targeting approximately 15 frames/s; the cache stores the nominal target, not a uniform physical timestamp sequence. Frames missing every horizontal landmark coordinate are trimmed at the ends. Every remaining joint/channel is interpolated independently without a maximum interior gap. Clips need at least eight cleaned frames. Complete 32-frame windows begin at frames 0, 16, 32, and so on; a trailing partial window is omitted. Clips shorter than 32 frames repeat their final frame and have no separate padding-validity mask.
+
+Table~\ref{tab:regions} specifies the seven regions by MediaPipe's zero-based landmark indices. Highlighted landmarks are $\{11,12,23,24,25,26,27,28,29,30,31,32\}$. For region $r$, let $m_j$ be the number of regions containing joint $j$. Set $b_r=1.5$ if the region contains a highlighted joint and $b_r=1$ otherwise. Its unnormalized sampling weight is
+\begin{equation}
+a_r=\frac{b_r}{|r|^{-1}\sum_{j\in r}m_j}.
+\end{equation}
+Weights are normalized over regions. A region and then a uniformly chosen span length from 1 to 6 time blocks are sampled; its start is uniform over positions where that span fits. The selected tokens are added to the target set until its size reaches $\operatorname{round}(0.6\times264)=158$, or 36 region draws have occurred. Overlap and the final draw allow a realized fraction different from 60\%.
+
+\begin{table}[t]
+\centering
+\caption{Regions for target-mask sampling. Arms and trunk share shoulders; legs and trunk share hips.}
+\label{tab:regions}
+\small\setlength{\tabcolsep}{5pt}
+\begin{tabular}{ll}
+\toprule
+Region & Landmark indices\\
+\midrule
+Head &0, 1, 2, 3, 4, 5, 6, 7, 8\\
+Mouth &9, 10\\
+Left arm &11, 13, 15, 17, 19, 21\\
+Right arm &12, 14, 16, 18, 20, 22\\
+Trunk &11, 12, 23, 24\\
+Left leg &23, 25, 27, 29, 31\\
+Right leg &24, 26, 28, 30, 32\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+If every token in the highlighted joint set is hidden, one randomly selected token in that set is made visible. The code also guarantees nonempty context and target sets. This rule can retain only a shoulder token and does not guarantee visible hips, legs, or context in every time block. The sampler creates a separate mask for each example. A separate notebook diagnostic of 512 masks reports a mean target fraction of 63.3\%; this is a sampler check, not measured exposure over all training updates.
+
+\section{Loss, optimization, and readout}
+Let $u$ be a 96-dimensional predictor vector and $z$ the corresponding target-encoder vector at a hidden token. With running center $c$, training uses
+\begin{equation}
+p=\operatorname{softmax}(u/0.10),\qquad
+q=\operatorname{softmax}((z-c)/0.06).
+\end{equation}
+The loss $-\sum_d q_d\log p_d$ is averaged over hidden tokens within each example, then over the batch. The center is updated once per batch as $c\leftarrow0.9c+0.1\bar z$, where $\bar z$ averages masked target vectors. No gradient passes through the target encoder. Its parameters follow an exponential moving average of the context encoder after each optimization step, with the coefficient increasing from 0.996 toward 1.
+
+AdamW uses coefficients $(0.9,0.95)$, peak learning rate $10^{-3}$, weight decay 0.05, and gradient-norm clipping at 1. The rate increases over the first 10\% of each stage and then follows cosine decay. The continuation retains context, target, predictor, and mask-token weights but restarts the optimizer, running center, random generators, and both schedules. It is not equivalent to an uninterrupted 1,200-update training run. No VICReg term or condition-aware encoder loss is used in this evaluated recipe.
+
+The context encoder has 229,728 parameters, the predictor 172,320, and the shared mask token 96, giving 402,144 trainable parameters. The target encoder adds 229,728 nontrainable parameters. Both encoders use width 96, three layers, four heads, feed-forward expansion 2, and no dropout; the predictor uses two layers with separate learned joint and time positions.
+
+Reflection exchanges left and right slots only in the transformed context input. The unreflected target and target-mask indices retain the original slots. A target's physical joint may therefore be represented by an opposite-side context slot after reflection. The stored experiments have this correspondence issue, and its effect has not been isolated by a corrected training comparison.
+
+At inference the target encoder receives the full, unmasked window. A mask sampled once with NumPy generator seed 0 selects 161 output tokens for averaging; it does not remove input observations. Window vectors are averaged to one clip vector. The linear classifier uses $C=1$, a 2,000-iteration limit, balanced class weights, and random state 42. Mean-pose and visibility comparisons use the same classification recipe, fitted independently. The RF uses 100 trees, depth 5, square-root feature sampling, balanced classes, and seed 42, after removing columns with zero training variance and fitting the training scaler.
+
+\section{Training diagnostics and their interpretation}
+The exact first-/last-50 summaries are retained as printed output in notebook 03, cell 18 (zero-based JSON cell index). That teaching execution uses the first fold's 51 training clips and 24 sources; its initial-stage endpoint agrees with the primary five-fold run to printed precision. The checkpoint retains final training state, but not a complete numeric series of the per-update diagnostics. Table~\ref{tab:diagnostics} therefore reports the saved summaries rather than reconstructing a learning curve.
+
+\begin{table}[t]
+\centering
+\caption{First-fold training diagnostics, averaged over the first and last 50 of 800 updates. Values describe sampled training batches.}
+\label{tab:diagnostics}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrr}
+\toprule
+Diagnostic & First 50 & Last 50\\
+\midrule
+Feature-prediction loss &3.858368&1.022220\\
+Mean feature standard deviation &0.153868&0.525584\\
+Effective rank &8.132109&10.939291\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For feature spread and effective rank, each window is represented by the mean of all target-encoder output tokens. For every feature, its standard deviation is computed across the 32 sampled windows, and the 96 results are averaged. These diagnostic vectors differ from classification vectors pooled over the fixed 161 positions. The training loss decreases while the pooled target features retain variation across sampled inputs. The target distributions and their uncertainty also change during training, so lower cross-entropy alone does not establish closer agreement between the predictor and target. Held-out label prediction provides separate evidence of the usefulness of the resulting features.
+
+Effective rank summarizes how evenly variation is distributed across feature directions. The batch is centered, singular values $s_i>10^{-9}$ are normalized as $r_i=s_i/\sum_j s_j$, and the score is $\exp(-\sum_i r_i\log r_i)$. The centered batch has matrix rank at most 31. This diagnostic does not count independent clinical factors or measure disease separation. Training-set projections in notebook 05 also show no clear label clusters: the initial and continued feature silhouettes are approximately $-0.004$ and $-0.012$. These exploratory projections are not used to establish the held-out classification result.
+
+\section{Recomputing the reported scores}
+Run the following from the unzipped package directory using Python 3:
+\begin{quote}\small\ttfamily
+python3 reproducibility/verify\_metrics.py
+\end{quote}
+The verifier checks packet hashes, 88 unique clips, 41 sources, class counts, source separation, and exactly one test prediction per clip. It reconstructs the source- and clip-weighted confusion matrices and all pooled and fold-level F1 scores, then compares them with the saved expected values. No classifier fitting occurs in this check.
+
+For source weighting, clip $i$ from source $s$ receives $w_i=1/n_s$; for clip weighting, $w_i=1$. With collection label $y_i$ and predicted label $\widehat y_i$, the confusion count is
+\begin{equation}
+C_{ab}=\sum_i w_i\,\mathbf{1}[y_i=a,\widehat y_i=b].
+\end{equation}
+Class F1 is $2C_{kk}/(\sum_b C_{kb}+\sum_a C_{ak})$, and macro-F1 is the equal average across Normal, MS, and PD. Undefined class scores are zero. Counts are pooled before scoring, so pooled F1 generally differs from the mean of fold F1 values. Fold standard deviation uses division by five and describes spread across these particular held-out groups.
+
+The corrected RF's source F1 is 0.3251841041; the historical RF's is 0.4112629104. Twelve RF decisions differ between the records, while all S-JEPA hard predictions coincide. The feature matrices differ only in the left-ankle-range column: the earlier implementation duplicates the right-ankle range. Both results remain available in the packet so that the observed S-JEPA margin is not mistaken for an improvement in S-JEPA between executions.
+
+The fixed predictions do not assess retraining variability, alternative partitions, recurring participants across sources, or transfer to new clinical populations. Continuous class probabilities were not retained in the prediction rows, so the packet does not calculate ROC curves or area under the curve from hard labels. Complete retraining additionally requires the original pose caches or permitted source videos, model implementation, and recorded software environment. Source-media access and ethics documentation remain unresolved author responsibilities, as described in the paper.
+\end{document}

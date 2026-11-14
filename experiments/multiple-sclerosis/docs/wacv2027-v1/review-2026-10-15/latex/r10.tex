@@ -1,0 +1,39 @@
+% R10 — Results: replace the complete section
+\section{Results}
+\subsection{Classification using learned representations}
+S-JEPA's frozen features support prediction of collection labels on recordings excluded from training. The pooled source-weighted macro-F1 is 0.457, compared with 0.325 for the corrected handcrafted RF (Table~\ref{tab:heldout_revised}), a difference of 0.131 on the F1 scale. With equal weight per clip, S-JEPA also exceeds RF, scoring 0.397 versus 0.321 and correctly classifying 36 of 88 clips compared with 30 for RF. Each encoder was trained on only 24 source videos.
+
+Mean pose is a strong comparison, with source-weighted macro-F1 of 0.452. It exceeds S-JEPA with equal clip weighting (0.410 versus 0.397) and correctly classifies 37 clips. The small difference under source weighting therefore provides little basis for attributing S-JEPA's predictions specifically to temporal information. One MS-labeled source contributes 13 clips, illustrating why the two weighting schemes can produce different rankings.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.43\columnwidth}rrr@{}}
+\hline
+Method & Source F1 & Clip F1 & Correct clips \\
+\hline
+S-JEPA + linear classifier & 0.457 & 0.397 & 36/88 \\
+Joint angles + corrected RF & 0.325 & 0.321 & 30/88 \\
+Mean pose + linear classifier & 0.452 & 0.410 & 37/88 \\
+Visibility + linear classifier & 0.318 & 0.318 & 29/88 \\
+Majority class & 0.259 & 0.202 & 23/88 \\
+\hline
+Earlier RF (duplicate) & 0.411 & 0.397 & 37/88 \\
+\hline
+\end{tabular}
+\caption{Held-out classification of the collection labels. Macro-F1 combines predictions across all five test folds, weighting each source equally (Source F1) or each clip equally (Clip F1). Correct clips are unweighted counts. The final row records the earlier RF implementation with a duplicated ankle-range field; it is separate from the corrected main comparison.}
+\label{tab:heldout_revised}
+\end{table}
+
+The earlier RF implementation scores 0.411 with source weighting. S-JEPA also exceeds that result, by 0.045, although the two clip-weighted scores round to 0.397 and the earlier RF is slightly higher before rounding. Correcting the ankle feature changes 12 RF predictions and lowers its score. The earlier and corrected executions use the same collection, partitions and seed, and produce identical S-JEPA predicted labels. They do not provide independent evidence across training seeds or datasets.
+
+\subsection{Variation across recordings and labels}
+S-JEPA exceeds corrected RF in three of five test folds, with fold macro-F1 ranging from 0.217 to 0.780 (Figure~\ref{fig:results_revised}). Mean pose exceeds S-JEPA in four folds. The higher pooled S-JEPA score reflects performance across all held-out predictions, including its strong result in fold 2, rather than a consistent advantage in every partition.
+
+With equal source weighting, S-JEPA correctly identifies 39.6\% of Normal-, 42.9\% of MS-, and 56.9\% of PD-labeled examples, compared with 27.1\%, 23.1\%, and 51.0\% for corrected RF. PD predictions also include many examples from the other labels: their source-weighted precision is 38.6\%. In raw clip counts, S-JEPA correctly classifies 10 of 24 Normal clips, 8 of 29 MS clips and 18 of 35 PD clips; 13 MS clips are assigned to PD. The source-weighted percentages and raw counts use different weights. These errors limit clinical interpretation even though the features support useful prediction within this collection.
+
+\subsection{Learning during training}
+The training records show that the model fits the hidden-feature prediction task while retaining variation across inputs. In the saved fold-0 training history, the first and last 50 updates of the initial stage have mean losses of 3.858 and 1.022, respectively. At the end of that stage, effective rank---a measure of how varied a batch of features is---is 12.13; the corresponding values across folds range from 10.90 to 12.13. Together with the held-out classifier results, these observations support the practical usefulness of the trained representation. They do not measure how much classification improved relative to an untrained encoder.
+
+The continuation stage lowers the final training-batch loss in every fold, but validation selects it only in folds 3 and 4. The initial stage is retained in folds 0--2. Further optimization of the training objective therefore does not consistently improve label prediction; the validation step determines which stage is used for each test fold.

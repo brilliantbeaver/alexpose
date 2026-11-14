@@ -1,0 +1,5 @@
+% R15 — Preprocessing: duration and missing detections
+The target sampling cadence is approximately 15 Hz, with the actual cadence depending on the original frame rate and integer sampling stride. Windows contain 32 sampled frames with a stride of 16 frames; their duration therefore varies across recordings.
+
+% Append this sentence to the existing final padding paragraph of Section 3:
+Padding short clips by repeating the final frame does not add observed movement.

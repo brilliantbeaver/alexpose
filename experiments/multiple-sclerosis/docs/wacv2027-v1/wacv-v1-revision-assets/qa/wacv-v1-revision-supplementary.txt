@@ -1,0 +1,196 @@
+ WACV                                                                                                                                           WACV
+#DRAFT                                                                                                                                         #DRAFT
+                  WACV 2027 Submission #DRAFT.        Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+
+                                             Supplementary Material
+                                        Learning Skeleton Representations
+                                from a Small Collection of Neurological Gait Videos
+
+
+                                        Anonymous WACV Applications Track submission
+
+                                                              Paper ID DRAFT
+
+
+ 001     S1. Purpose and evaluation scope                                     signments determine the reported result. Training uses 207,       036
+                                                                              226, 238, 224 and 190 windows in folds 0–4, respectively,         037
+ 002     This supplement gives the implementation details and un-             from 24 sources in each fold.                                     038
+ 003     certainty analysis for the main paper. It describes the same            Encoder training samples a source uniformly with re-           039
+ 004     88 clips, 41 source recordings and ﬁxed ﬁve-fold evalua-             placement and then a window uniformly within that source.         040
+ 005     tion. The primary results come from the complete execu-              This gives equal source probabilities, although realized          041
+ 006     tion recorded on 9 October 2026; the earlier RF comparison           draws need not be identical. The downstream classiﬁer             042
+ 007     is from 21 September 2026. Both use the same collection,             instead treats clips as observations and weights classes in-      043
+ 008     source partitions and training seed. No new encoder or clas-         versely to their training frequency. Class balancing and          044
+ 009     siﬁer was trained during preparation of this revision.               source balancing therefore operate at different stages.           045
+ 010         The main paper reports an observed advantage over the
+ 011     corrected handcrafted RF. The resampling analysis below
+                                                                              S3. Anatomical mask construction                                  046
+ 012     describes variation in that comparison while keeping the ﬁt-
+ 013     ted models and their predictions ﬁxed. It does not supply a          Table S1 gives the seven regions by zero-based BlazePose          047
+ 014     new test collection or an independent replication.                   landmark index.          The preferred landmark set is            048
+                                                                              {11, 12, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32}. For joint j,    049
+ 015     S2. Pose processing and source partitions                            let mj be the number of regions containing it. Set br = 1.5       050
+                                                                              if region r contains a preferred landmark and br = 1 other-       051
+ 016     The pose front end uses the pretrained full MediaPipe pose           wise. Its unnormalized sampling weight is                         052
+ 017     landmarker from the BlazePose family [2], in per-frame im-
+ 018     age mode with one pose and detection and presence thresh-                                              b
+                                                                                                 ar =           Pr        .            (S1)     053
+ 019     olds of 0.5. It operates on the supplied clips after any man-                                  |r|−1    j∈r mj
+ 020     ual cropping. Only image-plane coordinates and visibility
+ 021     are retained. The main paper speciﬁes the frame-selection,           Normalizing these weights gives the region-selection prob-        054
+ 022     cleaning and spatial-normalization rules.                            abilities. The overlap adjustment and region membership           055
+ 023         Frames missing all horizontal landmark coordinates are           mean that the 1.5 multiplier is not an individual joint’s hid-    056
+ 024     trimmed from the ends. Missing channels are interpolated             ing probability.                                                  057
+ 025     independently without a maximum interior gap. Complete                   For each example, a region is sampled, followed by a          058
+ 026     32-frame windows begin at frames 0, 16, 32 and so on; a              span length chosen uniformly from one to six time blocks          059
+ 027     trailing partial window is omitted. A clip shorter than 32           and a start position where that span ﬁts. Its tokens are added    060
+ 028     frames repeats its last frame, without a separate padding-           to the target set until the count reaches round(0.6 × 264) =      061
+ 029     validity mask. Retained clips have at least 14 cleaned               158, or 36 region draws have occurred. Overlap and the last       062
+ 030     frames in this collection, although the implemented accep-           draw can change the realized hidden fraction.                     063
+ 031     tance threshold is eight.                                                If every token associated with the preferred landmark set     064
+ 032         The outer source splitter uses seed 42. Within fold k, the       is hidden, one randomly selected token in that set is made        065
+ 033     validation splitter uses seed 43 + k, and the ﬁrst of its four       visible. The implementation also ensures nonempty con-            066
+ 034     splits deﬁnes the validation set. This is one validation hold-       text and target sets. This rule preserves some preferred-         067
+ 035     out per outer fold, not four inner evaluations. The saved as-        landmark context somewhere in the window; it does not             068
+
+
+                                                                          1
+ WACV                                                                                                                                                 WACV
+#DRAFT                                                                                                                                               #DRAFT
+                   WACV 2027 Submission #DRAFT.            Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+
+                        Region       Landmark indices                                 Diagnostic                         First 50   Last 50
+                        Head         0, 1, 2, 3, 4, 5, 6, 7, 8                        Feature-prediction loss               3.858     1.022
+                        Mouth        9, 10                                            Mean feature standard deviation       0.154     0.526
+                        Left arm     11, 13, 15, 17, 19, 21                           Effective rank                         8.13     10.94
+                        Right arm    12, 14, 16, 18, 20, 22
+                        Trunk        11, 12, 23, 24                              Table S2. Training-batch summaries for fold 0. The feature spread
+                        Left leg     23, 25, 27, 29, 31                          and rank use pooled target-encoder outputs.
+                        Right leg    24, 26, 28, 30, 32
+
+         Table S1. Regions used in mask sampling. Arms and trunk share              For classiﬁcation, the full window enters the frozen tar-         106
+         shoulders; legs and trunk share hips.                                   get encoder. A readout mask sampled once with NumPy                  107
+                                                                                 generator seed zero selects 161 of 264 output positions for          108
+                                                                                 averaging. Window vectors are averaged within a clip. Lo-            109
+ 069     guarantee a visible leg or preferred landmark in every time
+                                                                                 gistic regression uses C = 1, balanced class weights, ran-           110
+ 070     block.
+                                                                                 dom state 42 and a 2,000-iteration limit. Every scaler and           111
+                                                                                 classiﬁer is ﬁtted only on its training clips.                       112
+ 071     S4. Loss, optimization and readout
+ 072     Let u be the predictor vector, z the target-encoder vector at           S5. Handcrafted and simple comparisons                               113
+ 073     the corresponding hidden position, and c the running center.
+ 074     Following the centering and sharpening of DINO [3] used                 The RF computes hip, knee and ankle angles from the                  114
+ 075     by S-JEPA [1],                                                          shoulder–hip–knee, hip–knee–ankle and knee–ankle–foot-               115
+                                                                                 index triplets on each side. An angle is omitted when the            116
+                          p = softmax(u/0.10),                                   geometric mean of its three landmark visibility scores is be-        117
+ 076                                                                  (S2)
+                          q = softmax((z − c)/0.06).                             low 0.3. Six mean angles, six maximum-minus-minimum                  118
+                             P                                                   ranges and three absolute left/right mean differences form           119
+ 077     Cross-entropy − d qd log pd is averaged over each win-                  the 15 varying ﬁelds. Missing angle summaries are ﬁlled              120
+ 078     dow’s hidden tokens and then across windows. These dis-                 with zero. The 82-ﬁeld feature container includes other              121
+ 079     tributions are over 96 feature dimensions, not the collection           ﬁelds that are unpopulated or constant here; zero-variance           122
+ 080     labels. After the loss is formed, the center updates once per           columns are removed using the training partition.                    123
+ 081     batch as c ← 0.9c + 0.1z̄, where z̄ averages all masked tar-               The corrected extractor records left- and right-ankle             124
+ 082     get vectors in the batch. No loss gradient enters the target            ranges separately. The earlier extractor copied the right-           125
+ 083     encoder.                                                                ankle range into both ﬁelds. The two saved feature matrices          126
+ 084         Both encoders have width 96, three layers, four atten-              differ only in that ﬁeld, and the corresponding RF predic-           127
+ 085     tion heads, feed-forward expansion two and no dropout;                  tions change for 12 of 88 clips. The main results retain the         128
+ 086     the predictor has two layers with separate learned landmark             earlier score in a separate historical row.                          129
+ 087     and time positions. AdamW uses peak learning rate 10−3 ,                   The RF uses 100 trees, maximum depth ﬁve, square-root             130
+ 088     weight decay 0.05, coefﬁcients (0.9, 0.95) and gradient-                feature subsampling, balanced class weights and seed 42,             131
+ 089     norm clipping at one. The ﬁrst 10% of each stage warms up               after a training-ﬁtted scaler. Mean pose uses 66 full-clip co-       132
+ 090     the learning rate, followed by cosine decay. Target-encoder             ordinate averages. Visibility uses 33 means and 33 standard          133
+ 091     momentum rises from 0.996 toward 1.0.                                   deviations. These two comparisons use the same training-             134
+ 092         Each fold starts from fresh skeleton-model weights with             only scaling and logistic-regression settings as S-JEPA.             135
+ 093     seed 42. After 800 updates, the 400-update continuation re-
+ 094     tains learned model weights but restarts the optimizer, cen-            S6. Training behavior                                                136
+ 095     ter, random-number generators and schedules. Both stages
+ 096     receive a separately ﬁtted scaler and classiﬁer on training             The ﬁrst-fold training history reports means over the ﬁrst           137
+ 097     clips. Source-weighted validation F1 selects the stage, re-             and last 50 updates of the initial 800-update stage (Ta-             138
+ 098     taining the initial stage on a tie. The initial stage is selected       ble S2). These are saved summaries, not a reconstructed              139
+ 099     in folds 0–2, and continuation in folds 3–4.                            per-update curve. The retained checkpoint’s serialized pay-          140
+ 100         Reﬂection exchanges left/right slots in the context input           load agrees with the ﬁrst-fold initial checkpoint of the pri-        141
+ 101     while the untransformed target and mask indices keep their              mary evaluation.                                                     142
+ 102     original slots. The physical joint available at a context po-              For these diagnostics, each window is represented by              143
+ 103     sition can therefore change sides. The reported experiment              the average of all target-encoder output tokens, rather than         144
+ 104     retains this implementation; its effect has not been isolated           only the positions used by the classiﬁer. Feature stan-              145
+ 105     in a controlled training comparison.                                    dard deviations are calculated across the 32 sampled win-            146
+
+
+                                                                             2
+ WACV                                                                                                                                            WACV
+#DRAFT                                                                                                                                          #DRAFT
+                  WACV 2027 Submission #DRAFT.        Applications Track. CONFIDENTIAL REVIEW COPY. DO NOT DISTRIBUTE.
+
+
+
+ 147     dows and averaged across the 96 dimensions. For ef-                   uncertainty around the observed ranking without establish-        195
+ 148     fective rank, the batch is centered, Psingular values above           ing equivalence or a reliable advantage in new populations.       196
+ 149     10−9 are P  normalized as ri = si / j sj , and the score                  These calculations keep the trained models and predic-        197
+ 150     is exp(− i ri log ri ). The centered batch has maximum                tions ﬁxed. They do not include changes from retraining,          198
+ 151     rank 31.                                                              checkpoint selection or alternative source partitions, and        199
+ 152        Initial-stage endpoint ranks range from 10.896 to 12.135;          they treat source videos as independent units even though         200
+ 153     continuation-stage endpoints range from 9.558 to 11.638.              participant identities across videos are unknown. Fold            201
+ 154     These diagnostics show variation in learned features and do           variability describes the same collection under overlapping       202
+ 155     not measure clinical separation. Endpoint losses describe             training partitions, rather than ﬁve independent replications.    203
+ 156     individual training batches; the averages in Table S2 sum-
+ 157     marize a longer portion of training.                                  References                                                        204
+ 158        The mask-frequency check used 5,000 masks with seed
+                                                                               [1] Mohamed Abdelfattah and Alexandre Alahi. S-JEPA:              205
+ 159     42. The mean hidden-token fraction was 0.632. The left
+                                                                                   A joint embedding predictive architecture for skeletal        206
+ 160     shoulder was hidden in 78.3% of landmark–time positions,
+                                                                                   action recognition. In Computer Vision – ECCV 2024,           207
+ 161     but in at least one time block in 98.6% of windows. These
+                                                                                   pages 367–384, 2024. 2                                        208
+ 162     are different denominators. The sampling check does not
+ 163     determine whether the anatomical preference improves clas-            [2] Valentin Bazarevsky, Ivan Grishchenko, Karthik                209
+
+ 164     siﬁcation.                                                                Raveendran, Tyler Zhu, Fan Zhang, and Matthias                210
+                                                                                   Grundmann. BlazePose: On-device real-time body                211
+
+ 165     S7. Score calculation                                                     pose tracking, 2020. arXiv:2006.10204. 1                      212
+                                                                               [3] Mathilde Caron, Hugo Touvron, Ishan Misra, Hervé              213
+ 166     For clip i from source s, source weighting uses wi = 1/ns ,               Jégou, Julien Mairal, Piotr Bojanowski, and Armand            214
+ 167     where ns is that source’s usable clip count; clip weighting               Joulin. Emerging properties in self-supervised vision         215
+ 168     uses wi = 1. With collection label yi and predicted label ybi ,           transformers. In Proceedings of the IEEE/CVF Inter-           216
+ 169     the confusion count is                                                    national Conference on Computer Vision, pages 9650–           217
+                              X                                                    9660, 2021. 2                                                 218
+ 170                   Cab =       wi 1[yi = a, ybi = b].        (S3)
+                                i
+                              P            P
+ 171     Class F1 is 2Ckk /( b Ckb + a Cak ), and macro-F1 is
+ 172     the equal average across Normal, MS and PD. Undeﬁned
+ 173     scores are zero. The pooled result combines counts from
+ 174     all test folds before calculating F1, so it need not equal the
+ 175     mean of the ﬁve fold scores.
+
+ 176     S8. Variation in the retained predictions
+ 177     We resampled source videos within each collection label
+ 178     10,000 times, retaining 16 Normal, 13 MS and 12 PD source
+ 179     draws per resample. Sampling was with replacement. Each
+ 180     sampled source contributed total weight one across its clips,
+ 181     with repeated draws counted repeatedly. All methods used
+ 182     the same draws. The calculation used NumPy’s PCG64
+ 183     generator with seed 42 and sorted source identiﬁers within
+ 184     each label. All 10,000 draws for Normal are generated ﬁrst,
+ 185     followed by all draws for MS and then PD. The 2.5th and
+ 186     97.5th percentiles, using linear interpolation, deﬁne the in-
+ 187     tervals reported here.
+ 188        For the corrected execution, source-weighted macro-F1
+ 189     is 0.457 for S-JEPA (interval 0.331–0.580), 0.325 for RF
+ 190     (0.207–0.445), and 0.452 for mean pose (0.324–0.573).
+ 191     The paired S-JEPA minus RF difference is 0.131 (interval
+ 192     −0.046 to 0.309); the difference from mean pose is 0.005
+ 193     (−0.167 to 0.174). The range of differences includes either
+ 194     method performing better under resampling. This describes
+
+                                                                           3
+

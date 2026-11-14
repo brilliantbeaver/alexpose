@@ -1,0 +1,72 @@
+{
+  "primary_run_timestamp_utc": "2026-10-09T06:09:55.236580Z",
+  "earlier_run_timestamp_utc": "2026-09-21T01:13:05.448893Z",
+  "registry_sha256": "9496e61b050fc8b62ccbc59cb737376396205a3356b323733b9b8915d56600e1",
+  "dataset_sha256": "93e3ed716d608f503b77381692f833e8b027b85d9aa6d3580fae70eebb30e75b",
+  "primary_original_oof_sha256": "8ea21a90ea72e30346cd7063e6e55a973cbe8ae9a0503c755fb9cbcf918c9de0",
+  "earlier_original_oof_sha256": "70d9b62a8e1d949f4910921f409abd974529e70d059d71f6b10875e77d0438f5",
+  "primary_scientific_code_sha256": "b0bcda1d8fc911cf92b270d09a8ad6b3c60732fb9d45c9a73310dbd1e94e1cab",
+  "config": {
+    "profile": "laptop",
+    "num_joints": 33,
+    "in_channels": 3,
+    "window_frames": 32,
+    "frame_group": 4,
+    "target_fps": 15,
+    "window_stride": 16,
+    "encoder_dim": 96,
+    "encoder_depth": 3,
+    "encoder_heads": 4,
+    "predictor_dim": 96,
+    "predictor_depth": 2,
+    "mlp_ratio": 2.0,
+    "dropout": 0.0,
+    "batch_size": 32,
+    "lr": 0.001,
+    "weight_decay": 0.05,
+    "ema_start": 0.996,
+    "ema_end": 1.0,
+    "center_beta": 0.9,
+    "tau_pred": 0.1,
+    "tau_target": 0.06,
+    "seed": 42
+  },
+  "active_schedule": {
+    "base_updates": 800,
+    "continuation_updates": 400,
+    "warmup_fraction_per_stage": 0.1,
+    "mask_ratio": 0.6,
+    "clinical_region_weight": 1.5,
+    "masks_per_sequence": 1,
+    "continuation_resets": [
+      "optimizer",
+      "running center",
+      "random generators",
+      "learning-rate schedule",
+      "teacher schedule"
+    ]
+  },
+  "training_sources_each_fold": 24,
+  "readout": {
+    "encoder": "frozen teacher",
+    "input": "complete unmasked window",
+    "output_pooling": "161 fixed seed-0 selected tokens, then mean across windows per clip",
+    "dimensions": 96,
+    "probe": "training-only StandardScaler and class-balanced logistic regression",
+    "C": 1.0,
+    "max_iter": 2000,
+    "random_state": 42
+  },
+  "rf": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "max_features": "sqrt",
+    "class_weight": "balanced",
+    "random_state": 42,
+    "feature_filter": "training variance > 0",
+    "feature_scaling": "training-only standardization",
+    "historical_difference": "Earlier left ankle range field duplicated right ankle range; primary run uses corrected left ankle range."
+  },
+  "anonymization": "Recording and clip identifiers are replaced by S001... and C001...; original identifiers and mapping are not included. These identifiers do not establish unique participants.",
+  "diagnostics": "Values transcribed at six-decimal precision from saved notebook03 cell18. Loss averages masked-target token cross-entropy within windows then across the batch. Rank and embedding standard deviation use all-token teacher-pooled window vectors after the EMA update. Drift averages tensor-wise 1-cosine of student and teacher parameters after the optimizer step and before EMA, with denominator clamped at 1e-9. The CSV gives each aggregation rule; these are training diagnostics, not a full learning-curve history."
+}

@@ -1,0 +1,22 @@
+1. **HOLDS — scientific coherence within the retained evidence.** `docs/wacv2027-v1/wacv-v1-revision.tex:102` specifies the “complete, untransformed training window”; line 124 preserves the restarted continuation and validation selection. These agree with `sjepa/train_v2.py:215–220` and `sjepa/full_experiment.py:169–183`. The results at manuscript lines 194–200 match the retained current and historical scores.
+
+2. **HOLDS — claims remain bounded.** The main manuscript states “further controls are needed to isolate the contribution of pretraining and temporal information” at line 19. Line 148 explicitly includes “32--33 development sources”; lines 184 and 207 retain mean pose’s stronger clip-weighted result and the historical RF comparison. Line 229 states that labels “were not independently clinically verified.” The contribution is an observed pipeline comparison, without claiming causal pretraining benefit, clinical validation, or methodological priority.
+
+3. **NOT REACHED in full — one added implementation detail is unverified here.** `docs/wacv2027-v1/wacv-v1-revision-supplementary.tex:29` specifies the “full MediaPipe pose landmarker,” image mode, one pose, and detection/presence thresholds of 0.5. The supplied loader delegates to `SequenceKeypointExtractor` at `sjepa/data.py:64–66`; its implementation is outside this snapshot, and the retained audits do not establish those exact settings. This is a verification limit, not a demonstrated false statement. Otherwise, the reviewed corrections survive: the complete loss and optimizer description appears at supplement lines 68–79, reflection remains explicitly untested at line 81, and the bootstrap draw ordering is specified at line 124. MaskFeat attribution is restored at main line 50 with its bibliography entry at `wacv-v1-revision.bib:131`.
+
+4. **HOLDS — numerical figure sources, scales, and denominators agree.** `docs/wacv2027-v1/wacv-v1-revision-assets/build_figures.py:56` computes `pct = 100 * cm / cm.sum(axis=1, keepdims=True)`; line 57 fixes every confusion panel to `vmin=0, vmax=100`. Lines 44–45 use the full zero-to-one F1 scale. All supplied fold scores and confusion cells match the October run in `review-2026-10-15/evidence/results-verification.json`. The rounding at figure-builder line 61 produces **43.8** for the exact mean-pose Normal recall of 43.75%. Main line 176 correctly labels row percentages, and supplement line 114 distinguishes token frequency from windows containing any hidden token.
+
+5. **HOLDS for static source inspection — execution not reached.** No obvious in-scope build defect was found. `docs/wacv2027-v1/wacv-v1-revision-assets/build_figures.py:26` supplies the stated fallback: `payload = json.loads((HERE / "figure-values.json").read_text())`. The expanded manuscripts contain their text directly and reference the matching bibliography and specified figures. The author-workspace dependencies in `build_manuscript.py:305–319` do not become dependencies of the expanded TeX. Compilation, generated PDFs, and final rendering were not exercised in this leg; the separately reported host checks are taken as supplied.
+
+No findings meet the requested defect bar; no introduced or inherited blocker or should-fix defect was demonstrated.
+
+The retained verification does **not** exercise causal pretraining benefit, temporal-order benefit, masking benefit, participant independence, or clinical validity; the manuscript acknowledges these boundaries. The earlier layout check also cannot establish complete-manuscript rendering: `review-2026-10-15/evidence/final-delivery-verification.json:242` explicitly says “Internal layout preview of 18 fragments; unchanged manuscript portions omitted.”
+
+One potentially misleading check is the assertion of 15 varying RF columns at `review-2026-10-15/evidence/verify_results.py:215`: it passes even for the historical duplicated ankle column. It cannot prove 15 distinct measurements. The separate column comparison at lines 207–209 and the manuscript’s historical-error disclosure prevent that count from serving as false validation of the correction.
+
+Read anchors, from `nl -ba`:
+
+- `docs/wacv2027-v1/wacv-v1-revision.tex`: **245 lines**; line 245 is verbatim `\end{document}`.
+- `docs/wacv2027-v1/wacv-v1-revision-supplementary.tex`: **134 lines**; line 134 is verbatim `\end{document}`.
+
+Verdict: approve

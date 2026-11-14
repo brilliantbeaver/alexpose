@@ -1,0 +1,295 @@
+
+===== CELL 1 markdown EXEC=None =====
+
+<a href="https://colab.research.google.com/github/your-org/alexpose/blob/main/experiments/multiple-sclerosis/01_pose_extraction_from_raw_video.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+===== CELL 2 markdown EXEC=None =====
+
+# 01 - Pose extraction from raw video
+
+The model reads **skeleton sequences**, not image pixels directly. We run MediaPipe BlazePose over each of the 91 clips and estimate 33 landmarks per sampled frame. Each cache record keeps both its clip name and its source-video ID.
+
+Each usable clip becomes an array of shape `(T, 33, 3)`: sampled frames, landmarks, and pixel x, pixel y, and visibility. We clean and normalize it, then cache it for later stages.
+
+
+===== CELL 3 code EXEC=1 =====
+
+# --- Setup: install dependencies (Colab installs; local usually already has them) ---
+import importlib, importlib.util, subprocess, sys, os
+
+IN_COLAB = 'google.colab' in sys.modules
+
+def _need(mod):
+    return importlib.util.find_spec(mod) is None
+
+# Light deps used by every notebook.
+_pkgs = []
+for mod, pip_name in [('cv2','opencv-python'), ('mediapipe','mediapipe'),
+                      ('sklearn','scikit-learn'), ('pandas','pandas'),
+                      ('matplotlib','matplotlib'), ('tqdm','tqdm')]:
+    if _need(mod):
+        _pkgs.append(pip_name)
+if _pkgs:
+    print('installing:', _pkgs)
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', *_pkgs])
+else:
+    print('all light dependencies already present')
+
+--- OUTPUT 1 stream ---
+
+all light dependencies already present
+
+
+===== CELL 4 code EXEC=2 =====
+
+# --- Make `sjepa` and `ambient` importable, locally and in Colab ---
+from pathlib import Path
+import sys, subprocess
+
+def _find_exp_dir():
+    # Local run: this notebook sits in experiments/multiple-sclerosis.
+    here = Path.cwd()
+    for p in [here, *here.parents]:
+        if (p / 'sjepa' / '__init__.py').exists():
+            return p
+    return None
+
+EXP_DIR = _find_exp_dir()
+if EXP_DIR is None:
+    # Colab: clone the repo, then point at the experiment folder.
+    REPO = 'https://github.com/your-org/alexpose.git'  # <-- edit to your fork
+    if not Path('alexpose').exists():
+        subprocess.check_call(['git', 'clone', '--depth', '1', REPO])
+    EXP_DIR = Path('alexpose') / 'experiments' / 'multiple-sclerosis'
+
+REPO_ROOT = EXP_DIR.parents[1]
+for p in (str(EXP_DIR), str(REPO_ROOT)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+print('experiment dir:', EXP_DIR)
+print('repo root     :', REPO_ROOT)
+
+--- OUTPUT 1 stream ---
+
+experiment dir: /Users/pmui/dev/alexpose/experiments/multiple-sclerosis
+repo root     : /Users/pmui/dev/alexpose
+
+
+===== CELL 5 code EXEC=3 =====
+
+# --- Paths and profile (reads the root .env if python-dotenv is present) ---
+import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv(REPO_ROOT / '.env')
+except Exception:
+    pass
+
+VIDEO_DIR = EXP_DIR / 'video-data-full'
+ARTIFACT_DIR = EXP_DIR / 'artifacts'
+KEYPOINTS_DIR = ARTIFACT_DIR / 'keypoints-full'
+IMAGES_DIR = EXP_DIR / 'images'
+ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Pick the model size profile. 'laptop' is the fast default; set SJEPA_PROFILE=gpu
+# in your .env for a larger model, or SJEPA_SMOKE=1 for a near-instant test run.
+os.environ.setdefault('SJEPA_PROFILE', 'laptop')
+print('SJEPA_PROFILE =', os.environ['SJEPA_PROFILE'],
+      '| SJEPA_SMOKE =', os.environ.get('SJEPA_SMOKE', '0'))
+print('video dir     :', VIDEO_DIR)
+
+--- OUTPUT 1 stream ---
+
+SJEPA_PROFILE = laptop | SJEPA_SMOKE = 0
+video dir     : /Users/pmui/dev/alexpose/experiments/multiple-sclerosis/video-data-full
+
+
+===== CELL 6 markdown EXEC=None =====
+
+## One frame at a time
+
+The raw collection ranges from about 24 to 60 fps and uses several resolutions. The loader retains frames at an approximately 15 fps cadence and asks MediaPipe for a pose in each one. Unlike the GAVD pipeline, it reads the whole frame without bounding boxes or annotation CSVs.
+
+
+===== CELL 7 code EXEC=4 =====
+
+from ambient.pose.model_management import MediaPipeModelManager
+from ambient.pose.keypoint_extractor import SequenceKeypointExtractor
+from sjepa.data import load_video_sequence, clean_sequence, normalize_sequence
+
+MediaPipeModelManager().ensure_model_available()  # downloads the model once
+extractor = SequenceKeypointExtractor()
+
+CLASS_DIRS = {'normal': 'Normal', 'ms': 'MS', 'pd': 'PD'}
+sample = sorted((VIDEO_DIR / CLASS_DIRS['normal']).glob('*.mp4'))[0]
+seq = load_video_sequence(sample, target_fps=15, extractor=extractor, verbose=True)
+print('raw sequence shape:', seq.shape, '  (frames, joints, [x, y, visibility])')
+
+--- OUTPUT 1 stream ---
+
+I0000 00:00:1791526012.729571 16775268 init-domain.cc:132] Fiber init: default domain = pthread, concurrency = 19, prefix = pthread-default
+I0000 00:00:1791526012.792772 16775268 gl_context.cc:407] GL version: 2.1 (2.1 Metal - 91.7), renderer: Apple M5 Max
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+W0000 00:00:1791526012.826125 16775276 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791526012.837777 16775284 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1791526012.856674 16775282 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.
+
+
+--- OUTPUT 2 stream ---
+
+  -0wbleNgAwg_P1_01.mp4: 68 frames @ ~15fps, 54% fully detected
+raw sequence shape: (68, 33, 3)   (frames, joints, [x, y, visibility])
+
+
+===== CELL 8 code EXEC=5 =====
+
+seq[0]
+
+--- OUTPUT 1 execute_result ---
+
+text/plain: array([[8.50557617e+02, 3.07553673e+01, 9.99971151e-01],
+       [8.41822266e+02, 1.56989689e+01, 9.99968052e-01],
+       [8.35395386e+02, 1.56637897e+01, 9.99972701e-01],
+       [8.29645203e+02, 1.58047981e+01, 9.99965668e-01],
+       [8.60588562e+02, 1.67004852e+01, 9.99965429e-01],
+       [8.67128662e+02, 1.72607880e+01, 9.99971151e-01],
+       [8.73578613e+02, 1.80088978e+01, 9.99962926e-01],
+       [8.21671326e+02, 2.46687050e+01, 9.99976039e-01],
+       [8.86469604e+02, 3.03851585e+01, 9.99968767e-01],
+       [8.39104004e+02, 4.62318306e+01, 9.99948621e-01],
+       [8.60414551e+02, 4.68450165e+01, 9.99925375e-01],
+       [7.67260132e+02, 1.20996796e+02, 9.99982119e-01],
+       [9.28713501e+02, 1.31867889e+02, 9.99929786e-01],
+       [7.29231323e+02, 2.33724060e+02, 9.85023499e-01],
+       [9.49220093e+02, 2.70236237e+02, 9.98072028e-01],
+       [7.57866577e+02, 3.10336945e+02, 5.90443313e-01],
+       [9.71186707e+02, 3.86804504e+02, 9.75419760e-01],
+       [7.62503784e+02, 3.31342316e+02, 4.36838329e-01],
+       [9.77452698e+02, 4.20207886e+02, 9.47543919e-01],
+       [7.72511963e+02, 3.27514984e+02, 4.25005704e-01],
+       [9.71994446e+02, 4.23343536e+02, 9.37239110e-01],
+       [7.73249634e+02, 3.21921051e+02, 4.34594184e-01],
+       [9.65739563e+02, 4.11589691e+02, 9.09525096e-01],
+       [8.00093140e+02, 3.75116425e+02, 9.99995112e-01],
+       [8.92270630e+02, 3.73643799e+02, 9.99945283e-01],
+       [8.09497986e+02, 5.71842285e+02, 9.99317646e-01],
+       [8.70832275e+02, 5.44891846e+02, 9.62034941e-01],
+       [8.21819763e+02, 7.66455933e+02, 9.97531414e-01],
+       [8.76070435e+02, 6.97915100e+02, 9.75550115e-01],
+       [8.29528931e+02, 7.98057495e+02, 9.98190224e-01],
+       [8.73978271e+02, 7.18188354e+02, 9.80077624e-01],
+       [8.12874146e+02, 8.00581055e+02, 9.83896732e-01],
+       [8.54900513e+02, 7.17304504e+02, 9.29785132e-01]], dtype=float32)
+
+===== CELL 9 markdown EXEC=None =====
+
+## Clean and normalize
+
+Real videos have frames where the detector loses the person. We interpolate short gaps and drop videos that are mostly empty. Then we **normalize**: we move the pelvis to the origin and scale by the torso length. This reduces translation and apparent-size differences, but does not remove viewpoint, frame-rate, resolution, compression, or detector-confidence cues.
+
+
+===== CELL 10 code EXEC=6 =====
+
+cleaned = clean_sequence(seq)
+normalized = normalize_sequence(cleaned)
+print('cleaned:', cleaned.shape, '| normalized:', normalized.shape)
+print('normalized x range:', round(float(normalized[:,:,0].min()),2),
+      'to', round(float(normalized[:,:,0].max()),2))
+
+--- OUTPUT 1 stream ---
+
+cleaned: (48, 33, 3) | normalized: (48, 33, 3)
+normalized x range: -0.71 to 1.39
+
+
+===== CELL 11 markdown EXEC=None =====
+
+## See the skeleton move
+
+Here is the skeleton the model will actually train on. The animation draws the BlazePose stick figure over time. This is the same view we will reuse in notebook 02 to show the mask.
+
+
+===== CELL 12 code EXEC=7 =====
+
+from sjepa.viz import skeleton_animation
+from IPython.display import Image
+
+gif = skeleton_animation(normalized, ARTIFACT_DIR / 'demo_skeleton.gif',
+                         fps=15, title='normal gait (normalized)')
+Image(filename=str(gif))
+
+--- OUTPUT 1 execute_result ---
+
+image/gif: [binary image omitted]
+text/plain: <IPython.core.display.Image object>
+
+===== CELL 13 markdown EXEC=None =====
+
+## Extract and cache every clip
+
+We now process all 91 raw clips and write one `.npz` per usable clip. The final count may be smaller because clips with too little valid pose signal are skipped. The committed `g1` cache comes from an earlier 47-clip collection and must not be mixed with this versioned full cache.
+
+
+===== CELL 14 code EXEC=8 =====
+
+from sjepa.data import save_sequence_npz, source_id_from_name
+import numpy as np
+
+KEYPOINTS_DIR.mkdir(parents=True, exist_ok=True)
+index = []
+for label, folder in CLASS_DIRS.items():
+    for vid in sorted((VIDEO_DIR / folder).glob('*.mp4')):
+        sid = source_id_from_name(vid.name)
+        out = KEYPOINTS_DIR / f'{label}__{sid}__{vid.stem}.npz'
+        if out.exists():
+            with np.load(out, allow_pickle=True) as z:
+                n = int(z['keypoints_norm'].shape[0])
+        else:
+            raw = load_video_sequence(vid, target_fps=15, extractor=extractor)
+            cl = clean_sequence(raw)
+            if cl is None or cl.shape[0] < 8:
+                print('skip (too few valid frames):', vid.name); continue
+            nm = normalize_sequence(cl)
+            save_sequence_npz(out, cl, nm, 15, sid, label, vid.stem)
+            n = nm.shape[0]
+        index.append(dict(label=label, source_id=sid, clip_name=vid.stem, n_frames=n))
+
+import pandas as pd
+idx = pd.DataFrame(index)
+idx.to_parquet(ARTIFACT_DIR / 'keypoints_index_full.parquet', index=False)
+print(idx.groupby('label').agg(clips=('clip_name','count'),
+                               sources=('source_id','nunique'),
+                               frames=('n_frames','sum')))
+
+--- OUTPUT 1 stream ---
+
+skip (too few valid frames): JD1AGVpftps_P1_02.mp4
+skip (too few valid frames): diCVwltkV5M_P1_01.mp4
+skip (too few valid frames): tsOMPBS277Q_P1.mp4
+        clips  sources  frames
+label                         
+ms         29       13    3450
+normal     24       16    1427
+pd         35       12    2766
+
+
+===== CELL 15 markdown EXEC=None =====
+
+### Quick checks
+
+Shape checks verify structure, not validity. Also report accepted and rejected clips by label and source before training.
+
+
+===== CELL 16 code EXEC=9 =====
+
+from sjepa.data import load_index
+recs = load_index(KEYPOINTS_DIR)
+assert len(recs) > 0
+for r in recs[:5]:
+    a = r.load_norm()
+    assert a.ndim == 3 and a.shape[1] == 33 and a.shape[2] == 3
+print(f'cached {len(recs)} sequences, all shaped (T, 33, 3). Ready for notebook 02.')
+
+--- OUTPUT 1 stream ---
+
+cached 88 sequences, all shaped (T, 33, 3). Ready for notebook 02.

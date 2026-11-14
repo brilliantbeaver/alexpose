@@ -1,0 +1,54 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[review,applications]{wacv}
+\usepackage{graphicx,booktabs,amsmath,amssymb,microtype,placeins}
+\usepackage[pagebackref,breaklinks,colorlinks]{hyperref}
+\def\wacvPaperID{CHECK}
+\def\confName{WACV}
+\def\confYear{2027}
+\input{../../latex/r0.tex}
+\author{Anonymous submission}
+\begin{document}
+\maketitle
+\input{../../latex/r1.tex}
+\section{Introduction}
+\input{../../latex/r2.tex}
+\section{Related work}
+\input{../../latex/r3a.tex}
+\input{../../latex/r3b.tex}
+\input{../../latex/r3c.tex}
+\section{Dataset and preprocessing}
+\textit{Layout verification of replacement fragments only. Unchanged original passages are omitted. This is not a complete submission manuscript.}
+\input{../../latex/r15.tex}
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lrrr}
+Fold & Training & Validation & Test\\\hline
+0 & 24/51 & 8/19 & 9/18\\
+1 & 24/58 & 9/17 & 8/13\\
+2 & 24/54 & 9/17 & 8/17\\
+3 & 24/53 & 9/21 & 8/14\\
+4 & 24/45 & 9/17 & 8/26\\
+\end{tabular}
+\caption{Original Table 2 counts: sources/clips.}\label{tab:source_partitions}
+\end{table}
+\section{Methodology}
+\input{../../latex/r4.tex}
+\input{../../latex/r5.tex}
+\input{../../latex/r6.tex}
+\section{Experimental setup}
+\subsection{Baseline methods}
+\input{../../latex/r7.tex}
+\input{../../latex/r8.tex}
+\input{../../latex/r9.tex}
+\input{../../latex/r10.tex}
+\input{../../latex/r13.tex}
+\input{../../latex/r11.tex}
+\input{../../latex/r12.tex}
+\FloatBarrier
+\bibliographystyle{ieeenat_fullname}
+\bibliography{references}
+\clearpage
+\appendix
+\input{../../latex/r14.tex}
+\end{document}

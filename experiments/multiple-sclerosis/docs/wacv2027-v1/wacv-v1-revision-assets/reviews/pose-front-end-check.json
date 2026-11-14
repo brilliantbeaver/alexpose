@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "loader_uses_default_extractor": true,
+    "extractor_uses_default_model": true,
+    "singleton_passes_no_parameter_overrides": true,
+    "image_mode": true,
+    "single_pose_default": true,
+    "detection_threshold_default": true,
+    "presence_threshold_default": true,
+    "full_model_default": true
+  },
+  "sources_sha256": {
+    "sjepa/data.py": "a02e8a57280ce5afc44ab3271da1d6ac3a80df3c9c16131a03d2e92deda9c094",
+    "ambient/pose/keypoint_extractor.py": "1e23ed7255cfb95276208becf8bd5d1ca8db7f7a733f87b6ad89fdea7a4b40af",
+    "ambient/pose/mediapipe_singleton.py": "75609ab2eb050cd1e46dbd4c3f2f3b9030e7e669cc6067caf2a0b732f1522b5e",
+    "ambient/pose/model_management.py": "2bd2fef28777ce6798f5ce83accbf02f2cbf54eb4adea7c1ffbd0aeb503f39ab"
+  },
+  "scope": "Confirms implemented default call chain; no new pose extraction and no claim of an archived downloaded-model checksum.",
+  "anchors": {
+    "sjepa/data.py": [
+      63,
+      66
+    ],
+    "ambient/pose/keypoint_extractor.py": [
+      74,
+      94
+    ],
+    "ambient/pose/mediapipe_singleton.py": [
+      50,
+      86
+    ],
+    "ambient/pose/model_management.py": [
+      40,
+      42,
+      120,
+      123,
+      149,
+      155,
+      186,
+      193
+    ]
+  }
+}

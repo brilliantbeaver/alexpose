@@ -1,0 +1,7 @@
+% R4 — Anatomical masking
+\subsection{Anatomical masking}
+For each training window, the model predicts hidden features from the visible parts of the skeleton sequence. We sample masks over seven body regions: the head, mouth, left and right arms, trunk, and left and right legs. A selected region is hidden across one to six consecutive time blocks, and regions are added until approximately 60\% of the landmark--time tokens are hidden. Overlap and the final region can increase this proportion; a check of 5,000 sampled masks gave an average of 63.2\%.
+
+Regions containing any of 12 gait-relevant landmarks---both shoulders, hips, knees, ankles, heels, and foot indices---receive a 1.5-fold multiplier in their selection weights, with an adjustment for overlapping region membership. The multiplier also affects the arm regions because they contain shoulders; it does not mean that every landmark in the selected set is hidden 1.5 times as often. All 33 landmarks can serve as visible context or hidden targets across successive masks. At least one token from the selected landmark set remains visible somewhere in each window.
+
+This anatomical preference is motivated by the role of lower-limb movement and body coordination in gait~\cite{filli2018,plotnik2020}. The sampling checks verify how the masks are constructed; a separate comparison would be needed to determine whether the preference improves classification.
