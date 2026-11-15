@@ -1,0 +1,496 @@
+                   Controlled Cross-Leg Prediction for Gait Anomaly Detection
+
+                                                       Anonymous submission
+
+
+
+
+                             Abstract                                   the visible target leg. We keep this baseline fixed and learn
+                                                                        two corrections: one receives additional features from the
+  Models that detect unusual walking often learn to predict nor-
+  mal movement and then look for prediction errors. However,            same leg, while the other receives features from both legs.
+  an error can also arise because joints are hidden or the model        Both predict exactly the same hidden coordinates. This pro-
+  has learned a weak predictor. We present a controlled way             vides a stronger comparison than adding the other leg to an
+  to examine how much the other leg helps predict a hidden              uncorrected baseline, although equal feature counts do not
+  movement after the visible target leg has already been used.          eliminate every difference in model flexibility.
+  We preserve an own-leg prediction and compare corrections                Scattered missing points can leave nearby joints available
+  that use either the same leg or both legs. We also compare            to reconstruct the answer, whereas hiding neighboring joints
+  three ways of hiding observations during training while keep-         together removes some of that help. We compare training
+  ing evaluation tasks fixed. The exploratory study includes            masks on fixed evaluation tasks to measure how the pattern
+  304 GAVD video recordings and an independent laboratory
+                                                                        of missing observations affects the result.
+  dataset of 178 participants. Compared with the own-leg cor-
+  rection, the both-leg model reduces normal prediction error by           The contribution is a controlled procedure for assessing
+  19.5% when neighboring leg joints are hidden in GAVD and              cross-leg prediction as anomaly evidence. Experiments on
+  by 5.2% in the laboratory data. Anatomical masking reduces            web videos and independent laboratory participants test pre-
+  error on the grouped GAVD task by 7.7% relative to random             diction quality under explicit input restrictions. We evaluate
+  masking, although its advantage on scattered hiding is un-            anomaly ranking separately, because a relationship that re-
+  certain. Better prediction does not automatically improve de-         constructs normal walking may still add little to posture and
+  tection: movement-only and combined anomaly scores reach              movement measurements.
+  AUROCs of 0.694 and 0.576 in the main GAVD compari-
+  son, and 0.958 and 0.892 in the laboratory study. The method
+  provides a reproducible way to test cross-leg evidence while
+                                                                                    Background and motivation
+  preserving posture and movement size as separate informa-             Self-supervised models learn from the data themselves, for
+  tion.                                                                 example by predicting hidden observations. MAMP applies
+                                                                        this approach to skeleton motion. S-JEPA predicts a learned
+                         Introduction                                   representation supplied by a teacher network (Mao et al.
+                                                                        2023; Abdelfattah and Alahi 2024). Our core experiment
+Gait describes how a person walks. A person compensating                instead uses ridge regression, a regularized linear model,
+for weakness may repeat an unusual movement consistently,               to predict coordinates or measured angles. This keeps the
+while ordinary walking can become difficult to predict when             answer the same across models without requiring a JEPA
+one leg hides the other. An anomaly detector must account for           encoder.
+these different reasons why prediction error might change.                 VideoMAE hides the same image regions across time,
+    The relationship between the legs offers possible informa-          while SLiM hides anatomical groups to reduce easy recon-
+tion beyond the movement of either leg alone. Suppose that              struction from nearby observations (Tong et al. 2022; Do
+a short section of the left ankle trajectory is hidden. The left        et al. 2026). Our comparison uses established mask fami-
+knee and foot may already provide enough information to                 lies with equal hiding rates. Unlike motion-aware sampling
+reconstruct much of it. The right leg could supply additional           in MAMP and S-JEPA, mask selection does not depend on
+information about the walking pattern, but a comparison must            movement speed or size.
+establish what it adds beyond this local explanation.                      Several anomaly methods already learn from normal
+    We study that question using regularized linear models              movement. FSGait models posture and time, GenGait uses
+fitted to joint positions over time. The first predictor uses           masked gait reconstruction, SeeKer estimates conditional
+This is an anonymized submission for review purposes only. Dis-         keypoint distributions, and STG-NF estimates pose likeli-
+tribution, citation, or public sharing of this manuscript is strictly   hoods (Duan, Wan, and Zhao 2024; Motta et al. 2026; Delić,
+prohibited. Copyright and publication details will appear in the        Grcić, and Šegvić 2025; Hirschorn and Avidan 2023). Our
+final version if accepted.                                              focus is the comparison needed to interpret added context.
+  1. Prepare the gait window                  2. Fill the same hidden gaps               3. Compare with normal gait
+
+
+         Observed walking                           Own-leg baseline (f)                       Movement score (M)
+    32 samples at 15 Hz; 16 joints
+                                                     Use visible movement                    How unusual is movement
+        One token is one joint
+                                                      from the target leg                  measured from observed joints?
+          over four frames
+
+
+                                                 Own-leg correction (f+h)                       Cross-leg score (R)
+           Training masks
+                                                     Add a correction using                   How unusual is the benefit
+              Random (U)                                 the same leg                          of adding the other leg?
+             Whole joint (J)
+             Anatomical (A)
+                                                 Both-leg correction (f+g)                      Combined score (S)
+
+    Small lower-leg groups include                   Add a correction using                         Fixed average:
+   knee, ankle, heel and toe points                        both legs                                S = (M + R) / 2
+   on one side over nearby frames.
+
+                                           Compare f+h with f+g on the same gaps.
+
+
+
+Figure 1: The study compares three predictions of the same hidden movement and measures posture and movement size
+separately. The own-leg baseline stays fixed while the two corrections are fitted. Their error difference measures the benefit of
+the both-leg model under the specified inputs. The anomaly analysis then asks whether an unusual benefit helps distinguish
+abnormal recordings.
+
+
+The target remains fixed, the local prediction is preserved,           Population               Units    Normal       Windows
+and prediction quality is checked again when fewer observa-
+tions are available.                                                   GAVD annotations           348         32            –
+   Clinical findings motivate preserving posture, movement             Usable pose windows        311         28        9,474
+size and timing. Stroke can produce different adaptations on           Leg observations           304         28        9,442
+the two sides (Clark et al. 2010; Awad, Hsiao, and Binder-             Four-condition set          90         28        2,594
+Macleod 2020), while Parkinsonian movement size and arm                Laboratory, selected       188        138            –
+coordination can change differently (Morris et al. 1994; Ster-         Laboratory, eligible       178        128          433
+ling et al. 2015). Cerebral palsy combines motor-control
+and musculoskeletal limitations, and myopathic conditions          Table 1: The available data after each selection step. GAVD
+involve muscle disease (Steele, Rozumalski, and Schwartz           units are video uploads, while laboratory units are partici-
+2015; Steele et al. 2012; Vandekerckhove et al. 2025). Be-         pants. Windows are short, overlapping portions of a recording
+cause mechanics and task constraints also produce joint rela-      and are not independent people. Normal laboratory partici-
+tionships (Kutch and Valero-Cuevas 2012), video prediction         pants are labeled healthy in that dataset.
+cannot identify a neurological cause.
+
+             Data and evaluation design                            myopathic, with respective counts of 10, 15, 10 and 27. A
+                                                                   second analysis treats every non-normal folder as abnormal
+Video recordings and laboratory participants                       across all 304 recordings. One cerebral-palsy recording also
+GAVD contains web videos with annotated walking se-                has a generic abnormal annotation. It counts once in binary
+quences and gait categories (Ranjan et al. 2025, 2026). We         evaluation but is excluded from the separate five-class ex-
+rebuild the inventory from the current condition CSV files.        periment, leaving 89 recordings. These folder labels are not
+It contains 1,874 sequences from 348 upload IDs, of which          independently confirmed diagnoses.
+332 have decodable videos. Fixed pose-quality and lower-              We also use a public laboratory dataset with simultane-
+leg observation requirements retain 304 recordings (Table          ous hip, knee and ankle flexion angles from both legs (Van
+1). A confirmed duplicate pair fails those requirements, but       Criekinge et al. 2023). One walking trial per participant is
+different uploads could still show the same person.                selected before inspecting results. Of 188 selected trials, ten
+   The main comparison contains 28 normal recordings and           healthy trials lack the required observations, leaving 128
+62 recordings labeled Parkinsons, stroke, cerebral palsy or        healthy and 50 stroke participants. This allows a participant-
+separated test with a different measurement system. We fit           The three predictions are
+new models to the angles rather than transfer video-trained
+weights.
+                                                                                  Yb0 = f (O; Q),                               (1)
+Keeping training and testing separate                                             Ybo = f (O; Q) + αo h(O; Q),                  (2)
+The GAVD evaluation uses four outer folds. In each fold, 16                       Ybb = f (O; Q) + αb g(O, C; Q).               (3)
+normal recordings fit the models, five other normal record-
+ings define a reference distribution for cross-leg prediction,        The own-leg baseline f uses interpolation estimates,
+and seven normal recordings are held out for testing. Ab-          observation-availability indicators, relative time and target-
+normal recordings enter testing only, except in the separately     joint identity. Once fitted, it remains fixed. The own-leg
+labeled supervised comparisons. Three internal folds within        correction h adds summaries of that leg’s movement over
+the fitting set select model settings. All sequences, overlap-     time, while the both-leg correction g adds opposite-leg fea-
+ping windows and modified inputs from one recording stay           tures. The multipliers control correction size and include
+in the same role.                                                  zero, which reproduces the saved baseline exactly.
+   This analysis is exploratory because the 28 normal record-         The corrections each have 154 features, but equal feature
+ings informed method development. The population, com-             counts do not guarantee equal flexibility. Their numerical
+parisons, roles, masks and scores were fixed before fitting        ranks are 111 and 141, indicating different numbers of in-
+the reported models. The five reference recordings do not          dependent feature directions under the recorded threshold.
+select model settings or score weights. Models share training      These are not ridge effective degrees of freedom, so gains
+recordings across folds, so four folds are not four independent    apply to the fitted model families.
+studies. The laboratory analysis follows the same separation          Normal-only validation selects settings. The both-leg
+at participant level, using 76 healthy participants for fitting,   model must beat both local alternatives in at least two of
+20 for reference estimation and 32 for testing in each fold.       three internal folds and in average error. This practical rule is
+                                                                   supported by software checks for known dependence, condi-
+Turning video into model inputs                                    tional independence, exact zero corrections and unchanged
+We crop each annotated person, run BlazePose to estimate           predictions when inaccessible inputs change. The generated
+joint locations and restore the coordinates to the full image      examples do not simulate disease.
+(Bazarevsky et al. 2020). The extractor returns the first pose
+in the crop, so person selection and continuity can still fail.
+                                                                   Hiding observations during training and evaluation
+Measurements with confidence below 0.5 remain missing.             All training methods hide exactly 64 of 128 tokens. Random
+We resample at 15 Hz, interpolating only between adjacent          masking, U, samples them uniformly. Whole-joint masking,
+valid observations, and use overlapping 32-sample windows.         J, hides all eight time blocks of one randomly chosen joint,
+   A token contains four consecutive valid samples of one          then hides 56 additional tokens at random. Anatomical mask-
+joint. Sixteen torso, arm and leg joints supply 128 tokens per     ing, A, hides a small body region over consecutive times,
+window. At least 75% must be valid overall and 50% in each         also totaling eight tokens, then fills the remaining 56 posi-
+half. Final readouts use eight knee, ankle, heel and foot-index    tions randomly. The regions cover the torso, either arm, or
+measurements, while window-quality checks still include all        the knee-to-foot joints on either side.
+16 joints.                                                             The anatomical group probabilities and permitted starting
+   A shared body reference, denoted Q, centers coordinates         times give every token the same chance of entering the initial
+on the pelvis and divides them by torso length measured in the     eight-token block. After random filling, each token has hiding
+first half of the window. We preserve trunk tilt, movement size    probability 0.5 under all three methods. This changes which
+and the timing shared by both legs. The own-leg restriction        observations disappear together while holding the total and
+is therefore conditional on this reference; it does not exclude    individual probabilities fixed. It does not make the tasks
+every opposite-side body measurement. Image coordinates            equally difficult or guarantee equal numbers of usable targets
+and projected angles do not measure walking speed, ground          after naturally missing measurements are removed. Masks
+clearance or clinical three-dimensional angles.                    are drawn before inspecting validity and are never redrawn
+                                                                   to rescue an example.
+       Measuring the value of the other leg                            Every method shares the same random-trained baseline,
+                                                                   fitting recordings and presentation schedule. Unrelated ran-
+Three predictions of the same answer                               dom choices are kept separate from mask sampling, prevent-
+Let Y be the hidden four-sample coordinate block, O the            ing changes in the mask generator from silently altering other
+visible target-leg observations and C the visible opposite-        parts of training.
+leg observations. Each leg includes its hip, knee, ankle, heel         Evaluation uses two fixed sets of 16 masks. The main
+and foot index. We remove hidden and invalid inputs before         task, scattered hiding, uses random masks and requires at
+constructing features. This prevents a hidden answer from          least two visible blocks of the target joint. The grouped-
+returning through a derived angle, interpolation estimate or       hiding task removes the knee, ankle, heel and foot index
+embedding, conditional on Q. Visible observations can occur        together over eight consecutive frames. It scores these hidden
+before and after the hidden block, so the task is completion       blocks and requires at least two visible tokens at different
+rather than future forecasting.                                    times on each leg. Both tasks require valid answers and four
+distinct target blocks for every scored joint in a recording.     supervised classifier. For a published pose comparator, we
+All 304 recordings satisfy both tasks; repeating a mask does      adapt the authors’ STG-NF implementation to the 16-joint
+not increase the distinct-target count.                           graph and replace missing values with fitting-normal medi-
+   Training methods are compared within each task on iden-        ans. Only five normal recordings have complete poses, so an
+tical targets. Anatomical versus random training on scattered     unmodified complete-case comparison cannot use the same
+hiding is the main masking comparison; grouped hiding is a        split. The reported adapter is distinct from a reproduction of
+separate diagnostic. Both tasks use the same five reference       the published method.
+recordings but estimate their reference parameters separately.       A separate five-class experiment fits Random Forest and
+                                                                  learned/random JEPA-feature classifiers. The learned en-
+        From prediction to anomaly scores                         coder trains on fitting normals with a slowly updated teacher
+Movement and cross-leg scores                                     and VICReg regularization against constant or redundant
+                                                                  representations (Bardes, Ponce, and LeCun 2022).
+The movement score M describes how unusual posture and               AUROC measures how often an abnormal recording ranks
+movement size are compared with normal recordings. Its 16         above a normal recording. We calculate it within each fold
+features include the level and variation of knee angles, ankle    and weight the average by the number of normal-abnormal
+movement ranges, variability of ankle velocity, trunk tilt and    pairs, avoiding comparisons across differently fitted score
+left-right differences. We average windows within sequences       scales. We also report average precision with each fold’s
+and sequences within recordings before fitting missing-value      abnormal fraction.
+replacement, robust scaling and a shrinkage covariance esti-         Paired bootstrap intervals resample whole recordings
+mate on fitting-normal recordings. The score is squared Ma-       within fold and label group, keeping all method scores to-
+halanobis distance divided by 16, which measures departure        gether and preserving the fold weights. Laboratory intervals
+from normal while accounting for feature variation. These         resample participants instead. These intervals describe un-
+full-observation features never enter a restricted predictor.     certainty conditional on the saved models and selected analy-
+   The cross-leg score R measures how unusual the benefit         sis. They omit retraining uncertainty, unknown repeated peo-
+from the both-leg model is. It begins with two errors on the      ple across uploads and method-development choices. Multi-
+same hidden answer:                                               ple comparisons are exploratory and receive no multiplicity
+                                                                  adjustment.
+              b = MSE(Ybo , Y ) − MSE(Ybb , Y ).            (4)
+   Here MSE is mean squared error, and positive benefit b         Checking sensitivity to the other leg’s timing
+means that the both-leg correction predicts more accurately.      The timing diagnostic keeps the answer and visible target
+We average repeated masks of one target, then targets within      leg fixed while taking opposite-leg observations from four
+windows, windows within sequences and sequences within            frames earlier or later, about 0.27 seconds. We use the mid-
+recordings. Averaging the four scored joints on each side         dle 32 frames of a 48-frame interval, without wrapping,
+gives every recording a left-target and a right-target benefit.   padding or crossing recording gaps. Donor joint positions
+   The five reserved normal recordings supply a reference         are expressed relative to their visible hip and attached to the
+mean and variance for each side. R averages the two squared,      original visible hip, using the unchanged body scale.
+variance-scaled distances from these means. Either an unusu-         Only observations available in both the aligned and shifted
+ally large or an unusually small benefit can raise R; larger      versions are allowed, so hidden donor values cannot reappear
+benefit is not a ranking of health. Each variance is stabi-       through the edit. This can leave much less context than the
+lized by averaging it with the mean variance across sides         completion task. We therefore check prediction quality again
+and adding 10−8 . This score treats the sides separately rather   on the exact aligned inputs used by the timing comparison.
+than modeling their covariance.                                      The measured effect is shifted error minus aligned error
+   The combined score is fixed as S = (M + R)/2. Dividing         from the fixed both-leg model. A zero shift must reproduce
+by feature count makes the distances easier to compare, but       the input, and changing only the other leg must leave the
+does not turn them into equally calibrated probabilities. A       own-leg prediction unchanged. Noise, missing-observation
+fold that fails the internal prediction check would receive       and whole-body interval-shift controls accompany the test.
+R = 0 for all recordings. Every fitted model passes that          Even a valid response would reflect both changed alignment
+internal check in this study.                                     and changed instantaneous geometry, rather than isolate a
+                                                                  neurological timing mechanism.
+Comparisons and uncertainty
+We compare these scores with a richer 36-feature movement                                   Results
+distance, timing and waveform descriptors, and Isolation For-
+est. Additional controls replace the cross-leg benefit with the   Predicting hidden movement in GAVD
+improvement from the own-leg correction, or use distances         On grouped hiding, the random-trained both-leg correction
+based on the prediction errors themselves. These controls         reduces mean error across 28 held-out normal recordings
+examine whether another score component helps simply be-          from 0.080769 to 0.065020 relative to the own-leg correc-
+cause it adds information beyond M .                              tion. This is a 19.5% reduction in mean error. The absolute
+   Scores based on measurement availability and viewpoint         benefit is 0.015748, with conditional 95% interval [0.010721,
+assess recording-related differences, including a separately      0.021300] from 5,000 within-fold recording resamples.
+                                                  Completion gains depend on the available context and the task
+
+                                          Laboratory: normal completion                                      GAVD: masking comparison
+
+
+
+
+ Mean squared error (degrees²)
+                                 325                           Fold 1       Fold 3
+                                                               Fold 2       Fold 4                                                      7.71%
+                                 300
+                                                                                                Grouped
+                                 275                                                              hiding
+
+                                 250
+
+                                 225                                                                            0.76%
+                                                                                              Scattered
+                                 200                                                             hiding
+
+
+                                      Linear        Own-leg     Own-leg      Both-leg                          0.0      2.5     5.0      7.5     10.0
+                                  interpolation     baseline   correction   correction
+                                                                                                              Error reduction with Anatomical
+                                                       (f)       (f+h)        (f+g)
+                                                                                                                versus Random training (%)
+                                                                                              Both-leg correction is compared in both rows.
+                                                                                                   Positive values indicate lower error.
+
+
+
+Figure 2: The left panel compares four ways to complete laboratory angles; each line represents a test fold, and lower error is
+better. The right panel compares anatomical with random training on the two GAVD tasks. Positive percentages mean lower
+error with anatomical training; intervals crossing zero leave the direction uncertain. The 95% intervals resample recordings
+while keeping fitted models fixed. The panels show different comparisons and should not be pooled.
+
+
+   All three training methods have positive benefit intervals                            [3.6%, 6.7%], and 109 of 128 healthy participants improve.
+on this task. In contrast, the benefit remains uncertain for                             These descriptive intervals use 1,000 paired resamples within
+random and anatomical training on scattered hiding. When                                 the fixed folds and were calculated after inspecting the fitted
+neighboring joints disappear together, local geometry sup-                               results. They exclude training and analysis-selection uncer-
+plies less information and the opposite leg is more useful                               tainty.
+to these models. The targets remain estimated image coordi-
+nates, so this measures recovery of deliberately hidden ob-                              How the training mask changes prediction
+servations rather than independently verified motion during                              Anatomical training reduces both-leg error on grouped hid-
+natural occlusion.                                                                       ing from 0.065020 to 0.060009 relative to random train-
+                                                                                         ing. The reduction is 7.7%, with conditional interval [6.4%,
+Prediction in independent laboratory participants                                        9.0%]. All four fold means and 27 of 28 normal recordings
+The laboratory model uses six simultaneous joint-angle sig-                              improve. Because this task resembles part of the anatomical
+nals with their common timestamps preserved. Each 32-                                    training pattern, the result shows a benefit from matching
+sample window has 48 four-sample tokens, half of which                                   training to a particular missing-observation task.
+are hidden. Twelve angle-level and angle-range features re-                                 The same comparison on scattered hiding gives only a
+place the video-specific movement features, and the same                                 0.8% reduction, with interval [-1.0%, 2.6%]. Sixteen record-
+internal prediction rule selects corrections. The angles are                             ings improve, and one fold’s mean becomes worse. This
+processed measurements from a shared body model and are                                  leaves the general advantage of anatomical masking uncer-
+not interchangeable with BlazePose coordinates.                                          tain. Both evaluation tasks were fixed before fitting. The
+   The both-leg correction improves healthy-participant error                            paired error intervals are descriptive analyses of saved pre-
+by 4.78% to 5.52% in each fold. On the same held-out tar-                                dictions calculated after outcome inspection.
+gets, direct interpolation gives mean MSE 309.838 squared
+degrees, the own-leg baseline gives 206.262, the own-leg                                 Distinguishing normal and abnormal recordings
+correction gives 201.038 and the both-leg correction gives                               Table 2 compares scores on the same recordings; prediction-
+190.584. Every fold has this ordering (Figure 2). The cor-                               based scores use scattered hiding. In the four-condition
+rections each have 72 features, but their numerical ranks are                            GAVD comparison, movement alone reaches AUROC 0.694
+44 and 62. As with GAVD, the gain applies to these fitted                                and the combined score reaches 0.576. Their paired dif-
+feature families.                                                                        ference, combined minus movement, is -0.118 with inter-
+   Across participants, the both-leg correction reduces mean                             val [-0.217, -0.025]. Across all abnormal folders, the scores
+error by 10.454 squared degrees, with conditional interval                               reach 0.707 and 0.631, respectively, with difference -0.076,
+[7.154, 13.387]. The relative reduction is 5.2%, with interval                           [-0.143, -0.009].
+                                                  Timing test: weak unshifted prediction limits interpretation
+
+                                                                                                                                         After shifting: does error change?
+
+
+
+
+Own-leg error minus both-leg error                                                         Shifted error minus unshifted error
+                                              Before shifting: does context help?                                                     1e−4
+                                      0.000
+                                                                                                                                  6
+                                     −0.005
+                                                                                                                                  4
+                                     −0.010
+                                                                                                                                  2
+                                     −0.015
+                                                                                                                                  0
+                                     −0.020
+
+                                     −0.025                                                                                      −2
+
+                                                 4 frames             4 frames                                                               4 frames             4 frames
+                                                  earlier               later                                                                 earlier               later
+                                                      Planned timing shift                                                                     Other-leg samples used
+
+                                               Above zero: both-leg correction helps.                                                   Above zero: shifting raises error.
+                                               Below zero: both-leg correction hurts.                                                   Below zero: shifting lowers error.
+
+
+
+    Figure 3: The timing test uses the random-trained model on 27 normal recordings. On the left, negative benefit means the
+    both-leg correction is less accurate than the own-leg correction on the aligned inputs available to each comparison. On the
+    right, positive change means shifting the other leg increases error. The earlier shift has a measurable response, but poor aligned
+    prediction limits its interpretation. Error bars are 95% intervals from recording resamples.
+
+
+       For the main masking comparison, anatomical training                             What the timing test can establish
+    raises the combined score’s AUROC by 0.055 relative to ran-                         The timing comparison includes 27 normal recordings, with
+    dom training, but its interval [-0.018, 0.127] includes zero.                       at least six in each test fold. However, intersecting visible
+    On grouped hiding, combined-score AUROCs for random,                                observations leaves only about 1.75 editable lower-leg tokens
+    whole-joint and anatomical training are 0.668, 0.668 and                            on average. The both-leg predictor fails its adequacy check
+    0.684. These concern a different prediction task and do not                         on aligned inputs in all 24 outer fold, training-method and
+    replace the scattered-hiding comparison.                                            offset combinations, as well as all 72 corresponding internal
+       With random training, average precision in the four-                             comparisons.
+    condition comparison is 0.763 for the combined score and                               For random training, earlier opposite-leg observations
+    0.864 for movement alone. The abnormal fraction ranges                              increase error by 0.000393, with interval [0.000177,
+    from 0.682 to 0.696 across folds, helping explain the rela-                         0.000618]. Later observations change it by 0.000064, [-
+    tively high precision values. The own-leg-improvement and                           0.000232, 0.000368]. Although the first interval excludes
+    correction-error controls reach AUROCs of 0.687 and 0.684.                          zero, the predictor already performs inadequately before the
+    They show why another prediction-derived score must be                              edit on these sparse inputs. The result cannot support a reli-
+    compared with movement alone rather than credited auto-                             able coordination interpretation (Figure 3). Sufficient record-
+    matically to cross-leg information.                                                 ing counts do not guarantee enough useful observations for
+                                                                                        a particular prediction test.
+       In the laboratory data, movement, cross-leg and combined
+    scores reach AUROCs of 0.958, 0.694 and 0.892. Combining                                                                     Measurement limits and implications
+    the scores changes AUROC by -0.066, with interval [-0.106,
+    -0.031]. A fixed same-sex, within-five-year matching rule re-                       A fixed rule selects ten high-error and low-error examples
+    tains 45 healthy/stroke pairs and gives movement and com-                           across the five labels for video and pose review. They show
+    bined AUROCs of 0.955 and 0.874, a difference of -0.081,                            camera motion, assistance, split screens, overlapping limbs
+    [-0.156, -0.028]. Walking speed remains unmatched.                                  and feet outside the image (Figure 4). Three-frame checks
+                                                                                        reveal visible errors but cannot establish continuous tracking
+       The separate five-class classifiers have mean macro F1                           or verify clinical labels.
+    scores of 0.347 for Random Forest, 0.251 for learned JEPA                              An image-boundary check finds high-confidence lower-
+    features and 0.309 for random-encoder features. Macro F1                            leg points outside the decoded image in 13 of 28 normal and
+    weights the five classes equally. These small supervised runs                       83 of 276 abnormal recordings. Pooled point fractions are
+    provide no demonstrated advantage for the learned encoder.                          about 0.43% and 0.24%; one requested frame fails decoding.
+                                        Four       All                             Prediction error is not a health ranking
+    Score or method                    groups    folders
+                                                                                           Normal folder                   Parkinsons folder
+    Movement score M                    0.694     0.707                                     Higher error                      Lower error
+    Cross-leg score R                   0.445     0.560
+    Combined S (random)                 0.576     0.631                            −1.0
+                                                                                                                         −1.0
+    Movement, 36 features               0.677     0.669                            −0.5                                  −0.5
+
+
+
+
+                                                                  Scaled image y
+    M + own-leg improvement             0.687     0.661
+    M + correction errors               0.684     0.685                             0.0                                   0.0
+    M + baseline error                  0.700     0.692                                                                   0.5
+    Timing and waveform features        0.588     0.631                             0.5
+
+    Isolation Forest                    0.551     0.593                                                                   1.0
+                                                                                    1.0
+    STG-NF, adapted                     0.376     0.435                                                                   1.5
+    Availability and viewpoint          0.389     0.520                             1.5
+    Supervised recording features       0.461     0.506                                                                   2.0
+                                                                                          −1           0                        −0.5 0.0 0.5
+    Combined S (whole joint)            0.620     0.644
+    Combined S (anatomical)             0.631     0.672                                    Scaled image x                   Scaled image x
+                                                                                               Start            Middle           End
+
+Table 2: GAVD AUROC averaged within the four test folds
+as described in the text. Higher values indicate better rank-                       Measured 2D poses; missing joints stay missing.
+ing of abnormal recordings. The columns contain 62 abnor-
+mal recordings out of 90 and 276 out of 304. All rows use       Figure 4: Estimated skeletons from three times in two record-
+the same eligible recordings. The recording-feature classi-     ings: a normal-labeled example with high prediction error
+fier uses abnormal training labels; STG-NF uses the stated      and a Parkinsons-labeled example with low error. The axes
+missing-value adaptation.                                       use image coordinates divided by torso length. These exam-
+                                                                ples illustrate why raw prediction error should not be inter-
+                                                                preted as neurological severity.
+Pose confidence alone does not establish a visible measure-
+ment. No models or exclusions change after this check. Too
+few normal recordings share a single view for a complete        terpretable by preserving the local baseline, using the same
+four-fold view-matched comparison, so recording conditions      hidden answers and measuring the value of an additional
+remain a possible influence on the scores.                      own-leg correction.
+   Five normal GAVD references give uncertain cross-leg            The anomaly experiments show why prediction quality
+means and variances. Recalculating scores while omit-           and detection value need separate evaluation. Posture and
+ting each reference or changing the variance floor exposes      movement size remain informative even when walking is
+that sensitivity. The laboratory scores also have different     predictable, while a timing test can become unreliable af-
+tails: test-healthy 99th percentiles range from 6.30 to 33.94   ter too many inputs are removed. The procedure helps re-
+for R across folds, compared with 2.45 to 3.99 for M .          searchers examine these conditions directly and provides a
+Left/right reference-benefit correlations range from 0.54 to    basis for testing better-calibrated cross-leg scores on new
+0.82, whereas R treats the sides separately. These observa-     participants.
+tions suggest calibration questions, but do not establish why
+the fixed combination performs worse or demonstrate a rem-                                                 References
+edy.
+   The laboratory experiment strengthens evidence for com-      Abdelfattah, M.; and Alahi, A. 2024. S-JEPA: A Joint Em-
+pletion across measurement systems. Its scope remains           bedding Predictive Architecture for Skeletal Action Recog-
+healthy and stroke walking, with ten selected healthy tri-      nition. In Computer Vision – ECCV 2024, volume 15090
+als excluded and one trial per participant. GAVD supplies       of Lecture Notes in Computer Science, 367–384. Springer
+more varied recordings, but its normal sample is small and      Nature Switzerland.
+informed development. Neither study establishes clinical de-    Awad, L. N.; Hsiao, H.; and Binder-Macleod, S. A. 2020.
+ployment, and more windows cannot replace independent           Central Drive to the Paretic Ankle Plantarflexors Affects the
+participants. Limited training budgets and the adapted pose     Relationship Between Propulsion and Walking Speed After
+comparator also leave the best attainable model performance     Stroke. Journal of Neurologic Physical Therapy, 44(1): 42–
+unresolved.                                                     48.
+                                                                Bardes, A.; Ponce, J.; and LeCun, Y. 2022. VICReg:
+                       Conclusion                               Variance-Invariance-Covariance Regularization for Self-
+The other leg improves prediction under specific missing-       Supervised Learning. In International Conference on Learn-
+observation tasks in GAVD and independent laboratory mea-       ing Representations.
+surements. The controlled comparison makes this result in-      Bazarevsky, V.; Grishchenko, I.; Raveendran, K.; Zhu, T.;
+Zhang, F.; and Grundmann, M. 2020. BlazePose: On-device         to Walk in a Crouch Gait? Journal of Biomechanics, 45(15):
+Real-time Body Pose Tracking. arXiv:2006.10204.                 2564–2569.
+Clark, D. J.; Ting, L. H.; Zajac, F. E.; Neptune, R. R.; and    Sterling, N. W.; Cusumano, J. P.; Shaham, N.; Piazza, S. J.;
+Kautz, S. A. 2010. Merging of Healthy Motor Modules Pre-        Liu, G.; Kong, L.; Du, G.; Lewis, M. M.; and Huang, X.
+dicts Reduced Locomotor Performance and Muscle Coordi-          2015. Dopaminergic Modulation of Arm Swing During Gait
+nation Complexity Post-Stroke. Journal of Neurophysiology,      Among Parkinson’s Disease Patients. Journal of Parkinson’s
+103(2): 844–857.                                                Disease, 5(1): 141–150.
+Delić, A.; Grcić, M.; and Šegvić, S. 2025. Sequential           Tong, Z.; Song, Y.; Wang, J.; and Wang, L. 2022. Video-
+Keypoint Density Estimator: An Overlooked Baseline of           MAE: Masked Autoencoders Are Data-Efficient Learners for
+Skeleton-Based Video Anomaly Detection. In Proceedings          Self-Supervised Video Pre-Training. In Advances in Neural
+of the IEEE/CVF International Conference on Computer Vi-        Information Processing Systems, volume 35.
+sion, 11579–11589.                                              Van Criekinge, T.; Saeys, W.; Truijen, S.; Vereeck, L.; Sloot,
+Do, J.; Chen, Y.; Youk, G.; and Kim, M. 2026. Less Is           L. H.; and Hallemans, A. 2023. A Full-Body Motion Capture
+More: Compact-Token Masked Feature Prediction for Skele-        Gait Dataset of 138 Able-Bodied Adults Across the Life Span
+ton Representation Learning. ArXiv:2603.10648v4. Author         and 50 Stroke Survivors. Scientific Data, 10: 852.
+record lists NeurIPS 2026.                                      Vandekerckhove, I.; Molenberghs, G.; Van den Hauwe, M.;
+Duan, B.; Wan, X.; and Zhao, X. 2024. FSGait: Fine-Grained      Goemans, N.; De Waele, L.; Van Campenhout, A.; De
+Self-supervised Gait Abnormality Detection. In Computer         Groote, F.; and Desloovere, K. 2025. Longitudinal Inter-
+Vision – ACCV 2024, volume 15477 of Lecture Notes in            action Between Muscle Impairments and Gait Pathology
+Computer Science, 313–329. Springer Nature Singapore.           in Growing Children with Duchenne Muscular Dystrophy.
+Hirschorn, O.; and Avidan, S. 2023. Normalizing Flows           Journal of NeuroEngineering and Rehabilitation, 22(1): 207.
+for Human Pose Anomaly Detection. In Proceedings of the
+IEEE/CVF International Conference on Computer Vision,
+13545–13554.
+Kutch, J. J.; and Valero-Cuevas, F. J. 2012. Challenges and
+New Approaches to Proving the Existence of Muscle Syner-
+gies of Neural Origin. PLoS Computational Biology, 8(5):
+e1002434.
+Mao, Y.; Deng, J.; Zhou, W.; Fang, Y.; Ouyang, W.; and Li, H.
+2023. Masked Motion Predictors are Strong 3D Action Rep-
+resentation Learners. In Proceedings of the IEEE/CVF In-
+ternational Conference on Computer Vision, 10181–10191.
+Morris, M. E.; Iansek, R.; Matyas, T. A.; and Summers, J. J.
+1994. The Pathogenesis of Gait Hypokinesia in Parkinson’s
+Disease. Brain, 117(5): 1169–1181.
+Motta, E.; Lorenzini, M.; Mouawad, C.; Ranavolo, A.; Ser-
+rao, M.; and Ajoudani, A. 2026. GenGait: A Transformer-
+Based Model for Human Gait Anomaly Detection and Nor-
+mative Twin Generation. arXiv:2604.01997.
+Ranjan, R.; Ahmedt-Aristizabal, D.; Ali Armin, M.; and
+Kim, J. 2025. Computer Vision for Clinical Gait Analy-
+sis: A Gait Abnormality Video Dataset. IEEE Access, 13:
+45321–45339.
+Ranjan, R.; Ahmedt-Aristizabal, D.; Ali Armin, M.;
+and Kim, J. 2026.          GAVD: Gait Abnormality in
+Video Dataset, Annotation Catalog and Documenta-
+tion.    Author-maintained GitHub repository.          Snap-
+shot accessed November 15, 2026; repository revision
+a87859c881603443f200bcd640663d2c3d7a8136. The year
+denotes access, not an asserted original release date.
+Steele, K. M.; Rozumalski, A.; and Schwartz, M. H. 2015.
+Muscle Synergies and Complexity of Neuromuscular Con-
+trol During Gait in Cerebral Palsy. Developmental Medicine
+and Child Neurology, 57(12): 1176–1182.
+Steele, K. M.; van der Krogt, M. M.; Schwartz, M. H.; and
+Delp, S. L. 2012. How Much Muscle Strength Is Required
+

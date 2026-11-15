@@ -1,0 +1,585 @@
+{
+  "created_at_utc": "2026-11-15T22:01:57.201778+00:00",
+  "core_protocol": "d66e1b126c9d9a9adf1b",
+  "external_protocol": "external_fb9d0d23b56ce29fd846",
+  "core_verification": {
+    "passed": true,
+    "status": "verified_core",
+    "checks": [
+      {
+        "name": "fold0_source_roles",
+        "passed": true
+      },
+      {
+        "name": "fold1_source_roles",
+        "passed": true
+      },
+      {
+        "name": "fold2_source_roles",
+        "passed": true
+      },
+      {
+        "name": "fold3_source_roles",
+        "passed": true
+      },
+      {
+        "name": "frozen_mask_banks",
+        "passed": true
+      },
+      {
+        "name": "retained_shared_baselines_and_all_target_predictions",
+        "passed": true,
+        "raw_rows": 16801488,
+        "distinct_window_targets": 3548730,
+        "npz_files": 2769,
+        "all_predictions": true
+      },
+      {
+        "name": "all_source_scores_and_fallbacks",
+        "passed": true,
+        "rows": 1824
+      },
+      {
+        "name": "metrics_recomputed_from_saved_source_scores",
+        "passed": true
+      },
+      {
+        "name": "draft01_manuscript_preserved",
+        "passed": true
+      }
+    ],
+    "protocol_hash": "d66e1b126c9d9a9adf1b",
+    "data_kind": "real_gavd",
+    "wall_seconds": 24.945686542021576,
+    "scope": "core data, models, raw predictions, source aggregation and metrics; extensions separately audited"
+  },
+  "timing_verification": {
+    "status": "passed",
+    "raw_target_rows": 5870520,
+    "diagnostic_count": 16
+  },
+  "external_verification": {
+    "participants_once_each": true,
+    "demographic_cohort_consistency": true
+  },
+  "notebooks": {
+    "all18_independent": true,
+    "all6_new_have_real_video": true,
+    "historical_original_artifacts_unchanged": true
+  },
+  "tests": {
+    "command": "uv run --project experiments/aaai pytest experiments/aaai/tests -q --disable-warnings",
+    "passed": 137,
+    "failed": 0,
+    "elapsed_seconds": 19.17,
+    "execution_record": "Recorded completed study validation, reused for this editorial check. Model tests were not rerun for the language revision."
+  },
+  "slides": {
+    "pages": 43,
+    "out_of_bounds_words": [],
+    "local_links_checked": 302,
+    "broken_links": [],
+    "type3_fonts": false,
+    "raster_objects": 0,
+    "draft01_pdf_unchanged": true,
+    "planning_pdf_unchanged": true
+  },
+  "active_document_links": {
+    "checked": 141,
+    "broken": []
+  },
+  "scientific_code_hashes": [
+    {
+      "path": "iteration_runner.py",
+      "unchanged": true
+    },
+    {
+      "path": "iteration_scoring.py",
+      "unchanged": true
+    },
+    {
+      "path": "iteration_data.py",
+      "unchanged": true
+    },
+    {
+      "path": "retained_prediction.py",
+      "unchanged": true
+    },
+    {
+      "path": "masking.py",
+      "unchanged": true
+    },
+    {
+      "path": "iteration_pose_baseline.py",
+      "unchanged": true
+    },
+    {
+      "path": "data.py",
+      "unchanged": true
+    },
+    {
+      "path": "model.py",
+      "unchanged": true
+    },
+    {
+      "path": "features.py",
+      "unchanged": true
+    },
+    {
+      "path": "study_data.py",
+      "unchanged": true
+    }
+  ],
+  "numerical_artifact_hashes": [
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/rawmetrics.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/paired_intervals.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/timing_summary.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/metrics.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/paired_effects.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/age_sex_sensitivity.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/A_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/A_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/A_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/A_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_E_leg/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_E_leg/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_E_leg/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_E_leg/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_E_leg/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_U/prediction_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_U/source_joint_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_U/source_scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_U/target_losses.csv.gz",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_U/window_metadata.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/derivatives/interpolation_audit_v1/participant_comparison.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_0/predictions/participant_angle_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_0/scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_1/predictions/participant_angle_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_1/scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_2/predictions/participant_angle_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_2/scores.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_3/predictions/participant_angle_profiles.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_3/scores.csv",
+      "hash_matches": true
+    }
+  ],
+  "positive_summary_arithmetic_passed": true,
+  "draft01_pdf_unchanged": true,
+  "pdf": {
+    "pages": 8,
+    "content_pages": 7,
+    "reference_pages": 2,
+    "page_limit_passed": true,
+    "pdf_sha256": "e5166a54b801afc82cfe9816de54edc9024325abbe68bfa8d5f00c835d3c7737",
+    "all_fonts_embedded": true,
+    "type3_fonts": false,
+    "out_of_page_words": [],
+    "overfull_boxes": [],
+    "undefined_references": false,
+    "missing_bibliography_keys": [],
+    "anonymity_scan_passed": true,
+    "official_style_unchanged": true,
+    "illustrative_or_simulated_efficacy": false,
+    "passed": true
+  },
+  "reviews": {
+    "gpt": "docs/draft02/reviews/gpt_manuscript_review.md",
+    "claude": {
+      "tool": "claude CLI",
+      "requested_model": "opus",
+      "tools_enabled": false,
+      "returncode": 0,
+      "elapsed_seconds": 105.75113820898696,
+      "prompt_sha256": "706ae5ea0eb128095286b5847fdc7e9ab7fef40401c785daaa502c882cda2b64",
+      "manuscript_sha256": "2dcdc8dcd4aaad028b247e23e64a3d64d2ad5cd3357c08bdeba3246369a6c6da",
+      "is_error": false,
+      "modelUsage": {
+        "global.anthropic.claude-opus-4-8": {
+          "inputTokens": 2,
+          "outputTokens": 6462,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 26846,
+          "webSearchRequests": 0,
+          "costUSD": 0.3293475,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 64000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 26846,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-opus-4-8",
+          "provider": "bedrock",
+          "costBasis": "list"
+        }
+      },
+      "total_cost_usd": 0.3293475,
+      "reviewed_manuscript_sha256": "6184883a855478d37308ef6ea61329045469b4ac236e7c291e0f71718bc2a8b7",
+      "manuscript_sha256_field_note": "Original field was recorded at call completion; reviewed_manuscript_sha256 hashes the exact supplied text."
+    }
+  },
+  "scientific_limitations": [
+    "Exploratory evaluation and post-outcome descriptive completion intervals.",
+    "Fixed fusion has no demonstrated detection advantage.",
+    "All paired timing-support adequacy gates fail.",
+    "Equal feature width does not establish matched effective capacity.",
+    "GAVD source IDs are not verified people.",
+    "Conditional intervals omit training uncertainty."
+  ],
+  "status": "passed_with_scientific_limitations"
+}

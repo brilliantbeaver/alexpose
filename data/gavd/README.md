@@ -253,3 +253,6 @@ For attribution, citation, and access details, see the
 its [local verbatim copy](source/UPSTREAM_README.md), and the
 [upstream license copy](source/LICENSE). Relative figure links inside the
 verbatim README resolve in the upstream repository.
+
+<!-- iteration02-study-link -->
+The separately frozen [iteration02 observation study](../../experiments/aaai/docs/iteration02/protocol.md) records source attrition and hash-compatible pose eligibility. It does not replace this fresh CSV inventory. Videos and local previews remain under [data/videos-gavd](../videos-gavd/README.md).

@@ -1,0 +1,447 @@
+ From Prediction Gain to Anomaly Detection: A Controlled Cross-Leg Gait Study
+
+                                                       Anonymous submission
+
+
+
+
+                             Abstract                                   opposite-leg observations. Both predict the same hidden co-
+                                                                        ordinates under the same observation support. Separate tests
+  An unusual gait can be regular and predictable. Conversely,           establish whether the estimator can recover a known depen-
+  adding another limb can improve completion without im-
+                                                                        dency, whether it helps on normal recordings, and whether
+  proving detection beyond a strong movement baseline. We
+  test this distinction using observable coordinate targets, a re-      its source-level benefit adds detection value.
+  tained own-leg predictor, an additional own-leg control with             The expected implication is not that more predictive help
+  matched input width, and an opposite-leg correction. Three            means healthier walking. A stable compensation can be pre-
+  motion-independent training masks have equal budgets and              dictable. Small, regularly timed steps can have unusual am-
+  marginal hiding probabilities and share fixed evaluation tar-         plitude without unusual timing. We therefore preserve a local
+  gets. An exploratory source-separated GAVD study retains              channel for projected posture, excursion and raw timing. A
+  304 recordings, including 28 normal recordings. All internal          bilateral benefit departure is a separate candidate signal.
+  prediction gates pass, but the frozen combination of move-               The study makes three bounded contributions. First, it
+  ment descriptors and bilateral prediction benefit reduces focal       implements an observable, retained-baseline comparison
+  AUROC from 0.694 to 0.576, a difference of -0.118 with con-
+                                                                        with an own-leg augmentation control and exact input-
+  ditional 95% interval [-0.217, -0.025]. A fixed-answer timing
+  diagnostic has adequate recording coverage but fails predic-          access checks. Second, it separates mask-training effects
+  tion adequacy on its sparse matched inputs. An independent            from evaluation-task changes using matched uniform, joint-
+  six-angle study of 178 participants confirms useful held-out          tube and anatomical-tube policies. Third, it follows the same
+  normal completion while the same score construction lowers            algorithmic question into an independent participant dataset.
+  AUROC from 0.958 to 0.892. The contribution is a controlled           The resulting negative evidence is specific: normal prediction
+  separation of prediction adequacy, observation support and            improvement does not establish an advantage for the frozen
+  detection value. The findings reject a detection advantage for        equal-weight anomaly score, and timing sensitivity does not
+  this fixed score, not the usefulness of all cross-limb informa-       establish useful gait timing when matched observation sup-
+  tion.                                                                 port defeats prediction adequacy. We do not introduce a new
+                                                                        mask family or infer a neurological cause.
+                         Introduction
+                                                                          Related work and physiological motivation
+Suppose a short interval of the left ankle trajectory is hid-
+den. The visible left knee and foot may reconstruct it through          S-JEPA learns skeletal representations by predicting teacher
+local geometry. The right leg might supply additional infor-            features, while MAMP uses masked motion prediction
+mation about progression through the walking pattern. These             (Abdelfattah and Alahi 2024; Mao et al. 2023). Their
+are different sources of predictive help. Comparing a weak              motion-aware masking differs from our intentionally motion-
+local predictor with a larger full-body model cannot distin-            independent reference. VideoMAE uses temporal tubes, and
+guish them. Neither can a difference between errors against             SLiM’s semantic tubes already target anatomical reconstruc-
+different contextual representations.                                   tion shortcuts (Tong et al. 2022; Do et al. 2026). Our compar-
+   We ask a narrower question: after accounting for a leg’s             ison controls token budgets, marginal probabilities and the
+own visible movement, does the other leg add useful pre-                downstream observation task; it does not claim those mask
+diction information, and does that information improve de-              families are new. Stochastic positional queries are another in-
+tection of unusual gait? Our estimator preserves an own-leg             tervention and remain separate from selecting hidden inputs
+coordinate solution and compares two residual corrections.              (Bar et al. 2024).
+One receives additional own-leg features; the other receives               Normal-only gait methods already model posture, time and
+                                                                        reconstruction. FSGait separates posture and temporal evi-
+This is an anonymized submission for review purposes only. Dis-         dence; GenGait uses masked gait reconstruction and joint in-
+tribution, citation, or public sharing of this manuscript is strictly   consistency (Duan, Wan, and Zhao 2024; Motta et al. 2026).
+prohibited. Copyright and publication details will appear in the        SeeKer estimates conditional keypoint densities, and STG-
+final version if accepted.                                              NF learns pose likelihoods (Delić, Grcić, and Šegvić 2025;
+      Control, muscle,                 Camera and pose              Preserve posture,              M: local movement
+    and body structure                  estimation alter             amplitude and                   Distance from
+     shape movement                    what is observed                raw timing                    fitting normals
+
+
+  Biology motivates the measurements. Prediction does not identify a neurological cause.
+
+
+      Shared answer Y                  Retain own-leg f             Check prediction               R: benefit departure
+      and shared body                Compare corrections             and permitted                      Fixed score
+        reference Q                      f+h and f+g                 timing support                   S = (M + R) / 2
+
+
+
+Figure 1: Biological reasoning motivates separate local movement and relational measurements. The three predictors share the
+same observable target and declared body reference. Prediction adequacy precedes interpretation; passing it does not guarantee
+added detection value.
+
+
+Hirschorn and Avidan 2023). Thus conditional surprise, nor-           Population                Sources    Normal      Windows
+mative reconstruction and multiple score channels are not
+sufficient novelty. Our empirical question concerns what an           Fresh annotations             348         32            –
+added-context predictor measures after local geometry, nom-           Pose-window quality           311         28        9,474
+inal residual width and observation support are controlled.           Lower-limb readout            304         28        9,442
+                                                                      Focal binary endpoint          90         28        2,594
+   Post-stroke motor-module changes and weakness can alter
+                                                                      Lab, selected                 188        138            –
+sided movement and compensation (Clark et al. 2010; Awad,
+                                                                      Lab, eligible                 178        128          433
+Hsiao, and Binder-Macleod 2020). Parkinsonian movement
+size and arm coordination need not change together (Mor-
+ris et al. 1994; Sterling et al. 2015). Cerebral palsy com-         Table 1: Observation attrition. GAVD units are upload IDs,
+bines varied motor-control and musculoskeletal constraints,         not verified participants. Laboratory units are dataset partic-
+while myopathic gait concerns muscle disease rather than            ipant IDs. Selection is part of the target population.
+a single brain disorder (Steele, Rozumalski, and Schwartz
+2015; Steele et al. 2012; Vandekerckhove et al. 2025). These
+findings motivate preserving amplitude, posture and timing          repeated people remain unresolved.
+as distinct observations. They do not establish that video             The focal primary contrasts normal with Parkinsons,
+predictability recovers neural synergies; mechanics and task        stroke, cerebral palsy and myopathic memberships: 28, 10,
+constraints can also produce coordinated patterns (Kutch and        15, 10 and 27 sources, respectively. The broad secondary
+Valero-Cuevas 2012). A full movement world model would              includes every non-normal folder with unchanged scores.
+require control, mechanics, contact and observation compo-          One source has two abnormal memberships and counts once
+nents with multiple compatible explanations. We test only an        in binary endpoints. A frozen multi-membership exclusion
+observable completion component.                                    leaves 89 sources for the separate supervised five-class task.
+                                                                    Folder labels are not independently revalidated diagnoses;
+           Data and exploratory protocol                            some broad categories describe circumstances rather than
+                                                                    disease.
+GAVD observation population                                            This is an exploratory redesign after an earlier completed
+We rebuild the inventory from the current condition CSVs,           context study. All 28 normal recordings had appeared in prior
+excluding the distribution folder. GAVD provides web                exploration. We froze the new population, endpoints, roles,
+recordings, sequence annotations and observed gait cate-            masks and score before new fitting, but do not call the anal-
+gories (Ranjan et al. 2025, 2026). The inventory contains           ysis confirmatory. Four outer folds each reserve seven test
+1,874 sequences, 458,116 rows and 348 upload IDs. There             normals and five separate reference normals; the other 16
+are 332 decodable videos. Fixed pose-quality rules retain           normals fit models. Abnormal sources enter only outer eval-
+311 sources; lower-limb readout support retains 304 sources,        uation, except in separately labeled supervised comparators.
+1,381 sequences and 9,442 windows (Table 1). A confirmed            Three source-grouped internal folds select the small resid-
+pixel-identical duplicate pair already fails pose quality, so the   ual grid. Reference normals never select architecture, signs,
+retained cohort has 304 known recording groups. Unknown             stopping or fusion. Overlapping windows, sequences and ed-
+its remain inside their source role. Fits share sources across        if it improves over both baseline and own correction in at
+folds and are not independent replications.                           least two of three internal folds and on their mean source
+                                                                      risk. This operational rule is not a significance test. Inter-
+Preserved measurements and restricted inputs                          nal selection averages source/joint-weighted requests; final
+The existing ingestion pipeline crops each annotated person           scoring additionally merges repeated masks within physical
+using the frame-specific GAVD box, detects BlazePose land-            window targets. We report this weighting difference. Sep-
+marks, and restores full-frame coordinates (Bazarevsky et al.         arate generated dependency and conditional-independence
+2020). It returns the first pose in the crop and is not a validated   fixtures, zero gates and hidden-input invariance test estima-
+temporal identity tracker. We use raw coordinates, decoded-           tor behavior without pretending to simulate a disease.
+frame flags and confidence. Values below 0.5 remain miss-
+ing. Resampling to 15 Hz interpolates only between adjacent           Equal-budget training, fixed evaluation
+valid source observations. Windows contain 32 samples with            A window has eight temporal patches and 16 joints, or 128
+stride 16; all four samples must be valid for a token. Existing       tokens. U uniformly hides 64 tokens. J uniformly selects
+overall and half-window validity gates remain unchanged.              one joint, hides its eight temporal tokens and uniformly
+   Only indices 11–16 and 23–32 enter masking: shoulders,             fills 56 from the other 120. A chooses an anatomical group
+elbows, wrists, hips, knees, ankles, heels and foot indices.          with probability equal to its width divided by 16. Four-joint
+Source readouts use the eight distal-leg joints, 25–32. The           groups are torso reference joints and either distal leg; two-
+shared reference Q centers each frame on the pelvis and               joint groups are elbow and wrist on either side. Four-joint
+scales by valid first-half torso length. We do not rotate             groups occupy two patches starting at 0, 2, 4 or 6; two-joint
+trunks upright, standardize each joint’s excursion, or inde-          groups occupy four patches starting at 0 or 4. Starts are cho-
+pendently phase-align legs. Own-leg access is conditional on          sen uniformly from those listed. Each core has eight tokens.
+this shared body reference, which already contains body mea-          Uniformly filling 56 remaining tokens yields
+surements. Projected angles and scaled image trajectories are
+not clinical three-dimensional angles, speed or ground clear-                                        1    15 56      1
+                                                                                   P (hidden) =        +          = .             (4)
+ance.                                                                                               16 16 120        2
+                                                                         All policies are motion-independent and share exact U-
+        Controlled prediction and masking                             trained baseline weights. The coordinate target definition,
+Let O denote permitted visible own-leg tokens, C opposite-            nominal budget, unrelated RNG streams and source/window
+leg tokens, and Y the hidden four-frame XY target. Own-leg            schedule are shared. Selected training targets and valid loss
+membership is hip, knee, ankle, heel and foot index. We apply         terms can differ. Matching marginals does not match higher-
+masks and validity before constructing interpolation, tempo-          order dependence, difficulty or usable supervision. Masks
+ral features or model inputs. Completion can use observations         are drawn before natural missingness, without favorable re-
+before and after the target; it is not future forecasting.            drawing.
+    We fit a shared ridge baseline f on normal sources, freeze           The primary U evaluation bank has 16 stored masks with
+it, and compare                                                       seed 17 and preserves the historical own-joint support rule.
+                                                                      The separate E_leg bank enumerates two distal sides and four
+                                                                      starts twice, fills to 64 with seed 117, and scores the forced
+               Yb0 = f (O; Q),                                 (1)    core only. New training and E_leg require a valid target and
+               Ybo = f (O; Q) + αo h(O; Q),                    (2)    at least two permitted tokens at distinct times on each leg.
+                                                                      Every source requires four distinct physical target patches
+               Ybb = f (O; Q) + αb g(O, C; Q).                 (3)    per readout. Repeated masks cannot satisfy that requirement.
+                                                                      Each bank uses the same five reserved reference identities and
+    The local basis contains permitted interpolation estimates,       its own fitted reference parameters. All 304 sources retain
+support indicators, relative time and target identity. The own        support on both banks. A versus U on the unchanged U bank
+correction adds own-leg temporal moments; the bilateral cor-          is the primary masking contrast; E_leg cannot replace an
+rection adds opposite-leg features. The baseline has 77 fea-          unfavorable U result.
+tures; each residual has 154 features, eight outputs and 1,240
+coefficients including intercepts. Equal widths do not equal-
+ize numerical feature rank or inductive bias. Ranks count                             Scores and evaluation
+thresholded feature Gram-matrix eigenvalues, not ridge ef-            The local channel M uses 16 descriptors from full observed
+fective degrees of freedom. Recorded GAVD ranks include               movement. Each leg supplies knee-angle median and in-
+111 for the own residual and 141 for the bilateral residual.          terquartile range, ankle X/Y interquartile ranges and velocity
+A zero gate returns the saved baseline exactly, but does not          median absolute deviations. Trunk inclination median/IQR
+guarantee held-out improvement or contain the separately              and two sided differences complete the vector. We average
+fitted own correction.                                                windows within sequences and sequences within sources be-
+    Every fit uses 512 source-balanced window/mask presen-            fore normal-only imputation, robust scaling and shrinkage
+tations, with equal source/readout-joint loss weights. Internal       covariance fitting. M is squared Mahalanobis distance di-
+validation chooses residual ridge penalty from {0.1, 1, 10}           vided by 16. These full-observation descriptors never enter
+and multiplier from {0, 0.5, 1}. A bilateral recipe passes only       a restricted completion branch.
+  For identical target coordinates, define benefit                        Score, U evaluation            Focal    Broad
+                                                                          Local movement M               0.694    0.707
+             b = MSE(Ybo , Y ) − MSE(Ybb , Y ).            (5)            Relational departure R         0.445    0.560
+   Masks average within targets, targets within windows,                  Fixed S, U training            0.576    0.631
+windows within sequences and sequences within sources,                    Richer motion, 36 features     0.677    0.669
+retaining joint identity. Four joints average equally on                  M + own-capacity sham          0.687    0.661
+each side. Five reserved normal references supply bilat-                  M + constituent error          0.684    0.685
+                                            2                             M + baseline error             0.700    0.692
+eral means µk and sample variances sP       k . We use vk =
+0.5s2k +0.5 mean(s2 )+10−8 and R = 2 k (bk −µk )2 /vk .
+                                          1                               Timing/waveform distance       0.588    0.631
+The frozen score is S = (M + R)/2. A failed internal                      Isolation Forest               0.551    0.593
+gate would set R = 0 for every source in that fold; none                  STG-NF, adapted                0.376    0.435
+failed. Neither benefit nor R is mutual information or a health           Availability and viewpoint     0.389    0.520
+ranking. Dimension normalization does not make M and R                    Supervised nuisance            0.461    0.506
+equally calibrated probabilities, and R omits bilateral covari-           Fixed S, J training            0.620    0.644
+ance.                                                                     Fixed S, A training            0.631    0.672
+   Comparators retain the same sources: a richer 36-feature
+motion distance; base-to-own sham benefit; equally con-           Table 2: Weighted within-fold AUROC. Focal and broad
+structed constituent-error fusions; timing/waveform descrip-      prevalence are 62/90 and 276/304. The fixed fusion has no
+tors; Isolation Forest; availability-and-viewpoint distance;      demonstrated advantage. The adapted pose baseline and su-
+and a separately supervised nuisance classifier. A bounded        pervised nuisance row have distinct modeling assumptions.
+STG-NF adapter uses its authors’ implementation with a
+16-joint graph and fitting-normal median imputation. Native
+complete cases retain only five normal sources and cannot         changes instantaneous geometry and finite-interval distribu-
+support the same roles. The adapter is not a faithful pub-        tions, so even a successful effect would not isolate neural
+lished reproduction. Separate five-class Random Forest and        timing. Adequacy is rechecked on the exact paired original
+learned/random JEPA probes use source-separated labels.           inputs rather than assumed from denser training inputs.
+Fresh encoders pretrain only on fitting normals with EMA
+and VICReg (Bardes, Ponce, and LeCun 2022); these small                                     Results
+probes do not establish representation-learning limits.
+   We summarize AUROC by within-fold values weighted by           Completion, mask structure and detection
+fixed normal-by-abnormal pair counts. Average precision is        All 12 outer-policy fits pass the internal normal gate. Direct
+reported per fold and as an equal-fold mean with prevalence.      interpolation is weaker than shared ridge in every aggregate
+Pooled out-of-fold ranks are secondary because separate ref-      of internal held-out GAVD normals. Figure 2 shows outer-
+erences need not align score scales. Paired 1,000-replicate       test normal errors. U-bank bilateral benefit remains uncer-
+bootstraps resample whole recording groups within fold and        tain for U and A; E_leg provides more headroom. Thus an
+binary-label stratum, retain all method scores together and       internal selection gate alone does not establish uniform-task
+preserve original fold weights. Intervals condition on the fit-   generalization.
+ted models, split and selected protocol; they omit fitting un-       The primary S minus M contrast is -0.118, conditional
+certainty, unknown repeated-person dependence and adap-           95% interval [-0.217, -0.025]. The broad difference is -0.076,
+tive redesign. Multiple contrasts are exploratory and are not     [-0.143, -0.009]. For the masking comparison, A minus U
+multiplicity-adjusted.                                            on the fixed U bank is 0.055, interval [-0.018, 0.127], on the
+                                                                  focal endpoint. This does not establish a better mask policy.
+Fixed-answer timing diagnostic                                    The focal E_leg S AUROCs for U, J and A are 0.668, 0.668,
+For a valid 48-frame parent, frames 8:40 supply the target        0.684; they describe specialization to a different task. All
+interval. Distal opposite-leg observations come from offsets      arms and failures remain reported.
+−4 or +4 frames, without wraparound, padding or cross-               For U, focal equal-fold average precision is 0.763 for S and
+ing annotations. Each donor vector is relative to its permit-     0.864 for M; fold prevalence is 0.682, 0.696, 0.696, 0.682.
+ted donor hip, divided by the original scale, and attached        High precision values must be read beside this high abnor-
+to the permitted opposite hip at the original time. Original      mal prevalence. Sham and constituent-error controls do not
+and shifted inputs share target, own leg, reference and pair-     rescue the primary relational claim. The separate five-class
+specific permitted support. A hidden donor coordinate cannot      equal-fold macro F1 values are 0.347 for Random Forest,
+reappear after shifting. Sixteen stored uniform parent masks      0.251 for learned JEPA and 0.309 for the random encoder.
+hide 96 of 192 tokens, with seed 217, before original/donor       This modest classification comparison is not evidence of a
+joint-and-hip visibility is intersected.                          clinical classifier or a JEPA advantage.
+   The estimand is shifted minus aligned squared error from
+the frozen bilateral predictor on identical targets. Zero-        Timing adequacy fails despite recording coverage
+offset, own-branch invariance, noise, missing-observation         The timing census retains 27 normal recordings, with 7, 7, 6
+and whole-body crop controls accompany it. Shifting also          and 7 outer-test normals. It passes the operational coverage
+                                          Unchanged uniform task                                                                      Distal-leg challenge task
+                               0.04
+
+
+
+
+ Mean held-out normal XY MSE                                                         Mean held-out normal XY MSE
+                                                                                                                   0.08
+
+                               0.03
+                                                                                                                   0.06
+
+
+                               0.02
+                                                                                                                   0.04
+
+
+                               0.01                                                                                0.02
+
+
+                               0.00                                                                                0.00
+                                      U                   J               A                                                       U                   J               A
+                                          Correction-training mask policy                                                             Correction-training mask policy
+
+
+                                                           Retained f         Own-capacity f+h                                    Both-leg f+g
+
+
+Figure 2: Outer-test normal coordinate MSE, equally aggregated over sources. Every training policy retains the same U-trained
+baseline. The focused E_leg bank changes the observation task and exposes more headroom; its errors must not be compared
+with U as an isolated training effect.
+
+
+floor. However, all 24 outer fold/policy/offset combinations                                                       held-out healthy error over the own-capacity control by
+fail adequacy on their exact paired original inputs, as do all                                                     4.78% to 5.52% across folds. A post-outcome audit on
+72 corresponding internal combinations. Only about 1.75                                                            the frozen normal targets gives mean participant MSEs of
+editable distal tokens remain on average. U’s negative offset                                                      309.838 for direct interpolation, 206.262 for f, 201.038 for
+has a positive raw effect of 0.000393, interval [0.000177,                                                         f+h and 190.584 for f+g, in squared degrees. The same or-
+0.000618]; the positive offset gives 0.000064, interval [-                                                         dering holds in every fold. Equal residual width still does
+0.000232, 0.000368]. The negative-offset interval excludes                                                         not equalize rank: the 72-feature own and bilateral bases
+zero, but compares two predictions from a model that is in-                                                        have ranks 44 and 62. The observed improvement applies to
+adequate on the aligned paired inputs. It therefore does not                                                       these fitted predictor families; it does not isolate opposite-leg
+establish a reliable coordination measurement (Figure 3).                                                          information from every difference in effective flexibility.
+Software identity and visibility tests pass, but do not repair                                                        Despite useful completion, M reaches 0.958 and S 0.892,
+insufficient useful context.                                                                                       difference -0.066, [-0.106, -0.031]. R alone reaches 0.694,
+                                                                                                                   so the negative finding concerns incremental value under
+Independent participant replication                                                                                this score construction, not absence of all abnormality infor-
+                                                                                                                   mation. A frozen same-sex, within-five-year matching rule
+We independently fit the same retained-prediction contrast                                                         retains 45 participant pairs; M reaches 0.955 and S 0.874,
+to six simultaneous hip, knee and ankle flexion signals from                                                       difference -0.081, [-0.156, -0.028]. Walking speed remains
+a public laboratory dataset (Van Criekinge et al. 2023). One                                                       unmatched. Figure 4 summarizes the consistent loss for the
+frozen walking trial per participant was selected before out-                                                      fixed fusion across measurement systems.
+comes. All 188 selected trials parse; ten healthy trials fail
+unchanged observation support. The resulting 128 healthy
+and 50 stroke participants supply 433 windows. C3D an-                                                                    Observation failures and limitations
+gle declarations, degree units and common timestamps are                                                           We inspect prespecified high/low prediction-error examples
+verified. The first flexion component is not a global-axis rota-                                                   in each focal label, with local videos, pose overlays and
+tion, and the signals are processed Plug-in Gait outputs with                                                      first/middle/last annotated frames. The ten cases show cam-
+a shared body model.                                                                                               era motion, assistance, split-screen footage, limb overlap and
+   The external representation uses 48 angle-patch tokens,                                                         feet leaving the image. Figure 5 illustrates measured skeleton
+half hidden, and the same gate logic. Each fold has 76 fit-                                                        traces without redistributing source photographs. Three sam-
+ting healthy participants, 20 references and 32 healthy tests.                                                     pled frames do not establish continuous identity correctness,
+Twelve angle median/IQR descriptors replace the image-                                                             and visible descriptions are not clinical relabeling.
+specific M features. No limbs are independently cycle-                                                                A post-outcome boundary audit finds high-confidence dis-
+aligned, no laboratory markers are relabeled as BlazePose                                                          tal points outside decoded images in frozen-window spans
+joints, and no video weights are transferred.                                                                      from 13/28 normal and 83/276 abnormal recordings. Pooled
+   All four internal gates pass. Bilateral prediction improves                                                     point fractions are approximately 0.43% and 0.24%; one re-
+                                               Paired-support adequacy fails                                                                                    Sensitivity is not coordination evidence
+                                  0.000
+
+
+
+
+                                                                                                 Shifted error minus aligned error
+                                                                                                                                      0.0006
+
+
+
+
+ Aligned error: own minus both
+                                 −0.005
+                                                                                                                                      0.0004
+                                 −0.010
+                                                                                                                                      0.0002
+                                 −0.015
+
+                                                                                                                                      0.0000
+                                 −0.020
+
+                                                                                                                                     −0.0002
+                                 −0.025
+                                                -4 frames                  +4 frames                                                                           -4 frames                               +4 frames
+
+
+Figure 3: The U-trained predictor on 27 outer-test normal recordings separates a raw offset response from prediction adequacy
+on exactly matched inputs. All outer paired-support gates fail. A positive response alone is therefore insufficient for a timing
+interpretation. Error bars are conditional source-resampling intervals.
+
+
+                                  GAVD focal                                                                                                                             normal folder         parkinsons folder
+                                                                                                                                                                     high completion error   low completion error
+
+                                                                                                                                                              −1.0
+                                 GAVD broad                                                                                                                                                  −1
+
+
+
+
+                                                                                                                                       Torso-scaled image Y
+                                                                                                                                                              −0.5
+
+                                  Laboratory                                                                                                                   0.0                            0
+
+                                                                                                                                                               0.5
+ Age/sex matched
+                                                                                                                                                                                              1
+                                               −0.20    −0.15      −0.10     −0.05        0.00                                                                 1.0
+                                                AUROC difference: fixed S minus local M
+                                                                                                                                                               1.5
+                                                                                                                                                                                              2
+Figure 4: S minus M AUROC with conditional 95% inter-
+                                                                                                                                                                     −1         0                 −0.5 0.0 0.5
+vals. GAVD intervals resample recording groups; external
+                                                                                                                                                                     Torso-scaled image X    Torso-scaled image X
+intervals resample participants, or matched pairs in the de-
+mographic sensitivity. These are not four independent stud-
+ies.                                                                                                                                  Figure 5: Measured high-error normal and low-error
+                                                                                                                                      Parkinsons-labeled examples. Sparse image traces are ob-
+                                                                                                                                      servation examples, not evidence that prediction error orders
+quested frame fails decoding. Confidence therefore does not                                                                           neurological severity. Source labels are retained without clin-
+guarantee visible measurement, and the higher normal frac-                                                                            ical reinterpretation.
+tion cautions against attributing artifacts only to abnormal
+videos. No fits or exclusions change after this audit. Frame-
+aligned single-view strata lack enough normal support for a                                                                           These observations do not identify the cause of fusion loss.
+complete four-fold matched analysis; mixed views are not a                                                                            The negative result may reflect score calibration, reference
+matched viewpoint. Neither a global nuisance score nor the                                                                            estimation or representation choice as well as limited incre-
+small camera review resolves these alternatives.                                                                                      mental movement information. We do not tune fusion after
+    Five GAVD reference sources produce uncertain bene-                                                                               observing abnormal results. A new normal-only calibration
+fit scales. Saved leave-one-reference-out and variance-floor                                                                          study would require a separately frozen protocol and fresh
+analyses expose that uncertainty. M and R also have different                                                                         evaluation.
+tails despite dimension normalization. In a post-outcome de-                                                                             The laboratory replication addresses participant separa-
+scriptive audit, external test-normal R 99th percentiles range                                                                        tion and changes the observation system, but covers only
+from 6.30 to 33.94 across folds, versus 2.45 to 3.99 for M.                                                                           healthy and stroke walking, excludes ten selected healthy
+External reference left/right benefit correlations range from                                                                         trials and does not validate clinical deployment or video-
+0.54 to 0.82, which the diagonal R distance does not model.                                                                           weight transfer. GAVD remains an internal web-recording
+study with a small, previously explored normal sample. More       ton Representation Learning. ArXiv:2603.10648v4. Author
+abnormal windows do not replace independent normal par-           record lists NeurIPS 2026.
+ticipants. Conditional intervals omit training uncertainty, and   Duan, B.; Wan, X.; and Zhao, X. 2024. FSGait: Fine-Grained
+limited ridge/JEPA budgets do not establish the best attain-      Self-supervised Gait Abnormality Detection. In Computer
+able model. The imputed STG-NF adapter is an informative          Vision – ACCV 2024, volume 15477 of Lecture Notes in
+bounded comparison, not a state-of-the-art benchmark.             Computer Science, 313–329. Springer Nature Singapore.
+                                                                  Hirschorn, O.; and Avidan, S. 2023. Normalizing Flows
+                       Conclusion                                 for Human Pose Anomaly Detection. In Proceedings of the
+Opposite-leg observations can improve normal movement             IEEE/CVF International Conference on Computer Vision,
+completion while a fixed bilateral-benefit score worsens          13545–13554.
+anomaly ranking. On incomplete video observations, even           Kutch, J. J.; and Valero-Cuevas, F. J. 2012. Challenges and
+a positive timing response can coexist with failed prediction     New Approaches to Proving the Existence of Muscle Syner-
+adequacy. A defensible relational detector must establish in-     gies of Neural Origin. PLoS Computational Biology, 8(5):
+put access, useful prediction on its exact support, and in-       e1002434.
+cremental detection value separately. This study provides an      Mao, Y.; Deng, J.; Zhou, W.; Fang, Y.; Ouyang, W.; and Li, H.
+executed test of those requirements and a narrow negative         2023. Masked Motion Predictors are Strong 3D Action Rep-
+result across two measurement systems and partly different        resentation Learners. In Proceedings of the IEEE/CVF In-
+condition sets, without converting prediction behavior into a     ternational Conference on Computer Vision, 10181–10191.
+neurological diagnosis.                                           Morris, M. E.; Iansek, R.; Matyas, T. A.; and Summers, J. J.
+                                                                  1994. The Pathogenesis of Gait Hypokinesia in Parkinson’s
+                        References                                Disease. Brain, 117(5): 1169–1181.
+Abdelfattah, M.; and Alahi, A. 2024. S-JEPA: A Joint Em-          Motta, E.; Lorenzini, M.; Mouawad, C.; Ranavolo, A.; Ser-
+bedding Predictive Architecture for Skeletal Action Recog-        rao, M.; and Ajoudani, A. 2026. GenGait: A Transformer-
+nition. In Computer Vision – ECCV 2024, volume 15090              Based Model for Human Gait Anomaly Detection and Nor-
+of Lecture Notes in Computer Science, 367–384. Springer           mative Twin Generation. arXiv:2604.01997.
+Nature Switzerland.                                               Ranjan, R.; Ahmedt-Aristizabal, D.; Ali Armin, M.; and
+Awad, L. N.; Hsiao, H.; and Binder-Macleod, S. A. 2020.           Kim, J. 2025. Computer Vision for Clinical Gait Analy-
+Central Drive to the Paretic Ankle Plantarflexors Affects the     sis: A Gait Abnormality Video Dataset. IEEE Access, 13:
+Relationship Between Propulsion and Walking Speed After           45321–45339.
+Stroke. Journal of Neurologic Physical Therapy, 44(1): 42–        Ranjan, R.; Ahmedt-Aristizabal, D.; Ali Armin, M.;
+48.                                                               and Kim, J. 2026.          GAVD: Gait Abnormality in
+Bar, A.; Bordes, F.; Shocher, A.; Assran, M.; Vincent, P.;        Video Dataset, Annotation Catalog and Documenta-
+Ballas, N.; Darrell, T.; Globerson, A.; and LeCun, Y. 2024.       tion.     Author-maintained GitHub repository.          Snap-
+Stochastic Positional Embeddings Improve Masked Image             shot accessed November 15, 2026; repository revision
+Modeling. In Proceedings of the 41st International Confer-        a87859c881603443f200bcd640663d2c3d7a8136. The year
+ence on Machine Learning, volume 235 of Proceedings of            denotes access, not an asserted original release date.
+Machine Learning Research, 2944–2958.                             Steele, K. M.; Rozumalski, A.; and Schwartz, M. H. 2015.
+                                                                  Muscle Synergies and Complexity of Neuromuscular Con-
+Bardes, A.; Ponce, J.; and LeCun, Y. 2022. VICReg:
+                                                                  trol During Gait in Cerebral Palsy. Developmental Medicine
+Variance-Invariance-Covariance Regularization for Self-
+                                                                  and Child Neurology, 57(12): 1176–1182.
+Supervised Learning. In International Conference on Learn-
+ing Representations.                                              Steele, K. M.; van der Krogt, M. M.; Schwartz, M. H.; and
+                                                                  Delp, S. L. 2012. How Much Muscle Strength Is Required
+Bazarevsky, V.; Grishchenko, I.; Raveendran, K.; Zhu, T.;         to Walk in a Crouch Gait? Journal of Biomechanics, 45(15):
+Zhang, F.; and Grundmann, M. 2020. BlazePose: On-device           2564–2569.
+Real-time Body Pose Tracking. arXiv:2006.10204.
+                                                                  Sterling, N. W.; Cusumano, J. P.; Shaham, N.; Piazza, S. J.;
+Clark, D. J.; Ting, L. H.; Zajac, F. E.; Neptune, R. R.; and      Liu, G.; Kong, L.; Du, G.; Lewis, M. M.; and Huang, X.
+Kautz, S. A. 2010. Merging of Healthy Motor Modules Pre-          2015. Dopaminergic Modulation of Arm Swing During Gait
+dicts Reduced Locomotor Performance and Muscle Coordi-            Among Parkinson’s Disease Patients. Journal of Parkinson’s
+nation Complexity Post-Stroke. Journal of Neurophysiology,        Disease, 5(1): 141–150.
+103(2): 844–857.                                                  Tong, Z.; Song, Y.; Wang, J.; and Wang, L. 2022. Video-
+Delić, A.; Grcić, M.; and Šegvić, S. 2025. Sequential             MAE: Masked Autoencoders Are Data-Efficient Learners for
+Keypoint Density Estimator: An Overlooked Baseline of             Self-Supervised Video Pre-Training. In Advances in Neural
+Skeleton-Based Video Anomaly Detection. In Proceedings            Information Processing Systems, volume 35.
+of the IEEE/CVF International Conference on Computer Vi-          Van Criekinge, T.; Saeys, W.; Truijen, S.; Vereeck, L.; Sloot,
+sion, 11579–11589.                                                L. H.; and Hallemans, A. 2023. A Full-Body Motion Capture
+Do, J.; Chen, Y.; Youk, G.; and Kim, M. 2026. Less Is             Gait Dataset of 138 Able-Bodied Adults Across the Life Span
+More: Compact-Token Masked Feature Prediction for Skele-          and 50 Stroke Survivors. Scientific Data, 10: 852.
+Vandekerckhove, I.; Molenberghs, G.; Van den Hauwe, M.;
+Goemans, N.; De Waele, L.; Van Campenhout, A.; De
+Groote, F.; and Desloovere, K. 2025. Longitudinal Inter-
+action Between Muscle Impairments and Gait Pathology
+in Growing Children with Duchenne Muscular Dystrophy.
+Journal of NeuroEngineering and Rehabilitation, 22(1): 207.
+

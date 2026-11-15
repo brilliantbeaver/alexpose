@@ -1,0 +1,51 @@
+{
+  "tool": "claude CLI",
+  "requested_model": "opus",
+  "exit_code": 0,
+  "elapsed_seconds": 171.33,
+  "input_sha256": "924c14921fbb4792506a62e3a69203b053a127ae8da05d95ea9443d76209aa2e",
+  "prompt_sha256": "a0694ffb837775102bfdfb77e634fcb99e352b85fa753eb7e2c61a719ddd15a8",
+  "tools_enabled": false,
+  "modelUsage": {
+    "global.anthropic.claude-opus-4-8": {
+      "inputTokens": 2,
+      "outputTokens": 4017,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 22378,
+      "webSearchRequests": 0,
+      "costUSD": 0.2402975,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 0,
+      "cacheCreationEphemeral5mInputTokens": 22378,
+      "cacheCreationEphemeral1hInputTokens": 0,
+      "canonicalModel": "claude-opus-4-8",
+      "provider": "bedrock",
+      "costBasis": "list"
+    }
+  },
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 22378,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 4017,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 22378
+    },
+    "inference_geo": "",
+    "iterations": [],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "is_error": false,
+  "total_cost_usd": 0.2402975
+}

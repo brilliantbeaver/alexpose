@@ -1,0 +1,83 @@
+{
+  "created_at_utc": "2026-11-15T20:44:11.104320+00:00",
+  "input_hashes_reverified": 89,
+  "all_output_hashes_reverified": true,
+  "paired_metadata_checks": [
+    {
+      "bank": "U",
+      "outer_fold": 0,
+      "all_window_metadata_equal": true,
+      "sha256": "daf1f503646ac610020bba6d0e4baaeca0a59f148cf47037fe731b88a121e7ba"
+    },
+    {
+      "bank": "U",
+      "outer_fold": 1,
+      "all_window_metadata_equal": true,
+      "sha256": "f64c02885e497be7b85b15a29c69c7952edda958093bdc3a20a2a5b9785f49e0"
+    },
+    {
+      "bank": "U",
+      "outer_fold": 2,
+      "all_window_metadata_equal": true,
+      "sha256": "44f2f3db23fcf1615bb35952f2493f933e8efded50b6bee3515c5cfd6933d8d1"
+    },
+    {
+      "bank": "U",
+      "outer_fold": 3,
+      "all_window_metadata_equal": true,
+      "sha256": "1595ab5185770c4da96074e84652fd5a32720566d0535adad791b83938687c21"
+    },
+    {
+      "bank": "E_leg",
+      "outer_fold": 0,
+      "all_window_metadata_equal": true,
+      "sha256": "daf1f503646ac610020bba6d0e4baaeca0a59f148cf47037fe731b88a121e7ba"
+    },
+    {
+      "bank": "E_leg",
+      "outer_fold": 1,
+      "all_window_metadata_equal": true,
+      "sha256": "f64c02885e497be7b85b15a29c69c7952edda958093bdc3a20a2a5b9785f49e0"
+    },
+    {
+      "bank": "E_leg",
+      "outer_fold": 2,
+      "all_window_metadata_equal": true,
+      "sha256": "44f2f3db23fcf1615bb35952f2493f933e8efded50b6bee3515c5cfd6933d8d1"
+    },
+    {
+      "bank": "E_leg",
+      "outer_fold": 3,
+      "all_window_metadata_equal": true,
+      "sha256": "1595ab5185770c4da96074e84652fd5a32720566d0535adad791b83938687c21"
+    }
+  ],
+  "independent_summary_arithmetic_checks": [
+    {
+      "dataset": "external_angles",
+      "bank": "U",
+      "summary_matches_saved_unit_losses_and_bootstrap": true,
+      "unique_units": 128
+    },
+    {
+      "dataset": "GAVD",
+      "bank": "U",
+      "summary_matches_saved_unit_losses_and_bootstrap": true,
+      "unique_units": 28
+    },
+    {
+      "dataset": "GAVD",
+      "bank": "E_leg",
+      "summary_matches_saved_unit_losses_and_bootstrap": true,
+      "unique_units": 28
+    }
+  ],
+  "local_document_links_verified": 11,
+  "figure_review": "Rendered and visually checked at full size. A first draft had a footnote/x-axis-label overlap; increased bottom margin and height resolved it. Final labels, intervals, notes and three comparison rows are separated.",
+  "report_sha256": {
+    "docs/draft03/advisory/completion_audit_v1/README.md": "0314f16d28db5f57306af99fd0749ca69f797c35618e7606601bc11cdd9c1f2c",
+    "docs/draft02/reviews/calibration_audit/README.md": "8f8eb1c0b9e4de5ab5e966440289d9af220ad9668ba7040a437783d2625441e1"
+  },
+  "audit_manifest_sha256": "f399757965b4e40fdc7dd4b2d87ad94a48eef50a2e9a41138c6625bdcaf76280",
+  "figure_manifest_sha256": "5bbe336e5099b132fb502cca72159123872178aa793a7850925096040f964dc2"
+}

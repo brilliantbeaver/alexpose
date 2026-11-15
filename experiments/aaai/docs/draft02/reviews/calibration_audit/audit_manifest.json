@@ -1,0 +1,41 @@
+{
+  "all_planned_folds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "causal_boundary": "Observed score-scale/tail differences and reference component correlation do not establish the cause of reduced fusion AUROC. No counterfactual calibration or refitted detector was evaluated.",
+  "created_at_utc": "2026-11-15T20:38:13.577414+00:00",
+  "inputs": {
+    "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_0/U_U/source_scores.csv": "61f6aa9e2e4552f775306676f0947bdc216016ceab4768bbd0af084809afbda0",
+    "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_1/U_U/source_scores.csv": "7af6b09a29a239a6660ea05a24aa04be3946becb091839a0486ea49294026001",
+    "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_2/U_U/source_scores.csv": "65cf89307809cbaafc8d59799e007e6400c73e2378844828380360e4c232b537",
+    "artifacts/iteration02/d66e1b126c9d9a9adf1b/fold_3/U_U/source_scores.csv": "f2e58c514b5666b542b41fae7a870d5dba7c2755e8dda4e1caf6b7f41d5b6a36",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_0/predictions/participant_angle_profiles.csv": "ef1fe19bb6403df42ad5937cff25757305a87b5915630adc5b150aff88c821ad",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_0/reference_audit.json": "32df7e8056198a4a08955a721bf5d4e1c1c5b28d9de2ff4040a499bf3e0da7a2",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_0/scores.csv": "f7ae1e7f51ffc18b6fef0510debdb9bd0e6794a646d28f550cc32dd0cd8a87ca",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_1/predictions/participant_angle_profiles.csv": "e35a1cb49193ee0010846be49b927297de1cd624b025df0bd48b38f638bbeb9d",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_1/reference_audit.json": "de4a38f3064af4e0ee82533cccfa6ef6a0c758b80c76d8166f5dd506ab9ee2b6",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_1/scores.csv": "ad3ef2faae04c80d8929c0b074dd6fc33a658f93c56b600b91c6b0f8ba09f9f3",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_2/predictions/participant_angle_profiles.csv": "bc8de51afc9e8a659b8a0e6f225074c206d3341bd38688365670305f5f87540b",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_2/reference_audit.json": "67f1addd82a559a98049cd92ea28feb1750284bbe0b83c100f8dbcd4ef0eb5c1",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_2/scores.csv": "a95bdd538fdd3260147208564fbb7990727c0d25df40e00d8ef4f335b2855bf7",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_3/predictions/participant_angle_profiles.csv": "3c5cc30b840e56ceea8a041c4833157408f67c59ec11797e3acc3b076e84b885",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_3/reference_audit.json": "7a9349d67ff7e424f5107ea09abf48b5832521da050c46a619a42213173e7ca7",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/fold_3/scores.csv": "cdfc30509060d500fec8b86c48b2b387308d8cacaa13094742fd7427fe5b005d"
+  },
+  "normal_counts": {
+    "GAVD_U_U": 7,
+    "external_angles": 32
+  },
+  "outputs": {
+    "external_heldout_mse.csv": "1be6b1be50d978dba63f6cf0658c457b79100c35d970a86fab3a0a279865060c",
+    "external_reference_correlations.csv": "a953cec0d9af3e2adcfee1c9571ab2b29d7e9cd35f5d805a994ddf489f90a025",
+    "normal_score_quantiles.csv": "aa00998fee3b9517838f046a88f9b006f437f708f5a6a7f6b9e4dd2f45176a50"
+  },
+  "producer_sha256": "846cf93438596c26a9ad3798aeb0a8a944a9345c029ddd7764def539fb3e0b38",
+  "quantile_method": "numpy linear empirical interpolation; p99 is not a well-estimated population tail with7or32 test normals",
+  "score_definitions": "M and R are frozen dimension-normalized distances from different reference constructions. This audit does not recalibrate them or convert them to probabilities.",
+  "status": "complete_post_outcome_descriptive_only"
+}

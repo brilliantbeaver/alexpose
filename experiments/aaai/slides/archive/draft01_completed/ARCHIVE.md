@@ -1,0 +1,1 @@
+This folder preserves the completed draft01 deck before the second-iteration planning deck replaced the active slides. The 40-page tutorial.pdf is an exact byte copy. It describes completed exploratory results, not the proposed second iteration. Relative documentation links in the HTML and Markdown were repaired after relocation. The PDF was not changed.

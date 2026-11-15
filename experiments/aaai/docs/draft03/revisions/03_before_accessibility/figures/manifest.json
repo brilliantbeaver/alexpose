@@ -1,0 +1,63 @@
+[
+  {
+    "name": "method",
+    "caption": "Implemented measurement workflow; neurological mechanisms are motivation, not recovered latent causes.",
+    "inputs": [
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/protocol.json"
+    ],
+    "hashes": {
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/protocol.json": "bcd76c09e1a5ff56708800a54b1f9f4d36b27b36bda1d61ea160a6933f06d8b7"
+    },
+    "raster_photo_content": false
+  },
+  {
+    "name": "detection_difference",
+    "caption": "All differences and intervals are conditional on fitted models and declared protocols; the laboratory matched interval resamples pairs.",
+    "inputs": [
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/paired_intervals.json",
+      "artifacts/iteration02/external_fb9d0d23b56ce29fd846/paired_effects.json",
+      "artifacts/iteration02/external_fb9d0d23b56ce29fd846/age_sex_sensitivity.json"
+    ],
+    "hashes": {
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/paired_intervals.json": "97c30ae8814452f467c9da7dea5c9c73e8e1c2840fb000b2136f333bd3d246e9",
+      "artifacts/iteration02/external_fb9d0d23b56ce29fd846/paired_effects.json": "71129153702ee5b180d62adb07f2b46c48e6e84d9be42da25a7d7864f8f7c669",
+      "artifacts/iteration02/external_fb9d0d23b56ce29fd846/age_sex_sensitivity.json": "4eeda93d16c2021c89b0a254ae054e838d605f653a66ec52e4136eb534dc0295"
+    },
+    "raster_photo_content": false
+  },
+  {
+    "name": "normal_prediction",
+    "caption": "All28 held-out normal sources contribute. Columns are different observation tasks, so cross-column differences do not isolate training policy.",
+    "inputs": [
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/normal_error_table.csv"
+    ],
+    "hashes": {
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/normal_error_table.csv": "1de8aeaa6625be58cd20d965fcb268f1b8c47be51480c5062e73b84a2c2617fa"
+    },
+    "raster_photo_content": false
+  },
+  {
+    "name": "timing_limits",
+    "caption": "27 held-out normal recordings per offset. About1.75 editable distal tokens remain; a positive response does not rescue failed prediction adequacy.",
+    "inputs": [
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/timing_summary.json"
+    ],
+    "hashes": {
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/timing_summary.json": "45e8e41228a6b2b1a3a73dcf37a3342785510f39cab9daed0add0bb3726e715b"
+    },
+    "raster_photo_content": false
+  },
+  {
+    "name": "failure_cases",
+    "caption": "Prespecified extreme-error examples use actual projected poses. Different viewpoints and regular motion prevent raw error from being a health ordering.",
+    "inputs": [
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/video_review/review_ledger.csv",
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/window_metadata.csv"
+    ],
+    "hashes": {
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/video_review/review_ledger.csv": "eca19b59609b20a4e78e53bc569d3a57f6d994076d0771fe72a92c6a572f615c",
+      "artifacts/iteration02/d66e1b126c9d9a9adf1b/window_metadata.csv": "1acb3a13f843d01d147852efd1a7286ef6c70253afbdc9d17e14d7370e440ec0"
+    },
+    "raster_photo_content": false
+  }
+]

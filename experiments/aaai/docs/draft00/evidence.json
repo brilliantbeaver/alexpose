@@ -1,0 +1,997 @@
+{
+  "assessment_date": "2026-11-14",
+  "kind": "Read-only research assessment of existing experiments; no retraining",
+  "classification_unit": "Sequence probabilities averaged from windows; source-weighted metrics give equal total weight to each source.",
+  "anomaly_unit": "Source-label aggregates; uncertainty resamples source clusters.",
+  "training_statistics": "First and last epoch averages read from local checkpoints. EMA coefficient is algebraic initial-teacher weighting, not a causal diagnosis.",
+  "runs": [
+    {
+      "seed": 42,
+      "provenance": {
+        "path": "../../artifacts/gavd/e9a0527c16adec52/provenance.json",
+        "sha256": "404ee3656f15d5fb2655257b108cab62f676f1230b359ca1986f4fda34ea0f31"
+      },
+      "classification_metrics_source": {
+        "path": "../../artifacts/gavd/e9a0527c16adec52/capstone_metrics.json",
+        "sha256": "158e63311e2ad9e30f2c575c33ad4146a8f7cb5c658cb7c45a4698d71c44d92b"
+      },
+      "n_windows": 2504,
+      "n_sequences": 450,
+      "n_sources": 91,
+      "selected_jepa": "normal_jepa",
+      "source_weighted_classification": {
+        "random_forest": {
+          "macro_f1": 0.2673459959510015,
+          "balanced_accuracy": 0.2729761904761905,
+          "abnormal_auroc": 0.9091337600128808,
+          "abnormal_average_precision": 0.9647216791794968
+        },
+        "normal_jepa": {
+          "macro_f1": 0.24381502180123613,
+          "balanced_accuracy": 0.2346199633699634,
+          "abnormal_auroc": 0.601263736263736,
+          "abnormal_average_precision": 0.7336380067153075
+        },
+        "progressive_jepa": {
+          "macro_f1": 0.10775333925335737,
+          "balanced_accuracy": 0.11193223443223443,
+          "abnormal_auroc": 0.6066795475586684,
+          "abnormal_average_precision": 0.8298171695425124
+        },
+        "untrained_encoder": {
+          "macro_f1": 0.29290826134501513,
+          "balanced_accuracy": 0.28563186813186814,
+          "abnormal_auroc": 0.6436809161534436,
+          "abnormal_average_precision": 0.7470102630321107
+        },
+        "mean_pose": {
+          "macro_f1": 0.23014410030908444,
+          "balanced_accuracy": 0.25395604395604393,
+          "abnormal_auroc": 0.6595013685947752,
+          "abnormal_average_precision": 0.8614568753101457
+        },
+        "pose_availability": {
+          "macro_f1": 0.22107154353493425,
+          "balanced_accuracy": 0.2482967032967033,
+          "abnormal_auroc": 0.5842585436541478,
+          "abnormal_average_precision": 0.7661809033688783
+        },
+        "prior_baseline": {
+          "macro_f1": 0.08695652173913036,
+          "balanced_accuracy": 0.2,
+          "abnormal_auroc": 0.4970414201183432,
+          "abnormal_average_precision": 0.7210370972338619
+        }
+      },
+      "normal_only_anomaly": {
+        "masked": {
+          "source": {
+            "path": "../../artifacts/gavd/e9a0527c16adec52/anomaly_metrics.json",
+            "sha256": "6fc12f83d87f2eb6dd41c6bb115377612e84ac60035dd3a43024824d8f38a523"
+          },
+          "metrics": {
+            "auroc": 0.19999999999999998,
+            "average_precision": 0.5955914309421096,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 5,
+            "n_abnormal": 13,
+            "n_normal_calibration_sources": 6,
+            "alpha": 0.05,
+            "finite_threshold": false,
+            "mode": "masked",
+            "unit": "source and label; mixed-label source rows are dependent",
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.0,
+                0.5538461538461539
+              ],
+              "average_precision_ci95": [
+                0.391493783993784,
+                0.8792185233067586
+              ],
+              "valid_repeats": 997,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 18,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        },
+        "forecast": {
+          "source": {
+            "path": "../../artifacts/gavd/e9a0527c16adec52/forecast_anomaly_metrics.json",
+            "sha256": "b71ef58d8bd8c19c4ad7bcda0ed7d833ecbe063f73f2a8f27116069cbfc41be3"
+          },
+          "metrics": {
+            "auroc": 0.1384615384615384,
+            "average_precision": 0.5713592528637778,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 5,
+            "n_abnormal": 13,
+            "n_normal_calibration_sources": 6,
+            "alpha": 0.05,
+            "finite_threshold": false,
+            "mode": "forecast",
+            "unit": "source and label; mixed-label source rows are dependent",
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.0,
+                0.4
+              ],
+              "average_precision_ci95": [
+                0.37145350564468216,
+                0.8589038559479735
+              ],
+              "valid_repeats": 997,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 18,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        },
+        "normal_distance": {
+          "source": {
+            "path": "../../artifacts/gavd/e9a0527c16adec52/normal_distance_metrics.json",
+            "sha256": "e9d4636ef875c9241a1f892a80d43987ac16935bac7a35ae29f7c73ae0a5a865"
+          },
+          "metrics": {
+            "auroc": 0.3230769230769231,
+            "average_precision": 0.7091769906815155,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 5,
+            "n_abnormal": 13,
+            "n_normal_training_sources": 17,
+            "n_normal_calibration_sources": 6,
+            "finite_threshold": false,
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.07692307692307693,
+                0.6153846153846154
+              ],
+              "average_precision_ci95": [
+                0.48173611111111114,
+                0.9224736432348889
+              ],
+              "valid_repeats": 997,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 18,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        }
+      },
+      "training": {
+        "normal_masked_fixed.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/e9a0527c16adec52/normal_masked_fixed.pt",
+            "sha256": "9a4d9b862aa5ef5101a26a8f3fb50f1b210e84bacbf9777e28faf30d959afb4f"
+          },
+          "recorded_epochs": 3,
+          "optimizer_updates_in_this_stage_history": 45,
+          "loss": {
+            "first_epoch_mean": 7.513384024302165,
+            "last_epoch_mean": 4.570315869649251
+          },
+          "prediction": {
+            "first_epoch_mean": 5.094866752624512,
+            "last_epoch_mean": 2.2843995332717895
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.03454837575554848,
+            "last_epoch_mean": 0.10225720331072807
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.11093234270811081,
+            "last_epoch_mean": 0.10476015036304792
+          },
+          "initial_teacher_coefficient_at_momentum_0_996": 0.8349687642713475
+        },
+        "normal_forecast_fixed.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/e9a0527c16adec52/normal_forecast_fixed.pt",
+            "sha256": "17b784256f2ed5f2cf04f5621fbbaff8957671826e9d19dd5716857d1ad6e2c4"
+          },
+          "recorded_epochs": 3,
+          "optimizer_updates_in_this_stage_history": 45,
+          "loss": {
+            "first_epoch_mean": 7.614734808603923,
+            "last_epoch_mean": 4.435810343424479
+          },
+          "prediction": {
+            "first_epoch_mean": 5.17479681968689,
+            "last_epoch_mean": 2.0800991455713906
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.024025563647349677,
+            "last_epoch_mean": 0.057771804928779605
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.07291609346866608,
+            "last_epoch_mean": 0.06693613082170487
+          },
+          "initial_teacher_coefficient_at_momentum_0_996": 0.8349687642713475
+        },
+        "progressive_fba3dc3e706e0d21.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/e9a0527c16adec52/progressive_fba3dc3e706e0d21.pt",
+            "sha256": "3410807bc9d5691c500caca1a5bac8f4a20c0f7d3b3cdec1b582e12c0a8a038e"
+          },
+          "recorded_epochs": 12,
+          "optimizer_updates_in_this_stage_history": 777,
+          "loss": {
+            "first_epoch_mean": 3.970282171083533,
+            "last_epoch_mean": 2.40291428565979
+          },
+          "prediction": {
+            "first_epoch_mean": 1.8923763192218284,
+            "last_epoch_mean": 1.0325514529690598
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.2672825682422389,
+            "last_epoch_mean": 0.6139803001976977
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.20911226972289707,
+            "last_epoch_mean": 0.6210706312246997
+          },
+          "note": "These are additional progressive updates following the normal anchor."
+        }
+      },
+      "paired_selected_minus_rf_sequence_weighted": {
+        "intervals_95": {
+          "macro_f1": [
+            -0.1427057408286453,
+            0.10788422024283546
+          ],
+          "balanced_accuracy": [
+            -0.17574708139436493,
+            0.09452145406862386
+          ],
+          "abnormal_auroc": [
+            -0.5135218947718948,
+            -0.0427380952380952
+          ]
+        },
+        "valid_repeats": 550,
+        "requested_repeats": 1000,
+        "n_source_groups": 18,
+        "paired_difference": true,
+        "minimum_20_valid_repeats_met": true
+      },
+      "spe_source_weighted_macro_f1": 0.17170646203889986,
+      "spe_source": {
+        "path": "../../artifacts/gavd/e9a0527c16adec52/spe_ablation.json",
+        "sha256": "d7e3e342d7762a2b47732c4c831eb473408e0461fffb10df7ab4e39eabe4ea2b"
+      }
+    },
+    {
+      "seed": 43,
+      "provenance": {
+        "path": "../../artifacts/gavd/3b5c7b8627857b2f/provenance.json",
+        "sha256": "c7c75fa00fb72db93939b0a03991156a3d0d5357070de8a62065454ddb93f329"
+      },
+      "classification_metrics_source": {
+        "path": "../../artifacts/gavd/3b5c7b8627857b2f/capstone_metrics.json",
+        "sha256": "4b9225803d383035d7e5d8913aff2226ced5972c66924c42fcde201a528fdc1e"
+      },
+      "n_windows": 2504,
+      "n_sequences": 450,
+      "n_sources": 91,
+      "selected_jepa": "progressive_jepa",
+      "source_weighted_classification": {
+        "random_forest": {
+          "macro_f1": 0.48182990717074653,
+          "balanced_accuracy": 0.477936507936508,
+          "abnormal_auroc": 0.8825231481481483,
+          "abnormal_average_precision": 0.9599013679586281
+        },
+        "normal_jepa": {
+          "macro_f1": 0.2141534676659087,
+          "balanced_accuracy": 0.26269841269841276,
+          "abnormal_auroc": 0.804728835978836,
+          "abnormal_average_precision": 0.901527484058299
+        },
+        "progressive_jepa": {
+          "macro_f1": 0.25199125461068705,
+          "balanced_accuracy": 0.2734722222222222,
+          "abnormal_auroc": 0.8346560846560848,
+          "abnormal_average_precision": 0.9390755905719235
+        },
+        "untrained_encoder": {
+          "macro_f1": 0.3266486472176697,
+          "balanced_accuracy": 0.34206349206349207,
+          "abnormal_auroc": 0.8475391313932982,
+          "abnormal_average_precision": 0.9408933288392829
+        },
+        "mean_pose": {
+          "macro_f1": 0.2496264980844626,
+          "balanced_accuracy": 0.3253968253968254,
+          "abnormal_auroc": 0.6616236772486773,
+          "abnormal_average_precision": 0.8798734286715193
+        },
+        "pose_availability": {
+          "macro_f1": 0.20425081111813098,
+          "balanced_accuracy": 0.17950396825396825,
+          "abnormal_auroc": 0.7025669642857143,
+          "abnormal_average_precision": 0.8566042449496774
+        },
+        "prior_baseline": {
+          "macro_f1": 0.08,
+          "balanced_accuracy": 0.2,
+          "abnormal_auroc": 0.5,
+          "abnormal_average_precision": 0.75
+        }
+      },
+      "normal_only_anomaly": {
+        "masked": {
+          "source": {
+            "path": "../../artifacts/gavd/3b5c7b8627857b2f/anomaly_metrics.json",
+            "sha256": "ea16769bb641e025f58ddfcb162d7f37fefd0c56b94ea3c1c8f35fd4b56405bd"
+          },
+          "metrics": {
+            "auroc": 0.6041666666666666,
+            "average_precision": 0.8524410774410773,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 4,
+            "n_abnormal": 12,
+            "n_normal_calibration_sources": 6,
+            "alpha": 0.05,
+            "finite_threshold": false,
+            "mode": "masked",
+            "unit": "source and label; mixed-label source rows are dependent",
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.21428571428571427,
+                0.9333333333333333
+              ],
+              "average_precision_ci95": [
+                0.663815386002886,
+                0.9911746031746032
+              ],
+              "valid_repeats": 988,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 16,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        },
+        "forecast": {
+          "source": {
+            "path": "../../artifacts/gavd/3b5c7b8627857b2f/forecast_anomaly_metrics.json",
+            "sha256": "fe462067f241f66c3e76eba57571f534b496e726635fb3f3b508624ba038bde4"
+          },
+          "metrics": {
+            "auroc": 0.4166666666666667,
+            "average_precision": 0.7175657675657676,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 4,
+            "n_abnormal": 12,
+            "n_normal_calibration_sources": 6,
+            "alpha": 0.05,
+            "finite_threshold": false,
+            "mode": "forecast",
+            "unit": "source and label; mixed-label source rows are dependent",
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.0,
+                0.7916666666666666
+              ],
+              "average_precision_ci95": [
+                0.4971029491341991,
+                0.9671681923845383
+              ],
+              "valid_repeats": 988,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 16,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        },
+        "normal_distance": {
+          "source": {
+            "path": "../../artifacts/gavd/3b5c7b8627857b2f/normal_distance_metrics.json",
+            "sha256": "dc40e7fa1f89a82016c72a5ed0c68c241fd0b0cd2bb57dc7a5e5e3fd1578ece7"
+          },
+          "metrics": {
+            "auroc": 0.625,
+            "average_precision": 0.87999962999963,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 4,
+            "n_abnormal": 12,
+            "n_normal_training_sources": 18,
+            "n_normal_calibration_sources": 6,
+            "finite_threshold": false,
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.3059615384615385,
+                0.9166666666666666
+              ],
+              "average_precision_ci95": [
+                0.6805051198801199,
+                0.9828201606086223
+              ],
+              "valid_repeats": 992,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 16,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        }
+      },
+      "training": {
+        "normal_masked_fixed.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/3b5c7b8627857b2f/normal_masked_fixed.pt",
+            "sha256": "eba0ce446b8f0ab89e4e33860b59ffa115676af368b0c20c67a58f78cd421a33"
+          },
+          "recorded_epochs": 3,
+          "optimizer_updates_in_this_stage_history": 66,
+          "loss": {
+            "first_epoch_mean": 6.0940823988481005,
+            "last_epoch_mean": 3.8528556498614224
+          },
+          "prediction": {
+            "first_epoch_mean": 3.685417478734797,
+            "last_epoch_mean": 1.719399782744321
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.03869161737913435,
+            "last_epoch_mean": 0.2592586502432823
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.11946209994229404,
+            "last_epoch_mean": 0.20078808069229126
+          },
+          "initial_teacher_coefficient_at_momentum_0_996": 0.7675670726704799
+        },
+        "normal_forecast_fixed.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/3b5c7b8627857b2f/normal_forecast_fixed.pt",
+            "sha256": "a3080e44313b8b0069f764cb274acbb56b8a9ddfe3e20f0e99685db9d215125a"
+          },
+          "recorded_epochs": 3,
+          "optimizer_updates_in_this_stage_history": 66,
+          "loss": {
+            "first_epoch_mean": 5.974262432618574,
+            "last_epoch_mean": 3.4812396222894844
+          },
+          "prediction": {
+            "first_epoch_mean": 3.539114919575778,
+            "last_epoch_mean": 1.5611973350698298
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.025942120023749092,
+            "last_epoch_mean": 0.26581655713644897
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.08129301091486757,
+            "last_epoch_mean": 0.2122270085594871
+          },
+          "initial_teacher_coefficient_at_momentum_0_996": 0.7675670726704799
+        },
+        "progressive_58d9d19e057055b5.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/3b5c7b8627857b2f/progressive_58d9d19e057055b5.pt",
+            "sha256": "223f074bb2ecb5fbddc6ea7878eb06129826ec9b6196400e0a69ea285e036faf"
+          },
+          "recorded_epochs": 12,
+          "optimizer_updates_in_this_stage_history": 747,
+          "loss": {
+            "first_epoch_mean": 3.598067368230512,
+            "last_epoch_mean": 2.2935317903757095
+          },
+          "prediction": {
+            "first_epoch_mean": 1.6102596406013734,
+            "last_epoch_mean": 0.9682707178095976
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.3162923070692247,
+            "last_epoch_mean": 0.6416762912025055
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.2323837866706233,
+            "last_epoch_mean": 0.6623677058766285
+          },
+          "note": "These are additional progressive updates following the normal anchor."
+        }
+      },
+      "paired_selected_minus_rf_sequence_weighted": {
+        "intervals_95": {
+          "macro_f1": [
+            -0.3284631775649341,
+            -0.09600394425469927
+          ],
+          "balanced_accuracy": [
+            -0.3614125122189638,
+            -0.043722222222222405
+          ],
+          "abnormal_auroc": [
+            -0.39164952694364463,
+            0.21395460358056204
+          ]
+        },
+        "valid_repeats": 558,
+        "requested_repeats": 1000,
+        "n_source_groups": 16,
+        "paired_difference": true,
+        "minimum_20_valid_repeats_met": true
+      }
+    },
+    {
+      "seed": 44,
+      "provenance": {
+        "path": "../../artifacts/gavd/91e588536ebb8053/provenance.json",
+        "sha256": "6390d6076d6bd2b9be1d812edb90528a4db227916594a8eb84b6e0eaa9d7de10"
+      },
+      "classification_metrics_source": {
+        "path": "../../artifacts/gavd/91e588536ebb8053/capstone_metrics.json",
+        "sha256": "0ade06f681caae61e3730880f249a1b12f4bc8d47114c122f31f71eb284feeae"
+      },
+      "n_windows": 2504,
+      "n_sequences": 450,
+      "n_sources": 91,
+      "selected_jepa": "progressive_jepa",
+      "source_weighted_classification": {
+        "random_forest": {
+          "macro_f1": 0.3326938593170311,
+          "balanced_accuracy": 0.3398730158730158,
+          "abnormal_auroc": 0.8399782213671101,
+          "abnormal_average_precision": 0.913266938010337
+        },
+        "normal_jepa": {
+          "macro_f1": 0.2896041504408097,
+          "balanced_accuracy": 0.2876262626262626,
+          "abnormal_auroc": 0.7108460932072038,
+          "abnormal_average_precision": 0.8394456723452632
+        },
+        "progressive_jepa": {
+          "macro_f1": 0.3313813189154312,
+          "balanced_accuracy": 0.31401010101010096,
+          "abnormal_auroc": 0.7252066297899629,
+          "abnormal_average_precision": 0.8794129400253475
+        },
+        "untrained_encoder": {
+          "macro_f1": 0.34819079368972894,
+          "balanced_accuracy": 0.3388874458874459,
+          "abnormal_auroc": 0.7360696248196246,
+          "abnormal_average_precision": 0.8416801098028616
+        },
+        "mean_pose": {
+          "macro_f1": 0.3219514203185825,
+          "balanced_accuracy": 0.33383694083694093,
+          "abnormal_auroc": 0.7313154695099136,
+          "abnormal_average_precision": 0.8823665740768052
+        },
+        "pose_availability": {
+          "macro_f1": 0.24307783802517413,
+          "balanced_accuracy": 0.24571428571428572,
+          "abnormal_auroc": 0.6981389289722622,
+          "abnormal_average_precision": 0.825486491933495
+        },
+        "prior_baseline": {
+          "macro_f1": 0.09090909090909079,
+          "balanced_accuracy": 0.2,
+          "abnormal_auroc": 0.5,
+          "abnormal_average_precision": 0.7058823529411766
+        }
+      },
+      "normal_only_anomaly": {
+        "masked": {
+          "source": {
+            "path": "../../artifacts/gavd/91e588536ebb8053/anomaly_metrics.json",
+            "sha256": "37dff12764623dbbb8232a97d611d5d420bbaac1c1a524872a8d57bf0534bb63"
+          },
+          "metrics": {
+            "auroc": 0.5833333333333334,
+            "average_precision": 0.772463130551366,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 5,
+            "n_abnormal": 12,
+            "n_normal_calibration_sources": 5,
+            "alpha": 0.05,
+            "finite_threshold": false,
+            "mode": "masked",
+            "unit": "source and label; mixed-label source rows are dependent",
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.21666666666666667,
+                0.9502976190476191
+              ],
+              "average_precision_ci95": [
+                0.5216136294261294,
+                0.9901360544217688
+              ],
+              "valid_repeats": 996,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 17,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        },
+        "forecast": {
+          "source": {
+            "path": "../../artifacts/gavd/91e588536ebb8053/forecast_anomaly_metrics.json",
+            "sha256": "8ec8d3bbd690e5f7a8efbbbfe606600fc4f1593f3ba37abb85d0e54a3cb327a3"
+          },
+          "metrics": {
+            "auroc": 0.5666666666666667,
+            "average_precision": 0.7318514818514819,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 5,
+            "n_abnormal": 12,
+            "n_normal_calibration_sources": 5,
+            "alpha": 0.05,
+            "finite_threshold": false,
+            "mode": "forecast",
+            "unit": "source and label; mixed-label source rows are dependent",
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.1990384615384615,
+                0.9666666666666667
+              ],
+              "average_precision_ci95": [
+                0.4988216066341067,
+                0.9952380952380953
+              ],
+              "valid_repeats": 996,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 17,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        },
+        "normal_distance": {
+          "source": {
+            "path": "../../artifacts/gavd/91e588536ebb8053/normal_distance_metrics.json",
+            "sha256": "2e99edb6ff9cdd71a10a2a0722e2e9b6f0d8101b6cc181550edbd8b683fa93a3"
+          },
+          "metrics": {
+            "auroc": 0.25,
+            "average_precision": 0.6051136975769329,
+            "sensitivity": 0.0,
+            "false_positive_rate": 0.0,
+            "threshold": null,
+            "n_normal": 5,
+            "n_abnormal": 12,
+            "n_normal_training_sources": 18,
+            "n_normal_calibration_sources": 5,
+            "finite_threshold": false,
+            "source_bootstrap": {
+              "auroc_ci95": [
+                0.0,
+                0.5714285714285714
+              ],
+              "average_precision_ci95": [
+                0.39854518796154825,
+                0.9207540525242731
+              ],
+              "valid_repeats": 999,
+              "requested_repeats": 1000,
+              "n_test_source_clusters": 17,
+              "unit": "source-label ranking with source-cluster resampling"
+            }
+          }
+        }
+      },
+      "training": {
+        "normal_masked_fixed.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/91e588536ebb8053/normal_masked_fixed.pt",
+            "sha256": "45aa08c1ba19b48fe402f2542092b6b4447e2181de5ce87e308a3145cb1bf557"
+          },
+          "recorded_epochs": 3,
+          "optimizer_updates_in_this_stage_history": 63,
+          "loss": {
+            "first_epoch_mean": 6.466810794103713,
+            "last_epoch_mean": 2.960440476735433
+          },
+          "prediction": {
+            "first_epoch_mean": 4.0316428400221325,
+            "last_epoch_mean": 0.799449622631073
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.026706864436467487,
+            "last_epoch_mean": 0.2157450786658696
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.09495678934313002,
+            "last_epoch_mean": 0.1696497297712735
+          },
+          "initial_teacher_coefficient_at_momentum_0_996": 0.7768520581884804
+        },
+        "normal_forecast_fixed.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/91e588536ebb8053/normal_forecast_fixed.pt",
+            "sha256": "5faa936694f419db0e8941b24d95d03980b54d812f654b30ab475f5d32023908"
+          },
+          "recorded_epochs": 3,
+          "optimizer_updates_in_this_stage_history": 63,
+          "loss": {
+            "first_epoch_mean": 6.291023640405564,
+            "last_epoch_mean": 2.846687089829218
+          },
+          "prediction": {
+            "first_epoch_mean": 3.8409428880328225,
+            "last_epoch_mean": 0.7620777913502285
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.019968184243355478,
+            "last_epoch_mean": 0.20030170608134495
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.06388922514660018,
+            "last_epoch_mean": 0.14035927752653757
+          },
+          "initial_teacher_coefficient_at_momentum_0_996": 0.7768520581884804
+        },
+        "progressive_10808d421fb27b9d.pt": {
+          "source": {
+            "path": "../../artifacts/gavd/91e588536ebb8053/progressive_10808d421fb27b9d.pt",
+            "sha256": "9c34997ff78b5418931b3b46ac5af8fb9157d5ab063a4d1067265fbd6b370ec8"
+          },
+          "recorded_epochs": 12,
+          "optimizer_updates_in_this_stage_history": 825,
+          "loss": {
+            "first_epoch_mean": 2.7155084865433827,
+            "last_epoch_mean": 2.1966212953839985
+          },
+          "prediction": {
+            "first_epoch_mean": 0.828256409083094,
+            "last_epoch_mean": 0.8299732440993899
+          },
+          "projection_std": {
+            "first_epoch_mean": 0.3646181523799896,
+            "last_epoch_mean": 0.6139356105100541
+          },
+          "embedding_std": {
+            "first_epoch_mean": 0.23817554541996547,
+            "last_epoch_mean": 0.6542143180256799
+          },
+          "note": "These are additional progressive updates following the normal anchor."
+        }
+      },
+      "paired_selected_minus_rf_sequence_weighted": {
+        "intervals_95": {
+          "macro_f1": [
+            -0.2476508854143988,
+            0.12434351679309223
+          ],
+          "balanced_accuracy": [
+            -0.25144796650717693,
+            0.11849986731534723
+          ],
+          "abnormal_auroc": [
+            -0.43424886571822147,
+            0.04095616739059358
+          ]
+        },
+        "valid_repeats": 722,
+        "requested_repeats": 1000,
+        "n_source_groups": 17,
+        "paired_difference": true,
+        "minimum_20_valid_repeats_met": true
+      }
+    }
+  ],
+  "subjective_scorecard": {
+    "source": {
+      "path": "../../docs/draft00/scorecard.csv",
+      "sha256": "e3533814820ec13da265f83d5068d292915a6207736c0c089ff555911743bf5d"
+    },
+    "weighted_score_out_of_100": 44.5,
+    "display_score_out_of_100": 45,
+    "not_acceptance_probability": true
+  },
+  "revision": {
+    "date": "2026-11-14",
+    "scope": "Revised research advice using two Claude consultations, two distinct GPT advisors, and a fresh annotation/file-presence census. No new model performance is claimed.",
+    "user_binary_definition": {
+      "normal": [
+        "normal"
+      ],
+      "abnormal": [
+        "abnormal",
+        "antalgic",
+        "cerebral palsy",
+        "exercise",
+        "inebriated",
+        "myopathic",
+        "parkinsons",
+        "pregnant",
+        "prosthetic",
+        "stroke",
+        "style"
+      ]
+    },
+    "claude_consultations": [
+      {
+        "round": 1,
+        "requested_model": "opus",
+        "reported_model_identifiers": [
+          "global.anthropic.claude-opus-4-8"
+        ],
+        "interface": "Claude Code CLI",
+        "tools_enabled": false,
+        "invocation": {
+          "path": "advisory/claude_invocation.json",
+          "sha256": "7b0d6fdd14afdae953e77db670fa4aefcbd1c53bdc307bd3a175caac4b97af2b"
+        },
+        "response": {
+          "path": "advisory/claude_response.json",
+          "sha256": "382086515c547396f354561669cd006b3efb5de11ed0f0f2c26df27a34ef616b"
+        }
+      },
+      {
+        "round": 2,
+        "requested_model": "opus",
+        "reported_model_identifiers": [
+          "global.anthropic.claude-opus-4-8"
+        ],
+        "interface": "Claude Code CLI",
+        "tools_enabled": false,
+        "invocation": {
+          "path": "advisory/claude_followup_invocation.json",
+          "sha256": "85222fcef237d608d674fd2c29235ff052c6105996c02d79ca734a5c77868f0d"
+        },
+        "response": {
+          "path": "advisory/claude_followup_response.json",
+          "sha256": "0f26dd10907fa630d336d2a073ccba04b8c0309b29e73e4fa7548c3ba0d9c0f9"
+        }
+      }
+    ],
+    "gpt_advisors": [
+      {
+        "configured_model": "gpt-6-astra",
+        "review": {
+          "path": "advisory/gpt_6_astra_review.md",
+          "sha256": "5df92da6968d1fc415ec8206d5e5a8952d0fee3f75cc775ebc12c5280b25f2dd"
+        }
+      },
+      {
+        "configured_model": "gpt-6-sol",
+        "review": {
+          "path": "advisory/gpt_6_sol_review.md",
+          "sha256": "42f3c746bb952bf81f23fa1c2792a2fcfed8046dc3473aa8c979b9872a6eccef"
+        }
+      }
+    ],
+    "new_metadata_evidence": {
+      "path": "advisory/gavd_opportunity_audit.json",
+      "sha256": "23790d31c2465f18291ff20a09db1300d89089d395e139a2b7538afb932292c7"
+    },
+    "unchanged_research_readiness_score": 44.5,
+    "new_performance_results": false,
+    "raw_advice_status": "Unfiltered advice includes mistakes; advisory_summary.md records the accepted corrections."
+  },
+  "neuromechanics_extension": {
+    "date": "2026-11-14",
+    "scope": "Targeted primary-literature research, advisory critique, proposed protocol revision, and original vector illustrations.",
+    "new_model_results": false,
+    "new_video_processing": false,
+    "clinical_primary_studies_in_ledger": 14,
+    "literature_scope": "Targeted review with abstract-level verification and selected full texts; not a systematic review or proof of novelty priority.",
+    "claude": {
+      "requested_model": "opus",
+      "reported_model_identifiers": [
+        "global.anthropic.claude-opus-4-8"
+      ],
+      "tools_enabled": false,
+      "prompt": {
+        "path": "advisory/claude_neuromechanics_prompt.md",
+        "sha256": "7f445ef4c2bdc147efab4ec5ae530c692e108b5687f1c6887b0e7aebced3dd09"
+      },
+      "invocation": {
+        "path": "advisory/claude_neuromechanics_invocation.json",
+        "sha256": "d288050ca2b86e8ce35b80f699525af6ddc67bfcd00184489c4dfec7b2f76091"
+      },
+      "response": {
+        "path": "advisory/claude_neuromechanics_response.json",
+        "sha256": "e7850c81f4bfa8a258d773b3e73e87e11f7c2df98d171df4642709ffc1f9ee24"
+      }
+    },
+    "gpt_reviews": [
+      {
+        "configured_model": "gpt-6-astra",
+        "review": {
+          "path": "advisory/neuromechanics_gpt_astra.md",
+          "sha256": "66a465514bc68f7cd94b41fea250f378ce3550ad6e13ddfe3935e6a2174c4865"
+        }
+      },
+      {
+        "configured_model": "gpt-6-sol",
+        "review": {
+          "path": "advisory/neuromechanics_gpt_sol.md",
+          "sha256": "d8fa4c43d07ac7b4ed9931012516163321be8758b7431c3a6006ad956aea2855"
+        }
+      },
+      {
+        "configured_model": "gpt-6.1-sol",
+        "review": {
+          "path": "advisory/neuromechanics_clinical_evidence.md",
+          "sha256": "a18abc4683574d5009f875e3e0aad5025d2212be142050de148510b4a81d7a4f"
+        }
+      }
+    ],
+    "protocol_revision": "Added a two-sided three-region profile before new scoring, retained the earlier one-sided comparator, and specified matched readout, normal reference, controls, and source inference.",
+    "figures": {
+      "count_new": 8,
+      "content": "Original conceptual illustrations; all plotted values and curves are invented examples, not results.",
+      "generator": {
+        "path": "images/build_neuromechanics_figures.py",
+        "sha256": "a1226a4ee6f5326653804169067ac3c0c117acda1b4a8bb8ac8e0d5cb98b9098"
+      },
+      "svg_files": [
+        {
+          "path": "images/neurological_chain.svg",
+          "sha256": "7f3db1ff797689ecd6404cd4609041960ae956b5ac269dae6c7f0d977ec7923a"
+        },
+        {
+          "path": "images/condition_routes.svg",
+          "sha256": "72d17a924bc16ef700924613d20f9e0bc8d9723a7543e96ef77effb97e3b35db"
+        },
+        {
+          "path": "images/predictable_patterns.svg",
+          "sha256": "5337f75e215f838e857b89888c0392c031a52155f3b348ffc0126ebf9b0cbd26"
+        },
+        {
+          "path": "images/support_profile.svg",
+          "sha256": "2f82936c17756c4ef7bbec4df6c7b607ddef6609ecf65578a7c8241bb22d679f"
+        },
+        {
+          "path": "images/neuromechanics_experiment.svg",
+          "sha256": "25e77bc9add6b6ac89c85811f9018531659455bea04dfd7b181776ddc2552d39"
+        },
+        {
+          "path": "images/intervention_controls.svg",
+          "sha256": "9ad50c10f492259ea7c209a012e9985dcdae5f135d664c8017a89bb8d157f069"
+        },
+        {
+          "path": "images/physical_world_model.svg",
+          "sha256": "2353a631e4b5f7e09f71e1f502072664e5a089a5d0f1f534a0dccff7876f283d"
+        },
+        {
+          "path": "images/mechanism_ambiguity.svg",
+          "sha256": "bbbf09e0373a37a87988870bd5ee98f7f96b142dd8922092354623181cf65409"
+        }
+      ]
+    },
+    "unchanged_readiness_score_before_rounding": 44.5,
+    "validation_record": {
+      "path": "validation_neuromechanics.md",
+      "sha256": "43354dabf7bb85e5a717f7b9a7f897a12cb8737f34927d7f0def590d80524026"
+    },
+    "additional_prior_art": [
+      {
+        "topic": "Probabilistic musculoskeletal simulation",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25404535/"
+      },
+      {
+        "topic": "Inverse-analysis measurement/model uncertainty",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9174465/"
+      },
+      {
+        "topic": "Gait model identifiability",
+        "url": "https://arxiv.org/abs/2307.11332"
+      },
+      {
+        "topic": "Bayesian gait-state estimation and sensor configuration",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9246062/"
+      }
+    ]
+  }
+}

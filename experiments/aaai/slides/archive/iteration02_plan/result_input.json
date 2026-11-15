@@ -1,0 +1,216 @@
+{
+  "completed_run": "3044566091261819",
+  "historical_cohort": {
+    "sources": 251,
+    "normal_sources": 23,
+    "sequences": 1303,
+    "windows": 8950
+  },
+  "metrics": [
+    {
+      "Method": "Latent benefit profile",
+      "Primary512": 0.6414950419527079,
+      "Sensitivity4096": 0.6666666666666667
+    },
+    {
+      "Method": "Raw full latent error",
+      "Primary512": 0.5408085430968727,
+      "Sensitivity4096": 0.5286041189931351
+    },
+    {
+      "Method": "Full-error reference distance",
+      "Primary512": 0.6727688787185354,
+      "Sensitivity4096": 0.665903890160183
+    },
+    {
+      "Method": "Own-error reference distance",
+      "Primary512": 0.65675057208238,
+      "Sensitivity4096": 0.5903890160183066
+    },
+    {
+      "Method": "Random encoder, latent heads",
+      "Primary512": 0.650648360030511,
+      "Sensitivity4096": 0.7139588100686499
+    },
+    {
+      "Method": "Coordinate benefit profile",
+      "Primary512": 0.6857360793287567,
+      "Sensitivity4096": 0.6895499618611747
+    },
+    {
+      "Method": "Random encoder, coordinate heads",
+      "Primary512": 0.7009916094584286,
+      "Sensitivity4096": 0.6933638443935927
+    },
+    {
+      "Method": "Ridge coordinate profile",
+      "Primary512": 0.6071700991609458,
+      "Sensitivity4096": 0.6071700991609458
+    },
+    {
+      "Method": "Latent profile, four patches",
+      "Primary512": 0.5423340961098397,
+      "Sensitivity4096": 0.6437833714721587
+    },
+    {
+      "Method": "Reference-free contrast",
+      "Primary512": 0.5270785659801678,
+      "Sensitivity4096": 0.3981693363844393
+    }
+  ],
+  "primary_difference": {
+    "score_a": "trained_latent_all_profile_score",
+    "score_b": "trained_latent_all_raw_full",
+    "point_difference": 0.10068649885583525,
+    "interval_95": [
+      -0.03508771929824558,
+      0.2242753623188406
+    ],
+    "repeats": 1000,
+    "seed": 42,
+    "n_sources": 251,
+    "normal_sources_by_fold": {
+      "0": 6,
+      "1": 6,
+      "2": 6,
+      "3": 5
+    },
+    "coverage": {
+      "n_sources_supplied": 251,
+      "n_common_scorable_sources": 251,
+      "n_excluded_sources": 0,
+      "excluded_source_ids": []
+    },
+    "conditional_on": "Fixed folds, predictor weights, reference parameters and common source cohort",
+    "paired": true,
+    "bootstrap_unit": "source within outer fold and binary label"
+  },
+  "read_only_candidate": {
+    "sources": 304,
+    "normal_sources": 28,
+    "sequences": 1381,
+    "windows": 9442,
+    "by_label": [
+      {
+        "label": "abnormal",
+        "sources": 103,
+        "windows": 5143
+      },
+      {
+        "label": "antalgic",
+        "sources": 9,
+        "windows": 116
+      },
+      {
+        "label": "cerebral palsy",
+        "sources": 10,
+        "windows": 390
+      },
+      {
+        "label": "exercise",
+        "sources": 87,
+        "windows": 1069
+      },
+      {
+        "label": "inebriated",
+        "sources": 5,
+        "windows": 36
+      },
+      {
+        "label": "myopathic",
+        "sources": 27,
+        "windows": 665
+      },
+      {
+        "label": "normal",
+        "sources": 28,
+        "windows": 482
+      },
+      {
+        "label": "parkinsons",
+        "sources": 10,
+        "windows": 184
+      },
+      {
+        "label": "pregnant",
+        "sources": 2,
+        "windows": 20
+      },
+      {
+        "label": "prosthetic",
+        "sources": 7,
+        "windows": 445
+      },
+      {
+        "label": "stroke",
+        "sources": 15,
+        "windows": 779
+      },
+      {
+        "label": "style",
+        "sources": 2,
+        "windows": 113
+      }
+    ]
+  },
+  "rewindowing_upper_bounds": [
+    {
+      "frames": 32,
+      "sample_span_seconds": 2.066666666666667,
+      "windows": 9474,
+      "sequences": 1389,
+      "sources": 311,
+      "normal_sources": 28,
+      "normal_windows": 482
+    },
+    {
+      "frames": 48,
+      "sample_span_seconds": 3.1333333333333333,
+      "windows": 8226,
+      "sequences": 1248,
+      "sources": 303,
+      "normal_sources": 27,
+      "normal_windows": 367
+    },
+    {
+      "frames": 64,
+      "sample_span_seconds": 4.2,
+      "windows": 7039,
+      "sequences": 966,
+      "sources": 284,
+      "normal_sources": 23,
+      "normal_windows": 284
+    },
+    {
+      "frames": 96,
+      "sample_span_seconds": 6.333333333333333,
+      "windows": 5368,
+      "sequences": 664,
+      "sources": 231,
+      "normal_sources": 12,
+      "normal_windows": 179
+    },
+    {
+      "frames": 128,
+      "sample_span_seconds": 8.466666666666667,
+      "windows": 4219,
+      "sequences": 438,
+      "sources": 162,
+      "normal_sources": 9,
+      "normal_windows": 129
+    }
+  ],
+  "provenance": {
+    "files": [
+      {
+        "path": "docs/draft01/evidence.json",
+        "sha256": "3e25c06fdc4dcf45fa9a448ce216b6a866bc8e9979c6c3361e7e85621f39ff53"
+      },
+      {
+        "path": "docs/iteration02/data_feasibility_probe.json",
+        "sha256": "030ba65a343d22aae442c5c82644a448c58bdd328c2eeb60a0b7126891459500"
+      }
+    ],
+    "status": "Completed results and read-only availability only; new method not executed"
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "created_at_utc": "2026-11-15T21:21:03.874170+00:00",
+  "producer": "docs/draft03/build_figures.py",
+  "producer_sha256": "66061016f1f15f0b21a068a643f5be9e99280ccb1ec1d31c971d33df26476010",
+  "status": "rendered_from_saved_evidence_only",
+  "model_or_score_changes": false,
+  "numerical_evidence_sha256": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+  "terminology": {
+    "training": {
+      "U": "Random",
+      "J": "Whole joint",
+      "A": "Anatomical"
+    },
+    "evaluation": {
+      "U": "Scattered hiding",
+      "E_leg": "Grouped hiding"
+    },
+    "scores": {
+      "M": "Movement score",
+      "R": "Cross-leg score",
+      "S": "Combined score"
+    }
+  },
+  "figures": [
+    {
+      "name": "method",
+      "caption": "The workflow uses one gait window and the same hidden targets for three predictors. The cross-leg benefit compares both-leg correction with own-leg correction. The movement score comes directly from observed-gait descriptors. The cross-leg score measures how unusual the prediction benefit is relative to normal reference data; the combined score is their fixed average. A token contains one joint across four frames. An anatomical lower-leg group contains knee, ankle, heel and toe points on one side over a short time span. The diagram motivates measurements, not a claim to recover neurological causes.",
+      "inputs": {
+        "docs/draft03/study_evidence.json": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+        "artifacts/iteration02/d66e1b126c9d9a9adf1b/protocol.json": "bcd76c09e1a5ff56708800a54b1f9f4d36b27b36bda1d61ea160a6933f06d8b7"
+      },
+      "outputs": {
+        "method.svg": "4241a68f8db185fe60bbbe47a6865727d3b1815668476123692082abac778348",
+        "method.pdf": "0d8223deff7526b4dd05633f510da40cb0df9130655d8fa8b7baa6f35c10110f",
+        "method.png": "1b9b1f955ff112032cba263706c5aaa086b23791c6807d230340fc273af0e67e"
+      },
+      "plotted_values": null,
+      "metadata": {},
+      "raster_photo_content": false
+    },
+    {
+      "name": "detection_difference",
+      "caption": "The combined score performs worse than the movement score in all four comparisons. Dots show Combined minus Movement AUROC; bars show the unchanged conditional 95% intervals. The first two comparisons use GAVD, the third uses the laboratory participants, and the fourth uses the age/sex-matched laboratory subset. Intervals condition on fitted models and the declared evaluation design.",
+      "inputs": {
+        "docs/draft03/study_evidence.json": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+        "artifacts/iteration02/d66e1b126c9d9a9adf1b/paired_intervals.json": "97c30ae8814452f467c9da7dea5c9c73e8e1c2840fb000b2136f333bd3d246e9",
+        "artifacts/iteration02/external_fb9d0d23b56ce29fd846/paired_effects.json": "71129153702ee5b180d62adb07f2b46c48e6e84d9be42da25a7d7864f8f7c669",
+        "artifacts/iteration02/external_fb9d0d23b56ce29fd846/age_sex_sensitivity.json": "4eeda93d16c2021c89b0a254ae054e838d605f653a66ec52e4136eb534dc0295"
+      },
+      "outputs": {
+        "detection_difference.svg": "07b8d35f16f3f01bde3d1ccd6184f14bb2239aaba35e16950d0ad3e87fb6c4e3",
+        "detection_difference.pdf": "07622ba021bfd273cf3465102018fa72936d0f789ac166f170bc4cadfb7fe474",
+        "detection_difference.png": "5dd731f8b0bd6be3c473b17d1ae9eea8e7e74c1b618a0cbda7d05bb69f809c08"
+      },
+      "plotted_values": [
+        {
+          "label": "Four condition groups",
+          "difference": -0.11751152073732718,
+          "interval": [
+            -0.21658986175115202,
+            -0.025288018433179744
+          ]
+        },
+        {
+          "label": "All abnormal folders",
+          "difference": -0.07556935817805388,
+          "interval": [
+            -0.14287008281573502,
+            -0.009316770186335421
+          ]
+        },
+        {
+          "label": "Laboratory",
+          "difference": -0.06625000000000014,
+          "interval": [
+            -0.10562500000000002,
+            -0.030624999999999993
+          ]
+        },
+        {
+          "label": "Age/sex matched",
+          "difference": -0.0808678500986193,
+          "interval": [
+            -0.15581854043392504,
+            -0.027613412228796805
+          ]
+        }
+      ],
+      "metadata": {},
+      "raster_photo_content": false
+    },
+    {
+      "name": "normal_prediction",
+      "caption": "All 28 held-out normal GAVD recording sources contribute. Each bar averages errors over the same hierarchy of targets, windows, sequences and recording sources; eight lower-leg joints receive equal weight. Scattered hiding removes individual tokens across the sequence. Grouped hiding scores nearby knee, ankle, heel and toe points hidden together on one side. The two panels test different missing-observation patterns, so their absolute errors should not be treated as a controlled comparison of training masks. Units are squared torso-scaled image coordinates.",
+      "inputs": {
+        "docs/draft03/study_evidence.json": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+        "artifacts/iteration02/d66e1b126c9d9a9adf1b/normal_error_table.csv": "1de8aeaa6625be58cd20d965fcb268f1b8c47be51480c5062e73b84a2c2617fa"
+      },
+      "outputs": {
+        "normal_prediction.svg": "aaf75e3380b68093082854264484e094c918615f1b4d13055674a807c11c6d02",
+        "normal_prediction.pdf": "b8740f34a85570a178b52f7d0bcbed8eb59901bd26899bf5834035633ce43e93",
+        "normal_prediction.png": "411020ae2898e1b0d3a1bbb1a21e81bb565c913f2d4596a2f0570dbb73cf526e"
+      },
+      "plotted_values": [
+        {
+          "evaluation": "U",
+          "policy": "U",
+          "loss_base": 0.039180548536035274,
+          "loss_own": 0.036571207166670776,
+          "loss_both": 0.035939894027588175
+        },
+        {
+          "evaluation": "U",
+          "policy": "J",
+          "loss_base": 0.039180548536035274,
+          "loss_own": 0.03729849410670035,
+          "loss_both": 0.03660139752257275
+        },
+        {
+          "evaluation": "U",
+          "policy": "A",
+          "loss_base": 0.039180548536035274,
+          "loss_own": 0.036352550807793246,
+          "loss_both": 0.03566568172305625
+        },
+        {
+          "evaluation": "E_leg",
+          "policy": "U",
+          "loss_base": 0.08402428105873219,
+          "loss_own": 0.08076858985517298,
+          "loss_both": 0.06502032179957615
+        },
+        {
+          "evaluation": "E_leg",
+          "policy": "J",
+          "loss_base": 0.08402428105873219,
+          "loss_own": 0.0800570177288018,
+          "loss_both": 0.06956708939577635
+        },
+        {
+          "evaluation": "E_leg",
+          "policy": "A",
+          "loss_base": 0.08402428105873219,
+          "loss_own": 0.07837149895632362,
+          "loss_both": 0.0600093161913679
+        }
+      ],
+      "metadata": {},
+      "raster_photo_content": false
+    },
+    {
+      "name": "timing_limits",
+      "caption": "The experiment substitutes permitted other-leg samples from four frames earlier or later, preserving the original target and body reference. Four frames correspond to about 0.27 seconds at 15 Hz. The left panel compares the two corrections on the common unshifted observations available for each shift: both-leg prediction is worse before either perturbation. The right panel shows the change after shifting, with conditional 95% intervals. All values are unchanged; 27 held-out normal recordings contribute at each offset. Because unshifted prediction already fails to help, these responses do not establish a coordination mechanism.",
+      "inputs": {
+        "docs/draft03/study_evidence.json": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+        "artifacts/iteration02/d66e1b126c9d9a9adf1b/timing_summary.json": "45e8e41228a6b2b1a3a73dcf37a3342785510f39cab9daed0add0bb3726e715b"
+      },
+      "outputs": {
+        "timing_limits.svg": "9d840ed783b45039d87b2c0caf7c61e26c0ab6b4841bc1d92d7cbee688c904af",
+        "timing_limits.pdf": "7db5cd22443d4310e821bf55d608485781b5359eb4798f78e1076d217f1c88aa",
+        "timing_limits.png": "ed53cb23a8fee453cb4c790d0a59f8f21d0ca04cba789f97a5f3f6b3c65168e1"
+      },
+      "plotted_values": [
+        {
+          "conditional_source_bootstrap_95_interval": [
+            0.00017722427732500145,
+            0.0006181321130489396
+          ],
+          "eligible_source_model_rows": 27,
+          "frozen_zero_correction_source_model_rows": 0,
+          "max_own_prediction_change": 0.0,
+          "mean_effect": 0.00039251818454954374,
+          "mean_fraction_with_distal_context": 0.738217459739373,
+          "mean_fraction_with_nonzero_edit": 0.7377335974029355,
+          "mean_permitted_distal_tokens": 1.746711677209893,
+          "no_distal_context_source_model_rows": 0,
+          "normal_source_count": 27,
+          "offset": -4,
+          "paired_gain_over_base": -0.021759362645682314,
+          "paired_gain_over_own": -0.024165238354015097,
+          "policy": "U",
+          "scope": "outer_test_normal",
+          "variant": "timing"
+        },
+        {
+          "conditional_source_bootstrap_95_interval": [
+            -0.0002323155848794525,
+            0.00036819568637757395
+          ],
+          "eligible_source_model_rows": 27,
+          "frozen_zero_correction_source_model_rows": 0,
+          "max_own_prediction_change": 0.0,
+          "mean_effect": 6.4111437485884e-05,
+          "mean_fraction_with_distal_context": 0.7978288828113667,
+          "mean_fraction_with_nonzero_edit": 0.7970091465098595,
+          "mean_permitted_distal_tokens": 1.749171898967677,
+          "no_distal_context_source_model_rows": 0,
+          "normal_source_count": 27,
+          "offset": 4,
+          "paired_gain_over_base": -0.022490542222002308,
+          "paired_gain_over_own": -0.0248964179303351,
+          "policy": "U",
+          "scope": "outer_test_normal",
+          "variant": "timing"
+        }
+      ],
+      "metadata": {},
+      "raster_photo_content": false
+    },
+    {
+      "name": "failure_cases",
+      "caption": "These are the unchanged high-error normal and low-error Parkinsons-folder examples selected by the saved review protocol. Curves show measured poses at samples 0, 15 and 31, with coordinates centered at the pelvis and scaled by torso size. Anatomical indices are mapped explicitly, and edges touching missing coordinates are omitted rather than filled. Viewpoint, amplitude and pose-estimation limits can affect error; these illustrations do not establish the cause of any individual score or verify a diagnosis.",
+      "inputs": {
+        "artifacts/iteration02/d66e1b126c9d9a9adf1b/run_manifest.json": "ce7c9bf3df1119dd23bc7bfd9a28d2505ae047665f2e20b9b1ceadc14fd9c5b9",
+        "artifacts/iteration02/d66e1b126c9d9a9adf1b/video_review/review_ledger.csv": "eca19b59609b20a4e78e53bc569d3a57f6d994076d0771fe72a92c6a572f615c",
+        "artifacts/iteration02/preparation/cohort_v2/artifact_hashes.json": "556b718996028283ee62039faea2d95016ee45ea798e452d517d06b1b0f8847d",
+        "artifacts/iteration02/preparation/cohort_v2/windows.npy": "93514dc0c836d9048160f96c8b3903ff7a15b75351c106c47edc0b772fc4760a",
+        "artifacts/iteration02/preparation/cohort_v2/window_index.csv": "b1ca78de77db9c4724638363841da60ead16b5de9ad286c27b2e07c7632e1d97",
+        "aaai_gait/data.py": "20b4928f64c81b98fb69bbc120271f5df38df5ba83d076e1b2ee09a3b958c79d",
+        "aaai_gait/media.py": "9023bc023123016304d59ee0d44f7298662c863a395613e8f4f672314f367ced"
+      },
+      "outputs": {
+        "failure_cases.svg": "a7b2a2b648681ddf438021aae98a836257c6ad045e520bb40479e1af6a91af34",
+        "failure_cases.pdf": "a4796f58703b32b6bf349870f1ce16f5673178d07274cfa1b275fd143c1f3248",
+        "failure_cases.png": "088e58643aec97bdc04c621231d0713995acbc8737036bbf2eb47232d215109c"
+      },
+      "plotted_values": null,
+      "metadata": {
+        "examples": [
+          {
+            "source_id": "ucZdenbi65k",
+            "sequence_id": "clk7w3ipd004v3n6lvxg2f2do",
+            "selected_window_index": 7856,
+            "start_seconds": 63.2621955288622,
+            "frame_indices": [
+              0,
+              15,
+              31
+            ],
+            "finite_edges_drawn": 44,
+            "missing_edges_skipped": 10,
+            "source_prediction_mse": 0.1002759254793183
+          },
+          {
+            "source_id": "v1SoZ_S31pk",
+            "sequence_id": "cljwsrf6f00043n6lyvybiqah",
+            "selected_window_index": 8042,
+            "start_seconds": 11.733333333333333,
+            "frame_indices": [
+              0,
+              15,
+              31
+            ],
+            "finite_edges_drawn": 54,
+            "missing_edges_skipped": 0,
+            "source_prediction_mse": 0.0037494630230304
+          }
+        ],
+        "anatomical_joint_indices": [
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "anatomical_edges": [
+          [
+            11,
+            12
+          ],
+          [
+            11,
+            13
+          ],
+          [
+            13,
+            15
+          ],
+          [
+            12,
+            14
+          ],
+          [
+            14,
+            16
+          ],
+          [
+            11,
+            23
+          ],
+          [
+            12,
+            24
+          ],
+          [
+            23,
+            24
+          ],
+          [
+            23,
+            25
+          ],
+          [
+            25,
+            27
+          ],
+          [
+            24,
+            26
+          ],
+          [
+            26,
+            28
+          ],
+          [
+            27,
+            29
+          ],
+          [
+            29,
+            31
+          ],
+          [
+            27,
+            31
+          ],
+          [
+            28,
+            30
+          ],
+          [
+            30,
+            32
+          ],
+          [
+            28,
+            32
+          ]
+        ],
+        "missingness": "Finite original coordinates only; no imputation or joint substitution"
+      },
+      "raster_photo_content": false
+    },
+    {
+      "name": "positive_completion",
+      "caption": "Left: the original mean errors for all four laboratory folds, each with 32 held-out healthy participants. Both-leg correction is compared with own-leg correction, giving a 5.2% mean reduction across participants; linear interpolation is the added descriptive benchmark. Right: the same both-leg predictor is trained with Anatomical or Random masking and evaluated on identical GAVD targets. Anatomical training reduces grouped-hiding error by 7.7%; the scattered-hiding difference is uncertain. Error bars are the unchanged conditional paired 95% intervals. These are post-outcome descriptive completion comparisons, not improved anomaly-detection results.",
+      "inputs": {
+        "docs/draft03/study_evidence.json": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+        "docs/draft03/advisory/completion_audit_v1/completion_summary.csv": "8b6dc465e66034c2c12a29cd19b03a404b3f35a5efdee875f02ea3ec70cf40f7",
+        "artifacts/iteration02/external_fb9d0d23b56ce29fd846/derivatives/interpolation_audit_v1/participant_comparison.csv": "de8b98f585235a27064e7f143847d5a47bcfe20e8b120ae06d7535d576196fb7"
+      },
+      "outputs": {
+        "positive_completion.svg": "c09c8f788e4f39bb38315bad50810cfeff76d8ccc7702ed650c3102799e7d3d6",
+        "positive_completion.pdf": "713750d2a575bd9ab05c00eeb09cd858930b3305f82a07eb932d58a180b95177",
+        "positive_completion.png": "71b0582797aff5ed6ccf00748ef96eb3c77ff8ac67dc4862a9675f847637f5b5"
+      },
+      "plotted_values": {
+        "laboratory": [
+          {
+            "outer_fold": 0,
+            "loss_interpolation": 310.94670202657875,
+            "loss_base": 204.29497941653295,
+            "loss_own": 199.99481521678518,
+            "loss_both": 188.95010595797976
+          },
+          {
+            "outer_fold": 1,
+            "loss_interpolation": 324.5342037643364,
+            "loss_base": 213.24562446842162,
+            "loss_own": 206.39764658482187,
+            "loss_both": 195.216899015494
+          },
+          {
+            "outer_fold": 2,
+            "loss_interpolation": 295.6901874290406,
+            "loss_base": 198.87995392188535,
+            "loss_own": 193.48530231026626,
+            "loss_both": 183.64981973144884
+          },
+          {
+            "outer_fold": 3,
+            "loss_interpolation": 308.1808764149901,
+            "loss_base": 208.6267479884442,
+            "loss_own": 204.27288250232706,
+            "loss_both": 194.5174186615972
+          }
+        ],
+        "masking": [
+          {
+            "evaluation": "U",
+            "relative_mse_reduction": 0.0076297471640131,
+            "interval": [
+              -0.0095464714861726,
+              0.0258384325252522
+            ]
+          },
+          {
+            "evaluation": "E_leg",
+            "relative_mse_reduction": 0.0770682991027725,
+            "interval": [
+              0.0635599805073489,
+              0.0900318775183361
+            ]
+          }
+        ]
+      },
+      "metadata": {},
+      "raster_photo_content": false
+    }
+  ]
+}

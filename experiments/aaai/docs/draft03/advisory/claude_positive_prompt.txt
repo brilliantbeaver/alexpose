@@ -1,0 +1,321 @@
+Review this alternate positive interpretation of completed research as a skeptical ASTAD reviewer. No tools or file actions. The user asks whether a defensible positive writeup exists. Distinguish supported completion gains from detection, physiology, causal information, effective capacity and novelty. Do not require positive detection to acknowledge a measured completion result. Challenge cherry-picking, changed-primary language and unsupported masks/generalization. Check the supplied table. Recommend minimal corrections preserving frozen results; distinguish actual contradictions from future experiments. Return a concise review in plain complete sentences, with a verdict on whether the positive framing is honest and scientifically useful.
+
+MANUSCRIPT
+---
+title: "When the Other Leg Helps: Controlled Gait Completion for Anomaly Analysis"
+abstract: |
+  Observations of the other leg can help complete missing gait motion, but successful completion must be separated from successful anomaly detection. We compare a retained own-leg predictor, an additional own-leg control with matched input width, and a both-leg correction against identical observable targets. Three motion-independent training masks share fixed evaluation banks. In an exploratory GAVD study, the uniform-trained bilateral predictor reduces normal completion MSE by 19.5% on a declared distal-leg challenge. An independent laboratory study reduces healthy-participant MSE by 5.2%, with conditional 95% interval [3.6, 6.7]%, and improves 109 of 128 participants. Anatomical masking improves challenge-task completion by 7.7%, but not conclusively on the unchanged uniform task. These are improvements under the fitted predictor families, whose effective ranks differ. The original primary anomaly analysis remains negative: the frozen relational fusion lowers AUROC in both datasets. A sparse timing diagnostic also fails prediction adequacy. The contribution is a controlled measurement of when opposite-leg context helps, with explicit limits on its use as abnormality or neurological evidence.
+---
+
+# Introduction
+
+When a short part of the left ankle's movement is hidden, the visible left knee, heel and foot may already reveal the answer. The right leg becomes useful when those local clues are insufficient. This suggests a practical question: **when does seeing the other leg help reconstruct missing movement, and what must be checked before using that help to detect unusual gait?**
+
+The completed experiments give a positive but bounded answer. A normal-trained bilateral predictor improves completion on a declared distal-leg challenge in web-video skeletons and on simultaneous laboratory angles from independent participants. The result persists against a fitted own-leg augmentation and direct interpolation. It is not an isolated measurement of neural coordination, because the feature families have different effective ranks and both measurements share a body reference.
+
+Our method keeps the local prediction available, predicts the same hidden answer in every branch, and applies access restrictions before constructing features. It separates three things that are often conflated: how the model is trained to handle missing input, which information is available at evaluation, and how prediction behavior is converted into an anomaly score. A model can succeed at the first two and fail at the third.
+
+The positive finding therefore concerns a useful component of movement modeling rather than a completed clinical detector. The same frozen experiments show that equal-weight fusion of a bilateral benefit distance with posture and movement descriptors lowers anomaly-ranking performance. A timing edit can also produce a nonzero response after permitted context becomes too sparse for adequate prediction. These failures identify where the successful completion result stops supporting interpretation.
+
+The contribution is an executed comparison with observable targets, a retained local solution, a nominal-width own-leg control, matched masking budgets and independent participant replication. Tube masking, residual models and conditional surprise already exist. The new value lies in demonstrating useful completion under declared observation tasks while checking the alternative explanations that limit its meaning. This draft gives greater emphasis to a predeclared secondary completion diagnostic after outcomes were inspected. The original primary detection analysis remains unchanged and visible.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/method.pdf}
+\caption{Biological reasoning motivates separate local movement and relational measurements. The three predictors share the same observable target and declared body reference. Prediction adequacy precedes interpretation; passing it does not guarantee added detection value.}
+\label{fig:method}
+\end{figure*}
+
+# Related work and physiological motivation
+
+S-JEPA learns skeletal representations by predicting teacher features, while MAMP uses masked motion prediction [@abdelfattah2024sjepa; @mao2023mamp]. Their motion-aware masking differs from our intentionally motion-independent reference. VideoMAE uses temporal tubes, and SLiM's semantic tubes already target anatomical reconstruction shortcuts [@tong2022videomae; @do2026slim]. Our comparison controls token budgets, marginal probabilities and the downstream observation task; it does not claim those mask families are new. Stochastic positional queries are another intervention and remain separate from selecting hidden inputs [@bar2024stop].
+
+Normal-only gait methods already model posture, time and reconstruction. FSGait separates posture and temporal evidence; GenGait uses masked gait reconstruction and joint inconsistency [@duan2024fsgait; @motta2026gengait]. SeeKer estimates conditional keypoint densities, and STG-NF learns pose likelihoods [@delic2025seeker; @hirschorn2023stgnf]. Thus conditional surprise, normative reconstruction and multiple score channels are not sufficient novelty. Our empirical question concerns what an added-context predictor measures after local geometry, nominal residual width and observation support are controlled.
+
+Post-stroke motor-module changes and weakness can alter sided movement and compensation [@clark2010modules; @awad2020drive]. Parkinsonian movement size and arm coordination need not change together [@morris1994hypokinesia; @sterling2015armswing]. Cerebral palsy combines varied motor-control and musculoskeletal constraints, while myopathic gait concerns muscle disease rather than a single brain disorder [@steele2015synergies; @steele2012crouch; @vandekerckhove2025dmd]. These findings motivate preserving amplitude, posture and timing as distinct observations. They do not establish that video predictability recovers neural synergies; mechanics and task constraints can also produce coordinated patterns [@kutch2012synergies]. A full movement world model would require control, mechanics, contact and observation components with multiple compatible explanations. We test only an observable completion component.
+
+# Data and exploratory protocol
+
+## GAVD observation population
+
+We rebuild the inventory from the current condition CSVs, excluding the distribution folder. GAVD provides web recordings, sequence annotations and observed gait categories [@ranjan2025gavd; @gavd2026catalog]. The inventory contains 1,874 sequences, 458,116 rows and 348 upload IDs. There are 332 decodable videos. Fixed pose-quality rules retain 311 sources; lower-limb readout support retains 304 sources, 1,381 sequences and 9,442 windows (Table \ref{tab:attrition}). A confirmed pixel-identical duplicate pair already fails pose quality, so the retained cohort has 304 known recording groups. Unknown repeated people remain unresolved.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Population & Sources & Normal & Windows \\
+\midrule
+Fresh annotations & 348 & 32 & -- \\
+Pose-window quality & 311 & 28 & 9,474 \\
+Lower-limb readout & 304 & 28 & 9,442 \\
+Focal binary endpoint & 90 & 28 & 2,594 \\
+Lab, selected & 188 & 138 & -- \\
+Lab, eligible & 178 & 128 & 433 \\
+\bottomrule
+\end{tabular}
+\caption{Observation attrition. GAVD units are upload IDs, not verified participants. Laboratory units are dataset participant IDs. Selection is part of the target population.}
+\label{tab:attrition}
+\end{table}
+
+The focal primary contrasts normal with Parkinsons, stroke, cerebral palsy and myopathic memberships: 28, 10, 15, 10 and 27 sources, respectively. The broad secondary includes every non-normal folder with unchanged scores. One source has two abnormal memberships and counts once in binary endpoints. A frozen multi-membership exclusion leaves 89 sources for the separate supervised five-class task. Folder labels are not independently revalidated diagnoses; some broad categories describe circumstances rather than disease.
+
+This is an exploratory redesign after an earlier completed context study. All 28 normal recordings had appeared in prior exploration. We froze the new population, endpoints, roles, masks and score before new fitting, but do not call the analysis confirmatory. Four outer folds each reserve seven test normals and five separate reference normals; the other 16 normals fit models. Abnormal sources enter only outer evaluation, except in separately labeled supervised comparators. Three source-grouped internal folds select the small residual grid. Reference normals never select architecture, signs, stopping or fusion. Overlapping windows, sequences and edits remain inside their source role. Fits share sources across folds and are not independent replications.
+
+## Preserved measurements and restricted inputs
+
+The existing ingestion pipeline crops each annotated person using the frame-specific GAVD box, detects BlazePose landmarks, and restores full-frame coordinates [@bazarevsky2020blazepose]. It returns the first pose in the crop and is not a validated temporal identity tracker. We use raw coordinates, decoded-frame flags and confidence. Values below 0.5 remain missing. Resampling to 15 Hz interpolates only between adjacent valid source observations. Windows contain 32 samples with stride 16; all four samples must be valid for a token. Existing overall and half-window validity gates remain unchanged.
+
+Only indices 11--16 and 23--32 enter masking: shoulders, elbows, wrists, hips, knees, ankles, heels and foot indices. Source readouts use the eight distal-leg joints, 25--32. The shared reference $Q$ centers each frame on the pelvis and scales by valid first-half torso length. We do not rotate trunks upright, standardize each joint's excursion, or independently phase-align legs. Own-leg access is conditional on this shared body reference, which already contains body measurements. Projected angles and scaled image trajectories are not clinical three-dimensional angles, speed or ground clearance.
+
+# Controlled prediction and masking
+
+Let $O$ denote permitted visible own-leg tokens, $C$ opposite-leg tokens, and $Y$ the hidden four-frame XY target. Own-leg membership is hip, knee, ankle, heel and foot index. We apply masks and validity before constructing interpolation, temporal features or model inputs. Completion can use observations before and after the target; it is not future forecasting.
+
+We fit a shared ridge baseline $f$ on normal sources, freeze it, and compare
+
+\begin{align}
+\widehat Y_0 &= f(O;Q),\\
+\widehat Y_o &= f(O;Q)+\alpha_o h(O;Q),\\
+\widehat Y_b &= f(O;Q)+\alpha_b g(O,C;Q).
+\end{align}
+
+The local basis contains permitted interpolation estimates, support indicators, relative time and target identity. The own correction adds own-leg temporal moments; the bilateral correction adds opposite-leg features. The baseline has 77 features; each residual has 154 features, eight outputs and 1,240 coefficients including intercepts. Equal widths do not equalize effective rank or inductive bias. Recorded GAVD ranks include 111 for the own residual and 141 for the bilateral residual. A zero gate returns the saved baseline exactly, but does not guarantee held-out improvement or contain the separately fitted own correction.
+
+Every fit uses 512 source-balanced window/mask presentations, with equal source/readout-joint loss weights. Internal validation chooses residual ridge penalty from $\{0.1,1,10\}$ and multiplier from $\{0,0.5,1\}$. A bilateral recipe passes only if it improves over both baseline and own correction in at least two of three internal folds and on their mean source risk. This operational rule is not a significance test. Internal selection averages source/joint-weighted requests; final scoring additionally merges repeated masks within physical window targets. We report this weighting difference. Separate generated dependency and conditional-independence fixtures, zero gates and hidden-input invariance test estimator behavior without pretending to simulate a disease.
+
+## Equal-budget training, fixed evaluation
+
+A window has eight temporal patches and 16 joints, or 128 tokens. U uniformly hides 64 tokens. J uniformly selects one joint, hides its eight temporal tokens and uniformly fills 56 from the other 120. A chooses an anatomical group with probability equal to its width divided by 16. Four-joint groups are torso reference joints and either distal leg; two-joint groups are elbow and wrist on either side. Four-joint groups occupy two patches starting at 0, 2, 4 or 6; two-joint groups occupy four patches starting at 0 or 4. Starts are chosen uniformly from those listed. Each core has eight tokens. Uniformly filling 56 remaining tokens yields
+
+\begin{equation}
+P(\text{hidden})=\frac{1}{16}+\frac{15}{16}\frac{56}{120}=\frac12.
+\end{equation}
+
+All policies are motion-independent and share exact U-trained baseline weights. The coordinate target definition, nominal budget, unrelated RNG streams and source/window schedule are shared. Selected training targets and valid loss terms can differ. Matching marginals does not match higher-order dependence, difficulty or usable supervision. Masks are drawn before natural missingness, without favorable redrawing.
+
+The primary U evaluation bank has 16 stored masks with seed 17 and preserves the historical own-joint support rule. The separate E_leg bank enumerates two distal sides and four starts twice, fills to 64 with seed 117, and scores the forced core only. New training and E_leg require a valid target and at least two permitted tokens at distinct times on each leg. Every source requires four distinct physical target patches per readout. Repeated masks cannot satisfy that requirement. Each bank uses the same five reserved reference identities and its own fitted reference parameters. All 304 sources retain support on both banks. A versus U on the unchanged U bank is the primary masking contrast; E_leg cannot replace an unfavorable U result.
+
+# Scores and evaluation
+
+The local channel $M$ uses 16 descriptors from full observed movement. Each leg supplies knee-angle median and interquartile range, ankle X/Y interquartile ranges and velocity median absolute deviations. Trunk inclination median/IQR and two sided differences complete the vector. We average windows within sequences and sequences within sources before normal-only imputation, robust scaling and shrinkage covariance fitting. $M$ is squared Mahalanobis distance divided by 16. These full-observation descriptors never enter a restricted completion branch.
+
+For identical target coordinates, define benefit
+
+\begin{equation}
+b=\operatorname{MSE}(\widehat Y_o,Y)-\operatorname{MSE}(\widehat Y_b,Y).
+\end{equation}
+
+Masks average within targets, targets within windows, windows within sequences and sequences within sources, retaining joint identity. Four joints average equally on each side. Five reserved normal references supply bilateral means $\mu_k$ and sample variances $s_k^2$. We use $v_k=0.5s_k^2+0.5\operatorname{mean}(s^2)+10^{-8}$ and $R=\frac12\sum_k(b_k-\mu_k)^2/v_k$. The frozen score is $S=(M+R)/2$. A failed internal gate would set $R=0$ for every source in that fold; none failed. Neither benefit nor $R$ is mutual information or a health ranking. Dimension normalization does not make M and R equally calibrated probabilities, and R omits bilateral covariance.
+
+Comparators retain the same sources: a richer 36-feature motion distance; base-to-own sham benefit; equally constructed constituent-error fusions; timing/waveform descriptors; Isolation Forest; availability-and-viewpoint distance; and a separately supervised nuisance classifier. A bounded STG-NF adapter uses its authors' implementation with a 16-joint graph and fitting-normal median imputation. Native complete cases retain only five normal sources and cannot support the same roles. The adapter is not a faithful published reproduction. Separate five-class Random Forest and learned/random JEPA probes use source-separated labels. Fresh encoders pretrain only on fitting normals with EMA and VICReg [@bardes2022vicreg]; these small probes do not establish representation-learning limits.
+
+We summarize AUROC by within-fold values weighted by fixed normal-by-abnormal pair counts. Average precision is reported per fold and as an equal-fold mean with prevalence. Pooled out-of-fold ranks are secondary because separate references need not align score scales. Paired 1,000-replicate bootstraps resample whole recording groups within fold and binary-label stratum, retain all method scores together and preserve original fold weights. Intervals condition on the fitted models, split and selected protocol; they omit fitting uncertainty, unknown repeated-person dependence and adaptive redesign. Multiple contrasts are exploratory and are not multiplicity-adjusted.
+
+## Fixed-answer timing diagnostic
+
+For a valid 48-frame parent, frames 8:40 supply the target interval. Distal opposite-leg observations come from offsets $-4$ or $+4$ frames, without wraparound, padding or crossing annotations. Each donor vector is relative to its permitted donor hip, divided by the original scale, and attached to the permitted opposite hip at the original time. Original and shifted inputs share target, own leg, reference and pair-specific permitted support. A hidden donor coordinate cannot reappear after shifting. Sixteen stored uniform parent masks hide 96 of 192 tokens, with seed 217, before original/donor joint-and-hip visibility is intersected.
+
+The estimand is shifted minus aligned squared error from the frozen bilateral predictor on identical targets. Zero-offset, own-branch invariance, noise, missing-observation and whole-body crop controls accompany it. Shifting also changes instantaneous geometry and finite-interval distributions, so even a successful effect would not isolate neural timing. Adequacy is rechecked on the exact paired original inputs rather than assumed from denser training inputs.
+
+# Results: useful completion and its boundaries
+
+## A declared distal gap reveals useful completion
+
+We lead with the U-trained reference, rather than selecting the largest gain among the three policies. On the fixed E_leg challenge, its mean held-out normal MSE falls from 0.080769 for the own-leg augmentation to 0.065020 for the bilateral correction. This is a 19.5% reduction as a ratio of source means. The absolute benefit is 0.015748, with conditional 95% interval [0.010721, 0.021300], across 28 normal recordings. These intervals use 5,000 within-fold source resamples of saved predictions.
+
+All three policies have positive normal benefit intervals on E_leg. On the ordinary U bank, U and A remain uncertain. The focused task hides nearby distal joints together, making local geometry less available. Its stronger benefit supports task-specific usefulness, not a claim that one task's larger loss or gain is intrinsically better. Targets remain pose estimates; artificially hiding an observed coordinate does not validate reconstruction of genuinely unobserved anatomy.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/normal_prediction.pdf}
+\caption{Outer-test normal coordinate MSE, equally aggregated over sources. Every training policy retains the same U-trained baseline. The focused E\_leg bank changes the observation task and exposes more headroom; its errors must not be compared with U as an isolated training effect.}
+\label{fig:normal}
+\end{figure*}
+
+## Independent healthy participants also benefit
+
+
+We independently fit the same retained-prediction contrast to six simultaneous hip, knee and ankle flexion signals from a public laboratory dataset [@vancriekinge2023dataset]. One frozen walking trial per participant was selected before outcomes. All 188 selected trials parse; ten healthy trials fail unchanged observation support. The resulting 128 healthy and 50 stroke participants supply 433 windows. C3D angle declarations, degree units and common timestamps are verified. The first flexion component is not a global-axis rotation, and the signals are processed Plug-in Gait outputs with a shared body model.
+
+The external representation uses 48 angle-patch tokens, half hidden, and the same gate logic. Each fold has 76 fitting healthy participants, 20 references and 32 healthy tests. Twelve angle median/IQR descriptors replace the image-specific M features. No limbs are independently cycle-aligned, no laboratory markers are relabeled as BlazePose joints, and no video weights are transferred.
+
+All four internal gates pass. Bilateral prediction improves held-out healthy error over the own-capacity control by 4.78% to 5.52% across folds. A post-outcome audit on the frozen normal targets gives mean participant MSEs of 309.838 for direct interpolation, 206.262 for f, 201.038 for f+h and 190.584 for f+g, in squared degrees. The same ordering holds in every fold. Equal residual width still does not equalize rank: the 72-feature own and bilateral bases have ranks 44 and 62. The observed improvement applies to these fitted predictor families; it does not isolate opposite-leg information from every difference in effective flexibility.
+
+
+The aggregate own-to-both reduction is 10.454 squared degrees, conditional interval [7.154, 13.387], or 5.2%, [3.6, 6.7]%. The bilateral model improves 109 of 128 held-out healthy participants. Every fold has a positive mean reduction. These additional completion intervals are post-outcome descriptive summaries of frozen predictions, using 1,000 paired participant resamples within original folds. They omit training uncertainty and do not retrospectively become a primary endpoint.
+
+## Anatomical masking helps the focused task
+
+An additional paired audit compares A with U while retaining exactly the same E_leg target keys, mask draws, support and U-trained baseline. Normal bilateral MSE falls from 0.065020 to 0.060009, a 7.7% reduction, conditional interval [6.4, 9.0]%. All four fold means improve and 27 of 28 sources improve. This is a useful result about specialization to coherent distal gaps.
+
+The unchanged U bank provides the necessary boundary: A's reduction is only 0.8%, interval [-1.0, 2.6]%, with improvement in 16 of 28 sources and a worse mean in one fold. We therefore do not call A generally superior. Both banks were declared before model fitting; these paired raw-error uncertainty summaries and the positive emphasis are post-outcome analyses. No masks, sources, hyperparameters or predictions changed.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/positive_completion.pdf}
+\caption{Left: the laboratory interpolation, retained baseline, own augmentation and bilateral predictor have the same ordering in every held-out healthy fold. Right: A-versus-U training improves the focused E\_leg task, with an inconclusive change on U. These are different comparisons and units, not a pooled effect. Interpolation and paired mask intervals are post-outcome audits of fixed predictions.}
+\label{fig:positive}
+\end{figure*}
+
+## Useful completion does not establish added detection
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Score, U evaluation & Focal & Broad \\
+\midrule
+Local movement M & 0.694 & 0.707 \\
+Relational departure R & 0.445 & 0.560 \\
+Fixed S, U training & 0.576 & 0.631 \\
+Richer motion, 36 features & 0.677 & 0.669 \\
+M + own-capacity sham & 0.687 & 0.661 \\
+M + constituent error & 0.684 & 0.685 \\
+M + baseline error & 0.700 & 0.692 \\
+Timing/waveform distance & 0.588 & 0.631 \\
+Isolation Forest & 0.551 & 0.593 \\
+STG-NF, adapted & 0.376 & 0.435 \\
+Availability and viewpoint & 0.389 & 0.520 \\
+Supervised nuisance & 0.461 & 0.506 \\
+Fixed S, J training & 0.620 & 0.644 \\
+Fixed S, A training & 0.631 & 0.672 \\
+\bottomrule
+\end{tabular}
+\caption{Weighted within-fold AUROC. Focal and broad prevalence are 62/90 and 276/304. The fixed fusion has no demonstrated advantage. The adapted pose baseline and supervised nuisance row have distinct modeling assumptions.}
+\label{tab:detection}
+\end{table}
+
+The primary S minus M contrast is -0.118, conditional 95% interval [-0.217, -0.025]. The broad difference is -0.076, [-0.143, -0.009]. For the masking comparison, A minus U on the fixed U bank is 0.055, interval [-0.018, 0.127], on the focal endpoint. This does not establish a better mask policy. The focal E_leg S AUROCs for U, J and A are 0.668, 0.668, 0.684; they describe specialization to a different task. All arms and failures remain reported.
+
+For U, focal equal-fold average precision is 0.763 for S and 0.864 for M; fold prevalence is 0.682, 0.696, 0.696, 0.682. High precision values must be read beside this high abnormal prevalence. Sham and constituent-error controls do not rescue the primary relational claim. The separate five-class equal-fold macro F1 values are 0.347 for Random Forest, 0.251 for learned JEPA and 0.309 for the random encoder. This modest classification comparison is not evidence of a clinical classifier or a JEPA advantage.
+
+
+
+Despite useful completion, M reaches 0.958 and S 0.892, difference -0.066, [-0.106, -0.031]. R alone reaches 0.694, so the negative finding concerns incremental value under this score construction, not absence of all abnormality information. A frozen same-sex, within-five-year matching rule retains 45 participant pairs; M reaches 0.955 and S 0.874, difference -0.081, [-0.156, -0.028]. Walking speed remains unmatched. Figure \ref{fig:delta} summarizes the consistent loss for the fixed fusion across measurement systems.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/detection_difference.pdf}
+\caption{S minus M AUROC with conditional 95\% intervals. GAVD intervals resample recording groups; external intervals resample participants, or matched pairs in the demographic sensitivity. These are not four independent studies.}
+\label{fig:delta}
+\end{figure}
+
+
+
+## Sparse paired inputs limit timing interpretation
+
+
+
+The timing census retains 27 normal recordings, with 7, 7, 6 and 7 outer-test normals. It passes the operational coverage floor. However, all 24 outer fold/policy/offset combinations fail adequacy on their exact paired original inputs, as do all 72 corresponding internal combinations. Only about 1.75 editable distal tokens remain on average. U's negative offset has a positive raw effect of 0.000393, interval [0.000177, 0.000618]; the positive offset gives 0.000064, interval [-0.000232, 0.000368]. The negative-offset interval excludes zero, but compares two predictions from a model that is inadequate on the aligned paired inputs. It therefore does not establish a reliable coordination measurement (Figure \ref{fig:timing}). Software identity and visibility tests pass, but do not repair insufficient useful context.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/timing_limits.pdf}
+\caption{The U-trained predictor on 27 outer-test normal recordings separates a raw offset response from prediction adequacy on exactly matched inputs. All outer paired-support gates fail. A positive response alone is therefore insufficient for a timing interpretation. Error bars are conditional source-resampling intervals.}
+\label{fig:timing}
+\end{figure*}
+
+
+# Observation failures and limitations
+
+We inspect prespecified high/low prediction-error examples in each focal label, with local videos, pose overlays and first/middle/last annotated frames. The ten cases show camera motion, assistance, split-screen footage, limb overlap and feet leaving the image. Figure \ref{fig:cases} illustrates measured skeleton traces without redistributing source photographs. Three sampled frames do not establish continuous identity correctness, and visible descriptions are not clinical relabeling.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/failure_cases.pdf}
+\caption{Measured high-error normal and low-error Parkinsons-labeled examples. Sparse image traces are observation examples, not evidence that prediction error orders neurological severity. Source labels are retained without clinical reinterpretation.}
+\label{fig:cases}
+\end{figure}
+
+A post-outcome boundary audit finds high-confidence distal points outside decoded images in frozen-window spans from 13/28 normal and 83/276 abnormal recordings. Pooled point fractions are approximately 0.43% and 0.24%; one requested frame fails decoding. Confidence therefore does not guarantee visible measurement, and the higher normal fraction cautions against attributing artifacts only to abnormal videos. No fits or exclusions change after this audit. Frame-aligned single-view strata lack enough normal support for a complete four-fold matched analysis; mixed views are not a matched viewpoint. Neither a global nuisance score nor the small camera review resolves these alternatives.
+
+Five GAVD reference sources produce uncertain benefit scales. Saved leave-one-reference-out and variance-floor analyses expose that uncertainty. M and R also have different tails despite dimension normalization. In a post-outcome descriptive audit, external test-normal R 99th percentiles range from 6.30 to 33.94 across folds, versus 2.45 to 3.99 for M. External reference left/right benefit correlations range from 0.54 to 0.82, which the diagonal R distance does not model. These observations do not identify the cause of fusion loss. The negative result may reflect score calibration, reference estimation or representation choice as well as limited incremental movement information. We do not tune fusion after observing abnormal results. A new normal-only calibration study would require a separately frozen protocol and fresh evaluation.
+
+The laboratory replication addresses participant separation and changes the observation system, but covers only healthy and stroke walking, excludes ten selected healthy trials and does not validate clinical deployment or video-weight transfer. GAVD remains an internal web-recording study with a small, previously explored normal sample. More abnormal windows do not replace independent normal participants. Conditional intervals omit training uncertainty, and limited ridge/JEPA budgets do not establish the best attainable model. The imputed STG-NF adapter is an informative bounded comparison, not a state-of-the-art benchmark.
+
+# Conclusion
+
+The other leg is useful to the declared fitted predictors when a distal movement segment must be completed from incomplete observations. This positive result appears in web-video skeletons under a focused gap and in independently fitted laboratory angles from participant-separated data. Anatomical training masks improve the focused video task while showing no conclusive advantage on the ordinary uniform task.
+
+The result is a movement-modeling component, not a clinical detector or a neurological explanation. Equal input width does not equalize effective capacity. The fixed anomaly fusion remains worse than local movement, and the GAVD timing diagnostic fails on its sparse paired inputs. A useful next study should preserve the demonstrated completion task, strengthen the own-leg feature control, and test normal-only reliability calibration on new evaluation data. It should ask how to make useful prediction evidence dependable, rather than assume that prediction success already provides a diagnosis.
+
+
+POST-OUTCOME AUDIT
+# Positive completion evidence from the frozen runs
+
+Two useful positive results are present in the completed experiments. Both-leg context reduces normal-gait completion error in the independent laboratory dataset. Anatomical masking reduces error on the structured leg-occlusion task in GAVD. The ordinary random-mask comparison is uncertain. These findings can support a focused manuscript about the conditions under which prediction improves, provided that the negative anomaly-fusion result remains visible.
+
+This audit was conducted after the original outcomes and manuscript critiques. It does not refit predictors, change cohorts or masks, select a favorable fold, or create a new prespecified primary endpoint. It reports all four folds and both fixed GAVD evaluation banks. The [manifest](audit_manifest.json) records input and producer hashes, the estimator, and these limits.
+
+![Paired relative changes in normal completion error for all three reported comparisons.](completion_gains.svg)
+
+## Independent laboratory completion
+
+The external comparison uses 128 healthy participants, each scored once in its original outer-test fold. It compares the retained baseline with its own-leg augmentation, f+h, against the same baseline with both-leg augmentation, f+g. The six sagittal angle channels share the original time axis. Errors are squared degrees.
+
+| Fold | Normal participants | Own augmentation MSE | Both-leg augmentation MSE | Absolute reduction | Relative reduction |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 32 | 199.995 | 188.950 | 11.045 | 5.52% |
+| 1 | 32 | 206.398 | 195.217 | 11.181 | 5.42% |
+| 2 | 32 | 193.485 | 183.650 | 9.835 | 5.08% |
+| 3 | 32 | 204.273 | 194.517 | 9.755 | 4.78% |
+| All folds | 128 | **201.038** | **190.584** | **10.454** | **5.20%** |
+
+The conditional paired-bootstrap 95% interval is **7.154 to 13.387 squared degrees** for the absolute reduction and **3.55% to 6.70%** for the relative reduction. All four fold means improve, and 109 of 128 participants have lower error with the both-leg augmentation. The improvement is therefore not carried by a single favorable fold or a minority of participants, although individual effect sizes vary.
+
+The separate post-outcome [interpolation audit](../../../../artifacts/iteration02/external_fb9d0d23b56ce29fd846/derivatives/interpolation_audit_v1/README.md) reports mean direct-interpolation error of 309.838 squared degrees, compared with 206.262 for the retained baseline. The learned both-leg predictor's error is 38.49% lower than direct interpolation. This is useful context for the baseline, but that benchmark was also added after outcomes and is not an interpolation-based anomaly experiment.
+
+The positive claim must remain specific: **under the declared fitted predictor families, access to both legs improves held-out normal completion.** Equal residual input width does not establish equal effective capacity. The own-leg residual design has rank 44 and the both-leg residual design has rank 62 in every fold, despite both having 72 input columns. The result does not isolate intrinsic cross-leg information from differences in feature directions, regularization geometry or inductive bias. It is not evidence of a recovered neurological mechanism or of better disease detection. The original external anomaly AUROC remains 0.9581 for M and 0.8919 for the fixed fusion S.
+
+## GAVD masking comparison
+
+This comparison holds the both-leg branch fixed as the readout and compares training policies U and A. U hides 64 of 128 tokens uniformly. A hides an anatomical eight-token core plus 56 other randomly chosen tokens. Both policies are independent of observed movement intensity. The evaluation banks are the original U bank and the original E_leg bank, whose scored targets lie in short, jointly hidden portions of one leg. Scores use the same normalized image-plane coordinates, not degrees.
+
+| Evaluation bank | Fold | Normal recording sources | U-trained MSE | A-trained MSE | Relative reduction |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Random U | 0 | 7 | 0.033942 | 0.033514 | 1.26% |
+| Random U | 1 | 7 | 0.035675 | 0.035323 | 0.99% |
+| Random U | 2 | 7 | 0.027563 | 0.026080 | 5.38% |
+| Random U | 3 | 7 | 0.046580 | 0.047747 | −2.50% |
+| Random U | All | 28 | **0.035940** | **0.035666** | **0.76%** |
+| Leg occlusion E_leg | 0 | 7 | 0.065955 | 0.062817 | 4.76% |
+| Leg occlusion E_leg | 1 | 7 | 0.061687 | 0.056783 | 7.95% |
+| Leg occlusion E_leg | 2 | 7 | 0.051375 | 0.045373 | 11.68% |
+| Leg occlusion E_leg | 3 | 7 | 0.081064 | 0.075065 | 7.40% |
+| Leg occlusion E_leg | All | 28 | **0.065020** | **0.060009** | **7.71%** |
+
+For E_leg, the absolute MSE reduction is 0.005011, with a conditional 95% interval of 0.003593 to 0.006509. Its relative interval is **6.36% to 9.00%**. Twenty-seven of 28 normal sources improve. For U, the relative interval is **−0.95% to 2.58%**, and 16 of 28 improve. Thus the evidence supports a benefit on the structured leg-occlusion task, without establishing broad superiority across masking tasks. E_leg resembles part of A's training design, so this is also evidence of task alignment rather than a surprising universal generalization result.
+
+The [target-identity audit](gavd_target_identity_audit.csv) checks the same normal sources, source/joint coverage, window/joint/patch identities, number of repeated mask draws, and evaluation-mask hashes across U and A. No source is removed to improve the comparison. GAVD sources are recording units, not verified independent people, and all 28 normal sources had already been explored in this project. These intervals cannot repair those generalizability limits.
+
+## Estimation and interpretation
+
+The audit uses 1,000 paired bootstrap draws with seed 42. Each draw resamples participants within each external fold, or recording sources within each GAVD fold, carrying both method errors together. The original normal-count fold weights remain fixed at one quarter per fold. The relative reduction is the difference between weighted mean errors divided by the weighted comparator mean. It is not the average of individual percentage changes.
+
+The original target aggregation remains unchanged. Repeated masks are averaged within identical targets. External targets then aggregate through windows, participant and angle, with six angles weighted equally. GAVD targets aggregate through windows, sequences, source and joint, with eight readout joints weighted equally. The resampling unit is never a mask, target, window or joint.
+
+The intervals condition on the fitted models, folds, masks and retained evaluation units. They do not include uncertainty from retraining, protocol selection or reuse of previously explored data. They are descriptive intervals for comparisons examined after outcomes, without multiplicity adjustment. They should not be presented as new confirmatory evidence.
+
+A precise manuscript direction is to study **when context and masking improve completion, and why that improvement does not automatically improve anomaly discrimination**. The completed results support the first part as a bounded empirical finding and show the failure of the tested fixed fusion. They do not demonstrate the causal reason for that failure. The separate [calibration audit](../../../draft02/reviews/calibration_audit/README.md) describes score-distribution differences without attributing the fusion loss to them.
+
+The [summary](completion_summary.csv) retains every fold, absolute and relative interval, and number of improving units. The participant/source tables and bootstrap draws allow direct inspection. The producer is [audit_normal_completion.py](../../../../scripts/audit_normal_completion.py); its executed hash is stored in the manifest.
+
+
+NUMERICAL SUMMARY
+dataset,bank,outer_fold,evaluation_unit,count,comparator,candidate,comparator_mean_mse,candidate_mean_mse,absolute_mse_reduction,relative_mse_reduction,absolute_ci_low,absolute_ci_high,relative_ci_low,relative_ci_high,units_with_lower_candidate_mse
+external_angles,U,0,participant,32,loss_own,loss_both,199.99481521678518,188.95010595797976,11.044709258805426,0.05522497794172049,4.304787876845512,16.392297661238942,0.020807704210443003,0.08240346796008882,28
+external_angles,U,1,participant,32,loss_own,loss_both,206.39764658482187,195.216899015494,11.180747569327877,0.05417090627888046,3.6559772581579915,17.000945529207208,0.01796887681300574,0.08365109726310584,28
+external_angles,U,2,participant,32,loss_own,loss_both,193.48530231026626,183.64981973144884,9.83548257881742,0.050833228474613454,5.9387718622091175,13.610326208582968,0.030772655654032147,0.07094920739797642,26
+external_angles,U,3,participant,32,loss_own,loss_both,204.27288250232706,194.5174186615972,9.755463840729874,0.047757018558832645,2.2298477372089827,15.699002861800587,0.0102084140631968,0.07949600480807953,27
+external_angles,U,all,participant,128,loss_own,loss_both,201.03766165355012,190.58356084162995,10.45410081192017,0.05200070835451623,7.154286234535631,13.387092882088377,0.0355300258472026,0.06697555516960307,109
+GAVD,U,0,recording_source,7,loss_U_both,loss_A_both,0.033942037098059714,0.03351361391143456,0.000428423186625157,0.012622200175771054,9.285357922325759e-05,0.0008473899741297451,0.003918317993230187,0.01832936523052921,6
+GAVD,U,1,recording_source,7,loss_U_both,loss_A_both,0.03567480338822666,0.03532284175618689,0.0003519616320397656,0.009865832425468095,-4.0056000166638605e-05,0.0008057138010220509,-0.0018316052955461887,0.017197242512986315,3
+GAVD,U,2,recording_source,7,loss_U_both,loss_A_both,0.027562674312475482,0.02607961062860689,0.0014830636838685934,0.05380695889866267,-0.00018371959641864266,0.0037579508626163563,-0.00884400833813953,0.11718958520412286,6
+GAVD,U,3,recording_source,7,loss_U_both,loss_A_both,0.04658006131159104,0.04774666059599685,-0.0011665992844058157,-0.025045035398343664,-0.002843650056742073,6.194395430925865e-05,-0.04976800852315297,0.0013679660327801091,1
+GAVD,U,all,recording_source,28,loss_U_both,loss_A_both,0.03593989402758822,0.0356656817230563,0.00027421230453192336,0.007629747164013121,-0.0003598707087525769,0.000934709753686562,-0.00954647148617269,0.025838432525252298,16
+GAVD,E_leg,0,recording_source,7,loss_U_both,loss_A_both,0.06595488321603933,0.06281657365818108,0.0031383095578582515,0.047582671742113815,0.001597192542770472,0.004950075623709706,0.03786719488743136,0.05534169181402288,7
+GAVD,E_leg,1,recording_source,7,loss_U_both,loss_A_both,0.06168663663136209,0.05678278207644457,0.004903854554917521,0.07949622191630971,0.0021554718458197397,0.007890403819210223,0.058607203440293666,0.09046014830536274,7
+GAVD,E_leg,2,recording_source,7,loss_U_both,loss_A_both,0.051375273297216695,0.045373078888017615,0.00600219440919908,0.11683041323157797,0.003155530173878636,0.009273075638693848,0.07562287889753283,0.15679702313691213,7
+GAVD,E_leg,3,recording_source,7,loss_U_both,loss_A_both,0.08106449405368668,0.0750648301428285,0.005999663910858183,0.07401099557698809,0.0028672651745652103,0.009768118599489601,0.048493721629571836,0.09878092758070746,6
+GAVD,E_leg,all,recording_source,28,loss_U_both,loss_A_both,0.0650203217995762,0.06000931619136794,0.0050110056082082605,0.07706829910277253,0.0035932875429281535,0.00650940329170933,0.06355998050734898,0.09003187751833615,27

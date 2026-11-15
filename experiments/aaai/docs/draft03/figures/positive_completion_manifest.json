@@ -1,0 +1,67 @@
+{
+  "producer_sha256": "66061016f1f15f0b21a068a643f5be9e99280ccb1ec1d31c971d33df26476010",
+  "name": "positive_completion",
+  "caption": "Left: the original mean errors for all four laboratory folds, each with 32 held-out healthy participants. Both-leg correction is compared with own-leg correction, giving a 5.2% mean reduction across participants; linear interpolation is the added descriptive benchmark. Right: the same both-leg predictor is trained with Anatomical or Random masking and evaluated on identical GAVD targets. Anatomical training reduces grouped-hiding error by 7.7%; the scattered-hiding difference is uncertain. Error bars are the unchanged conditional paired 95% intervals. These are post-outcome descriptive completion comparisons, not improved anomaly-detection results.",
+  "inputs": {
+    "docs/draft03/study_evidence.json": "7f24c996d16b4eb724e6a1a8590ab56c3a8e462165252cedf6b7fc392a7c17cf",
+    "docs/draft03/advisory/completion_audit_v1/completion_summary.csv": "8b6dc465e66034c2c12a29cd19b03a404b3f35a5efdee875f02ea3ec70cf40f7",
+    "artifacts/iteration02/external_fb9d0d23b56ce29fd846/derivatives/interpolation_audit_v1/participant_comparison.csv": "de8b98f585235a27064e7f143847d5a47bcfe20e8b120ae06d7535d576196fb7"
+  },
+  "outputs": {
+    "positive_completion.svg": "c09c8f788e4f39bb38315bad50810cfeff76d8ccc7702ed650c3102799e7d3d6",
+    "positive_completion.pdf": "713750d2a575bd9ab05c00eeb09cd858930b3305f82a07eb932d58a180b95177",
+    "positive_completion.png": "71b0582797aff5ed6ccf00748ef96eb3c77ff8ac67dc4862a9675f847637f5b5"
+  },
+  "plotted_values": {
+    "laboratory": [
+      {
+        "outer_fold": 0,
+        "loss_interpolation": 310.94670202657875,
+        "loss_base": 204.29497941653295,
+        "loss_own": 199.99481521678518,
+        "loss_both": 188.95010595797976
+      },
+      {
+        "outer_fold": 1,
+        "loss_interpolation": 324.5342037643364,
+        "loss_base": 213.24562446842162,
+        "loss_own": 206.39764658482187,
+        "loss_both": 195.216899015494
+      },
+      {
+        "outer_fold": 2,
+        "loss_interpolation": 295.6901874290406,
+        "loss_base": 198.87995392188535,
+        "loss_own": 193.48530231026626,
+        "loss_both": 183.64981973144884
+      },
+      {
+        "outer_fold": 3,
+        "loss_interpolation": 308.1808764149901,
+        "loss_base": 208.6267479884442,
+        "loss_own": 204.27288250232706,
+        "loss_both": 194.5174186615972
+      }
+    ],
+    "masking": [
+      {
+        "evaluation": "U",
+        "relative_mse_reduction": 0.0076297471640131,
+        "interval": [
+          -0.0095464714861726,
+          0.0258384325252522
+        ]
+      },
+      {
+        "evaluation": "E_leg",
+        "relative_mse_reduction": 0.0770682991027725,
+        "interval": [
+          0.0635599805073489,
+          0.0900318775183361
+        ]
+      }
+    ]
+  },
+  "metadata": {},
+  "raster_photo_content": false
+}

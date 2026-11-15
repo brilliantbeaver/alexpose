@@ -1,0 +1,406 @@
+                       Auditing Predictive Context for Gait Anomaly Detection
+
+                                                        Anonymous submission
+
+
+
+
+                             Abstract                                   and measure distance from a reference estimated using sepa-
+                                                                        rate normal sources. Observable-coordinate targets and con-
+  Predicting a joint from the rest of the body seems a plausi-          textual latent targets distinguish movement prediction from
+  ble way to detect unusual gait, but an apparent gain over raw
+  prediction error need not demonstrate learned movement re-
+                                                                        representation prediction. The intended contribution is a con-
+  lationships. We audit this idea with matched own-joint, local-        trolled empirical assessment of this diagnostic, including its
+  interval and full-body completion tasks, coordinate and latent        failure conditions, rather than a new skeleton architecture
+  targets, and source-separated normal references. Real GAVD            or a clinical model of disease. An apparent point-estimate
+  processing yields 8,950 eligible windows from 251 source              gain over raw latent error did not establish a relational or
+  videos, including 23 normal sources. The latent benefit pro-          learned-representation advantage after matched calibration,
+  file reaches AUROC 0.641, while a calibrated full-error score         random-feature and learning-adequacy checks.
+  reaches 0.673. The fixed primary comparison against raw er-
+  ror gives a difference of 0.101 with a conditional 95% interval            Related work and biological motivation
+  of [-0.035, 0.224]. On unchanged coordinate targets, a ran-
+  dom encoder with fitted heads reaches 0.701 versus 0.686              Skeleton S-JEPA learns action representations by predict-
+  for the learned encoder. Longer training does not establish           ing teacher embeddings from partial skeletal observations
+  an advantage. Normal prediction inadequacy, reference sen-            (Abdelfattah and Alahi 2024). MAMP instead emphasizes
+  sitivity and contextual teacher targets limit interpretation. All     masked motion prediction (Mao et al. 2023). Both motivate
+  retained normal sources overlap earlier development, making           the prediction task, but their motion-aware masking differs
+  this an exploratory audit. The contribution is a reproducible         from our uniform selection. VICReg supplies agreement,
+  set of checks that prevents a favorable point estimate from be-
+                                                                        variance and covariance regularization (Bardes, Ponce, and
+  coming an unsupported claim about learned or neurological
+  relationships.                                                        LeCun 2022). Normal-only gait reconstruction and predic-
+                                                                        tion already appear in FSGait (Duan, Wan, and Zhao 2024).
+                                                                        SeeKer estimates conditional keypoint densities and incorpo-
+                         Introduction                                   rates keypoint-detector confidence (Delić, Grcić, and Šegvić
+An unusual walking pattern need not be difficult to predict.            2025), while STG-NF models pose-sequence likelihoods us-
+A repeated compensation may be highly regular, while or-                ing graph-based normalizing flows (Hirschorn and Avidan
+dinary walking observed from an unfamiliar camera may                   2023). GenGait also uses normal-only masked gait recon-
+produce substantial prediction error. This distinction moti-            struction and joint inconsistency scoring (Motta et al. 2026).
+vates a different question: how much does the rest of the               Beyond Marginals separates marginal, temporal and inter-
+body help predict a hidden joint, compared with that joint’s            variable structure for multivariate anomaly detection (Roy,
+own visible history? Consider a hidden left-ankle interval. Its         Boker, and Mili 2025). Our narrower question concerns the
+prediction may change when the model additionally sees the              difference between matched information conditions and its
+opposite leg, arms and trunk. Either unusually weak or un-              regional normal-reference profile. The contribution is the
+usually strong predictive help could distinguish an observed            matched-context audit and its diagnostic controls, not pri-
+pattern from a normal reference.                                        ority for normal-only gait prediction, conditional skeleton
+   We investigate this question through matched skeleton-               modeling or anatomical anomaly localization.
+completion tasks (Figure 1). A normal-trained representation               Clinical findings motivate examining relationships with-
+supports three information conditions, with restrictions en-            out determining their expected direction. Following stroke,
+forced before contextual encoding. We compare their predic-             reduced muscle-activation complexity can accompany im-
+tion losses, summarize the differences across body regions,             paired locomotion, while plantarflexor drive and nonparetic
+                                                                        compensation complicate the relationship between walking
+This is an anonymized submission for review purposes only. Dis-         speed and propulsion (Clark et al. 2010; Awad, Hsiao, and
+tribution, citation, or public sharing of this manuscript is strictly   Binder-Macleod 2020). Parkinsonian gait involves stride-
+prohibited. Copyright and publication details will appear in the        length regulation, and arm-swing amplitude and bilateral co-
+final version if accepted.                                              ordination need not respond identically to medication (Mor-
+  Normal sources fit the encoder and six separate heads
+
+    Uniform masking                   Frozen encoder                  Two target types                 Matched losses
+    16 joints × 8 patches             Own / patch / full              Local coordinates                Own minus full
+    Same hidden targets               Restricted inputs               Contextual teacher               12 readout joints
+
+
+  Each fold separates fitting, normal reference, and outer test sources
+
+    Three-region profile                        Five normal references                     Outer test sources
+    Left leg • right leg • arms                 Freeze mean and variation                  Rank within each fold
+    Equal joint/source weights                  Check more or less help                    Compare identical targets
+
+
+  The score describes model prediction. It does not identify neural causes.
+
+Figure 1: Matched completion tasks hold the target and mask fixed while changing available observations before encoding. A
+normal-reference distance summarizes three regional loss differences. This is an operational diagnostic of fitted predictors, not
+a physiological or causal model.
+
+
+ris et al. 1994; Sterling et al. 2015). Cerebral palsy encom-          Folder            Annotated    Pose QC      Profile QC
+passes diverse activation and musculoskeletal constraints;
+crouch changes strength requirements across muscle groups              Normal                    32          28             23
+(Steele, Rozumalski, and Schwartz 2015; Steele et al. 2012).           Parkinsons                11          10              9
+Myopathic gait concerns muscle disease rather than a single            Stroke                    19          15             14
+neurological etiology. Longitudinal Duchenne observations              Cerebral palsy            11          10             10
+connect weakness with varied trunk, pelvis and lower-limb              Myopathic                 30          28             25
+adaptations (Vandekerckhove et al. 2025).                              Exercise                  98          92             59
+                                                                       Inebriated                 8           6              2
+   These studies do not establish that projected joint pre-
+dictability measures neural coordination. Mechanics and task           All 12 folders          348          311           251
+constraints can themselves produce compact movement or
+activation patterns (Kutch and Valero-Cuevas 2012). Our bi-        Table 1: Source-video counts at successive observation gates.
+ological motivation therefore supports a testable movement-        Selected categories illustrate differential attrition; the last
+level question, not diagnosis, muscle-synergy recovery or          row covers the complete catalog. One source has two abnor-
+inference of lesion location.                                      mal category labels, so category counts must not be summed
+                                                                   as independent people.
+          Data and observation protocol
+We use the refreshed GAVD annotations, whose public-
+source videos provide observational gait categories, se-           ple. Media failure and pose attrition are recorded rather
+quence boundaries, views and bounding boxes (Ranjan et al.         than replaced with cached features. Table 1 shows substan-
+2025, 2026). The binary endpoint is exactly the normal             tial category-dependent selection. The target population is
+folder versus every other folder across all 12 categories. A       recordings meeting this observation and support rule, not
+positive label does not uniformly signify disease: the catalog     every annotated recording.
+includes nonpathological movement circumstances. Parkin-              We extract projected two-dimensional BlazePose land-
+sons, stroke, cerebral palsy and myopathic labels additionally     marks from the annotated person using sequence bounding
+define a separate five-class task with normal gait.                boxes (Bazarevsky et al. 2020). We retain BlazePose indices
+   The annotation inventory contains 1,874 sequences from          11–16 and 23–32, covering shoulders, elbows, wrists, hips,
+348 source IDs, comprising 32 normal and 316 abnormal              knees, ankles, heels and foot indices. These 16 joints alone
+sources. Ingestion obtained 332 decodable videos, including        enter the model and masking sampler. Coordinates with con-
+184 newly acquired videos. Pose-quality filtering retained         fidence below 0.5 remain missing. Resampling to 15 Hz
+9,474 windows from 1,389 sequences and 311 sources, in-            permits interpolation only between adjacent valid observa-
+cluding 28 normal sources. The subsequent fixed profile-           tions and excludes videos below 15 frames per second. Each
+support gate retained 8,950 windows from 1,303 sequences           window contains 32 frames with stride 16. Coordinates are
+and 251 sources: 23 normal and 228 abnormal. These                 centered on the frame’s pelvis and scaled using valid torso
+are source-video identifiers, not verified independent peo-        lengths from the first half of the window.
+   A token contains one joint’s two-dimensional coordinates        its measurements. Within each target type, heads share ini-
+over four frames, giving 128 tokens per window. A token is         tialization, sampled windows, masks and update budgets, but
+observed only when all eight coordinates are finite. Windows       have separate fitted parameters.
+require at least 75% observed tokens overall and 50% in each           The coordinate target contains the eight normalized coor-
+half. Invalid patches are numerically zeroed at projection and     dinates of the hidden patch, scored by mean squared error.
+excluded from attention keys, targets and pooling. Missing         The latent target is the frozen teacher’s distribution, scored by
+observations are not reconstructed as training labels.             KL divergence from teacher to prediction. All branches re-
+   Before fold assignment, a deterministic bank of 16 uni-         ceive the same target. A requested target is eligible only when
+form masks establishes profile eligibility using only availabil-   observed and accompanied by at least two visible valid own-
+ity and annotated time identities. Each source must supply         joint patches. Eligibility filtering does not redraw masks.
+at least four distinct eligible target patches for every read-     During head fitting, a joint is sampled uniformly from all 16
+out joint. Readout uses 12 joints: elbows, wrists, knees, an-      joints independently of visibility, and eligible hidden patches
+kles, heels and foot indices. All 16 joints still participate in   of that joint contribute to all six objectives. The same 16-
+training and masking. Support is deduplicated across over-         mask bank is used for all sources and comparators at evalu-
+lapping windows within each sequence; separate annotation          ation.
+sequences are not assumed to be independent physical ob-               These are completion tasks: visible context can occur af-
+servations.                                                        ter the hidden patch. Shared pelvis and torso normalization
+                                                                   already supplies a body reference to the own condition. The
+          Matched prediction experiment                            patch condition includes short motion as well as geometry.
+We first train a small skeleton JEPA using normal fitting          Moreover, the latent teacher can encode other joints in its
+sources only. Its encoder has two transformer blocks, four         target. Predictive benefit therefore means benefit for these
+attention heads and width 64. Uniform sampling hides ex-           fitted models under the declared body reference. It is nei-
+actly half of the 128 tokens, independently of coordinates,        ther conditional mutual information nor a causal measure of
+velocity and motion intensity. A visible-context encoder pre-      inter-joint coupling.
+dicts centered, sharpened distributions from an exponential-           At the raw-input level, full context contains own context.
+moving-average teacher over all observed tokens in the com-        For an ideal predictor that minimizes expected squared error,
+plete window. A VICReg term regularizes agreement and              additional information therefore cannot increase the optimal
+representation variance/covariance across masked views. It         risk. Our learners do not establish that bound: they separately
+discourages collapse and redundancy; it does not repel dis-        re-encode each context through a frozen transformer, so their
+ease classes. Missing targets remain excluded. With teacher        resulting memories need not be nested representations, and
+representation z T , center c and predictor output u, the tar-     finite fitted heads may underfit or overfit. The observed loss
+get is q = softmax((z T − c)/0.06) and the prediction is           difference measures model-dependent predictive gain, not
+p = softmax(u/0.1). Pretraining minimizes target cross-            mutual information, neural coupling or the intrinsic value of
+entropy plus 0.1 times VICReg. VICReg acts on projected,           the added observations. Negative benefit on normal coordi-
+valid-token pooled online embeddings from two indepen-             nate targets motivates a learning-adequacy check; it is not
+dently masked views; the second view also receives small           evidence that coordination or additional body information is
+coordinate noise. The teacher receives no gradient and is          biologically harmful.
+updated after the online optimizer step.                               Normal-development coordinate losses showed worse full-
+   The primary recipe uses 512 pretraining updates fol-            context than own-context error in all four folds under the
+lowed by 512 updates for each prediction head, with batch          512-head-update schedule. This training-adequacy diagnos-
+size 16, AdamW learning rate 0.0003, weight decay 0.05             tic motivated a separately retained 4,096-head-update sensi-
+and teacher momentum 0.996. Training first samples a nor-          tivity with the same 512 pretraining updates. The decision
+mal source uniformly and then a window from that source.           used normal development observations rather than abnormal
+Normal-development diagnostics are recorded every 64 up-           ranking outcomes. The original schedule remains primary,
+dates. Head diagnostics reuse four fixed source-sampled            and the longer schedule cannot replace it based on a favorable
+minibatches with fixed joint and mask draws. Fixed budgets         test result.
+establish a reproducible computational setting, not conver-
+gence. The primary study uses neither stochastic positional                Regional normal-reference profiles
+noise nor a learned stochastic latent variable.                    For an eligible target, let ℓo , ℓp and ℓf denote own, patch and
+   After pretraining, we freeze the online view encoder for        full losses. We define signed predictive benefit as b = ℓo −ℓf .
+contexts and the EMA teacher and target center for latent tar-     Positive values indicate lower error with full context; neg-
+gets. Six independently fitted heads cross three context con-      ative values remain valid observations. For each joint, we
+ditions with two target types. For target joint j and time patch   first average all eligible mask-target exposures within a win-
+t, own context contains visible valid patches of joint j; patch    dow, then average windows within sequences and sequences
+context adds visible joints in the target four-frame interval;     within sources. Repeated mask exposures retain equal weight
+full context contains every visible valid token. Allowed to-       in the window mean; the support gate separately deduplicates
+kens are gathered before the encoder’s first attention layer.      annotated target patches. Each region then gives equal weight
+Restricted branches never receive cached full-context embed-       to its four joints: left knee/ankle/heel/foot, the corresponding
+dings. A position query supplies the target identity without       right joints, and both elbows/wrists.
+   For source s, the three regional benefits form bs . Five        sensitivity of the reference calculation without retraining the
+reserved normal sources estimate a reference mean µg and           predictors.
+sample variance vg for each region. With v̄ the mean regional          The coordinate-target experiment tests whether find-
+variance, the anomaly score is                                     ings extend beyond contextual teacher targets. A random-
+                                                                   backbone control retains fitted heads and matched draws.
+                      3                                            Its coordinate targets remain comparable, whereas its la-
+                  1X         (bsg − µg )2
+         D(s) =                                   .                tent target changes with the teacher. A fixed source-balanced
+                  3 g=1 max(0.5vg + 0.5v̄, 10−8 )
+                                                                   ridge control uses 256 sampled windows/masks and regu-
+   This two-sided distance accommodates unusually high or          larization 10, with separate joint/time/context regressions. It
+low predictive benefit. It is not a calibrated probability. The    shares information access and scoring support, but not neu-
+shrinkage weight 0.5 and variance floor were fixed for this run    ral parameter sharing or optimization budget. Its minimum
+and were not tuned on test rankings. Primary latent-benefit        target-support check establishes estimability, not adequate
+sample variances range from 0.046 to 0.362 and coordinate-         learning or a strong linear optimum.
+benefit variances from 1.63 × 10−5 to 0.00606; the floor               A matched-budget sensitivity selects four distinct anno-
+does not bind. Identically constructed distances from own,         tated target patches per readout joint using a fixed hash.
+patch and full losses provide constituent controls. They are       It does not equalize mask exposure, contextual information,
+necessary because comparing D with raw full loss changes           temporal coverage or precision. Source-level exposure counts
+subtraction, regional preservation and reference standardiza-      remain part of the audit. Additional normal-only controls
+tion together. Patch-context losses are retained as a control      fit regularized Gaussian distances to 36 handcrafted motion
+for information near the hidden interval.                          features or joint-availability and camera-view features. A
+                                                                   separately supervised Random Forest uses only the latter
+                                                                   observation features. Every imputer, scaler and estimator is
+               Evaluation and controls                             fitted using the appropriate training sources. The separately
+Four outer folds hold out disjoint source IDs. Their test pop-     supervised five-class comparison uses a Random Forest on
+ulations contain respectively 6, 6, 6 and 5 normal sources,        handcrafted features and a frozen-encoder probe with the
+plus 57 abnormal sources each. Five non-test normal sources        same outer folds, excluding inner reference normals from
+per fold serve as development observations and the normal          fitting. Source-label weighting prevents multiple labels or
+reference, leaving 12 or 13 normal fitting sources. Within         many windows from increasing a source’s total evaluation
+each fold, fitting, reference and test sources are disjoint.       weight. These classifiers receive abnormal labels and answer
+Across folds, 20 reference assignments use 15 distinct normal      a different question from normal-only ranking.
+sources, with pairwise reference overlaps ranging from zero            Development diagnostics apply relative-leg timing shifts,
+to two sources. Fitting and reference sources recur, so the four   whole-body timing shifts and observation noise/dropout to
+models are not independent replications. Abnormal sources          normal fitting sources. They measure fitted-model sensi-
+never fit the normal-only anomaly models or reference. They        tivity rather than held-out mechanism validation or virtual
+enter fitting only in separately identified supervised controls.   diagnoses. A four-factor teacher diagnostic crosses orig-
+    The primary contrast is latent benefit distance versus raw     inal/edited predictions with original/edited teacher targets
+full-context KL on identical readout support. We compute           on eight unchanged arm/right-leg joints. Its raw-KL predic-
+AUROC within each fold and average using test-normal               tor, teacher and interaction terms sum algebraically to total
+counts as weights. Average precision is reported with ab-          change. They do not decompose the nonlinear three-region
+normal prevalence. Scores from independently fitted refer-         score.
+ences are not pooled into one ROC curve. Supporting paired             The reproducibility record fixes manifest and pose hashes,
+comparisons against full-distance and own-distance controls        model configuration, source roles, mask seed and checkpoint
+address whether subtraction contributes beyond constituent         identity. Every reported comparison must reconcile its re-
+calibration; their multiplicity is explicit.                       quired method, fold, target and observation-budget cells; a
+    A paired bootstrap resamples source IDs within fold            summary file alone is insufficient evidence that all controls
+and binary label, preserving pairing between scores and            completed. Missing cells remain missing rather than being
+recomputing the same weighted AUROC difference over                replaced by synthetic results.
+1,000 replicates. Its interval is conditional on fitted mod-
+els, reference observations, fold assignments and observed                                    Results
+source identities. It does not propagate retraining, reference-
+estimation or unknown participant dependence. With only            Matched controls do not establish an advantage
+five or six test normals per fold, its endpoints are coarse un-    The calibrated constituent and random-feature controls pre-
+certainty summaries. Supporting intervals are unadjusted for       vent interpreting this result as an established benefit of
+multiplicity; intervals containing zero do not establish equal-    learned movement relationships. Full-context coordinate pre-
+ity or absence of benefit. Fold-specific results and leave-one-    diction is also worse than own-context prediction on the
+reference-out score changes accompany this interval. A wide        normal-development diagnostics in all four primary folds.
+interval is inconclusive, while a narrow interval concerns this    This is a limitation of the tested learner, not a falsification of
+fitted analysis rather than performance after new training or      the biological hypothesis.
+population sampling. Removing one reference source tests              Table 2 reports the fixed primary schedule and its
+    Score or control                         512    4,096         Learning and reference sensitivity
+    Latent benefit profile                  .641     .667         Increasing head training to 4,096 updates raises the latent
+    Raw full latent error                   .541     .529         profile point estimate to 0.667, but a random encoder with
+    Full-error reference distance           .673     .666         fitted heads reaches 0.714. The longer-run profile-minus-
+    Own-error reference distance            .657     .590         raw-error difference is 0.138 with interval [−0.008, 0.280].
+    Random encoder, latent heads            .651     .714         This run cannot establish a learned advantage or replace
+    Coordinate benefit profile              .686     .690         the primary analysis. Its coordinate profile reaches 0.690
+    Random encoder, coordinate heads        .701     .693         versus 0.693 for random coordinate features. The reference-
+    Ridge coordinate profile                .607     .607         free contrast falls below chance to 0.398; its declared direc-
+    Latent profile, four patches            .542     .644         tion is retained, without inferring a significant reversal from
+    Reference-free contrast                 .527     .398         the point estimate. Normal-development full-context coor-
+                                                                  dinate MSE exceeds own-context MSE in all four primary
+Table 2: Normal-count-weighted within-fold AUROC on the           folds and three longer-run folds. This remaining learning-
+same 251 sources. Columns identify head-update budgets;           adequacy limitation prevents interpreting the loss difference
+the 512-update recipe remains primary. The reference-free         as the best achievable information gain. Pretraining’s normal-
+contrast ranks full minus own latent loss. Ridge is unchanged.    development embedding effective ranks range from 5.19 to
+Rows other than the three explicitly coordinate scores use la-    8.39 and embedding standard deviations from 0.488 to 0.570.
+tent targets. These are point estimates, not established rank-    These finite-batch diagnostics detect nonconstant representa-
+ings of methods.                                                  tions, not sufficient representation quality; their low effective
+                                                                  ranks also warrant investigation.
+                                                                      With four distinct target patches per readout joint, primary
+                                                                  latent-profile AUROC drops to 0.542. Selecting four patches
+separately retained training-budget sensitivity. Across 251       changes observation coverage as well as quantity; it does not
+sources, the primary latent profile reaches AUROC 0.641           diagnose a single cause. Independently omitting one of five
+versus 0.541 for raw full-context KL. The paired differ-          reference sources per fold yields aggregate AUROCs from
+ence is 0.101, with a conditional 95% bootstrap interval of       0.585 to 0.673 for the latent profile and 0.635 to 0.748 for the
+[−0.035, 0.224]. This interval includes both a small disad-       coordinate profile, without retraining. These ranges describe
+vantage and a meaningful advantage. It neither establishes        reference perturbations, not confidence intervals or new test
+benefit nor demonstrates equivalence. Primary fold AU-            sets.
+ROCs are 0.588, 0.646, 0.629 and 0.716. Average precision
+is 0.949, against a normal-count-weighted prevalence base-        Category and condition comparisons
+line of 0.908 (228 of 251 sources are positive overall). It       The primary profile’s descriptive AUROCs are 0.815 for exer-
+should not be read as performance on a balanced screening         cise, 0.681 for stroke, 0.604 for myopathic, 0.565 for Parkin-
+population.                                                       sons and 0.486 for cerebral palsy. Their abnormal source
+   A calibrated full-error distance reaches 0.673, exceeding      counts are respectively 59, 14, 25, 9 and 10. Categories
+the profile point estimate. The profile-minus-full-distance       reuse the same normal sources and are not independent tests.
+difference is −0.031 with interval [−0.152, 0.096]. Its dif-      Their small abnormal samples make these point estimates
+ference from calibrated own error is −0.015 with interval         descriptive, not precise condition-specific performance esti-
+[−0.128, 0.101]. Figure 2 displays these paired uncertain-        mates. An exercise review clip contains squatting, illustrating
+ties. Thus the raw-error comparison does not isolate a benefit    why the binary endpoint can distinguish activity rather than
+from subtracting own and full losses. A random frozen en-         pathology. Restricting positives to the four focal condition
+coder with trained latent heads reaches 0.651; its difference     families yields 81 sources in total and AUROC 0.585 for the
+from the learned profile is also unresolved. Because its latent   latent profile, 0.612 for calibrated full error and 0.625 for
+target changes, this control questions the learned system’s       the random-encoder profile. These secondary results do not
+anomaly advantage rather than isolating the encoder alone.        establish disease-specific discrimination.
+   The coordinate profile reaches 0.686, while a random en-          The separately supervised five-class task also uses 81
+coder with fitted coordinate heads reaches 0.701 and fixed        source videos. Across four folds, Random Forest macro-F1
+ridge reaches 0.607. The random-coordinate comparison pre-        values are 0.521, 0.532, 0.412 and 0.621, versus 0.483, 0.189,
+serves the observed target, making it a clearer control, al-      0.262 and 0.423 for the frozen-encoder probe. Its training la-
+though separately fitted heads still need not have equal opti-    bels and endpoint differ from normal-only anomaly ranking.
+mization quality. A separate normal-only distance on hand-        This comparison provides no evidence that the current rep-
+crafted motion features reaches 0.626; the latent-profile dif-    resentation improves supervised condition recognition.
+ference is 0.015 with interval [−0.140, 0.179]. Observation-
+only distance and a separately supervised observation-only        Development probes expose interpretation limits
+Random Forest reach 0.474 and 0.451. Their below-chance           Twelve normal fitting sources supply development windows
+directions are retained. These limited controls do not elim-      for timing and observation edits. Only five remain scorable
+inate unmeasured view, identity, activity or recording con-       under common support across all five versions, including
+founds.                                                           dropout. Median paired latent-profile changes are −0.014
+                                          Negative: comparator higher                                Positive: profile higher
+
+                      Raw full error
+
+
+                Full-error distance
+
+
+               Own-error distance
+
+
+Random encoder, latent heads
+
+
+         Motion-feature distance
+                                                        −0.1             0.0          0.1          0.2
+                                                         Latent-profile AUROC minus comparator AUROC
+
+Figure 2: Paired AUROC differences for the primary latent profile on 251 source videos, including 23 normal sources. Raw
+full error is the fixed primary comparison; the others are supporting comparisons without multiplicity correction. Positive
+values favor the profile. Intervals use 1,000 paired source-bootstrap replicates within fold and label, conditional on fitted
+models, references, folds and source identities. They do not establish equality, account for prior cohort exploration, or provide
+participant-level uncertainty.
+
+
+for relative-leg timing, −0.037 for whole-body timing, 0.004       cannot replace normal diversity. Visibility selection, camera
+for small coordinate noise and 0.068 for dropout. For coordi-      view, walking aids, repeated people and overlapping annota-
+nates, the corresponding changes are −0.001, 0.765, 0.007          tions may influence discrimination. Folder labels are obser-
+and 0.049. These are differences in dimensionless standard-        vational, projected pose is imperfect, and neither diagnoses
+ized profile scores, not raw coordinate MSE. Both timing           nor physical forces are measured. Finally, no validated pub-
+edits shift frames, not spatial positions; the whole-body edit     lished anomaly baseline is included. The fixed ridge control
+changes gait phase relative to fixed patch positions. The in-      and supervised Random Forest cannot establish superiority
+tended selective response to relative-leg timing is not demon-     over SeeKer, STG-NF or other published methods. Conclu-
+strated. These small, reused fitting samples and potentially       sions must remain conditional on the tested predictors, ob-
+distorted limb-to-torso geometry prevent biological valida-        servation pipeline and source population.
+tion.
+   The teacher diagnostic retains 87 unchanged-joint sum-
+maries across 12 normal fitting sources. Changing other               These results narrow the research question. A predictive-
+joints leaves the own-context predictor component exactly          context profile can rank some non-normal recordings, but the
+zero, while the median source mean absolute teacher-only           present evidence does not attribute that ranking to learned
+change in own KL is 0.0351. This confirms an interpretation        inter-joint relationships. Reference calibration, the target rep-
+hazard: contextual latent targets can change even when the         resentation, finite learning and observation coverage all re-
+local measurements and their own-context prediction are un-        quire separate checks. Failure of the fitted predictor to exploit
+changed. It is an expected property of the target construction,    more context should trigger a model-adequacy investigation
+not evidence of neurological coupling.                             before a biological explanation.
+
+              Discussion and limitations                              A stronger follow-up should first test predictors on syn-
+This is exploratory internal evaluation on a cohort overlap-       thetic processes with known dependencies and a nested or
+ping earlier development. All 23 retained normal sources and       residual architecture that can retain the own-context solution.
+58 abnormal sources occur in the earlier retained index; 170       It should then freeze choices before examining new normal
+abnormal sources do not. Absence from that index does not          participants, validate an established pose-anomaly baseline
+prove absence of prior inspection. New folds prevent direct        on exactly the same observation support, and collect blinded
+fitting/test overlap but do not erase analyst adaptation. Newly    movement annotations. External recordings with participant
+scored abnormal recordings compared with reused normals            identity, measured strength or electromyography would be
+are not an independent replication.                                needed to evaluate neurological or neuromuscular explana-
+    Five reference sources and five or six test normals per fold   tions. More abnormal web videos alone cannot answer those
+severely constrain precision. Additional abnormal videos           questions.
+                       Conclusion                                Morris, M. E.; Iansek, R.; Matyas, T. A.; and Summers, J. J.
+This real-video study audits a biologically motivated            1994. The Pathogenesis of Gait Hypokinesia in Parkinson’s
+prediction-context diagnostic rather than claiming a new dis-    Disease. Brain, 117(5): 1169–1181.
+ease detector. Matched constituent scores, a random encoder      Motta, E.; Lorenzini, M.; Mouawad, C.; Ranavolo, A.; Ser-
+with fitted heads, longer training and reference perturbations   rao, M.; and Ajoudani, A. 2026. GenGait: A Transformer-
+prevent a favorable raw-error comparison from becoming an        Based Model for Human Gait Anomaly Detection and Nor-
+unsupported representation claim. On the current GAVD co-        mative Twin Generation. arXiv:2604.01997.
+hort, the latent profile’s advantage remains inconclusive and    Ranjan, R.; Ahmedt-Aristizabal, D.; Ali Armin, M.; and
+its neurological interpretation unvalidated. The reproducible    Kim, J. 2025. Computer Vision for Clinical Gait Analy-
+protocol and its negative controls specify what a subsequent,    sis: A Gait Abnormality Video Dataset. IEEE Access, 13:
+independently evaluated study must establish.                    45321–45339.
+                                                                 Ranjan, R.; Ahmedt-Aristizabal, D.; Ali Armin, M.;
+                       References                                and Kim, J. 2026.          GAVD: Gait Abnormality in
+Abdelfattah, M.; and Alahi, A. 2024. S-JEPA: A Joint Em-         Video Dataset, Annotation Catalog and Documenta-
+bedding Predictive Architecture for Skeletal Action Recog-       tion.     Author-maintained GitHub repository.         Snap-
+nition. In Computer Vision – ECCV 2024, volume 15090             shot accessed November 15, 2026; repository revision
+of Lecture Notes in Computer Science, 367–384. Springer          a87859c881603443f200bcd640663d2c3d7a8136. The year
+Nature Switzerland.                                              denotes access, not an asserted original release date.
+Awad, L. N.; Hsiao, H.; and Binder-Macleod, S. A. 2020.          Roy, P.; Boker, A.; and Mili, L. 2025. Beyond Marginals:
+Central Drive to the Paretic Ankle Plantarflexors Affects the    Learning Joint Spatio-Temporal Patterns for Multivariate
+Relationship Between Propulsion and Walking Speed After          Anomaly Detection. Transactions on Machine Learning Re-
+Stroke. Journal of Neurologic Physical Therapy, 44(1): 42–       search.
+48.                                                              Steele, K. M.; Rozumalski, A.; and Schwartz, M. H. 2015.
+Bardes, A.; Ponce, J.; and LeCun, Y. 2022. VICReg:               Muscle Synergies and Complexity of Neuromuscular Con-
+Variance-Invariance-Covariance Regularization for Self-          trol During Gait in Cerebral Palsy. Developmental Medicine
+Supervised Learning. In International Conference on Learn-       and Child Neurology, 57(12): 1176–1182.
+ing Representations.                                             Steele, K. M.; van der Krogt, M. M.; Schwartz, M. H.; and
+Bazarevsky, V.; Grishchenko, I.; Raveendran, K.; Zhu, T.;        Delp, S. L. 2012. How Much Muscle Strength Is Required
+Zhang, F.; and Grundmann, M. 2020. BlazePose: On-device          to Walk in a Crouch Gait? Journal of Biomechanics, 45(15):
+Real-time Body Pose Tracking. arXiv:2006.10204.                  2564–2569.
+Clark, D. J.; Ting, L. H.; Zajac, F. E.; Neptune, R. R.; and     Sterling, N. W.; Cusumano, J. P.; Shaham, N.; Piazza, S. J.;
+Kautz, S. A. 2010. Merging of Healthy Motor Modules Pre-         Liu, G.; Kong, L.; Du, G.; Lewis, M. M.; and Huang, X.
+dicts Reduced Locomotor Performance and Muscle Coordi-           2015. Dopaminergic Modulation of Arm Swing During Gait
+nation Complexity Post-Stroke. Journal of Neurophysiology,       Among Parkinson’s Disease Patients. Journal of Parkinson’s
+103(2): 844–857.                                                 Disease, 5(1): 141–150.
+Delić, A.; Grcić, M.; and Šegvić, S. 2025. Sequential            Vandekerckhove, I.; Molenberghs, G.; Van den Hauwe, M.;
+Keypoint Density Estimator: An Overlooked Baseline of            Goemans, N.; De Waele, L.; Van Campenhout, A.; De
+Skeleton-Based Video Anomaly Detection. In Proceedings           Groote, F.; and Desloovere, K. 2025. Longitudinal Inter-
+of the IEEE/CVF International Conference on Computer Vi-         action Between Muscle Impairments and Gait Pathology
+sion, 11579–11589.                                               in Growing Children with Duchenne Muscular Dystrophy.
+                                                                 Journal of NeuroEngineering and Rehabilitation, 22(1): 207.
+Duan, B.; Wan, X.; and Zhao, X. 2024. FSGait: Fine-Grained
+Self-supervised Gait Abnormality Detection. In Computer
+Vision – ACCV 2024, volume 15477 of Lecture Notes in
+Computer Science, 313–329. Springer Nature Singapore.
+Hirschorn, O.; and Avidan, S. 2023. Normalizing Flows
+for Human Pose Anomaly Detection. In Proceedings of the
+IEEE/CVF International Conference on Computer Vision,
+13545–13554.
+Kutch, J. J.; and Valero-Cuevas, F. J. 2012. Challenges and
+New Approaches to Proving the Existence of Muscle Syner-
+gies of Neural Origin. PLoS Computational Biology, 8(5):
+e1002434.
+Mao, Y.; Deng, J.; Zhou, W.; Fang, Y.; Ouyang, W.; and Li, H.
+2023. Masked Motion Predictors are Strong 3D Action Rep-
+resentation Learners. In Proceedings of the IEEE/CVF In-
+ternational Conference on Computer Vision, 10181–10191.
+
