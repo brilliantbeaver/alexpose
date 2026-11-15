@@ -1,0 +1,324 @@
+{
+  "date": "2026-11-14",
+  "scope": "Fresh scan of per-condition CSV files, excluding source cache. Metadata only; no new media or clinical verification.",
+  "manifest_sha256": "c5f8aeebadd7f37274058b612a360314c7677a6092a6b945d78468faef856ca9",
+  "n_sequences": 1874,
+  "n_rows": 458116,
+  "n_sources": 348,
+  "n_labels": 12,
+  "per_label": {
+    "abnormal": {
+      "sequences": 767,
+      "rows": 216492,
+      "sources": 117,
+      "camera_views": [
+        "",
+        "back",
+        "front",
+        "left side",
+        "other",
+        "right side"
+      ],
+      "sources_outside_selected_five": 116
+    },
+    "antalgic": {
+      "sequences": 35,
+      "rows": 6556,
+      "sources": 10,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 10
+    },
+    "cerebral palsy": {
+      "sequences": 64,
+      "rows": 20346,
+      "sources": 11,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 0
+    },
+    "exercise": {
+      "sequences": 234,
+      "rows": 54941,
+      "sources": 98,
+      "camera_views": [
+        "",
+        "back",
+        "front",
+        "left side",
+        "other",
+        "right side"
+      ],
+      "sources_outside_selected_five": 98
+    },
+    "inebriated": {
+      "sequences": 23,
+      "rows": 7007,
+      "sources": 8,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 8
+    },
+    "myopathic": {
+      "sequences": 188,
+      "rows": 34595,
+      "sources": 30,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 0
+    },
+    "normal": {
+      "sequences": 291,
+      "rows": 41340,
+      "sources": 32,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "other",
+        "right side"
+      ],
+      "sources_outside_selected_five": 0
+    },
+    "parkinsons": {
+      "sequences": 47,
+      "rows": 10426,
+      "sources": 11,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 0
+    },
+    "pregnant": {
+      "sequences": 6,
+      "rows": 909,
+      "sources": 2,
+      "camera_views": [
+        "back",
+        "front"
+      ],
+      "sources_outside_selected_five": 2
+    },
+    "prosthetic": {
+      "sequences": 39,
+      "rows": 17999,
+      "sources": 8,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 8
+    },
+    "stroke": {
+      "sequences": 76,
+      "rows": 33934,
+      "sources": 19,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 0
+    },
+    "style": {
+      "sequences": 104,
+      "rows": 13571,
+      "sources": 3,
+      "camera_views": [
+        "back",
+        "front",
+        "left side",
+        "right side"
+      ],
+      "sources_outside_selected_five": 3
+    }
+  },
+  "gait_event_counts": {
+    "": 457358,
+    "Left initial contact": 368,
+    "Right initial contact": 383,
+    "Left tibia vertical": 3,
+    "Left toe off": 2,
+    "Left foot flat": 2
+  },
+  "dataset_field_counts": {
+    "Abnormal Gait": 422141,
+    "Normal Gait": 35975
+  },
+  "selected_five_source_count": 103,
+  "sources_outside_selected_five": 245,
+  "normal_sources_outside_selected_five": 0,
+  "sources_with_normal_and_other_labels": [],
+  "sources_with_normal_and_selected_abnormal_labels": [],
+  "sources_with_multiple_views": 213,
+  "interpretation": "Mixed-label or multi-view sources are candidate comparisons, not verified same-person pairs. Rows are frame annotations, not people.",
+  "gait_event_support_by_label": {
+    "abnormal": {
+      "annotated_rows": 359,
+      "sequences": 34,
+      "sources": 6
+    },
+    "exercise": {
+      "annotated_rows": 33,
+      "sequences": 3,
+      "sources": 1
+    },
+    "myopathic": {
+      "annotated_rows": 40,
+      "sequences": 7,
+      "sources": 2
+    },
+    "parkinsons": {
+      "annotated_rows": 56,
+      "sequences": 2,
+      "sources": 1
+    },
+    "style": {
+      "annotated_rows": 270,
+      "sequences": 34,
+      "sources": 1
+    }
+  },
+  "dataset_field_by_gait_pattern": [
+    {
+      "label": "abnormal",
+      "dataset_field": "Abnormal Gait",
+      "rows": 216492
+    },
+    {
+      "label": "antalgic",
+      "dataset_field": "Abnormal Gait",
+      "rows": 6556
+    },
+    {
+      "label": "cerebral palsy",
+      "dataset_field": "Abnormal Gait",
+      "rows": 20346
+    },
+    {
+      "label": "exercise",
+      "dataset_field": "Abnormal Gait",
+      "rows": 54941
+    },
+    {
+      "label": "inebriated",
+      "dataset_field": "Abnormal Gait",
+      "rows": 7007
+    },
+    {
+      "label": "myopathic",
+      "dataset_field": "Abnormal Gait",
+      "rows": 34595
+    },
+    {
+      "label": "normal",
+      "dataset_field": "Abnormal Gait",
+      "rows": 5365
+    },
+    {
+      "label": "normal",
+      "dataset_field": "Normal Gait",
+      "rows": 35975
+    },
+    {
+      "label": "parkinsons",
+      "dataset_field": "Abnormal Gait",
+      "rows": 10426
+    },
+    {
+      "label": "pregnant",
+      "dataset_field": "Abnormal Gait",
+      "rows": 909
+    },
+    {
+      "label": "prosthetic",
+      "dataset_field": "Abnormal Gait",
+      "rows": 17999
+    },
+    {
+      "label": "stroke",
+      "dataset_field": "Abnormal Gait",
+      "rows": 33934
+    },
+    {
+      "label": "style",
+      "dataset_field": "Abnormal Gait",
+      "rows": 13571
+    }
+  ],
+  "sources_with_multiple_named_views_by_label": {
+    "abnormal": 80,
+    "antalgic": 4,
+    "cerebral palsy": 10,
+    "exercise": 36,
+    "inebriated": 3,
+    "myopathic": 23,
+    "normal": 23,
+    "parkinsons": 10,
+    "pregnant": 2,
+    "prosthetic": 7,
+    "stroke": 13,
+    "style": 3
+  },
+  "normal_sources_by_dataset_field": {
+    "Normal Gait": 27,
+    "Abnormal Gait": 5
+  },
+  "local_file_presence_only": {
+    "video_folder": "data/videos-gavd",
+    "outside_selected_five_sources_with_matching_media_filename": 49,
+    "decoded_in_this_audit": false,
+    "per_extra_label": {
+      "abnormal": 30,
+      "antalgic": 2,
+      "exercise": 13,
+      "inebriated": 2,
+      "pregnant": 0,
+      "prosthetic": 1,
+      "style": 1
+    }
+  },
+  "binary_task": {
+    "normal_folder": "normal",
+    "abnormal_folders": [
+      "abnormal",
+      "antalgic",
+      "cerebral palsy",
+      "exercise",
+      "inebriated",
+      "myopathic",
+      "parkinsons",
+      "pregnant",
+      "prosthetic",
+      "stroke",
+      "style"
+    ],
+    "normal_sequences": 291,
+    "abnormal_sequences": 1583,
+    "normal_source_ids": 32,
+    "abnormal_source_ids": 316,
+    "definition_source": "Explicit user clarification in this conversation. Abnormal gait is not a verified diagnosis."
+  }
+}

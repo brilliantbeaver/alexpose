@@ -1,0 +1,108 @@
+{
+  "created_at_utc": "2026-11-15T21:08:14.496138+00:00",
+  "manuscript_title": "Controlled Cross-Leg Prediction for Gait Anomaly Detection",
+  "presentation": "standalone methodological manuscript",
+  "core_protocol": "d66e1b126c9d9a9adf1b",
+  "external_protocol": "external_fb9d0d23b56ce29fd846",
+  "pdf": {
+    "pages": 8,
+    "content_pages": 7,
+    "reference_pages": 1,
+    "page_limit_passed": true,
+    "pdf_sha256": "149ce6fb8867b18724875ab4e0246727715d44d297631260160491340a6e2fa0",
+    "all_fonts_embedded": true,
+    "type3_fonts": false,
+    "out_of_page_words": [],
+    "overfull_boxes": [],
+    "undefined_references": false,
+    "missing_bibliography_keys": [],
+    "anonymity_scan_passed": true,
+    "official_style_unchanged": true,
+    "illustrative_or_simulated_efficacy": false,
+    "passed": true
+  },
+  "source_hash_checks_passed": true,
+  "manuscript_input_hash_checks": [
+    {
+      "path": "docs/draft03/study_evidence.json",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/manuscript_template.md",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/advisory/completion_audit_v1/completion_summary.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/advisory/completion_audit_v1/audit_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/derivatives/interpolation_audit_v1/participant_comparison.csv",
+      "hash_matches": true
+    }
+  ],
+  "summary_arithmetic_passed": true,
+  "links": {
+    "checked": 29,
+    "broken": []
+  },
+  "conditional_post_outcome_inference": true,
+  "standalone_checks": {
+    "development_narrative_absent": true,
+    "no_em_dashes": true,
+    "local_template_exists": true,
+    "generator_hash_matches": true,
+    "input_hashes_match": true,
+    "independent_review_matches_manuscript": true
+  },
+  "visual_review_record": "visual_review.md",
+  "archived_advisory_provenance": {
+    "requested_model": "opus",
+    "tools_enabled": false,
+    "prompt_sha256": "14e18a7203e5b98a5cf86b5b0f2923ace3ab9c086adce2468fb7737824e3ba2f",
+    "reviewed_manuscript_sha256": "ed1c45cd848ce2dd64ba16a216e9e23000692610f42dd954c3cbaa7937e1c3dd",
+    "returncode": 0,
+    "elapsed_seconds": 38.134478374995524,
+    "modelUsage": {
+      "global.anthropic.claude-opus-4-8": {
+        "inputTokens": 2,
+        "outputTokens": 2205,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 18826,
+        "webSearchRequests": 0,
+        "costUSD": 0.1727975,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 64000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 18826,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-opus-4-8",
+        "provider": "bedrock",
+        "costBasis": "list"
+      }
+    },
+    "is_error": false,
+    "total_cost_usd": 0.1727975
+  },
+  "current_independent_review": "advisory/standalone_manuscript_review.md",
+  "study_execution": {
+    "notebooks": {
+      "all18_independent": true,
+      "all6_new_have_real_video": true,
+      "historical_original_artifacts_unchanged": true
+    },
+    "tests": {
+      "command": "uv run --project experiments/aaai pytest experiments/aaai/tests -q --disable-warnings",
+      "passed": 137,
+      "failed": 0,
+      "elapsed_seconds": 19.17,
+      "execution_record": "Observed completed command output in this task; no tests inferred from a file count."
+    },
+    "core_verified": true,
+    "timing_verified": true
+  },
+  "status": "passed_with_scientific_limitations"
+}

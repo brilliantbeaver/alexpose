@@ -1,0 +1,61 @@
+{
+  "created_at_utc": "2026-11-15T20:55:41.349034+00:00",
+  "editorial_version": "positive completion interpretation of unchanged studies",
+  "source_validation": "../draft02/final_validation.json",
+  "pdf": {
+    "pages": 8,
+    "content_pages": 7,
+    "reference_pages": 2,
+    "page_limit_passed": true,
+    "pdf_sha256": "1e44e265cc6a8dac1d5fff34c6051b0c2844c0f16793daa09f6a1af1c702857b",
+    "all_fonts_embedded": true,
+    "type3_fonts": false,
+    "out_of_page_words": [],
+    "overfull_boxes": [],
+    "undefined_references": false,
+    "missing_bibliography_keys": [],
+    "anonymity_scan_passed": true,
+    "official_style_unchanged": true,
+    "illustrative_or_simulated_efficacy": false,
+    "passed": true
+  },
+  "source_hash_checks_passed": true,
+  "summary_arithmetic_passed": true,
+  "links": {
+    "checked": 29,
+    "broken": []
+  },
+  "conditional_post_outcome_inference": true,
+  "negative_primary_preserved": true,
+  "visual_review_record": "visual_review.md",
+  "claude_review": {
+    "requested_model": "opus",
+    "tools_enabled": false,
+    "prompt_sha256": "14e18a7203e5b98a5cf86b5b0f2923ace3ab9c086adce2468fb7737824e3ba2f",
+    "reviewed_manuscript_sha256": "ed1c45cd848ce2dd64ba16a216e9e23000692610f42dd954c3cbaa7937e1c3dd",
+    "returncode": 0,
+    "elapsed_seconds": 38.134478374995524,
+    "modelUsage": {
+      "global.anthropic.claude-opus-4-8": {
+        "inputTokens": 2,
+        "outputTokens": 2205,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 18826,
+        "webSearchRequests": 0,
+        "costUSD": 0.1727975,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 64000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 18826,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-opus-4-8",
+        "provider": "bedrock",
+        "costBasis": "list"
+      }
+    },
+    "is_error": false,
+    "total_cost_usd": 0.1727975
+  },
+  "gpt_review": "adversarial_review_gpt.md",
+  "status": "passed_with_scientific_limitations"
+}

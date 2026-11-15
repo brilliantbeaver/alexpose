@@ -1,0 +1,41 @@
+{
+  "pdf_sha256": "149ce6fb8867b18724875ab4e0246727715d44d297631260160491340a6e2fa0",
+  "official_style_unchanged": true,
+  "compiler": "/Library/TeX/texbin/pdflatex",
+  "commands": [
+    [
+      "/opt/homebrew/bin/pandoc",
+      "manuscript.md",
+      "--from=markdown-auto_identifiers+raw_tex",
+      "--to=latex",
+      "--standalone",
+      "--natbib",
+      "--bibliography=references.bib",
+      "--template=template.tex",
+      "--wrap=none",
+      "--output=manuscript.tex"
+    ],
+    [
+      "/Library/TeX/texbin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/Library/TeX/texbin/bibtex",
+      "manuscript"
+    ],
+    [
+      "/Library/TeX/texbin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/Library/TeX/texbin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ]
+  ]
+}

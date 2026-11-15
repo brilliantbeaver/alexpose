@@ -1,0 +1,118 @@
+{
+  "manuscript": {
+    "passed": true,
+    "checks": {
+      "letter_pages": true,
+      "content_and_reference_limits": true,
+      "no_words_outside_page": true,
+      "all_fonts_embedded": true,
+      "no_type3_fonts": true,
+      "vector_figures": true,
+      "official_style_unchanged": true,
+      "no_latex_warnings": true,
+      "citations_defined": true,
+      "anonymous_text": true,
+      "no_em_dashes": true,
+      "figures_and_tables_referenced": true
+    },
+    "pages": 7,
+    "references_start_pages": [
+      7
+    ],
+    "outside_page_words": [],
+    "cited_reference_count": 19,
+    "pdf_sha256": "bf66987f4ed2b96ab8dda157afd24fcc8eddb9c58c42d446fa7c29e35a6b7cec"
+  },
+  "current_document_links": "passed",
+  "evidence_source_hashes": 28,
+  "primary_run": "3044566091261819",
+  "sensitivity_run": "eba2bd5a6e05efa1",
+  "real_notebooks": [
+    {
+      "notebook": "00_research_and_gavd_inventory.ipynb",
+      "cells": 12,
+      "seconds": 2.45,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "01_video_pose_and_quality.ipynb",
+      "cells": 14,
+      "seconds": 3.96,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "02_joint_tokens_and_uniform_masks.ipynb",
+      "cells": 16,
+      "seconds": 3.92,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "03_normal_only_jepa_and_vicreg.ipynb",
+      "cells": 15,
+      "seconds": 4.71,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "04_progressive_condition_adaptation.ipynb",
+      "cells": 13,
+      "seconds": 7.22,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "05_forecast_anomalies_and_explanations.ipynb",
+      "cells": 15,
+      "seconds": 38.66,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "06_capstone_rf_vs_jepa.ipynb",
+      "cells": 16,
+      "seconds": 21.35,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "07_ablation_and_paper_evidence.ipynb",
+      "cells": 15,
+      "seconds": 6.84,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "08_biology_cohort_and_source_folds.ipynb",
+      "cells": 16,
+      "seconds": 17.5,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "09_matched_context_prediction.ipynb",
+      "cells": 12,
+      "seconds": 17.62,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "10_source_profiles_and_classifier_comparison.ipynb",
+      "cells": 14,
+      "seconds": 4.15,
+      "status": "passed",
+      "mode": "GAVD"
+    },
+    {
+      "notebook": "11_interventions_and_manuscript_evidence.ipynb",
+      "cells": 14,
+      "seconds": 5.58,
+      "status": "passed",
+      "mode": "GAVD"
+    }
+  ],
+  "test_suite": "105 passed in 16.07s; reviews/final_pytest.log",
+  "submission_performed": false
+}

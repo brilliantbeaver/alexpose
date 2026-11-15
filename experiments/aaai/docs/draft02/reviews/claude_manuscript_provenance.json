@@ -1,0 +1,31 @@
+{
+  "tool": "claude CLI",
+  "requested_model": "opus",
+  "tools_enabled": false,
+  "returncode": 0,
+  "elapsed_seconds": 105.75113820898696,
+  "prompt_sha256": "706ae5ea0eb128095286b5847fdc7e9ab7fef40401c785daaa502c882cda2b64",
+  "manuscript_sha256": "2dcdc8dcd4aaad028b247e23e64a3d64d2ad5cd3357c08bdeba3246369a6c6da",
+  "is_error": false,
+  "modelUsage": {
+    "global.anthropic.claude-opus-4-8": {
+      "inputTokens": 2,
+      "outputTokens": 6462,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 26846,
+      "webSearchRequests": 0,
+      "costUSD": 0.3293475,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 0,
+      "cacheCreationEphemeral5mInputTokens": 26846,
+      "cacheCreationEphemeral1hInputTokens": 0,
+      "canonicalModel": "claude-opus-4-8",
+      "provider": "bedrock",
+      "costBasis": "list"
+    }
+  },
+  "total_cost_usd": 0.3293475,
+  "reviewed_manuscript_sha256": "6184883a855478d37308ef6ea61329045469b4ac236e7c291e0f71718bc2a8b7",
+  "manuscript_sha256_field_note": "Original field was recorded at call completion; reviewed_manuscript_sha256 hashes the exact supplied text."
+}

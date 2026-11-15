@@ -1,0 +1,79 @@
+{
+  "created_at_utc": "2026-11-15T21:15:06.735078+00:00",
+  "producer_sha256": "66061016f1f15f0b21a068a643f5be9e99280ccb1ec1d31c971d33df26476010",
+  "checks": [
+    {
+      "figure": "method",
+      "all_input_and_output_hashes_match": true,
+      "visible_text_avoids_internal_terms": true
+    },
+    {
+      "figure": "detection_difference",
+      "all_input_and_output_hashes_match": true,
+      "visible_text_avoids_internal_terms": true
+    },
+    {
+      "figure": "normal_prediction",
+      "all_input_and_output_hashes_match": true,
+      "visible_text_avoids_internal_terms": true
+    },
+    {
+      "figure": "timing_limits",
+      "all_input_and_output_hashes_match": true,
+      "visible_text_avoids_internal_terms": true
+    },
+    {
+      "figure": "failure_cases",
+      "all_input_and_output_hashes_match": true,
+      "visible_text_avoids_internal_terms": true
+    },
+    {
+      "figure": "positive_completion",
+      "all_input_and_output_hashes_match": true,
+      "visible_text_avoids_internal_terms": true
+    }
+  ],
+  "numerical_verification": "Normal prediction values independently matched the original CSV group means. Timing rows matched the original JSON exactly. Detection and completion values are saved verbatim in the figure manifest from their hashed evidence inputs. No fitting/scoring changes.",
+  "visual_review": "All six PNGs inspected as contact sheet; method and timing also inspected individually. No overlaps or clipped labels found. Independent neuro-agent review also inspected all six and found no overlap.",
+  "corrections_during_review": [
+    "Removed a generic method arrow that could imply the own-leg baseline produces the movement score.",
+    "Changed timing left x-axis to Planned timing shift so unshifted error is not mistaken for already shifted observations."
+  ],
+  "example_mapping": "Original16 anatomical indices retained. Edges with any nonfinite coordinate are skipped; missing observations are not imputed. Original two examples and sample indices0,15,31 retained.",
+  "figure_manifest_sha256": "a43045dcf59b7b5816adcd9980c0bf58c7d4770ea08629784e3aa5616d5e1ab6",
+  "caption_guidance_sha256": "8ac481cde6144c424b05ce7d4b1a771d3a5860ac4ec3d53be4a784848f7ddfbb",
+  "contact_sheet_sha256": "fd33df389e17fef5bb5a2884f943a38cf4f39b2379b91d515b00778e5934cf3b",
+  "final_rebuild_checked_at_utc": "2026-11-15T21:22:16.865189+00:00",
+  "current_rebuild_hash_checks": [
+    {
+      "figure": "method",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "figure": "detection_difference",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "figure": "normal_prediction",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "figure": "timing_limits",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "figure": "failure_cases",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "figure": "positive_completion",
+      "inputs_match": true,
+      "outputs_match": true
+    }
+  ]
+}

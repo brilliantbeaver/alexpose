@@ -1,0 +1,74 @@
+{
+  "A": {
+    "all_spatial_cores_connected": true,
+    "all_temporal_cores_contiguous_without_wrap": true,
+    "core_count": 16,
+    "core_partition_covers_each_token": 1,
+    "core_probability_for_every_token": "1/16",
+    "core_size": 8,
+    "hidden_probability_for_every_token": "1/2",
+    "left_right_reflection_closed": true,
+    "pair_hidden_probability_range": [
+      "21/85",
+      "9/34"
+    ],
+    "pair_probability_sum": "2016",
+    "time_reversal_closed": true
+  },
+  "E_leg_structure": {
+    "construction": "2 sides x 4 aligned starts x 2 repeats",
+    "distinct_scored_target_tokens": 64,
+    "expected_lower_limb_hidden_probability": "8/15",
+    "expected_other_joint_hidden_probability": "7/15",
+    "hidden_tokens_per_mask": 64,
+    "mask_count": 16,
+    "repeats_per_distinct_target": 2,
+    "same_distribution_as_primary_uniform_evaluation": false,
+    "scored_core_tokens_per_mask": 8,
+    "scored_target_instances_before_validity": 128
+  },
+  "J": {
+    "all_spatial_cores_connected": true,
+    "all_temporal_cores_contiguous_without_wrap": true,
+    "core_count": 16,
+    "core_partition_covers_each_token": 1,
+    "core_probability_for_every_token": "1/16",
+    "core_size": 8,
+    "hidden_probability_for_every_token": "1/2",
+    "left_right_reflection_closed": true,
+    "pair_hidden_probability_range": [
+      "21/85",
+      "9/34"
+    ],
+    "pair_probability_sum": "2016",
+    "time_reversal_closed": true
+  },
+  "frames_per_token": 4,
+  "grid_tokens": 128,
+  "hidden_tokens_per_primary_mask": 64,
+  "joints": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "production_bank_warning": "This script uses Python random.Random for checks. Preserve the historical Torch E_U bank and record production bank hashes separately.",
+  "sampled_budget_allowlist_checks": 6144,
+  "scope": "Exact proposed mask laws and standalone sampler invariants only; no GAVD data or models loaded.",
+  "status": "PASS",
+  "temporal_tokens": 8,
+  "uniform_hidden_probability_for_every_token": "1/2",
+  "uniform_pair_hidden_probability": "63/254"
+}

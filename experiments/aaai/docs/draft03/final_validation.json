@@ -1,0 +1,153 @@
+{
+  "created_at_utc": "2026-11-15T22:01:57.201778+00:00",
+  "manuscript_title": "Controlled Cross-Leg Prediction for Gait Anomaly Detection",
+  "presentation": "standalone manuscript edited for general AI/ML researchers",
+  "core_protocol": "d66e1b126c9d9a9adf1b",
+  "external_protocol": "external_fb9d0d23b56ce29fd846",
+  "pdf": {
+    "pages": 8,
+    "content_pages": 7,
+    "reference_pages": 2,
+    "page_limit_passed": true,
+    "pdf_sha256": "29eff1d3c656f38780550ea636dff6071b812da1c7c09ed2e6b51bc5265f20ae",
+    "all_fonts_embedded": true,
+    "type3_fonts": false,
+    "out_of_page_words": [],
+    "overfull_boxes": [],
+    "undefined_references": false,
+    "missing_bibliography_keys": [],
+    "anonymity_scan_passed": true,
+    "official_style_unchanged": true,
+    "illustrative_or_simulated_efficacy": false,
+    "passed": true
+  },
+  "source_hash_checks_passed": true,
+  "manuscript_input_hash_checks": [
+    {
+      "path": "docs/draft03/study_evidence.json",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/manuscript_template.md",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/technical_details.md",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/advisory/completion_audit_v1/completion_summary.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/advisory/completion_audit_v1/audit_manifest.json",
+      "hash_matches": true
+    },
+    {
+      "path": "artifacts/iteration02/external_fb9d0d23b56ce29fd846/derivatives/interpolation_audit_v1/participant_comparison.csv",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/build_figures.py",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/draft03/figures/manifest.json",
+      "hash_matches": true
+    }
+  ],
+  "summary_arithmetic_passed": true,
+  "links": {
+    "checked": 44,
+    "broken": []
+  },
+  "conditional_post_outcome_inference": true,
+  "standalone_checks": {
+    "development_narrative_absent": true,
+    "no_em_dashes": true,
+    "local_template_exists": true,
+    "generator_hash_matches": true,
+    "input_hashes_match": true,
+    "independent_review_matches_manuscript": true,
+    "figure_input_and_output_hashes_match": true
+  },
+  "figure_checks": [
+    {
+      "name": "method",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "name": "detection_difference",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "name": "normal_prediction",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "name": "timing_limits",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "name": "failure_cases",
+      "inputs_match": true,
+      "outputs_match": true
+    },
+    {
+      "name": "positive_completion",
+      "inputs_match": true,
+      "outputs_match": true
+    }
+  ],
+  "visual_review_record": "visual_review.md",
+  "archived_advisory_provenance": {
+    "requested_model": "opus",
+    "tools_enabled": false,
+    "prompt_sha256": "14e18a7203e5b98a5cf86b5b0f2923ace3ab9c086adce2468fb7737824e3ba2f",
+    "reviewed_manuscript_sha256": "ed1c45cd848ce2dd64ba16a216e9e23000692610f42dd954c3cbaa7937e1c3dd",
+    "returncode": 0,
+    "elapsed_seconds": 38.134478374995524,
+    "modelUsage": {
+      "global.anthropic.claude-opus-4-8": {
+        "inputTokens": 2,
+        "outputTokens": 2205,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 18826,
+        "webSearchRequests": 0,
+        "costUSD": 0.1727975,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 64000,
+        "thinkingTokens": 0,
+        "cacheCreationEphemeral5mInputTokens": 18826,
+        "cacheCreationEphemeral1hInputTokens": 0,
+        "canonicalModel": "claude-opus-4-8",
+        "provider": "bedrock",
+        "costBasis": "list"
+      }
+    },
+    "is_error": false,
+    "total_cost_usd": 0.1727975
+  },
+  "current_independent_review": "advisory/accessibility_review.md",
+  "study_execution": {
+    "notebooks": {
+      "all18_independent": true,
+      "all6_new_have_real_video": true,
+      "historical_original_artifacts_unchanged": true
+    },
+    "tests": {
+      "command": "uv run --project experiments/aaai pytest experiments/aaai/tests -q --disable-warnings",
+      "passed": 137,
+      "failed": 0,
+      "elapsed_seconds": 19.17,
+      "execution_record": "Recorded completed study validation, reused for this editorial check. Model tests were not rerun for the language revision."
+    },
+    "core_verified": true,
+    "timing_verified": true
+  },
+  "status": "passed_with_scientific_limitations"
+}
