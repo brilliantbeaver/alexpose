@@ -1,6 +1,16 @@
-**Role**: You are a world models expert specializing in Joint Embedding Predictive Architecture, pose estimation and vision transformers
+# Role
 
-**Task**: You are to create a set of progressive learning, simple to understand, step-by-step detailed tutorials in the folder "experiments/ms-pd" that implements the S-JEPA approach to predict skeleton motions that could be gait sequences of people with different health conditions, particularly multiple-sclerosis ("ms"), parkinsons, or normal.  You have the following tasks:
+You are a world models expert specializing in Joint Embedding Predictive Architecture, pose estimation and vision transformers
+
+# Tasks
+
+You are to create a set of progressive learning, simple to understand, step-by-step detailed tutorials in the folder "experiments/aaai" that implements the S-JEPA approach to predict skeleton motions that could be gait sequences of people with different health conditions.  
+
+**Important**: the goal for this set of experiments and explorations is to write a successful paper for the 4th Workshop on Automated Spatial and Temporal Anomaly Detection (ASTAD) which has a due date in a few days:  https://ismart.ece.mcgill.ca/astad4/
+
+Our research in this project should align with AI methods for detecting, predicting, explaining, and responding to anomalies, abnormalities, outliers, risks, failures, and deviations from expected or learned normal behavior across spatial, temporal, and multimodal data. 
+
+You have the following tasks:
 
 ## Task 1: undrestand the S-JEPA approach with stochastic positional embeddings
 
@@ -67,11 +77,13 @@ The main goal for this task is to create robust classifiers using the S-JEPA mod
 * myopathic
 * stroke
 
+For the set of all GAVD datasets, use the refreshed and updated data in "data/gavd" and not any cached version.  The latest GAVD manifest and dataset count should be at: "data/gavd/README.md".
+
 For performance comparison, you must also create a classical Random Forest classifier similiar to experiments/exp5 but only for classifying these health conditions with an input video gait sequence.  You must then create a test / validate / training datasets using the above videos only and examine the performance of each approach systematically and scientifically.
 
 ## Output instructions
 
-Create an output subfolder "experiments/ms-pd/" for your detailed tutorials.  Your outputs have fully explained, detailed, well structured, well written Jupyter notebooks with lots of clear examples and code snippets; as well as a README.md file fully explain what these tutorials are and how to setup & run them locally and in Google Colab.  You must illustrate your notebooks, README, and docs with clear and insightful vector graphics and flow charts (stored in an "images" subfolder).  Ultrathink to ensure that each of the notebooks should be self-contained regarding library dependencies so that they can be run in Google Colab by clicking on a "Google Colab" button at top of the notebook.
+Create an output subfolder "experiments/aaai/" for your detailed tutorials.  Your outputs have fully explained, detailed, well structured, well written Jupyter notebooks with lots of clear examples and code snippets; as well as a README.md file fully explain what these tutorials are and how to setup & run them locally and in Google Colab.  You must illustrate your notebooks, README, and docs with clear and insightful vector graphics and flow charts (stored in an "images" subfolder).  Ultrathink to ensure that each of the notebooks should be self-contained regarding library dependencies so that they can be run in Google Colab by clicking on a "Google Colab" button at top of the notebook.
 
 In that same output subfolder, create a folder called "slides" that contains illustrative slides documenting step-by-step with plenty of vector graphics, tables, and flowcharts explaining the setup and experiments.
 
@@ -86,3 +98,14 @@ For each of the tutorial notebooks, ultrathink on how best to enable viewing of 
 Use critical adversarial-review to check and verify all of your work; systematically and thoughtfully fix all issues.
 
 Use fan out subagents with dynamic workflows to parallize your tasks.
+
+
+---
+
+
+---
+
+This project and notebooks should try to use the GAVD dataset as much as possible to satisfy reviewers' demand for reasonably sufficient dataset sizes.  Ultrathink if the GAVD dataset satisfy the generalizability requirements -- and document clearly in the README.md file in the output folder.
+
+--
+
