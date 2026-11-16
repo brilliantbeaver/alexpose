@@ -1,0 +1,4130 @@
+{
+  "five_class_baseline": {
+    "identity": "medwm-gait-v1",
+    "status": "completed_pilot",
+    "pose_model_sha256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a",
+    "seed": 27,
+    "epochs_parameter": 5,
+    "steps_per_stage": 60,
+    "n_windows": 405,
+    "support": [
+      {
+        "split": "test",
+        "label": "cerebral palsy",
+        "windows": 6,
+        "sources": 1
+      },
+      {
+        "split": "test",
+        "label": "myopathic",
+        "windows": 24,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "normal",
+        "windows": 12,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "parkinsons",
+        "windows": 5,
+        "sources": 2
+      },
+      {
+        "split": "test",
+        "label": "stroke",
+        "windows": 10,
+        "sources": 2
+      },
+      {
+        "split": "train",
+        "label": "cerebral palsy",
+        "windows": 28,
+        "sources": 5
+      },
+      {
+        "split": "train",
+        "label": "myopathic",
+        "windows": 90,
+        "sources": 15
+      },
+      {
+        "split": "train",
+        "label": "normal",
+        "windows": 92,
+        "sources": 17
+      },
+      {
+        "split": "train",
+        "label": "parkinsons",
+        "windows": 28,
+        "sources": 7
+      },
+      {
+        "split": "train",
+        "label": "stroke",
+        "windows": 26,
+        "sources": 9
+      },
+      {
+        "split": "validation",
+        "label": "cerebral palsy",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "myopathic",
+        "windows": 26,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "normal",
+        "windows": 34,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "parkinsons",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "stroke",
+        "windows": 16,
+        "sources": 3
+      }
+    ],
+    "representation_diagnostics": {
+      "normal": {
+        "online": {
+          "mean_std": 0.04698273539543152,
+          "effective_rank": 2.926095485687256,
+          "n_examples": 17,
+          "maximum_rank": 16
+        },
+        "teacher": {
+          "mean_std": 0.04587608203291893,
+          "effective_rank": 3.1538631916046143,
+          "n_examples": 17,
+          "maximum_rank": 16
+        }
+      },
+      "adapted": {
+        "online": {
+          "mean_std": 0.5280663371086121,
+          "effective_rank": 2.601510763168335,
+          "n_examples": 53,
+          "maximum_rank": 48
+        },
+        "teacher": {
+          "mean_std": 0.4023432433605194,
+          "effective_rank": 2.254985809326172,
+          "n_examples": 53,
+          "maximum_rank": 48
+        }
+      }
+    },
+    "classifiers": {
+      "rf": {
+        "n_sources": 17,
+        "accuracy": 0.35294117647058826,
+        "balanced_accuracy": 0.4,
+        "macro_f1": 0.31047619047619046,
+        "classes": [
+          "normal",
+          "parkinsons",
+          "stroke",
+          "cerebral palsy",
+          "myopathic"
+        ],
+        "confusion_matrix": [
+          [
+            3,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            2,
+            1,
+            2,
+            0
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.5,
+          "parkinsons": 0.5,
+          "stroke": 1.0,
+          "cerebral palsy": 0.0,
+          "myopathic": 0.0
+        },
+        "abnormal_auroc": 0.9545454545454546,
+        "abnormal_average_precision": 0.975068870523416,
+        "selected_parameters": {
+          "max_depth": 4
+        }
+      },
+      "untrained_probe": {
+        "n_sources": 17,
+        "accuracy": 0.47058823529411764,
+        "balanced_accuracy": 0.5666666666666667,
+        "macro_f1": 0.52,
+        "classes": [
+          "normal",
+          "parkinsons",
+          "stroke",
+          "cerebral palsy",
+          "myopathic"
+        ],
+        "confusion_matrix": [
+          [
+            2,
+            3,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            3,
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.3333333333333333,
+          "parkinsons": 0.0,
+          "stroke": 1.0,
+          "cerebral palsy": 1.0,
+          "myopathic": 0.5
+        },
+        "abnormal_auroc": 0.6212121212121212,
+        "abnormal_average_precision": 0.810328842280714,
+        "selected_parameters": {
+          "C": 0.1
+        }
+      },
+      "jepa_normal": {
+        "n_sources": 17,
+        "accuracy": 0.47058823529411764,
+        "balanced_accuracy": 0.5666666666666667,
+        "macro_f1": 0.52,
+        "classes": [
+          "normal",
+          "parkinsons",
+          "stroke",
+          "cerebral palsy",
+          "myopathic"
+        ],
+        "confusion_matrix": [
+          [
+            2,
+            3,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            3,
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.3333333333333333,
+          "parkinsons": 0.0,
+          "stroke": 1.0,
+          "cerebral palsy": 1.0,
+          "myopathic": 0.5
+        },
+        "abnormal_auroc": 0.5757575757575758,
+        "abnormal_average_precision": 0.776454383406255,
+        "selected_parameters": {
+          "C": 0.1
+        }
+      },
+      "jepa_adapted": {
+        "n_sources": 17,
+        "accuracy": 0.35294117647058826,
+        "balanced_accuracy": 0.4333333333333333,
+        "macro_f1": 0.3135531135531135,
+        "classes": [
+          "normal",
+          "parkinsons",
+          "stroke",
+          "cerebral palsy",
+          "myopathic"
+        ],
+        "confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            3,
+            0
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.6666666666666666,
+          "parkinsons": 0.0,
+          "stroke": 0.5,
+          "cerebral palsy": 1.0,
+          "myopathic": 0.0
+        },
+        "abnormal_auroc": 0.7727272727272727,
+        "abnormal_average_precision": 0.8687409812409813,
+        "selected_parameters": {
+          "C": 0.1
+        }
+      },
+      "jepa_mixed": {
+        "n_sources": 17,
+        "accuracy": 0.4117647058823529,
+        "balanced_accuracy": 0.4666666666666667,
+        "macro_f1": 0.3261904761904762,
+        "classes": [
+          "normal",
+          "parkinsons",
+          "stroke",
+          "cerebral palsy",
+          "myopathic"
+        ],
+        "confusion_matrix": [
+          [
+            5,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            3,
+            0
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.8333333333333334,
+          "parkinsons": 0.0,
+          "stroke": 0.5,
+          "cerebral palsy": 1.0,
+          "myopathic": 0.0
+        },
+        "abnormal_auroc": 0.7727272727272727,
+        "abnormal_average_precision": 0.8794847828938739,
+        "selected_parameters": {
+          "C": 0.1
+        }
+      }
+    },
+    "paired_jepa_minus_rf": {
+      "metric": "binary_balanced_accuracy_A_minus_B",
+      "estimate": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "repetitions": 1000,
+      "seed": 27,
+      "unit": "source",
+      "resampling": "paired within label",
+      "n_sources": 17
+    },
+    "paired_macro_f1": {
+      "metric": "macro_f1_A_minus_B",
+      "estimate": 0.0030769230769230327,
+      "ci95": [
+        -0.23415945165945165,
+        0.18619805194805197
+      ],
+      "repetitions": 1000,
+      "seed": 27,
+      "unit": "source",
+      "resampling": "paired within label",
+      "n_sources": 17
+    },
+    "anomaly": {
+      "score": "future_coordinate_mse",
+      "auroc": 0.6363636363636364,
+      "average_precision": 0.810072280660516,
+      "prevalence": 0.6470588235294118,
+      "threshold": null,
+      "threshold_status": "insufficient_normal_sources_for_finite_5pct_threshold",
+      "normal_calibration_sources": 6,
+      "sensitivity": 0.0,
+      "specificity": 1.0
+    },
+    "seconds": 34.173041792120785,
+    "input_sha256": "e8752610a60788434ee89a0aa99a5080544e77b8fb766fb08e3ebc10508d5e5c",
+    "metadata_sha256": "e121f1bd69edc93b6488ff7daa2da5a65880c87ab90c0c02a91e213b46c6f2bc",
+    "features": [
+      "left_hip_mean_deg",
+      "left_knee_mean_deg",
+      "left_ankle_mean_deg",
+      "right_hip_mean_deg",
+      "right_knee_mean_deg",
+      "right_ankle_mean_deg",
+      "hip_asymmetry_deg",
+      "knee_asymmetry_deg",
+      "ankle_asymmetry_deg",
+      "left_hip_range_deg",
+      "left_knee_range_deg",
+      "left_ankle_range_deg",
+      "right_hip_range_deg",
+      "right_knee_range_deg",
+      "right_ankle_range_deg",
+      "left_hip_std_deg",
+      "left_knee_std_deg",
+      "left_ankle_std_deg",
+      "right_hip_std_deg",
+      "right_knee_std_deg",
+      "right_ankle_std_deg",
+      "left_elbow_mean_deg",
+      "left_elbow_std_deg",
+      "left_elbow_range_deg",
+      "right_elbow_mean_deg",
+      "right_elbow_std_deg",
+      "right_elbow_range_deg",
+      "left_foot_direction_mean_deg",
+      "left_foot_direction_std_deg",
+      "right_foot_direction_mean_deg",
+      "right_foot_direction_std_deg",
+      "left_wrist_speed_mean_torso_per_s",
+      "left_wrist_speed_std_torso_per_s",
+      "right_wrist_speed_mean_torso_per_s",
+      "right_wrist_speed_std_torso_per_s",
+      "ankle_separation_mean_torso",
+      "ankle_separation_std_torso"
+    ],
+    "validation_selection": [
+      {
+        "model": "rf",
+        "parameters": {
+          "max_depth": 4
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "rf",
+        "parameters": {
+          "max_depth": 8
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "untrained_probe",
+        "parameters": {
+          "C": 0.1
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "untrained_probe",
+        "parameters": {
+          "C": 1.0
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "jepa_normal",
+        "parameters": {
+          "C": 0.1
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "jepa_normal",
+        "parameters": {
+          "C": 1.0
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "jepa_adapted",
+        "parameters": {
+          "C": 0.1
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "jepa_adapted",
+        "parameters": {
+          "C": 1.0
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "jepa_mixed",
+        "parameters": {
+          "C": 0.1
+        },
+        "binary_balanced_accuracy": 0.5
+      },
+      {
+        "model": "jepa_mixed",
+        "parameters": {
+          "C": 1.0
+        },
+        "binary_balanced_accuracy": 0.5
+      }
+    ],
+    "forecast_mse_mean": 0.45965004078313415,
+    "persistence_mse_mean": 0.02891178059058444,
+    "artifact_sha256": {
+      "normal_forecast.pt": "5bf6fab68e037a2ee8e40eef44fd97f0466521c7a73ab4d693a967a0ef79c33b",
+      "untrained_probe_classifier.joblib": "20c8969aaa936967e2150b4b3fbe8aa209292e33981c84d3bd35cd3c5c07e8f8",
+      "jepa_normal_classifier.joblib": "1aa0389da2594f3a8d0a3e8c83e887d11996032471678d4597ff20524c705a12",
+      "untrained_encoder.pt": "c2660fd711c324d45858b94b558e97ab4c40b4742b935f18aab02e2356e60695",
+      "adaptation_1.pt": "c3b40dfd01470760dfb4e4111781a042ff19176783a01ba85e24a5148b0f04c1",
+      "jepa_adapted_classifier.joblib": "66fe002c97ae10bfc48dfc7aad5d3e051f2eb4bd64b8a223f101ec9fa988be26",
+      "mixed_adaptation.pt": "ba244df55abf5ece184dca4a10c446617dffe076c52da8150ad9659fa5fb3b3b",
+      "adaptation_4.pt": "d8b42a4de7e1a1251d7e39e2a6ef02af5d30f2b702b389a2e145b40f32a4f6b7",
+      "adaptation_3.pt": "be57e94973dad8b2d533213c17bea2e78af90ba8c4aa63e90169a7d1d7c604d9",
+      "normal_completion.pt": "3ec0508dfe067b032c1f20f01ca632df7359432beed5df367da00708f3f1faac",
+      "adaptation_2.pt": "021b2168f5a16114eb809ee848aa3454768cb21ca39b6aa030195fd103c9663d",
+      "rf_classifier.joblib": "07613b5f45d1ca95aa236d515dabaef8c76543138dfae61002d8f249238ed103",
+      "jepa_mixed_classifier.joblib": "dc869c3562f014f87100f45cac6e0bd5438fa08799f7ed70e95b47112056effe"
+    },
+    "person_selection": "full_image_first_detection_requires_manual_review",
+    "preprocessing": "pre-normalized articulation; random masks are not raw-coordinate conditional predictions",
+    "versions": {
+      "torch": "2.15.0",
+      "numpy": "2.5.5",
+      "scikit-learn": "1.9.1",
+      "mediapipe": "1.2.3"
+    },
+    "ambient_source_sha256": {
+      "joint_angles": "3ce3a320bffa0ebab307676bbaae798c5564e2338e4f4089a4e4ea6ec5d2b32f",
+      "keypoint_extractor": "1e23ed7255cfb95276208becf8bd5d1ca8db7f7a733f87b6ad89fdea7a4b40af"
+    },
+    "code_sha256": {
+      "binary_clean.py": "d5530e7a2fcec2570726319bf6132ea4b6b026caf7e2d5bc0be8064faa3876ac",
+      "notebook_support.py": "0d8b6aca4d6c37be17ce49bbc8be7afed0d161cb51b5e2f0a4ba967720ccde0b",
+      "objective_audit.py": "7dbe67067c4621b4d3cc0d8a1511d988c463f14d9180bb472349e75ca538fa3a",
+      "evaluation.py": "e46c9885d579a86c9673636060f2b98d62836755a536febe915e4a23fee8d489",
+      "clean_data.py": "85e8fadfeb18d01d01ee71b97811a42f89f961fa2a313e345d3805a68d752f22",
+      "__init__.py": "ea683997e7e8e11e5c53d4490fd5812a700dc3c4d68c6fd86a80a1bce51ee938",
+      "features.py": "68d6124f6247368d174ed9a51a8c16ed95a04ecf6daf970e5846a35a3eda35b7",
+      "masking.py": "4395b0ebea8c160105ca376af22740026208712884c34cac28e659fa1c89eca4",
+      "model.py": "43e710935cefd8fc5e4877764a7545b8438158c62f93d208d2ab559a42732189",
+      "experiment.py": "b3343eed4dfdfec8ec1eb0c08f620eeedb83bb0fdcd3766c5154b51ec098fffc",
+      "acquisition_control.py": "e197900b84e17e72df33de28f38260455ed915331a4f5088d628c234cbaeec5b",
+      "pose.py": "92083ad8c8c2b70950fff2cff7f4c21a0de3081f5e80a6994f420766da534f8d",
+      "revision.py": "5dcf6e3165ff04e313e48cde39ac2638a1c24fcc0a2d9be3cbd56ad3397b2b02",
+      "settings.py": "135bf6d07e62c86cb6617ea9f2aa25344d857d8b5dcf90b5195b8610419ea322",
+      "inference.py": "aa13702b19e6c47865531971fad32111364d94ae5ada6d2f590b819908befc77",
+      "binary_revision.py": "6e511dcc83dd471a58c823467cb8efde3e0fa1348e73c95a19bfa513ac27df8c",
+      "workflow.py": "556e3cf87ca1082b5ac14b484f876def424c98d3b23168af5eb4a66a9b56d992",
+      "extended_data.py": "609de01497b1b661907952257df37c358f87cf15c0c66f6f7060c1e355416ea5",
+      "demo.py": "baec4eb824e4ea6c86a3b3d54ebbdac22ea09f8f6001081bf0ece915766d83a2",
+      "training.py": "403354570a50b7021e05288f2518c14d24417bd2d57654892085ce6213262171",
+      "data.py": "68aa589be72b04e03d3b84e20fdb4a7d8f68f726dccf3b7e92b6272fe7640f77"
+    },
+    "limitations": [
+      "Single-run pilot is not clinical validation.",
+      "Source bootstrap does not cover training-seed uncertainty.",
+      "Curriculum and mixed adaptation match updates but not per-condition exposure."
+    ]
+  },
+  "objective_weight_audit": {
+    "status": "secondary_final_complete",
+    "identity": "coordinate-weight-ten-secondary-audit-v1",
+    "primary_unchanged": true,
+    "records": [
+      {
+        "seed": 27,
+        "normal_mse": 0.05474300132270116,
+        "primary_weight1_mse": 0.054641751497134274,
+        "gain_over_weight1": -0.00010124982556688744,
+        "gain_over_persistence": 0.0003732016027396806,
+        "normal_control_mse": {
+          "actual": 0.05474300132270116,
+          "static": 0.05355720401228712,
+          "shuffled": 0.05419937058414029
+        }
+      },
+      {
+        "seed": 41,
+        "normal_mse": 0.05394806845430413,
+        "primary_weight1_mse": 0.054045731107615125,
+        "gain_over_weight1": 9.766265331097861e-05,
+        "gain_over_persistence": 0.0011681344711366975,
+        "normal_control_mse": {
+          "actual": 0.05394806845430413,
+          "static": 0.05319316151311596,
+          "shuffled": 0.05408046788030721
+        }
+      },
+      {
+        "seed": 73,
+        "normal_mse": 0.05526540504652234,
+        "primary_weight1_mse": 0.05512362275962531,
+        "gain_over_weight1": -0.00014178228689702525,
+        "gain_over_persistence": -0.00014920212108150525,
+        "normal_control_mse": {
+          "actual": 0.05526540504652234,
+          "static": 0.054034262522066334,
+          "shuffled": 0.05587702554007148
+        }
+      }
+    ],
+    "gain_over_primary": {
+      "mean_gain": -4.845648638431135e-05,
+      "interval95": [
+        -0.00021241836904327798,
+        8.955830667436757e-05
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "gain_over_persistence": {
+      "mean_gain": 0.00046404465093162424,
+      "interval95": [
+        -0.0009447019807572501,
+        0.0018963760263468103
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "primary_final_results_sha256": "978455d3c69077bcd92402559202679dac4d5339db733893277ef1a246f4cccc",
+    "frozen_development_sha256": "e532bfc87ae8a9d84edc714d93fac3cd6abdbc2d8ae6f357dfd27ef21f76daa0"
+  },
+  "person_review": {
+    "identity": "inherited-normal-forecast-checkpoints-v1",
+    "parent": "/Users/alexmui/dev/alexpose/experiments/aaai-worldmodels/artifacts/runs/extended-input-v1",
+    "derivative": "/Users/alexmui/dev/alexpose/experiments/aaai-worldmodels/artifacts/runs/extended-input-clean-v1",
+    "exclusions_sha256": "98a234fbc4c6bd1948afd6e1799aee2eafd3ebddd27e6e2d9fbf35830cf6ed60",
+    "checks": {
+      "normal_train": {
+        "equal": true,
+        "rows": 84,
+        "sources": 17,
+        "x_sha256": "dc4cbe2a739e19a1404dc14d474f09e49876d7a7bbe36eabe47b6cab47657a17",
+        "valid_sha256": "3406ebc3011ba69565544f57f33b09647927cd17cb08e08f3d599dfb9d994c69",
+        "metadata_sha256": "48a4fa42032a1070378b744314634514f3dd116b5fba845ef13fa1f1f074ba9a"
+      },
+      "normal_validation": {
+        "equal": true,
+        "rows": 27,
+        "sources": 6,
+        "x_sha256": "3a797ee55cafdeab234a0cad9680893695796b82901f4f88bb1cb729959a063a",
+        "valid_sha256": "291c23c6d0e58d59f346eef5d974e9e46b0996b6f8811728ff483c0c339f2d16",
+        "metadata_sha256": "36b4ebd94609ef5a424a4d8992ec97e57906f9e5288f056be937695ea199cd75"
+      },
+      "all_test": {
+        "equal": true,
+        "rows": 59,
+        "sources": 19,
+        "x_sha256": "2066f8f343c910cd87f8a89ffce94377d997d3c215c721804781c670f5e31cb8",
+        "valid_sha256": "267ee60360bfab267c67aaf9724888c4d7c75968cce636959049ab6fd8e54e75",
+        "metadata_sha256": "9acae40fd56620c17870cedd7120565dfec962f097d7e5938672887b141cb01f"
+      }
+    },
+    "lineage": "No forecast retraining claimed. Original checkpoints and stochastic validation predictions inherited. Only excluded abnormal train/validation rows are removed.",
+    "parent_preparation_sha256": "1eb8b6d23b9ecfb882c0ebbef82e98f6e78779c235b50abc65f1795bc8b8b178",
+    "retained_row_map_sha256": "8aa402cade397f47977dcaa034a37b9ef6d1766b9203b18ab2c13ab26162a73f",
+    "all_retained_x_sha256": "d064e19bde7d5cf2c0b3aa15926e663bf4f71c480e2fadb56bd8c6479c889f95",
+    "all_retained_valid_sha256": "4fb26cffa20edde7c98d9b023a69e5a45249291fa0397ea0f3d1dbd96b707616",
+    "validation_lineage_sha256": "29eb3444d238ced5d8320fb5f89ec19cba950a337abf448fbfe3b993b79602f9",
+    "revision-development-v1_freeze_sha256": "23857851c13248eee0b3b60d3b2bcb50822684781016e2c950b9a338577b21a5",
+    "objective-audit-development-v1_freeze_sha256": "7d5b39545748b4fa90ad30745ca5606f43a1db03a786d699462f418c581e6b54"
+  },
+  "identity": "released-medwm-study-analysis-v1",
+  "primary_binary": "jepa_mixed",
+  "binary": {
+    "identity": "direct-binary-person-reviewed-clean-v1",
+    "selection_sha256": "f8d68dd8eee00b87ea7fb981332d07e8f3d065f3522db4b63facecac124404c2",
+    "primary_jepa": "jepa_mixed",
+    "test_reports": {
+      "rf": {
+        "n_sources": 17,
+        "accuracy": 0.8235294117647058,
+        "balanced_accuracy": 0.7878787878787878,
+        "macro_f1": 0.7984189723320159,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            10
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.7878787878787878,
+        "sensitivity": 0.9090909090909091,
+        "specificity": 0.6666666666666666,
+        "per_class_recall": {
+          "normal": 0.6666666666666666,
+          "abnormal": 0.9090909090909091
+        },
+        "abnormal_auroc": 0.893939393939394,
+        "abnormal_average_precision": 0.9342069546615002
+      },
+      "untrained_probe": {
+        "n_sources": 17,
+        "accuracy": 0.7647058823529411,
+        "balanced_accuracy": 0.8181818181818181,
+        "macro_f1": 0.7638888888888888,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            6,
+            0
+          ],
+          [
+            4,
+            7
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.8181818181818181,
+        "sensitivity": 0.6363636363636364,
+        "specificity": 1.0,
+        "per_class_recall": {
+          "normal": 1.0,
+          "abnormal": 0.6363636363636364
+        },
+        "abnormal_auroc": 0.787878787878788,
+        "abnormal_average_precision": 0.9146316102198456
+      },
+      "jepa_normal": {
+        "n_sources": 17,
+        "accuracy": 0.7647058823529411,
+        "balanced_accuracy": 0.7803030303030303,
+        "macro_f1": 0.7571428571428571,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            5,
+            1
+          ],
+          [
+            3,
+            8
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.7803030303030303,
+        "sensitivity": 0.7272727272727273,
+        "specificity": 0.8333333333333334,
+        "per_class_recall": {
+          "normal": 0.8333333333333334,
+          "abnormal": 0.7272727272727273
+        },
+        "abnormal_auroc": 0.7424242424242425,
+        "abnormal_average_precision": 0.8896316102198455
+      },
+      "jepa_adapted": {
+        "n_sources": 17,
+        "accuracy": 0.8823529411764706,
+        "balanced_accuracy": 0.9090909090909092,
+        "macro_f1": 0.8785714285714286,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            6,
+            0
+          ],
+          [
+            2,
+            9
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.9090909090909092,
+        "sensitivity": 0.8181818181818182,
+        "specificity": 1.0,
+        "per_class_recall": {
+          "normal": 1.0,
+          "abnormal": 0.8181818181818182
+        },
+        "abnormal_auroc": 0.9090909090909091,
+        "abnormal_average_precision": 0.9633264462809917
+      },
+      "jepa_mixed": {
+        "n_sources": 17,
+        "accuracy": 0.7647058823529411,
+        "balanced_accuracy": 0.8181818181818181,
+        "macro_f1": 0.7638888888888888,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            6,
+            0
+          ],
+          [
+            4,
+            7
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.8181818181818181,
+        "sensitivity": 0.6363636363636364,
+        "specificity": 1.0,
+        "per_class_recall": {
+          "normal": 1.0,
+          "abnormal": 0.6363636363636364
+        },
+        "abnormal_auroc": 0.8484848484848485,
+        "abnormal_average_precision": 0.9332546241637151
+      }
+    },
+    "paired_against_rf": {
+      "untrained_probe": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.030303030303030276,
+        "ci95": [
+          -0.18939393939393934,
+          0.25
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "jepa_normal": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": -0.007575757575757569,
+        "ci95": [
+          -0.31060606060606055,
+          0.28787878787878796
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "jepa_adapted": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.12121212121212133,
+        "ci95": [
+          -0.09090909090909094,
+          0.33333333333333337
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "jepa_mixed": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.030303030303030276,
+        "ci95": [
+          -0.18939393939393934,
+          0.25
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      }
+    },
+    "old_five_class_derived_reports": {
+      "rf": {
+        "n_sources": 17,
+        "accuracy": 0.6470588235294118,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.39285714285714285,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            11
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.0,
+          "abnormal": 1.0
+        },
+        "abnormal_auroc": 0.9545454545454546,
+        "abnormal_average_precision": 0.975068870523416
+      },
+      "untrained_probe": {
+        "n_sources": 17,
+        "accuracy": 0.6470588235294118,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.39285714285714285,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            11
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.0,
+          "abnormal": 1.0
+        },
+        "abnormal_auroc": 0.6212121212121212,
+        "abnormal_average_precision": 0.810328842280714
+      },
+      "jepa_normal": {
+        "n_sources": 17,
+        "accuracy": 0.6470588235294118,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.39285714285714285,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            11
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.0,
+          "abnormal": 1.0
+        },
+        "abnormal_auroc": 0.5757575757575758,
+        "abnormal_average_precision": 0.776454383406255
+      },
+      "jepa_adapted": {
+        "n_sources": 17,
+        "accuracy": 0.6470588235294118,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.39285714285714285,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            11
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.0,
+          "abnormal": 1.0
+        },
+        "abnormal_auroc": 0.7727272727272727,
+        "abnormal_average_precision": 0.8687409812409813
+      },
+      "jepa_mixed": {
+        "n_sources": 17,
+        "accuracy": 0.6470588235294118,
+        "balanced_accuracy": 0.5,
+        "macro_f1": 0.39285714285714285,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            11
+          ]
+        ],
+        "abnormal_prevalence": 0.6470588235294118,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "per_class_recall": {
+          "normal": 0.0,
+          "abnormal": 1.0
+        },
+        "abnormal_auroc": 0.7727272727272727,
+        "abnormal_average_precision": 0.8794847828938739
+      }
+    },
+    "direct_minus_old_endpoint": {
+      "rf": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.28787878787878785,
+        "ci95": [
+          0.0757575757575758,
+          0.5
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "untrained_probe": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.3181818181818181,
+        "ci95": [
+          0.18181818181818188,
+          0.4545454545454546
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "jepa_normal": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.2803030303030303,
+        "ci95": [
+          0.06818181818181812,
+          0.4545454545454546
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "jepa_adapted": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.40909090909090917,
+        "ci95": [
+          0.2727272727272727,
+          0.5
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      },
+      "jepa_mixed": {
+        "metric": "binary_balanced_accuracy_A_minus_B",
+        "estimate": 0.3181818181818181,
+        "ci95": [
+          0.18181818181818188,
+          0.4545454545454546
+        ],
+        "repetitions": 2000,
+        "seed": 27,
+        "unit": "source",
+        "resampling": "paired within label",
+        "n_sources": 17
+      }
+    },
+    "limitation": "Single encoder seed and same fixed held-out source cohort; no external clinical validation."
+  },
+  "binary_intervals": {
+    "jepa_adapted": {
+      "n_sources": 17,
+      "abnormal_prevalence": 0.6470588235294118,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.9090909090909091,
+        "ci95": [
+          0.7272727272727272,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.9633264462809917,
+        "ci95": [
+          0.8935145235780263,
+          1.0
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.9090909090909092,
+        "ci95": [
+          0.7727272727272727,
+          1.0
+        ]
+      }
+    },
+    "jepa_mixed": {
+      "n_sources": 17,
+      "abnormal_prevalence": 0.6470588235294118,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.8484848484848485,
+        "ci95": [
+          0.6212121212121211,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.9332546241637151,
+        "ci95": [
+          0.8354845154845155,
+          1.0
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.8181818181818181,
+        "ci95": [
+          0.6818181818181819,
+          0.9545454545454546
+        ]
+      }
+    },
+    "jepa_normal": {
+      "n_sources": 17,
+      "abnormal_prevalence": 0.6470588235294118,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.7424242424242425,
+        "ci95": [
+          0.4848484848484848,
+          0.9545454545454546
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8896316102198455,
+        "ci95": [
+          0.7744574420677361,
+          0.9805194805194806
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.7803030303030303,
+        "ci95": [
+          0.5606060606060606,
+          0.9545454545454546
+        ]
+      }
+    },
+    "rf": {
+      "n_sources": 17,
+      "abnormal_prevalence": 0.6470588235294118,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.893939393939394,
+        "ci95": [
+          0.6818181818181819,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.9342069546615002,
+        "ci95": [
+          0.8203684573002755,
+          1.0
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.7878787878787878,
+        "ci95": [
+          0.5757575757575758,
+          1.0
+        ]
+      }
+    },
+    "untrained_probe": {
+      "n_sources": 17,
+      "abnormal_prevalence": 0.6470588235294118,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.787878787878788,
+        "ci95": [
+          0.5303030303030303,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.9146316102198456,
+        "ci95": [
+          0.8040106951871657,
+          1.0
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.8181818181818181,
+        "ci95": [
+          0.6818181818181819,
+          0.9545454545454546
+        ]
+      }
+    }
+  },
+  "forecast": {
+    "status": "final_test_complete",
+    "protocol": {
+      "identity": "normal-articulation-residual-forecast-v1",
+      "frames": 32,
+      "context_frames": 16,
+      "seeds": [
+        27,
+        41,
+        73
+      ],
+      "arms": [
+        "direct_det",
+        "residual_det",
+        "residual_slv"
+      ],
+      "pretrain_steps": 200,
+      "forecast_steps": 300,
+      "batch_size": 8,
+      "dim": 48,
+      "encoder_layers": 2,
+      "learning_rate": 0.0003,
+      "variance_weight": 1.0,
+      "covariance_weight": 0.04,
+      "coordinate_weight": 1.0,
+      "latent_mse_weight": 1.0,
+      "kl_weight": 0.01,
+      "latent_dim": 8,
+      "prior_samples": 16,
+      "scoring_batch_size": 8,
+      "horizons": [
+        4,
+        8,
+        16
+      ]
+    },
+    "frozen_development_sha256": "0df625b9bb0d76bcdc691f29684a2d222eadf20d21a4ae8836960d0c2cce54d5",
+    "records": [
+      {
+        "seed": 27,
+        "arm": "direct_det",
+        "normal_mse": 0.07427834068614851,
+        "normal_energy": 0.2699553148481251,
+        "normal_persistence_gain": -0.01916213776070762,
+        "normal_control_mse": {
+          "actual": 0.07427834068614851,
+          "static": 0.07503758238542384,
+          "shuffled": 0.07458886109853778
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.07427834068614851,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.07427834068614851,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.07427834068614851,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.07365723478826447,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.07872844546888602,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.07427834068614851,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.07365723478826447,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.07872844546888602,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.07427834068614851,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.07427834068614851,
+          "aurc_prefix_missingness": 0.07289988974426063,
+          "aurc_prefix_confidence": 0.07289988974426063,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.09424443046443577,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.0942444304644358,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.09424443046443581,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.09081673047075653,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.09005106060766502,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.0942444304644358,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.09066110322667884,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.090051060607665,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.09424443046443579,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.0942444304644358,
+          "aurc_prefix_missingness": 0.0921503508481866,
+          "aurc_prefix_confidence": 0.09485220961656417,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 27,
+        "arm": "residual_det",
+        "normal_mse": 0.054641751497134294,
+        "normal_energy": 0.22311439867020214,
+        "normal_persistence_gain": 0.00047445142830658424,
+        "normal_control_mse": {
+          "actual": 0.054641751497134294,
+          "static": 0.05371428995037702,
+          "shuffled": 0.05418126617506836
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.054641751497134294,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.054641751497134294,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054641751497134294,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.036827630833916804,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05155118089812366,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.0546417514971343,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.036827630833916804,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05155118089812366,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.0546417514971343,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.054641751497134294,
+          "aurc_prefix_missingness": 0.0381961854108166,
+          "aurc_prefix_confidence": 0.0381961854108166,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.032287955537937625,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.032287955537937625,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032287955537937625,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.02027048970418841,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03194082913486267,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032287955537937625,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.024211742681048677,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03194082913486267,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032287955537937625,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.032287955537937625,
+          "aurc_prefix_missingness": 0.022765952594285616,
+          "aurc_prefix_confidence": 0.02181357466279848,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 27,
+        "arm": "residual_slv",
+        "normal_mse": 0.05557453907330534,
+        "normal_energy": 0.21617124073142988,
+        "normal_persistence_gain": -0.00045833614786445695,
+        "normal_control_mse": {
+          "actual": 0.05557453907330534,
+          "static": 0.0541829939758953,
+          "shuffled": 0.05518794210187428
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.04346600146143026,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.057038031661143206,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.05557453907330533,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.03748296369368127,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05271418519973399,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.05557453907330534,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.03748296369368127,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05271418519973399,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.05557453907330534,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.04825472484994711,
+          "aurc_prefix_missingness": 0.03894876584113564,
+          "aurc_prefix_confidence": 0.03894876584113564,
+          "uncertainty_error_spearman": 0.48571428571428577,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.031021991939163534,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.033246982795092424,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03290379056275519,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.020791427608526907,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03280350952187611,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032903790562755185,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.02490793392914457,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03280350952187611,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032903790562755185,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.031153356471789115,
+          "aurc_prefix_missingness": 0.02331922890866866,
+          "aurc_prefix_confidence": 0.02242059947369088,
+          "uncertainty_error_spearman": 0.12456140350877193,
+          "partial_rank_correlation": 0.02202918200113637,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 41,
+        "arm": "direct_det",
+        "normal_mse": 0.0716899884999279,
+        "normal_energy": 0.2647163660921257,
+        "normal_persistence_gain": -0.01657378557448701,
+        "normal_control_mse": {
+          "actual": 0.0716899884999279,
+          "static": 0.07572753170103737,
+          "shuffled": 0.07212424097862223
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.0716899884999279,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.0716899884999279,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.0716899884999279,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.07166540249394981,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.07542465749507948,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.07168998849992789,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.07166540249394981,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.07542465749507948,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.07168998849992789,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.0716899884999279,
+          "aurc_prefix_missingness": 0.0714262607432125,
+          "aurc_prefix_confidence": 0.0714262607432125,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.0881874971568892,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.08818749715688921,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.08818749715688921,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.07731175296226106,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.08067825755289028,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.08818749715688917,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.08057102986103279,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.08067825755289029,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.08818749715688919,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.0881874971568892,
+          "aurc_prefix_missingness": 0.08154641555371292,
+          "aurc_prefix_confidence": 0.08313801862183472,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 41,
+        "arm": "residual_det",
+        "normal_mse": 0.05404573110761515,
+        "normal_energy": 0.22149118033853496,
+        "normal_persistence_gain": 0.001070471817825733,
+        "normal_control_mse": {
+          "actual": 0.05404573110761515,
+          "static": 0.053221017283170684,
+          "shuffled": 0.054144348935575966
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.05404573110761515,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.054045731107615146,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054045731107615146,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.03661881229838037,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05100291810062255,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054045731107615146,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.03661881229838037,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05100291810062255,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054045731107615146,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.054045731107615146,
+          "aurc_prefix_missingness": 0.037574367184629746,
+          "aurc_prefix_confidence": 0.037574367184629746,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.032355584617462976,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.032355584617462976,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03235558461746298,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.020142050784046003,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03182627132173461,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03235558461746299,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.02416356116619774,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03182627132173461,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03235558461746299,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.03235558461746298,
+          "aurc_prefix_missingness": 0.022724401998415376,
+          "aurc_prefix_confidence": 0.021797963707820382,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 41,
+        "arm": "residual_slv",
+        "normal_mse": 0.054758763515987484,
+        "normal_energy": 0.21596221785083095,
+        "normal_persistence_gain": 0.0003574394094533982,
+        "normal_control_mse": {
+          "actual": 0.054758763515987484,
+          "static": 0.05319498281527924,
+          "shuffled": 0.05478755464691256
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.034772623011179664,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05578425367077065,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054758763515987484,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.03711661990529127,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05128161645417033,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054758763515987484,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.03711661990529127,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05128161645417033,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054758763515987484,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.04603381765390834,
+          "aurc_prefix_missingness": 0.03807945573959118,
+          "aurc_prefix_confidence": 0.03807945573959118,
+          "uncertainty_error_spearman": 0.6571428571428573,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.02637161470875382,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03444360913381191,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03246179300497112,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.020214775288783952,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.031921479940161576,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032461793004971116,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.024228198687149004,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.031921479940161576,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032461793004971116,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.02932784853455702,
+          "aurc_prefix_missingness": 0.02282193331317458,
+          "aurc_prefix_confidence": 0.021880190835748662,
+          "uncertainty_error_spearman": 0.1105263157894737,
+          "partial_rank_correlation": -0.24646474560612855,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 73,
+        "arm": "direct_det",
+        "normal_mse": 0.08059860148772276,
+        "normal_energy": 0.2775361795938517,
+        "normal_persistence_gain": -0.02548239856228188,
+        "normal_control_mse": {
+          "actual": 0.08059860148772276,
+          "static": 0.08984950717210316,
+          "shuffled": 0.08077217686929804
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.08059860148772276,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.08059860148772276,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.08059860148772276,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.08240679914787619,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.08659440611296507,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.08059860148772276,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.08240679914787619,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.08659440611296507,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.08059860148772276,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.08059860148772276,
+          "aurc_prefix_missingness": 0.08610078411103055,
+          "aurc_prefix_confidence": 0.08610078411103055,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.09944377021743289,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.09944377021743289,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.09944377021743289,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.09190263741048367,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.09518402150825768,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.09944377021743289,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.09536157606758913,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.09518402150825768,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.09944377021743289,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.09944377021743289,
+          "aurc_prefix_missingness": 0.09790695196690087,
+          "aurc_prefix_confidence": 0.09917979080444259,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 73,
+        "arm": "residual_det",
+        "normal_mse": 0.05512362275962538,
+        "normal_energy": 0.22433333871606834,
+        "normal_persistence_gain": -7.419834184491565e-06,
+        "normal_control_mse": {
+          "actual": 0.05512362275962538,
+          "static": 0.05398979252195251,
+          "shuffled": 0.05560651768594061
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.05512362275962538,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05512362275962538,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.05512362275962538,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.037642433360975946,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05186882632308609,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.055123622759625374,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.037642433360975946,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05186882632308609,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.055123622759625374,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.05512362275962538,
+          "aurc_prefix_missingness": 0.038844680867394975,
+          "aurc_prefix_confidence": 0.038844680867394975,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.03272491609267546,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03272491609267546,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03272491609267546,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.02061003962655684,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03244353357445775,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03272491609267544,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.02484190808192276,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03244353357445775,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03272491609267544,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.03272491609267546,
+          "aurc_prefix_missingness": 0.023280719376047927,
+          "aurc_prefix_confidence": 0.022300175518179966,
+          "uncertainty_error_spearman": null,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      },
+      {
+        "seed": 73,
+        "arm": "residual_slv",
+        "normal_mse": 0.05477838873077729,
+        "normal_energy": 0.2149950133458484,
+        "normal_persistence_gain": 0.00033781419466358845,
+        "normal_control_mse": {
+          "actual": 0.05477838873077729,
+          "static": 0.054489086743901495,
+          "shuffled": 0.054972290755652096
+        },
+        "normal_uncertainty": {
+          "n_sources": 6,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.05443700539565763,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.06238460209023118,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054778388730777304,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.03738962927946302,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05152320431720375,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054778388730777304,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.03738962927946302,
+                "actual_coverage": 0.5
+              },
+              "0.75": {
+                "mse": 0.05152320431720375,
+                "actual_coverage": 0.8333333333333334
+              },
+              "1.0": {
+                "mse": 0.054778388730777304,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.05921258690352805,
+          "aurc_prefix_missingness": 0.0383994410060187,
+          "aurc_prefix_confidence": 0.0383994410060187,
+          "uncertainty_error_spearman": -0.3714285714285715,
+          "partial_rank_correlation": null,
+          "partial_rank_residual_dof": 2,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 4,
+          "confidence_fields_present": true
+        },
+        "all_source_uncertainty": {
+          "n_sources": 19,
+          "retained_risk": {
+            "uncertainty": {
+              "0.5": {
+                "mse": 0.033449805626201014,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03662520568333464,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.03233546166523072,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_missingness": {
+              "0.5": {
+                "mse": 0.02050662999619745,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03208912210376376,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032335461665230714,
+                "actual_coverage": 1.0
+              }
+            },
+            "prefix_confidence": {
+              "0.5": {
+                "mse": 0.0244558754931202,
+                "actual_coverage": 0.5263157894736842
+              },
+              "0.75": {
+                "mse": 0.03208912210376376,
+                "actual_coverage": 0.7894736842105263
+              },
+              "1.0": {
+                "mse": 0.032335461665230714,
+                "actual_coverage": 1.0
+              }
+            }
+          },
+          "aurc_uncertainty": 0.039873103479895866,
+          "aurc_prefix_missingness": 0.023216994676546247,
+          "aurc_prefix_confidence": 0.02222086553057825,
+          "uncertainty_error_spearman": -0.24736842105263157,
+          "partial_rank_correlation": -0.4065273956615313,
+          "partial_rank_residual_dof": 13,
+          "partial_correlation_is_descriptive": true,
+          "nuisance_design_rank": 6,
+          "confidence_fields_present": true
+        }
+      }
+    ],
+    "hypotheses": {
+      "by_seed": [
+        {
+          "seed": 27,
+          "energy_gain": 0.00694315793877226,
+          "mse_ratio": 1.0170709677236456,
+          "mse_within_10pct": true,
+          "aurc_gain_over_prefix_missingness": -0.009305959008811475,
+          "aurc_gain_over_prefix_confidence": -0.009305959008811475,
+          "static_context_penalty": -0.0009274615467572758,
+          "shuffled_context_penalty": -0.000460485322065933
+        },
+        {
+          "seed": 41,
+          "energy_gain": 0.0055289624877040144,
+          "mse_ratio": 1.0131931309607516,
+          "mse_within_10pct": true,
+          "aurc_gain_over_prefix_missingness": -0.007954361914317164,
+          "aurc_gain_over_prefix_confidence": -0.007954361914317164,
+          "static_context_penalty": -0.0008247138244444688,
+          "shuffled_context_penalty": 9.861782796081325e-05
+        },
+        {
+          "seed": 73,
+          "energy_gain": 0.009338325370219946,
+          "mse_ratio": 0.9937370947052313,
+          "mse_within_10pct": true,
+          "aurc_gain_over_prefix_missingness": -0.02081314589750935,
+          "aurc_gain_over_prefix_confidence": -0.02081314589750935,
+          "static_context_penalty": -0.0011338302376728698,
+          "shuffled_context_penalty": 0.00048289492631523045
+        }
+      ],
+      "mean_energy_gain": 0.00727014859889874,
+      "all_seed_mse_within_10pct": true,
+      "interpretation": "Criteria limit claims; all declared arms remain in final evaluation."
+    },
+    "primary": {
+      "mean_gain": 0.000512501137315942,
+      "interval95": [
+        -0.0008106930803637331,
+        0.001859145723085199
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "n_test_sources": 19,
+    "normal_test_sources": 6,
+    "limitations": [
+      "Source bootstrap conditions on three fixed trained seeds.",
+      "Relative 2D articulation forecasts do not establish physical-world or clinical validity.",
+      "Native-frame sampling gives different time horizons across sources."
+    ]
+  },
+  "forecast_validation_gate": {
+    "passed": false,
+    "gains_by_seed": [
+      -0.0008102330391587346,
+      -0.0007529996164898351,
+      -0.0008700789079174679
+    ],
+    "mean_gain": -0.0008111038545220126,
+    "positive_seeds": 0,
+    "required_positive_seeds": 2
+  },
+  "quality": {
+    "identity": "acquisition-only-control-v1",
+    "selection_sha256": "67d0d84d31d8f540a730439d0e0918098be69e9fece8b73a4bb9d0389faff7fb",
+    "reports": {
+      "prefix_quality": {
+        "n_sources": 19,
+        "accuracy": 0.5789473684210527,
+        "balanced_accuracy": 0.5128205128205128,
+        "macro_f1": 0.5128205128205128,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            9
+          ]
+        ],
+        "abnormal_prevalence": 0.6842105263157895,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5128205128205128,
+        "sensitivity": 0.6923076923076923,
+        "specificity": 0.3333333333333333,
+        "per_class_recall": {
+          "normal": 0.3333333333333333,
+          "abnormal": 0.6923076923076923
+        },
+        "abnormal_auroc": 0.5,
+        "abnormal_average_precision": 0.724604798035972
+      },
+      "retrospective_quality": {
+        "n_sources": 19,
+        "accuracy": 0.631578947368421,
+        "balanced_accuracy": 0.5961538461538461,
+        "macro_f1": 0.5907692307692307,
+        "classes": [
+          "normal",
+          "abnormal"
+        ],
+        "confusion_matrix": [
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            9
+          ]
+        ],
+        "abnormal_prevalence": 0.6842105263157895,
+        "binary_threshold": 0.5,
+        "binary_balanced_accuracy": 0.5961538461538461,
+        "sensitivity": 0.6923076923076923,
+        "specificity": 0.5,
+        "per_class_recall": {
+          "normal": 0.5,
+          "abnormal": 0.6923076923076923
+        },
+        "abnormal_auroc": 0.6794871794871795,
+        "abnormal_average_precision": 0.8406446996944732
+      }
+    },
+    "interpretation": "Retrospective future quality is a confound audit, never a past-only uncertainty input."
+  },
+  "quality_intervals": {
+    "prefix_quality": {
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.5,
+        "ci95": [
+          0.21794871794871795,
+          0.7823717948717932
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.724604798035972,
+        "ci95": [
+          0.5879597230255125,
+          0.9132447158105051
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.5128205128205128,
+        "ci95": [
+          0.27564102564102566,
+          0.7564102564102564
+        ]
+      }
+    },
+    "retrospective_quality": {
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6794871794871795,
+        "ci95": [
+          0.38461538461538464,
+          0.923076923076923
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8406446996944732,
+        "ci95": [
+          0.7046530185500773,
+          0.965390538948231
+        ]
+      },
+      "binary_balanced_accuracy": {
+        "estimate": 0.5961538461538461,
+        "ci95": [
+          0.35256410256410253,
+          0.8397435897435898
+        ]
+      }
+    }
+  },
+  "temporal_controls": {
+    "direct_det_shuffled": {
+      "mean_gain": 0.0003061160908862944,
+      "interval95": [
+        -0.0004318725465096214,
+        0.001106455077565355
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "direct_det_static": {
+      "mean_gain": 0.004682563528255078,
+      "interval95": [
+        0.0009734344508040242,
+        0.006899502009257613
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "residual_det_shuffled": {
+      "mean_gain": 4.034247740337148e-05,
+      "interval95": [
+        -7.168394997447877e-05,
+        0.00020726699331909983
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "residual_det_static": {
+      "mean_gain": -0.0009620018696248714,
+      "interval95": [
+        -0.0016036281476967875,
+        -0.0003253947865487796
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "residual_slv_shuffled": {
+      "mean_gain": -5.463460521041918e-05,
+      "interval95": [
+        -0.0002946742866752848,
+        0.00016009123675936475
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    },
+    "residual_slv_static": {
+      "mean_gain": -0.0010815425949980454,
+      "interval95": [
+        -0.0018784144016736027,
+        -0.00033523244526824483
+      ],
+      "n_sources": 6,
+      "unit": "source after averaging model seeds",
+      "repetitions": 2000
+    }
+  },
+  "stochastic_energy_gain": {
+    "mean_gain": 0.007270148598898706,
+    "interval95": [
+      0.006609948770553448,
+      0.007889899041254908
+    ],
+    "n_sources": 6,
+    "unit": "source after averaging model seeds",
+    "repetitions": 2000
+  },
+  "anomaly_by_seed": [
+    {
+      "seed": 27,
+      "arm": "direct_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.782051282051282,
+        "ci95": [
+          0.5128205128205129,
+          0.9871794871794871
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8793716966793887,
+        "ci95": [
+          0.7369660547785548,
+          0.9945054945054943
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.6153846153846154,
+        "ci95": [
+          0.33333333333333337,
+          0.8717948717948718
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.3350693701789198,
+        "ci95": [
+          0.16901613870966684,
+          0.4430709385643594
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "direct_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.7435897435897437,
+        "ci95": [
+          0.46153846153846156,
+          0.9615384615384616
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8496642246642245,
+        "ci95": [
+          0.6988619881150839,
+          0.985576923076923
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.5769230769230771,
+        "ci95": [
+          0.2692307692307693,
+          0.8461538461538463
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.3053618981637556,
+        "ci95": [
+          0.1206022894374289,
+          0.43296338368803533
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "direct_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.9615384615384616,
+        "ci95": [
+          0.8461538461538461,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.9821780783319243,
+        "ci95": [
+          0.9372210481825866,
+          1.0
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.7948717948717949,
+        "ci95": [
+          0.4868589743589743,
+          1.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.43787575183145533,
+        "ci95": [
+          0.24226029457959683,
+          0.48863459876037274
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "residual_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5113944693276082,
+          0.7107315257577225
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.0016147879270050902,
+          0.0015663069961713294
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "residual_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5113941806585889,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.007348901098901071,
+          0.008241758241758212
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "residual_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6666666666666667,
+        "ci95": [
+          0.33333333333333337,
+          0.9743589743589743
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.7945093368170291,
+        "ci95": [
+          0.6458339583367865,
+          0.9897435897435896
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.5000000000000001,
+        "ci95": [
+          0.10256410256410253,
+          0.8589743589743589
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.2502070103165601,
+        "ci95": [
+          0.03853354376961189,
+          0.43103434010420794
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "residual_slv",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5113941806585889,
+          0.7107315257577225
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.002565559440559431,
+          0.002331082379159224
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "residual_slv",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5113194392235533,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008241758241758212,
+          0.008241758241758212
+        ]
+      }
+    },
+    {
+      "seed": 27,
+      "arm": "residual_slv",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.5256410256410258,
+        "ci95": [
+          0.19230769230769232,
+          0.8461538461538463
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.7095970493743773,
+        "ci95": [
+          0.5735246084539816,
+          0.9193723600960442
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.35897435897435914,
+        "ci95": [
+          -0.0641025641025641,
+          0.7179487179487181
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.16529472287390834,
+        "ci95": [
+          -0.021663935479724988,
+          0.3387898565638799
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "direct_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.7435897435897436,
+        "ci95": [
+          0.5,
+          0.9615384615384616
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8764246662019939,
+        "ci95": [
+          0.7484100329495064,
+          0.9826007326007327
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.576923076923077,
+        "ci95": [
+          0.28205128205128205,
+          0.8461538461538461
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.33212233970152494,
+        "ci95": [
+          0.1595033231186928,
+          0.43032807541351226
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "direct_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.7307692307692307,
+        "ci95": [
+          0.47403846153846146,
+          0.9615384615384616
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8610400508173786,
+        "ci95": [
+          0.7274329234362128,
+          0.9826007326007324
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.5641025641025641,
+        "ci95": [
+          0.25641025641025644,
+          0.8336538461538445
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.3167377243169096,
+        "ci95": [
+          0.1425018395132561,
+          0.4299717246118175
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "direct_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.9230769230769231,
+        "ci95": [
+          0.7435897435897436,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.958945755099601,
+        "ci95": [
+          0.8736054223554225,
+          1.0
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.7564102564102565,
+        "ci95": [
+          0.38461538461538464,
+          1.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.41464342859913206,
+        "ci95": [
+          0.19760806756453037,
+          0.48863459876037274
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "residual_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5111476782326985,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008241758241758212,
+          0.008186813186813208
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "residual_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5110530048065771,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008241758241758212,
+          0.008241758241758212
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "residual_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.717948717948718,
+        "ci95": [
+          0.41025641025641024,
+          0.9487179487179487
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8521966281581665,
+        "ci95": [
+          0.7152821895299271,
+          0.9751850713389174
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.5512820512820513,
+        "ci95": [
+          0.17948717948717946,
+          0.8717948717948718
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.3078943016576976,
+        "ci95": [
+          0.10124971176054777,
+          0.4284329397415844
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "residual_slv",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5110530048065771,
+          0.7107315257577225
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.0029605010374240707,
+          0.0027493707273118836
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "residual_slv",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.510979909538346,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008241758241758212,
+          0.008241758241758212
+        ]
+      }
+    },
+    {
+      "seed": 41,
+      "arm": "residual_slv",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6153846153846154,
+        "ci95": [
+          0.2564102564102564,
+          0.9102564102564102
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.7263336022951408,
+        "ci95": [
+          0.5885879432496931,
+          0.9513689782439781
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.4487179487179488,
+        "ci95": [
+          0.038461538461538436,
+          0.8205128205128206
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.18203127579467182,
+        "ci95": [
+          0.007559268233684755,
+          0.39625895467092764
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "direct_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6666666666666667,
+        "ci95": [
+          0.3717948717948718,
+          0.9230769230769231
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8106367990983374,
+        "ci95": [
+          0.6674513739746535,
+          0.9684981684981684
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.5000000000000001,
+        "ci95": [
+          0.14102564102564102,
+          0.8205128205128206
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.26633447259786847,
+        "ci95": [
+          0.0843788517950521,
+          0.4146849892883173
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "direct_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6538461538461539,
+        "ci95": [
+          0.358974358974359,
+          0.9230769230769231
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8014792899408283,
+        "ci95": [
+          0.6569013268557803,
+          0.968199716949717
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.4871794871794872,
+        "ci95": [
+          0.10256410256410256,
+          0.8205128205128206
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.25717696344035934,
+        "ci95": [
+          0.05585886701018267,
+          0.41486930252410104
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "direct_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.8461538461538463,
+        "ci95": [
+          0.5641025641025641,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8861435572974035,
+        "ci95": [
+          0.7274980628346014,
+          1.0
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.6794871794871796,
+        "ci95": [
+          0.23076923076923073,
+          0.9743589743589743
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.3418412307969345,
+        "ci95": [
+          0.07292354972598786,
+          0.48508426077177563
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "residual_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.15384615384615385,
+        "ci95": [
+          0.0,
+          0.3717948717948718
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.5408506499718694,
+        "ci95": [
+          0.5113944693276082,
+          0.7056376185304203
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": -0.012820512820512775,
+        "ci95": [
+          -0.05128205128205132,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": -0.0034516765285995676,
+        "ci95": [
+          -0.02130177514792897,
+          0.006686566638489794
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "residual_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.15384615384615385,
+        "ci95": [
+          0.0,
+          0.3717948717948718
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.5408506499718694,
+        "ci95": [
+          0.5112067634378006,
+          0.7056376185304203
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": -0.012820512820512775,
+        "ci95": [
+          -0.05128205128205132,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": -0.0034516765285995676,
+        "ci95": [
+          -0.02130177514792897,
+          0.006593406593406459
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "residual_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.5897435897435898,
+        "ci95": [
+          0.25641025641025644,
+          0.9230769230769231
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.7401294783647725,
+        "ci95": [
+          0.5884986819298561,
+          0.971153846153846
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.42307692307692313,
+        "ci95": [
+          0.01282051282051283,
+          0.7948717948717949
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.19582715186430355,
+        "ci95": [
+          -0.004293888301241265,
+          0.399165604826625
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "residual_slv",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5113944693276082,
+          0.7107315257577225
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.0016147879270050902,
+          0.0015663069961713294
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "residual_slv",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5115352502443179,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.007348901098901071,
+          0.008186813186813208
+        ]
+      }
+    },
+    {
+      "seed": 73,
+      "arm": "residual_slv",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.5641025641025641,
+        "ci95": [
+          0.1923076923076923,
+          0.8846153846153847
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.6848500858116243,
+        "ci95": [
+          0.5612911088094913,
+          0.9322698828948818
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.39743589743589747,
+        "ci95": [
+          -0.051282051282051294,
+          0.8076923076923077
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.14054775931115537,
+        "ci95": [
+          -0.04354988985935342,
+          0.3766045551455767
+        ]
+      }
+    }
+  ],
+  "anomaly_seed_mean_scores": [
+    {
+      "arm": "direct_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.7435897435897436,
+        "ci95": [
+          0.4871794871794872,
+          0.9615384615384616
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8659710172868067,
+        "ci95": [
+          0.725763177740732,
+          0.9838264299802761
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.576923076923077,
+        "ci95": [
+          0.28205128205128205,
+          0.8461538461538463
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.32166869078633775,
+        "ci95": [
+          0.15369787515149502,
+          0.4317926494795987
+        ]
+      }
+    },
+    {
+      "arm": "direct_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.7051282051282052,
+        "ci95": [
+          0.42307692307692313,
+          0.9487179487179488
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.8355155752929031,
+        "ci95": [
+          0.6897750197478554,
+          0.9757099850217259
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.5384615384615385,
+        "ci95": [
+          0.21794871794871795,
+          0.8333333333333334
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.29121324879243415,
+        "ci95": [
+          0.1112158592132246,
+          0.4240874500687848
+        ]
+      }
+    },
+    {
+      "arm": "direct_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.9230769230769231,
+        "ci95": [
+          0.7435897435897436,
+          1.0
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.958945755099601,
+        "ci95": [
+          0.873827022650552,
+          1.0
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.7564102564102565,
+        "ci95": [
+          0.38461538461538464,
+          1.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.41464342859913206,
+        "ci95": [
+          0.19657483963405023,
+          0.48863459876037274
+        ]
+      }
+    },
+    {
+      "arm": "residual_det",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5110520809566714,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008021170006464096,
+          0.00790643180349061
+        ]
+      }
+    },
+    {
+      "arm": "residual_det",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5110530048065771,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008241758241758212,
+          0.008241758241758212
+        ]
+      }
+    },
+    {
+      "arm": "residual_det",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6538461538461539,
+        "ci95": [
+          0.3076923076923077,
+          0.9615384615384616
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.7682901311860588,
+        "ci95": [
+          0.6055366246373034,
+          0.9855769230769231
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.4871794871794872,
+        "ci95": [
+          0.0769230769230769,
+          0.8464743589743573
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.22398780468558988,
+        "ci95": [
+          0.019441610128380856,
+          0.4311427987647027
+        ]
+      }
+    },
+    {
+      "arm": "residual_slv",
+      "score": "raw_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5115352502443179,
+          0.7107315257577225
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.0013265976105342552,
+          0.001379118618937616
+        ]
+      }
+    },
+    {
+      "arm": "residual_slv",
+      "score": "energy",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.16666666666666663,
+        "ci95": [
+          0.0,
+          0.38461538461538464
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.544302326500469,
+        "ci95": [
+          0.5110530048065771,
+          0.7074768725426616
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -1.3877787807814457e-17,
+          6.938893903907228e-18
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.0,
+        "ci95": [
+          -0.008241758241758212,
+          0.008241758241758212
+        ]
+      }
+    },
+    {
+      "arm": "residual_slv",
+      "score": "excess_mse",
+      "n_sources": 19,
+      "abnormal_prevalence": 0.6842105263157895,
+      "unit": "source",
+      "repetitions": 2000,
+      "auroc": {
+        "estimate": 0.6153846153846154,
+        "ci95": [
+          0.2692307692307693,
+          0.9358974358974359
+        ]
+      },
+      "average_precision": {
+        "estimate": 0.7458894549392285,
+        "ci95": [
+          0.59061323671268,
+          0.9723626373626372
+        ]
+      },
+      "auroc_gain_over_persistence": {
+        "estimate": 0.4487179487179488,
+        "ci95": [
+          0.02564102564102566,
+          0.8205128205128206
+        ]
+      },
+      "ap_gain_over_persistence": {
+        "estimate": 0.2015871284387596,
+        "ci95": [
+          -0.0017018428338087628,
+          0.4203977065048153
+        ]
+      }
+    }
+  ],
+  "persistence_anomaly": {
+    "n_sources": 19,
+    "abnormal_prevalence": 0.6842105263157895,
+    "unit": "source",
+    "repetitions": 2000,
+    "auroc": {
+      "estimate": 0.16666666666666663,
+      "ci95": [
+        0.0,
+        0.38461538461538464
+      ]
+    },
+    "average_precision": {
+      "estimate": 0.544302326500469,
+      "ci95": [
+        0.5113654012396273,
+        0.7107315257577225
+      ]
+    }
+  },
+  "interpretation": "Exploratory source-grouped GAVD study. No new model, score direction or threshold selected from these results.",
+  "analysis_code_sha256": "30795fb6cdf8d55352fec407d1f24877b8612ac5d23739c6342780a95dba5960"
+}

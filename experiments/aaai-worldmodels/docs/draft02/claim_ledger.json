@@ -1,0 +1,38 @@
+[
+  {
+    "claim": "Bilateral forecasts reduce normal-source error by 33.5%.",
+    "status": "supported exploratory finding",
+    "evidence": "results.json paired_contrasts and source_scores.csv",
+    "boundary": "Normal-source forecasting only; conditional uncertainty."
+  },
+  {
+    "claim": "Excess error AUROC is 0.793.",
+    "status": "prespecified secondary association",
+    "evidence": "results.json anomaly.excess_error",
+    "boundary": "No clinical diagnosis or proof of value beyond movement alone."
+  },
+  {
+    "claim": "Low-movement diagnostic AUROC is 0.806.",
+    "status": "completed post hoc diagnostic",
+    "evidence": "posthoc_score_audit.json",
+    "boundary": "Direction chosen after outcome inspection; not a changed frozen result."
+  },
+  {
+    "claim": "Learned anomaly scores improve on movement-only scores.",
+    "status": "not established",
+    "evidence": "posthoc_score_audit.json",
+    "boundary": "No superiority or state-of-the-art claim."
+  },
+  {
+    "claim": "Bilateral temporal context is necessary.",
+    "status": "not established",
+    "evidence": "current-posture MSE 0.07164; own-leg difference interval includes zero",
+    "boundary": "Timing control alone is insufficient."
+  },
+  {
+    "claim": "GAVD establishes clinical generalizability.",
+    "status": "not established",
+    "evidence": "data_audit.json; cohort.csv",
+    "boundary": "Source IDs are not verified people; no external clinical cohort."
+  }
+]

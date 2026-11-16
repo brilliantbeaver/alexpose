@@ -1,0 +1,73 @@
+{
+  "evidence_type": "real TRAIN-source software smoke, not held-out efficacy",
+  "source_id": "4KU6G7Iv8ZM",
+  "sequence_id": "cljxm3ajs004m3n6lk7unsn04",
+  "split": "train",
+  "first_frame": 1376,
+  "last_frame": 1406,
+  "report": {
+    "schema": 1,
+    "identity": "sealed-clean-binary-video-inference-v1",
+    "training_identity": "direct-binary-person-reviewed-clean-v1",
+    "primary_jepa": "jepa_mixed",
+    "n_windows": 1,
+    "input": {
+      "video_sha256": "852a1c70ab393035b9420a8c0938cec67c00581223b2a9084420793cd659a158",
+      "pose_model_sha256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a",
+      "start_frame": 1376,
+      "end_frame": 1406,
+      "frame_step": 2,
+      "processed_end_frame": 1406,
+      "decoded_sampled_frames": 16,
+      "detected_sampled_frames": 16,
+      "requested_sampled_frames": 16,
+      "coordinate_units": "pixels",
+      "image_dimensions": [
+        854,
+        480
+      ],
+      "source_fps": 29.97002997002997,
+      "sample_fps": 14.985014985014985,
+      "person_selection": "full_image_first_detection"
+    },
+    "person_review_status": "required",
+    "decision_threshold": 0.5,
+    "interpretation": "Research prediction of normal versus pooled GAVD abnormal labels, not a clinical diagnosis.",
+    "aggregation": "Arithmetic mean of window probabilities within this sequence",
+    "selection_sha256": "f8d68dd8eee00b87ea7fb981332d07e8f3d065f3522db4b63facecac124404c2",
+    "wrapper_sha256": "479dd6aeb1e9b8323a030e8f4ab7a3cba023bf767e809493d0d9ea0b124d8881",
+    "quality": {
+      "confidence_threshold": 0.5,
+      "minimum_valid_fraction": 0.7,
+      "frames": 16,
+      "context_frames": 8,
+      "mean_valid_fraction": 1.0,
+      "sample_fps": [
+        14.985014985014985
+      ],
+      "first_retained_frame": 1376,
+      "last_retained_frame": 1406
+    },
+    "classifiers": {
+      "rf": {
+        "probabilities": {
+          "normal": 0.7723512135438879,
+          "abnormal": 0.22764878645611245
+        },
+        "predicted_annotation": "normal",
+        "threshold": 0.5,
+        "classifier_sha256": "67fb9b8eeb931fdef472dc588e524a059311e2495eb1fff9299ecec3383c65f1"
+      },
+      "jepa_mixed": {
+        "probabilities": {
+          "normal": 0.4848383963108063,
+          "abnormal": 0.5151616334915161
+        },
+        "predicted_annotation": "abnormal",
+        "threshold": 0.5,
+        "classifier_sha256": "a52ef81dd183d9d6d09320a6144c73dd86fb89b170773c30ec1f0b267b71783d"
+      }
+    },
+    "status": "predictions_require_person_review"
+  }
+}

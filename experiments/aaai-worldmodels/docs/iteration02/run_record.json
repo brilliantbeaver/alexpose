@@ -1,0 +1,50 @@
+{
+  "identity": "medwm-iteration02-research-design-and-draft03-v1",
+  "scope": "Evidence review, next-study instruction, standalone manuscript, revised vector slides, and executed mask-design laboratory. No next-stage model training.",
+  "input_runs": [
+    "restart-full10hz-v1",
+    "restart-dynamics-v1"
+  ],
+  "team": [
+    {
+      "agent": "root",
+      "responsibility": "Protocol, integration, mask-design prototype, tests, README and run ledger"
+    },
+    {
+      "agent": "literature",
+      "responsibility": "Primary-source masking, neurological and external-data review"
+    },
+    {
+      "agent": "evidence_draft",
+      "responsibility": "Independent score analysis, draft02, evidence notebook"
+    },
+    {
+      "agent": "slides",
+      "responsibility": "36-slide editable vector deck and rendering"
+    },
+    {
+      "agent": "adversarial_review",
+      "responsibility": "Independent scientific, numerical, implementation and visual review"
+    }
+  ],
+  "separation": "Each worker had exclusive writable paths. The reviewer did not author the reviewed artifacts. Coordinator amendments to literature are identified in the integrated protocol.",
+  "preservation": "preservation_check.json",
+  "test_record": "test_execution.json",
+  "notebook_record": "notebook_execution.json",
+  "acceptance_record": "acceptance.json",
+  "existing_workspace": "Initial status included unrelated deletions/renames, untracked study trees and media, and editor changes. These were preserved; no staging or commit was performed.",
+  "resource_use": "Only lightweight audits, tests, rendering and notebook execution were performed. No new media download, paid API call or large model fit was needed.",
+  "scientific_boundaries": [
+    "The frozen GAVD study and new post hoc audits are exploratory.",
+    "The low-motion diagnostic remains identified as post hoc.",
+    "Conditional calibration, new masked model fitting and external evaluation remain proposed.",
+    "No patient-level clinical validity, treatment effects or state-of-the-art superiority are established."
+  ],
+  "deliverables": [
+    "../../../../notes/aaai-worldmodels/05-iterate-02-INSTR.md",
+    "../draft02/manuscript.pdf",
+    "../../slides/iteration02.html",
+    "../../slides/iteration02.pdf",
+    "../../16_iteration02_evidence_and_mask_design.ipynb"
+  ]
+}

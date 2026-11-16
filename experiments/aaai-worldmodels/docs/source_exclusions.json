@@ -1,0 +1,42 @@
+{
+  "identity": "manual-source-exclusion-before-joint-test-v1",
+  "date": "2026-11-16",
+  "evidence_sha256": "69caf82bdacdece92655ead86ab8862ef0a81d03d52d9b7d81f09effb3c5c2a4",
+  "excluded_sources": {
+    "CMls0LwK5OU": "validation scene cuts and person identity switches",
+    "eBvzFkcvScg": "training person identity switches"
+  },
+  "reviewed_frames": {
+    "CMls0LwK5OU": [
+      1,
+      33,
+      63,
+      493,
+      525,
+      555,
+      758,
+      790,
+      820,
+      1667,
+      1699,
+      1729
+    ],
+    "eBvzFkcvScg": [
+      27,
+      59,
+      89,
+      116,
+      148,
+      178,
+      478,
+      510,
+      540
+    ]
+  },
+  "reviewers": [
+    "coordinator",
+    "independent literature agent"
+  ],
+  "reason": "Visible discontinuities and identity changes invalidate person-specific motion; no diagnosis or role inferred from appearance.",
+  "scope": "All sequences and windows of both sources, all study cohorts; before final test metric access."
+}

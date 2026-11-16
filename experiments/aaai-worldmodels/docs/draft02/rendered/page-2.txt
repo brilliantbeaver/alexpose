@@ -1,0 +1,106 @@
+Public gait video
+Extract 2D pose
+Normal sources
+Fit a forecast
+Held-out video
+Predict 0.8 s
+Observed future
+Score both models
+Forecasting and anomaly ranking answer different questions.
+Forecast error measures disagreement with the learned prediction.
+Persistence error measures movement away from the last observed pose.
+Excess error = forecast error minus persistence error. Larger values mean less forecast benefit.
+Figure 1: The workflow separates model fitting from held-out scoring. Both forecasts are compared with exactly the same
+observed future. The anomaly score becomes available only after that future is observed.
+Annotation
+Sources
+Sequences
+Windows
+Cerebral palsy
+8
+52
+518
+Myopathic
+27
+168
+845
+Normal
+29
+141
+465
+Parkinsons
+11
+37
+292
+Stroke
+16
+58
+695
+Table 1: The evaluated cohort groups observations by source
+video. Counts do not establish independent participants.
+Ambient performs 46,783 recorded pose-model calls over
+the available annotated spans. We sample nearest native
+frames on a nominal 10 Hz grid and retain actual frame
+numbers and times. Each window has 16 observed and eight
+future samples, with stride eight. The observed prefix spans
+1.5 seconds. The final future sample occurs 0.767 to 0.834
+seconds later. We evaluate all eight future samples, not only
+the final instant.
+The contract uses 16 BlazePose joints, confidence at least
+0.5, and at least 70% valid observations separately in the pre-
+fix and future. An annotation-box check rejects unresolved
+geometry, although it cannot guarantee identity in crowded
+scenes. Coordinates are centered on each frame’s pelvis and
+divided by a prefix-only torso scale. They describe relative
+2D articulation, not physical speed. Both hips define the ref-
+erence, so the own-leg model does not have strictly unilateral
+visual access.
+Observation gates retain different fractions of the anno-
+tations. For example, 141 of 287 normal extraction candi-
+dates remain, compared with 168 of 183 myopathic candi-
+dates. All 32 annotated normal source IDs are already in
+the selected scope. Other GAVD labels cannot increase this
+normal-source ceiling, and additional windows do not create
+independent people.
+Forecasts and anomaly scores
+For each target leg, ridge regression predicts future knee,
+ankle, heel, and foot-index coordinates. This linear model
+penalizes large coefficients to limit overfitting. Inputs use
+eight fixed prefix positions, including both endpoints, with
+observation indicators. Missing values are filled from ear-
+lier prefix observations only. Outputs are trained only where
+future targets were observed.
+The own-leg model uses that leg’s history. The bilateral
+model adds the opposite leg. A separately trained timing
+control shifts the seven earlier opposite-leg samples by a
+window-specific offset while preserving their values, valid-
+ity, and current anchor. The current-posture model learns a
+separate transition at each future time from the latest bilateral
+pose. Its output can change over time. Persistence instead
+holds the latest pose fixed. Damped velocity and declared
+shrinkage variants provide additional references.
+Let a be the latest observed coordinate, y its observed
+future, and ˆ︁y the learned prediction. Actual displacement
+is d = y −a and predicted displacement is u = ˆ︁y −a.
+Excess squared error is (d −u)2 −d2 = u2 −2du. The
+identity also holds after averaging with the same observed-
+coordinate support and hierarchical weights. Excess error
+therefore combines prediction size and alignment with actual
+movement. Subtracting persistence does not remove every
+effect of movement amount, view, or pose noise.
+Larger excess error is prespecified to indicate more ab-
+normal gait. A negative value means forecasting improved
+on persistence. Other declared scores are raw bilateral er-
+ror, persistence error, bilateral-minus-own error, and prefix
+missingness. Because all error scores require the observed fu-
+ture, they detect anomalies retrospectively within a sequence.
+They do not predict an abnormal event before it occurs.
+Evaluation
+Five outer folds keep all sequences and windows from one
+source together. Models train only on normal sources outside
+the evaluation fold. Three inner source folds select regular-
+ization from 0.1, 1, 10, and 100. Scaling is refitted within
+every training split. A secondary analysis blends learned dis-
+placement with persistence using strengths 0, 0.25, 0.5, or 1,
+selected on inner normal-source validation. Abnormal labels
+do not select model settings.

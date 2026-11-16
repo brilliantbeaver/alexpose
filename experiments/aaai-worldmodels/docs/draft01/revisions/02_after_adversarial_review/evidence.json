@@ -1,0 +1,761 @@
+{
+  "results": {
+    "status": "complete",
+    "identity": "medwm-dynamics-audit-v1",
+    "input": "artifacts/runs/restart-full10hz-v1",
+    "windows": 2815,
+    "sequences": 456,
+    "sources": 91,
+    "normal_sources": 29,
+    "cohort_by_label": [
+      {
+        "label": "cerebral palsy",
+        "windows": 518,
+        "sequences": 52,
+        "sources": 8
+      },
+      {
+        "label": "myopathic",
+        "windows": 845,
+        "sequences": 168,
+        "sources": 27
+      },
+      {
+        "label": "normal",
+        "windows": 465,
+        "sequences": 141,
+        "sources": 29
+      },
+      {
+        "label": "parkinsons",
+        "windows": 292,
+        "sequences": 37,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "windows": 695,
+        "sequences": 58,
+        "sources": 16
+      }
+    ],
+    "normal_forecast": [
+      {
+        "arm": "bilateral",
+        "horizon": 4,
+        "estimate": 0.07183813281711006,
+        "ci95": [
+          0.054565665291189974,
+          0.09119560258861817
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "bilateral_shrunk",
+        "horizon": 4,
+        "estimate": 0.07624639226392886,
+        "ci95": [
+          0.05828891704632032,
+          0.09625383805258539
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "damped_velocity",
+        "horizon": 4,
+        "estimate": 0.15710705663603408,
+        "ci95": [
+          0.11067395061592179,
+          0.2102792753309587
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "inference_shift",
+        "horizon": 4,
+        "estimate": 0.08654683299537125,
+        "ci95": [
+          0.06796945644516007,
+          0.10883073512965255
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "inference_static",
+        "horizon": 4,
+        "estimate": 0.06868786626546125,
+        "ci95": [
+          0.05277442564979808,
+          0.08652682901713038
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "own",
+        "horizon": 4,
+        "estimate": 0.0712313762282942,
+        "ci95": [
+          0.054990524830523385,
+          0.08939327155181359
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "own_shrunk",
+        "horizon": 4,
+        "estimate": 0.07308587953766633,
+        "ci95": [
+          0.05670234671448183,
+          0.09133569394770845
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "persistence",
+        "horizon": 4,
+        "estimate": 0.10171019704616358,
+        "ci95": [
+          0.07448304347441143,
+          0.13152592221724174
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "shifted",
+        "horizon": 4,
+        "estimate": 0.07544919795528733,
+        "ci95": [
+          0.05794267445980705,
+          0.09557298567898773
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "shifted_shrunk",
+        "horizon": 4,
+        "estimate": 0.07340668178411419,
+        "ci95": [
+          0.055687022652096976,
+          0.09384833697207014
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "static",
+        "horizon": 4,
+        "estimate": 0.06416572310562606,
+        "ci95": [
+          0.04845382776133706,
+          0.08156208799237813
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "static_shrunk",
+        "horizon": 4,
+        "estimate": 0.06416572310562606,
+        "ci95": [
+          0.04845382776133706,
+          0.08156208799237813
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "bilateral",
+        "horizon": 8,
+        "estimate": 0.08063187534278243,
+        "ci95": [
+          0.06252193288859302,
+          0.10002328355695157
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "bilateral_shrunk",
+        "horizon": 8,
+        "estimate": 0.08377922205932997,
+        "ci95": [
+          0.0665820855901372,
+          0.10252813173270832
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "damped_velocity",
+        "horizon": 8,
+        "estimate": 0.2678281081417243,
+        "ci95": [
+          0.19323595804715163,
+          0.3531475077139805
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "inference_shift",
+        "horizon": 8,
+        "estimate": 0.09485538665398076,
+        "ci95": [
+          0.07507912315761339,
+          0.11653382970795496
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "inference_static",
+        "horizon": 8,
+        "estimate": 0.08226116096068001,
+        "ci95": [
+          0.06564074950069307,
+          0.10012351049538205
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "own",
+        "horizon": 8,
+        "estimate": 0.08174367674079216,
+        "ci95": [
+          0.064065816951453,
+          0.10072336800109127
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "own_shrunk",
+        "horizon": 8,
+        "estimate": 0.08274118142810188,
+        "ci95": [
+          0.06612604175871128,
+          0.10061540456144027
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "persistence",
+        "horizon": 8,
+        "estimate": 0.12126179358149482,
+        "ci95": [
+          0.09414986156405847,
+          0.1508001998404703
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "shifted",
+        "horizon": 8,
+        "estimate": 0.08654129682164138,
+        "ci95": [
+          0.06703179166683068,
+          0.10821491310535063
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "shifted_shrunk",
+        "horizon": 8,
+        "estimate": 0.08427813724049794,
+        "ci95": [
+          0.0657020912369036,
+          0.10437625848919953
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "static",
+        "horizon": 8,
+        "estimate": 0.07163593300674431,
+        "ci95": [
+          0.0558502274285774,
+          0.08862230707167744
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "arm": "static_shrunk",
+        "horizon": 8,
+        "estimate": 0.07163593300674431,
+        "ci95": [
+          0.0558502274285774,
+          0.08862230707167744
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      }
+    ],
+    "paired_contrasts": [
+      {
+        "reference": "persistence",
+        "method": "bilateral",
+        "horizon": 4,
+        "positive_favors": "bilateral",
+        "estimate": 0.02987206422905351,
+        "ci95": [
+          0.012219991837026737,
+          0.05012779563736283
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "own",
+        "method": "bilateral",
+        "horizon": 4,
+        "positive_favors": "bilateral",
+        "estimate": -0.0006067565888158792,
+        "ci95": [
+          -0.00402298577101639,
+          0.002978585187995962
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "shifted",
+        "method": "bilateral",
+        "horizon": 4,
+        "positive_favors": "bilateral",
+        "estimate": 0.0036110651381772536,
+        "ci95": [
+          -0.0002604416784278511,
+          0.007750561619031497
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "static",
+        "method": "bilateral",
+        "horizon": 4,
+        "positive_favors": "bilateral",
+        "estimate": -0.007672409711484013,
+        "ci95": [
+          -0.013887812449539001,
+          -0.001271304756027063
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "inference_shift",
+        "method": "bilateral",
+        "horizon": 4,
+        "positive_favors": "bilateral",
+        "estimate": 0.014708700178261177,
+        "ci95": [
+          0.008969356653318966,
+          0.020811946929373708
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "inference_static",
+        "method": "bilateral",
+        "horizon": 4,
+        "positive_favors": "bilateral",
+        "estimate": -0.0031502665516488044,
+        "ci95": [
+          -0.011090683237191508,
+          0.0052593039955347205
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "persistence",
+        "method": "bilateral_shrunk",
+        "horizon": 4,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": 0.025463804782234718,
+        "ci95": [
+          0.011897195911381922,
+          0.04042148695175525
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "bilateral",
+        "method": "bilateral_shrunk",
+        "horizon": 4,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.004408259446818795,
+        "ci95": [
+          -0.010994846241467099,
+          0.0006156855934242039
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "own_shrunk",
+        "method": "bilateral_shrunk",
+        "horizon": 4,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.003160512726262535,
+        "ci95": [
+          -0.006742110952976261,
+          0.00022411285909418807
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "shifted_shrunk",
+        "method": "bilateral_shrunk",
+        "horizon": 4,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.002839710479814657,
+        "ci95": [
+          -0.009688155044068699,
+          0.0033360483311524972
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "static_shrunk",
+        "method": "bilateral_shrunk",
+        "horizon": 4,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.012080669158302809,
+        "ci95": [
+          -0.01826276747842093,
+          -0.006063441993719873
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "persistence",
+        "method": "bilateral",
+        "horizon": 8,
+        "positive_favors": "bilateral",
+        "estimate": 0.04062991823871243,
+        "ci95": [
+          0.02399280326592323,
+          0.05911142047517208
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "own",
+        "method": "bilateral",
+        "horizon": 8,
+        "positive_favors": "bilateral",
+        "estimate": 0.0011118013980097497,
+        "ci95": [
+          -0.0025251564745638637,
+          0.005243520899007169
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "shifted",
+        "method": "bilateral",
+        "horizon": 8,
+        "positive_favors": "bilateral",
+        "estimate": 0.005909421478858959,
+        "ci95": [
+          0.0014071258845695183,
+          0.01133579260356177
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "static",
+        "method": "bilateral",
+        "horizon": 8,
+        "positive_favors": "bilateral",
+        "estimate": -0.008995942336038116,
+        "ci95": [
+          -0.01589366867418237,
+          -0.0020679845975244567
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "inference_shift",
+        "method": "bilateral",
+        "horizon": 8,
+        "positive_favors": "bilateral",
+        "estimate": 0.014223511311198343,
+        "ci95": [
+          0.008374891827925801,
+          0.020591843567885817
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "inference_static",
+        "method": "bilateral",
+        "horizon": 8,
+        "positive_favors": "bilateral",
+        "estimate": 0.0016292856178975886,
+        "ci95": [
+          -0.007975242138507005,
+          0.011519686431572118
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "persistence",
+        "method": "bilateral_shrunk",
+        "horizon": 8,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": 0.03748257152216489,
+        "ci95": [
+          0.023276730056372034,
+          0.053257203834783995
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "bilateral",
+        "method": "bilateral_shrunk",
+        "horizon": 8,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.003147346716547538,
+        "ci95": [
+          -0.007492835826277322,
+          0.0004936406918897634
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "own_shrunk",
+        "method": "bilateral_shrunk",
+        "horizon": 8,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.0010380406312280527,
+        "ci95": [
+          -0.004612035964748263,
+          0.0031820362015601918
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "shifted_shrunk",
+        "method": "bilateral_shrunk",
+        "horizon": 8,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": 0.0004989151811679716,
+        "ci95": [
+          -0.005119318631176776,
+          0.006374738951692707
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      },
+      {
+        "reference": "static_shrunk",
+        "method": "bilateral_shrunk",
+        "horizon": 8,
+        "positive_favors": "bilateral_shrunk",
+        "estimate": -0.01214328905258565,
+        "ci95": [
+          -0.018239826508105284,
+          -0.006522657955012
+        ],
+        "n_sources": 29,
+        "resamples": 5000
+      }
+    ],
+    "anomaly": {
+      "bilateral": {
+        "auroc": 0.3042269187986652,
+        "average_precision": 0.5575097561523459,
+        "auroc_ci95": [
+          0.17794771968854284,
+          0.4310622914349276
+        ],
+        "ap_ci95": [
+          0.5195081719049258,
+          0.6316086781616673
+        ],
+        "n_sources": 91,
+        "abnormal_prevalence": 0.6813186813186813
+      },
+      "persistence": {
+        "auroc": 0.1935483870967742,
+        "average_precision": 0.5185671948228294,
+        "auroc_ci95": [
+          0.09621802002224694,
+          0.29979143492769733
+        ],
+        "ap_ci95": [
+          0.49540736179225436,
+          0.5731566067323732
+        ],
+        "n_sources": 91,
+        "abnormal_prevalence": 0.6813186813186813
+      },
+      "excess_error": {
+        "auroc": 0.7931034482758621,
+        "average_precision": 0.8645524204655735,
+        "auroc_ci95": [
+          0.680186318131257,
+          0.8960094549499443
+        ],
+        "ap_ci95": [
+          0.7882702108180898,
+          0.9375076305577333
+        ],
+        "n_sources": 91,
+        "abnormal_prevalence": 0.6813186813186813
+      },
+      "coordination_deficit": {
+        "auroc": 0.549499443826474,
+        "average_precision": 0.6935146798514165,
+        "auroc_ci95": [
+          0.41040044493882094,
+          0.684107341490545
+        ],
+        "ap_ci95": [
+          0.6177612640939363,
+          0.7948681771557145
+        ],
+        "n_sources": 91,
+        "abnormal_prevalence": 0.6813186813186813
+      },
+      "prefix_missingness": {
+        "auroc": 0.4265850945494995,
+        "average_precision": 0.6464880862379013,
+        "auroc_ci95": [
+          0.29559927697441596,
+          0.5545467185761956
+        ],
+        "ap_ci95": [
+          0.5770332487482498,
+          0.7397720861995458
+        ],
+        "n_sources": 91,
+        "abnormal_prevalence": 0.6813186813186813
+      }
+    },
+    "seconds": 21.178388708271086,
+    "fit_count": 80,
+    "fit_count_note": "80 saved arm/leg/fold checkpoints; some shrinkage variants reuse the same ridge fit.",
+    "limitations": [
+      "Exploratory redevelopment after prior GAVD outcome exposure.",
+      "Source bootstrap intervals condition on fixed overlapping training folds and are not patient uncertainty.",
+      "GAVD source IDs do not prove independent patients or neurological diagnoses.",
+      "No treatment or clinical counterfactual is measured."
+    ]
+  },
+  "preparation": {
+    "identity": "restart-full10hz-v1",
+    "mode": "all-eligible-sequences-full-duration",
+    "frames": 24,
+    "context_frames": 16,
+    "stride": 8,
+    "sample_fps": 10.0,
+    "n_windows": 2818,
+    "n_sequences": 456,
+    "n_sources": 91,
+    "selected_sequences": 641,
+    "selected_sources": 96,
+    "actual_model_calls_this_invocation": 46783,
+    "source_cache_reuses": 0,
+    "seconds": 989.9980588750914,
+    "data_sha256": "39e2051e83909558ab6bdf5632145a15e0e529a9e2f9b617f90ce3f7ef7ad2e8",
+    "metadata_sha256": "6fcb0c0306bc6def26607bb9f7e15705a2ca41644db6613687d88ae58a1ab4d5",
+    "attrition_sha256": "01130b1c2e753c7975508e37e90691a8d01da70ea7812e0b49fa98ad7fc4737a",
+    "request_sha256": "12deec349d64ff82eaaf51a401cf2d1f18bb6b4471a186380e82c8e9ca13a250",
+    "source_progress_sha256": "a2aeb20ed3547517690215fd38ddc774528d1d03c59ba473d1d63aa65b728276",
+    "source_exclusions_sha256": "98a234fbc4c6bd1948afd6e1799aee2eafd3ebddd27e6e2d9fbf35830cf6ed60",
+    "adapter_sha256": "ebbff76426b5f576690f7bd95051a77781e5bcdd18f72db23e9bfdbdf6bb6376",
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "windows": 518,
+        "sequences": 52,
+        "sources": 8
+      },
+      {
+        "label": "myopathic",
+        "windows": 845,
+        "sequences": 168,
+        "sources": 27
+      },
+      {
+        "label": "normal",
+        "windows": 465,
+        "sequences": 141,
+        "sources": 29
+      },
+      {
+        "label": "parkinsons",
+        "windows": 293,
+        "sequences": 37,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "windows": 697,
+        "sequences": 58,
+        "sources": 16
+      }
+    ],
+    "limitations": [
+      "Source IDs do not establish participant identity or diagnosis.",
+      "Existing source-disjoint test results have been seen; new analyses are exploratory.",
+      "Sampling uses nominal FPS rather than presentation-time resampling; actual timestamps and grid errors are retained.",
+      "Full-image first detection and annotation-box pelvis containment do not guarantee subject identity.",
+      "Raw poses are native 2D image estimates; normalized outputs describe articulation rather than physical displacement."
+    ]
+  },
+  "inputs": {
+    "artifacts/runs/restart-dynamics-v1/results.json": "f14a6e533338c96da99b5085cb231b9de5cc47f7fe50a4c118225c42dc1fa1e8",
+    "artifacts/runs/restart-dynamics-v1/source_scores.csv": "6d70bc2ae0974f506c0a4df47b8bcd0659f8766ce7c989c566809b4da5a68c61",
+    "artifacts/runs/restart-dynamics-v1/selection.json": "bb8d3cefd51a588a8046856560d660daa6bf5e883c0838fafec96f28fbb1b675",
+    "artifacts/runs/restart-dynamics-v1/identity.json": "e135d47459bfc0070caf30d621a4348d888e1f130776b5243426c11ac9429c3d",
+    "artifacts/runs/restart-dynamics-v1/artifact_hashes.json": "90d8acb0b5f3a2581c909daec6403019cd3ad1944d4c9a400e2555c118bf4798",
+    "artifacts/runs/restart-full10hz-v1/preparation.json": "cc828d9a2f5cee879ed954c26a4fa98a65c357b76c3ebd4aca0131be84adebdc",
+    "docs/restart/protocol.md": "e7c331238c3ae61237336c11b36526afb20952ae31da51d9374962e98eafd299"
+  },
+  "checks": [
+    "Independent mean and paired-effect recomputation for horizon 4",
+    "Independent mean and paired-effect recomputation for horizon 8",
+    "All five anomaly AUROC/AP estimates independently recomputed",
+    "Source-disjoint fold assignment and cohort counts checked",
+    "All recorded result artifacts and input arrays match hashes"
+  ],
+  "primary_claim": "Bilateral history improved normal-source forecasting over persistence in this exploratory evaluation.",
+  "timing_claim": "The complete set of primary comparisons does not establish a timing-specific bilateral forecasting advantage.",
+  "secondary_shrinkage_claim": "The secondary shrunk forecast also improves persistence, but does not improve on the unshrunk bilateral model.",
+  "author_pending": true,
+  "manuscript_source_sha256": "0b4e651e65802f42a221c8c1525af7adce65bb2b6182d2211fab0d769a1a40f0"
+}

@@ -1,0 +1,1055 @@
+[
+  {
+    "title": "Reference-aware scoring reveals a useful gait signal.",
+    "subtitle": "A transparent study connects short-term movement prediction with exploratory anomaly detection.",
+    "kind": "flow",
+    "payload": [
+      "Observe real gait",
+      "Predict future articulation",
+      "Compare with a simple reference",
+      "Rank source videos"
+    ],
+    "caption": "The contribution is a controlled evaluation of observed movement. Clinical diagnosis and treatment effects remain outside its evidence.",
+    "notes": "This deck separates measured results from proposed experiments. The favorable excess-error ranking motivates stronger confound controls rather than a claim of clinical diagnostic accuracy.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Medical world models need a reliable observation layer.",
+    "subtitle": "Video poses provide a short-term motor observation, while disease trajectories require additional data.",
+    "kind": "flow",
+    "payload": [
+      "Video observations",
+      "Short-term movement transitions",
+      "Longitudinal patient states",
+      "Treatment-aware decisions"
+    ],
+    "caption": "This project tests the first transition. Later stages require clinical labels, follow-up and intervention observations.",
+    "notes": "The official workshop includes dynamics, uncertainty, validation and benchmarks. A short-term observation transition is relevant as a tested component, but it is not an action-conditioned clinical simulator.",
+    "status": "SCOPE / CONCEPTUAL",
+    "sources": [
+      "https://med-wm.github.io/aaai27-mwm/"
+    ],
+    "source_short": "Source: official Med-WM scope; the final two stages are conceptual future requirements."
+  },
+  {
+    "title": "Neurology motivates observable coordination hypotheses.",
+    "subtitle": "Clinical physiology suggests useful questions without making a video pose a direct neural measurement.",
+    "kind": "flow",
+    "payload": [
+      "Neural and muscular control",
+      "Coordinated limb movement",
+      "Camera projection and occlusion",
+      "Estimated 2D articulation"
+    ],
+    "caption": "The chain has many possible causes. Its arrows describe measurement pathways, not an identified causal model.",
+    "notes": "Timing studies in Parkinson disease motivate bilateral tests. EMG studies in stroke and cerebral palsy also show why simplified movement can accompany impairment. Camera view, speed and pose error remain alternative explanations.",
+    "status": "RATIONALE / CONCEPTUAL",
+    "sources": [
+      "https://doi.org/10.1007/s00221-007-0955-7",
+      "https://doi.org/10.1152/jn.00825.2009",
+      "https://doi.org/10.1111/dmcn.12826"
+    ],
+    "source_short": "Sources: Plotnik et al. 2007; Clark et al. 2010; Steele et al. 2015."
+  },
+  {
+    "title": "Different annotations suggest different checks.",
+    "subtitle": "These hypotheses concern visible movement and need independent clinical validation.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Annotation",
+        "Observable hypothesis",
+        "Required restraint"
+      ],
+      "rows": [
+        [
+          "Parkinsons",
+          "Test bilateral timing.",
+          "Do not infer a specific neural cause."
+        ],
+        [
+          "Stroke",
+          "Test asymmetry and low variability.",
+          "A simple trajectory may be impaired."
+        ],
+        [
+          "Cerebral palsy",
+          "Test constrained coordination.",
+          "Pose does not measure muscle activation."
+        ],
+        [
+          "Myopathic",
+          "Test weak or compensated motion.",
+          "Do not call every condition central."
+        ]
+      ],
+      "widths": [
+        2.1,
+        3.1,
+        4.3
+      ],
+      "size": 16
+    },
+    "caption": "No disease-specific direction is assumed for raw prediction error. The same condition can contain several movement patterns.",
+    "notes": "The dataset folders supply annotations, not independent diagnoses. Neurological reasoning sets falsifiable comparisons; it does not replace patient identity, severity, muscle recordings or validated gait events.",
+    "status": "RATIONALE / PROPOSED",
+    "sources": [
+      "https://doi.org/10.1007/s00221-007-0955-7",
+      "https://doi.org/10.1152/jn.00825.2009",
+      "https://doi.org/10.1111/dmcn.12826"
+    ],
+    "source_short": "Sources: neurological primary studies in the iteration02 literature registry; GAVD labels."
+  },
+  {
+    "title": "The full inventory defines the available evidence.",
+    "subtitle": "Source videos, sequences and patients are different units.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Scope",
+        "Sequences",
+        "Source IDs",
+        "Interpretation"
+      ],
+      "rows": [
+        [
+          "All GAVD labels",
+          "1,874",
+          "348",
+          "The complete annotation inventory."
+        ],
+        [
+          "Five requested labels",
+          "666",
+          "103",
+          "The disease-focused scope."
+        ],
+        [
+          "Normal annotations",
+          "291",
+          "32",
+          "Already included in that scope."
+        ],
+        [
+          "Evaluated cohort",
+          "456",
+          "91",
+          "After media and quality gates."
+        ]
+      ],
+      "widths": [
+        2.9,
+        1.2,
+        1.2,
+        4.8
+      ],
+      "size": 16
+    },
+    "caption": "The upstream source CSVs are provenance. Counting them again would duplicate the annotation inventory.",
+    "notes": "The repeated stroke entry in the task is one class. GAVD supplies heterogeneous videos, but source IDs are not verified participant IDs. Extra windows improve coverage without creating independent patients.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-full10hz-v1/inventory.json",
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Sources: restart-full10hz-v1/inventory.json and restart-dynamics-v1/results.json."
+  },
+  {
+    "title": "Every attrition step remains visible.",
+    "subtitle": "The study uses complete eligible spans and applies the same target gate to every model.",
+    "kind": "flow",
+    "payload": [
+      "652 media-eligible sequences",
+      "641 candidates after exclusions",
+      "2,818 prepared windows",
+      "2,815 evaluated windows"
+    ],
+    "caption": "The final cohort contains 456 sequences and 91 source videos. It is not a cohort of 2,815 patients.",
+    "notes": "Two documented whole-source identity exclusions are preserved. Pose quality and common distal-target support determine eligibility. All rejection reasons remain available in the frozen run; thresholds are not changed to improve a result.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/data_audit.md",
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "The condition table reveals unequal source support.",
+    "subtitle": "The smaller source groups need especially cautious subgroup interpretation.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Dataset annotation",
+        "Windows",
+        "Sequences",
+        "Sources"
+      ],
+      "rows": [
+        [
+          "cerebral palsy",
+          "518",
+          "52",
+          "8"
+        ],
+        [
+          "myopathic",
+          "845",
+          "168",
+          "27"
+        ],
+        [
+          "normal",
+          "465",
+          "141",
+          "29"
+        ],
+        [
+          "parkinsons",
+          "292",
+          "37",
+          "11"
+        ],
+        [
+          "stroke",
+          "695",
+          "58",
+          "16"
+        ]
+      ],
+      "widths": [
+        3,
+        1.4,
+        1.5,
+        1.4
+      ],
+      "size": 18
+    },
+    "caption": "All sources receive equal final weight. A large number of windows cannot compensate for few independent sources.",
+    "notes": "The table is loaded directly from the completed results artifact. The normal group contains 29 sources, while cerebral palsy has eight. Individual-disease estimates should show their denominators and broad uncertainty.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Shared Ambient interfaces keep ingestion traceable.",
+    "subtitle": "New videos belong under data/videos-gavd, with one original per source ID.",
+    "kind": "flow",
+    "payload": [
+      "Shared YouTube cache helper",
+      "Source video and hash",
+      "Ambient pose extraction",
+      "Frames, poses and quality ledger"
+    ],
+    "caption": "The completed extraction made 46,783 real pose-model calls. No new download was needed for that run.",
+    "notes": "Reuse ambient.utils.youtube_cache.download_youtube_urls and cache lookups. Store future originals under data/videos-gavd/sources/<source_id>.* and previews under data/videos-gavd/previews/. Existing unique originals remain reusable. The adapter uses SequenceKeypointExtractor.extract_from_image and records model and video identities.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../worldmodels/restart_data.py",
+      "../docs/restart/data_contract.md"
+    ],
+    "source_short": "Sources: Ambient downloader and pose APIs; restart_data.py; restart-full10hz-v1/preparation.json."
+  },
+  {
+    "title": "Frame numbering changes exactly once.",
+    "subtitle": "Annotation frames are one-based, while OpenCV indexes are zero-based.",
+    "kind": "flow",
+    "payload": [
+      "GAVD frame n",
+      "Subtract one at the decoder boundary",
+      "Decode native frame n − 1",
+      "Record time and dimensions"
+    ],
+    "caption": "A second subtraction shifts the observation. Cached poses must retain the exact frame identity and conversion contract.",
+    "notes": "SequenceKeypointExtractor frame arguments are also one-based. The current restart uses extract_from_image after explicit decoding. Do not apply a second frame conversion inside another adapter. Source IDs, sequence IDs, frame tuples, decoder times, confidence and missingness remain explicit.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/data_contract.md"
+    ],
+    "source_short": "Source: restart observation contract and shared Ambient extraction interface."
+  },
+  {
+    "title": "A fixed time horizon makes predictions comparable.",
+    "subtitle": "Nearest native frames approximate a nominal 10 Hz sampling grid.",
+    "kind": "timeline",
+    "payload": null,
+    "caption": "The observed prefix spans 1.5 seconds between endpoints. The final future sample is nominally 0.8 seconds later.",
+    "notes": "The complete target contains eight samples at approximately 0.1 through 0.8 seconds ahead. The saved metadata retain actual decoded times and sampling deviations. No skeleton interpolation converts missing data into observations.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/data_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "The model predicts body-relative articulation.",
+    "subtitle": "A shared pelvis origin and prefix-only torso scale define the coordinate system.",
+    "kind": "skeleton",
+    "payload": null,
+    "caption": "The diagram is schematic. Projected 2D coordinates are neither physical speed nor measured three-dimensional anatomy.",
+    "notes": "The declared representation selects 16 BlazePose joints from 33 raw landmarks. Each target leg uses knee, ankle, heel and foot-index joints. Both hips contribute to the shared reference, so own-leg input is not purely unilateral raw sensory access.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Missingness is separate from a measured zero.",
+    "subtitle": "Confidence, validity and available target support remain explicit arrays.",
+    "kind": "flow",
+    "payload": [
+      "Apply confidence and person gates",
+      "Fill prefix only from the past",
+      "Retain observation indicators",
+      "Score observed common targets"
+    ],
+    "caption": "Future coordinates and future validity may define scoring support, but they may not change the prediction inputs.",
+    "notes": "The frozen run uses confidence at least 0.5, separate prefix and future support gates, and a shared distal-target gate. A future target also needs a valid prefix anchor. New masks must never convert missing keypoints into visible inputs or training targets.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/data_contract.md",
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Simple references make the learned claim testable.",
+    "subtitle": "Every arm predicts the same future coordinates from the same eligible windows.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Prediction arm",
+        "Available information",
+        "Question answered"
+      ],
+      "rows": [
+        [
+          "Persistence",
+          "Latest observed target pose.",
+          "Does learning beat no change?"
+        ],
+        [
+          "Current-pose transition",
+          "Current bilateral articulation.",
+          "Is history necessary?"
+        ],
+        [
+          "Own-leg history",
+          "Target-leg distal prefix.",
+          "What does local history provide?"
+        ],
+        [
+          "Bilateral history",
+          "Both distal-leg prefixes.",
+          "Does extra context help?"
+        ],
+        [
+          "Shifted opposite history",
+          "Same values with changed alignment.",
+          "Does their timing matter?"
+        ]
+      ],
+      "widths": [
+        2.9,
+        3.5,
+        3.5
+      ],
+      "size": 16
+    },
+    "caption": "The current-pose transition is a learned forecast. It is different from copying the last pose.",
+    "notes": "The fitted models are normal-only ridge residual predictors. Damped velocity and shrinkage variants are retained as additional references. Own-leg and bilateral arms share the same pelvis reference.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "The timing control preserves values and the anchor.",
+    "subtitle": "A window-specific cyclic shift changes alignment rather than the selected coordinate set.",
+    "kind": "shift",
+    "payload": null,
+    "caption": "This schematic shows one shift. The actual offset varies by window and coordinates move with their validity indicators.",
+    "notes": "The eight selected prefix positions are 0, 2, 4, 6, 9, 11, 13 and 15. Only the first seven opposite-leg positions are shifted. A globally fixed permutation can be absorbed by a linear model, so it is an inadequate timing control. Refit controls and inference-only perturbations answer different questions.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Source grouping protects related observations.",
+    "subtitle": "All windows and sequences from a source remain in the same outer fold.",
+    "kind": "folds",
+    "payload": null,
+    "caption": "Five outer folds estimate internal source transfer. Three inner folds select settings using normal training sources.",
+    "notes": "Feature scaling, imputation parameters, model fitting and model selection must remain inside the relevant training data. Prior GAVD exposure means the current evaluation is exploratory. A new split does not create an untouched dataset.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "The aggregation gives each source equal weight.",
+    "subtitle": "The model is evaluated at the source level rather than treating every frame as independent.",
+    "kind": "flow",
+    "payload": [
+      "Coordinates within each leg",
+      "Equal weight for both legs",
+      "Windows then sequences",
+      "Equal source averages"
+    ],
+    "caption": "The reported bootstrap intervals resample fixed source predictions. They do not include full retraining or patient-identity uncertainty.",
+    "notes": "The complete hierarchy matters because sources have unequal numbers of sequences and windows. A frame bootstrap would give a misleading impression of sample size. Future work should repeat training partitions and evaluate a separate external cohort.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Current-pose prediction is the strongest forecast.",
+    "subtitle": "The chart averages all eight future samples on 29 held-out normal sources.",
+    "kind": "errors",
+    "payload": [
+      {
+        "label": "Current-pose transition",
+        "value": 0.07163593300674431,
+        "ci": [
+          0.0558502274285774,
+          0.08862230707167744
+        ]
+      },
+      {
+        "label": "Bilateral history",
+        "value": 0.08063187534278243,
+        "ci": [
+          0.06252193288859302,
+          0.10002328355695157
+        ]
+      },
+      {
+        "label": "Own-leg history",
+        "value": 0.08174367674079216,
+        "ci": [
+          0.064065816951453,
+          0.10072336800109127
+        ]
+      },
+      {
+        "label": "Shifted history",
+        "value": 0.08654129682164138,
+        "ci": [
+          0.06703179166683068,
+          0.10821491310535063
+        ]
+      },
+      {
+        "label": "Shrunk bilateral history",
+        "value": 0.08377922205932997,
+        "ci": [
+          0.0665820855901372,
+          0.10252813173270832
+        ]
+      },
+      {
+        "label": "Persistence",
+        "value": 0.12126179358149482,
+        "ci": [
+          0.09414986156405847,
+          0.1508001998404703
+        ]
+      },
+      {
+        "label": "Damped velocity",
+        "value": 0.2678281081417243,
+        "ci": [
+          0.19323595804715163,
+          0.3531475077139805
+        ]
+      }
+    ],
+    "caption": "Bilateral history beats persistence, but current-pose prediction is better. Bars show 95% source-bootstrap intervals conditional on fixed fits.",
+    "notes": "The bilateral forecast has 0.08063 MSE versus 0.12126 for persistence, a 33.5% relative reduction. The current-pose transition reaches 0.07164. These comparisons do not establish that ordered history is necessary. Intervals condition on the fixed fitted folds.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Paired controls narrow the interpretation.",
+    "subtitle": "A positive effect favors bilateral history over the listed reference.",
+    "kind": "effects",
+    "payload": [
+      {
+        "label": "Against persistence",
+        "value": 0.04062991823871243,
+        "ci": [
+          0.02399280326592323,
+          0.05911142047517208
+        ]
+      },
+      {
+        "label": "Against own-leg history",
+        "value": 0.0011118013980097497,
+        "ci": [
+          -0.0025251564745638637,
+          0.005243520899007169
+        ]
+      },
+      {
+        "label": "Against shifted history",
+        "value": 0.005909421478858959,
+        "ci": [
+          0.0014071258845695183,
+          0.01133579260356177
+        ]
+      },
+      {
+        "label": "Against current-pose transition",
+        "value": -0.008995942336038116,
+        "ci": [
+          -0.01589366867418237,
+          -0.0020679845975244567
+        ]
+      }
+    ],
+    "caption": "The own-leg gain is uncertain and current-pose prediction is better. Bars show 95% source-bootstrap intervals conditional on fixed fits.",
+    "notes": "All paired estimates use the same 29 normal sources. A useful forecast does not establish a neural mechanism. The complete evidence supports forecast utility and targeted evaluation, while leaving timing-specific biological claims unresolved.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Excess error asks whether learning helps this source.",
+    "subtitle": "The score compares a learned forecast with the same source’s persistence reference.",
+    "kind": "formula",
+    "payload": null,
+    "caption": "The score direction was fixed before the completed evaluation. Higher excess error was declared more abnormal.",
+    "notes": "Subtracting persistence changes the question from absolute movement error to relative forecast benefit. A high excess-error score can still arise from low movement amplitude or simple motion. Therefore, reference adjustment requires a direct low-motion control.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json",
+      "../docs/restart/model_contract.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Excess error ranks annotations with AUROC 0.793.",
+    "subtitle": "These five scores retain their original larger-is-abnormal direction.",
+    "kind": "auc",
+    "payload": [
+      {
+        "label": "Raw bilateral error",
+        "value": 0.3042269187986652,
+        "ci": [
+          0.17794771968854284,
+          0.4310622914349276
+        ]
+      },
+      {
+        "label": "Persistence error",
+        "value": 0.1935483870967742,
+        "ci": [
+          0.09621802002224694,
+          0.29979143492769733
+        ]
+      },
+      {
+        "label": "Excess error",
+        "value": 0.7931034482758621,
+        "ci": [
+          0.680186318131257,
+          0.8960094549499443
+        ]
+      },
+      {
+        "label": "Bilateral minus own error",
+        "value": 0.549499443826474,
+        "ci": [
+          0.41040044493882094,
+          0.684107341490545
+        ]
+      },
+      {
+        "label": "Prefix missingness",
+        "value": 0.4265850945494995,
+        "ci": [
+          0.29559927697441596,
+          0.5545467185761956
+        ]
+      }
+    ],
+    "caption": "The 95% conditional interval for excess error is 0.680 to 0.896. Ranking is exploratory and is not a clinical threshold.",
+    "notes": "The pooled out-of-fold comparison covers 91 sources, including 62 annotated abnormal sources. Average precision is 0.865 for excess error at prevalence 0.681. Cross-fold score comparability and unknown patient identity remain limitations.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "A low-motion control challenges the anomaly story.",
+    "subtitle": "A post hoc diagnostic reverses persistence to ask whether limited movement explains the association.",
+    "kind": "auc",
+    "payload": [
+      {
+        "label": "Excess error: declared score",
+        "value": 0.7931034482758621,
+        "ci": [
+          0.680186318131257,
+          0.8960094549499443
+        ]
+      },
+      {
+        "label": "Low-motion score: post hoc",
+        "value": 0.8064516129032258,
+        "ci": [
+          0.7002085650723027,
+          0.9037819799777531
+        ],
+        "posthoc": true
+      }
+    ],
+    "caption": "Negated persistence has AUROC 0.806. The excess-error result does not demonstrate superiority to this diagnostic control. Intervals condition on fixed fits.",
+    "notes": "Negating the persistence error is an outcome-informed diagnostic, not a newly prespecified endpoint. Its AUROC equals one minus the original AUROC; the reflected interval is conditional on the original bootstrap distribution. This finding motivates freezing motion and static-posture controls in the next study. It does not license reversing other scores to report success.",
+    "status": "POST HOC / DIAGNOSTIC",
+    "sources": [
+      "../artifacts/runs/restart-dynamics-v1/results.json"
+    ],
+    "source_short": "Source: results.json; AUROC(−score) = 1 − AUROC(score), including the standard half-credit treatment of ties."
+  },
+  {
+    "title": "The next study must test what the score adds.",
+    "subtitle": "A stronger result would separate abnormal movement patterns from amplitude and acquisition effects.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Alternative explanation",
+        "Required comparator",
+        "Useful interpretation"
+      ],
+      "rows": [
+        [
+          "Low movement amplitude",
+          "Negated persistence and prefix motion.",
+          "The new score adds information."
+        ],
+        [
+          "Static posture",
+          "Current-pose and pose-distance models.",
+          "Dynamics provide measurable value."
+        ],
+        [
+          "Occlusion or view",
+          "Missingness, quality and view strata.",
+          "Results survive observation changes."
+        ],
+        [
+          "Source composition",
+          "Source and external participant tests.",
+          "The effect transfers beyond uploads."
+        ]
+      ],
+      "widths": [
+        2.8,
+        3.8,
+        4.4
+      ],
+      "size": 16
+    },
+    "caption": "The existing result motivates this comparison. It cannot substitute for the comparison.",
+    "notes": "Freeze the complete baseline menu, score direction and aggregation before opening new evaluation labels. Use a supervised RF only as a separately identified label-assisted reference. Avoid comparing it as if it had the same normal-only information budget.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../docs/iteration02/literature_and_masking.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "Future targets stay hidden in every mask experiment.",
+    "subtitle": "Each pattern hides 24 prefix cells, protects the latest anchor, and predicts the same hidden future.",
+    "kind": "masks",
+    "payload": null,
+    "caption": "Green cells are visible, pale orange cells are hidden prefix inputs, and navy cells are future targets. The four rows are labeled joints.",
+    "notes": "The grids illustrate knee, ankle, heel and foot joints over the declared 16-plus-8 time contract. They are conceptual mask patterns, not observed poses. Each hides exactly 24 valid prefix cells and preserves the latest target anchors. The anatomical tube hides a connected foot region; the random tube uses separated joint rows over identical times. Match realized valid hidden-token counts in the actual implementation and retain the same future support. Random and anatomical tubes must be matched for target count and visibility. SLiM already uses connected anatomical semantic tubes, so anatomical masking itself is not claimed as new.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "https://arxiv.org/abs/2308.07092",
+      "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf",
+      "https://arxiv.org/html/2603.10648v4"
+    ],
+    "source_short": "Sources: MAMP (2023), S-JEPA (2024) and SLiM (2026). The forecasting comparison is proposed."
+  },
+  {
+    "title": "Motion-aware masking must retain quiet movement.",
+    "subtitle": "A complementary design tests high-motion and low-motion regions under the same target budget.",
+    "kind": "complementary",
+    "payload": null,
+    "caption": "Slow or constrained motion may be informative. Mask selection must not depend on the future or a diagnosis label.",
+    "notes": "MAMP and S-JEPA motivate motion-aware masking. ASMa motivates complementary high- and low-motion or structural selection. Estimate motion only from reliable prefix pairs, cap sensitivity to pose jumps, and compare with a shuffled-weight control. Treat an implementation inspired by these papers as an adaptation unless their objective is reproduced.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "https://arxiv.org/abs/2308.07092",
+      "https://openreview.net/forum?id=kIFo1q3VMS"
+    ],
+    "source_short": "Sources: MAMP; ASMa, TMLR 2026. Prefix-only reliability gating is a proposed adaptation."
+  },
+  {
+    "title": "Phase-based masks require reliable cycle support.",
+    "subtitle": "A short prefix may not contain enough observed gait cycles to estimate phase.",
+    "kind": "gate",
+    "payload": null,
+    "caption": "Coverage is an outcome of the eligibility rule. It must be reported by source and annotation before interpretation.",
+    "notes": "Use a blinded event-validation sample and a declared minimum of two reliable cycles before testing phase-aligned complementary masks. Longer prefixes need a separately identified cohort and matched fixed-time comparator. Do not infer a Parkinson phase-coordination index from unvalidated 2D peaks.",
+    "status": "PROPOSED / CONDITIONAL",
+    "sources": [
+      "https://doi.org/10.1007/s00221-007-0955-7"
+    ],
+    "source_short": "Source: Plotnik et al. 2007 motivates timing; phase eligibility and mask tests are proposed."
+  },
+  {
+    "title": "A masking comparison needs a matched contract.",
+    "subtitle": "Changing the objective, data and training budget at once prevents a clear interpretation.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Keep fixed",
+        "Match or measure",
+        "Do not allow"
+      ],
+      "rows": [
+        [
+          "Sources and future targets",
+          "Valid hidden-token count.",
+          "Different test support by mask."
+        ],
+        [
+          "Encoder and parameter budget",
+          "Updates, seeds and wall time.",
+          "A larger model for one mask."
+        ],
+        [
+          "Normal-only training inputs",
+          "Reliable prefix-only mask features.",
+          "Future or abnormal-label access."
+        ],
+        [
+          "Full-prefix primary inference",
+          "Separate stress-mask evaluation.",
+          "Test masks chosen from errors."
+        ]
+      ],
+      "widths": [
+        3,
+        3.3,
+        4.2
+      ],
+      "size": 16
+    },
+    "caption": "Learned or adversarial masks are an optional second stage after deterministic comparisons pass.",
+    "notes": "Prevent a learned mask selector from removing almost all useful observations or optimizing on evaluation labels. Bound its visibility and entropy, train it only within the fitting split, and compare with the same-budget fixed policy. Learned-mask results remain exploratory until a fresh evaluation.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../docs/iteration02/literature_and_masking.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "Representation prediction needs a coordinate check.",
+    "subtitle": "A low embedding error can reflect a weak representation rather than a useful forecast.",
+    "kind": "objectives",
+    "payload": null,
+    "caption": "Fit any coordinate probe on training sources only. Evaluate the same future coordinates for every objective.",
+    "notes": "Compare coordinate prediction with a separately declared S-JEPA-inspired latent prediction objective. Freeze architecture and masks for this objective comparison. Inspect latent variance, covariance, effective rank, target similarity and constant-input controls. A stop-gradient teacher alone does not prove that collapse is absent.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf"
+    ],
+    "source_short": "Source: S-JEPA motivates latent targets; the paired coordinate evaluation is proposed."
+  },
+  {
+    "title": "Two-sided calibration tests both tails of normal variation.",
+    "subtitle": "Normal-only calibration tests unusually easy or difficult prediction relative to observed prefix conditions.",
+    "kind": "twotails",
+    "payload": null,
+    "caption": "This is a proposed score. The displayed curve is conceptual and is not a fitted clinical distribution.",
+    "notes": "Calibrate a predeclared forecast-residual statistic on cross-fitted normal development predictions, conditional on a small set of prefix covariates. Use a tail rule defined in advance and report coarse resolution from the small normal-source sample. Low and high tails do not identify rigidity, disorder or any clinical cause. Combining several tails requires a frozen combination and new calibration. Clinical coverage cannot be promised under source shift.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../docs/iteration02/literature_and_masking.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "Calibration uses development sources, not test labels.",
+    "subtitle": "Fit the reference on cross-fitted normal development predictions, then freeze its transformation.",
+    "kind": "flow",
+    "payload": [
+      "Normal development sources",
+      "Cross-fitted forecast residuals",
+      "Small conditional reference",
+      "Frozen held-out tail score"
+    ],
+    "caption": "A small normal-source sample limits calibration resolution. Empirical ranks do not establish clinical coverage under source shift.",
+    "notes": "Declare a scalar residual statistic, the conditioning variables and the two-sided transformation before outer evaluation. Keep marginal and conditional calibration as distinct arms. Freeze any combination of multiple tails. Report within-fold ranking as well as pooled calibrated ranking. Thresholds require a separately valid calibration mechanism.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../../../notes/aaai-worldmodels/05-iterate-02-INSTR.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "Evaluate deterministic models before stochastic ones.",
+    "subtitle": "More forecast diversity is useful only if it improves a declared calibrated endpoint.",
+    "kind": "flow",
+    "payload": [
+      "Persistence and current pose",
+      "Small deterministic forecaster",
+      "Matched mask and objective tests",
+      "Optional stochastic extension"
+    ],
+    "caption": "Use identical data and compute limits. Keep means, uncertainty and anomaly ranking as separate endpoints.",
+    "notes": "A stochastic model must be evaluated with proper distribution scores, coverage and calibration, not only its best sampled trajectory. Do not use minimum-of-many-samples error as evidence of reliable clinical uncertainty. Model complexity is a staged decision, not a prerequisite for novelty.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../docs/iteration02/literature_and_masking.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "The notebooks should teach one decision at a time.",
+    "subtitle": "Each notebook needs independent setup, an input identity and an explicit execution status.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Notebook",
+        "Purpose",
+        "Required evidence"
+      ],
+      "rows": [
+        [
+          "16: Evidence and mask design",
+          "Audit scores and illustrate masks.",
+          "Use frozen results and declared examples."
+        ],
+        [
+          "20: Cohort and identities",
+          "Audit full GAVD and external eligibility.",
+          "Record attrition and source links."
+        ],
+        [
+          "21: Calibration and confounds",
+          "Freeze motion and posture controls.",
+          "Use training-only calibration."
+        ],
+        [
+          "22: Mask laboratory",
+          "Compare visible-token policies.",
+          "Test isolation and matched support."
+        ],
+        [
+          "23: Objectives and fitting",
+          "Fit controlled model comparisons.",
+          "Save seeds, budgets and checkpoints."
+        ]
+      ],
+      "widths": [
+        2.7,
+        4.1,
+        4.5
+      ],
+      "size": 15
+    },
+    "caption": "Notebook 16 is the bridge audit. Notebooks 20 through 26 describe the proposed next execution sequence.",
+    "notes": "Historical notebooks 00 through 07 and completed restart notebooks 10 through 15 remain intact. New demonstrations must distinguish synthetic masks, cached result inspection, real fitting and completed evaluation. A successful tutorial execution is not new efficacy evidence.",
+    "status": "PLAN / EXECUTION STATUS IN NOTEBOOKS",
+    "sources": [
+      "../../../notes/aaai-worldmodels/05-iterate-02-INSTR.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "Evaluation and interpretation complete the sequence.",
+    "subtitle": "The final notebooks should make every manuscript claim reproducible.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Notebook",
+        "Purpose",
+        "Required evidence"
+      ],
+      "rows": [
+        [
+          "24: Source and external evaluation",
+          "Estimate paired effects and transfer.",
+          "Source tables and frozen score directions."
+        ],
+        [
+          "25: Robustness and interpretation",
+          "Challenge quality and biological claims.",
+          "Condition counts and alternative explanations."
+        ],
+        [
+          "26: Manuscript evidence",
+          "Export figures and a bounded narrative.",
+          "Claim ledger, source hashes and review."
+        ]
+      ],
+      "widths": [
+        3,
+        4.2,
+        4.8
+      ],
+      "size": 17
+    },
+    "caption": "External evaluation must use compatible observations and verified participant identities, where available.",
+    "notes": "A model chosen using abnormal labels belongs to a separately identified supervised analysis. Newly acquired external data remain untouched until the protocol, calibration and comparison menu are frozen. Missing external evidence remains an explicit limit.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../../../notes/aaai-worldmodels/05-iterate-02-INSTR.md"
+    ],
+    "source_short": "Source: iteration02 research instruction and linked primary literature; the new experiments are proposed."
+  },
+  {
+    "title": "Broader GAVD use needs a separate transfer question.",
+    "subtitle": "The seven remaining labels add diverse sources but no new annotated normal sources.",
+    "kind": "flow",
+    "payload": [
+      "Audit every available label",
+      "Declare transfer label eligibility",
+      "Keep related uploads together",
+      "Evaluate the frozen model once"
+    ],
+    "caption": "Exercise, pregnancy and style labels are not automatically disease. A larger denominator alone does not improve clinical validity.",
+    "notes": "The current inventory adds 245 previously unselected source IDs outside the five-label scope. These videos were not cached in the completed audit. Future downloads must use the shared source directory and record unavailable media. Acquisition stops at the declared inventory or resource boundary, not when a desired significance level is reached.",
+    "status": "PROPOSED / NOT RUN",
+    "sources": [
+      "../docs/restart/data_audit.md"
+    ],
+    "source_short": "Source: complete GAVD inventory audit; expanded-label transfer is proposed."
+  },
+  {
+    "title": "GAVD establishes only bounded generalization.",
+    "subtitle": "The strongest immediate claim is heterogeneous-source internal evaluation.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Generalization question",
+        "Current evidence",
+        "Needed extension"
+      ],
+      "rows": [
+        [
+          "New source video",
+          "Evaluated by source folds.",
+          "More independently acquired sources."
+        ],
+        [
+          "New participant",
+          "Identity is not verified.",
+          "Participant-linked external data."
+        ],
+        [
+          "New clinical site",
+          "No site-disjoint cohort.",
+          "Independent sites and protocols."
+        ],
+        [
+          "Treatment response",
+          "No interventions are observed.",
+          "Longitudinal action and outcome data."
+        ]
+      ],
+      "widths": [
+        2.8,
+        3.7,
+        4.4
+      ],
+      "size": 16
+    },
+    "caption": "More windows cannot establish independent patients, verified diagnoses or safe clinical deployment.",
+    "notes": "Selection by confidence, view and person gates can alter the population. The README documents these limits explicitly. External generalization should evaluate both predictive performance and calibration, with compatibility checks for pose format and capture conditions.",
+    "status": "MEASURED / EXPLORATORY",
+    "sources": [
+      "../docs/restart/data_audit.md",
+      "../README.md"
+    ],
+    "source_short": "Source: restart-dynamics-v1; exact inputs and hashes are in iteration02_manifest.json."
+  },
+  {
+    "title": "Adversarial review should challenge every claimed gain.",
+    "subtitle": "The next manuscript becomes stronger when its most plausible alternative explanations are tested.",
+    "kind": "table",
+    "payload": {
+      "headers": [
+        "Reviewer challenge",
+        "Acceptance evidence"
+      ],
+      "rows": [
+        [
+          "Did the model see the future?",
+          "Future perturbations leave inputs and predictions unchanged."
+        ],
+        [
+          "Did more capacity cause the gain?",
+          "Matched architectures, visible tokens and training budgets."
+        ],
+        [
+          "Is the score only low movement?",
+          "Frozen amplitude and current-pose controls."
+        ],
+        [
+          "Are the samples independent?",
+          "Source and duplicate audits, plus explicit patient limits."
+        ],
+        [
+          "Can the result be replayed?",
+          "Saved predictions, source tables, environment and hashes."
+        ]
+      ],
+      "widths": [
+        3.3,
+        7
+      ],
+      "size": 16
+    },
+    "caption": "A review must examine the exact delivered files. A material edit reopens the affected checks.",
+    "notes": "Independent reviewers should reproduce source metrics, inspect figure geometry and language, and challenge novelty against related skeletal anomaly work. Fix the issue or narrow the claim; do not silently replace an unfavorable endpoint.",
+    "status": "REVIEW / ACCEPTANCE CONTRACT",
+    "sources": [
+      "../../../.agents/protocol.md"
+    ],
+    "source_short": "Source: .agents/protocol.md and the iteration02 acceptance criteria."
+  },
+  {
+    "title": "A strong contribution links evidence to a precise claim.",
+    "subtitle": "The current signal supports a transparent benchmark and a focused next experiment.",
+    "kind": "flow",
+    "payload": [
+      "Traceable observation pipeline",
+      "Reference-aware anomaly audit",
+      "Neurologically motivated mask tests",
+      "Independent validation"
+    ],
+    "caption": "The next claim should grow only when the corresponding evidence grows.",
+    "notes": "Read draft02 for the standalone manuscript, the iteration02 instruction for execution requirements, and the literature registry for primary sources. The active deck preserves the completed restart evidence while marking unrun methods as proposed.",
+    "status": "SYNTHESIS / EVIDENCE AND PLAN",
+    "sources": [
+      "../docs/draft02/README.md",
+      "../../../notes/aaai-worldmodels/05-iterate-02-INSTR.md",
+      "../docs/iteration02/literature_and_masking.md"
+    ],
+    "source_short": "Sources: completed restart evidence, draft02 and the iteration02 research plan."
+  }
+]

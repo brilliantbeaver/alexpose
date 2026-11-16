@@ -1,0 +1,97 @@
+GAVD video
+Ambient pose
+10 Hz samples
+Own-leg past
+Shared reference
+Add opposite leg
+Ordered or shifted
+Normal-only ridge
+Inner source folds
+Same future targets
+Predict 0.8 s
+Score by source
+Compare controls
+Does correctly timed bilateral context improve prediction?
+All windows from one source stay in one outer fold. No future observation enters the predictor.
+Figure 1: Controlled future prediction uses a common body reference, common targets, and source-separated training. The
+shifted control preserves observed values while changing their timing. No treatment or neural state is observed.
+0.834 seconds relative to the last prefix frame. Actual frame
+indices, decoded times, confidence, and missingness are re-
+tained. Each source/native-frame tuple is decoded for pose
+once within a source cache, and identical window tuples are
+deduplicated.
+The observation contract uses BlazePose joints 11–16 and
+23–32, confidence at least 0.5, and at least 70% observed
+joints in both the 16-sample prefix and eight-sample suffix.
+Full-image detection is followed by an annotation-box pelvis
+gate; unresolved geometry is rejected. This gate cannot guar-
+antee identity when people overlap. Coordinates are centered
+on each frame’s pelvis and divided by a torso scale estimated
+only from the prefix. Forecasts therefore describe relative
+2D articulation, not physical velocity or clinical joint angles.
+Own-leg input is conditional on this shared body reference,
+which already uses both hips.
+Retention differs by annotation: 141 of 287 normal se-
+quences selected for extraction remain (49.1%), compared
+with 168 of 183 myopathic sequences (91.8%). Gates com-
+bine duration, geometry, identity, and observation support;
+this is not purely pose-quality attrition. Selection can af-
+fect pooled abnormality ranking. All 32 annotated normal
+sources are already in the selected scope, so other GAVD
+labels cannot increase its normal-source ceiling. More win-
+dows improve temporal coverage without adding indepen-
+dent patients.
+Predictors and evaluation
+For each target leg, we predict the next eight samples of knee,
+ankle, heel, and foot-index x/y coordinates. Prefix values are
+causally forward-filled, with zero before the first observation
+and explicit observation indicators. Eight fixed prefix po-
+sitions, including both endpoints, limit dimensionality. The
+Annotation
+Catalog
+Final
+Windows
+Normal
+32
+29
+465
+Parkinsons
+11
+11
+292
+Stroke
+19
+16
+695
+Cerebral Palsy
+11
+8
+518
+Myopathic
+30
+27
+845
+Table 1: Source-video counts before and after all observation
+and support gates. More windows do not imply more inde-
+pendent people.
+own-leg design has 104 features; the bilateral design has 208,
+including historical residuals, observation indicators, and an-
+chors. Targets are residuals from each joint’s latest observed
+prefix position. Output-specific ridge fits use observed targets
+only; imputed targets never become measurements.
+The own-leg model uses target-leg history. The bilateral
+model adds opposite-leg history. A separately trained shifted
+model retains the same selected values, missingness, and
+latest opposite-leg observation, but cyclically shifts its seven
+earlier observations by a window-specific offset derived from
+the window identity. This disrupts timing with matched ca-
+pacity; a global feature permutation would instead be ab-
+sorbable by ridge regression. The static-context model re-
+peats the last observed posture as input but learns a sep-
+arate future transition at each horizon. It does not repeat
+a static output. Persistence and velocity extrapolation with
+fixed damping 0.5 provide elementary references. Additional
+inference-time shift and static perturbations are reported sep-
+arately because they can create input distribution shift.
+Five outer folds stratify source IDs by annotation with seed
+2701. Only normal sources outside each outer fold fit mo-

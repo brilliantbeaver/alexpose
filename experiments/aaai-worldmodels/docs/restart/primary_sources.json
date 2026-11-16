@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-16",
+  "purpose": "Primary-source support and claim boundaries for the exploratory fixed-time gait dynamics restart.",
+  "sources": [
+    {
+      "key": "ranjan2025",
+      "title": "Computer Vision for Clinical Gait Analysis: A Gait Abnormality Video Dataset",
+      "authors": ["Rahm Ranjan", "David Ahmedt-Aristizabal", "Mohammad Ali Armin", "Juno Kim"],
+      "date": "2025",
+      "version": "IEEE Access related DOI; arXiv v1 submitted 2024-07-05",
+      "doi": "10.1109/ACCESS.2025.3545787",
+      "url": "https://arxiv.org/abs/2407.04190",
+      "access": "Abstract and linked publication material inspected.",
+      "supports": "Public-video gait annotations and the reported 1,874-sequence dataset.",
+      "does_not_support": "Patient identity verification in the local derivative or clinical generalization of the restart."
+    },
+    {
+      "key": "borghese1996",
+      "title": "Kinematic determinants of human locomotion",
+      "authors": ["N. A. Borghese", "L. Bianchi", "F. Lacquaniti"],
+      "date": "1996-08-01",
+      "doi": "10.1113/jphysiol.1996.sp021539",
+      "url": "https://physoc.onlinelibrary.wiley.com/doi/10.1113/jphysiol.1996.sp021539",
+      "access": "Publisher abstract inspected.",
+      "supports": "Structured intersegmental covariation in laboratory gait.",
+      "does_not_support": "Equivalence of video coordinates to measured three-dimensional segment angles or neural states."
+    },
+    {
+      "key": "plotnik2007",
+      "title": "A new measure for quantifying the bilateral coordination of human gait: effects of aging and Parkinson's disease",
+      "authors": ["Meir Plotnik", "Nir Giladi", "Jeffrey M. Hausdorff"],
+      "date": "2007-08",
+      "doi": "10.1007/s00221-007-0955-7",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17503027/",
+      "access": "Indexed primary abstract inspected; a later direct open returned an incomplete shell.",
+      "supports": "Clinical relevance of bilateral gait timing.",
+      "does_not_support": "Calling a video context-control score the phase coordination index or a basal-ganglia measurement."
+    },
+    {
+      "key": "clark2010",
+      "title": "Merging of Healthy Motor Modules Predicts Reduced Locomotor Performance and Muscle Coordination Complexity Post-Stroke",
+      "authors": ["David J. Clark", "Lena H. Ting", "Felix E. Zajac", "Richard R. Neptune", "Steven A. Kautz"],
+      "date": "2010-02",
+      "doi": "10.1152/jn.00825.2009",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20007501/",
+      "access": "Primary abstract and author-hosted manuscript inspected; one later PDF request timed out.",
+      "supports": "Association between altered EMG modular organization and locomotor impairment after stroke.",
+      "does_not_support": "Recovering neural modules from this study's 2D poses or assigning a universal prediction-error direction."
+    },
+    {
+      "key": "steele2015",
+      "title": "Muscle synergies and complexity of neuromuscular control during gait in cerebral palsy",
+      "authors": ["Katherine M. Steele", "Adam Rozumalski", "Michael H. Schwartz"],
+      "date": "2015-12",
+      "doi": "10.1111/dmcn.12826",
+      "url": "https://steelelab.me.uw.edu/wp-content/uploads/2015/07/Steele-2015-Synergies-in-CP.pdf",
+      "access": "Author-hosted paper and indexed primary abstract inspected.",
+      "supports": "Reduced EMG synergy complexity in cerebral palsy and association with impairment.",
+      "does_not_support": "Equating low-dimensional pose prediction with a directly measured motor-control mechanism."
+    },
+    {
+      "key": "abdelfattah2024",
+      "title": "S-JEPA: A Joint Embedding Predictive Architecture for Skeletal Action Recognition",
+      "authors": ["Mohamed Abdelfattah", "Alexandre Alahi"],
+      "date": "2024",
+      "version": "ECCV 2024 conference paper",
+      "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf",
+      "access": "Conference PDF inspected, including masking, target, loss, and training details.",
+      "supports": "Published latent masked-skeleton prediction architecture and action-recognition evaluation.",
+      "does_not_support": "Faithful reproduction by the local compact model or clinical future-state simulation."
+    },
+    {
+      "key": "martinez2017",
+      "title": "On human motion prediction using recurrent neural networks",
+      "authors": ["Julieta Martinez", "Michael J. Black", "Javier Romero"],
+      "date": "2017-05-06",
+      "version": "arXiv v1; accepted at CVPR 2017",
+      "url": "https://arxiv.org/abs/1705.02445",
+      "access": "Primary abstract inspected; current arXiv author spelling retained.",
+      "supports": "Need for strong static motion-prediction baselines.",
+      "does_not_support": "Any numeric expectation for the GAVD restart."
+    },
+    {
+      "key": "flaborea2023",
+      "title": "Multimodal Motion Conditioned Diffusion Model for Skeleton-based Video Anomaly Detection",
+      "authors": ["Alessandro Flaborea", "Luca Collorone", "Guido D'Amely", "Stefano D'Arrigo", "Bardh Prenkaj", "Fabio Galasso"],
+      "date": "2023-08-28",
+      "version": "arXiv v3; accepted at ICCV 2023",
+      "url": "https://arxiv.org/abs/2307.07205",
+      "access": "Primary abstract inspected.",
+      "supports": "Prior work on future skeleton generation for anomaly detection.",
+      "does_not_support": "Direct numerical comparison with a clinical gait cohort."
+    },
+    {
+      "key": "motta2026",
+      "title": "GenGait: A Transformer-Based Model for Human Gait Anomaly Detection and Normative Twin Generation",
+      "authors": ["Elisa Motta", "Marta Lorenzini", "Clara Mouawad", "Alberto Ranavolo", "Mariano Serrao", "Arash Ajoudani"],
+      "date": "2026-10-01",
+      "version": "arXiv v2; source record describes a journal-submitted preprint",
+      "url": "https://arxiv.org/abs/2604.01997",
+      "access": "Current arXiv abstract inspected; separate PubMed DOI record not used to infer full publication details.",
+      "supports": "Prior normal-only gait reconstruction and normative-twin work.",
+      "does_not_support": "Clinical validation of reconstruction on all pathological conditions or causal treatment counterfactuals."
+    },
+    {
+      "key": "chen2026",
+      "title": "BioGait-VLM: A Tri-Modal Vision-Language-Biomechanics Framework for Interpretable Clinical Gait Assessment",
+      "authors": ["Erdong Chen", "Yuyang Ji", "Jacob K. Greenberg", "Benjamin Steel", "Faraz Arkam", "Abigail Lewis", "Pranay Singh", "Feng Liu"],
+      "date": "2026-03-09",
+      "version": "arXiv v1",
+      "url": "https://arxiv.org/abs/2603.08564",
+      "access": "Primary abstract and HTML article inspected.",
+      "supports": "Recent biomechanics-informed gait assessment and explicit concern with environmental shortcuts.",
+      "does_not_support": "Transfer of the paper's claimed subject-disjoint status to the local GAVD derivative."
+    },
+    {
+      "key": "medwm2027",
+      "title": "The First Workshop on Medical World Models at AAAI-27",
+      "authors": ["Med-WM organizers"],
+      "date": "2026-11-16 retrieval",
+      "url": "https://med-wm.github.io/aaai27-mwm/",
+      "access": "Official workshop page inspected.",
+      "supports": "Workshop scope, extended deadline, page limits, formatting, and review status.",
+      "does_not_support": "Acceptance probability or independent confirmation of the live OpenReview invitation deadline."
+    }
+  ],
+  "unresolved": [
+    "The OpenReview group URL returned a loading shell, so its invitation deadline remains independently unverified.",
+    "No official Skeleton S-JEPA implementation revision was pinned for the restart; the new ridge comparison does not claim to reproduce that model.",
+    "The inaccessible private background note referenced in the earlier project remains unavailable and is not presented as read.",
+    "The literature check establishes relevant precedents, not an exhaustive proof of novelty."
+  ]
+}
