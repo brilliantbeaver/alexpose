@@ -1,0 +1,72 @@
+[
+  {
+    "id": "sjepa-coordinator",
+    "source": ".agents/teams/sjepa/roles/sjepa-coordinator.md",
+    "description": "Coordinate the S-JEPA tutorial project, dependencies, file ownership and acceptance.",
+    "coordinator": true,
+    "codex_name": "sjepa_coordinator"
+  },
+  {
+    "id": "sjepa-data",
+    "source": ".agents/teams/sjepa/roles/sjepa-data.md",
+    "description": "Build an auditable GAVD cohort and source-grouped partitions from current CSVs.",
+    "coordinator": false,
+    "codex_name": "sjepa_data"
+  },
+  {
+    "id": "sjepa-evaluation",
+    "source": ".agents/teams/sjepa/roles/sjepa-evaluation.md",
+    "description": "Define leakage-resistant evaluation and compare Random Forest with JEPA.",
+    "coordinator": false,
+    "codex_name": "sjepa_evaluation"
+  },
+  {
+    "id": "sjepa-literature",
+    "source": ".agents/teams/sjepa/roles/sjepa-literature.md",
+    "description": "Verify S-JEPA, MAMP, positional and latent stochasticity and the scientific claims.",
+    "coordinator": false,
+    "codex_name": "sjepa_literature"
+  },
+  {
+    "id": "sjepa-model",
+    "source": ".agents/teams/sjepa/roles/sjepa-model.md",
+    "description": "Implement the agreed skeleton JEPA and controlled stochasticity experiments.",
+    "coordinator": false,
+    "codex_name": "sjepa_model"
+  },
+  {
+    "id": "sjepa-pose",
+    "source": ".agents/teams/sjepa/roles/sjepa-pose.md",
+    "description": "Reuse Ambient pose and feature APIs and define the allowed joint table.",
+    "coordinator": false,
+    "codex_name": "sjepa_pose"
+  },
+  {
+    "id": "sjepa-reproducibility",
+    "source": ".agents/teams/sjepa/roles/sjepa-reproducibility.md",
+    "description": "Set up laptop execution and independently replay notebooks and artifacts.",
+    "coordinator": false,
+    "codex_name": "sjepa_reproducibility"
+  },
+  {
+    "id": "sjepa-reviewer",
+    "source": ".agents/teams/sjepa/roles/sjepa-reviewer.md",
+    "description": "Independently challenge scientific validity, implementation and teaching artifacts.",
+    "coordinator": false,
+    "codex_name": "sjepa_reviewer"
+  },
+  {
+    "id": "sjepa-tutorials",
+    "source": ".agents/teams/sjepa/roles/sjepa-tutorials.md",
+    "description": "Create progressive, self-contained notebooks and an accessible research narrative.",
+    "coordinator": false,
+    "codex_name": "sjepa_tutorials"
+  },
+  {
+    "id": "sjepa-visuals",
+    "source": ".agents/teams/sjepa/roles/sjepa-visuals.md",
+    "description": "Build clear vector illustrations and teaching slides from accepted evidence.",
+    "coordinator": false,
+    "codex_name": "sjepa_visuals"
+  }
+]

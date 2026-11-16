@@ -1,0 +1,396 @@
+{
+  "schema_version": 1,
+  "name": "sjepa_tutorials",
+  "status": "definitions_ready_not_executed",
+  "brief": {
+    "path": "notes/aaai-astad/02-create-initial-tutorials.md",
+    "sha256": "9d2c611072addaa6b830412a09d6f92d7d3f6de8a080663ad381ea828931dfb4",
+    "binding": "confirmed_by_user",
+    "other_candidate": "notes/aaai-worldmodels/02-create-initial-tutorials.md",
+    "other_candidate_observed_bytes": 0,
+    "output_root": null
+  },
+  "runtime": {
+    "max_total_agents": 4,
+    "max_workers": 3,
+    "heavy_compute_jobs": 1,
+    "model_policy": "inherit_parent",
+    "permissions_policy": "inherit_parent",
+    "enforcement": "coordinator procedure; not an autonomous scheduling service"
+  },
+  "roles": [
+    {
+      "name": "sjepa_coordinator",
+      "definition": ".codex/agents/sjepa_coordinator.toml",
+      "description": "Coordinate the S-JEPA tutorial project, dependencies, file ownership and acceptance."
+    },
+    {
+      "name": "sjepa_literature",
+      "definition": ".codex/agents/sjepa_literature.toml",
+      "description": "Verify S-JEPA, MAMP, positional and latent stochasticity and the scientific claims."
+    },
+    {
+      "name": "sjepa_data",
+      "definition": ".codex/agents/sjepa_data.toml",
+      "description": "Build an auditable GAVD cohort and source-grouped partitions from current CSVs."
+    },
+    {
+      "name": "sjepa_pose",
+      "definition": ".codex/agents/sjepa_pose.toml",
+      "description": "Reuse Ambient pose and feature APIs and define the allowed joint table."
+    },
+    {
+      "name": "sjepa_model",
+      "definition": ".codex/agents/sjepa_model.toml",
+      "description": "Implement the agreed skeleton JEPA and controlled stochasticity experiments."
+    },
+    {
+      "name": "sjepa_evaluation",
+      "definition": ".codex/agents/sjepa_evaluation.toml",
+      "description": "Define leakage-resistant evaluation and compare Random Forest with JEPA."
+    },
+    {
+      "name": "sjepa_reproducibility",
+      "definition": ".codex/agents/sjepa_reproducibility.toml",
+      "description": "Set up laptop execution and independently replay notebooks and artifacts."
+    },
+    {
+      "name": "sjepa_tutorials",
+      "definition": ".codex/agents/sjepa_tutorials.toml",
+      "description": "Create progressive, self-contained notebooks and an accessible research narrative."
+    },
+    {
+      "name": "sjepa_visuals",
+      "definition": ".codex/agents/sjepa_visuals.toml",
+      "description": "Build clear vector illustrations and teaching slides from accepted evidence."
+    },
+    {
+      "name": "sjepa_reviewer",
+      "definition": ".codex/agents/sjepa_reviewer.toml",
+      "description": "Independently challenge scientific validity, implementation and teaching artifacts."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T00",
+      "role": "sjepa_coordinator",
+      "depends_on": [],
+      "objective": "Confirm brief, output identity, scope and resource budget",
+      "acceptance": [
+        "run record with confirmed source brief and output_root",
+        "existing-study preservation decisions"
+      ],
+      "requirements": [
+        "requirements_binding",
+        "output_identity"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T01",
+      "role": "sjepa_literature",
+      "depends_on": [
+        "T00"
+      ],
+      "objective": "Review papers and implementation evidence",
+      "acceptance": [
+        "literature evidence table",
+        "method distinctions and proposed ablations"
+      ],
+      "requirements": [
+        "literature",
+        "masking",
+        "stochasticity"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T02",
+      "role": "sjepa_data",
+      "depends_on": [
+        "T00"
+      ],
+      "objective": "Recount inputs, exclusions and source relationships",
+      "acceptance": [
+        "cohort registry",
+        "attrition table",
+        "duplicate/source grouping evidence"
+      ],
+      "requirements": [
+        "fresh_gavd",
+        "media",
+        "generalization"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T03",
+      "role": "sjepa_pose",
+      "depends_on": [
+        "T00"
+      ],
+      "objective": "Inspect shared APIs and candidate feature definitions",
+      "acceptance": [
+        "API map",
+        "feature-to-joint proposal",
+        "frame origin contract"
+      ],
+      "requirements": [
+        "ambient_reuse",
+        "joints",
+        "pose"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T04",
+      "role": "sjepa_evaluation",
+      "depends_on": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "objective": "Freeze scientific protocol and split rules",
+      "acceptance": [
+        "split manifest",
+        "endpoint, tuning and aggregation protocol",
+        "accepted joint whitelist"
+      ],
+      "requirements": [
+        "splits",
+        "rf_comparison",
+        "normal_only",
+        "joints"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T05",
+      "role": "sjepa_reproducibility",
+      "depends_on": [
+        "T04"
+      ],
+      "objective": "Prepare the laptop environment and smoke-test existing shared APIs",
+      "acceptance": [
+        "pyproject.toml",
+        "setup instructions",
+        "measured environment/import/shared-API smoke report"
+      ],
+      "requirements": [
+        "uv",
+        "env",
+        "laptop"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T06",
+      "role": "sjepa_pose",
+      "depends_on": [
+        "T05"
+      ],
+      "objective": "Prepare accepted pose, features and window contracts",
+      "acceptance": [
+        "pose/feature adapters",
+        "quality ledger",
+        "range/mapping tests"
+      ],
+      "requirements": [
+        "pose",
+        "joints",
+        "video_context"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T07",
+      "role": "sjepa_model",
+      "depends_on": [
+        "T06"
+      ],
+      "objective": "Implement JEPA and isolated stochastic variants",
+      "acceptance": [
+        "model/masking code",
+        "shape/leakage/collapse checks"
+      ],
+      "requirements": [
+        "sjepa",
+        "masking",
+        "vicreg",
+        "stochasticity"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T08",
+      "role": "sjepa_evaluation",
+      "depends_on": [
+        "T06"
+      ],
+      "objective": "Implement matched Random Forest and evaluation",
+      "acceptance": [
+        "RF baseline code",
+        "metrics/aggregation code",
+        "group leakage checks"
+      ],
+      "requirements": [
+        "rf_comparison",
+        "splits",
+        "metrics"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T09",
+      "role": "sjepa_model",
+      "depends_on": [
+        "T07",
+        "T08"
+      ],
+      "objective": "Run normal-only training and separately identified adaptation",
+      "acceptance": [
+        "Independent reproducibility evidence for the full pose-to-model-to-score fixture after T07 and T08, before real training",
+        "run identities",
+        "training logs/checkpoints",
+        "ordered adaptation comparisons"
+      ],
+      "requirements": [
+        "normal_only",
+        "adaptation",
+        "laptop"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T10",
+      "role": "sjepa_evaluation",
+      "depends_on": [
+        "T09"
+      ],
+      "objective": "Run frozen evaluation and ablations",
+      "acceptance": [
+        "results with provenance",
+        "uncertainty and failure analysis",
+        "generalization limits"
+      ],
+      "requirements": [
+        "metrics",
+        "rf_comparison",
+        "generalization",
+        "stochasticity"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T11",
+      "role": "sjepa_tutorials",
+      "depends_on": [
+        "T10"
+      ],
+      "objective": "Generate the progressive self-contained notebook course",
+      "acceptance": [
+        "notebook generator",
+        "independent notebooks",
+        "README draft"
+      ],
+      "requirements": [
+        "notebooks",
+        "video_context",
+        "language"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T12",
+      "role": "sjepa_visuals",
+      "depends_on": [
+        "T04"
+      ],
+      "objective": "Create conceptual diagrams and slide draft, then bind final results",
+      "acceptance": [
+        "SVG generators/images",
+        "slides source/exports",
+        "visual QA evidence"
+      ],
+      "requirements": [
+        "graphics",
+        "slides",
+        "language"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T13",
+      "role": "sjepa_reproducibility",
+      "depends_on": [
+        "T11",
+        "T12"
+      ],
+      "objective": "Replay every notebook and inspect final artifacts",
+      "acceptance": [
+        "fresh-kernel executions",
+        "dependency/runtime report",
+        "render checks"
+      ],
+      "requirements": [
+        "independent_execution",
+        "laptop",
+        "graphics"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    },
+    {
+      "id": "T14",
+      "role": "sjepa_reviewer",
+      "depends_on": [
+        "T10",
+        "T13"
+      ],
+      "objective": "Review science, code, prose and rendered materials independently",
+      "acceptance": [
+        "findings with evidence",
+        "repair/recheck decisions"
+      ],
+      "requirements": [
+        "adversarial_review",
+        "generalization"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_coordinator"
+    },
+    {
+      "id": "T15",
+      "role": "sjepa_coordinator",
+      "depends_on": [
+        "T14"
+      ],
+      "objective": "Integrate only accepted work and publish completion record",
+      "acceptance": [
+        "final README/index",
+        "coverage/review ledger",
+        "remaining limitations",
+        "Independent review of the exact final README/index identities after integration; no acceptance of unreviewed final edits"
+      ],
+      "requirements": [
+        "documentation",
+        "acceptance"
+      ],
+      "status": "pending",
+      "reviewer": "sjepa_reviewer"
+    }
+  ]
+}

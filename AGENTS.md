@@ -3,6 +3,10 @@
 This guide applies throughout the repository. `CLAUDE.md` is a relative symlink to this file.
 Read any more specific instructions in the directory you change, and inspect Git status first.
 
+For authorized research delegation, consult [.agents/README.md](.agents/README.md).
+It indexes shared AI/ML roles, coordination rules and generated native profiles.
+Use only the specialists needed for the task; saving the library does not start a study.
+
 ## Purpose and code ownership
 
 AlexPose processes gait videos into poses, movement features, and classifications.
