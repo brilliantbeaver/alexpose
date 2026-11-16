@@ -1,0 +1,158 @@
+Forecast
+MSE [95% interval]
+Bilateral history
+71.838 [54.566, 91.196]
+Shrunk bilateral
+76.246 [58.289, 96.254]
+Damped velocity
+157.107 [110.674, 210.279]
+Inference shift
+86.547 [67.969, 108.831]
+Inference static
+68.688 [52.774, 86.527]
+Own-leg history
+71.231 [54.991, 89.393]
+Shrunk own-leg
+73.086 [56.702, 91.336]
+Persistence
+101.710 [74.483, 131.526]
+Shifted bilateral
+75.449 [57.943, 95.573]
+Shrunk shifted
+73.407 [55.687, 93.848]
+Static posture
+64.166 [48.454, 81.562]
+Shrunk static
+64.166 [48.454, 81.562]
+Table 3: All normal-source forecasts at 0.4 seconds; values
+are multiplied by 1,000.
+Reference / forecast
+Gain [95% interval]
+Persistence / Bilateral
+29.872 [12.220, 50.128]
+Own / Bilateral
+-0.607 [-4.023, 2.979]
+Shifted / Bilateral
+3.611 [-0.260, 7.751]
+Static / Bilateral
+-7.672 [-13.888, -1.271]
+Perturbed time / Bilateral
+14.709 [8.969, 20.812]
+Perturbed static / Bilateral
+-3.150 [-11.091, 5.259]
+Persistence / Bilateral (S)
+25.464 [11.897, 40.421]
+Bilateral / Bilateral (S)
+-4.408 [-10.995, 0.616]
+Own (S) / Bilateral (S)
+-3.161 [-6.742, 0.224]
+Shifted (S) / Bilateral (S)
+-2.840 [-9.688, 3.336]
+Static (S) / Bilateral (S)
+-12.081 [-18.263, -6.063]
+Table 4: All paired contrasts at 0.4 seconds; gain is reference
+minus forecast MSE, multiplied by 1,000. (S) denotes the
+secondary shrinkage variant.
+Complete exploratory results
+Every declared forecast and contrast is retained below. The
+shorter horizon is cumulative over four future samples. These
+are descriptive comparisons without multiplicity adjustment.
+Reproducibility and scope
+All 80 saved model checkpoints and the input arrays are
+fingerprinted. The complete run contains source member-
+ship for every outer and inner fold, model selection grids,
+predictions, per-window and per-source errors, and source-
+level anomaly scores. Bilateral shrinkage beta counts across
+fold/leg fits are 0.5: 5/10, 1: 5/10. The prepared cohort re-
+quired 46,783 recorded model calls and 990.0 seconds for
+this invocation; fitting and scoring required 21.2 seconds.
+These timings are descriptive of the local environment.
+The method predicts a measured articulation sequence un-
+der observational source shift. It is not a disease simulator, a
+patient-specific digital twin, a causal intervention model, or a
+validated clinical diagnostic system. Participant verification,
+external clinical evaluation, and explicit action or treatment
+data remain necessary extensions.
+Forecast
+MSE [95% interval]
+Bilateral history
+80.632 [62.522, 100.023]
+Shrunk bilateral
+83.779 [66.582, 102.528]
+Damped velocity
+267.828 [193.236, 353.148]
+Inference shift
+94.855 [75.079, 116.534]
+Inference static
+82.261 [65.641, 100.124]
+Own-leg history
+81.744 [64.066, 100.723]
+Shrunk own-leg
+82.741 [66.126, 100.615]
+Persistence
+121.262 [94.150, 150.800]
+Shifted bilateral
+86.541 [67.032, 108.215]
+Shrunk shifted
+84.278 [65.702, 104.376]
+Static posture
+71.636 [55.850, 88.622]
+Shrunk static
+71.636 [55.850, 88.622]
+Table 5: All normal-source forecasts at 0.8 seconds; values
+are multiplied by 1,000.
+Reference / forecast
+Gain [95% interval]
+Persistence / Bilateral
+40.630 [23.993, 59.111]
+Own / Bilateral
+1.112 [-2.525, 5.244]
+Shifted / Bilateral
+5.909 [1.407, 11.336]
+Static / Bilateral
+-8.996 [-15.894, -2.068]
+Perturbed time / Bilateral
+14.224 [8.375, 20.592]
+Perturbed static / Bilateral
+1.629 [-7.975, 11.520]
+Persistence / Bilateral (S)
+37.483 [23.277, 53.257]
+Bilateral / Bilateral (S)
+-3.147 [-7.493, 0.494]
+Own (S) / Bilateral (S)
+-1.038 [-4.612, 3.182]
+Shifted (S) / Bilateral (S)
+0.499 [-5.119, 6.375]
+Static (S) / Bilateral (S)
+-12.143 [-18.240, -6.523]
+Table 6: All paired contrasts at 0.8 seconds; gain is reference
+minus forecast MSE, multiplied by 1,000. (S) denotes the
+secondary shrinkage variant.
+Score
+AUROC [95% interval]
+Bilateral MSE
+0.304 [0.178, 0.431]
+Persistence MSE
+0.194 [0.096, 0.300]
+Excess MSE
+0.793 [0.680, 0.896]
+Bilateral minus own
+0.549 [0.410, 0.684]
+Prefix missingness
+0.427 [0.296, 0.555]
+Table 7: All secondary abnormality rankings. Higher scores
+always mean more abnormal.
+Score
+AP [95% interval]
+Bilateral MSE
+0.558 [0.520, 0.632]
+Persistence MSE
+0.519 [0.495, 0.573]
+Excess MSE
+0.865 [0.788, 0.938]
+Bilateral minus own
+0.694 [0.618, 0.795]
+Prefix missingness
+0.646 [0.577, 0.740]
+Table 8: Average precision for every declared score.
+Abnormal-source prevalence is 0.681.

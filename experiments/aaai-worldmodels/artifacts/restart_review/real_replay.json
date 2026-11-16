@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "real_data": true,
+  "windows": 2815,
+  "sources": 91,
+  "artifact_hashes_verified": 94,
+  "checkpoints_replayed": 80,
+  "all_checkpoint_float32_predictions_exact": true,
+  "maximum_float32_rounding_difference": 1.1920925713226893e-07,
+  "independently_refit_output_coordinates": 10,
+  "maximum_independent_solver_prediction_difference": 6.161737786669619e-15,
+  "code_sha256": "226b276ae3d0759624aec9ae6acff59d0cf282b795bc309db814c4f49fe8259c",
+  "protocol_sha256": "e7c331238c3ae61237336c11b36526afb20952ae31da51d9374962e98eafd299",
+  "results_sha256": "f14a6e533338c96da99b5085cb231b9de5cc47f7fe50a4c118225c42dc1fa1e8",
+  "audit_script_sha256": "84e9734a4bf8f7096e989702a1acb972caa4ce2e528a1a6c41167bd943e11de3",
+  "checks": [
+    "input and output identities",
+    "all inner/outer source membership",
+    "all selected hyperparameter argmins",
+    "all 80 checkpoint predictions",
+    "all learned checkpoint window errors from absolute coordinates",
+    "all baseline and inference-control window errors from stored coordinates",
+    "hidden future invariance",
+    "all training-only scalers",
+    "ten independent sklearn coordinate refits",
+    "source aggregation",
+    "all paired means and intervals",
+    "manual pairwise anomaly AUROCs"
+  ],
+  "limitation": "Replay verifies this completed internal experiment; it does not establish patient identity, clinical labels or external generalization."
+}

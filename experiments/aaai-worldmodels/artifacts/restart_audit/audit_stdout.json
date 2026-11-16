@@ -1,0 +1,940 @@
+{
+  "audit_identity": "medwm-restart-data-audit-v1",
+  "inventory": {
+    "schema_version": 1,
+    "annotation_identity": "0d630ee0cfffe33f22a1ec9803b8cc0ec617f781f98867c7c65b604fd71238b5",
+    "source_manifest_sha256": "499c0e129fd6e32a103ed6a29e0ecc11f4860fc81c7d5b9c9da57babe990ef14",
+    "media_manifest_sha256": "74303b22e984e83d41d24944eefdf2fcc5fd350e5ab1d0137f0830dfcd6148ab",
+    "all_sequences": 1874,
+    "all_rows": 458116,
+    "all_sources": 348,
+    "by_label": {
+      "abnormal": {
+        "sequences": 767,
+        "rows": 216492,
+        "sources": 117
+      },
+      "antalgic": {
+        "sequences": 35,
+        "rows": 6556,
+        "sources": 10
+      },
+      "cerebral palsy": {
+        "sequences": 64,
+        "rows": 20346,
+        "sources": 11
+      },
+      "exercise": {
+        "sequences": 234,
+        "rows": 54941,
+        "sources": 98
+      },
+      "inebriated": {
+        "sequences": 23,
+        "rows": 7007,
+        "sources": 8
+      },
+      "myopathic": {
+        "sequences": 188,
+        "rows": 34595,
+        "sources": 30
+      },
+      "normal": {
+        "sequences": 291,
+        "rows": 41340,
+        "sources": 32
+      },
+      "parkinsons": {
+        "sequences": 47,
+        "rows": 10426,
+        "sources": 11
+      },
+      "pregnant": {
+        "sequences": 6,
+        "rows": 909,
+        "sources": 2
+      },
+      "prosthetic": {
+        "sequences": 39,
+        "rows": 17999,
+        "sources": 8
+      },
+      "stroke": {
+        "sequences": 76,
+        "rows": 33934,
+        "sources": 19
+      },
+      "style": {
+        "sequences": 104,
+        "rows": 13571,
+        "sources": 3
+      }
+    },
+    "selected_sequences": 666,
+    "selected_rows": 140641,
+    "selected_sources": 103,
+    "media_eligible_sequences": 652,
+    "media_eligible_sources": 98,
+    "exclusions": {
+      "missing_video": 9,
+      "video_reference_mismatch": 4,
+      "source_too_short": 1
+    },
+    "eligibility_note": "Media eligibility only. Frame alignment, person identity, and pose quality need review; recorded video hashes are not reverified by this inventory."
+  },
+  "manual_source_exclusions": {
+    "CMls0LwK5OU": "validation scene cuts and person identity switches",
+    "eBvzFkcvScg": "training person identity switches"
+  },
+  "candidate_after_all_existing_exclusions": {
+    "sequences": 641,
+    "sources": 96,
+    "annotation_rows": 135633,
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "sequences": 60,
+        "sources": 10
+      },
+      {
+        "label": "myopathic",
+        "sequences": 183,
+        "sources": 28
+      },
+      {
+        "label": "normal",
+        "sequences": 287,
+        "sources": 31
+      },
+      {
+        "label": "parkinsons",
+        "sequences": 47,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "sequences": 64,
+        "sources": 16
+      }
+    ],
+    "unique_annotated_source_frames": 132911,
+    "unique_stride_two_source_frames": 67125,
+    "potential_new_stride_two_source_frames_beyond_32_cache": 48556
+  },
+  "overlapping_annotation_sequences": [
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljargosy00cx3n6lm6atozrz",
+      "sequence_b": "cll8h0akb00683o6ls74ez7x9",
+      "shared_annotated_frames": 87
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarhldg00d13n6l7utw0lqn",
+      "sequence_b": "cll8h0wn0006c3o6laag88cor",
+      "shared_annotated_frames": 305
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarj6rf00d53n6ljtivf4q7",
+      "sequence_b": "cll8h1zss006k3o6lophvktm7",
+      "shared_annotated_frames": 223
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarkax200d93n6lukx52g1t",
+      "sequence_b": "cll8h2imm006o3o6lrk0orfvc",
+      "shared_annotated_frames": 241
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarlbch00dd3n6l9jaubrxq",
+      "sequence_b": "cll8h2yit006s3o6l0megfvr0",
+      "shared_annotated_frames": 120
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarmcm700dh3n6lxw24hxgx",
+      "sequence_b": "cll8h3m1d006w3o6l16evhm2z",
+      "shared_annotated_frames": 132
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarn9oy00dl3n6l8pg9exfg",
+      "sequence_b": "cll8ht6s600703o6lxkz5kl10",
+      "shared_annotated_frames": 108
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljaroguw00dp3n6lhfddiadu",
+      "sequence_b": "cll8hu4qq00743o6l9abmzbfu",
+      "shared_annotated_frames": 190
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarp08600dt3n6lxa7sysiv",
+      "sequence_b": "cll8huk7100783o6la7heoyxn",
+      "shared_annotated_frames": 138
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarpts600dx3n6l98zqf6yn",
+      "sequence_b": "cll8hv4lm007c3o6l3u0iruij",
+      "shared_annotated_frames": 138
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cljarqtuz00e13n6lrnox6mfs",
+      "sequence_b": "cll8hwczx007k3o6l9iqpma0o",
+      "shared_annotated_frames": 139
+    },
+    {
+      "source_id": "R8LRCiTvUz8",
+      "sequence_a": "cll8h1d5f006g3o6lhytfdu5d",
+      "sequence_b": "clldgy8s700723o6l5i2b6d4e",
+      "shared_annotated_frames": 147
+    },
+    {
+      "source_id": "jzJIpY6vRLo",
+      "sequence_a": "cljax9d2p00363n6lx043s1m7",
+      "sequence_b": "cll7ntwcy001j3o6l58p3y3fx",
+      "shared_annotated_frames": 134
+    },
+    {
+      "source_id": "jzJIpY6vRLo",
+      "sequence_a": "cljaxabfg003a3n6l95mrlcry",
+      "sequence_b": "cll7nuif7001n3o6ltux62vsz",
+      "shared_annotated_frames": 125
+    },
+    {
+      "source_id": "jzJIpY6vRLo",
+      "sequence_a": "cljaxb5y2003e3n6lj1j9qvav",
+      "sequence_b": "cll7nuzfe001r3o6lzh1nyjnq",
+      "shared_annotated_frames": 128
+    },
+    {
+      "source_id": "jzJIpY6vRLo",
+      "sequence_a": "cljaxbq22003i3n6lmzka93uq",
+      "sequence_b": "cll7nvnpk001v3o6l6i9yqdbg",
+      "shared_annotated_frames": 154
+    },
+    {
+      "source_id": "v1SoZ_S31pk",
+      "sequence_a": "cljwsrf6f00043n6lyvybiqah",
+      "sequence_b": "cllbkxxuf000c3o6l848vr3gz",
+      "shared_annotated_frames": 213
+    }
+  ],
+  "extended_raw_cache": {
+    "files": 595,
+    "schemas": {
+      "extended32-person-gate-v1": 595
+    },
+    "lengths": {
+      "32": 595
+    },
+    "invalid_records": [],
+    "unique_sampled_frames_before_manual_exclusions": 18825,
+    "unique_sampled_frames_after_manual_exclusions": 18569,
+    "person_gate_frame_counts_after_manual_exclusions": {
+      "inside_box": 14312,
+      "missing_pelvis": 2275,
+      "outside_annotated_person_box": 2197
+    }
+  },
+  "other_worldmodels_pose_cache_counts": [
+    {
+      "schema": "1",
+      "frames": 12,
+      "files": 1
+    },
+    {
+      "schema": "1",
+      "frames": 13,
+      "files": 1
+    },
+    {
+      "schema": "1",
+      "frames": 14,
+      "files": 2
+    },
+    {
+      "schema": "1",
+      "frames": 16,
+      "files": 746
+    },
+    {
+      "schema": "person-reviewed-short-v1",
+      "frames": 12,
+      "files": 1
+    },
+    {
+      "schema": "person-reviewed-short-v1",
+      "frames": 13,
+      "files": 1
+    },
+    {
+      "schema": "person-reviewed-short-v1",
+      "frames": 14,
+      "files": 2
+    },
+    {
+      "schema": "person-reviewed-short-v1",
+      "frames": 16,
+      "files": 637
+    }
+  ],
+  "input_identities": {
+    "source_manifest_sha256": "499c0e129fd6e32a103ed6a29e0ecc11f4860fc81c7d5b9c9da57babe990ef14",
+    "media_manifest_sha256": "74303b22e984e83d41d24944eefdf2fcc5fd350e5ab1d0137f0830dfcd6148ab",
+    "source_exclusions_sha256": "98a234fbc4c6bd1948afd6e1799aee2eafd3ebddd27e6e2d9fbf35830cf6ed60",
+    "audit_script_sha256": "d2732d9133d93579b57a7e036ac54ecfe8c58a0032aa6c1603e925c671d3fba8"
+  },
+  "limitations": [
+    "Exact file hashes do not detect recoded reposts or shared participants.",
+    "Patient identity and verified diagnosis are not established by source IDs.",
+    "Previous test outcomes have already been inspected; a new cross-validation result on these sources is exploratory.",
+    "Full-sequence pose eligibility has not been measured.",
+    "Raw-cache identity checks verify CSV/video bytes and frame alignment; complete extractor/model source hash verification is recorded separately."
+  ]
+}
+{
+  "pilot-input-v2": {
+    "windows": 494,
+    "sequences": 494,
+    "sources": 96,
+    "x_shape": [
+      494,
+      16,
+      16,
+      2
+    ],
+    "valid_shape": [
+      494,
+      16,
+      16
+    ],
+    "metadata_columns": [
+      "sequence_id",
+      "source_id",
+      "label",
+      "first_frame",
+      "last_frame",
+      "valid_fraction",
+      "sample_fps",
+      "pose_fingerprint",
+      "split"
+    ],
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "sequences": 39,
+        "sources": 9
+      },
+      {
+        "label": "myopathic",
+        "sequences": 145,
+        "sources": 28
+      },
+      {
+        "label": "normal",
+        "sequences": 204,
+        "sources": 31
+      },
+      {
+        "label": "parkinsons",
+        "sequences": 39,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "sequences": 67,
+        "sources": 17
+      }
+    ],
+    "by_partition": [
+      {
+        "split": "test",
+        "label": "cerebral palsy",
+        "windows": 6,
+        "sources": 1
+      },
+      {
+        "split": "test",
+        "label": "myopathic",
+        "windows": 24,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "normal",
+        "windows": 18,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "parkinsons",
+        "windows": 5,
+        "sources": 2
+      },
+      {
+        "split": "test",
+        "label": "stroke",
+        "windows": 14,
+        "sources": 3
+      },
+      {
+        "split": "train",
+        "label": "cerebral palsy",
+        "windows": 29,
+        "sources": 6
+      },
+      {
+        "split": "train",
+        "label": "myopathic",
+        "windows": 95,
+        "sources": 16
+      },
+      {
+        "split": "train",
+        "label": "normal",
+        "windows": 152,
+        "sources": 19
+      },
+      {
+        "split": "train",
+        "label": "parkinsons",
+        "windows": 30,
+        "sources": 7
+      },
+      {
+        "split": "train",
+        "label": "stroke",
+        "windows": 33,
+        "sources": 10
+      },
+      {
+        "split": "validation",
+        "label": "cerebral palsy",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "myopathic",
+        "windows": 26,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "normal",
+        "windows": 34,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "parkinsons",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "stroke",
+        "windows": 20,
+        "sources": 4
+      }
+    ],
+    "source_split_conflicts": 0,
+    "source_annotation_split_mismatches": 0,
+    "nonfinite_x": 0,
+    "valid_fraction": 0.8942228618421053,
+    "metadata_sha256": "1f045614a8455c9c12217a34630b937f6d50a81b34d061be347ab9fd5d7d5b56",
+    "data_sha256": "43726371b13f951ec4ab5d0813cd7b964132ff009d1d5c1ae2d85327f4a4337f"
+  },
+  "pilot-input-clean-v1": {
+    "windows": 405,
+    "sequences": 405,
+    "sources": 89,
+    "x_shape": [
+      405,
+      16,
+      16,
+      2
+    ],
+    "valid_shape": [
+      405,
+      16,
+      16
+    ],
+    "metadata_columns": [
+      "sequence_id",
+      "source_id",
+      "label",
+      "first_frame",
+      "last_frame",
+      "valid_fraction",
+      "sample_fps",
+      "pose_fingerprint",
+      "split"
+    ],
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "sequences": 38,
+        "sources": 8
+      },
+      {
+        "label": "myopathic",
+        "sequences": 140,
+        "sources": 27
+      },
+      {
+        "label": "normal",
+        "sequences": 138,
+        "sources": 29
+      },
+      {
+        "label": "parkinsons",
+        "sequences": 37,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "sequences": 52,
+        "sources": 14
+      }
+    ],
+    "by_partition": [
+      {
+        "split": "test",
+        "label": "cerebral palsy",
+        "windows": 6,
+        "sources": 1
+      },
+      {
+        "split": "test",
+        "label": "myopathic",
+        "windows": 24,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "normal",
+        "windows": 12,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "parkinsons",
+        "windows": 5,
+        "sources": 2
+      },
+      {
+        "split": "test",
+        "label": "stroke",
+        "windows": 10,
+        "sources": 2
+      },
+      {
+        "split": "train",
+        "label": "cerebral palsy",
+        "windows": 28,
+        "sources": 5
+      },
+      {
+        "split": "train",
+        "label": "myopathic",
+        "windows": 90,
+        "sources": 15
+      },
+      {
+        "split": "train",
+        "label": "normal",
+        "windows": 92,
+        "sources": 17
+      },
+      {
+        "split": "train",
+        "label": "parkinsons",
+        "windows": 28,
+        "sources": 7
+      },
+      {
+        "split": "train",
+        "label": "stroke",
+        "windows": 26,
+        "sources": 9
+      },
+      {
+        "split": "validation",
+        "label": "cerebral palsy",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "myopathic",
+        "windows": 26,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "normal",
+        "windows": 34,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "parkinsons",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "stroke",
+        "windows": 16,
+        "sources": 3
+      }
+    ],
+    "source_split_conflicts": 0,
+    "source_annotation_split_mismatches": 0,
+    "nonfinite_x": 0,
+    "valid_fraction": 0.9016685956790124,
+    "metadata_sha256": "e121f1bd69edc93b6488ff7daa2da5a65880c87ab90c0c02a91e213b46c6f2bc",
+    "data_sha256": "e8752610a60788434ee89a0aa99a5080544e77b8fb766fb08e3ebc10508d5e5c"
+  },
+  "extended-input-v1": {
+    "windows": 414,
+    "sequences": 414,
+    "sources": 93,
+    "x_shape": [
+      414,
+      32,
+      16,
+      2
+    ],
+    "valid_shape": [
+      414,
+      32,
+      16
+    ],
+    "metadata_columns": [
+      "sequence_id",
+      "source_id",
+      "label",
+      "first_frame",
+      "last_frame",
+      "valid_fraction",
+      "sample_fps",
+      "pose_fingerprint",
+      "split",
+      "prefix_valid_fraction",
+      "future_valid_fraction",
+      "prefix_mean_confidence",
+      "future_mean_confidence",
+      "horizon_seconds",
+      "unresolved_person_fraction",
+      "view"
+    ],
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "sequences": 40,
+        "sources": 8
+      },
+      {
+        "label": "myopathic",
+        "sequences": 160,
+        "sources": 27
+      },
+      {
+        "label": "normal",
+        "sequences": 121,
+        "sources": 29
+      },
+      {
+        "label": "parkinsons",
+        "sequences": 34,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "sequences": 59,
+        "sources": 18
+      }
+    ],
+    "by_partition": [
+      {
+        "split": "test",
+        "label": "cerebral palsy",
+        "windows": 7,
+        "sources": 1
+      },
+      {
+        "split": "test",
+        "label": "myopathic",
+        "windows": 25,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "normal",
+        "windows": 10,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "parkinsons",
+        "windows": 5,
+        "sources": 2
+      },
+      {
+        "split": "test",
+        "label": "stroke",
+        "windows": 12,
+        "sources": 4
+      },
+      {
+        "split": "train",
+        "label": "cerebral palsy",
+        "windows": 29,
+        "sources": 5
+      },
+      {
+        "split": "train",
+        "label": "myopathic",
+        "windows": 106,
+        "sources": 15
+      },
+      {
+        "split": "train",
+        "label": "normal",
+        "windows": 84,
+        "sources": 17
+      },
+      {
+        "split": "train",
+        "label": "parkinsons",
+        "windows": 25,
+        "sources": 7
+      },
+      {
+        "split": "train",
+        "label": "stroke",
+        "windows": 28,
+        "sources": 10
+      },
+      {
+        "split": "validation",
+        "label": "cerebral palsy",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "myopathic",
+        "windows": 29,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "normal",
+        "windows": 27,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "parkinsons",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "stroke",
+        "windows": 19,
+        "sources": 4
+      }
+    ],
+    "source_split_conflicts": 0,
+    "source_annotation_split_mismatches": 0,
+    "nonfinite_x": 0,
+    "valid_fraction": 0.892578125,
+    "metadata_sha256": "c24c016c3c498f61dfaa8629d8a47d09781c45d716aa6abfcd77c3e6515f681e",
+    "data_sha256": "806077a81400a249726a3f8d1e4d3146378bc8ab01a83985a757b3cd4c9ebf6b",
+    "forecast_horizon_seconds": {
+      "0.0": 1.0666666666666669,
+      "0.25": 1.0666666666666669,
+      "0.5": 1.0677333333333334,
+      "0.75": 1.0677333333333334,
+      "1.0": 3.2
+    },
+    "unresolved_person_windows": 7
+  },
+  "extended-input-clean-v1": {
+    "windows": 407,
+    "sequences": 407,
+    "sources": 91,
+    "x_shape": [
+      407,
+      32,
+      16,
+      2
+    ],
+    "valid_shape": [
+      407,
+      32,
+      16
+    ],
+    "metadata_columns": [
+      "sequence_id",
+      "source_id",
+      "label",
+      "first_frame",
+      "last_frame",
+      "valid_fraction",
+      "sample_fps",
+      "pose_fingerprint",
+      "split",
+      "prefix_valid_fraction",
+      "future_valid_fraction",
+      "prefix_mean_confidence",
+      "future_mean_confidence",
+      "horizon_seconds",
+      "unresolved_person_fraction",
+      "view"
+    ],
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "sequences": 40,
+        "sources": 8
+      },
+      {
+        "label": "myopathic",
+        "sequences": 160,
+        "sources": 27
+      },
+      {
+        "label": "normal",
+        "sequences": 121,
+        "sources": 29
+      },
+      {
+        "label": "parkinsons",
+        "sequences": 34,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "sequences": 52,
+        "sources": 16
+      }
+    ],
+    "by_partition": [
+      {
+        "split": "test",
+        "label": "cerebral palsy",
+        "windows": 7,
+        "sources": 1
+      },
+      {
+        "split": "test",
+        "label": "myopathic",
+        "windows": 25,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "normal",
+        "windows": 10,
+        "sources": 6
+      },
+      {
+        "split": "test",
+        "label": "parkinsons",
+        "windows": 5,
+        "sources": 2
+      },
+      {
+        "split": "test",
+        "label": "stroke",
+        "windows": 12,
+        "sources": 4
+      },
+      {
+        "split": "train",
+        "label": "cerebral palsy",
+        "windows": 29,
+        "sources": 5
+      },
+      {
+        "split": "train",
+        "label": "myopathic",
+        "windows": 106,
+        "sources": 15
+      },
+      {
+        "split": "train",
+        "label": "normal",
+        "windows": 84,
+        "sources": 17
+      },
+      {
+        "split": "train",
+        "label": "parkinsons",
+        "windows": 25,
+        "sources": 7
+      },
+      {
+        "split": "train",
+        "label": "stroke",
+        "windows": 25,
+        "sources": 9
+      },
+      {
+        "split": "validation",
+        "label": "cerebral palsy",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "myopathic",
+        "windows": 29,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "normal",
+        "windows": 27,
+        "sources": 6
+      },
+      {
+        "split": "validation",
+        "label": "parkinsons",
+        "windows": 4,
+        "sources": 2
+      },
+      {
+        "split": "validation",
+        "label": "stroke",
+        "windows": 15,
+        "sources": 3
+      }
+    ],
+    "source_split_conflicts": 0,
+    "source_annotation_split_mismatches": 0,
+    "nonfinite_x": 0,
+    "valid_fraction": 0.8926117168304668,
+    "metadata_sha256": "8b298922e4aac3aa4fefdb6f75e61fa7d4fdea83a873e8eca9aeffd077a587b0",
+    "data_sha256": "1a4d11caa69fe83df945013cb0459ce11b6643e0f9f33a5880bf04760acccdc5",
+    "forecast_horizon_seconds": {
+      "0.0": 1.0666666666666669,
+      "0.25": 1.0666666666666669,
+      "0.5": 1.0677333333333334,
+      "0.75": 1.0677333333333334,
+      "1.0": 2.1333333333333333
+    },
+    "unresolved_person_windows": 0
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "identity": "draft03-frozen-score-audit-v1",
+  "status": "completed post hoc diagnostic; no new trained model or confirmatory evaluation",
+  "inputs": {
+    "artifacts/runs/restart-dynamics-v1/source_anomaly_scores.csv": "f482a0ff7dc3c4875ffe6ae1af84e9d5119ed05823ed35c1e90d983bc253e01e",
+    "artifacts/runs/restart-dynamics-v1/cohort.csv": "ed81e82509f1ab26df87d1bf2f4e3b23541f70f961bb5f3fe1f46a024700e86a"
+  },
+  "seed": 2703,
+  "resamples": 5000,
+  "resampling": "paired stratified source bootstrap conditional on fixed overlapping fits",
+  "score_direction": "Frozen scores are unchanged. Negative persistence is an explicitly post hoc diagnostic.",
+  "pooled": [
+    {
+      "score": "excess_error",
+      "auroc": 0.7931034482758621,
+      "ci95": [
+        0.67853170189099,
+        0.8954393770856507
+      ],
+      "average_precision": 0.8645524204655735
+    },
+    {
+      "score": "low_motion_diagnostic",
+      "auroc": 0.8064516129032259,
+      "ci95": [
+        0.7007786429365963,
+        0.8982202447163514
+      ],
+      "average_precision": 0.8794452189746533
+    }
+  ],
+  "excess_minus_low_motion": {
+    "estimate": -0.013348164627363768,
+    "ci95": [
+      -0.11123470522803114,
+      0.08288375973303663
+    ]
+  },
+  "within_fold": [
+    {
+      "fold": 0,
+      "sources": 19,
+      "normal": 6,
+      "abnormal": 13,
+      "excess_auroc": 0.7051282051282052,
+      "low_motion_auroc": 0.9102564102564104
+    },
+    {
+      "fold": 1,
+      "sources": 18,
+      "normal": 6,
+      "abnormal": 12,
+      "excess_auroc": 0.9305555555555556,
+      "low_motion_auroc": 0.9305555555555556
+    },
+    {
+      "fold": 2,
+      "sources": 18,
+      "normal": 6,
+      "abnormal": 12,
+      "excess_auroc": 0.888888888888889,
+      "low_motion_auroc": 0.8333333333333334
+    },
+    {
+      "fold": 3,
+      "sources": 18,
+      "normal": 6,
+      "abnormal": 12,
+      "excess_auroc": 0.6527777777777778,
+      "low_motion_auroc": 0.7777777777777779
+    },
+    {
+      "fold": 4,
+      "sources": 18,
+      "normal": 5,
+      "abnormal": 13,
+      "excess_auroc": 0.6923076923076923,
+      "low_motion_auroc": 0.5692307692307692
+    }
+  ],
+  "within_fold_pair_weighted_auroc": {
+    "excess_auroc": 0.7743732590529248,
+    "low_motion_auroc": 0.8105849582172702
+  },
+  "within_fold_excess_minus_low_motion": {
+    "estimate": -0.03621169916434541,
+    "ci95": [
+      -0.14484679665738165,
+      0.06685236768802227
+    ],
+    "seed": 2704,
+    "resamples": 5000
+  },
+  "condition_slices": [
+    {
+      "label": "parkinsons",
+      "normal": 29,
+      "abnormal": 11,
+      "excess_auroc": 0.8557993730407524,
+      "low_motion_auroc": 0.8683385579937304
+    },
+    {
+      "label": "stroke",
+      "normal": 29,
+      "abnormal": 16,
+      "excess_auroc": 0.8642241379310345,
+      "low_motion_auroc": 0.8771551724137931
+    },
+    {
+      "label": "cerebral palsy",
+      "normal": 29,
+      "abnormal": 8,
+      "excess_auroc": 0.6896551724137931,
+      "low_motion_auroc": 0.7586206896551724
+    },
+    {
+      "label": "myopathic",
+      "normal": 29,
+      "abnormal": 27,
+      "excess_auroc": 0.7560664112388251,
+      "low_motion_auroc": 0.7535121328224776
+    }
+  ],
+  "limitations": [
+    "Low-motion sign chosen after outcomes; not a validated deployable score.",
+    "No threshold or model selected using these results.",
+    "Within-fold rankings exclude cross-fold pairs but training sets overlap.",
+    "Both scores use observed future motion and are retrospective."
+  ]
+}

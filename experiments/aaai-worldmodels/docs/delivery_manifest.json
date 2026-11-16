@@ -1,0 +1,37 @@
+{
+  "status": "verified",
+  "utc": "2026-11-16T08:21:41.955122+00:00",
+  "real_notebooks": 8,
+  "executed_real_code_cells": 88,
+  "final_evaluations": 4,
+  "source_csv_files": 84,
+  "slide_pages": 20,
+  "svg_figures": 12,
+  "tests": {
+    "command": "python -m pytest -c pyproject.toml tests -q",
+    "passed": 43,
+    "seconds": 7.03,
+    "note": "Previously executed focused suite; this verifier does not rerun tests or model fits."
+  },
+  "files": {
+    "README.md": "4d83d8f5d84f983b289e0114e52fe13e0b4790f74f9cb19dbfba113d2eda33a1",
+    "docs/manuscript.md": "32f6e62671e78e8c29632fcbe1bd18a6a1b91bc44be54d5273b6f246df1877e2",
+    "docs/manuscript_review.md": "2ca8248434eaf5d1a56b9994f84675bb367d8346fe338631bcf92771b214d4b5",
+    "docs/execution.md": "c1fb4187ce3f5b19eedb2bf32842eaef98027568ba3c17a044c529a647b1f86b",
+    "docs/inference.md": "bcc8db7df535ee2545c22cee076ada4f905540186e2941a1b2f7dee858403365",
+    "docs/research_results.json": "cbf21a5b8b4b27df48357eddd41a17377d0b7d0e66fa9146178c8790a82da8b9",
+    "docs/results_tables.md": "33494a5ff42099bcd0d61074c03ab65c0fb961e8959faaa8b8b422e354c8f229",
+    "docs/final_scientific_review.md": "bd673ed45e8f71d71c4a492ac7ea567c2de12c6c59a77af5b45a63337ca5f237",
+    "docs/notebook_execution_real.json": "b1729e8c688130cf35acfb07d9098092d3a9cbac11969afcd9e64c84c1bc23ff",
+    "docs/run_record.json": "bff1cdda6a8d4e3d43ad7d5c6f42af84f34eccfbc3c90fa5d110c9eea1de33fd",
+    "slides/tutorial.html": "e95df75754b4e329a7796776919b7a86e74896ab7c440bc282675ba1e909a7ce",
+    "pyproject.toml": "c01db457a9d4f6499fc8a76862430714e17ba6680c76c04b091d138384559ffd"
+  },
+  "frozen_release_sha256": "f4ea9f5db7da641844c529aaab2b5a8b96878fdd927169c663b4998a65261770",
+  "verifier_sha256": "01335d482f29378a5b3b18ac7808a160ed0ee2083f93eb28a9566cc8412b6583",
+  "limits": [
+    "Source groups are not verified independent patients.",
+    "The manuscript is an editable draft, not a submitted or typeset paper.",
+    "SVG/PNG figures received direct visual review; browser rendering of the HTML deck was not independently automated."
+  ]
+}

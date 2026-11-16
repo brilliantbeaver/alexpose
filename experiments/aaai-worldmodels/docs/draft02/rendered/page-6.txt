@@ -1,0 +1,90 @@
+Reference / forecast
+Gain [95% interval]
+Persistence / Bilateral
+40.630 [23.993, 59.111]
+Own / Bilateral
+1.112 [-2.525, 5.244]
+Shifted / Bilateral
+5.909 [1.407, 11.336]
+Static / Bilateral
+-8.996 [-15.894, -2.068]
+Perturbed time / Bilateral
+14.224 [8.375, 20.592]
+Perturbed static / Bilateral
+1.629 [-7.975, 11.520]
+Persistence / Bilateral (S)
+37.483 [23.277, 53.257]
+Bilateral / Bilateral (S)
+-3.147 [-7.493, 0.494]
+Own (S) / Bilateral (S)
+-1.038 [-4.612, 3.182]
+Shifted (S) / Bilateral (S)
+0.499 [-5.119, 6.375]
+Static (S) / Bilateral (S)
+-12.143 [-18.240, -6.523]
+Table 7: Paired effects through 0.8 seconds. Positive values
+favor the forecast; values are multiplied by 1,000. S denotes
+shrinkage.
+Fold
+N/A
+Excess
+Low motion
+0
+6/13
+0.705
+0.910
+1
+6/12
+0.931
+0.931
+2
+6/12
+0.889
+0.833
+3
+6/12
+0.653
+0.778
+4
+5/13
+0.692
+0.569
+Table 8: Post hoc within-fold AUROCs. N/A gives nor-
+mal/abnormal source counts. Folds share training sources.
+Annotation
+Abnormal
+Excess
+Low motion
+Parkinsons
+11
+0.856
+0.868
+Stroke
+16
+0.864
+0.877
+Cerebral palsy
+8
+0.690
+0.759
+Myopathic
+27
+0.756
+0.754
+Table 9: Post hoc AUROC by annotation versus the same 29
+normal sources. Small groups and repeated normal compar-
+isons limit interpretation.
+Reproduction
+Targets are BlazePose joints 25, 27, 29, and 31 on the left,
+and 26, 28, 30, and 32 on the right. Each leg requires at least
+four observed joint-time points through four future samples
+and eight through all eight samples. Each target joint also re-
+quires at least one prefix observation. This common support
+gate removes three of the 2,818 prepared windows for every
+model. The completed run contains 80 saved fold, leg, and
+variant checkpoints, some sharing fitted coefficients. There
+are 29 normal source groups, not 80 independent replica-
+tions. Evidence tables, hashes, notebook records, and source
+generators accompany this manuscript. Figures and diagnos-
+tics are regenerated from frozen artifacts; the manuscript
+builder never refits a model.

@@ -1,0 +1,24 @@
+.env
+.venv/
+uv.lock
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+artifacts/runs/
+artifacts/poses/
+artifacts/executed/
+*.pt
+
+artifacts/*.log
+
+artifacts/executed-real*/
+
+# Restart runtime products. Review summaries and source generators remain visible.
+artifacts/restart_kernel/
+artifacts/restart_review/synthetic*/
+artifacts/restart_audit/pilot*/
+artifacts/executed-restart/
+docs/draft01/*.aux
+docs/draft01/*.log
+docs/draft01/*.out
+docs/draft01/*.blg

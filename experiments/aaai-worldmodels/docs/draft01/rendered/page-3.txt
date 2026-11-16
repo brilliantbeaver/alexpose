@@ -1,0 +1,124 @@
+tion models. Three inner source folds select ridge strength
+from {0.1, 1, 10, 100}; scaling is refitted inside every in-
+ner fold. A prospective secondary amendment jointly selects
+residual shrinkage beta from {0, 0.25, 0.5, 1}, with zero cor-
+responding to persistence. Unshrunk models remain primary.
+Left and right legs are fitted separately, producing 80 saved
+fold/leg/arm checkpoints, some sharing the same fitted ridge
+solution.
+All methods use a common observed target support. Each
+leg must have at least four observed joint-time points in
+the first four future samples and eight over the full future;
+each target joint must also have a prefix observation. Co-
+ordinate errors are averaged within leg and window, then
+legs equally, windows within sequence, sequences within
+source, and sources equally. Training weights follow the same
+source/sequence/window hierarchy with adjustment for ob-
+served target counts. This prevents long videos or denser
+pose support from determining the endpoint.
+The primary endpoint is normal-source MSE averaged
+over all eight future observations, nominally 0.1 to 0.8 sec-
+onds, rather than only the final instant. Paired differences
+compare bilateral prediction with persistence, own history,
+shifted history, and static posture; positive values favor bi-
+lateral prediction. Four-step results and shrinkage are sec-
+ondary. We use 5,000 source resamples for error intervals
+and 2,000 stratified source resamples for secondary AUROC
+and average precision. These descriptive intervals condition
+on fixed fits with overlapping training folds. They exclude
+retraining and patient-population uncertainty and are not
+multiplicity-adjusted confirmatory tests. Earlier GAVD out-
+comes were exposed, so the new cross-fitting study is ex-
+ploratory.
+For prefix features zi and latest observed articulation ai,j,
+each output is
+ˆ︁yi,h,j = ai,j + β(z⊤
+i wh,j + bh,j).
+(1)
+The primary model fixes β = 1; secondary shrinkage is
+selected inside normal-source validation.
+Results
+Bilateral history improved normal-source forecasting over
+persistence in this exploratory evaluation. Persistence and bi-
+lateral normal-source MSE are 0.12126 and 0.08063. Their
+paired difference is 0.04063 [0.02399, 0.05911], equivalent
+to 33.5% of the persistence mean. Bilateral error is lower
+on 23 of 29 normal sources. The gain over own history
+is 0.00111 [-0.00253, 0.00524], over the separately trained
+timing control 0.00591 [0.00141, 0.01134], and over static
+posture -0.00900 [-0.01589, -0.00207]. The complete set of
+primary comparisons does not establish a timing-specific bi-
+lateral forecasting advantage.
+The secondary shrunk bilateral forecast has persistence-
+minus-model difference 0.03748 [0.02328, 0.05326] and
+lower error on 24 normal sources. Its selected beta counts
+across ten fold/leg fits are 0.5: 5/10, 1: 5/10. The secondary
+shrunk forecast also improves persistence, but does not im-
+prove on the unshrunk bilateral model. Selection used only
+Forecast
+MSE
+95% interval
+Persistence
+121.262
+[94.150, 150.800]
+Damped velocity
+267.828
+[193.236, 353.148]
+Own-leg history
+81.744
+[64.066, 100.723]
+Bilateral history
+80.632
+[62.522, 100.023]
+Shifted bilateral
+86.541
+[67.032, 108.215]
+Static posture
+71.636
+[55.850, 88.622]
+Shrunk bilateral
+83.779
+[66.582, 102.528]
+Table 2: Normal-source mean squared error, multiplied by
+1,000, over the nominal 0.8-second future. The shrunk bilat-
+eral arm is secondary. Intervals condition on fixed fits.
+0
+25
+50
+Reference MSE minus forecast MSE (×10³)
+Persistence
+Own history
+Shifted history
+Static posture
+Persistence*
+*Secondary shrunk bilateral forecast; others use primary bilateral.
+Figure 2: Paired normal-source error differences. Positive
+values favor the forecast. Conditional 95% source intervals
+do not include retraining or patient-population uncertainty.
+inner normal-source outcomes; no model or score was pro-
+moted based on outer abnormal labels. Appendix tables re-
+tain every arm, both horizons, and all paired comparisons.
+Abnormality ranking is a separate descriptive endpoint.
+Larger bilateral MSE, excess MSE above persistence, and
+bilateral-minus-own MSE are fixed to indicate more abnor-
+mal gait. Persistence error and prefix missingness are con-
+trols. Bilateral MSE has AUROC 0.304 [0.178, 0.431]. Per-
+sistence MSE has AUROC 0.194 [0.096, 0.300]. Excess MSE
+has AUROC 0.793 [0.680, 0.896]. Bilateral minus own has
+AUROC 0.549 [0.410, 0.684]. Prefix missingness has AU-
+ROC 0.427 [0.296, 0.555]. The abnormal-source prevalence
+is 0.681. No score direction is reversed, and these compar-
+isons do not measure clinical sensitivity or diagnosis accu-
+racy.
+Discussion and limitations
+The positive forecasting gain shows usable information in this
+observation contract. Correctly timed bilateral context also
+outperforms its matched shifted control. However, the small
+uncertain gain over own history and the stronger current-
+posture-conditioned predictor prevent a broader claim of bi-
+lateral temporal superiority. The static-context model learns
+horizon-specific transitions from the current state; its per-
+formance is a useful positive reference, not evidence that
+the output is motionless. These findings favor testing a com-
+pact current-state transition model before increasing tempo-
+ral complexity.

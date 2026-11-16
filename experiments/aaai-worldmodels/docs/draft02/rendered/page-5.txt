@@ -1,0 +1,144 @@
+Complete exploratory results
+All original forecast arms and prespecified score directions
+are retained. Added diagnostics are explicitly post hoc.
+0
+100
+200
+300
+Persistence error (MSE × 1,000)
+0
+50
+100
+150
+200
+250
+300
+Forecast error (MSE × 1,000)
+Normal
+Abnormal
+Figure 3: The 91 source videos comprise 29 normal and 62
+abnormal sources. Axes show squared body-relative coor-
+dinates, normalized by prefix torso scale and multiplied by
+1,000. Points below the equal-error line benefit from forecast-
+ing. Normal sources often have larger errors on both axes,
+explaining the direction of raw-error ranking.
+Score
+AUROC [95% interval]
+AP
+Bilateral MSE
+0.304 [0.178, 0.431]
+0.558
+Persistence MSE
+0.194 [0.096, 0.300]
+0.519
+Excess MSE
+0.793 [0.680, 0.896]
+0.865
+Bilateral minus own
+0.549 [0.410, 0.684]
+0.694
+Prefix missingness
+0.427 [0.296, 0.555]
+0.646
+Table 2: All prespecified anomaly scores.
+Forecast
+MSE × 1,000
+Persistence
+121.262
+Damped velocity
+267.828
+Own-leg history
+81.744
+Bilateral history
+80.632
+Shifted bilateral
+86.541
+Static posture
+71.636
+Shrunk bilateral
+83.779
+Table 3: Normal-source forecast error over all eight future
+samples.
+Forecast
+MSE [95% interval]
+Bilateral history
+71.838 [54.566, 91.196]
+Shrunk bilateral
+76.246 [58.289, 96.254]
+Damped velocity
+157.107 [110.674, 210.279]
+Inference shift
+86.547 [67.969, 108.831]
+Inference static
+68.688 [52.774, 86.527]
+Own-leg history
+71.231 [54.991, 89.393]
+Shrunk own-leg
+73.086 [56.702, 91.336]
+Persistence
+101.710 [74.483, 131.526]
+Shifted bilateral
+75.449 [57.943, 95.573]
+Shrunk shifted
+73.407 [55.687, 93.848]
+Static posture
+64.166 [48.454, 81.562]
+Shrunk static
+64.166 [48.454, 81.562]
+Table 4: All forecasts through 0.4 seconds. MSE is multiplied
+by 1,000.
+Reference / forecast
+Gain [95% interval]
+Persistence / Bilateral
+29.872 [12.220, 50.128]
+Own / Bilateral
+-0.607 [-4.023, 2.979]
+Shifted / Bilateral
+3.611 [-0.260, 7.751]
+Static / Bilateral
+-7.672 [-13.888, -1.271]
+Perturbed time / Bilateral
+14.709 [8.969, 20.812]
+Perturbed static / Bilateral
+-3.150 [-11.091, 5.259]
+Persistence / Bilateral (S)
+25.464 [11.897, 40.421]
+Bilateral / Bilateral (S)
+-4.408 [-10.995, 0.616]
+Own (S) / Bilateral (S)
+-3.161 [-6.742, 0.224]
+Shifted (S) / Bilateral (S)
+-2.840 [-9.688, 3.336]
+Static (S) / Bilateral (S)
+-12.081 [-18.263, -6.063]
+Table 5: Paired effects through 0.4 seconds. Positive values
+favor the forecast; values are multiplied by 1,000. S denotes
+shrinkage.
+Forecast
+MSE [95% interval]
+Bilateral history
+80.632 [62.522, 100.023]
+Shrunk bilateral
+83.779 [66.582, 102.528]
+Damped velocity
+267.828 [193.236, 353.148]
+Inference shift
+94.855 [75.079, 116.534]
+Inference static
+82.261 [65.641, 100.124]
+Own-leg history
+81.744 [64.066, 100.723]
+Shrunk own-leg
+82.741 [66.126, 100.615]
+Persistence
+121.262 [94.150, 150.800]
+Shifted bilateral
+86.541 [67.032, 108.215]
+Shrunk shifted
+84.278 [65.702, 104.376]
+Static posture
+71.636 [55.850, 88.622]
+Shrunk static
+71.636 [55.850, 88.622]
+Table 6: All forecasts through 0.8 seconds. MSE is multiplied
+by 1,000.

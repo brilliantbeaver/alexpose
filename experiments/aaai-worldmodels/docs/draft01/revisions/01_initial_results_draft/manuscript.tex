@@ -1,0 +1,319 @@
+\documentclass[letterpaper]{article}
+
+\usepackage[preprint]{aaai2027}
+
+\usepackage[hyphens]{url}
+
+\usepackage{graphicx}
+
+\usepackage{natbib}
+
+\usepackage{caption}
+
+\usepackage{booktabs}
+
+\usepackage{amsmath}
+
+\frenchspacing
+
+\urlstyle{rm}
+
+\def\UrlFont{\rm}
+
+\setcounter{secnumdepth}{0}
+
+\title{Testing Bilateral Predictive Information in a Video-Based Gait Observation Model}
+
+\author{Author details pending confirmation}
+
+\affiliations{Affiliation pending confirmation}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+Medical world models need observation dynamics that remain useful under simple controls. We test whether correctly timed opposite-leg history improves short-horizon gait forecasts beyond a leg's own history. Full-duration processing of selected GAVD videos yields 2,815 eligible windows from 456 sequences and 91 source videos, including 29 normal sources. Normal-only ridge predictors forecast eight observations at a nominal 10 Hz using nested source-grouped cross-validation. The primary bilateral forecast has a persistence-minus-model MSE difference of 0.04063 [0.02399, 0.05911]. The corresponding own-history and shifted-context differences are 0.00111 [-0.00253, 0.00524] and 0.00591 [0.00141, 0.01134]. A current-posture-conditioned regression is stronger still, with MSE 0.07164 versus bilateral 0.08063. Bilateral history improved normal-source forecasting over persistence in this exploratory evaluation. The complete set of primary comparisons does not establish a timing-specific bilateral forecasting advantage. A predeclared movement-referenced excess-error score reaches abnormality AUROC 0.793, a secondary association. Intervals resample sources conditional on fixed cross-validation fits. The study is exploratory because earlier GAVD outcomes were known. The contribution is a controlled evaluation of a motor-observation layer, without claims about treatment, disease progression, or neurological mechanism.
+
+\end{abstract}
+
+\section{Introduction}
+
+Movement supplies an observable aspect of patient state. A gait observation model could eventually support longitudinal assessment, but low prediction error alone does not show that a system has learned clinically meaningful dynamics. Persistence may already predict a short future reasonably well, while appearance, movement amplitude, and recording conditions may distinguish dataset labels. We therefore separate useful forecasting, timing-sensitive information, and abnormality ranking.
+
+Neurological evidence motivates a relational question without fixing its answer. Laboratory gait exhibits structured intersegmental covariation \citep{borghese1996}, and bilateral phase coordination is affected in Parkinson's disease \citep{plotnik2007}. Studies of stroke and cerebral palsy relate altered EMG modular organization to impaired movement \citep{clark2010,steele2015}. These measurements differ from projected video coordinates. A predictable compensation can still be abnormal, and no video forecast score identifies a neural module or lesion.
+
+We ask whether adding the opposite leg's correctly timed history improves prediction beyond the target leg's own history. Our contribution is a fixed-time, fuller-sequence, source-grouped audit with matched timing controls and explicit negative-result conditions. Bilateral gait analysis and normal-only prediction are established ideas. We aim to determine what the available observations actually support before introducing a more complex medical model.
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/method.pdf}
+
+\caption{Controlled future prediction uses a common body reference, common targets, and source-separated training. The shifted control preserves observed values while changing their timing. No treatment or neural state is observed.}
+
+\label{fig:method}
+
+\end{figure*}
+
+\section{Related work}
+
+Skeleton S-JEPA learns action representations through latent masked-observation prediction \citep{abdelfattah2024}. This is distinct from a strict future-only task. MoCoDAD generates future skeletons for anomaly detection \citep{flaborea2023}; GenGait reconstructs normative gait \citep{motta2026}; BioGait-VLM combines visual, language, and biomechanical evidence \citep{chen2026}. These precedents preclude broad first-method claims. Strong static baselines are particularly relevant because low motion-prediction error need not require a learned motion model \citep{martinez2017}.
+
+\section{Data and observation contract}
+
+The pinned local GAVD derivative contains 1,874 annotation sequences and 348 source IDs. The requested normal, Parkinson's, stroke, cerebral palsy, and myopathic labels contain 666 sequences from 103 sources \citep{ranjan2025}. Media checks retain 652 sequences from 98 sources. Two previously reviewed sources with person switches or scene cuts are excluded, leaving 641 sequences from 96 sources for extraction. Pose filtering retains 2,818 windows from 456 sequences and 91 sources; the common distal-target gate retains 2,815 windows from 456 sequences and 91 sources. These are video groups, not verified independent people.
+
+We reuse cached originals under data/videos-gavd and perform 46,783 recorded Ambient pose-model calls in this preparation invocation. We sample nearest native frames on a nominal 10 Hz grid without interpolating target observations. Each window contains 16 past and eight future samples, with stride eight. The final forecast time spans 0.767 to 0.834 seconds relative to the last prefix frame. Actual frame indices, decoded times, confidence, and missingness are retained. Each source/native-frame tuple is decoded for pose once within a source cache, and identical window tuples are deduplicated.
+
+The observation contract uses BlazePose joints 11--16 and 23--32, confidence at least 0.5, and at least 70\% observed joints in each half. Full-image detection is followed by an annotation-box pelvis gate; unresolved geometry is rejected. This gate cannot guarantee identity when people overlap. Coordinates are centered on each frame's pelvis and divided by a torso scale estimated only from the prefix. Forecasts therefore describe relative 2D articulation, not physical velocity or clinical joint angles. Own-leg input is conditional on this shared body reference, which already uses both hips.
+
+The dataset is exhausted with respect to available footage in the selected conditions, not every GAVD label. All 32 annotated normal sources are already in this scope. Additional categories do not increase normal training-source support and include contexts such as exercise, pregnancy, and style that are not equivalent to the selected conditions. More windows improve temporal coverage without adding independent patients.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Annotation & Catalog & Final & Windows \\
+\midrule
+Normal & 32 & 29 & 465 \\
+Parkinsons & 11 & 11 & 292 \\
+Stroke & 19 & 16 & 695 \\
+Cerebral Palsy & 11 & 8 & 518 \\
+Myopathic & 30 & 27 & 845 \\
+\bottomrule
+\end{tabular}
+\caption{Source-video counts before and after all observation and support gates. More windows do not imply more independent people.}
+\label{tab:cohort}
+\end{table}
+
+\section{Predictors and evaluation}
+
+For each target leg, we predict the next eight samples of knee, ankle, heel, and foot-index x/y coordinates. Prefix values are causally forward-filled, with zero before the first observation and explicit observation indicators. Eight fixed prefix positions, including both endpoints, limit dimensionality. The own-leg design has 104 features; the bilateral design has 208, including historical residuals, observation indicators, and anchors. Targets are residuals from each joint's latest observed prefix position. Output-specific ridge fits use observed targets only; imputed targets never become measurements.
+
+The own-leg model uses target-leg history. The bilateral model adds opposite-leg history. A separately trained shifted model retains the same selected values, missingness, and latest opposite-leg observation, but cyclically shifts its seven earlier observations by a window-specific offset derived from the window identity. This disrupts timing with matched capacity; a global feature permutation would instead be absorbable by ridge regression. The static-context model repeats the last observed posture as input but learns a separate future transition at each horizon. It does not repeat a static output. Persistence and velocity extrapolation with fixed damping 0.5 provide elementary references. Additional inference-time shift and static perturbations are reported separately because they can create input distribution shift.
+
+Five outer folds stratify source IDs by annotation with seed 2701. Only normal sources outside each outer fold fit motion models. Three inner source folds select ridge strength from \{0.1, 1, 10, 100\}; scaling is refitted inside every inner fold. A prospective secondary amendment jointly selects residual shrinkage beta from \{0, 0.25, 0.5, 1\}, with zero corresponding to persistence. Unshrunk models remain primary. Left and right legs are fitted separately, producing 80 saved fold/leg/arm checkpoints, some sharing the same fitted ridge solution.
+
+All methods use a common observed target support. Each leg must have at least four observed joint-time points in the first four future samples and eight over the full future; each target joint must also have a prefix observation. Coordinate errors are averaged within leg and window, then legs equally, windows within sequence, sequences within source, and sources equally. Training weights follow the same source/sequence/window hierarchy with adjustment for observed target counts. This prevents long videos or denser pose support from determining the endpoint.
+
+The primary endpoint is normal-source MSE over eight future observations. Paired differences compare bilateral prediction with persistence, own history, shifted history, and static posture; positive values favor bilateral prediction. Four-step results and shrinkage are secondary. We use 5,000 source resamples for error intervals and 2,000 stratified source resamples for secondary AUROC and average precision. These descriptive intervals condition on fixed fits with overlapping training folds. They exclude retraining and patient-population uncertainty and are not multiplicity-adjusted confirmatory tests. Earlier GAVD outcomes were exposed, so the new cross-fitting study is exploratory.
+
+For prefix features $z_i$ and latest observed articulation $a_{i,j}$, each output is
+
+\begin{equation}\widehat y_{i,h,j}=a_{i,j}+\beta(z_i^\top w_{h,j}+b_{h,j}).\end{equation}
+
+The primary model fixes $\beta=1$; secondary shrinkage is selected inside normal-source validation.
+
+\section{Results}
+
+Bilateral history improved normal-source forecasting over persistence in this exploratory evaluation. Persistence and bilateral normal-source MSE are 0.12126 and 0.08063. Their paired difference is 0.04063 [0.02399, 0.05911], equivalent to 33.5\% of the persistence mean. Bilateral error is lower on 23 of 29 normal sources. The gain over own history is 0.00111 [-0.00253, 0.00524], over the separately trained timing control 0.00591 [0.00141, 0.01134], and over static posture -0.00900 [-0.01589, -0.00207]. The complete set of primary comparisons does not establish a timing-specific bilateral forecasting advantage.
+
+The secondary shrunk bilateral forecast has persistence-minus-model difference 0.03748 [0.02328, 0.05326] and lower error on 24 normal sources. Its selected beta counts across ten fold/leg fits are 0.5: 5/10, 1: 5/10. The secondary shrunk forecast also improves persistence, but does not improve on the unshrunk bilateral model. Selection used only inner normal-source outcomes; no model or score was promoted based on outer abnormal labels. Appendix tables retain every arm, both horizons, and all paired comparisons.
+
+Abnormality ranking is a separate descriptive endpoint. Larger bilateral MSE, excess MSE above persistence, and bilateral-minus-own MSE are fixed to indicate more abnormal gait. Persistence error and prefix missingness are controls. Bilateral MSE has AUROC 0.304 [0.178, 0.431]. Persistence MSE has AUROC 0.194 [0.096, 0.300]. Excess MSE has AUROC 0.793 [0.680, 0.896]. Bilateral minus own has AUROC 0.549 [0.410, 0.684]. Prefix missingness has AUROC 0.427 [0.296, 0.555]. The abnormal-source prevalence is 0.681. No score direction is reversed, and these comparisons do not measure clinical sensitivity or diagnosis accuracy.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+Forecast & MSE & 95\% interval \\
+\midrule
+Persistence & 121.262 & [94.150, 150.800] \\
+Damped velocity & 267.828 & [193.236, 353.148] \\
+Own-leg history & 81.744 & [64.066, 100.723] \\
+Bilateral history & 80.632 & [62.522, 100.023] \\
+Shifted bilateral & 86.541 & [67.032, 108.215] \\
+Static posture & 71.636 & [55.850, 88.622] \\
+Shrunk bilateral & 83.779 & [66.582, 102.528] \\
+\bottomrule
+\end{tabular}
+\caption{Normal-source mean squared error, multiplied by 1,000, over the nominal 0.8-second future. The shrunk bilateral arm is secondary. Intervals condition on fixed fits.}
+\label{tab:forecast}
+\end{table}
+
+\begin{figure}[t]
+
+\centering
+
+\includegraphics[width=\columnwidth]{figures/paired_effects.pdf}
+
+\caption{Paired normal-source error differences. Positive values favor the forecast. Conditional 95\% source intervals do not include retraining or patient-population uncertainty.}
+
+\label{fig:effects}
+
+\end{figure}
+
+\section{Discussion and limitations}
+
+The positive forecasting gain shows usable information in this observation contract. Correctly timed bilateral context also outperforms its matched shifted control. However, the small uncertain gain over own history and the stronger current-posture-conditioned predictor prevent a broader claim of bilateral temporal superiority. The static-context model learns horizon-specific transitions from the current state; its performance is a useful positive reference, not evidence that the output is motionless. These findings favor testing a compact current-state transition model before increasing temporal complexity.
+
+The predeclared excess-error score also has a favorable abnormality association, while raw error ranks in the opposite direction. Subtracting matched persistence error accounts for a basic component of observed motion difficulty, but does not isolate disease or neurological mechanism. Predictive dependence can arise from mechanics, speed, camera geometry, compensation, and correlated pose noise. The model has no treatment input, longitudinal disease state, clinical reward, or intervention outcome.
+
+Generalization is limited by public-video selection, uncertain participant overlap, annotation validity, acquisition differences, and quality-dependent attrition. Source grouping addresses repeated windows from a video, but cannot establish patient-disjoint or external-site evaluation. Small normal-source support limits model selection and uncertainty estimates. GAVD alone therefore supports an exploratory observational benchmark, not deployment claims. The highest-value extension is an external cohort with verified identities, clinician assessments, repeated visits, and measured interventions.
+
+Bilateral history improved normal-source forecasting over persistence in this exploratory evaluation. The complete set of primary comparisons does not establish a timing-specific bilateral forecasting advantage. The reusable contribution is a complete evidence chain from real video inference to controlled source-level estimates. It makes forecast utility, timing-specific information, and abnormality association separately testable, which is necessary before a gait observation component can support stronger medical modeling claims.
+
+\clearpage
+
+\bibliographystyle{aaai2027}
+
+\bibliography{references}
+
+\clearpage
+
+\appendix
+
+\section{Complete exploratory results}
+
+Every declared forecast and contrast is retained below. The shorter horizon is cumulative over four future samples. These are descriptive comparisons without multiplicity adjustment.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Forecast & MSE [95\% interval] \\
+\midrule
+Bilateral history & 71.838 [54.566, 91.196] \\
+Shrunk bilateral & 76.246 [58.289, 96.254] \\
+Damped velocity & 157.107 [110.674, 210.279] \\
+Inference shift & 86.547 [67.969, 108.831] \\
+Inference static & 68.688 [52.774, 86.527] \\
+Own-leg history & 71.231 [54.991, 89.393] \\
+Shrunk own-leg & 73.086 [56.702, 91.336] \\
+Persistence & 101.710 [74.483, 131.526] \\
+Shifted bilateral & 75.449 [57.943, 95.573] \\
+Shrunk shifted & 73.407 [55.687, 93.848] \\
+Static posture & 64.166 [48.454, 81.562] \\
+Shrunk static & 64.166 [48.454, 81.562] \\
+\bottomrule
+\end{tabular}
+\caption{All normal-source forecasts at 0.4 seconds; values are multiplied by 1,000.}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Reference / forecast & Gain [95\% interval] \\
+\midrule
+Persistence / Bilateral & 29.872 [12.220, 50.128] \\
+Own / Bilateral & -0.607 [-4.023, 2.979] \\
+Shifted / Bilateral & 3.611 [-0.260, 7.751] \\
+Static / Bilateral & -7.672 [-13.888, -1.271] \\
+Perturbed time / Bilateral & 14.709 [8.969, 20.812] \\
+Perturbed static / Bilateral & -3.150 [-11.091, 5.259] \\
+Persistence / Bilateral + shrink & 25.464 [11.897, 40.421] \\
+Bilateral / Bilateral + shrink & -4.408 [-10.995, 0.616] \\
+Own + shrink / Bilateral + shrink & -3.161 [-6.742, 0.224] \\
+Shifted + shrink / Bilateral + shrink & -2.840 [-9.688, 3.336] \\
+Static + shrink / Bilateral + shrink & -12.081 [-18.263, -6.063] \\
+\bottomrule
+\end{tabular}
+\caption{All paired contrasts at 0.4 seconds; gain is reference minus forecast MSE, multiplied by 1,000.}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Forecast & MSE [95\% interval] \\
+\midrule
+Bilateral history & 80.632 [62.522, 100.023] \\
+Shrunk bilateral & 83.779 [66.582, 102.528] \\
+Damped velocity & 267.828 [193.236, 353.148] \\
+Inference shift & 94.855 [75.079, 116.534] \\
+Inference static & 82.261 [65.641, 100.124] \\
+Own-leg history & 81.744 [64.066, 100.723] \\
+Shrunk own-leg & 82.741 [66.126, 100.615] \\
+Persistence & 121.262 [94.150, 150.800] \\
+Shifted bilateral & 86.541 [67.032, 108.215] \\
+Shrunk shifted & 84.278 [65.702, 104.376] \\
+Static posture & 71.636 [55.850, 88.622] \\
+Shrunk static & 71.636 [55.850, 88.622] \\
+\bottomrule
+\end{tabular}
+\caption{All normal-source forecasts at 0.8 seconds; values are multiplied by 1,000.}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Reference / forecast & Gain [95\% interval] \\
+\midrule
+Persistence / Bilateral & 40.630 [23.993, 59.111] \\
+Own / Bilateral & 1.112 [-2.525, 5.244] \\
+Shifted / Bilateral & 5.909 [1.407, 11.336] \\
+Static / Bilateral & -8.996 [-15.894, -2.068] \\
+Perturbed time / Bilateral & 14.224 [8.375, 20.592] \\
+Perturbed static / Bilateral & 1.629 [-7.975, 11.520] \\
+Persistence / Bilateral + shrink & 37.483 [23.277, 53.257] \\
+Bilateral / Bilateral + shrink & -3.147 [-7.493, 0.494] \\
+Own + shrink / Bilateral + shrink & -1.038 [-4.612, 3.182] \\
+Shifted + shrink / Bilateral + shrink & 0.499 [-5.119, 6.375] \\
+Static + shrink / Bilateral + shrink & -12.143 [-18.240, -6.523] \\
+\bottomrule
+\end{tabular}
+\caption{All paired contrasts at 0.8 seconds; gain is reference minus forecast MSE, multiplied by 1,000.}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Score & AUROC [95\% interval] \\
+\midrule
+Bilateral MSE & 0.304 [0.178, 0.431] \\
+Persistence MSE & 0.194 [0.096, 0.300] \\
+Excess MSE & 0.793 [0.680, 0.896] \\
+Bilateral minus own & 0.549 [0.410, 0.684] \\
+Prefix missingness & 0.427 [0.296, 0.555] \\
+\bottomrule
+\end{tabular}
+\caption{All secondary abnormality rankings. Higher scores always mean more abnormal.}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+Score & AP [95\% interval] \\
+\midrule
+Bilateral MSE & 0.558 [0.520, 0.632] \\
+Persistence MSE & 0.519 [0.495, 0.573] \\
+Excess MSE & 0.865 [0.788, 0.938] \\
+Bilateral minus own & 0.694 [0.618, 0.795] \\
+Prefix missingness & 0.646 [0.577, 0.740] \\
+\bottomrule
+\end{tabular}
+\caption{Average precision for every declared score. Abnormal-source prevalence is 0.681.}
+\end{table}
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/normal_sources.pdf}
+
+\caption{All retained normal sources show the distribution of forecasting effects. Source ordering uses persistence error for display only. Source IDs and values are retained in the figure data file.}
+
+\end{figure*}
+
+\section{Reproducibility and scope}
+
+All 80 saved model checkpoints and the input arrays are fingerprinted. The complete run contains source membership for every outer and inner fold, model selection grids, predictions, per-window and per-source errors, and source-level anomaly scores. Bilateral shrinkage beta counts across fold/leg fits are 0.5: 5/10, 1: 5/10. The prepared cohort required 46,783 recorded model calls and 990.0 seconds for this invocation; fitting and scoring required 21.2 seconds. These timings are descriptive of the local environment.
+
+The method predicts a measured articulation sequence under observational source shift. It is not a disease simulator, a patient-specific digital twin, a causal intervention model, or a validated clinical diagnostic system. Participant verification, external clinical evaluation, and explicit action or treatment data remain necessary extensions.
+
+\end{document}

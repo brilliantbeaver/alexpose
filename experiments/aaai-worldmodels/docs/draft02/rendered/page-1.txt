@@ -1,0 +1,87 @@
+Reference-Aware Gait Anomaly Detection for Medical World Models
+Author details pending confirmation
+Affiliation pending confirmation
+Abstract
+Gait video can describe how a person’s movement changes,
+but prediction error needs a reference before it can serve as an
+anomaly score. A restricted yet repeatable gait can be easier to
+predict than ordinary walking. We present a source-grouped
+benchmark that compares learned forecasts with persistence,
+which repeats the lastobservedpose. Normal-onlymodels pre-
+dict eight future samples from public gait videos. Across 2,815
+windows from 91 source videos, the bilateral model reduces
+normal-source forecast error by 33.5%. Its prespecified ex-
+cess error above persistence ranks abnormal annotations with
+AUROC 0.793, compared with 0.304 for raw forecast error.
+A post hoc low-movement diagnostic reaches 0.806, showing
+why the reference itself must be evaluated. Current posture
+also forecasts better than bilateral history. These results pro-
+vide a practical way to separate forecasting skill, movement
+amount, and anomaly ranking. They support an exploratory
+motor-observation benchmark, without establishing clinical
+diagnosis or a learned anomaly advantage over movement
+alone.
+Introduction
+A medical world model needs observations that describe a
+patient’s state and a model of how that state changes. Gait pro-
+vides one possible observation. Videos reveal relative motion
+of the legs even when clinical sensors are unavailable. Before
+these observations support clinical simulation, however, we
+need to know what their prediction errors mean.
+A common approach trains on normal movement and treats
+large prediction errors as evidence of abnormality. This as-
+sumes that abnormal movement is harder to predict. The
+assumption can fail when a restricted or repeatable pattern
+produces little change between frames. Repeating the last
+pose can then obtain a small error without describing healthy
+movement.
+We address this problem with a reference-aware evalua-
+tion. The same observed future is scored against a learned
+forecast and against persistence. Their difference describes
+how much the learned model helps beyond holding the last
+pose fixed. We then evaluate the reference itself, the impor-
+tance of movement history, and the effect of keeping source
+videos separate. The contribution is a reproducible bench-
+mark and an interpretable score analysis. It provides a prac-
+tical test of whether a gait observation model learns infor-
+mation useful for anomaly ranking beyond simple movement
+differences.
+Neurological motivation and related work
+Walking coordinates body segments while maintaining sup-
+port and advancing the body. Laboratory measurements show
+structured relationships between segment angles (Borghese,
+Bianchi, and Lacquaniti 1996). Bilateral timing is clinically
+relevant: Plotnik and colleagues measured changes in the
+coordination of left and right steps in Parkinson’s disease
+(Plotnik, Giladi, and Hausdorff 2007). Studies of stroke and
+cerebral palsy link altered muscle-activation patterns with
+impaired walking (Clark et al. 2010; Steele, Rozumalski,
+and Schwartz 2015). These observations motivate testing re-
+lationships between the legs. They do not imply that every
+disorder increases prediction error or that video coordinates
+identify a neural mechanism. The myopathic annotation also
+describes a neuromuscular category, rather than a shared
+neurological cause across all included conditions.
+MoCoDAD uses skeleton forecasts for anomaly detection
+(Flaborea et al. 2023). FSGait combines normal-only gait
+reconstruction and prediction to detect postural and tem-
+poral abnormalities (Duan, Wan, and Zhao 2024). GenGait
+studies normative reconstruction (Motta et al. 2026), while
+S-JEPA predicts hidden skeleton representations for action
+recognition (Abdelfattah and Alahi 2024). Normal-only gait
+prediction is therefore established prior art. Following the im-
+portance of simple motion references (Martinez, Black, and
+Romero 2017), our contribution evaluates forecast skill and
+anomaly scores under one timing, observation, and source-
+grouping contract.
+Data and observation contract
+The pinned local GAVD inventory contains 1,874 se-
+quences from 348 source IDs (Ranjan et al. 2025). The
+five selected annotations contain 666 sequences from 103
+sources. Available-media checks retain 652 sequences from
+98 sources. Two documented source exclusions for iden-
+tity or scene problems leave 641 extraction candidates from
+96 sources. Timing, geometry, observation, and common-
+target gates retain 2,815 windows from 456 sequences and
+91 sources. These video groups are not verified independent
+participants.

@@ -1,0 +1,121 @@
+{
+  "built_at_utc": "2026-11-16T09:46:28.273399+00:00",
+  "generator_sha256": "0b4e651e65802f42a221c8c1525af7adce65bb2b6182d2211fab0d769a1a40f0",
+  "compiled": true,
+  "rendered": true,
+  "review_status": "awaiting_independent_review",
+  "compiler": "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+  "compiler_version": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+  "compiler_distribution": {
+    "url": "https://github.com/rstudio/tinytex-releases/releases/download/v2026.11/TinyTeX-1-darwin-v2026.11.tar.xz",
+    "archive_sha256": "9416a257c4caea2f82351fa2f89252b8bd75dceeb0ce6e442d25530b1922a02d",
+    "additional_packages": [
+      "newtx",
+      "tex-gyre",
+      "psnfss",
+      "placeins",
+      "natbib",
+      "caption",
+      "booktabs",
+      "xpatch",
+      "xkeyval",
+      "etoolbox",
+      "fontaxes",
+      "mweights",
+      "xstring",
+      "carlisle",
+      "grfext"
+    ]
+  },
+  "commands": [
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/bibtex",
+      "manuscript"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ]
+  ],
+  "source_date_epoch": 1794787200,
+  "compile_returncode": 0,
+  "pdf_checks": {
+    "pages": [
+      {
+        "page": 1,
+        "characters": 4924,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 2,
+        "characters": 3889,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 3,
+        "characters": 5304,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 4,
+        "characters": 3795,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 5,
+        "characters": 4345,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 6,
+        "characters": 404,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      }
+    ],
+    "page_count": 6,
+    "reference_start_pages": [
+      4
+    ],
+    "reference_page_has_body": true,
+    "appendix_start_pages": [
+      5
+    ],
+    "body_pages": 4,
+    "short_paper_body_in_range": true,
+    "full_paper_body_in_range": false,
+    "edge_overflow": [],
+    "pdf_bytes": 218503
+  },
+  "artifacts": {
+    "manuscript.md": "62c26445c78086a2ef049b325cfa8b6d3beb0a008159c74426e6d93ab1f5e3de",
+    "manuscript.tex": "0dc6539be692460c278d9cafc355d0742fa9c0a4429578f547ab39747497dea2",
+    "evidence.json": "7bd77b45f8704515fde17db3644f9f588cbb9b92c21825b290ce80d15c90721c",
+    "manuscript.pdf": "ed369e5497864f9766207bc41a69f7dca17952ed337f0be94cddce6af9f5b39e"
+  }
+}

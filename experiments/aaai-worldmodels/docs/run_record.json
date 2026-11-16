@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "run_id": "medwm-tutorial-build-2026-11-15",
+  "brief": {
+    "path": "docs/brief.md",
+    "sha256": "21b81c5d9251494f7daeb8e699c3a8afc90610052a7144fbbe697e7d9245fdc9"
+  },
+  "output_root": "/Users/alexmui/dev/alexpose/experiments/aaai-worldmodels",
+  "host": {
+    "product": "Codex",
+    "available_agent_slots": 4
+  },
+  "resource_policy": {
+    "max_workers": 3,
+    "heavy_jobs": 1,
+    "device": "CPU"
+  },
+  "decisions": [
+    "Five unique target labels; repeated stroke deduplicated.",
+    "Current CSV inventory and source-disjoint split before quality filtering.",
+    "Uniform joint-time masks over16 declared joints are a published-method adaptation.",
+    "Frozen normal-only reference and separate adapted checkpoint.",
+    "Paper claims depend on completed evidence; synthetic smoke checks are not clinical evidence.",
+    "Exclude CMls0LwK5OU and eBvzFkcvScg for independently reviewed identityswitches/scenecuts before finaltest access.",
+    "Refit all affected classifiers; inherit normalforecast checkpoints only with exact data-equality certificate."
+  ],
+  "tasks": [
+    {
+      "agent": "literature",
+      "scope": "Primary source review, workshop requirements, independent model and visual review",
+      "status": "accepted"
+    },
+    {
+      "agent": "data_eval",
+      "scope": "Fresh cohort, pose adapter, RF evaluation, notebook generation and replay",
+      "status": "accepted"
+    },
+    {
+      "agent": "model",
+      "scope": "JEPA, stochastic extensions, training, tests and input-video inference",
+      "status": "accepted"
+    },
+    {
+      "agent": "root",
+      "scope": "Integration, environment, protocol, diagrams/slides, real pilot and final evidence",
+      "status": "accepted"
+    }
+  ],
+  "active_file_owners": [],
+  "artifact_identities": [
+    {
+      "path": "docs/test_release.json",
+      "sha256": "f4ea9f5db7da641844c529aaab2b5a8b96878fdd927169c663b4998a65261770"
+    },
+    {
+      "path": "docs/test_execution.json",
+      "sha256": "c55b01cb5cd34f7aa5ad4389caff3ac014d1074aa0f8f399165cddc1232ab492"
+    },
+    {
+      "path": "docs/research_results.json",
+      "sha256": "cbf21a5b8b4b27df48357eddd41a17377d0b7d0e66fa9146178c8790a82da8b9"
+    },
+    {
+      "path": "docs/notebook_execution_real.json",
+      "sha256": "b1729e8c688130cf35acfb07d9098092d3a9cbac11969afcd9e64c84c1bc23ff"
+    },
+    {
+      "path": "docs/manuscript.md",
+      "sha256": "32f6e62671e78e8c29632fcbe1bd18a6a1b91bc44be54d5273b6f246df1877e2"
+    }
+  ],
+  "reviews": [
+    "docs/review_literature_model.md",
+    "docs/revision_review.md",
+    "docs/final_scientific_review.md",
+    "docs/manuscript_review.md"
+  ],
+  "limitations": [
+    "The requested local vault background file was unavailable; public papers and code were reviewed.",
+    "GAVD source groups are not verified independent patients; no external clinical validation was performed.",
+    "Five-class support is sparse and readout selection used binary validation; robust condition recognition is unestablished.",
+    "Bounded sequence prefixes, variable time horizons and incomplete person verification limit claims.",
+    "Primary JEPA versus RF and forecast versus persistence effects are inconclusive. Favorable secondary scores do not establish useful dynamics or calibrated clinical uncertainty.",
+    "The full positional/latent factorial experiment and full-sequence repeated-split training remain future work."
+  ],
+  "phase": "Complete: real-data execution, controlled revisions, final notebook replay and independently reviewed results draft",
+  "user_extension": "Execute every notebook with real GAVD videos/models, persist outputs, review findings, execute systematic modifications, then draft results.",
+  "completed_runs": [
+    "pilot-input-v1 (80sources; testclassloss correctly refused comparison)",
+    "pilot-input-v2 (494windows96sources)",
+    "pilot-comparison-v2 (fiveclassifierarms, results computed but finaltest not inspected)",
+    "binary-development-v1,v2,v3 (validation-only endpoint correction)",
+    "extended-input-v1 (414windows93sources32frames)",
+    "quality-development-v1 (validation-only acquisition controls)",
+    "notebook-real00-06 (71realcodecellspassed)",
+    "revision-development-v1: all3seeds and3forecastarms, primaryvalidationgatefailed",
+    "objective-audit-development-v1: fixedweight10 all3seeds, no validationrescue",
+    "extended-input-clean-v1:407windows91sources, originalnormaltrain/normalval/testbyteequal",
+    "pilot-input-clean-v1:405windows89sources freshperson-gatedrawposes",
+    "quality-development-clean-v1:2validationselected acquisitioncontrols",
+    "pilot-comparison-clean-v1 and binary-development-clean-v1: all affected encoder and readout refits.",
+    "binary-test-clean-v1: frozen direct binary comparison on 17 test sources.",
+    "quality-test-clean-v1: acquisition controls on 19 test sources.",
+    "revision-test-v1: all three seeds, three arms, and static/shuffled controls.",
+    "objective-audit-test-v1: all three weight-ten secondary fits.",
+    "Final real notebook replay: eight passed, 88 executed code cells, current source/output hashes verified.",
+    "Corrected binary video inference: real training source, independently replayed exact probabilities.",
+    "Focused suite: 43 tests passed in 7.03 seconds. Figure visual review accepted."
+  ],
+  "active_run": null,
+  "next_steps": [
+    "Editorial work: author details, final reference formatting and AAAI PDF/page check before submission.",
+    "Future independent research: patient-disjoint external evaluation, fixed-time horizons and repeated classifier seeds."
+  ],
+  "test_exposure": "Baseline testfile computed; nb06pre-gate once automatically persisted outputs, but authors report only pass/fail reviewed. Main/literature design choices use validation fields only. Reused source cohort is exploratory, not a newly independent preregistered test.",
+  "delivery": {
+    "notebooks": 8,
+    "real_code_cells": 88,
+    "tests_passed": 43,
+    "slide_pages": 20,
+    "svg_figures": 12,
+    "draft": "docs/manuscript.md",
+    "verification": "docs/delivery_manifest.json"
+  }
+}

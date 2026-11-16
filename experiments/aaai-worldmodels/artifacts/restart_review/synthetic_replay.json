@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "synthetic_only": true,
+  "windows": 20,
+  "sources": 10,
+  "folds": 5,
+  "checkpoints_replayed": 80,
+  "seconds": 12.227555625140667,
+  "code_sha256": "226b276ae3d0759624aec9ae6acff59d0cf282b795bc309db814c4f49fe8259c",
+  "audit_script_sha256": "774ef20f5abd405e526597baa2b07d6e041be0b5954b25132a5836cceadbade3",
+  "checks": [
+    "all source and nested folds isolated",
+    "normal-only training membership",
+    "all 80 saved checkpoint predictions replayed",
+    "hidden future invariance at checkpoint inference",
+    "source aggregation replayed",
+    "all output manifest hashes verified",
+    "corrupt input identity rejected"
+  ]
+}

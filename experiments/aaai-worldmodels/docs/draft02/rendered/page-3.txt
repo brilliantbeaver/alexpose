@@ -1,0 +1,105 @@
+All methods share observed future targets. We average co-
+ordinate errors within a leg and window, the two legs equally,
+then windows within sequences, sequences within sources,
+and sources equally. Training weights follow this hierarchy.
+Forecast evaluation uses 29 normal sources. Anomaly rank-
+ing compares 62 abnormal and 29 normal sources. AUROC
+is the probability that an abnormal source receives a higher
+score than a normal source; average precision also depends
+on prevalence.
+The frozen analysis uses 5,000 source resamples for
+forecast intervals and 2,000 stratified source resamples for
+anomaly intervals. These intervals condition on fixed models
+with overlapping training folds. They exclude retraining and
+participant-population uncertainty. The study is exploratory
+because GAVD outcomes were available during research de-
+velopment.
+This report adds an explicitly post hoc low-movement di-
+agnostic: negative persistence error. It assigns larger scores
+to smaller observed movements without changing any frozen
+score direction. We compare it with excess error using
+5,000 paired stratified source resamples. Within-fold rank-
+ings avoid comparing scores from different fitted models.
+These added analyses do not select a model, threshold, or
+clinical rule.
+Results
+Normal-source mean squared error is 0.12126 for persistence
+and 0.08063 for bilateral forecasting. The paired reduction
+is 0.04063 [0.02399, 0.05911], or 33.5% of the persistence
+mean. Bilateral forecasting improves error on 23 of 29 normal
+sources. This establishes useful forecast information within
+the observation contract.
+The gain over own-leg history is 0.00111 [-0.00253,
+0.00524], and the gain over the trained timing control is
+0.00591 [0.00141, 0.01134]. However, current posture fore-
+casts better, with error 0.07164, a 40.9% reduction from
+persistence. Longer bilateral context is therefore not estab-
+lished as necessary. Shrinkage yields bilateral error 0.08378
+and does not improve the unshrunk model.
+Prespecified excess error achieves AUROC 0.793 [0.680,
+0.896] and average precision 0.865 [0.788, 0.938]. Raw fore-
+cast error has AUROC 0.304 [0.178, 0.431], and persistence
+error has AUROC 0.194 [0.096, 0.300]. Abnormal-source
+prevalence is 0.681. These differences show that an error-
+based ranking depends strongly on its reference and inter-
+pretation.
+The post hoc low-movement diagnostic has AUROC
+0.806. The paired difference, excess error minus low move-
+ment, is -0.013 [-0.111, 0.083]. This does not establish added
+anomaly-ranking value from the learned forecast. Excess-
+error AUROC within individual folds ranges from 0.653 to
+0.931. Weighting those rankings by the number of normal-
+abnormal source pairs gives 0.774, compared with 0.811 for
+low movement. Their paired difference is -0.036 [-0.145,
+0.067]. The association persists without cross-fold pairs,
+while small source groups produce substantial variation.
+Complete scores and condition slices appear in the appendix.
+0.00
+0.25
+0.50
+0.75
+1.00
+Source AUROC (higher is better)
+Excess error
+Forecast error
+Persistence error
+Low motion*
+Figure 2: Ranking across 91 source videos (29 normal and
+62 abnormal) depends on the reference. Bars show condi-
+tional 95% source intervals. The asterisk marks a post hoc
+diagnostic that assigns higher scores to less movement. It is
+not a validated clinical score.
+Discussion and limitations
+The study supplies a useful observation-model benchmark
+and a concrete lesson for gait anomaly detection. A model
+can forecast normal movement well while its raw error ranks
+restricted abnormal movement as easier. Comparing fore-
+casts with persistence exposes this distinction. Evaluating
+persistence as an anomaly diagnostic then tests whether the
+apparent benefit comes from learned behavior or movement
+amount. This sequence of checks is the methodological con-
+tribution.
+The next model should demonstrate added information be-
+yond current posture and movement-only scores. Promising
+tests include normal-only calibration conditional on prefix
+motion and view, and structured masks that hide a leg or a
+continuous time interval. Such masks could encourage use
+of coordination rather than nearby redundant samples. These
+are proposed extensions that require matched budgets, fixed
+targets, timing controls, and an untouched evaluation cohort.
+GAVD supports exploratory evaluation across heteroge-
+neous public-video sources, but does not establish clinical
+generalizability. Participants may recur across uploads, a
+video may contain several people, and local annotations do
+not independently verify diagnoses. View, age, walking task,
+assistive devices, acquisition quality, and unequal retention
+can influence scores. More overlapping windows cannot re-
+solve these limitations or enlarge the 29 retained normal-
+source groups.
+The model describes short-term articulation without treat-
+ment inputs, repeated clinical visits, or measured inter-
+vention outcomes. Patient-level decisions require external
+participant-disjoint data and validated clinical measure-
+ments. Within this scope, the benchmark separates forecast-
+ing skill from anomaly ranking and defines clear tests for
+stronger medical claims.

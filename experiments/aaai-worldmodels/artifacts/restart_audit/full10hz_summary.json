@@ -1,0 +1,105 @@
+{
+  "preparation": {
+    "identity": "restart-full10hz-v1",
+    "mode": "all-eligible-sequences-full-duration",
+    "frames": 24,
+    "context_frames": 16,
+    "stride": 8,
+    "sample_fps": 10.0,
+    "n_windows": 2818,
+    "n_sequences": 456,
+    "n_sources": 91,
+    "selected_sequences": 641,
+    "selected_sources": 96,
+    "actual_model_calls_this_invocation": 46783,
+    "source_cache_reuses": 0,
+    "seconds": 989.9980588750914,
+    "data_sha256": "39e2051e83909558ab6bdf5632145a15e0e529a9e2f9b617f90ce3f7ef7ad2e8",
+    "metadata_sha256": "6fcb0c0306bc6def26607bb9f7e15705a2ca41644db6613687d88ae58a1ab4d5",
+    "attrition_sha256": "01130b1c2e753c7975508e37e90691a8d01da70ea7812e0b49fa98ad7fc4737a",
+    "request_sha256": "12deec349d64ff82eaaf51a401cf2d1f18bb6b4471a186380e82c8e9ca13a250",
+    "source_progress_sha256": "a2aeb20ed3547517690215fd38ddc774528d1d03c59ba473d1d63aa65b728276",
+    "source_exclusions_sha256": "98a234fbc4c6bd1948afd6e1799aee2eafd3ebddd27e6e2d9fbf35830cf6ed60",
+    "adapter_sha256": "ebbff76426b5f576690f7bd95051a77781e5bcdd18f72db23e9bfdbdf6bb6376",
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "windows": 518,
+        "sequences": 52,
+        "sources": 8
+      },
+      {
+        "label": "myopathic",
+        "windows": 845,
+        "sequences": 168,
+        "sources": 27
+      },
+      {
+        "label": "normal",
+        "windows": 465,
+        "sequences": 141,
+        "sources": 29
+      },
+      {
+        "label": "parkinsons",
+        "windows": 293,
+        "sequences": 37,
+        "sources": 11
+      },
+      {
+        "label": "stroke",
+        "windows": 697,
+        "sequences": 58,
+        "sources": 16
+      }
+    ],
+    "limitations": [
+      "Source IDs do not establish participant identity or diagnosis.",
+      "Existing source-disjoint test results have been seen; new analyses are exploratory.",
+      "Sampling uses nominal FPS rather than presentation-time resampling; actual timestamps and grid errors are retained.",
+      "Full-image first detection and annotation-box pelvis containment do not guarantee subject identity.",
+      "Raw poses are native 2D image estimates; normalized outputs describe articulation rather than physical displacement."
+    ]
+  },
+  "verification": {
+    "identity": "restart-full10hz-reconstruction-check-v1",
+    "windows_reconstructed": 2818,
+    "sequences_reconstructed": 456,
+    "maximum_absolute_reconstruction_error": 0.0,
+    "all_array_shapes_dtypes_missingness_and_support_passed": true,
+    "all_native_frames_timestamps_window_ids_matched": true,
+    "source_partitions_disjoint": true,
+    "attrition_and_calls_reconciled": true,
+    "all_source_cache_payload_hashes_verified": true,
+    "running_adapter_snapshot_hash_verified": true,
+    "verified_at_utc": "2026-11-16T09:37:18.486633+00:00",
+    "preparation_sha256": "cc828d9a2f5cee879ed954c26a4fa98a65c357b76c3ebd4aca0131be84adebdc",
+    "verifier_sha256": "58d548b99e871060337c875827b25fad4e2179f4a2d81b924938a4347cf34879",
+    "limitation": "This replay validates artifact construction and uses the same shared normalization API. It is not independent validation of source identity or diagnosis."
+  },
+  "candidate_windows": 4361,
+  "window_rejection_counts": {
+    "future_quality_below_0.7": 190,
+    "prefix_quality_below_0.7": 850,
+    "missing_prefix_torso_scale": 503
+  },
+  "sequences_without_duration_support": 64,
+  "person_gate_counts": {
+    "inside_box": 36035,
+    "outside_annotated_person_box": 6634,
+    "missing_pelvis": 4544
+  },
+  "absolute_normalized_coordinate_quantiles": {
+    "0": 3.2807460570438707e-07,
+    "0.5": 0.3792497515678406,
+    "0.9": 1.4725459814071655,
+    "0.99": 1.7839384078979492,
+    "1": 3.5989670753479004
+  },
+  "final_horizon_seconds": {
+    "0": 0.7674333333333152,
+    "0.5": 0.8000000000000114,
+    "1": 0.8341666666667038
+  },
+  "maximum_grid_error_seconds": 0.0412083333333157
+}

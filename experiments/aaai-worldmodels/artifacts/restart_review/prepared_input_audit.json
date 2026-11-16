@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "windows": 2818,
+  "sources": 91,
+  "retained_sequences_replayed": 456,
+  "gated_frames_replayed": 38562,
+  "raw_source_hashes_verified": 96,
+  "data_sha256": "39e2051e83909558ab6bdf5632145a15e0e529a9e2f9b617f90ce3f7ef7ad2e8",
+  "metadata_sha256": "6fcb0c0306bc6def26607bb9f7e15705a2ca41644db6613687d88ae58a1ab4d5",
+  "audit_script_sha256": "fcf06dc322bcbace88b803661a7bb176d4d865e22d0ae79df29ccc0b2992c7db",
+  "checks": [
+    "source cache hashes",
+    "raw-to-sequence array equality",
+    "annotation hashes",
+    "person gate exact replay",
+    "window normalization and support exact replay",
+    "timestamps and frame identities",
+    "duplicate window exclusion",
+    "whole-source exclusions"
+  ],
+  "limitation": "This replay verifies stored input construction. It does not establish anatomical accuracy or unique patient identity."
+}

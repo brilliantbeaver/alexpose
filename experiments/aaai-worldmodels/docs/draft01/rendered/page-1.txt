@@ -1,0 +1,89 @@
+Gait Forecasting for Medical World Models: A Source-Grouped Study
+Author details pending confirmation
+Affiliation pending confirmation
+Abstract
+Medical world models need observation dynamics that re-
+main useful under simple controls. We test whether correctly
+timed opposite-leg history improves short-horizon gait fore-
+casts beyond a leg’s own history. Full-duration processing of
+selected GAVD videos yields 2,815 eligible windows from
+456 sequences and 91 source videos, including 29 normal
+sources. Normal-only ridge predictors forecast eight obser-
+vations at a nominal 10 Hz using nested source-grouped
+cross-validation. The primary bilateral forecast reduces mean
+squared error by 33.5% relative to persistence, with paired dif-
+ference 0.04063 [0.02399, 0.05911]. The corresponding own-
+history and shifted-context differences are 0.00111 [-0.00253,
+0.00524] and 0.00591 [0.00141, 0.01134]. A current-posture-
+conditioned regression is stronger still, with MSE 0.07164
+versus bilateral 0.08063. Bilateral history improved normal-
+source forecasting over persistence in this exploratory eval-
+uation. The complete set of primary comparisons does not
+establish a timing-specific bilateral forecasting advantage. A
+predeclared movement-referenced excess-error score reaches
+abnormality AUROC 0.793, a secondary association. Inter-
+vals resample sources conditional on fixed cross-validation
+fits. The study is exploratory because earlier GAVD outcomes
+were known. The contribution is a controlled evaluation of
+a motor-observation layer, without claims about treatment,
+disease progression, or neurological mechanism.
+Introduction
+Movement supplies an observable aspect of patient state. A
+gait observation model could eventually support longitudi-
+nal assessment, but low prediction error alone does not show
+that a system has learned clinically meaningful dynamics.
+Persistence may already predict a short future reasonably
+well, while appearance, movement amplitude, and recording
+conditions may distinguish dataset labels. We therefore sep-
+arate useful forecasting, timing-sensitive information, and
+abnormality ranking.
+Neurological evidence motivates a relational question
+without fixing its answer. Laboratory gait exhibits struc-
+tured intersegmental covariation (Borghese, Bianchi, and
+Lacquaniti 1996), and bilateral phase coordination is affected
+in Parkinson’s disease (Plotnik, Giladi, and Hausdorff 2007).
+Studies of stroke and cerebral palsy relate altered EMG mod-
+ular organization to impaired movement (Clark et al. 2010;
+Steele, Rozumalski, and Schwartz 2015). These measure-
+ments differ from projected video coordinates. A predictable
+compensation can still be abnormal, and no video forecast
+score identifies a neural module or lesion.
+We ask whether adding the opposite leg’s correctly timed
+history improves prediction beyond the target leg’s own
+history. Our contribution is a fixed-time, fuller-sequence,
+source-grouped audit with matched timing controls and ex-
+plicit negative-result conditions. Bilateral gait analysis and
+normal-only prediction are established ideas. We aim to de-
+termine what the available observations actually support be-
+fore introducing a more complex medical model.
+Related work
+Skeleton S-JEPA learns action representations through la-
+tent masked-observation prediction (Abdelfattah and Alahi
+2024). This is distinct from a strict future-only task. MoCo-
+DAD generates future skeletons for anomaly detection (Fla-
+borea et al. 2023); GenGait reconstructs normative gait
+(Motta et al. 2026); BioGait-VLM combines visual, lan-
+guage, and biomechanical evidence (Chen et al. 2026).
+These precedents preclude broad first-method claims. Strong
+static baselines are particularly relevant because low motion-
+prediction error need not require a learned motion model
+(Martinez, Black, and Romero 2017).
+Data and observation contract
+The pinned local GAVD derivative contains 1,874 annota-
+tion sequences and 348 source IDs. The requested normal,
+Parkinson’s, stroke, cerebral palsy, and myopathic labels con-
+tain 666 sequences from 103 sources (Ranjan et al. 2025).
+Media checks retain 652 sequences from 98 sources. Two pre-
+viously reviewed sources with person switches or scene cuts
+are excluded, leaving 641 sequences from 96 sources for ex-
+traction. Timing, person, and observation gates retain 2,818
+windows from 456 sequences and 91 sources. The common
+distal-target gate removes 3 windows, retaining 2,815 win-
+dows from 456 sequences and 91 sources. These are video
+groups, not verified independent people.
+We reuse cached originals under data/videos-gavd and
+perform 46,783 recorded Ambient pose-model calls in this
+preparation invocation. We sample nearest native frames on
+a nominal 10 Hz grid without interpolating target observa-
+tions. Each window contains 16 past and eight future sam-
+ples, with stride eight. The final forecast time spans 0.767 to

@@ -1,0 +1,40 @@
+{
+  "identity": "inherited-normal-forecast-checkpoints-v1",
+  "parent": "/Users/alexmui/dev/alexpose/experiments/aaai-worldmodels/artifacts/runs/extended-input-v1",
+  "derivative": "/Users/alexmui/dev/alexpose/experiments/aaai-worldmodels/artifacts/runs/extended-input-clean-v1",
+  "exclusions_sha256": "98a234fbc4c6bd1948afd6e1799aee2eafd3ebddd27e6e2d9fbf35830cf6ed60",
+  "checks": {
+    "normal_train": {
+      "equal": true,
+      "rows": 84,
+      "sources": 17,
+      "x_sha256": "dc4cbe2a739e19a1404dc14d474f09e49876d7a7bbe36eabe47b6cab47657a17",
+      "valid_sha256": "3406ebc3011ba69565544f57f33b09647927cd17cb08e08f3d599dfb9d994c69",
+      "metadata_sha256": "48a4fa42032a1070378b744314634514f3dd116b5fba845ef13fa1f1f074ba9a"
+    },
+    "normal_validation": {
+      "equal": true,
+      "rows": 27,
+      "sources": 6,
+      "x_sha256": "3a797ee55cafdeab234a0cad9680893695796b82901f4f88bb1cb729959a063a",
+      "valid_sha256": "291c23c6d0e58d59f346eef5d974e9e46b0996b6f8811728ff483c0c339f2d16",
+      "metadata_sha256": "36b4ebd94609ef5a424a4d8992ec97e57906f9e5288f056be937695ea199cd75"
+    },
+    "all_test": {
+      "equal": true,
+      "rows": 59,
+      "sources": 19,
+      "x_sha256": "2066f8f343c910cd87f8a89ffce94377d997d3c215c721804781c670f5e31cb8",
+      "valid_sha256": "267ee60360bfab267c67aaf9724888c4d7c75968cce636959049ab6fd8e54e75",
+      "metadata_sha256": "9acae40fd56620c17870cedd7120565dfec962f097d7e5938672887b141cb01f"
+    }
+  },
+  "lineage": "No forecast retraining claimed. Original checkpoints and stochastic validation predictions inherited. Only excluded abnormal train/validation rows are removed.",
+  "parent_preparation_sha256": "1eb8b6d23b9ecfb882c0ebbef82e98f6e78779c235b50abc65f1795bc8b8b178",
+  "retained_row_map_sha256": "8aa402cade397f47977dcaa034a37b9ef6d1766b9203b18ab2c13ab26162a73f",
+  "all_retained_x_sha256": "d064e19bde7d5cf2c0b3aa15926e663bf4f71c480e2fadb56bd8c6479c889f95",
+  "all_retained_valid_sha256": "4fb26cffa20edde7c98d9b023a69e5a45249291fa0397ea0f3d1dbd96b707616",
+  "validation_lineage_sha256": "29eb3444d238ced5d8320fb5f89ec19cba950a337abf448fbfe3b993b79602f9",
+  "revision-development-v1_freeze_sha256": "23857851c13248eee0b3b60d3b2bcb50822684781016e2c950b9a338577b21a5",
+  "objective-audit-development-v1_freeze_sha256": "7d5b39545748b4fa90ad30745ca5606f43a1db03a786d699462f418c581e6b54"
+}

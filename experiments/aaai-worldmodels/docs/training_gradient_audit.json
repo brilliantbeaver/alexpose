@@ -1,0 +1,219 @@
+{
+  "identity": "coordinate-gradient-diagnosis-v1",
+  "split": "normal train only",
+  "optimizer_steps": 0,
+  "mode": "eval with autograd enabled",
+  "gradient_measurement": "Unweighted raw gradient before clipping or Adam adaptation",
+  "shared_parameters": "online encoder, predictor transformer, joint_embedding; excludes private heads and EMA teacher",
+  "auxiliary_objective": "CE + source-balanced latent MSE + variance + 0.04 covariance",
+  "batch_selection": "Saved source-schedule steps 0,149,299, fixed before measuring gradients",
+  "checkpoint_sha256": {
+    "artifacts/runs/revision-development-v1/seed_27/residual_det.pt": "0df8b2859c8cd5c95a4f9ca2974f125b1f2b7c3dfe7b1dcb37d2c23a224ec581",
+    "artifacts/runs/revision-development-v1/seed_41/residual_det.pt": "919716c533f06f5b6c1ee95be0b3ba9e25ab51fbc2536e88f7242c4b2cffc8c1",
+    "artifacts/runs/revision-development-v1/seed_73/residual_det.pt": "0ad2cda3b21429aedbd69a6fb5fde86ee551c9a0123cdf7272a1479926b159db"
+  },
+  "revision_sha256": "5dcf6e3165ff04e313e48cde39ac2638a1c24fcc0a2d9be3cbd56ad3397b2b02",
+  "data_sha256": "806077a81400a249726a3f8d1e4d3146378bc8ab01a83985a757b3cd4c9ebf6b",
+  "torch_version": "2.15.0",
+  "records": [
+    {
+      "seed": 27,
+      "schedule_step": 0,
+      "source_ids": [
+        "EHymg4AGMJs",
+        "WpARylM4UYU",
+        "hSIYGZhRGd4",
+        "ucZdenbi65k",
+        "FTHc-TJOQ34",
+        "gp4H7Z2Vvn0",
+        "diCVwltkV5M",
+        "OoCDFmCm1DE"
+      ],
+      "coordinate_mse": 0.06893251091241837,
+      "auxiliary_loss": 2.1162075996398926,
+      "coordinate_gradient_norm": 0.03905167803168297,
+      "auxiliary_gradient_norm": 5.08118200302124,
+      "gradient_ratio": 0.007685550022870302,
+      "gradient_cosine": -0.11151178181171417,
+      "correction_rms": 0.034595660865306854,
+      "future_displacement_rms": 0.2657153308391571
+    },
+    {
+      "seed": 27,
+      "schedule_step": 149,
+      "source_ids": [
+        "OoCDFmCm1DE",
+        "4KU6G7Iv8ZM",
+        "EHx08gSNfxQ",
+        "gp4H7Z2Vvn0",
+        "MN4vnaNwIsA",
+        "yFBy0X0D-w8",
+        "nXuJIs25z1U",
+        "PAeh4qBwsUk"
+      ],
+      "coordinate_mse": 0.04323594272136688,
+      "auxiliary_loss": 1.8576725721359253,
+      "coordinate_gradient_norm": 0.01334981806576252,
+      "auxiliary_gradient_norm": 6.022757530212402,
+      "gradient_ratio": 0.002216562395915389,
+      "gradient_cosine": 0.2837251126766205,
+      "correction_rms": 0.028800606727600098,
+      "future_displacement_rms": 0.2098270058631897
+    },
+    {
+      "seed": 27,
+      "schedule_step": 299,
+      "source_ids": [
+        "yFBy0X0D-w8",
+        "gp4H7Z2Vvn0",
+        "MN4vnaNwIsA",
+        "WpARylM4UYU",
+        "ucZdenbi65k",
+        "EHx08gSNfxQ",
+        "PAeh4qBwsUk",
+        "eCCYhDSDlDc"
+      ],
+      "coordinate_mse": 0.09135682880878448,
+      "auxiliary_loss": 1.8956496715545654,
+      "coordinate_gradient_norm": 0.03527463227510452,
+      "auxiliary_gradient_norm": 3.0986135005950928,
+      "gradient_ratio": 0.011384005658328533,
+      "gradient_cosine": 0.03219788894057274,
+      "correction_rms": 0.03367091342806816,
+      "future_displacement_rms": 0.30589747428894043
+    },
+    {
+      "seed": 41,
+      "schedule_step": 0,
+      "source_ids": [
+        "eCCYhDSDlDc",
+        "EHymg4AGMJs",
+        "EHx08gSNfxQ",
+        "OoCDFmCm1DE",
+        "MN4vnaNwIsA",
+        "WpARylM4UYU",
+        "yFBy0X0D-w8",
+        "hSIYGZhRGd4"
+      ],
+      "coordinate_mse": 0.0757891833782196,
+      "auxiliary_loss": 2.0262107849121094,
+      "coordinate_gradient_norm": 0.01211936492472887,
+      "auxiliary_gradient_norm": 3.95821475982666,
+      "gradient_ratio": 0.0030618261080235243,
+      "gradient_cosine": -0.04075261577963829,
+      "correction_rms": 0.031994178891181946,
+      "future_displacement_rms": 0.26923227310180664
+    },
+    {
+      "seed": 41,
+      "schedule_step": 149,
+      "source_ids": [
+        "eCCYhDSDlDc",
+        "MN4vnaNwIsA",
+        "diCVwltkV5M",
+        "ucZdenbi65k",
+        "EHymg4AGMJs",
+        "_-Ubl8iD2B0",
+        "EHx08gSNfxQ",
+        "gp4H7Z2Vvn0"
+      ],
+      "coordinate_mse": 0.19612723588943481,
+      "auxiliary_loss": 2.242914915084839,
+      "coordinate_gradient_norm": 0.03169151395559311,
+      "auxiliary_gradient_norm": 5.778444766998291,
+      "gradient_ratio": 0.005484436638653278,
+      "gradient_cosine": 0.27992430329322815,
+      "correction_rms": 0.027712315320968628,
+      "future_displacement_rms": 0.44490405917167664
+    },
+    {
+      "seed": 41,
+      "schedule_step": 299,
+      "source_ids": [
+        "_-Ubl8iD2B0",
+        "MN4vnaNwIsA",
+        "yFBy0X0D-w8",
+        "hSIYGZhRGd4",
+        "EHymg4AGMJs",
+        "OoCDFmCm1DE",
+        "4KU6G7Iv8ZM",
+        "FTHc-TJOQ34"
+      ],
+      "coordinate_mse": 0.06415119022130966,
+      "auxiliary_loss": 2.3491334915161133,
+      "coordinate_gradient_norm": 0.051628973335027695,
+      "auxiliary_gradient_norm": 3.047515869140625,
+      "gradient_ratio": 0.016941331326961517,
+      "gradient_cosine": -0.38028308749198914,
+      "correction_rms": 0.03245826065540314,
+      "future_displacement_rms": 0.2567831575870514
+    },
+    {
+      "seed": 73,
+      "schedule_step": 0,
+      "source_ids": [
+        "gp4H7Z2Vvn0",
+        "EHymg4AGMJs",
+        "EHx08gSNfxQ",
+        "eCCYhDSDlDc",
+        "MN4vnaNwIsA",
+        "hSIYGZhRGd4",
+        "_-Ubl8iD2B0",
+        "PAeh4qBwsUk"
+      ],
+      "coordinate_mse": 0.06972596794366837,
+      "auxiliary_loss": 2.321070909500122,
+      "coordinate_gradient_norm": 0.03135757893323898,
+      "auxiliary_gradient_norm": 3.6007251739501953,
+      "gradient_ratio": 0.008708684705197811,
+      "gradient_cosine": -0.24747321009635925,
+      "correction_rms": 0.03170643001794815,
+      "future_displacement_rms": 0.25599485635757446
+    },
+    {
+      "seed": 73,
+      "schedule_step": 149,
+      "source_ids": [
+        "gp4H7Z2Vvn0",
+        "4KU6G7Iv8ZM",
+        "diCVwltkV5M",
+        "nXuJIs25z1U",
+        "hSIYGZhRGd4",
+        "MN4vnaNwIsA",
+        "n-O8dHyYIF0",
+        "OoCDFmCm1DE"
+      ],
+      "coordinate_mse": 0.047667354345321655,
+      "auxiliary_loss": 2.3319289684295654,
+      "coordinate_gradient_norm": 0.03933796286582947,
+      "auxiliary_gradient_norm": 5.4285359382629395,
+      "gradient_ratio": 0.007246514316648245,
+      "gradient_cosine": -0.5101268887519836,
+      "correction_rms": 0.029879599809646606,
+      "future_displacement_rms": 0.21619980037212372
+    },
+    {
+      "seed": 73,
+      "schedule_step": 299,
+      "source_ids": [
+        "gp4H7Z2Vvn0",
+        "n-O8dHyYIF0",
+        "hSIYGZhRGd4",
+        "PAeh4qBwsUk",
+        "4KU6G7Iv8ZM",
+        "ucZdenbi65k",
+        "nXuJIs25z1U",
+        "OoCDFmCm1DE"
+      ],
+      "coordinate_mse": 0.07671082764863968,
+      "auxiliary_loss": 2.515894651412964,
+      "coordinate_gradient_norm": 0.05134982615709305,
+      "auxiliary_gradient_norm": 5.92775821685791,
+      "gradient_ratio": 0.008662604726850986,
+      "gradient_cosine": 0.14681540429592133,
+      "correction_rms": 0.03911995887756348,
+      "future_displacement_rms": 0.2770407497882843
+    }
+  ],
+  "caveat": "Relative raw gradient magnitude motivates a sensitivity audit but does not establish optimizer dominance or promise improved generalization."
+}

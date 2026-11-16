@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "run_id": "medwm-restart-20261116-v1",
+  "status": "complete",
+  "brief": "docs/restart/brief.md",
+  "resource_policy": {
+    "max_workers": 3,
+    "heavy_jobs": 1
+  },
+  "decisions": [
+    "Preserve earlier run identities and notebooks.",
+    "Use full eligible sequence duration, nominal 10Hz sampling, 16 prefix observations spanning 1.5 seconds between endpoints and a 0.8-second final rollout horizon.",
+    "Explore temporal and bilateral information through matched low-capacity models and falsification controls.",
+    "All new whole-cohort source-group cross-validation is exploratory.",
+    "Temporal control corrected before outcomes to per-window shifts of the identical selected coordinate/validity pairs.",
+    "Prospective normal-validation residual shrinkage added to every learned arm; unshrunk comparisons remain primary.",
+    "Complete GAVD audit establishes all normal source IDs already in selected scope; no sample-until-significant expansion."
+  ],
+  "tasks": [
+    {
+      "owner": "data_audit",
+      "status": "accepted",
+      "responsibility": "Full-duration 10Hz extraction and independent raw-cache reconstruction",
+      "paths": [
+        "worldmodels/restart_data.py",
+        "docs/restart/data_contract.md",
+        "artifacts/runs/restart-full10hz-v1"
+      ]
+    },
+    {
+      "owner": "dynamics_model",
+      "status": "accepted",
+      "responsibility": "Normal-only nested source models with matched timing control and prospective shrinkage",
+      "paths": [
+        "worldmodels/restart_experiment.py",
+        "docs/restart/model_contract.md",
+        "artifacts/runs/restart-dynamics-v1"
+      ]
+    },
+    {
+      "owner": "method_audit",
+      "status": "accepted",
+      "responsibility": "Independent code, provenance, isolation and replay review",
+      "paths": [
+        "docs/restart/implementation_review.md",
+        "artifacts/restart_review"
+      ]
+    },
+    {
+      "owner": "research_design",
+      "status": "accepted",
+      "responsibility": "Verified primary literature and results-grounded manuscript generation",
+      "paths": [
+        "docs/draft01",
+        "scripts/build_restart_manuscript.py"
+      ]
+    },
+    {
+      "owner": "root",
+      "status": "accepted",
+      "responsibility": "Coordination, protocol, notebooks, vector slides, guidance and integration verification",
+      "paths": [
+        "docs/restart/protocol.md",
+        "scripts/build_restart_notebooks.py",
+        "scripts/execute_restart_notebooks.py",
+        "scripts/build_restart_slides.py",
+        "scripts/build_restart_readme.py"
+      ]
+    }
+  ],
+  "limitations": [
+    "Source identity is a grouping proxy, not verified patient identity.",
+    "Full pose extraction does not establish clinical labels or identity across overlapping people.",
+    "Positive forecast utility and secondary annotation ranking do not establish a superior state-of-the-art architecture.",
+    "Current-pose learned transition outperforms bilateral history; own-leg incremental gain is uncertain; shrinkage does not improve the primary model.",
+    "All new source cross-validation is exploratory after prior GAVD outcome exposure.",
+    "Full-GAVD expansion adds no independent normal sources to this dataset."
+  ],
+  "reviews": [
+    {
+      "artifact": "docs/restart/implementation_review.md",
+      "status": "accepted_for_real_execution",
+      "independent": true,
+      "checks": "14 focused tests, complete synthetic pipeline and 80 checkpoint replays"
+    },
+    {
+      "artifact": "docs/restart/final_adversarial_review.md",
+      "status": "accepted_exploratory_evidence",
+      "independent": true,
+      "checks": "All 2,818 prepared windows, 94 run hashes, 80 checkpoints, fitted scalers, source folds, aggregation and metrics."
+    },
+    {
+      "artifact": "docs/restart/tutorial_visual_review.md",
+      "status": "accepted",
+      "independent": true,
+      "checks": "Six notebooks with 30 executed cells; 22 vector slides; numbers and rendered layout."
+    },
+    {
+      "artifact": "docs/draft01/reviews/independent_review.md",
+      "status": "accepted_for_human_author_review",
+      "independent": true,
+      "checks": "Official-style PDF, claims, tables, figures, scope and four-page body."
+    }
+  ],
+  "actual_execution": {
+    "pose_calls": 46783,
+    "preparation_seconds": 989.9980588750914,
+    "prepared_windows": 2818,
+    "model_windows": 2815,
+    "model_sources": 91,
+    "model_normal_sources": 29,
+    "model_seconds": 21.18,
+    "saved_checkpoints": 80,
+    "notebooks": 6,
+    "notebook_code_cells": 30,
+    "tests_passed": 57,
+    "slides": 22
+  },
+  "artifact_identities": [
+    {
+      "path": "artifacts/runs/restart-full10hz-v1/preparation.json",
+      "sha256": "cc828d9a2f5cee879ed954c26a4fa98a65c357b76c3ebd4aca0131be84adebdc"
+    },
+    {
+      "path": "artifacts/runs/restart-dynamics-v1/results.json",
+      "sha256": "f14a6e533338c96da99b5085cb231b9de5cc47f7fe50a4c118225c42dc1fa1e8"
+    },
+    {
+      "path": "docs/restart/notebook_execution.json",
+      "sha256": "63f4b29ba80d0c7c00205537c85712eb518a1e23553d8cebb05a47bd5b441498"
+    }
+  ],
+  "submission_ready": false,
+  "submission_remaining": [
+    "Confirm author names, affiliations, acknowledgments and AI-use disclosure.",
+    "Check the live OpenReview invitation and portal requirements.",
+    "Actual authors review and approve the final submission."
+  ]
+}
