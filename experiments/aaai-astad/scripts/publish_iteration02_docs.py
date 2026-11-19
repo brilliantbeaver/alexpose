@@ -64,7 +64,7 @@ Use Python3.12 and the existing [pyproject.toml](pyproject.toml). Install the op
 Before running the adapted STG-NF comparison, retrieve its pinned upstream code from the repository root:
 
 ```bash
-git submodule update --init -- experiments/aaai/vendor/STG-NF
+git submodule update --init -- experiments/aaai-astad/vendor/STG-NF
 ```
 
 The submodule is fixed at `edb5f3220332e160e4d20ce258787d5e2d7e0200`, the revision verified by the baseline loader. Videos, model weights and run artifacts remain local and are excluded from Git. Reports and notebooks identify their producer commands and required run identities; a fresh clone must prepare or restore those local inputs before replaying the experiments.
