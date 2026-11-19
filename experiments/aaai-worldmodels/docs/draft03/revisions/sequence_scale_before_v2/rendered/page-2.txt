@@ -1,0 +1,99 @@
+Video pose
+16 joints in 2D
+Actual times
+16 past samples
+Posture or history
+Training masks
+8 future samples
+0.1 through 0.8 s
+Fit normal sources
+Common targets
+Reference errors
+Scores by group
+Visible prefix: 1.5 s between endpoints
+Withheld future queries
+Forecasting skill and abnormality ranking are tested separately.
+Figure 1: The benchmark asks two separate questions: can a model predict future articulation, and does its error identify
+departures beyond simple references? Each GAVD window contains sixteen past and eight future observations at nominal 10
+Hz. Methods use the same evaluation windows and future target support, with their declared past inputs. Future availability
+never conditions a prediction.
+without inferring a neural controller or affected side.
+Human-motion forecasting already uses simple references
+such as repeating the latest pose, which can be strong at
+short horizons (Martinez, Black, and Romero 2017). Gait-
+specific self-supervised detection also predates this work
+(Duan, Wan, and Zhao 2024). Our question concerns the
+additional evidence needed to interpret forecasting as an
+abnormality measure under heterogeneous video observa-
+tions. We do not compare headline scores across studies that
+use different cohorts, labels, pose formats, or supervision. A
+classifier adapted with condition labels answers a different
+question from a predictor fitted only on normal sources.
+Masking deliberately hides observed input during training.
+It can discourage a model from relying on a nearby measure-
+ment that makes a task too easy. VideoMAE uses temporal
+tubes in video representation learning (Tong et al. 2022).
+MAMP uses motion-informed masking for skeletal action
+representations (Mao et al. 2023). S-JEPA predicts learned
+numerical summaries of withheld observations rather than
+their coordinates; a separate target encoder produces the sum-
+maries that guide learning (Abdelfattah and Alahi 2024). A
+small summary-matching loss alone cannot establish a useful
+representation because an encoder could discard information.
+Recent skeleton methods make the relevant precedents es-
+pecially clear. The revised SLiM method uses connected
+anatomical tubes, while ASMa combines complementary
+motion and spatial masking (Do et al. 2026; Anand et al.
+2026). Our policies adapt these ideas to sixteen intermit-
+tently observed joints and a small normal-source cohort.
+They change the input to one coordinate predictor rather than
+reproduce those larger action-recognition systems. This de-
+sign tests the proposed information constraints before chang-
+ing the representation objective or increasing model size.
+GAVD annotation
+Sources Sequences Windows
+cerebral palsy
+8
+52
+518
+myopathic
+27
+168
+845
+normal
+29
+141
+465
+parkinsons
+11
+37
+292
+stroke
+16
+58
+695
+Table 1: The internal model cohort after common observation
+gates. Source counts are video identifiers, not independently
+verified patients.
+Videos, joints, and prediction targets
+Internal and external populations
+We rebuild the local GAVD inventory from the condition
+folders, excluding its pinned provenance copy from counts
+(Ranjan et al. 2025). The complete inventory contains 1,874
+sequences and 348 source identifiers. The five study anno-
+tations, normal, parkinsons, stroke, cerebral palsy, and my-
+opathic, contain 666 sequences from 103 sources. Media
+availability leaves 652 sequences from 98 sources. Preserv-
+ing two known source-reference exclusions leaves 641 ex-
+traction candidates from 96 sources. Quality and common-
+target gates produce the cohort in Table 1. We reuse verified
+full-duration pose caches rather than extract only the first few
+frames of each sequence.
+All 32 annotated normal sources already occur within this
+five-label scope, and 29 survive the model gates. Processing
+other GAVD categories cannot increase this normal-source
+support. Those categories include exercise, pregnancy, styl-
+ized walking, and prosthetic use, which retain their actual
+meanings. We audit their inventory without calling every
+unusual movement neurological disease. A source-relation
+table checks exact duplicate media and known relationships

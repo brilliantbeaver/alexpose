@@ -1,0 +1,140 @@
+{
+  "identity": "reference-v2-independent-prefit-review-v1",
+  "status": "accepted_before_outer_fitting",
+  "method": "medwm-reference-masking-v2",
+  "reviewer": "/root/v2_reviewer",
+  "independence": "The reviewer authored none of the protocol, cohort, models, masks, evaluation, runner, transfer, robustness, or external adapter implementations.",
+  "reviewed_at_utc": "2026-11-16T16:37:15.542858+00:00",
+  "code_revision": "5d829ec882956ad6f76c862a50b8e1cc5918761e",
+  "scope": "Exact core protocol, configuration, GAVD cohort, and implementation; fixed transfer and robustness dependencies are accepted for execution after their data prerequisites pass. No empirical result or publication acceptance is implied.",
+  "protocol_sha256": "7b7560939585a6849ccf85c9e6b096d5327bbfe6e5c50ef5b314e70ddfe1f71f",
+  "run_config": {
+    "identity": "reference-v2-core-v1",
+    "alphas": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "mask_steps": [
+      100,
+      200
+    ],
+    "seeds": [
+      27,
+      41,
+      73
+    ],
+    "policies": [
+      "none",
+      "uniform",
+      "time_blocks",
+      "anatomical_tubes",
+      "motion_balanced",
+      "random_groups",
+      "motion_focused"
+    ],
+    "inner_folds": 3,
+    "inner_seed": 6701,
+    "forecast_reps": 5000,
+    "primary_reps": 5000,
+    "pooled_reps": 2000,
+    "core_seconds": 3600.0,
+    "untrained_probe": true,
+    "partition_seeds": [
+      2702,
+      2703
+    ]
+  },
+  "cohort_identity_sha256": "9b663eac68a945b0ae7cf7058177b2e9239e34a0cfbc3171afc7a27086a3c5e2",
+  "cohort_membership_sha256": "f364ce33601807d7c69a3621df004a00b50982538e892f3ce61db9afa5dc5f58",
+  "implementation_sha256": {
+    "worldmodels/v2_models.py": "07a3326f06705002429ddd66cbac444583917354603729cf5cdeffc49c711657",
+    "worldmodels/v2_masks.py": "050b08ca75849eb48796f2e79afaf89c8040138fabf61c2b8ea711b3e32f8cd2",
+    "worldmodels/v2_data.py": "351a97436e3c13425b53263d99d56055638fb3ab1da7caf95851aa173034c706",
+    "worldmodels/v2_evaluation.py": "f01d2ebd1087fdd910f79b2442ca6a1c1325739c7e4dc0e9b35d496ce301ebff",
+    "worldmodels/v2_runner.py": "cb8e57a3e32311b163d9938e941a31eac299c58db7b23eec4d59ce37d4a029fb",
+    "worldmodels/restart_experiment.py": "226b276ae3d0759624aec9ae6acff59d0cf282b795bc309db814c4f49fe8259c",
+    "worldmodels/data.py": "68aa589be72b04e03d3b84e20fdb4a7d8f68f726dccf3b7e92b6272fe7640f77",
+    "worldmodels/pose.py": "92083ad8c8c2b70950fff2cff7f4c21a0de3081f5e80a6994f420766da534f8d",
+    "worldmodels/restart_data.py": "ebbff76426b5f576690f7bd95051a77781e5bcdd18f72db23e9bfdbdf6bb6376"
+  },
+  "separate_dependency_sha256": {
+    "worldmodels/v2_transfer.py": "fe0760f6b73a613b756a2def0f9e35c58147b908fa9df50fc785c386f8ef42b9",
+    "worldmodels/v2_robustness.py": "d52b5cc78aaa2a7543ed26ae1915625d076afe3e12bfe9fc4a58439676657e67",
+    "worldmodels/v2_external.py": "19e9e9b77bb28e3f8500feea4f9bfa37409e73cf1e04e18d8403387cc59688a6"
+  },
+  "contract_sha256": {
+    "docs/reference_v2/model_contract.md": "3489df39850ecc6d99bf94fc9c49c70c1189553da3211f31b7652fbc8634b20e",
+    "docs/reference_v2/evaluation_contract.md": "df0f147f0a5b24d5785fac5bb695f77812d4f3e56fa598e7942c2edd768f798c"
+  },
+  "test_sha256": {
+    "tests/test_v2_data.py": "131702d014251d78c89ff01edd01f52466ecb4e87ba0852349a53418eac9e444",
+    "tests/test_v2_evaluation.py": "7930b232a840fc10f2e64248f3fdfd13945f64a77d5f8857abf73c622b911cf5",
+    "tests/test_v2_external.py": "025a8ec6492b4cc2de50fe6016f3a667b270c87fd28a9aade6444106da7ae9e8",
+    "tests/test_v2_masks.py": "4148a3d846bd42ecad002d2c8dc6217dabc45b3edc355a08c9ee2760d7bdec8a",
+    "tests/test_v2_models.py": "a3f4720941623afc08177ce302c2de3755d0875001a51ed47c6f6d5111fa653e",
+    "tests/test_v2_robustness.py": "67bf3261a1e42da9cff08cfa1db5691d092ef58ac29b15f2a4743e185fa72ea5",
+    "tests/test_v2_runner.py": "3247214cb2f07eaf921c7018cb97c612156d0ceabceed60a830f23c4dd60a721",
+    "tests/test_v2_transfer.py": "7934480e5c85f624be7e8aa56624f932b0c951275a2b0bc7fff2b7b6da0ca995"
+  },
+  "review_snapshot": "artifacts/reference-v2-independent-review/prefit_review_snapshot.md",
+  "review_snapshot_sha256": "364745cb71f81efd98f60da548ded7e3b80fcf0ffcc8eb07c36f70b82f4bac67",
+  "independent_check_artifacts": {
+    "artifacts/reference-v2-independent-review/prefit_checks.py": "bb1e85560816f239f5c331bae4e7d24510594ee429bfce86bd5c7b60bb72b0a9",
+    "artifacts/reference-v2-independent-review/prefit_checks.json": "4b46cec32e3c4b78a4730c770a25cae8f2bee9bb4f53d00c8bd9805b4771b8b9",
+    "artifacts/reference-v2-independent-review/data_hash_check.json": "0e795d6ec89f6f552200dfe3dec52028f20ac9a4369625e7203ae13c7c7b6c05",
+    "artifacts/reference-v2-independent-review/final_prefit_tests.json": "feacee6749860f88dc674551eed737b88290d964aea61bd7955a32fef21036ac"
+  },
+  "checks": [
+    "Initial independent execution: 57 tests passed in 19.63 seconds.",
+    "Final runner/transfer/robustness execution after cohort guard: 16 tests passed in 18.58 seconds.",
+    "Reviewer-written real-structure and synthetic-arithmetic checks passed; no real efficacy outcomes were inspected.",
+    "All 14 cohort artifacts, 96 raw source-pose caches and 96 actual source-video hashes verified.",
+    "Future-containing predictor input rejected; hidden and naturally missing values do not affect fixed-mask predictions.",
+    "All 15 nested source schedules exclude calibration and outer groups from all contributing fits.",
+    "Paired bootstrap matched an explicit source-resampling reconstruction.",
+    "Participant/recording hierarchy precedes nonlinear transfer calibration."
+  ],
+  "resolved_findings": [
+    {
+      "severity": "major",
+      "issue": "Unequal inner-fold means changed source weights.",
+      "resolution": "Selection pools one held-out error per source; independent numerical replay and regression test pass."
+    },
+    {
+      "severity": "major",
+      "issue": "Accepted freeze did not bind requested run configuration.",
+      "resolution": "Real entry compares normalized config before loading or fitting; refusal test passes."
+    },
+    {
+      "severity": "moderate",
+      "issue": "A different self-validating cohort could reuse an approved method identity.",
+      "resolution": "Identity and membership hashes are checked against freeze before data loading; refusal test passes."
+    }
+  ],
+  "unresolved_prefit_blockers": [],
+  "required_next_gates": [
+    "Coordinator writes an immutable accepted protocol freeze with the exact configuration, cohort and implementation identities above before real outer fitting.",
+    "Pin separate transfer and robustness dependencies before those analyses execute.",
+    "Complete external extraction attrition, independent reconstruction, and blinded observation/identity QA before external efficacy scores.",
+    "Record all attempted arms, failures, resource limits and extension-gate decisions.",
+    "Independently reconstruct actual source/participant results and inspect generated notebooks, manuscript pages and slide pages before final acceptance."
+  ],
+  "interpretation_limits": [
+    "GAVD source reuse remains exploratory; source IDs are not verified patient IDs.",
+    "Current components are singletons; multi-source components are explicitly rejected.",
+    "OOF nuisance predictions come from smaller fit pools than final R predictors; the coarse reference is an approximation.",
+    "Intervals condition on saved fits, not the entire training pipeline, and no clinical or conformal guarantee follows.",
+    "External coded participants and severity annotations remain dataset metadata; unknown cross-dataset person overlap cannot be disproved by file hashes.",
+    "A software acceptance does not establish masking, anomaly-detection, physiological or clinical efficacy."
+  ],
+  "versions": {
+    "numpy": "2.5.5",
+    "pandas": "2.3.3",
+    "torch": "2.15.0",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0",
+    "pytest": "9.2.0"
+  }
+}

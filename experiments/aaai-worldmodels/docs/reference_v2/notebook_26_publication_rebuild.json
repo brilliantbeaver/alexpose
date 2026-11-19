@@ -1,0 +1,83 @@
+{
+  "tables": [
+    {
+      "table": "cohort",
+      "rows": 5,
+      "all_cells_match": true
+    },
+    {
+      "table": "external_cohort",
+      "rows": 3,
+      "all_cells_match": true
+    },
+    {
+      "table": "forecasts",
+      "rows": 10,
+      "all_cells_match": true
+    },
+    {
+      "table": "complete_forecasts",
+      "rows": 40,
+      "all_cells_match": true
+    },
+    {
+      "table": "rankings",
+      "rows": 11,
+      "all_cells_match": true
+    },
+    {
+      "table": "external_rankings",
+      "rows": 9,
+      "all_cells_match": true
+    }
+  ],
+  "figures": [
+    {
+      "figure": "forecast_example.svg",
+      "sha256": "23c927cf00cea24480cb24b3865fe24110171c4ea2d60fba0403d8bbcc516688",
+      "exact_svg_match": true
+    },
+    {
+      "figure": "masking_results.svg",
+      "sha256": "f2d03ad6635883abf6e0380cc7b98ecd3635f382e9f5314feb63ca4581834dae",
+      "exact_svg_match": true
+    },
+    {
+      "figure": "motion_and_error.svg",
+      "sha256": "2b2f5aa73020e559f1ad39891c2d41f323e98af534fdb9aaf7cd32de79a0ff6a",
+      "exact_svg_match": true
+    },
+    {
+      "figure": "observation_task.svg",
+      "sha256": "7fe5000851e1de0ec9a738809f87038e908512150c6b16957096e6af82268cf0",
+      "exact_svg_match": true
+    },
+    {
+      "figure": "ranking_comparison.svg",
+      "sha256": "118695ad6601f8f328530705abcd85bf7e374865739b7b2080b3ee988d16d436",
+      "exact_svg_match": true
+    }
+  ],
+  "renderer_sha256": "b60b883b2bf796d7133b45d54ab7bdacddb9c086e40f17a8e5da76b9699f913b",
+  "reporting_identity": "medwm-reference-v2-draft03-evidence-v3",
+  "evidence_sha256": "7e3392160189fca20fb54f3f87114543164cc8faacb234846197aaed07314163",
+  "main_anomaly_chart": {
+    "methods": {
+      "Future movement only": {
+        "internal_score": "low_motion",
+        "external_score": "low_motion"
+      },
+      "Forecast + normal reference": {
+        "internal_score": "calibrated_two_sided",
+        "external_score": "two_sided"
+      }
+    },
+    "metric": "AUROC",
+    "chance": 0.5,
+    "full_appendix_score_rows": 11,
+    "full_score_table_unchanged": true,
+    "forecasts_refitted": false
+  },
+  "sequence_sensitivity_identity": "reference-v2-sequence-scale-posthoc-v2",
+  "sequence_audit_identity": "draft03-sequence-contract-audit-v1"
+}

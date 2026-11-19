@@ -1,0 +1,72 @@
+{
+  "identity": "reference-v2-sequence-scale-independent-prefit-review-v2",
+  "status": "accepted_before_posthoc_computation",
+  "reviewed_at_utc": "2026-11-16T18:34:49.884388+00:00",
+  "reviewer": "/root/v2_reviewer",
+  "script_sha256": "c891b95f590cf96840c4a03f121403e52d7f3a9b205137f2f58bd5c55b014ef6",
+  "protocol_sha256": "d17a03898b1de81f62c2e8f1bf5af1eef67546272e68fd43cbac7e94861157bb",
+  "analysis_identity": "reference-v2-sequence-scale-posthoc-v2",
+  "result_access": "No real sequence-weighted effect or bootstrap outcome inspected before release. Actual input metadata was checked without calculating any sequence means.",
+  "scope": "One post hoc weighting sensitivity from fixed predictions; no new fit or primary endpoint change.",
+  "input_hashes_match": true,
+  "independent_fixture": {
+    "groups": [
+      [
+        8.0
+      ],
+      [
+        -1.0,
+        -1.0,
+        -1.0
+      ]
+    ],
+    "component_draws": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "expanded_sequence_means": [
+      8.0,
+      1.25,
+      -1.0
+    ],
+    "matches_group_sum_divided_by_group_count": true
+  },
+  "reviewed_invariants": [
+    "All 456 sequence rows are reconstructed from the same frozen window MSEs and exact cohort keys.",
+    "The point estimate pools 141 normal sequence means, preserving the 29 recording components.",
+    "Each source stays in one original fold. Whole normal components are drawn within folds.",
+    "All sequences of a drawn component and its multiplicity travel together. The draw denominator is its total selected sequence count, rather than a fixed 141 or 29.",
+    "The candidate/reference pairing and original eight-query support remain fixed.",
+    "The original recording-weighted MSEs must replay within an absolute tolerance of 1e-12.",
+    "The output identity cannot overwrite an existing directory; no old result is changed."
+  ],
+  "reporting_requirements": [
+    "Call this post hoc sequence weighting and retain its distinct identity.",
+    "Sequences remain descriptive observation units; uncertainty resamples 29 recording groups.",
+    "Preserve the primary 40.8 percent result and the actual count of independent grouping units.",
+    "State that intervals condition on frozen fits and omit unknown participant overlap and retraining variation."
+  ],
+  "unresolved_blocking_findings": [],
+  "supersedes_failed_analysis": "reference-v2-sequence-scale-posthoc-v1",
+  "repair_review": {
+    "changes": "Only output identity and clearing the pandas column-axis name before exact metadata comparison. Estimation and resampling code are unchanged.",
+    "actual_old_metadata_failure_independently_reproduced": true,
+    "exact_metadata_values_pass_after_axis_label_clear": true,
+    "dataframe_values_unchanged": true,
+    "reviewer_checker_note": "An initial literal error-message search omitted pandas quote characters around names. The corrected check verifies the actual metadata discrepancy; no artifact or estimator changed.",
+    "archived_script_sha256": "1e0e61ea0007988112adf16af0b653efb3900bee84a5fa26bfc1d7ca0b7c8654",
+    "archived_protocol_sha256": "5255010ebaef4fca021c85914894316cf541d76b7e4462cbd402298e9e3109b4",
+    "archived_review_sha256": "78f5bd372d7d3b16df5c00afb236e01c9c569d7e5d47cdfe52d21688a63bf7af",
+    "failure_sha256": "18be5bf82507f9bf7fe76dccd6e1d5e7fd74c3ec6463aefb11e0ef6669c3e356"
+  }
+}

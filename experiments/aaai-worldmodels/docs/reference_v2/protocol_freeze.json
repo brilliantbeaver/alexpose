@@ -1,0 +1,60 @@
+{
+  "status": "accepted_before_outer_fitting",
+  "method": "medwm-reference-masking-v2",
+  "protocol_sha256": "7b7560939585a6849ccf85c9e6b096d5327bbfe6e5c50ef5b314e70ddfe1f71f",
+  "run_config": {
+    "identity": "reference-v2-core-v1",
+    "alphas": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "mask_steps": [
+      100,
+      200
+    ],
+    "seeds": [
+      27,
+      41,
+      73
+    ],
+    "policies": [
+      "none",
+      "uniform",
+      "time_blocks",
+      "anatomical_tubes",
+      "motion_balanced",
+      "random_groups",
+      "motion_focused"
+    ],
+    "inner_folds": 3,
+    "inner_seed": 6701,
+    "forecast_reps": 5000,
+    "primary_reps": 5000,
+    "pooled_reps": 2000,
+    "core_seconds": 3600.0,
+    "untrained_probe": true,
+    "partition_seeds": [
+      2702,
+      2703
+    ]
+  },
+  "cohort_identity_sha256": "9b663eac68a945b0ae7cf7058177b2e9239e34a0cfbc3171afc7a27086a3c5e2",
+  "cohort_membership_sha256": "f364ce33601807d7c69a3621df004a00b50982538e892f3ce61db9afa5dc5f58",
+  "implementation_sha256": {
+    "worldmodels/v2_models.py": "07a3326f06705002429ddd66cbac444583917354603729cf5cdeffc49c711657",
+    "worldmodels/v2_masks.py": "050b08ca75849eb48796f2e79afaf89c8040138fabf61c2b8ea711b3e32f8cd2",
+    "worldmodels/v2_data.py": "351a97436e3c13425b53263d99d56055638fb3ab1da7caf95851aa173034c706",
+    "worldmodels/v2_evaluation.py": "f01d2ebd1087fdd910f79b2442ca6a1c1325739c7e4dc0e9b35d496ce301ebff",
+    "worldmodels/v2_runner.py": "cb8e57a3e32311b163d9938e941a31eac299c58db7b23eec4d59ce37d4a029fb",
+    "worldmodels/restart_experiment.py": "226b276ae3d0759624aec9ae6acff59d0cf282b795bc309db814c4f49fe8259c",
+    "worldmodels/data.py": "68aa589be72b04e03d3b84e20fdb4a7d8f68f726dccf3b7e92b6272fe7640f77",
+    "worldmodels/pose.py": "92083ad8c8c2b70950fff2cff7f4c21a0de3081f5e80a6994f420766da534f8d",
+    "worldmodels/restart_data.py": "ebbff76426b5f576690f7bd95051a77781e5bcdd18f72db23e9bfdbdf6bb6376"
+  },
+  "identity": "reference-v2-protocol-freeze-v1",
+  "frozen_at_utc": "2026-11-16T16:38:13.751209+00:00",
+  "independent_review": "docs/reference_v2/prefit_acceptance.json",
+  "independent_review_sha256": "1232a7db062a245ea9a161ee918f6fc909a7d6ed07bc16a9ef57dd40629d37f7"
+}

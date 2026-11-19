@@ -1,0 +1,107 @@
+0.2
+0.4
+0.6
+0.8
+1.0
+Recording AUROC (higher is better)
+Conditional two-sided
+Low motion
+Paired difference -0.348 [-0.506, -0.191]
+GAVD: 456 gait sequences
+0.2
+0.4
+0.6
+0.8
+1.0
+Participant AUROC (higher is better)
+Conditional two-sided
+Low motion
+Paired difference -0.172 [-0.357, 0.009]
+External: 90 coded participants
+Figure 3: The locked posture-plus-velocity forecaster supplies the conditional two-sided anomaly score. Its smaller normal
+forecast-development fits and disjoint calibration groups differ from the full-pool forecasts in Table 2. The comparator is
+negative persistence error, which assigns higher abnormality to smaller realized displacement over the same observed future
+segment. The left panel summarizes 456 gait sequences through pair-count-weighted within-fold AUROC on their 91 original
+recording groups. Each recording supplies one anomaly score. The right panel uses all 90 external coded participants without
+target-domain fitting. Lines are conditional 95% paired group-bootstrap intervals; differences compare the same resamples.
+Forecast
+MSE x1,000
+95% interval
+Persistence
+121.26
+[93.84, 149.90]
+Damped velocity
+575.19 [375.68, 828.96]
+Own-leg history
+81.74
+[64.25, 100.33]
+Bilateral history
+80.63
+[62.73, 99.97]
+Current-posture transition
+(legacy)
+71.69
+[55.73, 88.66]
+Current-posture transition
+71.74
+[55.71, 88.79]
+Posture plus velocity
+76.93
+[60.96, 93.49]
+Random-feature ridge
+105.20
+[85.17, 125.55]
+Normal mean pose (post
+hoc)
+108.98
+[89.97, 130.25]
+Mean displacement (post
+hoc)
+122.35
+[92.71, 152.75]
+Table 2: Forecasting on 141 normal gait sequences over nom-
+inal offsets 0.1 through 0.8 seconds, with each of 29 original
+recordings given equal weight. Lower MSE is better. Values
+and conditional recording-bootstrap intervals are multiplied
+by 1,000, in squared prefix-torso units. The separately im-
+plemented legacy and current posture transitions are both
+retained.
+Structured masks do not improve the fixed task
+Uniform masking gives MSE 0.07761, compared with
+0.07962 for anatomical tubes and 0.07916 for motion bal-
+ancing (the masking comparison). With improvement de-
+fined as uniform error minus candidate error, the differences
+are -0.00201 [-0.00426, -0.00002] and -0.00155 [-0.00311,
+-0.00013]. These exploratory comparisons do not support a
+benefit. The tube advantage over geometry-matched random
+groups is 0.00042 [-0.00086, 0.00173], which also does not
+establish an anatomical advantage. Every seed and policy
+remains in the supplementary registry.
+60
+80
+100
+Forecast MSE x 1,000 (lower is better)
+No prefix masking
+Uniform masking
+Time blocks
+Anatomical tubes
+Random joint groups
+Motion-balanced masking
+Motion-focused masking
+Figure 4: Forecasting on 141 normal gait sequences with six
+prefix-corruption policies and an unmasked prefix baseline.
+Points give each of their 29 original recordings equal weight
+after averaging within sequence. MSE is multiplied by 1,000;
+lines are conditional 95% intervals resampling whole record-
+ing groups. Predictions average three fixed seeds before er-
+rors are computed. The dashed line is the current-posture
+transition. Evaluation retains the full observed prefix. Struc-
+tured masks do not improve on uniform masking here.
+Shared prefix dropout, small coordinate noise, and
+opposite-leg time shifts do not reverse the tube or motion-
+balanced comparison with uniform masking. These pertur-
+bations test observation dependence rather than neurologi-
+cal interventions. Phase, learned-mask, latent-objective, and
+stochastic-future extensions remain deferred under the de-
+clared evidence gates. A broader search after these outcomes
+would be a new study.

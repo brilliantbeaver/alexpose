@@ -1,0 +1,23 @@
+{
+  "identity": "reference-v2-sequence-scale-posthoc-v2",
+  "status": "declared_before_sensitivity_computation",
+  "declared_at_utc": "2026-11-16T18:30:46.403255+00:00",
+  "exposure": "Prior recording-weighted GAVD and external outcomes already known; this is post hoc, not preregistered.",
+  "question": "Does the posture-versus-persistence forecast result persist when each normal gait sequence receives equal weight?",
+  "population": "Same frozen141normal sequences in29original recording components; no eligibility changes.",
+  "estimator": "Average fixed window MSE within each sequence; equally weight sequence errors.",
+  "comparison": "ridge_posture versus persistence only; original eight-query horizon and target support.",
+  "resampling": "Sample whole normal recording components with replacement within each original outer fold; retain all their sequences and multiplicities; divide each draw by its total selected sequence count.",
+  "resamples": 5000,
+  "seed": 6827,
+  "direction": "Persistence error minus posture error; positive favors posture.",
+  "method_changes": "No fitting, score recalibration, anomalous-label selection or change to frozen primary endpoints.",
+  "script_sha256": "c891b95f590cf96840c4a03f121403e52d7f3a9b205137f2f58bd5c55b014ef6",
+  "inputs": {
+    "artifacts/runs/reference-v2-core-v1/refs_window_scores.csv": "e891e327690e108a40e32c0ff65abfbd38930a40a78e0bd5d5197622a1b84830",
+    "artifacts/runs/reference-v2-core-v1/cohort.csv": "35e5b78fc8bacd2808f51927f32da7d57b5eb517e6190496af92bd1063924985",
+    "artifacts/runs/reference-v2-core-v1/results.json": "82484bbf2db8d0f98f24e6c387c0ed8899eac1a7110437b84377590ef0ed3e3d",
+    "artifacts/runs/reference-v2-core-v1/artifact_hashes.json": "4031d67bfe561fd8ebdf51a335a90bef8bad938d65fbd77184d7cd8241c1f843"
+  },
+  "supersedes_failed_analysis": "reference-v2-sequence-scale-posthoc-v1"
+}

@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "run_id": "medwm-reference-masking-v2",
+  "status": "experiments_and_publication_bundle_complete",
+  "brief": {
+    "path": "notes/aaai-worldmodels/05-iterate-02-INSTR.md",
+    "sha256": "d28a802c245f13f8d81edc552ab098c90055b413ef60233e37b10a49c6f6dfc1"
+  },
+  "created_utc": "2026-11-16T15:59:21.512697+00:00",
+  "code_revision": "5d829ec882956ad6f76c862a50b8e1cc5918761e",
+  "output_root": "experiments/aaai-worldmodels/docs/reference_v2",
+  "host": {
+    "available_agent_slots": 4,
+    "architecture": "Apple arm64",
+    "memory_bytes": 34359738368,
+    "cpu_count": 8
+  },
+  "resource_policy": {
+    "max_workers": 3,
+    "heavy_jobs": 1,
+    "pilot_required": true,
+    "initial_training_ceiling_seconds": 3600,
+    "initial_external_download_ceiling_bytes": 7000000000,
+    "stopping_rule": "Complete declared core arms and source coverage once; no outcome-driven expansion. Optional phases depend on explicit scientific and feasibility gates."
+  },
+  "decisions": [
+    "Preserve all previous runs, draft01, draft02, notebooks00\u201316 and unrelated worktree changes.",
+    "Reuse verified immutable full-duration native pose caches; no needless pose extraction.",
+    "Freeze protocol and implementation before viewing new outer anomaly outcomes.",
+    "All GAVD results remain exploratory after previous source/outcome exposure.",
+    "One new model capacity, one coordinate objective, deterministic core before optional latent/stochastic phases.",
+    "Lock posture-plus-velocity primary and matched posture calibration secondary.",
+    "Inner selection weights each held-out normal source equally.",
+    "Alternate partition forecasts are sensitivity analyses, not independent studies."
+  ],
+  "tasks": [
+    {
+      "agent": "v2_data",
+      "status": "complete",
+      "scope": "Annotation inventory, media/pose identities, source components, external preparation and visual audit"
+    },
+    {
+      "agent": "v2_model",
+      "status": "complete",
+      "scope": "Compact predictors, exact-budget masks, fitting runner and invariant tests"
+    },
+    {
+      "agent": "v2_evaluation",
+      "status": "complete",
+      "scope": "Evaluation utilities complete; now clean-kernel notebooks20\u201326"
+    },
+    {
+      "agent": "v2_visuals",
+      "status": "complete",
+      "scope": "New editable vector slide deck and current entry point"
+    },
+    {
+      "agent": "v2_reviewer",
+      "status": "publication_acceptance_record",
+      "scope": "Independent reconstruction and final artifact acceptance"
+    },
+    {
+      "agent": "root",
+      "status": "publication_acceptance_record",
+      "scope": "Integration, execution, manuscript draft03, current README and evidence ledger"
+    },
+    {
+      "agent": "v2_accessibility",
+      "status": "complete",
+      "scope": "Independent opening-only explanation and main-text accessibility review; all five findings resolved."
+    }
+  ],
+  "active_file_owners": [
+    {
+      "owner": "v2_data",
+      "paths": [
+        "worldmodels/v2_data.py",
+        "tests/test_v2_data.py",
+        "scripts/audit_v2_data.py",
+        "docs/reference_v2/data_*",
+        "artifacts/runs/reference-v2-cohort-v1/"
+      ]
+    },
+    {
+      "owner": "v2_model",
+      "paths": [
+        "worldmodels/v2_models.py",
+        "worldmodels/v2_masks.py",
+        "tests/test_v2_models.py",
+        "tests/test_v2_masks.py",
+        "docs/reference_v2/model_contract.md",
+        "docs/reference_v2/model_pilot.json",
+        "artifacts/model-development-v2/"
+      ]
+    },
+    {
+      "owner": "v2_evaluation",
+      "paths": [
+        "worldmodels/v2_evaluation.py",
+        "tests/test_v2_evaluation.py",
+        "docs/reference_v2/evaluation_contract.md",
+        "docs/reference_v2/evaluation_design.json"
+      ]
+    },
+    {
+      "owner": "root",
+      "paths": [
+        "docs/reference_v2/run_record.json",
+        "docs/reference_v2/protocol*",
+        "worldmodels/v2_runner.py",
+        "scripts/run_reference_v2.py",
+        "tests/test_v2_runner.py"
+      ]
+    },
+    {
+      "owner": "v2_evaluation",
+      "paths": [
+        "scripts/build_reference_v2_notebooks.py",
+        "20_cohort_identity_and_coverage.ipynb",
+        "21_reference_scores_and_calibration.ipynb",
+        "22_structured_masking_laboratory.ipynb",
+        "23_compact_models_and_fitting.ipynb",
+        "24_source_and_external_evaluation.ipynb",
+        "25_robustness_and_movement_interpretation.ipynb",
+        "26_manuscript_evidence_and_claims.ipynb",
+        "docs/reference_v2/notebook_*",
+        "scripts/analyze_reference_mean_prior.py",
+        "docs/reference_v2/mean_prior_protocol.json",
+        "scripts/analyze_reference_floor_sensitivity.py",
+        "docs/reference_v2/floor_sensitivity_protocol.json"
+      ]
+    },
+    {
+      "owner": "v2_visuals",
+      "paths": [
+        "slides/reference_v2*",
+        "slides/reference_v2_images/",
+        "slides/README.md",
+        "slides/tutorial.html",
+        "scripts/build_reference_v2_slides.py"
+      ]
+    },
+    {
+      "owner": "v2_reviewer",
+      "paths": [
+        "docs/reference_v2/independent_review.md",
+        "docs/reference_v2/prefit_acceptance.json",
+        "docs/reference_v2/final_acceptance.json",
+        "docs/reference_v2/mean_prior_review.json",
+        "docs/reference_v2/floor_sensitivity_review.json",
+        "artifacts/reference-v2-independent-review/"
+      ]
+    },
+    {
+      "owner": "root",
+      "paths": [
+        "docs/draft03/",
+        "scripts/build_next_draft03.py",
+        "scripts/build_reference_v2_readme.py",
+        "README.md",
+        "docs/reference_v2/README.md",
+        "docs/reference_v2/verification.json",
+        "worldmodels/v2_transfer.py",
+        "worldmodels/v2_robustness.py",
+        "scripts/check_external_identity_sensitivity.py"
+      ]
+    },
+    {
+      "owner": "v2_accessibility",
+      "paths": [
+        "docs/reference_v2/accessibility_review.md"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "kind": "independent prefit acceptance",
+      "path": "prefit_acceptance.json",
+      "sha256": "1232a7db062a245ea9a161ee918f6fc909a7d6ed07bc16a9ef57dd40629d37f7"
+    },
+    {
+      "kind": "pre-score external identity sensitivity acceptance",
+      "path": "artifacts/reference-v2-independent-review/external_sensitivity_acceptance.json",
+      "sha256": "8454b8a2791039058d1a2dd2a13ccc13f4976323b82a3935aabd4c86c10ed9dc"
+    }
+  ],
+  "limitations": [
+    "Unknown participant relationships in GAVD; its source videos are grouping proxies.",
+    "Only 29 retained normal GAVD sources constrain nested reference fits and empirical rank resolution.",
+    "External evaluation uses dataset-coded identities and labels, acquisition-confounded observational videos, and no target-domain calibration.",
+    "The locked anomaly candidate does not beat the low-motion baseline internally or externally; no clinical discrimination superiority is claimed."
+  ],
+  "protocol_freeze_sha256": "f74f15b7b609cb8318fd642e7efff23e992dbcf57b9a1a387ecad4417d61be0b",
+  "heavy_job": null,
+  "completed_runs": {
+    "cohort": "reference-v2-cohort-v1",
+    "core": "reference-v2-core-v1",
+    "external_preparation": "reference-v2-external-v1",
+    "external_transfer": "reference-v2-transfer-v1",
+    "identity_sensitivity": "reference-v2-identity-sensitivity-v1",
+    "robustness": "reference-v2-robustness-v1",
+    "mean_prior_posthoc": "reference-v2-mean-prior-posthoc-v1",
+    "floor_sensitivity_posthoc": "reference-v2-floor-posthoc-v2"
+  },
+  "extension_gates": {
+    "latent_objective": {
+      "status": "deferred",
+      "reason": "The matched coordinate experiment shows no structured-mask advantage over uniform masking and no incremental anomaly advantage over the locked motion comparator. A latent-objective grid would not resolve that failure of the present reference design.",
+      "evidence": "artifacts/runs/reference-v2-core-v1/results.json:forecast_contrasts and primary_anomaly"
+    },
+    "learned_masks": {
+      "status": "deferred",
+      "reason": "The simpler structured masks do not improve on uniform masking. More adaptive mask optimization is not justified by the declared ladder.",
+      "evidence": "artifacts/runs/reference-v2-core-v1/results.json:forecast_contrasts"
+    },
+    "phase_conditioning": {
+      "status": "deferred",
+      "reason": "There is no frozen, manually validated phase estimator with two credible prefix cycles for this cohort.",
+      "evidence": "docs/reference_v2/protocol.md:physiology and phase prerequisites"
+    },
+    "stochastic_future": {
+      "status": "deferred",
+      "reason": "The deterministic reference and masking arms have not established the intended incremental movement-organization endpoint. Proper probabilistic calibration would also require a new protocol and stronger independent normal support.",
+      "evidence": "artifacts/runs/reference-v2-core-v1/results.json:primary_anomaly; docs/reference_v2/evaluation_contract.md"
+    }
+  },
+  "completion_record": "Independent final acceptance is recorded separately in docs/reference_v2/final_acceptance.json.",
+  "failed_analyses": [
+    {
+      "identity": "reference-v2-floor-posthoc-v1",
+      "reason": "Replay omitted the original intermediate CSV transport and failed exact primary-ranking agreement. No new scores were published.",
+      "disposition": "Preserved separately; reviewed v2 restores the original path and leaves all primary scores unchanged."
+    }
+  ],
+  "verification": {
+    "software_tests": 124,
+    "notebooks": 7,
+    "executed_code_cells": 43,
+    "independently_pinned_notebook_inputs": 1958,
+    "manuscript_tables_rebuilt_exactly": 6,
+    "vector_figures_rebuilt_exactly": 5,
+    "historical_source_notebooks_unchanged": 16,
+    "review_records": "docs/reference_v2/review_records/",
+    "report": "docs/reference_v2/verification.json"
+  },
+  "main_findings": {
+    "normal_posture_mse": 0.07174154584111857,
+    "normal_persistence_mse": 0.12126179358149479,
+    "relative_reduction": 0.40837469311466035,
+    "internal_candidate_auroc": 0.4623955431754875,
+    "internal_low_motion_auroc": 0.8105849582172702,
+    "external_candidate_auroc": 0.5908289241622575,
+    "external_low_motion_auroc": 0.7624926513815403,
+    "masking": "No structured-mask advantage over uniform is established under the declared coordinate task."
+  },
+  "numerical_replay_notes": [
+    "Bitwise core neural trajectories require the producer one-thread setting.",
+    "External float32 versus float64 error changes did not change tail scores.",
+    "The original calibrated CSV write/read path determines machine-precision empirical ties; preserve it when replaying ranks."
+  ],
+  "completion_boundaries": [
+    "GAVD evidence remains exploratory; no incremental detector superiority is established.",
+    "External results use dataset-coded participants and retain acquisition and identity limitations.",
+    "All four conditional extension gates remain deferred for their recorded scientific reasons.",
+    "HTML links and JavaScript syntax are checked; browser interaction was not exercised.",
+    "Author names, affiliations and submission decisions remain author responsibilities; no submission performed."
+  ]
+}

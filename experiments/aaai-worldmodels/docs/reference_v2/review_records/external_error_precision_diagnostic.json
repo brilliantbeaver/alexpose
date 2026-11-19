@@ -1,0 +1,9 @@
+{
+  "status": "dtype_diagnostic",
+  "component": "primary_fold0_rotation0",
+  "input_dtype": "float32",
+  "prediction_dtype": "float32",
+  "double_precision_manual_mse_max_discrepancy": 2.780583929773428e-08,
+  "production_native_dtype_api_max_discrepancy": 2.220446049250313e-16,
+  "reason": "The external participant error routine squares/sums native float32 arrays, while the core explicitly casts predictions to float64. Reconstruct native arithmetic for exact artifact verification and report any precision sensitivity separately."
+}

@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "boxes": [
+    {
+      "label": "Video pose\n16 joints in 2D\nActual times",
+      "fits_with_two_pixel_padding": true
+    },
+    {
+      "label": "16 past samples\nPosture or history\nTraining masks",
+      "fits_with_two_pixel_padding": true
+    },
+    {
+      "label": "8 future samples\n0.1 through 0.8 s\nNormal training",
+      "fits_with_two_pixel_padding": true
+    },
+    {
+      "label": "Common targets\nReference errors\nScores by group",
+      "fits_with_two_pixel_padding": true
+    }
+  ]
+}

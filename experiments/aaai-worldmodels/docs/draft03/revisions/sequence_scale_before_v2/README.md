@@ -1,0 +1,25 @@
+# Draft03: A reference-controlled gait observation benchmark
+
+Read [the compiled manuscript](manuscript.pdf) or [the generated Markdown](manuscript.md). The editable prose is [manuscript_source.md](manuscript_source.md). The paper leads with useful compact forecasting and a reproducible benchmark that distinguishes forecast skill from evidence of anomaly detection. It retains the strongest simple controls and does not claim an incremental detector win.
+
+This is a new standalone evidence identity, `medwm-reference-v2-draft03-evidence-v1`, for method `medwm-reference-masking-v2`. The current [draft02](../draft02/README.md), draft01, notebooks 00–16, predictions, pose caches, and historical run identities are preserved. The older `scripts/build_draft03.py` still writes preserved draft02. It is not the builder for this manuscript.
+
+The completed main inputs are `reference-v2-core-v1`, `reference-v2-transfer-v1`, `reference-v2-identity-sensitivity-v1`, and `reference-v2-robustness-v1`. Data identities are `reference-v2-cohort-v1` and `reference-v2-external-v1`. Input result and artifact-manifest hashes, counts, displayed values, uncertainty methods, and the dirty-source code fingerprint are recorded in [evidence.json](evidence.json). The [claim ledger](claim_ledger.json) explains each central claim and its permitted scope. [The complete forecast registry](complete_forecasts.csv), [all source scores](source_scores.csv), [source anomaly scores](source_anomaly_scores.csv), and [external participant scores](participant_scores.csv) retain unfavorable arms alongside the leading results.
+
+The reported internal population is 2,815 windows from 456 sequences and 91 GAVD source videos, including 29 normal sources. The separate external population is 773 windows from 168 recordings and 90 dataset-coded participants. Do not add those source and participant counts into a single patient population. The external whole-participant exclusion sensitivity retains 89 participants and removes the only retained severe-Parkinson's participant. All GAVD reuse remains exploratory. Confidence intervals condition on saved fits; they do not include unknown participant overlap or complete pipeline retraining variation.
+
+From `experiments/aaai-worldmodels`, rebuild with the experiment's Python 3.12 environment:
+
+```bash
+.venv/bin/python scripts/build_next_draft03.py --compile --render
+```
+
+The builder verifies completed input manifests and reconstructs displayed normal-source MSEs before writing Markdown, LaTeX, evidence, tables, and editable SVG/vector PDF figures. It fits no model. [The build record](build_record.json) records exact compilation and rendering commands. `--pdftex` and `--render-python` support equivalent local tools. The official AAAI style files are copied unchanged from the preserved author-kit snapshot. Author information remains to be confirmed before submission; no submission is performed.
+
+Figures teach the observation task, compare the same real future against two forecasts, show the full mask comparison, and present paired anomaly endpoints with the strongest comparator. [The illustration selection record](figures/forecast_example_selection.json) selects the first eligible normal window by identifier rather than accuracy. The scatter supplement keeps movement amount visible. Generated figures remain editable; no screenshot is the only source of a scientific figure.
+
+Scientific and accessibility editing are followed by [independent review](../reference_v2/independent_review.md). The final acceptance record applies only to the exact recorded hashes. Every page is rendered under `rendered/`, with page text, a contact sheet, page-count checks, and overflow diagnostics. Rebuilding or materially changing an artifact reopens the relevant review. [The publication manifest](publication_manifest.json) identifies the generated sources and outputs.
+
+**GAVD supports a heterogeneous public-video benchmark, but GAVD alone does not establish patient-disjoint, site-disjoint, or prospective clinical generalization.** Source IDs are not patient IDs, and labels were not independently clinically confirmed for this analysis. Full-inventory use cannot repair the small independent normal-source ceiling. External participant-coded transfer adds a different acquisition setting, but age, native FPS, view, markers, person selection, calibration-unit change, and quality retention remain possible explanations. This work tests a movement-observation component rather than disease progression, treatment response, or action-conditioned simulation.
+
+The [official Med-WM call](https://med-wm.github.io/aaai27-mwm/) includes observation dynamics, uncertainty, validation, and benchmarks. The manuscript's scope follows those interests. Its format and body-page range must be checked again when preparing an actual submission. The project guide and [new vector slides](../../slides/reference_v2.html) explain the notebook chain and the distinction between completed results and deferred extensions.

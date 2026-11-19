@@ -1,0 +1,47 @@
+# Frozen external-dataset preparation and transfer contract
+
+The external dataset is KOA-PD-NM, Mendeley Data V1, DOI `10.17632/44pfnysy89.1`. The locally available originals remain under `data/videos-more/koa-pd-nm`. Their exact copies under `data/videos-ms/koa-pd-nm` are not processed or counted again. The bundled demographic PDF assigns subject numbers separately within each disease-severity group. Participant IDs therefore include the original group, severity, and local number, for example `PD_ML_001` and `PD_MD_001`; normal participants use `NM_001`.
+
+The data audit catalogs 189 local recordings from 95 coded participants. Two files fail to open because their video headers lack a readable `moov` atom: `015_NM_02.MOV` and `002_PD_01_SV.MOV`. Their copies are byte-identical and also invalid. The remaining 187 recordings have successful first/last-frame decode checks and represent 94 participants: 30 normal, 14 Parkinson's, and 50 osteoarthritis. These are metadata counts before pose-quality attrition. The absent `PD_SV_003` participant and the original description's inconsistent PD video totals remain documented in `data_external_summary.json`.
+
+## Frozen observation pipeline
+
+`worldmodels/v2_external.py` reads the complete, hash-pinned `data_external_inventory.csv`. It processes every locally available file with successful metadata decode, including every original condition and direction. It does not select clips, crop people, or alter gates using disease labels, prediction errors, or anticipated results. Invalid originals receive explicit attrition records. No additional video download or alternate local copy is substituted.
+
+Each recording is decoded sequentially. Frames are requested on the same nearest-native-frame nominal 10 Hz grid as the GAVD preparation, starting from native frame one. Native annotation-style frame numbers remain one-based and decoded OpenCV indexes remain zero-based, with a single conversion at the decoder boundary. The cache records requested frame numbers, decoded indexes, actual decoder timestamps, nominal times, FPS, image dimensions, raw BlazePose-33 pixel coordinates, and confidence. It retains failures as missing observations rather than filling measured frames.
+
+The shared Ambient `SequenceKeypointExtractor.extract_from_image` API runs on RGB images using the same explicit `data/models/pose_landmarker_lite.task` weight file as GAVD. Its actual pose-weight byte hash must equal the frozen GAVD preparation request, and its first full-image pose is retained. There is no external person-box annotation, so the GAVD pelvis-inside-annotation-box gate cannot be applied. This difference is declared. A deterministic visual audit assesses whether multiple people, partial bodies, or scene changes make this selection unreliable, but does not infer clinical labels from appearance.
+
+Use every 24-sample native window at stride eight. The first 16 observations form the visible prefix, and the last eight form the forecast target. Call the same `supported_window` normalization and quality API as GAVD: confidence at least 0.5, pelvis centering per frame, torso scale estimated only from the prefix, and at least 70% observed support separately in prefix and future. A future joint is scored only when it has prefix support. Apply the exact unchanged `v2_data.common_support` distal-leg gate. Reject nonfinite or nonincreasing actual timestamps explicitly. No interpolated, imputed, or pose-failed coordinate becomes an observed target.
+
+The declared joint subset remains `(11,12,13,14,15,16,23,24,25,26,27,28,29,30,31,32)`, with distal targets `(25,27,29,31)` and `(26,28,30,32)`. Coordinates measure relative projected articulation in prefix-torso units. They are not marker-based anatomical angles or physical walking speed. Reflective markers, hospital background, image resolution, age distributions, and filming view differ from GAVD and are possible transfer confounders.
+
+## Grouping and the exact aggregation order
+
+The prepared metadata uses the coded participant for both `source_id` and `component_id`. It uses the video filename stem for `sequence_id` and `recording_id`, with path and byte hash retained separately. Window IDs hash the recording ID and native frame tuple, so two videos from one person cannot collide merely because each begins at frame one. Every recording from one coded participant remains together.
+
+For each frozen GAVD forecast component, first average observed squared coordinate discrepancies within each leg; give both legs equal window weight; average windows within recording; then average recordings equally within participant. Compute prefix motion and missingness with the identical recording/participant hierarchy. Thus each component supplies one participant MSE and two participant prefix covariates before calibration.
+
+Apply that GAVD component's stored nuisance model and empirical normal residual distribution to the aggregated participant quantities. This gives one participant tail score per component. Average the 15 fixed component tail scores equally across the five GAVD outer-fold models and their three calibration rotations. Do not average per-video tail ranks and then call the result participant calibration: the nonlinear transform makes those operations different. The original calibration unit is a GAVD source video, while the external evaluation unit averages repeated participant recordings. State this measurement-unit and variance shift explicitly.
+
+The low-motion comparator is negative participant-average persistence MSE using the same window/recording hierarchy. Raw and excess-error controls use the same observed targets and source forecasts. No external participant enters any GAVD predictor, feature scaler, nuisance fit, hyperparameter choice, or empirical normal reference. The pipeline performs no target-domain fitting, normal calibration, threshold selection, or score-direction change.
+
+The primary transfer endpoint is the paired participant-level AUROC difference between the locked GAVD conditional two-sided score and negative persistence error, using all retained normal versus all retained abnormal participants. Also report Parkinson's versus the same normal participants and osteoarthritis versus the same normal participants. These slices reuse the normal reference population. Use the protocol's 5,000 paired participant bootstrap draws and seed 5703; state conditional-model uncertainty and all retained and excluded counts. Dataset-provided diagnoses do not establish independent clinical reassessment.
+
+## Identity, resources, and release gates
+
+External preparation identity is `reference-v2-external-v1`. A completed run is immutable. Every cache request pins the actual video hash, model hash, extractor and support-module hashes, native-frame request, frame origins, time grid, and extraction implementation. The top-level request also pins the full external inventory and shared window-normalization/support implementations. Incomplete work can resume only when every identity agrees. Completed extraction writes `identity.json`, `preparation.json`, and an output hash manifest; these do not indicate that any gait prediction was evaluated.
+
+The full extraction has an initial one-hour per-invocation ceiling, checked between recordings. Its expected workload is approximately 17,138 pose calls across 187 decodable recordings. A resource stop preserves caches and writes an incomplete record, without publishing a completed preparation. Only the coordinator releases the full run after a measured one- or two-recording pilot and independent implementation review. At most one heavy extraction or fitting job runs at a time.
+
+Before external scores are viewed, generate first/middle/last sampled-frame sheets for every metadata-decodable participant. Select the first recording in filename order without considering pose quality or results. Hide labels and IDs on the sheet and retain a separate selection ledger. Record inspection coverage, tracking uncertainty, and any apparent mismatch. Stills cannot prove continuous identity or every frame's anatomical validity. Do not change eligibility based on a desired transfer score.
+
+Byte hashes found no exact overlap with local GAVD originals, and the dataset was not mentioned by the preimplementation search of experiment code and notes. Neither check can rule out prior human exposure, reencoded GAVD uploads of the same footage, or repeated participants. Report this as external-dataset transfer with coded-participant grouping, not proof of patient-disjoint clinical generalization across all source data. Do not merge the external participant count with GAVD source counts into one population.
+
+The preparation command, after coordinator release, runs from the project directory:
+
+```bash
+.venv/bin/python -m worldmodels.v2_external --output artifacts/runs/reference-v2-external-v1
+```
+
+A bounded timing pilot must use a different output identity and explicit recording IDs. It is a pipeline/resource check, not evidence for anomaly performance. Consumers call `load_external(path)` to obtain `(x, valid, metadata, times)`. The loader verifies the completed artifact hashes, participant grouping, common support, and actual timestamps. It rejects bounded pilots unless `allow_pilot=True` is explicitly supplied. The coordinator separately runs frozen predictive scoring after accepting the prepared data and its visual audit.

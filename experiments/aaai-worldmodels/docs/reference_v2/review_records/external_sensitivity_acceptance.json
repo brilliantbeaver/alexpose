@@ -1,0 +1,31 @@
+{
+  "identity": "reference-v2-independent-external-identity-sensitivity-prefit-v1",
+  "status": "accepted_secondary_prescore_rule",
+  "reviewed_at_utc": "2026-11-16T16:40:51.815018+00:00",
+  "reviewer": "/root/v2_reviewer",
+  "artifacts": {
+    "script": "scripts/check_external_identity_sensitivity.py",
+    "preparation": "artifacts/runs/reference-v2-external-v1/preparation.json",
+    "author_visual_review": "docs/reference_v2/data_external_visual_review.json",
+    "rule": "docs/reference_v2/external_identity_sensitivity_protocol.json"
+  },
+  "sha256": {
+    "script": "8ca62fb2286f953b464c334302cd0da30d0b1831ae7621df285e97e93cce3a76",
+    "preparation": "726b8c23ccfc4aecb1c5eac4a1cccb6c2129193f1c8b7e500f732c2202cab4c8",
+    "author_visual_review": "4506ee53f00b7e2975ae8c72e5d0b73e64ff87b96c9090a4d7204748d74472bc",
+    "rule": "9c8574956a51cdd8309b1d5517781289e311c3a1a592a0fb6e5898006926c79a"
+  },
+  "scientific_disposition": "The independent reviewer confirms a visible multiple-person overlap in QA panel094. Excluding this complete coded participant is a justified identity sensitivity, provided the original complete population and all locked directions remain primary. No score or exclusion tuning is authorized.",
+  "prerequisites": [
+    "The transfer run must be complete and its artifact hashes independently verified.",
+    "The script, declaration, evaluation dependency and source score hashes must match the pinned release."
+  ],
+  "expected_population": {
+    "primary_coded_participants": 90,
+    "secondary_coded_participants": 89,
+    "secondary_normal": 27,
+    "secondary_osteoarthritis": 49,
+    "secondary_parkinsons": 13
+  },
+  "interpretation_limit": "This removes the only retained severe-Parkinson coded participant. It changes condition/severity coverage and cannot be reported as an equivalent population."
+}

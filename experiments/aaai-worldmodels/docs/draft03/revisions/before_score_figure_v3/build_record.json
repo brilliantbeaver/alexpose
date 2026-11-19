@@ -1,0 +1,159 @@
+{
+  "built_at_utc": "2026-11-16T19:06:42.005973+00:00",
+  "generator_sha256": "ead3867c5e8e08771fdb6c60dbd17bc9a839fb7f5644d3d939d41bde8200138f",
+  "compiled": true,
+  "rendered": true,
+  "review_status": "awaiting_independent_review",
+  "compiler": "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+  "compiler_version": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+  "compiler_distribution": {
+    "url": "https://github.com/rstudio/tinytex-releases/releases/download/v2026.11/TinyTeX-1-darwin-v2026.11.tar.xz",
+    "archive_sha256": "9416a257c4caea2f82351fa2f89252b8bd75dceeb0ce6e442d25530b1922a02d",
+    "additional_packages": [
+      "newtx",
+      "tex-gyre",
+      "psnfss",
+      "placeins",
+      "natbib",
+      "caption",
+      "booktabs",
+      "xpatch",
+      "xkeyval",
+      "etoolbox",
+      "fontaxes",
+      "mweights",
+      "xstring",
+      "carlisle",
+      "grfext",
+      "courier"
+    ]
+  },
+  "commands": [
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/bibtex",
+      "manuscript"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ]
+  ],
+  "source_date_epoch": 1794787200,
+  "compile_returncode": 0,
+  "pdf_checks": {
+    "pages": [
+      {
+        "page": 1,
+        "characters": 5061,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 2,
+        "characters": 4566,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 3,
+        "characters": 5300,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 4,
+        "characters": 6090,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 5,
+        "characters": 6308,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 6,
+        "characters": 3654,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 7,
+        "characters": 6042,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 8,
+        "characters": 2786,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 9,
+        "characters": 6397,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 10,
+        "characters": 3764,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 11,
+        "characters": 4031,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      }
+    ],
+    "page_count": 11,
+    "reference_start_pages": [
+      8
+    ],
+    "reference_page_has_body": true,
+    "appendix_start_pages": [
+      9
+    ],
+    "body_pages": 8,
+    "short_paper_body_in_range": false,
+    "full_paper_body_in_range": true,
+    "edge_overflow": [],
+    "pdf_bytes": 310607
+  },
+  "artifacts": {
+    "manuscript.md": "ab640ece23bbdc84b102cd39a72c37715a46ac3d186b4ec4e1e1eab030f57edc",
+    "manuscript.tex": "8cfe9b36b3d4fdc53c018964f327246ba30d2b2646a316018ddf5b71f9486e51",
+    "evidence.json": "346f8ef181fd1357d82ead8e922d6d1224f6915d0b761a26e710cf85c94f3d34",
+    "manuscript.pdf": "1c166b642ae72b9ea2451541f6a0b8f2440ec10b737664ea936e54f8afd1c6df"
+  },
+  "publishing_helper_sha256": "0b4e651e65802f42a221c8c1525af7adce65bb2b6182d2211fab0d769a1a40f0",
+  "editable_source_sha256": "7b5210647cd20c866954a60c933070e6f8b56cb14fa89ff0c62002b431f15a41"
+}

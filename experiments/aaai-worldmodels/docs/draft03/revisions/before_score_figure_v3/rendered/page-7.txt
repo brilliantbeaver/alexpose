@@ -1,0 +1,146 @@
+Anomaly score
+Within-fold Pooled Pooled AP
+Conditional two-sided
+0.462
+0.462
+0.651
+Posture two-sided
+0.386
+0.394
+0.636
+Low motion
+0.811
+0.806
+0.879
+Conditional one-sided
+0.500
+0.490
+0.674
+Marginal two-sided
+0.556
+0.545
+0.688
+Static-posture distance
+0.404
+0.397
+0.646
+Motion/quality distance
+0.557
+0.566
+0.763
+Low prefix motion
+0.749
+0.764
+0.840
+Prefix missingness
+0.426
+0.427
+0.646
+Bilateral excess error
+0.774
+0.793
+0.865
+Posture/velocity excess error
+0.802
+0.811
+0.866
+Table 3: Internal rankings summarize 456 annotated gait
+sequences in 91 recording groups, with 29 normal and 62
+abnormal groups. Higher values are better. Within-fold AU-
+ROC weights each fold by its number of normal-abnormal
+pairs; pooled AUROC and average precision (AP) com-
+bine all recording groups. Abnormal-recording prevalence
+is 0.681. Scores use different reference mechanisms as ex-
+plained in the text.
+Forecast skill and anomaly ranking separate
+The locked conditional score has within-fold AUROC 0.462,
+compared with 0.811 for low motion. The paired difference
+is -0.348 [-0.506, -0.191]. Matched posture calibration also
+performs weakly, and its paired comparison with the larger
+state does not establish an advantage. Thus the present normal
+reference does not recognize annotation-defined departures
+better than the locked movement comparator. Table 3 keeps
+the simple alternatives and other score definitions visible.
+The bilateral excess score has pooled AUROC 0.793, while
+low motion has 0.806. Their within-fold rankings differ be-
+cause those compare only recordings evaluated by the same
+fold model. The favorable excess-error association remains
+compatible with a substantial contribution from movement
+amount. This does not make low motion meaningless: re-
+stricted movement can itself matter clinically. It shows that
+the association alone does not demonstrate additional knowl-
+edge of movement organization.
+Frozen transfer gives candidate AUROC 0.591 and low-
+motion AUROC 0.762, with paired difference -0.172 [-0.357,
+0.009]. The interval includes zero, and the candidate does not
+establish improvement. Parkinson’s and osteoarthritis slices
+follow the same direction and share normal participants. A
+pre-score audit found uncertain person continuity when an
+assistant overlaps one Parkinson’s participant. The fixed ex-
+clusion sensitivity retains 89 participants and gives 0.597
+versus 0.759, with difference -0.162 [-0.349, 0.020]. It re-
+moves the only retained severe-Parkinson’s participant and
+therefore narrows severity coverage.
+Nuisance checks constrain interpretation
+Matching within fold and annotated view on prefix move-
+ment and missingness retains 40 of 91 recordings. Thirty-
+eight enter four folds with adequate matched class support.
+The paired candidate-minus-low-motion difference is -0.409
+[-0.651, -0.161]. There is no distance caliper, so matching
+does not guarantee similar observations; pair distances and
+coverage loss remain visible. Most recordings have multi-
+ple views, and single-view strata are small. These analyses
+cannot establish camera invariance or remove unmeasured
+recording differences.
+External native frame rates are associated with labels even
+after sampling at 10 Hz. Age, reflective markers, clothing,
+scene, and full-image person selection also differ. Some pre-
+fix covariates leave the normal training range, and finite cal-
+ibration tails can saturate. External ranking therefore mea-
+sures transfer under documented observation shift rather than
+isolated disease physiology. A recording-identification diag-
+nostic on the normal training pool likewise supplies no evi-
+dence that learned features remove recording identity relative
+to random features.
+Discussion and scope
+The evaluation across hundreds of clinician-annotated walk-
+ing sequences identifies a compact, reproducible capability:
+a normal-only model predicts relative leg articulation bet-
+ter than repeating the last pose. The strongest tested refer-
+ence uses current posture rather than a long history. The
+benchmark also establishes why forecasting and abnormality
+ranking need separate validation. Neither a forecast-error re-
+duction nor a favorable excess-error AUROC establishes an
+incremental anomaly detector.
+Several explanations remain for the conditional score’s
+performance. Movement amount may carry annotation in-
+formation that the nuisance regression discounts. Although
+the cohort contains many gait sequences, the available 29 nor-
+mal recording groups may be too few for a stable conditional
+reference. Disjoint training and calibration roles reduce fit-
+ting support, while coarse tails lose ranking detail. Out-of-fit
+and refitted forecasting models can also differ in error scale.
+The study does not identify which explanation dominates or
+rule out better conditional models with stronger independent
+normal coverage.
+The masking finding is similarly bounded to one compact
+coordinate model and this sparse observation task. Anatom-
+ical or latent masking may help with other representations
+or larger populations. Here the policies do not earn an ad-
+vantage over a matched uniform control. A useful next study
+should add independent normal coverage and validated ob-
+servations that resolve these ambiguities before increasing
+model capacity.
+GAVD supports a heterogeneous public-video benchmark,
+but GAVD alone does not establish patient-disjoint, site-
+disjoint, or prospective clinical generalization. Recording
+IDs are not patient IDs, and folder labels are not indepen-
+dently confirmed diagnoses in this analysis. The external
+dataset adds participant-coded transfer evidence, but diag-
+noses and cross-dataset participant independence were not
+independently reverified. Byte hashes exclude identical files
+rather than reencoded copies or repeated people. Quality-
+dependent retention also changes the evaluated population.
+For medical world models, the contribution is a tested
+movement-observation benchmark with useful forecasting
+and explicit anomaly controls. Short gait forecasts do not

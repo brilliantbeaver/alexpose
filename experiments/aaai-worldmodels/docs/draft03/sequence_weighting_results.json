@@ -1,0 +1,65 @@
+{
+  "identity": "reference-v2-sequence-scale-posthoc-v2",
+  "status": "complete",
+  "analysis_status": "Post hoc weighting sensitivity; original primary results unchanged.",
+  "forecast_refit": false,
+  "sequences": 456,
+  "normal_sequences": 141,
+  "normal_recording_components": 29,
+  "sequence_weighted_mse": {
+    "persistence": 0.13849954436846693,
+    "ridge_posture": 0.08084133097159804
+  },
+  "paired_improvement": 0.057658213396868906,
+  "ci95": [
+    0.04178336195670544,
+    0.07967143972558138
+  ],
+  "relative_reduction": 0.4163061594157585,
+  "relative_ci95": [
+    0.3593753110159124,
+    0.4687267133446003
+  ],
+  "recording_weighted_primary": {
+    "method": "ridge_posture",
+    "reference": "persistence",
+    "method_mse": 0.07174154584111857,
+    "reference_mse": 0.12126179358149479,
+    "estimate": 0.04952024774037623,
+    "ci95": [
+      0.03446947167969933,
+      0.06628450926545679
+    ],
+    "method_ci95": [
+      0.055713940386887074,
+      0.08879487610105098
+    ],
+    "relative_reduction": 0.40837469311466035,
+    "relative_ci95": [
+      0.33308605901385985,
+      0.47435018625164715
+    ],
+    "normal_components": 29,
+    "resamples": 5000,
+    "seed": 5702,
+    "positive_favors": "ridge_posture",
+    "uncertainty": "Conditional on saved cross-validation predictions"
+  },
+  "resamples": 5000,
+  "seed": 6827,
+  "resampling": "Whole recording components within original folds; all sequences and multiplicities retained.",
+  "weights": "Windows average within sequence; each sequence has equal point-estimate weight.",
+  "uncertainty": "Conditional on frozen overlapping fits; unknown participant overlap and retraining variation excluded.",
+  "software_checks": [
+    "Unequal group-size fixture recovers expected effects8,1.25,-1.",
+    "Recording-weighted path recovers original MSEs."
+  ],
+  "protocol_sha256": "d17a03898b1de81f62c2e8f1bf5af1eef67546272e68fd43cbac7e94861157bb",
+  "script_sha256": "c891b95f590cf96840c4a03f121403e52d7f3a9b205137f2f58bd5c55b014ef6",
+  "inputs": {
+    "artifacts/runs/reference-v2-core-v1/refs_window_scores.csv": "e891e327690e108a40e32c0ff65abfbd38930a40a78e0bd5d5197622a1b84830",
+    "artifacts/runs/reference-v2-core-v1/cohort.csv": "35e5b78fc8bacd2808f51927f32da7d57b5eb517e6190496af92bd1063924985",
+    "artifacts/runs/reference-v2-core-v1/results.json": "82484bbf2db8d0f98f24e6c387c0ed8899eac1a7110437b84377590ef0ed3e3d",
+    "artifacts/runs/reference-v2-core-v1/artifact_hashes.json": "4031d67bfe561fd8ebdf51a335a90bef8bad938d65fbd77184d7cd8241c1f843"
+  }
+}

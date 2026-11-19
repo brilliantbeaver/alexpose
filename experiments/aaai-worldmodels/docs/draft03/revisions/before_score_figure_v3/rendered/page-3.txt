@@ -1,0 +1,124 @@
+GAVD annotation
+Sequences Windows Recordings
+cerebral palsy
+52
+518
+8
+myopathic
+168
+845
+27
+normal
+141
+465
+29
+parkinsons
+37
+292
+11
+stroke
+58
+695
+16
+Table 1: The evaluated cohort contains 456 unique annotated
+gait sequences after common observation gates. Counts lead
+with movement observations; original recordings define eval-
+uation groups and are not verified patient identities.
+five-label scope. Processing other GAVD categories there-
+fore cannot add new normal recording identities. Exercise,
+pregnancy, stylized walking, and prosthetic use also retain
+their actual meanings rather than becoming neurological di-
+agnoses.
+A sequence is a meaningful movement observation, while
+an original recording can contribute several sequences. We
+preserve GAVD’s intended single-direction boundaries and
+retain each unique sequence identifier. The annotation audit
+finds 17 pairs of retained sequence IDs that share origi-
+nal recording frames. Shared imagery can include different
+people, and sequence identifiers alone do not establish par-
+ticipant identity or disjoint footage. A relation table links
+verified duplicates and known relationships, and all linked
+observations stay together during evaluation. Unknown re-
+peated people across recordings remain possible.
+For transfer, we use the separately released KOA-PD-NM
+video dataset (Kour, Gupta, and Arora 2020, 2022). The local
+cache contains 189 originals from 95 dataset-coded partic-
+ipants. Byte-identical copies in another folder are counted
+once. Two files cannot be decoded. Processing all 187 de-
+codable recordings with the fixed gates retains 773 windows
+from 168 recordings and 90 coded participants: 27 normal,
+49 osteoarthritis, and 14 Parkinson’s. All recordings from one
+coded participant stay together. We report these counts sepa-
+rately because original recordings and coded participants are
+different grouping units; their names alone do not establish
+independent people.
+What the model observes
+A pose is an estimated arrangement of body joints in an
+image. We use Ambient’s shared RGB-image extraction in-
+terface with a pinned BlazePose weight file. Sixteen positions
+describe the shoulders, arms, hips, knees, ankles, heels, and
+foot indices, which are landmarks near the fronts of the feet.
+We subtract the midpoint between the hips, our pelvis refer-
+ence, in each frame and divide by a torso scale estimated from
+past observations only. The scale is the median valid distance
+between the hip midpoint and shoulder midpoint in the prefix.
+These coordinates describe relative two-dimensional articu-
+lation in prefix-torso units. They are not physical walking
+speed or measured three-dimensional joint angles. Both hips
+enter the shared reference, including in an own-leg model.
+Each window has sixteen past observations and eight fu-
+ture queries on a nominal 10 Hz grid, with stride eight be-
+tween windows. The past spans 1.5 seconds between end-
+−1.5
+−1.0
+−0.5
+0.0
+0.5
+Time from latest prefix sample (s)
+−0.5
+0.0
+0.5
+1.0
+Left ankle x (torso units)
+Observed ankle
+Persistence
+Posture transition
+Figure 2: A real normal-window example compares the
+learned current-posture transition and persistence on the
+same left-ankle x coordinate. Time zero is the latest pre-
+fix sample; the shaded area contains future queries. Coordi-
+nates use prefix-torso units. The example is the first eligible
+window in identifier order, selected without using forecast
+accuracy; it illustrates the task rather than population perfor-
+mance.
+points. Primary error averages all eight future offsets from
+0.1 through 0.8 seconds, rather than only the final offset. We
+select native frames nearest the grid, retain actual decoded
+times, and never call an interpolated joint a measured ob-
+servation. GAVD frames are one-based and decoder indices
+zero-based; conversion occurs once at the decoder boundary.
+Confidence must be at least 0.5. At least 70% of prefix
+and future joints must be observed, and both distal legs must
+pass common target-support gates. The eight predicted joints
+are both knees, ankles, heels, and foot indices. Predictors re-
+ceive fixed future queries from the prefix. Future confidence
+and visibility determine which errors can be evaluated af-
+ter the future arrives. They never select predictions, masks,
+anchors, or prefix normalization. Tests change every future
+coordinate and validity bit while requiring predictions and
+prefix preprocessing to remain unchanged. Future-relative
+target coordinates and evaluation support may change.
+Compact models and controlled masking
+References before larger models
+Persistence repeats each target joint’s latest observed po-
+sition. It is both a short-horizon forecasting reference and
+a measure of how far the future moves from that anchor.
+A damped-velocity reference extrapolates half the latest
+observed rate of change using actual time gaps. Learned
+ridge regressions predict displacement from the same an-
+chor. Ridge regularization limits coefficient magnitude in
+the small training population. We compare own-leg history,
+bilateral history, current bilateral posture, and a separately
+fitted opposite-leg timing control. The timing control applies
+a window-specific shift while retaining the anchor. It changes
+alignment rather than simply renaming feature columns.

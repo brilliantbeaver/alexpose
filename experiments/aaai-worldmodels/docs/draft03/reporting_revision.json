@@ -1,0 +1,15 @@
+{
+  "identity": "draft03-sequence-scale-and-score-visual-revision-v3",
+  "status": "completed_reporting_and_visual_revision",
+  "created_at_utc": "2026-11-16T19:14:59.691989+00:00",
+  "request": "Simplify the main anomaly-ranking presentation, explain the two primary scores in plain language, and preserve the full technical score audit.",
+  "previous_revision": "revisions/before_score_figure_v3/reporting_revision.json",
+  "preserved_snapshot": "revisions/before_score_figure_v3/snapshot_manifest.json",
+  "method_identity": "medwm-reference-masking-v2",
+  "method_and_primary_endpoints_changed": false,
+  "new_posthoc_analysis": "reference-v2-sequence-scale-posthoc-v2 (unchanged from reporting v2)",
+  "presentation": "Move eleven-rule table to appendix unchanged; revise Figure3 to explain the primary movement-only control and locked normal-reference score, show AUROC/conditional intervals and paired differences for both datasets.",
+  "interpretation": "Sequences are the observation units. Shared recording components remain grouped for validation and uncertainty. Unique sequence IDs do not establish independent participants.",
+  "acceptance": "reporting_acceptance.json will identify the exact final visual/reporting revision; earlier reviews remain tied to their original hashes.",
+  "completed_at_utc": "2026-11-16T19:18:47.367505+00:00"
+}

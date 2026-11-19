@@ -1,0 +1,26 @@
+{
+  "identity": "reference-v2-independent-floor-prefit-review-v1",
+  "status": "accepted_before_posthoc_fitting",
+  "reviewer": "/root/v2_reviewer",
+  "reviewed_at_utc": "2026-11-16T17:03:52.222189+00:00",
+  "script_sha256": "b850417c611c88f88eb8b01af632d1b310c2b780cb4de8e81eeaa3c70db6f540",
+  "protocol_sha256": "dac47ab9ca8fad86d0b7b41082244ab504eff1fdbca586ee3ed8fab6c6cf2d96",
+  "independence": "The reviewer authored neither the implementation nor its declaration or original evaluator.",
+  "scope": "Post hoc exploratory internal numerical-floor sensitivity at 1e-10,1e-8,1e-6 using the same fifteen saved forecast components and fixed source rows. No forecast fit, original-file mutation, score-direction change or outer selection.",
+  "checks": [
+    "Inspected isolated evaluator copies and their separate global FLOOR state; original evaluator stays at1e-8.",
+    "Nuisance regressions use the original normal-only memberships, source standardization and alpha selection; held-out/calibration roles remain separated.",
+    "Default replay is required to match original calibration residuals, source scores, primary paired effect and interval within1e-12.",
+    "Every read input is pinned to the declaration and original completed core manifest.",
+    "Synthetic self-test executed with the experiment interpreter: zero/nonzero additive log transforms, exact midrank ties and endpoint smoothing, original global unchanged.",
+    "All declared script and input hashes match current artifacts."
+  ],
+  "self_test_command": "experiments/aaai-worldmodels/.venv/bin/python experiments/aaai-worldmodels/scripts/analyze_reference_floor_sensitivity.py --self-test",
+  "unresolved_blockers": [],
+  "conditions": [
+    "Keep the diagnostic explicitly post hoc after outcome exposure.",
+    "Do not replace the original fixed-floor primary result or choose a favorable floor for a new headline.",
+    "The all-source pair-agreement count is a computational comparison, not independent sample support or a substitute for within-fold AUROC.",
+    "Independent actual-result reconstruction remains required."
+  ]
+}

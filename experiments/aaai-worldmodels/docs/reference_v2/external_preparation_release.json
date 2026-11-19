@@ -1,0 +1,21 @@
+{
+  "identity": "reference-v2-external-preparation-release-v1",
+  "status": "released_before_full_extraction_and_predictive_scoring",
+  "released_at_utc": "2026-11-16T16:26:59.346429+00:00",
+  "authorization": "Coordinator /root reviewed the external adapter, contract, two-recording pilot, loader, and weight checks; released full preparation with the sole heavy-job slot. No predictive efficacy score is permitted in this data stage.",
+  "artifact_hashes": {
+    "worldmodels/v2_external.py": "19e9e9b77bb28e3f8500feea4f9bfa37409e73cf1e04e18d8403387cc59688a6",
+    "tests/test_v2_external.py": "025a8ec6492b4cc2de50fe6016f3a667b270c87fd28a9aade6444106da7ae9e8",
+    "docs/reference_v2/external_contract.md": "635ad015dfbb7267cadfc5db6bce29056b60b031856ec4353d67ecff60153e6a",
+    "docs/reference_v2/data_external_inventory.csv": "b56445c63656801c60a09e9227550c5dfea984e53c0f500796df7cee718594e1",
+    "docs/reference_v2/data_external_summary.json": "e25cf4fa06313e802294aa93ec069819f0c3353926ea5d7f23a87d0ac33e1ce8",
+    "docs/reference_v2/data_external_pilot.json": "87ed4831367ba5edf6e6a3118561a7a5de9d374a236d4c7972c36367081e020c",
+    "artifacts/runs/reference-v2-external-pilot-v1/preparation.json": "e40531d9a7954b2945b00fae48753de5af57e9a3e78a2c1337b9bf3d1f93a464",
+    "artifacts/runs/restart-full10hz-v1/request.json": "12deec349d64ff82eaaf51a401cf2d1f18bb6b4471a186380e82c8e9ca13a250"
+  },
+  "code_revision": "5d829ec882956ad6f76c862a50b8e1cc5918761e",
+  "output": "artifacts/runs/reference-v2-external-v1",
+  "coverage": "All189cataloged files,187metadata-decodable recordings,94codedparticipants beforeposequality; knowninvalids retainedinattrition.",
+  "resource_ceiling_seconds": 3600,
+  "clinical_identity_limit": "Dataset-provided participants and labels; true GAVD participant disjointness not established."
+}

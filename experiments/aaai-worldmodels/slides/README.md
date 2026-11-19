@@ -1,39 +1,51 @@
-# Reference-aware gait anomaly detection
+# Reference-aware gait prediction and anomaly detection
 
-Open [the current illustrated tutorial](iteration02.html) or [the 36-page vector PDF](iteration02.pdf). The deck connects neurological reasoning, the actual GAVD ingestion pipeline, completed results, and the next controlled experiments. Each page marks measured evidence, post hoc diagnostics, or proposed work. The HTML includes full-sentence explanations and links to evidence beneath every slide. [tutorial.html](tutorial.html) opens this deck.
+Open the [current 40-slide illustrated tutorial](reference_v2.html) or its [vector PDF](reference_v2.pdf). [tutorial.html](tutorial.html) opens the current deck. The slides explain the completed `medwm-reference-masking-v2` study in full sentences, with editable diagrams, real observation masks, complete comparison arms, and evidence links beneath each page.
 
-The strongest anomaly result is the declared excess-error score with source AUROC 0.793. The deck also shows that a post hoc negated-persistence control reaches 0.806. Therefore, these results motivate a reference-aware evaluation and stronger motion controls; they do not establish superiority to a movement-only explanation. The current-pose transition also forecasts better than bilateral history. Both findings remain visible beside the favorable results.
+Current-posture prediction reduces held-out normal-source error by 40.8% relative to persistence. This useful forecasting capability is distinct from anomaly ranking: the locked conditional two-sided detector has within-fold source AUROC 0.462, compared with 0.811 for low motion. Frozen external transfer has coded-participant AUROC 0.591 versus 0.762 for the same comparator. The deck retains the paired uncertainty, stronger current-posture forecast, masking controls, and acquisition explanations that determine those findings' meaning.
 
-## Follow the reasoning
+Two added mean-prior controls have their own post hoc analysis identity. Current-posture prediction outperforms both a constant normal future pose and the latest anchor plus normal mean displacement on the same held-out normal sources. Slide 19 marks those outcome-exposed diagnostic comparisons with orange diamonds and preserves their distinction from the original core questions.
+
+## Follow the argument
 
 | Slides | Purpose |
 | --- | --- |
-| 1–4 | Establish the observation-layer contribution and explain what neurological reasoning permits us to test. |
-| 5–12 | Trace the complete inventory, cohort attrition, Ambient ingestion, frame conversion, time grid, joint reference and missingness. |
-| 13–16 | Explain the comparison arms, matched timing control, nested source folds and aggregation. |
-| 17–21 | Show frozen forecast results, paired controls, declared anomaly scores and the post hoc low-motion diagnostic. |
-| 22–30 | Specify confound controls, matched masking alternatives, reliable-cycle requirements, objective checks and normal-only calibration. These experiments are proposed. |
-| 31–36 | Connect the notebook roadmap, expanded GAVD use, generalization requirements and adversarial acceptance checks. |
+| 1–5 | State the contribution, physiological motivation, independent units, and full-inventory attrition. |
+| 6–10 | Explain Ambient ingestion, native frame numbering, the 16-past/8-future contract, body reference, missingness, and hierarchical error. |
+| 11–13 | Define strong forecasting alternatives, the compact posture/velocity/dispersion/support state, and grouped evaluation. |
+| 14–17 | Show the seven masks, real observation support, protected anchors, geometry controls, and shared neural training. |
+| 18–23 | Report forecasting, paired effects, every mask, repeated partitions, and the movement-amount diagnostic. |
+| 24–28 | Explain disjoint calibration and ranking, then display the primary endpoint and every fold. |
+| 29–31 | Report shared observation stresses, view/matching, and feature diagnostics. |
+| 32–37 | Explain external preparation and participant aggregation, complete transfer controls, domain shift, and the pre-score identity sensitivity. |
+| 38–40 | Connect notebooks 20–26, gated extensions, and immutable evidence identities. |
 
-The masking examples preserve the latest target anchor, hide the same number of valid prefix cells, and keep every future target hidden. The anatomical example uses a connected foot region. Its cells are schematic rather than sampled poses. Anatomical masking itself is not claimed as novel; the notes cite MAMP, S-JEPA, ASMa and SLiM where relevant.
+The internal cohort contains 2,815 windows from 456 sequences and 91 source videos, including 29 normal sources. External transfer contains 773 windows from 168 recordings and 90 dataset-coded participants, including 27 normal, 49 osteoarthritis, and 14 Parkinson participants. These are different populations and grouping units; the deck never adds their counts into one sample size.
 
-## What GAVD establishes
+GAVD supports a heterogeneous public-video benchmark, but GAVD alone does not establish patient-disjoint, site-disjoint, or prospective clinical generalization. Source IDs are not verified patient IDs, annotation folders are not independently confirmed diagnoses, and all local normal sources already lie in the five-label scope. External coded grouping adds a different dataset, while age, native frame rate, framing, observation attrition, uncertain identity continuity, and possible undetected overlap still limit clinical claims.
 
-The completed cohort has 2,815 windows from 456 sequences and 91 source videos, including 29 normal sources. The full inventory contains 1,874 sequences and 348 source IDs. The five requested annotations already include every annotated normal source. Additional labels can support a separate transfer study, but exercise, pregnancy and style must not automatically become disease labels.
+## Reproduce the deck
 
-GAVD supports exploratory internal generalization across heterogeneous source videos. It does not establish verified participant separation, independent clinical diagnoses, site-disjoint clinical transportability, treatment response, or safe deployment. More overlapping windows cannot supply those missing forms of evidence. The next study needs a frozen comparison menu and, where accessible, compatible external data with verified participant identities. These limits are explained on the slides and in the [experiment README](../README.md).
-
-## Regenerate and inspect
-
-Editable source is [build_iteration02_slides.py](../scripts/build_iteration02_slides.py). It reads the frozen `restart-dynamics-v1/results.json`, `restart-full10hz-v1/preparation.json`, and `restart-full10hz-v1/inventory.json`. It does not train models, download videos, alter those runs, or overwrite the preserved restart deck.
-
-From the repository root:
+From the repository root, use the experiment's Python 3.12 environment:
 
 ```bash
-experiments/aaai-worldmodels/.venv/bin/python \
-  experiments/aaai-worldmodels/scripts/build_iteration02_slides.py
+experiments/aaai-worldmodels/.venv/bin/python experiments/aaai-worldmodels/scripts/build_reference_v2_slides.py
 ```
 
-The generator exports SVG, PNG and single-page PDF files in [iteration02_images](iteration02_images/), the combined vector PDF, HTML, [narrative source](iteration02_source.json), [input and output manifest](iteration02_manifest.json), and [layout checks](iteration02_layout_checks.json). SVG text remains editable. All 36 pages have been rendered and visually inspected at full size. The validation record describes numerical replay, PDF checks, review corrections and remaining limitations in [iteration02_visual_review.md](iteration02_visual_review.md).
+The generator refuses missing, incomplete, synthetic-only, or hash-mismatched inputs. It requires these completed local runs:
 
-The earlier [restart deck](restart.html), [restart PDF](restart.pdf), and [original JEPA tutorial](tutorial_before_restart.html) remain preserved. Read [draft02](../docs/draft02/README.md), the [research instruction](../../../notes/aaai-worldmodels/05-iterate-02-INSTR.md), and the [literature review](../docs/iteration02/literature_and_masking.md) for the current manuscript and next execution contract.
+- `reference-v2-core-v1` supplies forecasting, all mask/seed candidates, separate calibration families, and source-level ranking.
+- `reference-v2-transfer-v1` supplies frozen external scoring without target-domain adaptation.
+- `reference-v2-robustness-v1` supplies shared corruption, view/matching, and feature diagnostics.
+- `reference-v2-identity-sensitivity-v1` supplies the separately declared participant exclusion analysis.
+- `reference-v2-mean-prior-posthoc-v1` supplies the added outcome-exposed constant-pose and mean-displacement controls.
+
+The audited cohort and prepared pose caches must also be available for the real-mask example. The example uses the first source, sequence, and window in lexical identity order with mask seed 27. The calibration diagram uses the first component in the frozen calibration index. Neither illustration is selected for model performance. The generator fits no model, downloads no media, and never changes run artifacts.
+
+The [source generator](../scripts/build_reference_v2_slides.py) produces [editable SVG, PDF, and PNG pages](reference_v2_images/), the [complete slide source](reference_v2_source.json), the HTML navigator, and the PDF. [The manifest](reference_v2_manifest.json) pins generator, input, and output hashes. [Numeric checks](reference_v2_numeric_checks.json) independently replay the four principal ranking points with scikit-learn and every normal eight-offset forecast mean from source rows. [Layout checks](reference_v2_layout_checks.json) test rendered text against its declared containers. [The visual review](reference_v2_visual_review.md) records actual page inspection separately from programmatic checks.
+
+The 95% intervals resample source components or coded participants and condition on saved fitted models. They do not include full model-development uncertainty, complete retraining variation, unknown participant overlap, or clinical measurement error. Seven or eight normal calibration sources give coarse empirical ranks, without automatic conformal coverage or a supported clinical threshold.
+
+## Preserved decks
+
+The [iteration02 HTML](iteration02.html), [iteration02 PDF](iteration02.pdf), [restart HTML](restart.html), [restart PDF](restart.pdf), and [pre-restart entry point](tutorial_before_restart.html) retain their original study identities and evidence boundaries. The iteration02 masking diagrams were proposals; the new reference-v2 deck reports a completed comparison under its own identity. Historical results and proposed extensions are not relabeled as new executed evidence.

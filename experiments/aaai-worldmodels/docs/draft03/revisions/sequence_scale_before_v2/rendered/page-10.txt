@@ -1,0 +1,160 @@
+Every declared forecast
+MSE x1,000
+95% interval
+Bilateral history
+80.63
+[62.73, 99.97]
+Damped velocity
+575.19
+[375.68, 828.96]
+Anatomical tubes
+79.62
+[62.21, 98.26]
+Anatomical tubes (seed 27)
+82.54
+[64.42, 102.23]
+Anatomical tubes (seed 41)
+81.48
+[63.92, 100.32]
+Anatomical tubes (seed 73)
+84.44
+[65.26, 104.58]
+Motion-balanced masking
+79.16
+[61.28, 98.76]
+Motion-balanced masking (seed 27)
+82.93
+[64.59, 102.80]
+Motion-balanced masking (seed 41)
+83.01
+[64.70, 102.81]
+Motion-balanced masking (seed 73)
+82.22
+[63.68, 102.67]
+Motion-focused masking
+77.75
+[60.31, 96.82]
+Motion-focused masking (seed 27)
+82.76
+[64.76, 102.48]
+Motion-focused masking (seed 41)
+79.92
+[62.56, 98.93]
+Motion-focused masking (seed 73)
+82.17
+[63.73, 102.48]
+No prefix masking
+78.28
+[59.59, 99.44]
+No prefix masking (seed 27)
+83.66
+[63.75, 105.81]
+No prefix masking (seed 41)
+80.60
+[61.70, 101.66]
+No prefix masking (seed 73)
+81.41
+[61.82, 103.12]
+Mask-pattern diagnostic
+138.46
+[111.44, 166.94]
+Random joint groups
+80.04
+[62.41, 99.08]
+Random joint groups (seed 27)
+85.00
+[66.01, 105.43]
+Random joint groups (seed 41)
+81.67
+[64.02, 100.59]
+Random joint groups (seed 73)
+82.75
+[64.45, 102.49]
+Time blocks
+78.43
+[61.07, 97.03]
+Time blocks (seed 27)
+83.22
+[64.52, 102.92]
+Time blocks (seed 41)
+81.25
+[63.57, 100.14]
+Time blocks (seed 73)
+81.65
+[63.26, 101.41]
+Uniform masking
+77.61
+[60.12, 96.69]
+Uniform masking (seed 27)
+83.12
+[64.14, 103.63]
+Uniform masking (seed 41)
+79.12
+[61.70, 98.30]
+Uniform masking (seed 73)
+82.57
+[64.15, 102.51]
+Own-leg history
+81.74
+[64.25, 100.33]
+Persistence
+121.26
+[93.84, 149.90]
+Current-posture transition
+71.74
+[55.71, 88.79]
+Posture plus velocity
+76.93
+[60.96, 93.49]
+Shifted opposite history
+86.54
+[66.90, 107.95]
+Current-posture transition (legacy)
+71.69
+[55.73, 88.66]
+Random-feature ridge
+105.20
+[85.17, 125.55]
+Normal mean pose (post hoc)
+108.98
+[89.97, 130.25]
+Mean displacement (post hoc)
+122.35
+[92.71, 152.75]
+Table 4: Complete candidate registry at the primary eight-query horizon, including all optimization seeds and the mask-pattern
+diagnostic. Lower values are better. Seeds do not multiply the 29 normal source groups.
+Physiology, robustness, and observation
+quality
+The timing control moves coordinate-validity pairs together
+and preserves the current anchor. A fixed global feature per-
+mutation would be inadequate because linear regression can
+absorb it. A separately fitted window-specific shift and an in-
+ference shift are therefore distinct controls. Any effect reflects
+dependence within this representation; it is not an estimate of
+basal-ganglia function, muscle modules, or selective motor
+control.
+Dropout removes 40% of eligible non-protected prefix to-
+kens. Coordinate noise has standard deviation 0.02 prefix-
+torso units. Patterns are fixed by window ID and shared
+across models; future targets and support stay unchanged.
+Opposite-leg stress changes one leg’s past when predicting
+the other, preserving its latest observed anchor. The source
+table retains all four conditions and seven models, including
+observed-prefix replays.
+The source-identification diagnostic uses thirteen normal
+sources in outer fold zero’s training pool with at least two
+annotated sequences. A fixed regularized classifier learns
+identity from the first sequence and evaluates the others. The
+forecaster already used these sources, and sequences may
+overlap in physical frames. This is a recording-information
+diagnostic rather than biometric validation or new-person
+generalization. Random encoder features are retained; the
+learned features show no source-invariance advantage.
+Original
+GAVD
+videos
+remain
+under
+data/videos-gavd, with verified paths reused without
+duplication. Source and sequence IDs, media hashes, frame
+origins, decoder times, joint order, dimensions, confidence,

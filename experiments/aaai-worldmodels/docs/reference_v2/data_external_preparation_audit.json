@@ -1,0 +1,148 @@
+{
+  "identity": "reference-v2-external-preparation-reconstruction-v1",
+  "status": "complete",
+  "preparation_sha256": "726b8c23ccfc4aecb1c5eac4a1cccb6c2129193f1c8b7e500f732c2202cab4c8",
+  "identity_sha256": "1216ed14d01407739044ea7ea3e6ed0802a7dcf7867e0a469eddc4c6928de98a",
+  "auditor_sha256": "0fbb02ff98ce7739838e7a7d7649f373d830f6c429328bf6617bdfd2c23171b2",
+  "recordings_verified": 187,
+  "requested_pose_frames": 17138,
+  "actual_pose_calls": 17138,
+  "windows_reconstructed": 773,
+  "maximum_absolute_coordinate_error": 0.0,
+  "participant_grouping_verified": true,
+  "native_frame_origin_verified": true,
+  "actual_times_verified": true,
+  "common_support_and_70pct_gates_verified": true,
+  "by_label": [
+    {
+      "label": "normal",
+      "catalog_recordings": 60,
+      "catalog_participants": 30,
+      "metadata_decodable_recordings": 59,
+      "decodable_participants": 30,
+      "retained_recordings": 49,
+      "retained_participants": 27,
+      "candidate_windows": 218,
+      "retained_windows": 84,
+      "rejection_counts": {
+        "future_quality_below_0.7": 43,
+        "prefix_quality_below_0.7": 85,
+        "missing_prefix_torso_scale": 6
+      }
+    },
+    {
+      "label": "osteoarthritis",
+      "catalog_recordings": 100,
+      "catalog_participants": 50,
+      "metadata_decodable_recordings": 100,
+      "decodable_participants": 50,
+      "retained_recordings": 92,
+      "retained_participants": 49,
+      "candidate_windows": 1062,
+      "retained_windows": 483,
+      "rejection_counts": {
+        "future_quality_below_0.7": 141,
+        "prefix_quality_below_0.7": 311,
+        "missing_prefix_torso_scale": 119,
+        "common_distal_target_support": 8
+      }
+    },
+    {
+      "label": "parkinsons",
+      "catalog_recordings": 29,
+      "catalog_participants": 15,
+      "metadata_decodable_recordings": 28,
+      "decodable_participants": 14,
+      "retained_recordings": 27,
+      "retained_participants": 14,
+      "candidate_windows": 405,
+      "retained_windows": 206,
+      "rejection_counts": {
+        "future_quality_below_0.7": 46,
+        "missing_prefix_torso_scale": 34,
+        "prefix_quality_below_0.7": 117,
+        "common_distal_target_support": 2
+      }
+    }
+  ],
+  "participants_without_model_support": [
+    "KOA_MD_002",
+    "NM_001",
+    "NM_008",
+    "NM_025",
+    "PD_SV_002"
+  ],
+  "finite_prefix_covariate_participants": 90,
+  "native_fps_by_label": [
+    {
+      "label": "normal",
+      "fps": 0.0,
+      "recordings": 1
+    },
+    {
+      "label": "normal",
+      "fps": 30.0,
+      "recordings": 51
+    },
+    {
+      "label": "normal",
+      "fps": 50.0,
+      "recordings": 8
+    },
+    {
+      "label": "osteoarthritis",
+      "fps": 30.0,
+      "recordings": 2
+    },
+    {
+      "label": "osteoarthritis",
+      "fps": 50.0,
+      "recordings": 98
+    },
+    {
+      "label": "parkinsons",
+      "fps": 0.0,
+      "recordings": 1
+    },
+    {
+      "label": "parkinsons",
+      "fps": 30.0,
+      "recordings": 14
+    },
+    {
+      "label": "parkinsons",
+      "fps": 50.0,
+      "recordings": 14
+    }
+  ],
+  "native_fps_limit": "Normal and abnormal recordings have different native-FPS distributions. Nominal10Hz sampling equalizes requested time gaps but does not remove acquisition, blur, duration, or framing confounding.",
+  "actual_frame_interval_seconds": [
+    0.09999999999999787,
+    0.10000000000000142
+  ],
+  "final_horizon_seconds": [
+    0.7999999999999989,
+    0.8000000000000007
+  ],
+  "visual_material": {
+    "status": "generated_before_model_scoring; visual_review_required",
+    "participants": 94,
+    "frames": 282,
+    "pages": [
+      "contact-01.png",
+      "contact-02.png",
+      "contact-03.png",
+      "contact-04.png",
+      "contact-05.png",
+      "contact-06.png",
+      "contact-07.png",
+      "contact-08.png"
+    ],
+    "selection": "All coded participants with a metadata-decodable recording; first recording by video_id and first/middle/last sampled frame.",
+    "limitation": "Still frames cannot verify person continuity, diagnosis, or every gait cycle; no GAVD person-box gate is available."
+  },
+  "seconds": 3.192442124709487,
+  "model_efficacy_scores_inspected": 0,
+  "confidence_summary_note": "External prefix_mean_confidence and future_mean_confidence average raw33 BlazePose confidence values, whereas support gates/missingness use the declared16-joint subset. Do not directly compare those descriptive fields to a GAVD16-joint confidence field. Predictor inputs and nuisance covariates use their declared masks and are unaffected.",
+  "limit": "Replay uses the same normalization API. It validates artifact construction, not independent clinical truth or full-duration identity tracking."
+}

@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "command": "experiments/aaai-worldmodels/.venv/bin/python -m pytest -c experiments/aaai-worldmodels/pyproject.toml experiments/aaai-worldmodels/tests/test_v2_runner.py experiments/aaai-worldmodels/tests/test_v2_transfer.py experiments/aaai-worldmodels/tests/test_v2_robustness.py -q",
+  "passed": 16,
+  "seconds": 18.58,
+  "note": "After the final cohort-identity freeze guard; includes full synthetic staged replay. No real outer fits or efficacy scores."
+}

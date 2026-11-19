@@ -1,0 +1,26 @@
+{
+  "status": "software_and_notebook_checks_passed",
+  "tests": {
+    "command": ".venv/bin/python -m pytest -c pyproject.toml tests -q",
+    "passed": 124,
+    "seconds": 23.68,
+    "log": "artifacts/reference-v2-tests.log",
+    "log_sha256": "99a45fdddece6bc1308b5b927fb45cc5bb7320746eb55c030af9ada1389a0498"
+  },
+  "scientific_reconstruction": "Independent reviewer artifacts/reference-v2-independent-review/core_results_checks.json, external_results_checks.json, robustness_results_checks.json",
+  "scope": "The test suite checks code and scientific invariants. It is not the evidence for completed experiment performance.",
+  "notebooks": {
+    "count": 7,
+    "code_cells": 43,
+    "input_hashes": 1958,
+    "execution_record": "docs/reference_v2/notebook_execution.json"
+  },
+  "manuscript": {
+    "body_pages": 7,
+    "total_pages": 11,
+    "tables_exactly_rebuilt": 6,
+    "svg_figures_exactly_rebuilt": 5,
+    "pdf_sha256": "f0c4af0ebd05ee710fbd1ef2b6e26755331ebc58b48ce352ad50e3f7c4f6f760"
+  },
+  "independent_acceptance": "docs/reference_v2/final_acceptance.json"
+}
