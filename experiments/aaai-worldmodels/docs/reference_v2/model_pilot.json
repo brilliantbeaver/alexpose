@@ -1,0 +1,277 @@
+{
+  "identity": "reference-v2-model-development-health-pilot-v1",
+  "purpose": "normal-training-only timing, numerical health and capacity; no held-out efficacy or anomaly evaluation",
+  "source_run": "restart-dynamics-v1",
+  "normal_training_sources": [
+    "-0wbleNgAwg",
+    "3FXUw98rrUY",
+    "3KnFt8bH3tE",
+    "4KU6G7Iv8ZM",
+    "DfRhvdCiUJk",
+    "EHx08gSNfxQ",
+    "EHymg4AGMJs",
+    "PAeh4qBwsUk",
+    "RMdC8Pa3VbU",
+    "VL0AOiZt_lg",
+    "WpARylM4UYU",
+    "_-Ubl8iD2B0",
+    "aqUuTLh6pHk",
+    "diCVwltkV5M",
+    "gp4H7Z2Vvn0",
+    "hGNKzkCF4J8",
+    "mBAxLr73IHU",
+    "n-O8dHyYIF0",
+    "nXuJIs25z1U",
+    "sk0EU7MNt78",
+    "tUT8Fh1zGKA",
+    "ucZdenbi65k",
+    "yFBy0X0D-w8"
+  ],
+  "excluded_outer_fold": 0,
+  "normal_windows": 318,
+  "runs": [
+    {
+      "config": {
+        "mode": "mlp",
+        "mask_policy": "none",
+        "mask_ratio": 0.4,
+        "seed": 27,
+        "hidden_dim": 32,
+        "steps": 100,
+        "batch_sources": 16,
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "ridge_alpha": 10.0,
+        "mask_banks": 4,
+        "pattern_only": false,
+        "objective": "coordinate"
+      },
+      "training_input_sha256": "57e9a76f181e14184178d24e9fca8151abe6d0354638ca258822f47c1d4c425a",
+      "training_metadata_sha256": "15f5cf99ca776686a420666e64aa0074650bd591ddce5b8d9b4fba87077b0828",
+      "parameter_count": 31936,
+      "seconds": 0.9725897088646889,
+      "history": [
+        {
+          "step": 1,
+          "sampled_source_loss": 0.11117324233055115
+        },
+        {
+          "step": 50,
+          "sampled_source_loss": 0.0651998445391655
+        },
+        {
+          "step": 100,
+          "sampled_source_loss": 0.0682835504412651
+        }
+      ],
+      "diagnostics": {
+        "feature_dimension": 832,
+        "mean_feature_std": 1.1324166391460029,
+        "effective_rank": 7.959747254457838,
+        "initial_mean_feature_std": 0.08993337466287143,
+        "initial_effective_rank": 13.19166922999079,
+        "diagnostic_population": "normal training prefix only",
+        "latent_objective": false,
+        "maximum_absolute_parameter": 0.23290735483169556
+      },
+      "mask_audit": [
+        {
+          "bank": 0,
+          "windows": 318,
+          "hidden_total": 0,
+          "eligible_total": 49833,
+          "partial_final_blocks": 0,
+          "mask_sha256": "cbbb3d5959a009380c2db0328042e2dccf31d05ea21888abc8f2af52dd42a027"
+        }
+      ],
+      "checkpoint": "artifacts/model-development-v2/mlp-none-100-healthdiag.joblib",
+      "checkpoint_sha256": "509a551bf864ebf426d97a8563543ce0e397d7f3b406fadab8af926a8963b29e"
+    },
+    {
+      "config": {
+        "mode": "mlp",
+        "mask_policy": "none",
+        "mask_ratio": 0.4,
+        "seed": 27,
+        "hidden_dim": 32,
+        "steps": 200,
+        "batch_sources": 16,
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "ridge_alpha": 10.0,
+        "mask_banks": 4,
+        "pattern_only": false,
+        "objective": "coordinate"
+      },
+      "training_input_sha256": "57e9a76f181e14184178d24e9fca8151abe6d0354638ca258822f47c1d4c425a",
+      "training_metadata_sha256": "15f5cf99ca776686a420666e64aa0074650bd591ddce5b8d9b4fba87077b0828",
+      "parameter_count": 31936,
+      "seconds": 0.679513749666512,
+      "history": [
+        {
+          "step": 1,
+          "sampled_source_loss": 0.11117324233055115
+        },
+        {
+          "step": 50,
+          "sampled_source_loss": 0.0651998445391655
+        },
+        {
+          "step": 100,
+          "sampled_source_loss": 0.0682835504412651
+        },
+        {
+          "step": 150,
+          "sampled_source_loss": 0.033844243735075
+        },
+        {
+          "step": 200,
+          "sampled_source_loss": 0.022226085886359215
+        }
+      ],
+      "diagnostics": {
+        "feature_dimension": 832,
+        "mean_feature_std": 1.1829783015160926,
+        "effective_rank": 11.00402385635652,
+        "initial_mean_feature_std": 0.08993337466287143,
+        "initial_effective_rank": 13.19166922999079,
+        "diagnostic_population": "normal training prefix only",
+        "latent_objective": false,
+        "maximum_absolute_parameter": 0.27619636058807373
+      },
+      "mask_audit": [
+        {
+          "bank": 0,
+          "windows": 318,
+          "hidden_total": 0,
+          "eligible_total": 49833,
+          "partial_final_blocks": 0,
+          "mask_sha256": "cbbb3d5959a009380c2db0328042e2dccf31d05ea21888abc8f2af52dd42a027"
+        }
+      ],
+      "checkpoint": "artifacts/model-development-v2/mlp-none-200-healthdiag.joblib",
+      "checkpoint_sha256": "6fd8879b85ae8e4d8f0bbe4e1946fc93cfeeb1868e68c8ded0033dc54c6266f6"
+    },
+    {
+      "config": {
+        "mode": "ridge_posture_velocity",
+        "mask_policy": "none",
+        "mask_ratio": 0.4,
+        "seed": 27,
+        "hidden_dim": 32,
+        "steps": 1,
+        "batch_sources": 16,
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "ridge_alpha": 10.0,
+        "mask_banks": 4,
+        "pattern_only": false,
+        "objective": "coordinate"
+      },
+      "training_input_sha256": "57e9a76f181e14184178d24e9fca8151abe6d0354638ca258822f47c1d4c425a",
+      "training_metadata_sha256": "15f5cf99ca776686a420666e64aa0074650bd591ddce5b8d9b4fba87077b0828",
+      "parameter_count": 8320,
+      "seconds": 0.09947987459599972,
+      "history": [],
+      "diagnostics": {
+        "objective": "coordinate ridge; no latent representation",
+        "feature_dimension": 64
+      },
+      "mask_audit": [],
+      "checkpoint": "artifacts/model-development-v2/ridge_posture_velocity-none-1-healthdiag.joblib",
+      "checkpoint_sha256": "e7398fd776929f77384a1f366a78f1210d0746ec90757aee698a9500402bf612"
+    },
+    {
+      "config": {
+        "mode": "mlp",
+        "mask_policy": "anatomical_tubes",
+        "mask_ratio": 0.4,
+        "seed": 27,
+        "hidden_dim": 32,
+        "steps": 100,
+        "batch_sources": 16,
+        "learning_rate": 0.001,
+        "weight_decay": 0.001,
+        "ridge_alpha": 10.0,
+        "mask_banks": 4,
+        "pattern_only": false,
+        "objective": "coordinate"
+      },
+      "training_input_sha256": "57e9a76f181e14184178d24e9fca8151abe6d0354638ca258822f47c1d4c425a",
+      "training_metadata_sha256": "15f5cf99ca776686a420666e64aa0074650bd591ddce5b8d9b4fba87077b0828",
+      "parameter_count": 31936,
+      "seconds": 0.6035681669600308,
+      "history": [
+        {
+          "step": 1,
+          "sampled_source_loss": 0.11117324233055115
+        },
+        {
+          "step": 50,
+          "sampled_source_loss": 0.06786638498306274
+        },
+        {
+          "step": 100,
+          "sampled_source_loss": 0.0793175995349884
+        }
+      ],
+      "diagnostics": {
+        "feature_dimension": 832,
+        "mean_feature_std": 0.9469171912607344,
+        "effective_rank": 5.720128137002076,
+        "initial_mean_feature_std": 0.08106470141688671,
+        "initial_effective_rank": 12.724805305835199,
+        "diagnostic_population": "normal training prefix only",
+        "latent_objective": false,
+        "maximum_absolute_parameter": 0.20769278705120087
+      },
+      "mask_audit": [
+        {
+          "bank": 0,
+          "windows": 318,
+          "hidden_total": 19950,
+          "eligible_total": 49833,
+          "partial_final_blocks": 279,
+          "mask_sha256": "17e1f11a48ce3bd042fae4c730e65883bcf35cb48fa2f5ab07d43d0f5c21c2d4"
+        },
+        {
+          "bank": 1,
+          "windows": 318,
+          "hidden_total": 19950,
+          "eligible_total": 49833,
+          "partial_final_blocks": 288,
+          "mask_sha256": "e3b37be78e598f0ec5b60243efe0742b389c46c0f07dbb9f175a9b1634c60beb"
+        },
+        {
+          "bank": 2,
+          "windows": 318,
+          "hidden_total": 19950,
+          "eligible_total": 49833,
+          "partial_final_blocks": 270,
+          "mask_sha256": "13ca0149dd9c1e9eb046d3c106cc03a84504631b846225ca41d7db5c03111939"
+        },
+        {
+          "bank": 3,
+          "windows": 318,
+          "hidden_total": 19950,
+          "eligible_total": 49833,
+          "partial_final_blocks": 282,
+          "mask_sha256": "8a2e3b9faeb627bf38cf278d73c7ad2095436ab7b75fdf9ab7706763374dd0ba"
+        }
+      ],
+      "checkpoint": "artifacts/model-development-v2/mlp-anatomical_tubes-100-healthdiag.joblib",
+      "checkpoint_sha256": "5dbefb1fbb31e924568b6001aeb67fd7c5e1959705b431c1ed734a8fb3bb59e9"
+    }
+  ],
+  "max_rss_bytes_macOS": 402833408,
+  "code_sha256": {
+    "worldmodels/v2_models.py": "07a3326f06705002429ddd66cbac444583917354603729cf5cdeffc49c711657",
+    "worldmodels/v2_masks.py": "050b08ca75849eb48796f2e79afaf89c8040138fabf61c2b8ea711b3e32f8cd2",
+    "artifacts/model-development-v2/pilot.py": "582eae9201beb717e63bbaea40d035849cadc386df57826f9984c9071f004f67"
+  },
+  "input_sha256": {
+    "artifacts/runs/restart-full10hz-v1/windows.npz": "39e2051e83909558ab6bdf5632145a15e0e529a9e2f9b617f90ce3f7ef7ad2e8",
+    "artifacts/runs/restart-full10hz-v1/windows.csv": "6fcb0c0306bc6def26607bb9f7e15705a2ca41644db6613687d88ae58a1ab4d5",
+    "artifacts/runs/restart-dynamics-v1/cohort.csv": "ed81e82509f1ab26df87d1bf2f4e3b23541f70f961bb5f3fe1f46a024700e86a"
+  }
+}

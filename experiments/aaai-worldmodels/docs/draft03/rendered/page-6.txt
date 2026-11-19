@@ -1,0 +1,89 @@
+0.25
+0.5
+chance ranking
+0.75
+1.0
+perfect
+AUROC (higher is better)
+Future movement
+only
+Forecast +
+normal reference
+0.811
+0.462
+GAVD: 456 gait sequences
+91 recording groups
+0.25
+0.5
+chance ranking
+0.75
+1.0
+perfect
+AUROC (higher is better)
+0.762
+0.591
+External dataset
+90 coded participants
+Does a learned forecast add to simply measuring movement?
+Future movement only
+Higher score when legs move less in the observed future.
+Forecast + normal reference
+Higher score for unusually easy or difficult prediction.
+Difference, forecast minus movement:
+-0.348 [-0.506, -0.191]
+Difference, forecast minus movement:
+-0.172 [-0.357, 0.009]
+Figure 3: Forecast-based scoring does not establish a ranking advantage over movement alone. Both methods score the future
+after it is observed. Dots show AUROC: the probability that an abnormal group ranks above a normal group, with 0.5 indicating
+chance and 1.0 perfect ranking. Left: 456 sequences grouped into 91 recordings (29 normal, 62 abnormal), compared within
+held-out folds. Right: 90 external coded participants (27 normal, 63 abnormal). Lines give conditional 95% group-bootstrap
+intervals; values below each panel give the paired AUROC difference. The learned score allows for past movement and missing
+joints. All eleven rules and pooled metrics remain in the appendix.
+Structured masks do not improve the fixed task
+Uniform masking gives MSE 0.07761, compared with
+0.07962 for anatomical tubes and 0.07916 for motion bal-
+ancing (the masking comparison). With improvement de-
+fined as uniform error minus candidate error, the differences
+are -0.00201 [-0.00426, -0.00002] and -0.00155 [-0.00311,
+-0.00013]. These exploratory comparisons do not support a
+benefit. The tube advantage over geometry-matched random
+groups is 0.00042 [-0.00086, 0.00173], which also does not
+establish an anatomical advantage. Every seed and policy
+remains in the supplementary registry.
+Shared prefix dropout, small coordinate noise, and
+opposite-leg time shifts do not reverse the tube or motion-
+balanced comparison with uniform masking. These pertur-
+bations test observation dependence rather than neurologi-
+cal interventions. Phase, learned-mask, latent-objective, and
+stochastic-future extensions remain deferred under the de-
+clared evidence gates. A broader search after these outcomes
+would be a new study.
+Forecast skill and anomaly ranking separate
+Figure 3 focuses on one question: does using a learned fore-
+cast improve abnormality ranking beyond measuring move-
+ment alone? The movement-only control assigns a higher
+score when the observed future contains less leg movement.
+The forecast-based candidate assigns a higher score when
+prediction is unusually easy or difficult relative to normal
+walking, after allowing for past movement and missing joints.
+Both scores require the future to be observed; neither is a
+prefix-only early warning.
+The forecast-based score has within-fold AUROC 0.462,
+compared with 0.811 for movement alone. Their paired dif-
+ference is -0.348 [-0.506, -0.191]. Matched posture calibra-
+tion also performs weakly, and its paired comparison with
+the larger state does not establish an advantage. Thus the
+present normal reference does not rank annotation-defined
+departures better than the declared movement comparator.
+The appendix retains every score definition and pooled met-
+ric.
+The bilateral excess score has pooled AUROC 0.793, while
+low motion has 0.806. Their within-fold rankings differ be-
+cause those compare only recordings evaluated by the same
+fold model. The favorable excess-error association remains
+compatible with a substantial contribution from movement
+amount. This does not make low motion meaningless: re-
+stricted movement can itself matter clinically. It shows that
+the association alone does not demonstrate additional knowl-
+edge of movement organization.
+Frozen transfer gives candidate AUROC 0.591 and low-

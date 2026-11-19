@@ -1,0 +1,53 @@
+{
+  "identity": "medwm-reference-masking-v2-evaluation-v1",
+  "status": "implemented before new outer-fold outcomes",
+  "primary_candidate_family": "ridge_posture_velocity",
+  "primary_score": "equal mean of three rotation scores A = abs(2*F_C(r)-1), where r = log(source_mse+1e-8)-g(log(prefix_motion+1e-8),prefix_missingness)",
+  "primary_reference": "negative persistence source MSE",
+  "primary_endpoint": "positive-negative-pair-weighted within-outer-fold AUROC difference candidate minus reference",
+  "outer_folds": 5,
+  "outer_fold_seed": 2701,
+  "calibration_rotations": 3,
+  "calibration_seed": "4701 + outer_fold",
+  "nuisance_oof_folds": 3,
+  "nuisance_oof_seed": "4801 + 10*outer_fold + rotation",
+  "predictor_fit_sources_per_rotation": [15, 16],
+  "calibration_sources_per_rotation": [7, 8],
+  "nuisance_oof_predictor_sources": [10, 11],
+  "nuisance_ridge_grid": [0.1, 1, 10, 100],
+  "nuisance_ridge_selection": "leave-component-out normal-source MSE; scaling refitted within each split; ties favor larger alpha",
+  "response": "log source MSE + fixed numerical floor inside logarithm",
+  "numerical_floor": 1e-8,
+  "covariates": ["log prefix motion amplitude", "prefix missingness"],
+  "cdf": "(0.5 + count_less + 0.5*count_equal)/(n_C+1)",
+  "rank_tie_credit": 0.5,
+  "primary_bootstrap": {
+    "draws": 5000,
+    "seed": 5701,
+    "unit": "verified source-relation component",
+    "strata": ["outer fold", "binary label"],
+    "pairing": "same sampled components for candidate and reference"
+  },
+  "forecast_bootstrap": {
+    "draws": 5000,
+    "seed": 5702,
+    "unit": "normal source-relation component",
+    "contrast": "reference minus method MSE"
+  },
+  "normal_distance_covariance_identity_shrinkage": 0.2,
+  "per_row_forecast_provenance_required": true,
+  "normal_reference_and_calibration_sources_disjoint": true,
+  "outer_sources_excluded_from_all_fitting": true,
+  "calibration_sources_excluded_from_nuisance_oof_forecasters": true,
+  "cdf_and_nuisance_do_not_use_abnormal_labels": true,
+  "confirmatory_significance_claim": false,
+  "conformal_coverage_claim": false,
+  "limitations": [
+    "The entire GAVD redevelopment is exploratory after historical outcome exposure.",
+    "The nuisance reference uses forecasts trained on fewer sources than the final rotation forecaster.",
+    "Calibration and outer sources share the identical final forecast and nuisance model, but this does not prove nuisance removal.",
+    "Seven or eight calibration sources produce discrete coarse reference ranks.",
+    "Intervals condition on saved fitted models and omit full retraining variability.",
+    "Source-relation components cannot resolve unverified repeated participants across uploads."
+  ]
+}

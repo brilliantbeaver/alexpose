@@ -1,0 +1,15 @@
+{
+  "identity": "reference-v2-external-visual-identity-sensitivity-declaration-v1",
+  "status": "declared_before_external_efficacy_scoring",
+  "declared_at_utc": "2026-11-16T16:39:38.353483+00:00",
+  "excluded_participant_ids": [
+    "PD_SV_001"
+  ],
+  "primary_population": "Keep the full90participant preparation as primary; add a secondary sensitivity excluding the pre-score visual flag.",
+  "reason": "QA panel094 in001_PD_01_SV contains a close assisting person overlapping the intended walker. Midpoint pose appears on the foreground walker but continuity is uncertain.",
+  "criterion": "Exclude the whole flagged participant only in this sensitivity; retain all other predictions, score directions and primary results.",
+  "external_preparation_sha256": "726b8c23ccfc4aecb1c5eac4a1cccb6c2129193f1c8b7e500f732c2202cab4c8",
+  "visual_review_sha256": "4506ee53f00b7e2975ae8c72e5d0b73e64ff87b96c9090a4d7204748d74472bc",
+  "code_sha256": "8ca62fb2286f953b464c334302cd0da30d0b1831ae7621df285e97e93cce3a76",
+  "limitation": "This changes severe-Parkinson coverage and must not replace the complete primary analysis."
+}

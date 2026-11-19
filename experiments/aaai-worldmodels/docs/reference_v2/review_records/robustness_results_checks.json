@@ -1,0 +1,84 @@
+{
+  "identity": "reference-v2-independent-robustness-checks-v1",
+  "status": "passed",
+  "reviewed_at_utc": "2026-11-16T16:53:17.704238+00:00",
+  "script_sha256": "dcfb8639cf24d44119530a2e85edef1d38270a31ab580410cd34ce1d898f07ff",
+  "result_sha256": "b009d1e99a4b914b85849c984598160646cdbaf4b5d1baa23a9402322405b6dd",
+  "artifact_hashes_verified": 6,
+  "real_windows_with_mask_and_noise_protection_checked": 2815,
+  "real_target_leg_shift_checks": 5630,
+  "maximum_observed_condition_mse_difference_from_core": 3.2495560409184776e-10,
+  "matched_pairs_recomputed": 20,
+  "matched_sources": 40,
+  "estimable_matched_sources": 38,
+  "paired_matching_endpoint": {
+    "candidate": "calibrated_two_sided",
+    "reference": "low_motion",
+    "estimate": -0.4086021505376344,
+    "candidate_auroc": 0.3548387096774194,
+    "reference_auroc": 0.7634408602150538,
+    "ci95": [
+      -0.6506720430107528,
+      -0.16129032258064513
+    ],
+    "candidate_ci95": [
+      0.1827956989247312,
+      0.543010752688172
+    ],
+    "reference_ci95": [
+      0.5913978494623656,
+      0.9139784946236559
+    ],
+    "folds": [
+      {
+        "fold": 0,
+        "normal": 6,
+        "abnormal": 6,
+        "candidate_auroc": 0.3194444444444444,
+        "reference_auroc": 0.8611111111111112,
+        "difference": -0.5416666666666667,
+        "pairs": 36
+      },
+      {
+        "fold": 1,
+        "normal": 5,
+        "abnormal": 5,
+        "candidate_auroc": 0.42,
+        "reference_auroc": 0.8,
+        "difference": -0.38000000000000006,
+        "pairs": 25
+      },
+      {
+        "fold": 2,
+        "normal": 4,
+        "abnormal": 4,
+        "candidate_auroc": 0.125,
+        "reference_auroc": 0.75,
+        "difference": -0.625,
+        "pairs": 16
+      },
+      {
+        "fold": 4,
+        "normal": 4,
+        "abnormal": 4,
+        "candidate_auroc": 0.5625,
+        "reference_auroc": 0.5,
+        "difference": 0.0625,
+        "pairs": 16
+      }
+    ],
+    "resamples": 5000,
+    "seed": 5706,
+    "unit": "verified source-relation component",
+    "resampling": "paired independently within outer fold and binary label",
+    "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+  },
+  "source_probe_classes": 13,
+  "seconds": 1.4919717921875417,
+  "limits": [
+    "Standalone neural inference can differ from core one-thread arithmetic at float32 rounding.",
+    "The source-ID probe is an optimization/training-pool diagnostic and annotation sequences can overlap.",
+    "View/motion matching changes the population, gives no caliper similarity guarantee, and does not establish causal control.",
+    "No movement stress identifies a neurological intervention or mechanism."
+  ]
+}

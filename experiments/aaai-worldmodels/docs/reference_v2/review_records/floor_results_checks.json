@@ -1,0 +1,20 @@
+{
+  "identity": "reference-v2-independent-floor-result-reconstruction-v1",
+  "status": "passed",
+  "reviewed_at_utc": "2026-11-16T17:10:57.196509+00:00",
+  "script_sha256": "a741176f258b5ce53f9dc84f2e21ba54410e35b006abcb8e0257b8e77ba63a91",
+  "results_sha256": "2408ba4b7dbdb91b40b20fde5985b3e73368fdf95e9e86d43c7f6cc5a0f4c286",
+  "artifact_hashes_verified": 9,
+  "independent_normal_nuisance_refits": 45,
+  "maximum_independent_nuisance_prediction_discrepancy": 8.881784197001252e-16,
+  "source_vectors_reconstructed_bitwise": 3,
+  "all_three_vectors_bitwise_equal_to_original_primary": true,
+  "paired_endpoints_and_intervals_recomputed": 3,
+  "original_evaluator_global_unchanged": true,
+  "seconds": 1.0344362910836935,
+  "limits": [
+    "Explicitly post hoc numerical sensitivity, retaining the failed v1 identity.",
+    "The producer CSV path is required for exact ties; numerical vector tolerance alone is insufficient.",
+    "No forecast refit, new score direction, or primary result replacement."
+  ]
+}

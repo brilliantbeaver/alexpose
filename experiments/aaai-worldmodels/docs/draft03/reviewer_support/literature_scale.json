@@ -1,0 +1,201 @@
+{
+  "identity": "draft03-scale-primary-literature-v1",
+  "checked_date": "2026-11-16",
+  "status": "primary-source verification complete; manuscript acceptance belongs to coordinator/reviewer",
+  "scope": "Dataset scale, sequence meaning, grouped inference, and workshop fit only. No new fitted experiment.",
+  "sources": [
+    {
+      "key": "ranjan2025",
+      "title": "Computer Vision for Clinical Gait Analysis: A Gait Abnormality Video Dataset",
+      "authors": [
+        "Rahm Ranjan",
+        "David Ahmedt-Aristizabal",
+        "Mohammad Ali Armin",
+        "Juno Kim"
+      ],
+      "year": 2025,
+      "publication": "IEEE Access 13:45321–45339",
+      "doi": "10.1109/ACCESS.2025.3545787",
+      "urls": [
+        "https://arxiv.org/html/2407.04190v1",
+        "https://ieeexplore.ieee.org/document/10921672"
+      ],
+      "version": "Full text inspected: arXiv v1, 5 July 2024; 2025 publication metadata confirmed by author repository.",
+      "supports": [
+        "The largest claim in section 3.2 concerns online-accessible abnormal-gait videos annotated by expert clinicians.",
+        "Table 3 reports 1,874 normal and abnormal sequences and 458,116 frames.",
+        "Section 3.2.1 describes expert visual screening, manually bounded uninterrupted sequences, singular walking direction, and at least two gait cycles."
+      ],
+      "does_not_establish": [
+        "A current worldwide largest claim across all gait modalities.",
+        "Independent clinical participants or separate independent diagnoses for every sequence."
+      ],
+      "access": "Versioned full text accessible; direct IEEE page returned only a minimal shell."
+    },
+    {
+      "key": "gavd_author_repository",
+      "title": "GAVD author repository and data dictionary",
+      "authors": [
+        "Rahm Ranjan and GAVD contributors"
+      ],
+      "year": null,
+      "urls": [
+        "https://github.com/Rahmyyy/GAVD"
+      ],
+      "supports": [
+        "The current owner description claims the largest linked collection of clinically annotated gait videos.",
+        "The seq field identifies a unique single-direction gait section.",
+        "Public release supplies annotations and video URLs, not a redistribution of raw video."
+      ],
+      "does_not_establish": [
+        "Statistical independence from assigning a new sequence ID.",
+        "Continued availability of every linked video."
+      ]
+    },
+    {
+      "key": "horsak2020",
+      "title": "GaitRec, a large-scale ground reaction force dataset of healthy and impaired gait",
+      "authors": [
+        "Brian Horsak",
+        "Djordje Slijepcevic",
+        "Anna-Maria Raberger",
+        "Caterine Schwab",
+        "Marianne Worisch",
+        "Matthias Zeppelzauer"
+      ],
+      "year": 2020,
+      "publication": "Scientific Data 7:143",
+      "doi": "10.1038/s41597-020-0481-z",
+      "urls": [
+        "https://www.nature.com/articles/s41597-020-0481-z"
+      ],
+      "supports": [
+        "An open clinical gait resource has 75,732 bilateral trials from 2,084 patients and 211 healthy controls.",
+        "A largest claim must specify modality and counting unit."
+      ],
+      "does_not_establish": [
+        "A matched RGB-video comparator or a reason to replace the present video pipeline."
+      ]
+    },
+    {
+      "key": "adeli2025",
+      "title": "CARE-PD: A Multi-Site Anonymized Clinical Dataset for Parkinson's Disease Gait Assessment",
+      "authors": [
+        "Vida Adeli et al."
+      ],
+      "year": 2025,
+      "publication": "NeurIPS 2025; arXiv:2510.04312v1",
+      "urls": [
+        "https://arxiv.org/abs/2510.04312",
+        "https://neurips2025.care-pd.ca/"
+      ],
+      "supports": [
+        "A separate largest claim concerns publicly available 3D mesh data for Parkinson's disease across nine cohorts and eight clinical centers.",
+        "Current clinical gait benchmarks distinguish modality and site-generalization protocols."
+      ],
+      "does_not_establish": [
+        "Current global superiority of GAVD or direct compatibility with the present sixteen-joint RGB pipeline."
+      ]
+    },
+    {
+      "key": "lazic2010",
+      "title": "The problem of pseudoreplication in neuroscientific studies: is it affecting your analysis?",
+      "authors": [
+        "Stanley E Lazic"
+      ],
+      "year": 2010,
+      "publication": "BMC Neuroscience 11:5",
+      "doi": "10.1186/1471-2202-11-5",
+      "urls": [
+        "https://link.springer.com/article/10.1186/1471-2202-11-5"
+      ],
+      "supports": [
+        "Distinct repeated observations can remain dependent.",
+        "Ignoring nesting can give false precision; an observational count need not equal the independent sample size."
+      ],
+      "does_not_establish": [
+        "The magnitude of within-recording correlation in this study."
+      ]
+    },
+    {
+      "key": "saeb2017",
+      "title": "The need to approximate the use-case in clinical machine learning",
+      "authors": [
+        "Sohrab Saeb",
+        "Luca Lonini",
+        "Arun Jayaraman",
+        "David C Mohr",
+        "Konrad P Kording"
+      ],
+      "year": 2017,
+      "publication": "GigaScience 6(5):1–9",
+      "doi": "10.1093/gigascience/gix019",
+      "urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/28327985/",
+        "https://academic.oup.com/gigascience/article/6/5/gix019/3071704"
+      ],
+      "supports": [
+        "The primary empirical study and simulation compare record-wise and subject-wise validation.",
+        "Generalization assessment must reflect whether future deployment concerns new people or further records from known people."
+      ],
+      "does_not_establish": [
+        "That original-video grouping proves participant-disjoint GAVD evaluation."
+      ],
+      "access": "Indexed primary PubMed abstract and figure descriptions accessible; direct publisher page failed."
+    },
+    {
+      "key": "saravanan2020",
+      "title": "Application of the hierarchical bootstrap to multi-level data in neuroscience",
+      "authors": [
+        "Varun Saravanan",
+        "Gordon J Berman",
+        "Samuel J Sober"
+      ],
+      "year": 2020,
+      "publication": "Neurons, Behavior, Data Analysis, and Theory 3(5):1–25",
+      "urls": [
+        "https://nbdt.scholasticahq.com/article/13927-application-of-the-hierarchical-bootstrap-to-multi-level-data-in-neuroscience",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7906290/"
+      ],
+      "supports": [
+        "Simulation and real-data analyses motivate resampling that respects nested observations."
+      ],
+      "does_not_establish": [
+        "A universal guarantee for every bootstrap or a way to manufacture more independent participants."
+      ]
+    },
+    {
+      "key": "medwm_official",
+      "title": "The First Workshop on Medical World Models: official call",
+      "authors": [
+        "Med-WM organizers"
+      ],
+      "year": 2026,
+      "urls": [
+        "https://med-wm.github.io/aaai27-mwm/"
+      ],
+      "supports": [
+        "Datasets and benchmarks, uncertainty and clinical validation are explicitly in scope.",
+        "Full papers have 6–8 body pages; short/poster/position papers have 2–4, excluding references and appendices.",
+        "AAAI two-column format and single-blind review are specified."
+      ],
+      "does_not_establish": [
+        "Acceptance likelihood or validation of patient-state/intervention simulation by short gait forecasts."
+      ]
+    }
+  ],
+  "recommended_manuscript_wording": "GAVD was introduced as the largest publicly accessible collection of abnormal-gait videos annotated by expert clinicians. It contains 1,874 normal and abnormal walking sequences. Our study evaluates 456 unique annotated walking sequences, using 2,815 forecast windows.",
+  "independence_wording": "A gait sequence is a distinct observational unit. Sequences from the same recording or participant may remain dependent, so related sequences stay together in evaluation and uncertainty estimation.",
+  "largest_claim_status": "Supported as an attributed claim with abnormal-gait RGB/video scope; not verified as a current cross-modality worldwide ranking.",
+  "local_snapshot": {
+    "repository": "https://github.com/Rahmyyy/GAVD",
+    "pinned_annotation_commit": "a87859c881603443f200bcd640663d2c3d7a8136",
+    "retrieved_at_utc": "2026-11-10T07:13:52.291244+00:00"
+  },
+  "limits": [
+    "This was a targeted primary-source check, not an exhaustive 2026 census of all gait datasets.",
+    "Primary sources support the intended sequence definition; the local cohort audit must establish actual turn/view/overlap behavior.",
+    "Clinical visual annotations are meaningful expert labels, but they do not provide this study with patient records or independent diagnostic reassessment.",
+    "No acceptance probability or new p-value is estimated."
+  ]
+}

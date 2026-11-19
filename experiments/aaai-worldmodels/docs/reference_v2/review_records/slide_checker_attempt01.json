@@ -1,0 +1,8 @@
+{
+  "identity": "reference-v2-independent-slide-checker-attempt01",
+  "status": "review_checker_assertion_failed_before_result_write",
+  "time_utc": "2026-11-16T17:50:16.727543+00:00",
+  "checker_sha256": "1beb67962f564536f8a141cda38af77cd82dca08059773ca871e5b86be18cb56",
+  "cause": "The reviewer searched for a literal single-space phrase in wrapped PDF text. Visual page9 correctly contains prefix at line end and normalization on the next line.",
+  "remedy": "Normalize extracted whitespace for semantic phrase checks only. No slide, result, rank, or numerical input changes."
+}

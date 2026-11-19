@@ -1,0 +1,56 @@
+{
+  "identity": "reference-v2-external-v1",
+  "status": "complete",
+  "mode": "bounded_extraction_pilot",
+  "recordings_cataloged": 2,
+  "recordings_processed": 2,
+  "participants_cataloged": 2,
+  "windows": 5,
+  "recordings_retained": 1,
+  "participants_retained": 1,
+  "actual_model_calls_this_invocation": 126,
+  "cache_reuses": 0,
+  "seconds": 5.397699791006744,
+  "data_sha256": "1c9cd76393beff3cd52b1d767339802db0eceb5745bdef405fca7d8c097162d0",
+  "metadata_sha256": "f44b95e2da63675382a4be0d9ef890b9cd2d898e6e3f2023f80e02040ecf4eba",
+  "request_sha256": "5ac3139e597b35cd8410c05b5b6cde51be6cca4639bcfa7e8a73712c22330e3c",
+  "identity_sha256": "f8850010a021bee4a6c29bd623d26e8383420556cbf9e2cf2cebf4f190696ee4",
+  "by_label": [
+    {
+      "label": "osteoarthritis",
+      "windows": 5,
+      "recordings": 1,
+      "participants": 1
+    }
+  ],
+  "source_unit": "coded participant",
+  "sequence_unit": "video recording",
+  "sample_hz": 10.0,
+  "frames": 24,
+  "context_frames": 16,
+  "annotation_box_gate": "not available in external recordings",
+  "evaluation": "No predictive-model scoring or target-domain fitting occurs in this preparation.",
+  "limitations": [
+    "Codes are dataset-provided participant identities; diagnoses are not independently reassessed.",
+    "No bounding-box person gate; full-image first-pose detection can follow the wrong person.",
+    "Metadata-decode failures and quality-dependent attrition change the observed participant population.",
+    "Byte-hash disjointness from GAVD cannot detect a reencoded upload of the same footage or repeated people."
+  ],
+  "preparation_artifact": "experiments/aaai-worldmodels/artifacts/runs/reference-v2-external-pilot-v1/preparation.json",
+  "preparation_sha256": "e40531d9a7954b2945b00fae48753de5af57e9a3e78a2c1337b9bf3d1f93a464",
+  "visual_review": {
+    "panels": 6,
+    "observation": "One apparent walking subject appears in each of two recordings; first and last sampled observations often show entry/exit beyond frame. The normal pilot yields no supported windows under unchanged70percent gates.",
+    "inclusion_changes": 0,
+    "outcome_scores_inspected": 0
+  },
+  "loader_checks": {
+    "default_rejects_pilot": true,
+    "allow_pilot_verifies_hashes": true,
+    "windows_loaded": 5,
+    "decoder_intervals_seconds": [
+      0.1,
+      0.1
+    ]
+  }
+}

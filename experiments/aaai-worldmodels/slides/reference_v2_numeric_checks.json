@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "point_estimate_checks": [
+    {
+      "endpoint": "internal_primary",
+      "replayed": {
+        "candidate_auroc": 0.4623955431754875,
+        "reference_auroc": 0.8105849582172702,
+        "estimate": -0.3481894150417827
+      },
+      "maximum_absolute_error": 0.0
+    },
+    {
+      "endpoint": "internal_matched_posture",
+      "replayed": {
+        "candidate_auroc": 0.4623955431754875,
+        "reference_auroc": 0.3857938718662953,
+        "estimate": 0.07660167130919215
+      },
+      "maximum_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "endpoint": "external_primary",
+      "replayed": {
+        "candidate_auroc": 0.5908289241622575,
+        "reference_auroc": 0.7624926513815403,
+        "estimate": -0.1716637272192828
+      },
+      "maximum_absolute_error": 0.0
+    },
+    {
+      "endpoint": "external_matched_posture",
+      "replayed": {
+        "candidate_auroc": 0.5908289241622575,
+        "reference_auroc": 0.5279247501469724,
+        "estimate": 0.06290417401528514
+      },
+      "maximum_absolute_error": 0.0
+    }
+  ],
+  "normal_forecast_means_replayed": 38,
+  "posthoc_prior_means_replayed": 4,
+  "method": "Independent scikit-learn ranking from saved source/participant rows; no model fitting.",
+  "limitation": "Confidence intervals are displayed from the hash-verified run, not recomputed by this figure generator."
+}

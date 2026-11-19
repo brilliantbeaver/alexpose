@@ -1,0 +1,31 @@
+{
+  "identity": "reference-v2-independent-gavd-visual-review-v1",
+  "status": "completed_postfit_observation_audit_no_cohort_changes",
+  "reviewer": "/root/v2_reviewer",
+  "reviewed_at_utc": "2026-11-16T16:57:35.662749+00:00",
+  "selection_material": "artifacts/runs/reference-v2-cohort-v1/visual_qa/blinded_contact_sheet.png",
+  "selection_material_sha256": "0d22d2061f822bd8732b9ee287fb9526c48dc78f18d63e0ff73ddd9dc931ba8c",
+  "selection_ledger_sha256": "03dccf48f930a35f767d5931553e3df7d8c2d58ac4f46f29c6f1bda09c0e36f6",
+  "coverage": {
+    "sources": 10,
+    "sequences": 10,
+    "stills": 30,
+    "accepted_sequences": 5,
+    "rejected_sequences": 5
+  },
+  "review_order": "Viewed all numbered image panels before opening the stratum/source ledger. The selection was frozen before this inspection. Aggregate performance was already known to the reviewer, so the inspection is partially blinded, not a pre-score identity validation.",
+  "blinded_observations": {
+    "01": "The walker changes apparent scale as the camera distance decreases. Raw points are absent in the far initial still and broadly follow the visible body in the other two; some distal points extend beyond the frame.",
+    "02": "One apparent walker is visible in the three stills, with raw pose unavailable in the midpoint. Still availability alone cannot determine whole-window quality.",
+    "03": "Crowded scene. Raw points select different foreground people across the stills, so continuity with an intended annotated walker is uncertain.",
+    "04": "Two adjacent people. Raw points consistently follow the person at image right rather than the person at image left using an aid. The intended annotated identity must be checked separately.",
+    "05": "One apparent distant walker. Pose is absent in midpoint/end stills, and the final still is darkened.",
+    "06": "One apparent walker approaches the camera. Initial raw points are absent; later points broadly follow the body, with final head and distal boundary truncation.",
+    "07": "A walker using an aid remains visible in three corridor stills. Points broadly follow the body, but a narrow view and limb overlap prevent anatomical validation.",
+    "08": "One apparent background walker is tracked at early/midpoint stills. A cyclist occludes the lower body near the final still; individual joint accuracy remains uncertain.",
+    "09": "Split-screen recording contains two walking views and text overlays. Raw pose is absent in initial/midpoint stills and selects one figure near the end; no single continuous observation stream is visually established.",
+    "10": "One apparent walker is visible through the selected stills. Some foot and distal points deviate from visible outlines; precise joints and clinical state are unverified."
+  },
+  "unblinded_disposition": "Panels03,04,09 are rejected sequences. Their metadata show outside-person-box or missing-pelvis gates, consistent with the obvious identity/split-screen hazards. Panels01,06 are accepted sequences but selected boundary stills are missing; acceptance applies to sufficient contiguous windows, not every frame. Accepted panel08 retains a visible occlusion risk. No new exclusions or efficacy-dependent rule changes are made.",
+  "claim_boundary": "This audit demonstrates review coverage and concrete observation hazards. It does not establish whole-cohort tracking accuracy, diagnosis, or identity validity. The source selection covers only ten of 96 extraction-candidate sources."
+}

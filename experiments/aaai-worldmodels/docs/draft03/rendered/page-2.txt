@@ -1,0 +1,87 @@
+Video pose
+16 joints in 2D
+Actual times
+16 past samples
+Posture or history
+Training masks
+8 future samples
+0.1 through 0.8 s
+Normal training
+Common targets
+Reference errors
+Scores by group
+Visible prefix: 1.5 s between endpoints
+Withheld future queries
+Forecasting skill and abnormality ranking are tested separately.
+Figure 1: The benchmark asks two separate questions: can a model predict future articulation, and does its error identify
+departures beyond simple references? Each GAVD window contains sixteen past and eight future observations at nominal 10
+Hz. Methods use the same evaluation windows and future target support, with their declared past inputs. Future availability
+never conditions a prediction.
+Movement motivation and related work
+Laboratory studies provide reasons to examine how joints
+relate over time. Bilateral gait timing differs in the Parkin-
+son’s disease population studied by Plotnik and colleagues
+(Plotnik, Giladi, and Hausdorff 2007). Studies using muscle
+recordings associate altered coordination complexity with
+post-stroke walking and cerebral palsy (Clark et al. 2010;
+Steele, Rozumalski, and Schwartz 2015). These findings mo-
+tivate tests of timing and multijoint organization. They do
+not give a unique interpretation to a video prediction error.
+Our measurements contain projected joint positions rather
+than muscle activity, verified foot contacts, neural signals, or
+muscle strength. We therefore test observable relationships
+without inferring a neural controller or affected side.
+Human-motion forecasting already uses simple references
+such as repeating the latest pose, which can be strong at
+short horizons (Martinez, Black, and Romero 2017). Gait-
+specific self-supervised detection also predates this work
+(Duan, Wan, and Zhao 2024). Our question concerns the
+additional evidence needed to interpret forecasting as an
+abnormality measure under heterogeneous video observa-
+tions. We do not compare headline scores across studies that
+use different cohorts, labels, pose formats, or supervision. A
+classifier adapted with condition labels answers a different
+question from a predictor fitted only on normal recordings.
+Masking deliberately hides observed input during training.
+It can discourage a model from relying on a nearby measure-
+ment that makes a task too easy. VideoMAE uses temporal
+tubes in video representation learning (Tong et al. 2022).
+MAMP uses motion-informed masking for skeletal action
+representations (Mao et al. 2023). S-JEPA predicts learned
+numerical summaries of withheld observations rather than
+their coordinates; a separate target encoder produces the sum-
+maries that guide learning (Abdelfattah and Alahi 2024). A
+small summary-matching loss alone cannot establish a useful
+representation because an encoder could discard information.
+Recent skeleton methods make the relevant precedents es-
+pecially clear. The revised SLiM method uses connected
+anatomical tubes, while ASMa combines complementary
+motion and spatial masking (Do et al. 2026; Anand et al.
+2026). Our policies adapt these ideas to sixteen intermit-
+tently observed joints and a small normal reference popu-
+lation. They change the input to one coordinate predictor
+rather than reproduce those larger action-recognition sys-
+tems. This design tests the proposed information constraints
+before changing the representation objective or increasing
+model size.
+Videos, joints, and prediction targets
+Internal and external populations
+The complete GAVD inventory contains 1,874 annotation-
+defined walking sequences. We rebuild the local inventory
+from the condition folders, excluding the pinned provenance
+copy from counts (Ranjan et al. 2025). Our five gait anno-
+tations, normal, parkinsons, stroke, cerebral palsy, and myo-
+pathic, provide 666 sequences. Available media cover 652 se-
+quences, and preserving two known recording-reference ex-
+clusions leaves 641 extraction candidates. Fixed observation-
+quality and common-target gates retain 456 sequences, in-
+cluding 141 normal sequences, which yield 2,815 forecasting
+windows. Table 1 reports sequence coverage first and gives
+the associated recording groups for statistical interpretation.
+We process complete eligible annotation spans through ver-
+ified pose caches rather than use only the beginning of each
+walking sequence.
+The 456 sequences originate from 91 original recordings.
+The normal reference consists of 141 sequences from 29
+recording groups. All 291 annotated normal sequences, dis-
+tributed across 32 original recordings, already fall within the

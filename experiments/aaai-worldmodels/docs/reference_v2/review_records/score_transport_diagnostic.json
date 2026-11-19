@@ -1,0 +1,60 @@
+{
+  "identity": "reference-v2-independent-score-transport-diagnostic-v1",
+  "status": "confirmed_exact_producer_path_required",
+  "reviewed_at_utc": "2026-11-16T17:07:52.243392+00:00",
+  "input_sha256": {
+    "calibrated_source_scores.csv": "72b736105c4de3417528f83379abdb55cd1775bc65fa33a30a60c87441cfc13f",
+    "source_scores.csv": "ea80b86d422d6f578cde2ef76edf9c99b0b3c65638c2a4be7cea722ab86034d9",
+    "results.json": "82484bbf2db8d0f98f24e6c387c0ed8899eac1a7110437b84377590ef0ed3e3d"
+  },
+  "rows": [
+    {
+      "path": "original_calibration_default_parser",
+      "candidate_auroc": 0.4623955431754875,
+      "difference": -0.3481894150417827,
+      "difference_ci95": [
+        -0.5055710306406686,
+        -0.19080779944289694
+      ],
+      "different_source_values": 0,
+      "max_abs_score_difference": 0.0
+    },
+    {
+      "path": "original_calibration_round_trip_parser",
+      "candidate_auroc": 0.46518105849582175,
+      "difference": -0.3454038997214484,
+      "difference_ci95": [
+        -0.5041782729805014,
+        -0.18802228412256267
+      ],
+      "different_source_values": 27,
+      "max_abs_score_difference": 6.938893903907228e-17
+    },
+    {
+      "path": "final_source_default_parser",
+      "candidate_auroc": 0.4623955431754875,
+      "difference": -0.3481894150417827,
+      "difference_ci95": [
+        -0.5055710306406686,
+        -0.19080779944289694
+      ],
+      "different_source_values": 0,
+      "max_abs_score_difference": 0.0
+    },
+    {
+      "path": "final_source_round_trip_parser",
+      "candidate_auroc": 0.4623955431754875,
+      "difference": -0.3481894150417827,
+      "difference_ci95": [
+        -0.5055710306406686,
+        -0.19080779944289694
+      ],
+      "different_source_values": 0,
+      "max_abs_score_difference": 0.0
+    }
+  ],
+  "default_parser_roundtrip_recovers_frozen_source_vector_bitwise": true,
+  "cause": "The source-level tail scores are coarse rational ranks. Machine-precision differences change exact ties. The original runner writes and parses the calibration ensemble CSV before computing the published endpoint. Its persisted final source vector and metric remain reproducible with that declared path.",
+  "disposition": "Preserve original primary artifacts. The failed post hoc floor replay is a separate failed identity; its successor must reproduce the exact producer transport path and bitwise baseline vector, without arbitrary rounding or a new favorable tie rule.",
+  "claim_boundary": "Numerical replay of raw tails to a tolerance alone is insufficient to prove identical ranking under discrete empirical scores."
+}

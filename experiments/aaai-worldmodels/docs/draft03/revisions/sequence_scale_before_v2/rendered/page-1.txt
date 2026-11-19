@@ -1,0 +1,91 @@
+Separating Movement Prediction from Gait Anomaly Detection: A
+Reference-Controlled Benchmark
+AlexPose Research Team
+Author names and affiliations to be confirmed before submission
+Abstract
+A compact model can predict future leg positions well without
+providing a better measure of gait abnormality. We demon-
+strate this distinction in a benchmark for movement obser-
+vations in medical world models. Models learn only from
+videos annotated as normal and predict eight future observa-
+tions from sixteen past observations. The internal evaluation
+contains 2,815 windows from 456 sequences and 91 GAVD
+source videos, including 29 normal sources. A learned transi-
+tion from current posture reduces normal-source forecast error
+by 40.8% relative to repeating the last pose. We then compare
+six training-mask policies with matched hidden-input budgets
+and an unmasked prefix baseline, keeping the model and fu-
+ture targets fixed. Anatomical and motion-balanced masks do
+not improve on uniform masking. We separately test a locked
+score from the posture-plus-velocity model that asks whether
+a source is easier or harder to predict than expected from its
+movement amount and missing observations. Its within-fold
+AUROC is 0.462, compared with 0.811 for a low-motion base-
+line that ranks smaller displacement over the observed future
+as more abnormal. Frozen transfer to a separate dataset with
+90 coded participants gives 0.591 and 0.762, respectively. The
+contribution is a reproducible benchmark that establishes use-
+ful short-horizon forecasting and makes its limits as evidence
+for anomaly detection explicit.
+Introduction
+Walking depends on the coordinated movement of many
+joints. Changes in that coordination can make movement
+more variable, more restricted, or more dependent on com-
+pensation. A model that learns how normal observations
+evolve could help describe such changes. For a medical world
+model, this would provide a testable observation component:
+a way to represent movement and check whether a short fu-
+ture is consistent with the observed past. Establishing this
+component requires evidence about the measurements and
+the prediction task before stronger claims about patient state
+or intervention are possible.
+Prediction offers an appealing route to gait anomaly de-
+tection. A model can learn from examples annotated as nor-
+mal and assign an unusualness score when a new sequence
+does not follow its expectations. However, an error score can
+reflect several things at once. A nearly stationary leg may
+be easy to predict even when its movement is clinically re-
+stricted. A fast-moving leg may be difficult to predict because
+the camera or pose estimator provides poor observations. A
+model may also forecast well because current posture already
+constrains the short future, without using the detailed order
+of earlier movement.
+These possibilities motivate our central question: can a
+model recognize departures from normal movement orga-
+nization beyond what is explained by movement amount,
+current posture, camera view, and observation quality? We
+address this question with compact models and explicit con-
+trols. We first compare learned forecasting with simple ref-
+erences. We then test whether hiding anatomically or tem-
+porally organized parts of the past improves a fixed forecast-
+ing model. Finally, we evaluate an anomaly score against a
+low-motion comparator and normal-only posture and quality
+controls. Each question has its own endpoint because success
+on one does not imply success on the others.
+The study makes three contributions. First, it provides a re-
+producible observation and evaluation contract that keeps re-
+lated video windows together, isolates the future from model
+inputs, and compares methods on identical observed targets.
+Second, it measures the value of compact state descriptions
+and six budget-matched masking policies and an unmasked
+prefix baseline, identifying a strong current-posture refer-
+ence. Third, it tests reference-aware anomaly scoring inter-
+nally and in frozen transfer, making the gap between useful
+prediction and incremental anomaly ranking explicit. The
+contribution is a controlled benchmark and an empirical find-
+ing about evaluation. Normal-only forecasting, anatomical
+masking, and motion-aware masking already have substan-
+tial precedents.
+Movement motivation and related work
+Laboratory studies provide reasons to examine how joints
+relate over time. Bilateral gait timing differs in the Parkin-
+son’s disease population studied by Plotnik and colleagues
+(Plotnik, Giladi, and Hausdorff 2007). Studies using muscle
+recordings associate altered coordination complexity with
+post-stroke walking and cerebral palsy (Clark et al. 2010;
+Steele, Rozumalski, and Schwartz 2015). These findings mo-
+tivate tests of timing and multijoint organization. They do
+not give a unique interpretation to a video prediction error.
+Our measurements contain projected joint positions rather
+than muscle activity, verified foot contacts, neural signals, or
+muscle strength. We therefore test observable relationships

@@ -1,0 +1,112 @@
+A fixed task with different hidden past observations
+Natural missingness, deliberate training masking, and future
+queries are stored separately. The entire future stays hidden
+in every arm. Additional prefix masks hide 40% of eligible
+non-protected tokens, with deterministic rounding; a token
+is one joint at one time. All observed reference joints and
+each joint’s latest observed point are protected, including the
+target anchors. The unmasked prefix baseline retains every
+observed prefix token and therefore has more visible input.
+It provides a full-input reference for the six budget-matched
+corruption policies.
+Uniform masking samples eligible tokens without replace-
+ment. Time blocks prioritize contiguous intervals. Anatomi-
+cal tubes prioritize connected limb groups over time. Random
+joint groups match the anatomical policy’s group sizes, in-
+tervals, and realized token counts. Motion-balanced masking
+distributes the budget across low- and high-motion prefix to-
+kens, using confidence-qualified differences and actual time
+gaps. A motion-focused comparator favors higher-motion to-
+kens. Both retain a uniform sampling component, so every
+eligible region can be selected. Missing motion is not zero
+motion, and ties have a deterministic rule.
+Missing observations can prevent a complete block or tube
+from reaching the exact budget. The frozen implementation
+then truncates or completes its priority list. These are there-
+fore budget-matched block and tube priorities rather than in-
+variably complete tubes. Four fixed mask banks per window
+make exposure auditable. A mask-pattern-only diagnostic re-
+moves residual coordinate inputs to test the information in
+the chosen locations; the shared persistence anchor is still
+added at the output. Main evaluation uses the full observed
+prefix for every policy, with shared corruptions reserved for
+robustness.
+From forecast error to an anomaly score
+Why a forecast needs an explicit reference
+Mean squared error, or MSE, averages squared differences
+between predicted and observed coordinates. Lower error
+means a closer forecast, in squared prefix-torso units. We
+compare the learned forecast and persistence on exactly the
+same future. Historical excess error is learned MSE minus
+persistence MSE. A negative value favors the learned fore-
+cast, while a higher value has the declared abnormality direc-
+tion. This measures forecast gain but does not automatically
+remove movement amount.
+For one observed coordinate vector, let a be the latest pose,
+y the future, and d the model’s predicted displacement from
+a. The difference in squared errors is:
+Ef −Ep = ∥d∥2 −2⟨d, y −a⟩.
+(1)
+Here E_f and E_p are learned and persistence errors.
+The inner product measures alignment between predicted
+displacement and observed displacement y minus a. The
+identity shows that excess error can vary when movement
+amount changes even if the predicted displacement stays
+fixed. Common-weight averaging preserves that dependence.
+We therefore retain negative persistence error as a low-
+motion comparator: it assigns greater abnormality to less
+displacement from the anchor. This diagnostic direction was
+discovered in earlier outcome inspection and locked as a
+baseline for the continuation. It does not gain preregistered
+historical status.
+A normal reference for movement difficulty
+The prespecified candidate uses the posture-plus-velocity
+ridge forecaster and asks whether a source is easier or harder
+to predict than expected from its past. First, we average fu-
+ture MSE within source. Prefix movement uses valid adjacent
+distal-joint differences divided by actual time gaps. We also
+retain prefix missingness. A small ridge regression g predicts
+log forecast MSE from log prefix movement and missingness
+using out-of-fit normal development predictions. Each such
+prediction belongs to a normal source excluded from the
+model that produced it. Subtracting this expected log error
+gives a scalar residual. Separate normal sources define how
+unusual the residual is:
+rs = log(Ef,s + ϵ) −g(zs),
+As = |2Fcal(rs) −1|. (2)
+The index s denotes a source, E_f,s its hierarchical forecast
+MSE, and epsilon the numerical floor 0.00000001. The two
+values in z_s are log prefix movement and missingness. The
+function F_cal is the smoothed empirical cumulative distri-
+bution of residuals from normal calibration sources. It indi-
+cates where a residual falls in that reference. The absolute-
+value transformation assigns a high score A_s to unusually
+easy or unusually difficult prediction. This scalar residual
+measures forecast difficulty; it is not a signed coordinate
+residual or the historical excess score.
+Normal sources have three separate roles. A development
+group fits the forecaster. Out-of-fit predictions within that
+group fit g. A disjoint normal calibration group supplies
+residuals and is excluded from both fits. The outer test group
+enters none of these operations. We rotate calibration mem-
+bership three times per outer fold and average tail scores.
+The matched posture model uses the same schedule, testing
+whether the larger state adds value under the same refer-
+ence mechanism. These anomaly components use smaller
+forecast-fitting pools than the full-development-pool fore-
+casts reported in Table 2.
+Separation is costly when normal support is small. Each
+calibration set has seven or eight sources, and its forecaster
+uses fifteen or sixteen. Smaller out-of-fit models supply the
+nuisance regression’s training predictions, which may change
+error scale. Empirical ranks are coarse and have no automatic
+conformal coverage guarantee. We therefore report ranking
+rather than a clinical operating threshold. Repeated windows
+cannot increase independent calibration support.
+Evaluation and frozen transfer
+All sequences and windows from a source-relation com-
+ponent stay in one outer fold. Five outer folds retain the
+earlier source partition; three inner normal-source folds
+choose ridge strength and training duration. Selection, scal-
+ing, masks, and calibration do not use abnormal training
+labels. Nevertheless, earlier GAVD outcomes informed the

@@ -1,0 +1,133 @@
+study, so every internal result remains exploratory. A new
+method name or split cannot make reused sources untouched.
+Errors average observed coordinate discrepancies within
+leg, give legs equal window weight, average windows within
+sequence, and average sequences within source. Training
+samples source, sequence, and window hierarchically so long
+videos do not dominate. Mask policies share the model, ob-
+jective, windows, targets, three seeds, and normal-selected
+duration. Neural predictions are averaged across seeds be-
+fore computing error. Seeds measure optimization sensitivity
+rather than additional subjects.
+The primary anomaly endpoint is the paired within-fold
+AUROC difference between the conditional two-sided can-
+didate and low motion. AUROC is the probability that an ab-
+normal group ranks above a normal group, with half credit for
+ties. Fold AUROCs are weighted by their normal-abnormal
+pair counts. We also report equal-fold and pooled rankings.
+Average precision summarizes precision across recall levels
+and depends on abnormal prevalence. Neither metric alone
+is clinical diagnostic accuracy. Secondary controls include
+normal-only posture distance, motion/quality distance, prefix
+movement, missingness, marginal calibration, and matched
+posture calibration.
+Primary 95% intervals use 5,000 paired bootstrap resam-
+ples of groups within fold and binary label. Forecast intervals
+resample the 29 normal components. These intervals condi-
+tion on saved overlapping fits and omit unknown participant
+links and complete pipeline retraining variation. Two ad-
+ditional grouped partitions repeat posture and posture-plus-
+velocity fits as correlated sensitivities. Mask comparisons are
+exploratory; we make no confirmatory significance claims
+across the family.
+External transfer freezes all weights, transforms, nuisance
+regressions, directions, and normal references. For each of
+fifteen calibration components, we average windows within
+recording and recordings within coded participant. Prefix co-
+variates follow the same hierarchy. We then apply the compo-
+nent’s normal-reference transform and average its participant
+tail scores. Aggregation must precede this nonlinear calibra-
+tion. The change from source videos to repeated participant
+recordings may alter score variance. No external participant
+fits or calibrates the model. Paired external intervals use
+5,000 participant bootstrap draws.
+Results
+Current posture supplies useful short-horizon
+prediction
+The current-posture transition has normal-source MSE
+0.07174, compared with 0.12126 for persistence (Table 2).
+Its paired absolute improvement is 0.04952, with condi-
+tional 95% interval [0.03447, 0.06628], a relative reduction
+of 40.8%. This establishes useful prediction relative to the
+tested reference. It does not establish that the model has re-
+covered a physiological state or needs the detailed order of
+past movement.
+Adding velocity and its support summaries gives MSE
+0.07693. Its paired improvement over posture is -0.00519
+[-0.01022, -0.00046], so this state does not earn its extra
+Forecast
+MSE x1,000
+95% interval
+Persistence
+121.26
+[93.84, 149.90]
+Damped velocity
+575.19 [375.68, 828.96]
+Own-leg history
+81.74
+[64.25, 100.33]
+Bilateral history
+80.63
+[62.73, 99.97]
+Current-posture transition
+(legacy)
+71.69
+[55.73, 88.66]
+Current-posture transition
+71.74
+[55.71, 88.79]
+Posture plus velocity
+76.93
+[60.96, 93.49]
+Random-feature ridge
+105.20
+[85.17, 125.55]
+Normal mean pose (post
+hoc)
+108.98
+[89.97, 130.25]
+Mean displacement (post
+hoc)
+122.35
+[92.71, 152.75]
+Table 2: Normal-source forecasting over the eight nominal
+future offsets, 0.1 through 0.8 seconds. Lower MSE is better.
+Units are squared prefix-torso units; values and conditional
+source intervals are multiplied by 1,000. The separately im-
+plemented legacy and current posture transitions are both
+retained.
+information here. Bilateral history also improves on persis-
+tence, but current posture is stronger. The bilateral advantage
+over own-leg history has an interval spanning zero. Both al-
+ternate partitions retain the direction of the posture compari-
+son. These results make current posture a necessary reference
+for any claim about learned temporal organization.
+A model might improve on persistence merely by predict-
+ing an average normal pose at each future query. To check that
+simpler explanation, a separately declared post hoc diagnos-
+tic adds two normal-training intercept priors, without tuning:
+a mean pose for each future query and an anchor plus mean
+displacement. They have MSE 0.10898 and 0.12235, respec-
+tively. Posture improves on the mean-pose prior by 0.03724
+[0.02539, 0.05150]. This supports the value of current po-
+sitions beyond a constant prior within an outcome-exposed
+exploratory comparison.
+Structured masks do not improve the fixed task
+Uniform masking gives MSE 0.07761, compared with
+0.07962 for anatomical tubes and 0.07916 for motion bal-
+ancing (the masking comparison). With improvement de-
+fined as uniform error minus candidate error, the differences
+are -0.00201 [-0.00426, -0.00002] and -0.00155 [-0.00311,
+-0.00013]. These exploratory comparisons do not support a
+benefit. The tube advantage over geometry-matched random
+groups is 0.00042 [-0.00086, 0.00173], which also does not
+establish an anatomical advantage. Every seed and policy
+remains in the supplementary registry.
+Shared prefix dropout, small coordinate noise, and
+opposite-leg time shifts do not reverse the tube or motion-
+balanced comparison with uniform masking. These pertur-
+bations test observation dependence rather than neurologi-
+cal interventions. Phase, learned-mask, latent-objective, and
+stochastic-future extensions remain deferred under the de-
+clared evidence gates. A broader search after these outcomes
+would be a new study.

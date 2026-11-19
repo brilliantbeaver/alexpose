@@ -1,0 +1,148 @@
+{
+  "identity": "reference-v2-notebook-author-verification-v3",
+  "status": "passed_author_checks_ready_for_independent_acceptance",
+  "checked_at_utc": "2026-11-16T19:17:14.637793+00:00",
+  "independence": "Author checks only; a separate reviewer accepts exact final artifacts.",
+  "execution_report_sha256": "e5c9e51f26392fa05d980ca8c91a65a1f24ceea258abaf9329e746c95ced9e29",
+  "generator_sha256": "3387d74fdc360c1988059df1d0ec844ab2e109c9b0ba378006b5e714a18a425b",
+  "verification_script_sha256": "7cbc92b6fa5e9b715f704d5cca745b72902ee42fe99112befb743c7691f94be5",
+  "total_code_cells": 43,
+  "fresh_kernels": 7,
+  "total_kernel_seconds": 30.19677870767191,
+  "unique_input_files": 1973,
+  "direct_run_inputs_observed_in_hash_traces": [
+    "reference-v2-cohort-v1",
+    "reference-v2-core-v1",
+    "reference-v2-floor-posthoc-v1",
+    "reference-v2-floor-posthoc-v2",
+    "reference-v2-identity-sensitivity-v1",
+    "reference-v2-mean-prior-posthoc-v1",
+    "reference-v2-robustness-v1",
+    "reference-v2-sequence-scale-posthoc-v2",
+    "reference-v2-transfer-v1",
+    "restart-full10hz-v1"
+  ],
+  "notebooks": [
+    {
+      "name": "20_cohort_identity_and_coverage.ipynb",
+      "source_sha256": "7d0c5adf7e1fc6c5c14c98cb37176aae9e404927a4ecc60e92106013fc4e2f1d",
+      "executed_sha256": "5db62ca42f6f8f89dcc6d4454b753d9fe4a07329c0c6b93e279cb6fd0dcd14b2",
+      "execution_generator_sha256": "3baf77d9e88fd9d17081ffbb68bd91f42d66a979a9f8cabc3f68e84969d77430",
+      "execution_generator_path": "docs/draft03/revisions/sequence_scale_before_v2/previous_build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 6,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 1888
+    },
+    {
+      "name": "21_reference_scores_and_calibration.ipynb",
+      "source_sha256": "2280578e7fd7e2b161b8d93bcaff1cc71eae70095a1901478d380b7bd931595f",
+      "executed_sha256": "3f3ebb6f57b4d8d66230d3a0064ef874b861798b65c3e823121a06bbb033b10e",
+      "execution_generator_sha256": "3baf77d9e88fd9d17081ffbb68bd91f42d66a979a9f8cabc3f68e84969d77430",
+      "execution_generator_path": "docs/draft03/revisions/sequence_scale_before_v2/previous_build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 6,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 15
+    },
+    {
+      "name": "22_structured_masking_laboratory.ipynb",
+      "source_sha256": "44ea06bccd8f376b001863ca9eb9d9fda8a185cc1e1aa229d26c88f299aa1e90",
+      "executed_sha256": "993ddf5c23ec8e0022e85eb8aaddbaf19b23a44ad8f30a451c9330e5ebac6b30",
+      "execution_generator_sha256": "3baf77d9e88fd9d17081ffbb68bd91f42d66a979a9f8cabc3f68e84969d77430",
+      "execution_generator_path": "docs/draft03/revisions/sequence_scale_before_v2/previous_build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 6,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 14
+    },
+    {
+      "name": "23_compact_models_and_fitting.ipynb",
+      "source_sha256": "6499de36b5ecf59d73088c814f061991cb41548f3741fbb01217364257b4c927",
+      "executed_sha256": "91ba853d39d259c0508203e01165ad0bf2afc710cd5476724399fd17c4c12f18",
+      "execution_generator_sha256": "3baf77d9e88fd9d17081ffbb68bd91f42d66a979a9f8cabc3f68e84969d77430",
+      "execution_generator_path": "docs/draft03/revisions/sequence_scale_before_v2/previous_build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 6,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 33
+    },
+    {
+      "name": "24_source_and_external_evaluation.ipynb",
+      "source_sha256": "eb12d9d8bc886195a5404ec726e82f51fce65a40014861b984b8c0d4fe1a4d67",
+      "executed_sha256": "d3f820a41fde98d5a3d97df165428cb8532d0a241abfea5a956758c211a551aa",
+      "execution_generator_sha256": "3baf77d9e88fd9d17081ffbb68bd91f42d66a979a9f8cabc3f68e84969d77430",
+      "execution_generator_path": "docs/draft03/revisions/sequence_scale_before_v2/previous_build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 6,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 18
+    },
+    {
+      "name": "25_robustness_and_movement_interpretation.ipynb",
+      "source_sha256": "c1496b177d498fb7d976477ac26a597996be6b5891caa02eb3dde11d859f079e",
+      "executed_sha256": "e003595d14eb8ced66cc0afe4bcc1ad2c72b904eccb5dbd6d8f82f5956a9cc8b",
+      "execution_generator_sha256": "3baf77d9e88fd9d17081ffbb68bd91f42d66a979a9f8cabc3f68e84969d77430",
+      "execution_generator_path": "docs/draft03/revisions/sequence_scale_before_v2/previous_build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 6,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 17
+    },
+    {
+      "name": "26_manuscript_evidence_and_claims.ipynb",
+      "source_sha256": "5eddc9424b10e423f5c624ed42131d56909c8b1e9a943cde215dd37a847f7a42",
+      "executed_sha256": "6ed3c1c3e9c3787d5f5041daca8127f67e174515271d58a3daf299b05403f298",
+      "execution_generator_sha256": "3387d74fdc360c1988059df1d0ec844ab2e109c9b0ba378006b5e714a18a425b",
+      "execution_generator_path": "scripts/build_reference_v2_notebooks.py",
+      "fresh_kernel_code_cells": 7,
+      "successful_execution_counts": true,
+      "error_outputs": 0,
+      "source_output_code_matches": true,
+      "all_recorded_inputs_match": true,
+      "input_files": 61
+    }
+  ],
+  "publication_rebuild_sha256": "d9afd190918f4da08e1334df17ca5cf4eb4b5657e678cf0d4c8f3a6059374133",
+  "reporting_identity": "medwm-reference-v2-draft03-evidence-v3",
+  "publication_evidence_sha256": "7e3392160189fca20fb54f3f87114543164cc8faacb234846197aaed07314163",
+  "sequence_sensitivity_identity": "reference-v2-sequence-scale-posthoc-v2",
+  "main_anomaly_chart": {
+    "methods": {
+      "Future movement only": {
+        "internal_score": "low_motion",
+        "external_score": "low_motion"
+      },
+      "Forecast + normal reference": {
+        "internal_score": "calibrated_two_sided",
+        "external_score": "two_sided"
+      }
+    },
+    "metric": "AUROC",
+    "chance": 0.5,
+    "full_appendix_score_rows": 11,
+    "full_score_table_unchanged": true,
+    "forecasts_refitted": false
+  },
+  "publication_tables_rebuilt": 6,
+  "publication_svgs_rebuilt_exactly": 5,
+  "visual_review": "Author inspected full-size teaching plots and actual Ambient frame overlay; independent publication-page review is separate.",
+  "resources": "Notebook23 performs a labeled small normal-only ridge fit. Large-study checkpoints are reused. Peak memory was not measured.",
+  "limitations": [
+    "No demonstration substitutes for held-out performance.",
+    "Generalization limits remain those of the source runs.",
+    "The coordinator ledger is an exact immutable snapshot at execution time."
+  ]
+}

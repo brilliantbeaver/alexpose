@@ -1,0 +1,27 @@
+{
+  "identity": "reference-v2-independent-mean-prior-prefit-review-v1",
+  "status": "accepted_before_posthoc_fitting",
+  "reviewer": "/root/v2_reviewer",
+  "reviewed_at_utc": "2026-11-16T16:59:05.892356+00:00",
+  "protocol_sha256": "76aaab0890c76b7a6db9423102a322848a268cabc19e3298f90b7523ddbde7d0",
+  "script_sha256": "294d966015543ce26d11a693c515241ce0a43634653dd6c6f02c49c05fa248a9",
+  "independence": "The reviewer authored neither this script nor its declaration or core implementation.",
+  "scope": "Two separately declared, untuned, normal-training mean forecast controls; no change to the completed core anomaly candidates or score directions.",
+  "posthoc_status": "The diagnostic was conceived after original internal and external outcomes were known. It remains exploratory despite this pre-execution implementation review.",
+  "checks": [
+    "Inspected normal-only outer fitting membership and exact common target support.",
+    "Verified equal source/sequence/window mass multiplied by per-leg observed-coordinate normalization. Each constant is the intercept optimum for the same masked objective.",
+    "Both priors are retained: absolute future-pose mean and anchor-plus-mean-residual. Neither is selected using outer outcomes.",
+    "Synthetic self-test independently executed with the experiment interpreter: hierarchical absolute mean3.5, residual mean2.5, all128 output intercepts agree with sklearn with zero discrepancy.",
+    "Poisoned held-out future values/support leave fitted means and prefix predictions unchanged; missing target values do not alter fitted statistics.",
+    "All declared input hashes match the completed core and current cohort. Unsupported outputs explicitly refuse execution."
+  ],
+  "self_test_command": "experiments/aaai-worldmodels/.venv/bin/python experiments/aaai-worldmodels/scripts/analyze_reference_mean_prior.py --self-test",
+  "unresolved_blockers": [],
+  "conditions": [
+    "Keep original core fits and outcomes immutable.",
+    "Execute only the declared controls and population without outcome-based extension.",
+    "Retain the post hoc identity in all manuscript, notebook, and slide reporting.",
+    "Independent actual-result reconstruction remains required."
+  ]
+}

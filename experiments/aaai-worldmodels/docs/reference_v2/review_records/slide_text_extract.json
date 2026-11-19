@@ -1,0 +1,485 @@
+{
+  "pdf_sha256": "08bd00fbb57c6955b28bfcb418cc056b8232768e3f8b4f25c855f8f3465f8fdd",
+  "pages": [
+    {
+      "page": 1,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nUseful movement prediction needs reference-aware evaluation.\nCurrent posture reduces normal-source forecast error by 40.8% relative to persistence.\nSource videos and coded participants are different evaluation units and are never pooled into one sample count.\nREFERENCE-AWARE GAIT STUDY V2  |  QUESTION\n01 / 40\nThe scientific question is\nspecific.\nCan the model recognize\ndepartures from normal\norganization beyond movement\namount, current posture,\ncamera view, and pose quality?\nThe study uses strong\nreferences.\nCompact forecasts, matched\nmasks, and a separate normal\nreference are evaluated\nalongside low-motion and\ncurrent-posture controls.\nForecasting and ranking\ndiffer.\nThe GAVD study uses 91 source\nvideos. Transfer uses 90 coded\nparticipants. The locked\ncalibrated score adds no\ndemonstrated ranking\nadvantage over low motion.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Useful movement prediction needs reference-aware evaluation.",
+        "Current posture reduces normal-source forecast error by 40.8% relative to persistence.",
+        "Source videos and coded participants are different evaluation units and are never pooled into one sample count."
+      ]
+    },
+    {
+      "page": 2,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nA movement-observation model has a clear medical role.\nThe workshop welcomes dynamics, uncertainty, validation, and benchmark contributions.\nThe measured endpoint is a short forecast of visible movement. It does not establish disease progression or treatment response.\nREFERENCE-AWARE GAIT STUDY V2  |  QUESTION\n02 / 40\nVideo observations\nBody-relative\nmovement\nShort-term prediction\nTested observation\ncomponent\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "A movement-observation model has a clear medical role.",
+        "The workshop welcomes dynamics, uncertainty, validation, and benchmark contributions.",
+        "The measured endpoint is a short forecast of visible movement. It does not establish disease progression or treatment response."
+      ]
+    },
+    {
+      "page": 3,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nMovement physiology motivates tests, not neural diagnoses.\nImpaired walking can become more variable, more stereotyped, or systematically compensated.\nThe physiological literature motivates both unusually easy and unusually difficult prediction as possibilities. The direction is tested\nempirically.\nREFERENCE-AWARE GAIT STUDY V2  |  QUESTION\n03 / 40\nMotivation\nObservable question\nInterpretation limit\nParkinson gait can alter bilateral\ntiming.\nDoes opposite-leg timing add useful\nprediction?\nProjected joints do not identify\nbasal-ganglia circuitry.\nStroke can change coordination\nand compensation.\nAre left/right forecast patterns\nunusual?\nMuscle-activation modules and affected\nside are not measured.\nCerebral palsy can alter selective\ncontrol.\nDo multijoint departures repeat\nacross sources?\nAge, devices, and view can explain\ndifferences.\nMyopathic gait can reflect\nweakness.\nDo hip-near and foot-near patterns\ndiffer?\nThe video does not measure muscle\nstrength.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Movement physiology motivates tests, not neural diagnoses.",
+        "Impaired walking can become more variable, more stereotyped, or systematically compensated.",
+        "The physiological literature motivates both unusually easy and unusually difficult prediction as possibilities. The direction is tested"
+      ]
+    },
+    {
+      "page": 4,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nIndependent coverage sets the scale of the evidence.\nThousands of overlapping windows provide many observations of a much smaller number of groups.\nGAVD alone does not establish patient-disjoint, site-disjoint, or prospective clinical generalization.\nREFERENCE-AWARE GAIT STUDY V2  |  DATA\n04 / 40\nEvaluation setting\nWindows / sequences or\nrecordings\nIndependent-group proxy\nGAVD, internal grouped\nevaluation\n2,815 windows; 456 sequences\n91 source videos; 29 normal\nKOA-PD-NM, frozen transfer\n773 windows; 168 recordings\n90 coded participants; 27 normal\nWhat the count does not\nprove\nWindows from the same recording\nare related.\nGAVD source IDs are not verified\npatient IDs.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Independent coverage sets the scale of the evidence.",
+        "Thousands of overlapping windows provide many observations of a much smaller number of groups.",
+        "GAVD alone does not establish patient-disjoint, site-disjoint, or prospective clinical generalization."
+      ]
+    },
+    {
+      "page": 5,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe full annotation inventory is audited before fitting.\nUpstream provenance CSVs are excluded from the transformed per-condition counts.\nAll 32 annotated normal source IDs are already in the five-label scope; 29 survive the fixed study gates.\nREFERENCE-AWARE GAIT STUDY V2  |  DATA\n05 / 40\nAll transformed labels\n1,874 sequences / 348 sources\nFive requested annotations\n666 sequences / 103 sources\nMedia-eligible material\n652 sequences / 98 sources\nAfter two preserved identity exclusions\n641 candidates / 96 sources\nPrepared, then common target support\n2,818 \u2192 2,815 windows / 91 sources\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The full annotation inventory is audited before fitting.",
+        "Upstream provenance CSVs are excluded from the transformed per-condition counts.",
+        "All 32 annotated normal source IDs are already in the five-label scope; 29 survive the fixed study gates."
+      ]
+    },
+    {
+      "page": 6,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe ingestion boundary reuses Ambient interfaces.\nThe existing native-frame pose caches are verified and reconstructed rather than extracted again.\nThe conversion occurs exactly once. All 96 source caches and all 2,818 prepared windows were checked against pinned inputs.\nREFERENCE-AWARE GAIT STUDY V2  |  OBSERVATION CONTRACT\n06 / 40\nGAVD annotation\nframe (one-based)\nNative decoder index\n(zero-based)\nRGB image \u2192\nAmbient pose\nTimestamped joints +\nconfidence\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The ingestion boundary reuses Ambient interfaces.",
+        "The existing native-frame pose caches are verified and reconstructed rather than extracted again.",
+        "The conversion occurs exactly once. All 96 source caches and all 2,818 prepared windows were checked against pinned inputs."
+      ]
+    },
+    {
+      "page": 7,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nEvery model sees the same past and predicts the same future.\nA window has 24 samples, 16 selected joints, and two image coordinates per joint.\nNearest-native-frame sampling is nominally 10 Hz. Actual decoded times are retained for motion calculations.\nREFERENCE-AWARE GAIT STUDY V2  |  OBSERVATION CONTRACT\n07 / 40\n0\n5\n10\n15\n16\n23\nVisible prefix\nPredicted future\n16 observations spanning 1.5 seconds\n8 offsets: 0.1 to 0.8 s\nThe primary error averages all eight future offsets.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Every model sees the same past and predicts the same future.",
+        "A window has 24 samples, 16 selected joints, and two image coordinates per joint.",
+        "Nearest-native-frame sampling is nominally 10 Hz. Actual decoded times are retained for motion calculations."
+      ]
+    },
+    {
+      "page": 8,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nBody-relative articulation has explicit units and joints.\nA pose estimates body-joint positions in an image. The diagram labels the joint IDs and reference.\nCoordinates are projected 2D articulation in prefix-torso units. They are not measured 3D angles or physical walking speed.\nREFERENCE-AWARE GAIT STUDY V2  |  OBSERVATION CONTRACT\n08 / 40\n11\n12\n13\n14\n15\n16\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\nA shared body reference defines the input.\nEach frame uses its pelvis center. Scale uses the prefix only.\nFour target joints describe each leg.\nKnee, ankle, heel, and foot index are predicted on each leg.\nJoint numbers follow BlazePose-33.\nThe 16-joint order is explicit. COCO indexing differs.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Body-relative articulation has explicit units and joints.",
+        "A pose estimates body-joint positions in an image. The diagram labels the joint IDs and reference.",
+        "Coordinates are projected 2D articulation in prefix-torso units. They are not measured 3D angles or physical walking speed."
+      ]
+    },
+    {
+      "page": 9,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nMissing observations, training masks, and queries differ.\nA confidence gate describes what was observed; a training mask deliberately removes an observed input.\nConfidence \u2265 0.5 and separate 70% prefix/future support gates are study settings. Imputed values are never measured outcomes.\nREFERENCE-AWARE GAIT STUDY V2  |  OBSERVATION CONTRACT\n09 / 40\nOperation\nMeaning\nWhere it may act\nNatural missingness\nThe pose estimate lacks sufficient\nsupport.\nThe prefix keeps validity indicators; missing\ntargets are not scored.\nArtificial prefix masking\nA policy hides an otherwise observed\nxy token.\nCoordinates are erased before causal filling\nand feature calculation.\nFuture query\nThe predictor is asked for a fixed future\njoint and time.\nQueries do not depend on future confidence or\ntarget values.\nFuture-isolation test\nChange every future coordinate and\nvalidity bit.\nPredictions, masks, anchors, and normalization\nmust stay unchanged.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Missing observations, training masks, and queries differ.",
+        "A confidence gate describes what was observed; a training mask deliberately removes an observed input.",
+        "Confidence \u2265 0.5 and separate 70% prefix/future support gates are study settings. Imputed values are never measured outcomes."
+      ]
+    },
+    {
+      "page": 10,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nEqual-source evaluation prevents long videos from dominating.\nMean squared error averages squared coordinate discrepancies on common observed targets.\nThe outcome has squared prefix-torso units. Repeated windows improve measurement, but do not create independent people.\nREFERENCE-AWARE GAIT STUDY V2  |  EVALUATION\n10 / 40\nCoordinates within\neach leg\nEqual weight for both\nlegs\nWindows, then\nsequences\nEqual source\ncomponents\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Equal-source evaluation prevents long videos from dominating.",
+        "Mean squared error averages squared coordinate discrepancies on common observed targets.",
+        "The outcome has squared prefix-torso units. Repeated windows improve measurement, but do not create independent people."
+      ]
+    },
+    {
+      "page": 11,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nSimple forecasts make a complex claim earn its place.\nEvery reference predicts identical observed targets under the same normal-only grouping.\nThe primary anomaly family was fixed as posture plus velocity before new outer outcomes were viewed.\nREFERENCE-AWARE GAIT STUDY V2  |  MODELS\n11 / 40\nReference\nAvailable information\nWhat it tests\nPersistence / damped velocity\nLatest pose / last measured slope.\nDoes learning add useful prediction?\nCurrent-posture transition\nLatest distal articulation and support.\nIs ordered history necessary?\nPosture + velocity state\nPosture, robust velocity, dispersion, support.\nDoes a small dynamic state help?\nOwn / bilateral / shifted history\nLocal history and matched timing controls.\nDoes aligned opposite-leg context add\nvalue?\nRandom encoder + fitted probe\nAn untrained representation with a normal\nprobe.\nCan generic features explain the\nimprovement?\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Simple forecasts make a complex claim earn its place.",
+        "Every reference predicts identical observed targets under the same normal-only grouping.",
+        "The primary anomaly family was fixed as posture plus velocity before new outer outcomes were viewed."
+      ]
+    },
+    {
+      "page": 12,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nA compact movement state is interpretable and inexpensive.\nThe 64 features describe joint positions and recent changes measured from observed prefix pairs.\nPV denotes the combined posture, velocity, dispersion, and support state. Any improvement must be interpreted for that combined\ninput.\nREFERENCE-AWARE GAIT STUDY V2  |  MODELS\n12 / 40\nCurrent state\nSixteen xy coordinates describe\neight distal joints. Eight\nindicators record whether their\nlatest anchors are known.\nRecent change\nSixteen coordinatewise median\nslopes use the last five prefix\nintervals, divided by actual\nmeasured time gaps.\nDispersion and support\nSixteen median absolute\ndeviations describe slope\nvariation. Eight measured-pair\ncounts record observation\nsupport.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "A compact movement state is interpretable and inexpensive.",
+        "The 64 features describe joint positions and recent changes measured from observed prefix pairs.",
+        "PV denotes the combined posture, velocity, dispersion, and support state. Any improvement must be interpreted for that combined"
+      ]
+    },
+    {
+      "page": 13,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nFive grouped outer folds separate fitting from evaluation.\nOnly normal sources outside the held-out fold fit the forecasting models.\nThree inner normal-source folds select settings. All earlier GAVD exposure still makes this internal study exploratory.\nREFERENCE-AWARE GAIT STUDY V2  |  EVALUATION\n13 / 40\nGroup 0\nGroup 1\nGroup 2\nGroup 3\nGroup 4\nOuter fold 0\nHeld out\nNormal fitting\nNormal fitting\nNormal fitting\nNormal fitting\nOuter fold 1\nNormal fitting\nHeld out\nNormal fitting\nNormal fitting\nNormal fitting\nOuter fold 2\nNormal fitting\nNormal fitting\nHeld out\nNormal fitting\nNormal fitting\nOuter fold 3\nNormal fitting\nNormal fitting\nNormal fitting\nHeld out\nNormal fitting\nOuter fold 4\nNormal fitting\nNormal fitting\nNormal fitting\nNormal fitting\nHeld out\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Five grouped outer folds separate fitting from evaluation.",
+        "Only normal sources outside the held-out fold fit the forecasting models.",
+        "Three inner normal-source folds select settings. All earlier GAVD exposure still makes this internal study exploratory."
+      ]
+    },
+    {
+      "page": 14,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nSeven mask policies test what the model can recover.\nAll policies predict the same hidden future. Only additional training-prefix removal changes.\nM1 and later arms hide 40% of eligible non-protected tokens. The endpoint uses a full naturally observed prefix.\nREFERENCE-AWARE GAIT STUDY V2  |  MASKING\n14 / 40\nArm\nPrefix information deliberately hidden\nReason for the control\nM0\nNone.\nUncorrupted anchor with more visible\ninput.\nM1 / M2\nUniform tokens / four-sample time blocks.\nRandom removal versus short tracking\ngaps.\nM3 / M3-random\nAnatomical groups / shuffled groups of the\nsame sizes.\nAnatomy versus matched mask geometry.\nM4 / M4-focused\nBalanced low/high motion / bounded motion\npreference.\nCompare different motion-informed\npriorities.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Seven mask policies test what the model can recover.",
+        "All policies predict the same hidden future. Only additional training-prefix removal changes.",
+        "M1 and later arms hide 40% of eligible non-protected tokens. The endpoint uses a full naturally observed prefix."
+      ]
+    },
+    {
+      "page": 15,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nReal observation support determines each realized mask.\nThese examples use the first window in lexical source, sequence, and window order.\nGreen is visible; blue-green is protected; peach is artificially hidden; gray is naturally missing; navy is a future query.\nREFERENCE-AWARE GAIT STUDY V2  |  MASKING\n15 / 40\nM0: naturally observed prefix\n16 prefix samples\n8 future queries\n11\n23\n25\n32\nM1: uniform prefix removal\n16 prefix samples\n8 future queries\n11\n23\n25\n32\nM2: exact-budget time priorities\n16 prefix samples\n8 future queries\n11\n23\n25\n32\nM3: exact-budget anatomical priorities\n16 prefix samples\n8 future queries\n11\n23\n25\n32\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Real observation support determines each realized mask.",
+        "These examples use the first window in lexical source, sequence, and window order.",
+        "Green is visible; blue-green is protected; peach is artificially hidden; gray is naturally missing; navy is a future query."
+      ]
+    },
+    {
+      "page": 16,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nMask matching concerns both budget and geometry.\nThe anatomical and random-group policies share group sizes 4, 4, 2, 2 and four-sample time blocks.\nThe example hides 70 of 174 eligible tokens (40.2%). Reference joints and latest anchors remain visible.\nREFERENCE-AWARE GAIT STUDY V2  |  MASKING\n16 / 40\nM3-random: geometry control\n16 prefix samples\n8 future queries\n11\n23\n25\n32\nM4: low/high-motion priorities\n16 prefix samples\n8 future queries\n11\n23\n25\n32\nM4-focused: bounded motion preference\n16 prefix samples\n8 future queries\n11\n23\n25\n32\nM1: shared random reference\n16 prefix samples\n8 future queries\n11\n23\n25\n32\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Mask matching concerns both budget and geometry.",
+        "The anatomical and random-group policies share group sizes 4, 4, 2, 2 and four-sample time blocks.",
+        "The example hides 70 of 174 eligible tokens (40.2%). Reference joints and latest anchors remain visible."
+      ]
+    },
+    {
+      "page": 17,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe neural comparison changes masks without changing the task.\nA small multilayer perceptron predicts coordinate residuals from 832 prefix features.\nThe network has 31,936 parameters. Normal inner validation selects 200, 100, 100, 100, 200 updates across the five folds.\nREFERENCE-AWARE GAIT STUDY V2  |  MODELS\n17 / 40\nCausal prefix features\n+ visibility\n32-unit nonlinear\nlayer\n32-unit nonlinear\nlayer\n128 residual\ncoordinates +\nanchors\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The neural comparison changes masks without changing the task.",
+        "A small multilayer perceptron predicts coordinate residuals from 832 prefix features.",
+        "The network has 31,936 parameters. Normal inner validation selects 200, 100, 100, 100, 200 updates across the five folds."
+      ]
+    },
+    {
+      "page": 18,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nNormal-source forecasts are compared against strong references.\nThe primary forecast error averages eight future offsets on 29 held-out normal sources.\nBars are 95% source-bootstrap intervals conditional on the saved fits. Current posture and random-feature controls remain visible.\nREFERENCE-AWARE GAIT STUDY V2  |  FORECAST RESULTS\n18 / 40\n0.06\n0.10\n0.20\n0.40\n0.80\nSource-average future MSE on a log scale; lower is better\nPersistence\nDamped velocity\nCurrent posture\nPosture + velocity state\nOwn-leg history\nBilateral history\nShifted history\nStatic-posture ridge\nUntrained encoder + probe\n0.1213\n0.5752\n0.0717\n0.0769\n0.0817\n0.0806\n0.0865\n0.0717\n0.1052\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Normal-source forecasts are compared against strong references.",
+        "The primary forecast error averages eight future offsets on 29 held-out normal sources.",
+        "Bars are 95% source-bootstrap intervals conditional on the saved fits. Current posture and random-feature controls remain visible."
+      ]
+    },
+    {
+      "page": 19,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCORE + POST HOC CONTROLS\nPaired controls separate prediction from a normal pose prior.\nPositive effects favor the first method. Orange diamonds are added post hoc mean-prior controls.\nAll 29 normal sources are paired. The mean-prior comparisons were added after outcomes were known, under a separate analysis\nidentity.\nREFERENCE-AWARE GAIT STUDY V2  |  FORECAST RESULTS\n19 / 40\n\u22120.01\n0.00\n0.01\n0.02\n0.03\n0.04\n0.05\n0.06\n0.07\nReference MSE minus method MSE; positive favors the first method\nCurrent posture vs\nPersistence\nPosture + velocity state vs\nCurrent posture\nBilateral history vs\nOwn-leg history\nBilateral history vs\nShifted history\nCurrent posture vs\nNormal mean future pose\nCurrent posture vs\nAnchor + mean displacement\n0.0495\n-0.0052\n0.0011\n0.0059\n0.0372\n0.0506\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "CORE + POST HOC CONTROLS",
+        "Paired controls separate prediction from a normal pose prior.",
+        "Positive effects favor the first method. Orange diamonds are added post hoc mean-prior controls.",
+        "All 29 normal sources are paired. The mean-prior comparisons were added after outcomes were known, under a separate analysis"
+      ]
+    },
+    {
+      "page": 20,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe complete masking result keeps every policy visible.\nThe main endpoint averages three predictions before computing MSE; the pattern diagnostic uses seed 27.\nIdentical future support and full-prefix inference make this a controlled comparison of training corruption.\nREFERENCE-AWARE GAIT STUDY V2  |  MASKING RESULTS\n20 / 40\n0.06\n0.08\n0.10\n0.12\n0.14\n0.16\nNormal-source future MSE; lower is better\nM0: full prefix\nM1: uniform\nM2: time blocks\nM3: anatomical tubes\nM4: motion balanced\nM3 random groups\nM4 motion focused\nMask pattern + anchor\n0.0783\n0.0776\n0.0784\n0.0796\n0.0792\n0.0800\n0.0778\n0.1385\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The complete masking result keeps every policy visible.",
+        "The main endpoint averages three predictions before computing MSE; the pattern diagnostic uses seed 27.",
+        "Identical future support and full-prefix inference make this a controlled comparison of training corruption."
+      ]
+    },
+    {
+      "page": 21,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nStructured masks must beat their specific simple controls.\nMatched geometry tests anatomy; matched motion preference tests how motion is allocated.\nThese exploratory intervals condition on saved fits. The complete comparison is retained even when an interval spans zero.\nREFERENCE-AWARE GAIT STUDY V2  |  MASKING RESULTS\n21 / 40\n\u22120.004\n\u22120.003\n\u22120.002\n\u22120.001\n0.000\n0.001\n0.002\nReference MSE minus structured-mask MSE; positive favors structured mask\nM3: anatomical tubes vs\nM1: uniform\nM3: anatomical tubes vs\nM3 random groups\nM4: motion balanced vs\nM1: uniform\nM4: motion balanced vs\nM4 motion focused\n-0.0020\n0.0004\n-0.0016\n-0.0014\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Structured masks must beat their specific simple controls.",
+        "Matched geometry tests anatomy; matched motion preference tests how motion is allocated.",
+        "These exploratory intervals condition on saved fits. The complete comparison is retained even when an interval spans zero."
+      ]
+    },
+    {
+      "page": 22,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nOptimization seeds and repeated partitions are sensitivity checks.\nThree optimization seeds describe fitting variation. Two alternate source partitions repeat the compact forecast\ncomparison.\nPartition effects use complete refits under the declared normal-only selection. They remain correlated evaluations of the same\nsources.\nREFERENCE-AWARE GAIT STUDY V2  |  SENSITIVITY\n22 / 40\nSensitivity\nMeasured value\nMeaning\nPartition seed 2702\n-0.00647\nPV gain versus current posture.\nPartition seed 2703\n-0.00501\nPV gain versus current posture.\nNeural seeds\n27, 41, 73\nAll per-seed source scores remain in the registry.\nPrimary mask endpoint\nMean of three predictions\nThe ensemble is scored once per source.\nIndependent sample size\n29 normal GAVD source videos\nSeeds and split repeats do not create participants.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Optimization seeds and repeated partitions are sensitivity checks.",
+        "Three optimization seeds describe fitting variation. Two alternate source partitions repeat the compact forecast",
+        "comparison."
+      ]
+    },
+    {
+      "page": 23,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nA small error can reflect quiet motion as well as skill.\nEach point is one held-out GAVD source under the compact full-training forecast.\nThe dotted line is equal forecast error. Colors indicate annotations only after the predictions are frozen.\nREFERENCE-AWARE GAIT STUDY V2  |  ANOMALY SCORING\n23 / 40\nMotion remains a\ncompeting explanation.\nAn almost stationary source can\nhave a small persistence error.\nSubtracting that error does not\nremove every dependence on\nmovement amount.\n0.00\n0.05\n0.10\n0.15\n0.20\n0.25\n0.30\nPersistence MSE\n0.00\n0.05\n0.10\n0.15\n0.20\n0.25\n0.30\nPosture + velocity MSE\nnormal\nabnormal\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "A small error can reflect quiet motion as well as skill.",
+        "Each point is one held-out GAVD source under the compact full-training forecast.",
+        "The dotted line is equal forecast error. Colors indicate annotations only after the predictions are frozen."
+      ]
+    },
+    {
+      "page": 24,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe normal reference is separate from every contributing fit.\nThe same forecast and nuisance reference score C and the held-out outer sources.\nThe nuisance model sees log prefix motion and prefix missingness. C sources are excluded from all contributing fits and selections.\nREFERENCE-AWARE GAIT STUDY V2  |  ANOMALY SCORING\n24 / 40\nR: normal forecast fitting\n15 or 16 sources fit a forecast.\nInner fits on 10 or 11 sources\ncreate out-of-fit errors for the\nnuisance reference.\nC: separate normal\nreference\nThe 7 or 8 C sources enter no\ncontributing fit. Their ranks\ndefine unusual prediction.\nOuter sources: evaluation\nNormal and abnormal sources\nreceive the same frozen\nforecast, nuisance reference,\nand tail transform.\nRotate C three times inside each outer fold, then average the three tail scores. Repeat\nthe complete schedule for the current-posture control.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The normal reference is separate from every contributing fit.",
+        "The same forecast and nuisance reference score C and the held-out outer sources.",
+        "The nuisance model sees log prefix motion and prefix missingness. C sources are excluded from all contributing fits and selections."
+      ]
+    },
+    {
+      "page": 25,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nA two-sided tail asks what is unusual relative to normal.\nThe curve uses the first frozen calibration component, selected by its saved order.\nThe residual is log forecast MSE minus its normal prediction from prefix motion and missingness. Orange ticks mark 8 separate\nnormal references.\nREFERENCE-AWARE GAIT STUDY V2  |  ANOMALY SCORING\n25 / 40\nA high score can mean\nunusually easy or unusually\ndifficult prediction.\nThe small normal reference makes\nranks coarse. The transform has no\nautomatic clinical or conformal\ncoverage guarantee.\n\u22121.5\n\u22121.0\n\u22120.5\n0.0\n0.5\n1.0\n1.5\nLog-error residual after the prefix reference\n0.0\n0.2\n0.4\n0.6\n0.8\n1.0\nTwo-sided empirical tail score\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "A two-sided tail asks what is unusual relative to normal.",
+        "The curve uses the first frozen calibration component, selected by its saved order.",
+        "The residual is log forecast MSE minus its normal prediction from prefix motion and missingness. Orange ticks mark 8 separate"
+      ]
+    },
+    {
+      "page": 26,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe main ranking endpoint compares paired within-fold scores.\nAUROC is the probability that a randomly chosen abnormal source receives a higher score than a normal source.\nAn AUROC of 0.5 is chance ranking. AUROC does not define a diagnostic threshold or clinical operating point.\nREFERENCE-AWARE GAIT STUDY V2  |  EVALUATION\n26 / 40\nPrimary candidate\nThe locked two-sided\nposture-plus-velocity score is\ncompared with negative\npersistence error, the\nlow-motion baseline.\nWithin-fold aggregation\nOnly abnormal-normal pairs\ninside the same outer fold\ncontribute. Folds are weighted\nby their available number of\npairs.\nGroup-level uncertainty\nThe bootstrap resamples\nsource components within fold\nand label, using the same\ndraws for both methods.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The main ranking endpoint compares paired within-fold scores.",
+        "AUROC is the probability that a randomly chosen abnormal source receives a higher score than a normal source.",
+        "An AUROC of 0.5 is chance ranking. AUROC does not define a diagnostic threshold or clinical operating point."
+      ]
+    },
+    {
+      "page": 27,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe locked detector is judged beside all nuisance controls.\nPrimary paired AUROC difference versus low motion: -0.348 [-0.506, -0.191].\nThe plotted controls show point estimates. The subtitle reports the primary 95% paired conditional interval.\nREFERENCE-AWARE GAIT STUDY V2  |  ANOMALY RESULTS\n27 / 40\n0.0\n0.2\n0.4\n0.6\n0.8\n1.0\nPair-weighted within-fold source AUROC; higher is better\nLocked two-sided PV\nMatched two-sided posture\nLow motion: \u2212persistence\nRaw PV forecast MSE\nPV minus persistence MSE\nNormal posture distance\nLow prefix motion\nHigh prefix missingness\nMarginal two-sided PV\n0.462\n0.386\n0.811\n0.259\n0.802\n0.404\n0.749\n0.426\n0.556\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The locked detector is judged beside all nuisance controls.",
+        "Primary paired AUROC difference versus low motion: -0.348 [-0.506, -0.191].",
+        "The plotted controls show point estimates. The subtitle reports the primary 95% paired conditional interval."
+      ]
+    },
+    {
+      "page": 28,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nEvery fold remains visible beside the aggregate.\nDifferent source populations can produce different rankings even under a fixed method.\nCounts are source components. The primary estimate excludes cross-fold comparisons and uses positive-negative pair weights.\nREFERENCE-AWARE GAIT STUDY V2  |  ANOMALY RESULTS\n28 / 40\nOuter fold\nNormal\nAbnormal\nCandidate AUROC\nLow-motion AUROC\n0\n6\n13\n0.449\n0.910\n1\n6\n12\n0.604\n0.931\n2\n6\n12\n0.403\n0.833\n3\n6\n12\n0.389\n0.778\n4\n5\n13\n0.469\n0.569\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Every fold remains visible beside the aggregate.",
+        "Different source populations can produce different rankings even under a fixed method.",
+        "Counts are source components. The primary estimate excludes cross-fold comparisons and uses positive-negative pair weights."
+      ]
+    },
+    {
+      "page": 29,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nShared corruptions test sensitivity to the observations.\nFuture targets stay fixed while prefix gaps, coordinate noise, or opposite-leg timing are perturbed.\nValues are paired MSE differences on 29 normal sources; positive favors the second method. Conditional 95% intervals remain in\nthe linked report.\nREFERENCE-AWARE GAIT STUDY V2  |  ROBUSTNESS\n29 / 40\nPrefix condition\nPosture MSE \u2212 PV MSE\nUniform MSE \u2212 tube\nMSE\nUniform MSE \u2212 balanced\nMSE\nObserved prefix\n-0.00519\n-0.00201\n-0.00155\n40% prefix removal\n-0.04897\n-0.00252\n-0.00216\nCoordinate noise\n-0.00654\n-0.00199\n-0.00156\nOpposite-leg time shift\n-0.00979\n-0.00145\n-0.00112\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Shared corruptions test sensitivity to the observations.",
+        "Future targets stay fixed while prefix gaps, coordinate noise, or opposite-leg timing are perturbed.",
+        "Values are paired MSE differences on 29 normal sources; positive favors the second method. Conditional 95% intervals remain in"
+      ]
+    },
+    {
+      "page": 30,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nView and observation quality remain alternative explanations.\nStratification and matching describe supported subsets rather than replacing the full-cohort endpoint.\nView rows are pooled. Matching retains 40 sources, with 38 evaluable across four folds. Its paired within-fold difference is -0.409\n[-0.651, -0.161].\nREFERENCE-AWARE GAIT STUDY V2  |  ROBUSTNESS\n30 / 40\nAnalysis\nSource support\nCandidate / low-motion AUROC\nFront view, pooled\n4 normal / 8 abnormal\n0.891 / 0.875\nMixed view, pooled\n16 normal / 49 abnormal\n0.418 / 0.837\nMatched motion + missingness\n38 sources / 4 folds\n0.355 / 0.763\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "View and observation quality remain alternative explanations.",
+        "Stratification and matching describe supported subsets rather than replacing the full-cohort endpoint.",
+        "View rows are pooled. Matching retains 40 sources, with 38 evaluable across four folds. Its paired within-fold difference is -0.409"
+      ]
+    },
+    {
+      "page": 31,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nFeature health and source information need separate checks.\nA training-source linear probe asks whether features retain video-source information across sequences.\nThis is a feature-decoding diagnostic inside normal training sources. It is not participant recognition or an independent\ngeneralization test.\nREFERENCE-AWARE GAIT STUDY V2  |  DIAGNOSTICS\n31 / 40\nEncoder or condition\nBalanced source-label accuracy\nSource classes\nM0\n0.166\n13\nM3\n0.117\n13\nM4\n0.157\n13\nuntrained\n0.206\n13\nUniform class reference\n0.077\n13\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Feature health and source information need separate checks.",
+        "A training-source linear probe asks whether features retain video-source information across sequences.",
+        "This is a feature-decoding diagnostic inside normal training sources. It is not participant recognition or an independent"
+      ]
+    },
+    {
+      "page": 32,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nFrozen transfer uses an independently sourced video resource.\nKOA-PD-NM contains normal, osteoarthritis, and Parkinson video with dataset-coded participant grouping.\nThe local inventory has 189 recordings; 187 decode. Identical files in the second cache are counted once.\nREFERENCE-AWARE GAIT STUDY V2  |  EXTERNAL TRANSFER\n32 / 40\nAnnotation\nLocal\nrecordings\nRetained recordings / windows\nRetained coded\nparticipants\nnormal\n60\n49 / 84\n27\nosteoarthritis\n100\n92 / 483\n49\nparkinsons\n29\n27 / 206\n14\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Frozen transfer uses an independently sourced video resource.",
+        "KOA-PD-NM contains normal, osteoarthritis, and Parkinson video with dataset-coded participant grouping.",
+        "The local inventory has 189 recordings; 187 decode. Identical files in the second cache are counted once."
+      ]
+    },
+    {
+      "page": 33,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nParticipant aggregation precedes every nonlinear tail transform.\nThe GAVD forecast, nuisance model, and normal residual distribution are frozen.\nAveraging per-recording tail ranks first would produce a different statistic and is not the declared method.\nREFERENCE-AWARE GAIT STUDY V2  |  EXTERNAL TRANSFER\n33 / 40\nObserved coordinates\n\u2192 each leg\nWindows \u2192 each\nrecording\nRecordings \u2192 coded\nparticipant\nStored GAVD\nreference \u2192 tail\nOnly after participant aggregation, apply each of the 15 frozen transforms. Then\naverage the 15 tail scores. No external example fits the model or reference.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Participant aggregation precedes every nonlinear tail transform.",
+        "The GAVD forecast, nuisance model, and normal residual distribution are frozen.",
+        "Averaging per-recording tail ranks first would produce a different statistic and is not the declared method."
+      ]
+    },
+    {
+      "page": 34,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nTransfer keeps the low-motion and posture challenges intact.\nPrimary paired participant AUROC difference: -0.172 [-0.357, +0.009].\nThe comparison uses 27 normal and 63 annotated abnormal participants. The interval conditions on frozen GAVD models.\nREFERENCE-AWARE GAIT STUDY V2  |  EXTERNAL RESULTS\n34 / 40\n0.0\n0.2\n0.4\n0.6\n0.8\n1.0\nExternal coded-participant AUROC; higher is better\nLocked two-sided PV\nMatched two-sided posture\nLow motion: \u2212persistence\nRaw PV forecast MSE\nPV minus persistence MSE\nLow prefix motion\nHigh prefix missingness\nMarginal two-sided PV\n0.591\n0.528\n0.762\n0.443\n0.740\n0.779\n0.586\n0.404\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Transfer keeps the low-motion and posture challenges intact.",
+        "Primary paired participant AUROC difference: -0.172 [-0.357, +0.009].",
+        "The comparison uses 27 normal and 63 annotated abnormal participants. The interval conditions on frozen GAVD models."
+      ]
+    },
+    {
+      "page": 35,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nCondition slices share the same normal comparison group.\nParkinson and osteoarthritis are reported separately without choosing a favorable subset.\nThe same 27 normal participants appear in both slices. These are descriptive, correlated comparisons.\nREFERENCE-AWARE GAIT STUDY V2  |  EXTERNAL RESULTS\n35 / 40\nAnnotation\nNormal /\nabnormal\nPV AUROC\nLow-motion\nAUROC\nPaired difference [95%\ninterval]\nosteoarthritis\n27 / 49\n0.588\n0.744\n-0.155 [-0.361, +0.050]\nparkinsons\n27 / 14\n0.599\n0.828\n-0.229 [-0.536, +0.107]\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Condition slices share the same normal comparison group.",
+        "Parkinson and osteoarthritis are reported separately without choosing a favorable subset.",
+        "The same 27 normal participants appear in both slices. These are descriptive, correlated comparisons."
+      ]
+    },
+    {
+      "page": 36,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nTransfer exposes acquisition and reference-range shifts.\nNominal 10 Hz sampling does not make recording conditions equivalent.\nConfidence summaries use different joint sets in some descriptive caches; the declared 16-joint support and prefix covariates\nremain consistent.\nREFERENCE-AWARE GAIT STUDY V2  |  TRANSFER LIMITS\n36 / 40\nThe cameras differ by\ngroup.\nAmong decodable recordings,\n51 of 59 normal videos use 30\nFPS; 98 of 100 osteoarthritis\nvideos use 50 FPS. Blur and\nframing can remain different.\nThe usable observations\ndiffer.\nOnly 84 of 218 candidate\nnormal windows survive the\nfixed observation gates. Age,\nclothing, reflective markers, and\nhospital backgrounds also\ndiffer.\nThe reference can\nsaturate.\nAcross the 15 PV components,\n36 to 77 of 90 participants lie\noutside a fitted covariate range.\nBetween 9 and 79 fall beyond a\nnormal residual range.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Transfer exposes acquisition and reference-range shifts.",
+        "Nominal 10 Hz sampling does not make recording conditions equivalent.",
+        "Confidence summaries use different joint sets in some descriptive caches; the declared 16-joint support and prefix covariates"
+      ]
+    },
+    {
+      "page": 37,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nA visual identity concern has a declared secondary analysis.\nThe exclusion of PD_SV_001 was recorded before external efficacy scores were viewed.\nThe exclusion removes 32 windows and two recordings from one severe-Parkinson coded participant. Severity coverage therefore\nchanges.\nREFERENCE-AWARE GAIT STUDY V2  |  IDENTITY SENSITIVITY\n37 / 40\nPopulation\nCoded participants\nPV minus low-motion AUROC [95%\ninterval]\nPrimary transfer, retained\nunchanged\n90\n-0.172 [-0.357, +0.009]\nExclude the flagged participant\n89\n-0.162 [-0.349, +0.020]\nReason for the sensitivity\nA nearby helper overlaps the\nwalking person.\nStill images cannot establish continuous\nidentity.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "A visual identity concern has a declared secondary analysis.",
+        "The exclusion of PD_SV_001 was recorded before external efficacy scores were viewed.",
+        "The exclusion removes 32 windows and two recordings from one severe-Parkinson coded participant. Severity coverage therefore"
+      ]
+    },
+    {
+      "page": 38,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nThe notebook chain teaches one scientific decision at a time.\nEach notebook starts from its own kernel and shows its actual artifacts and computation.\nA teaching fit and synthetic invariant tests are software or tutorial evidence. They do not replace held-out research results.\nREFERENCE-AWARE GAIT STUDY V2  |  REPRODUCTION\n38 / 40\nNotebook\nQuestion and evidence\n20: Cohort and identity\nRebuild the inventory, source groups, attrition, and external compatibility.\n21: Reference scores\nExplain movement amount, nuisance controls, and separate normal calibration.\n22: Mask laboratory\nDecode one Ambient frame, show real masks, and test causal isolation.\n23: Models and fitting\nDistinguish a real demonstration fit from loading the full-run checkpoints.\n24\u201325: Evaluation and\ninterpretation\nReplay source and external endpoints, uncertainty, and robustness.\n26: Manuscript evidence\nExpose every candidate, claim mapping, figure input, and deferred gate.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "The notebook chain teaches one scientific decision at a time.",
+        "Each notebook starts from its own kernel and shows its actual artifacts and computation.",
+        "A teaching fit and synthetic invariant tests are software or tutorial evidence. They do not replace held-out research results."
+      ]
+    },
+    {
+      "page": 39,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nEXTENSION GATES\nAdditional complexity has explicit scientific prerequisites.\nThe completed core is deterministic and coordinate-based. Extensions remain separately identified decisions.\nThese are proposed extensions with gates, not completed results or promised performance improvements.\nREFERENCE-AWARE GAIT STUDY V2  |  NEXT DECISIONS\n39 / 40\nExtension\nRequired prerequisite\nEvidence needed before a claim\nPredict a learned\nsummary\nKeep the model, masks, and training\nbudget matched.\nMeasure future coordinates and verify that\nsummaries retain variation.\nLearn which inputs to\nhide\nA remaining question after fixed masks;\nconstrain coverage.\nMeasure extra compute and add a\nrandomized-policy control.\nUse walking-cycle timing\nValidate events blindly and require two\ncredible prefix cycles.\nReport timing error, failure rate, and the\neligible population.\nPredict a distribution of\nfutures\nShow why a deterministic forecast is\ninadequate.\nUse proper distribution scores, coverage,\nand sharpness.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "EXTENSION GATES",
+        "Additional complexity has explicit scientific prerequisites.",
+        "The completed core is deterministic and coordinate-based. Extensions remain separately identified decisions.",
+        "These are proposed extensions with gates, not completed results or promised performance improvements."
+      ]
+    },
+    {
+      "page": 40,
+      "text": "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS\nCOMPLETED STUDY\nEvery number leads back to a declared evidence identity.\nThe deck checks input hashes and independently replays principal AUROC points and normal-source means.\nThe core invocation recorded 2,235 fits and 323.5 seconds. Those fits are computation, not independent samples.\nREFERENCE-AWARE GAIT STUDY V2  |  REPRODUCTION\n40 / 40\nEvidence\nImmutable identity or location\nRole\nCohort and extraction\nreference-v2-cohort-v1 / restart-full10hz-v1\nAnnotation, source, weights, native times,\nsupport.\nCore fits and calibration\nreference-v2-core-v1\nCheckpoints, fit ledger, masks, source\npredictions.\nExternal preparation /\ntransfer\nreference-v2-external-v1 / transfer-v1\nParticipant mapping, poses, frozen scoring.\nRobustness / identity\nanalysis\nrobustness-v1 / identity-sensitivity-v1\nSeparate perturbation and exclusion\nidentities.\nManuscript and visuals\ndraft03 ledger / reference_v2_manifest.json\nExact claims, figure values, and reviewed\nhashes.\n",
+      "images": 0,
+      "title_lines": [
+        "GAIT OBSERVATIONS FOR MEDICAL WORLD MODELS",
+        "COMPLETED STUDY",
+        "Every number leads back to a declared evidence identity.",
+        "The deck checks input hashes and independently replays principal AUROC points and normal-source means.",
+        "The core invocation recorded 2,235 fits and 323.5 seconds. Those fits are computation, not independent samples."
+      ]
+    }
+  ]
+}

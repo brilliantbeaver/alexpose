@@ -1,0 +1,91 @@
+Separating Movement Prediction from Gait Anomaly Detection: A
+Reference-Controlled Benchmark
+AlexPose Research Team
+Author names and affiliations to be confirmed before submission
+Abstract
+Clinician-annotated gait video offers a practical test of
+movement-observation models for medical world models. We
+study GAVD, introduced as the largest publicly accessible
+collection of abnormal-gait videos annotated by expert clin-
+icians. Our benchmark evaluates 456 unique annotated gait
+sequences, including 141 normal sequences, represented by
+2,815 forecast windows from 91 original recordings. Mod-
+els learn from normal walking and predict eight future ob-
+servations from sixteen past observations. Related sequences
+remain together throughout validation and uncertainty estima-
+tion. A learned transition from current posture reduces forecast
+error by 40.8% relative to repeating the last pose. A separate
+post hoc analysis that weights each normal sequence equally
+gives a 41.6% reduction with recording groups preserved in
+resampling. We also compare six training-mask policies un-
+der matched hidden-input budgets and an unmasked prefix
+baseline. Anatomical and motion-balanced masks do not im-
+prove on uniform masking. A separately locked posture-plus-
+velocity anomaly score has recording-level AUROC 0.462,
+compared with 0.811 for low realized future movement.
+Frozen transfer to a separate dataset with 90 coded partici-
+pants gives 0.591 and 0.762, respectively. The contribution is a
+reproducible benchmark that establishes useful short-horizon
+forecasting and identifies the controls needed before forecast
+errors can be interpreted as evidence of gait abnormality.
+Introduction
+Walking depends on the coordinated movement of many
+joints. Changes in that coordination can make movement
+more variable, more restricted, or more dependent on com-
+pensation. A model that learns how normal observations
+evolve could help describe such changes. For a medical world
+model, this would provide a testable observation component:
+a way to represent movement and check whether a short fu-
+ture is consistent with the observed past. Establishing this
+component requires evidence about the measurements and
+the prediction task before stronger claims about patient state
+or intervention are possible.
+Prediction offers an appealing route to gait anomaly de-
+tection. A model can learn from examples annotated as nor-
+mal and assign an unusualness score when a new sequence
+does not follow its expectations. However, an error score can
+reflect several things at once. A nearly stationary leg may
+be easy to predict even when its movement is clinically re-
+stricted. A fast-moving leg may be difficult to predict because
+the camera or pose estimator provides poor observations. A
+model may also forecast well because current posture already
+constrains the short future, without using the detailed order
+of earlier movement.
+These possibilities motivate our central question: can a
+model recognize departures from normal movement orga-
+nization beyond what is explained by movement amount,
+current posture, camera view, and observation quality? We
+address this question with compact models and explicit con-
+trols. We first compare learned forecasting with simple ref-
+erences. We then test whether hiding anatomically or tem-
+porally organized parts of the past improves a fixed forecast-
+ing model. Finally, we evaluate an anomaly score against a
+low-motion comparator and normal-only posture and quality
+controls. Each question has its own endpoint because success
+on one does not imply success on the others.
+GAVD gives this question an unusually broad collection
+of clinically annotated video observations. It was introduced
+as the largest publicly accessible collection of abnormal-gait
+videos annotated by expert clinicians, with 1,874 normal
+and abnormal walking sequences (Ranjan et al. 2025). Its
+sequence annotations are intended to describe uninterrupted
+walking in one camera-relative direction. We retain those
+published sequence identities and analyze 456 eligible se-
+quences across five gait annotations. This scale supports a
+heterogeneous movement benchmark, while the relationship
+between repeated sequences still determines the strength of
+statistical inference.
+The study makes three contributions. First, it provides a re-
+producible observation and evaluation contract that keeps re-
+lated video windows together, isolates the future from model
+inputs, and compares methods on identical observed targets.
+Second, it identifies a strong current-posture forecasting ref-
+erence. It also measures the value of six budget-matched
+masking policies alongside an unmasked prefix baseline.
+Third, it tests reference-aware anomaly scoring internally and
+in frozen transfer, making the gap between useful prediction
+and incremental anomaly ranking explicit. The contribution
+is a controlled benchmark and an empirical finding about
+evaluation. Normal-only forecasting, anatomical masking,
+and motion-aware masking already have substantial prece-
+dents.

@@ -1,0 +1,25 @@
+{
+  "identity": "reference-v2-independent-posthoc-mean-prior-reconstruction-v1",
+  "status": "passed",
+  "reviewed_at_utc": "2026-11-16T17:02:43.473130+00:00",
+  "script_sha256": "8101661f28750dd67edc016189b5f0e8c833b5a4434098b396029d412024c373",
+  "results_sha256": "8c0e0bac907752107f7f9c99bb13fcba2a72010ed71664c9fd1bf95826050356",
+  "artifact_hashes_verified": 10,
+  "outer_prior_states_reconstructed": 5,
+  "forecast_predictions_replayed_bitwise": 2,
+  "maximum_fitted_mean_discrepancy": 2.220446049250313e-16,
+  "maximum_source_mse_discrepancy": 9.8879238130678e-17,
+  "paired_contrasts_recomputed": 4,
+  "normal_mse": {
+    "mean_pose": 0.10898037252361101,
+    "mean_residual": 0.1223511529247857,
+    "persistence": 0.12126179358149479,
+    "ridge_posture": 0.07174154584111857
+  },
+  "seconds": 0.1880945423617959,
+  "limits": [
+    "The diagnostic is explicitly post hoc after internal and external outcome exposure.",
+    "It uses the existing body reference and normal training sources; no primary anomaly candidate is changed.",
+    "Intervals condition on fitted priors and original posture predictions."
+  ]
+}

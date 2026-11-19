@@ -1,0 +1,211 @@
+{
+  "identity": "medwm-reference-v2-draft03-evidence-v3",
+  "claims": [
+    {
+      "id": "C0",
+      "claim": "GAVD was introduced as the largest publicly accessible collection of abnormal-gait videos annotated by expert clinicians; the present benchmark evaluates 456 unique annotated gait sequences.",
+      "artifact": "GAVD primary paper/repository; reviewer_support/literature_scale.json; reviewer_support/sequence_audit.json",
+      "scope": "Attributed video-specific size claim. Full catalog 1,874 sequences; evaluated subset 456. Sequence identifiers are observational units, not verified independent patients."
+    },
+    {
+      "id": "C1",
+      "claim": "A compact current-posture transition reduces normal-source forecast error relative to persistence.",
+      "artifact": "reference-v2-core-v1/results.json:forecast_contrasts[persistence,ridge_posture]",
+      "estimate": 0.04952024774037623,
+      "ci95": [
+        0.03446947167969933,
+        0.06628450926545679
+      ],
+      "relative_reduction": 0.40837469311466035,
+      "scope": "141 normal GAVD gait sequences in 29 original recording groups; the primary mean gives recordings equal weight; relative projected articulation.",
+      "post_hoc_prior_control": "reference-v2-mean-prior-posthoc-v1/results.json:comparisons; normal mean pose and mean displacement are both retained."
+    },
+    {
+      "id": "C2",
+      "claim": "The tested structured masks do not improve on uniform masking under the fixed coordinate objective.",
+      "artifact": "reference-v2-core-v1/results.json:forecast_contrasts",
+      "contrasts": [
+        {
+          "method": "mlp_anatomical_tubes",
+          "reference": "mlp_uniform",
+          "method_mse": 0.07962218329186992,
+          "reference_mse": 0.0776103211712062,
+          "estimate": -0.0020118621206637283,
+          "ci95": [
+            -0.004262141695559217,
+            -2.136091916625597e-05
+          ],
+          "method_ci95": [
+            0.062206521034980394,
+            0.09826401577404673
+          ],
+          "relative_reduction": -0.025922610424786243,
+          "relative_ci95": [
+            -0.05918960610042792,
+            -0.0002628840141815465
+          ],
+          "normal_components": 29,
+          "resamples": 5000,
+          "seed": 5702,
+          "positive_favors": "mlp_anatomical_tubes",
+          "uncertainty": "Conditional on saved cross-validation predictions"
+        },
+        {
+          "method": "mlp_motion_balanced",
+          "reference": "mlp_uniform",
+          "method_mse": 0.07916394118310822,
+          "reference_mse": 0.0776103211712062,
+          "estimate": -0.0015536200119020329,
+          "ci95": [
+            -0.0031125017223044473,
+            -0.00013266377912730877
+          ],
+          "method_ci95": [
+            0.06128168524600249,
+            0.09875950878759429
+          ],
+          "relative_reduction": -0.020018213923825728,
+          "relative_ci95": [
+            -0.040573903000352574,
+            -0.0016823069944686478
+          ],
+          "normal_components": 29,
+          "resamples": 5000,
+          "seed": 5702,
+          "positive_favors": "mlp_motion_balanced",
+          "uncertainty": "Conditional on saved cross-validation predictions"
+        }
+      ],
+      "scope": "One compact model,40% eligible-token masking,three seeds; exploratory comparisons."
+    },
+    {
+      "id": "C3",
+      "claim": "The locked conditional two-sided score does not improve on the low-motion baseline internally or in frozen external transfer.",
+      "artifact": "reference-v2-core-v1/results.json:primary_anomaly; reference-v2-transfer-v1/results.json:primary_anomaly",
+      "internal": {
+        "candidate": "calibrated_two_sided",
+        "reference": "low_motion",
+        "estimate": -0.3481894150417827,
+        "candidate_auroc": 0.4623955431754875,
+        "reference_auroc": 0.8105849582172702,
+        "ci95": [
+          -0.5055710306406684,
+          -0.19080779944289694
+        ],
+        "candidate_ci95": [
+          0.3245125348189415,
+          0.5988857938718662
+        ],
+        "reference_ci95": [
+          0.7075208913649025,
+          0.9025069637883009
+        ],
+        "folds": [
+          {
+            "fold": 0,
+            "normal": 6,
+            "abnormal": 13,
+            "candidate_auroc": 0.44871794871794873,
+            "reference_auroc": 0.9102564102564102,
+            "difference": -0.4615384615384615,
+            "pairs": 78
+          },
+          {
+            "fold": 1,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.6041666666666666,
+            "reference_auroc": 0.9305555555555556,
+            "difference": -0.32638888888888895,
+            "pairs": 72
+          },
+          {
+            "fold": 2,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.4027777777777778,
+            "reference_auroc": 0.8333333333333334,
+            "difference": -0.4305555555555556,
+            "pairs": 72
+          },
+          {
+            "fold": 3,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.3888888888888889,
+            "reference_auroc": 0.7777777777777778,
+            "difference": -0.3888888888888889,
+            "pairs": 72
+          },
+          {
+            "fold": 4,
+            "normal": 5,
+            "abnormal": 13,
+            "candidate_auroc": 0.46923076923076923,
+            "reference_auroc": 0.5692307692307692,
+            "difference": -0.09999999999999998,
+            "pairs": 65
+          }
+        ],
+        "resamples": 5000,
+        "seed": 5701,
+        "unit": "verified source-relation component",
+        "resampling": "paired independently within outer fold and binary label",
+        "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+      },
+      "external": {
+        "candidate": "two_sided",
+        "reference": "low_motion",
+        "estimate": -0.1716637272192828,
+        "candidate_auroc": 0.5908289241622575,
+        "reference_auroc": 0.7624926513815403,
+        "ci95": [
+          -0.3565623162845385,
+          0.009112286890064714
+        ],
+        "candidate_ci95": [
+          0.46736478542034093,
+          0.7051734273956496
+        ],
+        "reference_ci95": [
+          0.6619488536155202,
+          0.8547912992357437
+        ],
+        "folds": [
+          {
+            "fold": 0,
+            "normal": 27,
+            "abnormal": 63,
+            "candidate_auroc": 0.5908289241622575,
+            "reference_auroc": 0.7624926513815403,
+            "difference": -0.1716637272192828,
+            "pairs": 1701
+          }
+        ],
+        "resamples": 5000,
+        "seed": 5703,
+        "unit": "dataset-coded external participant",
+        "resampling": "paired participant resampling within normal/abnormal strata; single external cohort",
+        "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+      },
+      "scope": "GAVD source groups and separate external dataset-coded participants; no clinical diagnosis or causal claim."
+    },
+    {
+      "id": "C4",
+      "claim": "The benchmark makes forecast utility, anomaly ranking, and recording-domain limitations separately auditable.",
+      "artifact": "Protocol freeze,complete candidate registry,clean-kernel notebooks,independent reconstruction and vector figures.",
+      "scope": "Reproducibility and evaluation contribution; no claim that masking or normal-only forecasting was invented here."
+    },
+    {
+      "id": "C5",
+      "claim": "Post hoc equal-sequence weighting retains the posture-versus-persistence forecast improvement while respecting recording dependence.",
+      "artifact": "reference-v2-sequence-scale-posthoc-v2/results.json",
+      "estimate": 0.057658213396868906,
+      "ci95": [
+        0.04178336195670544,
+        0.07967143972558138
+      ],
+      "scope": "141 normal sequence means; whole-component resampling within the five original folds;29 normal recording groups. New weighting estimand, not a replacement primary endpoint or new participant cohort."
+    }
+  ]
+}

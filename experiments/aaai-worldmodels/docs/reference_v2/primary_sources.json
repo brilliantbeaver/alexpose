@@ -1,0 +1,87 @@
+{
+  "identity": "reference-v2-primary-source-registry-v1",
+  "status": "checked during study design; method sources are precedents, not performance evidence for our implementation",
+  "sources": [
+    {
+      "key": "medwm",
+      "url": "https://med-wm.github.io/aaai27-mwm/",
+      "role": "Official workshop scope and paper format",
+      "supports": "Dynamics, uncertainty, validation, and benchmark contributions; short or full AAAI format.",
+      "limit": "Scope fit does not establish clinical utility or acceptance."
+    },
+    {
+      "key": "kour2020",
+      "url": "https://data.mendeley.com/datasets/44pfnysy89/1",
+      "doi": "10.17632/44pfnysy89.1",
+      "role": "External dataset owner record",
+      "supports": "KOA-PD-NM public gait video resource, contributors, version and CC BY4.0 page licence.",
+      "limit": "Local bundled README asks research/noncommercial use; this study uses already cached data for research without redistribution. Local file counts differ from stated inventory."
+    },
+    {
+      "key": "kour2022",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/exsy.12955",
+      "doi": "10.1111/exsy.12955",
+      "role": "Original clinical gait dataset/method publication",
+      "supports": "Original study of KOA, Parkinson and normal video gait with severity; identifies the public dataset.",
+      "limit": "Its supervised classification scores are not matched baselines for our normal-only transfer experiment."
+    },
+    {
+      "key": "mamp",
+      "url": "https://arxiv.org/abs/2308.07092v1",
+      "role": "Primary masking precedent",
+      "supports": "Masked skeleton-motion prediction and motion-informed masking for action representations.",
+      "limit": "No new claim that motion-focused masking itself is novel; no published clinical anomaly gain transferred numerically."
+    },
+    {
+      "key": "sjepa",
+      "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/04755.pdf",
+      "role": "Primary latent-prediction precedent",
+      "supports": "Masked skeletal latent prediction with centering and categorical matching for action recognition.",
+      "limit": "Our coordinate MLP is not an S-JEPA reproduction. Any later latent objective must identify its adaptation."
+    },
+    {
+      "key": "slim",
+      "url": "https://arxiv.org/html/2603.10648v4",
+      "version": "v4 November5,2026",
+      "role": "Current semantic masking precedent",
+      "supports": "Compact skeleton tokens and connected anatomical tubes over time.",
+      "limit": "Anatomical tubes are established prior art; our experiment tests their matched-budget usefulness for a different task and sample regime."
+    },
+    {
+      "key": "asma",
+      "url": "https://arxiv.org/html/2602.06251v1",
+      "role": "Complementary motion masking precedent",
+      "supports": "Complementary high/low motion and spatial-degree masking for action representation learning.",
+      "limit": "Our single-model rank-balanced corruption differs from its multiencoder feature-alignment and distillation system."
+    },
+    {
+      "key": "plotnik2007",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17503027/",
+      "doi": "10.1007/s00221-007-0955-7",
+      "role": "Primary physiological motivation",
+      "supports": "Bilateral timing is measurable and altered in Parkinson gait in the reported laboratory study.",
+      "limit": "Our projected video prediction errors are neither heel-strike phase coordination index nor a neural cause estimate."
+    },
+    {
+      "key": "clark2010",
+      "url": "https://sites.utexas.edu/neptune/wp-content/uploads/sites/6031/2020/07/jnp1032.pdf",
+      "doi": "10.1152/jn.00825.2009",
+      "role": "Primary physiological motivation",
+      "supports": "Association between post-stroke EMG module merging and locomotor performance.",
+      "limit": "Image pose variability is not a measurement of EMG modules. Reduced variation need not indicate normal movement."
+    },
+    {
+      "key": "steele2015",
+      "url": "https://onlinelibrary.wiley.com/doi/full/10.1111/dmcn.12826",
+      "doi": "10.1111/dmcn.12826",
+      "role": "Primary physiological motivation",
+      "supports": "Changes in gait EMG synergy complexity in cerebral palsy.",
+      "limit": "Does not establish a disease-specific direction for 2D forecast error or a clinical interpretation of our scores."
+    }
+  ],
+  "access_notes": [
+    "Direct publisher opens for several physiological studies failed; indexed primary abstracts and author-hosted primary PDFs were consulted.",
+    "OpenReview direct access presented a verification challenge; the versioned primary ASMa arXiv full text was accessible.",
+    "The earlier literature_and_masking.md retains broader primary-source coverage and external-dataset alternatives."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "identity": "reference-v2-blinded-observation-qa-v1",
+  "status": "material_generated_for_visual_review",
+  "selection": "One sequence per label\u00d7accepted/rejected stratum, candidate_windows>0, SHA256 lexical selection with distinct sources when available, first/middle/last sampled frames; no performance selection.",
+  "sequences": 10,
+  "source_videos": 10,
+  "frames": 30,
+  "acceptance_strata": {
+    "accepted": 5,
+    "rejected": 5
+  },
+  "blinded_sheet": "artifacts/runs/reference-v2-cohort-v1/visual_qa/blinded_contact_sheet.png",
+  "ledger": "artifacts/runs/reference-v2-cohort-v1/visual_qa/selection_ledger.csv",
+  "limits": "Still frames cannot establish diagnosis, person continuity, every gait cycle, or full-duration tracking. This audit makes no new inclusion/exclusion decisions."
+}

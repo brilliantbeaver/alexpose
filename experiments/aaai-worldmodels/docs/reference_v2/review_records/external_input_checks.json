@@ -1,0 +1,65 @@
+{
+  "identity": "reference-v2-independent-external-input-checks-v1",
+  "status": "passed_with_identity_and_acquisition_limits",
+  "reviewed_at_utc": "2026-11-16T16:39:44.904348+00:00",
+  "script_sha256": "e1b50692bced205649ac9aa1c2f5e4cf907b98dbf72207be4d62a09113990b5f",
+  "external_identity_sha256": "1216ed14d01407739044ea7ea3e6ed0802a7dcf7867e0a469eddc4c6928de98a",
+  "manifest_files_verified": 205,
+  "raw_recording_caches": 187,
+  "actual_video_hashes_verified": 187,
+  "actual_requested_native_frames": 17138,
+  "windows_rebuilt_with_independent_normalization": 773,
+  "maximum_coordinate_discrepancy": 0.0,
+  "windows": 773,
+  "recordings": 168,
+  "coded_participants": 90,
+  "by_label": [
+    {
+      "label": "normal",
+      "windows": 84,
+      "recordings": 49,
+      "participants": 27
+    },
+    {
+      "label": "osteoarthritis",
+      "windows": 483,
+      "recordings": 92,
+      "participants": 49
+    },
+    {
+      "label": "parkinsons",
+      "windows": 206,
+      "recordings": 27,
+      "participants": 14
+    }
+  ],
+  "visual_pages_independently_inspected": {
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-01.png": "1b011db8a1ee8bb1c838450ec8a7c066a79e10acfa52db9a784e951e4ec418e4",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-02.png": "9684c8f84e6c91728cd30973c1b8e776598693c58b92b7049a6cdfd908e4f866",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-03.png": "0ace3f96b79fbd329eddc3378fe065273c3d5c1f102e60149da4c79c1e053ed0",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-04.png": "d052d21f3a6ca54fcaad3c03e0dbb3eec10897b409d67049e7d19e96c337c1b9",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-05.png": "144961f5060c53290fdb3f7cf949ba7230a99fbe685eceb7d792b28c630c5b21",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-06.png": "daae610071d9bffa06a3777eed8ad8afc72e5e52ce60664ff7f2e192f47d7796",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-07.png": "82c933ed4fee7fc281b62870ef7116dfdbad15b5aca16e13bd7d33b680dc6e33",
+    "artifacts/runs/reference-v2-external-v1/visual_qa/contact-08.png": "4c8b4fa26a6140c20cb5beb8db9efb4e634c9948034e39e497ff36c37492a0bc"
+  },
+  "visual_selection_sha256": "a624c18297f3e479e2a89116a979b4cdc0174c49f5de316120785cb06ec433ee",
+  "visual_participant_coverage": 94,
+  "visual_still_count": 282,
+  "visual_review": "All eight pages were viewed directly. Most midpoint stills show one apparent walker with broadly body-associated points. Boundaries frequently have no or cropped person; several foot or limb points are displaced from the visible outline. No anatomical accuracy or continuity guarantee follows from stills.",
+  "identity_risk": {
+    "participant_id": "PD_SV_001",
+    "panel": "094",
+    "retained_windows": 32,
+    "observation": "A second person overlaps and follows the foreground walker in selected midpoint/end stills. First-pose identity through both recordings is unverified.",
+    "disposition": "Primary cohort must retain its declared identity; any participant-exclusion sensitivity must be frozen before external efficacy inspection and reported alongside the primary."
+  },
+  "limits": [
+    "Reviewer knew the author-flagged panel before this inspection; this is independent inspection, not a fully blinded replicate.",
+    "Only the first selected recording and three frames per coded participant were visually inspected.",
+    "Different native FPS, framing, duration, support and clothing across labels remain potential recording confounds.",
+    "Coded participant IDs and diagnoses are provided by the dataset. Unknown overlap with GAVD is not excluded by hash disjointness.",
+    "No predictive-model score was read or computed in this check."
+  ],
+  "seconds": 2.419306666124612
+}

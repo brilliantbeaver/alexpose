@@ -1,0 +1,23 @@
+{
+  "identity": "draft03-build-and-edit-history-v1",
+  "scope": "Publication tooling and visual QA only; no fitted scientific run is relabeled.",
+  "events": [
+    {
+      "event": "Initial renderer syntax check failed",
+      "evidence": "A raw string ending in a backslash made the includegraphics expression invalid.",
+      "remedy": "Use an explicit width variable; subsequent compilation succeeds.",
+      "original_full_log_retained": false
+    },
+    {
+      "event": "First TeX pass failed on missing Courier metric pcrr8t",
+      "remedy": "Installed the Courier package in the portable TinyTeX environment; exact current compiler and packages are recorded.",
+      "original_full_log_retained": false
+    },
+    {
+      "event": "Independent final review found overflowing workflow labels on page2",
+      "remedy": "Shortened every workflow node and added rendered text-container checks with padding. All other scientific inputs remain unchanged.",
+      "status": "Remedy implemented and text-container checks pass; independent visual disposition is recorded in the final review."
+    }
+  ],
+  "scientific_runtime_failures": "The separate floor-replay v1 guard failure and corrected v2 identity are preserved in the study analysis records."
+}

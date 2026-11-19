@@ -1,0 +1,166 @@
+{
+  "built_at_utc": "2026-11-16T19:15:48.773900+00:00",
+  "generator_sha256": "b60b883b2bf796d7133b45d54ab7bdacddb9c086e40f17a8e5da76b9699f913b",
+  "compiled": true,
+  "rendered": true,
+  "review_status": "awaiting_independent_review",
+  "compiler": "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+  "compiler_version": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+  "compiler_distribution": {
+    "url": "https://github.com/rstudio/tinytex-releases/releases/download/v2026.11/TinyTeX-1-darwin-v2026.11.tar.xz",
+    "archive_sha256": "9416a257c4caea2f82351fa2f89252b8bd75dceeb0ce6e442d25530b1922a02d",
+    "additional_packages": [
+      "newtx",
+      "tex-gyre",
+      "psnfss",
+      "placeins",
+      "natbib",
+      "caption",
+      "booktabs",
+      "xpatch",
+      "xkeyval",
+      "etoolbox",
+      "fontaxes",
+      "mweights",
+      "xstring",
+      "carlisle",
+      "grfext",
+      "courier"
+    ]
+  },
+  "commands": [
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/bibtex",
+      "manuscript"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ],
+    [
+      "/tmp/medwm-tools/TinyTeX/bin/universal-darwin/pdflatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "manuscript.tex"
+    ]
+  ],
+  "source_date_epoch": 1794787200,
+  "compile_returncode": 0,
+  "pdf_checks": {
+    "pages": [
+      {
+        "page": 1,
+        "characters": 5061,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 2,
+        "characters": 4566,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 3,
+        "characters": 5300,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 4,
+        "characters": 6090,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 5,
+        "characters": 6308,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 6,
+        "characters": 3908,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 7,
+        "characters": 5185,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 8,
+        "characters": 3252,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 9,
+        "characters": 6390,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 10,
+        "characters": 3802,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 11,
+        "characters": 5014,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      },
+      {
+        "page": 12,
+        "characters": 1124,
+        "images": 0,
+        "width": 612.0,
+        "height": 792.0
+      }
+    ],
+    "page_count": 12,
+    "reference_start_pages": [
+      8
+    ],
+    "reference_page_has_body": true,
+    "appendix_start_pages": [
+      9
+    ],
+    "body_pages": 8,
+    "short_paper_body_in_range": false,
+    "full_paper_body_in_range": true,
+    "edge_overflow": [],
+    "pdf_bytes": 323796
+  },
+  "artifacts": {
+    "manuscript.md": "dba95f8957f3cb1e798f44aac1d093a568c6771df77af96e2afca59fe437cd90",
+    "manuscript.tex": "1d91af5eaffcbe11a28755c01446bc66b2c155bc701db504c4fa6273f9192cfe",
+    "evidence.json": "7e3392160189fca20fb54f3f87114543164cc8faacb234846197aaed07314163",
+    "manuscript.pdf": "f5b368884c6724abbd304a4ffa05cc357f1d25a5d4cebba8625ccc0039561435"
+  },
+  "publishing_helper_sha256": "0b4e651e65802f42a221c8c1525af7adce65bb2b6182d2211fab0d769a1a40f0",
+  "editable_source_sha256": "2dc932baa29614fd1169f2a08711b2c2a3a7aa263f89ac1acd141946ae2e8c76"
+}

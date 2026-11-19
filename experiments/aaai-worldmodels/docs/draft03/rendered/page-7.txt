@@ -1,0 +1,127 @@
+Forecast
+MSE x1,000
+95% interval
+Persistence
+121.26
+[93.84, 149.90]
+Damped velocity
+575.19 [375.68, 828.96]
+Own-leg history
+81.74
+[64.25, 100.33]
+Bilateral history
+80.63
+[62.73, 99.97]
+Current-posture transition
+(legacy)
+71.69
+[55.73, 88.66]
+Current-posture transition
+71.74
+[55.71, 88.79]
+Posture plus velocity
+76.93
+[60.96, 93.49]
+Random-feature ridge
+105.20
+[85.17, 125.55]
+Normal mean pose (post
+hoc)
+108.98
+[89.97, 130.25]
+Mean displacement (post
+hoc)
+122.35
+[92.71, 152.75]
+Table 2: Forecasting on 141 normal gait sequences over nom-
+inal offsets 0.1 through 0.8 seconds, with each of 29 original
+recordings given equal weight. Lower MSE is better. Values
+and conditional recording-bootstrap intervals are multiplied
+by 1,000, in squared prefix-torso units. The separately im-
+plemented legacy and current posture transitions are both
+retained.
+60
+80
+100
+Forecast MSE x 1,000 (lower is better)
+No prefix masking
+Uniform masking
+Time blocks
+Anatomical tubes
+Random joint groups
+Motion-balanced masking
+Motion-focused masking
+Figure 4: Forecasting on 141 normal gait sequences with six
+prefix-corruption policies and an unmasked prefix baseline.
+Points give each of their 29 original recordings equal weight
+after averaging within sequence. MSE is multiplied by 1,000;
+lines are conditional 95% intervals resampling whole record-
+ing groups. Predictions average three fixed seeds before er-
+rors are computed. The dashed line is the current-posture
+transition. Evaluation retains the full observed prefix. Struc-
+tured masks do not improve on uniform masking here.
+motion AUROC 0.762, with paired difference -0.172 [-0.357,
+0.009]. The interval includes zero, and the candidate does not
+establish improvement. Parkinson’s and osteoarthritis slices
+follow the same direction and share normal participants. A
+pre-score audit found uncertain person continuity when an
+assistant overlaps one Parkinson’s participant. The fixed ex-
+clusion sensitivity retains 89 participants and gives 0.597
+versus 0.759, with difference -0.162 [-0.349, 0.020]. It re-
+moves the only retained severe-Parkinson’s participant and
+therefore narrows severity coverage.
+Nuisance checks constrain interpretation
+Matching within fold and annotated view on prefix move-
+ment and missingness retains 40 of 91 recordings. Thirty-
+eight enter four folds with adequate matched class support.
+The paired candidate-minus-low-motion difference is -0.409
+[-0.651, -0.161]. There is no distance caliper, so matching
+does not guarantee similar observations; pair distances and
+coverage loss remain visible. Most recordings have multi-
+ple views, and single-view strata are small. These analyses
+cannot establish camera invariance or remove unmeasured
+recording differences.
+External native frame rates are associated with labels even
+after sampling at 10 Hz. Age, reflective markers, clothing,
+scene, and full-image person selection also differ. Some pre-
+fix covariates leave the normal training range, and finite cal-
+ibration tails can saturate. External ranking therefore mea-
+sures transfer under documented observation shift rather than
+isolated disease physiology. A recording-identification diag-
+nostic on the normal training pool likewise supplies no evi-
+dence that learned features remove recording identity relative
+to random features.
+Discussion and scope
+The evaluation across hundreds of clinician-annotated walk-
+ing sequences identifies a compact, reproducible capability:
+a normal-only model predicts relative leg articulation bet-
+ter than repeating the last pose. The strongest tested refer-
+ence uses current posture rather than a long history. The
+benchmark also establishes why forecasting and abnormality
+ranking need separate validation. Neither a forecast-error re-
+duction nor a favorable excess-error AUROC establishes an
+incremental anomaly detector.
+Several explanations remain for the conditional score’s
+performance. Movement amount may carry annotation in-
+formation that the nuisance regression discounts. Although
+the cohort contains many gait sequences, the available 29 nor-
+mal recording groups may be too few for a stable conditional
+reference. Disjoint training and calibration roles reduce fit-
+ting support, while coarse tails lose ranking detail. Out-of-fit
+and refitted forecasting models can also differ in error scale.
+The study does not identify which explanation dominates or
+rule out better conditional models with stronger independent
+normal coverage.
+The masking finding is similarly bounded to one compact
+coordinate model and this sparse observation task. Anatom-
+ical or latent masking may help with other representations
+or larger populations. Here the policies do not earn an ad-
+vantage over a matched uniform control. A useful next study
+should add independent normal coverage and validated ob-
+servations that resolve these ambiguities before increasing
+model capacity.
+GAVD supports a heterogeneous public-video benchmark,
+but GAVD alone does not establish patient-disjoint, site-
+disjoint, or prospective clinical generalization. Recording
+IDs are not patient IDs, and folder labels are not indepen-
+dently confirmed diagnoses in this analysis. The external

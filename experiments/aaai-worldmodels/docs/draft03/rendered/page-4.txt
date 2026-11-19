@@ -1,0 +1,110 @@
+The new compact state contains current posture, a robust
+recent velocity estimate, and uncertainty-related summaries
+of that estimate. Velocity is the median of valid adjacent dif-
+ferences over the latest five prefix intervals. Median absolute
+deviation and valid-pair counts describe its variability and
+support. This arm therefore adds both movement and obser-
+vation information; its effect cannot be attributed to velocity
+alone. A matched current-posture ridge is the mandatory sim-
+ple alternative. It learns a mapping from the current joint po-
+sitions to future positions, whereas persistence copies those
+positions unchanged. An untrained random encoder with a
+fitted coordinate head checks whether a trained nonlinear
+representation is needed.
+For masking, one multilayer perceptron has two hidden
+layers of width 32 and a residual coordinate head, with 31,936
+parameters. It receives visible prefix coordinates, visibility
+indicators, latest observed anchors, and prefix times. Hidden
+values are filled only after masking. The objective is future-
+coordinate squared error with equal leg weighting. A learned
+representation here is the numerical summary inside this
+predictor. This experiment uses coordinates as targets rather
+than a teacher encoder or latent-target objective.
+A fixed task with different hidden past observations
+Natural missingness, deliberate training masking, and future
+queries are stored separately. The entire future stays hidden
+in every arm. Additional prefix masks hide 40% of eligible
+non-protected tokens, with deterministic rounding; a token
+is one joint at one time. All observed reference joints and
+each joint’s latest observed point are protected, including the
+target anchors. The unmasked prefix baseline retains every
+observed prefix token and therefore has more visible input.
+It provides a full-input reference for the six budget-matched
+corruption policies.
+Uniform masking samples eligible tokens without replace-
+ment. Time blocks prioritize contiguous intervals. Anatomi-
+cal tubes prioritize connected limb groups over time. Random
+joint groups match the anatomical policy’s group sizes, in-
+tervals, and realized token counts. Motion-balanced masking
+distributes the budget across low- and high-motion prefix to-
+kens, using confidence-qualified differences and actual time
+gaps. A motion-focused comparator favors higher-motion to-
+kens. Both retain a uniform sampling component, so every
+eligible region can be selected. Missing motion is not zero
+motion, and ties have a deterministic rule.
+Missing observations can prevent a complete block or tube
+from reaching the exact budget. The frozen implementation
+then truncates or completes its priority list. These are there-
+fore budget-matched block and tube priorities rather than in-
+variably complete tubes. Four fixed mask banks per window
+make exposure auditable. A mask-pattern-only diagnostic re-
+moves residual coordinate inputs to test the information in
+the chosen locations; the shared persistence anchor is still
+added at the output. Main evaluation uses the full observed
+prefix for every policy, with shared corruptions reserved for
+robustness.
+From forecast error to an anomaly score
+Why a forecast needs an explicit reference
+Mean squared error, or MSE, averages squared differences
+between predicted and observed coordinates. Lower error
+means a closer forecast, in squared prefix-torso units. We
+compare the learned forecast and persistence on exactly the
+same future. Historical excess error is learned MSE minus
+persistence MSE. A negative value favors the learned fore-
+cast, while a higher value has the declared abnormality direc-
+tion. This measures forecast gain but does not automatically
+remove movement amount.
+For one observed coordinate vector, let a be the latest pose,
+y the future, and d the model’s predicted displacement from
+a. The difference in squared errors is:
+Ef −Ep = ∥d∥2 −2⟨d, y −a⟩.
+(1)
+Here E_f and E_p are learned and persistence errors.
+The inner product measures alignment between predicted
+displacement and observed displacement y minus a. The
+identity shows that excess error can vary when movement
+amount changes even if the predicted displacement stays
+fixed. Common-weight averaging preserves that dependence.
+We therefore retain negative persistence error as a low-
+motion comparator: it assigns greater abnormality to less
+displacement from the anchor. This diagnostic direction was
+discovered in earlier outcome inspection and locked as a
+baseline for the continuation. It does not gain preregistered
+historical status.
+A normal reference for movement difficulty
+The prespecified candidate uses the posture-plus-velocity
+ridge forecaster and asks whether a recording is easier or
+harder to predict than expected from its past. First, we av-
+erage future MSE within recording. Prefix movement uses
+valid adjacent distal-joint differences divided by actual time
+gaps. We also retain prefix missingness. A small ridge regres-
+sion g predicts log forecast MSE from log prefix movement
+and missingness using out-of-fit normal development pre-
+dictions. Each such prediction belongs to a normal recording
+excluded from the model that produced it. Subtracting this
+expected log error gives a scalar residual. Separate normal
+recordings define how unusual the residual is:
+rs = log(Ef,s + ϵ) −g(zs),
+As = |2Fcal(rs) −1|. (2)
+The index s denotes a recording, E_f,s its hierarchical
+forecast MSE, and epsilon the numerical floor 0.00000001.
+The two values in z_s are log prefix movement and miss-
+ingness. The function F_cal is the smoothed empirical cu-
+mulative distribution of residuals from normal calibration
+recordings. It indicates where a residual falls in that refer-
+ence. The absolute-value transformation assigns a high score
+A_s to unusually easy or unusually difficult prediction. This
+scalar residual measures forecast difficulty; it is not a signed
+coordinate residual or the historical excess score.
+Normal recordings have three separate roles. A develop-
+ment group fits the forecaster. Out-of-fit predictions within

@@ -1,0 +1,370 @@
+{
+  "identity": "reference-v2-floor-posthoc-v2",
+  "status": "complete",
+  "analysis_status": "Post hoc, outcome-exposed exploratory numerical sensitivity.",
+  "scope": "Internal primary candidate only; all15 saved calibration components, same normal roles and outer predictions.",
+  "forecasts_refit": false,
+  "core_modules_written": false,
+  "sources": 91,
+  "components": 15,
+  "floors": [
+    1e-10,
+    1e-08,
+    1e-06
+  ],
+  "results": [
+    {
+      "floor": 1e-10,
+      "primary_anomaly": {
+        "candidate": "candidate",
+        "reference": "low_motion",
+        "estimate": -0.3481894150417827,
+        "candidate_auroc": 0.4623955431754875,
+        "reference_auroc": 0.8105849582172702,
+        "ci95": [
+          -0.5055710306406684,
+          -0.19080779944289694
+        ],
+        "candidate_ci95": [
+          0.3245125348189415,
+          0.5988857938718662
+        ],
+        "reference_ci95": [
+          0.7075208913649025,
+          0.9025069637883009
+        ],
+        "folds": [
+          {
+            "fold": 0,
+            "normal": 6,
+            "abnormal": 13,
+            "candidate_auroc": 0.44871794871794873,
+            "reference_auroc": 0.9102564102564102,
+            "difference": -0.4615384615384615,
+            "pairs": 78
+          },
+          {
+            "fold": 1,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.6041666666666666,
+            "reference_auroc": 0.9305555555555556,
+            "difference": -0.32638888888888895,
+            "pairs": 72
+          },
+          {
+            "fold": 2,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.4027777777777778,
+            "reference_auroc": 0.8333333333333334,
+            "difference": -0.4305555555555556,
+            "pairs": 72
+          },
+          {
+            "fold": 3,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.3888888888888889,
+            "reference_auroc": 0.7777777777777778,
+            "difference": -0.3888888888888889,
+            "pairs": 72
+          },
+          {
+            "fold": 4,
+            "normal": 5,
+            "abnormal": 13,
+            "candidate_auroc": 0.46923076923076923,
+            "reference_auroc": 0.5692307692307692,
+            "difference": -0.09999999999999998,
+            "pairs": 65
+          }
+        ],
+        "resamples": 5000,
+        "seed": 5701,
+        "unit": "verified source-relation component",
+        "resampling": "paired independently within outer fold and binary label",
+        "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+      },
+      "max_abs_score_change_vs_1e8": 0.0,
+      "changed_source_scores_above_1e12": 0,
+      "ranking_agreement_vs_1e8": {
+        "all_source_pairs": 4095,
+        "changed_pair_directions": 0,
+        "agreement_fraction": 1.0
+      },
+      "log_inputs": {
+        "mse": {
+          "minimum": 0.0051369491355874,
+          "maximum": 0.23740734892332704,
+          "repeated_source_role_rows": 621,
+          "at_or_below_floor": 0,
+          "max_abs_log_change_vs_1e8": 1.927212048613569e-06
+        },
+        "prefix_motion": {
+          "minimum": 0.3646225005899313,
+          "maximum": 3.962624072728664,
+          "repeated_source_role_rows": 621,
+          "at_or_below_floor": 0,
+          "max_abs_log_change_vs_1e8": 2.7151368486855176e-08
+        }
+      }
+    },
+    {
+      "floor": 1e-08,
+      "primary_anomaly": {
+        "candidate": "candidate",
+        "reference": "low_motion",
+        "estimate": -0.3481894150417827,
+        "candidate_auroc": 0.4623955431754875,
+        "reference_auroc": 0.8105849582172702,
+        "ci95": [
+          -0.5055710306406684,
+          -0.19080779944289694
+        ],
+        "candidate_ci95": [
+          0.3245125348189415,
+          0.5988857938718662
+        ],
+        "reference_ci95": [
+          0.7075208913649025,
+          0.9025069637883009
+        ],
+        "folds": [
+          {
+            "fold": 0,
+            "normal": 6,
+            "abnormal": 13,
+            "candidate_auroc": 0.44871794871794873,
+            "reference_auroc": 0.9102564102564102,
+            "difference": -0.4615384615384615,
+            "pairs": 78
+          },
+          {
+            "fold": 1,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.6041666666666666,
+            "reference_auroc": 0.9305555555555556,
+            "difference": -0.32638888888888895,
+            "pairs": 72
+          },
+          {
+            "fold": 2,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.4027777777777778,
+            "reference_auroc": 0.8333333333333334,
+            "difference": -0.4305555555555556,
+            "pairs": 72
+          },
+          {
+            "fold": 3,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.3888888888888889,
+            "reference_auroc": 0.7777777777777778,
+            "difference": -0.3888888888888889,
+            "pairs": 72
+          },
+          {
+            "fold": 4,
+            "normal": 5,
+            "abnormal": 13,
+            "candidate_auroc": 0.46923076923076923,
+            "reference_auroc": 0.5692307692307692,
+            "difference": -0.09999999999999998,
+            "pairs": 65
+          }
+        ],
+        "resamples": 5000,
+        "seed": 5701,
+        "unit": "verified source-relation component",
+        "resampling": "paired independently within outer fold and binary label",
+        "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+      },
+      "max_abs_score_change_vs_1e8": 0.0,
+      "changed_source_scores_above_1e12": 0,
+      "ranking_agreement_vs_1e8": {
+        "all_source_pairs": 4095,
+        "changed_pair_directions": 0,
+        "agreement_fraction": 1.0
+      },
+      "log_inputs": {
+        "mse": {
+          "minimum": 0.0051369491355874,
+          "maximum": 0.23740734892332704,
+          "repeated_source_role_rows": 621,
+          "at_or_below_floor": 0,
+          "max_abs_log_change_vs_1e8": 0.0
+        },
+        "prefix_motion": {
+          "minimum": 0.3646225005899313,
+          "maximum": 3.962624072728664,
+          "repeated_source_role_rows": 621,
+          "at_or_below_floor": 0,
+          "max_abs_log_change_vs_1e8": 0.0
+        }
+      }
+    },
+    {
+      "floor": 1e-06,
+      "primary_anomaly": {
+        "candidate": "candidate",
+        "reference": "low_motion",
+        "estimate": -0.3481894150417827,
+        "candidate_auroc": 0.4623955431754875,
+        "reference_auroc": 0.8105849582172702,
+        "ci95": [
+          -0.5055710306406684,
+          -0.19080779944289694
+        ],
+        "candidate_ci95": [
+          0.3245125348189415,
+          0.5988857938718662
+        ],
+        "reference_ci95": [
+          0.7075208913649025,
+          0.9025069637883009
+        ],
+        "folds": [
+          {
+            "fold": 0,
+            "normal": 6,
+            "abnormal": 13,
+            "candidate_auroc": 0.44871794871794873,
+            "reference_auroc": 0.9102564102564102,
+            "difference": -0.4615384615384615,
+            "pairs": 78
+          },
+          {
+            "fold": 1,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.6041666666666666,
+            "reference_auroc": 0.9305555555555556,
+            "difference": -0.32638888888888895,
+            "pairs": 72
+          },
+          {
+            "fold": 2,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.4027777777777778,
+            "reference_auroc": 0.8333333333333334,
+            "difference": -0.4305555555555556,
+            "pairs": 72
+          },
+          {
+            "fold": 3,
+            "normal": 6,
+            "abnormal": 12,
+            "candidate_auroc": 0.3888888888888889,
+            "reference_auroc": 0.7777777777777778,
+            "difference": -0.3888888888888889,
+            "pairs": 72
+          },
+          {
+            "fold": 4,
+            "normal": 5,
+            "abnormal": 13,
+            "candidate_auroc": 0.46923076923076923,
+            "reference_auroc": 0.5692307692307692,
+            "difference": -0.09999999999999998,
+            "pairs": 65
+          }
+        ],
+        "resamples": 5000,
+        "seed": 5701,
+        "unit": "verified source-relation component",
+        "resampling": "paired independently within outer fold and binary label",
+        "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+      },
+      "max_abs_score_change_vs_1e8": 0.0,
+      "changed_source_scores_above_1e12": 0,
+      "ranking_agreement_vs_1e8": {
+        "all_source_pairs": 4095,
+        "changed_pair_directions": 0,
+        "agreement_fraction": 1.0
+      },
+      "log_inputs": {
+        "mse": {
+          "minimum": 0.0051369491355874,
+          "maximum": 0.23740734892332704,
+          "repeated_source_role_rows": 621,
+          "at_or_below_floor": 0,
+          "max_abs_log_change_vs_1e8": 0.00019270245085145632
+        },
+        "prefix_motion": {
+          "minimum": 0.3646225005899313,
+          "maximum": 3.962624072728664,
+          "repeated_source_role_rows": 621,
+          "at_or_below_floor": 0,
+          "max_abs_log_change_vs_1e8": 2.715133123221136e-06
+        }
+      }
+    }
+  ],
+  "software_test": {
+    "status": "passed_synthetic_software_checks_only",
+    "zero_and_nonzero_log_values": true,
+    "midrank_and_endpoint_smoothing": true,
+    "original_evaluator_global_unchanged": true
+  },
+  "baseline_replay": true,
+  "protocol_sha256": "0c33025e29c7a4003e737598460ae7e1fcc968321f774243d083c20cd332e998",
+  "review_sha256": "667e6b2a3282d72579c7099f402ab79386ea02c35fd8810753f148c5b508f507",
+  "script_sha256": "de327a0e60529b5c782a8db8734cfcd6bcc5b57c87f7183d57de3dc1020dc5ea",
+  "inputs": {
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_0_rotation_0.calibrator.json": "019cc723bf2a368639a6ce48d8ba8183303f3c69ebf214a140ef2cc1721d2a96",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_0_rotation_0.scores.csv": "142496ed9e7429a27cbdf902915c125902e981e66568f06eede54ec273adc3ee",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_0_rotation_1.calibrator.json": "3ea11df19928e25b26ca32ee939592bc52341647573df5278253ae50ea8edeb4",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_0_rotation_1.scores.csv": "d10be0f5b554bd8c4c23f7ac69376a824ebe0821f7e61ab0213dd21754b04d5b",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_0_rotation_2.calibrator.json": "51c702c924047cf8c71ffbb4f5b1c4dd2e6cff0c6414590d22a13453af8bb9a5",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_0_rotation_2.scores.csv": "515e1a610d16cf8c1d9f2e3114a88398f3be7ba42d58f4572f2c0ab03ac511dc",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_1_rotation_0.calibrator.json": "5de52ff49478cfc90a8d05ac1c4cfc13b7d3a6051fc037a1fa5b2cafb2c51d33",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_1_rotation_0.scores.csv": "5eec6473850e78ecbc7bfb2a36ee77b5f01dbeb05ec9acce7b90d6f3458143bc",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_1_rotation_1.calibrator.json": "d40307c56918d3bf03f18418ddc4eb6fa4403746fb57a1a5f83d4a75dc15a097",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_1_rotation_1.scores.csv": "eacdf8cf07596a0a1a8332438ca33783aa209404eda6219b851842790c851766",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_1_rotation_2.calibrator.json": "e71e661602641c70d8c893170e2219859c3e10598f48ef6b7390248425ff4328",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_1_rotation_2.scores.csv": "194df4953a8439f1b4546bb69fc493927e286a99a8d7837433bf58745ecc60a6",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_2_rotation_0.calibrator.json": "331935731197dec663b18d37e499f7cc25072a62a2ae51922711637e2c0d8ec1",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_2_rotation_0.scores.csv": "96f4d8a32d11c8f4fdc729b7864b84f27866c03a6ca8a2e4ba26d2e4a7d79f9f",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_2_rotation_1.calibrator.json": "82c82ca35259a9c9eb15dde72315a89debe7f190cc7d2c38991d202416ed6be4",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_2_rotation_1.scores.csv": "7d885b1bf12f7439ddabb14562dfc4de45c233959f36763db09faadeafe8f78a",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_2_rotation_2.calibrator.json": "76775e472fbe032cac5b3714701f7edcfc9986e3b4815290a955500090fb6748",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_2_rotation_2.scores.csv": "82f1b5c1acf66433baabf6395bc17a1c0505da0bff75c5a19326e2c269e759c5",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_3_rotation_0.calibrator.json": "259ccd7447530b44e19b703a1de3f8b285fc4c8163dff4d179d056beaa74a8e3",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_3_rotation_0.scores.csv": "e215093ed205f4aac6e00cefc328177fde0be347a5bd6200e55938ff4ceeb719",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_3_rotation_1.calibrator.json": "ab8331c2096a442b74eefe8157353cd866beb7fedf0308a27b8355e051888831",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_3_rotation_1.scores.csv": "be17d6b94a4adf9751e310ac91634e1d38d2d7a0459606b36394403dd62a9dfe",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_3_rotation_2.calibrator.json": "c898e88315e8d3071843027a296b065ec95a8a71f371973a59dabca09b4efcca",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_3_rotation_2.scores.csv": "7b0fea6a2c3452cff121d0c020234b93e0b1ebadd4267412ec07531d90d52778",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_4_rotation_0.calibrator.json": "bf2688b370c9f5aefab90dc319852b32d0838137e40dd73638f2e2458a73c11b",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_4_rotation_0.scores.csv": "5b0565de610ef42b4f535ae9c95e15ef58470bdea0421cbc2c3eec0c164c278d",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_4_rotation_1.calibrator.json": "1648b36deaa22d4f182ee83c1acc88fcafb03f345ef96b6a732b09bcb3875b79",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_4_rotation_1.scores.csv": "2b98837cc2be1cb10d84bbf1640c3eea4e32c128fa268fe7f3086f62a2deeed6",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_4_rotation_2.calibrator.json": "b85c2863575ad4af1928a22521b7a31ce0838ff6558274700ff0871f54f852cf",
+    "artifacts/runs/reference-v2-core-v1/calibration/ridge_posture_velocity/fold_4_rotation_2.scores.csv": "54a2bcf71419e5d10e5c879b5647bd608ab88844802fdfea24f542fdbfb18c92",
+    "artifacts/runs/reference-v2-core-v1/calibration_models.json": "7b1ae8e88b378b3ad733f2f01015353454945809b90c672f55a2721e7ad58ee2",
+    "artifacts/runs/reference-v2-core-v1/results.json": "82484bbf2db8d0f98f24e6c387c0ed8899eac1a7110437b84377590ef0ed3e3d",
+    "artifacts/runs/reference-v2-core-v1/source_anomaly_scores.csv": "ea80b86d422d6f578cde2ef76edf9c99b0b3c65638c2a4be7cea722ab86034d9",
+    "artifacts/runs/reference-v2-core-v1/artifact_hashes.json": "4031d67bfe561fd8ebdf51a335a90bef8bad938d65fbd77184d7cd8241c1f843",
+    "worldmodels/v2_evaluation.py": "f01d2ebd1087fdd910f79b2442ca6a1c1325739c7e4dc0e9b35d496ce301ebff",
+    "worldmodels/data.py": "68aa589be72b04e03d3b84e20fdb4a7d8f68f726dccf3b7e92b6272fe7640f77",
+    "artifacts/runs/reference-v2-core-v1/calibrated_source_scores.csv": "72b736105c4de3417528f83379abdb55cd1775bc65fa33a30a60c87441cfc13f",
+    "artifacts/runs/reference-v2-core-v1/source_scores.csv": "ea80b86d422d6f578cde2ef76edf9c99b0b3c65638c2a4be7cea722ab86034d9",
+    "docs/reference_v2/floor_sensitivity_attempt01/analysis.py": "b850417c611c88f88eb8b01af632d1b310c2b780cb4de8e81eeaa3c70db6f540",
+    "artifacts/runs/reference-v2-floor-posthoc-v1/failure.json": "5584561fe1011fc6fdd841fdb6dc2666b41223e9574edb1f0d0f71f86c2a160c"
+  },
+  "seconds": 0.644954833202064,
+  "serialization": "Exactly one default pandas CSV write/read after averaging rotation scores, matching the frozen producer.",
+  "supersedes_failed_analysis": "reference-v2-floor-posthoc-v1; preserved failure before result export, not an efficacy result.",
+  "limitations": [
+    "Exploratory sensitivity chosen after outcomes were known; no primary result is replaced.",
+    "Saved source-level errors and motion estimates are fixed; only nuisance regression and normal empirical tails are refitted.",
+    "The floor is an additive logarithm stabilizer rather than a clipping threshold, so even large values change slightly.",
+    "Repeated source/role rows are not independent observations. Reported affected-row counts describe computation only.",
+    "Intervals condition on the saved forecasts and fixed fold memberships. External calibration is outside this sensitivity."
+  ]
+}

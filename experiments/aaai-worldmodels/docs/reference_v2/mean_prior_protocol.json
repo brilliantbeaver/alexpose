@@ -1,0 +1,57 @@
+{
+  "identity": "reference-v2-mean-prior-posthoc-v1",
+  "status": "declared_before_diagnostic_execution",
+  "declared_at_utc": "2026-11-16T16:57:16.682153+00:00",
+  "analysis_status": "Post hoc exploratory diagnostic after core and external outcomes were exposed. No confirmatory or preregistered claim.",
+  "question": "Does the tested current-posture forecast add normal-source accuracy beyond an untuned normal mean prior in the same body reference?",
+  "population": "Exact current 2815 common-support windows, 91 singleton source components, 29 normal sources; no altered target support or fold assignment.",
+  "folds": "The five frozen cohort outer folds; each prior fits only normal sources outside its scored fold.",
+  "controls": [
+    {
+      "name": "mean_pose",
+      "prediction": "For each future horizon, distal joint and coordinate, predict the normal-training weighted coordinate mean without a state-dependent learned term."
+    },
+    {
+      "name": "mean_residual",
+      "prediction": "Add the normal-training weighted future-minus-prefix-anchor mean to each query prefix anchor."
+    }
+  ],
+  "weighting": {
+    "hierarchy": "Equal source mass, equal sequence mass within source, equal window mass within sequence, using the current singleton-component hierarchy.",
+    "objective": "Equal measured coordinate mean within each leg, then equal legs within each window.",
+    "output_mean_formula": "For coordinate k in leg l, a_ik = w_i * 64 / n_observed_coordinates_in_leg_i * observed_ik. mean_k = sum(a_ik * target_ik) / sum(a_ik). Use identical weights for residual targets.",
+    "scaling": "The common factor 64 matches the existing ridge solver and cancels from each mean. No per-source coordinate-specific renormalization is added.",
+    "unsupported": "Refuse a window with no target support in a leg or an output with no permitted normal training support. Do not impute a target."
+  },
+  "hyperparameter_selection": "none",
+  "primary_horizon": "Mean error over the eight future samples, not the final time only. Four-sample results are secondary.",
+  "comparisons": "Both mean controls against persistence and the frozen new ridge_posture model on identical source rows. Positive reference-minus-method difference favors the mean control.",
+  "bootstrap": {
+    "draws": 5000,
+    "seed": 5801,
+    "unit": "normal source component",
+    "interval": "paired conditional percentile interval on saved source errors"
+  },
+  "checks": [
+    "Synthetic hierarchy arithmetic",
+    "All128 weighted intercepts compared with an independent sklearn solver under missingness",
+    "Missing-target value invariance",
+    "For every outer fold, poison all held-out future values and support bits, then refit; fitted means and prefix predictions must be unchanged.",
+    "Verify frozen core inputs and leave every original result unchanged."
+  ],
+  "budget": "Five very small normal-source mean fits plus paired bootstrap summaries. No neural training, hyperparameter search, data acquisition, or primary anomaly re-selection.",
+  "output": "artifacts/runs/reference-v2-mean-prior-posthoc-v1",
+  "review_required": "docs/reference_v2/mean_prior_review.json, status accepted_before_posthoc_fitting with exact declaration and script hashes.",
+  "script_sha256": "294d966015543ce26d11a693c515241ce0a43634653dd6c6f02c49c05fa248a9",
+  "input_sha256": {
+    "artifacts/runs/reference-v2-cohort-v1/identity.json": "9b663eac68a945b0ae7cf7058177b2e9239e34a0cfbc3171afc7a27086a3c5e2",
+    "artifacts/runs/reference-v2-cohort-v1/cohort.csv": "f364ce33601807d7c69a3621df004a00b50982538e892f3ce61db9afa5dc5f58",
+    "artifacts/runs/reference-v2-core-v1/results.json": "82484bbf2db8d0f98f24e6c387c0ed8899eac1a7110437b84377590ef0ed3e3d",
+    "artifacts/runs/reference-v2-core-v1/source_scores.csv": "ea80b86d422d6f578cde2ef76edf9c99b0b3c65638c2a4be7cea722ab86034d9",
+    "artifacts/runs/reference-v2-core-v1/artifact_hashes.json": "4031d67bfe561fd8ebdf51a335a90bef8bad938d65fbd77184d7cd8241c1f843",
+    "worldmodels/v2_data.py": "351a97436e3c13425b53263d99d56055638fb3ab1da7caf95851aa173034c706",
+    "worldmodels/v2_models.py": "07a3326f06705002429ddd66cbac444583917354603729cf5cdeffc49c711657",
+    "worldmodels/v2_runner.py": "cb8e57a3e32311b163d9938e941a31eac299c58db7b23eec4d59ce37d4a029fb",
+    "worldmodels/v2_evaluation.py": "f01d2ebd1087fdd910f79b2442ca6a1c1325739c7e4dc0e9b35d496ce301ebff"
+  }
+}

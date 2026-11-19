@@ -1,0 +1,71 @@
+{
+  "identity": "reference-v2-external-observation-visual-review-v1",
+  "status": "author_visual_inspection_complete_before_predictive_scoring",
+  "reviewer": "research-data author; independent final reviewer must assess the exact artifacts separately",
+  "inspected_at_utc": "2026-11-16T16:37:29.996045+00:00",
+  "selection_ledger_sha256": "a624c18297f3e479e2a89116a979b4cdc0174c49f5de316120785cb06ec433ee",
+  "pages": [
+    {
+      "page": 1,
+      "png_sha256": "1b011db8a1ee8bb1c838450ec8a7c066a79e10acfa52db9a784e951e4ec418e4",
+      "observations": "Panels001\u2013012 show an apparently single walking person at each midpoint against the same curtained space. Initial/final frames are frequently empty or contain only a partial body. Visible clothing and limb overlap limit joint-location verification."
+    },
+    {
+      "page": 2,
+      "png_sha256": "9684c8f84e6c91728cd30973c1b8e776598693c58b92b7049a6cdfd908e4f866",
+      "observations": "Panels013\u2013024 have the same entry/exit pattern. Panel020.1 is a decoded black frame, not proof of video-open failure. Midpoints generally place pose estimates on the visible walker, with some distal-point uncertainty."
+    },
+    {
+      "page": 3,
+      "png_sha256": "0ace3f96b79fbd329eddc3378fe065273c3d5c1f102e60149da4c79c1e053ed0",
+      "observations": "Panels025\u2013036 show one apparent walker at each midpoint. Several start/end stills show only the scene or a cropped person. Pose points follow the body coarsely, but the photographs do not validate anatomical joints."
+    },
+    {
+      "page": 4,
+      "png_sha256": "d052d21f3a6ca54fcaad3c03e0dbb3eec10897b409d67049e7d19e96c337c1b9",
+      "observations": "Panels037\u2013048 show a consistent static scene and walking person at midpoints. Some wrist/leg points are uncertain under clothing, and subjects leave the field of view at the final still."
+    },
+    {
+      "page": 5,
+      "png_sha256": "144961f5060c53290fdb3f7cf949ba7230a99fbe685eceb7d792b28c630c5b21",
+      "observations": "Panels049\u2013060 span two filming framings. The normal-sized moving person is generally visible centrally, while recording boundaries are cropped. Foot estimates sometimes cluster near or below visible foot outlines."
+    },
+    {
+      "page": 6,
+      "png_sha256": "daae610071d9bffa06a3777eed8ad8afc72e5e52ce60664ff7f2e192f47d7796",
+      "observations": "Panels061\u2013072 show one apparent walker per midpoint with repeated entry/exit truncation. Raw points are broadly on the body, but marker bands and overlapping legs make precise joint assignment uncertain."
+    },
+    {
+      "page": 7,
+      "png_sha256": "82c933ed4fee7fc281b62870ef7116dfdbad15b5aca16e13bd7d33b680dc6e33",
+      "observations": "Panels073\u2013084 show a single apparent walker per midpoint and no obvious change to a different person in the selected stills. Boundary frames frequently contain a partial or absent subject."
+    },
+    {
+      "page": 8,
+      "png_sha256": "4c8b4fa26a6140c20cb5beb8db9efb4e634c9948034e39e497ff36c37492a0bc",
+      "observations": "Panels085\u2013093 generally show one apparent walker per midpoint. Panel094.2 and094.3 include a second person closely behind and overlapping the foreground walker. The raw pose appears on the foreground body at the selected midpoint, but the first-pose identity cannot be guaranteed through the full recording."
+    }
+  ],
+  "participants_represented": 94,
+  "recordings_sampled": 94,
+  "still_frames_inspected": 282,
+  "review_order": "Inspected panel-numbered pages without source/condition labels, then unblinded flagged Panel094 using the separate ledger. Panel numbers retain deterministic participant order, so this is partial blinding rather than a clinical blinded study.",
+  "identity_risks": [
+    {
+      "panel": "094",
+      "participant_id": "PD_SV_001",
+      "recording_id": "001_PD_01_SV",
+      "observation": "Two overlapping people; full-image first-pose association remains uncertain.",
+      "recommendation": "Retain the declared primary data identity and report a pre-score identity-risk sensitivity excluding this participant if the coordinator freezes it before efficacy inspection."
+    }
+  ],
+  "cohort_changes": 0,
+  "predictive_scores_inspected": 0,
+  "conclusion": "The full sample reveals substantial frame-entry/exit missingness and one clear multiple-person overlap risk. Midpoint stills broadly support a walking-subject interpretation but cannot establish complete identity tracking or anatomical accuracy.",
+  "limits": [
+    "Only one recording per participant and three stills per recording were viewed.",
+    "The other direction and between-still frames were not visually verified.",
+    "Clinical labels and severity were not inferred or reassessed from appearance.",
+    "The raw33-joint confidence summary is a different descriptive quantity from16-joint support and should not be used interchangeably."
+  ]
+}

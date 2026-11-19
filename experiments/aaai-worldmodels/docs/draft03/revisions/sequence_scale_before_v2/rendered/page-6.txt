@@ -1,0 +1,120 @@
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC (higher is better)
+Conditional two-sided
+Low motion
+Paired difference -0.348 [-0.506, -0.191]
+GAVD: 91 source videos
+0.2
+0.4
+0.6
+0.8
+1.0
+AUROC (higher is better)
+Conditional two-sided
+Low motion
+Paired difference -0.172 [-0.357, 0.009]
+External: 90 coded participants
+Figure 3: The locked posture-plus-velocity forecaster supplies the conditional two-sided anomaly score. Its smaller normal
+forecast-development fits and disjoint calibration groups differ from the full-pool forecasts in Table 2. The comparator is negative
+persistence error, which assigns higher abnormality to smaller realized displacement over the same observed future segment.
+The left panel shows pair-count-weighted within-fold AUROC on 91 GAVD sources. The right panel uses all 90 external coded
+participants without target-domain fitting. Lines are conditional 95% paired group-bootstrap intervals; differences compare the
+same resamples.
+60
+80
+100
+Normal-source MSE x 1,000 (lower is better)
+No prefix masking
+Uniform masking
+Time blocks
+Anatomical tubes
+Random joint groups
+Motion-balanced masking
+Motion-focused masking
+Figure 4: Forecasting with six prefix-corruption policies and
+an unmasked prefix baseline on the same 29 held-out normal
+source videos. Points are source-average MSE multiplied by
+1,000; lines are conditional 95% source-bootstrap intervals.
+Predictions are averaged over three fixed seeds before errors
+are computed. The dashed line is the compact current-posture
+transition. Primary evaluation retains the full observed prefix.
+Structured masks do not improve on uniform masking under
+this contract.
+Forecast skill and anomaly ranking separate
+The locked conditional score has within-fold AUROC 0.462,
+compared with 0.811 for low motion. The paired difference
+is -0.348 [-0.506, -0.191]. Matched posture calibration also
+performs weakly, and its paired comparison with the larger
+state does not establish an advantage. Thus the present normal
+reference does not recognize annotation-defined departures
+better than the locked movement comparator. Table 3 keeps
+Anomaly score
+Within-fold Pooled Pooled AP
+Conditional two-sided
+0.462
+0.462
+0.651
+Posture two-sided
+0.386
+0.394
+0.636
+Low motion
+0.811
+0.806
+0.879
+Conditional one-sided
+0.500
+0.490
+0.674
+Marginal two-sided
+0.556
+0.545
+0.688
+Static-posture distance
+0.404
+0.397
+0.646
+Motion/quality distance
+0.557
+0.566
+0.763
+Low prefix motion
+0.749
+0.764
+0.840
+Prefix missingness
+0.426
+0.427
+0.646
+Bilateral excess error
+0.774
+0.793
+0.865
+Posture/velocity excess error
+0.802
+0.811
+0.866
+Table 3: Internal rankings on 29 normal and 62 abnormal
+GAVD sources. Higher values are better. Within-fold AU-
+ROC weights each fold by its number of normal-abnormal
+pairs; pooled AUROC and average precision (AP) combine
+all sources. Abnormal prevalence is 0.681. Scores use differ-
+ent reference mechanisms as explained in the text.
+the simple alternatives and other score definitions visible.
+The bilateral excess score has pooled AUROC 0.793, while
+low motion has 0.806. Their within-fold rankings differ be-
+cause those compare only sources evaluated by the same
+fold model. The favorable excess-error association remains
+compatible with a substantial contribution from movement
+amount. This does not make low motion meaningless: re-
+stricted movement can itself matter clinically. It shows that
+the association alone does not demonstrate additional knowl-
+edge of movement organization.
+Frozen transfer gives candidate AUROC 0.591 and low-
+motion AUROC 0.762, with paired difference -0.172 [-0.357,
+0.009]. The interval includes zero, and the candidate does not
+establish improvement. Parkinson’s and osteoarthritis slices

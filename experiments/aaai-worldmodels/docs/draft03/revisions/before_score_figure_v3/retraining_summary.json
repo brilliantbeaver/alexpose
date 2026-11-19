@@ -1,0 +1,114 @@
+[
+  {
+    "partition_seed": 2702,
+    "contrasts": [
+      {
+        "method": "ridge_posture_velocity",
+        "reference": "persistence",
+        "method_mse": 0.08023309057719569,
+        "reference_mse": 0.12126179358149482,
+        "estimate": 0.04102870300429916,
+        "ci95": [
+          0.025650842157449893,
+          0.0582009488303031
+        ],
+        "method_ci95": [
+          0.06420744962891539,
+          0.0966694131872172
+        ],
+        "relative_reduction": 0.3383481457143837,
+        "relative_ci95": [
+          0.25056492631349764,
+          0.4131745003881599
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5702,
+        "positive_favors": "ridge_posture_velocity",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      },
+      {
+        "method": "ridge_posture_velocity",
+        "reference": "ridge_posture",
+        "method_mse": 0.08023309057719569,
+        "reference_mse": 0.07376657082711073,
+        "estimate": -0.006466519750084962,
+        "ci95": [
+          -0.011624784183183643,
+          -0.0012438420435021014
+        ],
+        "method_ci95": [
+          0.06420744962891539,
+          0.0966694131872172
+        ],
+        "relative_reduction": -0.08766192704335901,
+        "relative_ci95": [
+          -0.17306504465622477,
+          -0.016085182360591706
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5702,
+        "positive_favors": "ridge_posture_velocity",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      }
+    ],
+    "note": "Complete normal-only refitting on a correlated alternate source partition; not an independent study."
+  },
+  {
+    "partition_seed": 2703,
+    "contrasts": [
+      {
+        "method": "ridge_posture_velocity",
+        "reference": "persistence",
+        "method_mse": 0.07826872781473204,
+        "reference_mse": 0.12126179358149482,
+        "estimate": 0.04299306576676282,
+        "ci95": [
+          0.027527169095731642,
+          0.06004606347128922
+        ],
+        "method_ci95": [
+          0.06232956783076541,
+          0.09507346877907379
+        ],
+        "relative_reduction": 0.3545475000571305,
+        "relative_ci95": [
+          0.2699277866011438,
+          0.42685980157532954
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5702,
+        "positive_favors": "ridge_posture_velocity",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      },
+      {
+        "method": "ridge_posture_velocity",
+        "reference": "ridge_posture",
+        "method_mse": 0.07826872781473204,
+        "reference_mse": 0.07326021519964418,
+        "estimate": -0.005008512615087868,
+        "ci95": [
+          -0.010449789758517588,
+          7.994212484398692e-05
+        ],
+        "method_ci95": [
+          0.06232956783076541,
+          0.09507346877907379
+        ],
+        "relative_reduction": -0.06836606473839826,
+        "relative_ci95": [
+          -0.15442836057151751,
+          0.0009359506398871721
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5702,
+        "positive_favors": "ridge_posture_velocity",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      }
+    ],
+    "note": "Complete normal-only refitting on a correlated alternate source partition; not an independent study."
+  }
+]

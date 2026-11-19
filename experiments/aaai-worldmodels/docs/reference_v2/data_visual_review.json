@@ -1,0 +1,141 @@
+{
+  "identity": "reference-v2-sampled-observation-visual-review-v1",
+  "status": "author_visual_inspection_complete",
+  "reviewer": "research-data author; not an independent review of own generated material",
+  "inspected_at_utc": "2026-11-16T16:08:33.138675+00:00",
+  "sheet_sha256": "0d22d2061f822bd8732b9ee287fb9526c48dc78f18d63e0ff73ddd9dc931ba8c",
+  "ledger_sha256": "03dccf48f930a35f767d5931553e3df7d8c2d58ac4f46f29c6f1bda09c0e36f6",
+  "review_order": "Viewed a sheet concealing label, source ID, acceptance stratum, and gate reason; recorded observable scene/pose concerns, then read the separate ledger. Visual disease cues can remain apparent.",
+  "panels_inspected": 30,
+  "sequences": 10,
+  "source_videos": 10,
+  "findings": [
+    {
+      "panel_group": "01",
+      "blinded_observation": "The subject is very small initially and grows substantially in the image; the first still lacks a usable pose. This is strong scale and observation-availability variation.",
+      "unblinded_status": "accepted",
+      "source_id": "DlPDuHBAP7A",
+      "sequence_id": "cljas71p600fv3n6lk1rzl7y5",
+      "sampled_gate_reasons": [
+        "missing_pelvis",
+        "inside_box",
+        "inside_box"
+      ]
+    },
+    {
+      "panel_group": "02",
+      "blinded_observation": "The walking subject is visible beside a parked vehicle, but raw pose output is absent in the middle still and limited in the others.",
+      "unblinded_status": "rejected",
+      "source_id": "bmi1hYOnTHs",
+      "sequence_id": "cljw65m0800333n6lpxsiegdj",
+      "sampled_gate_reasons": [
+        "inside_box",
+        "missing_pelvis",
+        "inside_box"
+      ]
+    },
+    {
+      "panel_group": "03",
+      "blinded_observation": "A crowded scene contains several walking people, and raw detections appear to select different foreground people across the sampled stills.",
+      "unblinded_status": "rejected",
+      "source_id": "KnvYRnTA3XQ",
+      "sequence_id": "cllenppvx002t3o6lxhjlee0a",
+      "sampled_gate_reasons": [
+        "outside_annotated_person_box",
+        "outside_annotated_person_box",
+        "outside_annotated_person_box"
+      ]
+    },
+    {
+      "panel_group": "04",
+      "blinded_observation": "Two people overlap in a supported-walking scene. The raw pose points predominantly follow the assisting person rather than the supported walker.",
+      "unblinded_status": "rejected",
+      "source_id": "sChOLBghpAc",
+      "sequence_id": "cllcybkmj001p3o6le6i3k02f",
+      "sampled_gate_reasons": [
+        "outside_annotated_person_box",
+        "outside_annotated_person_box",
+        "outside_annotated_person_box"
+      ]
+    },
+    {
+      "panel_group": "05",
+      "blinded_observation": "A distant hallway subject is visible, but raw pose points disappear in the middle and final stills; the last still includes a fade/darkened image.",
+      "unblinded_status": "rejected",
+      "source_id": "zJ6PFxJrGf8",
+      "sequence_id": "cllamyil1004o3o6lsl7ye5jj",
+      "sampled_gate_reasons": [
+        "inside_box",
+        "missing_pelvis",
+        "missing_pelvis"
+      ]
+    },
+    {
+      "panel_group": "06",
+      "blinded_observation": "The same apparent walker approaches the camera. Initial raw support is absent and the final upper body is cropped at the image edge.",
+      "unblinded_status": "accepted",
+      "source_id": "USurcA3YKDY",
+      "sequence_id": "clld34hz8001u3o6la1gw24at",
+      "sampled_gate_reasons": [
+        "missing_pelvis",
+        "inside_box",
+        "inside_box"
+      ]
+    },
+    {
+      "panel_group": "07",
+      "blinded_observation": "A single apparent walker with support devices remains visible across the sampled stills; pose points are generally on the same person.",
+      "unblinded_status": "accepted",
+      "source_id": "qVfnxAlL6d0",
+      "sequence_id": "cll8gq7i7004l3o6lby0zk8l9",
+      "sampled_gate_reasons": [
+        "inside_box",
+        "inside_box",
+        "inside_box"
+      ]
+    },
+    {
+      "panel_group": "08",
+      "blinded_observation": "Other people are present, and a passing cyclist partially occludes the walking subject in the last sampled still. Pose support does not prove unoccluded anatomy.",
+      "unblinded_status": "accepted",
+      "source_id": "hSIYGZhRGd4",
+      "sequence_id": "cllc0y22y003i3o6liek1w8k8",
+      "sampled_gate_reasons": [
+        "inside_box",
+        "inside_box",
+        "inside_box"
+      ]
+    },
+    {
+      "panel_group": "09",
+      "blinded_observation": "Split-screen before/after footage contains two displayed movement sequences. Raw output is absent in distant frames and follows one displayed person later; the single-person assumption is weak.",
+      "unblinded_status": "rejected",
+      "source_id": "dXAvAA556gE",
+      "sequence_id": "cljw7ndde006n3n6lfm5x8fuv",
+      "sampled_gate_reasons": [
+        "missing_pelvis",
+        "missing_pelvis",
+        "outside_annotated_person_box"
+      ]
+    },
+    {
+      "panel_group": "10",
+      "blinded_observation": "A stooped walking subject is visible across the sampled stills; some upper-body anatomy lies outside the image while the distal legs remain visible.",
+      "unblinded_status": "accepted",
+      "source_id": "dxRMtNtjwCc",
+      "sequence_id": "cljw7orya006s3n6lopenf75e",
+      "sampled_gate_reasons": [
+        "inside_box",
+        "inside_box",
+        "inside_box"
+      ]
+    }
+  ],
+  "conclusion": "The sampled rejected strata expose observation, crowding, and identity-selection failures that the box/support gates detect. Accepted sequences still contain scale variation, frame-edge cropping, and occlusion, so gate passage does not establish full tracking or anatomical validity.",
+  "inclusion_changes": 0,
+  "limits": [
+    "Only first/middle/last sampled frames of ten sequences were inspected.",
+    "No clinical diagnosis, identity continuity across every frame, or unseen sequence validity was assessed.",
+    "This qualitative check is descriptive and does not independently validate the complete dataset."
+  ]
+}

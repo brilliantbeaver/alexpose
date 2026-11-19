@@ -1,0 +1,235 @@
+{
+  "identity": "reference-v2-cohort-audit-v1",
+  "status": "complete",
+  "fresh_inventory": {
+    "schema_version": 1,
+    "annotation_identity": "0d630ee0cfffe33f22a1ec9803b8cc0ec617f781f98867c7c65b604fd71238b5",
+    "source_manifest_sha256": "499c0e129fd6e32a103ed6a29e0ecc11f4860fc81c7d5b9c9da57babe990ef14",
+    "media_manifest_sha256": "74303b22e984e83d41d24944eefdf2fcc5fd350e5ab1d0137f0830dfcd6148ab",
+    "all_sequences": 1874,
+    "all_rows": 458116,
+    "all_sources": 348,
+    "by_label": {
+      "abnormal": {
+        "sequences": 767,
+        "rows": 216492,
+        "sources": 117
+      },
+      "antalgic": {
+        "sequences": 35,
+        "rows": 6556,
+        "sources": 10
+      },
+      "cerebral palsy": {
+        "sequences": 64,
+        "rows": 20346,
+        "sources": 11
+      },
+      "exercise": {
+        "sequences": 234,
+        "rows": 54941,
+        "sources": 98
+      },
+      "inebriated": {
+        "sequences": 23,
+        "rows": 7007,
+        "sources": 8
+      },
+      "myopathic": {
+        "sequences": 188,
+        "rows": 34595,
+        "sources": 30
+      },
+      "normal": {
+        "sequences": 291,
+        "rows": 41340,
+        "sources": 32
+      },
+      "parkinsons": {
+        "sequences": 47,
+        "rows": 10426,
+        "sources": 11
+      },
+      "pregnant": {
+        "sequences": 6,
+        "rows": 909,
+        "sources": 2
+      },
+      "prosthetic": {
+        "sequences": 39,
+        "rows": 17999,
+        "sources": 8
+      },
+      "stroke": {
+        "sequences": 76,
+        "rows": 33934,
+        "sources": 19
+      },
+      "style": {
+        "sequences": 104,
+        "rows": 13571,
+        "sources": 3
+      }
+    },
+    "selected_sequences": 666,
+    "selected_rows": 140641,
+    "selected_sources": 103,
+    "media_eligible_sequences": 652,
+    "media_eligible_sources": 98,
+    "exclusions": {
+      "missing_video": 9,
+      "video_reference_mismatch": 4,
+      "source_too_short": 1
+    },
+    "eligibility_note": "Media eligibility only. Frame alignment, person identity, and pose quality need review; recorded video hashes are not reverified by this inventory."
+  },
+  "mixed_label_sources": {
+    "wRntYsztIEY": [
+      "abnormal",
+      "cerebral palsy"
+    ]
+  },
+  "prepared_windows": 2818,
+  "model_windows": 2815,
+  "model_sequences": 456,
+  "sources": 91,
+  "normal_sources": 29,
+  "source_components": 91,
+  "exact_footage_cross_source_edges": [],
+  "folds_equal_historical": true,
+  "source_caches_verified": 96,
+  "reconstruction": {
+    "windows_reconstructed": 2818,
+    "sequences_reconstructed": 456,
+    "maximum_absolute_error": 0.0,
+    "frame_origin_and_times_verified": true
+  },
+  "timing": {
+    "actual_decoder_intervals_min_seconds": 0.06666666666666288,
+    "actual_decoder_intervals_max_seconds": 0.13333333333335418,
+    "all_windows_strictly_increasing": true
+  },
+  "quality_and_timing_quantiles": {
+    "prefix_valid_fraction": {
+      "0": 0.703125,
+      "0.25": 0.86328125,
+      "0.5": 0.89453125,
+      "0.75": 0.99609375,
+      "1": 1.0
+    },
+    "future_valid_fraction": {
+      "0": 0.703125,
+      "0.25": 0.8671875,
+      "0.5": 0.890625,
+      "0.75": 1.0,
+      "1": 1.0
+    },
+    "prefix_mean_confidence": {
+      "0": 0.63077712059021,
+      "0.25": 0.8109224438667297,
+      "0.5": 0.848930835723877,
+      "0.75": 0.9254629909992218,
+      "1": 0.9775606393814088
+    },
+    "future_mean_confidence": {
+      "0": 0.6272438168525696,
+      "0.25": 0.8144915997982025,
+      "0.5": 0.8532333374023438,
+      "0.75": 0.9296393990516663,
+      "1": 0.97764253616333
+    },
+    "final_horizon_seconds": {
+      "0": 0.7674333333333152,
+      "0.25": 0.7999999999999972,
+      "0.5": 0.8000000000000114,
+      "0.75": 0.8007999999999997,
+      "1": 0.8341666666667038
+    },
+    "maximum_grid_error_seconds": {
+      "0": 0.0,
+      "0.25": 1.1546319456101628e-14,
+      "0.5": 0.002299999999999,
+      "0.75": 0.0023000000000026,
+      "1": 0.0412083333333157
+    }
+  },
+  "coverage_by_label": [
+    {
+      "label": "cerebral palsy",
+      "windows": 518,
+      "sequences": 52,
+      "sources": 8,
+      "components": 8
+    },
+    {
+      "label": "myopathic",
+      "windows": 845,
+      "sequences": 168,
+      "sources": 27,
+      "components": 27
+    },
+    {
+      "label": "normal",
+      "windows": 465,
+      "sequences": 141,
+      "sources": 29,
+      "components": 29
+    },
+    {
+      "label": "parkinsons",
+      "windows": 292,
+      "sequences": 37,
+      "sources": 11,
+      "components": 11
+    },
+    {
+      "label": "stroke",
+      "windows": 695,
+      "sequences": 58,
+      "sources": 16,
+      "components": 16
+    }
+  ],
+  "seconds": 5.5269286669790745,
+  "limits": [
+    "Source IDs are not participant IDs.",
+    "Byte identity cannot detect mirrored or edited reuploads.",
+    "Participant overlap across distinct recordings remains unknown.",
+    "Annotation folders do not independently verify clinical diagnosis.",
+    "Future observation gates define offline outcome availability, not a deployable decision rule.",
+    "Historical GAVD outcome exposure makes this an exploratory study."
+  ],
+  "actual_pose_model_weights_verified": {
+    "path": "data/models/pose_landmarker_lite.task",
+    "sha256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a"
+  },
+  "cohort_identity": {
+    "identity": "reference-v2-cohort-v1",
+    "status": "complete",
+    "prepared_directory": "experiments/aaai-worldmodels/artifacts/runs/restart-full10hz-v1",
+    "prepared_inputs": {
+      "windows.npz": "39e2051e83909558ab6bdf5632145a15e0e529a9e2f9b617f90ce3f7ef7ad2e8",
+      "windows.csv": "6fcb0c0306bc6def26607bb9f7e15705a2ca41644db6613687d88ae58a1ab4d5",
+      "preparation.json": "cc828d9a2f5cee879ed954c26a4fa98a65c357b76c3ebd4aca0131be84adebdc",
+      "request.json": "12deec349d64ff82eaaf51a401cf2d1f18bb6b4471a186380e82c8e9ca13a250",
+      "source_progress.json": "a2aeb20ed3547517690215fd38ddc774528d1d03c59ba473d1d63aa65b728276"
+    },
+    "cohort_sha256": "f364ce33601807d7c69a3621df004a00b50982538e892f3ce61db9afa5dc5f58",
+    "code_sha256": "351a97436e3c13425b53263d99d56055638fb3ab1da7caf95851aa173034c706",
+    "code_revision": "5d829ec882956ad6f76c862a50b8e1cc5918761e",
+    "grouping": "source_id plus verified byte-identical original-footage components",
+    "outer_folds": 5,
+    "outer_seed": 2701,
+    "annotation_identity": "0d630ee0cfffe33f22a1ec9803b8cc0ec617f781f98867c7c65b604fd71238b5",
+    "source_manifest_sha256": "499c0e129fd6e32a103ed6a29e0ecc11f4860fc81c7d5b9c9da57babe990ef14",
+    "media_manifest_sha256": "74303b22e984e83d41d24944eefdf2fcc5fd350e5ab1d0137f0830dfcd6148ab",
+    "pose_model_sha256": [
+      "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a"
+    ],
+    "note": "Prepared arrays reused by immutable hash and row index, with no new extraction or learned-model fitting."
+  },
+  "external_metadata": "data_external_summary.json",
+  "visual_qa": "data_visual_qa.json",
+  "report_generator_sha256": "41f3c6bfb80a4f2604e67edfb81b5024df053bb11d1c10c5ba820633a340d6e3",
+  "visual_inspection": "data_visual_review.json"
+}

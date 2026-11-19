@@ -43,3 +43,7 @@ By reviewing the experimental setup and results so far, think creatively and out
 draft02 should not reference any of the "original analysis remains negative".  This manuscript should be a standalone writeup of a significant contribution to anomaly detection for gait analysis.
 
 Carefully and thoughtfully rewrite your draft02 to make the reading more accessible and less dense with jargons.  The reader audience should be generally AI/ML researchers but not specialists about JEPA, self-supervised learning, or gait analysis.  Use simple complete sentences with clear connection words.  Proof read so that the main text, captions, and image illustrations are easy to understand.  Avoid syllogism and staccato cadence
+
+---
+
+Add to the notes/aaai-worldmodels/05-iterate-02-INSTR.md instructions for writing a positive results-based manuscript for AAAI [Med-WM workshop](https://med-wm.github.io/aaai27-mwm/) as the next draft03, using plainly written, grounded, easy to read, fully explained, well composed, logically connected languages and sentences.  Explain all key concepts and ideas clearly while able to emphasize our contributions.

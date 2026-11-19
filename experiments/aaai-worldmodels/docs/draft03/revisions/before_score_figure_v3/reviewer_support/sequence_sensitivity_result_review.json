@@ -1,0 +1,48 @@
+{
+  "identity": "reference-v2-sequence-scale-independent-result-review-v2",
+  "status": "accepted_exact_posthoc_results",
+  "reviewer": "/root/v2_reviewer",
+  "reviewed_at_utc": "2026-11-16T18:45:18.906467+00:00",
+  "analysis_identity": "reference-v2-sequence-scale-posthoc-v2",
+  "results_sha256": "9c64cccfa0a4ee4d63b2ec0f07a0cb3ea8e9fab36a9b17fd609026ff856e155a",
+  "artifact_manifest_sha256": "6ca13186de8541a417cb90c22942f267bf5831eb02966d6a9a0b3cd59f3cff75",
+  "script_sha256": "c891b95f590cf96840c4a03f121403e52d7f3a9b205137f2f58bd5c55b014ef6",
+  "protocol_sha256": "d17a03898b1de81f62c2e8f1bf5af1eef67546272e68fd43cbac7e94861157bb",
+  "prefit_review_sha256": "ad4704bee7076334d804aa87fe44f7ed40c648409b34c594eacba497a1625710",
+  "independence": "Reviewer did not author the sensitivity script or its declaration. Replay independently averaged actual window rows and explicitly expanded each selected recording into every one of its sequence rows.",
+  "checks": {
+    "output_manifest_files_verified": 3,
+    "input_hashes_verified": 4,
+    "all_sequence_errors_reconstructed": 456,
+    "normal_sequences": 141,
+    "normal_recording_components": 29,
+    "bootstrap_replicates_expanded": 5000,
+    "bootstrap_seed": 6827,
+    "minimum_selected_sequence_count": 61,
+    "maximum_selected_sequence_count": 240,
+    "maximum_saved_sequence_mse_discrepancy": 1.3877787807814457e-16,
+    "maximum_absolute_interval_discrepancy": 1.3877787807814457e-17,
+    "maximum_relative_interval_discrepancy": 5.551115123125783e-17,
+    "original_recording_weighted_points_reproduced": true,
+    "previous_publication_acceptance_unchanged": true
+  },
+  "verified_result": {
+    "sequence_weighted_mse": {
+      "persistence": 0.13849954436846693,
+      "ridge_posture": 0.08084133097159804
+    },
+    "paired_improvement": 0.057658213396868906,
+    "ci95": [
+      0.04178336195670544,
+      0.07967143972558138
+    ],
+    "relative_reduction": 0.4163061594157585,
+    "relative_ci95": [
+      0.3593753110159124,
+      0.4687267133446003
+    ]
+  },
+  "reporting_boundary": "Post hoc weighting sensitivity of existing predictions. Original recording-weighted 40.8 percent result remains primary. Equal sequence weighting does not add independent participants; uncertainty resamples the same 29 recording components within five original folds.",
+  "unresolved_blocking_findings": [],
+  "resources": "Read-only reconstruction of frozen predictions and explicit bootstrap sequence expansion; no fitting or media processing."
+}

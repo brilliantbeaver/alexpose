@@ -1,0 +1,28 @@
+{
+  "identity": "reference-v2-independent-floor-v2-prefit-review-v1",
+  "status": "accepted_before_posthoc_fitting",
+  "reviewer": "/root/v2_reviewer",
+  "reviewed_at_utc": "2026-11-16T17:08:27.272684+00:00",
+  "script_sha256": "de327a0e60529b5c782a8db8734cfcd6bcc5b57c87f7183d57de3dc1020dc5ea",
+  "protocol_sha256": "0c33025e29c7a4003e737598460ae7e1fcc968321f774243d083c20cd332e998",
+  "independence": "The reviewer authored neither this replay nor its declaration or original evaluator.",
+  "scope": "Only the corrected transport path for the same explicitly post hoc three-floor sensitivity. No original result or scientific policy changes.",
+  "checks": [
+    "Diffed predecessor versus successor: changes add one default pandas CSV serialization/read of final rotation means, a fresh output identity, a bitwise default-vector guard and provenance text.",
+    "Independently reproduced default versus round_trip parsing on original calibrated_source_scores.csv:27 of91 scores differ by at most6.94e-17 and AUROC changes .46239554 to .46518106.",
+    "One default CSV round trip of the raw rank vector exactly recovers all91 frozen scores. The persisted final source vector reproduces the original primary with either parser.",
+    "Independently verified all archived v1 code/declaration/review hashes and the retained failure identity.",
+    "Synthetic self-test independently re-executed and passed; all declared inputs match.",
+    "Normal-only nuisance memberships, alpha selection, fixed floor choices and score directions remain as previously reviewed."
+  ],
+  "transport_diagnostic": "artifacts/reference-v2-independent-review/score_transport_diagnostic.json",
+  "transport_diagnostic_sha256": "2379b68404f1304a16aaf7260a8700412a3a49fa2437dc55a186cdef9626b008",
+  "unresolved_blockers": [],
+  "conditions": [
+    "Keep v1 as a failed diagnostic, not an efficacy result.",
+    "Require exact default source-vector and endpoint agreement before accepting the successor.",
+    "Report the machine-precision tie/CSV dependence in the reproducibility record.",
+    "Do not introduce arbitrary rounding, a favorable direction, or a new selected primary floor.",
+    "Independent result reconstruction remains required."
+  ]
+}

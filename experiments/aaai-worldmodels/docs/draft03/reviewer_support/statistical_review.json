@@ -1,0 +1,584 @@
+{
+  "identity": "draft03-independent-statistical-scale-review-v1",
+  "status": "completed_statistical_advisory_with_independent_sequence_sensitivity_replay",
+  "reviewed_at_utc": "2026-11-16T18:46:13.798847+00:00",
+  "reviewer": "/root/v2_reviewer",
+  "independence": "Reviewer did not author the revised manuscript, coordinator REVIEWER.md, cohort, models, or evaluation. The reviewer authored prior independent audit records and the separate sequence-sensitivity pre-computation review.",
+  "scope": "Frozen results, observation versus inference units, defensible scale wording, and qualitative workshop framing. This record does not accept an unreviewed revised publication.",
+  "input_hashes_project_relative": {
+    "artifacts/runs/reference-v2-core-v1/results.json": "82484bbf2db8d0f98f24e6c387c0ed8899eac1a7110437b84377590ef0ed3e3d",
+    "artifacts/runs/reference-v2-core-v1/source_scores.csv": "ea80b86d422d6f578cde2ef76edf9c99b0b3c65638c2a4be7cea722ab86034d9",
+    "artifacts/runs/reference-v2-core-v1/artifact_hashes.json": "4031d67bfe561fd8ebdf51a335a90bef8bad938d65fbd77184d7cd8241c1f843",
+    "artifacts/runs/reference-v2-cohort-v1/cohort.csv": "f364ce33601807d7c69a3621df004a00b50982538e892f3ce61db9afa5dc5f58",
+    "artifacts/runs/reference-v2-cohort-v1/identity.json": "9b663eac68a945b0ae7cf7058177b2e9239e34a0cfbc3171afc7a27086a3c5e2",
+    "artifacts/runs/reference-v2-transfer-v1/results.json": "dba163563765f460bb48e0321e70f426f12fb45e24d6d3813ecb03caa3610ee8",
+    "artifacts/runs/reference-v2-mean-prior-posthoc-v1/results.json": "8c0e0bac907752107f7f9c99bb13fcba2a72010ed71664c9fd1bf95826050356",
+    "docs/reference_v2/protocol.md": "7b7560939585a6849ccf85c9e6b096d5327bbfe6e5c50ef5b314e70ddfe1f71f",
+    "docs/reference_v2/evaluation_contract.md": "df0f147f0a5b24d5785fac5bb695f77812d4f3e56fa598e7942c2edd768f798c",
+    "docs/reference_v2/final_acceptance.json": "8b5b6e6e1ce57e6f3b4513a5f8b4fd8aeec6dfa5fadca04970a7e704c12bf229",
+    "docs/draft03/reviewer_support/sequence_audit.json": "db1c3489c7e606cc48b94c31db9fa409ef95b3488364abf0f1f8afc11ac86cf7",
+    "docs/draft03/reviewer_support/sequence_audit.md": "329969a3e3217f4a64224b98f9b2bf2a9e43d6900466028c017664fb589ffbfd",
+    "docs/draft03/reviewer_support/literature_scale.json": "20fea1572479b7c5e46b0165c0eb102d6fc40abeb948fd3d285adaa8cb8ea090",
+    "docs/draft03/reviewer_support/literature_scale.md": "1566c0e530b915f3e2b6c9ce53c4c9d8039dec7d6c7abbcfe211a6f141ca2dfd",
+    "docs/draft03/reviewer_support/sequence_sensitivity_protocol.json": "d17a03898b1de81f62c2e8f1bf5af1eef67546272e68fd43cbac7e94861157bb",
+    "docs/draft03/reviewer_support/sequence_sensitivity_review.json": "ad4704bee7076334d804aa87fe44f7ed40c648409b34c594eacba497a1625710",
+    "docs/draft03/reviewer_support/sequence_sensitivity_v1_failure/analyze_draft03_sequence_scale.py": "1e0e61ea0007988112adf16af0b653efb3900bee84a5fa26bfc1d7ca0b7c8654",
+    "docs/draft03/reviewer_support/sequence_sensitivity_v1_failure/sequence_sensitivity_protocol.json": "5255010ebaef4fca021c85914894316cf541d76b7e4462cbd402298e9e3109b4",
+    "docs/draft03/reviewer_support/sequence_sensitivity_v1_failure/sequence_sensitivity_review.json": "78f5bd372d7d3b16df5c00afb236e01c9c569d7e5d47cdfe52d21688a63bf7af",
+    "artifacts/runs/reference-v2-sequence-scale-posthoc-v1/failure.json": "18be5bf82507f9bf7fe76dccd6e1d5e7fd74c3ec6463aefb11e0ef6669c3e356",
+    "scripts/analyze_draft03_sequence_scale.py": "c891b95f590cf96840c4a03f121403e52d7f3a9b205137f2f58bd5c55b014ef6",
+    "artifacts/runs/reference-v2-sequence-scale-posthoc-v2/results.json": "9c64cccfa0a4ee4d63b2ec0f07a0cb3ea8e9fab36a9b17fd609026ff856e155a",
+    "artifacts/runs/reference-v2-sequence-scale-posthoc-v2/artifact_hashes.json": "6ca13186de8541a417cb90c22942f267bf5831eb02966d6a9a0b3cd59f3cff75",
+    "artifacts/runs/reference-v2-sequence-scale-posthoc-v2/per_sequence_errors.csv": "843c326b24d147a2aadcbedefe7c3c59cba1d7e85582ef73163fcfe068ba6343",
+    "artifacts/runs/reference-v2-sequence-scale-posthoc-v2/normal_recording_sums.csv": "bbd1365980553c7076fc932ab9a042293b1a845865adc7b4cde53be27a04f32d",
+    "docs/draft03/reviewer_support/sequence_sensitivity_result_review.json": "b853ece72a17e445dc67e78a7e7e238885499e93812a09b97006cb8c6d73fd1f"
+  },
+  "counts": {
+    "modeled_sequences": 456,
+    "forecast_windows": 2815,
+    "recording_groups": 91,
+    "normal_sequences": 141,
+    "normal_windows": 465,
+    "normal_recording_groups": 29,
+    "catalog_sequences": 1874,
+    "catalog_annotation_rows": 458116,
+    "catalog_source_ids": 348,
+    "five_label_sequences": 666,
+    "five_label_source_ids": 103,
+    "by_label": [
+      {
+        "label": "cerebral palsy",
+        "sequences": 52,
+        "windows": 518,
+        "recording_groups": 8
+      },
+      {
+        "label": "myopathic",
+        "sequences": 168,
+        "windows": 845,
+        "recording_groups": 27
+      },
+      {
+        "label": "normal",
+        "sequences": 141,
+        "windows": 465,
+        "recording_groups": 29
+      },
+      {
+        "label": "parkinsons",
+        "sequences": 37,
+        "windows": 292,
+        "recording_groups": 11
+      },
+      {
+        "label": "stroke",
+        "sequences": 58,
+        "windows": 695,
+        "recording_groups": 16
+      }
+    ],
+    "sources_with_multiple_retained_sequences": 73,
+    "normal_sequences_per_recording_minimum": 1,
+    "normal_sequences_per_recording_maximum": 30
+  },
+  "focal_forecast_contrasts_independently_replayed": [
+    {
+      "method": "ridge_posture",
+      "reference": "persistence",
+      "method_mse": 0.07174154584111857,
+      "reference_mse": 0.12126179358149479,
+      "estimate": 0.04952024774037623,
+      "ci95": [
+        0.03446947167969933,
+        0.06628450926545679
+      ],
+      "method_ci95": [
+        0.055713940386887074,
+        0.08879487610105098
+      ],
+      "relative_reduction": 0.40837469311466035,
+      "relative_ci95": [
+        0.33308605901385985,
+        0.47435018625164715
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "ridge_posture",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    },
+    {
+      "method": "ridge_posture_velocity",
+      "reference": "ridge_posture",
+      "method_mse": 0.07693311238605509,
+      "reference_mse": 0.07174154584111857,
+      "estimate": -0.00519156654493652,
+      "ci95": [
+        -0.010224247088882555,
+        -0.00045603380387920555
+      ],
+      "method_ci95": [
+        0.06095785479246078,
+        0.09349190241837674
+      ],
+      "relative_reduction": -0.07236485475841227,
+      "relative_ci95": [
+        -0.15093390760846645,
+        -0.005846145469556964
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "ridge_posture_velocity",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    },
+    {
+      "method": "bilateral",
+      "reference": "own",
+      "method_mse": 0.080631875425696,
+      "reference_mse": 0.08174367689527912,
+      "estimate": 0.0011118014695831097,
+      "ci95": [
+        -0.002670335655321234,
+        0.005287494456058497
+      ],
+      "method_ci95": [
+        0.06272584204135158,
+        0.09996792626802868
+      ],
+      "relative_reduction": 0.01360106997642685,
+      "relative_ci95": [
+        -0.03291500135938399,
+        0.06615548137592137
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "bilateral",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    },
+    {
+      "method": "mlp_anatomical_tubes",
+      "reference": "mlp_uniform",
+      "method_mse": 0.07962218329186992,
+      "reference_mse": 0.0776103211712062,
+      "estimate": -0.0020118621206637283,
+      "ci95": [
+        -0.004262141695559217,
+        -2.136091916625597e-05
+      ],
+      "method_ci95": [
+        0.062206521034980394,
+        0.09826401577404673
+      ],
+      "relative_reduction": -0.025922610424786243,
+      "relative_ci95": [
+        -0.05918960610042792,
+        -0.0002628840141815465
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "mlp_anatomical_tubes",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    },
+    {
+      "method": "mlp_anatomical_tubes",
+      "reference": "mlp_random_groups",
+      "method_mse": 0.07962218329186992,
+      "reference_mse": 0.08004248305427906,
+      "estimate": 0.00042029976240913155,
+      "ci95": [
+        -0.0008585552766006567,
+        0.0017315844903207152
+      ],
+      "method_ci95": [
+        0.062206521034980394,
+        0.09826401577404673
+      ],
+      "relative_reduction": 0.005250958570639688,
+      "relative_ci95": [
+        -0.011410764517197384,
+        0.020994312360997032
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "mlp_anatomical_tubes",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    },
+    {
+      "method": "mlp_motion_balanced",
+      "reference": "mlp_uniform",
+      "method_mse": 0.07916394118310822,
+      "reference_mse": 0.0776103211712062,
+      "estimate": -0.0015536200119020329,
+      "ci95": [
+        -0.0031125017223044473,
+        -0.00013266377912730877
+      ],
+      "method_ci95": [
+        0.06128168524600249,
+        0.09875950878759429
+      ],
+      "relative_reduction": -0.020018213923825728,
+      "relative_ci95": [
+        -0.040573903000352574,
+        -0.0016823069944686478
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "mlp_motion_balanced",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    },
+    {
+      "method": "bilateral",
+      "reference": "shifted",
+      "method_mse": 0.080631875425696,
+      "reference_mse": 0.08654129688701004,
+      "estimate": 0.0059094214613140345,
+      "ci95": [
+        0.0014691594499734683,
+        0.011095650566619476
+      ],
+      "method_ci95": [
+        0.06272584204135158,
+        0.09996792626802868
+      ],
+      "relative_reduction": 0.06828441072508416,
+      "relative_ci95": [
+        0.018131305078119407,
+        0.11878614448077987
+      ],
+      "normal_components": 29,
+      "resamples": 5000,
+      "seed": 5702,
+      "positive_favors": "bilateral",
+      "uncertainty": "Conditional on saved cross-validation predictions"
+    }
+  ],
+  "maximum_forecast_point_or_interval_replay_discrepancy": 0.0,
+  "primary_internal_anomaly": {
+    "candidate": "calibrated_two_sided",
+    "reference": "low_motion",
+    "estimate": -0.3481894150417827,
+    "candidate_auroc": 0.4623955431754875,
+    "reference_auroc": 0.8105849582172702,
+    "ci95": [
+      -0.5055710306406684,
+      -0.19080779944289694
+    ],
+    "candidate_ci95": [
+      0.3245125348189415,
+      0.5988857938718662
+    ],
+    "reference_ci95": [
+      0.7075208913649025,
+      0.9025069637883009
+    ],
+    "folds": [
+      {
+        "fold": 0,
+        "normal": 6,
+        "abnormal": 13,
+        "candidate_auroc": 0.44871794871794873,
+        "reference_auroc": 0.9102564102564102,
+        "difference": -0.4615384615384615,
+        "pairs": 78
+      },
+      {
+        "fold": 1,
+        "normal": 6,
+        "abnormal": 12,
+        "candidate_auroc": 0.6041666666666666,
+        "reference_auroc": 0.9305555555555556,
+        "difference": -0.32638888888888895,
+        "pairs": 72
+      },
+      {
+        "fold": 2,
+        "normal": 6,
+        "abnormal": 12,
+        "candidate_auroc": 0.4027777777777778,
+        "reference_auroc": 0.8333333333333334,
+        "difference": -0.4305555555555556,
+        "pairs": 72
+      },
+      {
+        "fold": 3,
+        "normal": 6,
+        "abnormal": 12,
+        "candidate_auroc": 0.3888888888888889,
+        "reference_auroc": 0.7777777777777778,
+        "difference": -0.3888888888888889,
+        "pairs": 72
+      },
+      {
+        "fold": 4,
+        "normal": 5,
+        "abnormal": 13,
+        "candidate_auroc": 0.46923076923076923,
+        "reference_auroc": 0.5692307692307692,
+        "difference": -0.09999999999999998,
+        "pairs": 65
+      }
+    ],
+    "resamples": 5000,
+    "seed": 5701,
+    "unit": "verified source-relation component",
+    "resampling": "paired independently within outer fold and binary label",
+    "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+  },
+  "internal_paired_endpoint_independently_replayed": {
+    "candidate_auroc": 0.4623955431754875,
+    "reference_auroc": 0.8105849582172702,
+    "ci95": [
+      -0.5055710306406686,
+      -0.19080779944289694
+    ],
+    "within_fold_pair_count": 359,
+    "bootstrap_replicates": 5000,
+    "bootstrap_seed": 5701
+  },
+  "external_primary": {
+    "candidate": "two_sided",
+    "reference": "low_motion",
+    "estimate": -0.1716637272192828,
+    "candidate_auroc": 0.5908289241622575,
+    "reference_auroc": 0.7624926513815403,
+    "ci95": [
+      -0.3565623162845385,
+      0.009112286890064714
+    ],
+    "candidate_ci95": [
+      0.46736478542034093,
+      0.7051734273956496
+    ],
+    "reference_ci95": [
+      0.6619488536155202,
+      0.8547912992357437
+    ],
+    "folds": [
+      {
+        "fold": 0,
+        "normal": 27,
+        "abnormal": 63,
+        "candidate_auroc": 0.5908289241622575,
+        "reference_auroc": 0.7624926513815403,
+        "difference": -0.1716637272192828,
+        "pairs": 1701
+      }
+    ],
+    "resamples": 5000,
+    "seed": 5703,
+    "unit": "dataset-coded external participant",
+    "resampling": "paired participant resampling within normal/abnormal strata; single external cohort",
+    "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+  },
+  "posthoc_mean_priors": {
+    "analysis_status": "Post hoc, outcome-exposed exploratory diagnostic; not a new primary endpoint",
+    "normal_mse": {
+      "mean_pose": 0.10898037252361101,
+      "mean_residual": 0.1223511529247857,
+      "persistence": 0.12126179358149479,
+      "ridge_posture": 0.07174154584111857
+    },
+    "comparisons": [
+      {
+        "method": "mean_pose",
+        "reference": "persistence",
+        "method_mse": 0.10898037252361101,
+        "reference_mse": 0.12126179358149479,
+        "estimate": 0.012281421057883834,
+        "ci95": [
+          -0.011616967486204563,
+          0.036557509041385376
+        ],
+        "method_ci95": [
+          0.08997353494835494,
+          0.13025441647730035
+        ],
+        "relative_reduction": 0.10128021939268093,
+        "relative_ci95": [
+          -0.11439631728580021,
+          0.2559496930893727
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5801,
+        "positive_favors": "mean_pose",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      },
+      {
+        "method": "mean_pose",
+        "reference": "ridge_posture",
+        "method_mse": 0.10898037252361101,
+        "reference_mse": 0.07174154584111857,
+        "estimate": -0.037238826682492406,
+        "ci95": [
+          -0.05149841567564698,
+          -0.025391672986835277
+        ],
+        "method_ci95": [
+          0.08997353494835494,
+          0.13025441647730035
+        ],
+        "relative_reduction": -0.5190691982712904,
+        "relative_ci95": [
+          -0.809744520165935,
+          -0.32706241120726126
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5801,
+        "positive_favors": "mean_pose",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      },
+      {
+        "method": "mean_residual",
+        "reference": "persistence",
+        "method_mse": 0.1223511529247857,
+        "reference_mse": 0.12126179358149479,
+        "estimate": -0.0010893593432908808,
+        "ci95": [
+          -0.0031540472224972542,
+          0.0008403350653595999
+        ],
+        "method_ci95": [
+          0.09270620741146382,
+          0.15274929613560648
+        ],
+        "relative_reduction": -0.008983533156787727,
+        "relative_ci95": [
+          -0.024435237713158538,
+          0.007938158636302838
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5801,
+        "positive_favors": "mean_residual",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      },
+      {
+        "method": "mean_residual",
+        "reference": "ridge_posture",
+        "method_mse": 0.1223511529247857,
+        "reference_mse": 0.07174154584111857,
+        "estimate": -0.05060960708366711,
+        "ci95": [
+          -0.06914506806192011,
+          -0.03410583831331453
+        ],
+        "method_ci95": [
+          0.09270620741146382,
+          0.15274929613560648
+        ],
+        "relative_reduction": -0.7054434984680844,
+        "relative_ci95": [
+          -0.9320096935554744,
+          -0.5040458460593064
+        ],
+        "normal_components": 29,
+        "resamples": 5000,
+        "seed": 5801,
+        "positive_favors": "mean_residual",
+        "uncertainty": "Conditional on saved cross-validation predictions"
+      }
+    ]
+  },
+  "grouping_judgment": {
+    "sequence_first_scale_description_supported": true,
+    "sequence_id_equals_independent_participant": false,
+    "straight_walking_establishes_independence": false,
+    "largest_current_all_modality_claim_established": false,
+    "largest_introduction_claim": "Supported only as an attributed expert-annotated abnormal-gait video collection claim, per separate primary-source review.",
+    "primary_result_relabeling_permitted": false,
+    "sequence_weighted_sensitivity": "Completed under a separately declared post hoc identity. All 141 normal sequences have equal point-estimate weight, while uncertainty resamples the same 29 recording components."
+  },
+  "reported_independent_data_audit": {
+    "analysis_identity": "draft03-sequence-contract-audit-v1",
+    "sequence_overlap_check": {
+      "interval_pair_count": 17,
+      "interval_shared_frame_sum": 2722,
+      "equals_native_frame_set_result": true
+    },
+    "window_overlap_pair_counts": {
+      "same_sequence": 4272,
+      "different_sequences": 155
+    },
+    "fold_integrity": {
+      "source_ids_in_multiple_outer_folds": 0,
+      "sequence_ids_in_multiple_outer_folds": 0,
+      "components_in_multiple_outer_folds": 0,
+      "retained_source_components": 91,
+      "source_count": 91
+    },
+    "physical_turns_verified": false
+  },
+  "inference_limits": [
+    "The 29 normal recording groups support main normal forecasting and nested calibration.",
+    "Internal anomaly ranking uses 91 recording groups, with 29 normal and 62 abnormal groups.",
+    "All reported intervals condition on saved overlapping fits and grouping assumptions.",
+    "Unknown participant links and full-pipeline retraining variability remain outside these intervals.",
+    "Historical GAVD exposure makes the analyses exploratory. No new p-values or acceptance probabilities are produced.",
+    "The external endpoint uses 90 dataset-coded participants and retains acquisition and identity limitations."
+  ],
+  "qualitative_assessment": {
+    "defensible_contribution": "Useful posture-conditioned forecasting plus a reproducible benchmark separating forecasting skill from incremental abnormality ranking.",
+    "algorithmic_novelty": "Limited; normal-only forecasting and structured skeleton masking have precedents.",
+    "short_paper_recommendation": "Preferred focused benchmark/validation framing on the completed evidence.",
+    "full_paper_boundary": "Defensible if the reusable benchmark, tested failure mechanism, and external evaluation form a substantive clear contribution. Seven body pages are format-eligible but page count does not establish novelty.",
+    "acceptance_probability_estimated": false,
+    "primary_result_implication": "No demonstrated incremental anomaly or structured-mask gain.",
+    "priority_improvements": [
+      "Keep sequence-first coverage and recording-group inference labels together.",
+      "Publish reusable permitted benchmark contracts, masks, split memberships, predictions, and a minimal executable example.",
+      "Obtain additional independently identified normal participants for calibration and validation.",
+      "If adding a forecasting competitor, test a strong simple alternative under identical support and grouped selection.",
+      "Add independent clinical/acquisition validation and complete-pipeline uncertainty when feasible."
+    ]
+  },
+  "resources": "Read-only table/statistic replay; no forecast fitting, downloads, or new data eligibility changes. Peak memory and cost were not measured.",
+  "separate_sequence_sensitivity": {
+    "identity": "reference-v2-sequence-scale-posthoc-v2",
+    "status": "accepted_exact_posthoc_results",
+    "forecast_refit": false,
+    "normal_sequences": 141,
+    "normal_recording_components": 29,
+    "sequence_weighted_mse": {
+      "persistence": 0.13849954436846693,
+      "ridge_posture": 0.08084133097159804
+    },
+    "paired_improvement": 0.057658213396868906,
+    "ci95": [
+      0.04178336195670544,
+      0.07967143972558138
+    ],
+    "relative_reduction": 0.4163061594157585,
+    "relative_ci95": [
+      0.3593753110159124,
+      0.4687267133446003
+    ],
+    "independent_checks": {
+      "output_manifest_files_verified": 3,
+      "input_hashes_verified": 4,
+      "all_sequence_errors_reconstructed": 456,
+      "normal_sequences": 141,
+      "normal_recording_components": 29,
+      "bootstrap_replicates_expanded": 5000,
+      "bootstrap_seed": 6827,
+      "minimum_selected_sequence_count": 61,
+      "maximum_selected_sequence_count": 240,
+      "maximum_saved_sequence_mse_discrepancy": 1.3877787807814457e-16,
+      "maximum_absolute_interval_discrepancy": 1.3877787807814457e-17,
+      "maximum_relative_interval_discrepancy": 5.551115123125783e-17,
+      "original_recording_weighted_points_reproduced": true,
+      "previous_publication_acceptance_unchanged": true
+    },
+    "interpretation": "Forecast improvement has the same direction under equal-recording and equal-sequence weighting of the same saved predictions. This changes the estimand and is not an independent cohort replication. The original recording-weighted result remains primary.",
+    "preserved_failed_identity": "reference-v2-sequence-scale-posthoc-v1",
+    "failed_attempt_status": "Pandas metadata-axis guard stopped before estimation. Exact first code, declaration, review and failure remain preserved."
+  },
+  "report_markdown_sha256": "aa71cac1aef0d25e6456365b8b04f106202c5e201b2dc2af99e5a9a1ca80fd6d"
+}

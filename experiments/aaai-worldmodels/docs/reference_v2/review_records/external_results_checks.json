@@ -1,0 +1,128 @@
+{
+  "identity": "reference-v2-independent-external-result-reconstruction-v1",
+  "status": "passed",
+  "reviewed_at_utc": "2026-11-16T16:49:33.407769+00:00",
+  "script_sha256": "b8ff94699ff57b02031b5b297c8736b0e9b25ecac9e5bee72fe84467ab9c0bb7",
+  "transfer_results_sha256": "dba163563765f460bb48e0321e70f426f12fb45e24d6d3813ecb03caa3610ee8",
+  "sensitivity_results_sha256": "534eabf59f0a6eabec6daea64ef7455b792ad7cb2a63414f49f4b5cf0c311710",
+  "artifact_hashes_verified": 10,
+  "component_checkpoint_trajectory_replays": 30,
+  "component_participant_aggregations_verified": 30,
+  "maximum_participant_mse_discrepancy": 2.220446049250313e-16,
+  "maximum_tail_score_discrepancy": 2.7755575615628914e-17,
+  "maximum_native_float32_vs_double_mse_discrepancy": 1.0351803969577134e-07,
+  "maximum_float32_vs_double_tail_discrepancy": 0.0,
+  "participant_prefix_covariates_rebuilt": 90,
+  "primary_anomaly": {
+    "candidate": "two_sided",
+    "reference": "low_motion",
+    "estimate": -0.1716637272192828,
+    "candidate_auroc": 0.5908289241622575,
+    "reference_auroc": 0.7624926513815403,
+    "ci95": [
+      -0.3565623162845385,
+      0.009112286890064714
+    ],
+    "candidate_ci95": [
+      0.46736478542034093,
+      0.7051734273956496
+    ],
+    "reference_ci95": [
+      0.6619488536155202,
+      0.8547912992357437
+    ],
+    "folds": [
+      {
+        "fold": 0,
+        "normal": 27,
+        "abnormal": 63,
+        "candidate_auroc": 0.5908289241622575,
+        "reference_auroc": 0.7624926513815403,
+        "difference": -0.1716637272192828,
+        "pairs": 1701
+      }
+    ],
+    "resamples": 5000,
+    "seed": 5703,
+    "unit": "dataset-coded external participant",
+    "resampling": "paired participant resampling within normal/abnormal strata; single external cohort",
+    "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+  },
+  "posture_comparison": {
+    "candidate": "two_sided",
+    "reference": "posture_two_sided",
+    "estimate": 0.06290417401528514,
+    "candidate_auroc": 0.5908289241622575,
+    "reference_auroc": 0.5279247501469724,
+    "ci95": [
+      -0.04585537918871252,
+      0.174316578483245
+    ],
+    "candidate_ci95": [
+      0.46736478542034093,
+      0.7051734273956496
+    ],
+    "reference_ci95": [
+      0.40652557319223986,
+      0.6458039388594943
+    ],
+    "folds": [
+      {
+        "fold": 0,
+        "normal": 27,
+        "abnormal": 63,
+        "candidate_auroc": 0.5908289241622575,
+        "reference_auroc": 0.5279247501469724,
+        "difference": 0.06290417401528514,
+        "pairs": 1701
+      }
+    ],
+    "resamples": 5000,
+    "seed": 5703,
+    "unit": "dataset-coded external participant",
+    "resampling": "paired participant resampling within normal/abnormal strata; single external cohort",
+    "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+  },
+  "secondary_identity_exclusion": {
+    "candidate": "two_sided",
+    "reference": "low_motion",
+    "estimate": -0.16188769414575865,
+    "candidate_auroc": 0.5967741935483871,
+    "reference_auroc": 0.7586618876941458,
+    "ci95": [
+      -0.34887246117084825,
+      0.020019414575866108
+    ],
+    "candidate_ci95": [
+      0.4731108124253286,
+      0.7129704301075267
+    ],
+    "reference_ci95": [
+      0.6606929510155317,
+      0.8506571087216248
+    ],
+    "folds": [
+      {
+        "fold": 0,
+        "normal": 27,
+        "abnormal": 62,
+        "candidate_auroc": 0.5967741935483871,
+        "reference_auroc": 0.7586618876941458,
+        "difference": -0.16188769414575865,
+        "pairs": 1674
+      }
+    ],
+    "resamples": 5000,
+    "seed": 5703,
+    "unit": "verified source-relation component",
+    "resampling": "paired independently within outer fold and binary label",
+    "uncertainty": "Conditional on saved predictions; excludes retraining and unknown participant overlap"
+  },
+  "seconds": 3.089962082915008,
+  "limits": [
+    "No model was fitted in this audit.",
+    "External units are dataset-coded participants; the generic component wording inherited by the sensitivity function must be read at this unit.",
+    "Participant aggregation differs from GAVD source-video aggregation; equal recording weighting does not eliminate acquisition/domain differences.",
+    "Intervals condition on fixed source-trained predictors and calibration distributions."
+  ]
+}

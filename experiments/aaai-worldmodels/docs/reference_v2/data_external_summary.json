@@ -1,0 +1,117 @@
+{
+  "identity": "reference-v2-external-local-inventory-v1",
+  "status": "metadata_audit_only_no_external_model_evaluation",
+  "selected_root": "data/videos-more/koa-pd-nm",
+  "clone_root": "data/videos-ms/koa-pd-nm",
+  "source_inputs": {
+    "data/videos-more/koa-pd-nm/README.md": "e009ec7cd28064abdc2b0d1c7ad681e3d3e5b75aaaf6b4375540188497160baf",
+    "data/videos-more/koa-pd-nm/Demographic Data.pdf": "a07dfe2098ad113ecf8350a98bfd5cf0beb7f2fb68baeeec504cbd7b02e9a3cf"
+  },
+  "primary_url": "https://data.mendeley.com/datasets/44pfnysy89/1",
+  "videos": 189,
+  "participants": 95,
+  "counts": [
+    {
+      "original_group": "KOA",
+      "severity": "EL",
+      "videos": 30,
+      "participants": 15
+    },
+    {
+      "original_group": "KOA",
+      "severity": "MD",
+      "videos": 40,
+      "participants": 20
+    },
+    {
+      "original_group": "KOA",
+      "severity": "SV",
+      "videos": 30,
+      "participants": 15
+    },
+    {
+      "original_group": "NM",
+      "severity": "none",
+      "videos": 60,
+      "participants": 30
+    },
+    {
+      "original_group": "PD",
+      "severity": "MD",
+      "videos": 14,
+      "participants": 7
+    },
+    {
+      "original_group": "PD",
+      "severity": "ML",
+      "videos": 12,
+      "participants": 6
+    },
+    {
+      "original_group": "PD",
+      "severity": "SV",
+      "videos": 3,
+      "participants": 2
+    }
+  ],
+  "expected_descriptor_videos": 191,
+  "expected_demographic_participants": 96,
+  "missing_participants": [
+    {
+      "participant_id": "PD_SV_003",
+      "status": "not_present_locally"
+    }
+  ],
+  "single_direction_participants": [
+    {
+      "participant_id": "PD_SV_002",
+      "label": "parkinsons",
+      "severity": "SV",
+      "videos": 1,
+      "directions": "01"
+    }
+  ],
+  "byte_identical_clones": 189,
+  "byte_identical_gavd_overlaps": 0,
+  "metadata_decode_success": 187,
+  "invalid_files": [
+    {
+      "video_id": "015_NM_02",
+      "participant_id": "NM_015",
+      "probe_status": "cannot_open",
+      "clone_byte_identical": true
+    },
+    {
+      "video_id": "002_PD_01_SV",
+      "participant_id": "PD_SV_002",
+      "probe_status": "cannot_open",
+      "clone_byte_identical": true
+    }
+  ],
+  "participants_with_decodable_video": 94,
+  "nominal_fps": [
+    0.0,
+    30.0,
+    50.0
+  ],
+  "image_sizes": [
+    {
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "width": 0,
+      "height": 0
+    }
+  ],
+  "manifest_sha256": "b56445c63656801c60a09e9227550c5dfea984e53c0f500796df7cee718594e1",
+  "terms": "Dataset-owner page states CC BY4.0; bundled README requests research/noncommercial use. Research use only in this study; no media redistribution.",
+  "missing_count_note": "Local PD_SV has 3 videos from 2 coded participants versus descriptor 5 videos/3 participants. The demographic two-direction ideal implies 32 PD videos; author README lists 31. Do not invent a full missing-file list from the inconsistent totals.",
+  "historical_exposure": "No mentions of this dataset/DOI/filename pattern were found by a preimplementation textual search of experiment code/reports and notes. This cannot prove absence of prior human exposure; treat as external to GAVD, not a prospectively collected clinical cohort.",
+  "limits": [
+    "Source labels and participant IDs are dataset-provided, not independently reverified diagnoses.",
+    "Exact byte-hash disjointness does not exclude GAVD containing a reencoded or edited upload of the same footage.",
+    "Full pose extraction, tracking quality, valid-span gating, and clinical domain compatibility remain untested here.",
+    "The source-video model must be frozen before external evaluation; local normal calibration would be domain adaptation."
+  ]
+}
