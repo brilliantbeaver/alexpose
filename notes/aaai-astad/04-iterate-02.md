@@ -4,7 +4,7 @@ You are an AI/ML researcher specializing in using the best AI/ML techniques to i
 
 # Tasks
 
-You are to carefully review the documents in "experiments/aaai/docs/draft01" as well as results in the "experiments/aaai" notebooks, ultrathink with outside the box creative thinking how est to significantly revise, enhance, and add to the notebooks, experiments and documentations in "experiments/aaai" in order to maximize the probability of research methodology and likely results, based in neurological reasoning, that would make the writing of a strong manuscript for the 4th Workshop on Automated Spatial and Temporal Anomaly Detection (ASTAD) which has a due date in a few days:  https://ismart.ece.mcgill.ca/astad4/.
+You are to carefully review the documents in "experiments/aaai-astad/docs/draft01" as well as results in the "experiments/aaai" notebooks, ultrathink with outside the box creative thinking how best to significantly revise, enhance, and add to the notebooks, experiments and documentations in "experiments/aaai" in order to maximize the probability of research methodology and likely results, based in neurological reasoning, that would make the writing of a strong manuscript for the 4th Workshop on Automated Spatial and Temporal Anomaly Detection (ASTAD) which has a due date in a few days:  https://ismart.ece.mcgill.ca/astad4/.
 
 You are to write the instruction for the next iteration of research methodology, notebook design, and technical approaches as a systematically thoughtful set of instructions in "05-iterate-02-INSTR.md".  
 

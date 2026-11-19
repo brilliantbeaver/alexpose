@@ -1,5 +1,7 @@
 # Useful prediction does not automatically improve gait anomaly detection
 
+The canonical experiment directory is `experiments/aaai-astad`. The compatibility path `experiments/aaai` points to the same directory so historical commands and artifact references continue to resolve. The notes directory has the same compatibility link.
+
 This package now contains an executed study of a precise question: **after a leg's own visible movement is accounted for, does the opposite leg add useful prediction information, and does that information improve detection of unusual gait?** The new study preserves a local predictor, adds an own-leg capacity control, compares three motion-independent masking policies, and checks the observation support needed for a timing interpretation.
 
 The answer is qualified. All three policies passed the planned internal normal-data prediction gate. The unchanged uniform task still has uncertain outer-normal gains for U and A. The fixed combined anomaly score performed worse than local movement alone. A separate laboratory study of 178 participants reproduced the detection loss despite clear held-out normal prediction improvement. The GAVD timing diagnostic failed its paired-support adequacy gate, so it cannot establish a reliable coordination measurement.
@@ -53,7 +55,7 @@ Use Python 3.12 and the existing [pyproject.toml](pyproject.toml). Install the o
 Before running the adapted STG-NF comparison, retrieve its pinned upstream code from the repository root:
 
 ```bash
-git submodule update --init -- experiments/aaai/vendor/STG-NF
+git submodule update --init -- experiments/aaai-astad/vendor/STG-NF
 ```
 
 The submodule is fixed at `edb5f3220332e160e4d20ce258787d5e2d7e0200`, the revision verified by the baseline loader. Videos, model weights and run artifacts remain local and are excluded from Git. Reports and notebooks identify their producer commands and required run identities; a fresh clone must prepare or restore those local inputs before replaying the experiments.

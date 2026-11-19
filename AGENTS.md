@@ -93,7 +93,7 @@ Folder labels are dataset annotations, not independently verified clinical diagn
 
 Use [exp5](experiments/exp5/) for historical feature/RF notebooks,
 [multiple-sclerosis](experiments/multiple-sclerosis/README.md) for its source-grouped study,
-and [aaai](experiments/aaai/README.md) for the ASTAD tutorials and controlled prediction study.
+and [aaai-astad](experiments/aaai-astad/README.md) for the ASTAD tutorials and controlled prediction study.
 Read each experiment's protocol, environment, and artifact prerequisites first.
 Preserve historical results, frozen run identities, provenance, and manuscript snapshots.
 A changed scientific method needs a new declared identity; never relabel an old output.
@@ -131,13 +131,13 @@ Each experiment's `pyproject.toml` defines its own dependencies and environment.
 For example, these commands run from the root against the AAAI project:
 
 ```bash
-uv sync --project experiments/aaai
-uv run --project experiments/aaai pytest -c experiments/aaai/pyproject.toml experiments/aaai/tests -q
+uv sync --project experiments/aaai-astad
+uv run --project experiments/aaai-astad pytest -c experiments/aaai-astad/pyproject.toml experiments/aaai-astad/tests -q
 ```
 
 Initialize the pinned comparator only when working with that baseline:
-`git submodule update --init -- experiments/aaai/vendor/STG-NF`.
-Use [the experiment README](experiments/aaai/README.md) for data prerequisites and notebook launch commands.
+`git submodule update --init -- experiments/aaai-astad/vendor/STG-NF`.
+Use [the experiment README](experiments/aaai-astad/README.md) for data prerequisites and notebook launch commands.
 
 ## Configuration and verification
 
